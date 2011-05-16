@@ -26,6 +26,8 @@ Testing reading sff format file Roche/E3MFGYR02_random_10_reads.sff
  Checking can write/read as 'qual' format
  Checking can write/read as 'sff' format
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading clustal format file Clustalw/cw02.aln
@@ -64,6 +66,7 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading clustal format file Clustalw/opuntia.aln
@@ -107,6 +110,7 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading clustal format file Clustalw/hedgehog.aln
@@ -150,6 +154,7 @@ Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading clustal format file Clustalw/odd_consensus.aln
@@ -189,6 +194,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/lupine.nu
@@ -217,6 +223,7 @@ Testing reading fasta format file Fasta/lupine.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/elderberry.nu
@@ -245,6 +252,7 @@ Testing reading fasta format file Fasta/elderberry.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/phlox.nu
@@ -273,6 +281,7 @@ Testing reading fasta format file Fasta/phlox.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/centaurea.nu
@@ -301,6 +310,7 @@ Testing reading fasta format file Fasta/centaurea.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/wisteria.nu
@@ -329,6 +339,7 @@ Testing reading fasta format file Fasta/wisteria.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/sweetpea.nu
@@ -357,6 +368,7 @@ Testing reading fasta format file Fasta/sweetpea.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/lavender.nu
@@ -385,6 +397,7 @@ Testing reading fasta format file Fasta/lavender.nu
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/aster.pro
@@ -413,6 +426,7 @@ Testing reading fasta format file Fasta/aster.pro
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/loveliesbleeding.pro
@@ -441,6 +455,7 @@ Testing reading fasta format file Fasta/loveliesbleeding.pro
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/rose.pro
@@ -469,6 +484,7 @@ Testing reading fasta format file Fasta/rose.pro
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/rosemary.pro
@@ -497,6 +513,7 @@ Testing reading fasta format file Fasta/rosemary.pro
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/f001
@@ -525,6 +542,7 @@ Testing reading fasta format file Fasta/f001
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Fasta/f002
@@ -560,6 +578,8 @@ Testing reading fasta format file Fasta/f002
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading fasta format file Fasta/fa01
@@ -593,6 +613,8 @@ Testing reading fasta format file Fasta/fa01
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading fasta format file GenBank/NC_005816.fna
@@ -621,6 +643,7 @@ Testing reading fasta format file GenBank/NC_005816.fna
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file GenBank/NC_005816.ffn
@@ -659,6 +682,8 @@ Testing reading fasta format file GenBank/NC_005816.ffn
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading fasta format file GenBank/NC_005816.faa
@@ -697,6 +722,8 @@ Testing reading fasta format file GenBank/NC_005816.faa
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading fasta format file GenBank/NC_000932.faa
@@ -735,6 +762,8 @@ Testing reading fasta format file GenBank/NC_000932.faa
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading tab format file GenBank/NC_005816.tsv
@@ -773,6 +802,8 @@ Testing reading tab format file GenBank/NC_005816.tsv
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading fasta format file GFF/NC_001802.fna
@@ -801,6 +832,7 @@ Testing reading fasta format file GFF/NC_001802.fna
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file GFF/NC_001802lc.fna
@@ -829,6 +861,7 @@ Testing reading fasta format file GFF/NC_001802lc.fna
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file GFF/multi.fna
@@ -869,6 +902,7 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fasta format file Registry/seqs.fasta
@@ -902,6 +936,8 @@ Testing reading fasta format file Registry/seqs.fasta
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading nexus format file Nexus/test_Nexus_input.nex
@@ -945,6 +981,7 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp001
  ID = 'Q13454', Name='N33_HUMAN',
@@ -969,6 +1006,7 @@ Testing reading swiss format file SwissProt/sp001
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp002
  ID = 'P54101', Name='CSP_MOUSE',
@@ -993,6 +1031,7 @@ Testing reading swiss format file SwissProt/sp002
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp003
  ID = 'P42655', Name='143E_HUMAN',
@@ -1017,6 +1056,7 @@ Testing reading swiss format file SwissProt/sp003
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp004
  ID = 'P23082', Name='NDOA_PSEPU',
@@ -1041,6 +1081,7 @@ Testing reading swiss format file SwissProt/sp004
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp005
  ID = 'P24973', Name='NU3M_BALPH',
@@ -1065,6 +1106,7 @@ Testing reading swiss format file SwissProt/sp005
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp006
  ID = 'P39896', Name='TCMO_STRGA',
@@ -1089,6 +1131,7 @@ Testing reading swiss format file SwissProt/sp006
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp007
  ID = 'O95832', Name='CLD1_HUMAN',
@@ -1113,6 +1156,7 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp008
  ID = 'P01892', Name='1A02_HUMAN',
@@ -1137,6 +1181,7 @@ Testing reading swiss format file SwissProt/sp008
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp009
  ID = 'O23729', Name='CHS3_BROFI',
@@ -1161,6 +1206,7 @@ Testing reading swiss format file SwissProt/sp009
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp010
  ID = 'Q13639', Name='5H4_HUMAN',
@@ -1185,6 +1231,7 @@ Testing reading swiss format file SwissProt/sp010
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp011
  ID = 'P16235', Name='LSHR_RAT',
@@ -1209,6 +1256,7 @@ Testing reading swiss format file SwissProt/sp011
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp012
  ID and Name='Q9Y736',
@@ -1233,6 +1281,7 @@ Testing reading swiss format file SwissProt/sp012
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp013
  ID and Name='P82909',
@@ -1257,6 +1306,7 @@ Testing reading swiss format file SwissProt/sp013
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp014
  ID = 'P12166', Name='PSBL_ORYSA',
@@ -1281,6 +1331,7 @@ Testing reading swiss format file SwissProt/sp014
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp015
  ID = 'IPI00383150', Name='IPI00383150.2',
@@ -1305,6 +1356,7 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/sp016
  ID = 'P01100', Name='FOS_HUMAN',
@@ -1329,6 +1381,7 @@ Testing reading swiss format file SwissProt/sp016
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file Registry/EDD_RAT.dat
  ID = 'Q62671', Name='EDD_RAT',
@@ -1353,6 +1406,7 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading uniprot-xml format file SwissProt/uni001
  ID = 'Q91G55', Name='043L_IIV6',
@@ -1377,6 +1431,7 @@ Testing reading uniprot-xml format file SwissProt/uni001
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading uniprot-xml format file SwissProt/uni002
  ID = 'Q91G55', Name='043L_IIV6',
@@ -1408,6 +1463,8 @@ Testing reading uniprot-xml format file SwissProt/uni002
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading uniprot-xml format file SwissProt/Q13639.xml
@@ -1433,6 +1490,7 @@ Testing reading uniprot-xml format file SwissProt/Q13639.xml
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading swiss format file SwissProt/Q13639.txt
  ID = 'Q13639', Name='5HT4R_HUMAN',
@@ -1457,6 +1515,7 @@ Testing reading swiss format file SwissProt/Q13639.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/noref.gb
  ID = 'NM_006141.1', Name='NM_006141',
@@ -1481,6 +1540,7 @@ Testing reading genbank format file GenBank/noref.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/cor6_6.gb
  ID = 'X55053.1', Name='ATCOR66M',
@@ -1515,6 +1575,8 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading genbank format file GenBank/iro.gb
@@ -1540,6 +1602,7 @@ Testing reading genbank format file GenBank/iro.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/pri1.gb
  ID = 'U05344.1', Name='HUGLUT1',
@@ -1564,6 +1627,7 @@ Testing reading genbank format file GenBank/pri1.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/arab1.gb
  ID = 'AC007323.5', Name='AC007323',
@@ -1588,6 +1652,7 @@ Testing reading genbank format file GenBank/arab1.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/protein_refseq.gb
  ID = 'NP_034640.1', Name='NP_034640',
@@ -1612,6 +1677,7 @@ Testing reading genbank format file GenBank/protein_refseq.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/protein_refseq2.gb
  ID = 'NP_034640.1', Name='NP_034640',
@@ -1636,6 +1702,7 @@ Testing reading genbank format file GenBank/protein_refseq2.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/extra_keywords.gb
  ID = 'AL138972.1', Name='DMBR25B3',
@@ -1660,6 +1727,7 @@ Testing reading genbank format file GenBank/extra_keywords.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/one_of.gb
  ID = 'U18266.1', Name='HSTMPO1',
@@ -1684,6 +1752,7 @@ Testing reading genbank format file GenBank/one_of.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/NT_019265.gb
  ID = 'NT_019265.6', Name='NT_019265',
@@ -1716,6 +1785,7 @@ Testing reading genbank format file GenBank/origin_line.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/blank_seq.gb
  ID = 'NP_001832.1', Name='NP_001832',
@@ -1740,6 +1810,7 @@ Testing reading genbank format file GenBank/blank_seq.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/dbsource_wrap.gb
  ID = 'P01485', Name='SCX3_BUTOC',
@@ -1764,6 +1835,7 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/NC_005816.gb
  ID = 'NC_005816.1', Name='NC_005816',
@@ -1788,6 +1860,7 @@ Testing reading genbank format file GenBank/NC_005816.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/NC_000932.gb
  ID = 'NC_000932.1', Name='NC_000932',
@@ -1812,6 +1885,7 @@ Testing reading genbank format file GenBank/NC_000932.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/pBAD30.gb
  ID and Name='pBAD30',
@@ -1836,6 +1910,7 @@ Testing reading genbank format file GenBank/pBAD30.gb
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading genbank format file GenBank/gbvrl1_start.seq
  ID = 'AB000048.1', Name='AB000048',
@@ -1867,6 +1942,8 @@ Testing reading genbank format file GenBank/gbvrl1_start.seq
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading genbank format file GFF/NC_001422.gbk
@@ -1892,6 +1969,7 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/epo_prt_selection.embl
  ID = 'A00022.1', Name='A00022',
@@ -1927,6 +2005,8 @@ UserWarning - Annotation 'flavin-adenine-dinucleotide-dependent-d-erythronate-4-
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading embl format file EMBL/TRBG361.embl
@@ -1952,6 +2032,7 @@ Testing reading embl format file EMBL/TRBG361.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/DD231055_edited.embl
  ID = 'DD231055.1', Name='DD231055',
@@ -1976,6 +2057,7 @@ Testing reading embl format file EMBL/DD231055_edited.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/SC10H5.embl
  ID = 'AL031232', Name='SC10H5',
@@ -2000,6 +2082,7 @@ Testing reading embl format file EMBL/SC10H5.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/U87107.embl
  ID = 'U87107.1', Name='U87107',
@@ -2024,6 +2107,7 @@ Testing reading embl format file EMBL/U87107.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/AAA03323.embl
  ID = 'AAA03323.1', Name='AAA03323',
@@ -2048,6 +2132,7 @@ Testing reading embl format file EMBL/AAA03323.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/AE017046.embl
  ID = 'AE017046.1', Name='AE017046',
@@ -2072,6 +2157,7 @@ Testing reading embl format file EMBL/AE017046.embl
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading embl format file EMBL/Human_contigs.embl
  ID = 'AJ229040.1', Name='AJ229040',
@@ -2106,6 +2192,7 @@ Testing reading embl format file EMBL/A04195.imgt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading imgt format file EMBL/A04195.imgt
  ID and Name='A04195',
@@ -2130,6 +2217,7 @@ Testing reading imgt format file EMBL/A04195.imgt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading stockholm format file Stockholm/simple.sth
  ID and Name='AP001509.1',
@@ -2167,6 +2255,7 @@ Testing reading stockholm format file Stockholm/simple.sth as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading stockholm format file Stockholm/funny.sth
@@ -2210,6 +2299,7 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/reference_dna.phy
@@ -2253,6 +2343,7 @@ Testing reading phylip format file Phylip/reference_dna.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/reference_dna2.phy
@@ -2296,6 +2387,7 @@ Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/hennigian.phy
@@ -2339,6 +2431,7 @@ Testing reading phylip format file Phylip/hennigian.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/horses.phy
@@ -2382,6 +2475,7 @@ Testing reading phylip format file Phylip/horses.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/random.phy
@@ -2425,6 +2519,7 @@ Testing reading phylip format file Phylip/random.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/interlaced.phy
@@ -2465,6 +2560,7 @@ Testing reading phylip format file Phylip/interlaced.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phylip format file Phylip/interlaced2.phy
@@ -2507,6 +2603,7 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading emboss format file Emboss/alignret.txt
@@ -2549,6 +2646,7 @@ Testing reading emboss format file Emboss/alignret.txt as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading emboss format file Emboss/needle.txt
@@ -2587,6 +2685,8 @@ Testing reading emboss format file Emboss/needle.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading emboss format file Emboss/water.txt
@@ -2625,6 +2725,7 @@ Testing reading emboss format file Emboss/water.txt as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading phd format file Phd/phd1
@@ -2655,6 +2756,8 @@ UserWarning - Data loss - max Solexa quality 62 in Solexa FASTQ
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading phd format file Phd/phd2
@@ -2675,6 +2778,7 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading phd format file Phd/phd_solexa
  ID and Name='HWI-EAS94_4_1_1_537_446',
@@ -2698,6 +2802,7 @@ Testing reading phd format file Phd/phd_solexa
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading phd format file Phd/phd_454
  ID and Name='EBE03TV04IHLTF.77-243',
@@ -2718,6 +2823,7 @@ Testing reading phd format file Phd/phd_454
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/contig1.ace
  ID and Name='Contig1',
@@ -2742,6 +2848,8 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading ace format file Ace/consed_sample.ace
@@ -2762,6 +2870,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading ace format file Ace/seq.cap.ace
  ID and Name='Contig1',
@@ -2782,6 +2891,7 @@ UserWarning - Data loss - max PHRED quality 93 in Sanger FASTQ
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  ID and Name='A_U455',
@@ -2819,6 +2929,8 @@ Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt
@@ -2862,6 +2974,7 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
@@ -2900,6 +3013,8 @@ Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading pir format file NBRF/B_nuc.pir
@@ -2935,6 +3050,8 @@ Testing reading pir format file NBRF/B_nuc.pir
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading pir format file NBRF/Cw_prot.pir
@@ -2970,6 +3087,8 @@ Testing reading pir format file NBRF/Cw_prot.pir
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading pir format file NBRF/DMA_nuc.pir
@@ -3004,6 +3123,8 @@ Testing reading pir format file NBRF/DMA_nuc.pir
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading pir format file NBRF/DMB_prot.pir
@@ -3039,6 +3160,8 @@ Testing reading pir format file NBRF/DMB_prot.pir
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
 Testing reading pir format file NBRF/clustalw.pir
@@ -3075,6 +3198,7 @@ Testing reading pir format file NBRF/clustalw.pir as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
 Testing reading fasta format file Quality/example.fasta
  ID and Name='EAS54_6_R1_2_1_413_324',
@@ -3115,6 +3239,7 @@ Testing reading fasta format file Quality/example.fasta as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading qual format file Quality/example.qual
@@ -3143,6 +3268,7 @@ Testing reading qual format file Quality/example.qual
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq format file Quality/example.fastq
@@ -3179,6 +3305,7 @@ Testing reading fastq format file Quality/example.fastq as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq format file Quality/tricky.fastq
@@ -3217,6 +3344,7 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq format file Quality/sanger_faked.fastq
@@ -3240,6 +3368,7 @@ Testing reading fastq format file Quality/sanger_faked.fastq
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq format file Quality/sanger_93.fastq
@@ -3263,6 +3392,7 @@ Testing reading fastq format file Quality/sanger_93.fastq
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq-illumina format file Quality/illumina_faked.fastq
@@ -3286,6 +3416,7 @@ Testing reading fastq-illumina format file Quality/illumina_faked.fastq
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq-solexa format file Quality/solexa_faked.fastq
@@ -3309,6 +3440,7 @@ Testing reading fastq-solexa format file Quality/solexa_faked.fastq
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Testing reading fastq-solexa format file Quality/solexa_example.fastq
@@ -3348,6 +3480,7 @@ Testing reading fastq-solexa format file Quality/solexa_example.fastq as an alig
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
 Finished tested reading files
