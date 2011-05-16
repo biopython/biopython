@@ -63,6 +63,7 @@ test_files = [
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1, 'NBRF/clustalw.pir'),
     ("maf", 3, 2, 'MAF/humor.maf'),
+    ("maf", None, 3, "MAF/bug2453.maf") #Have 5, 5, 4 sequences
     ]
 
 def str_summary(text, max_len=40):
@@ -258,10 +259,11 @@ for (t_format, t_per, t_count, t_filename) in test_files:
     alignments  = list(AlignIO.parse(handle=open(t_filename,"r"), format=t_format))
     assert len(alignments)  == t_count, \
          "Found %i alignments but expected %i" % (len(alignments), t_count)
-    for alignment in alignments:
-        assert len(alignment) == t_per, \
-            "Expected %i records per alignment, got %i" \
-            % (t_per, len(alignment))
+    if t_per is not None:
+        for alignment in alignments:
+            assert len(alignment) == t_per, \
+                "Expected %i records per alignment, got %i" \
+                % (t_per, len(alignment))
 
     #Try using the iterator with a for loop and a filename not handle
     alignments2 = []
