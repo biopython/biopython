@@ -182,7 +182,21 @@ class MafIterator(AlignmentIterator):
                          "strand": species_data["strand"],
                          "size": int(species_data["size"])}
 
-            record = SeqRecord(Seq(species_data["text"], self.alphabet),
+            sequence = species_data["text"]
+            #Interpret a dot/period to mean same the first sequence
+            if "." in sequence:
+                if idn == parsed_bundle[2][0]:
+                    raise ValueError("Found dot/period in first sequence of alignment")
+                ref = parsed_bundle[1][parsed_bundle[2][0]]["text"]
+                new = []
+                for (s, r) in zip(sequence, ref):
+                    if s==".":
+                        new.append(r)
+                    else:
+                        new.append(s)
+                sequence = "".join(new)
+
+            record = SeqRecord(Seq(sequence, self.alphabet),
                                 id = idn,
                                 name = idn,
                                 description = species_data["src"],
