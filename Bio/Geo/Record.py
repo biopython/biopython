@@ -13,7 +13,7 @@ o Record - All of the information in an GEO record.
 See http://www.ncbi.nlm.nih.gov/geo/
 """
 
-class Record:
+class Record(object):
     """Hold GEO information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are

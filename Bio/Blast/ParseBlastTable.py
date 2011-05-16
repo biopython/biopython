@@ -8,7 +8,7 @@ the '-m 9' option, (table w/ annotations).
 Returns a BlastTableRec instance
 """
 
-class BlastTableEntry:
+class BlastTableEntry(object):
    def __init__(self,in_rec):
       bt_fields = in_rec.split()
       self.qid = bt_fields[0].split('|')
@@ -22,7 +22,7 @@ class BlastTableEntry:
       self.e_value = float(bt_fields[10])
       self.bit_score = float(bt_fields[11])
       
-class BlastTableRec:
+class BlastTableRec(object):
    def __init__(self):
       self.program = None
       self.version = None
@@ -39,7 +39,7 @@ reader_keywords = {'BLASTP': 'version',
                    'Query': 'query',
                    'Database': 'database',
                    'Fields': 'fields'}
-class BlastTableReader:
+class BlastTableReader(object):
    def __init__(self, handle):
       self.handle = handle
       inline = self.handle.readline()

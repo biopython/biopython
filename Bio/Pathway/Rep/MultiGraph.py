@@ -6,7 +6,7 @@
 # get set abstraction for graph representation
 from Bio.Pathway.Rep.HashSet import *
 
-class MultiGraph:
+class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
 
     def __init__(self, nodes = []):

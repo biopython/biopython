@@ -25,7 +25,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 #from BioModule import 
 
-class ProteinAnalysis:
+class ProteinAnalysis(object):
     """Class containing methods for protein analysis.
 
     The class init method takes only one argument, the protein sequence as a

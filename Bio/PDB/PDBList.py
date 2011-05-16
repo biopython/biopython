@@ -40,7 +40,7 @@ import shutil
 import urllib
 
 
-class PDBList:
+class PDBList(object):
     """
     This class provides quick access to the structure lists on the
     PDB server or its mirrors. The structure lists contain

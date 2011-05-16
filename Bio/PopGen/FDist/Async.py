@@ -63,7 +63,7 @@ class FDistAsync(FDistController):
         output_files['out.dat'] = open(data_dir + os.sep + 'out.dat', 'r')
         return fst, output_files
 
-class SplitFDist:
+class SplitFDist(object):
     """Splits a FDist run.
 
        The idea is to split a certain number of simulations in smaller

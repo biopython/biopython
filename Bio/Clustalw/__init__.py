@@ -224,7 +224,7 @@ class ClustalAlignment(Alignment):
         """
         return self.format("clustal")
 
-class MultipleAlignCL:
+class MultipleAlignCL(object):
     """Represent a clustalw multiple alignment command line (OBSOLETE).
 
     This command line wrapper is considerd obsolete. Please use the replacement

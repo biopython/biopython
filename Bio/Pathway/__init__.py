@@ -35,7 +35,7 @@ from Bio.Pathway.Rep.HashSet import *
 from Bio.Pathway.Rep.MultiGraph import *
 
 
-class Reaction:
+class Reaction(object):
     """Abstraction for a biochemical transformation.
 
     This class represents a (potentially reversible) biochemical
@@ -147,7 +147,7 @@ class Reaction:
         return self.reactants.keys()
 
 
-class System:
+class System(object):
     """Abstraction for a collection of reactions.
 
     This class is used in the Bio.Pathway framework to represent an arbitrary
@@ -217,7 +217,7 @@ class System:
         return (species, reactions, stoch)
 
 
-class Interaction:
+class Interaction(object):
     """An arbitrary interaction between any number of species.
 
     This class definition is inteded solely as a minimal wrapper interface that should
@@ -244,7 +244,7 @@ class Interaction:
         return "<" + str(self.data) + ">"
     
 
-class Network:
+class Network(object):
     """A set of species that are explicitly linked by interactions.
 
     The network is a directed multigraph with labeled edges. The nodes in the graph

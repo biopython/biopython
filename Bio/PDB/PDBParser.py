@@ -18,7 +18,7 @@ from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
 
-class PDBParser:
+class PDBParser(object):
     """
     Parse a PDB file and return a Structure object.
     """

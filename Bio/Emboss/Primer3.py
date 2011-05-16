@@ -19,7 +19,7 @@ function to iterate over the retsults.
 
 # --- primer3
 
-class Record:
+class Record(object):
     """Represent information from a primer3 run finding primers.
 
     Members:
@@ -32,7 +32,7 @@ class Record:
         self.comments = ""
         self.primers = []
 
-class Primers:
+class Primers(object):
     """A primer set designed by Primer3.
 
     Members:

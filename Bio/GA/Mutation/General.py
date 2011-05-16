@@ -6,7 +6,7 @@ import random
 # local stuff
 from Bio.GA.Organism import Organism
 
-class SafeFitnessMutation:
+class SafeFitnessMutation(object):
     """Perform mutations, but do not allow decreases in organism fitness.
 
     This doesn't actually do any mutation work, but just checks that

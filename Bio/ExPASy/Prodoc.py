@@ -40,7 +40,7 @@ def parse(handle):
             return
         yield record
  
-class Record:
+class Record(object):
     """Holds information from a Prodoc record.
 
     Members:
@@ -57,7 +57,7 @@ class Record:
         self.references = []
 
 
-class Reference:
+class Reference(object):
     """Holds information from a Prodoc citation.
 
     Members:

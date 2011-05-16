@@ -208,7 +208,7 @@ class _GenePopCommandline(AbstractCommandline):
         """
         self.set_parameter("input", "InputFile="+fname)
 
-class GenePopController:
+class GenePopController(object):
     def __init__(self, genepop_dir = None):
         """Initializes the controller.
         

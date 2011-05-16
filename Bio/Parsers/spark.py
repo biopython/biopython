@@ -49,7 +49,7 @@ def _namelist(instance):
                 namedict[name] = 1
     return namelist
 
-class GenericScanner:
+class GenericScanner(object):
     def __init__(self):
         pattern = self.reflect()
         self.re = re.compile(pattern, re.VERBOSE)
@@ -94,7 +94,7 @@ class GenericScanner:
         r'( . | \n )+'
         pass
 
-class GenericParser:
+class GenericParser(object):
     def __init__(self, start):
         self.rules = {}
         self.rule2func = {}
@@ -458,10 +458,10 @@ class GenericASTBuilder(GenericParser):
 #  preorder traversal.  Node type is determined via the typestring() method.
 #
 
-class GenericASTTraversalPruningException:
+class GenericASTTraversalPruningException(object):
     pass
 
-class GenericASTTraversal:
+class GenericASTTraversal(object):
     def __init__(self, ast):
         self.ast = ast
 

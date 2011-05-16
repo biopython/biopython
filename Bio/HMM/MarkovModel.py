@@ -8,7 +8,7 @@ import random
 # biopython
 from Bio.Seq import MutableSeq
 
-class MarkovModelBuilder:
+class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
 
     This class is designed to try to separate the task of specifying the
@@ -272,7 +272,7 @@ class MarkovModelBuilder:
             raise KeyError("Emission of %s from %s is not allowed."
                            % (emission_state, seq_state))
 
-class HiddenMarkovModel:
+class HiddenMarkovModel(object):
     """Represent a hidden markov model that can be used for state estimation.
     """
     def __init__(self, transition_prob, emission_prob, transition_pseudo,

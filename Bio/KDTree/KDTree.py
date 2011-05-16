@@ -88,7 +88,7 @@ def _test(nr_points, dim, bucket_size, radius):
     else:
         print "Not passed: %i != %i." % (l1, l2)
 
-class KDTree:
+class KDTree(object):
     """
     KD tree implementation (C++, SWIG python wrapper)
 

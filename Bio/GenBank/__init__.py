@@ -292,7 +292,7 @@ def _split_compound_loc(compound_loc):
         for part in compound_loc.split(","):
             yield part
 
-class Iterator:
+class Iterator(object):
     """Iterator interface to move over a file of GenBank entries one at a time.
     """
     def __init__(self, handle, parser = None):
@@ -337,7 +337,7 @@ class LocationParserError(Exception):
     """
     pass
                                                           
-class FeatureParser:
+class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects.
     """
     def __init__(self, debug_level = 0, use_fuzziness = 1, 
@@ -368,7 +368,7 @@ class FeatureParser:
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class RecordParser:
+class RecordParser(object):
     """Parse GenBank files into Record objects
     """
     def __init__(self, debug_level = 0):

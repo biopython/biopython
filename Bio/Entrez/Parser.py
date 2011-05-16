@@ -134,7 +134,7 @@ class ValidationError(ValueError):
         return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False." % self.name
 
 
-class DataHandler:
+class DataHandler(object):
 
     home = os.path.expanduser('~')
     local_dtd_dir = os.path.join(home, '.biopython', 'Bio', 'Entrez', 'DTDs')

@@ -88,7 +88,7 @@ def read(handle):
     return record
 
 
-class Record:
+class Record(object):
     """Holds information from a GenePop record.
 
     Members:

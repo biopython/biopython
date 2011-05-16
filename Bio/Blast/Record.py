@@ -22,7 +22,7 @@ Parameters         Holds information from the parameters.
 
 from Bio.Align import Generic
 
-class Header:
+class Header(object):
     """Saves information from a blast header.
 
     Members:
@@ -52,7 +52,7 @@ class Header:
         self.database_sequences = None
         self.database_letters = None
 
-class Description:
+class Description(object):
     """Stores information about one hit in the descriptions section.
 
     Members:
@@ -72,7 +72,7 @@ class Description:
     def __str__(self):
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
 
-class Alignment:
+class Alignment(object):
     """Stores information about one hit in the alignments section.
 
     Members:
@@ -94,7 +94,7 @@ class Alignment:
         lines.append("Length = %s\n" % self.length)
         return '\n           '.join(lines)
 
-class HSP:
+class HSP(object):
     """Stores information about one hsp in an alignment hit.
 
     Members:
@@ -189,7 +189,7 @@ class HSP:
                             str(self.sbjct_end)))
         return "\n".join(lines)
 
-class MultipleAlignment:
+class MultipleAlignment(object):
     """Holds information about a multiple alignment.
 
     Members:
@@ -237,7 +237,7 @@ class MultipleAlignment:
 
         return generic
 
-class Round:
+class Round(object):
     """Holds information from a PSI-BLAST round.
 
     Members:
@@ -255,7 +255,7 @@ class Round:
         self.alignments = []
         self.multiple_alignment = None
 
-class DatabaseReport:
+class DatabaseReport(object):
     """Holds information about a database report.
     
     Members:
@@ -277,7 +277,7 @@ class DatabaseReport:
         self.gapped = 0
         self.ka_params_gap = (None, None, None)
 
-class Parameters:
+class Parameters(object):
     """Holds information about the parameters.
 
     Members:

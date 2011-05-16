@@ -8,7 +8,7 @@ check.
 # standard library
 import random
 
-class AmbiguousRepair:
+class AmbiguousRepair(object):
     """Perform repair to reduce the number of Ambiguous genes in a genome.
 
     In cases where ambiguous genes are allowed in a genome (for example,

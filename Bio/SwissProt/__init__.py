@@ -23,7 +23,7 @@ parse              Read multiple SwissProt records
 
 from Bio._py3k import _as_string
 
-class Record:
+class Record(object):
     """Holds information from a SwissProt record.
 
     Members:
@@ -87,7 +87,7 @@ class Record:
         self.sequence = ''
 
 
-class Reference:
+class Reference(object):
     """Holds information from one reference in a SwissProt entry.
 
     Members:

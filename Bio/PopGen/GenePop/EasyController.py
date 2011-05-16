@@ -16,7 +16,7 @@ from Controller import GenePopController
 from Bio.PopGen import GenePop
 
 
-class EasyController:
+class EasyController(object):
     def __init__(self, fname, genepop_dir = None):
         """Initializes the controller.
         

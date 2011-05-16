@@ -29,7 +29,7 @@ equal_weight    Every example is given a weight of 1.
 
 import numpy
 
-class kNN:
+class kNN(object):
     """Holds information necessary to do nearest neighbors classification.
 
     Members:

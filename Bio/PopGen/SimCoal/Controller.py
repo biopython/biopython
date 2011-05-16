@@ -14,7 +14,7 @@ import tempfile
 from shutil import copyfile
 from logging import debug
 
-class SimCoalController:
+class SimCoalController(object):
     def __init__(self, simcoal_dir):
         """Initializes the controller.
         

@@ -34,7 +34,7 @@ from reportlab.lib import colors
 from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
 
-class Track:
+class Track(object):
     """ Track
 
         Provides:

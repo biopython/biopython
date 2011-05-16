@@ -16,7 +16,7 @@ rapid mutation-behavior.
 # standard modules
 import random
 
-class UniformCrossover:
+class UniformCrossover(object):
     """Perform single point crossover between genomes at some defined rates.
 
     This performs a single crossover between two genomes at some

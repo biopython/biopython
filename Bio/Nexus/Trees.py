@@ -22,7 +22,7 @@ NODECOMMENT_END=']'
 
 class TreeError(Exception): pass
 
-class NodeData:
+class NodeData(object):
     """Stores tree-relevant data associated with nodes (e.g. branches or otus)."""
     def __init__(self,taxon=None,branchlength=0.0,support=None,comment=None):
         self.taxon=taxon

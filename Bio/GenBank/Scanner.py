@@ -32,7 +32,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_alphabet, generic_protein
 
-class InsdcScanner:
+class InsdcScanner(object):
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
 
     The International Nucleotide Sequence Database Collaboration (INSDC)

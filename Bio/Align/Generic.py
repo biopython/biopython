@@ -19,7 +19,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
-class Alignment:
+class Alignment(object):
     """Represent a set of alignments (DEPRECATED).
 
     This is a base class to represent alignments, which can be subclassed

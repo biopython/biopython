@@ -1,6 +1,6 @@
 """Useful utilities for helping in parsing GenBank files.
 """
-class FeatureValueCleaner:
+class FeatureValueCleaner(object):
     """Provide specialized capabilities for cleaning up values in features.
 
     This class is designed to provide a mechanism to clean up and process
