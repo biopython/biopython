@@ -81,13 +81,18 @@ class MafIterator(AlignmentIterator):
         bundle = []
 
         # iterate through file, capture a bundle of lines
-        line = self.handle.readline()
+        try:
+            line = self._lastline
+            del self._lastline
+        except AttributeError:
+            line = self.handle.readline()
 
         while line:
             if line.startswith("a"):
                 if len(bundle) > 0:
-                    # rewind the pointer so we don't lose this line next time
-                    self.handle.seek(self.handle.tell() - len(line))
+                    # save this line for next time.  avoids manipulation of
+                    # the file pointer for handles like sys.stdin
+                    self._lastline = line
                     break
 
                 bundle = [line]
