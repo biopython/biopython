@@ -180,16 +180,54 @@ class MafIterator(AlignmentIterator):
         return alignment
 
     def next(self):
-        try:
-            _ = self._header
-        except AttributeError:
-            line = self.handle.readline()
+        if self.handle.tell() == 0:
+            # clear old data if necessary
+            try:
+                del self._header
+                del self._track
+            except AttributeError:
+                pass
+            
+            def _check_nextline_header():
+                line = self.handle.readline()
 
-            if line[:15] == "##maf version=1":
-                self._header = line.strip()
+                if line[:15] == "##maf version=1":
+                    self._header = line.strip()
+                    
+                    return True
+                else:
+                    return line
+            
+            line = _check_nextline_header()
+            
+            if line == True:
+                pass            
             elif not line:
                 raise StopIteration
-            else:
+            elif line[:5] == "track":
+                import shlex
+                
+                _valid_track_keys = ("name", "mafDot", "visibility", "frames", "speciesOrder", "description")
+
+                parsed_track_line = dict(x.split("=") for x in shlex.split(line)[1:])
+
+                invalid_keys = [x for x in parsed_track_line.keys() if x not in _valid_track_keys]
+                
+                if len(invalid_keys) > 0:
+                    raise ValueError("Error parsing MAF header -- invalid keys: %s" % (" ".join (invalid_keys,)))           
+                    
+                self._track = parsed_track_line
+                
+                if "speciesOrder" in self._track:
+                    self._track["speciesOrder"] = self._track["speciesOrder"].split(" ")
+                    
+                    if len(self._track["speciesOrder"]) <> len(set(self._track["speciesOrder"])):
+                        raise ValueError("Error parsing MAF header -- duplicate entry in speciesOrder")
+                
+                # next line better be the header!
+                line = _check_nextline_header()
+
+            if line != True:
                 raise ValueError("Did not find MAF header")
 
         # handoff to bundle fetcher
