@@ -702,4 +702,32 @@ Testing reading maf format file MAF/humor.maf with 2 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading maf format file MAF/bug2453.maf with 3 alignments
+ Alignment 0, with 5 sequences of length 42
+  AAA-- alignment column 0
+  AAAAA alignment column 1
+  AAAAA alignment column 2
+  ---T- alignment column 3
+  GGGGG alignment column 4
+  ||||| ...
+  GGGGG alignment column 41
+ Alignment 1, with 5 sequences of length 6
+  TTTTt alignment column 0
+  AAAAa alignment column 1
+  AAAAa alignment column 2
+  AAAAg alignment column 3
+  GGGGg alignment column 4
+  ||||| ...
+  AAAAa alignment column 5
+ Alignment 2, with 4 sequences of length 13
+  gcagctgaaaaca hg16.chr7
+  gcagctgaaaaca panTro1.chr6
+  gcagctgaaaaca baboon
+  ACAGCTGAAAATA mm4.chr6
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
 Finished tested reading files
