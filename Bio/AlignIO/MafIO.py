@@ -10,15 +10,12 @@ You are expected to use this module via the Bio.AlignIO functions(or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 """
-import bisect, sys, os
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 """
-import sys
 from Bio import AlignIO
 a = AlignIO.parse("/comp_sync/data/foreign/ucsc/20100921_multiz30way/chr10.maf", "maf")
 
@@ -229,7 +226,7 @@ if __name__ == "__main__":
     alignment = MultipleSeqAlignment([], single_letter_alphabet)
     alignment.extend([rec1A, rec2A])
 
-    this_mafwriter.write_alignment(alignment)
+    this_mafwriter.write_file([alignment])
     this_tmp.flush()
     this_tmp.seek(0)
     
@@ -275,7 +272,7 @@ s rec2                                                   0    36 +              
     alignment.annotations = {"score": 4935893.43435,
                              "works": "excellent"}
 
-    this_mafwriter.write_alignment(alignment)
+    this_mafwriter.write_file([alignment])
     this_tmp.flush()
     this_tmp.seek(0)
 
