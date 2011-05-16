@@ -119,7 +119,7 @@ class MafIterator(AlignmentIterator):
                     break
 
                 this_bundle = [line]
-            elif line.startswith("#") or line == "\n":
+            elif line.startswith("#") or not line.strip():
                 pass
             else:
                 this_bundle.append(line)
