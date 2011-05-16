@@ -200,6 +200,11 @@ def simple_alignment_comparison(alignments, alignments2, format):
             else:
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
+
+            #Check the sequence
+            assert r1.seq.tostring() == r2.seq.tostring(), \
+                   "Seq does not match %s vs %s (%s vs %s)" \
+                   % (r1.seq, r2.seq, r1.id, r2.id)
     return True
 
 
