@@ -108,7 +108,7 @@ class MafIterator(AlignmentIterator):
     @staticmethod
     def _parse_bundle(bundle):
         # "s" line field names for making dicts
-        _s_line_fields =("start", "size", "strand", "srcSize", "text")
+        _s_line_fields = ("start", "size", "strand", "srcSize", "text")
 
         # stores the "a" line and all "s" lines
         bundle_ids = []
@@ -120,8 +120,8 @@ class MafIterator(AlignmentIterator):
             if line.startswith("s"):
                 line_split = line.strip().split()
 
-                if len(line_split) > 7:
-                    raise ValueError("Error parsing alignment - 's' line with > 7 fields")
+                if len(line_split) <> 7:
+                    raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
                 idn = line_split[1]
                 bundle_ids.append(idn)
@@ -152,9 +152,9 @@ class MafIterator(AlignmentIterator):
         for idn in parsed_bundle[2]:
             species_data = parsed_bundle[1][idn]
             anno = {"start": int(species_data["start"]),
-                         "srcSize": int(species_data["srcSize"]),
-                         "strand": species_data["strand"],
-                         "size": int(species_data["size"])}
+                    "srcSize": int(species_data["srcSize"]),
+                    "strand": species_data["strand"],
+                    "size": int(species_data["size"])}
 
             sequence = species_data["text"]
             #Interpret a dot/period to mean same the first sequence
@@ -164,17 +164,17 @@ class MafIterator(AlignmentIterator):
                 ref = parsed_bundle[1][parsed_bundle[2][0]]["text"]
                 new = []
                 for (s, r) in zip(sequence, ref):
-                    if s==".":
+                    if s == ".":
                         new.append(r)
                     else:
                         new.append(s)
                 sequence = "".join(new)
 
             record = SeqRecord(Seq(sequence, self.alphabet),
-                                id = idn,
-                                name = idn,
-                                description = "",
-                                annotations = anno)
+                               id = idn,
+                               name = idn,
+                               description = "",
+                               annotations = anno)
 
             alignment.append(record)
 
