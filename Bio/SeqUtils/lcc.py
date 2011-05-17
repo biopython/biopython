@@ -114,7 +114,7 @@ def lcc_mult(seq,wsize):
                 term_t = compone[cant_t]
                 term_g = compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-        tail=window[0]
+        tail = window[0]
     return lccsal
 
 def lcc_simp(seq):
@@ -129,14 +129,14 @@ def lcc_simp(seq):
     Andrzej K Konopka (2005) Sequence Complexity and Composition
     DOI: 10.1038/npg.els.0005260
     """
-    wsize=len(seq)
+    wsize = len(seq)
     try:
         #Assume its a string
         upper = seq.upper()
     except AttributeError:
         #Should be a Seq object then
         upper = seq.tostring().upper()
-    l2=math.log(2)
+    l2 = math.log(2)
     if 'A' not in seq:
         term_a = 0
         # Check to avoid calculating the log of 0.
