@@ -122,11 +122,8 @@ class MafIterator(AlignmentIterator):
 
                 if len(line_split) > 7:
                     raise ValueError("Error parsing alignment - 's' line with > 7 fields")
-                #Cannot assume the identifier is database.chromosome
-                #idn = line_split[1].split(".", 1)[0]
+
                 idn = line_split[1]
-                if idn in bundle_ids:
-                    raise ValueError("Error parsing alignment - duplicate ID in one bundle")
                 bundle_ids.append(idn)
                 bundle_s_lines[idn] = dict(zip(_s_line_fields, line_split[2:]))
             elif line.startswith("a"):
@@ -137,6 +134,9 @@ class MafIterator(AlignmentIterator):
 
             ##TODO
             # parse 'i' 'q' 'e' lines?
+
+        if len(bundle_ids) <> len(set(bundle_ids)):
+            raise ValueError("Error parsing alignment - duplicate ID in one bundle")
 
         return(bundle_a_line, bundle_s_lines, bundle_ids)
 
