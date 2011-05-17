@@ -5,7 +5,8 @@
 
 """Atom class, used in Structure objects."""
 
-import numpy, warnings
+import numpy
+import warnings
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
