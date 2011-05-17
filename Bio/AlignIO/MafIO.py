@@ -138,10 +138,6 @@ class MafIterator(AlignmentIterator):
             ##TODO
             # parse 'i' 'q' 'e' lines?
 
-        # check that all sequences are the same length
-        if len(set([len(x["text"]) for x in bundle_s_lines.values()])) > 1:
-            raise ValueError("Error parsing alignment - sequences of different length?")
-
         return(bundle_a_line, bundle_s_lines, bundle_ids)
 
     def _build_alignment(self, parsed_bundle):
