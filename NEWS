@@ -20,6 +20,10 @@ The Bio.AlignIO "phylip" parser and writer now treat a dot/period in the
 sequence as an error, in line with the official PHYLIP specification. Older
 verions of our code didn't do anything special with this character.
 
+Of potential interest to anyone subclassing Biopython objects, any remaining
+"old syle" Python classes have been switched to "new style" classes. This
+allows things like defining properties.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
