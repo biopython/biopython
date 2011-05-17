@@ -5,7 +5,7 @@
 
 """Atom class, used in Structure objects."""
 
-import numpy
+import numpy, warnings
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -94,7 +94,6 @@ class Atom(object):
                 msg = "Could not assign element %r for Atom (name=%s) with given element %r" \
                       % (putative_element, self.name, element)
                 element = ""
-            import warnings
             warnings.warn(msg, PDBConstructionWarning)
                 
         return element
