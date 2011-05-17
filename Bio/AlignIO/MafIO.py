@@ -85,7 +85,7 @@ class MafIterator(AlignmentIterator):
             line = self._lastline
             del self._lastline
         except AttributeError:
-            line = self.handle.readline()
+            line = self.handle.next()
 
         while line:
             if line[0] == "a":
@@ -101,7 +101,7 @@ class MafIterator(AlignmentIterator):
             else:
                 bundle.append(line)
 
-            line = self.handle.readline()
+            line = self.handle.next()
 
         return bundle
 
