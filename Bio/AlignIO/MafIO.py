@@ -88,7 +88,7 @@ class MafIterator(AlignmentIterator):
             line = self.handle.readline()
 
         while line:
-            if line.startswith("a"):
+            if line[0] == "a":
                 if len(bundle) > 0:
                     # save this line for next time.  avoids manipulation of
                     # the file pointer for handles like sys.stdin
@@ -96,7 +96,7 @@ class MafIterator(AlignmentIterator):
                     break
 
                 bundle = [line]
-            elif line.startswith("#") or not line.strip():
+            elif line[0] == "#" or line == "\n":
                 pass
             else:
                 bundle.append(line)
@@ -117,7 +117,7 @@ class MafIterator(AlignmentIterator):
 
         # parse everything
         for line in bundle:
-            if line.startswith("s"):
+            if line[0] == "s":
                 line_split = line.strip().split()
 
                 if len(line_split) <> 7:
@@ -126,7 +126,7 @@ class MafIterator(AlignmentIterator):
                 idn = line_split[1]
                 bundle_ids.append(idn)
                 bundle_s_lines[idn] = dict(zip(_s_line_fields, line_split[2:]))
-            elif line.startswith("a"):
+            elif line[0] == "a":
                 if bundle_a_line != None:
                     raise ValueError("Error parsing alignment - multiple 'a' lines in one bundle")
 
