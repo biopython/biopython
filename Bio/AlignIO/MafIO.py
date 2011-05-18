@@ -78,30 +78,20 @@ class MafIterator(AlignmentIterator):
     """
     
     def _fetch_bundle(self):
+        in_a_bundle = False
         bundle = []
-
-        # iterate through file, capture a bundle of lines
-        try:
-            line = self._lastline
-            del self._lastline
-        except AttributeError:
-            line = self.handle.next()
-
-        while line:
-            if line[0] == "a":
-                if len(bundle) > 0:
-                    # save this line for next time.  avoids manipulation of
-                    # the file pointer for handles like sys.stdin
-                    self._lastline = line
-                    break
-
-                bundle = [line]
-            elif line[0] == "#" or line == "\n":
+        
+        for line in self.handle:     
+            if line[0] == "#":
                 pass
-            else:
-                bundle.append(line)
-
-            line = self.handle.next()
+            elif line[0] == "a":
+                in_a_bundle = True
+                bundle = [line]
+            elif in_a_bundle:
+                if not line.strip():
+                    break
+                else:
+                    bundle.append(line)
 
         return bundle
 
