@@ -31,8 +31,7 @@ class MafWriter(SequentialAlignmentWriter):
                   #In the MAF file format, spaces are not allowed in the id
                   "%-40s" % record.id.replace(" ","_"),
                   "%15s" % record.annotations.get("start", 0),
-                  #TODO - Should default this exclude the gaps?
-                  "%5s" % record.annotations.get("size", len(record)),
+                  "%5s" % record.annotations.get("size", len(str(record.seq).replace("-",""))),
                   record.annotations.get("strand", "+"),
                   "%15s" % record.annotations.get("srcSize", 0),
                   str(record.seq)]
