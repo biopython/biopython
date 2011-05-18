@@ -223,13 +223,13 @@ class MultipleSeqAlignment(_Alignment):
                 #Special case, no records
                 return
             expected_length = len(rec)
-            self.append(rec, expected_length)
+            self._append(rec, expected_length)
             #Now continue to the rest of the records as usual
             
         for rec in records:
             self._append(rec, expected_length)
             
-    def append(self, record, _private_expected_length=None):
+    def append(self, record):
         """Add one more SeqRecord object to the alignment as a new row.
 
         This must have the same length as the original alignment (unless this is
