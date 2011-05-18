@@ -1,4 +1,4 @@
-# Copyright 2008-2010 by Peter Cock.
+# Copyright 2008-2011 by Peter Cock.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -21,7 +21,7 @@ class MultipleSeqAlignment(_Alignment):
     """Represents a classical multiple sequence alignment (MSA).
 
     By this we mean a collection of sequences (usually shown as rows) which
-    are all the same length (usually with gap characters for insertions of
+    are all the same length (usually with gap characters for insertions or
     padding). The data can then be regarded as a matrix of letters, with well
     defined columns.
 
