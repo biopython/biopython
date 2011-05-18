@@ -38,7 +38,6 @@ class MafWriter(SequentialAlignmentWriter):
         self.handle.write(" ".join(fields) + "\n")
 
     def write_alignment(self, alignment):
-
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an alignment object")
         
@@ -50,10 +49,10 @@ class MafWriter(SequentialAlignmentWriter):
         if len(all_ids) != len(set(all_ids)):
             raise ValueError("Identifiers in each MultipleSeqAlignment must be unique")
 
-        # for this format, there really should be an 'annotations' dict at the level
-        # of the alignment object, not just SeqRecords
+        # for now, use ._annotations private property, but restrict keys to those
+        # specifically supported by the MAF format, according to spec
         try:
-            anno = " ".join(["%s=%s" % (x, y) for x, y in alignment.annotations.iteritems()])
+            anno = " ".join(["%s=%s" % (x, y) for x, y in alignment._annotations.iteritems() if x in ("score", "pass")])
         except AttributeError:
             anno = "score=0.00"
 
