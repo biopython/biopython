@@ -119,6 +119,9 @@ class MafIterator(AlignmentIterator):
                     raise ValueError("Error parsing alignment - multiple 'a' lines in one bundle")
 
                 bundle_a_line = dict([x.split("=") for x in line.strip().split()[1:]])
+                
+                if len([x for x in bundle_a_line.iterkeys() if x not in ("score", "pass")]) > 0:
+                    raise ValueError("Error parsing alignment - invalid key in 'a' line")
 
             ##TODO
             # parse 'i' 'q' 'e' lines?
