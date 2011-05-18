@@ -121,4 +121,3 @@ class Paml(object):
         if result_code < 0:
             # If the paml process is killed by a signal somehow
             raise EnvironmentError, "The {0} process was killed.".format(command)
-        
