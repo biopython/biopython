@@ -127,6 +127,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
     records = []
     
     while True:
+        # allows parsing of the last bundle without duplicating code
         try:
             line = handle.next()
         except StopIteration:
@@ -149,6 +150,9 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
                     assert len(records) == seq_count
                     
                 alignment = MultipleSeqAlignment(records, alphabet)
+                #TODO - Introduce an annotated alignment class?
+                #See also Bio/AlignIO/FastaIO.py for same requirement.        
+                #For now, store the annotation a new private property:
                 alignment._annotations = annotations
                 
                 yield alignment
@@ -164,6 +168,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
                 if len(line_split) <> 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
+                # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
                 anno = {"start": int(line_split[2]),
                         "size": int(line_split[3]),
                         "strand": line_split[4],
