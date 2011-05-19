@@ -10,11 +10,12 @@ You are expected to use this module via the Bio.AlignIO functions(or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
 """
+from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
-from Interfaces import AlignmentIterator, SequentialAlignmentWriter
+from Interfaces import SequentialAlignmentWriter
 
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file.
@@ -68,163 +69,132 @@ class MafWriter(SequentialAlignmentWriter):
         self.handle.write("\n")
 
         return recs_out
-
-class MafIterator(AlignmentIterator):
-    """Returns iterator over specified handle, of MultipleSeqAlignment objects.
-    
-    More later.
-    """
-    
-    def _fetch_bundle(self):
-        in_a_bundle = False
-        bundle = []
         
-        for line in self.handle:     
-            if line[0] == "#":
-                pass
-            elif line[0] == "a":
-                in_a_bundle = True
-                bundle = [line]
-            elif in_a_bundle:
-                if not line.strip():
-                    break
-                else:
-                    bundle.append(line)
+def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, expect_header = True):
+    track_data = False
+    header_data = False
+        
+    if expect_header == True:
+        def _parse_track_line(line):
+            import shlex
+            
+            _valid_track_keys = ("name", "mafDot", "visibility", "frames", "speciesOrder", "description")
+    
+            parsed_track_line = dict(x.split("=") for x in shlex.split(line)[1:])
+    
+            invalid_keys = [x for x in parsed_track_line.keys() if x not in _valid_track_keys]
+                
+            if len(invalid_keys) > 0:
+                raise ValueError("Error parsing MAF header -- invalid keys: %s" % (" ".join (invalid_keys,)))           
+    
+            if "speciesOrder" in parsed_track_line:
+                parsed_track_line["speciesOrder"] = parsed_track_line["speciesOrder"].split(" ")
+                    
+                if len(parsed_track_line["speciesOrder"]) <> len(set(parsed_track_line["speciesOrder"])):
+                    raise ValueError("Error parsing MAF header -- duplicate entry in speciesOrder")
+                    
+            return parsed_track_line
+            
+        def _parse_header_line(line):
+            import shlex
+            
+            _valid_header_keys = ("version", "scoring")
+    
+            parsed_header_line = dict(x.split("=") for x in shlex.split(line)[1:])
+    
+            invalid_keys = [x for x in parsed_header_line.keys() if x not in _valid_header_keys]
+                
+            if len(invalid_keys) > 0:
+                raise ValueError("Error parsing MAF header -- invalid keys: %s" % (" ".join (invalid_keys,)))
+                
+            return parsed_header_line
+        
+        header_line = handle.next()
+        
+        if header_line.startswith("track"):
+            track_data = _parse_track_line(header_line)
+            
+            header_line = handle.next()
+            
+        if header_line.startswith("##"):
+            header_data = _parse_header_line(header_line)
+        else:
+            raise ValueError("Did not find MAF header!")
 
-        return bundle
-
-    @staticmethod
-    def _parse_bundle(bundle):
-        # "s" line field names for making dicts
-        _s_line_fields = ("start", "size", "strand", "srcSize", "text")
-
-        # stores the "a" line and all "s" lines
-        bundle_ids = []
-        bundle_s_lines = {}
-        bundle_a_line = None
-
-        # parse everything
-        for line in bundle:
-            if line[0] == "s":
+    in_a_bundle = False
+    
+    annotations = []
+    records = []
+    
+    while True:
+        try:
+            line = handle.next()
+        except StopIteration:
+            line = ""
+        
+        if line.startswith("#"):
+            pass
+        elif line.startswith("a"):
+            # start a bundle of records
+            in_a_bundle = True
+            
+            annotations = dict([x.split("=") for x in line.strip().split()[1:]])
+                
+            if len([x for x in annotations.iterkeys() if x not in ("score", "pass")]) > 0:
+                raise ValueError("Error parsing alignment - invalid key in 'a' line")
+        elif in_a_bundle:
+            if not line.strip():
+                # end a bundle of records
+                if seq_count is not None:
+                    assert len(records) == seq_count
+                    
+                alignment = MultipleSeqAlignment(records, alphabet)
+                alignment._annotations = annotations
+                
+                yield alignment
+                
+                in_a_bundle = False
+                
+                annotations = []
+                records = []
+            elif line.startswith("s"):
+                # add a SeqRecord to the bundle
                 line_split = line.strip().split()
 
                 if len(line_split) <> 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
-                idn = line_split[1]
-                bundle_ids.append(idn)
-                bundle_s_lines[idn] = dict(zip(_s_line_fields, line_split[2:]))
-            elif line[0] == "a":
-                if bundle_a_line != None:
-                    raise ValueError("Error parsing alignment - multiple 'a' lines in one bundle")
-
-                bundle_a_line = dict([x.split("=") for x in line.strip().split()[1:]])
+                anno = {"start": int(line_split[2]),
+                        "size": int(line_split[3]),
+                        "strand": line_split[4],
+                        "srcSize": int(line_split[5])}
+                        
+                sequence = line_split[6]
                 
-                if len([x for x in bundle_a_line.iterkeys() if x not in ("score", "pass")]) > 0:
-                    raise ValueError("Error parsing alignment - invalid key in 'a' line")
-
-            ##TODO
-            # parse 'i' 'q' 'e' lines?
-
-        if len(bundle_ids) <> len(set(bundle_ids)):
-            raise ValueError("Error parsing alignment - duplicate ID in one bundle")
-
-        return(bundle_a_line, bundle_s_lines, bundle_ids)
-
-    def _build_alignment(self, parsed_bundle):
-        # build the multiple alignment object
-        alignment = MultipleSeqAlignment([], self.alphabet)
-
-        #TODO - Introduce an annotated alignment class?
-        #See also Bio/AlignIO/FastaIO.py for same requirement.        
-        #For now, store the annotation a new private property:
-        alignment._annotations = parsed_bundle[0]
-
-        for idn in parsed_bundle[2]:
-            species_data = parsed_bundle[1][idn]
-            anno = {"start": int(species_data["start"]),
-                    "srcSize": int(species_data["srcSize"]),
-                    "strand": species_data["strand"],
-                    "size": int(species_data["size"])}
-
-            sequence = species_data["text"]
-            #Interpret a dot/period to mean same the first sequence
-            if "." in sequence:
-                if idn == parsed_bundle[2][0]:
-                    raise ValueError("Found dot/period in first sequence of alignment")
-                ref = parsed_bundle[1][parsed_bundle[2][0]]["text"]
-                new = []
-                for (s, r) in zip(sequence, ref):
-                    if s == ".":
-                        new.append(r)
-                    else:
-                        new.append(s)
-                sequence = "".join(new)
-
-            record = SeqRecord(Seq(sequence, self.alphabet),
-                               id = idn,
-                               name = idn,
+                # interpret a dot/period to mean same the first sequence
+                if "." in sequence:
+                    if not records:
+                        raise ValueError("Found dot/period in first sequence of alignment")
+                        
+                    ref = str(records[0].seq)
+                    new = []
+                    
+                    for (s, r) in zip(sequence, ref):
+                        new.append(r if s == "." else s)
+                             
+                    sequence = "".join(new)
+                    
+                records.append(SeqRecord(Seq(sequence, alphabet),
+                               id = line_split[1],
+                               name = line_split[1],
                                description = "",
-                               annotations = anno)
-
-            alignment.append(record)
-
-        return alignment
-
-    def next(self):
-        try:
-            _ = self._header
-        except AttributeError:
-            def _check_nextline_header():
-                line = self.handle.readline()
-
-                if line[:15] == "##maf version=1":
-                    self._header = line.strip()
-                    
-                    return True
-                else:
-                    return line
-            
-            line = _check_nextline_header()
-            
-            if line == True:
-                pass            
-            elif not line:
-                raise StopIteration
-            elif line[:5] == "track":
-                import shlex
-                
-                _valid_track_keys = ("name", "mafDot", "visibility", "frames", "speciesOrder", "description")
-
-                parsed_track_line = dict(x.split("=") for x in shlex.split(line)[1:])
-
-                invalid_keys = [x for x in parsed_track_line.keys() if x not in _valid_track_keys]
-                
-                if len(invalid_keys) > 0:
-                    raise ValueError("Error parsing MAF header -- invalid keys: %s" % (" ".join (invalid_keys,)))           
-                    
-                self._track = parsed_track_line
-                
-                if "speciesOrder" in self._track:
-                    self._track["speciesOrder"] = self._track["speciesOrder"].split(" ")
-                    
-                    if len(self._track["speciesOrder"]) <> len(set(self._track["speciesOrder"])):
-                        raise ValueError("Error parsing MAF header -- duplicate entry in speciesOrder")
-                
-                # next line better be the header!
-                line = _check_nextline_header()
-
-            if line != True:
-                raise ValueError("Did not find MAF header")
-
-        # handoff to bundle fetcher
-        bundle = self._fetch_bundle()
-
-        if len(bundle) == 0:
-            raise StopIteration
-
-        # handoff to bundle parser
-        parsed_bundle = self._parse_bundle(bundle)
-
-        # handoff to alignment builder
-        return self._build_alignment(parsed_bundle)
+                               annotations = anno))
+            elif line.startswith("e") or \
+                 line.startswith("i") or \
+                 line.startswith("q"):
+                # not implemented
+                pass
+            else:
+                raise ValueError("Error parsing alignment - unexpected line:\n%s" % (line,))
+        elif not line:
+            break
