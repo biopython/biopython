@@ -133,35 +133,8 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
         except StopIteration:
             line = ""
         
-        if line.startswith("#"):
-            pass
-        elif line.startswith("a"):
-            # start a bundle of records
-            in_a_bundle = True
-            
-            annotations = dict([x.split("=") for x in line.strip().split()[1:]])
-                
-            if len([x for x in annotations.iterkeys() if x not in ("score", "pass")]) > 0:
-                raise ValueError("Error parsing alignment - invalid key in 'a' line")
-        elif in_a_bundle:
-            if not line.strip():
-                # end a bundle of records
-                if seq_count is not None:
-                    assert len(records) == seq_count
-                    
-                alignment = MultipleSeqAlignment(records, alphabet)
-                #TODO - Introduce an annotated alignment class?
-                #See also Bio/AlignIO/FastaIO.py for same requirement.        
-                #For now, store the annotation a new private property:
-                alignment._annotations = annotations
-                
-                yield alignment
-                
-                in_a_bundle = False
-                
-                annotations = []
-                records = []
-            elif line.startswith("s"):
+        if in_a_bundle:
+            if line.startswith("s"):
                 # add a SeqRecord to the bundle
                 line_split = line.strip().split()
 
@@ -199,7 +172,35 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
                  line.startswith("q"):
                 # not implemented
                 pass
+            elif not line.strip():
+                # end a bundle of records
+                if seq_count is not None:
+                    assert len(records) == seq_count
+                    
+                alignment = MultipleSeqAlignment(records, alphabet)
+                #TODO - Introduce an annotated alignment class?
+                #See also Bio/AlignIO/FastaIO.py for same requirement.        
+                #For now, store the annotation a new private property:
+                alignment._annotations = annotations
+                
+                yield alignment
+                
+                in_a_bundle = False
+                
+                annotations = []
+                records = []
             else:
                 raise ValueError("Error parsing alignment - unexpected line:\n%s" % (line,))
+        elif line.startswith("a"):
+            # start a bundle of records
+            in_a_bundle = True
+            
+            annotations = dict([x.split("=") for x in line.strip().split()[1:]])
+                
+            if len([x for x in annotations.iterkeys() if x not in ("score", "pass")]) > 0:
+                raise ValueError("Error parsing alignment - invalid key in 'a' line")
+        elif line.startswith("#"):
+            # ignore comments
+            pass
         elif not line:
             break
