@@ -112,7 +112,24 @@ class Yn00(Paml):
 
 def read(results_file):
     """Parse a yn00 results file."""
+    results = {}
     if not os.path.exists(results_file):
         raise IOError, "Results file does not exist."
-    results = _parse_yn00.parse(results_file)
+    with open(results_file) as results_handle:
+        lines = results_handle.readlines()
+    for line_num in range(len(lines)):
+        line = lines[line_num]
+        if "(A) Nei-Gojobori (1986) method" in line:
+            ng86_start = line_num + 1 
+        elif "(B) Yang & Nielsen (2000) method" in line:
+            (sequences, results) = _parse_yn00.parse_ng86(lines[ng86_start:line_num], 
+                    results)
+            yn00_start = line_num + 1
+        elif "(C) LWL85, LPB93 & LWLm methods" in line:
+            results = _parse_yn00.parse_yn00(lines[yn00_start:line_num], results, sequences)
+            results = _parse_yn00.parse_others(lines[line_num+1:], results, sequences)
+    if len(results) == 0:
+        raise ValueError, "Invalid results file."
     return results
+
+

@@ -5,23 +5,6 @@
 
 import re
 
-def parse(lines):
-    results = {}
-    for line_num in range(len(lines)):
-        line = lines[line_num]
-        if "(A) Nei-Gojobori (1986) method" in line:
-            ng86_start = line_num + 1 
-        elif "(B) Yang & Nielsen (2000) method" in line:
-            (sequences, results) = parse_ng86(lines[ng86_start:line_num], 
-                    results)
-            yn00_start = line_num + 1
-        elif "(C) LWL85, LPB93 & LWLm methods" in line:
-            results = parse_yn00(lines[yn00_start:line_num], results, sequences)
-            results = parse_others(lines[line_num+1:], results, sequences)
-    if len(results) == 0:
-        raise ValueError, "Invalid results file."
-    return results
-
 def parse_ng86(lines, results):
     """ Parse the Nei & Gojobori (1986) section of the resuls.
     Nei_Gojobori results are organized in a lower 
@@ -104,6 +87,8 @@ def parse_others(lines, results, sequences):
     # LWL85:  dS =  0.0227 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
     # LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
     # LPB93:  dS =  0.0129 dN =  0.0000 w = 0.0000
+    seq_name1 = None
+    seq_name2 = None
     for line in lines:
         comp_res = re.match("\d+ \((.+)\) vs. \d+ \((.+)\)", line)
         if comp_res is not None:

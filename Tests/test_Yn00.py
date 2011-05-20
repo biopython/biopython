@@ -7,7 +7,6 @@ from __future__ import with_statement
 import unittest
 import os
 import os.path
-import sys
 from Bio.Phylo.PAML import yn00
 from Bio.Phylo.PAML._paml import PamlError
 
@@ -130,11 +129,11 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, yn00.read, self.results_file)
         
     def testParseAllVersions(self):
-        for results_file in os.listdir(os.path.join("Tests", "PAML",
-                "Results", "yn00", "versions")):
-            if os.path.isfile(results_file) and results_file[:4] == "yn00":
-                results = yn00.read(os.path.join("Tests", "PAML",
-                    "Results", results_file))
+        folder = os.path.join("Tests", "PAML","Results", "yn00", "versions")
+        for results_file in os.listdir(folder):
+            file_path = os.path.join(folder, results_file)
+            if os.path.isfile(file_path) and results_file[:4] == "yn00":
+                results = yn00.read(file_path)
                 self.assertEqual(len(results), 5)
                 self.assertEqual(len(results["Homo_sapie"]), 4)
                 self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]),
