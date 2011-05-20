@@ -171,13 +171,14 @@ class Writer(object):
     def to_strings(self, support_as_branchlengths=False,
             branchlengths_only=False, plain=False,
             plain_newick=True, ladderize=None,
-            max_support=1.0):
+            max_support=1.0, format_branchlength=None):
         """Return an iterable of PAUP-compatible tree lines."""
         # If there's a conflict in the arguments, we override plain=True
         if support_as_branchlengths or branchlengths_only:
             plain = False
         make_info_string = self._info_factory(plain, support_as_branchlengths,
-                                              branchlengths_only, max_support)
+                                              branchlengths_only, max_support,
+                                              format_branchlength)
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
             if clade.is_terminal():    #terminal
@@ -207,8 +208,14 @@ class Writer(object):
             yield ' '.join(treeline)
 
     def _info_factory(self, plain, support_as_branchlengths,
-            branchlengths_only, max_support):
+            branchlengths_only, max_support, format_branchlength):
         """Return a function that creates a nicely formatted node tag."""
+        if format_branchlength is None:
+            def fmt_bl(bl):
+                return '%1.5f' % (bl,)
+        else:
+            fmt_bl = format_branchlength
+
         if plain:
             # Plain tree only. That's easy.
             def make_info_string(clade, terminal=False):
@@ -226,23 +233,23 @@ class Writer(object):
         elif branchlengths_only:
             # write only branchlengths, ignore support
             def make_info_string(clade, terminal=False):
-                return ':%1.5f' % (clade.branch_length)
+                return ':%s' % (fmt_bl(clade.branch_length),)
 
         else:
             # write support and branchlengths (e.g. .con tree of mrbayes)
             def make_info_string(clade, terminal=False):
                 if terminal:
-                    return ':%1.5f' % (clade.branch_length or 1.0)
+                    return ':%s' % (fmt_bl(clade.branch_length or 1.0),)
                 else:
                     if (clade.branch_length is not None and
                         hasattr(clade, 'confidence') and
                         clade.confidence is not None):
                         # we have blen and suppport
-                        return '%1.2f:%1.5f' % (clade.confidence,
-                                                clade.branch_length)
+                        return '%1.2f:%s' % (clade.confidence,
+                                             fmt_bl(clade.branch_length))
                     elif clade.branch_length is not None:
                         # we have only blen
-                        return '0.00000:%1.5f' % clade.branch_length
+                        return '0.00000:%s' % (fmt_bl(clade.branch_length),)
                     elif (hasattr(clade, 'confidence') and
                           clade.confidence is not None):
                         # we have only support
