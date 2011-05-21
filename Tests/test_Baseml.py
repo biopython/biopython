@@ -186,13 +186,13 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, baseml.read, self.results_file)
         
     def testParseAllVersions(self):
-        for results_file in os.listdir(os.path.join("Tests", "PAML",
-                "Results", "baseml", "versions")):
-            if os.path.isfile(results_file) and results_file[:6] == "baseml":
-                results = baseml.read(os.path.join("Tests", "PAML",
-                    "Results", results_file))
-                self.assertEqual(len(results), 5)
-                self.assertEqual(len(results["parameters"]), 6)
+        folder = os.path.join("Tests", "PAML","Results", "baseml", "versions")
+        for results_file in os.listdir(folder):
+            file_path = os.path.join(folder, results_file)
+            if os.path.isfile(file_path) and results_file[:6] == "baseml":
+                results = baseml.read(file_path)
+                self.assertEqual(len(results), 6)
+                self.assertEqual(len(results["parameters"]), 7)
     
     def testParseSEs(self):
         SE_results_file = os.path.join("Tests", "PAML", "Results", "baseml",
