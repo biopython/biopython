@@ -41,6 +41,8 @@ def _read_allele_freq_table(f):
     while l.find(" --")==-1:
         if l == "":
             raise StopIteration
+        if l.find("No data")>-1:
+            return None, None
         l = f.readline()
     alleles = filter(lambda x: x != '', f.readline().rstrip().split(" "))
     alleles = map(lambda x: _gp_int(x), alleles)
