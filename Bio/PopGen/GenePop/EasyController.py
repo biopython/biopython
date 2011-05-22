@@ -131,16 +131,17 @@ class EasyController(object):
             geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
             pop_iter, loc_iter = geno_freqs
             for locus_info in loc_iter:
-                alleles =  locus_info[1]
-                if alleles == None:
+                if locus_info[0] == None:
                     self.__allele_frequency[locus_info[0]] = None, None
                 else:
-                    pop_name, freqs, total = locus_info[2][pop_pos]
-                    allele_freq = {}
-                    for i in range(len(alleles)):
-                        allele_freq[alleles[i]] = freqs[i]
-                    self.__allele_frequency[locus_info[0]] = total, allele_freq
-        return self.__allele_frequency[locus_name]
+                    self.__allele_frequency[locus_info[0]] = locus_info[1:]
+        info = self.__allele_frequency[locus_name]
+        pop_name, freqs, total = info[1][pop_pos]
+        allele_freq = {}
+        alleles = info[0]
+        for i in range(len(alleles)):
+            allele_freq[alleles[i]] = freqs[i]
+        return total, allele_freq
 
 
     def get_multilocus_f_stats(self):
