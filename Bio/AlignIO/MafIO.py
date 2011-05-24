@@ -235,6 +235,11 @@ class MafIndex():
             self._con = con
             
             try:
+                db_target = con.execute("SELECT value FROM meta_data WHERE key = 'target_seqname'").fetchone()[0]      
+                
+                if db_target != target_seqname:
+                    raise ValueError("Provided database indexed for %s, expected %s" % (db_target, target_seqname))
+
                 record_count = int(con.execute("SELECT value FROM meta_data WHERE key = 'record_count'").fetchone()[0])          
                 
                 if record_count == -1:
