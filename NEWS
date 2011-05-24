@@ -29,6 +29,7 @@ Bio.HMM's Viterbi algorithm now expects the initial probabilities explicitly.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Aaron Gallagher (first contribution)
 Connor McCoy (first contribution)
 Eric Talevich
 Joao Rodrigues
