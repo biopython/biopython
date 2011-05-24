@@ -24,6 +24,8 @@ Of potential interest to anyone subclassing Biopython objects, any remaining
 "old syle" Python classes have been switched to "new style" classes. This
 allows things like defining properties.
 
+Bio.HMM's Viterbi algorithm now expects the initial probabilities explicitly.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -31,6 +33,7 @@ Connor McCoy (first contribution)
 Eric Talevich
 Joao Rodrigues
 Peter Cock
+Walter Gillett
 
 ===================================================================
 
