@@ -15,6 +15,7 @@ try:
 except ImportError:
     BytesIO = StringIO
 
+from Bio import BiopythonWarning
 from Bio.Alphabet import generic_dna
 from Bio.SeqIO import QualityIO
 from Bio import SeqIO
@@ -271,7 +272,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
         for out_variant in ["sanger", "solexa", "illumina"]:
             if out_variant != "sanger":
                 #Ignore data loss warnings from max qualities
-                warnings.simplefilter('ignore', UserWarning)
+                warnings.simplefilter('ignore', BiopythonWarning)
             in_filename = "Quality/%s_original_%s.fastq" \
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
@@ -428,7 +429,7 @@ class TestWriteRead(unittest.TestCase):
         #TODO - Record with no identifier?
         records = [record1, record2, record3, record4, record5, record6, record7, record8]
         #TODO - Have a Biopython defined "DataLossWarning?"
-        warnings.simplefilter('ignore', UserWarning)
+        warnings.simplefilter('ignore', BiopythonWarning)
         #TODO - Include phd output?
         for format in ["fasta", "fastq", "fastq-solexa", "fastq-illumina", "qual"]:
             handle = StringIO()
@@ -455,7 +456,7 @@ class TestWriteRead(unittest.TestCase):
                    ["fastq", "fastq-sanger", "fasta", "qual", "phd"])
         #TODO - Have a Biopython defined "DataLossWarning?"
         #TODO - On Python 2.6+ we can check this warning is really triggered
-        warnings.simplefilter('ignore', UserWarning)
+        warnings.simplefilter('ignore', BiopythonWarning)
         self.check(os.path.join("Quality", "sanger_93.fastq"), "fastq",
                    ["fastq-solexa","fastq-illumina"])
         warnings.filters.pop()
@@ -611,7 +612,7 @@ class MappingTests(unittest.TestCase):
         out_handle = StringIO("")
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
-        warnings.simplefilter('ignore', UserWarning)
+        warnings.simplefilter('ignore', BiopythonWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
                     out_handle, "fastq-solexa")
         warnings.filters.pop()
@@ -634,7 +635,7 @@ class MappingTests(unittest.TestCase):
         out_handle = StringIO("")
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
-        warnings.simplefilter('ignore', UserWarning)
+        warnings.simplefilter('ignore', BiopythonWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-solexa"),
                     out_handle, "fastq-sanger")
         warnings.filters.pop()
@@ -653,7 +654,7 @@ class MappingTests(unittest.TestCase):
         out_handle = StringIO("")
         #Want to ignore the data loss warning
         #(on Python 2.6 we could check for it!)
-        warnings.simplefilter('ignore', UserWarning)
+        warnings.simplefilter('ignore', BiopythonWarning)
         SeqIO.write(SeqIO.parse(in_handle, "fastq-sanger"),
                     out_handle, "fastq-illumina")
         warnings.filters.pop()
