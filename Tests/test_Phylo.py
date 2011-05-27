@@ -44,11 +44,11 @@ class IOTests(unittest.TestCase):
         for tree in trees:
             self.assertEqual(len(tree.get_terminals()), 9)
 
-    def test_formatting_branch_length(self):
+    def test_format_branch_length(self):
+        """Custom format string for Newick branch length serialization."""
         tree = Phylo.read(StringIO('A:0.1;'), 'newick')
         mem_file = StringIO()
-        Phylo.write(tree, mem_file, 'newick',
-                    format_branchlength=lambda bl: '%.0e' % (bl,))
+        Phylo.write(tree, mem_file, 'newick', format_branch_length='%.0e')
         self.assertEqual(mem_file.getvalue().strip(), 'A:1e-01;')
 
     def test_convert(self):
