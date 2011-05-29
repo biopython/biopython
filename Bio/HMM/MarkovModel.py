@@ -16,6 +16,58 @@ def _gen_random_array(n):
     
     return normalizedRandArray
 
+def _calculate_from_transitions(trans_probs):
+    """Calculate which 'from transitions' are allowed for each state
+
+    This looks through all of the trans_probs, and uses this dictionary
+    to determine allowed transitions. It converts this information into
+    a dictionary, whose keys are source states and whose values are
+    lists of destination states reachable from the source state via a
+    transition.
+    """
+    from_transitions = {}
+
+    # loop over all of the transitions, mapping source states to lists
+    # of destination states
+    for trans_key in trans_probs:
+        from_state = trans_key[0]
+        to_state = trans_key[1]
+        # Add to_state to the list of destination states that are reachable
+        # from from_state. Map from_state if we haven't seen it before.
+        if from_state in from_transitions:
+            from_transitions[from_state].append(to_state)
+        # otherwise create the list and add the state
+        else:
+            from_transitions[from_state] = [to_state]
+
+    return from_transitions
+
+def _calculate_to_transitions(trans_probs):
+    """Calculate which 'to transitions' are allowed for each state
+
+    This looks through all of the trans_probs, and uses this dictionary
+    to determine allowed transitions. It converts this information into
+    a dictionary, whose keys are destination states and whose values are
+    lists of source states from which the destination is reachable via a
+    transition.
+    """
+    to_transitions = {}
+
+    # loop over all of the transitions, mapping destination states to lists
+    # of source states
+    for trans_key in trans_probs:
+        from_state = trans_key[0]
+        to_state = trans_key[1]
+        # Add from_state to the list of source states from which to_state
+        # is reachable. Map to_state if we haven't seen it before.
+        if to_state in to_transitions:
+            to_transitions[to_state].append(from_state)
+        # otherwise create the list and add the state
+        else:
+            to_transitions[to_state] = [from_state]
+
+    return to_transitions
+
 class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
 
@@ -404,65 +456,14 @@ class HiddenMarkovModel(object):
         # each key is a source state, mapped to a list of the destination states
         # that are reachable from the source state via a transition
         self._transitions_from = \
-           self._calculate_from_transitions(self.transition_prob)
+           _calculate_from_transitions(self.transition_prob)
 
         # a dictionary of the possible transitions to each state
         # each key is a destination state, mapped to a list of source states
         # from which the destination is reachable via a transition
         self._transitions_to = \
-           self._calculate_to_transitions(self.transition_prob)
+           _calculate_to_transitions(self.transition_prob)
 
-    def _calculate_from_transitions(self, trans_probs):
-        """Calculate which 'from transitions' are allowed for each state
-
-        This looks through all of the trans_probs, and uses this dictionary
-        to determine allowed transitions. It converts this information into
-        a dictionary, whose keys are source states and whose values are
-        lists of destination states reachable from the source state via a
-        transition.
-        """
-        from_transitions = {}
-
-        # loop over all of the transitions, mapping source states to lists
-        # of destination states
-        for trans_key in trans_probs:
-            from_state = trans_key[0]
-            to_state = trans_key[1]
-            # Add to_state to the list of destination states that are reachable
-            # from from_state. Map from_state if we haven't seen it before.
-            if from_state in from_transitions:
-                from_transitions[from_state].append(to_state)
-            # otherwise create the list and add the state
-            else:
-                from_transitions[from_state] = [to_state]
-
-        return from_transitions
-
-    def _calculate_to_transitions(self, trans_probs):
-        """Calculate which 'to transitions' are allowed for each state
-
-        This looks through all of the trans_probs, and uses this dictionary
-        to determine allowed transitions. It converts this information into
-        a dictionary, whose keys are destination states and whose values are
-        lists of source states from which the destination is reachable via a
-        transition.
-        """
-        to_transitions = {}
-
-        # loop over all of the transitions, mapping destination states to lists
-        # of source states
-        for trans_key in trans_probs:
-            from_state = trans_key[0]
-            to_state = trans_key[1]
-            # Add from_state to the list of source states from which to_state
-            # is reachable. Map to_state if we haven't seen it before.
-            if to_state in to_transitions:
-                to_transitions[to_state].append(from_state)
-            # otherwise create the list and add the state
-            else:
-                to_transitions[to_state] = [from_state]
-
-        return to_transitions
 
     def get_blank_transitions(self):
         """Get the default transitions for the model.
