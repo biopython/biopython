@@ -8,6 +8,14 @@ import random
 # biopython
 from Bio.Seq import MutableSeq
 
+def _gen_random_array(n):
+    """ Return an array of n random numbers, where the elements of the array sum to 1.0"""
+    randArray = [random.random() for i in range(n)]
+    total = sum(randArray)
+    normalizedRandArray = [x/total for x in randArray]
+    
+    return normalizedRandArray
+
 class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
 
@@ -177,26 +185,49 @@ class MarkovModelBuilder(object):
             self.emission_prob[key] = new_emission_prob
 
 
+    def set_random_initial_probabilities(self):
+        """Set all initial state probabilities to a randomly generated distribution.
+        Returns the dictionary containing the initial probabilities.
+        """
+        freqs = _gen_random_array(len(self._state_alphabet.letters))
+        for state in self._state_alphabet.letters:
+            self.initial_prob[state] = initial_freqs.pop()
+
+        return self.initial_prob
+
+    def set_random_transition_probabilities(self):
+        """Set all transition probabilities to a randomly generated distribution.
+        Returns the dictionary containing the transition probabilities.
+        """
+        for from_state in self._state_alphabet.letters:
+            freqs = _gen_random_array(len(self._state_alphabet.letters))
+            for from_state in self._state_alphabet.letters:                
+                self._transition_prob[(from_state, to_state)] = freqs.pop()
+
+        return self.transition_prob
+
+
+    def set_random_emission_probabilities(self):
+        """Set all emission probabilities to a randomly generated distribution.
+        Returns the dictionary containing the emission probabilities.
+        """
+        for state in self._state_alphabet.letters:
+            freqs = _gen_random_array(len(self._state_alphabet.letters))
+            for symbol in self._emission_alphabet.letters:
+                self.emisssion_prob[(state, symbol)] = freqs.pop()
+
+        return self.emission_prob
+
+        
     def set_random_probabilities(self):
         """Set all probabilities to randomly generated numbers.
 
-        Resets probabilities of all initial states, allowed transitions, and
+        Resets probabilities of all initial states, transitions, and
         emissions to random values.
-
-        Warning 1 -- This will reset any currently set probabibilities.
-
-        Warning 2 -- This does not check to ensure that the sum of
-        all of the probabilities is less then 1. It just randomly assigns
-        a probability to each
         """
-        for state in self._state_alphabet.letters:
-            self.initial_prob[state] = random.random()
-
-        for key in self.transition_prob:
-            self.transition_prob[key] = random.random()
-
-        for key in self.emission_prob:
-            self.emission_prob[key] = random.random()
+        self.set_random_initial_probabilities()
+        self.set_random_transition_probabilities()
+        self.set_random_emission_probabilities()
 
     # --- functions to deal with the transitions in the sequence
 
