@@ -2644,9 +2644,7 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
-UserWarning - Data loss - max PHRED quality 62 in Illumina FASTQ
  Checking can write/read as 'fastq-solexa' format
-UserWarning - Data loss - max Solexa quality 62 in Solexa FASTQ
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'imgt' format
@@ -2772,7 +2770,6 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
-UserWarning - Data loss - max PHRED quality 93 in Sanger FASTQ
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format

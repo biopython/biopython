@@ -797,7 +797,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def title(self, content):
         if self._cur_reference is None:
             import warnings
-            warnings.warn("GenBank TITLE line without REFERENCE line.")
+            from Bio import BiopythonParserWarning
+            warnings.warn("GenBank TITLE line without REFERENCE line.",
+                          BiopythonParserWarning)
         elif self._cur_reference.title:
             self._cur_reference.title += ' ' + content
         else:
@@ -1096,8 +1098,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         and len(sequence) != 0 \
         and self._expected_size != len(sequence):
             import warnings
+            from Bio import BiopythonParserWarning
             warnings.warn("Expected sequence length %i, found %i (%s)." \
-                          % (self._expected_size, len(sequence), self.data.id))
+                          % (self._expected_size, len(sequence), self.data.id),
+                          BiopythonParserWarning)
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
@@ -1229,7 +1233,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def title(self, content):
         if self._cur_reference is None:
             import warnings
-            warnings.warn("GenBank TITLE line without REFERENCE line.")
+            from Bio import BiopythonParserWarning
+            warnings.warn("GenBank TITLE line without REFERENCE line.",
+                          BiopythonParserWarning)
             return
         self._cur_reference.title = content
 

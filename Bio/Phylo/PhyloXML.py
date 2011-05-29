@@ -22,12 +22,12 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.SeqRecord import SeqRecord
-import Bio
+from Bio import BiopythonWarning
 
 from Bio.Phylo import BaseTree
 
 
-class PhyloXMLWarning(Warning):
+class PhyloXMLWarning(BiopythonWarning):
     """Warning for non-compliance with the phyloXML specification."""
     pass
 

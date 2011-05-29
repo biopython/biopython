@@ -10,7 +10,7 @@ import unittest
 from cStringIO import StringIO
 
 from Bio import Phylo
-from Bio.Phylo import PhyloXML
+from Bio.Phylo import PhyloXML, NewickIO
 
 #TODO - Remove this hack
 #This will raise MissingPythonDependencyError if we don't have ElementTree
@@ -43,6 +43,13 @@ class IOTests(unittest.TestCase):
         self.assertEqual(len(trees), 3)
         for tree in trees:
             self.assertEqual(len(tree.get_terminals()), 9)
+
+    def test_format_branch_length(self):
+        """Custom format string for Newick branch length serialization."""
+        tree = Phylo.read(StringIO('A:0.1;'), 'newick')
+        mem_file = StringIO()
+        Phylo.write(tree, mem_file, 'newick', format_branch_length='%.0e')
+        self.assertEqual(mem_file.getvalue().strip(), 'A:1e-01;')
 
     def test_convert(self):
         """Convert a tree between all supported formats."""
