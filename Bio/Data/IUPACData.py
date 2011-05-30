@@ -319,3 +319,15 @@ atom_weights = {
     'Hs' : 269.13,
     'Mt' : 268.14,    
 }
+
+# pKa of amino acids side chains
+# taken from EMBOSS (/usr/share/EMBOSS/data/Epk.dat)
+protein_pka_side_chain = {
+    "C": 8.5,
+    "D": 3.9,
+    "H": 6.5,
+    "K": 10.8,
+    "Q": 4.25,
+    "R": 12.5,
+    "Y": 10.1
+    }
