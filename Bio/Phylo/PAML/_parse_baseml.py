@@ -41,15 +41,14 @@ def parse_basics(lines, results):
         elif re.match("\(+", line) is not None:
             if ":" in line:
                 results["tree"] = line.strip()
-    return (num_params, results)
+    return num_params
 
 def parse_parameters(lines, results, num_params): 
     results["parameters"] = {}
-    results = parse_parameter_list(lines, results, num_params)
-    results = parse_kappas(lines, results)
-    results = parse_rates(lines, results)
-    results = parse_freqs(lines, results)
-    return results
+    parse_parameter_list(lines, results, num_params)
+    parse_kappas(lines, results)
+    parse_rates(lines, results)
+    parse_freqs(lines, results)
 
 def parse_parameter_list(lines, results, num_params):
     for line_num in range(len(lines)):
@@ -75,7 +74,6 @@ def parse_parameter_list(lines, results, num_params):
                 SEs_line = lines[line_num + 2]
                 results["parameters"]["SEs"] = SEs_line.strip()
            break
-    return results
 
 def parse_kappas(lines, results):
     kappa_found = False
@@ -113,7 +111,6 @@ def parse_kappas(lines, results):
                 results["parameters"]["kappa"] = line_floats[0]
             else:
                 results["parameters"]["kappa"] = line_floats
-    return results 
 
 def parse_rates(lines, results):
     Q_mat_found = False
@@ -152,7 +149,6 @@ def parse_rates(lines, results):
         # Example match: "alpha (gamma, K=5) = 192.47918"
         elif "alpha" in line and len(line_floats) > 0:
             results["parameters"]["alpha"] = line_floats[0]
-    return results
 
 def parse_freqs(lines, results):
     branch_freqs_found = False
@@ -205,4 +201,3 @@ def parse_freqs(lines, results):
                     results["parameters"]["nodes"][root_node]["root"] =\
                         True
                     branch_freqs_found = False
-    return results

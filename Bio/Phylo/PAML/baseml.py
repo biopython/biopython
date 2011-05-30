@@ -6,7 +6,6 @@
 from __future__ import with_statement
 import os
 import os.path
-import re
 from _paml import Paml, PamlError
 import _parse_baseml
 
@@ -56,10 +55,10 @@ class Baseml(Paml):
                         "icode": None,
                         "fix_blength": None,
                         "method": 0}
-                        
+
     def write_ctl_file(self):
         """Dynamically build a BASEML control file from the options.
-        
+
         The control file is written to the location specified by the 
         ctl_file property of the baseml class.
         """
@@ -91,9 +90,9 @@ class Baseml(Paml):
                         ctl_handle.write("model = {0}  {1}".format(option[1],
                             self._options["model_options"]))
                         continue
-                ctl_handle.write("{0} = {1}\n".format(option[0], 
+                ctl_handle.write("{0} = {1}\n".format(option[0],
                     option[1]))
-    
+
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Baseml instance.
         """
@@ -124,7 +123,7 @@ class Baseml(Paml):
                         else:
                             model_num = value.partition(" ")[0]
                             model_opt = value.partition(" ")[2].strip()
-                            temp_options["model"] = int(value)
+                            temp_options["model"] = int(model_num)
                             temp_options["model_options"] = model_opt
                     else:
                         if "." in value or "e-" in value:
@@ -143,10 +142,10 @@ class Baseml(Paml):
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
-        
+
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.
-        
+
         BASEML requires that all paths specified in the control file be
         relative to the directory from which it is called rather than 
         absolute paths.
@@ -155,11 +154,11 @@ class Baseml(Paml):
         if self.tree is not None:
             self._rel_tree = os.path.relpath(self.tree, 
                 self.working_dir)
-        
+
     def run(self, ctl_file = None, verbose = False, command = "baseml",
                 parse = True):
         """Run baseml using the current configuration and then parse the results. 
-        
+
         Return a process signal so the user can determine if
         the execution was successful (return code 0 is successful, -N
         indicates a failure). The arguments may be passed as either 
@@ -183,15 +182,15 @@ class Baseml(Paml):
                 raise ValueError, strerror
         else:
             results = None
-        return results        
+        return results
 
 def read(results_file):
     results = {}
     """Parse a BASEML results file."""
     with open(results_file) as results_handle:
-        lines = results_handle.readlines()    
-    (num_params, results) = _parse_baseml.parse_basics(lines, results)
-    results = _parse_baseml.parse_parameters(lines, results, num_params)
-    if results.get("version") is None:   
-        raise ValueError, "Invalid results file"            
+        lines = results_handle.readlines()
+    num_params = _parse_baseml.parse_basics(lines, results)
+    _parse_baseml.parse_parameters(lines, results, num_params)
+    if results.get("version") is None:
+        raise ValueError, "Invalid results file"
     return results
