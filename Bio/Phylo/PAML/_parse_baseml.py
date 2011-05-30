@@ -4,9 +4,12 @@
 # as part of this package.
 
 import re
+
 line_floats_re = re.compile("-*\d+\.\d+")
 
 def parse_basics(lines, results):
+    version_re = re.compile("BASEML \(in paml version (\d+\.\d+[a-z]*).*")
+    np_re = re.compile("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)")
     num_params = -1
     for line in lines:
         # Find all floating point numbers in this line
@@ -15,10 +18,9 @@ def parse_basics(lines, results):
         # Find the version number
         # Example match: 
         # "BASEML (in paml version 4.3, August 2009)  alignment.phylip"
-        version_re = re.match("BASEML \(in paml version (\d+\.\d+[a-z]*).*",
-                line)
-        if version_re is not None:
-            results["version"] = version_re.group(1)
+        version_res = version_re.match(line)
+        if version_res is not None:
+            results["version"] = version_res.group(1)
         # Find max lnL
         # Example match:
         # ln Lmax (unconstrained) = -316.049385
@@ -29,7 +31,7 @@ def parse_basics(lines, results):
         # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
         elif "lnL(ntime:" in line and len(line_floats) > 0:
             results["lnL"] = line_floats[0]
-            np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)",line)
+            np_res = np_re.match(line)
             if np_res is not None:
                 num_params = int(np_res.group(1))
         # Find tree lengths.
@@ -151,6 +153,7 @@ def parse_rates(lines, results):
             results["parameters"]["alpha"] = line_floats[0]
 
 def parse_freqs(lines, results):
+    root_re = re.compile("Note: node (\d+) is root.")
     branch_freqs_found = False
     for line in lines:
         # Find all floating point numbers in this line
@@ -195,7 +198,7 @@ def parse_freqs(lines, results):
                                                 "A":line_floats[6],
                                                 "G":line_floats[7]}
             else:
-                root_res = re.match("Note: node (\d+) is root.", line)
+                root_res = root_re.match(line)
                 if root_res is not None:
                     root_node = int(root_res.group(1))
                     results["parameters"]["nodes"][root_node]["root"] =\
