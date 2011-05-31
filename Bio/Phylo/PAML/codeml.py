@@ -8,6 +8,7 @@ import os
 import os.path
 import re
 from _paml import Paml, PamlError
+import _parse_codeml
 
 class CodemlError(EnvironmentError):
     """CODEML has failed. Run with verbose = True to view CODEML's error
@@ -196,11 +197,7 @@ class Codeml(Paml):
 
 def read(results_file):
     """Parse a CODEML results file."""
-    results = {"NSsites":{}}
-    lnLs = []
-    w_flag = False
-    pos_flag = False
-    count = 0
+    results = {}
     current_model = 0
     dN_tree_flag = False
     dS_tree_flag = False
@@ -214,169 +211,17 @@ def read(results_file):
     ml_aa_distances_flag = False
     sequences = []
     floats_re = re.compile("-*\d+\.\d+")
+    if not os.path.exists(results_file):
+        raise IOError, "Results file does not exist."
     with open(results_file) as results_handle:
-        line = None
-        while line != "":
-            line = results_handle.readline()
-            # Find the version number
-            # Example match: 
-            # "CODONML (in paml version 4.3, August 2009)  alignment.phylip"
-            version_re = re.match(".+ \(in paml version (\d+\.\d+[a-z]*).*",
-                line)
-            if version_re is not None:
-                results["version"] = version_re.group(1)
-                break
-        if line == "":    
-            raise ValueError, "Invalid results file"   
-        for line in results_handle:
-            # Find all floating point numbers in this line
-            line_floats_res = floats_re.findall(line)
-            line_floats = [float(val) for val in line_floats_res]
-            # Find the model description at the beginning of the file.
-            model_re = re.match("Model:\s+(.+)", line)
-            if model_re is not None:
-                results["model"] = model_re.group(1)
-            codon_freq_res = re.match("Codon frequency model:\s+(.+)", line)
-            if codon_freq_res is not None:
-                results["codon model"] = codon_freq_res.group(1)
-            # Find the site-class model name at the beginning of the file.
-            # This exists only if a NSsites class other than 0 is used.
-            # Example match: "Site-class models:  PositiveSelection"
-            siteclass_re = re.match("Site-class models:\s*(.*)", line)
-            if siteclass_re is not None:
-                siteclass_model = siteclass_re.group(1)
-                if siteclass_model == "":
-                    multi_models = True
-                    continue
-                results["site-class model"] = siteclass_model
-                if siteclass_model == "NearlyNeutral":
-                    current_model = 1
-                    results["NSsites"][current_model] = \
-                        {"description":siteclass_model}
-                    if 0 in results["NSsites"]:
-                        del results["NSsites"][0]
-                elif siteclass_model == "PositiveSelection":
-                    current_model = 2
-                    results["NSsites"][current_model] = \
-                        {"description":siteclass_model}
-                    if 0 in results["NSsites"]:
-                        del results["NSsites"][0]
-                elif siteclass_model == "discrete (4 categories)":
-                    current_model = 3
-                    results["NSsites"][current_model] = \
-                        {"description":siteclass_model}
-                    if 0 in results["NSsites"]:
-                        del results["NSsites"][0]
-                elif siteclass_model == "beta (4 categories)":
-                    current_model = 7
-                    results["NSsites"][current_model] = \
-                        {"description":siteclass_model}
-                    if 0 in results["NSsites"]:
-                        del results["NSsites"][0]
-                elif siteclass_model == "beta&w>1 (5 categories)":
-                    current_model = 8
-                    results["NSsites"][current_model] = \
-                        {"description":siteclass_model}
-                    if 0 in results["NSsites"]:
-                        del results["NSsites"][0]
-            if not multi_models:
-                if current_model == 0:
-                    if results["NSsites"].get(0) is None:
-                        results["NSsites"][0] = {"description": "one-ratio"}
-            # Find model names. If this is found on a line,
-            # all of the following lines until the next time this matches
-            # contain results for Model X.
-            # Example match: "Model 1: NearlyNeutral (2 categories)"
-            model_re = re.match("Model (\d+):\s+(.+)", line)
-            if model_re is not None:
-                current_model = int(model_re.group(1))
-                results["NSsites"][current_model] = \
-                    {"description":model_re.group(2)}
-            # Find lnL values.
-            # Example match (lnL = -2021.348300):
-            # "lnL(ntime: 19  np: 22):  -2021.348300      +0.000000"
-            elif "lnL(ntime:" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["lnL"] = line_floats[0]
-                np_res = re.match("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)",line)
-                if np_res is not None:
-                    num_params = int(np_res.group(1))
-            elif "ln Lmax" in line and len(line_floats) > 0:
-                results["lnL max"] = line_floats[0]
-            # Get parameter list. This can be useful for specifying starting
-            # parameters in another run by copying the list of parameters
-            # to a file called in.baseml. Since the parameters must be in
-            # a fixed order and format, copying and pasting to the file is
-            # best. For this reason, they are grabbed here just as a long
-            # string and not as individual numbers.
-            elif len(line_floats) == num_params and not SEs_flag:
-                if results["NSsites"][current_model].get("parameters") is None:
-                    results["NSsites"][current_model]["parameters"] = {}
-                results["NSsites"][current_model]["parameters"]\
-                    ["parameter list"] = line.strip()
-            # Find SEs. The same format as parameters above is maintained
-            # since there is a correspondance between the SE format and
-            # the parameter format.
-            # Example match:
-            # "SEs for parameters:
-            # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000 
-            elif "SEs for parameters:" in line:
-                SEs_flag = True
-            elif SEs_flag and len(line_floats) > 0:
-                results["NSsites"][current_model]["parameters"]["SEs"] = \
-                    line.strip()
-                SEs_flag = False
-            # Find tree lengths.
-            # Example match: "tree length =   1.71931"
-            elif "tree length =" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["tree length"] = \
-                    line_floats[0]
-            # Find the estimated tree, only taking the tree if it has
-            # branch lengths
-            elif re.match("\(\(+", line) is not None and not \
-                    (dS_tree_flag or dN_tree_flag or w_tree_flag):
-                if ":" in line:
-                    results["NSsites"][current_model]["tree"] = line.strip()
-            # Find rates for multiple genes
-            # Example match: "rates for 2 genes:     1  2.75551"
-            elif "rates for" in line and len(line_floats) > 0:
-                line_floats.insert(0, 1.0)
-                results["NSsites"][current_model]["parameters"]["rates"] = \
-                    line_floats
-            # Find kappa values.
-            # Example match: "kappa (ts/tv) =  2.77541"
-            elif "kappa (ts/tv)" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["parameters"]["kappa"] = \
-                    line_floats[0]
-            # Find omega values.
-            # Example match: "omega (dN/dS) =  0.25122"
-            elif "omega (dN/dS)" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["parameters"]["omega"] = \
-                    line_floats[0]
-            elif "w (dN/dS)" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["parameters"]["omega"] = \
-                    line_floats
-            # Find omega and kappa values for multi-gene files
-            # Example match: "gene # 1: kappa =   1.72615 omega =   0.39333"
-            elif "gene # " in line:
-                gene_num = int(re.match("gene # (\d+)", line).group(1))
-                if results["NSsites"][current_model]\
-                        ["parameters"].get("genes") is None:
-                    results["NSsites"][current_model]["parameters"]\
-                        ["genes"] = {}
-                results["NSsites"][current_model]["parameters"]["genes"]\
-                    [gene_num] = {"kappa":line_floats[0],
-                                    "omega":line_floats[1]}
-            # Find dN values.
-            # Example match: "tree length for dN:       0.2990"
-            elif "tree length for dN" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["parameters"]["dN"] = \
-                    line_floats[0]
-            # Find dS values
-            # Example match: "tree length for dS:       1.1901"
-            elif "tree length for dS" in line and len(line_floats) > 0:
-                results["NSsites"][current_model]["parameters"]["dS"] = \
-                    line_floats[0]
-            # Find site class distributions.
+        lines = results_handle.readlines()
+    _parse_codeml.parse_basics(lines, results)
+    _parse_codeml.parse_nssites(lines, results)
+    _parse_codeml.parse_pairwise(lines, results)
+    _parse_codeml.parse_distances(lines, results)
+
+
+           # Find site class distributions.
             # Example match 1 (normal model, 2 site classes):
             # "p:   0.77615  0.22385"
             # Example match 2 (branch site A model, 4 site classes):
