@@ -102,7 +102,7 @@ class WriterTests(unittest.TestCase):
                                    "Missing SFF flow information")
         else:
             self.check_simple(records, format)
-    
+
     def check_simple(self, records, format):
         if format in SeqIO._BinaryFormats:
             handle = BytesIO()
