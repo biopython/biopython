@@ -261,7 +261,7 @@ class MarkovModelBuilder(object):
         if not self.transition_prob:
             raise Exception("No transitions have been allowed yet. " +
                             "Allow some or all transitions by calling " + 
-                            "allow_transition or allow_all_transitions first."
+                            "allow_transition or allow_all_transitions first.")
 
         transitions_from = _calculate_from_transitions(self.transitions_prob)
         for from_state in transitions_from.keys():
