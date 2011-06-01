@@ -50,7 +50,7 @@ def _collect_associations(pairList, keyPos):
 def _calculate_emissions(emission_probs):
     """Calculate which symbols can be emitted in each state
     """
-    return _gen_duple_map(emission_probs.keys(), 0)
+    return _collect_associations(emission_probs.keys(), 0)
 
 def _calculate_from_transitions(trans_probs):
     """Calculate which 'from transitions' are allowed for each state
