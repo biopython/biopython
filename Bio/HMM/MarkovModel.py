@@ -9,7 +9,8 @@ import random
 from Bio.Seq import MutableSeq
 
 def _gen_random_array(n):
-    """ Return an array of n random numbers, where the elements of the array sum to 1.0"""
+    """ Return an array of n random numbers, where the elements of the array sum
+    to 1.0"""
     randArray = [random.random() for i in range(n)]
     total = sum(randArray)
     normalizedRandArray = [x/total for x in randArray]
