@@ -302,7 +302,7 @@ class MarkovModelBuilder(object):
         for state in self._state_alphabet.letters:
             freqs = _gen_random_array(len(self._state_alphabet.letters))
             for symbol in self._emission_alphabet.letters:
-                self.emisssion_prob[(state, symbol)] = freqs.pop()
+                self.emission_prob[(state, symbol)] = freqs.pop()
 
         return self.emission_prob
 
