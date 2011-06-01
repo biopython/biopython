@@ -284,16 +284,22 @@ class MarkovModelBuilder(object):
         return self.initial_prob
 
     def set_random_transition_probabilities(self):
-        """Set all transition probabilities to a randomly generated distribution.
+        """Set all allowed transition probabilities to a randomly generated distribution.
         Returns the dictionary containing the transition probabilities.
         """
-        for from_state in self._state_alphabet.letters:
-            freqs = _gen_random_array(len(self._state_alphabet.letters))
-            for from_state in self._state_alphabet.letters:                
+
+        if not self.transition_prob:
+            raise Exception("No transitions have been allowed yet. " +
+                            "Allow some or all transitions by calling " + 
+                            "allow_transition or allow_all_transitions first."
+
+        transitions_from = _calculate_from_transitions(self.transitions_prob)
+        for from_state in transitions_from.keys():
+            freqs = _gen_random_array(len(transitions_from[from_state])
+            for to_state in transitions_from[from_state]:
                 self._transition_prob[(from_state, to_state)] = freqs.pop()
 
         return self.transition_prob
-
 
     def set_random_emission_probabilities(self):
         """Set all emission probabilities to a randomly generated distribution.
