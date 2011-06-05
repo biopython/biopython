@@ -8,6 +8,10 @@ import re
 line_floats_re = re.compile("-*\d+\.\d+")
 
 def parse_basics(lines, results):
+    """Parse the basic information that should be present in most codeml output files.
+    """
+    # multi_models is used to designate there being results for more than one
+    # model in the file
     multi_models = False
     version_re = re.compile(".+ \(in paml version (\d+\.\d+[a-z]*).*")
     model_re = re.compile("Model:\s+(.+)")
@@ -17,6 +21,7 @@ def parse_basics(lines, results):
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
+        # Get the program version number
         version_res = version_re.match(line)
         if version_res is not None:
             results["version"] = version_res.group(1)
@@ -26,12 +31,15 @@ def parse_basics(lines, results):
         if model_res is not None:
             results["model"] = model_res.group(1)
             continue
+        # Get the codon substitution model
         codon_freq_res = codon_freq_re.match(line)
         if codon_freq_res is not None:
             results["codon model"] = codon_freq_res.group(1)
             continue
         # Find the site-class model name at the beginning of the file.
         # This exists only if a NSsites class other than 0 is used.
+        # If there's no site class model listed, then there are multiple
+        # models in the results file
         # Example match: "Site-class models:  PositiveSelection"
         siteclass_res = siteclass_re.match(line)
         if siteclass_res is not None:
@@ -41,12 +49,14 @@ def parse_basics(lines, results):
                 multi_models = False
             else:
                 multi_models = True
+        # Get the maximum log-likelihood
         if "ln Lmax" in line and len(line_floats) > 0:
             results["lnL max"] = line_floats[0]
     return multi_models
  
 def parse_nssites(lines, results, multi_models):
-    """Determine which NSsites models are present and parse them."""
+    """Determine which NSsites models are present and parse them.
+    """
 
     ns_sites = {}
     model_re = re.compile("Model (\d+):\s+(.+)")
@@ -102,6 +112,8 @@ def parse_nssites(lines, results, multi_models):
         results["NSsites"] = ns_sites
 
 def parse_model(lines, results):
+    """Parse an individual NSsites model's results.
+    """
     parameters = {}
     SEs_flag = False
     dS_tree_flag = False
@@ -115,7 +127,9 @@ def parse_model(lines, results):
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
+        # Check if branch-specific results are in the line
         branch_res = branch_re.match(line)
+        # Check if additional model parameters are in the line
         model_params = model_params_re.findall(line)
         # Find lnL values.
         # Example match (lnL = -2021.348300):
@@ -265,6 +279,8 @@ def parse_model(lines, results):
         results["parameters"] = parameters
 
 def parse_siteclass_proportions(line_floats, parameters):
+    """For models which have multiple site classes, find the proportion of the alignment assigned to each class.
+    """
     site_classes = {}
     if len(line_floats) > 0:
         for n in range(len(line_floats)):
@@ -272,12 +288,16 @@ def parse_siteclass_proportions(line_floats, parameters):
     parameters["site classes"] = site_classes
 
 def parse_siteclass_omegas(line_floats, parameters):
+    """For models which have multiple site classes, find the omega estimated for each class.
+    """
     site_classes = parameters.get("site classes")
     if site_classes and len(line_floats) > 0:
         for n in range(len(line_floats)):
             site_classes[n]["omega"] = line_floats[n]
 
 def parse_clademodelc(branch_type_no, line_floats, parameters):
+    """Parse results specific to the clade model C.
+    """
     site_classes = parameters.get("site classes")
     if not site_classes or len(line_floats) == 0:
         return
@@ -287,6 +307,8 @@ def parse_clademodelc(branch_type_no, line_floats, parameters):
         site_classes[n]["branch types"][branch_type_no] = line_floats[n]
 
 def parse_branch_site_a(foreground, line_floats, parameters):
+    """Parse results specific to the branch site A model.
+    """
     site_classes = parameters.get("site classes")
     if not site_classes or len(line_floats) == 0:
         return
@@ -301,6 +323,8 @@ def parse_branch_site_a(foreground, line_floats, parameters):
                     line_floats[n]
 
 def parse_pairwise(lines, results):
+    """Parse results from pairwise comparisons.
+    """
     # Find pairwise comparisons
     # Example:
     # 2 (Pan_troglo) ... 1 (Homo_sapie)
@@ -325,7 +349,7 @@ def parse_pairwise(lines, results):
             if len(line_floats) == 1:
                 pairwise[seq1][seq2] = {"lnL" : line_floats[0]}
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
-            elif len(line_floats) > 3:
+            elif len(line_floats) == 6:
                 pairwise[seq1][seq2] = {"t" : line_floats[0],
                         "S" : line_floats[1],
                         "N" : line_floats[2],
@@ -337,6 +361,8 @@ def parse_pairwise(lines, results):
         results["pairwise"] = pairwise
 
 def parse_distances(lines, results):
+    """Parse amino acid sequence distance results.
+    """
     distances = {}
     sequences = []
     raw_aa_distances_flag = False

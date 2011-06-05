@@ -8,6 +8,8 @@ import re
 line_floats_re = re.compile("-*\d+\.\d+")
 
 def parse_basics(lines, results):
+    """Parse the basics that should be present in most baseml results files.
+    """
     version_re = re.compile("BASEML \(in paml version (\d+\.\d+[a-z]*).*")
     np_re = re.compile("lnL\(ntime:\s+\d+\s+np:\s+(\d+)\)")
     num_params = -1
@@ -46,6 +48,8 @@ def parse_basics(lines, results):
     return num_params
 
 def parse_parameters(lines, results, num_params): 
+    """Parse the various parameters from the file.
+    """
     results["parameters"] = {}
     parse_parameter_list(lines, results, num_params)
     parse_kappas(lines, results)
@@ -53,6 +57,8 @@ def parse_parameters(lines, results, num_params):
     parse_freqs(lines, results)
 
 def parse_parameter_list(lines, results, num_params):
+    """ Parse the parameters list, which is just an unlabeled list of numeric values.
+    """
     for line_num in range(len(lines)):
         line = lines[line_num]
          # Find all floating point numbers in this line
@@ -78,6 +84,8 @@ def parse_parameter_list(lines, results, num_params):
            break
 
 def parse_kappas(lines, results):
+    """Parse out the kappa parameters.
+    """
     kappa_found = False
     for line in lines:
         # Find all floating point numbers in this line
@@ -115,6 +123,8 @@ def parse_kappas(lines, results):
                 results["parameters"]["kappa"] = line_floats
 
 def parse_rates(lines, results):
+    """Parse the rate parameters.
+    """
     Q_mat_found = False
     for line in lines:
         # Find all floating point numbers in this line
@@ -153,6 +163,8 @@ def parse_rates(lines, results):
             results["parameters"]["alpha"] = line_floats[0]
 
 def parse_freqs(lines, results):
+    """Parse the basepair frequencies.
+    """
     root_re = re.compile("Note: node (\d+) is root.")
     branch_freqs_found = False
     for line in lines:

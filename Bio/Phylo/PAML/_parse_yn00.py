@@ -37,11 +37,12 @@ def parse_yn00(lines, results, sequences):
     Yang & Nielsen results are organized in a table with
     each row comprising one pairwise species comparison.
     Rows are labeled by spequence number rather than by
-    sequence name.
-    Example (header row and first table row):
-    seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
-    2    1    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150
-    +- 0.0151"""
+    sequence name."""
+    
+    # Example (header row and first table row):
+    # seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
+    # 2    1    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150
+    # +- 0.0151
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = re.findall("-*\d+\.\d+", line)
@@ -68,13 +69,16 @@ def parse_yn00(lines, results, sequences):
             seq_name2 = None
 
 def parse_others(lines, results, sequences):
-    # The remaining methods are grouped together. Statistics
-    # for all three are listed for each of the pairwise 
-    # species comparisons, with each method's results on its
-    # own line.
-    # The stats in this section must be handled differently
-    # due to the possible presence of NaN values, which won't
-    # get caught by my typical "line_floats" method used above.
+    """Parse the results from the other methods.
+
+    The remaining methods are grouped together. Statistics
+    for all three are listed for each of the pairwise 
+    species comparisons, with each method's results on its
+    own line.
+    The stats in this section must be handled differently
+    due to the possible presence of NaN values, which won't
+    get caught by my typical "line_floats" method used above.
+    """
     # Example:
     # 2 (Pan_troglo) vs. 1 (Homo_sapie)
 
