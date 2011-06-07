@@ -265,7 +265,7 @@ class MarkovModelBuilder(object):
 
         transitions_from = _calculate_from_transitions(self.transitions_prob)
         for from_state in transitions_from.keys():
-            freqs = _gen_random_array(len(transitions_from[from_state])
+            freqs = _gen_random_array(len(transitions_from[from_state]))
             for to_state in transitions_from[from_state]:
                 self._transition_prob[(from_state, to_state)] = freqs.pop()
 
