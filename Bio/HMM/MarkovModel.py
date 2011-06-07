@@ -276,7 +276,7 @@ class MarkovModelBuilder(object):
         Returns the dictionary containing the emission probabilities.
         """
         for state in self._state_alphabet.letters:
-            freqs = _gen_random_array(len(self._state_alphabet.letters))
+            freqs = _gen_random_array(len(self._emission_alphabet.letters))
             for symbol in self._emission_alphabet.letters:
                 self.emission_prob[(state, symbol)] = freqs.pop()
 
