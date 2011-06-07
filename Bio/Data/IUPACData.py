@@ -336,7 +336,7 @@ protein_pka_side_chain = {
 # from /usr/share/EMBOSS/data/Eaa_hydropathy.dat
 # 3 scales are available, by default the consensus
 # one is used
-protein_hydropathy_K&D = {
+protein_hydropathy_KD = {
     "A": 1.8,
     "C": 2.5,
     "D": -3.5,
