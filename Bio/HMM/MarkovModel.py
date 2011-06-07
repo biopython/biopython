@@ -247,7 +247,7 @@ class MarkovModelBuilder(object):
         """Set all initial state probabilities to a randomly generated distribution.
         Returns the dictionary containing the initial probabilities.
         """
-        freqs = _gen_random_array(len(self._state_alphabet.letters))
+        initial_freqs = _gen_random_array(len(self._state_alphabet.letters))
         for state in self._state_alphabet.letters:
             self.initial_prob[state] = initial_freqs.pop()
 
