@@ -331,3 +331,77 @@ protein_pka_side_chain = {
     "R": 12.5,
     "Y": 10.1
     }
+
+# Relative hydrophobicity of amino acids taken
+# from /usr/share/EMBOSS/data/Eaa_hydropathy.dat
+# 3 scales are available, by default the consensus
+# one is used
+protein_hydropathy_K&D = {
+    "A": 1.8,
+    "C": 2.5,
+    "D": -3.5,
+    "E": -3.5,
+    "F": 2.8,
+    "G": -0.4,
+    "H": -3.2,
+    "I": 4.5,
+    "K": -3.9,
+    "L": 3.8,
+    "M": 1.9,
+    "N": -3.5,
+    "P": -1.6,
+    "Q": -3.5,
+    "R": -4.5,
+    "S": -0.8,
+    "T": -0.7,
+    "V": 4.2,
+    "W": -0.9,
+    "Y": -1.3
+    }
+
+protein_hydropathy_OHM = {
+    "A": -0.40,
+    "C": 0.17,
+    "D": -1.31,
+    "E": -3.5,
+    "F": -1.22,
+    "G": 1.92,
+    "H": -0.64,
+    "I": 1.25,
+    "K": -0.67,
+    "L": 1.22,
+    "M": 1.02,
+    "N": -0.92,
+    "P": -0.49,
+    "Q": -0.91,
+    "R": -0.59,
+    "S": -0.55,
+    "T": -0.28,
+    "V": 0.91,
+    "W": 0.50,
+    "Y": 1.67
+    }
+
+protein_hydropathy_consensus = {
+    "A": 0.62,
+    "C": 0.29,
+    "D": -0.90,
+    "E": -0.74,
+    "F": 1.19,
+    "G": 0.48,
+    "H": -0.40,
+    "I": 1.38,
+    "K": -1.50,
+    "L": 1.06,
+    "M": 0.64,
+    "N": -0.78,
+    "P": 0.12,
+    "Q": -0.85,
+    "R": -2.53,
+    "S": -0.18,
+    "T": -0.05,
+    "V": 1.08,
+    "W": 0.81,
+    "Y": 0.26
+    }
+
