@@ -36,8 +36,8 @@ def _collect_associations(pairList, keyPos):
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
     for duple in pairList:
-        key = pairList[keyPos]
-        value = pairList[valuePos]
+        key = duple[keyPos]
+        value = duple[valuePos]
         # Add the symbol to the list of emissions from state
         if key in associations:
             associations[key].append(value)
