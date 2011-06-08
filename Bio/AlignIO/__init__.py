@@ -133,10 +133,6 @@ __docformat__ = "epytext en" #not just plaintext
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
-#from cStringIO import StringIO
-from StringIO import StringIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
@@ -157,6 +153,7 @@ _FormatToIterator = {#"fasta" is done via Bio.SeqIO
                      "fasta-m10" : FastaIO.FastaM10Iterator,
                      "nexus" : NexusIO.NexusIterator,
                      "phylip" : PhylipIO.PhylipIterator,
+                     "phylip-extended" : PhylipIO.ExtendedPhylipIterator, # (unfinished)
                      "stockholm" : StockholmIO.StockholmIterator,
                      }
 
@@ -164,6 +161,7 @@ _FormatToWriter = {#"fasta" is done via Bio.SeqIO
                    #"emboss" : EmbossIO.EmbossWriter, (unfinished)
                    "nexus" : NexusIO.NexusWriter,
                    "phylip" : PhylipIO.PhylipWriter,
+                   "phylip-extended" : PhylipIO.ExtendedPhylipWriter, # (unfinished)
                    "stockholm" : StockholmIO.StockholmWriter,
                    "clustal" : ClustalIO.ClustalWriter,
                    }
