@@ -8,6 +8,16 @@ AlignIO support for the "phylip" format used in Joe Felsenstein's PHYLIP tools.
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
+Support for "extended phylip" format is also provided. Extended phylip differs
+from standard phylip format in the following ways:
+
+ * No whitespace is allowed in the sequence ID.
+ * No truncation is performed. Instead, sequence IDs are padded to the longest
+   ID length, rather than 10 characters. A space separates the sequence
+   identifier from the sequence.
+
+Extended phylip is supported by RAxML and PHYML.
+
 Note
 ====
 In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
@@ -21,16 +31,17 @@ http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
+import string
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import single_letter_alphabet
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
 class PhylipWriter(SequentialAlignmentWriter):
     """Phylip alignment writer."""
-    def write_alignment(self, alignment):
+
+    def write_alignment(self, alignment, truncate=10):
         """Use this to write (another) single alignment to an open file.
 
         This code will write interlaced alignments (when the sequences are
@@ -42,7 +53,6 @@ class PhylipWriter(SequentialAlignmentWriter):
         http://evolution.genetics.washington.edu/phylip/doc/sequence.html
         http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
         """
-        truncate = 10
         handle = self.handle
 
         if len(alignment)==0:
@@ -98,20 +108,22 @@ class PhylipWriter(SequentialAlignmentWriter):
         while True:
             for name, record in zip(names, alignment):
                 if block==0:
-                    #Write name (truncated/padded to 10 characters)
+                    #Write name (truncated/padded to truncate characters)
                     #Now truncate and right pad to expected length.
                     handle.write(name[:truncate].ljust(truncate))
                 else:
                     #write 10 space indent
-                    handle.write(" "*truncate)
+                    handle.write(" " * truncate)
                 #Write five chunks of ten letters per line...
                 sequence = str(record.seq)
                 if "." in sequence:
-                    raise ValueError("PHYLIP format no longer allows dots in sequence")
+                    raise ValueError("PHYLIP format no longer allows dots in "
+                                     "sequence")
                 for chunk in range(0,5):
                     i = block*50 + chunk*10
                     seq_segment = sequence[i:i+10]
-                    #TODO - Force any gaps to be '-' character?  Look at the alphabet...
+                    #TODO - Force any gaps to be '-' character?  Look at the
+                    #alphabet...
                     #TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
                     if i+10 > length_of_seqs : break
@@ -132,6 +144,9 @@ class PhylipIterator(AlignmentIterator):
     http://evolution.genetics.washington.edu/phylip/doc/sequence.html
     http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
     """
+
+    # Default truncation length
+    truncate = 10
 
     def _is_header(self, line):
         line = line.strip()
@@ -178,12 +193,21 @@ class PhylipIterator(AlignmentIterator):
         ids = []
         seqs = []
 
-        #Expects STRICT truncation/padding to 10 characters
-        #Does not require any white space between name and seq.
-        for i in range(0,number_of_seqs):
+        # By default, expects STRICT truncation / padding to 10 characters.
+        # Does not require any whitespace between name and seq.
+
+        # To support extended phylip - if self.truncate is set to None the
+        # truncation length is inferred from splitting at the first whitespace
+        # character. In this scheme, whitespace is prohibited in the ID, and 1+
+        # whitespace characters must be present between the ID and sequence
+        for i in xrange(number_of_seqs):
             line = handle.readline().rstrip()
-            ids.append(line[:10].strip()) #first ten characters
-            s = line[10:].strip().replace(" ","")
+            if self.truncate is None:
+                ids.append(line.split(None, 1)[0])
+                s = line.split(None, 1)[1].strip().replace(" ", "")
+            else:
+                ids.append(line[:self.truncate].strip()) #first ten characters
+                s = line[self.truncate:].strip().replace(" ","")
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append([s])
@@ -203,7 +227,7 @@ class PhylipIterator(AlignmentIterator):
                 break
 
             #print "New block..."
-            for i in range(0,number_of_seqs):
+            for i in xrange(number_of_seqs):
                 s = line.strip().replace(" ","")
                 if "." in s:
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -217,6 +241,42 @@ class PhylipIterator(AlignmentIterator):
                              id=i, name=i, description=i) \
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
+
+# Extended Phylip
+class ExtendedPhylipWriter(PhylipWriter):
+    """
+    Extended Phylip format writer
+    """
+
+    def write_alignment(self, alignment):
+        """
+        Write an extended phylip alignment
+        """
+        # Check inputs
+        for name in (s.id.strip() for s in alignment):
+            if any(c in name for c in string.whitespace):
+                raise ValueError("Whitespace not allowed in identifier: %s"
+                        % name)
+
+        # Calculate a truncation length - maximum length of sequence ID plus a
+        # single character for padding
+        # If no sequences, set truncate to 1 - super(...) call will raise a
+        # ValueError
+        if len(alignment) == 0:
+            truncate = 1
+        else:
+            truncate = max((len(s.id.strip()) for s in alignment)) + 1
+        super(ExtendedPhylipWriter, self).write_alignment(alignment, truncate)
+
+
+class ExtendedPhylipIterator(PhylipIterator):
+    """
+    Extended Phylip format Iterator
+    """
+    # Set truncate to None - IDs will be parsed based on spacing
+    truncate = None
+
+
 
 if __name__=="__main__":
     print "Running short mini-test"
