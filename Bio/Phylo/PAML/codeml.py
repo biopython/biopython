@@ -6,7 +6,6 @@
 from __future__ import with_statement
 import os
 import os.path
-import re
 from _paml import Paml, PamlError
 import _parse_codeml
 
@@ -33,33 +32,33 @@ class Codeml(Paml):
                 raise IOError, "The specified tree file does not exist."
         self.tree = tree
         self.ctl_file = "codeml.ctl"
-        self._options = {"noisy": 9, 
-                        "verbose": 1, 
-                        "runmode": 0,
-                        "seqtype": 2, 
-                        "CodonFreq": 2, 
+        self._options = {"noisy": None, 
+                        "verbose": None, 
+                        "runmode": None,
+                        "seqtype": None, 
+                        "CodonFreq": None, 
                         "ndata": None,
-                        "clock": 0, 
-                        "aaDist": 0,
-                        "aaRatefile": "dat/jones.dat", 
-                        "model": 2,
-                        "NSsites": [0], 
-                        "icode": 0, 
-                        "Mgene": 0,
-                        "fix_kappa": 0, 
-                        "kappa": 2, 
-                        "fix_omega": 0,
-                        "omega": .4, 
-                        "fix_alpha": 1, 
-                        "alpha": 0,
-                        "Malpha": 0, 
-                        "ncatG": 8, 
-                        "getSE": 0,
-                        "RateAncestor": 1, 
-                        "Small_Diff": .5e-6,
-                        "cleandata": 1, 
+                        "clock": None, 
+                        "aaDist": None,
+                        "aaRatefile": None, 
+                        "model": None,
+                        "NSsites": None, 
+                        "icode": None, 
+                        "Mgene": None,
+                        "fix_kappa": None, 
+                        "kappa": None, 
+                        "fix_omega": None,
+                        "omega": None, 
+                        "fix_alpha": None, 
+                        "alpha": None,
+                        "Malpha": None, 
+                        "ncatG": None, 
+                        "getSE": None,
+                        "RateAncestor": None, 
+                        "Small_Diff": None,
+                        "cleandata": None, 
                         "fix_blength": None, 
-                        "method": 0}
+                        "method": None}
                         
     def write_ctl_file(self):
         """Dynamically build a CODEML control file from the options.

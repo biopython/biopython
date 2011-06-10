@@ -25,10 +25,10 @@ class Yn00(Paml):
         """
         Paml.__init__(self, alignment, working_dir, out_file)
         self.ctl_file = "yn00.ctl"
-        self._options = {"verbose": 0,
-                        "icode": 0,
-                        "weighting": 0,
-                        "commonf3x4": 0,
+        self._options = {"verbose": None,
+                        "icode": None,
+                        "weighting": None,
+                        "commonf3x4": None,
                         "ndata": None}
 
     def write_ctl_file(self):
