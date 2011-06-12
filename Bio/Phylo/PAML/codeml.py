@@ -201,10 +201,10 @@ def read(results_file):
         raise IOError, "Results file does not exist."
     with open(results_file) as results_handle:
         lines = results_handle.readlines()
-    multi_models = _parse_codeml.parse_basics(lines, results)
-    _parse_codeml.parse_nssites(lines, results, multi_models)
-    _parse_codeml.parse_pairwise(lines, results)
-    _parse_codeml.parse_distances(lines, results)
+    (results, multi_models) = _parse_codeml.parse_basics(lines, results)
+    results = _parse_codeml.parse_nssites(lines, results, multi_models)
+    results = _parse_codeml.parse_pairwise(lines, results)
+    results = _parse_codeml.parse_distances(lines, results)
     if len(results) == 0:
         raise ValueError, "Invalid results file"
     return results

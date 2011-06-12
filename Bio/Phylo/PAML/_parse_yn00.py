@@ -30,7 +30,7 @@ def parse_ng86(lines, results):
                 NG86["dS"] = line_floats[i+2]
                 results[seq_name][sequences[i/3]] = {"NG86":NG86}
                 results[sequences[i/3]][seq_name] = {"NG86":NG86}
-    return sequences
+    return (results, sequences)
  
 def parse_yn00(lines, results, sequences):
     """ Parse the Yang & Nielsen (2000) part of the results.
@@ -67,6 +67,7 @@ def parse_yn00(lines, results, sequences):
             results[seq_name2][seq_name1]["YN00"] = YN00
             seq_name1 = None
             seq_name2 = None
+    return results
 
 def parse_others(lines, results, sequences):
     """Parse the results from the other methods.
@@ -118,3 +119,4 @@ def parse_others(lines, results, sequences):
                 elif "LPB93" in line:
                     results[seq_name1][seq_name2]["LPB93"] = stats
                     results[seq_name2][seq_name1]["LPB93"] = stats
+    return results

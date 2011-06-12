@@ -122,12 +122,14 @@ def read(results_file):
         if "(A) Nei-Gojobori (1986) method" in line:
             ng86_start = line_num + 1 
         elif "(B) Yang & Nielsen (2000) method" in line:
-            sequences = _parse_yn00.parse_ng86(lines[ng86_start:line_num], 
+            (results, sequences) = _parse_yn00.parse_ng86(lines[ng86_start:line_num], 
                     results)
             yn00_start = line_num + 1
         elif "(C) LWL85, LPB93 & LWLm methods" in line:
-            _parse_yn00.parse_yn00(lines[yn00_start:line_num], results, sequences)
-            _parse_yn00.parse_others(lines[line_num+1:], results, sequences)
+            results = _parse_yn00.parse_yn00(lines[yn00_start:line_num], results, 
+                    sequences)
+            results = _parse_yn00.parse_others(lines[line_num+1:], results, 
+                    sequences)
     if len(results) == 0:
         raise ValueError, "Invalid results file."
     return results

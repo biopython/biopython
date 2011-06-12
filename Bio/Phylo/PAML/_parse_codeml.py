@@ -52,7 +52,7 @@ def parse_basics(lines, results):
         # Get the maximum log-likelihood
         if "ln Lmax" in line and len(line_floats) > 0:
             results["lnL max"] = line_floats[0]
-    return multi_models
+    return (results, multi_models)
  
 def parse_nssites(lines, results, multi_models):
     """Determine which NSsites models are present and parse them.
@@ -73,7 +73,7 @@ def parse_nssites(lines, results, multi_models):
                         "beta (4 categories)" : 7,
                         "beta&w>1 (5 categories)" : 8}[siteclass_model]
         model_results = {"description" : siteclass_model}
-        parse_model(lines, model_results)
+        model_results = parse_model(lines, model_results)
         ns_sites[current_model] = model_results
     else:
     # If there are multiple models in the results, scan through
@@ -99,7 +99,7 @@ def parse_nssites(lines, results, multi_models):
         if ns_sites.get(current_model) is None:
         # When we reach the end of the file, we'll still have one more
         # model to parse.
-            parse_model(lines[model_start:], model_results)
+            model_results = parse_model(lines[model_start:], model_results)
             ns_sites[current_model] = model_results
     # Only add the ns_sites dict to the results if we really have results. 
     # Model M0 is added by default in some cases, so if it exists, make sure 
@@ -110,6 +110,7 @@ def parse_nssites(lines, results, multi_models):
             results["NSsites"] = ns_sites
     elif len(ns_sites) > 1:
         results["NSsites"] = ns_sites
+    return results
 
 def parse_model(lines, results):
     """Parse an individual NSsites model's results.
@@ -224,11 +225,14 @@ def parse_model(lines, results):
         # Example match 2 (branch site A model, 4 site classes):
         # "proportion       0.00000  0.00000  0.73921  0.26079"
         elif line[0:2] == "p:" or line[0:10] == "proportion":
-            parse_siteclass_proportions(line_floats, parameters)
+            site_classes = parse_siteclass_proportions(line_floats)
+            parameters["site classes"] = site_classes
         # Find the omega value corresponding to each site class
         # Example match (2 site classes): "w:   0.10224  1.00000"
         elif line[0:2] == "w:":
-            parse_siteclass_omegas(line_floats, parameters)
+            site_classes = parameters.get("site classes")
+            site_classes = parse_siteclass_omegas(line_floats, site_classes)
+            parameters["site classes"] = site_classes
         # Find the omega values corresponding to a branch type from  
         # the clade model C for each site class
         # Example match:
@@ -236,20 +240,27 @@ def parse_model(lines, results):
         elif "branch type " in line:
             branch_type = re.match("branch type (\d)", line)
             if branch_type:
+                site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
-                parse_clademodelc(branch_type_no, line_floats, parameters)
+                site_classes = parse_clademodelc(branch_type_no, line_floats, 
+                        site_classes)
+                parameters["site classes"] = site_classes
         # Find the omega values of the foreground branch for each site
         # class in the branch site A model
         # Example match:
         # "foreground w     0.07992  1.00000 134.54218 134.54218"
         elif line[0:12] == "foreground w":
-            parse_branch_site_a(True, line_floats, parameters)
+            site_classes = parameters.get("site classes")
+            site_classes = parse_branch_site_a(True, line_floats, site_classes)
+            parameters["site classes"] = site_classes
         # Find the omega values of the background for each site
         # class in the branch site A model
         # Example match:
         # "background w     0.07992  1.00000  0.07992  1.00000"
         elif line[0:12] == "background w":
-            parse_branch_site_a(False, line_floats, parameters)
+            site_classes = parameters.get("site classes")
+            site_classes = parse_branch_site_a(False, line_floats, site_classes)
+            parameters["site classes"] = site_classes
         # Find dN & dS for each branch, which is organized in a table
         # The possibility of NaNs forces me to not use the line_floats
         # method.
@@ -277,39 +288,40 @@ def parse_model(lines, results):
             parameters = dict(parameters.items() + float_model_params)
     if len(parameters) > 0:
         results["parameters"] = parameters
+    return results
 
-def parse_siteclass_proportions(line_floats, parameters):
+def parse_siteclass_proportions(line_floats):
     """For models which have multiple site classes, find the proportion of the alignment assigned to each class.
     """
     site_classes = {}
     if len(line_floats) > 0:
         for n in range(len(line_floats)):
             site_classes[n] = {"proportion" : line_floats[n]}
-    parameters["site classes"] = site_classes
+    return site_classes
 
-def parse_siteclass_omegas(line_floats, parameters):
+def parse_siteclass_omegas(line_floats, site_classes):
     """For models which have multiple site classes, find the omega estimated for each class.
     """
-    site_classes = parameters.get("site classes")
-    if site_classes and len(line_floats) > 0:
-        for n in range(len(line_floats)):
-            site_classes[n]["omega"] = line_floats[n]
+    if not site_classes or len(line_floats) == 0:
+        return
+    for n in range(len(line_floats)):
+        site_classes[n]["omega"] = line_floats[n]
+    return site_classes
 
-def parse_clademodelc(branch_type_no, line_floats, parameters):
+def parse_clademodelc(branch_type_no, line_floats, site_classes):
     """Parse results specific to the clade model C.
     """
-    site_classes = parameters.get("site classes")
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
         if site_classes[n].get("branch types") is None:
             site_classes[n]["branch types"] = {}
         site_classes[n]["branch types"][branch_type_no] = line_floats[n]
+    return site_classes
 
-def parse_branch_site_a(foreground, line_floats, parameters):
+def parse_branch_site_a(foreground, line_floats, site_classes):
     """Parse results specific to the branch site A model.
     """
-    site_classes = parameters.get("site classes")
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
@@ -321,6 +333,7 @@ def parse_branch_site_a(foreground, line_floats, parameters):
         else:
             site_classes[n]["branch types"]["background omega"] =\
                     line_floats[n]
+    return site_classes
 
 def parse_pairwise(lines, results):
     """Parse results from pairwise comparisons.
@@ -359,6 +372,7 @@ def parse_pairwise(lines, results):
                 pairwise[seq2][seq1] = pairwise[seq1][seq2]
     if len(pairwise) > 0:
         results["pairwise"] = pairwise
+    return results
 
 def parse_distances(lines, results):
     """Parse amino acid sequence distance results.
@@ -403,3 +417,4 @@ def parse_distances(lines, results):
                     distances["ml"][sequences[i]][seq_name] = line_floats[i]
     if len(distances) > 0:
         results["distances"] = distances
+    return results
