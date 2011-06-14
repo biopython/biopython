@@ -17,7 +17,8 @@ class Interface(Entity):
     def __init__(self, id):
         self.level="I"
         self.id=id
-        self.neighbors = []
+        self.neighbors = {}
+        self.uniq_pairs = []
 
         Entity.__init__(self, id)
 
@@ -44,4 +45,30 @@ class Interface(Entity):
         "Get the different chains involved in the Interface object"
         for chain in self.child_dict.keys():
             yield chain
-            
+
+    def get_neighbors(self):
+        neighbors=self.neighbors
+        for resA, resB in self.uniq_pairs:
+        ## Checking for 1st residue (if his chain exist, then if 
+        ## it is referenced and finally if his partner is already present)
+            if resA.parent.id not in neighbors:
+                neighbors[resA.parent.id]={}
+                neighbors[resA.parent.id][resA]=[]
+                neighbors[resA.parent.id][resA].append(resB)
+            elif resA not in neighbors[resA.parent.id]:
+                neighbors[resA.parent.id][resA]=[]
+                neighbors[resA.parent.id][resA].append(resB)
+            elif resB not in neighbors[resA.parent.id][resA]:
+                neighbors[resA.parent.id][resA].append(resB)
+        ## Checking for 2nd residue
+            if resB.parent.id not in neighbors:
+                neighbors[resB.parent.id]={}
+                neighbors[resB.parent.id][resB]=[]
+                neighbors[resB.parent.id][resB].append(resB)
+            elif resB not in neighbors[resB.parent.id]:
+                neighbors[resB.parent.id][resB]=[]
+                neighbors[resB.parent.id][resB].append(resB)
+            elif resA not in neighbors[resB.parent.id][resB]:
+                neighbors[resB.parent.id][resB].append(resA)
+        return neighbors
+
