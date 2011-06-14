@@ -105,7 +105,7 @@ class InterfaceBuilder(object):
                 self._add_residue(resB)
 
         #interface=uniq_pairs
-
+        self.interface.uniq_pairs=uniq_pairs
         # Add neighbors
         # so you can call
         # my_int.neighbors['A'][10] = [list of contacting residues]
