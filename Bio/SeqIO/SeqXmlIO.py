@@ -3,12 +3,13 @@
 #
 # This module is for reading and writing SeqXML format files as
 # SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
-"""Bio.SeqIO support for the "seqxml" file format.
+"""Bio.SeqIO support for the "seqxml" file format, SeqXML.
 
 You are expected to use this module via the Bio.SeqIO functions.
 
-SeqXML is a lightweight XML format which is supposed be an alternative for FASTA.
-For more Information see http://www.seqXML.org
+SeqXML is a lightweight XML format which is supposed be an alternative for
+FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
+(2011), http://dx.doi.org/10.1093/bib/bbr025 
 """
 
 from xml.sax.saxutils import XMLGenerator

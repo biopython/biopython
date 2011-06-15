@@ -236,6 +236,7 @@ names are also used in Bio.AlignIO and include the following:
  - pir     - A "FASTA like" format introduced by the National Biomedical
              Research Foundation (NBRF) for the Protein Information Resource
              (PIR) database, now part of UniProt.
+ - seqxml  - SeqXML, simple XML format described in Schmitt et al (2011).
  - sff     - Standard Flowgram Format (SFF), typical output from Roche 454.
  - sff-trim - Standard Flowgram Format (SFF) with given trimming applied.
  - swiss   - Plain text Swiss-Prot aka UniProt format.
