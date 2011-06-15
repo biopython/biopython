@@ -57,7 +57,7 @@ class TestSimpleRead(unittest.TestCase):
             
             self.assertEqual(len(records),test_files[_file][1])
             
-class TestDetalidRead(unittest.TestCase):
+class TestDetailedRead(unittest.TestCase):
     
     records = {}
     
