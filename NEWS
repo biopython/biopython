@@ -16,6 +16,10 @@ A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
 Likelihood) package of programs, supporting codeml, baseml and yn00 as well
 as a Python re-implementation of chi2 was added as the Bio.Phylo.PAML module.
 
+Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
+format offering basic annotation support. See Schmitt et al (2011) in
+Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
+
 The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
 would only return alignments for the first query sequence.
@@ -42,6 +46,7 @@ Connor McCoy (first contribution)
 Eric Talevich
 Joao Rodrigues
 Peter Cock
+Thomas Schmitt (first contribution)
 Walter Gillett
 
 ===================================================================
