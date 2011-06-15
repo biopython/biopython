@@ -296,7 +296,8 @@ class SeqXmlWriter(SequentialSequenceWriter):
     def _write_seq(self,record):
         """Write the sequence.
         
-        Note that SeqXML requires a DNA, RNA or protein alphabet"""
+        Note that SeqXML requires a DNA, RNA or protein alphabet.
+        """
         
         if isinstance(record.seq,UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
@@ -306,8 +307,8 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")
         
-        alphabet = record.seq.alphabet
-        
+        #Get the base alphabet (underneath any Gapped or StopCodon encoding)
+        alphabet = Alphabet._get_base_alphabet(record.seq.alphabet)
         if isinstance(alphabet,Alphabet.RNAAlphabet):
             seqElem = "RNAseq"
         elif isinstance(alphabet,Alphabet.DNAAlphabet):

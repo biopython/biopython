@@ -2999,7 +2999,6 @@ Testing reading ace format file Ace/contig1.ace
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'seqxml' format
- Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -3022,7 +3021,6 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'seqxml' format
- Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
@@ -3044,7 +3042,6 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'phd' format
  Checking can write/read as 'qual' format
  Checking can write/read as 'seqxml' format
- Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'sff' format
  Failed: Missing SFF flow information
  Checking can write/read as 'tab' format
