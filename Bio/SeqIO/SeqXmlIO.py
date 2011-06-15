@@ -3,14 +3,13 @@
 #
 # This module is for reading and writing SeqXML format files as
 # SeqRecord objects, and is expected to be used via the Bio.SeqIO API.
-
-
 """Bio.SeqIO support for the "seqxml" file format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 
 SeqXML is a lightweight XML format which is supposed be an alternative for FASTA.
-For more Information see http://www.seqXML.org"""
+For more Information see http://www.seqXML.org
+"""
 
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
@@ -27,16 +26,15 @@ from Interfaces import SequentialSequenceWriter
 class XMLRecordIterator:
     """Base class for building iterators for record style XML formats. 
     
-        It is assumed that all information for one record can be found 
-        within a record element or above. Two types of methods are called when 
-        the start tag of an element is reached. To receive only the
-        attributes of an element before its end tag is reached implement _attr_TAGNAME.
-        To get an element and its children as a DOM tree implement _elem_TAGNAME. 
-        Everything that is part of the DOM tree will not trigger any further 
-        method calls.
+    It is assumed that all information for one record can be found within a
+    record element or above. Two types of methods are called when the start
+    tag of an element is reached. To receive only the attributes of an
+    element before its end tag is reached implement _attr_TAGNAME.
+    To get an element and its children as a DOM tree implement _elem_TAGNAME. 
+    Everything that is part of the DOM tree will not trigger any further 
+    method calls.
     """
 
-    
     def __init__(self,handle,recordTag,namespace=None):
         """Creating the object and initializing the XML parser."""
         
@@ -198,8 +196,10 @@ class SeqXmlIterator(XMLRecordIterator):
 class SeqXmlWriter(SequentialSequenceWriter):
     """Writes SeqRecords into seqXML file.
     
-    SeqXML requires the sequence alphabet to an instance of Bio.Alphapet.RNAAlphabet, Bio.Alphapet.DNAAlphabet or Bio.Alphapet.ProteinAlphabet.
-    Simple string Annotaion"""
+    SeqXML requires the sequence alphabet be explicitly RNA, DNA or protein,
+    i.e. an instance or subclass of Bio.Alphapet.RNAAlphabet,
+    Bio.Alphapet.DNAAlphabet or Bio.Alphapet.ProteinAlphabet.
+    """
     
     def __init__(self, handle,seqXML_version=None,source=None,source_version=None):
         """Create Object and start the xml generator."""
@@ -216,8 +216,9 @@ class SeqXmlWriter(SequentialSequenceWriter):
         """Write root node with document metadata."""
         SequentialSequenceWriter.write_header(self)
         
-        attrs = { "xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance", "xsi:noNamespaceSchemaLocation":"http://www.seqxml.org/0.3/seqxml.xsd" }
-        if self.seqXML_version !=None:
+        attrs = {"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
+                 "xsi:noNamespaceSchemaLocation":"http://www.seqxml.org/0.3/seqxml.xsd"}
+        if self.seqXML_version != None:
             attrs["seqXMLversion"] = self.seqXML_version
         if self.source != None:
             attrs["source"] = self.source
@@ -387,5 +388,3 @@ if __name__ == "__main__":
     records = list(SeqIO.parse(stringHandle,"seqxml"))
     
     SeqIO.write(records,sys.stdout,"seqxml")
-
-        
