@@ -8,7 +8,7 @@ AlignIO support for the "phylip" format used in Joe Felsenstein's PHYLIP tools.
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
-Support for "extended phylip" format is also provided. Extended phylip differs
+Support for "relaxed phylip" format is also provided. Relaxed phylip differs
 from standard phylip format in the following ways:
 
  * No whitespace is allowed in the sequence ID.
@@ -16,7 +16,7 @@ from standard phylip format in the following ways:
    ID length, rather than 10 characters. A space separates the sequence
    identifier from the sequence.
 
-Extended phylip is supported by RAxML and PHYML.
+Relaxed phylip is supported by RAxML and PHYML.
 
 Note
 ====
@@ -160,6 +160,20 @@ class PhylipIterator(AlignmentIterator):
         except ValueError:
             return False # First line should have two integers
 
+    def _split_id(self, line):
+        """
+        Extracts the sequence ID from a Phylip line, returning a tuple
+        containing:
+
+            (sequence_id, sequence_residues)
+
+        The first 10 characters in the line are are the sequence id, the
+        remainder are sequence data.
+        """
+        seq_id = line[:self.truncate].strip()
+        seq = line[self.truncate:].strip().replace(' ', '')
+        return seq_id, seq
+
     def next(self):
         handle = self.handle
 
@@ -195,19 +209,10 @@ class PhylipIterator(AlignmentIterator):
 
         # By default, expects STRICT truncation / padding to 10 characters.
         # Does not require any whitespace between name and seq.
-
-        # To support extended phylip - if self.truncate is set to None the
-        # truncation length is inferred from splitting at the first whitespace
-        # character. In this scheme, whitespace is prohibited in the ID, and 1+
-        # whitespace characters must be present between the ID and sequence
         for i in xrange(number_of_seqs):
             line = handle.readline().rstrip()
-            if self.truncate is None:
-                ids.append(line.split(None, 1)[0])
-                s = line.split(None, 1)[1].strip().replace(" ", "")
-            else:
-                ids.append(line[:self.truncate].strip()) #first ten characters
-                s = line[self.truncate:].strip().replace(" ","")
+            sequence_id, s = self._split_id(line)
+            ids.append(sequence_id)
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append([s])
@@ -242,15 +247,15 @@ class PhylipIterator(AlignmentIterator):
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
 
-# Extended Phylip
-class ExtendedPhylipWriter(PhylipWriter):
+# Relaxed Phylip
+class RelaxedPhylipWriter(PhylipWriter):
     """
-    Extended Phylip format writer
+    Relaxed Phylip format writer
     """
 
     def write_alignment(self, alignment):
         """
-        Write an extended phylip alignment
+        Write a relaxed phylip alignment
         """
         # Check inputs
         for name in (s.id.strip() for s in alignment):
@@ -266,16 +271,26 @@ class ExtendedPhylipWriter(PhylipWriter):
             truncate = 1
         else:
             truncate = max((len(s.id.strip()) for s in alignment)) + 1
-        super(ExtendedPhylipWriter, self).write_alignment(alignment, truncate)
+        super(RelaxedPhylipWriter, self).write_alignment(alignment, truncate)
 
 
-class ExtendedPhylipIterator(PhylipIterator):
+class RelaxedPhylipIterator(PhylipIterator):
     """
-    Extended Phylip format Iterator
+    Relaxed Phylip format Iterator
     """
-    # Set truncate to None - IDs will be parsed based on spacing
-    truncate = None
 
+    def _split_id(self, line):
+        """Returns the ID, sequence data from a line
+        Extracts the sequence ID from a Phylip line, returning a tuple
+        containing:
+
+            (sequence_id, sequence_residues)
+
+        For relaxed format - split at the first whitespace character
+        """
+        seq_id, sequence = line.split(None, 1)
+        sequence = sequence.strip().replace(" ", "")
+        return seq_id, sequence
 
 
 if __name__=="__main__":
