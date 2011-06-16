@@ -45,7 +45,7 @@ test_files = [
     ("phylip",10, 1, 'Phylip/random.phy'),
     ("phylip", 3, 1, 'Phylip/interlaced.phy'),
     ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
-    ("phylip-extended", 12, 1, 'ExtendedPhylip/primates.phyx'),
+    ("phylip-relaxed", 12, 1, 'ExtendedPhylip/primates.phyx'),
     ("emboss", 4, 1, 'Emboss/alignret.txt'),
     ("emboss", 2, 5, 'Emboss/needle.txt'),
     ("emboss", 2, 1, 'Emboss/needle_asis.txt'),
@@ -176,7 +176,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
             if format=="phylip":
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="phylip-extended":
+            elif format=="phylip-relaxed":
                 assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
                         "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="clustal":
