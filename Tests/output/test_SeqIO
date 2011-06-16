@@ -16,7 +16,7 @@ Testing reading sff format file Roche/E3MFGYR02_random_10_reads.sff
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -47,7 +47,7 @@ Testing reading clustal format file Clustalw/cw02.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -91,7 +91,7 @@ Testing reading clustal format file Clustalw/opuntia.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -135,7 +135,7 @@ Testing reading clustal format file Clustalw/hedgehog.aln as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -175,7 +175,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -204,7 +204,7 @@ Testing reading fasta format file Fasta/lupine.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -233,7 +233,7 @@ Testing reading fasta format file Fasta/elderberry.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -262,7 +262,7 @@ Testing reading fasta format file Fasta/phlox.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -291,7 +291,7 @@ Testing reading fasta format file Fasta/centaurea.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -320,7 +320,7 @@ Testing reading fasta format file Fasta/wisteria.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -349,7 +349,7 @@ Testing reading fasta format file Fasta/sweetpea.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -378,7 +378,7 @@ Testing reading fasta format file Fasta/lavender.nu
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -407,7 +407,7 @@ Testing reading fasta format file Fasta/aster.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -436,7 +436,7 @@ Testing reading fasta format file Fasta/loveliesbleeding.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -465,7 +465,7 @@ Testing reading fasta format file Fasta/rose.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -494,7 +494,7 @@ Testing reading fasta format file Fasta/rosemary.pro
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -523,7 +523,7 @@ Testing reading fasta format file Fasta/f001
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -559,7 +559,7 @@ Testing reading fasta format file Fasta/f002
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -594,7 +594,7 @@ Testing reading fasta format file Fasta/fa01
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -624,7 +624,7 @@ Testing reading fasta format file GenBank/NC_005816.fna
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -663,7 +663,7 @@ Testing reading fasta format file GenBank/NC_005816.ffn
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -703,7 +703,7 @@ Testing reading fasta format file GenBank/NC_005816.faa
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -743,7 +743,7 @@ Testing reading fasta format file GenBank/NC_000932.faa
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -783,7 +783,7 @@ Testing reading tab format file GenBank/NC_005816.tsv
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -813,7 +813,7 @@ Testing reading fasta format file GFF/NC_001802.fna
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -842,7 +842,7 @@ Testing reading fasta format file GFF/NC_001802lc.fna
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -883,7 +883,7 @@ Testing reading fasta format file GFF/multi.fna as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -917,7 +917,7 @@ Testing reading fasta format file Registry/seqs.fasta
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -962,7 +962,7 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Whitespace not allowed in identifier: one should be punished, for (that)!
  Checking can write/read as 'embl' format
  Failed: Cannot have spaces in EMBL accession, 'one should be punished, for (that)!'
@@ -991,7 +991,7 @@ Testing reading swiss format file SwissProt/sp001
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13454).
@@ -1016,7 +1016,7 @@ Testing reading swiss format file SwissProt/sp002
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P54101).
@@ -1041,7 +1041,7 @@ Testing reading swiss format file SwissProt/sp003
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P42655).
@@ -1066,7 +1066,7 @@ Testing reading swiss format file SwissProt/sp004
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P23082).
@@ -1091,7 +1091,7 @@ Testing reading swiss format file SwissProt/sp005
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P24973).
@@ -1116,7 +1116,7 @@ Testing reading swiss format file SwissProt/sp006
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P39896).
@@ -1141,7 +1141,7 @@ Testing reading swiss format file SwissProt/sp007
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O95832).
@@ -1166,7 +1166,7 @@ Testing reading swiss format file SwissProt/sp008
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01892).
@@ -1191,7 +1191,7 @@ Testing reading swiss format file SwissProt/sp009
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O23729).
@@ -1216,7 +1216,7 @@ Testing reading swiss format file SwissProt/sp010
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
@@ -1241,7 +1241,7 @@ Testing reading swiss format file SwissProt/sp011
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P16235).
@@ -1266,7 +1266,7 @@ Testing reading swiss format file SwissProt/sp012
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q9Y736).
@@ -1291,7 +1291,7 @@ Testing reading swiss format file SwissProt/sp013
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P82909).
@@ -1316,7 +1316,7 @@ Testing reading swiss format file SwissProt/sp014
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P12166).
@@ -1341,7 +1341,7 @@ Testing reading swiss format file SwissProt/sp015
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=IPI00383150).
@@ -1366,7 +1366,7 @@ Testing reading swiss format file SwissProt/sp016
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01100).
@@ -1391,7 +1391,7 @@ Testing reading swiss format file Registry/EDD_RAT.dat
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q62671).
@@ -1416,7 +1416,7 @@ Testing reading uniprot-xml format file SwissProt/uni001
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q91G55).
@@ -1448,7 +1448,7 @@ Testing reading uniprot-xml format file SwissProt/uni002
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -1475,7 +1475,7 @@ Testing reading uniprot-xml format file SwissProt/Q13639.xml
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
@@ -1500,7 +1500,7 @@ Testing reading swiss format file SwissProt/Q13639.txt
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Q13639).
@@ -1525,7 +1525,7 @@ Testing reading genbank format file GenBank/noref.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NM_006141.1).
@@ -1560,7 +1560,7 @@ Testing reading genbank format file GenBank/cor6_6.gb
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -1587,7 +1587,7 @@ Testing reading genbank format file GenBank/iro.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL109817.1).
@@ -1612,7 +1612,7 @@ Testing reading genbank format file GenBank/pri1.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U05344.1).
@@ -1637,7 +1637,7 @@ Testing reading genbank format file GenBank/arab1.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AC007323.5).
@@ -1662,7 +1662,7 @@ Testing reading genbank format file GenBank/protein_refseq.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).
@@ -1687,7 +1687,7 @@ Testing reading genbank format file GenBank/protein_refseq2.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_034640.1).
@@ -1712,7 +1712,7 @@ Testing reading genbank format file GenBank/extra_keywords.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL138972.1).
@@ -1737,7 +1737,7 @@ Testing reading genbank format file GenBank/one_of.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U18266.1).
@@ -1770,7 +1770,7 @@ Testing reading genbank format file GenBank/origin_line.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_002678.1).
@@ -1795,7 +1795,7 @@ Testing reading genbank format file GenBank/blank_seq.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NP_001832.1).
@@ -1820,7 +1820,7 @@ Testing reading genbank format file GenBank/dbsource_wrap.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=P01485).
@@ -1845,7 +1845,7 @@ Testing reading genbank format file GenBank/NC_005816.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_005816.1).
@@ -1870,7 +1870,7 @@ Testing reading genbank format file GenBank/NC_000932.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_000932.1).
@@ -1895,7 +1895,7 @@ Testing reading genbank format file GenBank/pBAD30.gb
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=pBAD30).
@@ -1927,7 +1927,7 @@ Testing reading genbank format file GenBank/gbvrl1_start.seq
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -1954,7 +1954,7 @@ Testing reading genbank format file GFF/NC_001422.gbk
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=NC_001422.1).
@@ -1989,7 +1989,7 @@ Testing reading embl format file EMBL/epo_prt_selection.embl
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -2017,7 +2017,7 @@ Testing reading embl format file EMBL/TRBG361.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=X56734.1).
@@ -2042,7 +2042,7 @@ Testing reading embl format file EMBL/DD231055_edited.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=DD231055.1).
@@ -2067,7 +2067,7 @@ Testing reading embl format file EMBL/SC10H5.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL031232).
@@ -2092,7 +2092,7 @@ Testing reading embl format file EMBL/U87107.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=U87107.1).
@@ -2117,7 +2117,7 @@ Testing reading embl format file EMBL/AAA03323.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AAA03323.1).
@@ -2142,7 +2142,7 @@ Testing reading embl format file EMBL/AE017046.embl
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AE017046.1).
@@ -2177,7 +2177,7 @@ Testing reading embl format file EMBL/A04195.imgt
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
@@ -2202,7 +2202,7 @@ Testing reading imgt format file EMBL/A04195.imgt
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=A04195).
@@ -2237,7 +2237,7 @@ Testing reading stockholm format file Stockholm/simple.sth as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2281,7 +2281,7 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2325,7 +2325,7 @@ Testing reading phylip format file Phylip/reference_dna.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Whitespace not allowed in identifier: B. virgini
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -2370,7 +2370,7 @@ Testing reading phylip format file Phylip/reference_dna2.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Whitespace not allowed in identifier: B. virgini
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -2415,7 +2415,7 @@ Testing reading phylip format file Phylip/hennigian.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2459,7 +2459,7 @@ Testing reading phylip format file Phylip/horses.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Whitespace not allowed in identifier: M. secundu
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -2504,7 +2504,7 @@ Testing reading phylip format file Phylip/random.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2545,7 +2545,7 @@ Testing reading phylip format file Phylip/interlaced.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2588,7 +2588,7 @@ Testing reading phylip format file Phylip/interlaced2.phy as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2631,7 +2631,7 @@ Testing reading emboss format file Emboss/alignret.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2670,7 +2670,7 @@ Testing reading emboss format file Emboss/needle.txt
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -2710,7 +2710,7 @@ Testing reading emboss format file Emboss/water.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2746,7 +2746,7 @@ Testing reading phd format file Phd/phd1
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -2769,7 +2769,7 @@ Testing reading phd format file Phd/phd2
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
@@ -2792,7 +2792,7 @@ Testing reading phd format file Phd/phd_solexa
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'HWI-EAS94_' (originally 'HWI-EAS94_4_1_1_537_446'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
@@ -2813,7 +2813,7 @@ Testing reading phd format file Phd/phd_454
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
@@ -2839,7 +2839,7 @@ Testing reading ace format file Ace/contig1.ace
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -2861,7 +2861,7 @@ Testing reading ace format file Ace/consed_sample.ace
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
@@ -2881,7 +2881,7 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
@@ -2911,7 +2911,7 @@ Testing reading ig format file IntelliGenetics/TAT_mase_nuc.txt
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -2956,7 +2956,7 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -2995,7 +2995,7 @@ Testing reading ig format file IntelliGenetics/vpu_nucaligned.txt
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -3035,7 +3035,7 @@ Testing reading pir format file NBRF/B_nuc.pir
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -3072,7 +3072,7 @@ Testing reading pir format file NBRF/Cw_prot.pir
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -3108,7 +3108,7 @@ Testing reading pir format file NBRF/DMA_nuc.pir
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -3145,7 +3145,7 @@ Testing reading pir format file NBRF/DMB_prot.pir
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -3182,7 +3182,7 @@ Testing reading pir format file NBRF/clustalw.pir as an alignment
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=815Parelaphostrongylus_odocoil).
@@ -3221,7 +3221,7 @@ Testing reading fasta format file Quality/example.fasta as an alignment
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3255,7 +3255,7 @@ Testing reading qual format file Quality/example.qual
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3292,7 +3292,7 @@ Testing reading fastq format file Quality/example.fastq as an alignment
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3331,7 +3331,7 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'phylip' format
  Failed: Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3355,7 +3355,7 @@ Testing reading fastq format file Quality/sanger_faked.fastq
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3379,7 +3379,7 @@ Testing reading fastq format file Quality/sanger_93.fastq
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3403,7 +3403,7 @@ Testing reading fastq-illumina format file Quality/illumina_faked.fastq
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3427,7 +3427,7 @@ Testing reading fastq-solexa format file Quality/solexa_faked.fastq
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
@@ -3467,7 +3467,7 @@ Testing reading fastq-solexa format file Quality/solexa_example.fastq as an alig
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation
  Checking can write/read as 'stockholm' format
- Checking can write/read as 'phylip-extended' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format

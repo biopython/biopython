@@ -33,7 +33,7 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = ["fasta","clustal","phylip","phylip-extended","tab","ig",
+no_alpha_formats = ["fasta","clustal","phylip","phylip-relaxed","tab","ig",
                     "stockholm","emboss", "fastq","fastq-solexa",
                     "fastq-illumina","qual"]
 possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
@@ -42,7 +42,7 @@ possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
 #The list is initially hard coded to preserve the original order of the unit
 #test output, with any new formats added since appended to the end.
 test_write_read_alignment_formats = ["fasta","clustal","phylip","stockholm",
-                                     "phylip-extended"]
+                                     "phylip-relaxed"]
 for format in sorted(SeqIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
         test_write_read_alignment_formats.append(format)
@@ -354,7 +354,7 @@ def check_simple_write_read(records, indent=" "):
             if format=="phylip":
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="phylip-extended":
+            elif format=="phylip-relaxed":
                 assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
                         "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="clustal":
