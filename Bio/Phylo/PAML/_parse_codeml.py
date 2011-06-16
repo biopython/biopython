@@ -328,10 +328,10 @@ def parse_branch_site_a(foreground, line_floats, site_classes):
         if site_classes[n].get("branch types") is None:
             site_classes[n]["branch types"] = {}
         if foreground:
-            site_classes[n]["branch types"]["foreground omega"] =\
+            site_classes[n]["branch types"]["foreground"] =\
                     line_floats[n]
         else:
-            site_classes[n]["branch types"]["background omega"] =\
+            site_classes[n]["branch types"]["background"] =\
                     line_floats[n]
     return site_classes
 
