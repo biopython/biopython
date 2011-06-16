@@ -105,6 +105,8 @@ def parse_others(lines, results, sequences):
                 stats_split = line_stats.split()
                 for i in range(0, len(stats_split), 3):
                     stat = stats_split[i].strip("()")
+                    if stat == "w":
+                        stat = "omega"
                     value = stats_split[i+2].strip("()")
                     try:
                         stats[stat] = float(value)
