@@ -594,8 +594,12 @@ class HiddenMarkovModel(object):
         and log-transformed values.
         """
         log_prob = copy.copy(probability)
-
-        neg_inf = float("-inf")
+        try:
+            neg_inf = float("-inf")
+        except ValueError:
+            #On Python 2.5 or older that was handled in C code,
+            #and failed on Windows XP 32bit
+            neg_inf = - 1E400
         for key in log_prob:
             prob = log_prob[key]
             if prob > 0:
