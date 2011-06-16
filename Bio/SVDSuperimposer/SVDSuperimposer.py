@@ -6,7 +6,7 @@
 from numpy import dot, transpose, sqrt, array
 from numpy.linalg import svd, det
 
-class SVDSuperimposer:
+class SVDSuperimposer(object):
     """
     SVDSuperimposer finds the best rotation and translation to put
     two point sets on top of each other (minimizing the RMSD). This is 

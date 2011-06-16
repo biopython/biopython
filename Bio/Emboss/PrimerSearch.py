@@ -2,7 +2,7 @@
 """
 
 
-class InputRecord:
+class InputRecord(object):
     """Represent the input file into the primersearch program.
 
     This makes it easy to add primer information and write it out to the
@@ -24,7 +24,7 @@ class InputRecord:
         self.primer_info.append((primer_name, first_primer_seq,
                                  second_primer_seq))
            
-class OutputRecord:
+class OutputRecord(object):
     """Represent the information from a primersearch job.
 
     amplifiers is a dictionary where the keys are the primer names and
@@ -33,7 +33,7 @@ class OutputRecord:
     def __init__(self):
         self.amplifiers = {}
 
-class Amplifier:
+class Amplifier(object):
     """Represent a single amplification from a primer.
     """
     def __init__(self):

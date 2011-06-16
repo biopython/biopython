@@ -7,9 +7,9 @@
 
 """I/O function wrappers for the Newick file format.
 
-See: U{ http://evolution.genetics.washington.edu/phylip/newick_doc.html }
+See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 from cStringIO import StringIO
 
@@ -28,17 +28,17 @@ class NewickError(Exception):
 # ---------------------------------------------------------
 # Public API
 
-def parse(handle):
+def parse(handle, **kwargs):
     """Iterate over the trees in a Newick file handle.
 
-    @return: a generator of Bio.Phylo.Newick.Tree objects.
+    :returns: generator of Bio.Phylo.Newick.Tree objects.
     """
-    return Parser(handle).parse()
+    return Parser(handle).parse(**kwargs)
 
 def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 
-    @return: number of trees written.
+    :returns: number of trees written.
     """
     return Writer(trees).write(handle, plain=plain, **kwargs)
 
@@ -49,7 +49,7 @@ def write(trees, handle, plain=False, **kwargs):
 class Parser(object):
     """Parse a Newick tree given a file handle.
 
-    Based on the parser in Bio.Nexus.Trees.
+    Based on the parser in `Bio.Nexus.Trees`.
     """
 
     def __init__(self, handle):
@@ -63,24 +63,24 @@ class Parser(object):
     def parse(self, values_are_support=False, rooted=False):
         """Parse the text stream this object was initialized with."""
         self.values_are_support = values_are_support
-        self.rooted = rooted
+        self.rooted = rooted    # XXX this attribue is useless
         buf = ''
         for line in self.handle:
             buf += line.rstrip()
             if buf.endswith(';'):
-                yield self._parse_tree(buf)
+                yield self._parse_tree(buf, rooted)
                 buf = ''
         if buf:
             # Last tree is missing a terminal ';' character -- that's OK
-            yield self._parse_tree(buf)
+            yield self._parse_tree(buf, rooted)
 
-    def _parse_tree(self, text):
+    def _parse_tree(self, text, rooted):
         """Parses the text representation into an Tree object."""
-        # XXX what global info do we have here? Any? Use **kwargs?
-        return Newick.Tree(root=self._parse_subtree(text))
+        # XXX Pass **kwargs along from Parser.parse?
+        return Newick.Tree(root=self._parse_subtree(text), rooted=self.rooted)
 
     def _parse_subtree(self, text):
-        """Parse (a,b,c...)[[[xx]:]yy] into subcomponents, recursively."""
+        """Parse ``(a,b,c...)[[[xx]:]yy]`` into subcomponents, recursively."""
         text = text.strip().rstrip(';')
         if text.count('(')!=text.count(')'):
             raise NewickError("Parentheses do not match in (sub)tree: " + text)
@@ -112,7 +112,7 @@ class Parser(object):
     def _parse_tag(self, text):
         """Extract the data for a node from text.
 
-        @return: Clade instance containing any available data
+        :returns: Clade instance containing any available data
         """
         # Extract the comment
         comment_start = text.find(NODECOMMENT_START)
@@ -170,14 +170,15 @@ class Writer(object):
 
     def to_strings(self, support_as_branchlengths=False,
             branchlengths_only=False, plain=False,
-            plain_newick=True, ladderize=None,
-            max_support=1.0):
+            plain_newick=True, ladderize=None, max_support=1.0,
+            format_support='%1.2f', format_branch_length='%1.5f'):
         """Return an iterable of PAUP-compatible tree lines."""
         # If there's a conflict in the arguments, we override plain=True
         if support_as_branchlengths or branchlengths_only:
             plain = False
         make_info_string = self._info_factory(plain, support_as_branchlengths,
-                                              branchlengths_only, max_support)
+                                branchlengths_only, max_support,
+                                format_support, format_branch_length)
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
             if clade.is_terminal():    #terminal
@@ -206,8 +207,8 @@ class Writer(object):
             treeline.append(rawtree)
             yield ' '.join(treeline)
 
-    def _info_factory(self, plain, support_as_branchlengths,
-            branchlengths_only, max_support):
+    def _info_factory(self, plain, support_as_branchlengths, branchlengths_only,
+            max_support, format_support, format_branch_length):
         """Return a function that creates a nicely formatted node tag."""
         if plain:
             # Plain tree only. That's easy.
@@ -219,36 +220,26 @@ class Writer(object):
             def make_info_string(clade, terminal=False):
                 if terminal:
                     # terminal branches have 100% support
-                    return ':%1.2f' % max_support
-                else:
-                    return ':%1.2f' % (clade.confidence)
+                    return ':' + format_support % max_support
+                else:      
+                    return ':' + format_support % clade.confidence
 
         elif branchlengths_only:
             # write only branchlengths, ignore support
             def make_info_string(clade, terminal=False):
-                return ':%1.5f' % (clade.branch_length)
+                return ':' + format_branch_length % clade.branch_length
 
         else:
             # write support and branchlengths (e.g. .con tree of mrbayes)
             def make_info_string(clade, terminal=False):
-                if terminal:
-                    return ':%1.5f' % (clade.branch_length or 1.0)
+                if (terminal or
+                        not hasattr(clade, 'confidence') or
+                        clade.confidence is None):
+                    return (':' + format_branch_length
+                            ) % (clade.branch_length or 0.0)
                 else:
-                    if (clade.branch_length is not None and
-                        hasattr(clade, 'confidence') and
-                        clade.confidence is not None):
-                        # we have blen and suppport
-                        return '%1.2f:%1.5f' % (clade.confidence,
-                                                clade.branch_length)
-                    elif clade.branch_length is not None:
-                        # we have only blen
-                        return '0.00000:%1.5f' % clade.branch_length
-                    elif (hasattr(clade, 'confidence') and
-                          clade.confidence is not None):
-                        # we have only support
-                        return '%1.2f:0.00000' % clade.confidence
-                    else:
-                        return '0.00:0.00000'
+                    return (format_support + ':' + format_branch_length
+                            ) % (clade.confidence, clade.branch_length or 0.0)
 
         return make_info_string
 

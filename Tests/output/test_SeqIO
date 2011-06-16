@@ -168,7 +168,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'AT3G20900.' (originally 'AT3G20900.1-CDS'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -2644,9 +2644,7 @@ Testing reading phd format file Phd/phd1
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Checking can write/read as 'fastq-illumina' format
-UserWarning - Data loss - max PHRED quality 62 in Illumina FASTQ
  Checking can write/read as 'fastq-solexa' format
-UserWarning - Data loss - max Solexa quality 62 in Solexa FASTQ
  Checking can write/read as 'genbank' format
  Failed: Locus identifier '425_7_(71-A03-19).b.ab1' is too long
  Checking can write/read as 'imgt' format
@@ -2684,7 +2682,7 @@ Testing reading phd format file Phd/phd_solexa
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'HWI-EAS94_' (originally 'HWI-EAS94_4_1_1_537_446'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
@@ -2772,7 +2770,6 @@ Testing reading ace format file Ace/seq.cap.ace
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
-UserWarning - Data loss - max PHRED quality 93 in Sanger FASTQ
  Checking can write/read as 'fastq-illumina' format
  Checking can write/read as 'fastq-solexa' format
  Checking can write/read as 'genbank' format
@@ -3094,7 +3091,7 @@ Testing reading fasta format file Quality/example.fasta as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -3127,7 +3124,7 @@ Testing reading qual format file Quality/example.qual
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -3163,7 +3160,7 @@ Testing reading fastq format file Quality/example.fastq as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'EAS54_6_R1' (originally 'EAS54_6_R1_2_1_540_792'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -3201,7 +3198,7 @@ Testing reading fastq format file Quality/tricky.fastq as an alignment
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name '071113_EAS' (originally '071113_EAS56_0053:1:1:153:10'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
@@ -3332,7 +3329,7 @@ Testing reading fastq-solexa format file Quality/solexa_example.fastq as an alig
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'SLXA-B3_64' (originally 'SLXA-B3_649_FC8437_R1_1_1_362_549'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet

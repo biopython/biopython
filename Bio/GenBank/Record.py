@@ -90,7 +90,7 @@ def _indent_genbank(information, indent):
 
     return output_info
 
-class Record:
+class Record(object):
     """Hold GenBank information in a format similar to the original record.
 
     The Record class is meant to make data easy to get to when you are
@@ -497,7 +497,7 @@ class Record:
         return output
         
 
-class Reference:
+class Reference(object):
     """Hold information from a GenBank reference.
 
     Attributes:
@@ -611,7 +611,7 @@ class Reference:
             output += _wrapped_genbank(self.remark, Record.GB_BASE_INDENT)
         return output
     
-class Feature:
+class Feature(object):
     """Hold information about a Feature in the Feature Table of GenBank record.
 
     Attributes:
@@ -642,7 +642,7 @@ class Feature:
                                        Record.GB_FEATURE_INDENT, space_wrap)
         return output
 
-class Qualifier:
+class Qualifier(object):
     """Hold information about a qualifier in a GenBank feature.
 
     Attributes:

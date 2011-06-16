@@ -97,7 +97,7 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
-class align:
+class align(object):
     """This class provides functions that do alignments."""
     
     class alignment_function:

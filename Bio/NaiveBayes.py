@@ -35,7 +35,7 @@ def _contents(items):
         counts[item] = counts.get(item,0) + term
     return counts
 
-class NaiveBayes:
+class NaiveBayes(object):
     """Holds information for a NaiveBayes classifier.
 
     Members:
@@ -143,7 +143,7 @@ def train(training_set, results, priors=None, typecode=None):
 
     nb = NaiveBayes()
     nb.dimensionality = dimensions[0]
-    
+
     # Get a list of all the classes, and
     # estimate the prior probabilities for the classes.
     if priors is not None:
@@ -189,7 +189,7 @@ def train(training_set, results, priors=None, typecode=None):
 
             # Add pseudocounts here.  This needs to be parameterized.
             #values = list(values) + range(len(nb.classes))  # XXX add 1
-            
+
             # Estimate P(value|class,dim)
             nb.p_conditional[i][j] = _contents(values)
     return nb

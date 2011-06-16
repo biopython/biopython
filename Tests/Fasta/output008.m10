@@ -1,0 +1,604 @@
+# tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta
+TFASTX compares a protein to a translated DNA data bank
+ version 36.3.4 Apr, 2011
+Please cite:
+ Pearson et al, Genomics (1997) 46:24-36
+
+Query: four_human_proteins.fasta
+  1>>>sp|Q9BS26|ERP44_HUMAN Endoplasmic reticulum resident protein 44 OS=Homo sapiens GN=ERP44 - 406 aa
+Library: rhodopsin_nucs.fasta
+    10296 residues in     6 sequences
+
+Statistics: (shuffled3 [282]) Expectation_n fit: rho(ln(x))= 4.4103+/-0.0124; mu= 10.6753+/- 0.892
+ mean_var=54.1224+/-24.831, 0's: 0 Z-trim(-1.0): 0  B-trim: 0 in 0/5
+ Lambda= 0.174335
+ statistics sampled from 1 (1) to 282 sequences
+Algorithm: TFASTX (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0.583), E-opt: 0.1 (0.0833), width:  16
+ Scan time:  0.170
+!! No sequences with E() < 0.05
+>>><<<
+  2>>>sp|Q9NSY1|BMP2K_HUMAN BMP-2-inducible protein kinase OS=Homo sapiens GN=BMP2K - 1161 aa
+Library: rhodopsin_nucs.fasta
+    10296 residues in     6 sequences
+
+Statistics: (shuffled3 [413]) Expectation_n fit: rho(ln(x))= 0.1869+/-0.00911; mu= 49.2907+/- 0.667
+ mean_var=82.3490+/-39.486, 0's: 0 Z-trim(-1.0): 0  B-trim: 0 in 0/5
+ Lambda= 0.141334
+ statistics sampled from 3 (3) to 413 sequences
+Algorithm: TFASTX (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0.792), E-opt: 0.1 (0.167), width:  16
+ Scan time:  0.320
+
+The best scores are:                             initn opt bits E(6)
+gi|283855822|gb|GQ290312.1| Myotis ri ( 983) [f]   53   70 28.0   0.026
+gi|57163782|ref|NM_001009242.1| Felis (1047) [f]   88   68 27.7   0.034
+
+>>>sp|Q9NSY1|BMP2K_HUMAN, 1161 aa vs rhodopsin_nucs.fasta library
+; pg_name: tfastx36
+; pg_ver: 36.3.4 Apr, 2011
+; pg_argv: tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta
+; pg_name_alg: TFASTX
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open_ext: -12 -2
+; pg_ktup: 2
+; pg_join_E(): 0.5 (0.792)
+; pg_optcut_E(): 0.1 (0.167)
+; mp_extrap: 60000 413
+; mp_stats: (shuffled3 [413]) Expectation_n fit: rho(ln(x))= 0.1869+/-0.00911; mu= 49.2907+/- 0.667  mean_var=82.3490+/-39.486, 0's: 0 Z-trim(-1.0): 0  B-trim: 0 in 0/5  Lambda= 0.141334
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: TFASTX (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.792), E-opt: 0.1 (0.167), width:  16
+>>gi|283855822|gb|GQ290312.1| Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds
+; tfx_frame: f
+; tfx_initn: 106
+; tfx_init1:  53
+; tfx_opt:  70
+; tfx_z-score: 88.0
+; tfx_bits: 28.0
+; tfx_expect:  0.026
+; sw_score: 70
+; sw_ident: 0.231
+; sw_sim: 0.462
+; sw_overlap: 65
+>sp|Q9NSY1|BM ..
+; sq_len: 1161
+; sq_offset: 1
+; sq_type: p
+; al_start: 453
+; al_stop: 514
+; al_display_start: 453
+LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH---HHHHHHHLLQDA
+YMQQYQHATQQQQML
+>gi|283855822|gb|GQ290312.1| ..
+; sq_len: 983
+; sq_offset: 1
+; sq_type: p
+; al_start: 123
+; al_stop: 317
+; al_display_start: 123
+IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHGLWRLHHHPVYLYAW
+ILRLRGHGMQSGGLL
+; al_cons:
+. :. ::  ...  :.  . .: .  :    :  :---. :::   :   
+ ..   :. :.  .:
+>>gi|57163782|ref|NM_001009242.1| Felis catus rhodopsin (RHO), mRNA
+; tfx_frame: f
+; tfx_initn: 105
+; tfx_init1:  57
+; tfx_opt:  68
+; tfx_z-score: 85.8
+; tfx_bits: 27.7
+; tfx_expect:  0.034
+; sw_score: 72
+; sw_ident: 0.235
+; sw_sim: 0.450
+; sw_overlap: 200
+>sp|Q9NSY1|BM ..
+; sq_len: 1161
+; sq_offset: 1
+; sq_type: p
+; al_start: 418
+; al_stop: 599
+; al_display_start: 418
+GPEIL---LGQ-GPPQQPPQQHRVLQQLQQGDWRLQQLH-------LQHR
+HPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH-----HHHHHH-HLLQDAY
+MQQYQHATQQQQMLQQQF-LMHSVYQPQPSASQYPTMMPQYQQAFFQQQM
+LAQHQPSQQQASPEYLTSPQEFSPALVSYTSSLPA-QVGTIMDSSYSANR
+S
+>gi|57163782|ref|NM_001009242.1| ..
+; sq_len: 1047
+; sq_offset: 1
+; sq_type: p
+; al_start: 15
+; al_stop: 595
+; al_display_start: 15
+GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAGRLHVPAHRAWLPHQ
+LPHALRHGPAQEAAHASQLHPAQPGRG*PLHGLRWLHHHPLH/PLCMDTL
+SLGPQDAIWRASLPHWAVKLPCGLWWSWPLSGTWWCVSP*ATSA------
+LGRTMP*WASLSPGSWHWPALHPPSLVGPGTSLKACSVHAGSTTTHSSQK
+S
+; al_cons:
+:::.:---: :-:   :: .   ::    ..  .  .::-------: :.
+ ::  ..   :.  . .: .  :  .    :-----:::  :- : .:. 
+    : :  . .. .   -:  ...   : .. .  . :   .:------
+:.. .:   . ::     :    :.::.  .:: :-.: .   ...:...
+:
+>>><<<
+  3>>>sp|P06213|INSR_HUMAN Insulin receptor OS=Homo sapiens GN=INSR - 1382 aa
+Library: rhodopsin_nucs.fasta
+    10296 residues in     6 sequences
+
+Statistics: (shuffled3 [404]) Expectation_n fit: rho(ln(x))= 0.7256+/-0.00716; mu= 45.3358+/- 0.538
+ mean_var=73.5676+/-40.275, 0's: 0 Z-trim(-1.0): 0  B-trim: 0 in 0/5
+ Lambda= 0.149531
+ statistics sampled from 1 (1) to 403 sequences
+Algorithm: TFASTX (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0.722), E-opt: 0.1 (0.139), width:  16
+ Scan time:  0.340
+!! No sequences with E() < 0.05
+>>><<<
+  4>>>sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Library: rhodopsin_nucs.fasta
+    10296 residues in     6 sequences
+
+Statistics: (shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097
+ mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5
+ Lambda= 0.175253
+ statistics sampled from 6 (6) to 357 sequences
+Algorithm: TFASTX (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20
+ ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16
+ Scan time:  0.180
+
+The best scores are:                             initn opt bits E(6)
+gi|57163782|ref|NM_001009242.1| Felis (1047) [f] 2298 2298 593.0 6.7e-173
+gi|18148870|dbj|AB062417.1| Synthetic (1047) [f] 2237 2237 577.6 2.9e-168
+gi|283855822|gb|GQ290312.1| Myotis ri ( 983) [f] 2138 2143 553.8 4.1e-161
+gi|2734705|gb|U59921.1|BBU59921 Bufo  (1574) [f] 2063 2057 532.4 1.8e-154
+gi|12583664|dbj|AB043817.1| Conger my (1344) [f] 1975 1993 516.1 1.2e-149
+gi|283855845|gb|GQ290303.1| Cynopteru (4301) [f] 2094  723 195.8   1e-52
+gi|283855822|gb|GQ290312.1| Myotis ri ( 983) [r]   58   59 26.9   0.017
+
+>>>sp|P08100|OPSD_HUMAN, 348 aa vs rhodopsin_nucs.fasta library
+; pg_name: tfastx36
+; pg_ver: 36.3.4 Apr, 2011
+; pg_argv: tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta
+; pg_name_alg: TFASTX
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open_ext: -12 -2
+; pg_ktup: 2
+; pg_join_E(): 0.5 (0.771)
+; pg_optcut_E(): 0.1 (0.292)
+; mp_extrap: 60000 357
+; mp_stats: (shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: TFASTX (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16
+>>gi|57163782|ref|NM_001009242.1| Felis catus rhodopsin (RHO), mRNA
+; tfx_frame: f
+; tfx_initn: 2298
+; tfx_init1: 2298
+; tfx_opt: 2298
+; tfx_z-score: 3150.5
+; tfx_bits: 593.0
+; tfx_expect: 6.7e-173
+; sw_score: 2298
+; sw_ident: 0.966
+; sw_sim: 0.994
+; sw_overlap: 348
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 348
+; al_display_start: 1
+MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVL
+GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLH
+GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+NHAIMGVAFTWVMALACAAPPLAGWSRYIPEGLQCSCGIDYYTLKPEVNN
+ESFVIYMFVVHFTIPMIIIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAKSAAI
+YNPVIYIMMNKQFRNCMLTTICCGKNPLGDDEASATVSKTETSQVAPA
+>gi|57163782|ref|NM_001009242.1| ..
+; sq_len: 1047
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 1044
+; al_display_start: 1
+MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVL
+GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLH
+GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+NHAIMGVAFTWVMALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNN
+ESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTLPAFFAKSSSI
+YNPVIYIMMNKQFRNCMLTTLCCGKNPLGDDEASTTGSKTETSQVAPA
+; al_cons:
+::::::::::::::: ::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::.::::.:::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::.:::::::::.:::::::::::::::::
+:::::::::::::::::.::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::.:::::::..:
+::::::::::::::::::::.:::::::::::::.: :::::::::::
+>>gi|18148870|dbj|AB062417.1| Synthetic construct Bos taurus gene for rhodopsin, complete cds
+; tfx_frame: f
+; tfx_initn: 2237
+; tfx_init1: 2237
+; tfx_opt: 2237
+; tfx_z-score: 3067.2
+; tfx_bits: 577.6
+; tfx_expect: 2.9e-168
+; sw_score: 2237
+; sw_ident: 0.934
+; sw_sim: 0.986
+; sw_overlap: 348
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 348
+; al_display_start: 1
+MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVL
+GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLH
+GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+NHAIMGVAFTWVMALACAAPPLAGWSRYIPEGLQCSCGIDYYTLKPEVNN
+ESFVIYMFVVHFTIPMIIIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAKSAAI
+YNPVIYIMMNKQFRNCMLTTICCGKNPLGDDEASATVSKTETSQVAPA
+>gi|18148870|dbj|AB062417.1| ..
+; sq_len: 1047
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 1044
+; al_display_start: 1
+MNGTEGPNFYVPFSNKTGVVRSPFEAPQYYLAEPWQFSMLAAYMFLLIML
+GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLH
+GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+NHAIMGVAFTWVMALACAAPPLVGWSRYIPEGMQCSCGIDYYTPHEETNN
+ESFVIYMFVVHFIIPLIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVIAFLICWLPYAGVAFYIFTHQGSDFGPIFMTIPAFFAKTSAV
+YNPVIYIMMNKQFRNCMVTTLCCGKNPLGDDEASTTVSKTETSQVAPA
+; al_cons:
+::::::::::::::: ::::::::: ::::::::::::::::::::::.:
+:::::::::::::::::::::::::::::::::::::.::::.:::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::.:::::::::.:::::::::: . :.::
+:::::::::::: ::.:.::::::::::::::::::::::::::::::::
+:::::::::::::::.:::.:::::::::::.::::::::::::::..:.
+:::::::::::::::::.::.:::::::::::::.:::::::::::::
+>>gi|283855822|gb|GQ290312.1| Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds
+; tfx_frame: f
+; tfx_initn: 2138
+; tfx_init1: 2138
+; tfx_opt: 2143
+; tfx_z-score: 2939.0
+; tfx_bits: 553.8
+; tfx_expect: 4.1e-161
+; sw_score: 2143
+; sw_ident: 0.951
+; sw_sim: 0.994
+; sw_overlap: 326
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 11
+; al_stop: 336
+; al_display_start: 11
+VPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLY
+VTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGC
+NLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFT
+WVMALACAAPPLAGWSRYIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVV
+HFTIPMIIIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIA
+FLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAKSAAIYNPVIYIMMN
+KQFRNCMLTTICCGKNPLGDDEASAT
+>gi|283855822|gb|GQ290312.1| ..
+; sq_len: 983
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 978
+; al_display_start: 1
+VPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLY
+VTVQHKKLRTPLNYILLNLAVANLFMVFGGFTTTLYTSMHGYFVFGATGC
+NLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLAFT
+WVMALACAAPPLAGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVV
+HFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVVA
+FLICWLPYASVAFYIFTHQGSNFGPVFMTIPAFFAKSSSIYNPVIYIMMN
+KQFRNCMLTTLCCGKNPLGDDEASTT
+; al_cons:
+::::: ::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::.::::.::::.:::::.::::::: :::
+::::::::::::::::::::::::::::::::::::::::::::::.:::
+::::::::::::::::::::::.:::::::::::::::::::::::::::
+:::::::.::::::::::::::::::::::::::::::::::::::::.:
+:::::.:::::::::::::::::::.:::::::::::..:::::::::::
+::::::::::.:::::::::::::.:
+>>gi|2734705|gb|U59921.1|BBU59921 Bufo bufo rhodopsin mRNA, complete cds
+; tfx_frame: f
+; tfx_initn: 2080
+; tfx_init1: 2031
+; tfx_opt: 2057
+; tfx_z-score: 2819.6
+; tfx_bits: 532.4
+; tfx_expect: 1.8e-154
+; sw_score: 2057
+; sw_ident: 0.833
+; sw_sim: 0.952
+; sw_overlap: 354
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 348
+; al_display_start: 1
+MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVL
+GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLH
+GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+NHAIMGVAFTWVMALACAAPPLAGWSRYIPEGLQCSCGIDYYTLKPEVNN
+ESFVIYMFVVHFTIPMIIIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAKSAAI
+YNPVIYIMMNKQFRNCMLTTICCGKNPLGDDEAS-ATVSKTE-----TSQ
+VAPA
+>gi|2734705|gb|U59921.1|BBU59921 ..
+; sq_len: 1574
+; sq_offset: 1
+; sq_type: p
+; al_start: 42
+; al_stop: 1103
+; al_display_start: 42
+MNGTEGPNFYIPMSNKTGVVRSPFEYPQYYLAEPWQYSILCAYMFLLILL
+GFPINFMTLYVTIQHKKLRTPLNYILLNLAFANHFMVLCGFTVTMYSSMN
+GYFILGATGCYVEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFSE
+NHAVMGVAFTWIMALSCAVPPLLGWSRYIPEGMQCSCGVDYYTLKPEVNN
+ESFVIYMFVVHFTIPLIIIFFCYGRLVCTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVVFFLICWVPYASVAFFIFSNQGSEFGPIFMTVPAFFAKSSSI
+YNPVIYIMLNKQFRNCMITTLCCGKNPFGEDDASSAATSKTEASSVSSSQ
+VSPA
+; al_cons:
+::::::::::.:.:: ::::::::::::::::::::.:.: :::::::.:
+::::::.:::::.::::::::::::::::: :. :::: ::: :.:.:..
+:::..: ::: .::::::::::::::::::::::::::::::::::::.:
+:::.:::::::.:::.::.::: :::::::::.:::::.:::::::::::
+:::::::::::::::.::::::::.:: ::::::::::::::::::::::
+::::::::. :::::::::::::.::..:::.:::::::.:::::::..:
+::::::::.::::::::.::.::::::.:.:.::-:..::::-----.::
+:.::
+>>gi|12583664|dbj|AB043817.1| Conger myriaster conf gene for fresh water form rod opsin, complete cds
+; tfx_frame: f
+; tfx_initn: 1975
+; tfx_init1: 1951
+; tfx_opt: 1993
+; tfx_z-score: 2732.8
+; tfx_bits: 516.1
+; tfx_expect: 1.2e-149
+; sw_score: 1993
+; sw_ident: 0.816
+; sw_sim: 0.939
+; sw_overlap: 347
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 346
+; al_display_start: 1
+MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVL
+GFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLH
+GYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGE
+NHAIMGVAFTWVMALACAAPPLAGWSRYIPEGLQCSCGIDYYTLKPEVNN
+ESFVIYMFVVHFTIPMIIIFFCYGQLVFTVKEAAAQQQESATTQKAEKEV
+TRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTIPAFFAKSAAI
+YNPVIYIMMNKQFRNCMLTTICCGKNPLGD-DEASATVSKTETSQVA
+>gi|12583664|dbj|AB043817.1| ..
+; sq_len: 1344
+; sq_offset: 1
+; sq_type: p
+; al_start: 23
+; al_stop: 1063
+; al_display_start: 23
+MNGTEGPNFYIPMSNATGVVRSPFEYPQYYLAEPWAFSALSAYMFFLIIA
+GFPINFLTLYVTIEHKKLRTPLNYILLNLAVADLFMVFGGFTTTMYTSMH
+GYFVFGPTGCNIEGFFATLGGEIALWCLVVLAIERWMVVCKPVTNFRFGE
+SHAIMGVMVTWTMALACALPPLFGWSRYIPEGLQCSCGIDYYTRAPGINN
+ESFVIYMFTCHFSIPLAVISFCYGRLVCTVKEAAAQQQESETTQRAEREV
+TRMVVIMVISFLVCWVPYASVAWYIFTHQGSTFGPIFMTIPSFFAKSSAL
+YNPMIYICMNKQFRHCMITTLCCGKNPFEEEDGASATSSKTEASSVS
+; al_cons:
+::::::::::.:.:::::::::::::::::::::: :: :.::::.::. 
+::::::::::::..:::::::::::::::::::::::.::::.:.:::.:
+:::::::::::.:::::::::::::: ::::::::..:::::..::::::
+.::::::  ::.:::::: ::: ::::::::::::::::::::  : .::
+::::::::. ::.::. .: ::::.:: :::::::::::: :::.::.::
+::::.::::.::.:::::::::.::::::::.:::::::::.:::::.:.
+:::.::: ::::::.::.::.::::::. .-: :::: ::::.:.:.
+>>gi|283855845|gb|GQ290303.1| Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds
+; tfx_frame: f
+; tfx_initn: 2094
+; tfx_init1: 723
+; tfx_opt: 723
+; tfx_z-score: 992.9
+; tfx_bits: 195.8
+; tfx_expect:  1e-52
+; sw_score: 723
+; sw_ident: 0.964
+; sw_sim: 0.991
+; sw_overlap: 111
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 11
+; al_stop: 121
+; al_display_start: 11
+VPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLY
+VTVQHKKLRTPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGPTGC
+NLEGFFATLGG
+>gi|283855845|gb|GQ290303.1| ..
+; sq_len: 4301
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 333
+; al_display_start: 1
+VPFSNKTGVVRSPFEHPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLY
+VTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFVFGPTGC
+NLEGFFATLGG
+; al_cons:
+::::: :::::::::.::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::.::::.:::::::::::::::::
+:::::::::::
+>--
+; tfx_frame: f
+; tfx_initn: 1411
+; tfx_init1: 499
+; tfx_opt: 501
+; tfx_z-score: 992.9
+; tfx_bits: 195.8
+; tfx_expect:  1e-52
+; sw_score: 783
+; sw_ident: 0.754
+; sw_sim: 0.795
+; sw_overlap: 171
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 177
+; al_stop: 312
+; al_display_start: 177
+RYIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQL
+VFTVKE------------------------------------AAAQQQES
+ATTQKAEKEVTRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI
+PAFFAKSAAIYNPVIYIMMNKQ
+>gi|283855845|gb|GQ290303.1| ..
+; sq_len: 4301
+; sq_offset: 1
+; sq_type: p
+; al_start: 2855
+; al_stop: 3368
+; al_display_start: 2855
+RYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQL
+VFTVKEVRSCVGHWGHAH*VNGAQLHSQSCHSLDT*PCVPA\AAAQQQES
+ATTQKAEKEVTRMVIIMVIAFLICWLPYAGVAFYIFTHQGSNFGPIFMTL
+PAFFAKSSSIYNPVIYIMMNKQ
+; al_cons:
+::::::.::::::::::::::::::::::::::::::::::.::::::::
+::::::------------------------------------::::::::
+:::::::::::::::::::::::::.:::.:::::::::::::::::::.
+:::::::..:::::::::::::
+>--
+; tfx_frame: f
+; tfx_initn: 431
+; tfx_init1: 379
+; tfx_opt: 388
+; tfx_z-score: 992.9
+; tfx_bits: 195.8
+; tfx_expect:  1e-52
+; sw_score: 388
+; sw_ident: 0.808
+; sw_sim: 0.904
+; sw_overlap: 73
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 119
+; al_stop: 189
+; al_display_start: 119
+LGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVMALACA
+APPLAGWSR--YIPEGLQCSCGI
+>gi|283855845|gb|GQ290303.1| ..
+; sq_len: 4301
+; sq_offset: 1
+; sq_type: p
+; al_start: 1404
+; al_stop: 1619
+; al_display_start: 1404
+LAGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLALTWVMALACA
+APPLVGWSR*WH*TEG-KCL*GL
+; al_cons:
+:.::::::::::::::::::::::::::::::::::::.:.:::::::::
+::::.::::--.  ::-.:  :.
+>--
+; tfx_frame: f
+; tfx_initn: 213
+; tfx_init1: 171
+; tfx_opt: 176
+; tfx_z-score: 992.9
+; tfx_bits: 195.8
+; tfx_expect:  1e-52
+; sw_score: 176
+; sw_ident: 0.767
+; sw_sim: 0.933
+; sw_overlap: 30
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 307
+; al_stop: 336
+; al_display_start: 307
+IMMNKQFRNCMLTTICCGKNPLGDDEASAT
+>gi|283855845|gb|GQ290303.1| ..
+; sq_len: 4301
+; sq_offset: 1
+; sq_type: p
+; al_start: 4207
+; al_stop: 4296
+; al_display_start: 4207
+MLLAFQFRNCMLTTLCCGKNPLGDDEASTT
+; al_cons:
+...  :::::::::.:::::::::::::.:
+>>gi|283855822|gb|GQ290312.1| Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds
+; tfx_frame: r
+; tfx_initn:  74
+; tfx_init1:  58
+; tfx_opt:  59
+; tfx_z-score: 91.3
+; tfx_bits: 26.9
+; tfx_expect:  0.017
+; sw_score: 59
+; sw_ident: 0.355
+; sw_sim: 0.613
+; sw_overlap: 31
+>sp|P08100|OP ..
+; sq_len: 348
+; sq_offset: 1
+; sq_type: p
+; al_start: 235
+; al_stop: 265
+; al_display_start: 235
+AQQQESATTQKAEKEVTRMVIIMVIAFLICW
+>gi|283855822|gb|GQ290312.1| ..
+; sq_len: 983
+; sq_offset: 984
+; sq_type: p
+; al_start: 767
+; al_stop: 675
+; al_display_start: 767
+SQQIRNATTMMMTMRVTSFSAFWVVADSCCW
+; al_cons:
+.:: ..:::.    .:: .  . :.:   ::
+>>><<<
+>>>///
+
+
+3297 residues in 4 query   sequences
+10296 residues in 6 library sequences
+ Tcomplib [36.3.4 Apr, 2011] (8 proc)
+ start: Tue Apr 26 15:35:42 2011 done: Tue Apr 26 15:35:43 2011
+ Total Scan time:  1.010 Total Display time:  0.420
+
+Function used was TFASTX [36.3.4 Apr, 2011]

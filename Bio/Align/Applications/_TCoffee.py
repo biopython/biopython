@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment program TCOFFEE.
 """
 
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class TCoffeeCommandline(AbstractCommandline):

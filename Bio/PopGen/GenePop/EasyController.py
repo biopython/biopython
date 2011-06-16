@@ -16,7 +16,7 @@ from Controller import GenePopController
 from Bio.PopGen import GenePop
 
 
-class EasyController:
+class EasyController(object):
     def __init__(self, fname, genepop_dir = None):
         """Initializes the controller.
         
@@ -28,6 +28,7 @@ class EasyController:
         self._fname = fname
         self._controller = GenePopController(genepop_dir)
         self.__fst_pair_locus = {} #More caches like this needed!
+        self.__allele_frequency = {} #More caches like this needed!
 
     def get_basic_info(self):
         f=open(self._fname)
@@ -126,16 +127,22 @@ class EasyController:
                 return locus_info[1]
 
     def get_allele_frequency(self, pop_pos, locus_name):
-        geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
-        pop_iter, loc_iter = geno_freqs
-        for locus_info in loc_iter:
-            if locus_info[0] == locus_name:
-                alleles =  locus_info[1]
-                pop_name, freqs, total = locus_info[2][pop_pos]
-                allele_freq = {}
-                for i in range(len(alleles)):
-                    allele_freq[alleles[i]] = freqs[i]
-                return total, allele_freq
+        if len(self.__allele_frequency) == 0:
+            geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
+            pop_iter, loc_iter = geno_freqs
+            for locus_info in loc_iter:
+                if locus_info[0] == None:
+                    self.__allele_frequency[locus_info[0]] = None, None
+                else:
+                    self.__allele_frequency[locus_info[0]] = locus_info[1:]
+        info = self.__allele_frequency[locus_name]
+        pop_name, freqs, total = info[1][pop_pos]
+        allele_freq = {}
+        alleles = info[0]
+        for i in range(len(alleles)):
+            allele_freq[alleles[i]] = freqs[i]
+        return total, allele_freq
+
 
     def get_multilocus_f_stats(self):
         """ Returns the multilocus F stats

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqalign.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 161842 $
 **********************************************************************
 
   NCBI Sequence Alignment elements
@@ -303,14 +303,20 @@ $Revision: 1.1 $
 -->
 <!ELEMENT Spliced-seg_exons (Spliced-exon*)>
 
-<!-- optional poly(A) tail -->
+<!--
+ start of poly(A) tail on the transcript
+ For sense transcripts:
+   aligned product positions < poly-a <= product-length
+   poly-a == product-length indicates inferred poly(A) tail at transcript's end
+ For antisense transcripts:
+   -1 <= poly-a < aligned product positions
+   poly-a == -1 indicates inferred poly(A) tail at transcript's start
+-->
 <!ELEMENT Spliced-seg_poly-a (%INTEGER;)>
 
 <!--
  length of the product, in bases/residues
- from this, a 3' unaligned length can be extracted; this also captures
- the case in which a protein aligns leaving a partial codon alignment
- at the 3' end
+ from this (or from poly-a if present), a 3' unaligned length can be extracted
 -->
 <!ELEMENT Spliced-seg_product-length (%INTEGER;)>
 
@@ -356,8 +362,8 @@ $Revision: 1.1 $
         Spliced-exon_genomic-strand?, 
         Spliced-exon_parts?, 
         Spliced-exon_scores?, 
-        Spliced-exon_splice-5-prime?, 
-        Spliced-exon_splice-3-prime?, 
+        Spliced-exon_acceptor-before-exon?, 
+        Spliced-exon_donor-after-exon?, 
         Spliced-exon_partial?, 
         Spliced-exon_ext?)>
 
@@ -389,9 +395,9 @@ $Revision: 1.1 $
 <!ELEMENT Spliced-exon_scores (Score-set)>
 
 <!-- splice sites -->
-<!ELEMENT Spliced-exon_splice-5-prime (Splice-site)>
+<!ELEMENT Spliced-exon_acceptor-before-exon (Splice-site)>
 <!-- site involved in splice -->
-<!ELEMENT Spliced-exon_splice-3-prime (Splice-site)>
+<!ELEMENT Spliced-exon_donor-after-exon (Splice-site)>
 
 <!-- flag: is this exon complete or partial? -->
 <!ELEMENT Spliced-exon_partial EMPTY>

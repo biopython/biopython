@@ -7,7 +7,7 @@
 
 The amount of code in this file should be kept to a minimum.
 """
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 
 def iterlen(items):

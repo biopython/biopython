@@ -3,7 +3,7 @@
 # standard modules
 import random
 
-class SinglePositionMutation:
+class SinglePositionMutation(object):
     """Perform a conversion mutation, but only at a single point in the genome.
 
     This does not randomize the genome as much as ConversionMutation, since
@@ -44,7 +44,7 @@ class SinglePositionMutation:
 
         return mutated_org
 
-class ConversionMutation:
+class ConversionMutation(object):
     """Potentially mutate any item to another in the alphabet.
 
     This just performs switching mutation -- changing one gene of a genome

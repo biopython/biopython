@@ -222,8 +222,10 @@ names are also used in Bio.AlignIO and include the following:
  - fastq-solexa - Original Solexa/Illumnia variant of the FASTQ format which
              encodes Solexa quality scores (not PHRED quality scores) with an
              ASCII offset of 64.
- - fastq-illumina - Solexa/Illumnia 1.3+ variant of the FASTQ format which
-             encodes PHRED quality scores with an ASCII offset of 64 (not 33).
+ - fastq-illumina - Solexa/Illumina 1.3 to 1.7 variant of the FASTQ format
+             which encodes PHRED quality scores with an ASCII offset of 64
+             (not 33). Note as of version 1.8 of the CASAVA pipeline Illumina
+             will produce FASTQ files using the standard Sanger encoding.
  - genbank - The GenBank or GenPept flat file format.
  - gb      - An alias for "genbank", for consistency with NCBI Entrez Utilities
  - ig      - The IntelliGenetics file format, apparently the same as the
@@ -792,7 +794,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     Bio.SeqIO.index(...) function).
     
      - index_filename - Where to store the SQLite index
-     - filenames - list of strings specifying file(s) to be indexed
+     - filenames - list of strings specifying file(s) to be indexed, or when
+                  indexing a single file this can be given as a string.
                   (optional if reloading an existing index, but must match)
      - format   - lower case string describing the file format
                   (optional if reloading an existing index, but must match)
@@ -830,8 +833,12 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     #Try and give helpful error messages:
     if not isinstance(index_filename, basestring):
         raise TypeError("Need a string for the index filename")
+    if isinstance(filenames, basestring):
+        #Make the API a little more friendly, and more similar
+        #to Bio.SeqIO.index(...) for indexing just one file.
+        filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
-        raise TypeError("Need a list of filenames (as strings)")
+        raise TypeError("Need a list of filenames (as strings), or one filename")
     if format is not None and not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if format and format != format.lower():

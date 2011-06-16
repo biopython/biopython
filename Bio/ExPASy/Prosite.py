@@ -50,7 +50,7 @@ def read(handle):
         raise ValueError("More than one Prosite record found")
     return record
 
-class Record:
+class Record(object):
     """Holds information from a Prosite record.
 
     Members:

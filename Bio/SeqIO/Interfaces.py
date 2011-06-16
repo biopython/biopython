@@ -11,7 +11,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from Bio.Alphabet import generic_alphabet
 
-class SequenceIterator:
+class SequenceIterator(object):
     """Base class for building SeqRecord iterators.
 
     You should write a next() method to return SeqRecord
@@ -131,7 +131,7 @@ class InterlacedSequenceIterator(SequenceIterator):
     def __iter__(self):
         return iter(self.next, None)
 
-class SequenceWriter:
+class SequenceWriter(object):
     """This class should be subclassed.
 
     Interlaced file formats (e.g. Clustal) should subclass directly.

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seq.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 12/20/2010 23:04:52
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 217680 $
 **********************************************************************
 
   NCBI Sequence elements
@@ -37,7 +37,8 @@ $Revision: 1.1 $
           Seq-inst,
           Seq-literal,
           Seqdesc,
-          Delta-ext -->
+          Delta-ext,
+          Seq-gap -->
 
 <!-- Elements referenced from other modules:
           Date,
@@ -46,7 +47,8 @@ $Revision: 1.1 $
           Object-id,
           User-object FROM NCBI-General,
           Seq-align FROM NCBI-Seqalign,
-          Seq-feat FROM NCBI-Seqfeat,
+          Seq-feat,
+          ModelEvidenceSupport FROM NCBI-Seqfeat,
           Seq-graph FROM NCBI-Seqres,
           Pub-equiv FROM NCBI-Pub,
           Org-ref FROM NCBI-Organism,
@@ -114,7 +116,8 @@ $Revision: 1.1 $
         Seqdesc_pdb | 
         Seqdesc_het | 
         Seqdesc_source | 
-        Seqdesc_molinfo)>
+        Seqdesc_molinfo | 
+        Seqdesc_modelev)>
 
 <!-- type of molecule -->
 <!ELEMENT Seqdesc_mol-type (GIBB-mol)>
@@ -187,6 +190,9 @@ $Revision: 1.1 $
 
 <!-- info on the molecule and techniques -->
 <!ELEMENT Seqdesc_molinfo (MolInfo)>
+
+<!-- model evidence for XM records -->
+<!ELEMENT Seqdesc_modelev (ModelEvidenceSupport)>
 
 <!--
 ******* NOTE:
@@ -914,17 +920,46 @@ $Revision: 1.1 $
 <!--
 *** Sequence Annotation *************************************
 *
+ This is a replica of Textseq-id
+ This is specific for annotations, and exists to maintain a semantic
+ difference between IDs assigned to annotations and IDs assigned to
+ sequences
 -->
+<!ELEMENT Textannot-id (
+        Textannot-id_name?, 
+        Textannot-id_accession?, 
+        Textannot-id_release?, 
+        Textannot-id_version?)>
+
+<!ELEMENT Textannot-id_name (#PCDATA)>
+
+<!ELEMENT Textannot-id_accession (#PCDATA)>
+
+<!ELEMENT Textannot-id_release (#PCDATA)>
+
+<!ELEMENT Textannot-id_version (%INTEGER;)>
+
+
 <!ELEMENT Annot-id (
         Annot-id_local | 
         Annot-id_ncbi | 
-        Annot-id_general)>
+        Annot-id_general | 
+        Annot-id_other)>
 
 <!ELEMENT Annot-id_local (Object-id)>
 
 <!ELEMENT Annot-id_ncbi (%INTEGER;)>
 
 <!ELEMENT Annot-id_general (Dbtag)>
+<!--
+*** Sequence Annotation *************************************
+*
+ This is a replica of Textseq-id
+ This is specific for annotations, and exists to maintain a semantic
+ difference between IDs assigned to annotations and IDs assigned to
+ sequences
+-->
+<!ELEMENT Annot-id_other (Textannot-id)>
 
 
 <!ELEMENT Annot-descr (Annotdesc*)>

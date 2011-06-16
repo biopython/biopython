@@ -22,7 +22,7 @@ class CelRecord: stores the information from a cel file
 
 import numpy
 
-class Record:
+class Record(object):
     """
     Stores the information in a cel file
     """
@@ -76,7 +76,7 @@ def read(handle):
 from Bio.ParserSupport import AbstractConsumer
 from numpy import *
 
-class CelScanner:
+class CelScanner(object):
     """Scanner for Affymetrix CEL files (DEPRECATED)
 
     Methods:
@@ -161,7 +161,7 @@ class CelConsumer(AbstractConsumer):
         self._stdev[x,y] = stdev
         self._npix[x,y]  = int(npix)
 
-class CelRecord:
+class CelRecord(object):
     """
     Stores the information in a cel file (DEPRECATED).
 
@@ -237,7 +237,7 @@ class CelRecord:
 
 
 
-class CelParser:
+class CelParser(object):
     """
     Takes a handle to an Affymetrix cel file, parses the file and
     returns an instance of a CelRecord
@@ -257,7 +257,7 @@ class CelParser:
         import Bio
         warnings.warn("Bio.Affy.CelFile.CelParser is deprecated; please use the read() function in this module instead",
                       Bio.BiopythonDeprecationWarning)
-        
+
         self._intensities = None
         self._stdevs      = None
         self._npix        = None

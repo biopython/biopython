@@ -8,7 +8,7 @@ import random
 # biopython
 from Bio.Seq import MutableSeq
 
-class MarkovModelBuilder:
+class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
 
     This class is designed to try to separate the task of specifying the
@@ -34,7 +34,11 @@ class MarkovModelBuilder:
         """
         self._state_alphabet = state_alphabet
         self._emission_alphabet = emission_alphabet
-        
+
+        # probabilities for the initial state, initialized by calling
+        # set_initial_probabilities (required)
+        self.initial_prob = {}
+
         # the probabilities for transitions and emissions
         # by default we have no transitions and all possible emissions
         self.transition_prob = {}
@@ -82,19 +86,68 @@ class MarkovModelBuilder:
         Each markov model returned by a call to this function is unique
         (ie. they don't influence each other).
         """
+
+        # user must set initial probabilities
+        if not self.initial_prob:
+            raise Exception("set_initial_probabilities must be called to " +
+                            "fully initialize the Markov model")
+
+        initial_prob = copy.deepcopy(self.initial_prob)
         transition_prob = copy.deepcopy(self.transition_prob)
         emission_prob = copy.deepcopy(self.emission_prob)
         transition_pseudo = copy.deepcopy(self.transition_pseudo)
         emission_pseudo = copy.deepcopy(self.emission_pseudo)
         
-        return HiddenMarkovModel(transition_prob, emission_prob,
+        return HiddenMarkovModel(initial_prob, transition_prob, emission_prob,
                                  transition_pseudo, emission_pseudo)
+
+    def set_initial_probabilities(self, initial_prob):
+        """Set initial state probabilities.
+
+        initial_prob is a dictionary mapping states to probabilities.
+        Suppose, for example, that the state alphabet is ['A', 'B']. Call
+        set_initial_prob({'A': 1}) to guarantee that the initial
+        state will be 'A'. Call set_initial_prob({'A': 0.5, 'B': 0.5})
+        to make each initial state equally probable.
+
+        This method must now be called in order to use the Markov model
+        because the calculation of initial probabilities has changed
+        incompatibly; the previous calculation was incorrect.
+
+        If initial probabilities are set for all states, then they should add up
+        to 1. Otherwise the sum should be <= 1. The residual probability is
+        divided up evenly between all the states for which the initial
+        probability has not been set. For example, calling
+        set_initial_prob({}) results in P('A') = 0.5 and P('B') = 0.5,
+        for the above example.
+        """
+        self.initial_prob = copy.copy(initial_prob)
+
+        # ensure that all referenced states are valid
+        for state in initial_prob.iterkeys():
+            assert state in self._state_alphabet.letters, \
+                   "State %s was not found in the sequence alphabet" % state
+
+        # distribute the residual probability, if any
+        num_states_not_set =\
+            len(self._state_alphabet.letters) - len(self.initial_prob)
+        if num_states_not_set < 0:
+            raise Exception("Initial probabilities can't exceed # of states")
+        prob_sum = sum(self.initial_prob.values())
+        if prob_sum > 1.0:
+            raise Exception("Total initial probability cannot exceed 1.0")
+        if num_states_not_set > 0:
+            prob = (1.0 - prob_sum) / num_states_not_set
+            for state in self._state_alphabet.letters:
+                if not state in self.initial_prob:
+                    self.initial_prob[state] = prob
 
     def set_equal_probabilities(self):
         """Reset all probabilities to be an average value.
 
-        This resets the values of all allowed transitions and all allowed
-        emissions to be equal to 1 divided by the number of possible elements.
+        Resets the values of all initial probabilities and all allowed
+        transitions and all allowed emissions to be equal to 1 divided by the
+        number of possible elements.
 
         This is useful if you just want to initialize a Markov Model to
         starting values (ie. if you have no prior notions of what the
@@ -107,22 +160,28 @@ class MarkovModelBuilder:
         emissions to total up to 1, so it doesn't ensure that the sum of
         each set of transitions adds up to 1.
         """
-        # first set the transitions
+
+        # set initial state probabilities
+        new_initial_prob = float(1) / float(len(self.transition_prob))
+        for state in self._state_alphabet.letters:
+            self.initial_prob[state] = new_initial_prob
+
+        # set the transitions
         new_trans_prob = float(1) / float(len(self.transition_prob))
         for key in self.transition_prob:
             self.transition_prob[key] = new_trans_prob
 
-        # now set the emissions
+        # set the emissions
         new_emission_prob = float(1) / float(len(self.emission_prob))
         for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
-            
+
 
     def set_random_probabilities(self):
         """Set all probabilities to randomly generated numbers.
 
-        This will reset the value of all allowed transitions and emissions
-        to random values.
+        Resets probabilities of all initial states, allowed transitions, and
+        emissions to random values.
 
         Warning 1 -- This will reset any currently set probabibilities.
 
@@ -130,6 +189,9 @@ class MarkovModelBuilder:
         all of the probabilities is less then 1. It just randomly assigns
         a probability to each
         """
+        for state in self._state_alphabet.letters:
+            self.initial_prob[state] = random.random()
+
         for key in self.transition_prob:
             self.transition_prob[key] = random.random()
 
@@ -194,7 +256,7 @@ class MarkovModelBuilder:
                 pseudcount = self.DEFAULT_PSEUDO
             self.transition_pseudo[(from_state, to_state)] = pseudocount 
         else:
-            raise KeyError("Transtion from %s to %s is already allowed."
+            raise KeyError("Transition from %s to %s is already allowed."
                            % (from_state, to_state))
 
     def destroy_transition(self, from_state, to_state):
@@ -272,17 +334,19 @@ class MarkovModelBuilder:
             raise KeyError("Emission of %s from %s is not allowed."
                            % (emission_state, seq_state))
 
-class HiddenMarkovModel:
+class HiddenMarkovModel(object):
     """Represent a hidden markov model that can be used for state estimation.
     """
-    def __init__(self, transition_prob, emission_prob, transition_pseudo,
-                 emission_pseudo):
+    def __init__(self, initial_prob, transition_prob, emission_prob,
+                 transition_pseudo, emission_pseudo):
         """Initialize a Markov Model.
 
         Note: You should use the MarkovModelBuilder class instead of
         initiating this class directly.
 
         Arguments:
+
+        o initial_prob - A dictionary of initial probabilities for all states.
 
         o transition_prob -- A dictionary of transition probabilities for all
         possible transitions in the sequence.
@@ -296,6 +360,9 @@ class HiddenMarkovModel:
         o emission_pseudo -- Pseudo-counts to be used for the emissions,
         when counting for purposes of estimating emission probabilities.
         """
+
+        self.initial_prob = initial_prob
+
         self._transition_pseudo = transition_pseudo
         self._emission_pseudo = emission_pseudo
         
@@ -427,55 +494,57 @@ class HiddenMarkovModel:
         o state_alphabet -- The alphabet of the possible state sequences
         that can be generated.
         """
-        # calculate logarithms of the transition and emission probs
+
+        # calculate logarithms of the initial, transition, and emission probs
+        log_initial = self._log_transform(self.initial_prob)
         log_trans = self._log_transform(self.transition_prob)
         log_emission = self._log_transform(self.emission_prob)
 
         viterbi_probs = {}
         pred_state_seq = {}
         state_letters = state_alphabet.letters
-        # --- initialization
-        #
-        # NOTE: My index numbers are one less than what is given in Durbin
-        # et al, since we are indexing the sequence going from 0 to
-        # (Length - 1) not 1 to Length, like in Durbin et al.
-        #
-        # v_{0}(0) = 0
-        viterbi_probs[(state_letters[0], -1)] = 0
-        # v_{k}(0) = 0 for k > 0
-        for state_letter in state_letters[1:]:
-            viterbi_probs[(state_letter, -1)] = 0
 
         # --- recursion
         # loop over the training squence (i = 1 .. L)
+        # NOTE: My index numbers are one less than what is given in Durbin
+        # et al, since we are indexing the sequence going from 0 to
+        # (Length - 1) not 1 to Length, like in Durbin et al.
         for i in range(0, len(sequence)):
             # loop over all of the possible i-th states in the state path
             for cur_state in state_letters:
                 # e_{l}(x_{i})
                 emission_part = log_emission[(cur_state, sequence[i])]
 
-                # loop over all possible (i-1)-th previous states
-                possible_state_probs = {}
-                for prev_state in self.transitions_to(cur_state):
-                    # a_{kl}
-                    trans_part = log_trans[(prev_state, cur_state)]
+                max_prob = 0
+                if i == 0:
+                    # for the first state, use the initial probability rather
+                    # than looking back to previous states
+                    max_prob = log_initial[cur_state]
+                else:
+                    # loop over all possible (i-1)-th previous states
+                    possible_state_probs = {}
+                    for prev_state in self.transitions_to(cur_state):
+                        # a_{kl}
+                        trans_part = log_trans[(prev_state, cur_state)]
 
-                    # v_{k}(i - 1)
-                    viterbi_part = viterbi_probs[(prev_state, i - 1)]
-                    cur_prob = viterbi_part + trans_part
+                        # v_{k}(i - 1)
+                        viterbi_part = viterbi_probs[(prev_state, i - 1)]
+                        cur_prob = viterbi_part + trans_part
 
-                    possible_state_probs[prev_state] = cur_prob
+                        possible_state_probs[prev_state] = cur_prob
 
-                # calculate the viterbi probability using the max
-                max_prob = max(possible_state_probs.values())
+                    # calculate the viterbi probability using the max
+                    max_prob = max(possible_state_probs.values())
+
                 # v_{k}(i)
                 viterbi_probs[(cur_state, i)] = (emission_part + max_prob)
 
-                # get the most likely prev_state leading to cur_state
-                for state in possible_state_probs:
-                    if possible_state_probs[state] == max_prob:
-                        pred_state_seq[(i - 1, cur_state)] = state
-                        break
+                if i > 0:
+                    # get the most likely prev_state leading to cur_state
+                    for state in possible_state_probs:
+                        if possible_state_probs[state] == max_prob:
+                            pred_state_seq[(i - 1, cur_state)] = state
+                            break
                     
         # --- termination
         # calculate the probability of the state path
@@ -498,7 +567,7 @@ class HiddenMarkovModel:
         # --- traceback
         traceback_seq = MutableSeq('', state_alphabet)
         
-        loop_seq = range(0, len(sequence))
+        loop_seq = range(1, len(sequence))
         loop_seq.reverse()
 
         # last_state is the last state in the most probable state sequence.
@@ -506,9 +575,10 @@ class HiddenMarkovModel:
         # state in the sequence, find the (i-1)-th state as the most
         # probable state preceding the i-th state.
         state = last_state
+        traceback_seq.append(state)
         for i in loop_seq:
-            traceback_seq.append(state)            
             state = pred_state_seq[(i - 1, state)]
+            traceback_seq.append(state)
 
         # put the traceback sequence in the proper orientation
         traceback_seq.reverse()
@@ -518,16 +588,24 @@ class HiddenMarkovModel:
     def _log_transform(self, probability):
         """Return log transform of the given probability dictionary.
 
-        When calculating the Viterbi equation, we need to deal with things
-        as sums of logs instead of products of probabilities, so that we
-        don't get underflow errors.. This copies the given probability
-        dictionary and returns the same dictionary with everything
-        transformed with a log.
+        When calculating the Viterbi equation, add logs of probabilities rather
+        than multiplying probabilities, to avoid underflow errors. This method
+        returns a new dictionary with the same keys as the given dictionary
+        and log-transformed values.
         """
         log_prob = copy.copy(probability)
-
+        try:
+            neg_inf = float("-inf")
+        except ValueError:
+            #On Python 2.5 or older that was handled in C code,
+            #and failed on Windows XP 32bit
+            neg_inf = - 1E400
         for key in log_prob:
-            log_prob[key] = math.log(log_prob[key])
+            prob = log_prob[key]
+            if prob > 0:
+                log_prob[key] = math.log(log_prob[key])
+            else:
+                log_prob[key] = neg_inf
 
         return log_prob
     

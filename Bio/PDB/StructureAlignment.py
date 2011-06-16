@@ -13,7 +13,7 @@ from Bio.PDB import Selection
 from Bio.PDB.Polypeptide import is_aa
 
 
-class StructureAlignment:
+class StructureAlignment(object):
     """
     This class aligns two structures based on an alignment of their
     sequences.

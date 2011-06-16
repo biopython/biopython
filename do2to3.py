@@ -136,12 +136,10 @@ def do_update(py2folder, py3folder, verbose=False):
                 continue
             #Python, C code, data files, etc - copy with date stamp etc
             shutil.copy2(old, new)
-            assert round(os.stat(old).st_mtime*1000) == \
-                   round(os.stat(new).st_mtime*1000), \
-                   "Modified time not copied! %0.8f vs %0.8f, %i vs %i" \
+            assert abs(os.stat(old).st_mtime-os.stat(new).st_mtime)<0.0001, \
+                   "Modified time not copied! %0.8f vs %0.8f, diff %f" \
                    % (os.stat(old).st_mtime, os.stat(new).st_mtime,
-                      round(os.stat(old).st_mtime*1000),
-                      round(os.stat(new).st_mtime*1000))
+                      abs(os.stat(old).st_mtime-os.stat(new).st_mtime))
             if f.endswith(".py"):
                 #Also run 2to3 on it
                 to_convert.append(new)

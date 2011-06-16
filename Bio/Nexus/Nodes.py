@@ -20,7 +20,7 @@ class ChainException(Exception):
 class NodeException(Exception):
     pass
 
-class Chain:
+class Chain(object):
     """Stores a list of nodes that are linked together."""
     
     def __init__(self):
@@ -114,7 +114,7 @@ class Chain:
             if self.is_parent_of(sn,finish):
                 return [sn]+self.trace(sn,finish)
                 
-class Node:
+class Node(object):
     """A single node."""
 
     def __init__(self,data=None):

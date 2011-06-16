@@ -228,7 +228,7 @@ class ProteinX(Alphabet.ProteinAlphabet):
 #Can't add a deprecation warning to the class due to the following line:
 proteinX = ProteinX()
 
-class MissingTable:
+class MissingTable(object):
     def __init__(self, table):
         self._table = table
         import warnings

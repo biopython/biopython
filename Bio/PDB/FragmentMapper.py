@@ -86,7 +86,7 @@ def _read_fragments(size, length, dir="."):
     return flist
 
 
-class Fragment:
+class Fragment(object):
     """
     Represent a polypeptide C-alpha fragment.
     """
@@ -226,7 +226,7 @@ def _map_fragment_list(flist, reflist):
     return mapped
 
 
-class FragmentMapper:
+class FragmentMapper(object):
     """
     Map polypeptides in a model to lists of representative fragments.
     """

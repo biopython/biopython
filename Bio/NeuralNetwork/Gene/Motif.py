@@ -14,7 +14,7 @@ from Bio.Seq import Seq
 # local modules
 from Pattern import PatternRepository
 
-class MotifFinder:
+class MotifFinder(object):
     """Find motifs in a set of Sequence Records.
     """
     def __init__(self, alphabet_strict = 1):
@@ -143,7 +143,7 @@ class MotifFinder:
 
         return motif_dict
     
-class MotifCoder:
+class MotifCoder(object):
     """Convert motifs and a sequence into neural network representations.
 
     This is designed to convert a sequence into a representation that

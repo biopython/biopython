@@ -1,14 +1,14 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "blastxml.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
 <!-- This section is mapped from module "NCBI-BlastOutput"
 ================================================= -->
 
-<!--$Id: blastxml.asn 120927 2008-02-28 18:57:30Z ucko $ -->
+<!--$Id: blastxml.asn 100080 2007-03-12 16:05:35Z kazimird $ -->
 
 
 <!ELEMENT BlastOutput (

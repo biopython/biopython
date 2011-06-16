@@ -118,9 +118,10 @@ While we try to ship a robust package, bugs inevitably pop up.  If you are
 having problems that might be caused by a bug in Biopython, it is possible
 that it has already been identified. Update to the latest release if you are
 not using it already, and retry. If the problem persists, please search our
-bug database at http://bugzilla.open-bio.org/ and our mailing lists to see
-if it has already been reported (and hopefully fixed), and if not please do
-report the bug. We can't fix problems we don't know about ;)
+bug database at http://redmine.open-bio.org/projects/biopython and our
+mailing lists to see if it has already been reported (and hopefully fixed),
+and if not please do report the bug. We can't fix problems we don't know
+about ;)
 
 If you suspect the problem lies within a parser, it is likely that the data
 format has changed and broken the parsing code.  (The text BLAST and GenBank

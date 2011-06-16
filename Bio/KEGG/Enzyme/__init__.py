@@ -32,7 +32,7 @@ id_wrap = lambda indent : [indent, "",
 struct_wrap = lambda indent : [indent, "",
                                ("  ","",1,1)]
 
-class Record:
+class Record(object):
     """Holds info from a KEGG Enzyme record.
 
     Members:

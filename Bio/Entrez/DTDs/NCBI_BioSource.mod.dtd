@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 12/01/2010 23:04:55
      ============================================ -->
 
 <!-- ============================================ -->
@@ -19,7 +19,8 @@
 -->
 
 <!-- Elements used by other modules:
-          BioSource -->
+          BioSource,
+          SubSource -->
 
 <!-- Elements referenced from other modules:
           Org-ref FROM NCBI-Organism -->
@@ -38,7 +39,8 @@
         BioSource_origin?, 
         BioSource_org, 
         BioSource_subtype?, 
-        BioSource_is-focus?)>
+        BioSource_is-focus?, 
+        BioSource_pcr-primers?)>
 <!-- biological context -->
 <!ELEMENT BioSource_genome (%INTEGER;)>
 <!ATTLIST BioSource_genome value (
@@ -95,6 +97,38 @@
 <!-- to distinguish biological focus -->
 <!ELEMENT BioSource_is-focus EMPTY>
 
+<!ELEMENT BioSource_pcr-primers (PCRReactionSet)>
+
+
+<!ELEMENT PCRReactionSet (PCRReaction*)>
+
+
+<!ELEMENT PCRReaction (
+        PCRReaction_forward?, 
+        PCRReaction_reverse?)>
+
+<!ELEMENT PCRReaction_forward (PCRPrimerSet)>
+
+<!ELEMENT PCRReaction_reverse (PCRPrimerSet)>
+
+
+<!ELEMENT PCRPrimerSet (PCRPrimer*)>
+
+
+<!ELEMENT PCRPrimer (
+        PCRPrimer_seq?, 
+        PCRPrimer_name?)>
+
+<!ELEMENT PCRPrimer_seq (PCRPrimerSeq)>
+
+<!ELEMENT PCRPrimer_name (PCRPrimerName)>
+
+
+<!ELEMENT PCRPrimerSeq (#PCDATA)>
+
+
+<!ELEMENT PCRPrimerName (#PCDATA)>
+
 
 <!ELEMENT SubSource (
         SubSource_subtype, 
@@ -149,6 +183,11 @@
         fwd-primer-name |
         rev-primer-name |
         metagenomic |
+        mating-type |
+        linkage-group |
+        haplogroup |
+        whole-replicon |
+        phenotype |
         other
         ) #IMPLIED >
 

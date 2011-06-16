@@ -10,7 +10,7 @@
 This is used by sequences which contain a finite number of similar words.
 """
 
-class Alphabet:
+class Alphabet(object):
     size = None     # default to no fixed size for words
     letters = None  # default to no fixed alphabet
                     # In general, a list-like object. However,
@@ -117,7 +117,7 @@ class ThreeLetterProtein(Alphabet):
 
 # (These are Decorator classes)
 
-class AlphabetEncoder:
+class AlphabetEncoder(object):
     def __init__(self, alphabet, new_letters):
         self.alphabet = alphabet
         self.new_letters = new_letters

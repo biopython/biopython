@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "gbseq.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,12 +9,12 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 192669 $
 *********************************************************
 
  ASN.1 and XML for the components of a GenBank format sequence
  J.Ostell 2002
- Updated 14 December 2005
+ Updated 25 May 2010
 
 *********************************************************
 -->
@@ -37,8 +37,8 @@ $Revision: 1.1 $
     fields do not have full substructure defined here where there is
     already a standard GenBank format string. For example:
 
-    Date  DD-Mon-YYYY
-    Authors   LastName, Intials (with periods)
+   Date  DD-Mon-YYYY
+   Authors   LastName, Intials (with periods)
    Journal   JounalName Volume (issue), page-range (year)
    FeatureLocations as per GenBank feature table, but FeatureIntervals
     may also be provided as a convenience
@@ -94,6 +94,9 @@ $Revision: 1.1 $
 
 ********
 -->
+<!ELEMENT GBSet (GBSeq*)>
+
+
 <!ELEMENT GBSeq (
         GBSeq_locus, 
         GBSeq_length, 
@@ -119,12 +122,16 @@ $Revision: 1.1 $
         GBSeq_taxonomy?, 
         GBSeq_references?, 
         GBSeq_comment?, 
+        GBSeq_comment-set?, 
+        GBSeq_struc-comments?, 
         GBSeq_primary?, 
         GBSeq_source-db?, 
         GBSeq_database-reference?, 
         GBSeq_feature-table?, 
+        GBSeq_feature-set?, 
         GBSeq_sequence?, 
-        GBSeq_contig?)>
+        GBSeq_contig?, 
+        GBSeq_alt-seq?)>
 
 <!ELEMENT GBSeq_locus (#PCDATA)>
 
@@ -174,6 +181,10 @@ $Revision: 1.1 $
 
 <!ELEMENT GBSeq_comment (#PCDATA)>
 
+<!ELEMENT GBSeq_comment-set (GBComment*)>
+
+<!ELEMENT GBSeq_struc-comments (GBStrucComment*)>
+
 <!ELEMENT GBSeq_primary (#PCDATA)>
 
 <!ELEMENT GBSeq_source-db (#PCDATA)>
@@ -182,16 +193,20 @@ $Revision: 1.1 $
 
 <!ELEMENT GBSeq_feature-table (GBFeature*)>
 
-<!-- Optional for other dump forms -->
+<!ELEMENT GBSeq_feature-set (GBFeatureSet*)>
+
+<!-- Optional for contig, wgs, etc. -->
 <!ELEMENT GBSeq_sequence (#PCDATA)>
 
 <!ELEMENT GBSeq_contig (#PCDATA)>
 
-
-<!ELEMENT GBSecondary-accn (#PCDATA)>
+<!ELEMENT GBSeq_alt-seq (GBAltSeqData*)>
 
 
 <!ELEMENT GBSeqid (#PCDATA)>
+
+
+<!ELEMENT GBSecondary-accn (#PCDATA)>
 
 
 <!ELEMENT GBKeyword (#PCDATA)>
@@ -239,6 +254,60 @@ $Revision: 1.1 $
 <!ELEMENT GBXref_id (#PCDATA)>
 
 
+<!ELEMENT GBComment (
+        GBComment_type?, 
+        GBComment_paragraphs)>
+
+<!ELEMENT GBComment_type (#PCDATA)>
+
+<!ELEMENT GBComment_paragraphs (GBCommentParagraph*)>
+
+
+<!ELEMENT GBCommentParagraph (
+        GBCommentParagraph_items)>
+
+<!ELEMENT GBCommentParagraph_items (GBCommentItem*)>
+
+
+<!ELEMENT GBCommentItem (
+        GBCommentItem_value?, 
+        GBCommentItem_url?)>
+
+<!ELEMENT GBCommentItem_value (#PCDATA)>
+
+<!ELEMENT GBCommentItem_url (#PCDATA)>
+
+
+<!ELEMENT GBStrucComment (
+        GBStrucComment_name?, 
+        GBStrucComment_items)>
+
+<!ELEMENT GBStrucComment_name (#PCDATA)>
+
+<!ELEMENT GBStrucComment_items (GBStrucCommentItem*)>
+
+
+<!ELEMENT GBStrucCommentItem (
+        GBStrucCommentItem_tag?, 
+        GBStrucCommentItem_value?, 
+        GBStrucCommentItem_url?)>
+
+<!ELEMENT GBStrucCommentItem_tag (#PCDATA)>
+
+<!ELEMENT GBStrucCommentItem_value (#PCDATA)>
+
+<!ELEMENT GBStrucCommentItem_url (#PCDATA)>
+
+
+<!ELEMENT GBFeatureSet (
+        GBFeatureSet_annot-source?, 
+        GBFeatureSet_features)>
+
+<!ELEMENT GBFeatureSet_annot-source (#PCDATA)>
+
+<!ELEMENT GBFeatureSet_features (GBFeature*)>
+
+
 <!ELEMENT GBFeature (
         GBFeature_key, 
         GBFeature_location, 
@@ -246,7 +315,8 @@ $Revision: 1.1 $
         GBFeature_operator?, 
         GBFeature_partial5?, 
         GBFeature_partial3?, 
-        GBFeature_quals?)>
+        GBFeature_quals?, 
+        GBFeature_xrefs?)>
 
 <!ELEMENT GBFeature_key (#PCDATA)>
 
@@ -265,6 +335,8 @@ $Revision: 1.1 $
 
 
 <!ELEMENT GBFeature_quals (GBQualifier*)>
+
+<!ELEMENT GBFeature_xrefs (GBXref*)>
 
 
 <!ELEMENT GBInterval (
@@ -301,5 +373,44 @@ $Revision: 1.1 $
 <!ELEMENT GBQualifier_value (#PCDATA)>
 
 
-<!ELEMENT GBSet (GBSeq*)>
+<!ELEMENT GBAltSeqData (
+        GBAltSeqData_name, 
+        GBAltSeqData_items?)>
+
+<!-- e.g., contig, wgs, scaffold, cage, genome -->
+<!ELEMENT GBAltSeqData_name (#PCDATA)>
+
+<!ELEMENT GBAltSeqData_items (GBAltSeqItem*)>
+
+
+<!ELEMENT GBAltSeqItem (
+        GBAltSeqItem_interval?, 
+        GBAltSeqItem_isgap?, 
+        GBAltSeqItem_gap-length?, 
+        GBAltSeqItem_gap-type?, 
+        GBAltSeqItem_gap-linkage?, 
+        GBAltSeqItem_gap-comment?, 
+        GBAltSeqItem_first-accn?, 
+        GBAltSeqItem_last-accn?, 
+        GBAltSeqItem_value?)>
+
+<!ELEMENT GBAltSeqItem_interval (GBInterval)>
+
+<!ELEMENT GBAltSeqItem_isgap EMPTY>
+<!ATTLIST GBAltSeqItem_isgap value ( true | false ) #REQUIRED >
+
+
+<!ELEMENT GBAltSeqItem_gap-length (%INTEGER;)>
+
+<!ELEMENT GBAltSeqItem_gap-type (#PCDATA)>
+
+<!ELEMENT GBAltSeqItem_gap-linkage (#PCDATA)>
+
+<!ELEMENT GBAltSeqItem_gap-comment (#PCDATA)>
+
+<!ELEMENT GBAltSeqItem_first-accn (#PCDATA)>
+
+<!ELEMENT GBAltSeqItem_last-accn (#PCDATA)>
+
+<!ELEMENT GBAltSeqItem_value (#PCDATA)>
 

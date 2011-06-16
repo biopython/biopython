@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "entrezgene.asn"
-     ::DATATOOL:: by application DATATOOL version 1.8.7
-     ::DATATOOL:: on 10/24/2007 23:07:33
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 04/26/2010 23:04:43
      ============================================ -->
 
 <!-- NCBI_Entrezgene.dtd
@@ -72,6 +72,9 @@
 
 <!ENTITY % NCBI_TxInit_module PUBLIC "-//NCBI//NCBI TxInit Module//EN" "NCBI_TxInit.mod.dtd">
 %NCBI_TxInit_module;
+
+<!ENTITY % NCBI_Variation_module PUBLIC "-//NCBI//NCBI Variation Module//EN" "NCBI_Variation.mod.dtd">
+%NCBI_Variation_module;
 
 <!ENTITY % PDB_General_module PUBLIC "-//NCBI//PDB General Module//EN" "PDB_General.mod.dtd">
 %PDB_General_module;

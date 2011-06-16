@@ -10,7 +10,7 @@ import unittest
 from cStringIO import StringIO
 
 from Bio import Phylo
-from Bio.Phylo import PhyloXML
+from Bio.Phylo import PhyloXML, NewickIO
 
 #TODO - Remove this hack
 #This will raise MissingPythonDependencyError if we don't have ElementTree
@@ -32,17 +32,24 @@ EX_PHYLO = 'PhyloXML/phyloxml_examples.xml'
 class IOTests(unittest.TestCase):
     """Tests for parsing and writing the supported formats."""
 
-    def test_newick(self):
+    def test_newick_read_single(self):
         """Read a Newick file with one tree."""
         tree = Phylo.read(EX_NEWICK, 'newick')
         self.assertEqual(len(tree.get_terminals()), 28)
 
-    def test_newick(self):
+    def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
         trees = list(Phylo.parse(EX_NEXUS, 'nexus'))
         self.assertEqual(len(trees), 3)
         for tree in trees:
             self.assertEqual(len(tree.get_terminals()), 9)
+
+    def test_format_branch_length(self):
+        """Custom format string for Newick branch length serialization."""
+        tree = Phylo.read(StringIO('A:0.1;'), 'newick')
+        mem_file = StringIO()
+        Phylo.write(tree, mem_file, 'newick', format_branch_length='%.0e')
+        self.assertEqual(mem_file.getvalue().strip(), 'A:1e-01;')
 
     def test_convert(self):
         """Convert a tree between all supported formats."""
@@ -273,6 +280,16 @@ class MixinTests(unittest.TestCase):
         # No internal nodes should remain except the root
         self.assertEqual(len(tree.get_terminals()), len(tree.clade))
         self.assertEqual(len(list(tree.find_clades(terminal=False))), 1)
+        # Again, with a target specification
+        tree = Phylo.read(EX_APAF, 'phyloxml')
+        d1 = tree.depths()
+        internal_node_ct = len(tree.get_nonterminals())
+        tree.collapse_all(lambda c: c.branch_length < 0.1)
+        d2 = tree.depths()
+        # Should have collapsed 7 internal nodes
+        self.assertEqual(len(tree.get_nonterminals()), internal_node_ct - 7)
+        for clade in d2:
+            self.assertAlmostEqual(d1[clade], d2[clade])
 
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""

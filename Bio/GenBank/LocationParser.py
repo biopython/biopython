@@ -24,7 +24,7 @@
 # Uses John Aycock's SPARK for parsing
 from Bio.Parsers.spark import GenericScanner, GenericParser
 
-class Token:
+class Token(object):
     def __init__(self, type):
         self.type = type
     def __cmp__(self, other):
@@ -33,7 +33,7 @@ class Token:
         return "Tokens(%r)" % (self.type,)
 
 # "38"
-class Integer:
+class Integer(object):
     type = "integer"
     def __init__(self, val):
         self.val = val
@@ -51,7 +51,7 @@ class UnsignedInteger(Integer):
     def __repr__(self):
         return "UnsignedInteger(%s)" % self.val
 
-class Symbol:
+class Symbol(object):
     type = "symbol"
     def __init__(self, name):
         self.name = name
@@ -63,21 +63,21 @@ class Symbol:
         return "Symbol(%s)" % repr(self.name)
 
 # ">38"  -- The BNF says ">" is for the lower bound.. seems wrong to me
-class LowBound:
+class LowBound(object):
     def __init__(self, base):
         self.base = base
     def __repr__(self):
         return "LowBound(%r)" % self.base
 
 # "<38"
-class HighBound:
+class HighBound(object):
     def __init__(self, base):
         self.base = base
     def __repr__(self):
         return "HighBound(%r)" % self.base
 
 # 12.34
-class TwoBound:
+class TwoBound(object):
     def __init__(self, low, high):
         self.low = low
         self.high = high
@@ -85,7 +85,7 @@ class TwoBound:
         return "TwoBound(%r, %r)" % (self.low, self.high)
 
 # 12^34
-class Between:
+class Between(object):
     def __init__(self, low, high):
         self.low = low
         self.high = high
@@ -93,35 +93,35 @@ class Between:
         return "Between(%r, %r)" % (self.low, self.high)
 
 # 12..34
-class Range:
+class Range(object):
     def __init__(self, low, high):
         self.low = low
         self.high = high
     def __repr__(self):
         return "Range(%r, %r)" % (self.low, self.high)
 
-class Function:
+class Function(object):
     def __init__(self, name, args):
         self.name = name
         self.args = args
     def __repr__(self):
         return "Function(%r, %r)" % (self.name, self.args)
 
-class AbsoluteLocation:
+class AbsoluteLocation(object):
     def __init__(self, path, local_location):
         self.path = path
         self.local_location = local_location
     def __repr__(self):
         return "AbsoluteLocation(%r, %r)" % (self.path, self.local_location)
 
-class Path:
+class Path(object):
     def __init__(self, database, accession):
         self.database = database
         self.accession = accession
     def __repr__(self):
         return "Path(%r, %r)" % (self.database, self.accession)
 
-class FeatureName:
+class FeatureName(object):
     def __init__(self, path, label):
         self.path = path
         self.label = label

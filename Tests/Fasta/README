@@ -33,3 +33,10 @@ output005.m10 - ssearch35 protein-protein, 3 queries where
                 only the middle one has a single hit.
 output006.m10 - fasta35 nucleotide-nucleotide, 1 query, in the
                 alignment the query has been reversed.
+output007.m10 - recreation of output001.m10 using fasta-36.3.4 (note that
+                histogram is now off by default, -H now turns it on, and the
+                -Q quiet flag no longer exists). Get more hits due to revised
+                e-value calculations, also ">>><<<" marks end of a query, not
+                just end of the file!
+output008.m10 - tfastx36 protein-nucleotide, 4 queries, some with no hits,
+                some matches with multiple HSPs (new feature in FASTA v36)

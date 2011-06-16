@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 3 January 2011 (Biopython 1.56+)}
+\date{Last Update -- 2 April 2011 (Biopython 1.57+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -346,6 +346,7 @@ Disputably (of course!), the central object in bioinformatics is the sequence. T
 
 Most of the time when we think about sequences we have in my mind a string of letters like `\verb|AGTACACTGGT|'. You can create such \verb|Seq| object with this sequence as follows - the ``$>>>$'' represents the Python prompt followed by what you would type in:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
@@ -361,6 +362,7 @@ What we have here is a sequence object with a \emph{generic} alphabet - reflecti
 
 In addition to having an alphabet, the \verb|Seq| object differs from the Python string in the methods it supports.  You can't do this with a plain string:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq
 Seq('AGTACACTGGT', Alphabet())
@@ -524,6 +526,7 @@ The advantages of having an alphabet class are two fold. First, this gives an id
 Now that we know what we are dealing with, let's look at how to utilize this class to do interesting work.
 You can create an ambiguous sequence with the default generic alphabet like this:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> my_seq = Seq("AGTACACTGGT")
@@ -535,6 +538,7 @@ Alphabet()
 
 However, where possible you should specify the alphabet explicitly when creating your sequence objects - in this case an unambiguous DNA alphabet object:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -547,6 +551,7 @@ IUPACUnambiguousDNA()
 
 Unless of course, this really is an amino acid sequence:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -561,28 +566,41 @@ IUPACProtein()
 
 In many ways, we can deal with Seq objects as if they were normal Python strings, for example getting the length, or iterating over the elements:
 
+%doctest
 \begin{verbatim}
-from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
-my_seq = Seq("GATCGATGGGCCTATATAGGATCGAAAATCGC", IUPAC.unambiguous_dna)
-for index, letter in enumerate(my_seq):
-    print index, letter
-print len(letter)
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq("GATCG", IUPAC.unambiguous_dna)
+>>> for index, letter in enumerate(my_seq):
+...     print index, letter
+0 G
+1 A
+2 T
+3 C
+4 G
+>>> print len(my_seq)
+5
 \end{verbatim}
 
 You can access elements of the sequence in the same way as for strings (but remember, Python counts from zero!):
 
+%cont-doctest
 \begin{verbatim}
 >>> print my_seq[0] #first letter
+G
 >>> print my_seq[2] #third letter
+T
 >>> print my_seq[-1] #last letter
+G
 \end{verbatim}
 
 The \verb|Seq| object has a \verb|.count()| method, just like a string.
 Note that this means that like a Python string, this gives a
 \emph{non-overlapping} count:
 
+%doctest
 \begin{verbatim}
+>>> from Bio.Seq import Seq
 >>> "AAAA".count("AA")
 2
 >>> Seq("AAAA").count("AA")
@@ -593,17 +611,22 @@ Note that this means that like a Python string, this gives a
 (i.e. $3$ in this trivial example). When searching for single letters, this
 makes no difference:
 
+%doctest
 \begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import IUPAC
+>>> my_seq = Seq('GATCGATGGGCCTATATAGGATCGAAAATCGC', IUPAC.unambiguous_dna)
 >>> len(my_seq)
 32
 >>> my_seq.count("G")
-10
+9
 >>> 100 * float(my_seq.count("G") + my_seq.count("C")) / len(my_seq)
 46.875
 \end{verbatim}
 
 While you could use the above snippet of code to calculate a GC\%, note that  the \verb|Bio.SeqUtils| module has several GC functions already built.  For example:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -621,6 +644,7 @@ Also note that just like a normal Python string, the \verb|Seq| object is in som
 
 A more complicated example, let's get a slice of the sequence:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -635,6 +659,7 @@ The second thing to notice is that the slice is performed on the sequence data s
 
 Also like a Python string, you can do slices with a start, stop and \emph{stride} (the step size, which defaults to one).  For example, we can get the first, second and third codon positions of this DNA sequence:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq[0::3]
 Seq('GCTGTAGTAAG', IUPACUnambiguousDNA())
@@ -646,6 +671,7 @@ Seq('TAGCTAAGAC', IUPACUnambiguousDNA())
 
 Another stride trick you might have seen with a Python string is the use of a -1 stride to reverse the string.  You can do this with a \verb|Seq| object too:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq[::-1]
 Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
@@ -655,6 +681,7 @@ Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
 \label{sec:seq-to-string}
 
 If you really do just need a plain string, for example to write to a file, or insert into a database, then this is very easy to get:
+%cont-doctest
 \begin{verbatim}
 >>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
@@ -663,17 +690,20 @@ If you really do just need a plain string, for example to write to a file, or in
 Since calling \verb|str()| on a \verb|Seq| object returns the full sequence as a string,
 you often don't actually have to do this conversion explicitly.
 Python does this automatically with a print statement:
+%cont-doctest
 \begin{verbatim}
 >>> print my_seq
 GATCGATGGGCCTATATAGGATCGAAAATCGC
 \end{verbatim}
 
 You can also use the \verb|Seq| object directly with a \verb|%s| placeholder when using the Python string formatting or interpolation operator (\verb|%|):
+%cont-doctest
 \begin{verbatim}
 >>> fasta_format_string = ">Name\n%s\n" % my_seq
 >>> print fasta_format_string
 >Name
 GATCGATGGGCCTATATAGGATCGAAAATCGC
+<BLANKLINE>
 \end{verbatim}
 
 \noindent This line of code constructs a simple FASTA format record (without worrying about line wrapping).
@@ -685,6 +715,7 @@ writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO
 will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
 (which is still available in the current Biopython releases for backwards compatibility):
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq.tostring()
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
@@ -694,15 +725,21 @@ will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
 
 Naturally, you can in principle add any two Seq objects together - just like you can with Python strings to concatenate them.  However, you can't add sequences with incompatible alphabets, such as a protein sequence and a DNA sequence:
 
+%doctest
 \begin{verbatim}
+>>> from Bio.Alphabet import IUPAC
+>>> from Bio.Seq import Seq
+>>> protein_seq = Seq("EVRNAK", IUPAC.protein)
+>>> dna_seq = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> protein_seq + dna_seq
 Traceback (most recent call last):
 ...
-TypeError: ('incompatable alphabets', 'IUPACProtein()', 'IUPACUnambiguousDNA()')
+TypeError: Incompatible alphabets IUPACProtein() and IUPACUnambiguousDNA()
 \end{verbatim}
 
 If you \emph{really} wanted to do this, you'd have to first give both sequences generic alphabets:
 
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Alphabet import generic_alphabet
 >>> protein_seq.alphabet = generic_alphabet
@@ -713,6 +750,7 @@ Seq('EVRNAKACGT', Alphabet())
 
 Here is an example of adding a generic nucleotide sequence to an unambiguous IUPAC DNA sequence, resulting in an ambiguous nucleotide sequence:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_nucleotide
@@ -733,6 +771,7 @@ Python strings have very useful \verb|upper| and \verb|lower| methods for changi
 As of Biopython 1.53, the \verb|Seq| object gained similar methods which are alphabet aware.
 For example,
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import generic_dna
@@ -747,6 +786,7 @@ Seq('acgtacgt', DNAAlphabet())
 
 These are useful for doing case insensitive matching:
 
+%cont-doctest
 \begin{verbatim}
 >>> "GTAC" in dna_seq
 False
@@ -757,6 +797,7 @@ True
 Note that strictly speaking the IUPAC alphabets are for upper case
 sequences only, thus:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -774,6 +815,7 @@ Seq('acgt', DNAAlphabet())
 For nucleotide sequences, you can easily obtain the complement or reverse
 complement of a \verb|Seq| object using its built-in methods:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -789,6 +831,7 @@ Seq('GCGATTTTCGATCCTATATAGGCCCATCGATC', IUPACUnambiguousDNA())
 As mentioned earlier, an easy way to just reverse a \verb|Seq| object (or a
 Python string) is slice it with -1 step:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_seq[::-1]
 Seq('CGCTAAAAGCTAGGATATATCCGGGTAGCTAG', IUPACUnambiguousDNA())
@@ -798,11 +841,13 @@ In all of these operations, the alphabet property is maintained. This is very
 useful in case you accidentally end up trying to do something weird like take
 the (reverse)complement of a protein sequence:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> protein_seq = Seq("EVRNAK", IUPAC.protein)
 >>> protein_seq.complement()
+Traceback (most recent call last):
 ...
 ValueError: Proteins do not have complements!
 \end{verbatim}
@@ -835,6 +880,7 @@ encodes a short peptide:
 The actual biological transcription process works from the template strand, doing a reverse complement (TCAG $\rightarrow$ CUGA) to give the mRNA.  However, in Biopython and bioinformatics in general, we typically work directly with the coding strand because this means we can get the mRNA sequence just by switching T $\rightarrow$ U.
 
 Now let's actually get down to doing a transcription in Biopython.  First, let's create \verb|Seq| objects for the coding and template DNA strands:
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -848,6 +894,7 @@ Seq('CTATCGGGCACCCTTTCAGCGGCCCATTACAATGGCCAT', IUPACUnambiguousDNA())
 \noindent These should match the figure above - remember by convention nucleotide sequences are normally read from the 5' to 3' direction, while in the figure the template strand is shown reversed.
 
 Now let's transcribe the coding strand into the corresponding mRNA, using the \verb|Seq| object's built in \verb|transcribe| method:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna
 Seq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG', IUPACUnambiguousDNA())
@@ -858,12 +905,14 @@ Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \noindent As you can see, all this does is switch T $\rightarrow$ U, and adjust the alphabet.
 
 If you do want to do a true biological transcription starting with the template strand, then this becomes a two-step process:
+%cont-doctest
 \begin{verbatim}
 >>> template_dna.reverse_complement().transcribe()
 Seq('AUGGCCAUUGUAAUGGGCCGCUGAAAGGGUGCCCGAUAG', IUPACUnambiguousRNA())
 \end{verbatim}
 
 The \verb|Seq| object also includes a back-transcription method for going from the mRNA to the coding strand of the DNA.  Again, this is a simple U $\rightarrow$ T substitution and associated change of alphabet:
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -884,6 +933,7 @@ Sticking with the same example discussed in the transcription section above,
 now let's translate this mRNA into the corresponding protein sequence - again taking
 advantage of one of the \verb|Seq| object's biological methods:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -895,6 +945,7 @@ Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also translate directly from the coding strand DNA sequence:
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
@@ -909,12 +960,14 @@ You should notice in the above protein sequences that in addition to the end sto
 
 The translation tables available in Biopython are based on those \href{http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{from the NCBI} (see the next section of this tutorial).  By default, translation will use the \emph{standard} genetic code (NCBI table id 1).
 Suppose we are dealing with a mitochondrial sequence.  We need to tell the translation function to use the relevant genetic code instead:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table="Vertebrate Mitochondrial")
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 \end{verbatim}
 
 You can also specify the table using the NCBI table number which is shorter, and often included in the feature annotation of GenBank files:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table=2)
 Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
@@ -922,6 +975,7 @@ Seq('MAIVMGRWKGAR*', HasStopCodon(IUPACProtein(), '*'))
 
 Now, you may want to translate the nucleotides up to the first in frame stop codon,
 and then stop (as happens in nature):
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate()
 Seq('MAIVMGR*KGAR*', HasStopCodon(IUPACProtein(), '*'))
@@ -937,6 +991,7 @@ is not translated - and the stop symbol is not included at the end of your prote
 sequence.
 
 You can even specify the stop symbol if you don't like the default asterisk:
+%cont-doctest
 \begin{verbatim}
 >>> coding_dna.translate(table=2, stop_symbol="@")
 Seq('MAIVMGRWKGAR@', HasStopCodon(IUPACProtein(), '@'))
@@ -951,7 +1006,10 @@ you want (perhaps with the \verb|to_stop| option). However, what if your
 sequence uses a non-standard start codon? This happens a lot in bacteria --
 for example the gene yaaX in \texttt{E. coli} K12:
 
+%TODO - handle line wrapping in doctest?
 \begin{verbatim}
+>>> from Bio.Seq import Seq
+>>> from Bio.Alphabet import generic_dna
 >>> gene = Seq("GTGAAAAAGATGCAATCTATCGTACTCGCACTTTCCCTGGTTCTGGTCGCTCCCATGGCA" + \
 ...            "GCACAGGCTGCGGAAATTACGTTAGTCCCGTCAGTAAAATTACAGATAGGCGATCGTGAT" + \
 ...            "AATCGTGGCTATTACTGGGATGGAGGTCACTGGCGCGACCACGGCTGGTGGAAACAACAT" + \
@@ -971,6 +1029,7 @@ and while it does \emph{normally} encode valine, if used as a start codon it
 should be translated as methionine. This happens if you tell Biopython your
 sequence is a complete CDS:
 
+%TODO - handle line wrapping in doctest?
 \begin{verbatim}
 >>> gene.translate(table="Bacterial", cds=True)
 Seq('MKKMQSIVLALSLVLVAPMAAQAAEITLVPSVKLQIGDRDNRGYYWDGGHWRDH...HHR',
@@ -1001,6 +1060,7 @@ Internally these use codon table objects derived from the NCBI information at
 As before, let's just focus on two choices: the Standard translation table, and the
 translation table for Vertebrate Mitochondrial DNA. 
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Data import CodonTable
 >>> standard_table = CodonTable.unambiguous_dna_by_name["Standard"]
@@ -1008,6 +1068,7 @@ translation table for Vertebrate Mitochondrial DNA.
 \end{verbatim}
 
 Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Data import CodonTable
 >>> standard_table = CodonTable.unambiguous_dna_by_id[1]
@@ -1015,6 +1076,7 @@ Alternatively, these tables are labeled with ID numbers 1 and 2, respectively:
 \end{verbatim}
 
 You can compare the actual tables visually by printing them:
+%TODO - handle <BLANKLINE> automatically in doctest?
 \begin{verbatim}
 >>> print standard_table
 Table 1 Standard, SGC0
@@ -1073,6 +1135,7 @@ G | GTG V(s)| GCG A   | GAG E   | GGG G   | G
 
 You may find these following properties useful -- for example if you are trying
 to do your own gene finding:
+%cont-doctest
 \begin{verbatim}
 >>> mito_table.stop_codons
 ['TAA', 'TAG', 'AGA', 'AGG']
@@ -1109,14 +1172,19 @@ IUPAC.protein)} to be equal -- which most people would agree is just not right.
 This transitivity problem would also have implications for using \verb|Seq|
 objects as Python dictionary keys.
 
-So, what does Biopython do? Well, the equality test is the default for Python
-objects -- it tests to see if they are the same object in memory. This is a
-very strict test:
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> seq1 = Seq("ACGT", IUPAC.unambiguous_dna)
 >>> seq2 = Seq("ACGT", IUPAC.unambiguous_dna)
+\end{verbatim}
+
+So, what does Biopython do? Well, the equality test is the default for Python
+objects -- it tests to see if they are the same object in memory. This is a
+very strict test:
+%TODO - silence FutureWarning from this doctest?
+\begin{verbatim}
 >>> seq1 == seq2
 False
 >>> seq1 == seq1
@@ -1125,6 +1193,7 @@ True
 
 If you actually want to do this, you can be more explicit by using the Python
 \verb|id| function,
+%cont-doctest
 \begin{verbatim}
 >>> id(seq1) == id(seq2)
 False
@@ -1136,7 +1205,7 @@ Now, in every day use, your sequences will probably all have the same
 alphabet, or at least all be the same type of sequence (all DNA, all RNA, or
 all protein). What you probably want is to just compare the sequences as
 strings -- so do this explicitly:
-
+%cont-doctest
 \begin{verbatim}
 >>> str(seq1) == str(seq2)
 True
@@ -1153,18 +1222,25 @@ string for the key. See also Section~\ref{sec:seq-to-string}.
 
 Just like the normal Python string, the \verb|Seq| object is ``read only'', or in Python terminology, immutable.  Apart from wanting the \verb|Seq| object to act like a string, this is also a useful default since in many biological applications you want to ensure you are not changing your sequence data:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> from Bio.Alphabet import IUPAC
 >>> my_seq = Seq("GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA", IUPAC.unambiguous_dna)
+\end{verbatim}
+
+Observe what happens if you try to edit the sequence:
+%TODO - This is not a doctest as Python 2.4 output omits the object name.
+\begin{verbatim}
 >>> my_seq[5] = "G"
 Traceback (most recent call last):
-  File "<stdin>", line 1, in ?
-AttributeError: 'Seq' instance has no attribute '__setitem__'
+...
+TypeError: 'Seq' object does not support item assignment
 \end{verbatim}
 
 However, you can convert it into a mutable sequence (a \verb|MutableSeq| object) and do pretty much anything you want with it:
 
+%cont-doctest
 \begin{verbatim}
 >>> mutable_seq = my_seq.tomutable()
 >>> mutable_seq
@@ -1172,6 +1248,7 @@ MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 \end{verbatim}
 
 Alternatively, you can create a \verb|MutableSeq| object directly from a string:
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import MutableSeq
 >>> from Bio.Alphabet import IUPAC
@@ -1179,18 +1256,19 @@ Alternatively, you can create a \verb|MutableSeq| object directly from a string:
 \end{verbatim}
 
 Either way will give you a sequence object which can be changed:
+%cont-doctest
 \begin{verbatim}
 >>> mutable_seq
 MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
->>> mutable_seq[5] = "T"
+>>> mutable_seq[5] = "C"
 >>> mutable_seq
-MutableSeq('GCCATTGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCATCGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 >>> mutable_seq.remove("T")
 >>> mutable_seq
-MutableSeq('GCCATGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
+MutableSeq('GCCACGTAATGGGCCGCTGAAAGGGTGCCCGA', IUPACUnambiguousDNA())
 >>> mutable_seq.reverse()
 >>> mutable_seq
-MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
+MutableSeq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 Do note that unlike the \verb|Seq| object, the \verb|MutableSeq| object's methods like \verb|reverse_complement()| and \verb|reverse()| act in-situ!
@@ -1199,10 +1277,11 @@ An important technical difference between mutable and immutable objects in Pytho
 
 Once you have finished editing your a \verb|MutableSeq| object, it's easy to get back to a read-only \verb|Seq| object should you need to:
 
+%cont-doctest
 \begin{verbatim}
 >>> new_seq = mutable_seq.toseq()
 >>> new_seq
-Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGTACCG', IUPACUnambiguousDNA())
+Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
@@ -1215,6 +1294,7 @@ You could of course use a normal \verb|Seq| object in this situation, but it was
 rather a lot of memory to hold a string of a million ``N'' characters when you could
 just store a single letter ``N'' and the desired length as an integer.
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import UnknownSeq
 >>> unk = UnknownSeq(20)
@@ -1229,6 +1309,7 @@ UnknownSeq(20, alphabet = Alphabet(), character = '?')
 You can of course specify an alphabet, meaning for nucleotide sequences
 the letter defaults to ``N'' and for proteins ``X'', rather than just ``?''.
 
+%cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import UnknownSeq
 >>> from Bio.Alphabet import IUPAC
@@ -1242,6 +1323,7 @@ NNNNNNNNNNNNNNNNNNNN
 You can use all the usual \verb|Seq| object methods too, note these give back
 memory saving \verb|UnknownSeq| objects where appropriate as you might expect:
 
+%cont-doctest
 \begin{verbatim}
 >>> unk_dna
 UnknownSeq(20, alphabet = IUPACAmbiguousDNA(), character = 'N')
@@ -1278,6 +1360,7 @@ objects (or who prefer a functional programming style to an object orientated on
 there are module level functions in \verb|Bio.Seq| will accept plain Python strings,
 \verb|Seq| objects (including \verb|UnknownSeq| objects) or \verb|MutableSeq| objects:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import reverse_complement, transcribe, back_transcribe, translate
 >>> my_string = "GCTGTTATGGGTCGTTGGAAGGGTGGTCGTGCTGCTGGTTAG"
@@ -1347,6 +1430,7 @@ below).  However, creating \verb|SeqRecord| can be quite simple.
 
 To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -1356,6 +1440,7 @@ To create a \verb|SeqRecord| at a minimum you just need a \verb|Seq| object:
 
 Additionally, you can also pass the id, name and description to the initialization function, but if not they will be set as strings indicating they are unknown, and can be modified subsequently:
 
+%cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.id
 '<unknown id>'
@@ -1369,6 +1454,7 @@ Seq('GATC', Alphabet())
 
 Including an identifier is very important if you want to output your \verb|SeqRecord| to a file.  You would normally include this when creating the object:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
 >>> simple_seq = Seq("GATC")
@@ -1380,6 +1466,7 @@ As mentioned above, the \verb|SeqRecord| has an dictionary attribute \verb|annot
 for any miscellaneous annotations that doesn't fit under one of the other more specific attributes.
 Adding annotations is easy, and just involves dealing directly with the annotation dictionary:
 
+%cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.annotations["evidence"] = "None. I just made it up."
 >>> print simple_seq_r.annotations
@@ -1392,9 +1479,10 @@ Working with per-letter-annotations is similar, \verb|letter_annotations| is a
 dictionary like attribute which will let you assign any Python sequence (i.e.
 a string, list or tuple) which has the same length as the sequence:
 
+%cont-doctest
 \begin{verbatim}
 >>> simple_seq_r.letter_annotations["phred_quality"] = [40,40,38,30]
->>> print simple_seq_r. letter_annotations
+>>> print simple_seq_r.letter_annotations
 {'phred_quality': [40, 40, 38, 30]}
 >>> print simple_seq_r.letter_annotations["phred_quality"]
 [40, 40, 38, 30]
@@ -1423,6 +1511,7 @@ Back in Chapter~\ref{chapter:quick-start} you will have seen the function \verb|
 used to loop over all the records in a file as \verb|SeqRecord| objects. The \verb|Bio.SeqIO| module
 has a sister function for use on files which contain just one record which we'll use here (see Chapter~\ref{chapter:Bio.SeqIO} for details):
 
+%TODO - line wrapping for doctest?
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.fna", "fasta")
@@ -1670,6 +1759,7 @@ The complication in dealing with locations comes in the positions themselves. In
 
 Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
 
+%doctest
 \begin{verbatim}
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
@@ -1686,36 +1776,39 @@ If you print out a \verb|FeatureLocation| object, you can get a nice representat
 
 We can access the fuzzy start and end positions using the start and end attributes of the location:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_location.start
-Bio.SeqFeature.AfterPosition(5)
+AfterPosition(5)
 >>> print my_location.start
 >5
 >>> my_location.end
-Bio.SeqFeature.BetweenPosition(8,1)
+BetweenPosition(8,1)
 >>> print my_location.end
 (8^9)
 \end{verbatim}
 
 If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
 
+%cont-doctest
 \begin{verbatim}
 >>> my_location.nofuzzy_start
 5
 >>> my_location.nofuzzy_end
-8
+9
 \end{verbatim}
 
 Notice that this just gives you back the position attributes of the fuzzy locations.
 
 Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
 
+%cont-doctest
 \begin{verbatim}
->>> exact_location = SeqFeature.FeatureLocation(5, 8)
+>>> exact_location = SeqFeature.FeatureLocation(5, 9)
 >>> print exact_location
-[5:8]
+[5:9]
 >>> exact_location.start
-Bio.SeqFeature.ExactPosition(5)
+ExactPosition(5)
 >>> exact_location.nofuzzy_start
 5
 \end{verbatim}
@@ -1726,27 +1819,35 @@ That is all of the nitty gritty about dealing with fuzzy positions in Biopython.
 
 A \verb|SeqFeature| object doesn't directly contain a sequence, instead its location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(4..18)}, like this:
 
+%doctest
 \begin{verbatim}
-from Bio import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
-example_parent = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
-example_feature = example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqFeature import SeqFeature, FeatureLocation
+>>> example_parent = Seq("ACCGAGACGGCAAAGGCTAGCATAGGTATGAGACTTCCTTCCTGCCAGTGCTGAGGAACTGGGAGCCTAC")
+>>> example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
 \end{verbatim}
 
 You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement:
 
+%cont-doctest
 \begin{verbatim}
-feature_seq = example_parent[5:18].reverse_complement()
+>>> feature_seq = example_parent[5:18].reverse_complement()
+>>> print feature_seq
+AGCCTTTGCCGTC
 \end{verbatim}
 
 This is a simple example so this isn't too bad -- however once you have to deal with compound features (joins) this is rather messy. Instead, the \verb|SeqFeature| object has an \verb|extract| method to take care of all this:
 
+%cont-doctest
 \begin{verbatim}
-feature_seq = example_feature.extract(example_parent)
+>>> feature_seq = example_feature.extract(example_parent)
+>>> print feature_seq
+AGCCTTTGCCGTC
 \end{verbatim}
 
 The \verb|extract| method was added in Biopython 1.53, and in Biopython 1.56 the \verb|SeqFeature| was further extended to give its length as that of the region of sequence it describes.
 
+%cont-doctest
 \begin{verbatim}
 >>> print example_feature.extract(example_parent)
 AGCCTTTGCCGTC
@@ -1767,6 +1868,7 @@ features this SNP is within, and lets suppose this SNP is at index 4350
 (Python counting!). Here is a simple brute force solution where we just
 check all the features one by one in a loop:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> my_snp = 4350
@@ -1840,19 +1942,27 @@ completely within the new sequence are preserved (with their locations adjusted)
 
 For example, taking the same GenBank file used earlier:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
+\end{verbatim}
+%TODO - support line wrapping in doctest
+\begin{verbatim}
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(record)
 9609
 >>> len(record.features)
 29
 \end{verbatim}
+
 
 For this example we're going to focus in on the \verb|pim| gene, \verb|YP_pPCP05|.
 If you have a look at the GenBank file directly you'll find this gene/CDS has
@@ -1861,21 +1971,23 @@ From looking at the file you can work out that these are the twelfth and
 thirteenth entries in the file, so in Python zero-based counting they are
 entries $11$ and $12$ in the \texttt{features} list:
 
+%cont-doctest
 \begin{verbatim}
 >>> print record.features[11]
 type: gene
 location: [4342:4780]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-
+<BLANKLINE>
+\end{verbatim}
+%This one is truncated so can't use for doctest
+\begin{verbatim}
 >>> print record.features[12]
 type: CDS
 location: [4342:4780]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: codon_start, Value: ['1']
@@ -1892,13 +2004,20 @@ qualifiers:
 Let's slice this parent record from 4300 to 4800 (enough to include the \verb|pim|
 gene/CDS), and see how many features we get:
 
+%cont-doctest
 \begin{verbatim}
 >>> sub_record = record[4300:4800]
+\end{verbatim}
+%TODO - Line wrapping for doctest?
+\begin{verbatim}
 >>> sub_record
 SeqRecord(seq=Seq('ATAAATAGATTATTCCAAATAATTTATTTATGTAAGAACAGGATGGGAGGGGGA...TTA',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(sub_record)
 500
 >>> len(sub_record.features)
@@ -1907,17 +2026,19 @@ dbxrefs=[])
 
 Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP05|:
 
+%cont-doctest
 \begin{verbatim}
 >>> print sub_record.features[0]
 type: gene
 location: [42:480]
-ref: None:None
 strand: 1
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
-
+<BLANKLINE>
+\end{verbatim}
+\begin{verbatim}
 >>> print sub_record.features[1]
 type: CDS
 location: [42:480]
@@ -1943,6 +2064,7 @@ this still applies to the sub-sequence or not. To avoid guessing, the \texttt{an
 and \texttt{dbxrefs} are omitted from the sub-record, and it is up to you to transfer
 any relevant information as appropriate.
 
+%cont-doctest
 \begin{verbatim}
 >>> sub_record.annotations
 {}
@@ -1953,6 +2075,7 @@ any relevant information as appropriate.
 The same point could be made about the record \texttt{id}, \texttt{name}
 and \texttt{description}, but for practicality these are preserved:
 
+%cont-doctest
 \begin{verbatim}
 >>> sub_record.id
 'NC_005816.1'
@@ -1989,6 +2112,7 @@ and description).
 For an example with per-letter annotation, we'll use the first record in a
 FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functions:
 
+%doctest ../Tests/Quality
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.parse("example.fastq", "fastq").next()
@@ -1996,6 +2120,9 @@ FASTQ file. Chapter~\ref{chapter:Bio.SeqIO} will explain the \verb|SeqIO| functi
 25
 >>> print record.seq
 CCCTTCTTGTCTTCAGCGTTTCTCC
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> print record.letter_annotations["phred_quality"]
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
 26, 26, 26, 23, 23]
@@ -2006,6 +2133,7 @@ you think the \texttt{TTT} should be only \texttt{TT}. We can make a new edited
 record by first slicing the \verb|SeqRecord| before and after the ``extra''
 third \texttt{T}:
 
+%cont-doctest
 \begin{verbatim}
 >>> left = record[:20]
 >>> print left.seq
@@ -2021,12 +2149,15 @@ CTCC
 
 \noindent Now add the two parts together:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited = left + right
 >>> len(edited)
 24
 >>> print edited.seq
 CCCTTCTTGTCTTCAGCGTTCTCC
+\end{verbatim}
+\begin{verbatim}
 >>> print edited.letter_annotations["phred_quality"]
 [26, 26, 18, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 22, 26, 26, 26, 26,
 26, 26, 23, 23]
@@ -2034,6 +2165,7 @@ CCCTTCTTGTCTTCAGCGTTCTCC
 
 \noindent Easy and intuitive? We hope so! You can make this shorter with just:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited = record[:20] + record[21:]
 \end{verbatim}
@@ -2041,20 +2173,30 @@ CCCTTCTTGTCTTCAGCGTTCTCC
 Now, for an example with features, we'll use a GenBank file.
 Suppose you have a circular genome:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> record = SeqIO.read("NC_005816.gb", "genbank")
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> record
 SeqRecord(seq=Seq('TGTAACGAACGGTGCAATAGTGATCCACACCCAACGCCTGAAATCAGATCCAGG...CTG',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=['Project:10638'])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(record)
 9609
 >>> len(record.features)
 29
 >>> record.dbxrefs
 ['Project:10638']
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> record.annotations.keys()
 ['comment', 'sequence_version', 'source', 'taxonomy', 'keywords', 'references',
 'accessions', 'data_file_division', 'date', 'organism', 'gi']
@@ -2062,13 +2204,20 @@ dbxrefs=['Project:10638'])
 
 You can shift the origin like this:
 
+%cont-doctest
 \begin{verbatim}
 >>> shifted = record[2000:] + record[:2000]
+\end{verbatim}
+%TODO - doctest wrapping
+\begin{verbatim}
 >>> shifted
 SeqRecord(seq=Seq('GATACGCAGTCATATTTTTTACACAATTCTCTAATCCCGACAAGGTCGTAGGTC...GGA',
 IUPACAmbiguousDNA()), id='NC_005816.1', name='NC_005816',
 description='Yersinia pestis biovar Microtus str. 91001 plasmid pPCP1, complete sequence.',
 dbxrefs=[])
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> len(shifted)
 9609
 \end{verbatim}
@@ -2076,12 +2225,13 @@ dbxrefs=[])
 Note that this isn't perfect in that some annotation like the database cross references
 and one of the features (the source feature) have been lost:
 
+%cont-doctest
 \begin{verbatim}
 >>> len(shifted.features)
 28
 >>> shifted.dbxrefs
 []
->>> record.annotations.keys()
+>>> shifted.annotations.keys()
 []
 \end{verbatim}
 
@@ -2406,6 +2556,7 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
+Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
@@ -2430,6 +2581,7 @@ alias for ``genbank'' in \verb|Bio.SeqIO|.
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
+Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="gb", id="6273291")
 seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 handle.close()
@@ -2450,6 +2602,7 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 \begin{verbatim}
 from Bio import Entrez
 from Bio import SeqIO
+Entrez.email = "A.N.Other@example.com"
 handle = Entrez.efetch(db="nucleotide", rettype="gb", \
                        id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "gb"):
@@ -2541,9 +2694,10 @@ You can use the function \verb|Bio.SeqIO.to_dict()| to make a SeqRecord dictiona
 (in memory).  By default this will use each record's identifier (i.e. the \verb|.id|
 attribute) as the key.  Let's try this using our GenBank file:
 
+%doctest examples
 \begin{verbatim}
-from Bio import SeqIO
-orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"))
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"))
 \end{verbatim}
 
 There is just one required argument for \verb|Bio.SeqIO.to_dict()|, a list or
@@ -2553,9 +2707,13 @@ Python dictionary.
 
 Since this variable \verb|orchid_dict| is an ordinary Python dictionary, we can look at all of the keys we have available:
 
+%cont-doctest
 \begin{verbatim}
 >>> len(orchid_dict)
 94
+\end{verbatim}
+%Can't use following for doctest due to abbreviation
+\begin{verbatim}
 >>> print orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
 \end{verbatim}
@@ -2568,10 +2726,11 @@ If you really want to, you can even look at all the records at once:
 
 We can access a single \verb|SeqRecord| object via the keys and manipulate the object as normal:
 
+%cont-doctest
 \begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print seq_record.description
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> print repr(seq_record.seq)
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
@@ -2580,7 +2739,7 @@ So, it is very easy to create an in memory ``database'' of our GenBank records. 
 
 Note that those of you with prior Python experience should all be able to construct a dictionary like this ``by hand''.  However, typical dictionary construction methods will not deal with the case of repeated keys very nicely.  Using the \verb|Bio.SeqIO.to_dict()| will explicitly check for duplicate keys, and raise an exception if any are found.
 
-\subsection{Specifying the dictionary keys}
+\subsubsection{Specifying the dictionary keys}
 \label{seq:seqio-todict-functionkey}
 
 Using the same code as above, but for the FASTA file instead:
@@ -2630,7 +2789,7 @@ print orchid_dict.keys()
 
 \noindent Not too complicated, I hope!
 
-\subsection{Indexing a dictionary using the SEGUID checksum}
+\subsubsection{Indexing a dictionary using the SEGUID checksum}
 
 To give another example of working with dictionaries of \verb|SeqRecord| objects, we'll use the SEGUID checksum function.  This is a relatively recent checksum, and collisions should be very rare (i.e. two different sequences with the same checksum), an improvement on the CRC64 checksum.
 
@@ -2654,19 +2813,22 @@ Z78439.1 H+JfaShya/4yyAj7IbMqgNkxdxQ
 
 Now, recall the \verb|Bio.SeqIO.to_dict()| function's \verb|key_function| argument expects a function which turns a \verb|SeqRecord| into a string.  We can't use the \verb|seguid()| function directly because it expects to be given a \verb|Seq| object (or a string).  However, we can use Python's \verb|lambda| feature to create a ``one off'' function to give to \verb|Bio.SeqIO.to_dict()| instead:
 
+%doctest examples
 \begin{verbatim}
-from Bio import SeqIO
-from Bio.SeqUtils.CheckSum import seguid
-seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
-                            lambda rec : seguid(rec.seq))
-record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
-print record.id
-print record.description
+>>> from Bio import SeqIO
+>>> from Bio.SeqUtils.CheckSum import seguid
+>>> seguid_dict = SeqIO.to_dict(SeqIO.parse("ls_orchid.gbk", "genbank"),
+...                             lambda rec : seguid(rec.seq))
+>>> record = seguid_dict["MN/s0q9zDoCVEEc+k/IFwCNF2pY"]
+>>> print record.id
+Z78532.1
+>>> print record.description
+C.californicum 5.8S rRNA gene and ITS1 and ITS2 DNA.
 \end{verbatim}
 
 \noindent That should have retrieved the record {\tt Z78532.1}, the second entry in the file.
 
-\section{Sequence files as Dictionaries -- Indexed files}
+\subsection{Sequence files as Dictionaries -- Indexed files}
 %\subsection{Indexing really large files}
 \label{sec:SeqIO-index}
 
@@ -2684,16 +2846,23 @@ it on demand.
 
 As an example, let's use the same GenBank file as before:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
 >>> len(orchid_dict)
 94
+\end{verbatim}
+%Following is abbr.
+\begin{verbatim}
 >>> orchid_dict.keys()
 ['Z78484.1', 'Z78464.1', 'Z78455.1', 'Z78442.1', 'Z78532.1', 'Z78453.1', ..., 'Z78471.1']
+\end{verbatim}
+%cont-doctest
+\begin{verbatim}
 >>> seq_record = orchid_dict["Z78475.1"]
 >>> print seq_record.description
-P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA
+P.supardii 5.8S rRNA gene and ITS1 and ITS2 DNA.
 >>> seq_record.seq
 Seq('CGTAACAAGGTTTCCGTAGGTGAACCTGCGGAAGGATCATTGTTGAGATCACAT...GGT', IUPACAmbiguousDNA())
 \end{verbatim}
@@ -2720,7 +2889,7 @@ filename and the format name:
  ..., 'gi|2765613|emb|Z78488.1|PTZ78488', 'gi|2765583|emb|Z78458.1|PHZ78458']
 \end{verbatim}
 
-\subsection{Specifying the dictionary keys}
+\subsubsection{Specifying the dictionary keys}
 \label{seq:seqio-index-functionkey}
 
 Suppose you want to use the same keys as before? Much like with the
@@ -2751,7 +2920,7 @@ function to use in building the dictionary:
 
 \noindent Easy when you know how?
 
-\subsection{Getting the raw data for a record}
+\subsubsection{Getting the raw data for a record}
 \label{sec:seqio-index-getraw}
 
 The dictionary-like object from \verb|Bio.SeqIO.index()| gives you each
@@ -2787,12 +2956,63 @@ There is a longer example in Section~\ref{sec:SeqIO-sort} using the
 \verb|SeqIO.index()| function to sort a large sequence file (without
 loading everything into memory at once).
 
-\section{Sequence files as Dictionaries -- Database indexed files}
+\subsection{Sequence files as Dictionaries -- Database indexed files}
 \label{sec:SeqIO-index-db}
 
 Biopython 1.57 introduced an alternative, \verb|Bio.SeqIO.index_db()|, which
 can work on even extremely large files since it stores the record information
-as a file on disk (using an SQLite3 database) rather than in memory.
+as a file on disk (using an SQLite3 database) rather than in memory. Also,
+you can index multiple files together (providing all the record identifiers
+are unique).
+
+The \verb|Bio.SeqIO.index()| function takes three required arguments:
+\begin{itemize}
+\item Index filename, we suggest using something ending \texttt{.idx}.
+This index file is actually an SQLite3 database.
+\item List of sequence filenames to index (or a single filename)
+\item File format (lower case string as used in the rest of the
+\verb|SeqIO| module).
+\end{itemize}
+
+As an example, consider the GenBank flat file releases from the NCBI FTP site,
+\url{ftp://ftp.ncbi.nih.gov/genbank/}, which are gzip compressed GenBank files.
+As of GenBank release $182$, there are $16$ files making up the viral sequences,
+\texttt{gbvrl1.seq}, \ldots, \texttt{gbvrl16.seq}, containing in total almost
+one million records. You can index them like this:
+
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> files = ["gbvrl%i.seq" % (i+1) for i in range(16)]
+>>> gb_vrl = SeqIO.index_db("gbvrl.idx", files, "genbank")
+>>> print "%i sequences indexed" % len(gb_vrl)
+958086 sequences indexed
+\end{verbatim}
+
+That takes about two minutes to run on my machine. If you rerun it then the
+index file (here \texttt{gbvrl.idx}) is reloaded in under a second. You can
+use the index as a read only Python dictionary - without having to worry
+about which file the sequence comes from, e.g.
+
+\begin{verbatim}
+>>> print gb_vrl["GQ333173.1"].description
+HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial cds.
+\end{verbatim}
+
+\subsubsection{Getting the raw data for a record}
+
+Just as with the \verb|Bio.SeqIO.index()| function discussed above in
+Section~\ref{sec:seqio-index-getraw}, the dictionary like object also lets you
+get at the raw text of each record:
+
+\begin{verbatim}
+>>> print gb_vrl.get_raw("GQ333173.1")
+LOCUS       GQ333173                 459 bp    DNA     linear   VRL 21-OCT-2009
+DEFINITION  HIV-1 isolate F12279A1 from Uganda gag protein (gag) gene, partial
+            cds.
+ACCESSION   GQ333173
+...
+//
+\end{verbatim}
 
 \subsection{Discussion}
 \label{sec:SeqIO-indexing-discussion}
@@ -2808,7 +3028,7 @@ Reasons to choose \verb|Bio.SeqIO.to_dict()| over either
 for flexibility despite its high memory needs. The advantage of storing the
 \verb|SeqRecord| objects in memory is they can be changed, added to, or
 removed at will. In addition to the downside of high memory consumption,
-indexing can also take longer because all the recorda must be fully parsed.
+indexing can also take longer because all the records must be fully parsed.
 
 Both \verb|Bio.SeqIO.index()| and \verb|Bio.SeqIO.index_db()| only parse
 records on demand. When indexing, they scan the file once looking for the
@@ -2818,9 +3038,9 @@ identifier.
 Reasons to choose \verb|Bio.SeqIO.index()| over \verb|Bio.SeqIO.index_db()|
 include:
 \begin{itemize}
-\item Faster to build the index
+\item Faster to build the index (more noticeable in simple file formats)
 \item Slightly faster access as SeqRecord objects (but the difference is only
-really noticable for simple to parse file formats).
+really noticeable for simple to parse file formats).
 \item Can use any immutable Python object as the dictionary keys (e.g. a
 tuple of strings, or a frozen set) not just strings.
 \item Don't need to worry about the index database being out of date if the
@@ -3167,15 +3387,17 @@ COATB_BPIF1/22-73             FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVS
 
 This is the seed alignment for the Phage\_Coat\_Gp8 (PF05371) PFAM entry, downloaded from a now out of date release of PFAM from \url{http://pfam.sanger.ac.uk/}.  We can load this file as follows (assuming it has been saved to disk as ``PF05371\_seed.sth'' in the current working directory):
 
+%doctest examples
 \begin{verbatim}
-from Bio import AlignIO
-alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
-print alignment
+>>> from Bio import AlignIO
+>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 \end{verbatim}
 
 \noindent This code will print out a summary of the alignment:
 
+%cont-doctest
 \begin{verbatim}
+>>> print alignment
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRL...SKA COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKL...SRA Q9T0Q8_BPIKE/1-52
@@ -3188,18 +3410,14 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 
 You'll notice in the above output the sequences have been truncated.  We could instead write our own code to format this as we please by iterating over the rows as \verb|SeqRecord| objects:
 
+%doctest examples
 \begin{verbatim}
-from Bio import AlignIO
-alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
-print "Alignment length %i" % alignment.get_alignment_length()
-for record in alignment:
-    print "%s - %s" % (record.seq, record.id)
-\end{verbatim}
-
-\noindent This will give the following output:
-
-\begin{verbatim}
+>>> from Bio import AlignIO
+>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
+>>> print "Alignment length %i" % alignment.get_alignment_length()
 Alignment length 52
+>>> for record in alignment:
+...     print "%s - %s" % (record.seq, record.id)
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
 AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
 DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
@@ -3213,15 +3431,11 @@ You could also use the alignment object's \verb|format| method to show it in a p
 
 Did you notice in the raw file above that several of the sequences include database cross-references to the PDB and the associated known secondary structure?  Try this:
 
+%cont-doctest
 \begin{verbatim}
-for record in alignment:
-    if record.dbxrefs:
-        print record.id, record.dbxrefs
-\end{verbatim}
-
-\noindent giving:
-
-\begin{verbatim}
+>>> for record in alignment:
+...     if record.dbxrefs:
+...         print record.id, record.dbxrefs
 COATB_BPIKE/30-81 ['PDB; 1ifl ; 1-52;']
 COATB_BPM13/24-72 ['PDB; 2cpb ; 1-49;', 'PDB; 2cps ; 1-49;']
 Q9T0Q9_BPFD/1-49 ['PDB; 1nh4 A; 1-49;']
@@ -3231,8 +3445,8 @@ COATB_BPIF1/22-73 ['PDB; 1ifk ; 1-50;']
 \noindent To have a look at all the sequence annotation, try this:
 
 \begin{verbatim}
-for record in alignment:
-    print record
+>>> for record in alignment:
+...     print record
 \end{verbatim}
 
 Sanger provide a nice web interface at \url{http://pfam.sanger.ac.uk/family?acc=PF05371} which will actually let you download this alignment in several other formats.  This is what the file looks like in the FASTA file format:
@@ -3703,12 +3917,21 @@ First of all, in some senses the alignment objects act like a Python \verb|list|
 of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecord|)
 make sense:
 
+%doctest examples
 \begin{verbatim}
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
->>> print "Number of rows: %i" % len(align)
+>>> print "Number of rows: %i" % len(alignment)
+Number of rows: 7
 >>> for record in alignment:
 ...     print "%s - %s" % (record.seq, record.id)
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA - COATB_BPIKE/30-81
+AEPNAATNYATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA - Q9T0Q8_BPIKE/1-52
+DGTSTATSYATEAMNSLKTQATDLIDQTWPVVTSVAVAGLAIRLFKKFSSKA - COATB_BPI22/32-83
+AEGDDP---AKAAFNSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - COATB_BPM13/24-72
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFASKA - COATB_BPZJ2/1-49
+AEGDDP---AKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA - Q9T0Q9_BPFD/1-49
+FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA - COATB_BPIF1/22-73
 \end{verbatim}
 
 You can also use the list-like \verb|append| and \verb|extend| methods to add
@@ -3716,6 +3939,7 @@ more rows to the alignment (as \verb|SeqRecord| objects). Keeping the list
 metaphor in mind, simple slicing of the alignment should also make sense -
 it selects some of the rows giving back another alignment object:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment
 SingleLetterAlphabet() alignment with 7 rows and 52 columns
@@ -3737,6 +3961,7 @@ FAADDATSQAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKL...SRA COATB_BPIF1/22-73
 What if you wanted to select by column? Those of you who have used the NumPy
 matrix or array objects won't be surprised at this - you use a double index.
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[2,6]
 T
@@ -3744,6 +3969,7 @@ T
 
 \noindent Using two integer indices pulls out a single letter, short hand for this:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[2].seq[6]
 T
@@ -3751,6 +3977,7 @@ T
 
 You can pull out a single column as a string like this:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[:,6]
 TTT---T
@@ -3759,6 +3986,7 @@ TTT---T
 You can also select a range of columns. For example, to pick out those same
 three rows we extracted earlier, but take just their first six columns:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[3:6,:6]
 SingleLetterAlphabet() alignment with 3 rows and 6 columns
@@ -3769,6 +3997,7 @@ AEGDDP Q9T0Q9_BPFD/1-49
 
 Leaving the first index as \verb|:| means take all the rows:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[:,:6]
 SingleLetterAlphabet() alignment with 7 rows and 6 columns
@@ -3784,6 +4013,7 @@ FAADDA COATB_BPIF1/22-73
 This brings us to a neat way to remove a section. Notice columns
 7, 8 and 9 which are gaps in three of the seven sequences:
 
+%cont-doctest
 \begin{verbatim}
 >>> print alignment[:,6:9]
 SingleLetterAlphabet() alignment with 7 rows and 3 columns
@@ -3798,7 +4028,9 @@ TSQ COATB_BPIF1/22-73
 
 \noindent Again, you can slice to get everything after the ninth column:
 
-\begin{verbatim}>>> print alignment[:,9:]
+%cont-doctest
+\begin{verbatim}
+>>> print alignment[:,9:]
 SingleLetterAlphabet() alignment with 7 rows and 43 columns
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIRLFKKFSSKA COATB_BPIKE/30-81
 ATEAMDSLKTQAIDLISQTWPVVTTVVVAGLVIKLFKKFVSRA Q9T0Q8_BPIKE/1-52
@@ -3812,6 +4044,7 @@ AKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 \noindent Now, the interesting thing is that addition of alignment objects works
 by column. This lets you do this as a way to remove a block of columns:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited = alignment[:,:6] + alignment[:,9:]
 >>> print edited
@@ -3831,6 +4064,7 @@ need to match up (see Section~\ref{{sec:SeqRecord-addition}} for how adding
 \verb|SeqRecord| objects works). You may find it helpful to first sort the
 alignment rows alphabetically by id:
 
+%cont-doctest
 \begin{verbatim}
 >>> edited.sort()
 >>> print edited
@@ -3918,6 +4152,7 @@ By default ClustalW will generate an alignment and guide tree file with names
 based on the input FASTA file, in this case \texttt{opuntia.aln} and
 \texttt{opuntia.dnd}, but you can override this or make it explicit:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> cline = ClustalwCommandline("clustalw2", infile="opuntia.fasta")
@@ -3939,12 +4174,16 @@ either update your PATH setting to include the location of your copy of
 ClustalW tools (how you do this will depend on your OS), or simply type in
 the full path of the tool. For example:
 
+%doctest
 \begin{verbatim}
 >>> import os
 >>> from Bio.Align.Applications import ClustalwCommandline
 >>> clustalw_exe = r"C:\Program Files\new clustal\clustalw2.exe"
->>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
 >>> clustalw_cline = ClustalwCommandline(clustalw_exe, infile="opuntia.fasta")
+\end{verbatim}
+%Don't run it in the doctest
+\begin{verbatim}
+>>> assert os.path.isfile(clustalw_exe), "Clustal W executable missing"
 >>> stdout, stderr = clustalw_cline()
 \end{verbatim}
 
@@ -4045,6 +4284,7 @@ For the most basic usage, all you need is to have a FASTA input file, such as
 code). You can then tell MUSCLE to read in this FASTA file, and write the
 alignment to an output file:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.txt")
@@ -4061,6 +4301,7 @@ sequences). The \verb|Bio.AlignIO| module should be able to read this
 alignment using \texttt{format="fasta"}.
 You can also ask for ClustalW-like output:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clw=True)
@@ -4071,6 +4312,7 @@ muscle -in opuntia.fasta -out opuntia.aln -clw
 Or, strict ClustalW output where the original ClustalW header line is
 used for maximum compatibility:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> cline = MuscleCommandline(input="opuntia.fasta", out="opuntia.aln", clwstrict=True)
@@ -4100,6 +4342,7 @@ standard out (stdout) or standard error (stderr) handles. However, by default
 MUSCLE will write the alignment to standard output (stdout). We can take
 advantage of this to avoid having a temporary output file! For example:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(input="opuntia.fasta")
@@ -4164,6 +4407,7 @@ First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects
 For this demonstration I'm going to use a filtered version of the original FASTA
 file (using a generator expression), taking just six of the seven sequences:
 
+%doctest
 \begin{verbatim}
 >>> from Bio import SeqIO
 >>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
@@ -4173,6 +4417,7 @@ Then we create the MUSCLE command line, leaving the input and output to their
 defaults (stdin and stdout). I'm also going to ask for strict ClustalW format
 as for the output.
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Align.Applications import MuscleCommandline
 >>> muscle_cline = MuscleCommandline(clwstrict=True)
@@ -4258,12 +4503,13 @@ KEFTPPVQAAYQKVVAGVANALAHKYH
 
 Let's start by creating a complete \texttt{needle} command line object in one go:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(asequence="alpha.faa", bsequence="beta.faa",
 ...                                  gapopen=10, gapextend=0.5, outfile="needle.txt")
 >>> print needle_cline
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 \end{verbatim}
 
 Why not try running this by hand at the command prompt? You should see it does a
@@ -4276,6 +4522,7 @@ probably means that the EMBOSS tools are not on your PATH environment
 variable. You can either update your PATH setting, or simply tell Biopython
 the full path to the tool, for example:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline(r"C:\EMBOSS\needle.exe",
@@ -4298,6 +4545,7 @@ Biopython help text:
 
 Note that you can also specify (or change or look at) the settings like this:
 
+%doctest
 \begin{verbatim}
 >>> from Bio.Emboss.Applications import NeedleCommandline
 >>> needle_cline = NeedleCommandline()
@@ -4307,7 +4555,7 @@ Note that you can also specify (or change or look at) the settings like this:
 >>> needle_cline.gapextend=0.5
 >>> needle_cline.outfile="needle.txt"
 >>> print needle_cline
-needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5 
+needle -outfile=needle.txt -asequence=alpha.faa -bsequence=beta.faa -gapopen=10 -gapextend=0.5
 >>> print needle_cline.outfile
 needle.txt
 \end{verbatim}
@@ -4404,6 +4652,7 @@ documentation, or that built into Biopython:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> help(NCBIWWW.qblast)
+...
 \end{verbatim}
 
 Note that the default settings on the NCBI BLAST website are not quite
@@ -4523,17 +4772,19 @@ and there are also other tools which can produce imitation BLAST output files, s
 
 \href{http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download}
 {NCBI ``legacy'' BLAST} included command line tools \verb|blastall|, \verb|blastpgp| and
-\verb|rpsblast|. This is probably the most widely used standalone BLAST tool at the moment.
+\verb|rpsblast|. This was the most widely used standalone BLAST tool up until its replacement
+BLAST+ was released by the NCBI.
 
 The \verb|Bio.Blast.Applications| module has wrappers for the ``legacy'' NCBI BLAST tools
 like \verb|blastall|, \verb|blastpgp| and \verb|rpsblast|, and there are also helper
 functions in \verb|Bio.Blast.NCBIStandalone|. These are now considered obsolete, and will
-be deprecated and eventually removed from Biopython as the NCBI move over to the replacement
+be deprecated and eventually removed from Biopython as people move over to the replacement
 BLAST+ suite.
 
 To try and avoid confusion, we will not cover calling these old tools from Biopython
 in this tutorial. Have a look at the older edition of this tutorial included with
-Biopython 1.52 if you are curious.
+Biopython 1.52 if you are curious (look at the Tutorial PDF or HTML file in the Doc
+directory within \texttt{biopython-1.52.tar.gz} or \texttt{biopython-1.52.zip}).
 
 \subsection{Standalone NCBI BLAST+}
 
@@ -4544,6 +4795,9 @@ like \verb|blastn|, \verb|blastp|, \verb|blastx|, \verb|tblastn|, \verb|tblastx|
 (which all used to be handled by \verb|blastall|), \verb|psiblast|
 (replacing \verb|blastpgp|) and \verb|rpsblast| and \verb|rpstblastn|
 (which replace the old \verb|rpsblast|).
+We don't include a wrapper for the \verb|makeblastdb| used in BLAST+ to build a
+local BLAST database from FASTA file, nor the equivalent tool \verb|formatdb| in
+``legacy'' BLAST.
 
 This section will show briefly how to use these tools from within Python. If you have
 already read or tried the alignment tool examples in Section~\ref{sec:alignment-tools}
@@ -4576,10 +4830,10 @@ and run it:
 >>> blastx_cline = NcbiblastxCommandline(query="opuntia.fasta", db="nr", evalue=0.001,
 ...                                      outfmt=5, out="opuntia.xml")
 >>> blastx_cline
-NcbiblastxCommandline(cmd='blastx', query='opuntia.fasta', db='nr', out='opuntia.xml',
-evalue=0.001, outfmt=5)
+NcbiblastxCommandline(cmd='blastx', out='opuntia.xml', outfmt=5, query='opuntia.fasta',
+db='nr', evalue=0.001)
 >>> print blastx_cline
-blastx -query opuntia.fasta -db nr -out opuntia.xml -evalue 0.001 -outfmt 5
+blastx -out opuntia.xml -outfmt 5 -query opuntia.fasta -db nr -evalue 0.001
 >>> stdout, stderr = blastx_cline()
 \end{verbatim}
 
@@ -5024,7 +5278,7 @@ For the DOM and SAX parsers, see the Python documentation. The parser in \verb+B
 
 NCBI uses DTD (Document Type Definition) files to describe the structure of the information contained in XML files. Most of the DTD files used by NCBI are included in the Biopython distribution. The \verb+Bio.Entrez+ parser makes use of the DTD files when parsing an XML file returned by NCBI Entrez.
 
-Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will show a warning message with the name and URL of the missing DTD file. The parser will proceed to access the missing DTD file through the internet, allowing the parsing of the XML file to continue.  However, the parser is much faster if the DTD file is available locally. For this purpose, please download the DTD file from the URL in the warning message and place it in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files.  If you don't have write access to this directory, you can also place the DTD file in \verb+~/.biopython/Bio/Entrez/DTDs+, where \verb+~+ represents your home directory, Alternatively, if you installed Biopython from source, you can add the DTD file to the source code's \verb+Bio/Entrez/DTDs+ directory, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
+Occasionally, you may find that the DTD file associated with a specific XML file is missing in the Biopython distribution. In particular, this may happen when NCBI updates its DTD files. If this happens, \verb+Entrez.read+ will show a warning message with the name and URL of the missing DTD file. The parser will proceed to access the missing DTD file through the internet, allowing the parsing of the XML file to continue.  However, the parser is much faster if the DTD file is available locally. For this purpose, please download the DTD file from the URL in the warning message and place it in the directory \verb+...site-packages/Bio/Entrez/DTDs+, containing the other DTD files.  If you don't have write access to this directory, you can also place the DTD file in \verb+~/.biopython/Bio/Entrez/DTDs+, where \verb+~+ represents your home directory. Since this directory is read before the directory \verb+...site-packages/Bio/Entrez/DTDs+, you can also put newer versions of DTD files there if the ones in \verb+...site-packages/Bio/Entrez/DTDs+ become outdated. Alternatively, if you installed Biopython from source, you can add the DTD file to the source code's \verb+Bio/Entrez/DTDs+ directory, and reinstall Biopython. This will install the new DTD file in the correct location together with the other DTD files.
 
 The Entrez Programming Utilities can also generate output in other formats, such as the Fasta or GenBank file formats for sequence databases, or the MedLine format for the literature database, discussed in Section~\ref{sec:entrez-specialized-parsers}.
 
@@ -5726,15 +5980,20 @@ AB  - Bioinformatics research is often difficult to do with commercial software.
 ...
 \end{verbatim}
 We first open the file and then parse it:
+%doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
 >>> input = open("pubmed_result1.txt")
 >>> record = Medline.read(input)
 \end{verbatim}
 The \verb+record+ now contains the Medline record as a Python dictionary:
+%cont-doctest
 \begin{verbatim}
 >>> record["PMID"]
 '12230038'
+\end{verbatim}
+%TODO - doctest wrapping?
+\begin{verbatim}
 >>> record["AB"]
 'Bioinformatics research is often difficult to do with commercial software.
 The Open Source BioPerl, BioPython and Biojava projects provide toolkits with
@@ -5751,6 +6010,7 @@ The key names used in a Medline record can be rather obscure; use
 for a brief summary.
 
 To parse a file containing multiple Medline records, you can use the \verb+parse+ function instead:
+%doctest ../Tests/Medline
 \begin{verbatim}
 >>> from Bio import Medline
 >>> input = open("pubmed_result2.txt")
@@ -6668,6 +6928,7 @@ In this example, the first line shows the EC (Enzyme Commission) number of lipop
 
 In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Record| class. This record derives from a Python dictionary and has keys corresponding to the two-letter codes used in Enzyme files. To read an Enzyme file containing one Enzyme record, use the \verb+read+ function in \verb|Bio.ExPASy.Enzyme|:
 
+%doctest ../Tests/Enzymes
 \begin{verbatim}
 >>> from Bio.ExPASy import Enzyme
 >>> handle = open("lipoprotein.txt")
@@ -6680,11 +6941,14 @@ In Biopython, an Enzyme record is represented by the \verb|Bio.ExPASy.Enzyme.Rec
 ['Clearing factor lipase.', 'Diacylglycerol lipase.', 'Diglyceride lipase.']
 >>> record["CA"]
 'Triacylglycerol + H(2)O = diacylglycerol + a carboxylate.'
+>>> record["PR"]
+['PDOC00110']
+\end{verbatim}
+%TODO - line wrapping?
+\begin{verbatim}
 >>> record["CC"]
 ['Hydrolyzes triacylglycerols in chylomicrons and very low-density lipoproteins
 (VLDL).', 'Also hydrolyzes diacylglycerol.']
->>> record["PR"]
-['PDOC00110']
 >>> record["DR"]
 [['P11151', 'LIPL_BOVIN'], ['P11153', 'LIPL_CAVPO'], ['P11602', 'LIPL_CHICK'],
 ['P55031', 'LIPL_FELCA'], ['P06858', 'LIPL_HUMAN'], ['P11152', 'LIPL_MOUSE'],
@@ -8074,10 +8338,6 @@ The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of Seq
 it aims to provide a common way to work with phylogenetic data independently of the source data
 format, as well as a consistent API for I/O operations.
 
-{\em Note:} Since Phylo is a relatively recent addition to Biopython, we anticipate parts of it
-may change in backwards-incompatible ways in future releases --- we'll try our best to avoid
-it, though.
-
 \section{Demo: What's in a Tree?}
 
 To get acquainted with the module, let's start with a tree that we've already constructed, and
@@ -8389,7 +8649,9 @@ Convert files between any of the supported formats with the \verb|convert| funct
 To use strings as input or output instead of actual files, use \verb|StringIO| as you would
 with SeqIO and AlignIO:
 
+%doctest
 \begin{verbatim}
+>>> from Bio import Phylo
 >>> from StringIO import StringIO
 >>> handle = StringIO("(((A,B),(C,D)),(E,F,G));")
 >>> tree = Phylo.read(handle, "newick")
@@ -8722,7 +8984,8 @@ newtree = copy.deepcopy(tree)
 
   \item[\texttt{collapse\_all}]
     Collapse all the descendents of this tree, leaving only terminals. Branch lengths are
-    preserved, i.e. the distance to each terminal stays the same.
+    preserved, i.e. the distance to each terminal stays the same. With a target specification
+    (see above), collapses only the internal nodes matching the specification.
 
   \item[\texttt{ladderize}]
     Sort clades in-place according to the number of terminal nodes.  Deepest clades are placed
@@ -8813,7 +9076,7 @@ releases:
 \end{description}
 
 We're open to any suggestions for improving the functionality and usability of this module;
-just let us know on the mailing list or Bugzilla.
+just let us know on the mailing list or our bug database.
 
 \chapter{Sequence motif analysis using Bio.Motif}
 \label{chap:bio_motif}
@@ -8837,28 +9100,34 @@ on commercial use.
 
 \section{Motif objects}
 \label{sec:object}
+
+%TODO - turn these into doctests...
 Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import 
 the Motif library:
+%doctest
 \begin{verbatim}
-from Bio import Motif
+>>> from Bio import Motif
 \end{verbatim}
 and we can start creating our first motif objects. Let's create a DNA motif:
+%cont-doctest
 \begin{verbatim}
-from Bio.Alphabet import IUPAC
-m=Motif.Motif(alphabet=IUPAC.unambiguous_dna)
+>>> from Bio.Alphabet import IUPAC
+>>> m = Motif.Motif(alphabet=IUPAC.unambiguous_dna)
 \end{verbatim}
 This is for now just an empty container, so let's add some sequences to our newly created motif:
+%cont-doctest
 \begin{verbatim}
-from Bio.Seq import Seq
-m.add_instance(Seq("TATAA",m.alphabet))
-m.add_instance(Seq("TATTA",m.alphabet))
-m.add_instance(Seq("TATAA",m.alphabet))
-m.add_instance(Seq("TATAA",m.alphabet))
+>>> from Bio.Seq import Seq
+>>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> m.add_instance(Seq("TATTA",m.alphabet))
+>>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> m.add_instance(Seq("TATAA",m.alphabet))
 \end{verbatim}
 Now we have a full \verb|Motif| instance, so we can try to get some
 basic information about it. Let's start with length and consensus
 sequence:
+%cont-doctest
 \begin{verbatim}
 >>> len(m)
 5
@@ -8866,22 +9135,25 @@ sequence:
 Seq('TATAA', IUPACUnambiguousDNA())
 \end{verbatim}
 In case of DNA motifs, we can also get a reverse complement of a motif:
+%>>> m.reverse_complement()
+%<Bio.Motif.Motif.Motif object at 0xb39890>
+%cont-doctest
 \begin{verbatim}
->>> m.reverse_complement()
-<Bio.Motif.Motif.Motif object at 0xb39890>
 >>> m.reverse_complement().consensus()
 Seq('TTATA', IUPACUnambiguousDNA())
->>> m.reverse_complement().instances  
-[Seq('TTATA', IUPACUnambiguousDNA()), 
- Seq('TAATA', IUPACUnambiguousDNA()), 
- Seq('TTATA', IUPACUnambiguousDNA()), 
- Seq('TTATA', IUPACUnambiguousDNA())]
+>>> for i in m.reverse_complement().instances:
+...     print i
+TTATA
+TAATA
+TTATA
+TTATA
 \end{verbatim}
 
 We can also calculate the information content of a motif with a simple call:
+%cont-doctest
 \begin{verbatim}
->>> m.ic()
-5.2735010263278932
+>>> print "%0.2f" % m.ic()
+5.27
 \end{verbatim}
 This gives us a number of bits of information provided by the motif,
 which tells us how much differs from background.
@@ -8914,6 +9186,7 @@ genome). It is by default set to a uniform distribution upon creation of a motif
 \end{verbatim}
 The other parameter is \verb|.beta|, which states the amount of
 pseudo-counts we should add to the PWM. By default it is set to $1.0$,
+%cont-doctest
 \begin{verbatim}
 >>> m.beta
 1.0
@@ -8966,18 +9239,22 @@ representation is based on instances or on some version of PWM matrix.
 On of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
  stores motifs in both formats, so
 let's look at how we can import JASPAR motifs from instances:
+%doctest ../Tests/Motif
 \begin{verbatim}
-arnt=Motif.read(open("Arnt.sites"),"jaspar-sites")
+>>> from Bio import Motif
+>>> arnt = Motif.read(open("Arnt.sites"),"jaspar-sites")
 \end{verbatim}
 and from a count matrix:
+%cont-doctest
 \begin{verbatim}
-srf=Motif.read(open("SRF.pfm"),"jaspar-pfm")
+>>> srf = Motif.read(open("SRF.pfm"),"jaspar-pfm")
 \end{verbatim}
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
 us, but they use different internal representations of the motif. We
 can tell that by inspecting the \verb|has_counts| and
 \verb|has_instances| properties:
+%cont-doctest
 \begin{verbatim}
 >>> arnt.has_instances
 True
@@ -8985,6 +9262,9 @@ True
 False
 >>> srf.has_counts
 True
+\end{verbatim}
+%TODO - sort order and formatting for doctest?
+\begin{verbatim}
 >>> srf.counts
 {'A': [2, 9, 0, 1, 32, 3, 46, 1, 43, 15, 2, 2],
  'C': [1, 33, 45, 45, 1, 1, 0, 0, 0, 1, 0, 1],
@@ -9400,6 +9680,8 @@ Gene pair & Intergene distance ($x_1$) & Gene expression score ($x_2$) & Class\\
 Table \ref{table:training} lists some of the {\it Bacillus subtilis} gene pairs for which the operon structure is known.
 Let's calculate the logistic regression model from these data:
 
+%NOTE - can't use this as a doctest in case NumPy is missing (Jython).
+%Also the ... are missing but that means the user can copy/paste the example.
 \begin{verbatim}
 >>> from Bio import LogisticRegression
 >>> xs = [[-53, -200.78],
@@ -10412,9 +10694,10 @@ website, \href{http://biopython.org/SRC/biopython/Tests/GenBank/NC_005816.gb}
 This file contains one and only one record, so we can read it in as a
 \verb|SeqRecord| using the \verb|Bio.SeqIO.read()| function:
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
-from Bio import SeqIO
-original_rec = SeqIO.read("NC_005816.gb","genbank")
+>>> from Bio import SeqIO
+>>> original_rec = SeqIO.read("NC_005816.gb","genbank")
 \end{verbatim}
 
 So, how can we generate a shuffled versions of the original sequence?  I would
@@ -10422,10 +10705,11 @@ use the built in Python \verb|random| module for this, in particular the functio
 \verb|random.shuffle| -- but this works on a Python list.  Our sequence is a
 \verb|Seq| object, so in order to shuffle it we need to turn it into a list:
 
+%cont-doctest
 \begin{verbatim}
-import random
-nuc_list = list(original_rec.seq)
-random.shuffle(nuc_list) #acts in situ!
+>>> import random
+>>> nuc_list = list(original_rec.seq)
+>>> random.shuffle(nuc_list) #acts in situ!
 \end{verbatim}
 
 Now, in order to use \verb|Bio.SeqIO| to output the shuffled sequence, we need
@@ -10434,11 +10718,12 @@ shuffled list.  In order to do this, we need to turn the list of nucleotides
 (single letter strings) into a long string -- the standard Python way to do
 this is with the string object's join method.
 
+%cont-doctest
 \begin{verbatim}
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet), \
-                         id="Shuffled", description="Based on %s" % original_rec.id)
+>>> from Bio.Seq import Seq
+>>> from Bio.SeqRecord import SeqRecord
+>>> shuffled_rec = SeqRecord(Seq("".join(nuc_list), original_rec.seq.alphabet),
+...                          id="Shuffled", description="Based on %s" % original_rec.id)
 \end{verbatim}
 
 Let's put all these pieces together to make a complete Python script which
@@ -10658,21 +10943,37 @@ working with quality data in a \verb|SeqRecord| object.  All we are going to
 do here is read in a file of FASTQ data, and filter it to pick out only those
 records whose PHRED quality scores are all above some threshold (here 20).
 
-For this example we'll use some real data downloaded from the NCBI,
-\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}
-(8MB) which unzips to a 23MB file \texttt{SRR014849.fastq}.
+For this example we'll use some real data downloaded from the ENA sequence
+read archive,
+\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}
+(2MB) which unzips to a 19MB file \texttt{SRR020192.fastq}. This is some
+Roche 454 GS FLX single end data from virus infected California sea lions
+(see \url{http://www.ebi.ac.uk/ena/data/view/SRS004476} for details).
+
+First, let's count the reads:
+
+\begin{verbatim}
+from Bio import SeqIO
+count = 0
+for rec in SeqIO.parse("SRR020192.fastq", "fastq"):
+    count += 1
+print "%i reads" % count
+\end{verbatim}
+
+\noindent Now let's do a simple filtering for a minimum PHRED quality of 20:
 
 \begin{verbatim}
 from Bio import SeqIO
 good_reads = (rec for rec in \
-              SeqIO.parse("SRR014849.fastq", "fastq") \
+              SeqIO.parse("SRR020192.fastq", "fastq") \
               if min(rec.letter_annotations["phred_quality"]) >= 20)
 count = SeqIO.write(good_reads, "good_quality.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-\noindent This pulled out only $412$ reads - maybe this dataset hasn't been
-quality trimmed yet?
+\noindent This pulled out only $14580$ reads out of the $41892$ present.
+A more sensible thing to do would be to quality trim the reads, but this
+is intended as an example only.
 
 FASTQ files can contain millions of entries, so it is best to avoid loading
 them all into memory at once.  This example uses a generator expression, which
@@ -10682,10 +10983,10 @@ limitations.
 \subsection{Trimming off primer sequences}
 \label{sec:FASTQ-slicing-off-primer}
 
-For this example we're going to pretend that \texttt{GTTGGAACCG} is a 3' primer
+For this example we're going to pretend that \texttt{GATGACGGTGT} is a 5' primer
 sequence we want to look for in some FASTQ formatted read data.  As in the example
-above, we'll use the \texttt{SRR014849.fastq} file downloaded from the NCBI
-(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+above, we'll use the \texttt{SRR020192.fastq} file downloaded from the ENA
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
 The same approach would work with any other supported file format (e.g. FASTA files).
 
 This code uses \verb|Bio.SeqIO| with a generator expression (to avoid loading
@@ -10695,34 +10996,34 @@ all the sequences into memory at once), and the \verb|Seq| object's
 \begin{verbatim}
 from Bio import SeqIO
 primer_reads = (rec for rec in \
-                SeqIO.parse("SRR014849.fastq", "fastq") \
-                if rec.seq.startswith("GTTGGAACCG"))
+                SeqIO.parse("SRR020192.fastq", "fastq") \
+                if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(primer_reads, "with_primer.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-\noindent That should find $500$ reads from \texttt{SRR014849.fastq} and save them to
+\noindent That should find $13819$ reads from \texttt{SRR014849.fastq} and save them to
 a new FASTQ file, \texttt{with\_primer.fastq}.
 
-Now suppose that instead you wanted to make a FASTQ file containing these $500$ reads
+Now suppose that instead you wanted to make a FASTQ file containing these reads
 but with the primer sequence removed?  That's just a small change as we can slice the
-\verb|SeqRecord| (see Section~\ref{sec:SeqRecord-slicing}) to remove the first ten
+\verb|SeqRecord| (see Section~\ref{sec:SeqRecord-slicing}) to remove the first eleven
 letters (the length of our primer):
 
 \begin{verbatim}
 from Bio import SeqIO
-trimmed_primer_reads = (rec[10:] for rec in \
-                        SeqIO.parse("SRR014849.fastq", "fastq") \
-                        if rec.seq.startswith("GTTGGAACCG"))
+trimmed_primer_reads = (rec[11:] for rec in \
+                        SeqIO.parse("SRR020192.fastq", "fastq") \
+                        if rec.seq.startswith("GATGACGGTGT"))
 count = SeqIO.write(trimmed_primer_reads, "with_primer_trimmed.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-\noindent Again, that should pull out the $500$ reads from \texttt{SRR014849.fastq},
+\noindent Again, that should pull out the $13819$ reads from \texttt{SRR020192.fastq},
 but this time strip off the first ten characters, and save them to another new
 FASTQ file, \texttt{with\_primer\_trimmed.fastq}.
 
-Finally, suppose you want to create a new FASTQ file where these $500$ reads have
+Finally, suppose you want to create a new FASTQ file where these reads have
 their primer removed, but all the other reads are kept as they were?
 If we want to still use a generator expression, it is probably clearest to
 define our own trim function:
@@ -10735,13 +11036,13 @@ def trim_primer(record, primer):
     else:
         return record
 
-trimmed_reads = (trim_primer(record, "GTTGGAACCG") for record in \
-                 SeqIO.parse("SRR014849.fastq", "fastq"))
+trimmed_reads = (trim_primer(record, "GATGACGGTGT") for record in \
+                 SeqIO.parse("SRR020192.fastq", "fastq"))
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq")
 print "Saved %i reads" % count
 \end{verbatim}
 
-This takes longer, as this time the output file contains all $94696$ reads.
+This takes longer, as this time the output file contains all $41892$ reads.
 Again, we're used a generator expression to avoid any memory problems.
 You could alternatively use a generator function rather than a generator
 expression.
@@ -10761,8 +11062,8 @@ def trim_primers(records, primer):
         else:
             yield record
 
-original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
-trimmed_reads = trim_primers(original_reads, "GTTGGAACCG")
+original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
+trimmed_reads = trim_primers(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
@@ -10774,9 +11075,9 @@ where only some of the records are retained -- as shown in the next example.
 \label{sec:FASTQ-slicing-off-adaptor}
 
 This is essentially a simple extension to the previous example. We are going
-to going to pretend \texttt{GTTGGAACCG} is an adaptor sequence in some FASTQ
-formatted read data, again the \texttt{SRR014849.fastq} file from the NCBI
-(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}).
+to going to pretend \texttt{GATGACGGTGT} is an adaptor sequence in some FASTQ
+formatted read data, again the \texttt{SRR020192.fastq} file from the NCBI
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}).
 
 This time however, we will look for the sequence \emph{anywhere} in the reads,
 not just at the very beginning:
@@ -10784,7 +11085,7 @@ not just at the very beginning:
 \begin{verbatim}
 from Bio import SeqIO
 
-def trim_adaptors(records, adaptor, min_len):
+def trim_adaptors(records, adaptor):
     """Trims perfect adaptor sequences.
     
     This is a generator function, the records argument should
@@ -10800,8 +11101,8 @@ def trim_adaptors(records, adaptor, min_len):
             #trim off the adaptor
             yield record[index+len_adaptor:]
 
-original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
-trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG")
+original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
+trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT")
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
@@ -10840,8 +11141,8 @@ def trim_adaptors(records, adaptor, min_len):
             #after trimming this will still be long enough
             yield record[index+len_adaptor:]
 
-original_reads = SeqIO.parse("SRR014849.fastq", "fastq")
-trimmed_reads = trim_adaptors(original_reads, "GTTGGAACCG", 36)
+original_reads = SeqIO.parse("SRR020192.fastq", "fastq")
+trimmed_reads = trim_adaptors(original_reads, "GATGACGGTGT", 100)
 count = SeqIO.write(trimmed_reads, "trimmed.fastq", "fastq") 
 print "Saved %i reads" % count
 \end{verbatim}
@@ -11011,19 +11312,19 @@ random access to the reads. Here the \verb|Bio.SeqIO.index()| function
 may prove very helpful, as it allows you to access any read in the FASTQ file
 by its name (see Section~\ref{sec:SeqIO-index}).
 
-Again we'll use the \texttt{SRR014849.fastq} file from the NCBI
-(\url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX003/SRX003639/SRR014849.fastq.gz}),
-although this is actually quite a small FASTQ file with less than $100,000$ reads:
+Again we'll use the \texttt{SRR020192.fastq} file from the ENA
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR020/SRR020192/SRR020192.fastq.gz}),
+although this is actually quite a small FASTQ file with less than $50,000$ reads:
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> fq_dict = SeqIO.index("SRR014849.fastq", "fastq")
+>>> fq_dict = SeqIO.index("SRR020192.fastq", "fastq")
 >>> len(fq_dict)
-94696
-fq_dict.keys()[:4]
-['SRR014849.80961', 'SRR014849.80960', 'SRR014849.80963', 'SRR014849.288943']
->>> fq_dict["SRR014849.171880"].seq
-Seq('AAAATCATCTCTGGCGCCCCGTTGGAACCGAAAGGGTTTGAATTCAAACCCTTT...CAG', SingleLetterAlphabet())
+41892
+>>> fq_dict.keys()[:4]
+['SRR020192.38240', 'SRR020192.23181', 'SRR020192.40568', 'SRR020192.23186']
+>>> fq_dict["SRR020192.23186"].seq
+Seq('GTCCCAGTATTCGGATTTGTCTGCCAAAACAATGAAATTGACACAGTTTACAAC...CCG', SingleLetterAlphabet())
 \end{verbatim}
 
 When testing this on a FASTQ file with seven million reads,
@@ -11112,28 +11413,25 @@ this time we'll start with a plain FASTA file with no pre-marked genes:
 {\texttt{NC\_005816.fna}}. This is a bacterial sequence, so we'll want to use
 NCBI codon table 11 (see Section~\ref{sec:translation} about translation).
 
+%doctest ../Tests/GenBank
 \begin{verbatim}
-from Bio import SeqIO 
-record = SeqIO.read("NC_005816.fna","fasta")
-table = 11
-min_pro_len = 100
+>>> from Bio import SeqIO 
+>>> record = SeqIO.read("NC_005816.fna","fasta")
+>>> table = 11
+>>> min_pro_len = 100
 \end{verbatim}
 
 Here is a neat trick using the \verb|Seq| object's \verb|split| method to
 get a list of all the possible ORF translations in the six reading frames:
 
+%cont-doctest
 \begin{verbatim}
-for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
-    for frame in range(3):
-        for pro in nuc[frame:].translate(table).split("*"):
-            if len(pro) >= min_pro_len:
-                print "%s...%s - length %i, strand %i, frame %i" \
-                      % (pro[:30], pro[-3:], len(pro), strand, frame)
-\end{verbatim}
-
-\noindent This should give:
-
-\begin{verbatim}
+>>> for strand, nuc in [(+1, record.seq), (-1, record.seq.reverse_complement())]:
+...     for frame in range(3):
+...         for pro in nuc[frame:].translate(table).split("*"):
+...             if len(pro) >= min_pro_len:
+...                 print "%s...%s - length %i, strand %i, frame %i" \
+...                       % (pro[:30], pro[-3:], len(pro), strand, frame)
 GCLMKKSSIVATIITILSGSANAASSQLIP...YRF - length 315, strand 1, frame 0
 KSGELRQTPPASSTLHLRLILQRSGVMMEL...NPE - length 285, strand 1, frame 1
 GLNCSFFSICNWKFIDYINRLFQIIYLCKN...YYH - length 176, strand 1, frame 1
@@ -11537,10 +11835,12 @@ matches in one color and the reverse matches in another.
 If you are working with second generation sequencing data, you may want to try plotting
 the quality data. Here is an example using two FASTQ files containing paired end reads,
 \texttt{SRR001666\_1.fastq} for the forward reads, and  \texttt{SRR001666\_2.fastq} for
-the reverse reads. These were downloaded from the NCBI short read archive (SRA) FTP site
-(see the \href{http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?cmd=viewer&m=data&s=viewer&run=SRR001666}
-{SRR001666 page} and \url{ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/}
-for details).
+the reverse reads. These were downloaded from the ENA sequence read archive FTP site
+(\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_1.fastq.gz} and
+\url{ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR001/SRR001666/SRR001666_2.fastq.gz}), and
+are from \textit{E. coli} -- see \url{http://www.ebi.ac.uk/ena/data/view/SRR001666}
+for details.
+%Originally from ftp://ftp.ncbi.nlm.nih.gov/sra/static/SRX000/SRX000430/
 
 In the following code the \verb|pylab.subplot(...)| function is used in order to show
 the forward and reverse qualities on two subplots, side by side. There is also a little
@@ -12390,7 +12690,7 @@ necessary in the current application.
 
 This is a very flexible framework, which is advantageous if you want to
 be able to parse a file format into more than one representation.  For
-example, the \verb|Bio.GenBank| module uses this construct either
+example, the \verb|Bio.GenBank| module uses this to construct either
 \verb|SeqRecord| objects or file-format-specific record objects.
 
 More recently, many of the parsers added for \verb|Bio.SeqIO| and
@@ -12683,8 +12983,8 @@ The main forums for discussing feature requests and potential bugs are the
 \end{itemize}
 
 Additionally, if you think you've found a bug, you can submit it to our
-bug-tracking page at \url{http://bugzilla.open-bio.org/}. This
-way, it won't get buried in anyone's Inbox and forgotten about.
+bug-tracking page at \url{http://redmine.open-bio.org/projects/biopython}.
+This way, it won't get buried in anyone's Inbox and forgotten about.
 
 \section{Mailing lists and helping newcomers}
 
@@ -12870,17 +13170,18 @@ One useful thing is to be able to turn information contained in a
 string into a handle. The following example shows how to do this using
 \verb|cStringIO| from the Python standard library:
 
+%doctest
 \begin{verbatim}
 >>> my_info = 'A string\n with multiple lines.'
 >>> print my_info
 A string
  with multiple lines.
->>> import cStringIO
->>> my_info_handle = cStringIO.StringIO(my_info)
+>>> from StringIO import StringIO
+>>> my_info_handle = StringIO(my_info)
 >>> first_line = my_info_handle.readline()
 >>> print first_line
 A string
-
+<BLANKLINE>
 >>> second_line = my_info_handle.readline()
 >>> print second_line
  with multiple lines.

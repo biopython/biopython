@@ -13,7 +13,7 @@ from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
 
 
-class MMCIFParser:
+class MMCIFParser(object):
     def get_structure(self, structure_id, filename):
         self._mmcif_dict=MMCIF2Dict(filename)
         self._structure_builder=StructureBuilder()

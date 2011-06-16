@@ -13,7 +13,7 @@ It is a simple container class, with list and dictionary like properties.
 """
 
 
-class Entity:
+class Entity(object):
     """
     Basic container object. Structure, Model, Chain and Residue
     are subclasses of Entity. It deals with storage and lookup.
@@ -139,7 +139,7 @@ class Entity:
 
 
 
-class DisorderedEntityWrapper:
+class DisorderedEntityWrapper(object):
     """
     This class is a simple wrapper class that groups a number of equivalent
     Entities and forwards all method calls to one of them (the currently selected 

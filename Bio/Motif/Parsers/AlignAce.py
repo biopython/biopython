@@ -11,7 +11,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
 
-class Record:
+class Record(object):
     def __init__(self):
         self.motifs=[]
         self.current_motif=None
@@ -59,7 +59,7 @@ from Bio.ParserSupport import *
 import Bio
 
 
-class AlignAceConsumer:
+class AlignAceConsumer(object):
     """
     The general purpose consumer for the AlignAceScanner (DEPRECATED).
 
@@ -132,7 +132,7 @@ class AlignAceParser(AbstractParser):
         self._scanner.feed(handle, self._consumer)
         return self._consumer
 
-class AlignAceScanner:
+class AlignAceScanner(object):
     """Scannner for AlignACE output (DEPRECATED).
 
     Methods:

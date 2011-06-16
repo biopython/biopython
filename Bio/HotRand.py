@@ -18,7 +18,7 @@ def byte_concat( text ):
 
     return val
 
-class HotCache:
+class HotCache(object):
 
     def __init__( self  ):
 #        self.url = 'http://www.fourmilab.ch/cgi-bin/uncgi/Hotbits?num=5000&min=1&max=6&col=1'
@@ -47,7 +47,7 @@ class HotCache:
 
 
 
-class HotRandom:
+class HotRandom(object):
 
     def __init__( self ):
         self.hot_cache = HotCache( )

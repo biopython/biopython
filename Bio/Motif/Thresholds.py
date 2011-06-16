@@ -7,7 +7,7 @@
 """
 import math,random
 
-class ScoreDistribution:
+class ScoreDistribution(object):
     """ Class representing approximate score distribution for a given motif.
 
     Utilizes a dynamic programming approch to calculate the distribution of

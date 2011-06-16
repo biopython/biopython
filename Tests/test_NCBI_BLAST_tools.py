@@ -204,16 +204,27 @@ class CheckCompleteArgList(unittest.TestCase):
         #will be seen as an extra argument on older versions:
         if "-seqidlist" in extra:
             extra.remove("-seqidlist")
+        if "-db_hard_mask" in extra \
+        and exe_name in ["blastn", "blastp", "blastx", "tblastx", "tblastn"]:
+            #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
+            extra.remove("-db_hard_mask")
+        if "-msa_master_idx" in extra and exe_name=="psiblast":
+            #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
+            extra.remove("-msa_master_idx")
+        if exe_name=="rpsblast":
+            #New in BLAST 2.2.25+ so will look like an extra arg on old BLAST
+            extra = extra.difference(["-best_hit_overhang",
+                                      "-best_hit_score_edge",
+                                      "-culling_limit"])
 
         if extra or missing:
-            raise MissingExternalDependencyError("BLAST+ and Biopython out "
-                  "of sync. Your version of the NCBI BLAST+ tool %s does not "
-                  "match what we are expecting. Please update your copy of "
-                  "Biopython, or report this issue if you are already using "
-                  "the latest version. (Exta args: %s; Missing: %s)" \
-                  % (exe_name,
-                     ",".join(sorted(extra)),
-                     ",".join(sorted(missing))))
+            import warnings
+            warnings.warn("NCBI BLAST+ %s and Biopython out sync. Please "
+                          "update Biopython, or report this issue if you are "
+                          "already using the latest version. (Exta args: %s; "
+                          "Missing: %s)" % (exe_name,
+                          ",".join(sorted(extra)),
+                          ",".join(sorted(missing))))
 
         #An almost trivial example to test any validation
         if "-query" in names:

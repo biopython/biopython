@@ -1,4 +1,4 @@
-# Copyright 2006-2010 by Peter Cock.  All rights reserved.
+# Copyright 2006-2011 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -12,12 +12,14 @@ Note
 ====
 In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
 a dot/period (".") in a sequence is interpreted as meaning the same
-character as in the first sequence.  The PHYLIP 3.6 documentation says:
+character as in the first sequence.  The PHYLIP documentation from 3.3 to 3.69
+http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 
    "a period was also previously allowed but it is no longer allowed,
    because it sometimes is used in different senses in other programs"
 
-At the time of writing, we do nothing special with a dot/period.
+Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
+for reading and writing. Older versions did nothing special with a dot/period.
 """
 
 from Bio.Seq import Seq
@@ -40,7 +42,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         http://evolution.genetics.washington.edu/phylip/doc/sequence.html
         http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
         """
-        truncate=10
+        truncate = 10
         handle = self.handle        
         
         if len(alignment)==0:
@@ -52,9 +54,39 @@ class PhylipWriter(SequentialAlignmentWriter):
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
         
-        if len(alignment) > len(set([r.id[:truncate] for r in alignment])):
-            raise ValueError("Repeated identifier, possibly due to truncation")
+        # Check for repeated identifiers...
+        # Apply this test *after* cleaning the identifiers
+        names = []
+        for record in alignment:
+            """
+            Quoting the PHYLIP version 3.6 documentation:
+            
+            The name should be ten characters in length, filled out to
+            the full ten characters by blanks if shorter. Any printable
+            ASCII/ISO character is allowed in the name, except for
+            parentheses ("(" and ")"), square brackets ("[" and "]"),
+            colon (":"), semicolon (";") and comma (","). If you forget
+            to extend the names to ten characters in length by blanks,
+            the program [i.e. PHYLIP] will get out of synchronization
+            with the contents of the data file, and an error message will
+            result.
 
+            Note that Tab characters count as only one character in the
+            species names. Their inclusion can cause trouble.
+            """
+            name = record.id.strip()
+            #Either remove the banned characters, or map them to something
+            #else like an underscore "_" or pipe "|" character...
+            for char in "[](),":
+                name = name.replace(char,"")
+            for char in ":;":
+                name = name.replace(char,"|")
+            name = name[:truncate]
+            if name in names:
+                raise ValueError("Repeated name %r (originally %r), "
+                                 "possibly due to truncation" \
+                                 % (name, record.id))
+            names.append(name)
 
         # From experimentation, the use of tabs is not understood by the
         # EMBOSS suite.  The nature of the expected white space is not
@@ -64,42 +96,21 @@ class PhylipWriter(SequentialAlignmentWriter):
         handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
         block=0
         while True:
-            for record in alignment:
+            for name, record in zip(names, alignment):
                 if block==0:
                     #Write name (truncated/padded to 10 characters)
-                    """
-                    Quoting the PHYLIP version 3.6 documentation:
-                    
-                    The name should be ten characters in length, filled out to
-                    the full ten characters by blanks if shorter. Any printable
-                    ASCII/ISO character is allowed in the name, except for
-                    parentheses ("(" and ")"), square brackets ("[" and "]"),
-                    colon (":"), semicolon (";") and comma (","). If you forget
-                    to extend the names to ten characters in length by blanks,
-                    the program [i.e. PHYLIP] will get out of synchronization
-                    with the contents of the data file, and an error message will
-                    result.
-
-                    Note that Tab characters count as only one character in the
-                    species names. Their inclusion can cause trouble.
-                    """
-                    name = record.id.strip()
-                    #Either remove the banned characters, or map them to something
-                    #else like an underscore "_" or pipe "|" character...
-                    for char in "[](),":
-                        name = name.replace(char,"")
-                    for char in ":;":
-                        name = name.replace(char,"|")
-
                     #Now truncate and right pad to expected length.
                     handle.write(name[:truncate].ljust(truncate))
                 else:
                     #write 10 space indent
                     handle.write(" "*truncate)
                 #Write five chunks of ten letters per line...
+                sequence = str(record.seq)
+                if "." in sequence:
+                    raise ValueError("PHYLIP format no longer allows dots in sequence")
                 for chunk in range(0,5):
                     i = block*50 + chunk*10
-                    seq_segment = record.seq.tostring()[i:i+10]
+                    seq_segment = sequence[i:i+10]
                     #TODO - Force any gaps to be '-' character?  Look at the alphabet...
                     #TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
@@ -172,7 +183,10 @@ class PhylipIterator(AlignmentIterator):
         for i in range(0,number_of_seqs):
             line = handle.readline().rstrip()
             ids.append(line[:10].strip()) #first ten characters
-            seqs.append([line[10:].strip().replace(" ","")])
+            s = line[10:].strip().replace(" ","")
+            if "." in s:
+                raise ValueError("PHYLIP format no longer allows dots in sequence")
+            seqs.append([s])
 
         #Look for further blocks
         line=""
@@ -190,7 +204,10 @@ class PhylipIterator(AlignmentIterator):
 
             #print "New block..."
             for i in range(0,number_of_seqs):
-                seqs[i].append(line.strip().replace(" ",""))
+                s = line.strip().replace(" ","")
+                if "." in s:
+                    raise ValueError("PHYLIP format no longer allows dots in sequence")
+                seqs[i].append(s)
                 line = handle.readline()
                 if (not line) and i+1 < number_of_seqs:
                     raise ValueError("End of file mid-block")

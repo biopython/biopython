@@ -5,9 +5,9 @@
 
 """Package for working with phylogenetic trees.
 
-See also: U{ http://biopython.org/wiki/Phylo }
+See also: http://biopython.org/wiki/Phylo
 """
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 from Bio.Phylo._io import parse, read, write, convert
 from Bio.Phylo._utils import (draw_ascii, draw_graphviz, to_networkx)

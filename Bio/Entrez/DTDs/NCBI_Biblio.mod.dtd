@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "biblio.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 12/20/2010 23:04:52
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 217677 $
 ****************************************************************
 
   NCBI Bibliographic data elements
@@ -37,7 +37,8 @@ $Revision: 1.1 $
           Cit-sub,
           Title,
           Author,
-          PubMedId -->
+          PubMedId,
+          DOI -->
 
 <!-- Elements referenced from other modules:
           Person-id,

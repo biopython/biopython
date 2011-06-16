@@ -4,7 +4,7 @@
 # as part of this package.
 
 # TODO - Can we replace this with the python built in set object?
-class HashSet:
+class HashSet(object):
     """A set abstraction supporting the basic set operations.
 
     This implementation requires that all elements are hashable,

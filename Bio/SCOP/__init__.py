@@ -152,7 +152,7 @@ def _open_scop_file(scop_dir_path, version, filetype):
     return handle
 
 
-class Scop:
+class Scop(object):
     """The entire SCOP hierarchy.
 
     root -- The root node of the hierarchy 
@@ -516,7 +516,7 @@ class Scop:
         
 
   
-class Node:
+class Node(object):
     """ A node in the Scop hierarchy
 
     sunid  -- SCOP unique identifiers. e.g. '14986'
@@ -683,7 +683,7 @@ class Domain(Node):
        
         return rec
             
-class Astral:
+class Astral(object):
     """Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
     as well as clusterings by percent id or evalue.
     """

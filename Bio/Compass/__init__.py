@@ -102,7 +102,7 @@ def parse(handle):
             yield record
             break
 
-class Record:
+class Record(object):
     """
     Hold information from one compass hit.
     Ali1 one is the query, Ali2 the hit.
@@ -403,7 +403,7 @@ class RecordParser(AbstractParser):
             self._scanner.feed(uhandle, self._consumer)
             return self._consumer.data
                 
-class Iterator:
+class Iterator(object):
     """Iterate through a file of compass results (DEPRECATED)."""
     def __init__(self, handle):
         import warnings

@@ -8,6 +8,7 @@ include NEWS
 include README
 include DEPRECATED
 include MANIFEST.in
+include do2to3.py
 
 recursive-include Scripts *    # Include scripts.
 recursive-include Tests *      # Include regression tests.
@@ -22,6 +23,8 @@ recursive-include Doc *.fasta
 recursive-include Doc Makefile
 recursive-include Doc/examples *.aln
 recursive-include Doc/examples *.xpk
+recursive-include Doc/examples *.gbk
+recursive-include Doc/examples *.sth
 recursive-include Doc/images *.png
 recursive-include Doc/images *.jpg # e.g. the logo for the Tutorial
 

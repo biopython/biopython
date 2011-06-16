@@ -18,7 +18,7 @@ SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
 """
 import StringIO
 
-class UndoHandle:
+class UndoHandle(object):
     """A Python handle that adds functionality for saving lines.
 
     Saves lines in a LIFO fashion.
@@ -112,7 +112,7 @@ except ImportError:
     #is obsolete
     pass
 else:
-    class SGMLStripper:
+    class SGMLStripper(object):
         """Object to strip SGML tags (OBSOLETE)."""
         class MyParser(sgmllib.SGMLParser):
             def __init__(self):

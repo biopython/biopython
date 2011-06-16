@@ -8,7 +8,9 @@ from StringIO import StringIO
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Align.Generic import Alignment
-from Bio.Align import AlignInfo
+from Bio.Align import AlignInfo, MultipleSeqAlignment
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 test_write_read_alignment_formats = sorted(AlignIO._FormatToWriter)
 test_write_read_align_with_seq_count = test_write_read_alignment_formats \
@@ -22,7 +24,7 @@ test_write_read_align_with_seq_count = test_write_read_alignment_formats \
 #
 # Most of the input files are also used by test_SeqIO.py,
 # and by other additional tests as noted below.
-test_files = [ \
+test_files = [
 #Following examples are also used in test_Clustalw.py
     ("clustal", 2, 1, 'Clustalw/cw02.aln'),
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
@@ -56,6 +58,8 @@ test_files = [ \
     ("fasta-m10", 2, 1, 'Fasta/output004.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output005.m10'),
     ("fasta-m10", 2, 1, 'Fasta/output006.m10'),
+    ("fasta-m10", 2, 9, 'Fasta/output007.m10'),
+    ("fasta-m10", 2, 12,'Fasta/output008.m10'),
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1,  'NBRF/clustalw.pir'),
     ]
@@ -184,6 +188,28 @@ def simple_alignment_comparison(alignments, alignments2, format):
                        "'%s' vs '%s'" % (r1.id, r2.id)
     return True
 
+#Check Phylip files reject duplicate identifiers.
+def check_phylip_reject_duplicate():
+    """
+    Ensure that attempting to write sequences with duplicate IDs after
+    truncation fails for Phylip format.
+    """
+    handle = StringIO()
+    sequences = [SeqRecord(Seq('AAAA'), id='longsequencename1'),
+                 SeqRecord(Seq('AAAA'), id='longsequencename2'),
+                 SeqRecord(Seq('AAAA'), id='other_sequence'),]
+    alignment = MultipleSeqAlignment(sequences)
+    try:
+        # This should raise a ValueError
+        AlignIO.write(alignment, handle, 'phylip')
+        assert False, "Duplicate IDs after truncation are not allowed."
+    except ValueError, e:
+        # Expected - check the error
+        assert "Repeated name 'longsequen'" in str(e)
+
+check_phylip_reject_duplicate()
+
+
 #Check parsers can cope with an empty file
 for t_format in AlignIO._FormatToIterator:
      handle = StringIO()
@@ -203,7 +229,7 @@ for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
     handle = StringIO()
     try:
         AlignIO.write([list_of_records], handle, t_format)
-        print False, "Writing non-alignment to %s format should fail!" \
+        assert False, "Writing non-alignment to %s format should fail!" \
             % t_format
     except (TypeError, AttributeError, ValueError):
         pass
