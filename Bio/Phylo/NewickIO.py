@@ -28,12 +28,12 @@ class NewickError(Exception):
 # ---------------------------------------------------------
 # Public API
 
-def parse(handle):
+def parse(handle, **kwargs):
     """Iterate over the trees in a Newick file handle.
 
     :returns: generator of Bio.Phylo.Newick.Tree objects.
     """
-    return Parser(handle).parse()
+    return Parser(handle).parse(**kwargs)
 
 def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
@@ -63,21 +63,21 @@ class Parser(object):
     def parse(self, values_are_support=False, rooted=False):
         """Parse the text stream this object was initialized with."""
         self.values_are_support = values_are_support
-        self.rooted = rooted
+        self.rooted = rooted    # XXX this attribue is useless
         buf = ''
         for line in self.handle:
             buf += line.rstrip()
             if buf.endswith(';'):
-                yield self._parse_tree(buf)
+                yield self._parse_tree(buf, rooted)
                 buf = ''
         if buf:
             # Last tree is missing a terminal ';' character -- that's OK
-            yield self._parse_tree(buf)
+            yield self._parse_tree(buf, rooted)
 
-    def _parse_tree(self, text):
+    def _parse_tree(self, text, rooted):
         """Parses the text representation into an Tree object."""
-        # XXX what global info do we have here? Any? Use **kwargs?
-        return Newick.Tree(root=self._parse_subtree(text))
+        # XXX Pass **kwargs along from Parser.parse?
+        return Newick.Tree(root=self._parse_subtree(text), rooted=self.rooted)
 
     def _parse_subtree(self, text):
         """Parse ``(a,b,c...)[[[xx]:]yy]`` into subcomponents, recursively."""
