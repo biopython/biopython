@@ -33,14 +33,16 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = ["fasta","clustal","phylip","tab","ig","stockholm","emboss",
-                    "fastq","fastq-solexa","fastq-illumina","qual"]
+no_alpha_formats = ["fasta","clustal","phylip","phylip-relaxed","tab","ig",
+                    "stockholm","emboss", "fastq","fastq-solexa",
+                    "fastq-illumina","qual"]
 possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
 
 #List of formats including alignment only file formats we can read AND write.
 #The list is initially hard coded to preserve the original order of the unit
 #test output, with any new formats added since appended to the end.
-test_write_read_alignment_formats = ["fasta","clustal","phylip","stockholm"]
+test_write_read_alignment_formats = ["fasta","clustal","phylip","stockholm",
+                                     "phylip-relaxed"]
 for format in sorted(SeqIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
         test_write_read_alignment_formats.append(format)
@@ -282,13 +284,13 @@ def check_simple_write_read(records, indent=" "):
            #rather long, and it seems a bit pointless to record them.
            continue
         print indent+"Checking can write/read as '%s' format" % format
-        
+
         #Going to write to a handle...
         if format in SeqIO._BinaryFormats:
             handle = BytesIO()
         else:
             handle = StringIO()
-        
+
         try:
             c = SeqIO.write(sequences=records, handle=handle, format=format)
             assert c == len(records)
@@ -352,6 +354,9 @@ def check_simple_write_read(records, indent=" "):
             if format=="phylip":
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="phylip-relaxed":
+                assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
+                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="clustal":
                 assert r1.id.replace(" ","_")[:30] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
@@ -388,7 +393,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         mode = "rb"
     else:
         mode = "r"
-    
+
     print "Testing reading %s format file %s" % (t_format, t_filename)
     assert os.path.isfile(t_filename), t_filename
 
@@ -413,7 +418,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             break
         assert record is not None, "Should raise StopIteration not return None"
         records3.append(record)
-        
+
     #Try a mixture of next() and list (a torture test!)
     seq_iterator = SeqIO.parse(handle=open(t_filename,mode), format=t_format)
     try:
@@ -469,8 +474,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
                 "Bad cross reference in dbxrefs: %s" % repr(ref)
         assert len(record.dbxrefs) == len(record.dbxrefs), \
                "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
-                
-            
+
+
         #Check the lists obtained by the different methods agree
         assert compare_record(record, records2[i])
         assert compare_record(record, records3[i])
@@ -479,7 +484,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
         if i < 3:
             print record_summary(record)
-    # Only printed the only first three records: 0,1,2 
+    # Only printed the only first three records: 0,1,2
     if t_count > 4:
         print " ..."
     if t_count > 3:

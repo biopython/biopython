@@ -14,7 +14,7 @@ can read in the sequences within these alignmenta using Bio.SeqIO.
 Bio.AlignIO is also documented at U{http://biopython.org/wiki/AlignIO} and by
 a whole chapter in our tutorial:
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
- - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}  
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
 
 Input
 =====
@@ -131,12 +131,8 @@ __docformat__ = "epytext en" #not just plaintext
 #   parser would fail.
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
-#   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
+#   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
-#from cStringIO import StringIO
-from StringIO import StringIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
@@ -157,6 +153,7 @@ _FormatToIterator = {#"fasta" is done via Bio.SeqIO
                      "fasta-m10" : FastaIO.FastaM10Iterator,
                      "nexus" : NexusIO.NexusIterator,
                      "phylip" : PhylipIO.PhylipIterator,
+                     "phylip-relaxed" : PhylipIO.RelaxedPhylipIterator,
                      "stockholm" : StockholmIO.StockholmIterator,
                      }
 
@@ -164,6 +161,7 @@ _FormatToWriter = {#"fasta" is done via Bio.SeqIO
                    #"emboss" : EmbossIO.EmbossWriter, (unfinished)
                    "nexus" : NexusIO.NexusWriter,
                    "phylip" : PhylipIO.PhylipWriter,
+                   "phylip-relaxed" : PhylipIO.RelaxedPhylipWriter,
                    "stockholm" : StockholmIO.StockholmWriter,
                    "clustal" : ClustalIO.ClustalWriter,
                    }
@@ -350,7 +348,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     #Map the file format to a sequence iterator:
     if format in _FormatToIterator:
         iterator_generator = _FormatToIterator[format]
-        if alphabet is None : 
+        if alphabet is None :
             i = iterator_generator(handle, seq_count)
         else:
             try:
@@ -453,7 +451,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     conversion is aborted (e.g. an invalid out_format name is given).
     """
     #TODO - Add optimised versions of important conversions
-    #For now just off load the work to SeqIO parse/write    
+    #For now just off load the work to SeqIO parse/write
     if isinstance(in_file, basestring):
         in_handle = open(in_file, "rU")
         in_close = True
