@@ -236,7 +236,7 @@ class Writer(object):
                         not hasattr(clade, 'confidence') or
                         clade.confidence is None):
                     return (':' + format_branch_length
-                            ) % (clade.branch_length or 1.0)
+                            ) % (clade.branch_length or 0.0)
                 else:
                     return (format_support + ':' + format_branch_length
                             ) % (clade.confidence, clade.branch_length or 0.0)
