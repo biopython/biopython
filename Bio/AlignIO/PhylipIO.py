@@ -38,16 +38,21 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+
+_PHYLIP_ID_WIDTH = 10
+
+
 class PhylipWriter(SequentialAlignmentWriter):
     """Phylip alignment writer."""
 
-    def write_alignment(self, alignment, truncate=10):
+    def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
         """Use this to write (another) single alignment to an open file.
 
         This code will write interlaced alignments (when the sequences are
         longer than 50 characters).
 
-        Note that record identifiers are strictly truncated at 10 characters.
+        Note that record identifiers are strictly truncated to id_width,
+        defaulting to the value required to comply with the PHYLIP standard.
 
         For more information on the file format, please see:
         http://evolution.genetics.washington.edu/phylip/doc/sequence.html
@@ -91,7 +96,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                 name = name.replace(char,"")
             for char in ":;":
                 name = name.replace(char,"|")
-            name = name[:truncate]
+            name = name[:id_width]
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
                                  "possibly due to truncation" \
@@ -108,12 +113,12 @@ class PhylipWriter(SequentialAlignmentWriter):
         while True:
             for name, record in zip(names, alignment):
                 if block==0:
-                    #Write name (truncated/padded to truncate characters)
+                    #Write name (truncated/padded to id_width characters)
                     #Now truncate and right pad to expected length.
-                    handle.write(name[:truncate].ljust(truncate))
+                    handle.write(name[:id_width].ljust(id_width))
                 else:
-                    #write 10 space indent
-                    handle.write(" " * truncate)
+                    #write indent
+                    handle.write(" " * id_width)
                 #Write five chunks of ten letters per line...
                 sequence = str(record.seq)
                 if "." in sequence:
@@ -146,7 +151,7 @@ class PhylipIterator(AlignmentIterator):
     """
 
     # Default truncation length
-    truncate = 10
+    id_width = _PHYLIP_ID_WIDTH
 
     def _is_header(self, line):
         line = line.strip()
@@ -170,8 +175,8 @@ class PhylipIterator(AlignmentIterator):
         The first 10 characters in the line are are the sequence id, the
         remainder are sequence data.
         """
-        seq_id = line[:self.truncate].strip()
-        seq = line[self.truncate:].strip().replace(' ', '')
+        seq_id = line[:self.id_width].strip()
+        seq = line[self.id_width:].strip().replace(' ', '')
         return seq_id, seq
 
     def next(self):
@@ -265,13 +270,13 @@ class RelaxedPhylipWriter(PhylipWriter):
 
         # Calculate a truncation length - maximum length of sequence ID plus a
         # single character for padding
-        # If no sequences, set truncate to 1 - super(...) call will raise a
+        # If no sequences, set id_width to 1. super(...) call will raise a
         # ValueError
         if len(alignment) == 0:
-            truncate = 1
+            id_width = 1
         else:
-            truncate = max((len(s.id.strip()) for s in alignment)) + 1
-        super(RelaxedPhylipWriter, self).write_alignment(alignment, truncate)
+            id_width = max((len(s.id.strip()) for s in alignment)) + 1
+        super(RelaxedPhylipWriter, self).write_alignment(alignment, id_width)
 
 
 class RelaxedPhylipIterator(PhylipIterator):
