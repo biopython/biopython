@@ -144,7 +144,7 @@ class Codeml(Paml):
     def print_options(self):
         """Print out all of the options and their current settings."""
         for option in self._options.items():
-            if option[0] == "NSsites":
+            if option[0] == "NSsites" and option[1] is not None:
                 # NSsites is stored in Python as a list but in the 
                 # control file it is specified as a series of numbers
                 # separated by spaces.
