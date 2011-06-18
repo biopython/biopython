@@ -49,7 +49,10 @@ class IOTests(unittest.TestCase):
         tree = Phylo.read(StringIO('A:0.1;'), 'newick')
         mem_file = StringIO()
         Phylo.write(tree, mem_file, 'newick', format_branch_length='%.0e')
-        self.assertEqual(mem_file.getvalue().strip(), 'A:1e-01;')
+        # Py2.5 compat: Windows with Py2.5- represents this as 1e-001;
+        # on all other platforms it's 1e-01
+        self.assertTrue(mem_file.getvalue().strip()
+                        in ['A:1e-01;', 'A:1e-001;'])
 
     def test_convert(self):
         """Convert a tree between all supported formats."""
