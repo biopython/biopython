@@ -7,6 +7,9 @@
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 
+# GSOC 2011 - ExtendedResidue
+from Bio.Data import IUPACData
+from Bio.SCOP.Raf import to_one_letter_code
 
 """Residue class, used by Structure objects."""
 
@@ -25,6 +28,7 @@ class Residue(Entity):
     def __init__(self, id, resname, segid):
         self.level="R"
         self.disordered=0
+        self.extended=0
         self.resname=resname
         self.segid=segid
         Entity.__init__(self, id)
@@ -112,6 +116,14 @@ class Residue(Entity):
     def get_segid(self):
         return self.segid
 
+    def extend(self):
+        self=ExtendedResidue(self)
+
+    def is_extended(self):
+        "Return if the residue is extended"
+        return self.extended
+
+
 
 class DisorderedResidue(DisorderedEntityWrapper):
     """
@@ -161,3 +173,35 @@ class DisorderedResidue(DisorderedEntityWrapper):
         self[resname]=residue
         self.disordered_select(resname)
 
+class ExtendedResidue(Residue):
+    """
+    ExtendedResidue adds some physical and chemical information
+    to a Residue object.
+
+    - Hydrophobicity
+    - etc etc etc
+
+    """
+
+    def __init__(self, residue):
+        Residue.__init__(self, residue.id, residue.resname, residue.segid)
+        self.extended=1
+
+        self.hydrophobicity = self.set_hydrophobicity()
+        
+    def set_hydrophobicity(self, scale='consensus'):
+        """
+        Sets the hydrophobicity scale to use:
+        - Kyte and Doolittle  (KD)
+        - Sweet and Eisenberg (OHM)
+        - Consensus of the previous two. (consensus) [default].
+        
+        Returns scale name.
+        """
+
+        set_scale=getattr(IUPACData, "protein_hydropathy_"+scale)
+        
+        self.hydrophobicity=set_scale[to_one_letter_code[self.resname]]
+        self.hydrophobicity_scale = scale
+
+        return scale

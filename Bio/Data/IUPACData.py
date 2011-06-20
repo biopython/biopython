@@ -334,8 +334,8 @@ protein_pka_side_chain = {
 
 # Relative hydrophobicity of amino acids taken
 # from /usr/share/EMBOSS/data/Eaa_hydropathy.dat
-# 3 scales are available, by default the consensus
-# one is used
+
+# Kyte-Doolittle
 protein_hydropathy_KD = {
     "A": 1.8,
     "C": 2.5,
@@ -359,6 +359,7 @@ protein_hydropathy_KD = {
     "Y": -1.3
     }
 
+# Sweet & Eisenberg
 protein_hydropathy_OHM = {
     "A": -0.40,
     "C": 0.17,
@@ -382,6 +383,7 @@ protein_hydropathy_OHM = {
     "Y": 1.67
     }
 
+# Consensus
 protein_hydropathy_consensus = {
     "A": 0.62,
     "C": 0.29,
