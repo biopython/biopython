@@ -649,7 +649,9 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
             _Option(["-subject_loc", "subject_loc"],
                     """Location on the subject sequence (Format: start-stop)
 
-                    Incompatible with: db, gilist, negative_gilist, remote.
+                    Incompatible with: db, gilist, seqidlist, negative_gilist,
+                    db_soft_mask, db_hard_mask, remote.
+                    
                     See also subject.""",
                     equate=False),
             #Restrict search or results:
@@ -695,7 +697,48 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
         _NcbiblastCommandline._validate(self)
 
 
-class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
+class _NcbiblastMain2SeqCommandline(_Ncbiblast2SeqCommandline):
+    """Base Commandline object for (new) NCBI BLAST+ wrappers (PRIVATE).
+
+    This is provided for subclassing, it deals with shared options
+    common to the main BLAST tools blastp, blastn, blastx, tblastx, tblastn
+    but not psiblast, rpsblast or rpstblastn.
+    """
+    def __init__(self, cmd=None, **kwargs):
+        assert cmd is not None
+        extra_parameters = [
+            #Restrict search or results:
+            _Option(["-db_soft_mask", "db_soft_mask"],
+                    """Filtering algorithm for soft masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as soft masking.
+
+                    Incompatible with: db_hard_mask, subject, subject_loc""",
+                    equate=False),
+            _Option(["-db_hard_mask", "db_hard_mask"],
+                    """Filtering algorithm for hard masking (integer).
+
+                    Filtering algorithm ID to apply to the BLAST database as hard masking.
+
+                    Incompatible with: db_soft_mask, subject, subject_loc""",
+                    equate=False),
+            ]
+        try:
+            #Insert extra parameters - at the start just in case there
+            #are any arguments which must come last:
+            self.parameters = extra_parameters + self.parameters
+        except AttributeError:
+            #Should we raise an error?  The subclass should have set this up!
+            self.parameters = extra_parameters
+        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"db_soft_mask":["db_hard_mask", "subject", "subject_loc"],
+                         "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
+        self._validate_incompatibilities(incompatibles)
+        _Ncbiblast2SeqCommandline._validate(self)
+
+class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
     """Create a commandline for the NCBI BLAST+ program blastp (for proteins).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -744,14 +787,6 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
-            #Restrict search or results:
-            _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm for soft masking (integer).
-
-                    Filtering algorithm ID to apply to the BLAST database as soft masking.
-
-                    Incompatible with: subject, subject_loc""",
-                    equate=False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
@@ -759,15 +794,10 @@ class NcbiblastpCommandline(_Ncbiblast2SeqCommandline):
             _Switch(["-use_sw_tback", "use_sw_tback"],
                     "Compute locally optimal Smith-Waterman alignments?"),
             ]
-        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
-
-    def _validate(self):
-        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
-        self._validate_incompatibilities(incompatibles)
-        _Ncbiblast2SeqCommandline._validate(self)
+        _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
+class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program blastn (for nucleotides).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -843,13 +873,6 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     "Enable WindowMasker filtering using this repeats database (string).",
                     equate=False),
             #Restrict search or results:
-            _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm for soft masking (integer).
-
-                    Filtering algorithm ID to apply to the BLAST database as soft masking.
-
-                    Incompatible with: subject, subject_loc""",
-                    equate=False),
             _Option(["-perc_identity", "perc_identity"],
                     "Percent identity (real, 0 to 100 inclusive).",
                     equate=False),
@@ -887,18 +910,16 @@ class NcbiblastnCommandline(_Ncbiblast2SeqCommandline):
                     """,
                     equate=False),
             ]
-        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+        _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
     def _validate(self):
-        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
-        self._validate_incompatibilities(incompatibles)
         if (self.template_type and not self.template_length) \
         or (self.template_length and not self.template_type) :
             raise ValueError("Options template_type and template_type require each other.")
-        _Ncbiblast2SeqCommandline._validate(self)
+        _NcbiblastMain2SeqCommandline._validate(self)
 
 
-class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
+class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program blastx (nucleotide query, protein database).
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -955,27 +976,14 @@ class NcbiblastxCommandline(_Ncbiblast2SeqCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
-            #Restrict search or results:
-            _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm for soft masking (integer).
-
-                    Filtering algorithm ID to apply to the BLAST database as soft masking.
-
-                    Incompatible with: subject, subject_loc""",
-                    equate=False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
             ]
-        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
-
-    def _validate(self):
-        incompatibles = {"db_soft_mask":["subject", "subject_loc"]}
-        self._validate_incompatibilities(incompatibles)
-        _Ncbiblast2SeqCommandline._validate(self)
+        _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
+class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program tblastn.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -1036,13 +1044,6 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
-            #Restrict search or results:
-            _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm ID to apply to the BLAST database as soft masking (string).
-                    
-                    Incompatible with: subject, subject_loc
-                    """,
-                    equate=False),
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
@@ -1057,15 +1058,10 @@ class NcbitblastnCommandline(_Ncbiblast2SeqCommandline):
                     filename=True,
                     equate=False),
             ]
-        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
-
-    def _validate(self):
-        incompatibles = {"in_pssm":["remote", "query"]}
-        self._validate_incompatibilities(incompatibles)
-        _Ncbiblast2SeqCommandline._validate(self)
+        _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
-class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
+class NcbitblastxCommandline(_NcbiblastMain2SeqCommandline):
     """Wrapper for the NCBI BLAST+ program tblastx.
 
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
@@ -1124,15 +1120,8 @@ class NcbitblastxCommandline(_Ncbiblast2SeqCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
-            #Restrict search or results:
-            _Option(["-db_soft_mask", "db_soft_mask"],
-                    """Filtering algorithm ID to apply to the BLAST database as soft masking (string).
-                    
-                    Incompatible with: subject, subject_loc
-                    """,
-                    equate=False),
-           ]
-        _Ncbiblast2SeqCommandline.__init__(self, cmd, **kwargs)
+            ]
+        _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
 
 class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
@@ -1209,6 +1198,13 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
                     Incompatible with: in_pssm, query""",
                     filename=True,
                     equate=False),
+            _Option(["-msa_master_idx", "msa_master_idx"],
+                    """Index of sequence to use as master in MSA.
+
+                    Index (1-based) of sequence to use as the master in the
+                    multiple sequence alignment. If not specified, the first
+                    sequence is used.""",
+                    equate=False),
             _Option(["-in_pssm", "in_pssm"],
                     """PSI-BLAST checkpoint file
 
@@ -1270,8 +1266,37 @@ class NcbirpsblastCommandline(_NcbiblastCommandline):
                     Format: "yes", "window locut hicut", or "no" to disable.
                     Default is "12 2.2 2.5""",
                     equate=False),
+            #Restrict search or results:
+            _Option(["-culling_limit", "culling_limit"],
+                    """Hit culling limit (integer).
+
+                    If the query range of a hit is enveloped by that of at
+                    least this many higher-scoring hits, delete the hit.
+
+                    Incompatible with: best_hit_overhang, best_hit_score_edge.
+                    """,
+                    equate=False),
+            _Option(["-best_hit_overhang", "best_hit_overhang"],
+                    """Best Hit algorithm overhang value (recommended value: 0.1)
+
+                    Float between 0.0 and 0.5 inclusive.
+
+                    Incompatible with: culling_limit.""",
+                    equate=False),
+            _Option(["-best_hit_score_edge", "best_hit_score_edge"],
+                    """Best Hit algorithm score edge value (recommended value: 0.1)
+
+                    Float between 0.0 and 0.5 inclusive.
+
+                    Incompatible with: culling_limit.""",
+                    equate=False),
             ]
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
+
+    def _validate(self):
+        incompatibles = {"culling_limit":["best_hit_overhang","best_hit_score_edge"]}
+        self._validate_incompatibilities(incompatibles)
+        _NcbiblastCommandline._validate(self)
 
 
 class NcbirpstblastnCommandline(_NcbiblastCommandline):

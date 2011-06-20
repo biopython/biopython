@@ -60,8 +60,9 @@ class SeqFeature(object):
     shown below, the location_operator would be "join"
     o strand - A value specifying on which strand (of a DNA sequence, for
     instance) the feature deals with. 1 indicates the plus strand, -1 
-    indicates the minus strand, 0 indicates both strands, and None indicates
-    that strand doesn't apply (ie. for proteins) or is not known.
+    indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
+    while the default of None indicates that strand doesn't apply (dot in GFF3,
+    e.g. features on proteins)
     o id - A string identifier for the feature.
     o ref - A reference to another sequence. This could be an accession
     number for some different sequence.
@@ -140,7 +141,7 @@ class SeqFeature(object):
             answer += ", type=%s" % repr(self.type)
         if self.location_operator:
             answer += ", location_operator=%s" % repr(self.location_operator)
-        if self.strand:
+        if self.strand is not None:
             answer += ", strand=%s" % repr(self.strand)
         if self.id and self.id != "<unknown id>":
             answer += ", id=%s" % repr(self.id)
@@ -190,8 +191,8 @@ class SeqFeature(object):
         
         The argument length gives the length of the parent sequence. For
         example a location 0..20 (+1 strand) with parent length 30 becomes
-        after flipping 10..30 (-1 strand). Dual strand or strandless features
-        remain dual strand or strandless - just their end points are changed.
+        after flipping 10..30 (-1 strand). Strandless (None) or unknown
+        strand (0) remain like that - just their end points are changed.
 
         The annotation qaulifiers are copied.
         """
@@ -199,8 +200,8 @@ class SeqFeature(object):
             new_strand = -1
         elif self.strand == -1 :
             new_strand = +1
-        else :
-            assert self.strand == 0 or self.strand is None
+        else:
+            #When create new SeqFeature it will check this is 0 or None
             new_strand = self.strand
         return SeqFeature(location = self.location._flip(length),
             type = self.type,

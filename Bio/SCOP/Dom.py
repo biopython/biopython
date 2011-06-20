@@ -18,7 +18,7 @@ The DOM files for older releases can be found
 
 from Residues import Residues
 
-class Record:
+class Record(object):
     """Holds information for one SCOP domain.
 
     sid -- The SCOP ID of the entry, e.g. d1anu1

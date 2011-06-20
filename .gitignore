@@ -68,7 +68,11 @@ Doc/install/Installation.html
 Doc/cookbook/motif/motif.pdf
 Doc/cookbook/motif/motif.html
 
-Ignore the hevea.sty file if present (used for HTML docs)
+#Ignore the hevea.sty file if present (used for HTML docs)
 Doc/hevea.sty
 Doc/*/hevea.sty
 Doc/*/*/hevea.sty
+
+#Ignore IntelliJ IDEA directory and project files
+.idea
+*.iml

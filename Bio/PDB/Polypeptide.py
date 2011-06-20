@@ -447,7 +447,7 @@ if __name__=="__main__":
     import sys
     from Bio.PDB.PDBParser import PDBParser
 
-    p=PDBParser(PERMISSIVE=1)
+    p=PDBParser(PERMISSIVE=True)
 
     s=p.get_structure("scr", sys.argv[1])
 

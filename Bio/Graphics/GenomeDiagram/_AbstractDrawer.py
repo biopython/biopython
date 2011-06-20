@@ -284,7 +284,7 @@ def intermediate_points(start, end, graph_data):
 # CLASSES
 ################################################################################
 
-class AbstractDrawer:
+class AbstractDrawer(object):
     """ AbstractDrawer
 
         Provides:

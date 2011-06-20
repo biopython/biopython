@@ -50,7 +50,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'AT3G20900.' (originally 'AT3G20900.1-SEQ'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -67,7 +67,7 @@ Testing reading clustal format file Clustalw/protein.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'gi|1377497' (originally 'gi|13774975|gb|AAK39115.1|AF35'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -84,7 +84,7 @@ Testing reading clustal format file Clustalw/promals3d.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'gi_1393639' (originally 'gi_13936397_dbj_BAB47195.'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -289,7 +289,7 @@ Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
  Checking can write/read as 'fasta' format
@@ -313,7 +313,7 @@ Testing reading emboss format file Emboss/water2.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
  Checking can write/read as 'fasta' format
@@ -416,7 +416,7 @@ Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
- Failed: Repeated identifier, possibly due to truncation
+ Failed: Repeated name 'ref|NC_002' (originally 'ref|NC_002695.1|:1970775-1971404'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -438,6 +438,48 @@ Testing reading fasta-m10 format file Fasta/output006.m10 with 1 alignments
  Checking can write/read as 'clustal' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
+Testing reading fasta-m10 format file Fasta/output007.m10 with 9 alignments
+ Alignment 0, with 2 sequences of length 108
+  SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECG...LSR gi|10955263|ref|NP_052604.1|
+  AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFG...LSR gi|152973457|ref|YP_001338508.1|
+ Alignment 1, with 2 sequences of length 64
+  AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MR...AIT gi|10955263|ref|NP_052604.1|
+  ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIM...TLT gi|152973588|ref|YP_001338639.1|
+ Alignment 2, with 2 sequences of length 45
+  EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTD...VMR gi|10955263|ref|NP_052604.1|
+  ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTD...MLQ gi|152973480|ref|YP_001338531.1|
+ ...
+ Alignment 8, with 2 sequences of length 64
+  ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYFDE...FSD gi|10955265|ref|NP_052606.1|
+  IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW---...YPD gi|152973505|ref|YP_001338556.1|
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
+Testing reading fasta-m10 format file Fasta/output008.m10 with 12 alignments
+ Alignment 0, with 2 sequences of length 65
+  LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH-...QML sp|Q9NSY1|BMP2K_HUMAN
+  IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHG...GLL gi|283855822|gb|GQ290312.1|
+ Alignment 1, with 2 sequences of length 201
+  GPEIL---LGQ-GPPQQPPQQHRVLQQLQQGDWRLQ...NRS sp|Q9NSY1|BMP2K_HUMAN
+  GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAG...QKS gi|57163782|ref|NM_001009242.1|
+ Alignment 2, with 2 sequences of length 348
+  MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQ...APA sp|P08100|OPSD_HUMAN
+  MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQ...APA gi|57163782|ref|NM_001009242.1|
+ ...
+ Alignment 11, with 2 sequences of length 31
+  AQQQESATTQKAEKEVTRMVIIMVIAFLICW sp|P08100|OPSD_HUMAN
+  SQQIRNATTMMMTMRVTSFSAFWVVADSCCW gi|283855822|gb|GQ290312.1|
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format

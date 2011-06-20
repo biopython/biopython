@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "entrezgene.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $ 
+$Revision: 158408 $ 
 ********************************************************************** 
  
   NCBI Entrezgene 
@@ -25,7 +25,9 @@ $Revision: 1.1 $
 
 <!-- Elements used by other modules:
           Entrezgene,
-          Entrezgene-Set -->
+          Entrezgene-Set,
+          Gene-track,
+          Gene-commentary -->
 
 <!-- Elements referenced from other modules:
           Gene-ref FROM NCBI-Gene,
@@ -81,6 +83,7 @@ $Revision: 1.1 $
         pseudo |
         transposon |
         miscRNA |
+        ncRNA |
         other
         ) #IMPLIED >
 
@@ -245,6 +248,7 @@ $Revision: 1.1 $
     complex	-  used (but not limited) to identify resulting 
          interaction complexes
     compound	-  pubchem entities
+    gene-group	-  for relationship sets (such as pseudogene / parent gene)
 -->
 <!ATTLIST Gene-commentary_type value (
         genomic |
@@ -268,6 +272,8 @@ $Revision: 1.1 $
         phenotype |
         complex |
         compound |
+        ncRNA |
+        gene-group |
         comment |
         other
         ) #IMPLIED >

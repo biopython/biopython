@@ -1951,7 +1951,8 @@ DVPGVYTKVTNYLDWIRDNMRP
 </sequence>
 </entry>
 <entry dataset="Swiss-Prot" created="1998-07-15" modified="2010-08-10" version="31">
-<accession>P56540</accession>
+    <!-- This indentation and comment were added manually for testing -->
+    <accession>P56540</accession>
 <name>CBBQ_CHRVI</name>
 <protein>
 <recommendedName>

@@ -5,7 +5,8 @@
 """Command line wrapper for the multiple alignment program PROBCONS.
 """
 
-import types
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
 class ProbconsCommandline(AbstractCommandline):
@@ -27,22 +28,22 @@ class ProbconsCommandline(AbstractCommandline):
     You would typically run the command line with probcons_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
     Note that PROBCONS will write the alignment to stdout, which you may
-    want to save to a file and then parse, e.g.
+    want to save to a file and then parse, e.g.::
 
-    stdout, stderr = probcons_cline()
-    handle = open("aligned.aln", "w")
-    handle.write(stdout)
-    handle.close()
-    from Bio import AlignIO
-    align = AlignIO.read("aligned.fasta", "clustalw")
+        stdout, stderr = probcons_cline()
+        handle = open("aligned.aln", "w")
+        handle.write(stdout)
+        handle.close()
+        from Bio import AlignIO
+        align = AlignIO.read("aligned.fasta", "clustalw")
 
     Alternatively, to parse the output with AlignIO directly you can
-    use StringIO to turn the string into a handle:
+    use StringIO to turn the string into a handle::
 
-    stdout, stderr = probcons_cline()
-    from StringIO import StringIO
-    from Bio import AlignIO
-    align = AlignIO.read(StringIO(stdout), "clustalw")
+        stdout, stderr = probcons_cline()
+        from StringIO import StringIO
+        from Bio import AlignIO
+        align = AlignIO.read(StringIO(stdout), "clustalw")
     
     Citations:
 

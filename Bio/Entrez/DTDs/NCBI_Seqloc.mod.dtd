@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqloc.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 08/02/2010 23:05:14
      ============================================ -->
 
 <!-- ============================================ -->
@@ -9,7 +9,7 @@
 ================================================= -->
 
 <!--
-$Revision: 1.1 $
+$Revision: 182653 $
 **********************************************************************
 
   NCBI Sequence location and identifier elements
@@ -62,7 +62,8 @@ $Revision: 1.1 $
         Seq-id_tpg | 
         Seq-id_tpe | 
         Seq-id_tpd | 
-        Seq-id_gpipe)>
+        Seq-id_gpipe | 
+        Seq-id_named-annot-track)>
 
 <!-- local use -->
 <!ELEMENT Seq-id_local (Object-id)>
@@ -86,7 +87,7 @@ $Revision: 1.1 $
 
 <!ELEMENT Seq-id_patent (Patent-seq-id)>
 
-<!-- catch all -->
+<!-- for historical reasons, 'other' = 'refseq' -->
 <!ELEMENT Seq-id_other (Textseq-id)>
 
 <!-- for other databases -->
@@ -115,6 +116,12 @@ $Revision: 1.1 $
 
 <!-- Internal NCBI genome pipeline processing ID -->
 <!ELEMENT Seq-id_gpipe (Textseq-id)>
+
+<!-- Internal named annotation tracking ID -->
+<!ELEMENT Seq-id_named-annot-track (Textseq-id)>
+
+
+<!ELEMENT Seq-id-set (Seq-id*)>
 
 
 <!ELEMENT Patent-seq-id (

@@ -261,7 +261,10 @@ class TreeTests(unittest.TestCase):
 
     def test_Confidence(self):
         """Instantiation of Confidence objects."""
-        tree = PhyloXMLIO.parse(EX_MADE).next()
+        #Because we short circult interation, must close handle explicitly
+        handle = open(EX_MADE)
+        tree = PhyloXMLIO.parse(handle).next()
+        handle.close()
         self.assertEqual(tree.name, 'testing confidence')
         for conf, type, val in zip(tree.confidences,
                 ('bootstrap', 'probability'),
@@ -327,7 +330,10 @@ class TreeTests(unittest.TestCase):
 
         Also checks ProteinDomain type.
         """
-        tree = PhyloXMLIO.parse(EX_APAF).next()
+        #Because we short circult interation, must close handle explicitly
+        handle = open(EX_APAF)
+        tree = PhyloXMLIO.parse(handle).next()
+        handle.close()
         clade = tree.clade[0,0,0,0,0,0,0,0,0,0]
         darch = clade.sequences[0].domain_architecture
         self.assertTrue(isinstance(darch, PX.DomainArchitecture))
@@ -395,7 +401,10 @@ class TreeTests(unittest.TestCase):
 
     def test_Reference(self):
         """Instantiation of Reference objects."""
-        tree = PhyloXMLIO.parse(EX_DOLLO).next()
+        #Because we short circult interation, must close handle explicitly
+        handle = open(EX_DOLLO)
+        tree = PhyloXMLIO.parse(handle).next()
+        handle.close()
         reference = tree.clade[0,0,0,0,0,0].references[0]
         self.assertTrue(isinstance(reference, PX.Reference))
         self.assertEqual(reference.doi, '10.1038/nature06614')

@@ -1,7 +1,7 @@
 <!-- ============================================
      ::DATATOOL:: Generated from "seqfeat.asn"
-     ::DATATOOL:: by application DATATOOL version 1.9.0
-     ::DATATOOL:: on 04/10/2008 16:04:22
+     ::DATATOOL:: by application DATATOOL version 2.0.0
+     ::DATATOOL:: on 04/26/2010 23:04:43
      ============================================ -->
 
 <!-- ============================================ -->
@@ -16,7 +16,7 @@
   Philip Bucher, David Ghosh
   version 1.1
 
-  
+
 
 ********************************************************************
 -->
@@ -132,9 +132,9 @@
     rna-size	-  RNA length measurement
     np-map	-  nuclease protection mapping with homologous sequence ladder
     np-size	-  nuclease protected fragment length measurement
-    pe-seq	-  dideoxy RNA sequencing 
+    pe-seq	-  dideoxy RNA sequencing
     cDNA-seq	-  full-length cDNA sequencing
-    pe-map	-  primer extension mapping with homologous sequence ladder    
+    pe-map	-  primer extension mapping with homologous sequence ladder
     pe-size	-  primer extension product length measurement
     pseudo-seq	-  full-length processed pseudogene sequencing
     rev-pe-map	-  see NOTE (1) below

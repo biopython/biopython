@@ -78,7 +78,7 @@ Here is an overview of the flat file format that this parser deals with:
 """
 
 
-class SequenceLine:
+class SequenceLine(object):
     """Store the information for one SEQUENCE line from a Unigene file
 
     Initialize with the text part of the SEQUENCE line, or nothing.
@@ -134,7 +134,7 @@ class SequenceLine:
         return self.text
         
 
-class ProtsimLine:
+class ProtsimLine(object):
     """Store the information for one PROTSIM line from a Unigene file
 
     Initialize with the text part of the PROTSIM line, or nothing.
@@ -168,7 +168,7 @@ class ProtsimLine:
         return self.text
         
 
-class STSLine:
+class STSLine(object):
     """Store the information for one STS line from a Unigene file
 
     Initialize with the text part of the STS line, or nothing.
@@ -197,7 +197,7 @@ class STSLine:
         return self.text
         
 
-class Record:
+class Record(object):
     """Store a Unigene record
 
     Here is what is stored:
@@ -334,7 +334,7 @@ import Bio
 #
 UG_INDENT=12
 
-class UnigeneSequenceRecord:
+class UnigeneSequenceRecord(object):
     """Store the information for one SEQUENCE line from a Unigene file
     (DEPRECATED).
 
@@ -402,7 +402,7 @@ class UnigeneSequenceRecord:
         return self.text
         
 
-class UnigeneProtsimRecord:
+class UnigeneProtsimRecord(object):
     """Store the information for one PROTSIM line from a Unigene file
     (DEPRECATED).
 
@@ -442,7 +442,7 @@ class UnigeneProtsimRecord:
         return self.text
         
 
-class UnigeneSTSRecord:
+class UnigeneSTSRecord(object):
     """Store the information for one STS line from a Unigene file
     (DEPRECATED).
 
@@ -481,7 +481,7 @@ class UnigeneSTSRecord:
         return self.text
         
 
-class UnigeneRecord:
+class UnigeneRecord(object):
     """Store a Unigene record (DEPRECATED).
 
     Here is what is stored:
@@ -632,7 +632,7 @@ class RecordParser(AbstractParser):
             self._scanner.feed(uhandle, self._consumer)
         return self._consumer.unigene_record
 
-class Iterator:
+class Iterator(object):
     """This class is DEPRECATED; please use the parse() function in this module
     instead."""
 

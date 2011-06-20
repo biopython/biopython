@@ -1,7 +1,7 @@
 """Base selection class from which all Selectors should derive.
 """
 
-class AbstractSelection:
+class AbstractSelection(object):
     """Base class for Selector classes.
 
     This classes provides useful functions for different selector classes

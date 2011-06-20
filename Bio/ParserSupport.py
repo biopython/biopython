@@ -41,7 +41,7 @@ except ImportError:
                      "This causes problems with some ParserSupport modules\n")
     xml_support = 0
 
-class AbstractParser:
+class AbstractParser(object):
     """Base class for other parsers.
 
     """
@@ -59,7 +59,7 @@ class AbstractParser:
             h.close()
         return retval
 
-class AbstractConsumer:
+class AbstractConsumer(object):
     """Base class for other Consumers.
 
     Derive Consumers from this class and implement appropriate
@@ -118,7 +118,7 @@ class TaggingConsumer(AbstractConsumer):
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
 
-class SGMLStrippingConsumer:
+class SGMLStrippingConsumer(object):
     """A consumer that strips off SGML tags.
 
     This is meant to be used as a decorator for other consumers.

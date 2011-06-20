@@ -28,7 +28,7 @@ def validate_key(key):
     if len(key) != 1:
         raise CrystalError('chain label should contain one letter')
 
-class Hetero:
+class Hetero(object):
     """
     This class exists to support the PDB hetero codes.
 
@@ -63,7 +63,7 @@ class Hetero:
 
     def __len__(self): return len(self.data)
 
-class Chain:
+class Chain(object):
     def __init__(self, residues = ''):
         self.data = []
         if type(residues) == type(''):
@@ -207,7 +207,7 @@ class Chain:
             raise TypeError
         return self
 
-class Crystal:
+class Crystal(object):
     def __init__(self, data = {}):
         # Enforcestorage
         if type(data) != type({}):

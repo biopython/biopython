@@ -13,7 +13,7 @@ import os
 import thread
 
 
-class Async:
+class Async(object):
     '''Abstract Asynchronous execution class.
 
        This is the top abstract class.
@@ -90,7 +90,7 @@ class Async:
             self.access_ds.release()
             return None
 
-class FileRetriever:
+class FileRetriever(object):
     '''An Abstract Support class to retrieve files.
     '''
 

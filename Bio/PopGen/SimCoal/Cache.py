@@ -13,7 +13,7 @@ import tarfile
 import tempfile
 from Controller import SimCoalController
 
-class SimCoalCache:
+class SimCoalCache(object):
     def __init__(self, data_dir, simcoal_dir):
         """Initializes the cache.
         

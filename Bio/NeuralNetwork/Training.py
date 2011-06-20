@@ -3,7 +3,7 @@
 # standard modules
 import random
 
-class TrainingExample:
+class TrainingExample(object):
     """Hold inputs and outputs of a training example.
 
     XXX Do I really need this? 
@@ -13,7 +13,7 @@ class TrainingExample:
         self.inputs = inputs
         self.outputs = outputs
 
-class ExampleManager:
+class ExampleManager(object):
     """Manage a grouping of Training Examples.
 
     This is meant to make it easy to split a bunch of training examples

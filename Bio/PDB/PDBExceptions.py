@@ -5,6 +5,8 @@
 
 """Some Bio.PDB-specific exceptions."""
 
+from Bio import BiopythonWarning
+
 # General error
 class PDBException(Exception):
     pass
@@ -14,5 +16,5 @@ class PDBException(Exception):
 class PDBConstructionException(Exception):
     pass
 
-class PDBConstructionWarning(Warning):
+class PDBConstructionWarning(BiopythonWarning):
     pass

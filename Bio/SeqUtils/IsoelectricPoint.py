@@ -28,7 +28,7 @@ charged_aas = ('K', 'R', 'H', 'D', 'E', 'C', 'Y')
 
 # access this module through ProtParam.ProteinAnalysis class.
 # first make a ProteinAnalysis object and then call its isoelectric_point method.
-class IsoelectricPoint:
+class IsoelectricPoint(object):
     def __init__(self, ProteinSequence, AminoAcidsContent):
         self.sequence = ProteinSequence        
         self.charged_aas_content = self._select_charged(AminoAcidsContent)

@@ -21,7 +21,7 @@ RAINBOW_COLORS = {(1, 1)  : colors.violet,
                   (6, 6)  : colors.orange,
                   (7, 20) : colors.red}
 
-class ChromosomeCounts:
+class ChromosomeCounts(object):
     """Represent a chromosome with count information.
 
     This is used to display information about counts along a chromosome.

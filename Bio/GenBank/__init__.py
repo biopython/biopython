@@ -292,7 +292,7 @@ def _split_compound_loc(compound_loc):
         for part in compound_loc.split(","):
             yield part
 
-class Iterator:
+class Iterator(object):
     """Iterator interface to move over a file of GenBank entries one at a time.
     """
     def __init__(self, handle, parser = None):
@@ -337,7 +337,7 @@ class LocationParserError(Exception):
     """
     pass
                                                           
-class FeatureParser:
+class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects.
     """
     def __init__(self, debug_level = 0, use_fuzziness = 1, 
@@ -368,7 +368,7 @@ class FeatureParser:
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class RecordParser:
+class RecordParser(object):
     """Parse GenBank files into Record objects
     """
     def __init__(self, debug_level = 0):
@@ -797,7 +797,9 @@ class _FeatureConsumer(_BaseGenBankConsumer):
     def title(self, content):
         if self._cur_reference is None:
             import warnings
-            warnings.warn("GenBank TITLE line without REFERENCE line.")
+            from Bio import BiopythonParserWarning
+            warnings.warn("GenBank TITLE line without REFERENCE line.",
+                          BiopythonParserWarning)
         elif self._cur_reference.title:
             self._cur_reference.title += ' ' + content
         else:
@@ -972,6 +974,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             cur_feature.location = SeqFeature.FeatureLocation(s,e)
             return
         #Not recognised
+        if "order" in location_line and "join" in location_line:
+            #See Bug 3197
+            msg = 'Combinations of "join" and "order" within the same ' + \
+                  'location (nested operators) are illegal:\n' + location_line
+            raise LocationParserError(msg)
         raise LocationParserError(location_line)
 
     def _add_qualifier(self):
@@ -1091,8 +1098,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         and len(sequence) != 0 \
         and self._expected_size != len(sequence):
             import warnings
+            from Bio import BiopythonParserWarning
             warnings.warn("Expected sequence length %i, found %i (%s)." \
-                          % (self._expected_size, len(sequence), self.data.id))
+                          % (self._expected_size, len(sequence), self.data.id),
+                          BiopythonParserWarning)
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
@@ -1224,7 +1233,9 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def title(self, content):
         if self._cur_reference is None:
             import warnings
-            warnings.warn("GenBank TITLE line without REFERENCE line.")
+            from Bio import BiopythonParserWarning
+            warnings.warn("GenBank TITLE line without REFERENCE line.",
+                          BiopythonParserWarning)
             return
         self._cur_reference.title = content
 

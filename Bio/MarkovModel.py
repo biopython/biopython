@@ -49,7 +49,7 @@ numpy.random.seed()
 VERY_SMALL_NUMBER = 1E-300
 LOG0 = numpy.log(VERY_SMALL_NUMBER)
 
-class MarkovModel:
+class MarkovModel(object):
     def __init__(self, states, alphabet,
                  p_initial=None, p_transition=None, p_emission=None):
         self.states = states

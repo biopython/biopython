@@ -1586,7 +1586,7 @@ class _PSIBlastConsumer(AbstractConsumer,
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
 
-class Iterator:
+class Iterator(object):
     """Iterates over a file of multiple BLAST results.
 
     Methods:

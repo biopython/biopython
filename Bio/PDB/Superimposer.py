@@ -11,7 +11,7 @@ from Bio.SVDSuperimposer import SVDSuperimposer
 from Bio.PDB.PDBExceptions import PDBException
 
 
-class Superimposer:
+class Superimposer(object):
     """
     Rotate/translate one set of atoms on top of another,
     thereby minimizing the RMSD.

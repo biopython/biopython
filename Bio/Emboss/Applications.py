@@ -194,7 +194,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Millimolar salt concentration in the PCR."),
            _Option(["-dnaconc","dnaconc"],
                    "Nanomolar concentration of annealing oligos in the PCR."),
-           _Option(["-maxployx","maxployx"],
+           _Option(["-maxpolyx","maxpolyx"],
                    "Maximum allowable mononucleotide repeat length in a primer."),
            #Primer length:
            _Option(["-productosize","productosize"],

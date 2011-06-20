@@ -5,6 +5,8 @@
 """Command line wrapper for the multiple alignment programme MAFFT.
 """
 
+__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+
 #TODO - Remove file exist checks? Other wrappers don't do this, and
 #it prevent things like preparing commands to run on a cluster.
 

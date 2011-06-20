@@ -31,7 +31,7 @@ from _Colors import ColorTranslator
 
 import string
 
-class Feature:
+class Feature(object):
     """ Class to wrap Bio.SeqFeature objects for GenomeDiagram
 
         Provides:

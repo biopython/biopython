@@ -4,7 +4,7 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
-class AbstractDPAlgorithms:
+class AbstractDPAlgorithms(object):
     """An abstract class to calculate forward and backward probabiliies.
 
     This class should not be instantiated directly, but should be used

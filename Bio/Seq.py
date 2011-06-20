@@ -253,7 +253,7 @@ class Seq(object):
         >>> Seq("ACGT", generic_dna) + Seq("ACGU", generic_rna)
         Traceback (most recent call last):
            ...
-        TypeError: Incompatable alphabets DNAAlphabet() and RNAAlphabet()
+        TypeError: Incompatible alphabets DNAAlphabet() and RNAAlphabet()
 
         You can't add nucleotide and protein sequences:
 
@@ -261,13 +261,13 @@ class Seq(object):
         >>> Seq("ACGT", generic_dna) + Seq("MELKI", generic_protein)
         Traceback (most recent call last):
            ...
-        TypeError: Incompatable alphabets DNAAlphabet() and ProteinAlphabet()
+        TypeError: Incompatible alphabets DNAAlphabet() and ProteinAlphabet()
         """
         if hasattr(other, "alphabet"):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s" \
+                raise TypeError("Incompatible alphabets %s and %s" \
                                 % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])

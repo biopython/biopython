@@ -14,7 +14,7 @@ import sys
 HEADERLEN=6
 # * * * * * _______________ * * * * *
 
-class XpkEntry:
+class XpkEntry(object):
     # Usage: XpkEntry(xpkentry,xpkheadline) where xpkentry is the line
     #        from an nmrview .xpk file and xpkheadline is the line from
     #        the header file that gives the names of the entries
@@ -39,7 +39,7 @@ class XpkEntry:
        except IndexError, e:
            pass
 
-class Peaklist:
+class Peaklist(object):
     # This class reads in an entire xpk file and returns
     # Header file lines are available as attributes
     # The data lines are available as a list

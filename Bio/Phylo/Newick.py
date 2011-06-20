@@ -5,9 +5,9 @@
 
 """Classes corresponding to Newick trees, also used for Nexus trees.
 
-See classes in Bio.Nexus: Trees.Tree, Trees.NodeData, and Nodes.Chain.
+See classes in `Bio.Nexus`: Trees.Tree, Trees.NodeData, and Nodes.Chain.
 """
-__docformat__ = "epytext en"
+__docformat__ = "restructuredtext en"
 
 import warnings
 

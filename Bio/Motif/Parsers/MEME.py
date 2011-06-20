@@ -144,7 +144,7 @@ class MEMEInstance(Seq.Seq):
         self.length = length
     
 
-class MEMERecord:
+class MEMERecord(object):
     """A class for holding the results of a MEME run.
     
     A MEMERecord is an object that holds the results from running
@@ -918,7 +918,7 @@ class _MASTScanner:
     
 
 
-class MASTRecord:
+class MASTRecord(object):
     """The class for holding the results from a MAST run (DEPRECATED).
     
     A MASTRecord holds data about matches between motifs and sequences.

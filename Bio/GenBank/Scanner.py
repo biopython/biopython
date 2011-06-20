@@ -32,7 +32,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_alphabet, generic_protein
 
-class InsdcScanner:
+class InsdcScanner(object):
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
 
     The International Nucleotide Sequence Database Collaboration (INSDC)
@@ -1090,9 +1090,16 @@ class GenBankScanner(InsdcScanner):
         elif len(line.split())>=4 and line.split()[3] in ["aa","bp"]:
             #Cope with EMBOSS seqret output where it seems the locus id can cause
             #the other fields to overflow.  We just IGNORE the other fields!
+            warnings.warn("Malformed LOCUS line found - is this correct?\n" + line)
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
+        elif len(line.split())>=4 and line.split()[-1] in ["aa","bp"]:
+            #Cope with psuedo-GenBank files like this:
+            #   "LOCUS       RNA5 complete       1718 bp"
+            #Treat everything between LOCUS and the size as the identifier.
             warnings.warn("Malformed LOCUS line found - is this correct?\n" + line)
+            consumer.locus(line[5:].rsplit(None,2)[0].strip())
+            consumer.size(line.split()[-2])
         else:
             raise ValueError('Did not recognise the LOCUS line layout:\n' + line)
 

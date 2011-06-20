@@ -30,7 +30,7 @@ SynonymousCodons = {'CYS': ['TGT', 'TGC'], 'ASP': ['GAT', 'GAC'],
 'VAL': ['GTA', 'GTC', 'GTG', 'GTT'], 'GLU': ['GAG', 'GAA'], 'TYR': ['TAT', 'TAC']}
 
 
-class CodonAdaptationIndex:
+class CodonAdaptationIndex(object):
     """A codon adaptaion index (CAI) implementation.
     
     This class implements the codon adaptaion index (CAI) described by Sharp and

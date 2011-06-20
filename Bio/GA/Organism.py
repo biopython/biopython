@@ -79,7 +79,7 @@ def random_population(genome_alphabet, genome_size, num_organisms,
 
     return all_orgs
 
-class Organism:
+class Organism(object):
     """Represent a single individual in a population.
 
     Attributes:

@@ -62,7 +62,7 @@ test_records = [
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record",
      [(["stockholm"],ValueError,"Duplicate record identifier: Beta"),
-      (["phylip"],ValueError,"Repeated identifier, possibly due to truncation")]),
+      (["phylip"],ValueError,"Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"

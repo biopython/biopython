@@ -33,7 +33,7 @@ CODONPOSITIONS='codonpositions'
 DEFAULTNEXUS='#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=dna; end; '
 class NexusError(Exception): pass
 
-class CharBuffer:
+class CharBuffer(object):
     """Helps reading NEXUS-words and characters from a buffer."""
     def __init__(self,string):
         if string:
@@ -127,7 +127,7 @@ class CharBuffer:
         """Return the rest of the string without parsing."""
         return ''.join(self.buffer)
 
-class StepMatrix:
+class StepMatrix(object):
     """Calculate a stepmatrix for weighted parsimony.
 
     See Wheeler (1990), Cladistics 6:269-275.
@@ -465,7 +465,7 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
         opening=seq.find('(')
     return seq
 
-class Commandline:
+class Commandline(object):
     """Represent a commandline as command and options."""
     
     def __init__(self, line, title):
@@ -499,7 +499,7 @@ class Commandline:
                 except ValueError:
                     raise NexusError('Incorrect formatting in line: %s' % line)
                 
-class Block:
+class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
     def __init__(self,title=None):
         self.title=title

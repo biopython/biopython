@@ -38,7 +38,7 @@ standard_rna_table = None
 class TranslationError(Exception):
     pass
 
-class CodonTable:
+class CodonTable(object):
     nucleotide_alphabet = Alphabet.generic_nucleotide
     protein_alphabet = Alphabet.generic_protein
     
@@ -273,7 +273,7 @@ assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],IUPACData.ambiguous_dna_value
 #  >>> t.forward_table["YTA"]
 #  'L'
 
-class AmbiguousForwardTable:
+class AmbiguousForwardTable(object):
     def __init__(self, forward_table, ambiguous_nucleotide, ambiguous_protein):
         self.forward_table = forward_table
 

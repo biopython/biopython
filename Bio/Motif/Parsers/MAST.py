@@ -8,7 +8,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Motif.Parsers.MEME import MEMEMotif
 
 
-class Record:
+class Record(object):
     """The class for holding the results from a MAST run.
     
     A MAST.Record holds data about matches between motifs and sequences.

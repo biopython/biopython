@@ -14,7 +14,7 @@ http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=8
 Copyright Jonathan Taylor 2005
 """
 
-class DifferentialCutsite:
+class DifferentialCutsite(object):
     """A differential cutsite is a location in an alignment where an enzyme cuts
     at least one sequence and also cannot cut at least one other sequence.
 
@@ -43,7 +43,7 @@ class DifferentialCutsite:
 class AlignmentHasDifferentLengthsError(Exception):
     pass
 
-class CAPSMap:
+class CAPSMap(object):
     """A map of an alignment showing all possible dcuts.
 
     Members:

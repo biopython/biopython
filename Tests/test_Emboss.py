@@ -62,6 +62,8 @@ def get_emboss_version():
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
+    child.stdout.close() #This is both stdout and stderr
+    del child
     assert stderr is None #Send to stdout instead
     for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
@@ -305,8 +307,10 @@ class SeqRetAlignIOTests(unittest.TestCase):
             try:
                 new_aligns = list(AlignIO.parse(handle, new_format))
             except:
+                handle.close()
                 raise ValueError("Can't parse %s file %s in %s format." \
                                  % (old_format, filename, new_format))
+            handle.close()
             try:
                 self.assertTrue(compare_alignments(old_aligns, new_aligns))
             except ValueError, err:

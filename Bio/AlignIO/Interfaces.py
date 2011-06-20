@@ -10,8 +10,8 @@ use this module.  It provides base classes to try and simplify things.
 """
 
 from Bio.Alphabet import single_letter_alphabet, Gapped
-   
-class AlignmentIterator:
+
+class AlignmentIterator(object):
     """Base class for building MultipleSeqAlignment iterators.
 
     You should write a next() method to return Aligment
@@ -68,7 +68,7 @@ class AlignmentIterator:
         myFile.close()"""
         return iter(self.next, None)
 
-class AlignmentWriter:
+class AlignmentWriter(object):
     """Base class for building MultipleSeqAlignment writers.
     
     You should write a write_alignment() method.
