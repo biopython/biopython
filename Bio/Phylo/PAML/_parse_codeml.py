@@ -231,7 +231,7 @@ def parse_model(lines, results):
         # Example match (2 site classes): "w:   0.10224  1.00000"
         elif line[0:2] == "w:":
             site_classes = parameters.get("site classes")
-            site_classes = parse_siteclass_omegas(line_floats, site_classes)
+            site_classes = parse_siteclass_omegas(line, site_classes)
             parameters["site classes"] = site_classes
         # Find the omega values corresponding to a branch type from  
         # the clade model C for each site class
@@ -299,9 +299,15 @@ def parse_siteclass_proportions(line_floats):
             site_classes[n] = {"proportion" : line_floats[n]}
     return site_classes
 
-def parse_siteclass_omegas(line_floats, site_classes):
+def parse_siteclass_omegas(line, site_classes):
     """For models which have multiple site classes, find the omega estimated for each class.
     """
+    # The omega results are tabular with strictly 9 characters per column
+    # (1 to 3 digits before the  decimal point and 5 after). This causes
+    # numbers to sometimes run into each other, so we must use a different
+    # regular expression to account for this. i.e.:
+    # w:   0.00012  1.00000109.87121
+    line_floats = re.findall("\d{1,3}\.\d{5}", line)
     if not site_classes or len(line_floats) == 0:
         return
     for n in range(len(line_floats)):
