@@ -117,13 +117,9 @@ class Residue(Entity):
         return self.segid
 
     def extend(self):
-        self=ExtendedResidue(self)
-
-    def is_extended(self):
-        "Return if the residue is extended"
-        return self.extended
-
-
+        self.__class__=ExtendedResidue
+        self.__init__()
+        return self
 
 class DisorderedResidue(DisorderedEntityWrapper):
     """
@@ -183,12 +179,18 @@ class ExtendedResidue(Residue):
 
     """
 
-    def __init__(self, residue):
-        Residue.__init__(self, residue.id, residue.resname, residue.segid)
+    def __init__(self):
+#        Residue.__init__(residue.id, residue.resname, residue.segid)
         self.extended=1
-
-        self.hydrophobicity = self.set_hydrophobicity()
+        self.set_hydrophobicity()
+        self.set_charge()
         
+    def __repr__(self):
+        resname=self.get_resname()
+        hetflag, resseq, icode=self.get_id()
+        full_id=(resname, hetflag, resseq, icode)
+        return "<ExtendedResidue %s het=%s resseq=%i icode=%s>" % full_id
+
     def set_hydrophobicity(self, scale='consensus'):
         """
         Sets the hydrophobicity scale to use:
@@ -205,3 +207,20 @@ class ExtendedResidue(Residue):
         self.hydrophobicity_scale = scale
 
         return scale
+
+    def set_charge(self, pH=7.0):
+        """
+        Sets the charge depending on the pH (by default 7.0)
+        and the pKa of the side chain
+        
+        """
+
+        if to_one_letter_code[self.resname] in IUPACData.protein_pka_side_chain:
+            set_pka=getattr(IUPACData, "protein_pka_side_chain")
+            self.pka=set_pka[to_one_letter_code[self.resname]]
+            if self.pka < pH:
+                self.charge=1
+            elif self.pka > pH:
+                self.charge=-1
+        else:
+            self.charge=0
