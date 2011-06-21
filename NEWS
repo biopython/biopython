@@ -12,6 +12,10 @@ The latest news is at the top of this file.
 
 In progress: Biopython 1.58 (not yet released)
 
+A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum Likelihood)
+package of programs, supporting codeml, baseml and yn00 as well as a 
+Python re-implementation of chi2.
+
 The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
 would only return alignments for the first query sequence.
@@ -33,6 +37,7 @@ possible, especially the following contributors:
 
 Aaron Gallagher (first contribution)
 Connor McCoy (first contribution)
+Brandon Invergo (first contribution)
 Eric Talevich
 Joao Rodrigues
 Peter Cock
