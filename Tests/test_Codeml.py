@@ -286,5 +286,6 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(distances), 2) 
         
         
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

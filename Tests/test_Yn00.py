@@ -138,5 +138,6 @@ class ModTest(unittest.TestCase):
                 self.assertEqual(len(results["Homo_sapie"]["Pan_troglo"]),
                     5)
         
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

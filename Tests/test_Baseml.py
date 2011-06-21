@@ -200,5 +200,8 @@ class ModTest(unittest.TestCase):
         SE_parameters = SE_results.get("parameters")
         self.assertNotEqual(SE_parameters.get("SEs"), None)
         
-if __name__ == '__main__':
-    unittest.main()
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+
