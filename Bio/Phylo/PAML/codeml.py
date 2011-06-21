@@ -176,17 +176,9 @@ class Codeml(Paml):
             raise ValueError, "Tree file not specified."
         if not os.path.exists(self.tree):
             raise IOError, "The specified tree file does not exist."
-        try:
-            Paml.run(self, ctl_file, verbose, command)
-        except PamlError as strerror:
-            raise PamlError, strerror
+        Paml.run(self, ctl_file, verbose, command)
         if parse:
-            try:
-                results = read(self._rel_out_file)
-            except KeyError as (errorno, strerror):
-                raise KeyError, strerror
-            except ValueError as (errorno, strerror):
-                raise ValueError, strerror
+            results = read(self._rel_out_file)
         else:
             results = None
         return results        

@@ -92,17 +92,9 @@ class Yn00(Paml):
                 
     def run(self, ctl_file = None, verbose = False, command = "yn00",
                 parse = True):
-        try:
-            Paml.run(self, ctl_file, verbose, command)
-        except PamlError as strerror:
-            raise PamlError, strerror
+        Paml.run(self, ctl_file, verbose, command)
         if parse:
-            try:
-                results = read(self._rel_out_file)
-            except KeyError as (errorno, strerror):
-                raise KeyError, strerror
-            except ValueError as (errorno, strerror):
-                raise ValueError, strerror
+            results = read(self._rel_out_file)
         else:
             results = None
         return results
