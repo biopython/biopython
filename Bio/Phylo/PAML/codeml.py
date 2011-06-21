@@ -6,7 +6,7 @@
 from __future__ import with_statement
 import os
 import os.path
-from _paml import Paml, PamlError
+from _paml import Paml, PamlError, _relpath
 import _parse_codeml
 
 class CodemlError(EnvironmentError):
@@ -159,8 +159,7 @@ class Codeml(Paml):
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
-            self._rel_tree = os.path.relpath(self.tree, 
-                self.working_dir)
+            self._rel_tree = _relpath(self.tree, self.working_dir)
         
     def run(self, ctl_file = None, verbose = False, command = "codeml",
                 parse = True):
