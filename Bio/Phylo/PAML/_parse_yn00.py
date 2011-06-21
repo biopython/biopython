@@ -28,8 +28,8 @@ def parse_ng86(lines, results):
                 NG86["omega"] = line_floats[i]
                 NG86["dN"] = line_floats[i+1]
                 NG86["dS"] = line_floats[i+2]
-                results[seq_name][sequences[i/3]] = {"NG86":NG86}
-                results[sequences[i/3]][seq_name] = {"NG86":NG86}
+                results[seq_name][sequences[i//3]] = {"NG86":NG86}
+                results[sequences[i//3]][seq_name] = {"NG86":NG86}
     return (results, sequences)
  
 def parse_yn00(lines, results, sequences):
