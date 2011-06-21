@@ -10,23 +10,25 @@ try:
     from os.path import relpath as _relpath
 except ImportError:
     #New in Python 2.6
-    def _relpath(path, start=curdir):
+    def _relpath(path, start=None):
         """Return a relative version of a path.
 
         Implementation by James Gardner in his BareNecessities
         package, under MIT licence.
         """
-        from posixpath import curdir, sep, pardir, join
+        import posixpath
+        if start is None:
+            start = posixpath.curdir
         if not path:
             raise ValueError("no path specified")
-        start_list = posixpath.abspath(start).split(sep)
-        path_list = posixpath.abspath(path).split(sep)
+        start_list = posixpath.abspath(start).split(posixpath.sep)
+        path_list = posixpath.abspath(path).split(posixpath.sep)
         # Work out how much of the filepath is shared by start and path.
         i = len(posixpath.commonprefix([start_list, path_list]))
-        rel_list = [pardir] * (len(start_list)-i) + path_list[i:]
+        rel_list = [posixpath.pardir] * (len(start_list)-i) + path_list[i:]
         if not rel_list:
-            return curdir
-        return join(*rel_list)
+            return posixpath.curdir
+        return posixpath.join(*rel_list)
 
 class PamlError(EnvironmentError):
     """paml has failed. Run with verbose = True to view the error
