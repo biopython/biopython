@@ -172,7 +172,6 @@ class ModTest(unittest.TestCase):
                         "fix_blength": 1,
                         "method": 0}
         self.cml.read_ctl_file(self.ctl_file)
-        print len(self.cml._options), len(target_options)
         self.assertEqual(self.cml._options, target_options)
         
     def testCtlFileExistsOnRead(self):
