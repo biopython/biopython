@@ -12,13 +12,13 @@ from Bio.Phylo.PAML._paml import PamlError
 
 class ModTest(unittest.TestCase):
     
-    align_file = os.path.join("Tests", "PAML", "alignment.phylip")
-    out_file = os.path.join("Tests", "PAML", "test.out")
-    working_dir = os.path.join("Tests", "PAML", "yn00_test")
-    results_file = os.path.join("Tests", "PAML", "bad_results.out")
-    bad_ctl_file1 = os.path.join("Tests", "PAML", "bad1.ctl")
-    bad_ctl_file2 = os.path.join("Tests", "PAML", "bad2.ctl")
-    ctl_file = os.path.join("Tests", "PAML", "yn00.ctl")
+    align_file = os.path.join("PAML", "alignment.phylip")
+    out_file = os.path.join("PAML", "test.out")
+    working_dir = os.path.join("PAML", "yn00_test")
+    results_file = os.path.join("PAML", "bad_results.out")
+    bad_ctl_file1 = os.path.join("PAML", "bad1.ctl")
+    bad_ctl_file2 = os.path.join("PAML", "bad2.ctl")
+    ctl_file = os.path.join("PAML", "yn00.ctl")
        
     def __del__(self):
         """Just in case yn00 creates some junk files, do a clean-up."""
@@ -129,7 +129,7 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, yn00.read, self.results_file)
         
     def testParseAllVersions(self):
-        folder = os.path.join("Tests", "PAML","Results", "yn00", "versions")
+        folder = os.path.join("PAML","Results", "yn00", "versions")
         for results_file in os.listdir(folder):
             file_path = os.path.join(folder, results_file)
             if os.path.isfile(file_path) and results_file[:4] == "yn00":

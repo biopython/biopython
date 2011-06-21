@@ -12,16 +12,16 @@ from Bio.Phylo.PAML._paml import PamlError
 
 class ModTest(unittest.TestCase):
     
-    align_file = os.path.join("Tests", "PAML", "alignment.phylip")
-    tree_file = os.path.join("Tests", "PAML", "species.tree")
-    bad_tree_file = os.path.join("Tests", "PAML", "bad.tree")
-    out_file = os.path.join("Tests", "PAML", "test.out")
-    working_dir = os.path.join("Tests", "PAML", "codeml_test")
-    results_file = os.path.join("Tests", "PAML", "bad_results.out")
-    bad_ctl_file1 = os.path.join("Tests", "PAML", "bad1.ctl")
-    bad_ctl_file2 = os.path.join("Tests", "PAML", "bad2.ctl")
-    bad_ctl_file3 = os.path.join("Tests", "PAML", "bad3.ctl")
-    ctl_file = os.path.join("Tests", "PAML", "codeml.ctl")
+    align_file = os.path.join("PAML", "alignment.phylip")
+    tree_file = os.path.join("PAML", "species.tree")
+    bad_tree_file = os.path.join("PAML", "bad.tree")
+    out_file = os.path.join("PAML", "test.out")
+    working_dir = os.path.join("PAML", "codeml_test")
+    results_file = os.path.join("PAML", "bad_results.out")
+    bad_ctl_file1 = os.path.join("PAML", "bad1.ctl")
+    bad_ctl_file2 = os.path.join("PAML", "bad2.ctl")
+    bad_ctl_file3 = os.path.join("PAML", "bad3.ctl")
+    ctl_file = os.path.join("PAML", "codeml.ctl")
        
     def __del__(self):
         """Just in case CODEML creates some junk files, do a clean-up."""
@@ -191,10 +191,10 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, codeml.read, self.results_file)
         
     def testParseAllVersions(self):
-        for results_file in os.listdir(os.path.join("Tests", "PAML",
+        for results_file in os.listdir(os.path.join("PAML",
                 "Results","codeml","versions")):
             if os.path.isfile(results_file) and results_file[:6] == "codeml":
-                results = codeml.read(os.path.join("Tests", "PAML",
+                results = codeml.read(os.path.join("PAML",
                     "Results", results_file))
                 self.assertEqual(len(results["NSsites"]), 6)
                 self.assertEqual(len(results["NSsites"][0]), 7)
@@ -205,7 +205,7 @@ class ModTest(unittest.TestCase):
                 self.assertEqual(len(results["NSsites"][8]), 6)
     
     def testParseSEs(self):
-        SE_results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        SE_results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_SE.out")
         SE_results = codeml.read(SE_results_file)
         SE_models = SE_results.get("NSsites")
@@ -215,7 +215,7 @@ class ModTest(unittest.TestCase):
             self.assertNotEqual(SE_parameters.get("SEs"), None)
     
     def testParseAllNSsites(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_NSsites_all.out")
         results = codeml.read(results_file)
         models = results.get("NSsites")
@@ -224,7 +224,7 @@ class ModTest(unittest.TestCase):
             self.assertEqual(len(models.get(model)), 5)
         
     def testParseBranchSiteA(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_branchsiteA.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 5)
@@ -232,7 +232,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(site_classes), 4)        
         
     def testParseCladeModelC(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_clademodelC.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 5)
@@ -240,7 +240,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(site_classes), 3)        
     
     def testParseNgene2Mgene012(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_ngene2_mgene012.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
@@ -248,7 +248,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(site_classes), 2)        
     
     def testParseNgene2Mgene34(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_ngene2_mgene34.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
@@ -256,7 +256,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(site_classes), 2)   
     
     def testParseFreeBranch(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_freebranch.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
@@ -264,7 +264,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(branches), 7) 
     
     def testParsePairwise(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_pairwise.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 5)
@@ -272,7 +272,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(pairwise), 5) 
     
     def testParseAA(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_aa_model0.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 5)
@@ -280,7 +280,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(len(distances), 1) 
 
     def testParseAAPairwise(self):
-        results_file = os.path.join("Tests", "PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_aa_pairwise.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
