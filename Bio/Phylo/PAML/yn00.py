@@ -3,7 +3,6 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-from __future__ import with_statement
 import os.path
 from _paml import Paml, PamlError
 import _parse_yn00
@@ -63,7 +62,7 @@ class Yn00(Paml):
             ctl_handle = open(ctl_file)
             for line in ctl_handle:
                 line = line.strip()
-                uncommented = line.partition("*")[0]
+                uncommented = line.split("*",1)[0]
                 if uncommented != "":
                     if "=" not in uncommented:
                         raise AttributeError, \
