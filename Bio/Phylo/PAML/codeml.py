@@ -9,6 +9,9 @@ import os.path
 from _paml import Paml, PamlError, _relpath
 import _parse_codeml
 
+#TODO - Restore use of with statement for closing handles automatically
+#after dropping Python 2.4
+
 class CodemlError(EnvironmentError):
     """CODEML has failed. Run with verbose = True to view CODEML's error
 message"""
@@ -68,7 +71,8 @@ class Codeml(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        with open(self.ctl_file, 'w') as ctl_handle:
+        if True: #Dummy statement to preserve indentation for diff
+            ctl_handle = open(self.ctl_file, 'w')
             ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
             ctl_handle.write("outfile = %s\n" % self._rel_out_file)
             ctl_handle.write("treefile = %s\n" % self._rel_tree)
@@ -86,12 +90,14 @@ class Codeml(Paml):
                     ctl_handle.write("%s = %s\n" % (option[0], NSsites))
                 else:
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
+            ctl_handle.close()
     
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Codeml instance.
         """
         temp_options = {}
-        with open(ctl_file) as ctl_handle:
+        if True: #Dummy statement to preserve indentation for diff
+            ctl_handle = open(ctl_file)
             for line in ctl_handle:
                 line = line.strip()
                 uncommented = line.partition("*")[0]
@@ -131,6 +137,7 @@ class Codeml(Paml):
                             except:
                                 converted_value = value
                         temp_options[option] = converted_value
+            ctl_handle.close()
         for option in self._options.keys():
             if option in temp_options.keys():
                 self._options[option] = temp_options[option]
@@ -186,8 +193,9 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError, "Results file does not exist."
-    with open(results_file) as results_handle:
-        lines = results_handle.readlines()
+    handle = open(results_file)
+    lines = handle.readlines()
+    handle.close()
     (results, multi_models) = _parse_codeml.parse_basics(lines, results)
     results = _parse_codeml.parse_nssites(lines, results, multi_models)
     results = _parse_codeml.parse_pairwise(lines, results)

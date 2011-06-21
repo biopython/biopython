@@ -8,6 +8,9 @@ import os.path
 from _paml import Paml, PamlError
 import _parse_yn00
 
+#TODO - Restore use of with statement for closing handles automatically
+#after dropping Python 2.4
+
 class Yn00Error(EnvironmentError):
     """yn00 has failed. Run with verbose = True to view yn00's error
 message"""
@@ -39,22 +42,25 @@ class Yn00(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        with open(self.ctl_file, 'w') as ctl_handle:
+        if True: #Dummy statement to preserve indentation for diff
+            ctl_handle = open(self.ctl_file, 'w')
             ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
             ctl_handle.write("outfile = %s\n" % self._rel_out_file)
             for option in self._options.items():
-                if option[1] == None:
+                if option[1] is None:
                     # If an option has a value of None, there's no need
                     # to write it in the control file; it's normally just
                     # commented out.
                     continue
                 ctl_handle.write("%s = %s\n" % (option[0], option[1]))
-    
+            ctl_handle.close()
+
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the yn00 instance.
         """
         temp_options = {}
-        with open(ctl_file) as ctl_handle:
+        if True: #Dummy statement to preserve indentation for diff
+            ctl_handle = open(ctl_file)
             for line in ctl_handle:
                 line = line.strip()
                 uncommented = line.partition("*")[0]
@@ -83,6 +89,7 @@ class Yn00(Paml):
                             except:
                                 converted_value = value
                         temp_options[option] = converted_value
+            ctl_handle.close()
         for option in self._options.keys():
             if option in temp_options.keys():
                 self._options[option] = temp_options[option]
@@ -103,8 +110,9 @@ def read(results_file):
     results = {}
     if not os.path.exists(results_file):
         raise IOError, "Results file does not exist."
-    with open(results_file) as results_handle:
-        lines = results_handle.readlines()
+    handle = open(results_file)
+    lines = handle.readlines()
+    handle.close()
     for line_num in range(len(lines)):
         line = lines[line_num]
         if "(A) Nei-Gojobori (1986) method" in line:
