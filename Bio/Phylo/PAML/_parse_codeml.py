@@ -270,6 +270,8 @@ def parse_model(lines, results):
             branch = branch_res.group(1)
             if parameters.get("branches") is None:
                 parameters["branches"] = {}
+            #Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
+            line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
             parameters["branches"][branch]= {"t":float(params[0].strip()),
                 "N":float(params[1].strip()), "S":float(params[2].strip()),
