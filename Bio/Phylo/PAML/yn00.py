@@ -38,10 +38,7 @@ class Yn00(Paml):
         ctl_file property of the yn00 class.
         """
         # Make sure all paths are relative to the working directory
-        try:
-            self._set_rel_paths()
-        except (AttributeError, ValueError) as error:
-            raise error
+        self._set_rel_paths()
         with open(self.ctl_file, 'w') as ctl_handle:
             ctl_handle.write("seqfile = {0}\n".format(self._rel_alignment))
             ctl_handle.write("outfile = {0}\n".format(self._rel_out_file))
