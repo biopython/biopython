@@ -38,6 +38,15 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+try:
+    any
+except NameError:
+    #Hack for Python 2.4
+    def any(iterable):
+        for element in iterable:
+            if element:
+               return True
+        return False
 
 _PHYLIP_ID_WIDTH = 10
 
