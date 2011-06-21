@@ -55,7 +55,7 @@ class Paml(object):
     def print_options(self):
         """Print out all of the options and their current settings."""
         for option in self._options.items():
-            print "{0} = {1}".format(option[0], option[1])
+            print "%s = %s" % (option[0], option[1])
  
     def set_option(self, option, value):
         """Set the value of an option. 
@@ -138,7 +138,7 @@ class Paml(object):
         if result_code > 0:
             # If the program fails for any reason
             raise PamlError, \
-            "{0} has failed. Run with verbose = True to view {0}'s error message".format(command)
+            "%s has failed. Run with verbose = True to view error message" % command
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError, "The {0} process was killed.".format(command)
+            raise EnvironmentError, "The %s process was killed." % command
