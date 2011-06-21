@@ -47,9 +47,8 @@ class ModTest(unittest.TestCase):
             alignment = "nonexistent")
         self.yn00.alignment = "nonexistent"
         self.yn00.out_file = self.out_file
-        self.assertRaises((EnvironmentError, IOError), 
-            self.yn00.run)
-    
+        self.assertRaises(IOError, self.yn00.run)
+
     def testWorkingDirValid(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
@@ -94,7 +93,7 @@ class ModTest(unittest.TestCase):
     def testCtlFileExistsOnRun(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.assertRaises((EnvironmentError, IOError),
+        self.assertRaises(IOError,
             self.yn00.run, ctl_file = "nonexistent")
             
     def testCtlFileValidOnRead(self):
@@ -113,7 +112,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(self.yn00._options, target_options)
         
     def testCtlFileExistsOnRead(self):
-        self.assertRaises((EnvironmentError, IOError),
+        self.assertRaises(IOError,
             self.yn00.read_ctl_file, ctl_file = "nonexistent")
         
     def testResultsValid(self):

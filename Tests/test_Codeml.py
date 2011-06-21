@@ -53,8 +53,7 @@ class ModTest(unittest.TestCase):
         self.cml.alignment = "nonexistent"
         self.cml.tree = self.tree_file
         self.cml.out_file = self.out_file
-        self.assertRaises((EnvironmentError, IOError), 
-            self.cml.run)
+        self.assertRaises(IOError, self.cml.run)
     
     def testTreeFileValid(self):
         self.assertRaises((AttributeError, TypeError),
@@ -71,8 +70,7 @@ class ModTest(unittest.TestCase):
         self.cml.alignment = self.align_file
         self.cml.tree = "nonexistent"
         self.cml.out_file = self.out_file
-        self.assertRaises((EnvironmentError, IOError),
-            self.cml.run)
+        self.assertRaises(IOError, self.cml.run)
     
     def testWorkingDirValid(self):
         self.cml.tree = self.tree_file

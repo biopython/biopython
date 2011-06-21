@@ -58,7 +58,9 @@ class Yn00(Paml):
         """Parse a control file and load the options into the yn00 instance.
         """
         temp_options = {}
-        if True: #Dummy statement to preserve indentation for diff
+        if not os.path.isfile(ctl_file):
+            raise IOError("File not found: %r" % ctl_file)
+        else:
             ctl_handle = open(ctl_file)
             for line in ctl_handle:
                 line = line.strip()

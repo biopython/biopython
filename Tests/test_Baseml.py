@@ -170,7 +170,7 @@ class ModTest(unittest.TestCase):
         self.assertEqual(self.bml._options, target_options)
         
     def testCtlFileExistsOnRead(self):
-        self.assertRaises((EnvironmentError, IOError),
+        self.assertRaises(IOError,
             self.bml.read_ctl_file, ctl_file = "nonexistent")
         
     def testResultsValid(self):
@@ -178,8 +178,7 @@ class ModTest(unittest.TestCase):
             baseml.read, 1)
     
     def testResultsExist(self):
-        self.assertRaises((EnvironmentError, IOError),
-            baseml.read, "nonexistent")
+        self.assertRaises(IOError, baseml.read, "nonexistent")
         
     def testResultsParsable(self):
         self.assertRaises(ValueError, baseml.read, self.results_file)
