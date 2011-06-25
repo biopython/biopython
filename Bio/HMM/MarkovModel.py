@@ -4,6 +4,7 @@
 import copy
 import math
 import random
+from collections import defaultdict
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -17,40 +18,16 @@ def _gen_random_array(n):
     
     return normalizedRandArray
 
-def _collect_associations(pairList, keyPos):
-    """Change the representation of a map from a list of ordered pairs to a
-    dictionary
-
-    Example:
-    >>> animalSounds = [('meow', 'cats'), ('ribbit', 'frogs'), ('purr', 'cats')]
-    >>> _collect_associations(animalSounds, 1)
-    {'cats': ['meow', 'purr'], 'frogs': ['ribbit']}
-    """
-    if keyPos not in [0,1]:
-        raise ValueError("Index must be 0 or 1")
-
-    # If keyIndex is 0, valueIndex is 1. If keyIndex is 1, valueIndex is 0.
-    valuePos = keyPos ^ 1
-    associations= {}
-
-    # loop over all of the state-symbol duples, mapping states to
-    # lists of emitted symbols
-    for duple in pairList:
-        key = duple[keyPos]
-        value = duple[valuePos]
-        # Add the symbol to the list of emissions from state
-        if key in associations:
-            associations[key].append(value)
-        # otherwise create the list and add the state
-        else:
-            associations[key] = [value]
-
-    return associations
-
 def _calculate_emissions(emission_probs):
     """Calculate which symbols can be emitted in each state
     """
-    return _collect_associations(emission_probs.keys(), 0)
+    # loop over all of the state-symbol duples, mapping states to
+    # lists of emitted symbols
+    emissions = defaultdict(list)
+    for state, symbol in emission_probs:
+        emissions[state].append(symbol)
+
+    return emissions
 
 def _calculate_from_transitions(trans_probs):
     """Calculate which 'from transitions' are allowed for each state
@@ -61,7 +38,11 @@ def _calculate_from_transitions(trans_probs):
     lists of destination states reachable from the source state via a
     transition.
     """
-    return _collect_associations(trans_probs.keys(), 0)
+    transitions = defaultdict(list)
+    for from_state, to_state in trans_probs:
+        transitions[from_state].append(to_state)
+
+    return transitions
 
 def _calculate_to_transitions(trans_probs):
     """Calculate which 'to transitions' are allowed for each state
@@ -72,7 +53,11 @@ def _calculate_to_transitions(trans_probs):
     lists of source states from which the destination is reachable via a
     transition.
     """
-    return _collect_associations(trans_probs.keys(), 1)
+    transitions = defaultdict(list)
+    for from_state, to_state in trans_probs:
+        transitions[to_state].append(from_state)
+
+    return transitions
 
 class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
