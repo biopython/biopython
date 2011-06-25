@@ -4,9 +4,60 @@
 import copy
 import math
 import random
+from collections import defaultdict
 
 # biopython
 from Bio.Seq import MutableSeq
+
+def _gen_random_array(n):
+    """ Return an array of n random numbers, where the elements of the array sum
+    to 1.0"""
+    randArray = [random.random() for i in range(n)]
+    total = sum(randArray)
+    normalizedRandArray = [x/total for x in randArray]
+    
+    return normalizedRandArray
+
+def _calculate_emissions(emission_probs):
+    """Calculate which symbols can be emitted in each state
+    """
+    # loop over all of the state-symbol duples, mapping states to
+    # lists of emitted symbols
+    emissions = defaultdict(list)
+    for state, symbol in emission_probs:
+        emissions[state].append(symbol)
+
+    return emissions
+
+def _calculate_from_transitions(trans_probs):
+    """Calculate which 'from transitions' are allowed for each state
+
+    This looks through all of the trans_probs, and uses this dictionary
+    to determine allowed transitions. It converts this information into
+    a dictionary, whose keys are source states and whose values are
+    lists of destination states reachable from the source state via a
+    transition.
+    """
+    transitions = defaultdict(list)
+    for from_state, to_state in trans_probs:
+        transitions[from_state].append(to_state)
+
+    return transitions
+
+def _calculate_to_transitions(trans_probs):
+    """Calculate which 'to transitions' are allowed for each state
+
+    This looks through all of the trans_probs, and uses this dictionary
+    to determine allowed transitions. It converts this information into
+    a dictionary, whose keys are destination states and whose values are
+    lists of source states from which the destination is reachable via a
+    transition.
+    """
+    transitions = defaultdict(list)
+    for from_state, to_state in trans_probs:
+        transitions[to_state].append(from_state)
+
+    return transitions
 
 class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
@@ -177,26 +228,62 @@ class MarkovModelBuilder(object):
             self.emission_prob[key] = new_emission_prob
 
 
+    def set_random_initial_probabilities(self):
+        """Set all initial state probabilities to a randomly generated distribution.
+        Returns the dictionary containing the initial probabilities.
+        """
+        initial_freqs = _gen_random_array(len(self._state_alphabet.letters))
+        for state in self._state_alphabet.letters:
+            self.initial_prob[state] = initial_freqs.pop()
+
+        return self.initial_prob
+
+    def set_random_transition_probabilities(self):
+        """Set all allowed transition probabilities to a randomly generated distribution.
+        Returns the dictionary containing the transition probabilities.
+        """
+
+        if not self.transition_prob:
+            raise Exception("No transitions have been allowed yet. " +
+                            "Allow some or all transitions by calling " + 
+                            "allow_transition or allow_all_transitions first.")
+
+        transitions_from = _calculate_from_transitions(self.transition_prob)
+        for from_state in transitions_from.keys():
+            freqs = _gen_random_array(len(transitions_from[from_state]))
+            for to_state in transitions_from[from_state]:
+                self.transition_prob[(from_state, to_state)] = freqs.pop()
+
+        return self.transition_prob
+
+    def set_random_emission_probabilities(self):
+        """Set all allowed emission probabilities to a randomly generated
+        distribution.  Returns the dictionary containing the emission
+        probabilities.
+        """
+
+        if not self.emission_prob:
+            raise Exception("No emissions have been allowed yet. " +
+                            "Allow some or all emissions.")
+
+        emissions = _calculate_emissions(self.emission_prob)
+        for state in emissions.iterkeys():
+            freqs = _gen_random_array(len(emissions[state]))
+            for symbol in emissions[state]:
+                self.emission_prob[(state, symbol)] = freqs.pop()
+
+        return self.emission_prob
+
+        
     def set_random_probabilities(self):
         """Set all probabilities to randomly generated numbers.
 
-        Resets probabilities of all initial states, allowed transitions, and
+        Resets probabilities of all initial states, transitions, and
         emissions to random values.
-
-        Warning 1 -- This will reset any currently set probabibilities.
-
-        Warning 2 -- This does not check to ensure that the sum of
-        all of the probabilities is less then 1. It just randomly assigns
-        a probability to each
         """
-        for state in self._state_alphabet.letters:
-            self.initial_prob[state] = random.random()
-
-        for key in self.transition_prob:
-            self.transition_prob[key] = random.random()
-
-        for key in self.emission_prob:
-            self.emission_prob[key] = random.random()
+        self.set_random_initial_probabilities()
+        self.set_random_transition_probabilities()
+        self.set_random_emission_probabilities()
 
     # --- functions to deal with the transitions in the sequence
 
@@ -373,65 +460,14 @@ class HiddenMarkovModel(object):
         # each key is a source state, mapped to a list of the destination states
         # that are reachable from the source state via a transition
         self._transitions_from = \
-           self._calculate_from_transitions(self.transition_prob)
+           _calculate_from_transitions(self.transition_prob)
 
         # a dictionary of the possible transitions to each state
         # each key is a destination state, mapped to a list of source states
         # from which the destination is reachable via a transition
         self._transitions_to = \
-           self._calculate_to_transitions(self.transition_prob)
+           _calculate_to_transitions(self.transition_prob)
 
-    def _calculate_from_transitions(self, trans_probs):
-        """Calculate which 'from transitions' are allowed for each state
-
-        This looks through all of the trans_probs, and uses this dictionary
-        to determine allowed transitions. It converts this information into
-        a dictionary, whose keys are source states and whose values are
-        lists of destination states reachable from the source state via a
-        transition.
-        """
-        from_transitions = {}
-
-        # loop over all of the transitions, mapping source states to lists
-        # of destination states
-        for trans_key in trans_probs:
-            from_state = trans_key[0]
-            to_state = trans_key[1]
-            # Add to_state to the list of destination states that are reachable
-            # from from_state. Map from_state if we haven't seen it before.
-            if from_state in from_transitions:
-                from_transitions[from_state].append(to_state)
-            # otherwise create the list and add the state
-            else:
-                from_transitions[from_state] = [to_state]
-
-        return from_transitions
-
-    def _calculate_to_transitions(self, trans_probs):
-        """Calculate which 'to transitions' are allowed for each state
-
-        This looks through all of the trans_probs, and uses this dictionary
-        to determine allowed transitions. It converts this information into
-        a dictionary, whose keys are destination states and whose values are
-        lists of source states from which the destination is reachable via a
-        transition.
-        """
-        to_transitions = {}
-
-        # loop over all of the transitions, mapping destination states to lists
-        # of source states
-        for trans_key in trans_probs:
-            from_state = trans_key[0]
-            to_state = trans_key[1]
-            # Add from_state to the list of source states from which to_state
-            # is reachable. Map to_state if we haven't seen it before.
-            if to_state in to_transitions:
-                to_transitions[to_state].append(from_state)
-            # otherwise create the list and add the state
-            else:
-                to_transitions[to_state] = [from_state]
-
-        return to_transitions
 
     def get_blank_transitions(self):
         """Get the default transitions for the model.
