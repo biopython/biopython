@@ -9020,7 +9020,7 @@ See the Phylo page on the Biopython wiki (\url{http://biopython.org/wiki/Phylo})
 more examples of using the available methods.
 
 
-\section{Features of PhyloXML trees}
+\subsection{Features of PhyloXML trees}
 \label{sec:PhyloXML}
 
 The phyloXML file format includes fields for annotating trees with additional data types and
@@ -9037,10 +9037,56 @@ See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/Phyl
 descriptions and examples of using the additional annotation features provided by PhyloXML.
 
 
+\section{Running external applications}
+\label{sec:PhyloApps}
+
+While Bio.Phylo doesn't infer trees from alignments itself, there are third-party
+programs available that do. These are supported through the module
+\texttt{Bio.Phylo.Applications}, using the same general framework as
+\texttt{Bio.Emboss.Applications}, \texttt{Bio.Align.Applications} and others.
+
+Biopython 1.58 introduces a wrapper for PhyML
+(\url{http://www.atgc-montpellier.fr/phyml/}). The program accepts an input alignment in
+\texttt{phylip-relaxed} format (that's Phylip format, but without the 10-character limit
+on taxon names) and a variety of options. A quick example:
+
+\begin{verbatim}
+>>> from Bio import Phylo
+>>> from Bio.Phylo.Applications import PhymlCommandline
+>>> cmd = PhymlCommandline(input='Tests/Phylip/random.phy')
+>>> out_log, err_log = cmd()
+\end{verbatim}
+
+This generates a tree file and a stats file with the names
+[\textit{input~filename}]\verb|_phyml_tree.txt| and
+[\textit{input~filename}]\verb|_phyml_stats.txt|. The tree file is in Newick format:
+
+\begin{verbatim}
+>>> tree = Phylo.read('Tests/Phylip/random.phy_phyml_tree.txt', 'newick')
+>>> Phylo.draw_ascii(tree)
+\end{verbatim}
+
+Note that some popular Phylip programs, including \texttt{dnaml} and \texttt{protml},
+are already available through the EMBOSS wrappers in \texttt{Bio.Emboss.Applications} if
+you have the Phylip extensions to EMBOSS installed on your system.
+See Section~\ref{sec:alignment-tools} for some examples and clues on how to use
+programs like these.
+
+
+\section{PAML integration}
+\label{sec:PhyloPAML}
+
+Biopython 1.58 brings support for PAML
+(\url{http://abacus.gene.ucl.ac.uk/software/paml.html}), a suite of programs for
+phylogenetic analysis.
+
+Documentation for this new module currently lives on the Biopython wiki:
+\url{http://biopython.org/wiki/PAML}
+
 \section{Future plans}
 \label{sec:PhyloFuture}
 
-Bio.Phylo is under active development. Here's a quick survey of what we might change in future
+Bio.Phylo is under active development. Here are some features we might add in future
 releases:
 
 \begin{description}
@@ -9067,11 +9113,11 @@ releases:
     additions to the attributes of existing classes.
 
   \item[String representations] 
-    The string representations of Phylo objects might also change in future releases; we're
+    The string representations of some objects could change in future releases; we're
     still determining which ``informal'' representations are most useful most often. To
-    future-proof your code against this, we recommend using the attributes of objects directly
-    (e.g.  \verb|my_clade.name|) rather than automatic string conversion (\verb|str(my_clade)|)
-    in scripts that require a consistent result.
+    future-proof your code against this, we recommend using the attributes of objects
+    directly (e.g.  \verb|my_clade.name|) rather than automatic string conversion
+    (\verb|str(my_clade)|) in scripts that require a consistent result.
 
 \end{description}
 
