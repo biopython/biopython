@@ -9078,7 +9078,46 @@ programs like these.
 
 Biopython 1.58 brings support for PAML
 (\url{http://abacus.gene.ucl.ac.uk/software/paml.html}), a suite of programs for
-phylogenetic analysis.
+phylogenetic analysis by maximum likelihood. Currently the programs codeml, baseml and 
+yn00 are implemented. Due to PAML's usage of control files rather than commandline 
+arguments to control runtime options, usage of this wrapper strays from the format of 
+other application wrappers in Biopython. 
+
+A typical workflow would be to initialize a PAML object (Codeml in this example), 
+specifying an alignment file, a tree file, an output file and a working directory. Next, 
+runtime options are set via the set\_option() method or by reading an existing control 
+file. Finally, the program is run via the run() method and the output file is 
+automatically parsed to a results dictionary. 
+
+\begin{verbatim}
+>>> from Bio.Phylo.PAML import codeml
+>>> cml = codeml.Codeml()
+>>> cml.alignment = "Tests/PAML/alignment.phylip"
+>>> cml.tree = "Tests/PAML/species.tree"
+>>> cml.out_file = "results.out"
+>>> cml.working_dir = "./scratch"
+>>> cml.set_option("seqtype", 1)
+>>> cml.set_option("verbose", 0)
+>>> cml.set_option("noisy", 0)
+>>> cml.set_option("RateAncestor", 0)
+>>> cml.set_option("model", 0)
+>>> cml.set_option("NSsites", [0, 1, 2])
+>>> cml.set_option("CodonFreq", 2)
+>>> cml.set_option("cleandata", 1)
+>>> cml.set_option("fix_alpha", 1)
+>>> cml.set_option("kappa", 4.54006)
+>>> results = cml.run()
+>>> ns_sites = results.get("NSsites")
+>>> m0 = ns_sites.get(0)
+>>> m0_params = m0.get("parameters")
+>>> print m0_params.get("omega")
+\end{verbatim}
+
+Existing output files may be also be read:
+
+\begin{verbatim}
+>>> results = codeml.read("Tests/PAML/Results/codeml/codeml_NSsites_all.out")
+\end{verbatim}
 
 Documentation for this new module currently lives on the Biopython wiki:
 \url{http://biopython.org/wiki/PAML}
