@@ -59,16 +59,17 @@ class Paml(object):
         for option in self._options.items():
             print "%s = %s" % (option[0], option[1])
  
-    def set_option(self, option, value):
+    def set_options(self, **kwargs):
         """Set the value of an option. 
         
         This function abstracts the options dict to prevent the user from 
         adding options that do not exist or mispelling options.
         """
-        if not self._options.has_key(option):
-            raise KeyError, "Invalid option: " + option
-        else:
-            self._options[option] = value
+        for option, value in kwargs.items():
+            if not self._options.has_key(option):
+                raise KeyError, "Invalid option: " + option
+            else:
+                self._options[option] = value
         
     def get_option(self, option):
         """Return the value of an option."""
