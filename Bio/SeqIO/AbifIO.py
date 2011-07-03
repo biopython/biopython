@@ -136,7 +136,16 @@ def AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     header = struct.unpack('>4sH4sI2H3I', handle.read(30))
 
     for entry in _abif_parse_header(header, handle):
+        # stop iteration if all desired tags have been extracted
+        if not _EXTRACT:
+            break
+
         key = entry.tag_name + str(entry.tag_num)
+
+        # continue to next iteration if parsed tag is not desired
+        if not key in ['PBAS2', 'PCON2', 'SMPL1'] + _EXTRACT.keys():
+            continue
+
         # PBAS2 is base-called sequence
         if key == 'PBAS2': 
             seq = entry.tag_data
@@ -150,8 +159,9 @@ def AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
         elif key == 'SMPL1':
             sample_id = entry.tag_data
         else:
+            # extract sequence annotation as defined in _EXTRACT          
             if key in _EXTRACT:
-                annot[_EXTRACT[key]] = entry.tag_data
+                annot[_EXTRACT.pop(key)] = entry.tag_data
             else:
                 raise KeyError('The %s tag can not be found.' % key)
     
@@ -159,9 +169,8 @@ def AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
                        id=file_id, name=sample_id,
                        description='',
                        annotations=annot,
-                       letter_annotations={'phred_quality': qual}
-                      )
-
+                       letter_annotations={'phred_quality': qual})
+                      
     if not trim:
         yield record
     else:
@@ -244,4 +253,4 @@ def _abif_trim(seq_record):
         return seq_record[trim_start:trim_finish]
 
 if __name__ == '__main__':
-    print "Self-testing AbifIO..."
+    print "Quick-testing AbifIO..."
