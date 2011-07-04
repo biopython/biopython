@@ -13,6 +13,7 @@ test_files = {
     "dna" : ["SeqXML/dna_example.xml",4,None],
     "rna" : ["SeqXML/rna_example.xml",5,None],
     "protein" : ["SeqXML/protein_example.xml",5,None],
+    "globalSpecies" : ["SeqXML/global_species_example.xml",2,None],
 }
 
 corrupt_files = {"corrupt1" : ["SeqXML/corrupt_example1.xml",None],
@@ -92,8 +93,8 @@ class TestDetailedRead(unittest.TestCase):
         
         self.assertEqual(self.records["protein"][2].annotations["test"],[u"1",u"2",u"3"])
         
-    def test_duplicated_alternativeID(self):
-        """Read multiple alternative identifier form single source"""
+    def test_duplicated_dbxref(self):
+        """Read multiple cross references to a single source"""
         
         self.assertEqual(self.records["protein"][2].dbxrefs,[u"someDB:G001",u"someDB:G002"])
     
@@ -107,13 +108,21 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records["rna"][3].dbxrefs,minimalRecord.dbxrefs)
         self.assertEqual(self.records["protein"][3].description,minimalRecord.description)
         
-    def test_species(self):
+    def test_local_species(self):
         
         self.assertEqual(self.records["rna"][1].annotations["organism"],"Mus musculus")
         self.assertEqual(self.records["rna"][1].annotations["ncbi_taxid"],"10090")
         
         self.assertEqual(self.records["rna"][0].annotations["organism"],"Gallus gallus")
         self.assertEqual(self.records["rna"][0].annotations["ncbi_taxid"],"9031")
+        
+    def test_global_species(self):
+        
+        self.assertEqual(self.records["globalSpecies"][0].annotations["organism"],"Mus musculus")
+        self.assertEqual(self.records["globalSpecies"][0].annotations["ncbi_taxid"],"10090")
+        
+        self.assertEqual(self.records["globalSpecies"][1].annotations["organism"],"Homo sapiens")
+        self.assertEqual(self.records["globalSpecies"][1].annotations["ncbi_taxid"],"9606")
         
         
     def test_local_source_definition(self):
@@ -146,6 +155,11 @@ class TestReadAndWrite(unittest.TestCase):
     def test_read_write_protein(self):
         
         read1_records = list(SeqIO.parse(test_files["protein"][2],"seqxml"))
+        self._write_parse_and_compare(read1_records)
+        
+    def test_read_write_globalSpecies(self):
+        
+        read1_records = list(SeqIO.parse(test_files["globalSpecies"][2],"seqxml"))
         self._write_parse_and_compare(read1_records)
         
     

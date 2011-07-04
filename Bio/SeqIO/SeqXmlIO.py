@@ -101,6 +101,8 @@ class SeqXmlIterator(XMLRecordIterator):
         self._source = None
         self._source_version = None
         self._version = None
+        self._speciesName = None
+        self._ncbiTaxId = None
 
     def _attr_seqXML(self,attr_dict,record):
         """Parse the document metadata."""
@@ -111,6 +113,10 @@ class SeqXmlIterator(XMLRecordIterator):
             self._source_version = attr_dict["sourceVersion"]
         if "version" in attr_dict:
             self._version = attr_dict["seqXMLversion"]
+        if "ncbiTaxID" in attr_dict:
+            self._ncbiTaxId = attr_dict["ncbiTaxID"]
+        if "speciesName" in attr_dict:
+            self._speciesName = attr_dict["speciesName"]
     
     def _attr_property(self,attr_dict,record):
         """Parse key value pair properties and store them as annotations."""
@@ -149,7 +155,15 @@ class SeqXmlIterator(XMLRecordIterator):
             record.annotations["source"] = attr_dict["source"]
         elif self._source != None:
             record.annotations["source"] = self._source
-    
+            
+        #initialize entry with global species definition
+        #the keywords for the species annotation are taken from SwissIO   
+        if self._ncbiTaxId != None:
+            record.annotations["ncbi_taxid"] = self._ncbiTaxId
+        if self._speciesName != None:
+            record.annotations["organism"] = self._speciesName    
+
+
     def _elem_DNAseq(self,node,record):
         """Parse DNA sequence."""
         
@@ -188,7 +202,6 @@ class SeqXmlIterator(XMLRecordIterator):
         if "source" not in attr_dict or "id" not in attr_dict:
             raise ValueError("Invalid DB cross reference.")
         
-        #TODO add type 
         if "%s:%s" % (attr_dict["source"],attr_dict["id"]) not in record.dbxrefs:
             record.dbxrefs.append("%s:%s" % (attr_dict["source"],attr_dict["id"]) )
 
@@ -202,29 +215,39 @@ class SeqXmlWriter(SequentialSequenceWriter):
     Bio.Alphapet.DNAAlphabet or Bio.Alphapet.ProteinAlphabet.
     """
     
-    def __init__(self, handle,seqXML_version=None,source=None,source_version=None):
+    def __init__(self, handle,source=None,source_version=None,species=None,ncbiTaxId=None):
         """Create Object and start the xml generator."""
         
         SequentialSequenceWriter.__init__(self, handle)
 
         self.xml_generator = XMLGenerator(handle, "utf-8")
         self.xml_generator.startDocument()
-        self.seqXML_version = seqXML_version
         self.source = source
         self.source_version = source_version
+        self.species = species
+        self.ncbiTaxId = ncbiTaxId
             
     def write_header(self):
         """Write root node with document metadata."""
         SequentialSequenceWriter.write_header(self)
         
         attrs = {"xmlns:xsi":"http://www.w3.org/2001/XMLSchema-instance",
-                 "xsi:noNamespaceSchemaLocation":"http://www.seqxml.org/0.3/seqxml.xsd"}
-        if self.seqXML_version != None:
-            attrs["seqXMLversion"] = self.seqXML_version
+                 "xsi:noNamespaceSchemaLocation":"http://www.seqxml.org/0.4/seqxml.xsd",
+                 "seqXMLversion":"0.4"}
+        
         if self.source != None:
             attrs["source"] = self.source
         if self.source_version != None:
             attrs["sourceVersion"] = self.source_ersion
+        if self.species != None:
+            if not isinstance(species,basestring):
+                raise TypeError("species should be of type string")
+            attrs["speciesName"] = self.species
+        if self.ncbiTaxId != None:
+            if not isinstance(self.ncbiTaxId,(basestring,int)):
+                raise TypeError("ncbiTaxID should be of type string or int")
+            attrs["ncbiTaxID"] = self.ncbiTaxId
+        
         self.xml_generator.startElement("seqXML", AttributesImpl(attrs))
         
     
@@ -271,10 +294,12 @@ class SeqXmlWriter(SequentialSequenceWriter):
             if not isinstance(record.annotations["ncbi_taxid"],(basestring,int)):
                 raise TypeError("ncbiTaxID should be of type string or int")
             
+            #The local species definition is only written if it differs from the global species definition
+            if record.annotations["organism"] != self.species or record.annotations["ncbi_taxid"] != self.ncbiTaxId:
             
-            attr = { "name" : record.annotations["organism"], "ncbiTaxID" :record.annotations["ncbi_taxid"] }   
-            self.xml_generator.startElement("species",AttributesImpl(attr))
-            self.xml_generator.endElement("species")
+                attr = { "name" : record.annotations["organism"], "ncbiTaxID" :record.annotations["ncbi_taxid"] }   
+                self.xml_generator.startElement("species",AttributesImpl(attr))
+                self.xml_generator.endElement("species")
             
             
     def _write_description(self,record):
@@ -330,16 +355,14 @@ class SeqXmlWriter(SequentialSequenceWriter):
             
             for dbxref in record.dbxrefs:
                 
-                #TODO add type
                 if not isinstance(dbxref,basestring):
-                    raise TypeError("dbxrefs should of type list of string")
+                    raise TypeError("dbxrefs should be of type list of string")
                 if dbxref.find(':') < 1:
                     raise ValueError("dbxrefs should be in the form ['source:id', 'source:id' ]")
                 
                 dbsource,dbid = dbxref.split(':',1)
                 
-                
-                attr = { "type" : "unknown", "source" : dbsource, "id" : dbid }
+                attr = { "source" : dbsource, "id" : dbid }
                 self.xml_generator.startElement("DBRef",AttributesImpl(attr))
                 self.xml_generator.endElement("DBRef")
     
@@ -385,8 +408,10 @@ if __name__ == "__main__":
 
     SeqIO.write(records,stringHandle,"seqxml")
     SeqIO.write(records,sys.stdout,"seqxml")
+    print
     
     stringHandle.seek(0)
     records = list(SeqIO.parse(stringHandle,"seqxml"))
     
     SeqIO.write(records,sys.stdout,"seqxml")
+    print
