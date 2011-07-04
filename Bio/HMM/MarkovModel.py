@@ -4,7 +4,9 @@
 import copy
 import math
 import random
-from collections import defaultdict
+
+#TODO - Take advantage of defaultdict once Python 2.4 is dead?
+#from collections import defaultdict
 
 # biopython
 from Bio.Seq import MutableSeq
@@ -23,9 +25,12 @@ def _calculate_emissions(emission_probs):
     """
     # loop over all of the state-symbol duples, mapping states to
     # lists of emitted symbols
-    emissions = defaultdict(list)
+    emissions = dict()
     for state, symbol in emission_probs:
-        emissions[state].append(symbol)
+        try:
+            emissions[state].append(symbol)
+        except KeyError:
+            emissions[state] = [symbol]
 
     return emissions
 
@@ -38,9 +43,12 @@ def _calculate_from_transitions(trans_probs):
     lists of destination states reachable from the source state via a
     transition.
     """
-    transitions = defaultdict(list)
+    transitions = dict()
     for from_state, to_state in trans_probs:
-        transitions[from_state].append(to_state)
+        try:
+            transitions[from_state].append(to_state)
+        except KeyError:
+            transitions[from_state] = [to_state]
 
     return transitions
 
@@ -53,9 +61,12 @@ def _calculate_to_transitions(trans_probs):
     lists of source states from which the destination is reachable via a
     transition.
     """
-    transitions = defaultdict(list)
+    transitions = dict()
     for from_state, to_state in trans_probs:
-        transitions[to_state].append(from_state)
+        try:
+            transitions[to_state].append(from_state)
+        except KeyError:
+            transitions[to_state] = [from_state]
 
     return transitions
 
