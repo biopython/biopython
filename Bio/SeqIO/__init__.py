@@ -310,7 +310,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
-import AbifIO
+import AbiIO
 import AceIO
 import FastaIO
 import IgIO #IntelliGenetics or MASE format
@@ -357,8 +357,8 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
                      "seqxml" : SeqXmlIO.SeqXmlIterator,
-                     "abif": AbifIO.AbifIterator,
-                     "abif-trim": AbifIO._AbifTrimIterator,
+                     "abi": AbiIO.AbiIterator,
+                     "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
 _FormatToWriter = {"fasta" : FastaIO.FastaWriter,

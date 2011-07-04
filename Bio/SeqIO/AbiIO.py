@@ -3,9 +3,9 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SeqIO parser for the ABIF format.
+"""Bio.SeqIO parser for the ABI format.
 
-ABIF is the format used by Applied Biosystem's sequencing machines to store
+ABI is the format used by Applied Biosystem's sequencing machines to store
 sequencing results. 
 
 For more details on the format specification, visit:
@@ -25,21 +25,25 @@ from Bio.SeqRecord import SeqRecord
 # dictionary for deciding which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number
 # if a tag entry needs to be added, just add its key and its key
-# for the annotations dictionary here
+# for the annotations dictionary as the value
 _EXTRACT = {
             'TUBE1': 'sample well',
-            'MODL1': 'machine model',
             'DySN1': 'dye',
             'GTyp1': 'polymer',
-            'RUND1': 'run start date',
-            'RUND2': 'run finish date',
-            'RUND3': 'data collection start date',
-            'RUND4': 'data collection finish date',
-            'RUNT1': 'run start time',
-            'RUNT2': 'run finish time',
-            'RUNT3': 'data collection start time',
-            'RUNT4': 'data collection finish time',
+            'MODL1': 'machine model',
            }
+
+# dictionary for tags that require preprocessing before use in creating
+# seqrecords
+_SPCTAGS = [
+            'PBAS2',    # base-called sequence
+            'PCON2',    # quality values of base-called sequence
+            'SMPL1',    # sample id inputted before sequencing run
+            'RUND1',    # run start date
+            'RUND2',    # run finish date
+            'RUNT1',    # run start time
+            'RUNT2',    # run finish time
+           ]
 
 # dictionary for data unpacking format
 _BYTEFMT = {
@@ -64,87 +68,31 @@ _BYTEFMT = {
             20: '2i',   # tag, legacy unsupported
            }
 
-class _Dir(object):
-    """Class representing directory content. (PRIVATE)"""
-    def __init__(self, tag_entry, handle):
-        """Instantiates the _Dir object.
-
-        tag_entry - tag name, tag number, element type code, element size,
-                    number of elements, data size, data offset,
-                    directory handle, and tag start position
-        handle - the abif file object from which the tags would be unpacked
-        """
-        self.elem_code = tag_entry[2]
-        self.elem_num = tag_entry[4]
-        self.data_size = tag_entry[5]
-        self.data_offset = tag_entry[6]
-        self.tag_offset = tag_entry[8]
-
-        # if data size <= 4 bytes, data is stored inside tag
-        # so offset needs to be changed
-        if self.data_size <= 4:
-            self.data_offset = self.tag_offset + 20
-
-        self.tag_data = self._unpack_tag(handle)
-
-    def _unpack_tag(self, handle):
-        """"Returns tag data. (PRIVATE)
-        
-        handle - the abif file object from which the tags would be unpacked
-        """ 
-        if self.elem_code in _BYTEFMT:
-            
-            # because '>1s' unpack differently from '>s'
-            num = '' if self.elem_num == 1 else str(self.elem_num)
-            fmt = '>' + num + _BYTEFMT[self.elem_code]
-            fmt_size = struct.calcsize(fmt)
-            start = self.data_offset
-
-            handle.seek(start)
-            data = struct.unpack(fmt, handle.read(fmt_size))
-
-            # no need to use tuple if len(data) == 1
-            if self.elem_code not in [10, 11] and len(data) == 1:
-                data = data[0]
-
-            # account for different data types
-            if self.elem_code == 10:
-                return str(datetime.date(*data))
-            elif self.elem_code == 11:
-                return str(datetime.time(*data))
-            elif self.elem_code == 13:
-                return bool(data)
-            elif self.elem_code == 18:
-                return data[1:]
-            elif self.elem_code == 19:
-                return data[:-1]
-            else:
-                return data
-        else:
-            return None
-
-def AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
-    """Iterator for the Abif file format.
+def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
+    """Iterator for the Abi file format.
     """
-    file_id = handle.name.replace('.ab1','')
+    try:
+        file_id = handle.name.replace('.ab1','')
+    except:
+        from re import search
+        file_id = search('\'(.*)\.ab1\'', str(handle)).group(0)
+    # dirty hack for handling time information
+    times = {'RUND1': '', 'RUND2': '', 'RUNT1': '', 'RUNT2': '', }
     annot = {}
 
     if not handle.read(4) == 'ABIF':
-        raise IOError('%s is not a valid ABIF file.' % file_id)
+        raise IOError('%s is not a valid ABI file.' % file_id)
 
     handle.seek(0)
     header = struct.unpack('>4sH4sI2H3I', handle.read(30))
 
-    for entry in _abif_parse_header(header, handle):
+    for entry in _abi_parse_header(header, handle):
         # stop iteration if all desired tags have been extracted
-        if not _EXTRACT:
+        # 4 tags from _EXTRACT + 2 time tags from _SPCTAGS
+        if len(annot) == 6:
             break
 
         key = entry.tag_name + str(entry.tag_num)
-
-        # continue to next iteration if parsed tag is not desired
-        if not key in ['PBAS2', 'PCON2', 'SMPL1'] + _EXTRACT.keys():
-            continue
 
         # PBAS2 is base-called sequence
         if key == 'PBAS2': 
@@ -158,12 +106,18 @@ def AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
         # SMPL1 is sample id entered before sequencing run
         elif key == 'SMPL1':
             sample_id = entry.tag_data
+        elif key in times:
+            times[key] = str(entry.tag_data)
         else:
             # extract sequence annotation as defined in _EXTRACT          
             if key in _EXTRACT:
-                annot[_EXTRACT.pop(key)] = entry.tag_data
+                annot[_EXTRACT[key]] = entry.tag_data
             else:
                 raise KeyError('The %s tag can not be found.' % key)
+
+        # set time annotations
+        annot['run start'] = '%s %s' % times['RUND1'], times['RUNT1']
+        annot['run finish'] = '%s %s' % times['RUND2'], times['RUNT2']
     
     record = SeqRecord(Seq(seq, alphabet),
                        id=file_id, name=sample_id,
@@ -174,14 +128,14 @@ def AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     if not trim:
         yield record
     else:
-        yield _abif_trim(record)
+        yield _abi_trim(record)
 
-def _AbifTrimIterator(handle):
-    """Iterator for the Abif file format that yields trimmed SeqRecord objects.
+def _AbiTrimIterator(handle):
+    """Iterator for the Abi file format that yields trimmed SeqRecord objects.
     """
-    return AbifIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=True)
+    return AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=True)
 
-def _abif_parse_header(header, handle):
+def _abi_parse_header(header, handle):
     """Generator that returns directory contents.
     """
     # header structure:
@@ -198,12 +152,15 @@ def _abif_parse_header(header, handle):
         # add directory offset to tuple
         # to handle directories with data size <= 4 bytes
         handle.seek(start)
-        dir_content = struct.unpack('>4sI2H4I', handle.read(28)) + (start,)
+        dir_entry = struct.unpack('>4sI2H4I', handle.read(28)) + (start,)
         index += 1
-        yield _Dir(dir_content, handle)
+        # only parse desired dirs
+        if str(dir_entry[0] + dir_entry[1]) in (_EXTRACT.keys() + _SPCTAGS):
+            yield _Dir(dir_entry, handle)
+        else:
+            yield None
 
-
-def _abif_trim(seq_record):
+def _abi_trim(seq_record):
     """Trims the sequence using Richard Mott's modified trimming algorithm.
 
     seq_record - SeqRecord object to be trimmed.
@@ -217,8 +174,8 @@ def _abif_trim(seq_record):
     http://www.clcbio.com/manual/genomics/Quality_abif_trimming.html
     """
 
-    start = False   # flag for starting position of trimmed seq_recorduence
-    segment = 20    # minimum seq_recorduence length
+    start = False   # flag for starting position of trimmed sequence
+    segment = 20    # minimum sequence length
     trim_start = 0  # init start index
     cutoff = 0.05   # default cutoff value for calculating base score
 
@@ -252,5 +209,64 @@ def _abif_trim(seq_record):
                          
         return seq_record[trim_start:trim_finish]
 
+class _Dir(object):
+    """Class representing directory content. (PRIVATE)"""
+    def __init__(self, tag_entry, handle):
+        """Instantiates the _Dir object.
+
+        tag_entry - tag name, tag number, element type code, element size,
+                    number of elements, data size, data offset,
+                    directory handle, and tag start position
+        handle - the abi file object from which the tags would be unpacked
+        """
+        self.elem_code = tag_entry[2]
+        self.elem_num = tag_entry[4]
+        self.data_size = tag_entry[5]
+        self.data_offset = tag_entry[6]
+        self.tag_offset = tag_entry[8]
+
+        # if data size <= 4 bytes, data is stored inside tag
+        # so offset needs to be changed
+        if self.data_size <= 4:
+            self.data_offset = self.tag_offset + 20
+
+        self.tag_data = self._unpack_tag(handle)
+
+    def _unpack_tag(self, handle):
+        """"Returns tag data. (PRIVATE)
+        
+        handle - the abi file object from which the tags would be unpacked
+        """ 
+        if self.elem_code in _BYTEFMT:
+            
+            # because '>1s' unpack differently from '>s'
+            num = '' if self.elem_num == 1 else str(self.elem_num)
+            fmt = '>' + num + _BYTEFMT[self.elem_code]
+            fmt_size = struct.calcsize(fmt)
+            start = self.data_offset
+
+            handle.seek(start)
+            data = struct.unpack(fmt, handle.read(fmt_size))
+
+            # no need to use tuple if len(data) == 1
+            if self.elem_code not in [10, 11] and len(data) == 1:
+                data = data[0]
+
+            # account for different data types
+            if self.elem_code == 10:
+                return datetime.date(*data)
+            elif self.elem_code == 11:
+                return datetime.time(*data[:3])
+            elif self.elem_code == 13:
+                return bool(data)
+            elif self.elem_code == 18:
+                return data[1:]
+            elif self.elem_code == 19:
+                return data[:-1]
+            else:
+                return data
+        else:
+            return None
+
 if __name__ == '__main__':
-    print "Quick-testing AbifIO..."
+    pass
