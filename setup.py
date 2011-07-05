@@ -213,7 +213,6 @@ PACKAGES = [
     'Bio.Blast',
     'Bio.CAPS',
     'Bio.Compass',
-    'Bio.Clustalw',
     'Bio.Crystal',
     'Bio.Data',
     'Bio.Emboss',

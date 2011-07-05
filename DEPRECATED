@@ -75,10 +75,11 @@ PHYLIP tools (e.g. fneighbor) instead.
 
 Bio.Clustalw
 ============
-Declared obsolete in Release 1.52, and deprecated in Release 1.55 final,
-having been replaced with Bio.AlignIO for parsing and writing clustal format
-alignments (since Release 1.46), and Bio.Align.Applications for calling the
-ClustalW command line tool (Release 1.51). See the Tutorial for examples.
+Declared obsolete in Release 1.52, deprecated in Release 1.55 final, and
+removed in Release 1.58. Replaced with Bio.AlignIO for parsing and writing
+clustal format alignments (since Release 1.46), and Bio.Align.Applications
+for calling the ClustalW command line tool (since Release 1.51). See the
+Tutorial for examples.
 
 BioSQL and psycopg
 ==================
