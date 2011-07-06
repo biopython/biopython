@@ -91,7 +91,8 @@ except ApplicationError, err:
     #Python 2.3 on Windows gave (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "Cannot open sequence file" in str(err) or \
-           "Cannot open input file" in str(err)
+           "Cannot open input file" in str(err) or \
+           "non-zero exit status" in str(err), str(err)
 
 print
 print "Single sequence"
@@ -108,7 +109,7 @@ try:
         assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
 except ApplicationError, err:
     print "Failed (good)"
-    assert str(err) == "No records found in handle"
+    assert str(err) == "No records found in handle", str(err)
 
 print
 print "Invalid sequence"
@@ -128,7 +129,8 @@ except ApplicationError, err:
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "invalid format" in str(err) \
            or "not produced" in str(err) \
-           or "No sequences in file" in str(err), str(err)
+           or "No sequences in file" in str(err) \
+           or "non-zero exit status " in str(err), str(err)
 
 #################################################################
 print
