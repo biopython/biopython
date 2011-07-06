@@ -55,6 +55,7 @@ def qblast(program, database, sequence,
     entrez_query   Entrez query to limit Blast search
     hitlist_size   Number of hits to return. Default 50
     megablast      TRUE/FALSE whether to use MEga BLAST algorithm (blastn only)
+    service        plain, psi, phi, rpsblast, megablast (lower case)
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
@@ -69,6 +70,8 @@ def qblast(program, database, sequence,
     # Format the "Put" command, which sends search requests to qblast.
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node5.html on 9 July 2007
     # Additional parameters are taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node9.html on 8 Oct 2010
+    # To perform a PSI-BLAST or PHI-BLAST search the service ("Put" and "Get" commands) must be specified
+    # (e.g. psi_blast = NCBIWWW.qblast("blastp", "refseq_protein", input_sequence, service="psi"))
     parameters = [
         ('AUTO_FORMAT',auto_format),
         ('COMPOSITION_BASED_STATISTICS',composition_based_statistics),
@@ -119,7 +122,7 @@ def qblast(program, database, sequence,
     handle = urllib2.urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
-    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007    
+    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007	
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
         ('ALIGNMENTS',alignments),
@@ -242,4 +245,4 @@ def _parse_qblast_ref_page(handle):
         raise ValueError("A non-integer RTOE found in " \
                          +"the 'please wait' page, %s" % repr(rtoe))
 
-    
+ 
