@@ -148,7 +148,7 @@ class AbstractCommandline(object):
     system call using the subprocess module for full control. For the simple
     case where you just want to run the command and get the output:
 
-    stdout, stderr = water_cmd(capture=Ture)
+    stdout, stderr = water_cmd()
     """
     #Note the call example above is not a doctest as we can't handle EMBOSS
     #(or any other tool) being missing in the unit tests.
@@ -423,7 +423,6 @@ class AbstractCommandline(object):
                                          shell=(sys.platform!="win32"))
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
-        #any stderr output should be merged with stdout or sent to dev null
         if not stdout: assert not stdout_str
         if not stderr: assert not stderr_str
         return_code = child_process.returncode
