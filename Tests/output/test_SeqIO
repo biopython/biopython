@@ -3681,6 +3681,8 @@ Testing reading seqxml format file SeqXML/dna_example.xml
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
  Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).
@@ -3717,6 +3719,8 @@ Testing reading seqxml format file SeqXML/rna_example.xml
  Checking can write/read as 'phylip' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Failed: Cannot have spaces in EMBL accession, u'empty description'
@@ -3756,6 +3760,8 @@ Testing reading seqxml format file SeqXML/protein_example.xml
  Checking can write/read as 'phylip' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'stockholm' format
+ Failed: Sequences must all be the same length
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
  Checking can write/read as 'fastq' format
