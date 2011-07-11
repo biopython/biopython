@@ -184,6 +184,7 @@ class ExtendedResidue(Residue):
         self.extended=1
         self.set_hydrophobicity()
         self.set_charge()
+        self.set_mass()
         
     def __repr__(self):
         resname=self.get_resname()
@@ -211,16 +212,41 @@ class ExtendedResidue(Residue):
     def set_charge(self, pH=7.0):
         """
         Sets the charge depending on the pH (by default 7.0)
-        and the pKa of the side chain
-        
+        and the pKa of the side chain        
         """
 
-        if to_one_letter_code[self.resname] in IUPACData.protein_pka_side_chain:
+        try: 
             set_pka=getattr(IUPACData, "protein_pka_side_chain")
-            self.pka=set_pka[to_one_letter_code[self.resname]]
-            if self.pka < pH:
-                self.charge=1
-            elif self.pka > pH:
-                self.charge=-1
+            pka=set_pka[to_one_letter_code[self.resname]]
+        except IndexError:
+            warnings.warn("pka not found for residue %s. See Data/IUPACData for a list of supported residues" %self.resname )
+            self.charge = None
+            return self.charge
+
+        if pka and pka < pH:
+            charge=1
+        elif pka and pka > pH:
+            charge=-1
         else:
-            self.charge=0
+            charge=0
+
+        self.charge=charge
+        
+        return charge
+
+    def set_mass(self):
+        """
+        Sets the mass of a residue from its atoms, if missing information, takes theorical weight
+        """
+        try:
+            mass=sum([atom.mass for atom in self])
+            self.mass=mass
+        except:
+            warnings.warn("An mass atom is missing. Using the theorical residue mass")
+            theo_mass=getattr(IUPACData, "protein_weights")
+            if (to_one_letter_code[self.resname] in theo_mass):
+                self.mass=theo_mass[to_one_letter_code[self.resname]]
+            else:
+                warnings.warn("Residue %s has no theorical mass. Mass sets to None" %self.resname)
+                self.mass=None
+        return mass
