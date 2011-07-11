@@ -571,9 +571,9 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         if handle.read(padding).count(_null) != padding:
             raise ValueError("Post quality %i byte padding region contained data" \
                              % padding)
-    #Apply most aggressive of qual and adapter clipping
-    #(note Roche seems to ignore adapter clip fields,
-    #and use the quality clipping values for both)
+    #Follow Roche and apply most aggressive of qual and adapter clipping.
+    #Note Roche seems to ignore adapter clip fields when writing SFF,
+    #and uses just the quality clipping values for any clipping.
     clip_left = max(clip_qual_left, clip_adapter_left)
     #Right clipping of zero means no clipping
     if clip_qual_right:
