@@ -46,29 +46,26 @@ class Interface(Entity):
         for chain in self.child_dict.keys():
             yield chain
 
-    def get_neighbors(self):
-        neighbors=self.neighbors
+    def set_neighbors(self):
+        "Creates residues list of neighbors"
+        ## Initializes neighbors dictionnary with interface chains
+        for c in self.get_chains():
+            self.neighbors[c]={}
+            
         for resA, resB in self.uniq_pairs:
         ## Checking for 1st residue (if his chain exist, then if 
         ## it is referenced and finally if his partner is already present)
-            if resA.parent.id not in neighbors:
-                neighbors[resA.parent.id]={}
-                neighbors[resA.parent.id][resA]=[]
-                neighbors[resA.parent.id][resA].append(resB)
-            elif resA not in neighbors[resA.parent.id]:
-                neighbors[resA.parent.id][resA]=[]
-                neighbors[resA.parent.id][resA].append(resB)
-            elif resB not in neighbors[resA.parent.id][resA]:
-                neighbors[resA.parent.id][resA].append(resB)
+            if resA not in self.neighbors[resA.parent.id]:
+                self.neighbors[resA.parent.id][resA]=[]
+                self.neighbors[resA.parent.id][resA].append(resB)
+            elif resB not in self.neighbors[resA.parent.id][resA]:
+                self.neighbors[resA.parent.id][resA].append(resB)
         ## Checking for 2nd residue
-            if resB.parent.id not in neighbors:
-                neighbors[resB.parent.id]={}
-                neighbors[resB.parent.id][resB]=[]
-                neighbors[resB.parent.id][resB].append(resB)
-            elif resB not in neighbors[resB.parent.id]:
-                neighbors[resB.parent.id][resB]=[]
-                neighbors[resB.parent.id][resB].append(resB)
-            elif resA not in neighbors[resB.parent.id][resB]:
-                neighbors[resB.parent.id][resB].append(resA)
+            if resB not in self.neighbors[resB.parent.id]:
+                self.neighbors[resB.parent.id][resB]=[]
+                self.neighbors[resB.parent.id][resB].append(resB)
+            elif resA not in self.neighbors[resB.parent.id][resB]:
+                self.neighbors[resB.parent.id][resB].append(resA)
+        neighbors=self.neighbors
         return neighbors
 
