@@ -317,18 +317,31 @@ atom_weights = {
     'Sg' : 266.12,
     'Bh' : 264.12,
     'Hs' : 269.13,
-    'Mt' : 268.14,    
+    'Mt' : 268.14,
 }
 
 # pKa of amino acids side chains
 # taken from EMBOSS (/usr/share/EMBOSS/data/Epk.dat)
 protein_pka_side_chain = {
+    "A": None,
     "C": 8.5,
     "D": 3.9,
+    "E": 4.1,
+    "F": None,
+    "G": None,
     "H": 6.5,
+    "I": None,
     "K": 10.8,
-    "Q": 4.25,
+    "L": None,
+    "M": None,
+    "N": None,
+    "P": None,
+    "Q": None,
     "R": 12.5,
+    "S": None,
+    "T": None,
+    "V": None,
+    "W": None,
     "Y": 10.1
     }
 
@@ -406,4 +419,3 @@ protein_hydropathy_consensus = {
     "W": 0.81,
     "Y": 0.26
     }
-
