@@ -1,9 +1,5 @@
 # Copyright 2011 by Mikael Trellet.  All rights reserved.
-# Revisions copyright 2009-2010 by Peter Cock.  All rights reserved.
 #
-# Converted by Mikael Trellet from an unit test copyright 2009
-# by Eric Talevich.
-# 
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -17,8 +13,8 @@ from StringIO import StringIO
 from Bio.PDB import PDBParser
 from Bio.PDB import InterfaceBuilder
 
-class buildInterface(unittest.TestCase):
-    " Test to build an interface from a PDB "
+class Interface(unittest.TestCase):
+    " Test Interface Module "
 
     def setUp(self):
         "Setup"
