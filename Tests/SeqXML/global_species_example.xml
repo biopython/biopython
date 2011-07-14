@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML speciesName="Mus musculus" ncbiTaxID="10090" source="Ensembl" sourceVersion="56" seqXMLversion="0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.4/seqxml.xsd">
+    <entry id="ENSMUSP00000099904">
+        <description>uses global species definition</description>
+        <AAseq>QDPAKAPNSPDVLESVFKGQVYILGRESPLSLYNEELVSMNVQGDYEPIDATGFININSLRLKEYHRLQSKVTAK</AAseq>
+    </entry>
+    <entry id="ENSP000000004711">
+        <species name="Homo sapiens" ncbiTaxID="9606"/>
+        <description>overwrites global species definition</description>
+        <AAseq>QDPAKAPNSPDVLESVFKGQVYILGRESPLSLYNEELVSMNVQGDYEPIDATGFININSLRLKEYHRLQSKVTAK</AAseq>
+    </entry>
+</seqXML>
