@@ -9083,11 +9083,11 @@ yn00 are implemented. Due to PAML's usage of control files rather than commandli
 arguments to control runtime options, usage of this wrapper strays from the format of 
 other application wrappers in Biopython. 
 
-A typical workflow would be to initialize a PAML object, specifying an alignment file, 
-a tree file, an output file and a working directory. Next, runtime options are set via 
-the set\_option() method or by reading an existing control file. Finally, the program 
-is run via the run() method and the output file is automatically parsed to a results 
-dictionary.
+A typical workflow would be to initialize a PAML object, specifying an alignment file, a
+tree file, an output file and a working directory. Next, runtime options are set via the
+\texttt{set\_options()} method or by reading an existing control file. Finally, the
+program is run via the \texttt{run()} method and the output file is automatically parsed
+to a results dictionary.
 
 Here is an example of typical usage of codeml:
 \begin{verbatim}
@@ -9097,16 +9097,16 @@ Here is an example of typical usage of codeml:
 >>> cml.tree = "Tests/PAML/species.tree"
 >>> cml.out_file = "results.out"
 >>> cml.working_dir = "./scratch"
->>> cml.set_option("seqtype", 1)
->>> cml.set_option("verbose", 0)
->>> cml.set_option("noisy", 0)
->>> cml.set_option("RateAncestor", 0)
->>> cml.set_option("model", 0)
->>> cml.set_option("NSsites", [0, 1, 2])
->>> cml.set_option("CodonFreq", 2)
->>> cml.set_option("cleandata", 1)
->>> cml.set_option("fix_alpha", 1)
->>> cml.set_option("kappa", 4.54006)
+>>> cml.set_options(seqtype=1,
+...         verbose=0,
+...         noisy=0,
+...         RateAncestor=0,
+...         model=0,
+...         NSsites=[0, 1, 2],
+...         CodonFreq=2,
+...         cleandata=1,
+...         fix_alpha=1,
+...         kappa=4.54006)
 >>> results = cml.run()
 >>> ns_sites = results.get("NSsites")
 >>> m0 = ns_sites.get(0)
@@ -9114,13 +9114,13 @@ Here is an example of typical usage of codeml:
 >>> print m0_params.get("omega")
 \end{verbatim}
 
-Existing output files may be parsed as well using a module's read() function:
+Existing output files may be parsed as well using a module's \texttt{read()} function:
 \begin{verbatim}
 >>> results = codeml.read("Tests/PAML/Results/codeml/codeml_NSsites_all.out")
 >>> print results.get("lnL max")
 \end{verbatim}
 
-Documentation for this new module currently lives on the Biopython wiki:
+Detailed documentation for this new module currently lives on the Biopython wiki:
 \url{http://biopython.org/wiki/PAML}
 
 \section{Future plans}
