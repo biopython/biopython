@@ -3691,7 +3691,7 @@ Testing reading seqxml format file SeqXML/dna_example.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier u'ENSMUSG00000076441' is too long
+ Failed: Locus identifier 'ENSMUSG00000076441' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=minimal).
@@ -3723,7 +3723,7 @@ Testing reading seqxml format file SeqXML/rna_example.xml
  Checking can write/read as 'phylip-relaxed' format
  Failed: Sequences must all be the same length
  Checking can write/read as 'embl' format
- Failed: Cannot have spaces in EMBL accession, u'empty description'
+ Failed: Cannot have spaces in EMBL accession, 'empty description'
  Checking can write/read as 'fastq' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).
  Checking can write/read as 'fastq-illumina' format
@@ -3731,9 +3731,9 @@ Testing reading seqxml format file SeqXML/rna_example.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier u'empty description' is too long
+ Failed: Locus identifier 'empty description' is too long
  Checking can write/read as 'imgt' format
- Failed: Cannot have spaces in EMBL accession, u'empty description'
+ Failed: Cannot have spaces in EMBL accession, 'empty description'
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=empty description).
  Checking can write/read as 'qual' format
@@ -3771,7 +3771,7 @@ Testing reading seqxml format file SeqXML/protein_example.xml
  Checking can write/read as 'fastq-solexa' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).
  Checking can write/read as 'genbank' format
- Failed: Locus identifier u'ENSMUSP00000099904' is too long
+ Failed: Locus identifier 'ENSMUSP00000099904' is too long
  Checking can write/read as 'imgt' format
  Checking can write/read as 'phd' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=UniprotProtein).

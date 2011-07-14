@@ -498,7 +498,7 @@ class GenBankWriter(_InsdcWriter):
         if not locus or locus == "<unknown id>":
             locus = self._get_annotation_str(record, "accession", just_first=True)
         if len(locus) > 16:
-            raise ValueError("Locus identifier %s is too long" % repr(locus))
+            raise ValueError("Locus identifier %r is too long" % str(locus))
 
         if len(record) > 99999999999:
             #Currently GenBank only officially support up to 350000, but
@@ -851,11 +851,11 @@ class EmblWriter(_InsdcWriter):
         
         if ";" in accession :
             raise ValueError("Cannot have semi-colon in EMBL accession, %s" \
-                             % repr(accession))
+                             % repr(str(accession)))
         if " " in accession :
             #This is out of practicallity... might it be allowed?
             raise ValueError("Cannot have spaces in EMBL accession, %s" \
-                             % repr(accession))
+                             % repr(str(accession)))
 
         #Get the molecule type
         #TODO - record this explicitly in the parser?
