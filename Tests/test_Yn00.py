@@ -64,7 +64,7 @@ class ModTest(unittest.TestCase):
     
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
-            self.yn00.set_option, "xxxx", 1)
+                          self.yn00.set_options, xxxx=1)
         self.assertRaises((AttributeError, KeyError),
             self.yn00.get_option, "xxxx")
     

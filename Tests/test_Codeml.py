@@ -89,9 +89,9 @@ class ModTest(unittest.TestCase):
     
     def testOptionExists(self):
         self.assertRaises((AttributeError, KeyError),
-            self.cml.set_option, "xxxx", 1)
+                          self.cml.set_options, xxxx=1)
         self.assertRaises((AttributeError, KeyError),
-            self.cml.get_option, "xxxx")
+                          self.cml.get_option, "xxxx")
     
     def testAlignmentSpecified(self):
         self.cml.tree = self.tree_file
