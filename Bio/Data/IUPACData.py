@@ -419,3 +419,8 @@ protein_hydropathy_consensus = {
     "W": 0.81,
     "Y": 0.26
     }
+
+protein_polarity = {
+    "polar": ['R','N','D','C','E','Q','H','K','S','T','Y'],
+    "apolar": ['A','G','I','L','M','F','P','W','V']
+    }
