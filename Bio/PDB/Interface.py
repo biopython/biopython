@@ -6,6 +6,9 @@
 """Interface class, used in Structure objects."""
 
 from Bio.PDB.Entity import Entity
+from Bio.Data import IUPACData
+from Bio.SCOP.Raf import to_one_letter_code
+
 
 class Interface(Entity):
     """
@@ -68,4 +71,12 @@ class Interface(Entity):
                 self.neighbors[resB.parent.id][resB].append(resA)
         neighbors=self.neighbors
         return neighbors
+
+    def get_polar_percentage(self):
+        "Gets the percentage of polar residues in the interface"
+        
+        polar_list=getattr(IUPACData, "protein_polarity")
+        polar_residues = [r for r in self if to_one_letter_code[r.resname] in polar_list['polar']]
+        polar_percentage=float(len(polar_residues))/len(self)
+        return polar_percentage
 
