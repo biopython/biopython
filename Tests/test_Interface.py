@@ -19,7 +19,7 @@ class Interface(unittest.TestCase):
     def setUp(self):
         "Setup"
     
-        P = PDBParser(QUIET=1)
+        P = PDBParser()
         structure = P.get_structure('test', 'PDB/2WFU.pdb')[0]
         self.structure = structure
 
@@ -36,6 +36,11 @@ class Interface(unittest.TestCase):
         interface_ids = [(' ', 19, ' '), (' ', 19, ' '), (' ', 20, ' '), (' ', 20, ' '), (' ', 21, ' '), (' ', 21, ' '), (' ', 22, ' '), (' ', 22, ' '), (' ', 23, ' ')]
         # Indirect way of testing because of formatting problems otherwise
         self.assertEqual(sorted([res.id for res in interface.get_list()]), interface_ids)
+
+    def test_Stats(self):
+        "Statistics on interface residues"
+
+        self.assertEqual(interface.get_polar_percentage(),0.67)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
