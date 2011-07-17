@@ -651,7 +651,6 @@ class ParseReal(unittest.TestCase):
 
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
-        tmp_path = "PDB/tmp.pdb"
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 20)
             for idx, model in enumerate(struct):
@@ -663,13 +662,13 @@ class ParseReal(unittest.TestCase):
         # Round trip: serialize and parse again
         io = PDBIO()
         io.set_structure(struct1)
+        tmp_path = tempfile.NamedTemporaryFile()
         try:
-            io.save(tmp_path)
-            struct2 = parser.get_structure("1mot", tmp_path)
+            io.save(tmp_path.name)
+            struct2 = parser.get_structure("1mot", tmp_path.name)
             confirm_numbering(struct2)
         finally:
-            if os.path.isfile(tmp_path):
-                os.remove(tmp_path)
+            tmp_path.close()
 
 
 class Exposure(unittest.TestCase):
