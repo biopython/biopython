@@ -108,6 +108,7 @@ class PDBParser(object):
     def _get_header(self, header_coords_trailer):
         "Get the header of the PDB file, return the rest."
         structure_builder=self.structure_builder
+        i = 0
         for i in range(0, len(header_coords_trailer)):
             structure_builder.set_line_counter(i+1)
             line=header_coords_trailer[i]
