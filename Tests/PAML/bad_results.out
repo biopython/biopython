@@ -1,0 +1,1 @@
+The contents of this don't matter. They should not be in a PAML output format, to test whether the results parser fails properly on incorrect files.

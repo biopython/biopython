@@ -62,7 +62,7 @@ test_records = [
       SeqRecord(Seq("HNGFTALEGEIHHLTHGEKVAF",Alphabet.generic_protein), id="Gamma")],
      "alignment with repeated record",
      [(["stockholm"],ValueError,"Duplicate record identifier: Beta"),
-      (["phylip"],ValueError,"Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
+      (["phylip","phylip-relaxed"],ValueError,"Repeated name 'Beta' (originally 'Beta'), possibly due to truncation")]),
     ]
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
@@ -85,7 +85,7 @@ class WriterTests(unittest.TestCase):
         """
         #TODO - Check the exception messages?
         lengths = len(set(len(r) for r in records))
-        if not records and format in ["stockholm", "phylip", "nexus", "clustal", "sff"]:
+        if not records and format in ["stockholm", "phylip", "phylip-relaxed", "nexus", "clustal", "sff"]:
             self.check_write_fails(records, format, ValueError,
                                    "Must have at least one sequence")
         elif lengths > 1 and format in AlignIO._FormatToWriter:
@@ -102,7 +102,7 @@ class WriterTests(unittest.TestCase):
                                    "Missing SFF flow information")
         else:
             self.check_simple(records, format)
-    
+
     def check_simple(self, records, format):
         if format in SeqIO._BinaryFormats:
             handle = BytesIO()

@@ -1,4 +1,4 @@
-# Copyright 2008-2009 by Peter Cock.  All rights reserved.
+# Copyright 2008-2011 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -9,11 +9,10 @@ from Bio import MissingExternalDependencyError
 
 import sys
 import os
-from Bio import Clustalw #old and obsolete
-from Bio.Clustalw import MultipleAlignCL #old and obsolete
 from Bio import SeqIO
 from Bio import AlignIO
-from Bio.Align.Applications import ClustalwCommandline #new!
+from Bio.Align.Applications import ClustalwCommandline
+from Bio.Application import ApplicationError
 
 #################################################################
 
@@ -73,7 +72,7 @@ else:
 
 if not clustalw_exe:
     raise MissingExternalDependencyError(\
-        "Install clustalw or clustalw2 if you want to use Bio.Clustalw.")
+        "Install clustalw or clustalw2 if you want to use it from Biopython.")
 
 #################################################################
 
@@ -83,47 +82,44 @@ print "========================="
 print "Empty file"
 input_file = "does_not_exist.fasta"
 assert not os.path.isfile(input_file)
-cline = MultipleAlignCL(input_file, command=clustalw_exe)
+cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 try:
-    align = Clustalw.do_alignment(cline)
-    assert False, "Should have failed, returned %s" % repr(align)
-except IOError, err:
+    stdout, stderr = cline()
+    assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
+except ApplicationError, err:
     print "Failed (good)"
     #Python 2.3 on Windows gave (0, 'Error')
     #Python 2.5 on Windows gives [Errno 0] Error
-    assert "Cannot open sequence file" in str(err) \
-           or "not produced" in str(err) \
-           or str(err) == "[Errno 0] Error" \
-           or str(err) == "(0, 'Error')", str(err)
+    assert "Cannot open sequence file" in str(err) or \
+           "Cannot open input file" in str(err) or \
+           "non-zero exit status" in str(err), str(err)
 
 print
 print "Single sequence"
 input_file = "Fasta/f001"
 assert os.path.isfile(input_file)
 assert len(list(SeqIO.parse(input_file,"fasta")))==1
-cline = MultipleAlignCL(input_file, command=clustalw_exe)
+cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 try:
-    align = Clustalw.do_alignment(cline)
-    assert False, "Should have failed, returned %s" % repr(align)
-except IOError, err:
+    stdout, stderr = cline()
+    if "cannot do multiple alignment" in (stdout + stderr):
+        #Zero return code is a possible bug in clustal?
+        print "Failed (good)"
+    else:
+        assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
+except ApplicationError, err:
     print "Failed (good)"
-    assert "has only one sequence present" in str(err)
-except ValueError, err:
-    print "Failed (good)"
-    assert str(err) == "No records found in handle"
-    #Ideally we'd get an IOError but sometimes we don't seem to
-    #get a return value from clustalw.  If so, then there is a
-    #ValueError when the parsing fails.
+    assert str(err) == "No records found in handle", str(err)
 
 print
 print "Invalid sequence"
 input_file = "Medline/pubmed_result1.txt"
 assert os.path.isfile(input_file)
-cline = MultipleAlignCL(input_file, command=clustalw_exe)
+cline = ClustalwCommandline(clustalw_exe, infile=input_file)
 try:
-    align = Clustalw.do_alignment(cline)
-    assert False, "Should have failed, returned %s" % repr(align)
-except IOError, err:
+    stdout, stderr = cline()
+    assert False, "Should have failed, returned:\n%s\n%s" % (stdout, stderr)
+except ApplicationError, err:
     print "Failed (good)"
     #Ideally we'd catch the return code and raise the specific
     #error for "invalid format", rather than just notice there
@@ -133,8 +129,8 @@ except IOError, err:
     #Python 2.5 on Windows gives [Errno 0] Error
     assert "invalid format" in str(err) \
            or "not produced" in str(err) \
-           or str(err) == "[Errno 0] Error" \
-           or str(err) == "(0, 'Error')", str(err)
+           or "No sequences in file" in str(err) \
+           or "non-zero exit status " in str(err), str(err)
 
 #################################################################
 print
@@ -180,42 +176,6 @@ for input_file, output_file, newtree_file in [
     if newtree_file is not None:
         print "requesting output guide tree file %s" % repr(newtree_file)
 
-    #Prepare the command...
-    cline = MultipleAlignCL(input_file, command=clustalw_exe)
-    cline.set_output(output_file)
-    if newtree_file is not None:
-        cline.set_new_guide_tree(newtree_file)
-
-    #Run the command...
-    align = Clustalw.do_alignment(cline)
-
-    #Check the output...
-    print "Got an alignment, %i sequences" % (len(align))
-    #The length of the alignment will depend on the version of clustalw
-    #(clustalw 2.0.10 and clustalw 1.83 are certainly different).
-    output_records = SeqIO.to_dict(SeqIO.parse(output_file,"clustal"))
-    assert set(input_records.keys()) == set(output_records.keys())
-    for record in align:
-        assert str(record.seq) == str(output_records[record.id].seq)
-        assert str(record.seq).replace("-","") == \
-               str(input_records[record.id].seq)
-
-    #Clean up...
-    os.remove(output_file)
-
-    #Check the DND file was created.
-    #TODO - Try and parse this with Bio.Nexus?
-    if newtree_file is not None:
-        tree_file = newtree_file
-    else:
-        #Clustalw will name it based on the input file
-        tree_file = os.path.splitext(input_file)[0] + ".dnd"
-    assert os.path.isfile(tree_file), \
-           "Did not find tree file %s" % tree_file
-    os.remove(tree_file)
-
-
-    #And again, but this time using Bio.Align.Applications wrapper
     #Any filesnames with spaces should get escaped with quotes automatically.
     #Using keyword arguments here.
     cline = ClustalwCommandline(clustalw_exe,
@@ -232,7 +192,12 @@ for input_file, output_file, newtree_file in [
     output, error = cline()
     assert output.strip().startswith("CLUSTAL")
     assert error.strip() == ""
+    #Check the output...
     align = AlignIO.read(output_file, "clustal")
+    #The length of the alignment will depend on the version of clustalw
+    #(clustalw 2.0.10 and clustalw 1.83 are certainly different).
+    print "Got an alignment, %i sequences" % (len(align))
+    output_records = SeqIO.to_dict(SeqIO.parse(output_file,"clustal"))
     assert set(input_records.keys()) == set(output_records.keys())
     for record in align:
         assert str(record.seq) == str(output_records[record.id].seq)

@@ -148,7 +148,7 @@ class AbstractCommandline(object):
     system call using the subprocess module for full control. For the simple
     case where you just want to run the command and get the output:
 
-    stdout, stderr = water_cmd(capture=Ture)
+    stdout, stderr = water_cmd()
     """
     #Note the call example above is not a doctest as we can't handle EMBOSS
     #(or any other tool) being missing in the unit tests.
@@ -370,8 +370,9 @@ class AbstractCommandline(object):
         else:
             self.set_parameter(name, value)  # treat as a parameter
     
-    def __call__(self, stdin=None, stdout=True, stderr=True):
-        """Execute the command and waits for it to finish, returns output.
+    def __call__(self, stdin=None, stdout=True, stderr=True,
+                 cwd=None, env=None):
+        """Executes the command, waits for it to finish, and returns output.
         
         Runs the command line tool and waits for it to finish. If it returns
         a non-zero error level, an exception is raised. Otherwise two strings
@@ -385,10 +386,20 @@ class AbstractCommandline(object):
         by sending it to /dev/null to avoid wasting memory (False). In the
         later case empty string(s) are returned.
 
+        The optional cwd argument is a string giving the working directory to
+        to run the command from. See Python's subprocess module documentation
+        for more details.
+
+        The optional env argument is a dictionary setting the environment
+        variables to be used in the new process. By default the current
+        process' environment variables are used. See Python's subprocess
+        module documentation for more details.
+
         Default example usage:
 
         from Bio.Emboss.Applications import WaterCommandline
-        water_cmd = WaterCommandline(gapopen=10, gapextend=0.5, stdout=True,
+        water_cmd = WaterCommandline(gapopen=10, gapextend=0.5,
+                                     stdout=True, auto=True,
                                      asequence="a.fasta", bsequence="b.fasta")
         print "About to run:\n%s" % water_cmd
         std_output, err_output = water_cmd()
@@ -420,10 +431,10 @@ class AbstractCommandline(object):
         child_process = subprocess.Popen(str(self), stdin=subprocess.PIPE,
                                          stdout=stdout_arg, stderr=stderr_arg,
                                          universal_newlines=True,
+                                         cwd=cwd, env=env,
                                          shell=(sys.platform!="win32"))
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
-        #any stderr output should be merged with stdout or sent to dev null
         if not stdout: assert not stdout_str
         if not stderr: assert not stderr_str
         return_code = child_process.returncode

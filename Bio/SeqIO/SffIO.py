@@ -571,17 +571,32 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         if handle.read(padding).count(_null) != padding:
             raise ValueError("Post quality %i byte padding region contained data" \
                              % padding)
+    #Follow Roche and apply most aggressive of qual and adapter clipping.
+    #Note Roche seems to ignore adapter clip fields when writing SFF,
+    #and uses just the quality clipping values for any clipping.
+    clip_left = max(clip_qual_left, clip_adapter_left)
+    #Right clipping of zero means no clipping
+    if clip_qual_right:
+        if clip_adapter_right:
+            clip_right = min(clip_qual_right, clip_adapter_right)
+        else:
+            #Typical case with Roche SFF files
+            clip_right = clip_qual_right
+    elif clip_adapter_right:
+        clip_right = clip_adapter_right
+    else:
+        clip_right = seq_len
     #Now build a SeqRecord
     if trim:
-        seq = seq[clip_qual_left:clip_qual_right].upper()
-        quals = quals[clip_qual_left:clip_qual_right]
+        seq = seq[clip_left:clip_right].upper()
+        quals = quals[clip_left:clip_right]
         #Don't record the clipping values, flow etc, they make no sense now:
         annotations = {}
     else:
         #This use of mixed case mimics the Roche SFF tool's FASTA output
-        seq = seq[:clip_qual_left].lower() + \
-              seq[clip_qual_left:clip_qual_right].upper() + \
-              seq[clip_qual_right:].lower()
+        seq = seq[:clip_left].lower() + \
+              seq[clip_left:clip_right].upper() + \
+              seq[clip_right:].lower()
         annotations = {"flow_values":struct.unpack(read_flow_fmt, flow_values),
                        "flow_index":struct.unpack(temp_fmt, flow_index),
                        "flow_chars":flow_chars,
@@ -599,7 +614,6 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #record.letter_annotations["phred_quality"] = quals
     dict.__setitem__(record._per_letter_annotations,
                      "phred_quality", quals)
-    #TODO - adaptor clipping
     #Return the record and then continue...
     return record
 

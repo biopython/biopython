@@ -7,6 +7,7 @@ Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -23,6 +24,7 @@ Testing reading clustal format file Clustalw/opuntia.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -39,6 +41,7 @@ Testing reading clustal format file Clustalw/hedgehog.aln with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -51,6 +54,7 @@ Testing reading clustal format file Clustalw/odd_consensus.aln with 1 alignments
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'AT3G20900.' (originally 'AT3G20900.1-SEQ'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -68,6 +72,7 @@ Testing reading clustal format file Clustalw/protein.aln with 1 alignments
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'gi|1377497' (originally 'gi|13774975|gb|AAK39115.1|AF35'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -85,6 +90,7 @@ Testing reading clustal format file Clustalw/promals3d.aln with 1 alignments
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'gi_1393639' (originally 'gi_13936397_dbj_BAB47195.'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -97,6 +103,7 @@ Testing reading fasta format file GFF/multi.fna with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -112,6 +119,8 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex with 1 alignments
  Checking can write/read as 'clustal' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Whitespace not allowed in identifier: t2 the name
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -123,6 +132,7 @@ Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -139,6 +149,7 @@ Testing reading stockholm format file Stockholm/funny.sth with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -155,6 +166,8 @@ Testing reading phylip format file Phylip/reference_dna.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Whitespace not allowed in identifier: B. virgini
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -171,6 +184,8 @@ Testing reading phylip format file Phylip/reference_dna2.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Whitespace not allowed in identifier: B. virgini
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -187,6 +202,7 @@ Testing reading phylip format file Phylip/hennigian.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -203,6 +219,8 @@ Testing reading phylip format file Phylip/horses.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Failed: Whitespace not allowed in identifier: M. secundu
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -219,6 +237,7 @@ Testing reading phylip format file Phylip/random.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -231,6 +250,7 @@ Testing reading phylip format file Phylip/interlaced.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -244,6 +264,24 @@ Testing reading phylip format file Phylip/interlaced2.phy with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
+Testing reading phylip-relaxed format file ExtendedPhylip/primates.phyx with 1 alignments
+ Alignment 0, with 12 sequences of length 898
+  AAAAAAAAAAAA alignment column 0
+  AAAAAAAAAAAA alignment column 1
+  GGGGGGGGGGGG alignment column 2
+  TCCCCCCCCCCC alignment column 3
+  TTTTTTTTTTTT alignment column 4
+  |||||||||||| ...
+  TTTTTTTTTTTT alignment column 897
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -257,6 +295,7 @@ Testing reading emboss format file Emboss/alignret.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -278,6 +317,7 @@ Testing reading emboss format file Emboss/needle.txt with 5 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -289,6 +329,8 @@ Testing reading emboss format file Emboss/needle_asis.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
@@ -302,6 +344,7 @@ Testing reading emboss format file Emboss/water.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -313,6 +356,8 @@ Testing reading emboss format file Emboss/water2.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
  Failed: Repeated name 'asis' (originally 'asis'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Failed: Duplicate record identifier: asis
@@ -326,6 +371,7 @@ Testing reading emboss format file Emboss/matcher_simple.txt with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -347,6 +393,7 @@ Testing reading emboss format file Emboss/matcher_pair.txt with 5 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -367,6 +414,7 @@ Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -388,6 +436,7 @@ Testing reading fasta-m10 format file Fasta/output002.m10 with 6 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -405,6 +454,7 @@ Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -417,6 +467,7 @@ Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
  Failed: Repeated name 'ref|NC_002' (originally 'ref|NC_002695.1|:1970775-1971404'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -428,6 +479,7 @@ Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -439,6 +491,7 @@ Testing reading fasta-m10 format file Fasta/output006.m10 with 1 alignments
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -460,6 +513,7 @@ Testing reading fasta-m10 format file Fasta/output007.m10 with 9 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -481,6 +535,7 @@ Testing reading fasta-m10 format file Fasta/output008.m10 with 12 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -497,6 +552,7 @@ Testing reading ig format file IntelliGenetics/VIF_mase-pro.txt with 1 alignment
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -507,6 +563,7 @@ Testing reading pir format file NBRF/clustalw.pir with 1 alignments
  Checking can write/read as 'clustal' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format

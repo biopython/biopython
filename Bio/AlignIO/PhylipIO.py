@@ -8,6 +8,16 @@ AlignIO support for the "phylip" format used in Joe Felsenstein's PHYLIP tools.
 You are expected to use this module via the Bio.AlignIO functions (or the
 Bio.SeqIO functions if you want to work directly with the gapped sequences).
 
+Support for "relaxed phylip" format is also provided. Relaxed phylip differs
+from standard phylip format in the following ways:
+
+ * No whitespace is allowed in the sequence ID.
+ * No truncation is performed. Instead, sequence IDs are padded to the longest
+   ID length, rather than 10 characters. A space separates the sequence
+   identifier from the sequence.
+
+Relaxed phylip is supported by RAxML and PHYML.
+
 Note
 ====
 In TREE_PUZZLE (Schmidt et al. 2003) and PHYML (Guindon and Gascuel 2003)
@@ -21,30 +31,44 @@ http://evolution.genetics.washington.edu/phylip/doc/sequence.html says:
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
+import string
 
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord  
-from Bio.Alphabet import single_letter_alphabet
+from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+try:
+    any
+except NameError:
+    #Hack for Python 2.4
+    def any(iterable):
+        for element in iterable:
+            if element:
+               return True
+        return False
+
+_PHYLIP_ID_WIDTH = 10
+
+
 class PhylipWriter(SequentialAlignmentWriter):
     """Phylip alignment writer."""
-    def write_alignment(self, alignment):
+
+    def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
         """Use this to write (another) single alignment to an open file.
 
         This code will write interlaced alignments (when the sequences are
         longer than 50 characters).
 
-        Note that record identifiers are strictly truncated at 10 characters.
+        Note that record identifiers are strictly truncated to id_width,
+        defaulting to the value required to comply with the PHYLIP standard.
 
         For more information on the file format, please see:
         http://evolution.genetics.washington.edu/phylip/doc/sequence.html
         http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
         """
-        truncate = 10
-        handle = self.handle        
-        
+        handle = self.handle
+
         if len(alignment)==0:
             raise ValueError("Must have at least one sequence")
         length_of_seqs = alignment.get_alignment_length()
@@ -53,14 +77,14 @@ class PhylipWriter(SequentialAlignmentWriter):
                 raise ValueError("Sequences must all be the same length")
         if length_of_seqs <= 0:
             raise ValueError("Non-empty sequences are required")
-        
+
         # Check for repeated identifiers...
         # Apply this test *after* cleaning the identifiers
         names = []
         for record in alignment:
             """
             Quoting the PHYLIP version 3.6 documentation:
-            
+
             The name should be ten characters in length, filled out to
             the full ten characters by blanks if shorter. Any printable
             ASCII/ISO character is allowed in the name, except for
@@ -81,7 +105,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                 name = name.replace(char,"")
             for char in ":;":
                 name = name.replace(char,"|")
-            name = name[:truncate]
+            name = name[:id_width]
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
                                  "possibly due to truncation" \
@@ -98,20 +122,22 @@ class PhylipWriter(SequentialAlignmentWriter):
         while True:
             for name, record in zip(names, alignment):
                 if block==0:
-                    #Write name (truncated/padded to 10 characters)
+                    #Write name (truncated/padded to id_width characters)
                     #Now truncate and right pad to expected length.
-                    handle.write(name[:truncate].ljust(truncate))
+                    handle.write(name[:id_width].ljust(id_width))
                 else:
-                    #write 10 space indent
-                    handle.write(" "*truncate)
+                    #write indent
+                    handle.write(" " * id_width)
                 #Write five chunks of ten letters per line...
                 sequence = str(record.seq)
                 if "." in sequence:
-                    raise ValueError("PHYLIP format no longer allows dots in sequence")
+                    raise ValueError("PHYLIP format no longer allows dots in "
+                                     "sequence")
                 for chunk in range(0,5):
                     i = block*50 + chunk*10
                     seq_segment = sequence[i:i+10]
-                    #TODO - Force any gaps to be '-' character?  Look at the alphabet...
+                    #TODO - Force any gaps to be '-' character?  Look at the
+                    #alphabet...
                     #TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
                     if i+10 > length_of_seqs : break
@@ -133,6 +159,9 @@ class PhylipIterator(AlignmentIterator):
     http://evolution.genetics.washington.edu/phylip/doc/main.html#inputfiles
     """
 
+    # Default truncation length
+    id_width = _PHYLIP_ID_WIDTH
+
     def _is_header(self, line):
         line = line.strip()
         parts = filter(None, line.split())
@@ -144,6 +173,20 @@ class PhylipIterator(AlignmentIterator):
             return True
         except ValueError:
             return False # First line should have two integers
+
+    def _split_id(self, line):
+        """
+        Extracts the sequence ID from a Phylip line, returning a tuple
+        containing:
+
+            (sequence_id, sequence_residues)
+
+        The first 10 characters in the line are are the sequence id, the
+        remainder are sequence data.
+        """
+        seq_id = line[:self.id_width].strip()
+        seq = line[self.id_width:].strip().replace(' ', '')
+        return seq_id, seq
 
     def next(self):
         handle = self.handle
@@ -178,12 +221,12 @@ class PhylipIterator(AlignmentIterator):
         ids = []
         seqs = []
 
-        #Expects STRICT truncation/padding to 10 characters
-        #Does not require any white space between name and seq.
-        for i in range(0,number_of_seqs):
+        # By default, expects STRICT truncation / padding to 10 characters.
+        # Does not require any whitespace between name and seq.
+        for i in xrange(number_of_seqs):
             line = handle.readline().rstrip()
-            ids.append(line[:10].strip()) #first ten characters
-            s = line[10:].strip().replace(" ","")
+            sequence_id, s = self._split_id(line)
+            ids.append(sequence_id)
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append([s])
@@ -203,7 +246,7 @@ class PhylipIterator(AlignmentIterator):
                 break
 
             #print "New block..."
-            for i in range(0,number_of_seqs):
+            for i in xrange(number_of_seqs):
                 s = line.strip().replace(" ","")
                 if "." in s:
                     raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -215,57 +258,103 @@ class PhylipIterator(AlignmentIterator):
 
         records = (SeqRecord(Seq("".join(s), self.alphabet), \
                              id=i, name=i, description=i) \
-                   for (i,s) in zip(ids, seqs)) 
+                   for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
+
+# Relaxed Phylip
+class RelaxedPhylipWriter(PhylipWriter):
+    """
+    Relaxed Phylip format writer
+    """
+
+    def write_alignment(self, alignment):
+        """
+        Write a relaxed phylip alignment
+        """
+        # Check inputs
+        for name in (s.id.strip() for s in alignment):
+            if any(c in name for c in string.whitespace):
+                raise ValueError("Whitespace not allowed in identifier: %s"
+                        % name)
+
+        # Calculate a truncation length - maximum length of sequence ID plus a
+        # single character for padding
+        # If no sequences, set id_width to 1. super(...) call will raise a
+        # ValueError
+        if len(alignment) == 0:
+            id_width = 1
+        else:
+            id_width = max((len(s.id.strip()) for s in alignment)) + 1
+        super(RelaxedPhylipWriter, self).write_alignment(alignment, id_width)
+
+
+class RelaxedPhylipIterator(PhylipIterator):
+    """
+    Relaxed Phylip format Iterator
+    """
+
+    def _split_id(self, line):
+        """Returns the ID, sequence data from a line
+        Extracts the sequence ID from a Phylip line, returning a tuple
+        containing:
+
+            (sequence_id, sequence_residues)
+
+        For relaxed format - split at the first whitespace character
+        """
+        seq_id, sequence = line.split(None, 1)
+        sequence = sequence.strip().replace(" ", "")
+        return seq_id, sequence
+
 
 if __name__=="__main__":
     print "Running short mini-test"
 
     phylip_text="""     8    286
-V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG 
-B_subtilis MKMKKWTVLV VAALLAVLSA CG-------- ----NGNSSS KEDDNVLHVG 
-B_subtilis MKKALLALFM VVSIAALAAC GAGNDNQSKD NAKDGDLWAS IKKKGVLTVG 
-YA80_HAEIN MKKLLFTTAL LTGAIAFSTF ---------- -SHAGEIADR VEKTKTLLVG 
-FLIY_ECOLI MKLAHLGRQA LMGVMAVALV AG---MSVKS FADEG-LLNK VKERGTLLVG 
-E_coli_Gln --MKSVLKVS LAALTLAFAV S--------- ---------S HAADKKLVVA 
-Deinococcu -MKKSLLSLK LSGLLVPSVL ALS------- -LSACSSPSS TLNQGTLKIA 
-HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG 
+V_Harveyi_ --MKNWIKVA VAAIA--LSA A--------- ---------T VQAATEVKVG
+B_subtilis MKMKKWTVLV VAALLAVLSA CG-------- ----NGNSSS KEDDNVLHVG
+B_subtilis MKKALLALFM VVSIAALAAC GAGNDNQSKD NAKDGDLWAS IKKKGVLTVG
+YA80_HAEIN MKKLLFTTAL LTGAIAFSTF ---------- -SHAGEIADR VEKTKTLLVG
+FLIY_ECOLI MKLAHLGRQA LMGVMAVALV AG---MSVKS FADEG-LLNK VKERGTLLVG
+E_coli_Gln --MKSVLKVS LAALTLAFAV S--------- ---------S HAADKKLVVA
+Deinococcu -MKKSLLSLK LSGLLVPSVL ALS------- -LSACSSPSS TLNQGTLKIA
+HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
 
-           MSGRYFPFTF VKQ--DKLQG FEVDMWDEIG KRNDYKIEYV TANFSGLFGL 
-           ATGQSYPFAY KEN--GKLTG FDVEVMEAVA KKIDMKLDWK LLEFSGLMGE 
-           TEGTYEPFTY HDKDTDKLTG YDVEVITEVA KRLGLKVDFK ETQWGSMFAG 
-           TEGTYAPFTF HDK-SGKLTG FDVEVIRKVA EKLGLKVEFK ETQWDAMYAG 
-           LEGTYPPFSF QGD-DGKLTG FEVEFAQQLA KHLGVEASLK PTKWDGMLAS 
-           TDTAFVPFEF KQG--DKYVG FDVDLWAAIA KELKLDYELK PMDFSGIIPA 
-           MEGTYPPFTS KNE-QGELVG FDVDIAKAVA QKLNLKPEFV LTEWSGILAG 
-           TDPTYAPFES KNS-QGELVG FDIDLAKELC KRINTQCTFV ENPLDALIPS 
+           MSGRYFPFTF VKQ--DKLQG FEVDMWDEIG KRNDYKIEYV TANFSGLFGL
+           ATGQSYPFAY KEN--GKLTG FDVEVMEAVA KKIDMKLDWK LLEFSGLMGE
+           TEGTYEPFTY HDKDTDKLTG YDVEVITEVA KRLGLKVDFK ETQWGSMFAG
+           TEGTYAPFTF HDK-SGKLTG FDVEVIRKVA EKLGLKVEFK ETQWDAMYAG
+           LEGTYPPFSF QGD-DGKLTG FEVEFAQQLA KHLGVEASLK PTKWDGMLAS
+           TDTAFVPFEF KQG--DKYVG FDVDLWAAIA KELKLDYELK PMDFSGIIPA
+           MEGTYPPFTS KNE-QGELVG FDVDIAKAVA QKLNLKPEFV LTEWSGILAG
+           TDPTYAPFES KNS-QGELVG FDIDLAKELC KRINTQCTFV ENPLDALIPS
 
-           LETGRIDTIS NQITMTDARK AKYLFADPYV VDG-AQITVR KGNDSIQGVE 
-           LQTGKLDTIS NQVAVTDERK ETYNFTKPYA YAG-TQIVVK KDNTDIKSVD 
-           LNSKRFDVVA NQVG-KTDRE DKYDFSDKYT TSR-AVVVTK KDNNDIKSEA 
-           LNAKRFDVIA NQTNPSPERL KKYSFTTPYN YSG-GVIVTK SSDNSIKSFE 
-           LDSKRIDVVI NQVTISDERK KKYDFSTPYT ISGIQALVKK GNEGTIKTAD 
-           LQTKNVDLAL AGITITDERK KAIDFSDGYY KSG-LLVMVK ANNNDVKSVK 
-           LQANKYDVIV NQVGITPERQ NSIGFSQPYA YSRPEIIVAK NNTFNPQSLA 
-           LKAKKIDAIM SSLSITEKRQ QEIAFTDKLY AADSRLVVAK NSDIQP-TVE 
+           LETGRIDTIS NQITMTDARK AKYLFADPYV VDG-AQITVR KGNDSIQGVE
+           LQTGKLDTIS NQVAVTDERK ETYNFTKPYA YAG-TQIVVK KDNTDIKSVD
+           LNSKRFDVVA NQVG-KTDRE DKYDFSDKYT TSR-AVVVTK KDNNDIKSEA
+           LNAKRFDVIA NQTNPSPERL KKYSFTTPYN YSG-GVIVTK SSDNSIKSFE
+           LDSKRIDVVI NQVTISDERK KKYDFSTPYT ISGIQALVKK GNEGTIKTAD
+           LQTKNVDLAL AGITITDERK KAIDFSDGYY KSG-LLVMVK ANNNDVKSVK
+           LQANKYDVIV NQVGITPERQ NSIGFSQPYA YSRPEIIVAK NNTFNPQSLA
+           LKAKKIDAIM SSLSITEKRQ QEIAFTDKLY AADSRLVVAK NSDIQP-TVE
 
-           DLAGKTVAVN LGSNFEQLLR DYDKDGKINI KTYDT--GIE HDVALGRADA 
-           DLKGKTVAAV LGSNHAKNLE SKDPDKKINI KTYETQEGTL KDVAYGRVDA 
-           DVKGKTSAQS LTSNYNKLAT N----AGAKV EGVEGMAQAL QMIQQARVDM 
-           DLKGRKSAQS ATSNWGKDAK A----AGAQI LVVDGLAQSL ELIKQGRAEA 
-           DLKGKKVGVG LGTNYEEWLR QNV--QGVDV RTYDDDPTKY QDLRVGRIDA 
-           DLDGKVVAVK SGTGSVDYAK AN--IKTKDL RQFPNIDNAY MELGTNRADA 
-           DLKGKRVGST LGSNYEKQLI DTG---DIKI VTYPGAPEIL ADLVAGRIDA 
-           SLKGKRVGVL QGTTQETFGN EHWAPKGIEI VSYQGQDNIY SDLTAGRIDA 
+           DLAGKTVAVN LGSNFEQLLR DYDKDGKINI KTYDT--GIE HDVALGRADA
+           DLKGKTVAAV LGSNHAKNLE SKDPDKKINI KTYETQEGTL KDVAYGRVDA
+           DVKGKTSAQS LTSNYNKLAT N----AGAKV EGVEGMAQAL QMIQQARVDM
+           DLKGRKSAQS ATSNWGKDAK A----AGAQI LVVDGLAQSL ELIKQGRAEA
+           DLKGKKVGVG LGTNYEEWLR QNV--QGVDV RTYDDDPTKY QDLRVGRIDA
+           DLDGKVVAVK SGTGSVDYAK AN--IKTKDL RQFPNIDNAY MELGTNRADA
+           DLKGKRVGST LGSNYEKQLI DTG---DIKI VTYPGAPEIL ADLVAGRIDA
+           SLKGKRVGVL QGTTQETFGN EHWAPKGIEI VSYQGQDNIY SDLTAGRIDA
 
-           FIMDRLSALE -LIKKT-GLP LQLAGEPFET I-----QNAW PFVDNEKGRK 
-           YVNSRTVLIA -QIKKT-GLP LKLAGDPIVY E-----QVAF PFAKDDAHDK 
-           TYNDKLAVLN -YLKTSGNKN VKIAFETGEP Q-----STYF TFRKGS--GE 
-           TINDKLAVLD -YFKQHPNSG LKIAYDRGDK T-----PTAF AFLQGE--DA 
-           ILVDRLAALD -LVKKT-NDT LAVTGEAFSR Q-----ESGV ALRKGN--ED 
-           VLHDTPNILY -FIKTAGNGQ FKAVGDSLEA Q-----QYGI AFPKGS--DE 
-           AYNDRLVVNY -IINDQ-KLP VRGAGQIGDA A-----PVGI ALKKGN--SA 
-           AFQDEVAASE GFLKQPVGKD YKFGGPSVKD EKLFGVGTGM GLRKED--NE 
+           FIMDRLSALE -LIKKT-GLP LQLAGEPFET I-----QNAW PFVDNEKGRK
+           YVNSRTVLIA -QIKKT-GLP LKLAGDPIVY E-----QVAF PFAKDDAHDK
+           TYNDKLAVLN -YLKTSGNKN VKIAFETGEP Q-----STYF TFRKGS--GE
+           TINDKLAVLD -YFKQHPNSG LKIAYDRGDK T-----PTAF AFLQGE--DA
+           ILVDRLAALD -LVKKT-NDT LAVTGEAFSR Q-----ESGV ALRKGN--ED
+           VLHDTPNILY -FIKTAGNGQ FKAVGDSLEA Q-----QYGI AFPKGS--DE
+           AYNDRLVVNY -IINDQ-KLP VRGAGQIGDA A-----PVGI ALKKGN--SA
+           AFQDEVAASE GFLKQPVGKD YKFGGPSVKD EKLFGVGTGM GLRKED--NE
 
            LQAEVNKALA EMRADGTVEK ISVKWFGADI TK----
            LRKKVNKALD ELRKDGTLKK LSEKYFNEDI TVEQKH
@@ -397,7 +486,7 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
 
     handle = StringIO(phylip_text3 + "\n" + phylip_text4 + "\n\n\n" + phylip_text)
     assert len(list(PhylipIterator(handle))) == 3
-    
+
     print "OK"
 
     print "Checking write/read"

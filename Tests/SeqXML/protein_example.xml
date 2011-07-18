@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML source="Ensembl" sourceVersion="56" seqXMLversion="0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.4/seqxml.xsd">
+    <entry id="ENSMUSP00000099904">
+        <species name="Mus musculus" ncbiTaxID="10090"/>
+        <description>argininosuccinate synthetase 1 Gene [Source:MGI (curated);Acc:Ass1-001]</description>
+        <AAseq>MSSKGSVVLAYSGGLDTSCILVWLKEQGYDVIAYLANIGQKEDFEEARKKALKLGAKKVFIEDVSKEFVEEFIWPAVQSSALYEDRYLLGTSLARPCIARRQVEIAQREGAKYVSHGATGKGNDQVRFELTCYSLAPQIKVIAPWRMPEFYNRFKGRNDLMEYAKQHGIPIPVTPKSPWSMDENLMHISYEAGILENPKNQAPPGLYTKTQDPAKAPNSPDVLEIEFKKGVPVKVTNIKDGTTRTTSLELFMYLNEVAGKHGVGRIDIVENRFIGMKSRGIYETPAGTILYHAHLDIEAFTMDREVRKIKQGLGLKFAELVYTGFWHSPECEFVRHCIQKSQERVEGKVQVSVFKGQVYILGRESPLSLYNEELVSMNVQGDYEPIDATGFININSLRLKEYHRLQSKVTAK</AAseq>
+        <DBRef source="UniProt" id="Q3UEJ7"/>
+        <DBRef source="RefSeq" id="NP_031520.1"/>
+        <property name="sequence status" value="complete"/>
+        <property name="property with no value"/>
+    </entry>
+    <entry id="fake1">
+        <species name="Mus musculus" ncbiTaxID="10090"/>
+        <description>full alphabet</description>
+        <AAseq>ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*</AAseq>
+    </entry>
+    <entry id="fake2">
+        <species name="Homo sapiens" ncbiTaxID="9606"/>
+        <description>duplicated property/alternativeID</description>
+        <AAseq>GAKKVFIEDVSKEFVEEFIWPAVQSSALYE</AAseq>
+        <DBRef source="someDB" id="G001"/>
+        <DBRef source="someDB" id="G002"/>
+        <property name="test" value="1"/>
+        <property name="test" value="2"/>
+        <property name="test" value="3"/>
+    </entry>
+    <entry id="minimal">
+        <AAseq>S</AAseq>
+    </entry>
+    <entry id="UniprotProtein" source="Uniprot">
+        <species name="Homo sapiens" ncbiTaxID="9606"/>
+        <description>Local source definition</description>
+        <AAseq>PPPWAKKVFIEDVIIAGSKEFVEEFIWPAVQSE</AAseq>
+    </entry>
+</seqXML>

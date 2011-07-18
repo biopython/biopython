@@ -12,13 +12,23 @@ The latest news is at the top of this file.
 
 In progress: Biopython 1.58 (not yet released)
 
+A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
+Likelihood) package of programs, supporting codeml, baseml and yn00 as well
+as a Python re-implementation of chi2 was added as the Bio.Phylo.PAML module.
+
+Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
+format offering basic annotation support. See Schmitt et al (2011) in
+Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
+
 The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
 would only return alignments for the first query sequence.
 
 The Bio.AlignIO "phylip" parser and writer now treat a dot/period in the
 sequence as an error, in line with the official PHYLIP specification. Older
-verions of our code didn't do anything special with this character.
+verions of our code didn't do anything special with this character. Also,
+support for "phylip-relaxed" has been added which allows longer record names
+as used in RAxML and PHYML.
 
 Of potential interest to anyone subclassing Biopython objects, any remaining
 "old syle" Python classes have been switched to "new style" classes. This
@@ -30,10 +40,13 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Aaron Gallagher (first contribution)
+Brandon Invergo (first contribution)
+Fábio Madeira (first contribution)
 Connor McCoy (first contribution)
 Eric Talevich
 Joao Rodrigues
 Peter Cock
+Thomas Schmitt (first contribution)
 Walter Gillett
 
 ===================================================================

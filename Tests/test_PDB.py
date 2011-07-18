@@ -10,6 +10,7 @@
 
 """Unit tests for the Bio.PDB module."""
 import os
+import tempfile
 import unittest
 import warnings
 from StringIO import StringIO
@@ -142,7 +143,7 @@ class ParseTest(unittest.TestCase):
         p = PDBParser(PERMISSIVE=1)
         self.structure = p.get_structure("example", "PDB/a_structure.pdb")
         warnings.filters.pop()
- 
+
     def test_c_n(self):
         """Extract polypeptides using C-N."""
         ppbuild = PPBuilder()
@@ -159,7 +160,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
                          "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
                          str(s))
- 
+
     def test_ca_ca(self):
         """Extract polypeptides using CA-CA."""
         ppbuild = CaPPBuilder()
@@ -176,7 +177,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
                          "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
                          str(s))
- 
+
     def test_structure(self):
         """Verify the structure of the parsed example PDB file."""
         # Structure contains 2 models
@@ -490,7 +491,18 @@ class ParseTest(unittest.TestCase):
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
-    
+
+    def test_empty(self):
+        """Parse an empty file."""
+        parser = PDBParser()
+        tmpf = tempfile.NamedTemporaryFile()
+        try:
+            struct = parser.get_structure('MT', tmpf.name)
+            # Structure has no children (models)
+            self.assertFalse(len(struct))
+        finally:
+            tmpf.close()
+
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
         parser = PDBParser(PERMISSIVE=False)
@@ -639,7 +651,6 @@ class ParseReal(unittest.TestCase):
 
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
-        tmp_path = "PDB/tmp.pdb"
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 20)
             for idx, model in enumerate(struct):
@@ -651,13 +662,13 @@ class ParseReal(unittest.TestCase):
         # Round trip: serialize and parse again
         io = PDBIO()
         io.set_structure(struct1)
+        tmp_path = tempfile.NamedTemporaryFile()
         try:
-            io.save(tmp_path)
-            struct2 = parser.get_structure("1mot", tmp_path)
+            io.save(tmp_path.name)
+            struct2 = parser.get_structure("1mot", tmp_path.name)
             confirm_numbering(struct2)
         finally:
-            if os.path.isfile(tmp_path):
-                os.remove(tmp_path)
+            tmp_path.close()
 
 
 class Exposure(unittest.TestCase):
@@ -744,22 +755,21 @@ class Exposure(unittest.TestCase):
 
 class Atom_Element(unittest.TestCase):
     """induces Atom Element from Atom Name"""
-    
+
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         warnings.filters.pop()
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
-    
+
     def test_AtomElement(self):
         """ Atom Element """
         atoms = self.residue.child_list
-
         self.assertEqual('N', atoms[0].element) # N
         self.assertEqual('C', atoms[1].element) # Alpha Carbon
         self.assertEqual('CA', atoms[8].element) # Calcium
-        
+
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
         pdb_filename = "PDB/ions.pdb"
@@ -768,17 +778,17 @@ class Atom_Element(unittest.TestCase):
         # check magnesium atom
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
-        
+
 class IterationTests(unittest.TestCase):        
-    
+
     def setUp(self):
         self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
-        
+
     def test_get_chains(self):
         """Yields chains from different models separately."""
         chains = [chain.id for chain in self.struc.get_chains()]
         self.assertEqual(chains, ['A','A', 'B', ' '])
-        
+
     def test_get_residues(self):
         """Yields all residues from all models."""
         residues = [resi.id for resi in self.struc.get_residues()]
