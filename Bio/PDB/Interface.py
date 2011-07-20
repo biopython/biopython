@@ -72,11 +72,26 @@ class Interface(Entity):
         neighbors=self.neighbors
         return neighbors
 
-    def get_polar_percentage(self):
-        "Gets the percentage of polar residues in the interface"
+    def calculate_percentage(self):
+        "Gets the percentage of polar/apolar/charged residues at the interface"
         
+        polar=0
+        apolar=0
+        charged=0
         polar_list=getattr(IUPACData, "protein_polarity")
-        polar_residues = [r for r in self if to_one_letter_code[r.resname] in polar_list['polar']]
-        polar_percentage=float(len(polar_residues))/len(self)
-        return polar_percentage
+        charged_list=getattr(IUPACData, "protein_pka_side_chain")
+        for r in self:
+            res=to_one_letter_code[r.resname]
+            if res in polar_list['polar']:
+                if charged_list[res]:
+                    charged=charged+1
+                else:
+                    polar=polar+1
+            else:
+                apolar=apolar+1
+        print polar, apolar, charged
+        polar_percentage=float(polar)/len(self)
+        apolar_percentage=float(apolar)/len(self)
+        charged_percentage=float(charged)/len(self)
+        return [polar_percentage, apolar_percentage, charged_percentage]
 
