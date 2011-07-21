@@ -79,8 +79,14 @@ class XMLRecordIterator:
                 #empty file
                 pass
             else:
-                raise
-   
+                import os
+                if e.getLineNumber() == 1 and e.getColumnNumber() == 1 \
+                and os.name == "java":
+                    #empty file, see http://bugs.jython.org/issue1774
+                    pass
+                else:
+                    raise
+
     
     def _attributes(self,node):
         """Return the attributes of a DOM node as dictionary."""
