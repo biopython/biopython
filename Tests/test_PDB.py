@@ -495,13 +495,14 @@ class ParseReal(unittest.TestCase):
     def test_empty(self):
         """Parse an empty file."""
         parser = PDBParser()
-        tmpf = tempfile.NamedTemporaryFile()
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
         try:
-            struct = parser.get_structure('MT', tmpf.name)
+            struct = parser.get_structure('MT', filename)
             # Structure has no children (models)
             self.assertFalse(len(struct))
         finally:
-            tmpf.close()
+            os.remove(filename)
 
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
