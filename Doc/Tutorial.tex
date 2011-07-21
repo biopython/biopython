@@ -4402,6 +4402,8 @@ TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19
 
 We don't actually \emph{need} to have our FASTA input sequences prepared in a file,
 because by default MUSCLE will read in the input sequence from standard input!
+Note this is a bit more advanced and fiddly, so don't bother with this technique
+unless you need to.
 
 First, we'll need some unaligned sequences in memory as \verb|SeqRecord| objects.
 For this demonstration I'm going to use a filtered version of the original FASTA
@@ -4425,7 +4427,7 @@ as for the output.
 muscle -clwstrict
 \end{verbatim}
 
-Now comes the clever bit using the \verb|subprocess| module, stdin and stdout:
+Now for the fiddly bits using the \verb|subprocess| module, stdin and stdout:
 
 \begin{verbatim}
 >>> import subprocess
@@ -4474,6 +4476,42 @@ There can also be subtle cross platform issues (e.g. Windows versus Linux), and 
 you run your script can have an impact (e.g. at the command line, from IDLE or an
 IDE, or as a GUI script). These are all generic Python issues though, and not
 specific to Biopython.
+
+If you find working directly with \texttt{subprocess} like this scary, there is an
+alternative. If you execute the tool with \texttt{muscle\_cline()} you can supply
+any standard input as a big string, \texttt{muscle\_cline(stdin=...)}. So,
+provided your data isn't very big, you can prepare the FASTA input in memory as
+a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
+
+%doctest
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> records = (r for r in SeqIO.parse("opuntia.fasta", "fasta") if len(r) < 900)
+>>> from StringIO import StringIO
+>>> handle = StringIO()
+>>> SeqIO.write(records, handle, "fasta")
+>>> data = handle.getvalue()
+\end{verbatim}
+
+\noindent You can then run the tool and parse the alignment as follows:
+
+%not a doctest as can't assume the MUSCLE binary is present
+\begin{verbatim}
+>>> stdout, stderr = muscle_cline(stdin=data)
+>>> from Bio import AlignIO
+>>> align = AlignIO.read(StringIO(stdout), "clustal")
+>>> print align
+SingleLetterAlphabet() alignment with 6 rows and 900 columns
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273290|gb|AF191664.1|AF19166
+TATACATTAAAGGAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273289|gb|AF191663.1|AF19166
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273287|gb|AF191661.1|AF19166
+TATACATAAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273286|gb|AF191660.1|AF19166
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273285|gb|AF191659.1|AF19165
+TATACATTAAAGAAGGGGGATGCGGATAAATGGAAAGGCGAAAG...AGA gi|6273284|gb|AF191658.1|AF19165
+\end{verbatim}
+
+You might find this easier, but it does require more memory (RAM) for the strings
+used for the input FASTA and output Clustal formatted data.
 
 \subsection{EMBOSS needle and water}
 \label{seq:emboss-needle-water}
