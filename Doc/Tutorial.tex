@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 2 April 2011 (Biopython 1.57+)}
+\date{Last Update -- 21 July 2011 (Biopython 1.57+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4584,8 +4584,11 @@ MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRF...KYH HBB_HUMAN
 
 In this example, we told EMBOSS to write the output to a file, but you
 \emph{can} tell it to write the output to stdout instead (useful if you
-don't want a temporary output file to get rid of), and also read the
-input from stdin (just like in the MUSCLE example in the section above).
+don't want a temporary output file to get rid of -- use
+\texttt{stdout=True} rather than the \texttt{outfile} argument), and
+also to read \emph{one} of the one of the inputs from stdin (e.g.
+\texttt{asequence="stdin"}, much like in the MUSCLE example in the
+section above).
 
 This has only scratched the surface of what you can do with \texttt{needle}
 and \texttt{water}. One useful trick is that the second file can contain
