@@ -15,7 +15,7 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.dom import pulldom
-from xml.sax._exceptions import SAXParseException
+from xml.sax import SAXParseException
 
 from Bio import Alphabet
 from Bio.Seq import Seq
