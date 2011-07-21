@@ -4490,6 +4490,7 @@ a string using \texttt{StringIO} (see Section~\ref{sec:appendix-handles}):
 >>> from StringIO import StringIO
 >>> handle = StringIO()
 >>> SeqIO.write(records, handle, "fasta")
+6
 >>> data = handle.getvalue()
 \end{verbatim}
 
