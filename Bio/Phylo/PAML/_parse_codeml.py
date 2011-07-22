@@ -7,6 +7,21 @@ import re
 
 line_floats_re = re.compile("-*\d+\.\d+")
 
+try:
+    float("nan")
+    _nan_float = float
+except ValueError:
+    #Happens prior to Python 2.6 depending on C library, e.g. breaks on WinXP
+    def _nan_float(text):
+        try:
+            return float(text)
+        except ValueError:
+            if text.lower()=="nan":
+                import struct 
+                return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
+            else:
+                raise
+
 def parse_basics(lines, results):
     """Parse the basic information that should be present in most codeml output files.
     """
@@ -20,7 +35,7 @@ def parse_basics(lines, results):
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [float(val) for val in line_floats_res]
+        line_floats = [_nan_float(val) for val in line_floats_res]
         # Get the program version number
         version_res = version_re.match(line)
         if version_res is not None:
@@ -127,7 +142,7 @@ def parse_model(lines, results):
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [float(val) for val in line_floats_res]
+        line_floats = [_nan_float(val) for val in line_floats_res]
         # Check if branch-specific results are in the line
         branch_res = branch_re.match(line)
         # Check if additional model parameters are in the line
@@ -273,11 +288,15 @@ def parse_model(lines, results):
             #Hack for Jython http://bugs.jython.org/issue1762 float("-nan")
             line = line.replace(" -nan", " nan")
             params = line.strip().split()[1:]
-            parameters["branches"][branch]= {"t":float(params[0].strip()),
-                "N":float(params[1].strip()), "S":float(params[2].strip()),
-                "omega":float(params[3].strip()), "dN":float(params[4].strip()),
-                "dS":float(params[5].strip()), "N*dN":float(params[6].strip()),
-                "S*dS":float(params[7].strip())}
+            parameters["branches"][branch]= {
+                "t" : _nan_float(params[0].strip()),
+                "N" : _nan_float(params[1].strip()),
+                "S" : _nan_float(params[2].strip()),
+                "omega" :_nan_float(params[3].strip()),
+                "dN" : _nan_float(params[4].strip()),
+                "dS" : _nan_float(params[5].strip()),
+                "N*dN" : _nan_float(params[6].strip()),
+                "S*dS" : _nan_float(params[7].strip())}
         # Find model parameters, which can be spread across multiple
         # lines.
         # Example matches:
@@ -286,7 +305,7 @@ def parse_model(lines, results):
         elif len(model_params) > 0:
             float_model_params = []
             for param in model_params:
-                float_model_params.append((param[0], float(param[1])))
+                float_model_params.append((param[0], _nan_float(param[1])))
             parameters = dict(parameters.items() + float_model_params)
     if len(parameters) > 0:
         results["parameters"] = parameters
@@ -358,7 +377,7 @@ def parse_pairwise(lines, results):
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [float(val) for val in line_floats_res]
+        line_floats = [_nan_float(val) for val in line_floats_res]
         pair_res = pair_re.match(line)
         if pair_res:
             seq1 = pair_res.group(1)
@@ -393,7 +412,7 @@ def parse_distances(lines, results):
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
-        line_floats = [float(val) for val in line_floats_res]
+        line_floats = [_nan_float(val) for val in line_floats_res]
         if "AA distances" in line:
             raw_aa_distances_flag = True
             # In current versions, the raw distances always come
