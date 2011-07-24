@@ -438,23 +438,9 @@ class SeqRecord(object):
             #TODO - Review this in light of adding SeqRecord objects?
             
             #TODO - Cope with strides by generating ambiguous locations?
-            if index.step is None or index.step == 1:
+            start, stop, step = index.indices(parent_length)
+            if step == 1:
                 #Select relevant features, add them with shifted locations
-                if index.start is None:
-                    start = 0
-                else:
-                    start = index.start
-                if index.stop is None:
-                    stop = -1
-                else:
-                    stop = index.stop
-                if (start < 0 or stop < 0) and parent_length == 0:
-                    raise ValueError, \
-                          "Cannot support negative indices without the sequence length"
-                if start < 0:
-                    start = parent_length + start
-                if stop < 0:
-                    stop  = parent_length + stop + 1
                 #assert str(self.seq)[index] == str(self.seq)[start:stop]
                 for f in self.features:
                     if f.ref or f.ref_db:
@@ -462,7 +448,7 @@ class SeqRecord(object):
                         import warnings
                         warnings.warn("When slicing SeqRecord objects, any "
                               "SeqFeature referencing other sequences (e.g. "
-                              "from segmented GenBank records) is ignored.")
+                              "from segmented GenBank records) are ignored.")
                         continue
                     if start <= f.location.nofuzzy_start \
                     and f.location.nofuzzy_end <= stop:

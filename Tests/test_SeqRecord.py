@@ -111,6 +111,14 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
             self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
 
+    def test_slice_zero(self):
+        """Zero slice"""
+        rec = self.record
+        self.assertEqual(len(rec), 26)
+        self.assertEqual(len(rec[2:-2]), 22)
+        self.assertEqual(len(rec[5:2]), 0)
+        self.assertEqual(len(rec[5:2][2:-2]), 0)
+
     def test_add_simple(self):
         """Simple addition"""
         rec = self.record + self.record
