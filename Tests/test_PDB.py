@@ -495,13 +495,14 @@ class ParseReal(unittest.TestCase):
     def test_empty(self):
         """Parse an empty file."""
         parser = PDBParser()
-        tmpf = tempfile.NamedTemporaryFile()
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
         try:
-            struct = parser.get_structure('MT', tmpf.name)
+            struct = parser.get_structure('MT', filename)
             # Structure has no children (models)
             self.assertFalse(len(struct))
         finally:
-            tmpf.close()
+            os.remove(filename)
 
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
@@ -662,13 +663,14 @@ class ParseReal(unittest.TestCase):
         # Round trip: serialize and parse again
         io = PDBIO()
         io.set_structure(struct1)
-        tmp_path = tempfile.NamedTemporaryFile()
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
         try:
-            io.save(tmp_path.name)
-            struct2 = parser.get_structure("1mot", tmp_path.name)
+            io.save(filename)
+            struct2 = parser.get_structure("1mot", filename)
             confirm_numbering(struct2)
         finally:
-            tmp_path.close()
+            os.remove(filename)
 
 
 class Exposure(unittest.TestCase):

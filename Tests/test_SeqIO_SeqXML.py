@@ -10,29 +10,18 @@ from Bio.SeqRecord import SeqRecord
 from StringIO import StringIO
 
 test_files = {
-    "dna" : ["SeqXML/dna_example.xml",4,None],
-    "rna" : ["SeqXML/rna_example.xml",5,None],
-    "protein" : ["SeqXML/protein_example.xml",5,None],
-    "globalSpecies" : ["SeqXML/global_species_example.xml",2,None],
+    "dna" : ["SeqXML/dna_example.xml",4],
+    "rna" : ["SeqXML/rna_example.xml",5],
+    "protein" : ["SeqXML/protein_example.xml",5],
+    "globalSpecies" : ["SeqXML/global_species_example.xml",2],
 }
 
-corrupt_files = {"corrupt1" : ["SeqXML/corrupt_example1.xml",None],
-                 "corrupt2" : ["SeqXML/corrupt_example2.xml",None],}
+corrupt_files = ["SeqXML/corrupt_example1.xml",
+                 "SeqXML/corrupt_example2.xml",
+                ]
 
-def open_test_files():
-    for _file in test_files:
-        test_files[_file][2] = open(test_files[_file][0],"r")
-    for _file in corrupt_files:
-        corrupt_files[_file][1] = open(corrupt_files[_file][0],"r")
 
-def close_test_files():
-    for _file in test_files:
-        test_files[_file][2].close()
-    for _file in corrupt_files:
-        corrupt_files[_file][1].close()
-        
 def assert_equal_records(testCase,record_a,record_b):
-    
     testCase.assertEqual(record_a.id,record_b.id)
     testCase.assertEqual(record_a.name,record_b.name)
     testCase.assertEqual(record_a.description,record_b.description)
@@ -40,41 +29,25 @@ def assert_equal_records(testCase,record_a,record_b):
     testCase.assertEqual(record_a.dbxrefs,record_b.dbxrefs)
     testCase.assertEqual(record_a.annotations,record_a.annotations)
     
-    
 
 class TestSimpleRead(unittest.TestCase):
-    
-    def setUp(self):
-        open_test_files()
-
-    def tearDown(self):
-        close_test_files()
         
     def test_check_SeqIO(self):
         """Files readable using parser via SeqIO."""
-        
-        for _file in test_files:
-            records = list(SeqIO.parse(test_files[_file][2],"seqxml"))
-            
-            self.assertEqual(len(records),test_files[_file][1])
+        for key in test_files:
+            records = list(SeqIO.parse(test_files[key][0],"seqxml"))
+            self.assertEqual(len(records),test_files[key][1])
             
 class TestDetailedRead(unittest.TestCase):
     
     records = {}
     
     def setUp(self):
-        open_test_files()
-        
-        for _file in test_files:
-            self.records[_file] = list(SeqIO.parse(test_files[_file][2],"seqxml"))
+        for key in test_files:
+            self.records[key] = list(SeqIO.parse(test_files[key][0],"seqxml"))
 
-    def tearDown(self):
-        close_test_files()
-        
-        
     def test_special_characters_desc(self):
         """Read special XML characters in description."""
-        
         self.assertEqual(self.records["dna"][2].description, u'some special characters in the description\n<tag> "quoted string"')
         
     def test_unicode_characters_desc(self):
@@ -83,23 +56,20 @@ class TestDetailedRead(unittest.TestCase):
         
     def test_full_characters_set_read(self):
         """Read full characters set for each type"""
-        
         self.assertEqual(self.records["dna"][1].seq.tostring(),"ACGTMRWSYKVHDBXN.-" )
         self.assertEqual(self.records["rna"][1].seq.tostring(),"ACGUMRWSYKVHDBXN.-" )
         self.assertEqual(self.records["protein"][1].seq.tostring(),"ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*")
     
     def test_duplicated_property(self):
         """Read property with multiple values"""
-        
         self.assertEqual(self.records["protein"][2].annotations["test"],[u"1",u"2",u"3"])
         
     def test_duplicated_dbxref(self):
         """Read multiple cross references to a single source"""
-        
         self.assertEqual(self.records["protein"][2].dbxrefs,[u"someDB:G001",u"someDB:G002"])
     
-    def test_read_minial_required(self):
-        
+    def test_read_minimal_required(self):
+        """Check minimal record."""
         minimalRecord = SeqRecord(id="test",seq=Seq("abc"))
         minimalRecord.annotations["source"] = u"Ensembl"
         
@@ -109,7 +79,7 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records["protein"][3].description,minimalRecord.description)
         
     def test_local_species(self):
-        
+        """Check local species."""
         self.assertEqual(self.records["rna"][1].annotations["organism"],"Mus musculus")
         self.assertEqual(self.records["rna"][1].annotations["ncbi_taxid"],"10090")
         
@@ -117,49 +87,42 @@ class TestDetailedRead(unittest.TestCase):
         self.assertEqual(self.records["rna"][0].annotations["ncbi_taxid"],"9031")
         
     def test_global_species(self):
-        
+        """Check global species."""
         self.assertEqual(self.records["globalSpecies"][0].annotations["organism"],"Mus musculus")
         self.assertEqual(self.records["globalSpecies"][0].annotations["ncbi_taxid"],"10090")
         
         self.assertEqual(self.records["globalSpecies"][1].annotations["organism"],"Homo sapiens")
         self.assertEqual(self.records["globalSpecies"][1].annotations["ncbi_taxid"],"9606")
-        
-        
+
     def test_local_source_definition(self):
-        
+        """Check local source."""
         self.assertEqual(self.records["protein"][4].annotations["source"],u"Uniprot")
 
     def test_empty_description(self):
-         
+        """Check empty description."""
         self.assertEqual(self.records["rna"][4].description,SeqRecord(id="",seq=Seq("")).description)
 
 
 class TestReadAndWrite(unittest.TestCase):
     
-    def setUp(self):
-        open_test_files()
-
-    def tearDown(self):
-        close_test_files()
-    
     def test_read_write_rna(self):
-        
-        read1_records = list(SeqIO.parse(test_files["rna"][2],"seqxml"))
+        """Read and write RNA."""
+        read1_records = list(SeqIO.parse(test_files["rna"][0],"seqxml"))
         self._write_parse_and_compare(read1_records)
     
     def test_read_write_dna(self):
-        
-        read1_records = list(SeqIO.parse(test_files["dna"][2],"seqxml"))
+        """Read and write DNA."""
+        read1_records = list(SeqIO.parse(test_files["dna"][0],"seqxml"))
         self._write_parse_and_compare(read1_records)
     
     def test_read_write_protein(self):
-        
-        read1_records = list(SeqIO.parse(test_files["protein"][2],"seqxml"))
+        """Read and write protein."""
+        read1_records = list(SeqIO.parse(test_files["protein"][0],"seqxml"))
         self._write_parse_and_compare(read1_records)
         
     def test_read_write_globalSpecies(self):
-        
-        read1_records = list(SeqIO.parse(test_files["globalSpecies"][2],"seqxml"))
+        """Read and write global species."""
+        read1_records = list(SeqIO.parse(test_files["globalSpecies"][0],"seqxml"))
         self._write_parse_and_compare(read1_records)
         
     
@@ -180,23 +143,12 @@ class TestReadAndWrite(unittest.TestCase):
     
 class TestReadCorruptFiles(unittest.TestCase):
     
-    def setUp(self):
-        open_test_files()
-
-    def tearDown(self):
-        close_test_files()
-        
-    
     def test_for_errors(self):
-        
-        for _file in corrupt_files:
-            seqIO = SeqIO.parse(corrupt_files[_file][1],"seqxml")
-            
-            self.assertRaises(ValueError,seqIO.next);
+        """Handling of corrupt files."""        
+        for filename in corrupt_files:
+            iterator = SeqIO.parse(filename,"seqxml")
+            self.assertRaises(ValueError,iterator.next);
 
-    
-class TestWriteCorruptRecords(unittest.TestCase):
-    pass
         
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

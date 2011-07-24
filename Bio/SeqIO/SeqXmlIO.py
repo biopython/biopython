@@ -15,7 +15,7 @@ FASTA files. For more Information see http://www.seqXML.org and Schmitt et al
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.xmlreader import AttributesImpl
 from xml.dom import pulldom
-from xml.sax._exceptions import SAXParseException
+from xml.sax import SAXParseException
 
 from Bio import Alphabet
 from Bio.Seq import Seq
@@ -79,8 +79,14 @@ class XMLRecordIterator:
                 #empty file
                 pass
             else:
-                raise
-   
+                import os
+                if e.getLineNumber() == 1 and e.getColumnNumber() == 1 \
+                and os.name == "java":
+                    #empty file, see http://bugs.jython.org/issue1774
+                    pass
+                else:
+                    raise
+
     
     def _attributes(self,node):
         """Return the attributes of a DOM node as dictionary."""
