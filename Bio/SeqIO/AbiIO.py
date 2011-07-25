@@ -17,12 +17,14 @@ __docformat__ = "epytext en"
 
 import datetime
 import struct
+from sys import version_info
 
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio._py3k import _bytes_to_string, _as_bytes
 
-# dictionary for deciding which tags goes into SeqRecord annotation
+# dictionary for determining which tags goes into SeqRecord annotation
 # each key is tag_name + tag_number
 # if a tag entry needs to be added, just add its key and its key
 # for the annotations dictionary as the value
@@ -32,7 +34,6 @@ _EXTRACT = {
             'GTyp1': 'polymer',
             'MODL1': 'machine model',
            }
-
 # dictionary for tags that require preprocessing before use in creating
 # seqrecords
 _SPCTAGS = [
@@ -44,7 +45,6 @@ _SPCTAGS = [
             'RUNT1',    # run start time
             'RUNT2',    # run finish time
            ]
-
 # dictionary for data unpacking format
 _BYTEFMT = {
             1: 'b',     # byte
@@ -67,6 +67,10 @@ _BYTEFMT = {
             19: 's',    # cString
             20: '2i',   # tag, legacy unsupported
            }
+# header data structure
+_HEADFMT = '>4sH4sI2H3I'
+# directory data structure
+_DIRFMT = '>4sI2H4I'
 
 def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     """Iterator for the Abi file format.
@@ -76,20 +80,24 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     except:
         from re import search
         file_id = search('\'(.*)\.ab1\'', str(handle)).group(0)
+    # check if input file is a valid Abi file
+    if not handle.read(4) == _as_bytes('ABIF'):
+        raise IOError('%s is not a valid ABI file.' % file_id)
+
     # dirty hack for handling time information
     times = {'RUND1': '', 'RUND2': '', 'RUNT1': '', 'RUNT2': '', }
     annot = {}
 
-    if not handle.read(4) == 'ABIF':
-        raise IOError('%s is not a valid ABI file.' % file_id)
-
     handle.seek(0)
-    header = struct.unpack('>4sH4sI2H3I', handle.read(30))
+    header = struct.unpack(_HEADFMT, \
+             handle.read(struct.calcsize(_HEADFMT)))
 
     for entry in _abi_parse_header(header, handle):
         # stop iteration if all desired tags have been extracted
-        # 4 tags from _EXTRACT + 2 time tags from _SPCTAGS
-        if len(annot) == 6:
+        # 4 tags from _EXTRACT + 2 time tags from _SPCTAGS - 3,
+        # and seq, qual, id
+        if 'seq' in locals() and 'qual' in locals() and \
+           'id' in locals() and len(annot) == len(_EXTRACT) + len(_SPCTAGS) - 3:
             break
 
         key = entry.tag_name + str(entry.tag_num)
@@ -102,12 +110,16 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
                 alphabet = IUPAC.ambiguous_dna
         # PCON2 is quality values of base-called sequence
         elif key == 'PCON2':
-            qual = [ord(val) for val in entry.tag_data]
+            # because of bytes in py3
+            if version_info[0] >= 3:
+                qual = list(entry.tag_data)
+            else:
+                qual = [ord(val) for val in entry.tag_data]
         # SMPL1 is sample id entered before sequencing run
         elif key == 'SMPL1':
             sample_id = entry.tag_data
         elif key in times:
-            times[key] = str(entry.tag_data)
+            times[key] = entry.tag_data
         else:
             # extract sequence annotation as defined in _EXTRACT          
             if key in _EXTRACT:
@@ -152,10 +164,13 @@ def _abi_parse_header(header, handle):
         # add directory offset to tuple
         # to handle directories with data size <= 4 bytes
         handle.seek(start)
-        dir_entry = struct.unpack('>4sI2H4I', handle.read(28)) + (start,)
+        dir_entry = struct.unpack(_DIRFMT, \
+                    handle.read(struct.calcsize(_DIRFMT))) + (start,)
         index += 1
         # only parse desired dirs
-        if str(dir_entry[0] + dir_entry[1]) in (_EXTRACT.keys() + _SPCTAGS):
+        key = _bytes_to_string(dir_entry[0])
+        key += str(dir_entry[1])
+        if key in (list(_EXTRACT.keys()) + _SPCTAGS):
             yield _Dir(dir_entry, handle)
         else:
             yield None
@@ -180,8 +195,7 @@ def _abi_trim(seq_record):
     cutoff = 0.05   # default cutoff value for calculating base score
 
     if len(seq_record) <= segment:
-        raise ValueError('Sequence not trimmed because length is shorter than \
-                         minimum required length (20).')
+        return seq_record
     else:
         # calculate base score
         score_list = [cutoff - (10 ** (qual/-10.0)) for qual in
@@ -192,7 +206,7 @@ def _abi_trim(seq_record):
         # first value is set to 0, because of the assumption that
         # the first base will always be trimmed out
         cummul_score = [0]
-        for i in xrange(1, len(score_list)):
+        for i in range(1, len(score_list)):
             score = cummul_score[-1] + score_list[i]
             if score < 0:
                 cummul_score.append(0)
@@ -219,6 +233,8 @@ class _Dir(object):
                     directory handle, and tag start position
         handle - the abi file object from which the tags would be unpacked
         """
+        self.tag_name = _bytes_to_string(tag_entry[0])
+        self.tag_number = tag_entry[1]
         self.elem_code = tag_entry[2]
         self.elem_num = tag_entry[4]
         self.data_size = tag_entry[5]
@@ -242,27 +258,27 @@ class _Dir(object):
             # because '>1s' unpack differently from '>s'
             num = '' if self.elem_num == 1 else str(self.elem_num)
             fmt = '>' + num + _BYTEFMT[self.elem_code]
-            fmt_size = struct.calcsize(fmt)
             start = self.data_offset
 
             handle.seek(start)
-            data = struct.unpack(fmt, handle.read(fmt_size))
+            data = struct.unpack(fmt, handle.read(struct.calcsize(fmt)))
 
             # no need to use tuple if len(data) == 1
+            # also if data is date / time
             if self.elem_code not in [10, 11] and len(data) == 1:
                 data = data[0]
 
             # account for different data types
             if self.elem_code == 10:
-                return datetime.date(*data)
+                return str(datetime.date(*data))
             elif self.elem_code == 11:
-                return datetime.time(*data[:3])
+                return str(datetime.time(*data[:3]))
             elif self.elem_code == 13:
                 return bool(data)
             elif self.elem_code == 18:
-                return data[1:]
+                return _bytes_to_string(data[1:])
             elif self.elem_code == 19:
-                return data[:-1]
+                return _bytes_to_string(data[:-1])
             else:
                 return data
         else:
