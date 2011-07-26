@@ -128,9 +128,9 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
             if key in _EXTRACT:
                 annot[_EXTRACT[key]] = entry.tag_data
 
-        # set time annotations
-        annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
-        annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
+    # set time annotations
+    annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
+    annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
     
     record = SeqRecord(Seq(seq, alphabet),
                        id=file_id, name=sample_id,
