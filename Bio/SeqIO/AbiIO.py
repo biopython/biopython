@@ -17,6 +17,8 @@ __docformat__ = "epytext en"
 
 import datetime
 import struct
+
+from os.path import basename
 from sys import version_info
 
 from Bio.Alphabet import IUPAC
@@ -29,10 +31,10 @@ from Bio._py3k import _bytes_to_string, _as_bytes
 # if a tag entry needs to be added, just add its key and its key
 # for the annotations dictionary as the value
 _EXTRACT = {
-            'TUBE1': 'sample well',
+            'TUBE1': 'sample_well',
             'DySN1': 'dye',
             'GTyp1': 'polymer',
-            'MODL1': 'machine model',
+            'MODL1': 'machine_model',
            }
 # dictionary for tags that require preprocessing before use in creating
 # seqrecords
@@ -76,17 +78,20 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     """Iterator for the Abi file format.
     """
     try:
-        file_id = handle.name.replace('.ab1','')
+        file_id = basename(handle.name).replace('.ab1','')
     except:
         from re import search
-        file_id = search('\'(.*)\.ab1\'', str(handle)).group(0)
+        file_id = basename(search('\'(.*)\.ab1\'', str(handle)).group(0))
     # check if input file is a valid Abi file
+    handle.seek(0)
     if not handle.read(4) == _as_bytes('ABIF'):
         raise IOError('%s is not a valid ABI file.' % file_id)
 
     # dirty hack for handling time information
     times = {'RUND1': '', 'RUND2': '', 'RUNT1': '', 'RUNT2': '', }
-    annot = {}
+
+    # initialize annotations
+    annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
     handle.seek(0)
     header = struct.unpack(_HEADFMT, \
@@ -96,11 +101,9 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
         # stop iteration if all desired tags have been extracted
         # 4 tags from _EXTRACT + 2 time tags from _SPCTAGS - 3,
         # and seq, qual, id
-        if 'seq' in locals() and 'qual' in locals() and \
-           'id' in locals() and len(annot) == len(_EXTRACT) + len(_SPCTAGS) - 3:
-            break
+        # todo
 
-        key = entry.tag_name + str(entry.tag_num)
+        key = entry.tag_name + str(entry.tag_number)
 
         # PBAS2 is base-called sequence
         if key == 'PBAS2': 
@@ -124,12 +127,10 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
             # extract sequence annotation as defined in _EXTRACT          
             if key in _EXTRACT:
                 annot[_EXTRACT[key]] = entry.tag_data
-            else:
-                raise KeyError('The %s tag can not be found.' % key)
 
         # set time annotations
-        annot['run start'] = '%s %s' % times['RUND1'], times['RUNT1']
-        annot['run finish'] = '%s %s' % times['RUND2'], times['RUNT2']
+        annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
+        annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
     
     record = SeqRecord(Seq(seq, alphabet),
                        id=file_id, name=sample_id,
@@ -173,7 +174,7 @@ def _abi_parse_header(header, handle):
         if key in (list(_EXTRACT.keys()) + _SPCTAGS):
             yield _Dir(dir_entry, handle)
         else:
-            yield None
+            continue
 
 def _abi_trim(seq_record):
     """Trims the sequence using Richard Mott's modified trimming algorithm.
