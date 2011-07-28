@@ -317,7 +317,7 @@ import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import PirIO
-import SeqXMLIO
+import SeqXmlIO
 import SffIO
 import SwissIO
 import TabIO
