@@ -80,12 +80,15 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     try:
         file_id = basename(handle.name).replace('.ab1','')
     except:
-        from re import search
-        file_id = basename(search('\'(.*)\.ab1\'', str(handle)).group(0))
+        file_id = None
     # check if input file is a valid Abi file
     handle.seek(0)
-    if not handle.read(4) == _as_bytes('ABIF'):
-        raise IOError('%s is not a valid ABI file.' % file_id)
+    marker = handle.read(4)
+    if not marker:
+        #Handle empty file gracefully
+        raise StopIteration
+    if marker != _as_bytes('ABIF'):
+        raise IOError('File should start ABIF, not %r' % marker)
 
     # dirty hack for handling time information
     times = {'RUND1': '', 'RUND2': '', 'RUNT1': '', 'RUNT2': '', }
