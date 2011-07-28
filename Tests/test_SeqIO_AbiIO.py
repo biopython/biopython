@@ -89,7 +89,6 @@ def close_files():
 class TestAbi(unittest.TestCase):
     
     def setUp(self):
-        print 'ok'
         open_files()
 
     def tearDown(self):
