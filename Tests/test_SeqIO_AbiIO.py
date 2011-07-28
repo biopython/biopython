@@ -94,9 +94,6 @@ class TestAbi(unittest.TestCase):
     def tearDown(self):
         close_files()
 
-    def shortDescription(self):
-        return "Testing genuine files..."
-
     def test_file_type(self):
         """Test if filetype is ABIF."""
         for trace in test_data:
@@ -132,9 +129,6 @@ class TestAbiFake(unittest.TestCase):
 
     def tearDown(self):
         test_data_fake['fake']['handle'].close()
-
-    def shortDescription(self):
-        return "Testing fake file..."
 
     def test_file_type(self):
         """Test if error is raised if filetype is not ABIF."""
