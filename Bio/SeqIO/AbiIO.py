@@ -78,9 +78,9 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     """Iterator for the Abi file format.
     """
     try:
-        file_id = basename(handle.name).replace('.ab1','')
+        file_name = basename(handle.name).replace('.ab1','')
     except:
-        file_id = None
+        file_name = ""
     # check if input file is a valid Abi file
     handle.seek(0)
     marker = handle.read(4)
@@ -136,7 +136,7 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
     annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
     
     record = SeqRecord(Seq(seq, alphabet),
-                       id=file_id, name=sample_id,
+                       id=sample_id, name=file_name,
                        description='',
                        annotations=annot,
                        letter_annotations={'phred_quality': qual})
