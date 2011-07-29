@@ -500,7 +500,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     # Check Bio.SeqIO.read(...)
     if t_count == 1:
-        record = SeqIO.read(handle=open(t_filename), format=t_format)
+        record = SeqIO.read(handle=open(t_filename,mode), format=t_format)
         assert isinstance(record, SeqRecord)
     else:
         try:

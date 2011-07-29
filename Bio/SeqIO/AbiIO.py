@@ -78,6 +78,7 @@ _DIRFMT = '>4sI2H4I'
 def AbiIterator(handle, alphabet=None, trim=False):
     """Iterator for the Abi file format.
     """
+    # raise exception is alphabet is not dna
     if alphabet is not None:
         if isinstance(Alphabet._get_base_alphabet(alphabet),
                       Alphabet.ProteinAlphabet):
@@ -85,15 +86,17 @@ def AbiIterator(handle, alphabet=None, trim=False):
         if isinstance(Alphabet._get_base_alphabet(alphabet),
                       Alphabet.RNAAlphabet):
             raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
-    try:
-        file_name = basename(handle.name).replace('.ab1','')
-    except:
-        file_name = ""
+
+    # raise exception if handle mode is not 'rb'
+    if hasattr(handle, 'mode'):
+        if set('rb') != set(handle.mode.lower()):
+            raise ValueError("ABI files has to be opened in 'rb' mode.") 
+
     # check if input file is a valid Abi file
     handle.seek(0)
     marker = handle.read(4)
     if not marker:
-        #Handle empty file gracefully
+        # handle empty file gracefully
         raise StopIteration
     if marker != _as_bytes('ABIF'):
         raise IOError('File should start ABIF, not %r' % marker)
@@ -104,6 +107,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # initialize annotations
     annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
+    # parse header and extract data from directories
     handle.seek(0)
     header = struct.unpack(_HEADFMT, \
              handle.read(struct.calcsize(_HEADFMT)))
@@ -146,6 +150,12 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
     annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
     
+    # use the file name as SeqRecord.name if available
+    try:
+        file_name = basename(handle.name).replace('.ab1','')
+    except:
+        file_name = ""
+
     record = SeqRecord(Seq(seq, alphabet),
                        id=sample_id, name=file_name,
                        description='',

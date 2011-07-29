@@ -73,22 +73,25 @@ test_data_fake = {
              }
 }
 
-def open_files():
-    for trace in test_data:
-        test_data[trace]['handle'] = open(join(*test_data[trace]['path']), 'rb')
+def open_files(test_array):
+    for trace in test_array:
+        test_array[trace]['handle'] = open(join(*test_array[trace]['path']), 'rb')
 
-def close_files():
-    for trace in test_data:
-        test_data[trace]['handle'].close()
+def open_files_wrong_mode(test_array):
+    for trace in test_array:
+        test_array[trace]['handle'] = open(join(*test_array[trace]['path']))
 
+def close_files(test_array):
+    for trace in test_array:
+        test_array[trace]['handle'].close()
 
 class TestAbi(unittest.TestCase):
     
     def setUp(self):
-        open_files()
+        open_files(test_data)
 
     def tearDown(self):
-        close_files()
+        close_files(test_data)
 
     def test_file_type(self):
         """Test if filetype is ABIF."""
@@ -118,17 +121,25 @@ class TestAbi(unittest.TestCase):
             else:
                 self.assertEqual(str(record.seq), test_data[trace]['seq'])
 
+
+class TestAbiWrongMode(unittest.TestCase):
+    
+    def test_file_mode(self):
+        """Test if exception is raised if file is not opened in 'rb' mode."""
+        open_files_wrong_mode(test_data)
+        for trace in test_data:
+            self.assertRaises(ValueError, SeqIO.read, test_data[trace]['handle'], 'abi')
+        close_files(test_data)
+
+
 class TestAbiFake(unittest.TestCase):
-
-    def setUp(self):
-        test_data_fake['fake']['handle'] = open(join(*test_data_fake['fake']['path']), 'rb')
-
-    def tearDown(self):
-        test_data_fake['fake']['handle'].close()
 
     def test_file_type(self):
         """Test if error is raised if filetype is not ABIF."""
-        self.assertRaises(IOError, SeqIO.read, test_data_fake['fake']['handle'], 'abi')
+        open_files(test_data_fake)
+        for trace in test_data_fake:
+            self.assertRaises(IOError, SeqIO.read, test_data_fake[trace]['handle'], 'abi')
+        close_files(test_data_fake)
 
 
 if __name__ == "__main__":
