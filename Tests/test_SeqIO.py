@@ -206,6 +206,10 @@ test_files = [ \
     ("seqxml", False, 'SeqXML/dna_example.xml', 4),
     ("seqxml", False, 'SeqXML/rna_example.xml', 5),
     ("seqxml", False, 'SeqXML/protein_example.xml', 5),
+#Following examples are also used in test_SeqIO_AbiIO.py
+    ("abi", False, 'Abi/310.ab1', 1),
+    ("abi", False, 'Abi/3100.ab1', 1),
+    ("abi", False, 'Abi/3730.ab1', 1),
     ]
 
 

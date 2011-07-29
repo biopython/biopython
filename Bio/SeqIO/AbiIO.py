@@ -21,7 +21,8 @@ import struct
 from os.path import basename
 from sys import version_info
 
-from Bio.Alphabet import IUPAC
+from Bio import Alphabet
+from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import _bytes_to_string, _as_bytes
@@ -74,9 +75,16 @@ _HEADFMT = '>4sH4sI2H3I'
 # directory data structure
 _DIRFMT = '>4sI2H4I'
 
-def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
+def AbiIterator(handle, alphabet=None, trim=False):
     """Iterator for the Abi file format.
     """
+    if alphabet is not None:
+        if isinstance(Alphabet._get_base_alphabet(alphabet),
+                      Alphabet.ProteinAlphabet):
+            raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
+        if isinstance(Alphabet._get_base_alphabet(alphabet),
+                      Alphabet.RNAAlphabet):
+            raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
     try:
         file_name = basename(handle.name).replace('.ab1','')
     except:
@@ -112,8 +120,11 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
         if key == 'PBAS2': 
             seq = entry.tag_data
             ambigs = 'KYWMRS'
-            if len(set(seq).intersection(ambigs)) > 0:
-                alphabet = IUPAC.ambiguous_dna
+            if alphabet is None:
+                if set(seq).intersection(ambigs):
+                    alphabet = ambiguous_dna
+                else:
+                    alphabet = unambiguous_dna
         # PCON2 is quality values of base-called sequence
         elif key == 'PCON2':
             # because of bytes in py3
@@ -149,7 +160,7 @@ def AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=False):
 def _AbiTrimIterator(handle):
     """Iterator for the Abi file format that yields trimmed SeqRecord objects.
     """
-    return AbiIterator(handle, alphabet=IUPAC.unambiguous_dna, trim=True)
+    return AbiIterator(handle, trim=True)
 
 def _abi_parse_header(header, handle):
     """Generator that returns directory contents.
