@@ -377,7 +377,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "seqxml" : SeqXmlIO.SeqXmlWriter,
                    }
 
-_BinaryFormats = ["sff", "sff-trim", "abif", "abif-trim"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
