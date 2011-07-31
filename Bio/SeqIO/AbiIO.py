@@ -294,7 +294,9 @@ class _Dir(object):
                 data = data[0]
 
             # account for different data types
-            if self.elem_code == 10:
+            if self.elem_code == 2:
+                return _bytes_to_string(data)
+            elif self.elem_code == 10:
                 return str(datetime.date(*data))
             elif self.elem_code == 11:
                 return str(datetime.time(*data[:3]))
