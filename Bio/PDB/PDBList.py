@@ -25,7 +25,7 @@
 import gzip
 import os
 import shutil
-import urllib2 as urllib # urllib is causing too many FTP connections
+from urllib2 import urlopen as _urlopen
 import warnings
 
 from Bio import BiopythonDeprecationWarning
@@ -87,7 +87,7 @@ class PDBList(object):
         Typical contents of the list files parsed by this method is now
         very simply one PDB name per line.
         """
-        handle = urllib.urlopen(url)
+        handle = _urlopen(url)
         answer = []
         for line in handle:
             pdb = line.strip()
@@ -111,7 +111,7 @@ class PDBList(object):
         drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
         -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
         """     
-        url = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/')
+        url = _urlopen(self.pdb_server + '/pub/pdb/data/status/')
         recent = filter(str.isdigit,
                         (x.split()[-1] for x in url.readlines())
                         )[-1]
@@ -128,7 +128,8 @@ class PDBList(object):
         Returns a list of PDB codes in the index file.
         """
         print "retrieving index file. Takes about 5 MB."
-        url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/index/entries.idx')
+        url = _urlopen(self.pdb_server +
+                       '/pub/pdb/derived_data/index/entries.idx')
         return [line[:4] for line in url.readlines()[2:] if len(line) > 4]
 
     def get_all_obsolete(self):
@@ -154,7 +155,8 @@ class PDBList(object):
         ...
 
         """
-        handle = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/obsolete.dat')
+        handle = _urlopen(self.pdb_server +
+                          '/pub/pdb/data/status/obsolete.dat')
         # Extract pdb codes. Could use a list comprehension, but I want
         # to include an assert to check for mis-reading the data.
         obsolete = []
@@ -236,7 +238,7 @@ class PDBList(object):
 
         # Retrieve the file
         print "Downloading PDB structure '%s'..." % pdb_code
-        lines=urllib.urlopen(url).read()
+        lines = _urlopen(url).read()
         open(filename,'wb').write(lines)
 
         # Uncompress the file
@@ -331,12 +333,13 @@ class PDBList(object):
         and writes it to a file.
         """
         print "retrieving sequence file. Takes about 15 MB."
-        url = urllib.urlopen(self.pdb_server + 
-                '/pub/pdb/derived_data/pdb_seqres.txt')
-        lines = url.readlines()
+        handle = _urlopen(self.pdb_server + 
+                          '/pub/pdb/derived_data/pdb_seqres.txt')
+        lines = handle.readlines()
         outfile = open(savefile, 'w')
         outfile.writelines(lines)
         outfile.close()
+        handle.close()
 
 
 if __name__ == '__main__':
