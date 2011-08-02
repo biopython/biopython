@@ -246,6 +246,16 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #Check Bio.SeqIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
 
+    def test_abi(self):
+        """SeqIO agrees with EMBOSS' Abi to FASTQ conversion."""
+        #This lets use check the id, sequence, and quality scores
+        for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
+             old = SeqIO.read(filename, "abi")
+             new = SeqIO.read(emboss_convert(filename, "abi", "fastq-sanger"), "fastq-sanger")
+             self.assertEqual(old.id, new.id)
+             self.assertEqual(str(old.seq), str(new.seq))
+             self.assertEqual(old.letter_annotations, new.letter_annotations)
+
     def test_genbank(self):
         """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
         self.check_SeqIO_with_EMBOSS("GenBank/cor6_6.gb", "genbank")
