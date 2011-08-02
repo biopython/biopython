@@ -84,7 +84,8 @@ def get_emboss_version():
                 % line)
             
 #To avoid confusing known errors from old versions of EMBOSS ...
-if get_emboss_version() < (6,1,0):
+emboss_version = get_emboss_version()
+if emboss_version < (6,1,0):
     raise MissingExternalDependencyError(\
         "Test requires EMBOSS 6.1.0 patch 3 or later.")
     
@@ -252,7 +253,9 @@ class SeqRetSeqIOTests(unittest.TestCase):
         for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
              old = SeqIO.read(filename, "abi")
              new = SeqIO.read(emboss_convert(filename, "abi", "fastq-sanger"), "fastq-sanger")
-             self.assertEqual(old.id, new.id)
+             #Avoid reported bug in EMBOSS 6.4.0
+             if embossversion != (6,4,0) and new.id != "EMBOSS_001":
+                 self.assertEqual(old.id, new.id)
              self.assertEqual(str(old.seq), str(new.seq))
              self.assertEqual(old.letter_annotations, new.letter_annotations)
 
