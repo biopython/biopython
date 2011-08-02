@@ -131,11 +131,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
                     alphabet = unambiguous_dna
         # PCON2 is quality values of base-called sequence
         elif key == 'PCON2':
-            # because of bytes in py3
-            if version_info[0] >= 3:
-                qual = list(entry.tag_data)
-            else:
-                qual = [ord(val) for val in entry.tag_data]
+            qual = [ord(val) for val in entry.tag_data]
         # SMPL1 is sample id entered before sequencing run
         elif key == 'SMPL1':
             sample_id = entry.tag_data
