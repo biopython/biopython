@@ -8,13 +8,17 @@
 from Bio.PDB.Interface import Interface
 from Bio.PDB import Selection
 from Bio.PDB import NeighborSearch
+from Bio.PDB.NACCESS import NACCESS
+from Bio.PDB.Model import Model
+from Bio.PDB.Structure import Structure
+import os
 
 class InterfaceBuilder(object):
     """
     Deals with contructing the Interface object. The InterfaceBuilder class is used
     by the Model classe to get an interface from a model.
     """
-    def __init__(self, model, id=None, threshold=5.0, include_waters=False, *chains):
+    def __init__(self, model, id=None, threshold=5.0, rsa_calculation=False, rsa_threshold=1.0, include_waters=False, *chains):
 
         chain_list = []
 
@@ -29,7 +33,7 @@ class InterfaceBuilder(object):
             id = "Interface_%s" %(''.join(self.chain_list))
 
         self.interface = Interface(id)
-        self._build_interface(model, id, threshold, include_waters, *chains)
+        self._build_interface(model, id, threshold, rsa_calculation, rsa_threshold, include_waters, *chains)
 
     def _unpack_chains(self, list_of_tuples):
         """Unpacks a list of tuples into a list of characters"""
@@ -51,8 +55,82 @@ class InterfaceBuilder(object):
         """Adds a residue to an Interface object"""
 
         self.interface.add(residue)
+        
+    def _get_residue_SASA(self, structure):
+        """Retrieves residual SASA from a NACCESS-submitted structure object"""
 
-    def _build_interface(self, model, id, threshold, include_waters=False, *chains):
+        # Ignore Hydrogens otherwise default NACCESS freaks out
+        # Maybe add support for flags in the NACCESS module?
+        # From the readme:
+        # "By default, the program ignores HETATM records, hydrogens, and waters. If you
+        # want these to be considered in the calculation supply a parameter of the form
+        # -h, -w and/or -y respectively."
+
+        sasa_l = [res.xtra['EXP_NACCESS']['all_atoms_rel'] for res in structure.get_residues() if res.id[0] == " "]
+        sasa = sum(sasa_l)
+        return sasa
+    
+    def _rsa_calculation(self, model, chain_list, rsa_threshold):
+        "Uses NACCESS module in order to calculate the Buried Surface Area"
+        pairs=[]
+        # Create temporary structures to feed NACCESS
+        structure_A=Structure("chainA")
+        structure_B=Structure("chainB")
+        mA = Model(0)
+        mB = Model(0)
+        mA.add(model[chain_list[0]])
+        mB.add(model[chain_list[1]])
+        structure_A.add(mA)
+        structure_B.add(mB)
+        # Calculate SASAs
+        nacc_at=NACCESS(model)
+        model_values=[]
+                
+        res_list = [r for r in model.get_residues() if r.id[0] == ' ']
+        structure_A_reslist =[r for r in structure_A[0].get_residues() if r.id[0] == ' ']
+        structure_B_reslist =[r for r in structure_B[0].get_residues() if r.id[0] == ' ']
+        
+        for res in res_list:
+            model_values.append(float(res.xtra['EXP_NACCESS']['all_atoms_rel']))
+            
+                
+        sas_tot= self._get_residue_SASA(model)
+        #print 'Accessible surface area, complex:', sas_tot
+
+        nacc_at=NACCESS(structure_A[0])
+        nacc_at=NACCESS(structure_B[0])
+        submodel_values=[]
+                
+        for res in structure_A_reslist:
+            if res.id[0]==' ':
+                submodel_values.append(float(res.xtra['EXP_NACCESS']['all_atoms_rel']))                
+                
+        for res in structure_B_reslist:
+            if res.id[0]==' ':
+                submodel_values.append(float(res.xtra['EXP_NACCESS']['all_atoms_rel']))
+        
+        count=0        
+        for res in res_list:
+            if res in structure_A_reslist and ((submodel_values[count] - model_values[count]) > rsa_threshold):
+                pairs.append(res)
+            elif res in structure_B_reslist and ((submodel_values[count] - model_values[count]) > rsa_threshold):
+                pairs.append(res)
+            count=count+1
+        
+        
+        sas_A= self._get_residue_SASA(structure_A)
+        #print 'Accessible surface aream CHAIN A :', sas_A
+        sas_B= self._get_residue_SASA(structure_B)
+        #print 'Accessible surface aream CHAIN B :',sas_B
+        
+        # Calculate BSA
+        bsa = sas_A+sas_B-sas_tot
+                
+        self.interface.accessibility=[bsa, sas_A, sas_B, sas_tot]
+        
+        return pairs
+    
+    def _build_interface(self, model, id, threshold, rsa_calculation, rsa_threshold, include_waters=False, *chains):
         """
         Return the interface of a model
         """
@@ -74,7 +152,7 @@ class InterfaceBuilder(object):
         pairs=ns.search_all(threshold, 'R')
 
         if not pairs:
-            raise ValueError("No atoms found in the interface")
+            raise ValueError("No atoms found in the interface")        
 
         # Selection of residues pairs
         # 1. Exclude water contacts
@@ -103,6 +181,16 @@ class InterfaceBuilder(object):
                 self._add_residue(resA)
             if resB not in self.interface:
                 self._add_residue(resB)
+                
+        # Accessible surface area calculated for each residue
+        # if naccess setup on user computer and rsa_calculation
+        # argument is TRUE
+        if rsa_calculation and os.system('which naccess') == 0:
+            rsa_pairs=self._rsa_calculation(model, chain_list, rsa_threshold)
+            
+        for res in rsa_pairs:
+            if res not in self.interface:
+                self._add_residue(res)
 
         #interface=uniq_pairs
         self.interface.uniq_pairs=uniq_pairs
