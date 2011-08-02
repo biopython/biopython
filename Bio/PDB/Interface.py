@@ -11,6 +11,8 @@ from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.NACCESS import NACCESS
 from Bio.PDB.NACCESS import NACCESS_atomic
+from Bio.PDB.Model import Model
+from Bio.PDB.Structure import Structure
 
 
 class Interface(Entity):
@@ -20,10 +22,9 @@ class Interface(Entity):
     the interface between 2 or more chains in a complex.
     """
 
-    def __init__(self, id, model):
+    def __init__(self, id):
         self.level="I"
         self.id=id
-        self.model=model
         self.neighbors = {}
         self.uniq_pairs = []
 
@@ -97,62 +98,53 @@ class Interface(Entity):
         polar_percentage=float(polar)/len(self)
         apolar_percentage=float(apolar)/len(self)
         charged_percentage=float(charged)/len(self)
+        
         return [polar_percentage, apolar_percentage, charged_percentage]
+        
+    def _get_atomic_SASA(structure):
+        """Retrieves atomic SASA from a NACCESS-submitted structure object"""
 
+        # Ignore Hydrogens otherwise default NACCESS freaks out
+        # Maybe add support for flags in the NACCESS module?
+        # From the readme:
+        # "By default, the program ignores HETATM records, hydrogens, and waters. If you
+        # want these to be considered in the calculation supply a parameter of the form
+        # -h, -w and/or -y respectively."
+
+        sasa_l = [at.xtra['EXP_NACCESS'] for at in structure.get_atoms() if at.get_parent().id[0] == " " and at.element != 'H']
+        sasa = sum(sas_l)
+        return sasa
+        
     def calculate_BSA(self):
         "Uses NACCESS module in order to calculate the Buried Surface Area"
-        chains=[]
-        nacc_at=NACCESS_atomic(self.model)
 
-        sas_tot=0.0
-
-        for at in self.model.get_atoms():
-        # JR: Ignore Hydrogens otherwise NACCESS freaks out
-        # See comment above
-            if at.get_parent().id[0] == ' ' and at.element != 'H':
-                sas_tot=sas_tot+float(at.xtra['EXP_NACCESS'])
-
-        print 'Accessible surface area, complex:', sas_tot
-        
-        from Bio.PDB.Model import Model
-        from Bio.PDB.Structure import Structure
+        # Extract list of chains in the interface only
+        chains = list(self.get_chains())
+           
+        # Create temporary structures to feed NACCESS
         structure_A=Structure("chainA")
         structure_B=Structure("chainB")
         mA = Model(0)
         mB = Model(0)
-        for c in self.get_chains():
-            chains.append(c)
-
         mA.add(self.model[chains[0]])
         mB.add(self.model[chains[1]])
         structure_A.add(mA)
         structure_B.add(mB)
-        print structure_A
-        print structure_B
-        #sys.exit()
-
-        nacc_at=NACCESS_atomic(structure_A[0])
-        nacc_at=NACCESS_atomic(structure_B[0])
-
-        sas_A=0.0
-
-        for at in structure_A.get_atoms():
-            if at.get_parent().id[0] == ' '  and at.element != 'H':
-                sas_A=sas_A+float(at.xtra['EXP_NACCESS'])
-
-        print 'Accessible surface aream CHAIN A :', sas_A
-
-        sas_B=0.0
-
-        for at in structure_B.get_atoms():
-            if at.get_parent().id[0] == ' '  and at.element != 'H':
-                sas_B=sas_B+float(at.xtra['EXP_NACCESS'])
-
-        print 'Accessible surface aream CHAIN B :',sas_B
         
-        BSA=(sas_A+sas_B-sas_tot)
+        # Calculate SASAs
+        NACCESS_atomic(self.model)
+        NACCESS_atomic(structure_A[0])
+        NACCESS_atomic(structure_B[0])
+
+        sas_tot= _get_atomic_SASA(self.model)
+        #print 'Accessible surface area, complex:', sas_tot
+        sas_A= _get_atomic_SASA(structure_A)
+        #print 'Accessible surface aream CHAIN A :', sas_A
+        sas_B= _get_atomic_SASA(structure_B)
+        #print 'Accessible surface aream CHAIN B :',sas_B
         
-        print 'BSA =', BSA
-        
-        return BSA
+        # Calculate BSA
+        bsa = sas_A+sas_B-sas_tot
+                
+        return [bsa, sas_A, sas_B, sas_tot]
 
