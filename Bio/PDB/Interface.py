@@ -13,6 +13,9 @@ from Bio.PDB.NACCESS import NACCESS
 from Bio.PDB.NACCESS import NACCESS_atomic
 from Bio.PDB.Model import Model
 from Bio.PDB.Structure import Structure
+from Bio.PDB import Superimposer
+from Bio.PDB import DSSP
+import numpy
 
 
 class Interface(Entity):
@@ -147,4 +150,40 @@ class Interface(Entity):
         bsa = sas_A+sas_B-sas_tot
                 
         return [bsa, sas_A, sas_B, sas_tot]
-
+        
+    def _get_atoms_coords(self, interface, opt):
+        "Stores atoms coordinates for both reference and alternate interfaces"
+        
+        ref_atoms = []
+        alt_atoms = []
+        
+        for ref_res, alt_res in zip(self.child_list, interface.child_list):
+            ref_atoms.append(ref_res['CA'])
+            alt_atoms.append(alt_res['CA'])
+            
+        return ref_atoms, alt_atoms
+        
+    def rmsd(self, mobile, mob_ref=None):
+        "Calculates Root Mean Square Deviation between 2 interfaces"
+        
+        if not mob_ref:
+            ref_seq=[to_one_letter_code[r.resname] for r in self.child_list]
+            alt_seq=[to_one_letter_code[r.resname] for r in mobile.child_list]
+            ref_seq.sort()
+            alt_seq.sort()
+            print 'REFERENCE', ref_seq
+            print 'ALTERNATIVE', alt_seq
+            if ref_seq != alt_seq:
+                raise ValueError("Sequences doesn't match")
+        
+        #Build paired lists of c-alpha atoms, ref_atoms and alt_atoms
+        #Possibility to calculate RMSD on CA (ca), backbone (bb) or all atoms (all)        
+        ref_atoms, alt_atoms = self._get_atoms_coords(mobile, opt="ca")
+        
+        #Align these paired atom lists:
+        super_imposer = Superimposer()
+        super_imposer.set_atoms(ref_atoms, alt_atoms)
+        
+        print "RMS = %0.2f" % super_imposer.rms
+        
+        return super_imposer.rms
