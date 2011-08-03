@@ -23,7 +23,7 @@ class Interface(unittest.TestCase):
         structure = P.get_structure('test', 'PDB/2WFU.pdb')[0]
         self.structure = structure
 
-    def test_InterfaceBuilder(self):
+    def test_InterfaceBuilder_default(self):
         """InterfaceBuilder Test"""
 
         interfaceBuilder = InterfaceBuilder.InterfaceBuilder(self.structure)
@@ -36,11 +36,33 @@ class Interface(unittest.TestCase):
         interface_ids = [(' ', 19, ' '), (' ', 19, ' '), (' ', 20, ' '), (' ', 20, ' '), (' ', 21, ' '), (' ', 21, ' '), (' ', 22, ' '), (' ', 22, ' '), (' ', 23, ' ')]
         # Indirect way of testing because of formatting problems otherwise
         self.assertEqual(sorted([res.id for res in interface.get_list()]), interface_ids)
+        
+    def test_InterfaceBuilder_asa(self):
+        """InterfaceBuilder Test"""
+
+        interfaceBuilder = InterfaceBuilder.InterfaceBuilder(self.structure, rsa_calculation=True)
+        interface = interfaceBuilder.get_interface()
+
+        self.assertEqual(interface.level, 'I')
+        self.assertEqual(interface.id, 'Interface_AB')
+        self.assertEqual(len(interface), 9)
+        self.assertEqual(interface.accessibility, [216.5000000000001, 569.9, 655.9000000000001, 1009.3000000000001])
+
+        interface_ids = [(' ', 19, ' '), (' ', 19, ' '), (' ', 20, ' '), (' ', 20, ' '), (' ', 21, ' '), (' ', 21, ' '), (' ', 22, ' '), (' ', 22, ' '), (' ', 23, ' ')]
+        # Indirect way of testing because of formatting problems otherwise
+        self.assertEqual(sorted([res.id for res in interface.get_list()]), interface_ids)
 
     def test_Stats(self):
         "Statistics on interface residues"
 
         self.assertEqual(interface.get_polar_percentage(),0.67)
+        
+    def test_RMSD(self):
+        "Accessibility of interface"
+        
+        rms=interface.rmsd(interface2)
+        self.assertEqual(rms, 6.01202017721)
+        
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
