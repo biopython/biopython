@@ -106,10 +106,10 @@ class Motif(object):
                 #counting the occurences of letters in instances
                 for seq in self.instances:
                     #dict[seq[i]]=dict[seq[i]]+1
-		    try:
-			dict[seq[i]]+=1
-		    except KeyError: #we need to ignore non-alphabet letters
-			pass
+                    try:
+                        dict[seq[i]]+=1
+                    except KeyError: #we need to ignore non-alphabet letters
+                        pass
             self._pwm.append(FreqTable.FreqTable(dict,FreqTable.COUNT,self.alphabet)) 
         self._pwm_is_current=1
         return self._pwm
