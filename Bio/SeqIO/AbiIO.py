@@ -277,7 +277,10 @@ class _Dir(object):
         if self.elem_code in _BYTEFMT:
             
             # because '>1s' unpack differently from '>s'
-            num = '' if self.elem_num == 1 else str(self.elem_num)
+            if self.elem_num == 1:
+                num = ''
+            else:
+                num = str(self.elem_num)
             fmt = '>' + num + _BYTEFMT[self.elem_code]
             start = self.data_offset
 
