@@ -253,8 +253,10 @@ class SeqRetSeqIOTests(unittest.TestCase):
         for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
              old = SeqIO.read(filename, "abi")
              new = SeqIO.read(emboss_convert(filename, "abi", "fastq-sanger"), "fastq-sanger")
-             #Avoid reported bug in EMBOSS 6.4.0
-             if embossversion != (6,4,0) and new.id != "EMBOSS_001":
+             if emboss_version == (6,4,0) and new.id == "EMBOSS_001":
+                 #Avoid bug in EMBOSS 6.4.0 (patch forthcoming)
+                 pass
+             else:
                  self.assertEqual(old.id, new.id)
              self.assertEqual(str(old.seq), str(new.seq))
              self.assertEqual(old.letter_annotations, new.letter_annotations)
