@@ -12,6 +12,7 @@
 import unittest
 
 try:
+    from numpy import array
     from numpy.random import random
 except ImportError:
     from Bio import MissingExternalDependencyError
@@ -44,6 +45,13 @@ class NeighborTest(unittest.TestCase):
             hits = ns.search_all(5.0)
             self.assertTrue(isinstance(hits, list), hits)
             self.assertTrue(len(hits) >= 0, hits)
+        x = array([250,250,250]) #Far away from our random atoms
+        self.assertEqual([], ns.search(x, 5.0, "A"))
+        self.assertEqual([], ns.search(x, 5.0, "R"))
+        self.assertEqual([], ns.search(x, 5.0, "C"))
+        self.assertEqual([], ns.search(x, 5.0, "M"))
+        self.assertEqual([], ns.search(x, 5.0, "S"))
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
