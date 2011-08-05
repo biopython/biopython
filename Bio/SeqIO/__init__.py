@@ -211,6 +211,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.AlignIO and include the following:
 
+ - abif    - Applied Biosystem's sequencing trace format
  - ace     - Reads the contig sequences from an ACE assembly file.
  - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
  - fasta   - The generic sequence file format where each record starts with
@@ -309,18 +310,20 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
+import AbiIO
 import AceIO
 import FastaIO
 import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import PirIO
+import SeqXmlIO
 import SffIO
 import SwissIO
 import TabIO
 import QualityIO #FastQ and qual files
 import UniprotIO
-import SeqXmlIO
+
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
@@ -354,6 +357,8 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
                      "seqxml" : SeqXmlIO.SeqXmlIterator,
+                     "abi": AbiIO.AbiIterator,
+                     "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
 _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
@@ -372,7 +377,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "seqxml" : SeqXmlIO.SeqXmlWriter,
                    }
 
-_BinaryFormats = ["sff", "sff-trim"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.

@@ -3783,4 +3783,67 @@ Testing reading seqxml format file SeqXML/protein_example.xml
  Checking can write/read as 'tab' format
  Checking can write/read as 'nexus' format
  Failed: Sequences must all be the same length
+Testing reading abi format file Abi/310.ab1
+ ID = 'D11F', Name='310',
+ Seq='TGATNTTNACNNTTTTGAANCANTGAGTTAATAGCAATNC...NNNNNNG', length=868
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'phd' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'seqxml' format
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading abi format file Abi/3100.ab1
+ ID = '16S_S2_1387R', Name='3100',
+ Seq='CAAGATTGCATTCATGATCTACGATTACTAGCGATTCCAG...CCTTTTA', length=795
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'phd' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'seqxml' format
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+Testing reading abi format file Abi/3730.ab1
+ ID = '226032_C-ME-18_pCAGseqF', Name='3730',
+ Seq='GGGCGAGCKYYAYATTTTGGCAAGAATTGAGCTCTATGGC...ACCTTTC', length=1165
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'embl' format
+ Checking can write/read as 'fastq' format
+ Checking can write/read as 'fastq-illumina' format
+ Checking can write/read as 'fastq-solexa' format
+ Checking can write/read as 'genbank' format
+ Checking can write/read as 'imgt' format
+ Checking can write/read as 'phd' format
+ Checking can write/read as 'qual' format
+ Checking can write/read as 'seqxml' format
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
 Finished tested reading files

@@ -27,7 +27,8 @@ def get_unique_parents(entity_list):
 
 
 def unfold_entities(entity_list, target_level):
-    """
+    """Unfold entities list to a child level (e.g. residues in chain).
+
     Unfold a list of entities to a list of entities of another 
     level.  E.g.:
 
@@ -37,9 +38,17 @@ def unfold_entities(entity_list, target_level):
 
     o entity_list - list of entities or a single entity
     o target_level - char (A, R, C, M, S)
+
+    Note that if entity_list is an empty list, you get an empty list back:
+
+    >>> unfold_entities([], "A")
+    []
+
     """
     if not target_level in entity_levels:
         raise PDBException("%s: Not an entity level." % target_level)
+    if entity_list == []:
+        return []
     if isinstance(entity_list, Entity):
         # single entity
         entity_list=[entity_list]
@@ -70,4 +79,16 @@ def unfold_entities(entity_list, target_level):
             # find unique parents
             entity_list=uniqueify(new_entity_list)
     return entity_list
+
+
+def _test():
+    """Run the Bio.PDB.Selection module's doctests (PRIVATE)."""
+    import doctest
+    print "Runing doctests ..."
+    doctest.testmod()
+    print "Done"
+
+
+if __name__ == "__main__":
+    _test()
 

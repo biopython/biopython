@@ -20,6 +20,9 @@ Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
 format offering basic annotation support. See Schmitt et al (2011) in
 Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
 
+Bio.SeqIO now includes read support for ABI files ("Sanger" capillary
+sequencing trace files, containing called sequence with PHRED qualities).
+
 The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
 would only return alignments for the first query sequence.
@@ -45,10 +48,12 @@ Connor McCoy (first contribution)
 David Cain (first contribution)
 Eric Talevich
 Fábio Madeira (first contribution)
+Hongbo Zhu
 Joao Rodrigues
 Peter Cock
 Thomas Schmitt (first contribution)
 Walter Gillett
+Wibowo Arindrarto (first contribution)
 
 ===================================================================
 
