@@ -67,6 +67,7 @@ class Yn00(Paml):
                 uncommented = line.split("*",1)[0]
                 if uncommented != "":
                     if "=" not in uncommented:
+                        ctl_handle.close()
                         raise AttributeError, \
                             "Malformed line in control file:\n%r" % line
                     (option, value) = uncommented.split("=")
@@ -77,6 +78,7 @@ class Yn00(Paml):
                     elif option == "outfile":
                         self.out_file = value
                     elif option not in self._options:
+                        ctl_handle.close()
                         raise KeyError, "Invalid option: %s" % option
                     else:
                         if "." in value or "e-" in value:
