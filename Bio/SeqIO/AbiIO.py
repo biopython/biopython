@@ -1,4 +1,5 @@
 # Copyright 2011 by Wibowo Arindrarto (w.arindrarto@gmail.com)
+# Revisions copyright 2011 by Peter Cock.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -111,17 +112,17 @@ def AbiIterator(handle, alphabet=None, trim=False):
     header = struct.unpack(_HEADFMT, \
              handle.read(struct.calcsize(_HEADFMT)))
 
-    for entry in _abi_parse_header(header, handle):
+    for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
         # stop iteration if all desired tags have been extracted
         # 4 tags from _EXTRACT + 2 time tags from _SPCTAGS - 3,
         # and seq, qual, id
         # todo
 
-        key = entry.tag_name + str(entry.tag_number)
+        key = tag_name + str(tag_number)
 
         # PBAS2 is base-called sequence
         if key == 'PBAS2': 
-            seq = entry.tag_data
+            seq = tag_data
             ambigs = 'KYWMRS'
             if alphabet is None:
                 if set(seq).intersection(ambigs):
@@ -130,16 +131,16 @@ def AbiIterator(handle, alphabet=None, trim=False):
                     alphabet = unambiguous_dna
         # PCON2 is quality values of base-called sequence
         elif key == 'PCON2':
-            qual = [ord(val) for val in entry.tag_data]
+            qual = [ord(val) for val in tag_data]
         # SMPL1 is sample id entered before sequencing run
         elif key == 'SMPL1':
-            sample_id = entry.tag_data
+            sample_id = tag_data
         elif key in times:
-            times[key] = entry.tag_data
+            times[key] = tag_data
         else:
             # extract sequence annotation as defined in _EXTRACT          
             if key in _EXTRACT:
-                annot[_EXTRACT[key]] = entry.tag_data
+                annot[_EXTRACT[key]] = tag_data
 
     # set time annotations
     annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
@@ -191,9 +192,22 @@ def _abi_parse_header(header, handle):
         key = _bytes_to_string(dir_entry[0])
         key += str(dir_entry[1])
         if key in (list(_EXTRACT.keys()) + _SPCTAGS):
-            yield _Dir(dir_entry, handle)
-        else:
-            continue
+            tag_name = _bytes_to_string(dir_entry[0])
+            tag_number = dir_entry[1]
+            elem_code = dir_entry[2]
+            elem_num = dir_entry[4]
+            data_size = dir_entry[5]
+            data_offset = dir_entry[6]
+            tag_offset = dir_entry[8]
+            # if data size <= 4 bytes, data is stored inside tag
+            # so offset needs to be changed
+            if data_size <= 4:
+                data_offset = tag_offset + 20
+            handle.seek(data_offset)
+            data = handle.read(data_size)
+            yield tag_name, tag_number, \
+                  _parse_tag_data(elem_code, elem_num, data)
+
 
 def _abi_trim(seq_record):
     """Trims the sequence using Richard Mott's modified trimming algorithm.
@@ -243,71 +257,46 @@ def _abi_trim(seq_record):
                          
         return seq_record[trim_start:trim_finish]
 
-class _Dir(object):
-    """Class representing directory content. (PRIVATE)"""
-    def __init__(self, tag_entry, handle):
-        """Instantiates the _Dir object.
-
-        tag_entry - tag name, tag number, element type code, element size,
-                    number of elements, data size, data offset,
-                    directory handle, and tag start position
-        handle - the abi file object from which the tags would be unpacked
-        """
-        self.tag_name = _bytes_to_string(tag_entry[0])
-        self.tag_number = tag_entry[1]
-        self.elem_code = tag_entry[2]
-        self.elem_num = tag_entry[4]
-        self.data_size = tag_entry[5]
-        self.data_offset = tag_entry[6]
-        self.tag_offset = tag_entry[8]
-
-        # if data size <= 4 bytes, data is stored inside tag
-        # so offset needs to be changed
-        if self.data_size <= 4:
-            self.data_offset = self.tag_offset + 20
-
-        self.tag_data = self._unpack_tag(handle)
-
-    def _unpack_tag(self, handle):
-        """"Returns tag data. (PRIVATE)
-        
-        handle - the abi file object from which the tags would be unpacked
-        """ 
-        if self.elem_code in _BYTEFMT:
-            
-            # because '>1s' unpack differently from '>s'
-            if self.elem_num == 1:
-                num = ''
-            else:
-                num = str(self.elem_num)
-            fmt = '>' + num + _BYTEFMT[self.elem_code]
-            start = self.data_offset
-
-            handle.seek(start)
-            data = struct.unpack(fmt, handle.read(struct.calcsize(fmt)))
-
-            # no need to use tuple if len(data) == 1
-            # also if data is date / time
-            if self.elem_code not in [10, 11] and len(data) == 1:
-                data = data[0]
-
-            # account for different data types
-            if self.elem_code == 2:
-                return _bytes_to_string(data)
-            elif self.elem_code == 10:
-                return str(datetime.date(*data))
-            elif self.elem_code == 11:
-                return str(datetime.time(*data[:3]))
-            elif self.elem_code == 13:
-                return bool(data)
-            elif self.elem_code == 18:
-                return _bytes_to_string(data[1:])
-            elif self.elem_code == 19:
-                return _bytes_to_string(data[:-1])
-            else:
-                return data
+def _parse_tag_data(elem_code, elem_num, raw_data):
+    """Returns single data value.
+    
+    elem_code - What kind of data
+    elem_num - How many data points
+    raw_data - abi file object from which the tags would be unpacked
+    """
+    if elem_code in _BYTEFMT:
+        # because '>1s' unpack differently from '>s'
+        if elem_num == 1:
+            num = ''
         else:
-            return None
+            num = str(elem_num)
+        fmt = '>' + num + _BYTEFMT[elem_code]
+
+        assert len(raw_data) == struct.calcsize(fmt)
+        data = struct.unpack(fmt, raw_data)
+
+        # no need to use tuple if len(data) == 1
+        # also if data is date / time
+        if elem_code not in [10, 11] and len(data) == 1:
+            data = data[0]
+
+        # account for different data types
+        if elem_code == 2:
+            return _bytes_to_string(data)
+        elif elem_code == 10:
+            return str(datetime.date(*data))
+        elif elem_code == 11:
+            return str(datetime.time(*data[:3]))
+        elif elem_code == 13:
+            return bool(data)
+        elif elem_code == 18:
+            return _bytes_to_string(data[1:])
+        elif self.elem_code == 19:
+            return _bytes_to_string(data[:-1])
+        else:
+            return data
+    else:
+        return None
 
 if __name__ == '__main__':
     pass
