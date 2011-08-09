@@ -70,8 +70,8 @@ _BYTEFMT = {
             19: 's',    # cString
             20: '2i',   # tag, legacy unsupported
            }
-# header data structure
-_HEADFMT = '>4sH4sI2H3I'
+# header data structure (exluding 4 byte ABIF marker)
+_HEADFMT = '>H4sI2H3I'
 # directory data structure
 _DIRFMT = '>4sI2H4I'
 
@@ -108,7 +108,6 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
     # parse header and extract data from directories
-    handle.seek(0)
     header = struct.unpack(_HEADFMT, \
              handle.read(struct.calcsize(_HEADFMT)))
 
@@ -171,13 +170,13 @@ def _AbiTrimIterator(handle):
 def _abi_parse_header(header, handle):
     """Generator that returns directory contents.
     """
-    # header structure:
-    # file type, file version, tag name, tag number,
+    # header structure (after ABIF marker):
+    # file version, tag name, tag number,
     # element type code, element size, number of elements
     # data size, data offset, handle (not file handle)
-    head_elem_size = header[5]
-    head_elem_num = header[6]
-    head_offset = header[8]
+    head_elem_size = header[4]
+    head_elem_num = header[5]
+    head_offset = header[7]
     index = 0
 
     while index < head_elem_num:
