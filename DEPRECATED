@@ -283,8 +283,9 @@ old code deprecated in Releases 1.46 or 1.47, and removed in Release 1.49.
 Bio.SeqIO.to_alignment()
 ========================
 This function was made obsolete with the introduction of Bio.AlignIO,
-and deprecated in Release 1.54. Use either the Bio.AlignIO functions,
-or the Bio.Align.MultipleSeqAlignment class directly instead.
+deprecated in Release 1.54, and removed in Release 1.58. Use either the
+Bio.AlignIO functions, or the Bio.Align.MultipleSeqAlignment class
+directly instead.
 
 Bio.ECell
 =========

@@ -861,30 +861,6 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
                                           alphabet, key_function)
 
-def to_alignment(sequences, alphabet=None, strict=True):
-    """Returns a multiple sequence alignment (DEPRECATED).
-
-     - sequences -An iterator that returns SeqRecord objects,
-                  or simply a list of SeqRecord objects.  All
-                  the record sequences must be the same length.
-     - alphabet - Optional alphabet.  Stongly recommended.
-     - strict   - Dummy argument, used to enable strict error
-                  checking of sequence lengths and alphabets.
-                  This is now always done.
-
-    Using this function is now discouraged. You are now encouraged to use
-    Bio.AlignIO instead, e.g.
-
-    >>> from Bio import AlignIO
-    >>> filename = "Clustalw/protein.aln"
-    >>> alignment = AlignIO.read(filename, "clustal")
-    """
-    import warnings
-    import Bio
-    warnings.warn("The Bio.SeqIO.to_alignment(...) function is deprecated. "
-                  "Please use the Bio.Align.MultipleSeqAlignment(...) object "
-                  "directly instead.", Bio.BiopythonDeprecationWarning)
-    return MultipleSeqAlignment(sequences, alphabet)
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.
