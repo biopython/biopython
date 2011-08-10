@@ -29,6 +29,7 @@ from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB.PDBIO import PDBIO
 
 
 # Match C in DSSP
@@ -185,7 +186,7 @@ class DSSP(AbstractResiduePropertyMap):
         -42.399999999999999)
     """
 
-    def __init__(self, model, pdb_file, dssp="dssp"):
+    def __init__(self, model, pdb_file=None, dssp="dssp", temp_path = '/tmp/'):
         """
         @param model: the first model of the structure
         @type model: L{Model}
@@ -196,8 +197,27 @@ class DSSP(AbstractResiduePropertyMap):
         @param dssp: the dssp executable (ie. the argument to os.system)
         @type dssp: string
         """
+        # create a temporary file PDB
+        # make temp directory; chdir to temp directory, 
+        # as DSSP writes to current working directory
+        tmp_path = tempfile.mktemp(dir = temp_path)
+        os.mkdir(tmp_path)
+        old_dir = os.getcwd()
+        os.chdir(tmp_path)
+    
+        # file name must end with '.pdb' to work with DSSP
+        # -> create temp file of existing pdb
+        #    or write model to temp file
+        tmp_pdb_file = tempfile.mktemp('.pdb', dir = tmp_path)
+        if pdb_file:
+            os.system('cp %s %s' % (pdb_file, tmp_pdb_file))
+        else:
+            writer = PDBIO()
+            writer.set_structure(model.get_parent())
+            writer.save(tmp_pdb_file)
+        
         # create DSSP dictionary
-        dssp_dict, dssp_keys = dssp_dict_from_pdb_file(pdb_file, dssp)
+        dssp_dict, dssp_keys = dssp_dict_from_pdb_file(tmp_pdb_file, dssp)
         dssp_map = {}
         dssp_list = []
 
@@ -304,7 +324,7 @@ class DSSP(AbstractResiduePropertyMap):
 
         AbstractResiduePropertyMap.__init__(self, dssp_map, dssp_keys,
                 dssp_list)
-
+        os.system('rm -rf %s >& /dev/null' % tmp_path)
 
 if __name__ == "__main__":
     import sys
