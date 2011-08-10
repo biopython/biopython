@@ -11,6 +11,7 @@ from Bio.PDB import NeighborSearch
 from Bio.PDB.NACCESS import NACCESS
 from Bio.PDB.Model import Model
 from Bio.PDB.Structure import Structure
+from Bio.PDB.DSSP import DSSP
 import os
 
 class InterfaceBuilder(object):
@@ -55,6 +56,27 @@ class InterfaceBuilder(object):
         """Adds a residue to an Interface object"""
 
         self.interface.add(residue)
+        
+    def _secondary_structure(self, model):
+        """Define secondary structure of the interface"""
+        
+        ss=[]
+        #Launch DSSP calculation on the whole model (DSSP limitations)
+        dssp=DSSP(model, dssp='/home/mika/dssp/dsspcmbi')
+        res_list = [r for r in model.get_residues() if r.id[0] == ' ']
+        
+        for elt in dssp:
+            print 'ELT', elt[1]
+            if elt[0] in self.interface:
+                ss.append(elt[1])
+                
+        ss.sort()
+        
+        helical=(ss.count('H')+ss.count('G')+ss.count('I'))/len(ss)
+        strand=(ss.count('E'))/len(ss)
+        coil=(len(ss)-helical-strand)/len(ss)
+        
+        self.interface.secondary_structure=[helical,strand,coil]
         
     def _get_residue_SASA(self, structure):
         """Retrieves residual SASA from a NACCESS-submitted structure object"""
@@ -191,7 +213,7 @@ class InterfaceBuilder(object):
         for res in rsa_pairs:
             if res not in self.interface:
                 self._add_residue(res)
-
+        self._secondary_structure(model)
         #interface=uniq_pairs
         self.interface.uniq_pairs=uniq_pairs
         # Add neighbors
