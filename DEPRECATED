@@ -376,8 +376,8 @@ deprecated in Release 1.49, and removed in Release 1.53. Use the functions
 and methods in Bio.Seq instead.
 
 Function makeTableX and classes ProteinX and MissingTable were deprecated
-in Release 1.54. These were remnants of the removed translate function,
-and no longer served any useful purpose.
+in Release 1.54, and removed in Release 1.58. These were remnants of the
+removed translate function, and no longer served any useful purpose.
 
 Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, instead
 just use the string's slice method with a step of minus one.
