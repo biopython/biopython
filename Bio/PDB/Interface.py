@@ -187,3 +187,40 @@ class Interface(Entity):
         print "RMS = %0.2f" % super_imposer.rms
         
         return super_imposer.rms
+        
+    def _get_neighbors_id(self, chain):
+        "Creates a dictionary of tuples from the neighbors dictionary"
+        
+        self.neighbors_id={}
+        
+        for key in self.neighbors[chain]:
+            self.neighbors_id[key.id]=[res.id[1] for res in self.neighbors[chain][key]]
+            self.neighbors_id[key.id].sort()        
+        
+    def fcc(self, mobile):
+        "Defined the fraction of native contacts between 2 interfaces"
+        
+        #Creates neighbors dictionary for each interface residue
+        if not self.neighbors:
+            self.set_neighbors()
+        if not mobile.neighbors:
+            mobile.set_neighbors()
+        
+        #Calculation will be done only one one chain thanks to symetry
+        for c in self.get_chains():
+            chain=c
+            break
+        self._get_neighbors_id(chain)
+        mobile._get_neighbors_id(chain)
+        
+        #Gets the number of contacts for the reference interface
+        total=sum(len(l) for l in self.neighbors_id.itervalues())
+        
+        #Finds each common pairs for the 2 interfaces
+        common = 0
+        for res_id in self.neighbors_id:
+            if res_id in mobile.neighbors_id:
+                common = common + len(set(self.neighbors_id[res_id]).intersection(set(mobile.neighbors_id[res_id])))
+        fcc=float(common/total)
+        
+        return fcc
