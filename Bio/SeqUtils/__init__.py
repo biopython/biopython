@@ -218,37 +218,6 @@ def nt_search(seq, subseq):
 ######################
 # {{{ 
 
-# temporary hack for exception free translation of "dirty" DNA
-# should be moved to ???
-
-class ProteinX(Alphabet.ProteinAlphabet):
-    """Variant of the extended IUPAC extended protein alphabet (DEPRECATED)."""
-    letters = IUPACData.extended_protein_letters + "X"
-
-#Can't add a deprecation warning to the class due to the following line:
-proteinX = ProteinX()
-
-class MissingTable(object):
-    def __init__(self, table):
-        self._table = table
-        import warnings
-        import Bio
-        warnings.warn("Function Bio.SeqUtils.makeTableX() and related classes ProteinX "
-                      "and MissingTable are deprecated.", Bio.BiopythonDeprecationWarning)
-    def get(self, codon, stop_symbol):
-        try:
-            return self._table.get(codon, stop_symbol)
-        except CodonTable.TranslationError:
-            return 'X'
-
-def makeTableX(table):
-    assert table.protein_alphabet == IUPAC.extended_protein
-    return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                                 MissingTable(table.forward_table),
-                                 table.back_table, table.start_codons,
-                                 table.stop_codons)
-
-# end of hacks
 
 def seq3(seq):
     """Turn a one letter code protein sequence into one with three letter codes.
@@ -259,8 +228,9 @@ def seq3(seq):
     This function returns the amino acid sequence as a string using the three
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
-    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.  Any unknown
-    character (including possible gap characters), is changed into 'Xaa'.
+    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.
+    Any unknown character (including possible gap characters), is changed into
+    'Xaa'.
 
     e.g.
     >>> from Bio.SeqUtils import seq3
