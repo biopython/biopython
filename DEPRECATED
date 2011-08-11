@@ -68,12 +68,6 @@ BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
 1.53, having been replace with wrappers for the new NCBI BLAST+ tools (e.g.
 NcbiblastpCommandline and NcbipsiblastCommandline).
 
-Bio.EMBOSS.Applications
-=======================
-The wrappers for the "old" EMBOSS PHYLIP tools (e.g. eneighbor) were declared
-obsolete in Biopython 1.52, please use the wrappers for the "new" EMBOSS
-PHYLIP tools (e.g. fneighbor) instead.
-
 Bio.Clustalw
 ============
 Declared obsolete in Release 1.52, deprecated in Release 1.55 final, and
@@ -218,9 +212,11 @@ replaced by Bio.Emboss.Primer3 and Bio.Emboss.PrimerSearch instead.
 
 Bio.Emboss.Applications
 =======================
-EProtDistCommandline, ENeighborCommandline, EProtParsCommandline,
-EConsenseCommandline,  and ESeqBootCommandline were declared obsolete in
-Release 1.52, and deprecated in Release 1.55 final. These functions were
+The wrappers for the "old" EMBOSS PHYLIP tools (e.g. eneighbor) were declared
+obsolete in Biopython 1.52, deprecated in Release 1.55 final, and removed in
+release 1.58. please use the wrappers for the "new" EMBOSS PHYLIP tools (e.g.
+fneighbor) instead. Specifically, EProtDistCommandline, ENeighborCommandline,
+EProtParsCommandline, EConsenseCommandline, and ESeqBootCommandline are
 replaced by FProtDistCommandline, FNeighborCommandline, FProtParsCommandline,
 FConsenseCommandline, and FSeqBootCommandline, respectively.
 
