@@ -28,8 +28,9 @@ removed in Release 1.57.
 
 Bio.InterPro
 ============
-This module was a parser for the EBI InterPro webpages, but no longer works
-with their current website. Deprecated in Release 1.55.
+This module was a parser for the EBI InterPro webpages, but no longer worked
+with their current website. Deprecated in Release 1.55, and removed in
+Release 1.58.
 
 Bio.GenBank.LocationParser
 ==========================

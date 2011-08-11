@@ -229,7 +229,6 @@ PACKAGES = [
     'Bio.Graphics',
     'Bio.Graphics.GenomeDiagram',
     'Bio.HMM',
-    'Bio.InterPro',
     'Bio.KEGG',
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
