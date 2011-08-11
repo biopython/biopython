@@ -384,7 +384,8 @@ removed in Release 1.58. Instead just use the string's slice method with
 a step of minus one.
 
 Funtions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
-quicker_apply_on_multi_fasta were deprecated in Release 1.55 final.
+quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
+in Release 1.58.
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
