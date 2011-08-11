@@ -379,12 +379,12 @@ Function makeTableX and classes ProteinX and MissingTable were deprecated
 in Release 1.54, and removed in Release 1.58. These were remnants of the
 removed translate function, and no longer served any useful purpose.
 
-Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, instead
-just use the string's slice method with a step of minus one.
+Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, and
+removed in Release 1.58. Instead just use the string's slice method with
+a step of minus one.
 
 Funtions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
 quicker_apply_on_multi_fasta were deprecated in Release 1.55 final.
-
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======

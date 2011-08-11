@@ -22,23 +22,6 @@ from Bio.Data import IUPACData, CodonTable
 ######################
 # {{{ 
 
-def reverse(seq):
-    """Reverse the sequence. Works on string sequences (DEPRECATED).
-
-    This function is now deprecated, instead use the string's built in slice
-    method with a step of minus one:
-
-    >>> "ACGGT"[::-1]
-    'TGGCA'
-    """
-    import warnings
-    import Bio
-    warnings.warn("Bio.SeqUtils.reverse() is deprecated, use the string's "
-                  "slice method with a step of minus one instead.",
-                  Bio.BiopythonDeprecationWarning)
-    r = list(seq)
-    r.reverse()
-    return ''.join(r)
 
 def GC(seq):
     """Calculates G+C content, returns the percentage (float between 0 and 100).
