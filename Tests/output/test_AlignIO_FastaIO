@@ -1,4 +1,4 @@
-test_FastaIO
+test_AlignIO_FastaIO
 Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
 ==============================================================================
 Alignment 0, with 2 sequences of length 108
