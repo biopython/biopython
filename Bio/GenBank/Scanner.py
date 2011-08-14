@@ -935,7 +935,18 @@ class GenBankScanner(InsdcScanner):
 
         #Have to break up the locus line, and handle the different bits of it.
         #There are at least two different versions of the locus line...
-        if line[29:33] in [' bp ', ' aa ',' rc ']:
+        if len(line.split())==7 and line.split()[3] in ["aa","bp"]:
+            #Cope with EnsEMBL genbank files, and others with 7 fields in the LOCUS line.
+            #This supersedes "old" parser when 42:51 is blank.
+            #This supersedes "new" parser when both 55:63 and 44:47 are blank.
+            #If 44:47 isn't blank, but there are 7 fields ("new"), LOCUS line will be parsed wrongly.
+            splitline = line.split()
+            consumer.locus(splitline[1])
+            consumer.size(splitline[2])
+            consumer.residue_type(splitline[4])
+            consumer.data_file_division(splitline[5])
+            consumer.date(splitline[6])
+        elif line[29:33] in [' bp ', ' aa ',' rc ']:
             #Old...
             #
             #    Positions  Contents
@@ -1087,14 +1098,6 @@ class GenBankScanner(InsdcScanner):
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
                 warnings.warn("Minimal LOCUS line found - is this correct?\n" + line)
-        elif len(line.split())==7 and line.split()[3] in ["aa","bp"]:
-            #Cope with EnsEMBL genbank files.
-            splitline = line.split()
-            consumer.locus(splitline[1])
-            consumer.size(splitline[2])
-            consumer.residue_type(splitline[4])
-            consumer.data_file_division(splitline[5])
-            consumer.date(splitline[6])
         elif len(line.split())>=4 and line.split()[3] in ["aa","bp"]:
             #Cope with EMBOSS seqret output where it seems the locus id can cause
             #the other fields to overflow.  We just IGNORE the other fields!
