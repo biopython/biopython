@@ -1087,6 +1087,14 @@ class GenBankScanner(InsdcScanner):
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
                 warnings.warn("Minimal LOCUS line found - is this correct?\n" + line)
+        elif len(line.split())==7 and line.split()[3] in ["aa","bp"]:
+            #Cope with EnsEMBL genbank files.
+            splitline = line.split()
+            consumer.locus(splitline[1])
+            consumer.size(splitline[2])
+            consumer.residue_type(splitline[4])
+            consumer.data_file_division(splitline[5])
+            consumer.date(splitline[6])
         elif len(line.split())>=4 and line.split()[3] in ["aa","bp"]:
             #Cope with EMBOSS seqret output where it seems the locus id can cause
             #the other fields to overflow.  We just IGNORE the other fields!
