@@ -468,8 +468,8 @@ function. These classes were deprecated in Release 1.55 final.
 Bio.PopGen.FDist
 ================
 The RecordParser, _Scanner, and _RecordConsumer classes were declared obsolete
-in Release 1.54, and deprecated in Release 1.55 final. Their functionality is
-now available through a read() function.
+in Release 1.54, deprecated in Release 1.55, and removed in Release 1.58.
+Their functionality is now available through a read() function.
 
 Bio.UniGene
 ===========
