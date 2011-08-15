@@ -211,6 +211,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.AlignIO and include the following:
 
+ - abif    - Applied Biosystem's sequencing trace format
  - ace     - Reads the contig sequences from an ACE assembly file.
  - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
  - fasta   - The generic sequence file format where each record starts with
@@ -309,18 +310,20 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
+import AbiIO
 import AceIO
 import FastaIO
 import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import PirIO
+import SeqXmlIO
 import SffIO
 import SwissIO
 import TabIO
 import QualityIO #FastQ and qual files
 import UniprotIO
-import SeqXmlIO
+
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
@@ -354,6 +357,8 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
                      "seqxml" : SeqXmlIO.SeqXmlIterator,
+                     "abi": AbiIO.AbiIterator,
+                     "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
 _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
@@ -372,7 +377,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "seqxml" : SeqXmlIO.SeqXmlWriter,
                    }
 
-_BinaryFormats = ["sff", "sff-trim"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
@@ -856,30 +861,6 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
                                           alphabet, key_function)
 
-def to_alignment(sequences, alphabet=None, strict=True):
-    """Returns a multiple sequence alignment (DEPRECATED).
-
-     - sequences -An iterator that returns SeqRecord objects,
-                  or simply a list of SeqRecord objects.  All
-                  the record sequences must be the same length.
-     - alphabet - Optional alphabet.  Stongly recommended.
-     - strict   - Dummy argument, used to enable strict error
-                  checking of sequence lengths and alphabets.
-                  This is now always done.
-
-    Using this function is now discouraged. You are now encouraged to use
-    Bio.AlignIO instead, e.g.
-
-    >>> from Bio import AlignIO
-    >>> filename = "Clustalw/protein.aln"
-    >>> alignment = AlignIO.read(filename, "clustal")
-    """
-    import warnings
-    import Bio
-    warnings.warn("The Bio.SeqIO.to_alignment(...) function is deprecated. "
-                  "Please use the Bio.Align.MultipleSeqAlignment(...) object "
-                  "directly instead.", Bio.BiopythonDeprecationWarning)
-    return MultipleSeqAlignment(sequences, alphabet)
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.

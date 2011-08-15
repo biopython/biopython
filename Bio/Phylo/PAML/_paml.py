@@ -127,8 +127,9 @@ class Paml(object):
             if verbose:
                 result_code = subprocess.call([command, self.ctl_file])
             else:
+                # To suppress output, redirect it to a pipe to nowhere
                 result_code = subprocess.call([command, self.ctl_file],
-                    stdout=open(os.devnull, 'w'))
+                    stdout=subprocess.PIPE)
         else:
             if not os.path.exists(ctl_file):
                 raise IOError, "The specified control file does not exist."
@@ -136,7 +137,7 @@ class Paml(object):
                 result_code = subprocess.call([command, ctl_file])
             else:
                 result_code = subprocess.call([command, ctl_file],
-                    stdout=open(os.devnull, 'w'))
+                    stdout=subprocess.PIPE)
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason

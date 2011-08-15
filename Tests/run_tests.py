@@ -76,6 +76,7 @@ try:
     import numpy
     DOCTEST_MODULES.extend(["Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
+                            "Bio.PDB.Selection"
                             ])
 except ImportError:
     pass

@@ -106,6 +106,7 @@ class Baseml(Paml):
                 uncommented = line.split("*",1)[0]
                 if uncommented != "":
                     if "=" not in uncommented:
+                        ctl_handle.close()
                         raise AttributeError, \
                             "Malformed line in control file:\n%r" % line
                     (option, value) = uncommented.split("=")
@@ -118,6 +119,7 @@ class Baseml(Paml):
                     elif option == "outfile":
                         self.out_file = value
                     elif option not in self._options:
+                        ctl_handle.close()
                         raise KeyError, "Invalid option: %s" % option
                     elif option == "model":
                         if len(value) <= 2 and value.isdigit():

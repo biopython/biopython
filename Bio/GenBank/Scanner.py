@@ -935,8 +935,9 @@ class GenBankScanner(InsdcScanner):
 
         #Have to break up the locus line, and handle the different bits of it.
         #There are at least two different versions of the locus line...
-        if line[29:33] in [' bp ', ' aa ',' rc ']:
-            #Old...
+        if line[29:33] in [' bp ', ' aa ',' rc '] and line[55:62] == '       ':
+            #Old... note we insist on the 55:62 being empty to avoid trying
+            #to parse space separated LOCUS lines from Ensembl etc, see below.
             #
             #    Positions  Contents
             #    ---------  --------
@@ -962,8 +963,8 @@ class GenBankScanner(InsdcScanner):
                    'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
             assert line[51:52] == ' ', \
                    'LOCUS line does not contain space at position 52:\n' + line
-            assert line[55:62] == '       ', \
-                   'LOCUS line does not contain spaces from position 56 to 62:\n' + line
+            #assert line[55:62] == '       ', \
+            #      'LOCUS line does not contain spaces from position 56 to 62:\n' + line
             if line[62:73].strip():
                 assert line[64:65] == '-', \
                        'LOCUS line does not contain - at position 65 in date:\n' + line
@@ -1086,18 +1087,27 @@ class GenBankScanner(InsdcScanner):
             else:
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
-                warnings.warn("Minimal LOCUS line found - is this correct?\n" + line)
+                warnings.warn("Minimal LOCUS line found - is this correct?\n:%r" % line)
+        elif len(line.split())==7 and line.split()[3] in ["aa","bp"]:
+            #Cope with EnsEMBL genbank files which use space separation rather
+            #than the expected column based layout.
+            splitline = line.split()
+            consumer.locus(splitline[1])
+            consumer.size(splitline[2])
+            consumer.residue_type(splitline[4])
+            consumer.data_file_division(splitline[5])
+            consumer.date(splitline[6])
         elif len(line.split())>=4 and line.split()[3] in ["aa","bp"]:
             #Cope with EMBOSS seqret output where it seems the locus id can cause
             #the other fields to overflow.  We just IGNORE the other fields!
-            warnings.warn("Malformed LOCUS line found - is this correct?\n" + line)
+            warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
         elif len(line.split())>=4 and line.split()[-1] in ["aa","bp"]:
             #Cope with psuedo-GenBank files like this:
             #   "LOCUS       RNA5 complete       1718 bp"
             #Treat everything between LOCUS and the size as the identifier.
-            warnings.warn("Malformed LOCUS line found - is this correct?\n" + line)
+            warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
             consumer.locus(line[5:].rsplit(None,2)[0].strip())
             consumer.size(line.split()[-2])
         else:

@@ -28,8 +28,9 @@ removed in Release 1.57.
 
 Bio.InterPro
 ============
-This module was a parser for the EBI InterPro webpages, but no longer works
-with their current website. Deprecated in Release 1.55.
+This module was a parser for the EBI InterPro webpages, but no longer worked
+with their current website. Deprecated in Release 1.55, and removed in
+Release 1.58.
 
 Bio.GenBank.LocationParser
 ==========================
@@ -66,12 +67,6 @@ NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
 BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
 1.53, having been replace with wrappers for the new NCBI BLAST+ tools (e.g.
 NcbiblastpCommandline and NcbipsiblastCommandline).
-
-Bio.EMBOSS.Applications
-=======================
-The wrappers for the "old" EMBOSS PHYLIP tools (e.g. eneighbor) were declared
-obsolete in Biopython 1.52, please use the wrappers for the "new" EMBOSS
-PHYLIP tools (e.g. fneighbor) instead.
 
 Bio.Clustalw
 ============
@@ -217,9 +212,11 @@ replaced by Bio.Emboss.Primer3 and Bio.Emboss.PrimerSearch instead.
 
 Bio.Emboss.Applications
 =======================
-EProtDistCommandline, ENeighborCommandline, EProtParsCommandline,
-EConsenseCommandline,  and ESeqBootCommandline were declared obsolete in
-Release 1.52, and deprecated in Release 1.55 final. These functions were
+The wrappers for the "old" EMBOSS PHYLIP tools (e.g. eneighbor) were declared
+obsolete in Biopython 1.52, deprecated in Release 1.55 final, and removed in
+release 1.58. please use the wrappers for the "new" EMBOSS PHYLIP tools (e.g.
+fneighbor) instead. Specifically, EProtDistCommandline, ENeighborCommandline,
+EProtParsCommandline, EConsenseCommandline, and ESeqBootCommandline are
 replaced by FProtDistCommandline, FNeighborCommandline, FProtParsCommandline,
 FConsenseCommandline, and FSeqBootCommandline, respectively.
 
@@ -283,8 +280,9 @@ old code deprecated in Releases 1.46 or 1.47, and removed in Release 1.49.
 Bio.SeqIO.to_alignment()
 ========================
 This function was made obsolete with the introduction of Bio.AlignIO,
-and deprecated in Release 1.54. Use either the Bio.AlignIO functions,
-or the Bio.Align.MultipleSeqAlignment class directly instead.
+deprecated in Release 1.54, and removed in Release 1.58. Use either the
+Bio.AlignIO functions, or the Bio.Align.MultipleSeqAlignment class
+directly instead.
 
 Bio.ECell
 =========
@@ -375,15 +373,16 @@ deprecated in Release 1.49, and removed in Release 1.53. Use the functions
 and methods in Bio.Seq instead.
 
 Function makeTableX and classes ProteinX and MissingTable were deprecated
-in Release 1.54. These were remnants of the removed translate function,
-and no longer served any useful purpose.
+in Release 1.54, and removed in Release 1.58. These were remnants of the
+removed translate function, and no longer served any useful purpose.
 
-Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, instead
-just use the string's slice method with a step of minus one.
+Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, and
+removed in Release 1.58. Instead just use the string's slice method with
+a step of minus one.
 
 Funtions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
-quicker_apply_on_multi_fasta were deprecated in Release 1.55 final.
-
+quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
+in Release 1.58.
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
