@@ -6,6 +6,7 @@
 import unittest
 import os
 import os.path
+import sys
 from Bio.Phylo.PAML import yn00
 from Bio.Phylo.PAML._paml import PamlError
 
