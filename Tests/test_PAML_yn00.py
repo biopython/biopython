@@ -40,8 +40,11 @@ def which(program):
             return exe_file
     return None
 
-
-if which("yn00") is None:
+if sys.platform == "win32":
+    binary = "yn00.exe"
+else:
+    binary = "yn00"
+if which(binary) is None:
     raise MissingExternalDependencyError(\
         "Install YN00 if you want to use the Bio.Phylo.PAML wrapper.")
 

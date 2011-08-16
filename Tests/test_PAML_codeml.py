@@ -40,8 +40,11 @@ def which(program):
             return exe_file
     return None
 
-
-if which("codeml") is None:
+if sys.platform == "win32":
+    binary = "codeml.exe"
+else:
+    binary = "codeml"
+if which(binary) is None:
     raise MissingExternalDependencyError(\
         "Install CODEML if you want to use the Bio.Phylo.PAML wrapper.")
 

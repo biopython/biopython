@@ -40,8 +40,11 @@ def which(program):
             return exe_file
     return None
 
-
-if which("baseml") is None:
+if sys.platform == "win32":
+    binary = "baseml.exe"
+else:
+    binary = "baseml"
+if which(binary) is None:
     raise MissingExternalDependencyError(\
         "Install BASEML if you want to use the Bio.Phylo.PAML wrapper.")
 
