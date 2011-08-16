@@ -7,6 +7,7 @@ import unittest
 import os
 import os.path
 import sys
+from Bio import MissingExternalDependencyError
 from Bio.Phylo.PAML import baseml
 from Bio.Phylo.PAML._paml import PamlError
 
