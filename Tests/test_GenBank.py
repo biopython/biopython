@@ -183,3 +183,35 @@ def t_cleaning_features():
 print "Testing feature cleaning..."
 t_cleaning_features()
 
+def t_ensembl_locus():
+    line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG531_PATCH", c.data.name
+    assert c._expected_size == 1000000, c._expected_size
+
+    line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG531_PATCH", c.data.name
+    assert c._expected_size == 759984, c._expected_size
+
+    line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
+    assert c._expected_size == 814959, c._expected_size
+
+    line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
+    assert c._expected_size == 1219964, c._expected_size
+
+    print "Done"
+print "Testing EnsEMBL LOCUS lines..."
+t_ensembl_locus()
