@@ -183,31 +183,3 @@ def t_cleaning_features():
 print "Testing feature cleaning..."
 t_cleaning_features()
 
-def t_bioformat():
-    """Test converting GenBank into different formats using Bioformat.
-    """
-    from Bio import formats
-    from Bio import SeqRecord
-
-    test_file = os.path.join("GenBank", "iro.gb")
-    test_handle = open(test_file)
-    format = formats["sequence"].identify(test_handle)
-    assert format.name == "genbank-records", \
-      "Identified format incorrectly: %s" % format.name
-
-    all_records = []
-    for record in SeqRecord.io.readFile(test_handle):
-        all_records.append(record)
-
-    assert len(all_records) == 1
-    assert all_records[0].id == "AL109817.1", \
-      "Unexpected record id: %s" % all_records[0].id
-    assert all_records[0].seq[0:10] == "cacaggccca", \
-      "Unexpected sequence: %s" % all_records[0].seq
-    assert all_records[0].description == \
-      "Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.", \
-      "Unexpected description: %s" % all_records[0].description
-    test_handle.close()
-
-print "Testing format conversions..."
-# t_bioformat() # XXX this is mucked up right now and still under work
