@@ -925,6 +925,15 @@ class GenBankScanner(InsdcScanner):
         return (misc_lines,"".join(seq_lines).replace(" ",""))
 
     def _feed_first_line(self, consumer, line):
+        """Scan over and parse GenBank LOCUS line (PRIVATE).
+
+        This must cope with several variants, primarily the old and new column
+        based standards from GenBank. Additionally EnsEMBL produces GenBank
+        files where the LOCUS line is space separated rather that following
+        the column based layout.
+
+        We also try to cope with GenBank like files with partial LOCUS lines.
+        """
         #####################################
         # LOCUS line                        #
         #####################################
@@ -955,8 +964,8 @@ class GenBankScanner(InsdcScanner):
             #    55:62      space
             #    62:73      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
-            assert line[29:33] in [' bp ', ' aa ',' rc '] , \
-                   'LOCUS line does not contain size units at expected position:\n' + line
+            #assert line[29:33] in [' bp ', ' aa ',' rc '] , \
+            #       'LOCUS line does not contain size units at expected position:\n' + line
             assert line[41:42] == ' ', \
                    'LOCUS line does not contain space at position 42:\n' + line
             assert line[42:51].strip() in ['','linear','circular'], \
@@ -998,8 +1007,10 @@ class GenBankScanner(InsdcScanner):
             consumer.data_file_division(line[52:55])
             if line[62:73].strip():
                 consumer.date(line[62:73])
-        elif line[40:44] in [' bp ', ' aa ',' rc ']:
-            #New...
+        elif line[40:44] in [' bp ', ' aa ',' rc '] \
+        and line[54:64].strip() in ['','linear','circular']:
+            #New... linear/circular/big blank test should avoid EnsEMBL style
+            #LOCUS line being treated like a proper column based LOCUS line.
             #
             #    Positions  Contents
             #    ---------  --------
@@ -1090,7 +1101,13 @@ class GenBankScanner(InsdcScanner):
                 warnings.warn("Minimal LOCUS line found - is this correct?\n:%r" % line)
         elif len(line.split())==7 and line.split()[3] in ["aa","bp"]:
             #Cope with EnsEMBL genbank files which use space separation rather
-            #than the expected column based layout.
+            #than the expected column based layout. e.g.
+            #LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011
+            #LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011
+            #LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011
+            #LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011
+            #Notice that the 'bp' can occur in the position expected by either
+            #the old or the new fixed column standards (parsed above).
             splitline = line.split()
             consumer.locus(splitline[1])
             consumer.size(splitline[2])
@@ -1682,3 +1699,39 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
         print record.id, record.name, record.description
         print record.seq
 
+    
+    print
+    print "GenBank LOCUS"
+    print "============="
+
+    from Bio.GenBank import _FeatureConsumer
+
+    line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
+    s = GenBankScanner()
+    c = _FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG531_PATCH", c.data.name
+    assert c._expected_size == 1000000, c._expected_size
+
+    line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
+    s = GenBankScanner()
+    c = _FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG531_PATCH", c.data.name
+    assert c._expected_size == 759984, c._expected_size
+
+    line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
+    s = GenBankScanner()
+    c = _FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
+    assert c._expected_size == 814959, c._expected_size
+
+    line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
+    s = GenBankScanner()
+    c = _FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
+    assert c._expected_size == 1219964, c._expected_size
+
+    print "Done"
