@@ -102,12 +102,17 @@ def parse_others(lines, results, sequences):
             if "dS =" in line:
                 stats = {}
                 line_stats = line.split(":")[1].strip()
-                stats_split = line_stats.split()
-                for i in range(0, len(stats_split), 3):
-                    stat = stats_split[i].strip("()")
-                    if stat == "w":
-                        stat = "omega"
-                    value = stats_split[i+2].strip("()")
+                # Find all of the xx = ###### values in a row
+                # ie dS =  0.0227
+                # For dN and dS, the values have 8 characters from the equals
+                # sign, while the rest have 7 characters. On Windows,
+                # NaNs take on weird values like -1.#IND, which might fill the
+                # entire fixed column width.
+                res_matches = re.findall("[dSNwrho]{1,3} =.{7,8}?",
+                                         line_stats)             
+                for stat_pair in res_matches:
+                    stat = stat_pair.split('=')[0].strip()
+                    value = stat_pair.split('=')[1].strip()
                     try:
                         stats[stat] = float(value)
                     except:
