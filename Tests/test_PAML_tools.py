@@ -48,18 +48,15 @@ for binary in binaries:
         raise MissingExternalDependencyError(\
             "Install PAML if you want to use the Bio.Phylo.PAML wrapper.")
 
-class CodemlTest(unittest.TestCase):
 
-    align_file = os.path.join("PAML", "alignment.phylip")
-    tree_file = os.path.join("PAML", "species.tree")
-    out_file = os.path.join("PAML", "temp.out")
-    working_dir = os.path.join("PAML", "codeml_test")
-    ctl_file = os.path.join("PAML", "codeml.ctl")
+class Common(unittest.TestCase):
+    """Base class for PAML unit tests."""
+
+    del_files = []
 
     def __del__(self):
-        """Just in case CODEML creates some junk files, do a clean-up."""
-        del_files = [self.out_file, "2NG.dN", "2NG.dS", "2NG.t", "codeml.ctl",
-                     "lnf", "rst", "rst1", "rub"]
+        """Just in case tool creates some junk files, do a clean-up."""
+        del_files = self.del_files
         for filename in del_files:
             if os.path.exists(filename):
                 os.remove(filename)
@@ -68,6 +65,18 @@ class CodemlTest(unittest.TestCase):
                 if filename in del_files:
                     os.remove(os.path.join(self.working_dir, filename))
             os.rmdir(self.working_dir)
+
+
+class CodemlTest(Common):
+    "Tests for PAML tool codeml."""
+
+    align_file = os.path.join("PAML", "alignment.phylip")
+    tree_file = os.path.join("PAML", "species.tree")
+    out_file = os.path.join("PAML", "temp.out")
+    working_dir = os.path.join("PAML", "codeml_test")
+    ctl_file = os.path.join("PAML", "codeml.ctl")
+    del_files = [out_file, "2NG.dN", "2NG.dS", "2NG.t", "codeml.ctl",
+                 "lnf", "rst", "rst1", "rub"]
 
     def setUp(self):
         self.cml = codeml.Codeml(working_dir=self.working_dir)
@@ -84,26 +93,16 @@ class CodemlTest(unittest.TestCase):
         self.assertEqual(len(results["NSsites"][0]), 5)
 
 
-class BasemlTest(unittest.TestCase):
+class BasemlTest(Common):
+    """Tests for PAML tool baseml."""
 
     align_file = os.path.join("PAML", "alignment.phylip")
     tree_file = os.path.join("PAML", "species.tree")
     out_file = os.path.join("PAML", "temp.out")
     working_dir = os.path.join("PAML", "baseml_test")
     ctl_file = os.path.join("PAML", "baseml.ctl")
-
-    def __del__(self):
-        """Just in case BASEML creates some junk files, do a clean-up."""
-        del_files = [self.out_file, "2base.t", "in.basemlg", "baseml.ctl",
-                     "lnf", "rates", "rst", "rst1", "rub", "temp.out"]
-        for filename in del_files:
-            if os.path.exists(filename):
-                os.remove(filename)
-        if os.path.exists(self.working_dir):
-            for filename in os.listdir(self.working_dir):
-                if filename in del_files:
-                    os.remove(os.path.join(self.working_dir, filename))
-            os.rmdir(self.working_dir)
+    del_files = [out_file, "2base.t", "in.basemlg", "baseml.ctl",
+                 "lnf", "rates", "rst", "rst1", "rub", "temp.out"]
 
     def setUp(self):
         self.bml = baseml.Baseml(working_dir=self.working_dir)
@@ -119,29 +118,18 @@ class BasemlTest(unittest.TestCase):
         self.assertEqual(len(results["parameters"]), 5)
 
 
-class Yn00Test(unittest.TestCase):
+class Yn00Test(Common):
+    """Tests for PAML tool yn00."""
 
     align_file = os.path.join("PAML", "alignment.phylip")
     out_file = os.path.join("PAML", "temp.out")
     working_dir = os.path.join("PAML", "yn00_test")
     ctl_file = os.path.join("PAML", "yn00.ctl")
-
-    def __del__(self):
-        """Just in case BASEML creates some junk files, do a clean-up."""
-        del_files = [self.out_file, "2YN.dN", "2YN.dS", "2YN.t", "yn00.ctl",
-                     "rst", "rst1", "rub"]
-        for filename in del_files:
-            if os.path.exists(filename):
-                os.remove(filename)
-        if os.path.exists(self.working_dir):
-            for filename in os.listdir(self.working_dir):
-                if filename in del_files:
-                    os.remove(os.path.join(self.working_dir, filename))
-            os.rmdir(self.working_dir)
+    del_files = [out_file, "2YN.dN", "2YN.dS", "2YN.t", "yn00.ctl",
+                 "rst", "rst1", "rub"]
 
     def setUp(self):
         self.yn = yn00.Yn00(working_dir=self.working_dir)
-
 
     def testYn00Binary(self):
         """Test that the yn00 binary runs and generates correct output.
