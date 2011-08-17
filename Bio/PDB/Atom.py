@@ -7,6 +7,7 @@
 
 import numpy
 import warnings
+import copy
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
@@ -284,6 +285,17 @@ class Atom(object):
         """
         x,y,z=self.coord
         return Vector(x,y,z)
+
+    def copy(self):
+        """
+        Create a copy of the Atom.
+        Parent information is lost.
+        """
+        # Do a shallow copy then explicitly copy what needs to be deeper.
+        shallow = copy.copy(self)
+        shallow.detach_parent()
+        shallow.set_coord(copy.copy(self.get_coord()))
+        return shallow
 
 
 class DisorderedAtom(DisorderedEntityWrapper):

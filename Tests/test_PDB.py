@@ -863,6 +863,30 @@ class TransformTests(unittest.TestCase):
             for i in range(0, 3):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
+
+class CopyTests(unittest.TestCase):        
+
+    def setUp(self):
+        self.s = PDBParser(PERMISSIVE=True).get_structure(
+            'X', "PDB/a_structure.pdb")
+        self.m = self.s.get_list()[0]
+        self.c = self.m.get_list()[0]
+        self.r = self.c.get_list()[0]
+        self.a = self.r.get_list()[0]
+
+    def test_atom_copy(self):
+        aa = self.a.copy()
+        self.assertFalse(self.a is aa)
+        self.assertFalse(self.a.get_coord() is aa.get_coord())
+
+    def test_entitity_copy(self):
+        """Make a copy of a residue."""
+        for e in (self.s, self.m, self.c, self.r):
+            ee = e.copy()
+            self.assertFalse(e is ee)
+            self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
