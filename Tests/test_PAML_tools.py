@@ -65,7 +65,8 @@ class CodemlTest(unittest.TestCase):
                 os.remove(filename)
         if os.path.exists(self.working_dir):
             for filename in os.listdir(self.working_dir):
-                os.remove(filename)
+                if filename in del_files:
+                    os.remove(os.path.join(self.working_dir, filename))
             os.rmdir(self.working_dir)
 
     def setUp(self):
@@ -100,7 +101,8 @@ class BasemlTest(unittest.TestCase):
                 os.remove(filename)
         if os.path.exists(self.working_dir):
             for filename in os.listdir(self.working_dir):
-                os.remove(filename)
+                if filename in del_files:
+                    os.remove(os.path.join(self.working_dir, filename))
             os.rmdir(self.working_dir)
 
     def setUp(self):
@@ -133,7 +135,8 @@ class Yn00Test(unittest.TestCase):
                 os.remove(filename)
         if os.path.exists(self.working_dir):
             for filename in os.listdir(self.working_dir):
-                os.remove(filename)
+                if filename in del_files:
+                    os.remove(os.path.join(self.working_dir, filename))
             os.rmdir(self.working_dir)
 
     def setUp(self):
