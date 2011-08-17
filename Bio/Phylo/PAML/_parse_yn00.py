@@ -112,6 +112,8 @@ def parse_others(lines, results, sequences):
                                          line_stats)             
                 for stat_pair in res_matches:
                     stat = stat_pair.split('=')[0].strip()
+                    if stat == "w":
+                        stat = "omega"
                     value = stat_pair.split('=')[1].strip()
                     try:
                         stats[stat] = float(value)
