@@ -151,7 +151,7 @@ class ModTest(unittest.TestCase):
                         "aaDist": None,
                         "aaRatefile": None,
                         "model": 0,
-                        "NSsites": [0, 1, 2, 7, 8],
+                        "NSsites": [0],
                         "icode": 0,
                         "Mgene": 0,
                         "fix_kappa": 0,
@@ -169,7 +169,11 @@ class ModTest(unittest.TestCase):
                         "fix_blength": 1,
                         "method": 0}
         self.cml.read_ctl_file(self.ctl_file)
-        self.assertEqual(self.cml._options, target_options)
+        self.assertEqual(sorted(self.cml._options.keys()), sorted(target_options.keys()))
+        for key in target_options:
+            self.assertEqual(self.cml._options[key], target_options[key], \
+                             "%s: %r vs %r" \
+                             % (key, self.cml._options[key], target_options[key]))
         
     def testCtlFileExistsOnRead(self):
         self.assertRaises((EnvironmentError, IOError),

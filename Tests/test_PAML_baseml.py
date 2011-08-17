@@ -153,7 +153,7 @@ class ModTest(unittest.TestCase):
                         "kappa": 5,
                         "fix_alpha": 0,
                         "alpha": 0.5,
-                        "Malpha": 1,
+                        "Malpha": 0,
                         "ncatG": 5,
                         "fix_rho": 1,
                         "rho": 0,
@@ -167,7 +167,11 @@ class ModTest(unittest.TestCase):
                         "fix_blength": None,
                         "method": 0}
         self.bml.read_ctl_file(self.ctl_file)
-        self.assertEqual(self.bml._options, target_options)
+        self.assertEqual(sorted(self.bml._options.keys()), sorted(target_options.keys()))
+        for key in target_options:
+            self.assertEqual(self.bml._options[key], target_options[key], \
+                             "%s: %r vs %r" \
+                             % (key, self.bml._options[key], target_options[key]))
         
     def testCtlFileExistsOnRead(self):
         self.assertRaises(IOError,
