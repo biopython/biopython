@@ -1,11 +1,11 @@
-seqfile = Tests/PAML/alignment.phylip
+seqfile = PAML/alignment.phylip
 outfile = temp.out
-treefile = Tests/PAML/species.tree
+treefile = PAML/species.tree
 verbose = 0
 CodonFreq = 2
 cleandata = 1
 fix_blength = 1
-NSsites = 0 1 2 7 8
+NSsites = 0
 fix_omega = 0
 clock = 0
 runmode = 0

@@ -1,11 +1,11 @@
-      seqfile = brown.nuc 
-     treefile = brown.trees
+      seqfile = PAML/alignment.phylip
+     treefile = PAML/species.tree
 
-      outfile = mlb       * main result file
+      outfile = temp.out       * main result file
         noisy = 0   * 0,1,2,3: how much rubbish on the screen
       verbose = 0   * 1: detailed output, 0: concise output
       runmode = 0   * 0: user tree;  1: semi-automatic;  2: automatic
-                    * 3: StepwiseAddition; (4,5):PerturbationNNI 
+                    * 3: StepwiseAddition; (4,5):PerturbationNNI
 
         model = 6   * 0:JC69, 1:K80, 2:F81, 3:F84, 4:HKY85
                     * 5:T92, 6:TN93, 7:REV, 8:UNREST, 9:REVu; 10:UNRESTu
@@ -19,11 +19,11 @@
 
     fix_alpha = 0   * 0: estimate alpha; 1: fix alpha at value below
         alpha = 0.5   * initial or fixed alpha, 0:infinity (constant rate)
-       Malpha = 1   * 1: different alpha's for genes, 0: one alpha
+       Malpha = 0   * 1: different alpha's for genes, 0: one alpha
         ncatG = 5   * # of categories in the dG, AdG, or nparK models of rates
        fix_rho = 1
-          rho = 0        
-	nparK = 0   * rate-class models. 1:rK, 2:rK&fK, 3:rK&MK(1/K), 4:rK&MK 
+          rho = 0
+	nparK = 0   * rate-class models. 1:rK, 2:rK&fK, 3:rK&MK(1/K), 4:rK&MK
 
         nhomo = 0   * 0 & 1: homogeneous, 2: kappa for branches, 3: N1, 4: N2
         getSE = 0   * 0: don't want them, 1: want S.E.s of estimates
