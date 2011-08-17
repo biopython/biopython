@@ -107,7 +107,10 @@ def parse_others(lines, results, sequences):
                     stat = stats_split[i].strip("()")
                     if stat == "w":
                         stat = "omega"
-                    value = stats_split[i+2].strip("()")
+                    try:
+                        value = stats_split[i+2].strip("()")
+                    except IndexError:
+                        raise ValueError("Problem with stats line: %r" % line)
                     try:
                         stats[stat] = float(value)
                     except:
