@@ -155,6 +155,17 @@ class Entity(object):
         for o in self.get_list():
             o.transform(rot, tran)
 
+    def copy(self):
+        shallow = copy(self)
+        shallow.child_list = copy(self.child_list)
+        shallow.child_dict = copy(self.child_dict)
+        shallow.xtra = copy(self.xtra)
+        shallow.detach_parent()
+        for index, child in self.child_dict.items():
+            shallow.detach_child(index)
+            shallow.add(child.copy())
+        return shallow
+        
 
 class DisorderedEntityWrapper(object):
     """
