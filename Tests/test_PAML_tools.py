@@ -147,3 +147,9 @@ class Yn00Test(unittest.TestCase):
         self.yn.read_ctl_file(self.ctl_file)
         results = self.yn.run()
         self.assertEqual(len(results), 5)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
+    clean_up()
