@@ -137,6 +137,23 @@ class Entity(object):
             self.full_id=tuple(l)
         return self.full_id
 
+    def transform(self, rot, tran):
+        """
+        Apply rotation and translation to the atomic coordinates.
+
+        Example:
+                >>> rotation=rotmat(pi, Vector(1,0,0))
+                >>> translation=array((0,0,1), 'f')
+                >>> entity.transform(rotation, translation)
+
+        @param rot: A right multiplying rotation matrix
+        @type rot: 3x3 Numeric array
+
+        @param tran: the translation vector
+        @type tran: size 3 Numeric array
+        """
+        for o in self.get_list():
+            o.transform(rot, tran)
 
 
 class DisorderedEntityWrapper(object):
@@ -249,5 +266,3 @@ class DisorderedEntityWrapper(object):
     def disordered_get_list(self):
         "Return list of children."
         return self.child_dict.values()
-
-        
