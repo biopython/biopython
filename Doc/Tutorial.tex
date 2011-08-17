@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 21 July 2011 (Biopython 1.57+)}
+\date{Last Update -- 17 August 2011 (Biopython 1.57+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10804,6 +10804,36 @@ to the wiki, or elsewhere within the tutorial.
 
 This section shows some more examples of sequence input/output, using the
 \verb|Bio.SeqIO| module described in Chapter~\ref{chapter:Bio.SeqIO}.
+
+\subsection{Filtering a sequence file}
+
+Often you'll have a large file with many sequences in it (e.g. FASTA file
+or genes, or a FASTQ or SFF file of reads), a separate shorter list of
+the IDs for a subset of sequences of interest, and want to make a new
+sequence file for this subset.
+
+Let's say the list of IDs is in a simple text file, as the first word on
+each line. This could be a tabular file where the first column is the ID.
+Try something like this:
+
+%not a doctest to avoid temp files being left behind, also no >>>
+%makes it easier to copy and paste the example to a script file.
+\begin{verbatim}
+from Bio import SeqIO
+input_file = "big_file.sff"
+id_file = "short_list.txt"
+output_file = "short_list.sff"
+wanted = set(line.rstrip("\n").split(None,1)[0] for line in open(id_file))
+print "Found %i unique identifiers in %s" % (len(wanted), id_file)
+records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
+count = SeqIO.write(records, output_file, "sff")
+print "Saved %i records from %s to %s" % (count, input_file, output_file)
+if count < len(wanted):
+    print "Warning %i IDs not found in %s" % (len(wanted)-count, input_file)
+\end{verbatim}
+
+Note that we use a Python \verb|set| rather than a \verb|list|, this makes
+testing membership faster.
 
 \subsection{Producing randomised genomes}
 
