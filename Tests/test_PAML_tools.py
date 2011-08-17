@@ -11,7 +11,7 @@ from Bio import MissingExternalDependencyError
 
 def is_exe(filepath):
     """Test if a file is an executable."""
-        return os.path.exists(filepath) and os.access(filepath, os.X_OK)
+    return os.path.exists(filepath) and os.access(filepath, os.X_OK)
 
 def which(program):
     """Find the path to an executable."""
@@ -71,7 +71,6 @@ class CodemlTest(unittest.TestCase):
     def setUp(self):
         self.cml = codeml.Codeml(working_dir=self.working_dir)
 
-
     def testCodemlBinary(self):
         """Test that the codeml binary runs and generates correct output
         and is the correct version.
@@ -82,6 +81,7 @@ class CodemlTest(unittest.TestCase):
         self.assertTrue("NSsites" in results)
         self.assertEqual(len(results["NSsites"]), 1)
         self.assertEqual(len(results["NSsites"][0]), 5)
+
 
 class BasemlTest(unittest.TestCase):
 
@@ -106,7 +106,6 @@ class BasemlTest(unittest.TestCase):
     def setUp(self):
         self.bml = baseml.Baseml(working_dir=self.working_dir)
 
-
     def testBasemlBinary(self):
         """Test that the baseml binary runs and generates correct output
         and is the correct version.
@@ -116,6 +115,7 @@ class BasemlTest(unittest.TestCase):
         self.assertTrue(results["version"] > "4.0")
         self.assertTrue("parameters" in results)
         self.assertEqual(len(results["parameters"]), 5)
+
 
 class Yn00Test(unittest.TestCase):
 
