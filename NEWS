@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-In progress: Biopython 1.58 (not yet released)
+18 August 2011: Biopython 1.58
 
 A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
 Likelihood) package of programs, supporting codeml, baseml and yn00 as well
