@@ -26,15 +26,6 @@ from Bio import BiopythonWarning
 
 from Bio.Phylo import BaseTree
 
-#TODO - Remove this hack for Python 2.4
-try:
-    any
-except NameError:
-    def any(iterable):
-        for element in iterable:
-            if element:
-                return True
-        return False
 
 class PhyloXMLWarning(BiopythonWarning):
     """Warning for non-compliance with the phyloXML specification."""

@@ -32,24 +32,7 @@ else:
         from xml.etree import cElementTree as ElementTree
     except ImportError:
         # Alternative Python implementation, perhaps?
-        try:
-            from xml.etree import ElementTree as ElementTree
-        except ImportError:
-            # Python 2.4 -- check for 3rd-party implementations
-            try:
-                from lxml import etree as ElementTree
-            except ImportError:
-                try:
-                    import cElementTree as ElementTree
-                except ImportError:
-                    try:
-                        from elementtree import ElementTree
-                    except ImportError:
-                        from Bio import MissingPythonDependencyError
-                        raise MissingPythonDependencyError(
-                                "No ElementTree module was found. "
-                                "Use Python 2.5+, lxml or elementtree if you "
-                                "want to use Bio.PhyloXML.")
+        from xml.etree import ElementTree as ElementTree
 
 # Keep the standard namespace prefixes when writing
 # See http://effbot.org/zone/element-namespaces.htm
@@ -63,17 +46,8 @@ try:
 except AttributeError:
     if not hasattr(ElementTree, '_namespace_map'):
         # cElementTree needs the pure-Python xml.etree.ElementTree
-        # Py2.4 support: the exception handler can go away when Py2.4 does
-        try:
-            from xml.etree import ElementTree as ET_py
-            ElementTree._namespace_map = ET_py._namespace_map
-        except ImportError:
-            warnings.warn("Couldn't import xml.etree.ElementTree; "
-                    "phyloXML namespaces may have unexpected abbreviations "
-                    "in the output.",
-                    # NB: ImportWarning was introduced in Py2.5
-                    Warning, stacklevel=2)
-            ElementTree._namespace_map = {}
+        from xml.etree import ElementTree as ET_py
+        ElementTree._namespace_map = ET_py._namespace_map
 
     def register_namespace(prefix, uri):
         ElementTree._namespace_map[uri] = prefix
