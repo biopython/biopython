@@ -87,9 +87,9 @@ class TogoFields(unittest.TestCase):
 
 class TogoTests(unittest.TestCase):
     def test_pubmed_16381885(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885")"""
+        """Bio.TogoWS.entry("pubmed", "16381885")"""
         #Gives Medline plain text
-        handle = TogoWS.tfetch("pubmed", "16381885")
+        handle = TogoWS.entry("pubmed", "16381885")
         data = Medline.read(handle)
         handle.close()
         self.assertEqual(data["TI"],
@@ -100,25 +100,25 @@ class TogoTests(unittest.TestCase):
                                       'Hirakawa M'])
 
     def test_pubmed_16381885_ti(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885", field="ti")"""
-        handle = TogoWS.tfetch("pubmed", "16381885", field="ti")
+        """Bio.TogoWS.entry("pubmed", "16381885", field="ti")"""
+        handle = TogoWS.entry("pubmed", "16381885", field="ti")
         data = handle.read().strip()
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
     
     def test_pubmed_16381885_title(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885", field="title")"""
-        handle = TogoWS.tfetch("pubmed", "16381885", field="title")
+        """Bio.TogoWS.entry("pubmed", "16381885", field="title")"""
+        handle = TogoWS.entry("pubmed", "16381885", field="title")
         data = handle.read().strip()
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
     
     def test_pubmed_16381885_au(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885", field="au")"""
+        """Bio.TogoWS.entry("pubmed", "16381885", field="au")"""
         #Gives one name per line (i.e. \n separated), no dots
-        handle = TogoWS.tfetch("pubmed", "16381885", field="au")
+        handle = TogoWS.entry("pubmed", "16381885", field="au")
         data = handle.read().strip().split("\n")
         handle.close()
         self.assertEqual(data, ['Kanehisa M', 'Goto S', 'Hattori M',
@@ -127,9 +127,9 @@ class TogoTests(unittest.TestCase):
                                 'Hirakawa M'])
 
     def test_pubmed_16381885_authors(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885", field="authors")"""
+        """Bio.TogoWS.entry("pubmed", "16381885", field="authors")"""
         #Gives names tab separated (i.e. \t separated)
-        handle = TogoWS.tfetch("pubmed", "16381885", field="authors")
+        handle = TogoWS.entry("pubmed", "16381885", field="authors")
         data = handle.read().strip().split("\t")
         handle.close()
         self.assertEqual(data, ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.',
@@ -138,35 +138,35 @@ class TogoTests(unittest.TestCase):
                                 'Hirakawa, M.'])
 
     def test_pubmed_16381885_invalid_field(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885", field="invalid_for_testing")"""
-        self.assertRaises(IOError, TogoWS.tfetch,
+        """Bio.TogoWS.entry("pubmed", "16381885", field="invalid_for_testing")"""
+        self.assertRaises(IOError, TogoWS.entry,
                           "pubmed", "16381885", field="invalid_for_testing")
 
     def test_pubmed_16381885_invalid_format(self):
-        """Bio.TogoWS.tfetch("pubmed", "16381885", format="invalid_for_testing")"""
-        self.assertRaises(ValueError, TogoWS.tfetch,
+        """Bio.TogoWS.entry("pubmed", "16381885", format="invalid_for_testing")"""
+        self.assertRaises(ValueError, TogoWS.entry,
                           "pubmed", "16381885", format="invalid_for_testing")
 
     def test_pubmed_invalid_id(self):
-        """Bio.TogoWS.tfetch("pubmed", "invalid_for_testing")"""
-        self.assertRaises(IOError, TogoWS.tfetch,
+        """Bio.TogoWS.entry("pubmed", "invalid_for_testing")"""
+        self.assertRaises(IOError, TogoWS.entry,
                           "pubmed", "invalid_for_testing")
 
     def test_invalid_db(self):
-        """Bio.TogoWS.tfetch("invalid_db", "invalid_id")"""
-        self.assertRaises(ValueError, TogoWS.tfetch,
+        """Bio.TogoWS.entry("invalid_db", "invalid_id")"""
+        self.assertRaises(ValueError, TogoWS.entry,
                           "invalid_db", "invalid_id")
 
     def test_ddbj_genbank_length(self):
-        """Bio.TogoWS.tfetch("genbank", "NC_000913.2", field="length")"""
-        handle = TogoWS.tfetch("genbank", "NC_000913.2", field="length")
+        """Bio.TogoWS.entry("genbank", "NC_000913.2", field="length")"""
+        handle = TogoWS.entry("genbank", "NC_000913.2", field="length")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "4639675")
 
     def test_ddbj_genbank(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960")"""
-        handle = TogoWS.tfetch("ddbj", "X52960") #Returns "genbank" format
+        """Bio.TogoWS.entry("ddbj", "X52960")"""
+        handle = TogoWS.entry("ddbj", "X52960") #Returns "genbank" format
         record  = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
@@ -175,62 +175,62 @@ class TogoTests(unittest.TestCase):
         self.assertEqual(seguid(record.seq), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
     def test_ddbj_genbank_length(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="length")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="length")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="length")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "248")
 
     def test_ddbj_genbank_seq(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="seq")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="seq")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="seq")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="seq")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(seguid(data), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
     def test_ddbj_genbank_definition(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="definition")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="definition")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="definition")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="definition")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1 (CbVd) RNA.")
 
     def test_ddbj_genbank_accession(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="accession")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="accession")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="accession")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="accession")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960")
 
     def test_ddbj_genbank_accession(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="version")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="version")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="version")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="version")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "1")
 
     def test_ddbj_genbank_acc_version(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="acc_version")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="acc_version")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="acc_version")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="acc_version")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960.1")
 
     def test_ddbj_genbank_organism(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="organism")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", field="organism")
+        """Bio.TogoWS.entry("ddbj", "X52960", field="organism")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="organism")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1")
         
     def test_ddbj_genbank_invalid_field(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", field="invalid_for_testing")"""
-        self.assertRaises(IOError, TogoWS.tfetch,
+        """Bio.TogoWS.entry("ddbj", "X52960", field="invalid_for_testing")"""
+        self.assertRaises(IOError, TogoWS.entry,
                           "ddbj", "X52960", field="invalid_for_testing")
 
     def test_ddbj_fasta(self):
-        """Bio.TogoWS.tfetch("ddbj", "X52960", "fasta")"""
-        handle = TogoWS.tfetch("ddbj", "X52960", "fasta")
+        """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
+        handle = TogoWS.entry("ddbj", "X52960", "fasta")
         record  = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("X52960" in record.id, record.id)
@@ -239,9 +239,9 @@ class TogoTests(unittest.TestCase):
         self.assertEqual(seguid(record.seq), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
     def test_uniprot_swiss(self):
-        """Bio.TogoWS.tfetch("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])"""
+        """Bio.TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])"""
         #Returns "swiss" format:
-        handle = TogoWS.tfetch("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])
+        handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])
         record1, record2  = SeqIO.parse(handle, "swiss")
         handle.close()
 
@@ -256,8 +256,8 @@ class TogoTests(unittest.TestCase):
         self.assertEqual(seguid(record2.seq), "FGcj+RFQhP2gRusCmwPFty5PJT0")
 
     def test_nucleotide_fasta(self):
-        """Bio.TogoWS.tfetch("nucleotide", "6273291", "fasta")"""
-        handle = TogoWS.tfetch("nucleotide", "6273291", "fasta")
+        """Bio.TogoWS.entry("nucleotide", "6273291", "fasta")"""
+        handle = TogoWS.entry("nucleotide", "6273291", "fasta")
         record  = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("6273291" in record.id, record.id)
@@ -266,8 +266,8 @@ class TogoTests(unittest.TestCase):
         self.assertEqual(seguid(record.seq), "bLhlq4mEFJOoS9PieOx4nhGnjAQ")
 
     def test_protein_fasta(self):
-        """Bio.TogoWS.tfetch("protein", "16130152", "fasta")"""
-        handle = TogoWS.tfetch("protein", "16130152", "fasta")
+        """Bio.TogoWS.entry("protein", "16130152", "fasta")"""
+        handle = TogoWS.entry("protein", "16130152", "fasta")
         record  = SeqIO.read(handle, "fasta")
         handle.close()
         #Could use assertIn but requires Python 2.7+

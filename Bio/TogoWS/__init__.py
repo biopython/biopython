@@ -56,7 +56,7 @@ def _get_entry_fields(db):
 def _get_entry_formats(db):
     return _get_fields("http://togows.dbcls.jp/entry/%s?formats" % db)
 
-def tfetch(db, id, format=None, field=None):
+def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
 
     db - database (string), see list below.
@@ -78,8 +78,9 @@ def tfetch(db, id, format=None, field=None):
 
     For the current list, please see http://togows.dbcls.jp/entry/
 
-    The name of this function (tfetch) mimics that of the related NCBI
-    Entrez service EFetch, available in Biopython as Bio.Entrez.efetch(...)
+    This function is essentially equivalent to the NCBI Entrez service
+    EFetch, available in Biopython as Bio.Entrez.efetch(...), but that
+    does not offer field extraction.
     """
     global _fetch_db_names, _fetch_db_fields, fetch_db_formats
     if _fetch_db_names is None:
@@ -152,7 +153,7 @@ def tsearch_iter(db, query, batch=100):
     You would use this function within a for loop, e.g.
 
     for id in tsearch_iter("pubmed", "lung+cancer+drug"):
-        print id #maybe fetch data with tfetch?
+        print id #maybe fetch data with entry?
     """
     count = tsearch_count(db, query)
     if not count:
@@ -307,19 +308,19 @@ if __name__ == "__main__":
         assert "Error: Invalid database." in str(e)
         pass
 
-    print tfetch("pubmed", "16381885", field="au").read()
-    print tfetch("pubmed", "16381885", field="authors").read()
-    print tfetch("ddbj", "X52960").read()
-    print tfetch("ddbj", "X52960", "fasta").read()
-    print tfetch("ddbj", "X52960", "gff").read()
+    print entry("pubmed", "16381885", field="au").read()
+    print entry("pubmed", "16381885", field="authors").read()
+    print entry("ddbj", "X52960").read()
+    print entry("ddbj", "X52960", "fasta").read()
+    print entry("ddbj", "X52960", "gff").read()
     try:
-        print tfetch("ddbj", "X52960", "text").read()
+        print entry("ddbj", "X52960", "text").read()
     except Exception, e:
         print e
-    print tfetch("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"]).read()
+    print entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"]).read()
 
     """
-    names1, names2 = tfetch("pubmed", "16381885,19850725", field="authors").read().strip().split("\n")
+    names1, names2 = entry("pubmed", "16381885,19850725", field="authors").read().strip().split("\n")
     assert names1.split("\t") == ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.', 'Aoki-Kinoshita, K. F.', 'Itoh, M.', 'Kawashima, S.', 'Katayama, T.', 'Araki, M.', 'Hirakawa, M.']
     assert names2.split("\t") == ['Kaminuma, E.', 'Mashima, J.', 'Kodama, Y.', 'Gojobori, T.', 'Ogasawara, O.', 'Okubo, K.', 'Takagi, T.', 'Nakamura, Y.']
 
@@ -327,9 +328,9 @@ if __name__ == "__main__":
     #print tsearch("uniprot", "lung+cancer").read().strip().split()
 
     from Bio import SeqIO
-    print SeqIO.read(tfetch("ddbj", "X52960", "fasta"), "fasta")
-    print SeqIO.read(tfetch("protein", "16130152", "fasta"), "fasta")
-    print SeqIO.read(tfetch("protein", "16130152"), "gb")
+    print SeqIO.read(entry("ddbj", "X52960", "fasta"), "fasta")
+    print SeqIO.read(entry("protein", "16130152", "fasta"), "fasta")
+    print SeqIO.read(entry("protein", "16130152"), "gb")
     """
 
     #Current count is 1276, so compare all in one to batched:
