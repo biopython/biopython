@@ -391,8 +391,18 @@ class TogoSearch(unittest.TestCase):
 #        """
 #        self.check("pubmed", "porin",["21856844", "20956602"])
 
+#    def test_pdb_search_porin(self):
+#        """Bio.TogoWS.search("pdb", "porin") etc
+#
+#        Count was about 130 at time of writing.
+#        """
+#        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
+
     def check(self, database, search_term, expected_matches):
         search_count = TogoWS.search_count(database, search_term)
+        if expected_matches and search_count < len(expected_matches):
+            raise ValueError("Only %i matches, expected at least %i" \
+                             % (search_count, len(expected_matches)))
         if search_count > 5000:
             print "%i results, skipping" % search_count
             return
