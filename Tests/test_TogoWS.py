@@ -371,6 +371,46 @@ class TogoEntry(unittest.TestCase):
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
 
+class TogoSearch(unittest.TestCase):
+    """Search tests."""
+
+    def test_pubmed_search_togows(self):
+        """Bio.TogoWS.search("pubmed", "TogoWS") etc"""
+        self.check("pubmed", "TogoWS", ["20472643"])
+
+    def test_pubmed_search_bioruby(self):
+        """Bio.TogoWS.search("pubmed", "BioRuby") etc"""
+        self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
+
+#    def test_pubmed_search_porin(self):
+#        """Bio.TogoWS.search("pubmed", "porin") etc
+#
+#        Count was 2782 at time of writing, this was choosen to
+#        be larger than the default chunk size for iteration,
+#        but still not too big to download the full list.
+#        """
+#        self.check("pubmed", "porin",["21856844", "20956602"])
+
+    def check(self, database, search_term, expected_matches):
+        search_count = TogoWS.search_count(database, search_term)
+        if search_count > 5000:
+            print "%i results, skipping" % search_count
+            return
+        handle = TogoWS.search(database, search_term)
+        search_results = handle.read().strip().split()
+        handle.close()
+        search_iter = list(TogoWS.search_iter(database, search_term))
+        self.assertEqual(search_results, search_iter)
+        for match in expected_matches:
+            self.assert_(match in search_results,
+                         "Expected %s in results but not" % match)
+        #The default search output is limited to 100 terms
+        #at the time of writting.
+        if len(search_results) != 100:
+            self.assertEqual(len(search_results), search_count)
+            self.assertEqual(search_results, search_iter)
+
+
 class TogoConvert(unittest.TestCase):
     """Conversion tests."""
     

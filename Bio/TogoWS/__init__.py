@@ -178,7 +178,7 @@ def search(db, query, offset=None, count=None, format=None):
     offset, count - optional integers specifying which result to start from
             (1 based) and the number of results to return.
     format - return data file format (string), e.g. "json", "ttl" (RDF)
-             By default plain text is returned.
+             By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS supports a long list of databases, including
     many from the NCBI (e.g. "ncbi-pubmed" or "pubmed", "ncbi-genbank" or
