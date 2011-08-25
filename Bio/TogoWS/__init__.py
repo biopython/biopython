@@ -119,14 +119,14 @@ def entry(db, id, format=None, field=None):
         url += "." + format
     return _open(url)
 
-def tsearch_count(db, query):
+def search_count(db, query):
     """TogoWS search count (returns an integer).
 
     db - database (string), see http://togows.dbcls.jp/search
     query - search term (string)
 
     You could then use the count to download a large set of search results in
-    batches using the offset and limit options to Bio.TogoWS.tsearch().
+    batches using the offset and limit options to Bio.TogoWS.search().
     """
     global _search_db_names
     if _search_db_names is None:
@@ -143,7 +143,7 @@ def tsearch_count(db, query):
     handle.close()
     return count
 
-def tsearch_iter(db, query, batch=100):
+def search_iter(db, query, batch=100):
     """TogoWS search iteratating over the results (generator function).
 
     db - database (string), see http://togows.dbcls.jp/search
@@ -152,17 +152,17 @@ def tsearch_iter(db, query, batch=100):
 
     You would use this function within a for loop, e.g.
 
-    for id in tsearch_iter("pubmed", "lung+cancer+drug"):
+    for id in search_iter("pubmed", "lung+cancer+drug"):
         print id #maybe fetch data with entry?
     """
-    count = tsearch_count(db, query)
+    count = search_count(db, query)
     if not count:
         raise StopIteration
     remain = count
     offset = 1 #They don't use zero based counting
     while remain:
         batch = min(batch, remain)
-        ids = tsearch(db, query, offset, batch).read().strip().split()
+        ids = search(db, query, offset, batch).read().strip().split()
         assert len(ids)==batch, "Got %i, expected %i" % (len(ids), batch)
         #print "offset %i, %s ... %s" % (offset, ids[0], ids[1])
         for identifier in ids:
@@ -171,7 +171,7 @@ def tsearch_iter(db, query, batch=100):
         remain -= batch
     
 
-def tsearch(db, query, offset=None, count=None, format=None):
+def search(db, query, offset=None, count=None, format=None):
     """TogoWS search (returns a handle).
 
     db - database (string), see http://togows.dbcls.jp/search/
@@ -188,11 +188,11 @@ def tsearch(db, query, offset=None, count=None, format=None):
 
     For the current list, see http://togows.dbcls.jp/search/
 
-    The name of this function (tsearch) mimics that of the related NCBI
+    The name of this function (search) mimics that of the related NCBI
     Entrez service ESearch, available in Biopython as Bio.Entrez.esearch(...)
 
-    See also the function Bio.TogoWS.tsearch_count() which returns the number
-    of matches found, and the Bio.TogoWS.tsearch_iter() function which allows
+    See also the function Bio.TogoWS.search_count() which returns the number
+    of matches found, and the Bio.TogoWS.search_iter() function which allows
     you to iterate over the search results (taking care of batching for you).
     """
     global _search_db_names
@@ -324,8 +324,8 @@ if __name__ == "__main__":
     assert names1.split("\t") == ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.', 'Aoki-Kinoshita, K. F.', 'Itoh, M.', 'Kawashima, S.', 'Katayama, T.', 'Araki, M.', 'Hirakawa, M.']
     assert names2.split("\t") == ['Kaminuma, E.', 'Mashima, J.', 'Kodama, Y.', 'Gojobori, T.', 'Ogasawara, O.', 'Okubo, K.', 'Takagi, T.', 'Nakamura, Y.']
 
-    assert tsearch_count("uniprot", "lung+cancer") > 1000
-    #print tsearch("uniprot", "lung+cancer").read().strip().split()
+    assert search_count("uniprot", "lung+cancer") > 1000
+    #print search("uniprot", "lung+cancer").read().strip().split()
 
     from Bio import SeqIO
     print SeqIO.read(entry("ddbj", "X52960", "fasta"), "fasta")
@@ -334,11 +334,11 @@ if __name__ == "__main__":
     """
 
     #Current count is 1276, so compare all in one to batched:
-    #assert list(tsearch_iter("uniprot", "lung+cancer",batch=50)) \
-    #    == list(tsearch_iter("uniprot", "lung+cancer",batch=100))
-    all_in_one = tsearch("uniprot", "lung+cancer").read().strip().split("\n")
+    #assert list(search_iter("uniprot", "lung+cancer",batch=50)) \
+    #    == list(search_iter("uniprot", "lung+cancer",batch=100))
+    all_in_one = search("uniprot", "lung+cancer").read().strip().split("\n")
     if len(all_in_one) == 100:
         print "Oh, search was capped at 100."
     else:
-        batched = list(tsearch_iter("uniprot", "lung+cancer"))
+        batched = list(search_iter("uniprot", "lung+cancer"))
         assert all_in_one == batched, "All: %s\nBatched: %s" % (all_in_one, batched)
