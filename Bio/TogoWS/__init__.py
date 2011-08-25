@@ -219,7 +219,7 @@ def search(db, query, offset=None, count=None, format=None):
     #print url
     return _open(url)
 
-def tconvert(data, in_format, out_format):
+def convert(data, in_format, out_format):
     """TogoWS convert (returns a handle).
     
     data - string or handle containing input record(s)

@@ -284,7 +284,7 @@ class TogoConvert(unittest.TestCase):
         """Conversion of GenBank to FASTA."""
         filename = "GenBank/NC_005816.gb"
         old = SeqIO.read(filename, "gb")
-        new = SeqIO.read(TogoWS.tconvert(open(filename), "genbank", "fasta"), "fasta")
+        new = SeqIO.read(TogoWS.convert(open(filename), "genbank", "fasta"), "fasta")
         self.assertEqual(str(old.seq), str(new.seq))
 
 
