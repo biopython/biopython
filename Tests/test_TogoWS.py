@@ -8,6 +8,7 @@
 import sys
 import unittest
 import urllib
+from StringIO import StringIO
 
 #import requires_internet
 #requires_internet.check()
@@ -87,7 +88,7 @@ class TogoFields(unittest.TestCase):
                                         "models"]), fields)
 
 
-class TogoTests(unittest.TestCase):
+class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885(self):
         """Bio.TogoWS.entry("pubmed", "16381885")"""
         #Gives Medline plain text
@@ -153,6 +154,49 @@ class TogoTests(unittest.TestCase):
         """Bio.TogoWS.entry("pubmed", "invalid_for_testing")"""
         self.assertRaises(IOError, TogoWS.entry,
                           "pubmed", "invalid_for_testing")
+
+    def test_pubmed_16381885_and_19850725(self):
+        """Bio.TogoWS.entry("pubmed", "16381885,19850725")"""
+        handle = TogoWS.entry("pubmed", "16381885,19850725")
+        #Hack to insert blank line between record, missing in TogoWS
+        #output as of 25 August 2011 (will report this...)
+        data = handle.read()
+        data = data.replace("\nPMID-", "\n\nPMID-")
+        handle.close()
+        handle = StringIO(data)
+        #End of hack
+        records = list(Medline.parse(handle))
+        handle.close()
+        self.assertEqual(len(records), 2)
+        self.assertEqual(records[0]["TI"],
+             'From genomics to chemical genomics: new developments in KEGG.')
+        self.assertEqual(records[0]["AU"], ['Kanehisa M', 'Goto S',
+                                            'Hattori M', 'Aoki-Kinoshita KF',
+                                            'Itoh M', 'Kawashima S',
+                                            'Katayama T', 'Araki M',
+                                            'Hirakawa M'])
+        self.assertEqual(records[1]["TI"],
+             'DDBJ launches a new archive database with analytical tools ' + \
+             'for next-generation sequence data.')
+        self.assertEqual(records[1]["AU"], ['Kaminuma E', 'Mashima J',
+                                            'Kodama Y', 'Gojobori T',
+                                            'Ogasawara O', 'Okubo K',
+                                            'Takagi T', 'Nakamura Y'])
+
+    def test_pubmed_16381885_and_19850725_authors(self):
+        """Bio.TogoWS.entry("pubmed", "16381885,19850725", field="authors")"""
+        handle = TogoWS.entry("pubmed", "16381885,19850725", field="authors")
+        names1, names2 = handle.read().strip().split("\n")
+        handle.close()
+        self.assertEqual(names1.split("\t"),
+                         ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.',
+                          'Aoki-Kinoshita, K. F.', 'Itoh, M.',
+                          'Kawashima, S.', 'Katayama, T.',
+                          'Araki, M.', 'Hirakawa, M.'])
+        self.assertEqual(names2.split("\t"),
+                         ['Kaminuma, E.', 'Mashima, J.', 'Kodama, Y.',
+                          'Gojobori, T.', 'Ogasawara, O.', 'Okubo, K.',
+                          'Takagi, T.', 'Nakamura, Y.'])
 
     def test_invalid_db(self):
         """Bio.TogoWS.entry("invalid_db", "invalid_id")"""

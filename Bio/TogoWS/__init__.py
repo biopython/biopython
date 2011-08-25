@@ -307,13 +307,7 @@ if __name__ == "__main__":
         assert "Error: Invalid database." in str(e)
         pass
 
-    print entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"]).read()
-
     """
-    names1, names2 = entry("pubmed", "16381885,19850725", field="authors").read().strip().split("\n")
-    assert names1.split("\t") == ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.', 'Aoki-Kinoshita, K. F.', 'Itoh, M.', 'Kawashima, S.', 'Katayama, T.', 'Araki, M.', 'Hirakawa, M.']
-    assert names2.split("\t") == ['Kaminuma, E.', 'Mashima, J.', 'Kodama, Y.', 'Gojobori, T.', 'Ogasawara, O.', 'Okubo, K.', 'Takagi, T.', 'Nakamura, Y.']
-
     assert search_count("uniprot", "lung+cancer") > 1000
     #print search("uniprot", "lung+cancer").read().strip().split()
 
