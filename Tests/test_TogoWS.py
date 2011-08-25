@@ -230,6 +230,33 @@ class TogoTests(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "ddbj", "X52960", field="invalid_for_testing")
 
+    def test_ddbj_invalid_format(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", format="invalid_for_testing")"""
+        self.assertRaises(ValueError, TogoWS.entry,
+                          "ddbj", "X52960", format="invalid_for_testing")
+
+    def test_ddbj_gff3(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
+        handle = TogoWS.entry("ddbj", "X52960", format="gff")
+        data = handle.read()
+        handle.close()
+        self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
+
+    def test_genbank_gff3(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
+        #Note - Using manual URL with genbank instead of nucleotide works
+        handle = TogoWS.entry("nucleotide", "X52960", format="gff")
+        data = handle.read()
+        handle.close()
+        self.assert_(data.startswith("##gff-version 3\nX52960\tGenbank\t"), data)
+
+    def test_embl_AM905444_gff3(self):
+        """Bio.TogoWS.entry("embl", "AM905444", format="gff")"""
+        handle = TogoWS.entry("embl", "AM905444", format="gff")
+        data = handle.read()
+        handle.close()
+        self.assert_(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
+
     def test_embl_AM905444_seq(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
         handle = TogoWS.entry("embl", "AM905444", field="seq")

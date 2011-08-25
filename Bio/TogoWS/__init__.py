@@ -307,15 +307,6 @@ if __name__ == "__main__":
         assert "Error: Invalid database." in str(e)
         pass
 
-    print entry("pubmed", "16381885", field="au").read()
-    print entry("pubmed", "16381885", field="authors").read()
-    print entry("ddbj", "X52960").read()
-    print entry("ddbj", "X52960", "fasta").read()
-    print entry("ddbj", "X52960", "gff").read()
-    try:
-        print entry("ddbj", "X52960", "text").read()
-    except Exception, e:
-        print e
     print entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"]).read()
 
     """
