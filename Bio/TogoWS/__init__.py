@@ -63,24 +63,21 @@ def tfetch(db, id, format=None, field=None):
     id - identier (string) or a list of identifiers (either as a list of
          strings or a single string with comma separators).
     format - return data file format (string), options depend on the database
-             e.g. "xml", "json", "gff", "fasta", "ttl" (RDF)
+             e.g. "xml", "json", "gff", "fasta", "ttl" (RDF Turtle)
     field - specific field from within the database record (string)
             e.g. "au" or "authors" for pubmed.
 
-    At the time of writing, TogoWS website claims it supports the following
-    databases:
+    At the time of writing, this includes the following:
 
-    KEGG: gene, orthology, enzyme, compound, drug, glycan, reaction
-    DDBJ: ddbj, dad
-    PDBj: pdb
-    NCBI: gene, genome, genomeprj, geo, journals, mesh, nucleotide, omim,
-          pmc, protein, pubmed, taxonomy, cdd, popset, snp, unigene,
-          homologene, nuccore, nucest, nucgss, unists
-    EBI:  biomodels, chebi, ensembl, go, interpro, reactome, uniprot,
-          uniparc, uniref100, uniref90, uniref50, msdchem, msdpdb
+    KEGG: compound, drug, enzyme, genes, glycan, orthology, reaction,
+          module, pathway
+    DDBj: ddbj, dad, pdb
+    NCBI: nuccore, nucest, nucgss, nucleotide, protein, gene, onim,
+          homologue, snp, mesh, pubmed
+    EBI:  embl, uniprot, uniparc, uniref100, uniref90, uniref50
 
-    However, the list given at http://togows.dbcls.jp/entry/ is much smaller.
-        
+    For the current list, please see http://togows.dbcls.jp/entry/
+
     The name of this function (tfetch) mimics that of the related NCBI
     Entrez service EFetch, available in Biopython as Bio.Entrez.efetch(...)
     """
@@ -187,7 +184,9 @@ def tsearch(db, query, offset=None, count=None, format=None):
     many from the NCBI (e.g. "ncbi-pubmed" or "pubmed", "ncbi-genbank" or
     "genbank", "ncbi-taxonomy"), EBI (e.g. "ebi-ebml" or "embl", "ebi-uniprot"
     or "uniprot, "ebi-go"), and KEGG (e.g. "kegg-compound" or "compound").
-        
+
+    For the current list, see http://togows.dbcls.jp/search/
+
     The name of this function (tsearch) mimics that of the related NCBI
     Entrez service ESearch, available in Biopython as Bio.Entrez.esearch(...)
 
