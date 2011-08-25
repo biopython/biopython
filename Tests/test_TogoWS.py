@@ -26,29 +26,46 @@ class TogoFields(unittest.TestCase):
     def test_databases(self):
         """Check supported databases"""
         dbs = set(TogoWS._get_entry_dbs())
-        self.assert_(dbs.issuperset(['ddbj', 'dad', 'embl', 'reaction',
-                                     'orthology', 'genes', 'glycan', 'drug',
-                                     'pathway', 'enzyme', #'genbank',
-                                     'uniprot', 'compound', 'pubmed',
-                                     'pdb']), dbs)
+        self.assert_(dbs.issuperset(['nuccore', 'nucest', 'nucgss',
+                                     'nucleotide', 'protein', 'gene',
+                                     'omim', 'homologene', 'snp',
+                                     'mesh', 'pubmed', 'embl',
+                                     'uniprot', 'uniparc', 'uniref100',
+                                     'uniref90', 'uniref50', 'ddbj',
+                                     'dad', 'pdb', 'compound', 'drug',
+                                     'enzyme', 'genes', 'glycan',
+                                     'orthology', 'reaction', 'module',
+                                     'pathway']), dbs)
 
     def test_pubmed(self):
         """Check supported fields for pubmed database"""
         fields = set(TogoWS._get_entry_fields("pubmed"))
-        self.assert_(fields.issuperset(["abstract", "au", "authors", "doi", \
+        self.assert_(fields.issuperset(["abstract", "au", "authors", "doi",
                                         "mesh", "so"]), fields)
 
     def test_ncbi_protein(self):
         """Check supported fields for NCBI protein database"""
         fields = set(TogoWS._get_entry_fields("ncbi-protein"))
-        #Why does this leave out some like length?
-        self.assert_(fields.issuperset(["definition", "seq"]), fields)
+        self.assert_(fields.issuperset(['entry_id', 'length', 'strand',
+                                        'moltype', 'linearity', 'division',
+                                        'date', 'definition', 'accession',
+                                        'accessions', 'version', 'versions',
+                                        'acc_version', 'gi', 'keywords',
+                                        'organism', 'common_name',
+                                        'taxonomy', 'comment', 'seq']),
+                                        fields)
 
     def test_ddbj(self):
         """Check supported fields for ddbj database"""
         fields = set(TogoWS._get_entry_fields("ddbj"))
-        #Why does this leave out some like length?
-        self.assert_(fields.issuperset(["definition", "seq"]), fields)
+        self.assert_(fields.issuperset(['entry_id', 'length', 'strand',
+                                        'moltype', 'linearity', 'division',
+                                        'date', 'definition', 'accession',
+                                        'accessions', 'version', 'versions',
+                                        'acc_version', 'gi', 'keywords',
+                                        'organism', 'common_name',
+                                        'taxonomy', 'comment', 'seq']),
+                                        fields)
 
     def test_embl(self):
         """Check supported fields for embl database"""
