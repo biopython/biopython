@@ -314,6 +314,7 @@ PACKAGES = [
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
+    'Bio.TogoWS',
     'Bio.Phylo',
     'Bio.Phylo.Applications',
     'Bio.Phylo.PAML',
