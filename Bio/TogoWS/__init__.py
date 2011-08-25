@@ -99,16 +99,18 @@ def entry(db, id, format=None, field=None):
             #some undocumented fields like "length" for "embl".
             import warnings
             warnings.warn("TogoWS entry fetch does not explicitly support "
-                          "field '%s' for database '%s'." % (field, db))
+                          "field '%s' for database '%s'. Only: %s" \
+                          % (field, db, ", ".join(sorted(fields))))
     if format:
         try:
             formats = _entry_db_formats[db]
         except KeyError:
             formats = _get_entry_formats(db)
-            _entry_db_fields[db] = formats
+            _entry_db_formats[db] = formats
         if format not in formats:
             raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "format '%s' for database '%s'." % (format, db))
+                             "format '%s' for database '%s'. Only: %s" \
+                             % (format, db, ", ".join(sorted(formats))))
 
     if isinstance(id, list):
         id = ",".join(id)

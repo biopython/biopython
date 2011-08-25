@@ -40,8 +40,9 @@ class TogoFields(unittest.TestCase):
     def test_pubmed(self):
         """Check supported fields for pubmed database"""
         fields = set(TogoWS._get_entry_fields("pubmed"))
-        self.assert_(fields.issuperset(["abstract", "au", "authors", "doi",
-                                        "mesh", "so"]), fields)
+        self.assert_(fields.issuperset(['abstract', 'au', 'authors',
+                                        'doi', 'mesh', 'so', 'ti',
+                                        'title']), fields)
 
     def test_ncbi_protein(self):
         """Check supported fields for NCBI protein database"""
@@ -84,6 +85,7 @@ class TogoFields(unittest.TestCase):
         fields = set(TogoWS._get_entry_fields("pdb"))
         self.assert_(fields.issuperset(["accession", "chains", "keywords",
                                         "models"]), fields)
+
 
 class TogoTests(unittest.TestCase):
     def test_pubmed_16381885(self):
