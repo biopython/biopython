@@ -95,12 +95,9 @@ def entry(db, id, format=None, field=None):
             fields = _get_entry_fields(db)
             _entry_db_fields[db] = fields
         if field not in fields:
-            #TODO - Make this a ValueError? Right now TogoWS appears to support
-            #some undocumented fields like "length" for "embl".
-            import warnings
-            warnings.warn("TogoWS entry fetch does not explicitly support "
-                          "field '%s' for database '%s'. Only: %s" \
-                          % (field, db, ", ".join(sorted(fields))))
+            raise ValueError("TogoWS entry fetch does not explicitly support "
+                             "field '%s' for database '%s'. Only: %s" \
+                             % (field, db, ", ".join(sorted(fields))))
     if format:
         try:
             formats = _entry_db_formats[db]

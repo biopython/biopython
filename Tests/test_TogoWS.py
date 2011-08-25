@@ -141,7 +141,7 @@ class TogoTests(unittest.TestCase):
 
     def test_pubmed_16381885_invalid_field(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="invalid_for_testing")"""
-        self.assertRaises(IOError, TogoWS.entry,
+        self.assertRaises(ValueError, TogoWS.entry,
                           "pubmed", "16381885", field="invalid_for_testing")
 
     def test_pubmed_16381885_invalid_format(self):
@@ -227,13 +227,24 @@ class TogoTests(unittest.TestCase):
         
     def test_ddbj_genbank_invalid_field(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="invalid_for_testing")"""
-        self.assertRaises(IOError, TogoWS.entry,
+        self.assertRaises(ValueError, TogoWS.entry,
                           "ddbj", "X52960", field="invalid_for_testing")
+
+    def test_embl_AM905444(self):
+        """Bio.TogoWS.entry("embl", "AM905444")"""
+        handle = TogoWS.entry("embl", "AM905444")
+        record = SeqIO.read(handle, "embl")
+        handle.close()
+        self.assert_("AM905444" in record.id, record.id)
+        self.assert_("AM905444" in record.name, record.name)
+        self.assert_("porin" in record.description, record.description)
+        self.assertEqual(len(record), 1164)
+        self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
     def test_ddbj_fasta(self):
         """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
         handle = TogoWS.entry("ddbj", "X52960", "fasta")
-        record  = SeqIO.read(handle, "fasta")
+        record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("X52960" in record.id, record.id)
         self.assert_("X52960" in record.name, record.name)
