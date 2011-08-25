@@ -10,8 +10,8 @@ import unittest
 import urllib
 from StringIO import StringIO
 
-#import requires_internet
-#requires_internet.check()
+import requires_internet
+requires_internet.check()
 
 #We want to test these:
 from Bio import TogoWS
