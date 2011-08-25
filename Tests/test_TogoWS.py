@@ -230,6 +230,20 @@ class TogoTests(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "ddbj", "X52960", field="invalid_for_testing")
 
+    def test_embl_AM905444_seq(self):
+        """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
+        handle = TogoWS.entry("embl", "AM905444", field="seq")
+        data = handle.read().strip() #ignore any trailing \n
+        handle.close()
+        self.assertEqual(seguid(data), "G0HtLpwF7i4FXUaUjDUPTjok79c")
+
+    def test_embl_AM905444_definition(self):
+        """Bio.TogoWS.entry("embl", "AM905444", field="definition")"""
+        handle = TogoWS.entry("embl", "AM905444", field="definition")
+        data = handle.read().strip() #ignore any trailing \n
+        handle.close()
+        self.assertEqual(data, "Herbaspirillum seropedicae locus tag HS193.0074 for porin")
+
     def test_embl_AM905444(self):
         """Bio.TogoWS.entry("embl", "AM905444")"""
         handle = TogoWS.entry("embl", "AM905444")
