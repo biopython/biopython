@@ -159,16 +159,22 @@ def search_iter(db, query, batch=100):
         raise StopIteration
     remain = count
     offset = 1 #They don't use zero based counting
+    prev_ids = []
     while remain:
         batch = min(batch, remain)
         ids = search(db, query, offset, batch).read().strip().split()
         assert len(ids)==batch, "Got %i, expected %i" % (len(ids), batch)
         #print "offset %i, %s ... %s" % (offset, ids[0], ids[1])
+        if ids == prev_ids:
+            raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
+            if identifier in prev_ids:
+                raise RuntimeError("Result %s was in previous batch" \
+                                   % identifier)
             yield identifier
         offset += batch
         remain -= batch
-    
+        prev_ids = ids
 
 def search(db, query, offset=None, count=None, format=None):
     """TogoWS search (returns a handle).
