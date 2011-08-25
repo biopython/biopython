@@ -158,13 +158,6 @@ class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885_and_19850725(self):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725")"""
         handle = TogoWS.entry("pubmed", "16381885,19850725")
-        #Hack to insert blank line between record, missing in TogoWS
-        #output as of 25 August 2011 (will report this...)
-        data = handle.read()
-        data = data.replace("\nPMID-", "\n\nPMID-")
-        handle.close()
-        handle = StringIO(data)
-        #End of hack
         records = list(Medline.parse(handle))
         handle.close()
         self.assertEqual(len(records), 2)
@@ -186,8 +179,11 @@ class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885_and_19850725_authors(self):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725", field="authors")"""
         handle = TogoWS.entry("pubmed", "16381885,19850725", field="authors")
-        names1, names2 = handle.read().strip().split("\n")
+        #Little hack to remove blank lines...
+        names = handle.read().replace("\n\n", "\n").strip().split("\n")
         handle.close()
+        self.assertEqual(2, len(names))
+        names1, names2 = names
         self.assertEqual(names1.split("\t"),
                          ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.',
                           'Aoki-Kinoshita, K. F.', 'Itoh, M.',
