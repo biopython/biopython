@@ -36,9 +36,9 @@ from Bio import File
 
 #Caches:
 _search_db_names = None
-_fetch_db_names = None
-_fetch_db_fields = {}
-_fetch_db_formats = {}
+_entry_db_names = None
+_entry_db_fields = {}
+_entry_db_formats = {}
 
 def _get_fields(url):
     """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
@@ -82,18 +82,18 @@ def entry(db, id, format=None, field=None):
     EFetch, available in Biopython as Bio.Entrez.efetch(...), but that
     does not offer field extraction.
     """
-    global _fetch_db_names, _fetch_db_fields, fetch_db_formats
-    if _fetch_db_names is None:
-        _fetch_db_names = _get_entry_dbs()
-    if db not in _fetch_db_names:
+    global _entry_db_names, _entry_db_fields, fetch_db_formats
+    if _entry_db_names is None:
+        _entry_db_names = _get_entry_dbs()
+    if db not in _entry_db_names:
         raise ValueError("TogoWS entry fetch does not officially support "
                          "database '%s'." % db)
     if field:
         try:
-            fields = _fetch_db_fields[db]
+            fields = _entry_db_fields[db]
         except KeyError:
             fields = _get_entry_fields(db)
-            _fetch_db_fields[db] = fields
+            _entry_db_fields[db] = fields
         if field not in fields:
             #TODO - Make this a ValueError? Right now TogoWS appears to support
             #some undocumented fields like "length" for "embl".
@@ -102,10 +102,10 @@ def entry(db, id, format=None, field=None):
                           "field '%s' for database '%s'." % (field, db))
     if format:
         try:
-            formats = _fetch_db_formats[db]
+            formats = _entry_db_formats[db]
         except KeyError:
             formats = _get_entry_formats(db)
-            _fetch_db_fields[db] = formats
+            _entry_db_fields[db] = formats
         if format not in formats:
             raise ValueError("TogoWS entry fetch does not explicitly support "
                              "format '%s' for database '%s'." % (format, db))
