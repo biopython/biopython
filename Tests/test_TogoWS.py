@@ -476,7 +476,16 @@ class TogoSearch(unittest.TestCase):
 
 class TogoConvert(unittest.TestCase):
     """Conversion tests."""
-    
+
+    def test_invalid_format(self):
+        """Check convert file format checking."""
+        self.assertRaises(ValueError, TogoWS.convert,
+                          StringIO("PLACEHOLDER"),
+                          "genbank", "invalid_for_testing")
+        self.assertRaises(ValueError, TogoWS.convert,
+                          StringIO("PLACEHOLDER"),
+                          "invalid_for_testing", "fasta")
+
     def test_genbank_to_fasta(self):
         """Conversion of GenBank to FASTA."""
         filename = "GenBank/NC_005816.gb"
@@ -484,6 +493,12 @@ class TogoConvert(unittest.TestCase):
         new = SeqIO.read(TogoWS.convert(open(filename), "genbank", "fasta"), "fasta")
         self.assertEqual(str(old.seq), str(new.seq))
 
+    def test_genbank_to_embl(self):
+        """Conversion of GenBank to EMBL."""
+        filename = "GenBank/NC_005816.gb"
+        old = SeqIO.read(filename, "gb")
+        new = SeqIO.read(TogoWS.convert(open(filename), "genbank", "embl"), "embl")
+        self.assertEqual(str(old.seq), str(new.seq))
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

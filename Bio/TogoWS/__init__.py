@@ -39,6 +39,7 @@ _search_db_names = None
 _entry_db_names = None
 _entry_db_fields = {}
 _entry_db_formats = {}
+_convert_formats = []
 
 def _get_fields(url):
     """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
@@ -55,6 +56,10 @@ def _get_entry_fields(db):
 
 def _get_entry_formats(db):
     return _get_fields("http://togows.dbcls.jp/entry/%s?formats" % db)
+
+def _get_convert_formats():
+    return [pair.split(".") for pair in \
+            _get_fields("http://togows.dbcls.jp/convert/")]
 
 def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
@@ -252,11 +257,19 @@ def convert(data, in_format, out_format):
     data - string or handle containing input record(s)
     in_format - string describing the input file format (e.g. "genbank")
     out_format - string describing the requested output format (e.g. "fasta")
+
+    For a list of supported conversions (e.g. "genbank" to "fasta"), see
+    http://togows.dbcls.jp/convert/
     
     Note that Biopython has built in support for conversion of sequence and
     alignnent file formats (functions Bio.SeqIO.convert and Bio.AlignIO.convert)
     """
-    #TODO - Check the formats are supported
+    global _convert_formats
+    if not _convert_formats:
+        _convert_formats = _get_convert_formats()
+    if [in_format, out_format] not in _convert_formats:
+        msg = "\n".join("%s -> %s" % tuple(pair) for pair in _convert_formats)
+        raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
     url="http://togows.dbcls.jp/convert/%s.%s" % (in_format, out_format)
     #TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
