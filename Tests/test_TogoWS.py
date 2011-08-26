@@ -434,26 +434,17 @@ class TogoSearch(unittest.TestCase):
 
         Count was about 517 at time of writing.
         """
-        self.check("embl", "human porin",
-                   ["AF036160", "L08666", "T09295", "AA183988"])
-
-#    def test_uniprot_search_lung_cancer(self):
-#        """Bio.TogoWS.search("uniprot", "lung+cancer") etc
-#
-#        Count was 1327 at time of writing, this was choosen to
-#        be larger than the default chunk size for iteration, 
-#        but still not too big to download the full list.
-#        """
-#        self.check("uniprot", "lung+cancer",
-#                   ["DLEC1_HUMAN", "Q5WPA9_PIG", "NCOA3_HUMAN"])
+        self.check("embl", "human porin", limit=300)
 
     def test_uniprot_search_lung_cancer_limit(self):
-        """Bio.TogoWS.search("uniprot", "lung+cancer", limit=50) etc
+        """Bio.TogoWS.search("uniprot", "lung+cancer", limit=150) etc
 
         Search count was 1327 at time of writing, a bit large to
-        download all the results in a unit test.
+        download all the results in a unit test. Want to use a limit
+        larger than the batch size (100) to ensure at least two
+        batches.
         """
-        self.check("uniprot", "lung+cancer", limit=50)
+        self.check("uniprot", "lung+cancer", limit=150)
 
     def check(self, database, search_term, expected_matches=[], limit=None):
         if expected_matches and limit:
@@ -477,22 +468,17 @@ class TogoSearch(unittest.TestCase):
             self.assert_(match in search_iter,
                          "Expected %s in results but not" % match)
 
-        if limit:
+        #Now let's try some sub-result access.
+        if count > 20:
+            starts = range(0, count - 10, count // 5)
+        else:
+            starts = [] #skip
+        for start in starts:
             handle = TogoWS.search(database, search_term,
-                                   offset=1, limit=limit)
-        else:
-            #The default search output is limited to 100 terms
-            #at the time of writing.
-            handle = TogoWS.search(database, search_term)
-        search_results = handle.read().strip().split()
-        handle.close()
-        if len(search_results) == 100:
-            common_limit = min(100, count)
-            self.assertEqual(search_results[:common_limit],
-                             search_iter[:common_limit])
-        else:
-            self.assertEqual(len(search_results), count)
-            self.assertEqual(search_results, search_iter)
+                                   offset=start+1, limit=10)
+            search_results = handle.read().strip().split()
+            handle.close()
+            self.assertEqual(search_results, search_iter[start:][:10])
 
 
 class TogoConvert(unittest.TestCase):
