@@ -180,7 +180,8 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("pubmed", "16381885,19850725", field="authors")"""
         handle = TogoWS.entry("pubmed", "16381885,19850725", field="authors")
         #Little hack to remove blank lines...
-        names = handle.read().replace("\n\n", "\n").strip().split("\n")
+        #names = handle.read().replace("\n\n", "\n").strip().split("\n")
+        names = handle.read().strip().split("\n")
         handle.close()
         self.assertEqual(2, len(names))
         names1, names2 = names
@@ -389,7 +390,7 @@ class TogoSearch(unittest.TestCase):
 #        be larger than the default chunk size for iteration,
 #        but still not too big to download the full list.
 #        """
-#        self.check("pubmed", "porin",["21856844", "20956602"])
+#        self.check("pubmed", "porin", ["21856844", "20956602"])
 
 #    def test_pdb_search_porin(self):
 #        """Bio.TogoWS.search("pdb", "porin") etc
@@ -397,6 +398,16 @@ class TogoSearch(unittest.TestCase):
 #        Count was about 130 at time of writing.
 #        """
 #        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
+
+    def test_uniprot_search_lung_cancer(self):
+        """Bio.TogoWS.search("uniprot", "lung+cancer") etc
+
+        Count was 1327 at time of writing, this was choosen to
+        be larger than the default chunk size for iteration, 
+        but still not too big to download the full list.
+        """
+        self.check("uniprot", "lung+cancer",
+                   ["DLEC1_HUMAN", "Q5WPA9_PIG", "NCOA3_HUMAN"])
 
     def check(self, database, search_term, expected_matches):
         search_count = TogoWS.search_count(database, search_term)
@@ -406,17 +417,22 @@ class TogoSearch(unittest.TestCase):
         if search_count > 5000:
             print "%i results, skipping" % search_count
             return
+
+        #Iteration should find everything...
+        search_iter = list(TogoWS.search_iter(database, search_term))
+        self.assertEqual(search_count, len(search_iter))
+        for match in expected_matches:
+            self.assert_(match in search_iter,
+                         "Expected %s in results but not" % match)
+
+        #The default search output is limited to 100 terms
+        #at the time of writing.
         handle = TogoWS.search(database, search_term)
         search_results = handle.read().strip().split()
         handle.close()
-        search_iter = list(TogoWS.search_iter(database, search_term))
-        self.assertEqual(search_results, search_iter)
-        for match in expected_matches:
-            self.assert_(match in search_results,
-                         "Expected %s in results but not" % match)
-        #The default search output is limited to 100 terms
-        #at the time of writting.
-        if len(search_results) != 100:
+        if len(search_results) == 100:
+            self.assertEqual(search_results, search_iter[:100])
+        else:
             self.assertEqual(len(search_results), search_count)
             self.assertEqual(search_results, search_iter)
 
