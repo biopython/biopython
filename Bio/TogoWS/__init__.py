@@ -125,7 +125,8 @@ def search_count(db, query):
     query - search term (string)
 
     You could then use the count to download a large set of search results in
-    batches using the offset and limit options to Bio.TogoWS.search().
+    batches using the offset and limit options to Bio.TogoWS.search(). In
+    general however the Bio.TogoWS.search_iter() function is simpler to use.
     """
     global _search_db_names
     if _search_db_names is None:
@@ -142,29 +143,36 @@ def search_count(db, query):
     handle.close()
     return count
 
-def search_iter(db, query, batch=100):
+def search_iter(db, query, limit=None, batch=100):
     """TogoWS search iteratating over the results (generator function).
 
     db - database (string), see http://togows.dbcls.jp/search
     query - search term (string)
-    batch - number of search results to pull back each time talk to TogoWS.
+    limit - optional upper bound on number of search results
+    batch - number of search results to pull back each time talk to TogoWS
 
     You would use this function within a for loop, e.g.
 
-    for id in search_iter("pubmed", "lung+cancer+drug"):
-        print id #maybe fetch data with entry?
+    >>> for id in search_iter("pubmed", "lung+cancer+drug", limit=10):
+    ...     print id #maybe fetch data with entry?
+
+    Internally this first calls the Bio.TogoWS.search_count() and then
+    uses Bio.TogoWS.search() to get the results in batches.
     """
     count = search_count(db, query)
     if not count:
         raise StopIteration
     remain = count
+    if limit is not None:
+        remain = min(remain, limit)
     offset = 1 #They don't use zero based counting
     prev_ids = []
     while remain:
         batch = min(batch, remain)
+        #print "%r left, asking for %r" % (remain, batch)
         ids = search(db, query, offset, batch).read().strip().split()
         assert len(ids)==batch, "Got %i, expected %i" % (len(ids), batch)
-        #print "offset %i, %s ... %s" % (offset, ids[0], ids[1])
+        #print "offset %i, %s ... %s" % (offset, ids[0], ids[-1])
         if ids == prev_ids:
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
@@ -178,6 +186,10 @@ def search_iter(db, query, batch=100):
 
 def search(db, query, offset=None, limit=None, format=None):
     """TogoWS search (returns a handle).
+
+    This is a low level wrapper for the TogoWS search function, which
+    can return results in a several formats. In general, the search_iter
+    function is more suitable for end users.
 
     db - database (string), see http://togows.dbcls.jp/search/
     query - search term (string)
@@ -196,7 +208,7 @@ def search(db, query, offset=None, limit=None, format=None):
     For the current list, see http://togows.dbcls.jp/search/
 
     The NCBI provide the Entrez Search service (ESearch) which is similar,
-    available in Biopython as Bio.Entrez.esearch(...)
+    available in Biopython as the Bio.Entrez.esearch() function.
 
     See also the function Bio.TogoWS.search_count() which returns the number
     of matches found, and the Bio.TogoWS.search_iter() function which allows
