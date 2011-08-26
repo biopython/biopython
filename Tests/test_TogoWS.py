@@ -406,15 +406,15 @@ class TogoSearch(unittest.TestCase):
                           "pubmed", "lung+cancer", offset=1, limit="lots")
 
     def test_pubmed_search_togows(self):
-        """Bio.TogoWS.search("pubmed", "TogoWS") etc"""
+        """Bio.TogoWS.search_iter("pubmed", "TogoWS") etc"""
         self.check("pubmed", "TogoWS", ["20472643"])
 
     def test_pubmed_search_bioruby(self):
-        """Bio.TogoWS.search("pubmed", "BioRuby") etc"""
+        """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
         self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
 
 #    def test_pubmed_search_porin(self):
-#        """Bio.TogoWS.search("pubmed", "porin") etc
+#        """Bio.TogoWS.search_iter("pubmed", "porin") etc
 #
 #        Count was 2782 at time of writing, this was choosen to
 #        be larger than the default chunk size for iteration,
@@ -423,21 +423,21 @@ class TogoSearch(unittest.TestCase):
 #        self.check("pubmed", "porin", ["21856844", "20956602"])
 
 #    def test_pdb_search_porin(self):
-#        """Bio.TogoWS.search("pdb", "porin") etc
+#        """Bio.TogoWS.search_iter("pdb", "porin") etc
 #
 #        Count was about 130 at time of writing.
 #        """
 #        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_embl_search_porin(self):
-        """Bio.TogoWS.search("embl", "human porin") etc
+        """Bio.TogoWS.search_iter("embl", "human porin", limit=300) etc
 
         Count was about 517 at time of writing.
         """
         self.check("embl", "human porin", limit=300)
 
-    def test_uniprot_search_lung_cancer_limit(self):
-        """Bio.TogoWS.search("uniprot", "lung+cancer", limit=150) etc
+    def test_uniprot_search_lung_cancer(self):
+        """Bio.TogoWS.search_iter("uniprot", "lung+cancer", limit=150) etc
 
         Search count was 1327 at time of writing, a bit large to
         download all the results in a unit test. Want to use a limit
@@ -467,18 +467,6 @@ class TogoSearch(unittest.TestCase):
         for match in expected_matches:
             self.assert_(match in search_iter,
                          "Expected %s in results but not" % match)
-
-        #Now let's try some sub-result access.
-        if count > 20:
-            starts = range(0, count - 10, count // 5)
-        else:
-            starts = [] #skip
-        for start in starts:
-            handle = TogoWS.search(database, search_term,
-                                   offset=start+1, limit=10)
-            search_results = handle.read().strip().split()
-            handle.close()
-            self.assertEqual(search_results, search_iter[start:][:10])
 
 
 class TogoConvert(unittest.TestCase):
