@@ -24,6 +24,11 @@ from Bio import Medline
 #####################################################################
 
 class TogoFields(unittest.TestCase):
+    def test_invalid_database(self):
+        """Check asking for fields of invalid database fails"""
+        self.assertRaises(IOError, TogoWS._get_fields,
+                          "http://togows.dbcls.jp/entry/invalid?fields")
+
     def test_databases(self):
         """Check supported databases"""
         dbs = set(TogoWS._get_entry_dbs())

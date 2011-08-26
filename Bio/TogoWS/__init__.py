@@ -326,31 +326,3 @@ def _open(url, post=None):
 _open.previous = 0
 
 
-if __name__ == "__main__":
-
-    try:
-        _get_fields("http://togows.dbcls.jp/entry/invalid?fields")
-        assert False, "Should fail"
-    except IOError, e:
-        assert "Error: Invalid database." in str(e)
-        pass
-
-    """
-    assert search_count("uniprot", "lung+cancer") > 1000
-    #print search("uniprot", "lung+cancer").read().strip().split()
-
-    from Bio import SeqIO
-    print SeqIO.read(entry("ddbj", "X52960", "fasta"), "fasta")
-    print SeqIO.read(entry("protein", "16130152", "fasta"), "fasta")
-    print SeqIO.read(entry("protein", "16130152"), "gb")
-    """
-
-    #Current count is 1276, so compare all in one to batched:
-    #assert list(search_iter("uniprot", "lung+cancer",batch=50)) \
-    #    == list(search_iter("uniprot", "lung+cancer",batch=100))
-    all_in_one = search("uniprot", "lung+cancer").read().strip().split("\n")
-    if len(all_in_one) == 100:
-        print "Oh, search was capped at 100."
-    else:
-        batched = list(search_iter("uniprot", "lung+cancer"))
-        assert all_in_one == batched, "All: %s\nBatched: %s" % (all_in_one, batched)
