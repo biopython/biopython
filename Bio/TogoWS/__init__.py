@@ -176,12 +176,12 @@ def search_iter(db, query, batch=100):
         remain -= batch
         prev_ids = ids
 
-def search(db, query, offset=None, count=None, format=None):
+def search(db, query, offset=None, limit=None, format=None):
     """TogoWS search (returns a handle).
 
     db - database (string), see http://togows.dbcls.jp/search/
     query - search term (string)
-    offset, count - optional integers specifying which result to start from
+    offset, limit - optional integers specifying which result to start from
             (1 based) and the number of results to return.
     format - return data file format (string), e.g. "json", "ttl" (RDF)
              By default plain text is returned, one result per line.
@@ -213,14 +213,22 @@ def search(db, query, offset=None, count=None, format=None):
                       "See http://togows.dbcls.jp/search/ for options." % db)
     #TODO - Encode spaces etc
     url="http://togows.dbcls.jp/search/%s/%s" % (db, query)
-    if offset is not None and count is not None:
-        if offset<=0:
-            raise ValueError("Offset should be at least one")
-        if count<=0:
-            raise ValueError("Count should be at least one")
-        url += "/%i,%i" % (offset, count)
-    elif offset is not None or count is not None:
-        raise ValueError("Expect BOTH offset AND count to be provided (or neither)")
+    if offset is not None and limit is not None:
+        try:
+            offset = int(offset)
+        except:
+            raise ValueError("Offset should be an integer (at least one), not %r" % offset)
+        try:
+            limit = int(limit)
+        except:
+            raise ValueError("Limit should be an integer (at least one), not %r" % limit)
+        if offset <= 0:
+            raise ValueError("Offset should be at least one, not %i" % offset)
+        if limit <= 0:
+            raise ValueError("Count should be at least one, not %i" % limit)
+        url += "/%i,%i" % (offset, limit)
+    elif offset is not None or limit is not None:
+        raise ValueError("Expect BOTH offset AND limit to be provided (or neither)")
     if format:
         url += "." + format
     #print url

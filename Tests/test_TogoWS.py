@@ -375,6 +375,36 @@ class TogoEntry(unittest.TestCase):
 class TogoSearch(unittest.TestCase):
     """Search tests."""
 
+    def test_bad_args_just_limit(self):
+        """Reject Bio.TogoWS.search(...) with just limit"""
+        self.assertRaises(ValueError, TogoWS.search,
+                          "pubmed", "lung+cancer", limit=10)
+
+    def test_bad_args_just_offset(self):
+        """Reject Bio.TogoWS.search(...) with just offset"""
+        self.assertRaises(ValueError, TogoWS.search,
+                          "pubmed", "lung+cancer", offset=10)
+
+    def test_bad_args_zero_limit(self):
+        """Reject Bio.TogoWS.search(...) with zero limit"""
+        self.assertRaises(ValueError, TogoWS.search,
+                          "pubmed", "lung+cancer", offset=1, limit=0)
+
+    def test_bad_args_zero_offset(self):
+        """Reject Bio.TogoWS.search(...) with zero offset"""
+        self.assertRaises(ValueError, TogoWS.search,
+                          "pubmed", "lung+cancer", offset=0, limit=10)
+
+    def test_bad_args_non_int_offset(self):
+        """Reject Bio.TogoWS.search(...) with non-integer offset"""
+        self.assertRaises(ValueError, TogoWS.search,
+                          "pubmed", "lung+cancer", offset="test", limit=10)
+
+    def test_bad_args_non_int_limit(self):
+        """Reject Bio.TogoWS.search(...) with non-integer limit"""
+        self.assertRaises(ValueError, TogoWS.search,
+                          "pubmed", "lung+cancer", offset=1, limit="lots")
+
     def test_pubmed_search_togows(self):
         """Bio.TogoWS.search("pubmed", "TogoWS") etc"""
         self.check("pubmed", "TogoWS", ["20472643"])
