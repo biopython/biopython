@@ -186,15 +186,17 @@ def search(db, query, offset=None, count=None, format=None):
     format - return data file format (string), e.g. "json", "ttl" (RDF)
              By default plain text is returned, one result per line.
 
-    At the time of writing, TogoWS supports a long list of databases, including
-    many from the NCBI (e.g. "ncbi-pubmed" or "pubmed", "ncbi-genbank" or
-    "genbank", "ncbi-taxonomy"), EBI (e.g. "ebi-ebml" or "embl", "ebi-uniprot"
-    or "uniprot, "ebi-go"), and KEGG (e.g. "kegg-compound" or "compound").
+    At the time of writing, TogoWS applies a default count limit of 100
+    search results.
 
+    TogoWS supports a long list of databases, including many from the NCBI
+    (e.g. "ncbi-pubmed" or "pubmed", "ncbi-genbank" or "genbank", and
+    "ncbi-taxonomy"), EBI (e.g. "ebi-ebml" or "embl", "ebi-uniprot" or
+    "uniprot, "ebi-go"), and KEGG (e.g. "kegg-compound" or "compound").
     For the current list, see http://togows.dbcls.jp/search/
 
-    The name of this function (search) mimics that of the related NCBI
-    Entrez service ESearch, available in Biopython as Bio.Entrez.esearch(...)
+    The NCBI provide the Entrez Search service (ESearch) which is similar,
+    available in Biopython as Bio.Entrez.esearch(...)
 
     See also the function Bio.TogoWS.search_count() which returns the number
     of matches found, and the Bio.TogoWS.search_iter() function which allows
