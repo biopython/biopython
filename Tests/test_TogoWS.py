@@ -429,6 +429,14 @@ class TogoSearch(unittest.TestCase):
 #        """
 #        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
+    def test_embl_search_porin(self):
+        """Bio.TogoWS.search("embl", "human porin") etc
+
+        Count was about 517 at time of writing.
+        """
+        self.check("embl", "human porin",
+                   ["AF036160", "L08666", "T09295", "AA183988"])
+
     def test_uniprot_search_lung_cancer(self):
         """Bio.TogoWS.search("uniprot", "lung+cancer") etc
 
