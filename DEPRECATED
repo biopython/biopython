@@ -471,7 +471,7 @@ Bio.UniGene
 The classes UnigeneSequenceRecord, UnigeneProtsimRecord, UnigeneSTSRecord,
 UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
-and removed in Release 1.58. Their functionality is now available through a
+and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
 
 Bio.SubsMat
