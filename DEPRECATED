@@ -451,8 +451,8 @@ respectively.
 Bio.Compass
 ===========
 The RecordParser and Iterator classes were declared obsolete in Release 1.54,
-and deprecated in Release 1.55 final. Their functionality is now available
-through a read() and a parse() function, respectively.
+deprecated in Release 1.55, removed in Release 1.59. Their functionality is
+now available through a read() and a parse() function, respectively.
 
 Bio.Affy.CelFile
 ================
