@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 18 August 2011 (Biopython 1.58+)}
+\date{Last Update -- 29 August 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -1960,7 +1960,7 @@ dbxrefs=['Project:10638'])
 >>> len(record)
 9609
 >>> len(record.features)
-29
+41
 \end{verbatim}
 
 
@@ -1973,7 +1973,7 @@ entries $11$ and $12$ in the \texttt{features} list:
 
 %cont-doctest
 \begin{verbatim}
->>> print record.features[11]
+>>> print record.features[20]
 type: gene
 location: [4342:4780]
 strand: 1
@@ -1985,7 +1985,7 @@ qualifiers:
 \end{verbatim}
 %This one is truncated so can't use for doctest
 \begin{verbatim}
->>> print record.features[12]
+>>> print record.features[21]
 type: CDS
 location: [4342:4780]
 strand: 1
@@ -2039,7 +2039,7 @@ qualifiers:
 <BLANKLINE>
 \end{verbatim}
 \begin{verbatim}
->>> print sub_record.features[1]
+>>> print sub_record.features[20]
 type: CDS
 location: [42:480]
 ref: None:None
@@ -2191,9 +2191,9 @@ dbxrefs=['Project:10638'])
 >>> len(record)
 9609
 >>> len(record.features)
-29
+41
 >>> record.dbxrefs
-['Project:10638']
+['Project:58037']
 \end{verbatim}
 %TODO - doctest wrapping
 \begin{verbatim}
@@ -2228,7 +2228,7 @@ and one of the features (the source feature) have been lost:
 %cont-doctest
 \begin{verbatim}
 >>> len(shifted.features)
-28
+40
 >>> shifted.dbxrefs
 []
 >>> shifted.annotations.keys()

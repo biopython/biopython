@@ -985,6 +985,13 @@ class NC_005816(NC_000932):
             return
         gb_record = SeqIO.read(open(self.gb_filename),"genbank")
         embl_record = SeqIO.read(open(self.embl_filename),"embl")
+        if len(embl_record.features) < len(gb_record.features):
+            #Used to match, but I've update the GenBank files
+            #which now has lots of misc_feature entries not in EMBL
+            embl_record.features = [f for f in embl_record.features \
+                                    if f.type != "misc_feature"]
+            gb_record.features = [f for f in gb_record.features \
+                                  if f.type != "misc_feature"]
         return compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Translations(self):
@@ -1013,6 +1020,12 @@ class NC_005816(NC_000932):
         if self.emblname is None:
             return
         embl_record = SeqIO.read(open(self.embl_filename),"embl")
+        if len(embl_record.features) < len(gb_record.features):
+            #Hack since now out of sync for NC_005816
+            embl_record.features = [f for f in embl_record.features \
+                                    if f.type != "misc_feature"]
+            gb_record.features = [f for f in gb_record.features \
+                                  if f.type != "misc_feature"]
         compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
     def test_Features(self):

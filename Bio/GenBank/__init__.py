@@ -645,9 +645,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         We'll have to see some real examples to be sure, but based on the
         above example we can expect one reference per line.
+
+        Note that at some point the NCBI have included an extra space, e.g.
+
+        DBLINK      Project: 28471
         """
         #During the transition period with both PROJECT and DBLINK lines,
         #we don't want to add the same cross reference twice.
+        while ": " in content:
+            content = content.replace(": ", ":")
         if content.strip() not in self.data.dbxrefs:
             self.data.dbxrefs.append(content.strip())
 
