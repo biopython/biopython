@@ -457,8 +457,8 @@ now available through a read() and a parse() function, respectively.
 Bio.Affy.CelFile
 ================
 The CelScanner, CelConsumer, CelRecord, and CelParser were declared obsolete
-in Release 1.54. Their functionality is now available through a read()
-function. These classes were deprecated in Release 1.55 final.
+in Release 1.54, deprecated in Release 1.55 and removed in Release 1.59.
+Their functionality is now available through a read() function.
 
 Bio.PopGen.FDist
 ================
