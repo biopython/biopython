@@ -61,7 +61,7 @@ Bio.Blast.Applications
 ======================
 NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
 BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
-1.53, having been replace with wrappers for the new NCBI BLAST+ tools (e.g.
+1.53, having been replaced with wrappers for the new NCBI BLAST+ tools (e.g.
 NcbiblastpCommandline and NcbipsiblastCommandline).
 
 Bio.Clustalw
