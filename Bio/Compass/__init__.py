@@ -22,7 +22,6 @@ Classes:
 Record        One result of a COMPASS file
 """
 import re
-from Bio.ParserSupport import is_blank_line
 
 def read(handle):
     record = None
@@ -44,7 +43,7 @@ def read(handle):
         else:
             raise ValueError("Unexpected end of stream.")
     for line in handle:
-        if is_blank_line(line):
+        if not line.strip(): # skip empty lines
             continue
         __read_query_alignment(record, line)
         try:
