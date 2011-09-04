@@ -1,4 +1,4 @@
-# Copyright 2009-2010 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -170,8 +170,11 @@ def make_join_feature(f_list, ftype="misc_feature"):
         f.type=ftype
         f.location_operator="join"
     jf = SeqFeature(FeatureLocation(f_list[0].location.start,
-                                    f_list[-1].location.end),
-                    type=ftype, strand=strand, location_operator="join")
+                                    f_list[-1].location.end,
+                                    strand),
+                    type=ftype, location_operator="join")
+    assert jf.location.strand == strand
+    assert jf.strand == strand
     jf.sub_features = f_list
     return jf
 
@@ -270,6 +273,8 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         """Feature on RNA (simple, default strand)"""
         s = Seq("GAUCRYWSMKHBVDN", generic_rna)
         f = SeqFeature(FeatureLocation(5,10))
+        self.assertEqual(f.strand, None)
+        self.assertEqual(f.location.strand, None)
         self.check(s, f, "YWSMK", "6..10")
 
     def test_simple_dna(self):
@@ -312,12 +317,16 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         """Feature on DNA (simple, strand +1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=1)
+        self.assertEqual(f.strand, +1)
+        self.assertEqual(f.location.strand, +1)
         self.check(s, f, "YWSMK", "6..10")
         
     def test_simple_dna_strand_minus(self):
         """Feature on DNA (simple, strand -1)"""
         s = Seq("GATCRYWSMKHBVDN", generic_dna)
         f = SeqFeature(FeatureLocation(5,10), strand=-1)
+        self.assertEqual(f.strand, -1)
+        self.assertEqual(f.location.strand, -1)
         self.check(s, f, "MKSWR", "complement(6..10)")
 
     def test_simple_dna_join(self):

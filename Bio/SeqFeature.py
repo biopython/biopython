@@ -1,6 +1,6 @@
 # Copyright 2000-2003 Jeff Chang.
 # Copyright 2001-2008 Brad Chapman.
-# Copyright 2005-2010 by Peter Cock.
+# Copyright 2005-2011 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -62,7 +62,8 @@ class SeqFeature(object):
     instance) the feature deals with. 1 indicates the plus strand, -1 
     indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
     while the default of None indicates that strand doesn't apply (dot in GFF3,
-    e.g. features on proteins)
+    e.g. features on proteins). Note this is shortcut for accessing the
+    strand property of the feature's location.
     o id - A string identifier for the feature.
     o ref - A reference to another sequence. This could be an accession
     number for some different sequence.
@@ -99,13 +100,26 @@ class SeqFeature(object):
         e.g. With no strand, on the forward strand, and on the reverse strand:
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f1 = SeqFeature(FeatureLocation(5,10), type="domain")
-        >>> f2 = SeqFeature(FeatureLocation(7,110), strand=1, type="CDS")
-        >>> f3 = SeqFeature(FeatureLocation(9,108), strand=-1, type="CDS")
+        >>> f1 = SeqFeature(FeatureLocation(5, 10), type="domain")
+        >>> f1.strand == f1.location.strand == None
+        True
+        >>> f2 = SeqFeature(FeatureLocation(7, 110, strand=1), type="CDS")
+        >>> f2.strand == f2.location.strand == +1
+        True
+        >>> f3 = SeqFeature(FeatureLocation(9, 108, strand=-1), type="CDS")
+        >>> f3.strand == f3.location.strand == -1
+        True
 
         An invalid strand will trigger an exception:
 
-        >>> f4 = SeqFeature(FeatureLocation(50,60), strand=2)
+        >>> f4 = SeqFeature(FeatureLocation(50, 60), strand=2)
+        Traceback (most recent call last):
+           ...
+        ValueError: Strand should be +1, -1, 0 or None, not 2
+
+        Similarly if set via the FeatureLocation directly:
+
+        >>> loc4 = FeatureLocation(50, 60, strand=2)
         Traceback (most recent call last):
            ...
         ValueError: Strand should be +1, -1, 0 or None, not 2
@@ -114,16 +128,14 @@ class SeqFeature(object):
         as shorthand for the ExactPosition object. For non-exact locations, the
         FeatureLocation must be specified via the appropriate position objects.
         """
-        if strand not in [-1, 0, 1, None] :
-            raise ValueError("Strand should be +1, -1, 0 or None, not %s" \
-                             % repr(strand))
         if location is not None and not isinstance(location, FeatureLocation):
             raise TypeError("FeatureLocation (or None) required for the location")
         self.location = location
 
         self.type = type
         self.location_operator = location_operator
-        self.strand = strand
+        if strand is not None:
+            self.strand = strand
         self.id = id
         if qualifiers is None:
             qualifiers = {}
@@ -134,6 +146,23 @@ class SeqFeature(object):
         self.ref = ref 
         self.ref_db = ref_db
 
+    def _get_strand(self):
+        return self.location.strand
+    def _set_strand(self, value):
+        try:
+            self.location.strand = value
+        except AttributeError:
+            if self.location is None:
+                if value is not None:
+                    raise ValueError("Can't set strand without a location.")
+            else:
+                raise
+    strand = property(fget = _get_strand, fset = _set_strand,
+                      doc = """Feature's strand
+
+                            This is a shortcut for feature.location.strand
+                            """)
+
     def __repr__(self):
         """A string representation of the record for debugging."""
         answer = "%s(%s" % (self.__class__.__name__, repr(self.location))
@@ -141,8 +170,6 @@ class SeqFeature(object):
             answer += ", type=%s" % repr(self.type)
         if self.location_operator:
             answer += ", location_operator=%s" % repr(self.location_operator)
-        if self.strand is not None:
-            answer += ", strand=%s" % repr(self.strand)
         if self.id and self.id != "<unknown id>":
             answer += ", id=%s" % repr(self.id)
         if self.ref:
@@ -196,17 +223,9 @@ class SeqFeature(object):
 
         The annotation qaulifiers are copied.
         """
-        if self.strand == +1 :
-            new_strand = -1
-        elif self.strand == -1 :
-            new_strand = +1
-        else:
-            #When create new SeqFeature it will check this is 0 or None
-            new_strand = self.strand
         return SeqFeature(location = self.location._flip(length),
             type = self.type,
             location_operator = self.location_operator,
-            strand = new_strand,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
             sub_features = [f._flip(length) for f in self.sub_features[::-1]],
@@ -338,13 +357,8 @@ class SeqFeature(object):
                 for f in self.sub_features:
                     for i in f.location:
                         yield i
-        elif self.strand == -1:
-            for i in range(self.location.nofuzzy_end-1,
-                           self.location.nofuzzy_start-1, -1):
-                yield i
         else:
-            for i in range(self.location.nofuzzy_start,
-                           self.location.nofuzzy_end):
+            for i in self.location:
                 yield i
 
     def __contains__(self, value):
@@ -470,7 +484,7 @@ class FeatureLocation(object):
     thus a GenBank entry of 123..150 (one based counting) becomes a location
     of [122:150] (zero based counting).
     """
-    def __init__(self, start, end):
+    def __init__(self, start, end, strand=None):
         """Specify the start and end of a sequence feature.
 
         start and end arguments specify the values where the feature begins
@@ -490,12 +504,23 @@ class FeatureLocation(object):
         >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
         >>> loc = FeatureLocation(ExactPosition(5),ExactPosition(10))
 
+        Or with strand:
+
+        >>> loc = FeatureLocation(5, 10, strand=+1)
+        >>> print loc.strand
+        1
+
         Other fuzzy positions are used similarly,
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
         >>> loc2 = FeatureLocation(BeforePosition(5),AfterPosition(10))
 
+        For nucleotide features you will also want to specify the strand,
+        use 1 for the forward (plus) strand, -1 for the reverse (negative)
+        strand, 0 for stranded but strand unknown (? in GFF3), or None for
+        when the strand does not apply (dot in GFF3), e.g. features on
+        proteins.
         """
         if isinstance(start, AbstractPosition):
             self._start = start
@@ -510,6 +535,17 @@ class FeatureLocation(object):
             self._end = ExactPosition(end)
         else:
             raise TypeError(end)
+        self.strand = strand
+
+    def _get_strand(self):
+        return self._strand
+    def _set_strand(self, value):
+        if value not in [+1, -1, 0, None]:
+            raise ValueError("Strand should be +1, -1, 0 or None, not %r" \
+                             % value)
+        self._strand = value
+    strand = property(fget = _get_strand, fset = _set_strand,
+                      doc = "Strand of the location (+1, -1, 0 or None).")
 
     def __str__(self):
         """Returns a representation of the location (with python counting).
@@ -522,8 +558,12 @@ class FeatureLocation(object):
 
     def __repr__(self):
         """A string representation of the location for debugging."""
-        return "%s(%s,%s)" \
-               % (self.__class__.__name__, repr(self.start), repr(self.end))
+        if self.strand is None:
+            return "%s(%r, %r)" \
+                   % (self.__class__.__name__, self.start, self.end)
+        else:
+            return "%s(%r, %r, strand=%r)" \
+                   % (self.__class__.__name__, self.start, self.end, self.strand)
 
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
@@ -591,20 +631,39 @@ class FeatureLocation(object):
         [5, 6, 7, 8, 9]
         >>> [i for i in range(15) if i in loc]
         [5, 6, 7, 8, 9]
+
+        Note this is strand aware:
+
+        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10), strand = -1)
+        >>> list(loc)
+        [9, 8, 7, 6, 5]
         """
-        for i in range(self._start, self._end):
-            yield i
+        if self.strand == -1:
+            for i in range(self._end - 1, self._start - 1, -1):
+                yield i
+        else:
+            for i in range(self._start, self._end):
+                yield i
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
         return FeatureLocation(start = self._start._shift(offset),
-                               end = self._end._shift(offset))
+                               end = self._end._shift(offset),
+                               strand = self.strand)
 
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE)."""
         #Note this will flip the start and end too!
+        if self.strand == +1:
+            flip_strand = -1
+        elif self.strand == -1:
+            flip_strand = +1
+        else:
+            #0 or None
+            flip_strand = self.strand
         return FeatureLocation(start = self._end._flip(length),
-                               end = self._start._flip(length))
+                               end = self._start._flip(length),
+                               strand = flip_strand)
 
     @property
     def start(self):

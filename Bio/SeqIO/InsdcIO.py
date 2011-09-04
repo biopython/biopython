@@ -1,4 +1,4 @@
-# Copyright 2007-2010 by Peter Cock.  All rights reserved.
+# Copyright 2007-2011 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -214,7 +214,9 @@ def _insdc_feature_location_string(feature, rec_length):
     # As noted above, treat reverse complement strand features carefully:
     if feature.strand == -1:
         for f in feature.sub_features:
-            assert f.strand == -1
+            if f.strand != -1:
+                raise ValueError("Inconsistent strands: %r for parent, %r for child" \
+                                 % (feature.strand, f.strand))
         return "complement(%s(%s))" \
                % (feature.location_operator,
                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f, rec_length) \
