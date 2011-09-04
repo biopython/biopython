@@ -1126,7 +1126,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
-            elif self._seq_type in ["circular", "linear"]:
+            elif self._seq_type in ["circular", "linear", "unspecified"]:
                 pass
             # we have a bug if we get here
             else:

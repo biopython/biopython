@@ -153,6 +153,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
     ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
+    ("embl",   False, 'EMBL/location_wrap.embl', 1), #wrapped locations and unspecified type
     ("embl",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("imgt",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("stockholm", True,  'Stockholm/simple.sth', 2),
@@ -337,8 +338,9 @@ def check_simple_write_read(records, indent=" "):
                 print "Failed: Probably len() of None"
             else:
                 print indent+"Failed: %s" % str(e)
-            assert format != t_format, \
-                   "Should be able to re-write in the original format!"
+            if records[0].seq.alphabet.letters is not None:
+                assert format != t_format, \
+                       "Should be able to re-write in the original format!"
             #Carry on to the next format:
             continue
 
@@ -545,9 +547,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     # Check alphabets
     for record in records:
         base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-        assert isinstance(base_alpha, Alphabet.SingleLetterAlphabet)
-        if t_format in no_alpha_formats:
-            assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
+        if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
+            if t_format in no_alpha_formats:
+                assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
+        else:
+            base_alpha = None
     if base_alpha is None:
         good = []
         bad =[]

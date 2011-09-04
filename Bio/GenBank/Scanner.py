@@ -255,8 +255,11 @@ class InsdcScanner(object):
 
             qualifiers=[]
 
-            for line in iterator:
-                if line[0]=="/":
+            for i, line in enumerate(iterator):
+                # check for extra wrapping of the location closing parentheses
+                if i == 0 and line.startswith(")"):
+                    feature_location += line.strip()
+                elif line[0]=="/":
                     #New qualifier
                     i = line.find("=")
                     key = line[1:i] #does not work if i==-1

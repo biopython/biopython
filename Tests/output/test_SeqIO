@@ -2289,6 +2289,37 @@ Testing reading embl format file EMBL/Human_contigs.embl
  Checking can write/read as 'imgt' format
  Checking can write/read as 'qual' format
  Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=AL954800.2).
+Testing reading embl format file EMBL/location_wrap.embl
+ ID = 'Test', Name='Tester',
+ Seq='CGACTTTCCACTGCCCTCTACGCCCGCGCAATGGGTCGTA...CTACGTT', length=120
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'embl' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'fastq' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+ Checking can write/read as 'fastq-illumina' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+ Checking can write/read as 'fastq-solexa' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+ Checking can write/read as 'genbank' format
+ Failed: Need a Nucleotide or Protein alphabet
+ Checking can write/read as 'imgt' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'phd' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+ Checking can write/read as 'qual' format
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=Test).
+ Checking can write/read as 'seqxml' format
+ Failed: Need a DNA, RNA or Protein alphabet
+ Checking can write/read as 'sff' format
+ Failed: Missing SFF flow information
+ Checking can write/read as 'tab' format
+ Checking can write/read as 'nexus' format
+ Failed: Need a DNA, RNA or Protein alphabet
 Testing reading embl format file EMBL/A04195.imgt
  ID and Name='A04195',
  Seq='GATTGATCAATGCAGGCTGTTATGACTCAGGAATCTGCAC...CACATCA', length=51
