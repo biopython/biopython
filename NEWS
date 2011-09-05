@@ -15,6 +15,13 @@ The latest news is at the top of this file.
 Please note that this release will *not* work on Python 2.4 (while the
 recent releases have worked despite us not officially supporting this).
 
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Brad Chapman
+Michiel de Hoon
+Peter Cock
+
 ===================================================================
 
 18 August 2011: Biopython 1.58
