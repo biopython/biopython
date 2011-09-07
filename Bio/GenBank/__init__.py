@@ -47,7 +47,6 @@ import re
 
 # other Biopython stuff
 from Bio import SeqFeature
-from Bio.ParserSupport import AbstractConsumer
 from Bio import Entrez
 
 # other Bio.GenBank stuff
@@ -389,7 +388,7 @@ class RecordParser(object):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class _BaseGenBankConsumer(AbstractConsumer):
+class _BaseGenBankConsumer(object):
     """Abstract GenBank consumer providing useful general functions.
 
     This just helps to eliminate some duplication in things that most
@@ -403,6 +402,12 @@ class _BaseGenBankConsumer(AbstractConsumer):
 
     def __init__(self):
         pass
+
+    def _unhandled(self, data):
+        pass
+
+    def __getattr__(self, attr):
+        return self._unhandled
 
     def _split_keywords(self, keyword_string):
         """Split a string of keywords into a nice clean list.
