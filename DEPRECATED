@@ -473,6 +473,7 @@ UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
 and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
+The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59.
 
 Bio.SubsMat
 ===========
@@ -484,3 +485,7 @@ Bio.Align
 The methods get_column and add_sequence of the MultipleSeqAlignment class were
 deprecated in Release 1.57. The Alignment class in Bio.Align.Generic and its
 method get_seq_by_num were deprecated in Release 1.57.
+
+Bio.ParserSupport
+=================
+Bio.ParserSupport was declared obsolete in Release 1.59.
