@@ -117,7 +117,7 @@ Bio.File
 ========
 Bio.File.SGMLHandle was declared obsolete in Release 1.50, deprecated in
 Release 1.52, and removed in Release 1.56. Bio.File.SGMLStripper was deprecated
-in Release 1.57.
+in Release 1.57. Bio.File.StringHandle was deprecated in Release 1.59.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
@@ -489,3 +489,4 @@ method get_seq_by_num were deprecated in Release 1.57.
 Bio.ParserSupport
 =================
 Bio.ParserSupport was declared obsolete in Release 1.59.
+Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59.

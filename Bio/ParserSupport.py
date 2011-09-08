@@ -130,6 +130,8 @@ class SGMLStrippingConsumer(object):
 
     """
     def __init__(self, consumer):
+        import Bio
+        warnings.warn("SGMLStrippingConsumer is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
         if type(consumer) is not InstanceType:
             raise ValueError("consumer should be an instance")
         self._consumer = consumer
