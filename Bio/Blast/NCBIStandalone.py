@@ -1656,7 +1656,7 @@ class Iterator(object):
             
         data = ''.join(lines)
         if self._parser is not None:
-            return self._parser.parse(File.StringHandle(data))
+            return self._parser.parse(StringIO.StringIO(data))
         return data
 
     def __iter__(self):
@@ -2162,7 +2162,7 @@ class BlastErrorParser(AbstractParser):
         results = handle.read()
 
         try:
-            self._scanner.feed(File.StringHandle(results), self._consumer)
+            self._scanner.feed(StringIO.StringIO(results), self._consumer)
         except ValueError, msg:
             # if we have a bad_report_file, save the info to it first
             if self._bad_report_handle:
@@ -2171,7 +2171,7 @@ class BlastErrorParser(AbstractParser):
 
             # now we want to try and diagnose the error
             self._diagnose_error(
-                File.StringHandle(results), self._consumer.data)
+                StringIO.StringIO(results), self._consumer.data)
 
             # if we got here we can't figure out the problem
             # so we should pass along the syntax error we got

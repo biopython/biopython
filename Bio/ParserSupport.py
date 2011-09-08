@@ -54,7 +54,7 @@ class AbstractParser(object):
         raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
-        return self.parse(File.StringHandle(string))
+        return self.parse(StringIO.StringIO(string))
 
     def parse_file(self, filename):
         h = open(filename)
