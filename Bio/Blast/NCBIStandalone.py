@@ -54,6 +54,7 @@ warnings.warn("The plain text parser in this module still works at the time of w
 
 import os
 import re
+import StringIO
 
 from Bio import File
 from Bio.ParserSupport import *
