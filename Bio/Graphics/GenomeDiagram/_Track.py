@@ -377,16 +377,13 @@ class Track(object):
 if __name__ == '__main__':
 
     # test code
-    from Bio import GenBank
+    from Bio import SeqIO
     from Bio.SeqFeature import SeqFeature
     from _FeatureSet import FeatureSet
     from _GraphSet import GraphSet
     from random import normalvariate
     
-    parser = GenBank.FeatureParser()
-    fhandle = open('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'r')
-    genbank_entry = parser.parse(fhandle)
-    fhandle.close()
+    genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
     gdfs1 = FeatureSet(0, 'Nanoarchaeum equitans CDS - CDS')
     gdfs2 = FeatureSet(1, 'Nanoarchaeum equitans CDS - gene')
@@ -413,5 +410,3 @@ if __name__ == '__main__':
         print set
 
     print gdt.get_element_limits()
-    
-
