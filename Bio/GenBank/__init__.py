@@ -17,7 +17,19 @@ tutorial for details).
 Currently the ONLY reason to use Bio.GenBank directly is for the RecordParser
 which turns a GenBank file into GenBank-specific Record objects.  This is a
 much closer representation to the raw file contents that the SeqRecord
-alternative from the FeatureParser (used in Bio.SeqIO).
+alternative from the FeatureParser (used in Bio.SeqIO), and is particularly
+useful for GenBank whole genome shotgun (WGS) master records which use a
+variation of the GenBank flat file format but are not actually sequences.
+
+To use this parser there are two helper functions:
+
+read                  Parse a handle containing a single GenBank record
+                      as Bio.GenBank specific Record objects.
+parse                 Iterate over a handle containing multiple GenBank
+                      records as Bio.GenBank specific Record objects.
+
+The following internal classes are not intended for direct use and may
+be deprecated in a future release.
 
 Classes:
 Iterator              Iterate through a file of GenBank entries
@@ -31,16 +43,6 @@ ParserFailureError    Exception indicating a failure in the parser (ie.
 LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
-
-17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
-These are GenBank files that summarize the content of a project, and provide lists of
-scaffold and contig files in the project. These will be in annotations['wgs'] and
-annotations['wgs_scafld']. These GenBank files do not have sequences. See
-http://groups.google.com/group/bionet.molbio.genbank/browse_thread/thread/51fb88bf39e7dc36
-
-http://is.gd/nNgk
-for more details of this format, and an example.
-Added by Ying Huang & Iddo Friedberg
 """
 import cStringIO
 import re
@@ -292,7 +294,11 @@ def _split_compound_loc(compound_loc):
             yield part
 
 class Iterator(object):
-    """Iterator interface to move over a file of GenBank entries one at a time.
+    """Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).
+
+    This class is likely to be deprecated in a future release of Biopython.
+    Please use Bio.SeqIO.parse(..., format="gb") or Bio.GenBank.parse(...)
+    for SeqRecord and GenBank specific Record objects respectively instead.
     """
     def __init__(self, handle, parser = None):
         """Initialize the iterator.
@@ -337,7 +343,12 @@ class LocationParserError(Exception):
     pass
                                                           
 class FeatureParser(object):
-    """Parse GenBank files into Seq + Feature objects.
+    """Parse GenBank files into Seq + Feature objects (OBSOLETE).
+
+    Direct use of this class is discouraged, and may be deprecated in
+    a future release of Biopython.
+
+    Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
     def __init__(self, debug_level = 0, use_fuzziness = 1, 
                  feature_cleaner = FeatureValueCleaner()):
@@ -368,7 +379,13 @@ class FeatureParser(object):
         return self._consumer.data
 
 class RecordParser(object):
-    """Parse GenBank files into Record objects
+    """Parse GenBank files into Record objects (OBSOLETE).
+
+    Direct use of this class is discouraged, and may be deprecated in
+    a future release of Biopython.
+
+    Please use the Bio.GenBank.parse(...) or Bio.GenBank.read(...) functions
+    instead.
     """
     def __init__(self, debug_level = 0):
         """Initialize the parser.
@@ -385,11 +402,12 @@ class RecordParser(object):
         """Parse the specified handle into a GenBank record.
         """
         self._consumer = _RecordConsumer()
+
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
 class _BaseGenBankConsumer(object):
-    """Abstract GenBank consumer providing useful general functions.
+    """Abstract GenBank consumer providing useful general functions (PRIVATE).
 
     This just helps to eliminate some duplication in things that most
     GenBank consumers want to do.
@@ -507,7 +525,7 @@ class _BaseGenBankConsumer(object):
         return new_start, new_end
 
 class _FeatureConsumer(_BaseGenBankConsumer):
-    """Create a SeqRecord object with Features to return.
+    """Create a SeqRecord object with Features to return (PRIVATE).
 
     Attributes:
     o use_fuzziness - specify whether or not to parse with fuzziness in
@@ -1144,7 +1162,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
-    """Create a GenBank Record object from scanner generated information.
+    """Create a GenBank Record object from scanner generated information (PRIVATE).
     """
     def __init__(self):
         _BaseGenBankConsumer.__init__(self)
@@ -1376,12 +1394,69 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._add_feature()
 
 
+def parse(handle):
+    """Iterate over GenBank formatted entries as Record objects.
+
+    >>> from Bio import GenBank
+    >>> handle = open("GenBank/NC_000932.gb")
+    >>> for record in GenBank.parse(handle):
+    ...     print record.accession
+    ['NC_000932']
+    >>> handle.close()
+
+    To get SeqRecord objects use Bio.SeqIO.parse(..., format="gb")
+    instead.
+    """
+    return iter(Iterator(handle, RecordParser()))
+
+def read(handle):
+    """Read a handle containing a single GenBank entry as a Record object.
+
+    >>> from Bio import GenBank
+    >>> handle = open("GenBank/NC_000932.gb")
+    >>> record = GenBank.read(handle)
+    >>> print record.accession
+    ['NC_000932']
+    >>> handle.close()
+                       
+    To get a SeqRecord object use Bio.SeqIO.read(..., format="gb")
+    instead.
+    """
+    iterator = parse(handle)
+    try:
+        first = iterator.next()
+    except StopIteration:
+        first = None
+    if first is None:
+        raise ValueError("No records found in handle")
+    try:
+        second = iterator.next()
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first
+
 def _test():
     """Run the Bio.GenBank module's doctests."""
-    print "Runing doctests..."
     import doctest
-    doctest.testmod()
-    print "Done"
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
 
 if __name__ == "__main__":
     _test()
