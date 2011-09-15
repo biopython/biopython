@@ -683,6 +683,35 @@ class FeatureLocation(object):
         return "%s(%r, %r%s)" \
                    % (self.__class__.__name__, self.start, self.end, optional)
 
+    def __add__(self, other):
+        """Combine location with another feature location.
+
+        >>> from Bio.SeqFeature import FeatureLocation
+        >>> f1 = FeatureLocation(5,10)
+        >>> f2 = FeatureLocation(20,30)
+
+        You can add the two features to make a join feature:
+
+        >>> combined = f1 + f2
+        >>> print combined
+        join{[5:10], [20:30]}
+
+        This is thus equivalent to:
+
+        >>> from Bio.SeqFeature import CompoundLocation
+        >>> join = CompoundLocation([f1, f2])
+        >>> print join
+        join{[5:10], [20:30]}
+
+        The real benefit is for combining simple features and
+        compound features together.
+        """
+        if isinstance(other, FeatureLocation):
+            return CompoundLocation([self, other])
+        else:
+            #This will allow CompoundLocation's __radd__ to be called:
+            return NotImplemented
+
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
 
@@ -870,6 +899,15 @@ class CompoundLocation(object):
         6
         >>> list(f)
         [3, 4, 5, 12, 11, 10]
+
+        Note that adding locations provides a more intuitive method of
+        construction:
+
+        >>> f = FeatureLocation(3, 6, strand=+1) + FeatureLocation(10, 13, strand=-1)
+        >>> len(f)
+        6
+        >>> list(f)
+        [3, 4, 5, 12, 11, 10]
         """
         self.operator = operator
         self.parts = list(parts)
@@ -906,6 +944,50 @@ class CompoundLocation(object):
             loc.strand = value
     strand = property(fget = _get_strand, fset = _set_strand,
                       doc = "Overall strand of the compound location (read only).")
+
+    def __add__(self, other):
+        """Combine locations.
+
+        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
+        >>> f1 = FeatureLocation(15,17) + FeatureLocation(20,30)
+        >>> print f1
+        join{[15:17], [20:30]}
+
+        You can add another FeatureLocation:
+
+        >>> print f1 + FeatureLocation(40,50)
+        join{[15:17], [20:30], [40:50]}
+        >>> print FeatureLocation(5,10) + f1
+        join{[5:10], [15:17], [20:30]}
+
+        You can also add another CompoundLocation:
+
+        >>> f2 = FeatureLocation(40,50) + FeatureLocation(60,70)
+        >>> print f2
+        join{[40:50], [60:70]}
+        >>> print f1 + f2
+        join{[15:17], [20:30], [40:50], [60:70]}
+
+        """
+        if isinstance(other, FeatureLocation):
+            return CompoundLocation(self.parts + [other], self.operator)
+        elif isinstance(other, CompoundLocation):
+            if self.operator != other.operator:
+                #Handle join+order -> order as a special case?
+                raise ValueError("Mixed operators %s and %s" \
+                                 % (self.operator, other.operator))
+            return CompoundLocation(self.parts + other.parts, self.operator)
+        else:
+            raise NotImplementedError
+
+    def __radd__(self, other):
+        """Combine locations.
+        """
+        if isinstance(other, FeatureLocation):
+            return CompoundLocation([other] + self.parts, self.operator)
+        else:
+            raise NotImplementedError
+
 
     def __contains__(self, value):
         """Check if an integer position is within the location."""
