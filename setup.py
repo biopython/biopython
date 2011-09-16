@@ -25,6 +25,16 @@ import sys
 import os
 import shutil
 
+def is_pypy():
+    import platform
+    try:
+        if platform.python_implementation()=='PyPy':
+            return True
+    except AttributeError:
+        #New in Python 2.6, not in Jython yet either
+        pass
+    return False
+
 def get_yes_or_no(question, default):
     if default:
         option_str = "(Y/n)"
@@ -95,6 +105,8 @@ def check_dependencies():
 
     if os.name=='java':
         return True #NumPy is not avaliable for Jython (for now)
+    if is_pypy():
+        return True #Full NumPy not available for PyPy (for now)
 
     print ("""
 Numerical Python (NumPy) is not installed.
@@ -197,6 +209,8 @@ def can_import(module_name):
         return None
 
 def is_Numpy_installed():
+    if is_pypy():
+        return False
     return bool(can_import("numpy"))
 
 # --- set up the packages we are going to install
@@ -279,6 +293,9 @@ NUMPY_PACKAGES = [
 
 if os.name == 'java' :
     # Jython doesn't support C extensions
+    EXTENSIONS = []
+elif is_pypy():
+    # Skip C extensions for now
     EXTENSIONS = []
 elif sys.version_info[0] == 3:
     # TODO - Must update our C extensions for Python 3
