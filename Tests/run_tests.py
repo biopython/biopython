@@ -214,8 +214,10 @@ class ComparisonTestCase(unittest.TestCase):
         # the first line of the output file is the test name
         expected_test = expected.readline().strip()
 
-        assert expected_test == self.name, "\nOutput:   %s\nExpected: %s" % \
-               (self.name, expected_test)
+        if expected_test != self.name:
+            expected.close()
+            raise ValueError("\nOutput:   %s\nExpected: %s" \
+                  % (self.name, expected_test))
 
         # now loop through the output and compare it to the expected file
         while True:
@@ -239,10 +241,10 @@ class ComparisonTestCase(unittest.TestCase):
             if re.compile("^Ran [0-9]+ tests? in ").match(expected_line):
                 pass
             # otherwise make sure the two lines are the same
-            else:
-                assert expected_line == output_line, \
-                      "\nOutput  : %s\nExpected: %s" \
-                      % (repr(output_line), repr(expected_line))
+            elif expected_line != output_line:
+                expected.close()
+                raise ValueError("\nOutput  : %s\nExpected: %s" \
+                      % (repr(output_line), repr(expected_line)))
         expected.close()
 
     def generate_output(self):
