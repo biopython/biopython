@@ -5,6 +5,7 @@
 #TODO - Don't use "from XXX import *"
 try:
     from numpy import *
+    from numpy import dot #missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
