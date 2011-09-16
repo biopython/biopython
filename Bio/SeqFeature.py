@@ -607,31 +607,37 @@ class FeatureLocation(object):
         return FeatureLocation(start = self._end._flip(length),
                                end = self._start._flip(length))
 
-    start = property(fget= lambda self : self._start,
-                 doc="Start location (possibly a fuzzy position, read only).")
+    @property
+    def start(self):
+        """Start location (possibly a fuzzy position, read only)."""
+        return self._start
 
-    end = property(fget= lambda self : self._end,
-                   doc="End location (possibly a fuzzy position, read only).")
+    @property
+    def end(self):
+        """End location (possibly a fuzzy position, read only)."""
+        return self._end
 
-    nofuzzy_start = property(
-        fget=lambda self: self._start.position,
-        doc="""Start position (integer, approximated if fuzzy, read only).
-
-        To get non-fuzzy attributes (ie. the position only) ask for
-        'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
-        the largest range of the fuzzy position. So something like:
-        (10.20)..(30.40) should return 10 for start, and 40 for end.
-        """)
-
-    nofuzzy_end = property(
-        fget=lambda self: self._end.position + self._end.extension,
-        doc="""End position (integer, approximated if fuzzy, read only).
+    @property
+    def nofuzzy_start(self):
+        """Start position (integer, approximated if fuzzy, read only).
 
         To get non-fuzzy attributes (ie. the position only) ask for
         'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
         the largest range of the fuzzy position. So something like:
         (10.20)..(30.40) should return 10 for start, and 40 for end.
-        """)
+        """
+        return self._start.position
+
+    @property
+    def nofuzzy_end(self):
+        """End position (integer, approximated if fuzzy, read only).
+
+        To get non-fuzzy attributes (ie. the position only) ask for
+        'location.nofuzzy_start', 'location.nofuzzy_end'. These should return
+        the largest range of the fuzzy position. So something like:
+        (10.20)..(30.40) should return 10 for start, and 40 for end.
+        """
+        return self._end.position + self._end.extension
 
 
 class AbstractPosition(object):
