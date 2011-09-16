@@ -1341,8 +1341,10 @@ class Nexus(object):
                     fh.write(safename(taxon,mrbayes=mrbayes)+'\n')
                 else:
                     fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
+                taxon_seq = cropped_matrix[taxon]
                 for seek in range(0,nchar_adjusted,blocksize):
-                    fh.write(cropped_matrix[taxon][seek:seek+blocksize]+'\n')
+                    fh.write(taxon_seq[seek:seek+blocksize]+'\n')
+                del taxon_seq
         fh.write(';\nend;\n')
         if append_sets:
             if codons_block:
