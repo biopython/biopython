@@ -27,11 +27,10 @@ ftp://ftp.ncbi.nih.gov/genbank/docs/
 # Added by Ying Huang & Iddo Friedberg
 
 import warnings
-import os
 import re
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_alphabet, generic_protein
+from Bio.Alphabet import generic_protein
 
 class InsdcScanner(object):
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.

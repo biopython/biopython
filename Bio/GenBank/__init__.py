@@ -10,18 +10,12 @@ Rather than using Bio.GenBank, you are now encouraged to use Bio.SeqIO with
 the "genbank" or "embl" format names to parse GenBank or EMBL files into
 SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
 
-Also, rather than using Bio.GenBank to search or download files from the NCBI,
-you are now encouraged to use Bio.Entrez instead (again, see the Biopython
-tutorial for details).
+Using Bio.GenBank directly to parse GenBank files is only useful if you want 
+to obtain GenBank-specific Record objects, which is a much closer
+representation to the raw file contents that the SeqRecord alternative from
+the FeatureParser (used in Bio.SeqIO).
 
-Currently the ONLY reason to use Bio.GenBank directly is for the RecordParser
-which turns a GenBank file into GenBank-specific Record objects.  This is a
-much closer representation to the raw file contents that the SeqRecord
-alternative from the FeatureParser (used in Bio.SeqIO), and is particularly
-useful for GenBank whole genome shotgun (WGS) master records which use a
-variation of the GenBank flat file format but are not actually sequences.
-
-To use this parser there are two helper functions:
+To use the Bio.GenBank parser, there are two helper functions:
 
 read                  Parse a handle containing a single GenBank record
                       as Bio.GenBank specific Record objects.
@@ -44,12 +38,10 @@ LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
 """
-import cStringIO
 import re
 
 # other Biopython stuff
 from Bio import SeqFeature
-from Bio import Entrez
 
 # other Bio.GenBank stuff
 from utils import FeatureValueCleaner
