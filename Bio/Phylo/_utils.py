@@ -314,13 +314,15 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
     x_posns = get_x_positions(tree)
     y_posns = get_y_positions(tree)
 
-    def draw_clade(clade, x_start):
+    def draw_clade(clade, x_start, color='k', lw=1):
         """Recursively draw a tree, down from the given clade."""
         x_here = x_posns[clade]
         y_here = y_posns[clade]
         # phyloXML-only graphics annotations
-        color = clade.__dict__.get('color') or 'k'
-        lw = clade.__dict__.get('width')
+        if hasattr(clade, 'color') and clade.color is not None:
+            color = clade.color.to_hex()
+        if hasattr(clade, 'width') and clade.width is not None:
+            lw = clade.width
         # Draw a horizontal line from start to here
         plt.hlines(y_here, x_start, x_here, color=color, lw=lw)
         # Add node/taxon labels
@@ -342,10 +344,11 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
-            plt.vlines(x_here, y_bot, y_top, color=color, lw=lw)
+            # Only apply widths to horizontal lines, like Archaeopteryx
+            plt.vlines(x_here, y_bot, y_top, color=color)
             # Draw descendents
             for child in clade:
-                draw_clade(child, x_here)
+                draw_clade(child, x_here, color=color, lw=lw)
 
     draw_clade(tree.root, 0)
     if hasattr(tree, 'name') and tree.name:
