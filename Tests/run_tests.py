@@ -37,6 +37,27 @@ import traceback
 import unittest
 import doctest
 import distutils.util
+import gc
+
+def is_pypy():
+    import platform
+    try:
+        if platform.python_implementation()=='PyPy':
+            return True
+    except AttributeError:
+        #New in Python 2.6, not in Jython yet either
+        pass
+    return False
+
+def is_numpy():
+    if is_pypy():
+        return False
+    try:
+        import numpy
+        del numpy
+        return True
+    except ImportError:
+        return False
 
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
@@ -73,14 +94,12 @@ DOCTEST_MODULES = ["Bio.Alphabet",
                    "Bio.Motif",
                   ]
 #Silently ignore any doctests for modules requiring numpy!
-try:
-    import numpy
+if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
                             "Bio.PDB.Selection"
                             ])
-except ImportError:
-    pass
+
 
 try:
     import sqlite3
@@ -376,6 +395,8 @@ class TestRunner(unittest.TextTestRunner):
                 return False
         finally:
             sys.stdout = stdout
+            #Running under PyPy we were leaking file handles...
+            gc.collect()
 
     def run(self):
         """Run tests, return number of failures (integer)."""
