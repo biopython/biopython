@@ -103,7 +103,7 @@ class IndexDictTests(unittest.TestCase):
         #Saving to file...
         index_tmp = filename + ".key.idx"
         if os.path.isfile(index_tmp):
-            osremove(index_tmp)
+            os.remove(index_tmp)
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
