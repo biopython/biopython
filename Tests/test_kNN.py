@@ -10,6 +10,8 @@ import unittest
 
 try:
     import numpy
+    from numpy import asarray
+    del asarray
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
