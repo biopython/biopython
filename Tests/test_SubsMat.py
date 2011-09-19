@@ -2,6 +2,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+try:
+    from numpy import corrcoef
+    del corrcoef
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError(
+        "Install NumPy if you want to use Bio.SubsMat.")
+
 import cPickle
 import sys
 import os
