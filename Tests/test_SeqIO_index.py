@@ -55,6 +55,8 @@ class IndexDictTests(unittest.TestCase):
                           ":memory:", format="dummy")
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"])
+        rec_dict.close()
+        del rec_dict
 
         #Saving to file...
         index_tmp = filename + ".idx"
@@ -99,6 +101,8 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"],
                           key_function=add_prefix)
+        rec_dict.close()
+        del rec_dict
 
         #Saving to file...
         index_tmp = filename + ".key.idx"
