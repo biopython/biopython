@@ -60,6 +60,8 @@ class IndexDictTests(unittest.TestCase):
 
         #Saving to file...
         index_tmp = filename + ".idx"
+        if os.path.isfile(index_tmp):
+            os.remove(index_tmp)
         #To disk,
         #note here we give the filename as a single string
         #to confirm that works too (convience feature).
