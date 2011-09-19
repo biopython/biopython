@@ -38,13 +38,7 @@ class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, format, alphabet):
         """Check indexing (without a key function)."""
-        if format in SeqIO._BinaryFormats:
-            mode = "rb"
-        else :
-            mode = "r"
-
-        id_list = [rec.id for rec in \
-                   SeqIO.parse(open(filename, mode), format, alphabet)]
+        id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -85,13 +79,7 @@ class IndexDictTests(unittest.TestCase):
     
     def key_check(self, filename, format, alphabet):
         """Check indexing with a key function."""
-        if format in SeqIO._BinaryFormats:
-            mode = "rb"
-        else :
-            mode = "r"
-
-        id_list = [rec.id for rec in \
-                   SeqIO.parse(open(filename, mode), format, alphabet)]
+        id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
@@ -114,6 +102,8 @@ class IndexDictTests(unittest.TestCase):
 
         #Saving to file...
         index_tmp = filename + ".key.idx"
+        if os.path.isfile(index_tmp):
+            osremove(index_tmp)
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
