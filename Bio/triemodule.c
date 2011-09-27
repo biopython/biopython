@@ -655,6 +655,5 @@ DL_EXPORT(void)
 inittrie(void) 
 {
     Trie_Type.ob_type = &PyType_Type;
-
     (void) Py_InitModule3("trie", trie_methods, trie__doc__);
 }
