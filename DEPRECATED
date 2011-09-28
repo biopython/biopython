@@ -12,6 +12,10 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Bio.SeqFeature.WithinPosition and OneOfPosition
+===============================================
+The arguments to create these fuzzy positions changed in Release 1.59.
+
 Bio.Encodings
 =============
 Explicitly declared obsolete in Release 1.55, deprecated in Release 1.56, and

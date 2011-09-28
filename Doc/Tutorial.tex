@@ -1763,9 +1763,15 @@ Now that we've got all of the types of fuzzy positions we can have taken care of
 \begin{verbatim}
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
->>> end_pos = SeqFeature.BetweenPosition(8, 1)
+>>> end_pos = SeqFeature.BetweenPosition(9, left=8, right=9)
 >>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
 \end{verbatim}
+
+Note that the details of some of the fuzzy-locations changed in Biopython 1.59,
+in particular for BetweenPosition and WithinPosition you must now make it explicit
+which integer position should be used for slicing etc. For a start position this
+is generally the lower (left) value, while for an end position this would generally
+be the higher (right) value.
 
 If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
 
@@ -1783,12 +1789,25 @@ AfterPosition(5)
 >>> print my_location.start
 >5
 >>> my_location.end
-BetweenPosition(8,1)
+BetweenPosition(9, left=8, right=9)
 >>> print my_location.end
 (8^9)
 \end{verbatim}
 
-If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
+If you don't want to deal with fuzzy positions and just want numbers,
+they are actually subclasses of integers so should work like integers:
+
+%cont-doctest
+\begin{verbatim}
+>>> int(my_location.start)
+5
+>>> int(my_location.end)
+9
+\end{verbatim}
+
+For compatibility with older versions of Biopython you can ask for the
+\verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location
+which are plain integers:
 
 %cont-doctest
 \begin{verbatim}
@@ -1809,6 +1828,8 @@ Similary, to make it easy to create a position without worrying about fuzzy posi
 [5:9]
 >>> exact_location.start
 ExactPosition(5)
+>>> int(exact_location.start)
+5
 >>> exact_location.nofuzzy_start
 5
 \end{verbatim}
@@ -1827,11 +1848,12 @@ A \verb|SeqFeature| object doesn't directly contain a sequence, instead its loca
 >>> example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
 \end{verbatim}
 
-You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement:
+You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement.
+If you are using Biopython 1.59 or later, the feature location's start and end are integer like so this works:
 
 %cont-doctest
 \begin{verbatim}
->>> feature_seq = example_parent[5:18].reverse_complement()
+>>> feature_seq = example_parent[example_feature.location.start:example_feature.location.end].reverse_complement()
 >>> print feature_seq
 AGCCTTTGCCGTC
 \end{verbatim}

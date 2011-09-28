@@ -15,6 +15,11 @@ The latest news is at the top of this file.
 Please note that this release will *not* work on Python 2.4 (while the
 recent releases have worked despite us not officially supporting this).
 
+The position objects used in Bio.SeqFeature now act almost like integers,
+making dealing with fuzzy locations in EMBL/GenBank files much easier. Note
+as part of this work, the arguments to create fuzzy positions OneOfPosition
+and WithinPosition have changed in a non-backwards compatible way.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
