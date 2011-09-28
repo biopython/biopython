@@ -71,31 +71,6 @@ static void free_suffix(char *s) {
     }
 }
 
-/**
- * Old method without using lookup table
- */
-/*
-static char* duplicate(const char* s) {
-    // Don't use strdup, as it's not ANSI C.
-    char* t = malloc((strlen(s)+1)*sizeof(char));
-    if (!t) return NULL;
-    strcpy(t, s);
-    return t;
-}
-
-static char *shared_suffix(const char* s, int length) {
-    char *t= malloc(length + 1);
-    if (!t) return NULL;
-    strncpy(t, s, length);
-    t[length] = 0;
-    return t;
-}
-
-static void free_suffix(char *s) {
-    free(s);
-}
-*/
-
 
 /* Transition holds information about the transitions leading from
  * one Trie to another.  The trie structure here is different from
