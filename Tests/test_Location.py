@@ -18,9 +18,9 @@ before_pos = SeqFeature.BeforePosition(15)
 after_pos = SeqFeature.AfterPosition(40)
 
 print "Exact:", exact_pos
-print "Within (as start, %i): %s" % (within_pos_s, within_pos_s)
-print "Within (as end, %i): %s" % (within_pos_e, within_pos_e)
-print "Between (as end, %i): %s" % (between_pos_e, between_pos_e)
+print "Within (as start, %i): %s" % (int(within_pos_s), within_pos_s)
+print "Within (as end, %i): %s" % (int(within_pos_e), within_pos_e)
+print "Between (as end, %i): %s" % (int(between_pos_e), between_pos_e)
 print "Before:", before_pos
 print "After:", after_pos
 
