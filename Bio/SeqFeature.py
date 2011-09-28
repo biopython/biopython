@@ -686,7 +686,7 @@ class ExactPosition(int, AbstractPosition):
 
     def __repr__(self):
         """String representation of the ExactPosition location for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, self)
+        return "%s(%i)" % (self.__class__.__name__, int(self))
 
     @property
     def position(self):
@@ -821,7 +821,7 @@ class WithinPosition(int, AbstractPosition):
     def __repr__(self):
         """String representation of the WithinPosition location for debugging."""
         return "%s(%i, left=%i, right=%i)" \
-               % (self.__class__.__name__, self,
+               % (self.__class__.__name__, int(self),
                   self._left, self._right)
 
     def __str__(self):
@@ -911,7 +911,7 @@ class BetweenPosition(int, AbstractPosition):
     def __repr__(self):
         """String representation of the WithinPosition location for debugging."""
         return "%s(%i, left=%i, right=%i)" \
-               % (self.__class__.__name__, self,
+               % (self.__class__.__name__, int(self),
                   self._left, self._right)
 
     def __str__(self):
@@ -979,7 +979,7 @@ class BeforePosition(int, AbstractPosition):
 
     def __repr__(self):
         """A string representation of the location for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, self)
+        return "%s(%i)" % (self.__class__.__name__, int(self))
 
     def __str__(self):
         return "<%s" % self.position
@@ -1039,7 +1039,7 @@ class AfterPosition(int, AbstractPosition):
 
     def __repr__(self):
         """A string representation of the location for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, self)
+        return "%s(%i)" % (self.__class__.__name__, int(self))
 
     def __str__(self):
         return ">%s" % self.position
@@ -1128,7 +1128,7 @@ class OneOfPosition(int, AbstractPosition):
     def __repr__(self):
         """String representation of the OneOfPosition location for debugging."""
         return "%s(%i, choices=%r)" % (self.__class__.__name__, \
-                                       self, self.position_choices)
+                                       int(self), self.position_choices)
 
     def __str__(self):
         out = "one-of("
