@@ -397,12 +397,14 @@ class ChromosomeSegment(_ChromosomeComponent):
             cur_drawing.add(label_string)
 
 class AnnotatedChromosomeSegment(ChromosomeSegment):
-    def __init__(self, bp_length, features, default_feature_color=colors.blue):
+    def __init__(self, bp_length, features,
+                 default_feature_color=colors.blue,
+                 name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']):
         """Like the ChromosomeSegment, but accepts a list of features.
         
-        The features can either be SeqFeature objects, or tuples of four
-        values: start (int), end (int), strand (+1, -1, O or None), and
-        a ReportLab color.
+        The features can either be SeqFeature objects, or tuples of five
+        values: start (int), end (int), strand (+1, -1, O or None), label
+        (string) and a ReportLab color.
         
         Note we require 0 <= start <= end <= bp_length, and within the vertical
         space allocated to this segmenet lines will be places according to the
@@ -416,12 +418,15 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         
         When providing features as SeqFeature objects, the default color
         is used, unless the feature's qualifiers include an Artemis colour
-        string (functionality also in GenomeDiagram)
+        string (functionality also in GenomeDiagram). The caption also follows
+        the GenomeDiagram approach and takes the first qualifier from the list
+        specified in name_qualifiers.
         """
         ChromosomeSegment.__init__(self)
         self.bp_length = bp_length
         self.features = features
         self.default_feature_color = default_feature_color
+        self.name_qualifiers = name_qualifiers
 
     def _overdraw_subcomponents(self, cur_drawing):
         """Draw any annotated features on the chromosome segment.
@@ -447,9 +452,14 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                                              f.qualifiers['color'][0])
                 except:
                     color = self.default_feature_color
+                name = ""
+                for qualifier in self.name_qualifiers:            
+                    if qualifier in f.qualifiers:
+                        name = f.qualifiers[qualifier][0]
+                        break
             except AttributeError:
-                #Assume tuple of ints and color
-                start, end, strand, color = f
+                #Assume tuple of ints, string, and color
+                start, end, strand, name, color = f
             assert 0 <= start <= end <= self.bp_length
             if strand == +1 :
                 #Right side only
@@ -463,14 +473,21 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 #Both or neighther - full width
                 x = segment_x
                 w = segment_width
-            #TODO - Labels
             local_scale = segment_height / self.bp_length
             fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
                                   w, local_scale*(end-start))
             fill_rectangle.fillColor = color
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
-        
+            if name:
+                #Initially on the right as there is space there...
+                label_string = String(segment_x + segment_width * 1.1,
+                                      segment_y + segment_height - local_scale*start,
+                                      name)
+                label_string.fontName = 'Helvetica'
+                label_string.fontSize = self.label_size
+                cur_drawing.add(label_string)
+            
 class TelomereSegment(ChromosomeSegment):
     """A segment that is located at the end of a linear chromosome.
 
