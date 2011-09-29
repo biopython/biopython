@@ -272,20 +272,25 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
         chr_diagram = BasicChromosome.Organism()
         chr_diagram._legend_height = 0
         for name, acc, length, features, color in entries:
-            """
-            filename = "/Users/pjcock/Documents/comp_genomics/seed/%s.gbk" % acc
-            import os
-            if not os.path.isfile(filename):
-                continue
-            from Bio import SeqIO
-            record = SeqIO.read(filename, "gb")
-            assert length == len(record)
-            features = [f for f in record.features if f.type=="tRNA"]
-            features = [(int(f.location.start), int(f.location.end), f.strand) for f in features]
-            print name
-            print features
-            """
-            features = [(start,end,strand,color) for (start,end,strand) in features]
+            if False:
+                #How I generated the values above... and tested passing in SeqFeatures
+                filename = "/Users/pjcock/Documents/comp_genomics/seed/%s.gbk" % acc
+                import os
+                if not os.path.isfile(filename):
+                    continue
+                from Bio import SeqIO
+                record = SeqIO.read(filename, "gb")
+                assert length == len(record)
+                features = [f for f in record.features if f.type=="tRNA"]
+                print name
+                print [(int(f.location.start), int(f.location.end), f.strand) for f in features]
+                #Output was copy and pasted to the script, see above.
+                #Continue test using SeqFeature objects!
+                #To test colours from the qualifiers,
+                for i,f in enumerate(features):
+                    f.qualifiers['color'] = [str(i % 16)]
+            else:
+                features = [(start,end,strand,color) for (start,end,strand) in features]
             cur_chromosome = BasicChromosome.Chromosome(name)
             #Set the length, adding and extra 20 percent for the tolomeres:
             cur_chromosome.scale_num = max_length * 1.2

@@ -39,6 +39,9 @@ from reportlab.graphics import renderPDF, renderPS
 from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write
+from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator as _ColorTranslator
+
+_color_trans = _ColorTranslator()
 
 class _ChromosomeComponent(Widget):
     """Base class specifying the interface for a component of the system.
@@ -412,7 +415,8 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         (e.g. their length in base pairs).
         
         When providing features as SeqFeature objects, the default color
-        is used.
+        is used, unless the feature's qualifiers include an Artemis colour
+        string (functionality also in GenomeDiagram)
         """
         ChromosomeSegment.__init__(self)
         self.bp_length = bp_length
@@ -437,10 +441,14 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 start = f.location.start
                 end = f.location.end
                 strand = f.strand
-                #TODO - Mimic genome diagram color from qualifier code
-                color = self.default_feature_color
+                try:
+                    #Mimic the GenomeDiagram code
+                    color = _color_trans.artemis_color( \
+                                             f.qualifiers['color'][0])
+                except:
+                    color = self.default_feature_color
             except AttributeError:
-                #Assume tuple of ints
+                #Assume tuple of ints and color
                 start, end, strand, color = f
             assert 0 <= start <= end <= self.bp_length
             if strand == +1 :
