@@ -98,6 +98,7 @@ class Organism(_ChromosomeComponent):
         # customizable attributes
         self.page_size = letter
         self.title_size = 20
+        self._legend_height = 2 * inch
 
         self.output_format = output_format
 
@@ -123,13 +124,13 @@ class Organism(_ChromosomeComponent):
         # no sub_components
         else:
             pass
-        
+
         for sub_component in self._sub_components:
             # set the drawing location of the chromosome
             sub_component.start_x_position = cur_x_pos
             sub_component.end_x_position = cur_x_pos + .9 * x_pos_change
             sub_component.start_y_position = height - 1.5 * inch
-            sub_component.end_y_position = 3 * inch
+            sub_component.end_y_position = self._legend_height + 1 * inch
 
             # do the drawing
             sub_component.draw(cur_drawing)
@@ -137,7 +138,7 @@ class Organism(_ChromosomeComponent):
             # update the locations for the next chromosome
             cur_x_pos += x_pos_change
 
-        self._draw_legend(cur_drawing, 2.5 * inch, width)
+        self._draw_legend(cur_drawing, self._legend_height + 0.5 * inch, width)
 
         return _write(cur_drawing, output_file, self.output_format)
 
@@ -150,11 +151,12 @@ class Organism(_ChromosomeComponent):
         title_string.textAnchor = "middle"
 
         cur_drawing.add(title_string)
-
+    
     def _draw_legend(self, cur_drawing, start_y, width):
         """Draw a legend for the figure.
 
-        Subclasses should implement this to provide specialized legends.
+        Subclasses should implement this (see also self._legend_height) to
+        provide specialized legends.
         """
         pass
     
@@ -447,13 +449,3 @@ class TelomereSegment(ChromosomeSegment):
 
         cover_line.strokeColor = cover_color
         cur_drawing.add(cover_line)
-
-
-        
-        
-
-        
-        
-
-        
-                   
