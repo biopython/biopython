@@ -398,16 +398,51 @@ class ChromosomeSegment(_ChromosomeComponent):
             cur_drawing.add(label_string)
 
 def _spring_layout(desired, minimum, maximum, gap=0):
+    count = len(desired)
+    if count <= 1:
+        return desired #Easy!
     if min(desired) < minimum or max(desired) > maximum:
         raise ValueError("Data out of bounds")
-    count = len(desired)
-    if count == 1:
-        return desired #Easy!
     equal_step = float(maximum - minimum) / (count - 1)
+
     if equal_step < gap:
         import warnings
-        warnings.warn("Too many items to satify minimum gap")
+        warnings.warn("Too many items to satify minimum gap %0.1f, equal step gives %0.1f" % (gap, equal_step))
+        #Crudest solution
+        return [minimum+i*equal_step for i in range(count)]
+    
+    good = True
+    if gap:
+        prev = desired[0]
+        for next in desired[1:]:
+            if prev - next < gap:
+                good = False
+                break
+    if good:
+        return desired
+    
+    #Try and divide it up...
+    halfspan = 0.5 * (maximum - minimum)
+    midpoint = 0.5 * (minimum + maximum)
+    low = [x for x in desired if x <= midpoint-0.5*gap]
+    high = [x for x in desired if x > midpoint+0.5*gap]
+    if len(low)+len(high) == count \
+    and len(low)*gap <= halfspan-0.5*gap \
+    and len(high)*gap <= halfspan-0.5*gap:
+        if not low:
+            return _spring_layout(high, midpoint, maximum, gap)
+        elif not high:
+            return _spring_layout(low, minimum, midpoint, gap)
+        elif min(high) - min(low) > gap:
+            return _spring_layout(low, minimum, midpoint-0.5*gap, gap) + \
+                   _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+
+    #Crudest solution
     return [minimum+i*equal_step for i in range(count)]
+
+#assert False, _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1)
+#assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
+assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.16666666666666666, 0.33333333333333331, 0.5, 0.66666666666666663, 0.83333333333333326, 1.0]
 
 def _place_labels(desired_etc, minimum, maximum, gap=0):
     desired_etc.sort()
@@ -511,9 +546,15 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                     left_labels.append(value)
                 else:
                     right_labels.append(value)
-        #Now do some label placement magic...        
-        left_labels = _place_labels(left_labels, segment_y, segment_y + segment_height)
-        right_labels = _place_labels(right_labels, segment_y, segment_y + segment_height)
+        #Now do some label placement magic...
+        #from reportlab.pdfbase import pdfmetrics
+        #font = pdfmetrics.getFont('Helvetica')
+        #h = (font.face.ascent + font.face.descent) * 0.90
+        h = self.label_size
+        left_labels = _place_labels(left_labels, segment_y,
+                                    segment_y + segment_height, h)
+        right_labels = _place_labels(right_labels, segment_y,
+                                     segment_y + segment_height, h)
         x1 = segment_x
         x2 = segment_x - segment_width * 0.5
         for (y1, y2, color, name) in left_labels:
