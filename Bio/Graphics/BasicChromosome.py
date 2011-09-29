@@ -260,13 +260,13 @@ class Chromosome(_ChromosomeComponent):
     def _draw_label(self, cur_drawing, label_name):
         """Draw a label for the chromosome.
         """
-        x_position = self.start_x_position
+        x_position = 0.5 * (self.start_x_position + self.end_x_position)
         y_position = self.end_y_position
 
         label_string = String(x_position, y_position, label_name)
         label_string.fontName = 'Times-BoldItalic'
         label_string.fontSize = self.title_size
-        label_string.textAnchor = 'start'
+        label_string.textAnchor = 'middle'
 
         cur_drawing.add(label_string)
 
@@ -344,13 +344,14 @@ class ChromosomeSegment(_ChromosomeComponent):
     def _draw_segment(self, cur_drawing):
         """Draw the current chromosome segment.
         """
-        # set the coordinates of the segment -- it'll take up the left part
+        # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
-        segment_x = self.start_x_position
         segment_y = self.end_y_position
         segment_width = (self.end_x_position - self.start_x_position) \
                         * self.chr_percent
         segment_height = self.start_y_position - self.end_y_position
+        segment_x = self.start_x_position \
+                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
         
         # first draw the sides of the segment
         right_line = Line(segment_x, segment_y,
@@ -434,11 +435,14 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         Assumes _draw_segment already called to fill out the basic shape,
         and assmes that uses the same boundaries.
         """
-        segment_x = self.start_x_position
+        # set the coordinates of the segment -- it'll take up the MIDDLE part
+        # of the space we have.
         segment_y = self.end_y_position
         segment_width = (self.end_x_position - self.start_x_position) \
                         * self.chr_percent
         segment_height = self.start_y_position - self.end_y_position
+        segment_x = self.start_x_position \
+                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
         
         for f in self.features:
             try:
@@ -521,13 +525,13 @@ class TelomereSegment(ChromosomeSegment):
     def _draw_segment(self, cur_drawing):
         """Draw a half circle representing the end of a linear chromosome.
         """
-        # set the coordinates of the segment -- it'll take up the left part
+        # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         width = (self.end_x_position - self.start_x_position) \
                 * self.chr_percent
         height = self.start_y_position - self.end_y_position
-
-        center_x = self.start_x_position + width / 2
+        center_x = 0.5 * (self.end_x_position + self.start_x_position)
+        start_x = center_x - 0.5 * width
         if self._inverted:
             center_y = self.start_y_position
             start_angle = 180
@@ -545,12 +549,12 @@ class TelomereSegment(ChromosomeSegment):
 
         # draw a line to cover up the the bottom part of the wedge
         if self._inverted:
-            cover_line = Line(self.start_x_position, self.start_y_position,
-                              self.start_x_position + width,
+            cover_line = Line(start_x, self.start_y_position,
+                              start_x + width,
                               self.start_y_position)
         else:
-            cover_line = Line(self.start_x_position, self.end_y_position,
-                              self.start_x_position + width,
+            cover_line = Line(start_x, self.end_y_position,
+                              start_x + width,
                               self.end_y_position)
 
         if self.fill_color is not None:
