@@ -405,7 +405,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         space allocated to this segmenet lines will be places according to the
         start/end coordindates (starting from the top).
         
-        Positive stand features are drawn on the left, negative on the right,
+        Positive stand features are drawn on the right, negative on the left,
         otherwise all the way across.
         
         We recommend using consisent units for all the segment's scale values
@@ -444,12 +444,12 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 start, end, strand, color = f
             assert 0 <= start <= end <= self.bp_length
             if strand == +1 :
-                #Left side only
-                x = segment_x
-                w = segment_width * 0.4
-            elif strand == -1:
                 #Right side only
                 x = segment_x + segment_width * 0.6
+                w = segment_width * 0.4
+            elif strand == -1:
+                #Left side only
+                x = segment_x
                 w = segment_width * 0.4
             else:
                 #Both or neighther - full width
