@@ -480,10 +480,17 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
             if name:
-                #Initially on the right as there is space there...
-                label_string = String(segment_x + segment_width * 1.1,
-                                      segment_y + segment_height - local_scale*start,
-                                      name)
+                if strand == -1:
+                    #Left
+                    label_string = String(segment_x - segment_width * 0.1,
+                                          segment_y + segment_height - local_scale*start,
+                                          name,
+                                          textAnchor="end")
+                else:
+                    #Right
+                    label_string = String(segment_x + segment_width * 1.1,
+                                          segment_y + segment_height - local_scale*start,
+                                          name)
                 label_string.fontName = 'Helvetica'
                 label_string.fontSize = self.label_size
                 cur_drawing.add(label_string)
