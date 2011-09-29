@@ -325,8 +325,9 @@ class ChromosomeSegment(_ChromosomeComponent):
                          self.start_y_position, self.end_y_position):
             assert position != -1, "Need to set drawing coordinates."
 
-        self._draw_subcomponents(cur_drawing)
+        self._draw_subcomponents(cur_drawing) #Anything behind
         self._draw_segment(cur_drawing)
+        self._overdraw_subcomponents(cur_drawing) #Anything on top
         self._draw_label(cur_drawing)
 
     def _draw_subcomponents(self, cur_drawing):
@@ -365,7 +366,15 @@ class ChromosomeSegment(_ChromosomeComponent):
             fill_rectangle.strokeColor = None
 
             cur_drawing.add(fill_rectangle)
-            
+
+    def _overdraw_subcomponents(self, cur_drawing):
+        """Draw any subcomponents of the chromosome segment over the main part.
+
+        This should be overridden in derived classes if there are
+        subcomponents to be drawn.
+        """
+        pass
+
     def _draw_label(self, cur_drawing):
         """Add a label to the chromosome segment.
         """
@@ -383,6 +392,77 @@ class ChromosomeSegment(_ChromosomeComponent):
             label_string.fontSize = self.label_size
 
             cur_drawing.add(label_string)
+
+class AnnotatedChromosomeSegment(ChromosomeSegment):
+    def __init__(self, bp_length, features, default_feature_color=colors.blue):
+        """Like the ChromosomeSegment, but accepts a list of features.
+        
+        The features can either be SeqFeature objects, or tuples of four
+        values: start (int), end (int), strand (+1, -1, O or None), and
+        a ReportLab color.
+        
+        Note we require 0 <= start <= end <= bp_length, and within the vertical
+        space allocated to this segmenet lines will be places according to the
+        start/end coordindates (starting from the top).
+        
+        Positive stand features are drawn on the left, negative on the right,
+        otherwise all the way across.
+        
+        We recommend using consisent units for all the segment's scale values
+        (e.g. their length in base pairs).
+        
+        When providing features as SeqFeature objects, the default color
+        is used.
+        """
+        ChromosomeSegment.__init__(self)
+        self.bp_length = bp_length
+        self.features = features
+        self.default_feature_color = default_feature_color
+
+    def _overdraw_subcomponents(self, cur_drawing):
+        """Draw any annotated features on the chromosome segment.
+        
+        Assumes _draw_segment already called to fill out the basic shape,
+        and assmes that uses the same boundaries.
+        """
+        segment_x = self.start_x_position
+        segment_y = self.end_y_position
+        segment_width = (self.end_x_position - self.start_x_position) \
+                        * self.chr_percent
+        segment_height = self.start_y_position - self.end_y_position
+        
+        for f in self.features:
+            try:
+                #Assume SeqFeature objects
+                start = f.location.start
+                end = f.location.end
+                strand = f.strand
+                #TODO - Mimic genome diagram color from qualifier code
+                color = self.default_feature_color
+            except AttributeError:
+                #Assume tuple of ints
+                start, end, strand, color = f
+            assert 0 <= start <= end <= self.bp_length
+            if strand == +1 :
+                #Left side only
+                x = segment_x
+                w = segment_width * 0.4
+            elif strand == -1:
+                #Right side only
+                x = segment_x + segment_width * 0.6
+                w = segment_width * 0.4
+            else:
+                #Both or neighther - full width
+                x = segment_x
+                w = segment_width
+            #TODO - Check vertial direction
+            #TODO - Labels
+            local_scale = segment_height / self.bp_length
+            fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
+                                  w, local_scale*(end-start))
+            fill_rectangle.fillColor = color
+            fill_rectangle.strokeColor = color
+            cur_drawing.add(fill_rectangle)
         
 class TelomereSegment(ChromosomeSegment):
     """A segment that is located at the end of a linear chromosome.
