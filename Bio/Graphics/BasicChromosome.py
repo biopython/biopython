@@ -397,6 +397,26 @@ class ChromosomeSegment(_ChromosomeComponent):
 
             cur_drawing.add(label_string)
 
+def _spring_layout(desired, minimum, maximum, gap=0):
+    if min(desired) < minimum or max(desired) > maximum:
+        raise ValueError("Data out of bounds")
+    count = len(desired)
+    if count == 1:
+        return desired #Easy!
+    equal_step = float(maximum - minimum) / (count - 1)
+    if equal_step < gap:
+        import warnings
+        warnings.warn("Too many items to satify minimum gap")
+    return [minimum+i*equal_step for i in range(count)]
+
+def _place_labels(desired_etc, minimum, maximum, gap=0):
+    desired_etc.sort()
+    placed = _spring_layout([row[0] for row in desired_etc],
+                            minimum, maximum, gap)
+    for old,y2 in zip(desired_etc, placed):
+        y1, color, name = old
+        yield (y1, y2, color, name)
+
 class AnnotatedChromosomeSegment(ChromosomeSegment):
     def __init__(self, bp_length, features,
                  default_feature_color=colors.blue,
@@ -444,6 +464,8 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         segment_x = self.start_x_position \
                   + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
         
+        left_labels = []
+        right_labels = []
         for f in self.features:
             try:
                 #Assume SeqFeature objects
@@ -484,20 +506,35 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
             if name:
+                value = (segment_y + segment_height - local_scale*start, color, name)
                 if strand == -1:
-                    #Left
-                    label_string = String(segment_x - segment_width * 0.1,
-                                          segment_y + segment_height - local_scale*start,
-                                          name,
-                                          textAnchor="end")
+                    left_labels.append(value)
                 else:
-                    #Right
-                    label_string = String(segment_x + segment_width * 1.1,
-                                          segment_y + segment_height - local_scale*start,
-                                          name)
-                label_string.fontName = 'Helvetica'
-                label_string.fontSize = self.label_size
-                cur_drawing.add(label_string)
+                    right_labels.append(value)
+        #Now do some label placement magic...        
+        left_labels = _place_labels(left_labels, segment_y, segment_y + segment_height)
+        right_labels = _place_labels(right_labels, segment_y, segment_y + segment_height)
+        x1 = segment_x
+        x2 = segment_x - segment_width * 0.5
+        for (y1, y2, color, name) in left_labels:
+            cur_drawing.add(Line(x1, y1, x2, y2,
+                                 strokeColor = color,
+                                 strokeWidth = 0.25))
+            label_string = String(x2, y2, name,
+                                  textAnchor="end")
+            label_string.fontName = 'Helvetica'
+            label_string.fontSize = self.label_size
+            cur_drawing.add(label_string)
+        x1 = segment_x + segment_width
+        x2 = segment_x + segment_width * 1.5
+        for (y1, y2, color, name) in right_labels:
+            cur_drawing.add(Line(x1, y1, x2, y2,
+                                 strokeColor = color,
+                                 strokeWidth = 0.25))
+            label_string = String(x2, y2, name)
+            label_string.fontName = 'Helvetica'
+            label_string.fontSize = self.label_size
+            cur_drawing.add(label_string)
             
 class TelomereSegment(ChromosomeSegment):
     """A segment that is located at the end of a linear chromosome.
