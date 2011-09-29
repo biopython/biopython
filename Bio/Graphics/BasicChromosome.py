@@ -455,7 +455,6 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 #Both or neighther - full width
                 x = segment_x
                 w = segment_width
-            #TODO - Check vertial direction
             #TODO - Labels
             local_scale = segment_height / self.bp_length
             fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
