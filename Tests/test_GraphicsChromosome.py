@@ -305,6 +305,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             #Add a body - using bp as the scale length here.
             body = BasicChromosome.AnnotatedChromosomeSegment(length, features)
             body.scale = length
+            body.label_sep_percent = 0.15
             cur_chromosome.add(body)
             #Add a closing telomere
             end = BasicChromosome.TelomereSegment(inverted=True)

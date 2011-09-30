@@ -511,12 +511,18 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         string (functionality also in GenomeDiagram). The caption also follows
         the GenomeDiagram approach and takes the first qualifier from the list
         specified in name_qualifiers.
+
+        Note additional attribute label_sep_percent controls the percentage of
+        area that the chromosome segment takes up, by default half of the
+        chr_percent attribute (half of 25%, thus 12.5%)
+
         """
         ChromosomeSegment.__init__(self)
         self.bp_length = bp_length
         self.features = features
         self.default_feature_color = default_feature_color
         self.name_qualifiers = name_qualifiers
+        self.label_sep_percent = self.chr_percent * 0.5
 
     def _overdraw_subcomponents(self, cur_drawing):
         """Draw any annotated features on the chromosome segment.
@@ -529,6 +535,8 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         segment_y = self.end_y_position
         segment_width = (self.end_x_position - self.start_x_position) \
                         * self.chr_percent
+        label_sep = (self.end_x_position - self.start_x_position) \
+                        * self.label_sep_percent
         segment_height = self.start_y_position - self.end_y_position
         segment_x = self.start_x_position \
                   + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
@@ -590,7 +598,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
         right_labels = _place_labels(right_labels, segment_y,
                                      segment_y + segment_height, h)
         x1 = segment_x
-        x2 = segment_x - segment_width * 0.5
+        x2 = segment_x - label_sep
         for (y1, y2, color, name) in left_labels:
             cur_drawing.add(Line(x1, y1, x2, y2,
                                  strokeColor = color,
@@ -601,7 +609,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
             label_string.fontSize = self.label_size
             cur_drawing.add(label_string)
         x1 = segment_x + segment_width
-        x2 = segment_x + segment_width * 1.5
+        x2 = segment_x + segment_width + label_sep
         for (y1, y2, color, name) in right_labels:
             cur_drawing.add(Line(x1, y1, x2, y2,
                                  strokeColor = color,
