@@ -398,6 +398,24 @@ class ChromosomeSegment(_ChromosomeComponent):
             cur_drawing.add(label_string)
 
 def _spring_layout(desired, minimum, maximum, gap=0):
+    """Function to try and layout label co-ordinates (or other floats, PRIVATE).
+    
+    Originally written for the y-axis vertical positioning of labels on a
+    chromosome diagram (where the minimum gap between y-axis co-ordinates is
+    the label height), it could also potentially be used for x-axis placement,
+    or indeed radial placement for circular chromosomes within GenomeDiagram.
+    
+    In essence this is an optimisation problem, balancing the desire to have
+    each label as close as possible to its data point, but also to spread out
+    the labels to avoid overlaps. This could be described with a cost function
+    (modelling the label distance from the desired placement, and the inter-
+    label separations as springs) and solved as a multi-variable minimization
+    problem - perhaps with NumPy or SciPy.
+    
+    For now however, the implementation is a somewhat crude ad hoc algorithm.
+    
+    NOTE - This expects the input data to have been sorted!
+    """
     count = len(desired)
     if count <= 1:
         return desired #Easy!
@@ -430,19 +448,35 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     and len(low)*gap <= halfspan-0.5*gap \
     and len(high)*gap <= halfspan-0.5*gap:
         if not low:
-            return _spring_layout(high, midpoint, maximum, gap)
+            return _spring_layout(high, midpoint+0.5*gap, maximum, gap)
         elif not high:
-            return _spring_layout(low, minimum, midpoint, gap)
+            return _spring_layout(low, minimum, midpoint-0.5*gap, gap)
         elif min(high) - min(low) > gap:
             return _spring_layout(low, minimum, midpoint-0.5*gap, gap) + \
                    _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+    
+    #Try not to spread out as far as the min/max unless needed
+    low = 0.5 * (minimum + min(desired))
+    high = 0.5 * (max(desired) + maximum)
+    if (high-low) / (count-1) >= gap:
+        #Good, we don't need the full range
+        equal_step = (high-low) / (count-1)
+        return [low+i*equal_step for i in range(count)]
+
+    low = min(desired)
+    high = max(desired)
+    if (high-low) / (count-1) >= gap:
+        #Good, we don't need the full range, and can position the
+        #min and max exactly as well :)
+        equal_step = (high-low) / (count-1)
+        return [low+i*equal_step for i in range(count)]
 
     #Crudest solution
     return [minimum+i*equal_step for i in range(count)]
 
 #assert False, _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1)
 #assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
-assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.16666666666666666, 0.33333333333333331, 0.5, 0.66666666666666663, 0.83333333333333326, 1.0]
+#assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.16666666666666666, 0.33333333333333331, 0.5, 0.66666666666666663, 0.83333333333333326, 1.0]
 
 def _place_labels(desired_etc, minimum, maximum, gap=0):
     desired_etc.sort()
