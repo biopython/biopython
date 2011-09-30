@@ -142,14 +142,50 @@ def _pos(pos_str, offset=0):
 
     This also covers fuzzy positions:
 
-    >>> _pos("<5")
+    >>> p = _pos("<5")
+    >>> p
     BeforePosition(5)
+    >>> print p
+    <5
+    >>> int(p)
+    5
+
     >>> _pos(">5")
     AfterPosition(5)
-    >>> _pos("one-of(5,8,11)")
-    OneOfPosition([ExactPosition(5), ExactPosition(8), ExactPosition(11)])
+
+    By default assumes an end position, so note the integer behaviour:
+
+    >>> p = _pos("one-of(5,8,11)")
+    >>> p
+    OneOfPosition(11, choices=[ExactPosition(5), ExactPosition(8), ExactPosition(11)])
+    >>> print p
+    one-of(5,8,11)
+    >>> int(p)
+    11
+
     >>> _pos("(8.10)")
-    WithinPosition(8,2)
+    WithinPosition(10, left=8, right=10)
+
+    Fuzzy start positions:
+
+    >>> p = _pos("<5", -1)
+    >>> p
+    BeforePosition(4)
+    >>> print p
+    <4
+    >>> int(p)
+    4
+
+    Notice how the integer behaviour changes too!
+
+    >>> p = _pos("one-of(5,8,11)", -1)
+    >>> p
+    OneOfPosition(4, choices=[ExactPosition(4), ExactPosition(7), ExactPosition(10)])
+    >>> print(p)
+    one-of(4,7,10)
+    >>> int(p)
+    4
+
     """
     if pos_str.startswith("<"):
         return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
@@ -157,13 +193,23 @@ def _pos(pos_str, offset=0):
         return SeqFeature.AfterPosition(int(pos_str[1:])+offset)
     elif _re_within_position.match(pos_str):
         s,e = pos_str[1:-1].split(".")
-        return SeqFeature.WithinPosition(int(s)+offset, int(e)-int(s))
+        s = int(s) + offset
+        e = int(e) + offset
+        if offset == -1:
+            default = s
+        else:
+            default = e
+        return SeqFeature.WithinPosition(default, left=s, right=e)
     elif _re_oneof_position.match(pos_str):
         assert pos_str.startswith("one-of(")
         assert pos_str[-1]==")"
         parts = [SeqFeature.ExactPosition(int(pos)+offset) \
                  for pos in pos_str[7:-1].split(",")]
-        return SeqFeature.OneOfPosition(parts)
+        if offset == -1:
+            default = min(int(pos) for pos in parts)
+        else:
+            default = max(int(pos) for pos in parts)
+        return SeqFeature.OneOfPosition(default, choices=parts)
     else:
         return SeqFeature.ExactPosition(int(pos_str)+offset)
 
@@ -180,7 +226,9 @@ def _loc(loc_str, expected_seq_length):
     A more complex location using within positions,
 
     >>> _loc("(9.10)..(20.25)", 1000)
-    FeatureLocation(WithinPosition(8,1),WithinPosition(20,5))
+    FeatureLocation(WithinPosition(8, left=8, right=9),WithinPosition(25, left=20, right=25))
+
+    Notice how that will act as though it has overall start 8 and end 25.
 
     Zero length between feature,
 
