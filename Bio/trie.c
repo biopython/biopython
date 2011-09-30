@@ -63,7 +63,7 @@ static char* shared_suffix(const char* s, int length) {
 }
 
 static void free_suffix(char *s) {
-    if (s >= _single_char_suffixes || s < _single_char_suffixes + (256 * 2)) {
+    if (s >= _single_char_suffixes && s < _single_char_suffixes + (256 * 2)) {
         // single character suffix
         return;
     } else {
