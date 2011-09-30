@@ -456,18 +456,18 @@ def _spring_layout(desired, minimum, maximum, gap=0):
                    _spring_layout(high, midpoint+0.5*gap, maximum, gap)
     
     #Try not to spread out as far as the min/max unless needed
-    low = 0.5 * (minimum + min(desired))
-    high = 0.5 * (max(desired) + maximum)
-    if (high-low) / (count-1) >= gap:
-        #Good, we don't need the full range
-        equal_step = (high-low) / (count-1)
-        return [low+i*equal_step for i in range(count)]
-
     low = min(desired)
     high = max(desired)
     if (high-low) / (count-1) >= gap:
         #Good, we don't need the full range, and can position the
         #min and max exactly as well :)
+        equal_step = (high-low) / (count-1)
+        return [low+i*equal_step for i in range(count)]
+
+    low = 0.5 * (minimum + min(desired))
+    high = 0.5 * (max(desired) + maximum)
+    if (high-low) / (count-1) >= gap:
+        #Good, we don't need the full range
         equal_step = (high-low) / (count-1)
         return [low+i*equal_step for i in range(count)]
 
