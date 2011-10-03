@@ -53,7 +53,7 @@ static char* duplicate(const char* s) {
 
 static char* shared_suffix(const char* s, int length) {
     if (length == 1) {
-        return (char *)(_single_char_suffixes + ((int)s[0] * 2));
+        return (char *)(_single_char_suffixes + ((unsigned char)s[0] * 2));
     }
     char *t = malloc(length + 1);
     if (!t) return NULL;
