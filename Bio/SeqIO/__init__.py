@@ -531,9 +531,9 @@ def parse(handle, format, alphabet=None):
                 i = _force_alphabet(iterator_generator(handle), alphabet)
     elif format in AlignIO._FormatToIterator:
         #Use Bio.AlignIO to read in the alignments
-        #TODO - Can this helper function can be replaced with a generator
-        #expression, or something from itertools?
-        i = _iterate_via_AlignIO(handle, format, alphabet)
+        i = (r for alignment in AlignIO.parse(handle, format,
+                                              alphabet=alphabet)
+             for r in alignment)
     else:
         raise ValueError("Unknown format '%s'" % format)
     #This imposes some overhead... wait until we drop Python 2.4 to fix it
@@ -541,14 +541,6 @@ def parse(handle, format, alphabet=None):
         yield r
     if handle_close:
         handle.close()
-
-#This is a generator function
-def _iterate_via_AlignIO(handle, format, alphabet):
-    """Iterate over all records in several alignments (PRIVATE)."""
-    from Bio import AlignIO
-    for align in AlignIO.parse(handle, format, alphabet=alphabet):
-        for record in align:
-            yield record
 
 def _force_alphabet(record_iterator, alphabet):
     """Iterate over records, over-riding the alphabet (PRIVATE)."""
