@@ -304,10 +304,9 @@ See also http://biopython.org/wiki/SeqIO_dev
 --Peter
 """
 
-from Bio.Seq import Seq
+
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
 import AbiIO
