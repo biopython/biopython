@@ -11,7 +11,7 @@
 Bio.SeqIO is also documented at U{http://biopython.org/wiki/SeqIO} and by
 a whole chapter in our tutorial:
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
- - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}  
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
 
 Input
 =====
@@ -269,7 +269,7 @@ __docformat__ = "epytext en" #not just plaintext
 #   parser would fail.
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
-#   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
+#   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
 """
 FAO BioPython Developers
@@ -440,9 +440,9 @@ def write(sequences, handle, format):
 
     if handle_close:
         handle.close()
-    
+
     return count
-    
+
 def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
@@ -499,7 +499,7 @@ def parse(handle, format, alphabet=None):
     from Bio import AlignIO
 
     handle_close = False
-    
+
     if isinstance(handle, basestring):
         #Hack for SFF, will need to make this more general in future
         if format in _BinaryFormats :
@@ -520,7 +520,7 @@ def parse(handle, format, alphabet=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:    
+    #Map the file format to a sequence iterator:
     if format in _FormatToIterator:
         iterator_generator = _FormatToIterator[format]
         if alphabet is None:
@@ -636,7 +636,7 @@ def to_dict(sequences, key_function=None):
 
     If key_function is ommitted then record.id is used, on the assumption
     that the records objects returned are SeqRecords with a unique id.
-    
+
     If there are duplicate keys, an error is raised.
 
     Example usage, defaulting to using the record.id as key:
@@ -671,7 +671,7 @@ def to_dict(sequences, key_function=None):
     This approach is not suitable for very large sets of sequences, as all
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
-    """    
+    """
     if key_function is None:
         key_function = lambda rec : rec.id
 
@@ -694,7 +694,7 @@ def index(filename, format, alphabet=None, key_function=None):
      - key_function - Optional callback function which when given a
                   SeqRecord identifier string should return a unique
                   key for the dictionary.
-    
+
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
 
@@ -775,7 +775,7 @@ def index(filename, format, alphabet=None, key_function=None):
     would impose a severe performance penalty as it would require the file
     to be completely parsed while building the index. Right now this is
     usually avoided.
-    
+
     See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
@@ -791,7 +791,7 @@ def index(filename, format, alphabet=None, key_function=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:    
+    #Map the file format to a sequence iterator:
     import _index #Lazy import
     return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
 
@@ -801,7 +801,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 
     The index is stored in an SQLite database rather than in memory (as in the
     Bio.SeqIO.index(...) function).
-    
+
      - index_filename - Where to store the SQLite index
      - filenames - list of strings specifying file(s) to be indexed, or when
                   indexing a single file this can be given as a string.
@@ -814,7 +814,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
      - key_function - Optional callback function which when given a
                   SeqRecord identifier string should return a unique
                   key for the dictionary.
-    
+
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
 
@@ -836,7 +836,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'
 
     In this example the two files contain 85 and 10 records respectively.
-    
+
     See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
@@ -856,7 +856,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:    
+    #Map the file format to a sequence iterator:
     import _index #Lazy import
     return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
                                           alphabet, key_function)
@@ -923,7 +923,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     if out_close:
         out_handle.close()
     return count
-           
+
 def _test():
     """Run the Bio.SeqIO module's doctests.
 
