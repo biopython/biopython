@@ -304,7 +304,7 @@ See also http://biopython.org/wiki/SeqIO_dev
 --Peter
 """
 
-
+from Bio.File import seq_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
@@ -378,6 +378,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
+
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
@@ -406,39 +407,37 @@ def write(sequences, handle, format):
         sequences = [sequences]
 
     if isinstance(handle, basestring):
-        if format in _BinaryFormats :
-            handle = open(handle, "wb")
-        else :
-            handle = open(handle, "w")
-        handle_close = True
+        if format in _BinaryFormats:
+            mode = 'wb'
+        else:
+            mode = 'w'
     else:
-        handle_close = False
+        mode = None
 
-    #Map the file format to a writer class
-    if format in _FormatToWriter:
-        writer_class = _FormatToWriter[format]
-        count = writer_class(handle).write_file(sequences)
-    elif format in AlignIO._FormatToWriter:
-        #Try and turn all the records into a single alignment,
-        #and write that using Bio.AlignIO
-        alignment = MultipleSeqAlignment(sequences)
-        alignment_count = AlignIO.write([alignment], handle, format)
-        assert alignment_count == 1, "Internal error - the underlying writer " \
-           + " should have returned 1, not %s" % repr(alignment_count)
-        count = len(alignment)
-        del alignment_count, alignment
-    elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
-        raise ValueError("Reading format '%s' is supported, but not writing" \
-                         % format)
-    else:
-        raise ValueError("Unknown format '%s'" % format)
+    with seq_handle(handle, mode) as fp:
+        #Map the file format to a writer class
+        if format in _FormatToWriter:
+            writer_class = _FormatToWriter[format]
+            count = writer_class(fp).write_file(sequences)
+        elif format in AlignIO._FormatToWriter:
+            #Try and turn all the records into a single alignment,
+            #and write that using Bio.AlignIO
+            alignment = MultipleSeqAlignment(sequences)
+            alignment_count = AlignIO.write([alignment], fp, format)
+            assert alignment_count == 1, \
+                    "Internal error - the underlying writer " \
+                    " should have returned 1, not %s" % repr(alignment_count)
+            count = len(alignment)
+            del alignment_count, alignment
+        elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
+            raise ValueError("Reading format '%s' is supported, but not writing"
+                             % format)
+        else:
+            raise ValueError("Unknown format '%s'" % format)
 
-    assert isinstance(count, int), "Internal error - the underlying %s " \
-           "writer should have returned the record count, not %s" \
-           % (format, repr(count))
-
-    if handle_close:
-        handle.close()
+        assert isinstance(count, int), "Internal error - the underlying %s " \
+               "writer should have returned the record count, not %s" \
+               % (format, repr(count))
 
     return count
 
@@ -502,11 +501,11 @@ def parse(handle, format, alphabet=None):
     if isinstance(handle, basestring):
         #Hack for SFF, will need to make this more general in future
         if format in _BinaryFormats :
-            handle = open(handle, "rb")
-        else :
-            handle = open(handle, "rU")
-        #TODO - On Python 2.5+ use with statement to close handle
-        handle_close = True
+            mode = 'rb'
+        else:
+            mode = 'rU'
+    else:
+        mode = None
 
     #Try and give helpful error messages:
     if not isinstance(format, basestring):
@@ -519,28 +518,27 @@ def parse(handle, format, alphabet=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:
-    if format in _FormatToIterator:
-        iterator_generator = _FormatToIterator[format]
-        if alphabet is None:
-            i = iterator_generator(handle)
+    with seq_handle(handle, mode) as fp:
+        #Map the file format to a sequence iterator:
+        if format in _FormatToIterator:
+            iterator_generator = _FormatToIterator[format]
+            if alphabet is None:
+                i = iterator_generator(fp)
+            else:
+                try:
+                    i = iterator_generator(fp, alphabet=alphabet)
+                except TypeError:
+                    i = _force_alphabet(iterator_generator(fp), alphabet)
+        elif format in AlignIO._FormatToIterator:
+            #Use Bio.AlignIO to read in the alignments
+            i = (r for alignment in AlignIO.parse(fp, format,
+                                                  alphabet=alphabet)
+                 for r in alignment)
         else:
-            try:
-                i = iterator_generator(handle, alphabet=alphabet)
-            except TypeError:
-                i = _force_alphabet(iterator_generator(handle), alphabet)
-    elif format in AlignIO._FormatToIterator:
-        #Use Bio.AlignIO to read in the alignments
-        i = (r for alignment in AlignIO.parse(handle, format,
-                                              alphabet=alphabet)
-             for r in alignment)
-    else:
-        raise ValueError("Unknown format '%s'" % format)
-    #This imposes some overhead... wait until we drop Python 2.4 to fix it
-    for r in i:
-        yield r
-    if handle_close:
-        handle.close()
+            raise ValueError("Unknown format '%s'" % format)
+        #This imposes some overhead... wait until we drop Python 2.4 to fix it
+        for r in i:
+            yield r
 
 def _force_alphabet(record_iterator, alphabet):
     """Iterate over records, over-riding the alphabet (PRIVATE)."""
@@ -885,34 +883,27 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     if isinstance(in_file, basestring):
         #Hack for SFF, will need to make this more general in future
         if in_format in _BinaryFormats :
-            in_handle = open(in_file, "rb")
+            in_mode = 'rb'
         else :
-            in_handle = open(in_file, "rU")
-        in_close = True
+            in_mode = 'rU'
     else:
-        in_handle = in_file
-        in_close = False
+        in_mode = None
     #Don't open the output file until we've checked the input is OK?
     if isinstance(out_file, basestring):
         if out_format in ["sff", "sff_trim"] :
-            out_handle = open(out_file, "wb")
+            out_mode = 'wb'
         else :
-            out_handle = open(out_file, "w")
-        out_close = True
+            out_mode = 'w'
     else:
-        out_handle = out_file
-        out_close = False
+        out_mode = None
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
     from _convert import _handle_convert #Lazy import
-    count = _handle_convert(in_handle, in_format,
-                            out_handle, out_format,
-                            alphabet)
-    #Must now close any handles we opened
-    if in_close:
-        in_handle.close()
-    if out_close:
-        out_handle.close()
+    with seq_handle(in_file, in_mode) as in_handle:
+        with seq_handle(out_file, out_mode) as out_handle:
+            count = _handle_convert(in_handle, in_format,
+                                    out_handle, out_format,
+                                    alphabet)
     return count
 
 def _test():
