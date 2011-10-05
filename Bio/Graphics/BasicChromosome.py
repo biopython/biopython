@@ -647,7 +647,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 w = segment_width
             local_scale = segment_height / self.bp_length
             fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
-                                  w, local_scale*(end-start))
+                                  w, local_scale*(start-end))
             fill_rectangle.fillColor = color
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)

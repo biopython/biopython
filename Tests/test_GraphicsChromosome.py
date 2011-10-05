@@ -302,6 +302,8 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 start = (length - 1000000) * random.random()
                 end = min(length, start + 1000000)
                 cytobands.append((start, end, 0, None, color))
+            cytobands.append((0, 1000000, 0, "First 1 Mbp", colors.brown))
+            cytobands.append((length-1000000, length, 0, "Last 1 Mbp", colors.brown))
             #Create the drawing object for the chromosome
             cur_chromosome = BasicChromosome.Chromosome(name)
             #Set the length, adding an extra 20 percent for the tolomeres etc:
