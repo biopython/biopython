@@ -227,7 +227,11 @@ class TreeTests(unittest.TestCase):
 
     def test_BinaryCharacters(self):
         """Instantiation of BinaryCharacters objects."""
-        tree = PhyloXMLIO.parse(EX_DOLLO).next()
+        #Because we short circult interation, must close handle explicitly
+        #to avoid a ResourceWarning
+        handle = open(EX_DOLLO)
+        tree = PhyloXMLIO.parse(handle).next()
+        handle.close()
         bchars = tree.clade[0,0].binary_characters
         self.assertTrue(isinstance(bchars, PX.BinaryCharacters))
         self.assertEqual(bchars.type, 'parsimony inferred')
@@ -394,6 +398,7 @@ class TreeTests(unittest.TestCase):
     def test_Reference(self):
         """Instantiation of Reference objects."""
         #Because we short circult interation, must close handle explicitly
+        #to avoid a ResourceWarning
         handle = open(EX_DOLLO)
         tree = PhyloXMLIO.parse(handle).next()
         handle.close()
