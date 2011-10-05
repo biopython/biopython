@@ -304,6 +304,9 @@ See also http://biopython.org/wiki/SeqIO_dev
 --Peter
 """
 
+# For with statement in Python 2.5
+from __future__ import with_statement
+
 from Bio.File import seq_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
