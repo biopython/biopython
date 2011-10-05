@@ -308,7 +308,7 @@ See also http://biopython.org/wiki/SeqIO_dev
 """
 
 
-from Bio.File import seq_handle
+from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
@@ -415,7 +415,7 @@ def write(sequences, handle, format):
     else:
         mode = 'w'
 
-    with seq_handle(handle, mode) as fp:
+    with as_handle(handle, mode) as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
@@ -514,7 +514,7 @@ def parse(handle, format, alphabet=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    with seq_handle(handle, mode) as fp:
+    with as_handle(handle, mode) as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
@@ -891,8 +891,8 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
     from _convert import _handle_convert #Lazy import
-    with seq_handle(in_file, in_mode) as in_handle:
-        with seq_handle(out_file, out_mode) as out_handle:
+    with as_handle(in_file, in_mode) as in_handle:
+        with as_handle(out_file, out_mode) as out_handle:
             count = _handle_convert(in_handle, in_format,
                                     out_handle, out_format,
                                     alphabet)

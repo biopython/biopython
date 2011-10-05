@@ -24,7 +24,7 @@ import StringIO
 
 
 @contextlib.contextmanager
-def seq_handle(handleish, mode='r'):
+def as_handle(handleish, mode='r'):
     """
     Context manager for arguments that can be passed to
     SeqIO and AlignIO read, write, and parse methods: either file objects or strings.
@@ -39,13 +39,13 @@ def seq_handle(handleish, mode='r'):
 
     Example:
 
-    >>> with seq_handle('seqs.fasta', 'w') as fp:
+    >>> with as_handle('seqs.fasta', 'w') as fp:
     ...     fp.write('>test\nACGT')
     >>> fp.closed
     True
 
     >>> handle = open('seqs.fasta', 'w')
-    >>> with seq_handle(handle) as fp:
+    >>> with as_handle(handle) as fp:
     ...     fp.write('>test\nACGT')
     >>> fp.closed
     False
