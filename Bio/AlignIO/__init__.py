@@ -140,7 +140,7 @@ __docformat__ = "epytext en" #not just plaintext
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
-from Bio.File import seq_handle
+from Bio.File import as_handle
 
 import StockholmIO
 import ClustalIO
@@ -200,7 +200,7 @@ def write(alignments, handle, format):
         #This raised an exception in older version of Biopython
         alignments = [alignments]
 
-    with seq_handle(handle, 'w') as fp:
+    with as_handle(handle, 'w') as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
@@ -335,7 +335,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
     if seq_count is not None and not isinstance(seq_count, int):
         raise TypeError("Need integer for seq_count (sequences per alignment)")
 
-    with seq_handle(handle, 'rU') as fp:
+    with as_handle(handle, 'rU') as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
@@ -441,13 +441,13 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """
     #TODO - Add optimised versions of important conversions
     #For now just off load the work to SeqIO parse/write
-    with seq_handle(in_file, 'rU') as in_handle:
+    with as_handle(in_file, 'rU') as in_handle:
         #Don't open the output file until we've checked the input is OK:
         alignments = parse(in_handle, in_format, None, alphabet)
 
         #This will check the arguments and issue error messages,
         #after we have opened the file which is a shame.
-        with seq_handle(out_file, 'w') as out_handle:
+        with as_handle(out_file, 'w') as out_handle:
             count = write(alignments, out_handle, out_format)
 
     return count
