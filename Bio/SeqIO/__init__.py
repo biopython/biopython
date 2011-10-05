@@ -410,13 +410,10 @@ def write(sequences, handle, format):
         #This raised an exception in order version of Biopython
         sequences = [sequences]
 
-    if isinstance(handle, basestring):
-        if format in _BinaryFormats:
-            mode = 'wb'
-        else:
-            mode = 'w'
+    if format in _BinaryFormats:
+        mode = 'wb'
     else:
-        mode = None
+        mode = 'w'
 
     with seq_handle(handle, mode) as fp:
         #Map the file format to a writer class
@@ -500,16 +497,11 @@ def parse(handle, format, alphabet=None):
     #string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
-    handle_close = False
-
-    if isinstance(handle, basestring):
-        #Hack for SFF, will need to make this more general in future
-        if format in _BinaryFormats :
-            mode = 'rb'
-        else:
-            mode = 'rU'
+    #Hack for SFF, will need to make this more general in future
+    if format in _BinaryFormats :
+        mode = 'rb'
     else:
-        mode = None
+        mode = 'rU'
 
     #Try and give helpful error messages:
     if not isinstance(format, basestring):
@@ -884,22 +876,18 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    if isinstance(in_file, basestring):
-        #Hack for SFF, will need to make this more general in future
-        if in_format in _BinaryFormats :
-            in_mode = 'rb'
-        else :
-            in_mode = 'rU'
-    else:
-        in_mode = None
+    #Hack for SFF, will need to make this more general in future
+    if in_format in _BinaryFormats :
+        in_mode = 'rb'
+    else :
+        in_mode = 'rU'
+
     #Don't open the output file until we've checked the input is OK?
-    if isinstance(out_file, basestring):
-        if out_format in ["sff", "sff_trim"] :
-            out_mode = 'wb'
-        else :
-            out_mode = 'w'
-    else:
-        out_mode = None
+    if out_format in ["sff", "sff_trim"] :
+        out_mode = 'wb'
+    else :
+        out_mode = 'w'
+
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
     from _convert import _handle_convert #Lazy import
