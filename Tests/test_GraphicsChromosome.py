@@ -304,12 +304,13 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 cytobands.append((start, end, 0, None, color))
             #Create the drawing object for the chromosome
             cur_chromosome = BasicChromosome.Chromosome(name)
-            #Set the length, adding an extra 20 percent for the tolomeres:
-            cur_chromosome.scale_num = max_length * 1.2
+            #Set the length, adding an extra 6 percent for the tolomeres:
+            cur_chromosome.scale_num = max_length * 1.06
             cur_chromosome.label_sep_percent = 0.15
             #Add an opening telomere
             start = BasicChromosome.TelomereSegment()
-            start.scale = 0.1 * max_length
+            start.scale = 0.03 * max_length
+            start.fill_color = colors.lightgrey
             cur_chromosome.add(start)
             #Add a body - using bp as the scale length here.
             #Note we put the cytobands a start of combined list,
@@ -319,7 +320,8 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             cur_chromosome.add(body)
             #Add a closing telomere
             end = BasicChromosome.TelomereSegment(inverted=True)
-            end.scale = 0.1 * max_length
+            end.scale = 0.03 * max_length
+            end.fill_color = colors.lightgrey
             cur_chromosome.add(end)
             #This chromosome is done
             chr_diagram.add(cur_chromosome)

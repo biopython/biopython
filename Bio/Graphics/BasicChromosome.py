@@ -702,7 +702,7 @@ class TelomereSegment(ChromosomeSegment):
             end_angle = 180
         
         cap_wedge = Wedge(center_x, center_y, width / 2,
-                          start_angle, end_angle, height / 2)
+                          start_angle, end_angle, height)
 
         cap_wedge.fillColor = self.fill_color
         cur_drawing.add(cap_wedge)
