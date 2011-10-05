@@ -778,7 +778,6 @@ class Atom_Element(unittest.TestCase):
         """Element for magnesium is assigned correctly."""
         pdb_filename = "PDB/ions.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        warnings.filters.pop()
         # check magnesium atom
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
