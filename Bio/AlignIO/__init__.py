@@ -117,6 +117,9 @@ You can also use any file format supported by Bio.SeqIO, such as "fasta" or
 "ig" (which are listed above), PROVIDED the sequences in your file are all the
 same length.
 """
+# For with statement in Python 2.5
+from __future__ import with_statement
+
 __docformat__ = "epytext en" #not just plaintext
 
 #TODO
@@ -133,8 +136,6 @@ __docformat__ = "epytext en" #not just plaintext
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
-# For with statement in Python 2.5
-from __future__ import with_statement
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment

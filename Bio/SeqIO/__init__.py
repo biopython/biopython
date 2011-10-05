@@ -258,6 +258,9 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phlip" and "stockholm", which gives you access to the individual sequences
 making up each alignment as SeqRecords.
 """
+# For with statement in Python 2.5 - must occur before other statements
+from __future__ import with_statement
+
 __docformat__ = "epytext en" #not just plaintext
 
 #TODO
@@ -304,8 +307,6 @@ See also http://biopython.org/wiki/SeqIO_dev
 --Peter
 """
 
-# For with statement in Python 2.5
-from __future__ import with_statement
 
 from Bio.File import seq_handle
 from Bio.SeqRecord import SeqRecord
