@@ -724,3 +724,13 @@ class TelomereSegment(ChromosomeSegment):
 
         cover_line.strokeColor = cover_color
         cur_drawing.add(cover_line)
+
+class SpacerSegment(ChromosomeSegment):
+    """A segment that is located at the end of a linear chromosome.
+
+    Doesn't draw anything, just empty space which can be helpful
+    for layout purposes (e.g. making room for feature labels).
+    """
+
+    def draw(self, cur_diagram):
+        pass

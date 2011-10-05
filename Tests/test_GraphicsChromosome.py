@@ -304,12 +304,17 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 cytobands.append((start, end, 0, None, color))
             #Create the drawing object for the chromosome
             cur_chromosome = BasicChromosome.Chromosome(name)
-            #Set the length, adding an extra 6 percent for the tolomeres:
-            cur_chromosome.scale_num = max_length * 1.06
+            #Set the length, adding an extra 20 percent for the tolomeres etc:
+            cur_chromosome.scale_num = max_length * 1.2
             cur_chromosome.label_sep_percent = 0.15
+            #Add a dummy segment for allocating vertical space
+            #which can be used for feature label placement
+            spacer = BasicChromosome.SpacerSegment()
+            spacer.scale = 0.03 * max_length
+            cur_chromosome.add(spacer)
             #Add an opening telomere
             start = BasicChromosome.TelomereSegment()
-            start.scale = 0.03 * max_length
+            start.scale = 0.02 * max_length
             start.fill_color = colors.lightgrey
             cur_chromosome.add(start)
             #Add a body - using bp as the scale length here.
@@ -320,9 +325,13 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             cur_chromosome.add(body)
             #Add a closing telomere
             end = BasicChromosome.TelomereSegment(inverted=True)
-            end.scale = 0.03 * max_length
+            end.scale = 0.02 * max_length
             end.fill_color = colors.lightgrey
             cur_chromosome.add(end)
+            #Another spacer
+            spacer = BasicChromosome.SpacerSegment()
+            spacer.scale = 0.03 * max_length
+            cur_chromosome.add(spacer)
             #This chromosome is done
             chr_diagram.add(cur_chromosome)
         chr_diagram.draw("Graphics/tRNA_chrom.pdf", "Arabidopsis thaliana tRNA")
