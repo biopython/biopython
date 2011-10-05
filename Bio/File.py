@@ -17,6 +17,8 @@ SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
                to be removed in a future release of Biopython.
 
 """
+# For with statement in Python 2.5
+from __future__ import with_statement
 import contextlib
 import StringIO
 
