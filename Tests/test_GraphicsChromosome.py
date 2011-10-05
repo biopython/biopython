@@ -306,6 +306,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             cur_chromosome = BasicChromosome.Chromosome(name)
             #Set the length, adding an extra 20 percent for the tolomeres:
             cur_chromosome.scale_num = max_length * 1.2
+            cur_chromosome.label_sep_percent = 0.15
             #Add an opening telomere
             start = BasicChromosome.TelomereSegment()
             start.scale = 0.1 * max_length
@@ -315,7 +316,6 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             #as want them drawn underneath the tRNA markers.
             body = BasicChromosome.AnnotatedChromosomeSegment(length, cytobands + features)
             body.scale = length
-            body.label_sep_percent = 0.15
             cur_chromosome.add(body)
             #Add a closing telomere
             end = BasicChromosome.TelomereSegment(inverted=True)
