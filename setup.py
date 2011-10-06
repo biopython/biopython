@@ -73,13 +73,21 @@ elif sys.version_info[0] == 3:
         if not os.path.isdir("build"):
             os.mkdir("build")
         do2to3.main(".", python3_source)
-    
-from distutils.core import setup
-from distutils.core import Command
-from distutils.command.install import install
-from distutils.command.build_py import build_py
-from distutils.command.build_ext import build_ext
-from distutils.extension import Extension
+
+# use setuptools, falling back on core modules if not found
+try:
+    from setuptools import setup, Command
+    from setuptools.command.install import install
+    from setuptools.command.build_py import build_py
+    from setuptools.command.build_ext import build_ext
+    from setuptools.extension import Extension
+except ImportError:
+    from distutils.core import setup
+    from distutils.core import Command
+    from distutils.command.install import install
+    from distutils.command.build_py import build_py
+    from distutils.command.build_ext import build_ext
+    from distutils.extension import Extension
 
 _CHECKED = None
 def check_dependencies_once():
@@ -89,6 +97,32 @@ def check_dependencies_once():
     if _CHECKED is None:
         _CHECKED = check_dependencies()
     return _CHECKED
+
+def get_install_requires():
+    install_requires = []
+    # skip this with jython and pypy
+    if os.name=="java" or is_pypy():
+        return install_requires
+    # check for easy_install and pip
+    is_automated = False
+    # easy_install: --dist-dir option passed
+    try:
+        dist_dir_i = sys.argv.index("--dist-dir")
+    except ValueError:
+        dist_dir_i = None
+    if dist_dir_i is not None:
+        dist_dir = sys.argv[dist_dir_i+1]
+        if dist_dir.find("egg-dist-tmp") >= 0:
+            is_automated = True
+    # pip -- calls from python directly with "-c"
+    if sys.argv in [["-c", "develop", "--no-deps"],
+                    ["-c", "egg_info"]]:
+        is_automated = True
+    if is_automated:
+        global _CHECKED
+        if _CHECKED is None: _CHECKED = True
+        install_requires.append("numpy >= 1.5.1")
+    return install_requires
 
 def check_dependencies():
     """Return whether the installation should continue."""
@@ -393,10 +427,7 @@ try:
         package_data = {'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
                         'Bio.PopGen': ['SimCoal/data/*.par'],
                        },
-        #install_requires = ['numpy>=1.0'],
-        #extras_require = {
-        #    'PDF' : ['reportlab>=2.0']
-        #    }
+        install_requires = get_install_requires(),
         )
 finally:
     del sys.path[0]
