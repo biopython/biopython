@@ -8,7 +8,7 @@
 This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
 """
 
-# For with on [PJ]ython 2.5
+# For with on Python/Jython 2.5
 from __future__ import with_statement
 __docformat__ = "restructuredtext en"
 
