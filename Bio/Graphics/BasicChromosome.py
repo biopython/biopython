@@ -211,6 +211,7 @@ class Chromosome(_ChromosomeComponent):
         self.label_size = 6
         self.chr_percent = 0.25
         self.label_sep_percent = self.chr_percent * 0.5
+        self._color_labels = False
 
     def subcomponent_size(self):
         """Return the scaled size of all subcomponents of this component.
@@ -291,6 +292,8 @@ class Chromosome(_ChromosomeComponent):
         Draws the label text and a coloured line linking it to the
         location (i.e. feature) it applies to.
         """
+        color_label = self._color_labels
+
         segment_width = (self.end_x_position - self.start_x_position) \
                         * self.chr_percent
         label_sep = (self.end_x_position - self.start_x_position) \
@@ -321,6 +324,8 @@ class Chromosome(_ChromosomeComponent):
                                   textAnchor="end")
             label_string.fontName = 'Helvetica'
             label_string.fontSize = self.label_size
+            if color_label:
+                label_string.fillColor = color
             cur_drawing.add(label_string)
         x1 = segment_x + segment_width
         x2 = segment_x + segment_width + label_sep
@@ -331,6 +336,8 @@ class Chromosome(_ChromosomeComponent):
             label_string = String(x2, y2, name)
             label_string.fontName = 'Helvetica'
             label_string.fontSize = self.label_size
+            if color_label:
+                label_string.fillColor = color
             cur_drawing.add(label_string)
 
 
