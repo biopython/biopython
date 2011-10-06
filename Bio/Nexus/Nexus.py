@@ -9,14 +9,17 @@
 Based upon 'NEXUS: An extensible file format for systematic information'
 Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 """
+# For with in Python/Jython 2.5
+from __future__ import with_statement
 
 import os,sys, math, random, copy
 
+from Bio import File
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
 
-from Trees import Tree,NodeData
+from Trees import Tree
 
 INTERLEAVE=70
 SPECIAL_COMMANDS=['charstatelabels','charlabels','taxlabels', 'taxset', 'charset','charpartition','taxpartition',\
@@ -557,27 +560,22 @@ class Nexus(object):
         """Included for backwards compatibility (DEPRECATED)."""
         self.taxlabels=value
     original_taxon_order=property(get_original_taxon_order,set_original_taxon_order)
-    
+
     def read(self,input):
         """Read and parse NEXUS imput (a filename, file-handle, or string)."""
-        
-        # 1. Assume we have the name of a file in the execution dir
+
+        # 1. Assume we have the name of a file in the execution dir or a
+        # file-like object.
         # Note we need to add parsing of the path to dir/filename
         try:
-            file_contents = open(os.path.expanduser(input),'rU').read()
-            self.filename=input
+            with File.as_handle(input, 'rU') as fp:
+                file_contents = fp.read()
+                self.filename = getattr(fp, 'name', 'Unknown_nexus_file')
         except (TypeError,IOError,AttributeError):
             #2 Assume we have a string from a fh.read()
-            if isinstance(input, str):
+            if isinstance(input, basestring):
                 file_contents = input
                 self.filename='input_string'
-            #3 Assume we have a file object
-            elif hasattr(input,'read'): # file objects or StringIO objects
-                file_contents=input.read()
-                if hasattr(input,"name") and input.name:
-                    self.filename=input.name
-                else:
-                    self.filename='Unknown_nexus_file'
             else:
                 print input.strip()[:50]
                 raise NexusError('Unrecognized input: %s ...' % input[:100])
@@ -1271,96 +1269,82 @@ class Nexus(object):
         nchar_adjusted=len(cropped_matrix[undelete[0]])
         if not undelete or (undelete and undelete[0]==''):
             return
-        if isinstance(filename,basestring):
-            try:
-                fh=open(filename,'w',encoding="utf-8")
-            except IOError:
-                raise NexusError('Could not open %s for writing.' % filename)
-        elif hasattr(filename, 'write'):
-            #e.g. StringIO or a real file handle
-            fh=filename
-        else:
-            raise ValueError("Neither a filename nor a handle was supplied")
-        if not omit_NEXUS:
-            fh.write('#NEXUS\n')
-        if comment:
-            fh.write('['+comment+']\n')
-        fh.write('begin data;\n')
-        fh.write('\tdimensions ntax=%d nchar=%d;\n' % (ntax_adjusted, nchar_adjusted))
-        fh.write('\tformat datatype='+self.datatype)
-        if self.respectcase:
-            fh.write(' respectcase')
-        if self.missing:
-            fh.write(' missing='+self.missing)
-        if self.gap:
-            fh.write(' gap='+self.gap)
-        if self.matchchar:
-            fh.write(' matchchar='+self.matchchar)
-        if self.labels:
-            fh.write(' labels='+self.labels)
-        if self.equate:
-            fh.write(' equate='+self.equate)
-        if interleave or interleave_by_partition:
-            fh.write(' interleave')
-        fh.write(';\n')
-        #if self.taxlabels:
-        #    fh.write('taxlabels '+' '.join(self.taxlabels)+';\n')
-        if self.charlabels:
-            newcharlabels=self._adjust_charlabels(exclude=exclude)
-            clkeys=sorted(newcharlabels)
-            fh.write('charlabels '+', '.join(["%s %s" % (k+1,safename(newcharlabels[k])) for k in clkeys])+';\n')
-        fh.write('matrix\n')
-        if not blocksize:
-            if interleave:
-                blocksize=70
-            else:
-                blocksize=self.nchar
-        # delete deleted taxa and ecxclude excluded characters...
-        namelength=max([len(safename(t,mrbayes=mrbayes)) for t in undelete])
-        if interleave_by_partition:
-            # interleave by partitions, but adjust partitions with regard to excluded characters
-            seek=0
-            for p in names:
-                fh.write('[%s: %s]\n' % (interleave_by_partition,p))
-                if len(newpartition[p])>0:
+
+        with File.as_handle(filename, mode='w', encoding='utf-8') as fh:
+            if not omit_NEXUS:
+                fh.write('#NEXUS\n')
+            if comment:
+                fh.write('['+comment+']\n')
+            fh.write('begin data;\n')
+            fh.write('\tdimensions ntax=%d nchar=%d;\n' % (ntax_adjusted, nchar_adjusted))
+            fh.write('\tformat datatype='+self.datatype)
+            if self.respectcase:
+                fh.write(' respectcase')
+            if self.missing:
+                fh.write(' missing='+self.missing)
+            if self.gap:
+                fh.write(' gap='+self.gap)
+            if self.matchchar:
+                fh.write(' matchchar='+self.matchchar)
+            if self.labels:
+                fh.write(' labels='+self.labels)
+            if self.equate:
+                fh.write(' equate='+self.equate)
+            if interleave or interleave_by_partition:
+                fh.write(' interleave')
+            fh.write(';\n')
+            #if self.taxlabels:
+            #    fh.write('taxlabels '+' '.join(self.taxlabels)+';\n')
+            if self.charlabels:
+                newcharlabels=self._adjust_charlabels(exclude=exclude)
+                clkeys=sorted(newcharlabels)
+                fh.write('charlabels '+', '.join(["%s %s" % (k+1,safename(newcharlabels[k])) for k in clkeys])+';\n')
+            fh.write('matrix\n')
+            if not blocksize:
+                if interleave:
+                    blocksize=70
+                else:
+                    blocksize=self.nchar
+            # delete deleted taxa and ecxclude excluded characters...
+            namelength=max([len(safename(t,mrbayes=mrbayes)) for t in undelete])
+            if interleave_by_partition:
+                # interleave by partitions, but adjust partitions with regard to excluded characters
+                seek=0
+                for p in names:
+                    fh.write('[%s: %s]\n' % (interleave_by_partition,p))
+                    if len(newpartition[p])>0:
+                        for taxon in undelete:
+                            fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
+                            fh.write(cropped_matrix[taxon][seek:seek+len(newpartition[p])]+'\n')
+                        fh.write('\n')
+                    else:
+                        fh.write('[empty]\n\n')
+                    seek+=len(newpartition[p])
+            elif interleave:
+                for seek in range(0,nchar_adjusted,blocksize):
                     for taxon in undelete:
                         fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
-                        fh.write(cropped_matrix[taxon][seek:seek+len(newpartition[p])]+'\n')
+                        fh.write(cropped_matrix[taxon][seek:seek+blocksize]+'\n')
                     fh.write('\n')
-                else:
-                    fh.write('[empty]\n\n')
-                seek+=len(newpartition[p])
-        elif interleave:
-            for seek in range(0,nchar_adjusted,blocksize):
-                for taxon in undelete:
-                    fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
-                    fh.write(cropped_matrix[taxon][seek:seek+blocksize]+'\n')
-                fh.write('\n')
-        else:
-            for taxon in undelete:
-                if blocksize<nchar_adjusted:
-                    fh.write(safename(taxon,mrbayes=mrbayes)+'\n')
-                else:
-                    fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
-                taxon_seq = cropped_matrix[taxon]
-                for seek in range(0,nchar_adjusted,blocksize):
-                    fh.write(taxon_seq[seek:seek+blocksize]+'\n')
-                del taxon_seq
-        fh.write(';\nend;\n')
-        if append_sets:
-            if codons_block:
-                fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,include_codons=False))
-                fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,codons_only=True))
             else:
-                fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
+                for taxon in undelete:
+                    if blocksize<nchar_adjusted:
+                        fh.write(safename(taxon,mrbayes=mrbayes)+'\n')
+                    else:
+                        fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
+                    taxon_seq = cropped_matrix[taxon]
+                    for seek in range(0,nchar_adjusted,blocksize):
+                        fh.write(taxon_seq[seek:seek+blocksize]+'\n')
+                    del taxon_seq
+            fh.write(';\nend;\n')
+            if append_sets:
+                if codons_block:
+                    fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,include_codons=False))
+                    fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes,codons_only=True))
+                else:
+                    fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
+        return filename
 
-        if fh == filename:
-            #We were given the handle, don't close it.
-            return filename
-        else:
-            #We opened the handle, so we should close it.
-            fh.close()
-            return filename
 
     def append_sets(self,exclude=[],delete=[],mrbayes=False,include_codons=True,codons_only=False):
         """Returns a sets block."""
