@@ -26,6 +26,8 @@ try:
 except ImportError:
     from StringIO import StringIO
 import warnings
+
+#For speed try to use cElementTree rather than ElemenTree
 try:
     if (3,0,0) <= sys.version_info[:3] <= (3,1,3):
         #workaround for bug in python 3 to 3.1.3  see http://bugs.python.org/issue9257
@@ -33,27 +35,7 @@ try:
     else:
         from xml.etree import cElementTree as ElementTree
 except ImportError:
-    try:
-        from xml.etree import ElementTree as ElementTree
-    except ImportError:
-        # Python 2.4 -- check for 3rd-party implementations
-        try:
-            from lxml import etree as ElementTree
-        except ImportError:
-            try:
-                import cElementTree as ElementTree
-            except ImportError:
-                try:
-                    from elementtree import ElementTree
-                except ImportError:
-                    ElementTree = None
-                    #TODO - Clean this up after we drop Python 2.4,
-                    #for now delay the error so the tests pass on Python 2.4
-                    #from Bio import MissingPythonDependencyError
-                    #raise MissingPythonDependencyError(
-                    #        "No ElementTree module was found. "
-                    #        "Use Python 2.5+, lxml or elementtree if you "
-                    #        "want to use Bio.SeqIO.UniprotIO.")
+    from xml.etree import ElementTree as ElementTree
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"

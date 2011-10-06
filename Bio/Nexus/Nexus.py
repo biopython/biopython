@@ -380,19 +380,20 @@ def _kill_comments_and_break_lines(text):
    
     NOTE: this function is very slow for large files, and obsolete when using C extension cnexus
     """
-    contents=CharBuffer(text)
+    contents=iter(text)
     newtext=[] 
     newline=[]
     quotelevel=''
     speciallevel=False
     commlevel=0
+    #Parse with one character look ahead (for special comments)
+    t2 = contents.next()
     while True:
-        #plain=contents.next_until(["'",'"','[',']','\n',';'])   # search for next special character
-        #if not plain:
-        #    newline.append(contents.rest)                       # not found, just add the rest
-        #    break
-        #newline.append(plain)                                   # add intermediate text
-        t=contents.next()                                       # and get special character
+        t = t2
+        try:
+            t2 = contents.next()
+        except StopIteration:
+            t2 = None
         if t is None:
             break
         if t==quotelevel and not (commlevel or speciallevel):            # matching quote ends quotation
@@ -400,7 +401,7 @@ def _kill_comments_and_break_lines(text):
         elif not quotelevel and not (commlevel or speciallevel) and (t=='"' or t=="'"): # single or double quote starts quotation
             quotelevel=t
         elif not quotelevel and t=='[':                             # opening bracket outside a quote
-            if contents.peek() in SPECIALCOMMENTS and commlevel==0 and not speciallevel:
+            if t2 in SPECIALCOMMENTS and commlevel==0 and not speciallevel:
                 speciallevel=True
             else:
                 commlevel+=1
@@ -1341,8 +1342,10 @@ class Nexus(object):
                     fh.write(safename(taxon,mrbayes=mrbayes)+'\n')
                 else:
                     fh.write(safename(taxon,mrbayes=mrbayes).ljust(namelength+1))
+                taxon_seq = cropped_matrix[taxon]
                 for seek in range(0,nchar_adjusted,blocksize):
-                    fh.write(cropped_matrix[taxon][seek:seek+blocksize]+'\n')
+                    fh.write(taxon_seq[seek:seek+blocksize]+'\n')
+                del taxon_seq
         fh.write(';\nend;\n')
         if append_sets:
             if codons_block:

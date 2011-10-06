@@ -15,20 +15,27 @@ except ImportError:
 
         Implementation by James Gardner in his BareNecessities
         package, under MIT licence.
+
+        With a fix for Windows where posixpath.sep (and functions like
+        join) use the Unix slash not the Windows slash.
         """
         import posixpath
         if start is None:
             start = posixpath.curdir
+        else:
+            start = start.replace(os.path.sep, posixpath.sep)
         if not path:
             raise ValueError("no path specified")
+        else:
+            path = path.replace(os.path.sep, posixpath.sep)
         start_list = posixpath.abspath(start).split(posixpath.sep)
         path_list = posixpath.abspath(path).split(posixpath.sep)
         # Work out how much of the filepath is shared by start and path.
         i = len(posixpath.commonprefix([start_list, path_list]))
         rel_list = [posixpath.pardir] * (len(start_list)-i) + path_list[i:]
         if not rel_list:
-            return posixpath.curdir
-        return posixpath.join(*rel_list)
+            return posixpath.curdir.replace(posixpath.sep, os.path.sep)
+        return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
 
 class PamlError(EnvironmentError):
     """paml has failed. Run with verbose = True to view the error
@@ -127,8 +134,9 @@ class Paml(object):
             if verbose:
                 result_code = subprocess.call([command, self.ctl_file])
             else:
+                # To suppress output, redirect it to a pipe to nowhere
                 result_code = subprocess.call([command, self.ctl_file],
-                    stdout=open(os.devnull, 'w'))
+                    stdout=subprocess.PIPE)
         else:
             if not os.path.exists(ctl_file):
                 raise IOError, "The specified control file does not exist."
@@ -136,12 +144,14 @@ class Paml(object):
                 result_code = subprocess.call([command, ctl_file])
             else:
                 result_code = subprocess.call([command, ctl_file],
-                    stdout=open(os.devnull, 'w'))
+                    stdout=subprocess.PIPE)
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
             raise PamlError, \
-            "%s has failed. Run with verbose = True to view error message" % command
+            "%s has failed (return code %i). Run with verbose = True to view error message" \
+            % (command, result_code)
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError, "The %s process was killed." % command
+            raise EnvironmentError, "The %s process was killed (return code %i)." \
+                  % (command, result_code)

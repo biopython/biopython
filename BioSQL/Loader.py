@@ -815,8 +815,8 @@ class DatabaseLoader:
         # convert biopython locations to the 1-based location system
         # used in bioSQL
         # XXX This could also handle fuzzies
-        start = feature.location.nofuzzy_start + 1
-        end = feature.location.nofuzzy_end
+        start = int(feature.location.start) + 1
+        end = int(feature.location.end)
 
         # Biopython uses None when we don't know strand information but
         # BioSQL requires something (non null) and sets this as zero

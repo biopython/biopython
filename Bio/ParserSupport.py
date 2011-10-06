@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code to support writing parsers.
+"""Code to support writing parsers (OBSOLETE).
 
 
 
@@ -25,6 +25,11 @@ attempt_read_and_call  Like read_and_call, but forgiving of errors.
 is_blank_line          Test whether a line is blank.
 
 """
+
+
+import warnings
+warnings.warn("The module Bio.ParserSupport is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
+
 
 import sys
 import traceback
@@ -49,7 +54,7 @@ class AbstractParser(object):
         raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
-        return self.parse(File.StringHandle(string))
+        return self.parse(StringIO.StringIO(string))
 
     def parse_file(self, filename):
         h = open(filename)
@@ -125,6 +130,8 @@ class SGMLStrippingConsumer(object):
 
     """
     def __init__(self, consumer):
+        import Bio
+        warnings.warn("SGMLStrippingConsumer is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
         if type(consumer) is not InstanceType:
             raise ValueError("consumer should be an instance")
         self._consumer = consumer

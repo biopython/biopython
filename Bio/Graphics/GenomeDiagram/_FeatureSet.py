@@ -280,13 +280,10 @@ class FeatureSet(object):
 
 if __name__ == '__main__':
 
-    from Bio import GenBank
+    from Bio import SeqIO
     from Bio.SeqFeature import SeqFeature
     
-    parser = GenBank.FeatureParser()
-    fhandle = open('/Users/lpritc/Documents/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'r')
-    genbank_entry = parser.parse(fhandle)
-    fhandle.close()
+    genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
     # Test code
     gdfs = FeatureSet(0, 'Nanoarchaeum equitans CDS')

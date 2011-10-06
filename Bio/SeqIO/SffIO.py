@@ -654,6 +654,33 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
     #Return the raw bytes
     return raw
 
+class _AddTellHandle(object):
+    """Wrapper for handles which do not support the tell method (PRIVATE).
+
+    Intended for use with things like network handles where tell (and reverse
+    seek) are not supported. The SFF file needs to track the current offset in
+    order to deal with the index block.
+    """
+    def __init__(self, handle):
+        self._handle = handle
+        self._offset = 0
+
+    def read(self, length):
+        data = self._handle.read(length)
+        self._offset += len(data)
+        return data
+
+    def tell(self):
+        return self._offset
+
+    def seek(self, offset):
+        if offset < self._offset:
+            raise RunTimeError("Can't seek backwards")
+        self._handle.read(offset - self._offset)
+
+    def close(self):
+        return self._handle.close()
+
 
 #This is a generator function!
 def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
@@ -728,6 +755,11 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     if isinstance(Alphabet._get_base_alphabet(alphabet),
                   Alphabet.RNAAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
+    try:
+        assert 0 == handle.tell()
+    except AttributeError:
+        #Probably a network handle or something like that
+        handle = _AddTellHandle(handle)
     header_length, index_offset, index_length, number_of_reads, \
     number_of_flows_per_read, flow_chars, key_sequence \
         = _sff_file_header(handle)

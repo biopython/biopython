@@ -5,9 +5,14 @@
 
 """Parser for PDB files."""
 
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
+
 import warnings
 
 import numpy
+
+from Bio.File import as_handle
 
 from Bio.PDB.PDBExceptions import \
         PDBConstructionException, PDBConstructionWarning
@@ -72,16 +77,13 @@ class PDBParser(object):
         self.trailer=None
         # Make a StructureBuilder instance (pass id of structure as parameter)
         self.structure_builder.init_structure(id)
-        handle_close = False
-        if isinstance(file, basestring):
-            file=open(file)
-            handle_close = True
-        self._parse(file.readlines())
+
+        with as_handle(file) as handle:
+            self._parse(handle.readlines())
+
         self.structure_builder.set_header(self.header)
         # Return the Structure instance
         structure = self.structure_builder.get_structure()
-        if handle_close:
-            file.close()
         
         if self.QUIET:
             warnings.filters = warning_list

@@ -22,23 +22,6 @@ from Bio.Data import IUPACData, CodonTable
 ######################
 # {{{ 
 
-def reverse(seq):
-    """Reverse the sequence. Works on string sequences (DEPRECATED).
-
-    This function is now deprecated, instead use the string's built in slice
-    method with a step of minus one:
-
-    >>> "ACGGT"[::-1]
-    'TGGCA'
-    """
-    import warnings
-    import Bio
-    warnings.warn("Bio.SeqUtils.reverse() is deprecated, use the string's "
-                  "slice method with a step of minus one instead.",
-                  Bio.BiopythonDeprecationWarning)
-    r = list(seq)
-    r.reverse()
-    return ''.join(r)
 
 def GC(seq):
     """Calculates G+C content, returns the percentage (float between 0 and 100).
@@ -218,37 +201,6 @@ def nt_search(seq, subseq):
 ######################
 # {{{ 
 
-# temporary hack for exception free translation of "dirty" DNA
-# should be moved to ???
-
-class ProteinX(Alphabet.ProteinAlphabet):
-    """Variant of the extended IUPAC extended protein alphabet (DEPRECATED)."""
-    letters = IUPACData.extended_protein_letters + "X"
-
-#Can't add a deprecation warning to the class due to the following line:
-proteinX = ProteinX()
-
-class MissingTable(object):
-    def __init__(self, table):
-        self._table = table
-        import warnings
-        import Bio
-        warnings.warn("Function Bio.SeqUtils.makeTableX() and related classes ProteinX "
-                      "and MissingTable are deprecated.", Bio.BiopythonDeprecationWarning)
-    def get(self, codon, stop_symbol):
-        try:
-            return self._table.get(codon, stop_symbol)
-        except CodonTable.TranslationError:
-            return 'X'
-
-def makeTableX(table):
-    assert table.protein_alphabet == IUPAC.extended_protein
-    return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                                 MissingTable(table.forward_table),
-                                 table.back_table, table.start_codons,
-                                 table.stop_codons)
-
-# end of hacks
 
 def seq3(seq):
     """Turn a one letter code protein sequence into one with three letter codes.
@@ -259,8 +211,9 @@ def seq3(seq):
     This function returns the amino acid sequence as a string using the three
     letter amino acid codes. Output follows the IUPAC standard (including
     ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
-    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.  Any unknown
-    character (including possible gap characters), is changed into 'Xaa'.
+    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.
+    Any unknown character (including possible gap characters), is changed into
+    'Xaa'.
 
     e.g.
     >>> from Bio.SeqUtils import seq3
@@ -289,15 +242,6 @@ def seq3(seq):
 ######################
 # {{{ 
 
-def GC_Frame(seq, genetic_code = 1):
-    """Just an alias for six_frame_translations (DEPRECATED).
-
-    Please use six_frame_translations directly, as this function is deprecated."""
-    import warnings
-    import Bio
-    warnings.warn("GC_Frame is deprecated; please use six_frame_translations instead",
-                  Bio.BiopythonDeprecationWarning)
-    return six_frame_translations(seq, genetic_code)
 
 def six_frame_translations(seq, genetic_code = 1):
     """Formatted string showing the 6 frame translations and GC content.
@@ -356,37 +300,6 @@ def six_frame_translations(seq, genetic_code = 1):
 ######################
 # {{{ 
 
-def fasta_uniqids(filename):
-    """Checks and changes the name/ID's to be unique identifiers by adding numbers (DEPRECATED).
-
-    file - a FASTA format filename to read in.
-
-    No return value, the output is written to screen.
-    """
-    import warnings
-    import Bio
-    warnings.warn("fasta_uniqids is deprecated", Bio.BiopythonDeprecationWarning)
-
-    mydict = {}
-    txt = open(filename).read()
-    entries = []
-    for entry in txt.split('>')[1:]:
-        name, seq= entry.split('\n',1)
-        name = name.split()[0].split(',')[0]
-      
-        if name in mydict:
-            n = 1
-            while 1:
-                n = n + 1
-                _name = name + str(n)
-                if _name not in mydict:
-                    name = _name
-                    break
-            
-        mydict[name] = seq
-
-    for name, seq in mydict.iteritems():
-        print '>%s\n%s' % (name, seq)
 
 def quick_FASTA_reader(file):
     """Simple FASTA reader, returning a list of string tuples.
@@ -419,135 +332,9 @@ def quick_FASTA_reader(file):
         entries.append((name, seq))
     return entries
 
-def apply_on_multi_fasta(file, function, *args):
-    """Apply a function on each sequence in a multiple FASTA file (DEPRECATED).
-
-    file - filename of a FASTA format file
-    function - the function you wish to invoke on each record
-    *args - any extra arguments you want passed to the function
-   
-    This function will iterate over each record in a FASTA file as SeqRecord
-    objects, calling your function with the record (and supplied args) as
-    arguments.
-
-    This function returns a list.  For those records where your function
-    returns a value, this is taken as a sequence and used to construct a
-    FASTA format string.  If your function never has a return value, this
-    means apply_on_multi_fasta will return an empty list.
-    """
-    import warnings
-    import Bio
-    warnings.warn("apply_on_multi_fasta is deprecated", Bio.BiopythonDeprecationWarning)
-    try:
-        f = globals()[function]
-    except:
-        raise NotImplementedError("%s not implemented" % function)
-   
-    handle = open(file, 'r')
-    records = SeqIO.parse(handle, "fasta")
-    results = []
-    for record in records:
-        arguments = [record.sequence]
-        for arg in args: arguments.append(arg)
-        result = f(*arguments)
-        if result:
-            results.append('>%s\n%s' % (record.name, result))
-    handle.close()
-    return results
-         
-def quicker_apply_on_multi_fasta(file, function, *args):
-    """Apply a function on each sequence in a multiple FASTA file (DEPRECATED).
-
-    file - filename of a FASTA format file
-    function - the function you wish to invoke on each record
-    *args - any extra arguments you want passed to the function
-   
-    This function will use quick_FASTA_reader to load every record in the
-    FASTA file into memory as a list of tuples.  For each record, it will
-    call your supplied function with the record as a tuple of the name and
-    sequence as strings (plus any supplied args).
-
-    This function returns a list.  For those records where your function
-    returns a value, this is taken as a sequence and used to construct a
-    FASTA format string.  If your function never has a return value, this
-    means quicker_apply_on_multi_fasta will return an empty list.
-    """
-    import warnings
-    import Bio
-    warnings.warn("quicker_apply_on_multi_fasta is deprecated", Bio.BiopythonDeprecationWarning)
-    try:
-        f = globals()[function]
-    except:
-        raise NotImplementedError("%s not implemented" % function)
-   
-    entries = quick_FASTA_reader(file)
-    results = []
-    for name, seq in entries:
-        arguments = [seq]
-        for arg in args: arguments.append(arg)
-        result = f(*arguments)
-        if result:
-            results.append('>%s\n%s' % (name, result))
-    file.close()
-    return results
 
 # }}}
 
-######################################
-# Main
-#####################
-# {{{ 
-
-if __name__ == '__main__':
-   import sys, getopt
-   # crude command line options to use most functions directly on a FASTA file
-   options = {'apply_on_multi_fasta':0,
-              'quick':0,
-              'uniq_ids':0,
-              }
-
-   optlist, args = getopt.getopt(sys.argv[1:], '', ['describe', 'apply_on_multi_fasta=',
-                                                    'help', 'quick', 'uniq_ids', 'search='])
-   for arg in optlist:
-      if arg[0] in ['-h', '--help']:
-         pass
-      elif arg[0] in ['--describe']:
-         # get all new functions from this file
-         mol_funcs = [x[0] for x in locals().items() if type(x[1]) == type(GC)]
-         mol_funcs.sort()
-         print 'available functions:'
-         for f in mol_funcs: print '\t--%s' % f
-         print '\n\ne.g.\n./sequtils.py  --apply_on_multi_fasta GC test.fas'
-
-         sys.exit(0)
-      elif arg[0] in ['--apply_on_multi_fasta']:
-         options['apply_on_multi_fasta'] = arg[1]
-      elif arg[0] in ['--search']:
-         options['search'] = arg[1]
-      else:
-         key = re.search('-*(.+)', arg[0]).group(1)
-         options[key] = 1
-
-         
-   if options.get('apply_on_multi_fasta'):
-      file = args[0]
-      function = options['apply_on_multi_fasta']
-      arguments = []
-      if options.get('search'):
-         arguments = options['search']
-      if function == 'xGC_skew':
-         arguments = 1000
-      if options.get('quick'):
-         results = quicker_apply_on_multi_fasta(file, function, arguments)
-      else:
-         results = apply_on_multi_fasta(file, function, arguments)
-      for result in results: print result
-      
-   elif options.get('uniq_ids'):
-      file = args[0]
-      fasta_uniqids(file)
-
-# }}}
 
 def _test():
     """Run the Bio.SeqUtils module's doctests (PRIVATE)."""

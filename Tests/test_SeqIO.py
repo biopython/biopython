@@ -153,6 +153,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
     ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
     ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
+    ("embl",   False, 'EMBL/location_wrap.embl', 1), #wrapped locations and unspecified type
     ("embl",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("imgt",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("stockholm", True,  'Stockholm/simple.sth', 2),
@@ -206,8 +207,31 @@ test_files = [ \
     ("seqxml", False, 'SeqXML/dna_example.xml', 4),
     ("seqxml", False, 'SeqXML/rna_example.xml', 5),
     ("seqxml", False, 'SeqXML/protein_example.xml', 5),
+#Following examples are also used in test_SeqIO_AbiIO.py
+    ("abi", False, 'Abi/310.ab1', 1),
+    ("abi", False, 'Abi/3100.ab1', 1),
+    ("abi", False, 'Abi/3730.ab1', 1),
     ]
 
+class ForwardOnlyHandle(object):
+    """Mimic a network handle without seek and tell methods etc."""
+    def __init__(self, handle):
+        self._handle = handle
+
+    def __iter__(self):
+        return iter(self._handle)
+
+    def read(self, length=None):
+        if length is None:
+            return self._handle.read()
+        else:
+            return self._handle.read(length)
+
+    def readline(self):
+        return self._handle.readline()
+
+    def close(self):
+        return self._handle.close()
 
 def compare_record(record_one, record_two):
     """This is meant to be a strict comparison for exact agreement..."""
@@ -314,8 +338,9 @@ def check_simple_write_read(records, indent=" "):
                 print "Failed: Probably len() of None"
             else:
                 print indent+"Failed: %s" % str(e)
-            assert format != t_format, \
-                   "Should be able to re-write in the original format!"
+            if records[0].seq.alphabet.letters is not None:
+                assert format != t_format, \
+                       "Should be able to re-write in the original format!"
             #Carry on to the next format:
             continue
 
@@ -402,7 +427,9 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     assert os.path.isfile(t_filename), t_filename
 
     #Try as an iterator using handle
-    records  = list(SeqIO.parse(handle=open(t_filename,mode), format=t_format))
+    h = open(t_filename,mode)
+    records  = list(SeqIO.parse(handle=h, format=t_format))
+    h.close()
     assert len(records)  == t_count, \
          "Found %i records but expected %i" % (len(records), t_count)
 
@@ -414,7 +441,8 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     #Try using the iterator with the next() method
     records3 = []
-    seq_iterator = SeqIO.parse(handle=open(t_filename,mode), format=t_format)
+    h = open(t_filename,mode)
+    seq_iterator = SeqIO.parse(handle=h, format=t_format)
     while True:
         try:
             record = seq_iterator.next()
@@ -422,9 +450,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             break
         assert record is not None, "Should raise StopIteration not return None"
         records3.append(record)
+    h.close()
 
     #Try a mixture of next() and list (a torture test!)
-    seq_iterator = SeqIO.parse(handle=open(t_filename,mode), format=t_format)
+    h = open(t_filename,mode)
+    seq_iterator = SeqIO.parse(handle=h, format=t_format)
     try:
         record = seq_iterator.next()
     except StopIteration:
@@ -435,9 +465,16 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     else:
         records4 = []
     assert len(records4) == t_count
+    h.close()
 
     #Try a mixture of next() and for loop (a torture test!)
-    seq_iterator = SeqIO.parse(handle=open(t_filename,mode), format=t_format)
+    #with a forward-only-handle
+    if t_format == "abi":
+        #Temp hack
+        h = open(t_filename, mode)
+    else:
+        h = ForwardOnlyHandle(open(t_filename, mode))
+    seq_iterator = SeqIO.parse(h, format=t_format)
     try:
         record = seq_iterator.next()
     except StopIteration:
@@ -449,6 +486,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     else:
         records5 = []
     assert len(records5) == t_count
+    h.close()
 
     for i in range(t_count):
         record = records[i]
@@ -496,7 +534,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     # Check Bio.SeqIO.read(...)
     if t_count == 1:
-        record = SeqIO.read(handle=open(t_filename), format=t_format)
+        record = SeqIO.read(handle=open(t_filename,mode), format=t_format)
         assert isinstance(record, SeqRecord)
     else:
         try:
@@ -509,9 +547,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     # Check alphabets
     for record in records:
         base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
-        assert isinstance(base_alpha, Alphabet.SingleLetterAlphabet)
-        if t_format in no_alpha_formats:
-            assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
+        if isinstance(base_alpha, Alphabet.SingleLetterAlphabet):
+            if t_format in no_alpha_formats:
+                assert base_alpha == Alphabet.single_letter_alphabet # Too harsh?
+        else:
+            base_alpha = None
     if base_alpha is None:
         good = []
         bad =[]

@@ -104,7 +104,7 @@ class ModTest(unittest.TestCase):
         self.assertRaises(AttributeError, 
             self.yn00.read_ctl_file, self.bad_ctl_file2)
         target_options = {"verbose": 1,
-                        "icode": 1,
+                        "icode": 0,
                         "weighting": 0,
                         "commonf3x4": 0,
                         "ndata": 1}

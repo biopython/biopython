@@ -37,6 +37,27 @@ import traceback
 import unittest
 import doctest
 import distutils.util
+import gc
+
+def is_pypy():
+    import platform
+    try:
+        if platform.python_implementation()=='PyPy':
+            return True
+    except AttributeError:
+        #New in Python 2.6, not in Jython yet either
+        pass
+    return False
+
+def is_numpy():
+    if is_pypy():
+        return False
+    try:
+        import numpy
+        del numpy
+        return True
+    except ImportError:
+        return False
 
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
@@ -65,6 +86,7 @@ DOCTEST_MODULES = ["Bio.Alphabet",
                    "Bio.AlignIO.StockholmIO",
                    "Bio.Blast.Applications",
                    "Bio.Emboss.Applications",
+                   "Bio.GenBank",
                    "Bio.KEGG.Compound",
                    "Bio.KEGG.Enzyme",
                    "Bio.Wise",
@@ -72,13 +94,12 @@ DOCTEST_MODULES = ["Bio.Alphabet",
                    "Bio.Motif",
                   ]
 #Silently ignore any doctests for modules requiring numpy!
-try:
-    import numpy
+if is_numpy():
     DOCTEST_MODULES.extend(["Bio.Statistics.lowess",
                             "Bio.PDB.Polypeptide",
+                            "Bio.PDB.Selection"
                             ])
-except ImportError:
-    pass
+
 
 try:
     import sqlite3
@@ -212,8 +233,10 @@ class ComparisonTestCase(unittest.TestCase):
         # the first line of the output file is the test name
         expected_test = expected.readline().strip()
 
-        assert expected_test == self.name, "\nOutput:   %s\nExpected: %s" % \
-               (self.name, expected_test)
+        if expected_test != self.name:
+            expected.close()
+            raise ValueError("\nOutput:   %s\nExpected: %s" \
+                  % (self.name, expected_test))
 
         # now loop through the output and compare it to the expected file
         while True:
@@ -237,10 +260,10 @@ class ComparisonTestCase(unittest.TestCase):
             if re.compile("^Ran [0-9]+ tests? in ").match(expected_line):
                 pass
             # otherwise make sure the two lines are the same
-            else:
-                assert expected_line == output_line, \
-                      "\nOutput  : %s\nExpected: %s" \
-                      % (repr(output_line), repr(expected_line))
+            elif expected_line != output_line:
+                expected.close()
+                raise ValueError("\nOutput  : %s\nExpected: %s" \
+                      % (repr(output_line), repr(expected_line)))
         expected.close()
 
     def generate_output(self):
@@ -372,6 +395,8 @@ class TestRunner(unittest.TextTestRunner):
                 return False
         finally:
             sys.stdout = stdout
+            #Running under PyPy we were leaking file handles...
+            gc.collect()
 
     def run(self):
         """Run tests, return number of failures (integer)."""

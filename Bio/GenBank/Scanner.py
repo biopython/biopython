@@ -3,19 +3,20 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-#
-# This code is NOT intended for direct use.  It provides a basic scanner
-# (for use with a event consumer such as Bio.GenBank._FeatureConsumer)
-# to parse a GenBank or EMBL file (with their shared INSDC feature table).
-#
-# It is used by Bio.GenBank to parse GenBank files
-# It is also used by Bio.SeqIO to parse GenBank and EMBL files
-#
-# Feature Table Documentation:
-# http://www.insdc.org/files/feature_table.html
-# http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
-# ftp://ftp.ncbi.nih.gov/genbank/docs/
-#
+"""Internal code for parsing GenBank and EMBL files (PRIVATE).
+
+This code is NOT intended for direct use.  It provides a basic scanner
+(for use with a event consumer such as Bio.GenBank._FeatureConsumer)
+to parse a GenBank or EMBL file (with their shared INSDC feature table).
+
+It is used by Bio.GenBank to parse GenBank files
+It is also used by Bio.SeqIO to parse GenBank and EMBL files
+
+Feature Table Documentation:
+http://www.insdc.org/files/feature_table.html
+http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
+ftp://ftp.ncbi.nih.gov/genbank/docs/
+"""
 # 17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
 # These are GenBank files that summarize the content of a project, and provide lists of
 # scaffold and contig files in the project. These will be in annotations['wgs'] and
@@ -26,11 +27,10 @@
 # Added by Ying Huang & Iddo Friedberg
 
 import warnings
-import os
 import re
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import generic_alphabet, generic_protein
+from Bio.Alphabet import generic_protein
 
 class InsdcScanner(object):
     """Basic functions for breaking up a GenBank/EMBL file into sub sections.
@@ -255,8 +255,11 @@ class InsdcScanner(object):
 
             qualifiers=[]
 
-            for line in iterator:
-                if line[0]=="/":
+            for i, line in enumerate(iterator):
+                # check for extra wrapping of the location closing parentheses
+                if i == 0 and line.startswith(")"):
+                    feature_location += line.strip()
+                elif line[0]=="/":
                     #New qualifier
                     i = line.find("=")
                     key = line[1:i] #does not work if i==-1
@@ -925,6 +928,15 @@ class GenBankScanner(InsdcScanner):
         return (misc_lines,"".join(seq_lines).replace(" ",""))
 
     def _feed_first_line(self, consumer, line):
+        """Scan over and parse GenBank LOCUS line (PRIVATE).
+
+        This must cope with several variants, primarily the old and new column
+        based standards from GenBank. Additionally EnsEMBL produces GenBank
+        files where the LOCUS line is space separated rather that following
+        the column based layout.
+
+        We also try to cope with GenBank like files with partial LOCUS lines.
+        """
         #####################################
         # LOCUS line                        #
         #####################################
@@ -935,8 +947,9 @@ class GenBankScanner(InsdcScanner):
 
         #Have to break up the locus line, and handle the different bits of it.
         #There are at least two different versions of the locus line...
-        if line[29:33] in [' bp ', ' aa ',' rc ']:
-            #Old...
+        if line[29:33] in [' bp ', ' aa ',' rc '] and line[55:62] == '       ':
+            #Old... note we insist on the 55:62 being empty to avoid trying
+            #to parse space separated LOCUS lines from Ensembl etc, see below.
             #
             #    Positions  Contents
             #    ---------  --------
@@ -954,16 +967,16 @@ class GenBankScanner(InsdcScanner):
             #    55:62      space
             #    62:73      Date, in the form dd-MMM-yyyy (e.g., 15-MAR-1991)
             #
-            assert line[29:33] in [' bp ', ' aa ',' rc '] , \
-                   'LOCUS line does not contain size units at expected position:\n' + line
+            #assert line[29:33] in [' bp ', ' aa ',' rc '] , \
+            #       'LOCUS line does not contain size units at expected position:\n' + line
             assert line[41:42] == ' ', \
                    'LOCUS line does not contain space at position 42:\n' + line
             assert line[42:51].strip() in ['','linear','circular'], \
                    'LOCUS line does not contain valid entry (linear, circular, ...):\n' + line
             assert line[51:52] == ' ', \
                    'LOCUS line does not contain space at position 52:\n' + line
-            assert line[55:62] == '       ', \
-                   'LOCUS line does not contain spaces from position 56 to 62:\n' + line
+            #assert line[55:62] == '       ', \
+            #      'LOCUS line does not contain spaces from position 56 to 62:\n' + line
             if line[62:73].strip():
                 assert line[64:65] == '-', \
                        'LOCUS line does not contain - at position 65 in date:\n' + line
@@ -997,8 +1010,10 @@ class GenBankScanner(InsdcScanner):
             consumer.data_file_division(line[52:55])
             if line[62:73].strip():
                 consumer.date(line[62:73])
-        elif line[40:44] in [' bp ', ' aa ',' rc ']:
-            #New...
+        elif line[40:44] in [' bp ', ' aa ',' rc '] \
+        and line[54:64].strip() in ['','linear','circular']:
+            #New... linear/circular/big blank test should avoid EnsEMBL style
+            #LOCUS line being treated like a proper column based LOCUS line.
             #
             #    Positions  Contents
             #    ---------  --------
@@ -1086,18 +1101,33 @@ class GenBankScanner(InsdcScanner):
             else:
                 #Must just have just "LOCUS       ", is this even legitimate?
                 #We should be able to continue parsing... we need real world testcases!
-                warnings.warn("Minimal LOCUS line found - is this correct?\n" + line)
+                warnings.warn("Minimal LOCUS line found - is this correct?\n:%r" % line)
+        elif len(line.split())==7 and line.split()[3] in ["aa","bp"]:
+            #Cope with EnsEMBL genbank files which use space separation rather
+            #than the expected column based layout. e.g.
+            #LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011
+            #LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011
+            #LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011
+            #LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011
+            #Notice that the 'bp' can occur in the position expected by either
+            #the old or the new fixed column standards (parsed above).
+            splitline = line.split()
+            consumer.locus(splitline[1])
+            consumer.size(splitline[2])
+            consumer.residue_type(splitline[4])
+            consumer.data_file_division(splitline[5])
+            consumer.date(splitline[6])
         elif len(line.split())>=4 and line.split()[3] in ["aa","bp"]:
             #Cope with EMBOSS seqret output where it seems the locus id can cause
             #the other fields to overflow.  We just IGNORE the other fields!
-            warnings.warn("Malformed LOCUS line found - is this correct?\n" + line)
+            warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
         elif len(line.split())>=4 and line.split()[-1] in ["aa","bp"]:
             #Cope with psuedo-GenBank files like this:
             #   "LOCUS       RNA5 complete       1718 bp"
             #Treat everything between LOCUS and the size as the identifier.
-            warnings.warn("Malformed LOCUS line found - is this correct?\n" + line)
+            warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)
             consumer.locus(line[5:].rsplit(None,2)[0].strip())
             consumer.size(line.split()[-2])
         else:
@@ -1671,4 +1701,3 @@ SQ   Sequence 1859 BP; 609 A; 314 C; 355 G; 581 T; 0 other;
     for record in e.parse_records(StringIO(embl_example),do_features=True):
         print record.id, record.name, record.description
         print record.seq
-

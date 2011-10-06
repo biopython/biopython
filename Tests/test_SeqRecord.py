@@ -67,9 +67,9 @@ class SeqRecordMethods(unittest.TestCase):
         f0 = SeqFeature(FeatureLocation(0,26), type="source",
                         qualifiers={"mol_type":["fake protein"]})
         f1 = SeqFeature(FeatureLocation(0,ExactPosition(10)))
-        f2 = SeqFeature(FeatureLocation(WithinPosition(12,3),BeforePosition(22)))
+        f2 = SeqFeature(FeatureLocation(WithinPosition(12, left=12,right=15),BeforePosition(22)))
         f3 = SeqFeature(FeatureLocation(AfterPosition(16),
-                                        OneOfPosition([ExactPosition(25),AfterPosition(26)])))
+                                        OneOfPosition(26, [ExactPosition(25),AfterPosition(26)])))
         self.record = SeqRecord(Seq("ABCDEFGHIJKLMNOPQRSTUVWZYX", generic_protein),
                                 id="TestID", name="TestName", description="TestDescr",
                                 dbxrefs=["TestXRef"], annotations={"k":"v"},
@@ -110,6 +110,14 @@ class SeqRecordMethods(unittest.TestCase):
             #By construction, each feature matches the full sliced region:
             self.assertEqual(str(sub.features[0].extract(sub.seq)), str(sub.seq))
             self.assertEqual(sub.features[0].extract(str(sub.seq)), str(sub.seq))
+
+    def test_slice_zero(self):
+        """Zero slice"""
+        rec = self.record
+        self.assertEqual(len(rec), 26)
+        self.assertEqual(len(rec[2:-2]), 22)
+        self.assertEqual(len(rec[5:2]), 0)
+        self.assertEqual(len(rec[5:2][2:-2]), 0)
 
     def test_add_simple(self):
         """Simple addition"""

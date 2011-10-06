@@ -189,15 +189,8 @@ class Feature(object):
         else:
             self.strand = int(self._feature.strand)                 # Feature strand
         if 'color' in self._feature.qualifiers:                # Artemis color (if present)
-            # Artemis color used to be only a single integer, but as of
-            # Oct '04 appears to be dot-delimited.  This is a quick fix to
-            # allow dot-delimited strings, but only use the first integer
-            artemis_color = self._feature.qualifiers['color'][0] # Local copy of string
-            if artemis_color.count('.'):                          # dot-delimited
-                artemis_color = artemis_color.split('.')[0]      # Use only first integer
-            else:                                     # Assume just an integer
-                artemis_color = artemis_color       # Use integer
-            self.color = self._colortranslator.artemis_color(artemis_color)
+            self.color = self._colortranslator.artemis_color( \
+                                         self._feature.qualifiers['color'][0])
         self.name = self.type
         for qualifier in self.name_qualifiers:            
             if qualifier in self._feature.qualifiers:

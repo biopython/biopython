@@ -12,7 +12,7 @@ http://biopython.org
 
 __docformat__ = "epytext en" #not just plaintext
 
-__version__ = "1.57+"
+__version__ = "1.58+"
 
 class MissingExternalDependencyError(Exception):
     """Missing an external dependency.

@@ -17,6 +17,13 @@
 # NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
 # WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+import warnings
+warnings.warn("The module Bio.UniGene.UniGene is now obsolete, "
+              "and will be deprecated and removed in a future "
+              "release of Biopython. To parse UniGene flat files, "
+              "please use the parser in Bio.UniGene instead",
+              PendingDeprecationWarning)
+
 import string
 import operator
 import urllib

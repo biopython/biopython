@@ -3356,7 +3356,6 @@ type: repeat_region
 location: [0:1954]
 strand: 1
 qualifiers: 
-    Key: mobile_element, Value: ['insertion sequence:IS100']
 
 type: gene
 location: [86:1109]
@@ -3378,6 +3377,30 @@ qualifiers:
     Key: transl_table, Value: ['11']
     Key: translation, Value: ['MVTFETVMEIKILHKQGMSSRAIARELGISRNTVKRYLQAKSEPPKYTPRPAVASLLDEYRDYIRQRIADAHPYKIPATVIAREIRDQGYRGGMTILRAFIRSLSVPQEQEPAVRFETEPGRQMQVDWGTMRNGRSPLHVFVAVLGYSRMLYIEFTDNMRYDTLETCHRNAFRFFGGVPREVLYDNMKTVVLQRDAYQTGQHRFHPSLWQFGKEMGFSPRLCRPFRAQTKGKVERMVQYTRNSFYIPLMTRLRPMGITVDVETANRHGLRWLHDVANQRKHETIQARPCDRWLEEQQSMLALPPEKKEYDVHLDENLVNFDKHPLHHPLSIYDSFCRGVA']
 
+type: misc_feature
+location: [86:959]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:34222']
+    Key: locus_tag, Value: ['YP_pPCP01']
+    Key: note, Value: ['Transposase and inactivated derivatives [DNA replication, recombination, and repair]; Region: COG4584']
+
+type: misc_feature
+location: [<110:209]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:186341']
+    Key: locus_tag, Value: ['YP_pPCP01']
+    Key: note, Value: ['Helix-turn-helix domain of Hin and related proteins, a family of DNA-binding domains unique to bacteria and represented by the Hin protein of Salmonella. The basic HTH domain is a simple fold comprised of three core helices that form a right-handed...; Region: HTH_Hin_like; cl01116']
+
+type: misc_feature
+location: [437:812]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:194099']
+    Key: locus_tag, Value: ['YP_pPCP01']
+    Key: note, Value: ['Integrase core domain; Region: rve; cl01316']
+
 type: gene
 location: [1105:1888]
 strand: 1
@@ -3397,6 +3420,57 @@ qualifiers:
     Key: protein_id, Value: ['NP_995568.1']
     Key: transl_table, Value: ['11']
     Key: translation, Value: ['MMMELQHQRLMALAGQLQLESLISAAPALSQQAVDQEWSYMDFLEHLLHEEKLARHQRKQAMYTRMAAFPAVKTFEEYDFTFATGAPQKQLQSLRSLSFIERNENIVLLGPSGVGKTHLAIAMGYEAVRAGIKVRFTTAADLLLQLSTAQRQGRYKTTLQRGVMAPRLLIIDEIGYLPFSQEEAKLFFQVIAKRYEKSAMILTSNLPFGQWDQTFAGDAALTSAMLDRILHHSHVVQIKGESYRLRQKRKAGVIAEANPE']
+
+type: misc_feature
+location: [1108:1885]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:181681']
+    Key: locus_tag, Value: ['YP_pPCP02']
+    Key: note, Value: ['transposase/IS protein; Provisional; Region: PRK09183']
+
+type: misc_feature
+location: [1366:>1669]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:99707']
+    Key: locus_tag, Value: ['YP_pPCP02']
+    Key: note, Value: ['The AAA+ (ATPases Associated with a wide variety of cellular Activities) superfamily represents an ancient group of ATPases belonging to the ASCE (for additional strand, catalytic E) division of the P-loop NTPase fold. The ASCE division also includes...; Region: AAA; cd00009']
+
+type: misc_feature
+location: [1432:1456]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:99707']
+    Key: locus_tag, Value: ['YP_pPCP02']
+    Key: note, Value: ['Walker A motif; other site']
+
+type: misc_feature
+location: [1435:1621]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:99707']
+    Key: locus_tag, Value: ['YP_pPCP02']
+    Key: note, Value: ['ATP binding site [chemical binding]; other site']
+Sub-Features
+type: misc_feature
+location: [1435:1459]
+strand: 1
+qualifiers: 
+
+type: misc_feature
+location: [1618:1621]
+strand: 1
+qualifiers: 
+
+
+type: misc_feature
+location: [1606:1624]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:99707']
+    Key: locus_tag, Value: ['YP_pPCP02']
+    Key: note, Value: ['Walker B motif; other site']
 
 type: gene
 location: [2924:3119]
@@ -3421,6 +3495,16 @@ qualifiers:
     Key: protein_id, Value: ['NP_995569.1']
     Key: transl_table, Value: ['11']
     Key: translation, Value: ['MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCERLHELAEELQNSIQARFEAESETGT']
+
+type: misc_feature
+location: [2924:3107]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:145136']
+    Key: gene, Value: ['rop']
+    Key: gene_synonym, Value: ['rom']
+    Key: locus_tag, Value: ['YP_pPCP03']
+    Key: note, Value: ['Rop protein; Region: Rop; pfam01815']
 
 type: gene
 location: [3485:3857]
@@ -3571,6 +3655,15 @@ qualifiers:
     Key: transl_table, Value: ['11']
     Key: translation, Value: ['MKKSSIVATIITILSGSANAASSQLIPNISPDSFTVAASTGMLSGKSHEMLYDAETGRKISQLDWKIKNVAILKGDISWDPYSFLTLNARGWTSLASGSGNMDDYDWMNENQSEWTDHSSHPATNVNHANEYDLNVKGWLLQDENYKAGITAGYQETRFSWTATGGSYSYNNGAYTGNFPKGVRVIGYNQRFSMPYIGLAGQYRINDFELNALFKFSDWVRAHDNDEHYMRDLTFREKTSGSRYYGTVINAGYYVTPNAKVFAEFTYSKYDEGKGGTQIIDKNSGDSVSIGGDAAGISNKNYTVTAGLQYRF']
 
+type: misc_feature
+location: [6663:7599]
+strand: 1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:186487']
+    Key: gene, Value: ['pla']
+    Key: locus_tag, Value: ['YP_pPCP08']
+    Key: note, Value: ['Omptin family; Region: Omptin; cl01886']
+
 type: gene
 location: [7788:8088]
 strand: -1
@@ -3590,6 +3683,14 @@ qualifiers:
     Key: protein_id, Value: ['NP_995575.1']
     Key: transl_table, Value: ['11']
     Key: translation, Value: ['MRTLDEVIASRSPESQTRIKEMADEMILEVGLQMMREELQLSQKQVAEAMGISQPAVTKLEQRGNDLKLATLKRYVEAMGGKLSLDVELPTGRRVAFHV']
+
+type: misc_feature
+location: [7836:7995]
+strand: -1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:195788']
+    Key: locus_tag, Value: ['YP_pPCP09']
+    Key: note, Value: ['Helix-turn-helix XRE-family like proteins. Prokaryotic DNA binding proteins belonging to the xenobiotic response element family of transcriptional regulators; Region: HTH_XRE; cl09100']
 
 type: gene
 location: [8087:8360]
@@ -3611,6 +3712,14 @@ qualifiers:
     Key: transl_table, Value: ['11']
     Key: translation, Value: ['MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGRPIRAFYAFDPIRRAIVLCAGDKSNDKRFYEKLVRIAEDEFTAHLNTLESK']
 
+type: misc_feature
+location: [8090:>8357]
+strand: -1
+qualifiers: 
+    Key: db_xref, Value: ['CDD:194142']
+    Key: locus_tag, Value: ['YP_pPCP10']
+    Key: note, Value: ['Phage derived protein Gp49-like (DUF891); Region: Gp49; cl01470']
+
 type: variation
 location: [8529:8529]
 strand: 1
@@ -3618,7 +3727,7 @@ qualifiers:
     Key: note, Value: ['compared to AL109969']
     Key: replace, Value: ['tt']
 
-DB cross refs ['Project:10638']
+DB cross refs ['Project:58037']
 ***Record from noref.gb with the RecordParser
 sequence length: 1622
 locus: NM_006141
@@ -4630,8 +4739,7 @@ key: /plasmid= value: "pPCP1"
 key: /biovar= value: "Microtus"
 feature key: repeat_region
 location: 1..1954
-num qualifiers: 1
-key: /mobile_element= value: "insertion sequence:IS100"
+num qualifiers: 0
 feature key: gene
 location: 87..1109
 num qualifiers: 2
@@ -4649,6 +4757,24 @@ key: /protein_id= value: "NP_995567.1"
 key: /db_xref= value: "GI:45478712"
 key: /db_xref= value: "GeneID:2767718"
 key: /translation= value: "MVTFETVMEIKILHKQGMSSRAIARELGISRNTVKRYLQAKSEPPKYTPRPAVASLLDEYRDYIRQRIADAHPYKIPATVIAREIRDQGYRGGMTILRAFIRSLSVPQEQEPAVRFETEPGRQMQVDWGTMRNGRSPLHVFVAVLGYSRMLYIEFTDNMRYDTLETCHRNAFRFFGGVPREVLYDNMKTVVLQRDAYQTGQHRFHPSLWQFGKEMGFSPRLCRPFRAQTKGKVERMVQYTRNSFYIPLMTRLRPMGITVDVETANRHGLRWLHDVANQRKHETIQARPCDRWLEEQQSMLALPPEKKEYDVHLDENLVNFDKHPLHHPLSIYDSFCRGVA"
+feature key: misc_feature
+location: 87..959
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP01"
+key: /note= value: "Transposase and inactivated derivatives [DNA replication, recombination, and repair]; Region: COG4584"
+key: /db_xref= value: "CDD:34222"
+feature key: misc_feature
+location: <111..209
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP01"
+key: /note= value: "Helix-turn-helix domain of Hin and related proteins, a family of DNA-binding domains unique to bacteria and represented by the Hin protein of Salmonella. The basic HTH domain is a simple fold comprised of three core helices that form a right-handed...; Region: HTH_Hin_like; cl01116"
+key: /db_xref= value: "CDD:186341"
+feature key: misc_feature
+location: 438..812
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP01"
+key: /note= value: "Integrase core domain; Region: rve; cl01316"
+key: /db_xref= value: "CDD:194099"
 feature key: gene
 location: 1106..1888
 num qualifiers: 2
@@ -4666,6 +4792,36 @@ key: /protein_id= value: "NP_995568.1"
 key: /db_xref= value: "GI:45478713"
 key: /db_xref= value: "GeneID:2767716"
 key: /translation= value: "MMMELQHQRLMALAGQLQLESLISAAPALSQQAVDQEWSYMDFLEHLLHEEKLARHQRKQAMYTRMAAFPAVKTFEEYDFTFATGAPQKQLQSLRSLSFIERNENIVLLGPSGVGKTHLAIAMGYEAVRAGIKVRFTTAADLLLQLSTAQRQGRYKTTLQRGVMAPRLLIIDEIGYLPFSQEEAKLFFQVIAKRYEKSAMILTSNLPFGQWDQTFAGDAALTSAMLDRILHHSHVVQIKGESYRLRQKRKAGVIAEANPE"
+feature key: misc_feature
+location: 1109..1885
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP02"
+key: /note= value: "transposase/IS protein; Provisional; Region: PRK09183"
+key: /db_xref= value: "CDD:181681"
+feature key: misc_feature
+location: 1367..>1669
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP02"
+key: /note= value: "The AAA+ (ATPases Associated with a wide variety of cellular Activities) superfamily represents an ancient group of ATPases belonging to the ASCE (for additional strand, catalytic E) division of the P-loop NTPase fold. The ASCE division also includes...; Region: AAA; cd00009"
+key: /db_xref= value: "CDD:99707"
+feature key: misc_feature
+location: 1433..1456
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP02"
+key: /note= value: "Walker A motif; other site"
+key: /db_xref= value: "CDD:99707"
+feature key: misc_feature
+location: order(1436..1459,1619..1621)
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP02"
+key: /note= value: "ATP binding site [chemical binding]; other site"
+key: /db_xref= value: "CDD:99707"
+feature key: misc_feature
+location: 1607..1624
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP02"
+key: /note= value: "Walker B motif; other site"
+key: /db_xref= value: "CDD:99707"
 feature key: gene
 location: 2925..3119
 num qualifiers: 4
@@ -4687,6 +4843,14 @@ key: /protein_id= value: "NP_995569.1"
 key: /db_xref= value: "GI:45478714"
 key: /db_xref= value: "GeneID:2767717"
 key: /translation= value: "MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCERLHELAEELQNSIQARFEAESETGT"
+feature key: misc_feature
+location: 2925..3107
+num qualifiers: 5
+key: /gene= value: "rop"
+key: /locus_tag= value: "YP_pPCP03"
+key: /gene_synonym= value: "rom"
+key: /note= value: "Rop protein; Region: Rop; pfam01815"
+key: /db_xref= value: "CDD:145136"
 feature key: gene
 location: 3486..3857
 num qualifiers: 2
@@ -4809,6 +4973,13 @@ key: /protein_id= value: "NP_995574.1"
 key: /db_xref= value: "GI:45478719"
 key: /db_xref= value: "GeneID:2767715"
 key: /translation= value: "MKKSSIVATIITILSGSANAASSQLIPNISPDSFTVAASTGMLSGKSHEMLYDAETGRKISQLDWKIKNVAILKGDISWDPYSFLTLNARGWTSLASGSGNMDDYDWMNENQSEWTDHSSHPATNVNHANEYDLNVKGWLLQDENYKAGITAGYQETRFSWTATGGSYSYNNGAYTGNFPKGVRVIGYNQRFSMPYIGLAGQYRINDFELNALFKFSDWVRAHDNDEHYMRDLTFREKTSGSRYYGTVINAGYYVTPNAKVFAEFTYSKYDEGKGGTQIIDKNSGDSVSIGGDAAGISNKNYTVTAGLQYRF"
+feature key: misc_feature
+location: 6664..7599
+num qualifiers: 4
+key: /gene= value: "pla"
+key: /locus_tag= value: "YP_pPCP08"
+key: /note= value: "Omptin family; Region: Omptin; cl01886"
+key: /db_xref= value: "CDD:186487"
 feature key: gene
 location: complement(7789..8088)
 num qualifiers: 2
@@ -4826,6 +4997,12 @@ key: /protein_id= value: "NP_995575.1"
 key: /db_xref= value: "GI:45478720"
 key: /db_xref= value: "GeneID:2767713"
 key: /translation= value: "MRTLDEVIASRSPESQTRIKEMADEMILEVGLQMMREELQLSQKQVAEAMGISQPAVTKLEQRGNDLKLATLKRYVEAMGGKLSLDVELPTGRRVAFHV"
+feature key: misc_feature
+location: complement(7837..7995)
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP09"
+key: /note= value: "Helix-turn-helix XRE-family like proteins. Prokaryotic DNA binding proteins belonging to the xenobiotic response element family of transcriptional regulators; Region: HTH_XRE; cl09100"
+key: /db_xref= value: "CDD:195788"
 feature key: gene
 location: complement(8088..8360)
 num qualifiers: 2
@@ -4843,6 +5020,12 @@ key: /protein_id= value: "NP_995576.1"
 key: /db_xref= value: "GI:45478721"
 key: /db_xref= value: "GeneID:2767714"
 key: /translation= value: "MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGRPIRAFYAFDPIRRAIVLCAGDKSNDKRFYEKLVRIAEDEFTAHLNTLESK"
+feature key: misc_feature
+location: complement(8091..>8357)
+num qualifiers: 3
+key: /locus_tag= value: "YP_pPCP10"
+key: /note= value: "Phage derived protein Gp49-like (DUF891); Region: Gp49; cl01470"
+key: /db_xref= value: "CDD:194142"
 feature key: variation
 location: 8529^8530
 num qualifiers: 2
@@ -4871,4 +5054,5 @@ Testing GenBank writing for one_of.gb...
 Testing GenBank writing for origin_line.gb...
 	Testing for NC_002678.1
 Testing feature cleaning...
-Testing format conversions...
+Testing EnsEMBL LOCUS lines...
+Done

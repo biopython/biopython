@@ -25,7 +25,7 @@ def truncation_expected(format):
 
 #Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
-    records = list(SeqIO.parse(open(in_filename),in_format, alphabet))
+    records = list(SeqIO.parse(in_filename,in_format, alphabet))
     #Write it out...
     handle = StringIO()
     qual_truncate = truncation_expected(out_format)
@@ -53,7 +53,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     #We want the SAME error message from parse/write as convert!
     err1 = None
     try:
-        records = list(SeqIO.parse(open(in_filename),in_format, alphabet))
+        records = list(SeqIO.parse(in_filename,in_format, alphabet))
         handle = StringIO()
         if qual_truncate:
             warnings.simplefilter('ignore', UserWarning)

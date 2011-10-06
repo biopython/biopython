@@ -11,6 +11,13 @@ if os.name == 'java':
     raise MissingExternalDependencyError("The Bio.Entrez XML parser fails "
         "on Jython, see http://bugs.jython.org/issue1447")
 
+try:
+    from xml.parsers.expat import model
+    del model
+except ImportError:
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError("Not supported on PyPy")
+
 from Bio import Entrez
 
 

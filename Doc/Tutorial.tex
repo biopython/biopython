@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 21 July 2011 (Biopython 1.57+)}
+\date{Last Update -- 29 September 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -1763,9 +1763,15 @@ Now that we've got all of the types of fuzzy positions we can have taken care of
 \begin{verbatim}
 >>> from Bio import SeqFeature
 >>> start_pos = SeqFeature.AfterPosition(5)
->>> end_pos = SeqFeature.BetweenPosition(8, 1)
+>>> end_pos = SeqFeature.BetweenPosition(9, left=8, right=9)
 >>> my_location = SeqFeature.FeatureLocation(start_pos, end_pos)
 \end{verbatim}
+
+Note that the details of some of the fuzzy-locations changed in Biopython 1.59,
+in particular for BetweenPosition and WithinPosition you must now make it explicit
+which integer position should be used for slicing etc. For a start position this
+is generally the lower (left) value, while for an end position this would generally
+be the higher (right) value.
 
 If you print out a \verb|FeatureLocation| object, you can get a nice representation of the information:
 
@@ -1783,12 +1789,25 @@ AfterPosition(5)
 >>> print my_location.start
 >5
 >>> my_location.end
-BetweenPosition(8,1)
+BetweenPosition(9, left=8, right=9)
 >>> print my_location.end
 (8^9)
 \end{verbatim}
 
-If you don't want to deal with fuzzy positions and just want numbers, you just need to ask for the \verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location:
+If you don't want to deal with fuzzy positions and just want numbers,
+they are actually subclasses of integers so should work like integers:
+
+%cont-doctest
+\begin{verbatim}
+>>> int(my_location.start)
+5
+>>> int(my_location.end)
+9
+\end{verbatim}
+
+For compatibility with older versions of Biopython you can ask for the
+\verb|nofuzzy_start| and \verb|nofuzzy_end| attributes of the location
+which are plain integers:
 
 %cont-doctest
 \begin{verbatim}
@@ -1809,6 +1828,8 @@ Similary, to make it easy to create a position without worrying about fuzzy posi
 [5:9]
 >>> exact_location.start
 ExactPosition(5)
+>>> int(exact_location.start)
+5
 >>> exact_location.nofuzzy_start
 5
 \end{verbatim}
@@ -1827,11 +1848,12 @@ A \verb|SeqFeature| object doesn't directly contain a sequence, instead its loca
 >>> example_feature = SeqFeature(FeatureLocation(5, 18), type="gene", strand=-1)
 \end{verbatim}
 
-You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement:
+You could take the parent sequence, slice it to extract 5:18, and then take the reverse complement.
+If you are using Biopython 1.59 or later, the feature location's start and end are integer like so this works:
 
 %cont-doctest
 \begin{verbatim}
->>> feature_seq = example_parent[5:18].reverse_complement()
+>>> feature_seq = example_parent[example_feature.location.start:example_feature.location.end].reverse_complement()
 >>> print feature_seq
 AGCCTTTGCCGTC
 \end{verbatim}
@@ -1960,7 +1982,7 @@ dbxrefs=['Project:10638'])
 >>> len(record)
 9609
 >>> len(record.features)
-29
+41
 \end{verbatim}
 
 
@@ -1973,7 +1995,7 @@ entries $11$ and $12$ in the \texttt{features} list:
 
 %cont-doctest
 \begin{verbatim}
->>> print record.features[11]
+>>> print record.features[20]
 type: gene
 location: [4342:4780]
 strand: 1
@@ -1985,7 +2007,7 @@ qualifiers:
 \end{verbatim}
 %This one is truncated so can't use for doctest
 \begin{verbatim}
->>> print record.features[12]
+>>> print record.features[21]
 type: CDS
 location: [4342:4780]
 strand: 1
@@ -2039,7 +2061,7 @@ qualifiers:
 <BLANKLINE>
 \end{verbatim}
 \begin{verbatim}
->>> print sub_record.features[1]
+>>> print sub_record.features[20]
 type: CDS
 location: [42:480]
 ref: None:None
@@ -2191,9 +2213,9 @@ dbxrefs=['Project:10638'])
 >>> len(record)
 9609
 >>> len(record.features)
-29
+41
 >>> record.dbxrefs
-['Project:10638']
+['Project:58037']
 \end{verbatim}
 %TODO - doctest wrapping
 \begin{verbatim}
@@ -2228,7 +2250,7 @@ and one of the features (the source feature) have been lost:
 %cont-doctest
 \begin{verbatim}
 >>> len(shifted.features)
-28
+40
 >>> shifted.dbxrefs
 []
 >>> shifted.annotations.keys()
@@ -10167,8 +10189,9 @@ The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50
 having previously been available as a separate Python module dependent on Biopython.
 GenomeDiagram is described in the Bioinformatics journal publication Pritchard et al. (2006),
 \href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
-and there are several examples images and documentation for the old separate version
-available at \url{http://bioinf.scri.ac.uk/lp/programs.php#genomediagram}.
+which includes some examples images.
+%TODO - Leighton's old website is AWOL, put this link back later if possible.
+%http://bioinf.scri.ac.uk/lp/programs.php#genomediagram
 
 As the name might suggest, GenomeDiagram was designed for drawing whole genomes, in
 particular prokaryotic genomes, either as linear diagrams (optionally broken up into
@@ -10804,6 +10827,36 @@ to the wiki, or elsewhere within the tutorial.
 
 This section shows some more examples of sequence input/output, using the
 \verb|Bio.SeqIO| module described in Chapter~\ref{chapter:Bio.SeqIO}.
+
+\subsection{Filtering a sequence file}
+
+Often you'll have a large file with many sequences in it (e.g. FASTA file
+or genes, or a FASTQ or SFF file of reads), a separate shorter list of
+the IDs for a subset of sequences of interest, and want to make a new
+sequence file for this subset.
+
+Let's say the list of IDs is in a simple text file, as the first word on
+each line. This could be a tabular file where the first column is the ID.
+Try something like this:
+
+%not a doctest to avoid temp files being left behind, also no >>>
+%makes it easier to copy and paste the example to a script file.
+\begin{verbatim}
+from Bio import SeqIO
+input_file = "big_file.sff"
+id_file = "short_list.txt"
+output_file = "short_list.sff"
+wanted = set(line.rstrip("\n").split(None,1)[0] for line in open(id_file))
+print "Found %i unique identifiers in %s" % (len(wanted), id_file)
+records = (r for r in SeqIO.parse(input_file, "sff") if r.id in wanted)
+count = SeqIO.write(records, output_file, "sff")
+print "Saved %i records from %s to %s" % (count, input_file, output_file)
+if count < len(wanted):
+    print "Warning %i IDs not found in %s" % (len(wanted)-count, input_file)
+\end{verbatim}
+
+Note that we use a Python \verb|set| rather than a \verb|list|, this makes
+testing membership faster.
 
 \subsection{Producing randomised genomes}
 

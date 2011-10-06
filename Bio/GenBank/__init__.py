@@ -10,14 +10,20 @@ Rather than using Bio.GenBank, you are now encouraged to use Bio.SeqIO with
 the "genbank" or "embl" format names to parse GenBank or EMBL files into
 SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
 
-Also, rather than using Bio.GenBank to search or download files from the NCBI,
-you are now encouraged to use Bio.Entrez instead (again, see the Biopython
-tutorial for details).
+Using Bio.GenBank directly to parse GenBank files is only useful if you want 
+to obtain GenBank-specific Record objects, which is a much closer
+representation to the raw file contents that the SeqRecord alternative from
+the FeatureParser (used in Bio.SeqIO).
 
-Currently the ONLY reason to use Bio.GenBank directly is for the RecordParser
-which turns a GenBank file into GenBank-specific Record objects.  This is a
-much closer representation to the raw file contents that the SeqRecord
-alternative from the FeatureParser (used in Bio.SeqIO).
+To use the Bio.GenBank parser, there are two helper functions:
+
+read                  Parse a handle containing a single GenBank record
+                      as Bio.GenBank specific Record objects.
+parse                 Iterate over a handle containing multiple GenBank
+                      records as Bio.GenBank specific Record objects.
+
+The following internal classes are not intended for direct use and may
+be deprecated in a future release.
 
 Classes:
 Iterator              Iterate through a file of GenBank entries
@@ -31,24 +37,11 @@ ParserFailureError    Exception indicating a failure in the parser (ie.
 LocationParserError   Exception indiciating a problem with the spark based
                       location parser.
 
-
-17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
-These are GenBank files that summarize the content of a project, and provide lists of
-scaffold and contig files in the project. These will be in annotations['wgs'] and
-annotations['wgs_scafld']. These GenBank files do not have sequences. See
-http://groups.google.com/group/bionet.molbio.genbank/browse_thread/thread/51fb88bf39e7dc36
-
-http://is.gd/nNgk
-for more details of this format, and an example.
-Added by Ying Huang & Iddo Friedberg
 """
-import cStringIO
 import re
 
 # other Biopython stuff
 from Bio import SeqFeature
-from Bio.ParserSupport import AbstractConsumer
-from Bio import Entrez
 
 # other Bio.GenBank stuff
 from utils import FeatureValueCleaner
@@ -149,14 +142,50 @@ def _pos(pos_str, offset=0):
 
     This also covers fuzzy positions:
 
-    >>> _pos("<5")
+    >>> p = _pos("<5")
+    >>> p
     BeforePosition(5)
+    >>> print p
+    <5
+    >>> int(p)
+    5
+
     >>> _pos(">5")
     AfterPosition(5)
-    >>> _pos("one-of(5,8,11)")
-    OneOfPosition([ExactPosition(5), ExactPosition(8), ExactPosition(11)])
+
+    By default assumes an end position, so note the integer behaviour:
+
+    >>> p = _pos("one-of(5,8,11)")
+    >>> p
+    OneOfPosition(11, choices=[ExactPosition(5), ExactPosition(8), ExactPosition(11)])
+    >>> print p
+    one-of(5,8,11)
+    >>> int(p)
+    11
+
     >>> _pos("(8.10)")
-    WithinPosition(8,2)
+    WithinPosition(10, left=8, right=10)
+
+    Fuzzy start positions:
+
+    >>> p = _pos("<5", -1)
+    >>> p
+    BeforePosition(4)
+    >>> print p
+    <4
+    >>> int(p)
+    4
+
+    Notice how the integer behaviour changes too!
+
+    >>> p = _pos("one-of(5,8,11)", -1)
+    >>> p
+    OneOfPosition(4, choices=[ExactPosition(4), ExactPosition(7), ExactPosition(10)])
+    >>> print(p)
+    one-of(4,7,10)
+    >>> int(p)
+    4
+
     """
     if pos_str.startswith("<"):
         return SeqFeature.BeforePosition(int(pos_str[1:])+offset)
@@ -164,13 +193,23 @@ def _pos(pos_str, offset=0):
         return SeqFeature.AfterPosition(int(pos_str[1:])+offset)
     elif _re_within_position.match(pos_str):
         s,e = pos_str[1:-1].split(".")
-        return SeqFeature.WithinPosition(int(s)+offset, int(e)-int(s))
+        s = int(s) + offset
+        e = int(e) + offset
+        if offset == -1:
+            default = s
+        else:
+            default = e
+        return SeqFeature.WithinPosition(default, left=s, right=e)
     elif _re_oneof_position.match(pos_str):
         assert pos_str.startswith("one-of(")
         assert pos_str[-1]==")"
         parts = [SeqFeature.ExactPosition(int(pos)+offset) \
                  for pos in pos_str[7:-1].split(",")]
-        return SeqFeature.OneOfPosition(parts)
+        if offset == -1:
+            default = min(int(pos) for pos in parts)
+        else:
+            default = max(int(pos) for pos in parts)
+        return SeqFeature.OneOfPosition(default, choices=parts)
     else:
         return SeqFeature.ExactPosition(int(pos_str)+offset)
 
@@ -187,7 +226,9 @@ def _loc(loc_str, expected_seq_length):
     A more complex location using within positions,
 
     >>> _loc("(9.10)..(20.25)", 1000)
-    FeatureLocation(WithinPosition(8,1),WithinPosition(20,5))
+    FeatureLocation(WithinPosition(8, left=8, right=9),WithinPosition(25, left=20, right=25))
+
+    Notice how that will act as though it has overall start 8 and end 25.
 
     Zero length between feature,
 
@@ -293,7 +334,11 @@ def _split_compound_loc(compound_loc):
             yield part
 
 class Iterator(object):
-    """Iterator interface to move over a file of GenBank entries one at a time.
+    """Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).
+
+    This class is likely to be deprecated in a future release of Biopython.
+    Please use Bio.SeqIO.parse(..., format="gb") or Bio.GenBank.parse(...)
+    for SeqRecord and GenBank specific Record objects respectively instead.
     """
     def __init__(self, handle, parser = None):
         """Initialize the iterator.
@@ -338,7 +383,12 @@ class LocationParserError(Exception):
     pass
                                                           
 class FeatureParser(object):
-    """Parse GenBank files into Seq + Feature objects.
+    """Parse GenBank files into Seq + Feature objects (OBSOLETE).
+
+    Direct use of this class is discouraged, and may be deprecated in
+    a future release of Biopython.
+
+    Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
     def __init__(self, debug_level = 0, use_fuzziness = 1, 
                  feature_cleaner = FeatureValueCleaner()):
@@ -369,7 +419,13 @@ class FeatureParser(object):
         return self._consumer.data
 
 class RecordParser(object):
-    """Parse GenBank files into Record objects
+    """Parse GenBank files into Record objects (OBSOLETE).
+
+    Direct use of this class is discouraged, and may be deprecated in
+    a future release of Biopython.
+
+    Please use the Bio.GenBank.parse(...) or Bio.GenBank.read(...) functions
+    instead.
     """
     def __init__(self, debug_level = 0):
         """Initialize the parser.
@@ -386,11 +442,12 @@ class RecordParser(object):
         """Parse the specified handle into a GenBank record.
         """
         self._consumer = _RecordConsumer()
+
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class _BaseGenBankConsumer(AbstractConsumer):
-    """Abstract GenBank consumer providing useful general functions.
+class _BaseGenBankConsumer(object):
+    """Abstract GenBank consumer providing useful general functions (PRIVATE).
 
     This just helps to eliminate some duplication in things that most
     GenBank consumers want to do.
@@ -403,6 +460,12 @@ class _BaseGenBankConsumer(AbstractConsumer):
 
     def __init__(self):
         pass
+
+    def _unhandled(self, data):
+        pass
+
+    def __getattr__(self, attr):
+        return self._unhandled
 
     def _split_keywords(self, keyword_string):
         """Split a string of keywords into a nice clean list.
@@ -502,7 +565,7 @@ class _BaseGenBankConsumer(AbstractConsumer):
         return new_start, new_end
 
 class _FeatureConsumer(_BaseGenBankConsumer):
-    """Create a SeqRecord object with Features to return.
+    """Create a SeqRecord object with Features to return (PRIVATE).
 
     Attributes:
     o use_fuzziness - specify whether or not to parse with fuzziness in
@@ -645,9 +708,15 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         We'll have to see some real examples to be sure, but based on the
         above example we can expect one reference per line.
+
+        Note that at some point the NCBI have included an extra space, e.g.
+
+        DBLINK      Project: 28471
         """
         #During the transition period with both PROJECT and DBLINK lines,
         #we don't want to add the same cross reference twice.
+        while ": " in content:
+            content = content.replace(": ", ":")
         if content.strip() not in self.data.dbxrefs:
             self.data.dbxrefs.append(content.strip())
 
@@ -1120,7 +1189,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
-            elif self._seq_type in ["circular", "linear"]:
+            elif self._seq_type in ["circular", "linear", "unspecified"]:
                 pass
             # we have a bug if we get here
             else:
@@ -1133,7 +1202,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.seq = Seq(sequence, seq_alphabet)
 
 class _RecordConsumer(_BaseGenBankConsumer):
-    """Create a GenBank Record object from scanner generated information.
+    """Create a GenBank Record object from scanner generated information (PRIVATE).
     """
     def __init__(self):
         _BaseGenBankConsumer.__init__(self)
@@ -1365,12 +1434,69 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._add_feature()
 
 
+def parse(handle):
+    """Iterate over GenBank formatted entries as Record objects.
+
+    >>> from Bio import GenBank
+    >>> handle = open("GenBank/NC_000932.gb")
+    >>> for record in GenBank.parse(handle):
+    ...     print record.accession
+    ['NC_000932']
+    >>> handle.close()
+
+    To get SeqRecord objects use Bio.SeqIO.parse(..., format="gb")
+    instead.
+    """
+    return iter(Iterator(handle, RecordParser()))
+
+def read(handle):
+    """Read a handle containing a single GenBank entry as a Record object.
+
+    >>> from Bio import GenBank
+    >>> handle = open("GenBank/NC_000932.gb")
+    >>> record = GenBank.read(handle)
+    >>> print record.accession
+    ['NC_000932']
+    >>> handle.close()
+                       
+    To get a SeqRecord object use Bio.SeqIO.read(..., format="gb")
+    instead.
+    """
+    iterator = parse(handle)
+    try:
+        first = iterator.next()
+    except StopIteration:
+        first = None
+    if first is None:
+        raise ValueError("No records found in handle")
+    try:
+        second = iterator.next()
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first
+
 def _test():
     """Run the Bio.GenBank module's doctests."""
-    print "Runing doctests..."
     import doctest
-    doctest.testmod()
-    print "Done"
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
 
 if __name__ == "__main__":
     _test()

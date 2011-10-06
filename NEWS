@@ -10,7 +10,32 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-In progress: Biopython 1.58 (not yet released)
+(In progress, not yet released) Biopython 1.59
+
+Please note that this release will *not* work on Python 2.4 (while the
+recent releases have worked despite us not officially supporting this).
+
+The position objects used in Bio.SeqFeature now act almost like integers,
+making dealing with fuzzy locations in EMBL/GenBank files much easier. Note
+as part of this work, the arguments to create fuzzy positions OneOfPosition
+and WithinPosition have changed in a non-backwards compatible way.
+
+Bio.Graphics.BasicChromosome has been extended to allow simple sub-features
+to be drawn on chromosome segments, suitable to show the position of genes,
+SNPs or other loci. Note Bio.Graphics module requires the ReportLab library.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Brad Chapman
+Connor McCoy
+Eric Talevich
+Michiel de Hoon
+Peter Cock
+
+===================================================================
+
+18 August 2011: Biopython 1.58
 
 A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
 Likelihood) package of programs, supporting codeml, baseml and yn00 as well
@@ -19,6 +44,9 @@ as a Python re-implementation of chi2 was added as the Bio.Phylo.PAML module.
 Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
 format offering basic annotation support. See Schmitt et al (2011) in
 Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
+
+Bio.SeqIO now includes read support for ABI files ("Sanger" capillary
+sequencing trace files, containing called sequence with PHRED qualities).
 
 The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
@@ -40,14 +68,21 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Aaron Gallagher (first contribution)
+Bartek Wilczynski
+Bogdan T. (first contribution)
 Brandon Invergo (first contribution)
-Fábio Madeira (first contribution)
 Connor McCoy (first contribution)
+David Cain (first contribution)
 Eric Talevich
+Fábio Madeira (first contribution)
+Hongbo Zhu
 Joao Rodrigues
+Michiel de Hoon
 Peter Cock
 Thomas Schmitt (first contribution)
+Tiago Antao
 Walter Gillett
+Wibowo Arindrarto (first contribution)
 
 ===================================================================
 

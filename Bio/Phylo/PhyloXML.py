@@ -26,15 +26,6 @@ from Bio import BiopythonWarning
 
 from Bio.Phylo import BaseTree
 
-#TODO - Remove this hack for Python 2.4
-try:
-    any
-except NameError:
-    def any(iterable):
-        for element in iterable:
-            if element:
-                return True
-        return False
 
 class PhyloXMLWarning(BiopythonWarning):
     """Warning for non-compliance with the phyloXML specification."""
@@ -357,6 +348,10 @@ class Clade(PhyloElement, BaseTree.Clade):
                     name=clade.name)
         new_clade.clades = [cls.from_clade(c) for c in clade]
         new_clade.confidence = clade.confidence
+        new_clade.width = clade.width
+        new_clade.color = (BranchColor(
+                clade.color.red, clade.color.green, clade.color.blue)
+                if clade.color else None)
         new_clade.__dict__.update(kwargs)
         return new_clade
 
@@ -419,29 +414,12 @@ class Clade(PhyloElement, BaseTree.Clade):
 
     taxonomy = property(_get_taxonomy, _set_taxonomy)
 
-    # Syntax sugar for setting the branch color
-    def _get_color(self):
-        return self._color
 
-    def _set_color(self, arg):
-        if arg is None or isinstance(arg, BranchColor):
-            self._color = arg
-        elif isinstance(arg, basestring):
-            if arg in BranchColor.color_names:
-                # Known color name
-                self._color = BranchColor.from_name(arg)
-            elif arg.startswith('#') and len(arg) == 7:
-                # HTML-style hex string
-                self._color = BranchColor.from_hex(arg)
-            else:
-                raise ValueError("invalid color string %s" % arg)
-        elif hasattr(arg, '__iter__') and len(arg) == 3:
-            # RGB triplet
-            self._color = BranchColor(*arg)
-        else:
-            raise ValueError("invalid color value %s" % arg)
+# PhyloXML wrapper for a special BaseTree attribute
 
-    color = property(_get_color, _set_color, doc="Branch color.")
+class BranchColor(PhyloElement, BaseTree.BranchColor):
+    def __init__(self, *args, **kwargs):
+        BaseTree.BranchColor.__init__(self, *args, **kwargs)
 
 
 # PhyloXML-specific complex types
@@ -523,122 +501,6 @@ class BinaryCharacters(PhyloElement):
         self.present=present or []
         self.absent=absent or []
 
-
-class BranchColor(PhyloElement):
-    """Indicates the color of a clade when rendered graphically.
-
-    The color should be interpreted by client code (e.g. visualization
-    programs) as applying to the whole clade, unless overwritten by the
-    color(s) of sub-clades.
-
-    Color values must be integers from 0 to 255.
-    """
-
-    color_names = {
-            'red':      (255,   0,   0),
-            'r':        (255,   0,   0),
-            'yellow':   (255, 255,   0),
-            'y':        (255, 255,   0),
-            'green':    (  0, 128,   0),
-            'g':        (  0, 128,   0),
-            'cyan':     (  0, 255, 255),
-            'c':        (  0, 255, 255),
-            'blue':     (  0,   0, 255),
-            'b':        (  0,   0, 255),
-            'magenta':  (255,   0, 255),
-            'm':        (255,   0, 255),
-            'black':    (  0,   0,   0),
-            'k':        (  0,   0,   0),
-            'white':    (255, 255, 255),
-            'w':        (255, 255, 255),
-            # Names standardized in HTML/CSS spec
-            # http://w3schools.com/html/html_colornames.asp
-            'maroon':   (128,   0,   0),
-            'olive':    (128, 128,   0),
-            'lime':     (  0, 255,   0),
-            'aqua':     (  0, 255, 255),
-            'teal':     (  0, 128, 128),
-            'navy':     (  0,   0, 128),
-            'fuchsia':  (255,   0, 255),
-            'purple':   (128,   0, 128),
-            'silver':   (192, 192, 192),
-            'gray':     (128, 128, 128),
-            # More definitions from matplotlib/gcolor2
-            'grey':     (128, 128, 128),
-            'pink':     (255, 192, 203),
-            'salmon':   (250, 128, 114),
-            'orange':   (255, 165,   0),
-            'gold':     (255, 215,   0),
-            'tan':      (210, 180, 140),
-            'brown':    (165,  42,  42),
-            }
-
-    def __init__(self, red, green, blue):
-        for color in (red, green, blue):
-            assert (isinstance(color, int) and
-                    0 <= color <= 255
-                    ), "Color values must be integers between 0 and 255."
-        self.red = red
-        self.green = green
-        self.blue = blue
-
-    @classmethod
-    def from_hex(cls, hexstr):
-        """Construct a BranchColor object from a hexadecimal string.
-
-        The string format is the same style used in HTML and CSS, such as
-        '#FF8000' for an RGB value of (255, 128, 0).
-        """
-        assert (isinstance(hexstr, basestring) and
-                hexstr.startswith('#') and
-                len(hexstr) == 7
-                ), "need a 24-bit hexadecimal string, e.g. #000000"
-        def unpack(cc):
-            return int('0x'+cc, base=16)
-        RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
-        return cls(*map(unpack, RGB))
-
-    @classmethod
-    def from_name(cls, colorname):
-        """Construct a BranchColor object by the color's name."""
-        return cls(*cls.color_names[colorname])
-
-    def to_hex(self):
-        """Return a 24-bit hexadecimal RGB representation of this color.
-
-        The returned string is suitable for use in HTML/CSS, as a color
-        parameter in matplotlib, and perhaps other situations.
-
-        Example:
-
-            >>> bc = BranchColor(12, 200, 100)
-            >>> bc.to_hex()
-            '#0cc864'
-        """
-        return '#' + hex(
-                self.red * (16**4)
-                + self.green * (16**2)
-                + self.blue)[2:].zfill(6)
-
-    def to_rgb(self):
-        """Return a tuple of RGB values (0 to 255) representing this color.
-
-        Example:
-
-            >>> bc = BranchColor(255, 165, 0)
-            >>> bc.to_rgb()
-            (255, 165, 0)
-        """
-        return (self.red, self.green, self.blue)
-
-    def __repr__(self):
-        """Preserve the standard RGB order when representing this object."""
-        return (u'%s(red=%d, green=%d, blue=%d)'
-                % (self.__class__.__name__, self.red, self.green, self.blue))
-
-    def __str__(self):
-        """Show the color's RGB values."""
-        return "(%d, %d, %d)" % (self.red, self.green, self.blue)
 
 
 class CladeRelation(PhyloElement):

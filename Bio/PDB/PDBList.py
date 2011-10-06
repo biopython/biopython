@@ -19,25 +19,16 @@
 # It may be distributed freely with respect to the original author.
 # Any maintainer of the BioPython code may change this notice
 # when appropriate.
-#
-# Last modified on Fri, Oct 24th 2006, Warszawa
-#
-# Removed 'write' options from retrieve_pdb_file method: it is not used.
-# Also added a 'dir' options (pdb file is put in this directory if given),
-# and an 'exist' option (test if the file is already there). This method
-# now returns the name of the downloaded uncompressed file.
-#
-# -Thomas, 1/06/04
-#
-#
-# Including bugfixes from Sunjoong Lee (9/2006)
-#
 
 """Access the PDB over the internet (for example to download structures)."""
 
+import gzip
 import os
 import shutil
-import urllib
+from urllib2 import urlopen as _urlopen
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 
 
 class PDBList(object):
@@ -67,7 +58,6 @@ class PDBList(object):
 
     alternative_download_url = "http://www.rcsb.org/pdb/files/"
     # just append PDB code to this, and then it works.
-    # (above URL verified with a XXXX.pdb appended on 2 Sept 2008)
     
     def __init__(self,server='ftp://ftp.wwpdb.org', pdb=os.getcwd(), obsolete_pdb=None):
         """Initialize the class with the default server or a custom one."""
@@ -97,7 +87,7 @@ class PDBList(object):
         Typical contents of the list files parsed by this method is now
         very simply one PDB name per line.
         """
-        handle = urllib.urlopen(url)
+        handle = _urlopen(url)
         answer = []
         for line in handle:
             pdb = line.strip()
@@ -120,19 +110,13 @@ class PDBList(object):
         drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
         drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
         -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
-
-
         """     
-        url = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/')
-
-        # added by S.Lee
-        # recent = filter(lambda x: x.isdigit(), \
-        #                 map(lambda x: x.split()[-1], url.readlines()))[-1]
+        url = _urlopen(self.pdb_server + '/pub/pdb/data/status/')
         recent = filter(str.isdigit,
                         (x.split()[-1] for x in url.readlines())
                         )[-1]
         path = self.pdb_server+'/pub/pdb/data/status/%s/'%(recent)
-        # retrieve the lists
+        # Retrieve the lists
         added = self.get_status_list(path+'added.pdb')
         modified = self.get_status_list(path+'modified.pdb')
         obsolete = self.get_status_list(path+'obsolete.pdb')
@@ -144,10 +128,8 @@ class PDBList(object):
         Returns a list of PDB codes in the index file.
         """
         print "retrieving index file. Takes about 5 MB."
-        url = urllib.urlopen(self.pdb_server+'/pub/pdb/derived_data/index/entries.idx')
-        # extract four-letter-codes
-        # entries = map(lambda x: x[:4], \
-        #               filter(lambda x: len(x)>4, url.readlines()[2:]))
+        url = _urlopen(self.pdb_server +
+                       '/pub/pdb/derived_data/index/entries.idx')
         return [line[:4] for line in url.readlines()[2:] if len(line) > 4]
 
     def get_all_obsolete(self):
@@ -173,8 +155,9 @@ class PDBList(object):
         ...
 
         """
-        handle = urllib.urlopen(self.pdb_server+'/pub/pdb/data/status/obsolete.dat')
-        # extract pdb codes. Could use a list comprehension, but I want
+        handle = _urlopen(self.pdb_server +
+                          '/pub/pdb/data/status/obsolete.dat')
+        # Extract pdb codes. Could use a list comprehension, but I want
         # to include an assert to check for mis-reading the data.
         obsolete = []
         for line in handle:
@@ -185,16 +168,15 @@ class PDBList(object):
         handle.close()
         return obsolete
 
-
-
-    def retrieve_pdb_file(self,pdb_code, obsolete=0, compression='.gz', 
-            uncompress="gunzip", pdir=None):
-        """Retrieves a PDB structure file from the PDB server and
+    def retrieve_pdb_file(self,pdb_code, obsolete=0, compression=None,
+            uncompress=None, pdir=None):
+        """ Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
         The PDB structure is returned as a single string.
-        If obsolete is 1, the file will be by default saved in a special file tree.
-        The compression should be '.Z' or '.gz'. 'uncompress' is
-        the command called to uncompress the files.
+        If obsolete==1, the file will be saved in a special file tree.
+        If uncompress is specified, a system utility will decompress the .gz
+        archive. Otherwise, Python gzip utility will handle it.
+        compression does nothing, as all archives are already in .gz format
 
         @param pdir: put the file in this directory (default: create a PDB-style directory tree) 
         @type pdir: string
@@ -202,19 +184,29 @@ class PDBList(object):
         @return: filename
         @rtype: string
         """
-        # get the structure
+        # Alert the user about deprecated parameters
+        if compression is not None:
+            warnings.warn("PDB file servers now only host .gz archives: "
+                    "the compression parameter will not do anything"
+                    , BiopythonDeprecationWarning)
+        if uncompress is not None:
+            warnings.warn("Decompression is handled with the gzip module: "
+                    "the uncompression parameter will not do anything"
+                    , BiopythonDeprecationWarning)
+
+        # Get the structure
         code=pdb_code.lower()
-        filename="pdb%s.ent%s"%(code,compression)
+        filename="pdb%s.ent.gz"%code
         if not obsolete:
             url=(self.pdb_server+
-                 '/pub/pdb/data/structures/divided/pdb/%s/pdb%s.ent%s'
-                 % (code[1:3],code,compression))
+                 '/pub/pdb/data/structures/divided/pdb/%s/pdb%s.ent.gz'
+                 % (code[1:3],code))
         else:
             url=(self.pdb_server+
-                 '/pub/pdb/data/structures/obsolete/pdb/%s/pdb%s.ent%s'
-                 % (code[1:3],code,compression))
+                 '/pub/pdb/data/structures/obsolete/pdb/%s/pdb%s.ent.gz'
+                 % (code[1:3],code))
             
-        # in which dir to put the pdb file?
+        # In which dir to put the pdb file?
         if pdir is None:
             if self.flat_tree:
                 if not obsolete:
@@ -222,7 +214,7 @@ class PDBList(object):
                 else:
                     path=self.obsolete_pdb
             else:
-                # Put in PDB style directory tree
+                # Put in PDB-style directory tree
                 if not obsolete:
                     path=os.path.join(self.local_pdb, code[1:3])
                 else:
@@ -238,18 +230,24 @@ class PDBList(object):
         # the final uncompressed file
         final_file=os.path.join(path, "pdb%s.ent" % code)
 
-        # check whether the file exists
+        # Skip download if the file already exists
         if not self.overwrite:
             if os.path.exists(final_file):
-                print "file exists, not retrieved %s" % final_file
+                print "Structure exists: '%s' " % final_file
                 return final_file
 
         # Retrieve the file
-        print 'retrieving %s' % url
-        lines=urllib.urlopen(url).read()
+        print "Downloading PDB structure '%s'..." % pdb_code
+        lines = _urlopen(url).read()
         open(filename,'wb').write(lines)
-        # uncompress the file
-        os.system("%s %s" % (uncompress, filename))
+
+        # Uncompress the file
+        gz = gzip.open(filename, 'rb')
+        out = open(final_file, 'wb')
+        out.writelines(gz.read())
+        gz.close()
+        out.close()
+        os.remove(filename)
 
         return final_file
             
@@ -268,14 +266,13 @@ class PDBList(object):
         
         for pdb_code in new+modified:
             try:
-                #print 'retrieving %s' % pdb_code
                 self.retrieve_pdb_file(pdb_code)
             except Exception:
                 print 'error %s\n' % pdb_code
                 # you can insert here some more log notes that
                 # something has gone wrong.            
 
-        # move the obsolete files to a special folder
+        # Move the obsolete files to a special folder
         for pdb_code in obsolete:
             if self.flat_tree:
                 old_file = os.path.join(self.local_pdb,
@@ -331,21 +328,18 @@ class PDBList(object):
             outfile.writelines((x+'\n' for x in entries))
             outfile.close()
 
-
-    # this is actually easter egg code not used by any of the methods
-    # maybe someone will find it useful.
-    #    
     def get_seqres_file(self,savefile='pdb_seqres.txt'):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
         print "retrieving sequence file. Takes about 15 MB."
-        url = urllib.urlopen(self.pdb_server + 
-                '/pub/pdb/derived_data/pdb_seqres.txt')
-        lines = url.readlines()
+        handle = _urlopen(self.pdb_server + 
+                          '/pub/pdb/derived_data/pdb_seqres.txt')
+        lines = handle.readlines()
         outfile = open(savefile, 'w')
         outfile.writelines(lines)
         outfile.close()
+        handle.close()
 
 
 if __name__ == '__main__':
@@ -400,4 +394,3 @@ if __name__ == '__main__':
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
             pl.retrieve_pdb_file(sys.argv[1],pdir=pdb_path)
-

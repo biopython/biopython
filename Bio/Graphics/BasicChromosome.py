@@ -39,6 +39,9 @@ from reportlab.graphics import renderPDF, renderPS
 from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write
+from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator as _ColorTranslator
+
+_color_trans = _ColorTranslator()
 
 class _ChromosomeComponent(Widget):
     """Base class specifying the interface for a component of the system.
@@ -98,6 +101,7 @@ class Organism(_ChromosomeComponent):
         # customizable attributes
         self.page_size = letter
         self.title_size = 20
+        self._legend_height = 2 * inch
 
         self.output_format = output_format
 
@@ -123,13 +127,13 @@ class Organism(_ChromosomeComponent):
         # no sub_components
         else:
             pass
-        
+
         for sub_component in self._sub_components:
             # set the drawing location of the chromosome
             sub_component.start_x_position = cur_x_pos
             sub_component.end_x_position = cur_x_pos + .9 * x_pos_change
             sub_component.start_y_position = height - 1.5 * inch
-            sub_component.end_y_position = 3 * inch
+            sub_component.end_y_position = self._legend_height + 1 * inch
 
             # do the drawing
             sub_component.draw(cur_drawing)
@@ -137,7 +141,7 @@ class Organism(_ChromosomeComponent):
             # update the locations for the next chromosome
             cur_x_pos += x_pos_change
 
-        self._draw_legend(cur_drawing, 2.5 * inch, width)
+        self._draw_legend(cur_drawing, self._legend_height + 0.5 * inch, width)
 
         return _write(cur_drawing, output_file, self.output_format)
 
@@ -150,11 +154,12 @@ class Organism(_ChromosomeComponent):
         title_string.textAnchor = "middle"
 
         cur_drawing.add(title_string)
-
+    
     def _draw_legend(self, cur_drawing, start_y, width):
         """Draw a legend for the figure.
 
-        Subclasses should implement this to provide specialized legends.
+        Subclasses should implement this (see also self._legend_height) to
+        provide specialized legends.
         """
         pass
     
@@ -203,6 +208,10 @@ class Chromosome(_ChromosomeComponent):
         self.title_size = 20
         self.scale_num = None
 
+        self.label_size = 6
+        self.chr_percent = 0.25
+        self.label_sep_percent = self.chr_percent * 0.5
+
     def subcomponent_size(self):
         """Return the scaled size of all subcomponents of this component.
         """
@@ -234,7 +243,9 @@ class Chromosome(_ChromosomeComponent):
         # no sub_components to draw
         else:
             pass
-            
+        
+        left_labels = []
+        right_labels = []
         for sub_component in self._sub_components:
             this_y_pos_change = sub_component.scale * y_pos_change
             
@@ -245,25 +256,84 @@ class Chromosome(_ChromosomeComponent):
             sub_component.end_y_position = cur_y_pos - this_y_pos_change
 
             # draw the sub component
+            sub_component._left_labels = []
+            sub_component._right_labels = []
             sub_component.draw(cur_drawing)
+            left_labels += sub_component._left_labels
+            right_labels += sub_component._right_labels
 
             # update the position for the next component
             cur_y_pos -= this_y_pos_change
 
+        self._draw_labels(cur_drawing, left_labels, right_labels)
         self._draw_label(cur_drawing, self._name)
 
     def _draw_label(self, cur_drawing, label_name):
         """Draw a label for the chromosome.
         """
-        x_position = self.start_x_position
+        x_position = 0.5 * (self.start_x_position + self.end_x_position)
         y_position = self.end_y_position
 
         label_string = String(x_position, y_position, label_name)
         label_string.fontName = 'Times-BoldItalic'
         label_string.fontSize = self.title_size
-        label_string.textAnchor = 'start'
+        label_string.textAnchor = 'middle'
 
         cur_drawing.add(label_string)
+
+    def _draw_labels(self, cur_drawing, left_labels, right_labels):
+        """Layout and draw sub-feature labels for the chromosome.
+
+        Tries to place each label at the same vertical position as the
+        feature it applies to, but will adjust the positions to avoid or
+        at least reduce label overlap.
+
+        Draws the label text and a coloured line linking it to the
+        location (i.e. feature) it applies to.
+        """
+        segment_width = (self.end_x_position - self.start_x_position) \
+                        * self.chr_percent
+        label_sep = (self.end_x_position - self.start_x_position) \
+                        * self.label_sep_percent
+        segment_x = self.start_x_position \
+                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
+
+        y_limits = []
+        for sub_component in self._sub_components:
+            y_limits.extend((sub_component.start_y_position, sub_component.end_y_position))
+        y_min = min(y_limits)
+        y_max = max(y_limits)
+        del y_limits
+        #Now do some label placement magic...
+        #from reportlab.pdfbase import pdfmetrics
+        #font = pdfmetrics.getFont('Helvetica')
+        #h = (font.face.ascent + font.face.descent) * 0.90
+        h = self.label_size
+        left_labels = _place_labels(left_labels, y_min, y_max, h)
+        right_labels = _place_labels(right_labels, y_min, y_max, h)
+        x1 = segment_x
+        x2 = segment_x - label_sep
+        for (y1, y2, color, name) in left_labels:
+            cur_drawing.add(Line(x1, y1, x2, y2,
+                                 strokeColor = color,
+                                 strokeWidth = 0.25))
+            label_string = String(x2, y2, name,
+                                  textAnchor="end")
+            label_string.fontName = 'Helvetica'
+            label_string.fontSize = self.label_size
+            cur_drawing.add(label_string)
+        x1 = segment_x + segment_width
+        x2 = segment_x + segment_width + label_sep
+        for (y1, y2, color, name) in right_labels:
+            cur_drawing.add(Line(x1, y1, x2, y2,
+                                 strokeColor = color,
+                                 strokeWidth = 0.25))
+            label_string = String(x2, y2, name)
+            label_string.fontName = 'Helvetica'
+            label_string.fontSize = self.label_size
+            cur_drawing.add(label_string)
+
+
 
 class ChromosomeSegment(_ChromosomeComponent):
     """Draw a segment of a chromosome.
@@ -323,8 +393,9 @@ class ChromosomeSegment(_ChromosomeComponent):
                          self.start_y_position, self.end_y_position):
             assert position != -1, "Need to set drawing coordinates."
 
-        self._draw_subcomponents(cur_drawing)
+        self._draw_subcomponents(cur_drawing) #Anything behind
         self._draw_segment(cur_drawing)
+        self._overdraw_subcomponents(cur_drawing) #Anything on top
         self._draw_label(cur_drawing)
 
     def _draw_subcomponents(self, cur_drawing):
@@ -338,13 +409,14 @@ class ChromosomeSegment(_ChromosomeComponent):
     def _draw_segment(self, cur_drawing):
         """Draw the current chromosome segment.
         """
-        # set the coordinates of the segment -- it'll take up the left part
+        # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
-        segment_x = self.start_x_position
         segment_y = self.end_y_position
         segment_width = (self.end_x_position - self.start_x_position) \
                         * self.chr_percent
         segment_height = self.start_y_position - self.end_y_position
+        segment_x = self.start_x_position \
+                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
         
         # first draw the sides of the segment
         right_line = Line(segment_x, segment_y,
@@ -363,11 +435,22 @@ class ChromosomeSegment(_ChromosomeComponent):
             fill_rectangle.strokeColor = None
 
             cur_drawing.add(fill_rectangle)
-            
+
+    def _overdraw_subcomponents(self, cur_drawing):
+        """Draw any subcomponents of the chromosome segment over the main part.
+
+        This should be overridden in derived classes if there are
+        subcomponents to be drawn.
+        """
+        pass
+
     def _draw_label(self, cur_drawing):
         """Add a label to the chromosome segment.
+
+        The label will be applied to the right of the segment.
+
+        This may be overlapped by any sub-feature labels on other segments!
         """
-        # the label will be applied to the right of the segment
         if self.label is not None:
 
             label_x = self.start_x_position + \
@@ -381,7 +464,201 @@ class ChromosomeSegment(_ChromosomeComponent):
             label_string.fontSize = self.label_size
 
             cur_drawing.add(label_string)
+
+def _spring_layout(desired, minimum, maximum, gap=0):
+    """Function to try and layout label co-ordinates (or other floats, PRIVATE).
+    
+    Originally written for the y-axis vertical positioning of labels on a
+    chromosome diagram (where the minimum gap between y-axis co-ordinates is
+    the label height), it could also potentially be used for x-axis placement,
+    or indeed radial placement for circular chromosomes within GenomeDiagram.
+    
+    In essence this is an optimisation problem, balancing the desire to have
+    each label as close as possible to its data point, but also to spread out
+    the labels to avoid overlaps. This could be described with a cost function
+    (modelling the label distance from the desired placement, and the inter-
+    label separations as springs) and solved as a multi-variable minimization
+    problem - perhaps with NumPy or SciPy.
+    
+    For now however, the implementation is a somewhat crude ad hoc algorithm.
+    
+    NOTE - This expects the input data to have been sorted!
+    """
+    count = len(desired)
+    if count <= 1:
+        return desired #Easy!
+    if min(desired) < minimum or max(desired) > maximum:
+        raise ValueError("Data %f to %f out of bounds (%f to %f)" \
+                         % (min(desired), max(desired), minimum, maximum))
+    equal_step = float(maximum - minimum) / (count - 1)
+
+    if equal_step < gap:
+        import warnings
+        warnings.warn("Too many items to satify minimum gap %0.1f, equal step gives %0.1f" % (gap, equal_step))
+        #Crudest solution
+        return [minimum+i*equal_step for i in range(count)]
+    
+    good = True
+    if gap:
+        prev = desired[0]
+        for next in desired[1:]:
+            if prev - next < gap:
+                good = False
+                break
+    if good:
+        return desired
+    
+    #Try and divide it up...
+    halfspan = 0.5 * (maximum - minimum)
+    midpoint = 0.5 * (minimum + maximum)
+    low = [x for x in desired if x <= midpoint-0.5*gap]
+    high = [x for x in desired if x > midpoint+0.5*gap]
+    if len(low)+len(high) == count \
+    and len(low)*gap <= halfspan-0.5*gap \
+    and len(high)*gap <= halfspan-0.5*gap:
+        if not low:
+            return _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+        elif not high:
+            return _spring_layout(low, minimum, midpoint-0.5*gap, gap)
+        elif min(high) - min(low) > gap:
+            return _spring_layout(low, minimum, midpoint-0.5*gap, gap) + \
+                   _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+    
+    #Try not to spread out as far as the min/max unless needed
+    low = min(desired)
+    high = max(desired)
+    if (high-low) / (count-1) >= gap:
+        #Good, we don't need the full range, and can position the
+        #min and max exactly as well :)
+        equal_step = (high-low) / (count-1)
+        return [low+i*equal_step for i in range(count)]
+
+    low = 0.5 * (minimum + min(desired))
+    high = 0.5 * (max(desired) + maximum)
+    if (high-low) / (count-1) >= gap:
+        #Good, we don't need the full range
+        equal_step = (high-low) / (count-1)
+        return [low+i*equal_step for i in range(count)]
+
+    #Crudest solution
+    return [minimum+i*equal_step for i in range(count)]
+
+#assert False, _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1)
+#assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
+#assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.16666666666666666, 0.33333333333333331, 0.5, 0.66666666666666663, 0.83333333333333326, 1.0]
+
+def _place_labels(desired_etc, minimum, maximum, gap=0):
+    desired_etc.sort()
+    placed = _spring_layout([row[0] for row in desired_etc],
+                            minimum, maximum, gap)
+    for old,y2 in zip(desired_etc, placed):
+        y1, color, name = old
+        yield (y1, y2, color, name)
+
+class AnnotatedChromosomeSegment(ChromosomeSegment):
+    def __init__(self, bp_length, features,
+                 default_feature_color=colors.blue,
+                 name_qualifiers = ['gene', 'label', 'name', 'locus_tag', 'product']):
+        """Like the ChromosomeSegment, but accepts a list of features.
         
+        The features can either be SeqFeature objects, or tuples of five
+        values: start (int), end (int), strand (+1, -1, O or None), label
+        (string) and a ReportLab color.
+        
+        Note we require 0 <= start <= end <= bp_length, and within the vertical
+        space allocated to this segmenet lines will be places according to the
+        start/end coordindates (starting from the top).
+        
+        Positive stand features are drawn on the right, negative on the left,
+        otherwise all the way across.
+        
+        We recommend using consisent units for all the segment's scale values
+        (e.g. their length in base pairs).
+        
+        When providing features as SeqFeature objects, the default color
+        is used, unless the feature's qualifiers include an Artemis colour
+        string (functionality also in GenomeDiagram). The caption also follows
+        the GenomeDiagram approach and takes the first qualifier from the list
+        specified in name_qualifiers.
+
+        Note additional attribute label_sep_percent controls the percentage of
+        area that the chromosome segment takes up, by default half of the
+        chr_percent attribute (half of 25%, thus 12.5%)
+
+        """
+        ChromosomeSegment.__init__(self)
+        self.bp_length = bp_length
+        self.features = features
+        self.default_feature_color = default_feature_color
+        self.name_qualifiers = name_qualifiers
+        self.label_sep_percent = self.chr_percent * 0.5
+
+    def _overdraw_subcomponents(self, cur_drawing):
+        """Draw any annotated features on the chromosome segment.
+        
+        Assumes _draw_segment already called to fill out the basic shape,
+        and assmes that uses the same boundaries.
+        """
+        # set the coordinates of the segment -- it'll take up the MIDDLE part
+        # of the space we have.
+        segment_y = self.end_y_position
+        segment_width = (self.end_x_position - self.start_x_position) \
+                        * self.chr_percent
+        label_sep = (self.end_x_position - self.start_x_position) \
+                        * self.label_sep_percent
+        segment_height = self.start_y_position - self.end_y_position
+        segment_x = self.start_x_position \
+                  + 0.5 * (self.end_x_position - self.start_x_position - segment_width)
+        
+        left_labels = []
+        right_labels = []
+        for f in self.features:
+            try:
+                #Assume SeqFeature objects
+                start = f.location.start
+                end = f.location.end
+                strand = f.strand
+                try:
+                    #Mimic the GenomeDiagram code
+                    color = _color_trans.artemis_color( \
+                                             f.qualifiers['color'][0])
+                except:
+                    color = self.default_feature_color
+                name = ""
+                for qualifier in self.name_qualifiers:            
+                    if qualifier in f.qualifiers:
+                        name = f.qualifiers[qualifier][0]
+                        break
+            except AttributeError:
+                #Assume tuple of ints, string, and color
+                start, end, strand, name, color = f
+            assert 0 <= start <= end <= self.bp_length
+            if strand == +1 :
+                #Right side only
+                x = segment_x + segment_width * 0.6
+                w = segment_width * 0.4
+            elif strand == -1:
+                #Left side only
+                x = segment_x
+                w = segment_width * 0.4
+            else:
+                #Both or neighther - full width
+                x = segment_x
+                w = segment_width
+            local_scale = segment_height / self.bp_length
+            fill_rectangle = Rect(x, segment_y + segment_height - local_scale*start,
+                                  w, local_scale*(start-end))
+            fill_rectangle.fillColor = color
+            fill_rectangle.strokeColor = color
+            cur_drawing.add(fill_rectangle)
+            if name:
+                value = (segment_y + segment_height - local_scale*start, color, name)
+                if strand == -1:
+                    self._left_labels.append(value)
+                else:
+                    self._right_labels.append(value)
+
+            
 class TelomereSegment(ChromosomeSegment):
     """A segment that is located at the end of a linear chromosome.
 
@@ -408,13 +685,13 @@ class TelomereSegment(ChromosomeSegment):
     def _draw_segment(self, cur_drawing):
         """Draw a half circle representing the end of a linear chromosome.
         """
-        # set the coordinates of the segment -- it'll take up the left part
+        # set the coordinates of the segment -- it'll take up the MIDDLE part
         # of the space we have.
         width = (self.end_x_position - self.start_x_position) \
                 * self.chr_percent
         height = self.start_y_position - self.end_y_position
-
-        center_x = self.start_x_position + width / 2
+        center_x = 0.5 * (self.end_x_position + self.start_x_position)
+        start_x = center_x - 0.5 * width
         if self._inverted:
             center_y = self.start_y_position
             start_angle = 180
@@ -425,19 +702,19 @@ class TelomereSegment(ChromosomeSegment):
             end_angle = 180
         
         cap_wedge = Wedge(center_x, center_y, width / 2,
-                          start_angle, end_angle, height / 2)
+                          start_angle, end_angle, height)
 
         cap_wedge.fillColor = self.fill_color
         cur_drawing.add(cap_wedge)
 
         # draw a line to cover up the the bottom part of the wedge
         if self._inverted:
-            cover_line = Line(self.start_x_position, self.start_y_position,
-                              self.start_x_position + width,
+            cover_line = Line(start_x, self.start_y_position,
+                              start_x + width,
                               self.start_y_position)
         else:
-            cover_line = Line(self.start_x_position, self.end_y_position,
-                              self.start_x_position + width,
+            cover_line = Line(start_x, self.end_y_position,
+                              start_x + width,
                               self.end_y_position)
 
         if self.fill_color is not None:
@@ -448,12 +725,12 @@ class TelomereSegment(ChromosomeSegment):
         cover_line.strokeColor = cover_color
         cur_drawing.add(cover_line)
 
+class SpacerSegment(ChromosomeSegment):
+    """A segment that is located at the end of a linear chromosome.
 
-        
-        
+    Doesn't draw anything, just empty space which can be helpful
+    for layout purposes (e.g. making room for feature labels).
+    """
 
-        
-        
-
-        
-                   
+    def draw(self, cur_diagram):
+        pass

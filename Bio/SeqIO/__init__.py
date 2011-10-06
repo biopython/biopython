@@ -11,7 +11,7 @@
 Bio.SeqIO is also documented at U{http://biopython.org/wiki/SeqIO} and by
 a whole chapter in our tutorial:
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
- - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}  
+ - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
 
 Input
 =====
@@ -211,6 +211,7 @@ File Formats
 When specifying the file format, use lowercase strings.  The same format
 names are also used in Bio.AlignIO and include the following:
 
+ - abif    - Applied Biosystem's sequencing trace format
  - ace     - Reads the contig sequences from an ACE assembly file.
  - embl    - The EMBL flat file format. Uses Bio.GenBank internally.
  - fasta   - The generic sequence file format where each record starts with
@@ -257,6 +258,10 @@ You can also use any file format supported by Bio.AlignIO, such as "nexus",
 "phlip" and "stockholm", which gives you access to the individual sequences
 making up each alignment as SeqRecords.
 """
+
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
+
 __docformat__ = "epytext en" #not just plaintext
 
 #TODO
@@ -268,7 +273,7 @@ __docformat__ = "epytext en" #not just plaintext
 #   parser would fail.
 #
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
-#   http://www.bioperl.org/wiki/MSF_multiple_alignment_format 
+#   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
 """
 FAO BioPython Developers
@@ -303,24 +308,26 @@ See also http://biopython.org/wiki/SeqIO_dev
 --Peter
 """
 
-from Bio.Seq import Seq
+
+from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
-from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
+import AbiIO
 import AceIO
 import FastaIO
 import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
 import PhdIO
 import PirIO
+import SeqXmlIO
 import SffIO
 import SwissIO
 import TabIO
 import QualityIO #FastQ and qual files
 import UniprotIO
-import SeqXmlIO
+
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
@@ -354,6 +361,8 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
                      "seqxml" : SeqXmlIO.SeqXmlIterator,
+                     "abi": AbiIO.AbiIterator,
+                     "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
 _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
@@ -372,7 +381,8 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
                    "seqxml" : SeqXmlIO.SeqXmlWriter,
                    }
 
-_BinaryFormats = ["sff", "sff-trim"]
+_BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
+
 
 def write(sequences, handle, format):
     """Write complete set of sequences to a file.
@@ -401,43 +411,38 @@ def write(sequences, handle, format):
         #This raised an exception in order version of Biopython
         sequences = [sequences]
 
-    if isinstance(handle, basestring):
-        if format in _BinaryFormats :
-            handle = open(handle, "wb")
-        else :
-            handle = open(handle, "w")
-        handle_close = True
+    if format in _BinaryFormats:
+        mode = 'wb'
     else:
-        handle_close = False
+        mode = 'w'
 
-    #Map the file format to a writer class
-    if format in _FormatToWriter:
-        writer_class = _FormatToWriter[format]
-        count = writer_class(handle).write_file(sequences)
-    elif format in AlignIO._FormatToWriter:
-        #Try and turn all the records into a single alignment,
-        #and write that using Bio.AlignIO
-        alignment = MultipleSeqAlignment(sequences)
-        alignment_count = AlignIO.write([alignment], handle, format)
-        assert alignment_count == 1, "Internal error - the underlying writer " \
-           + " should have returned 1, not %s" % repr(alignment_count)
-        count = len(alignment)
-        del alignment_count, alignment
-    elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
-        raise ValueError("Reading format '%s' is supported, but not writing" \
-                         % format)
-    else:
-        raise ValueError("Unknown format '%s'" % format)
+    with as_handle(handle, mode) as fp:
+        #Map the file format to a writer class
+        if format in _FormatToWriter:
+            writer_class = _FormatToWriter[format]
+            count = writer_class(fp).write_file(sequences)
+        elif format in AlignIO._FormatToWriter:
+            #Try and turn all the records into a single alignment,
+            #and write that using Bio.AlignIO
+            alignment = MultipleSeqAlignment(sequences)
+            alignment_count = AlignIO.write([alignment], fp, format)
+            assert alignment_count == 1, \
+                    "Internal error - the underlying writer " \
+                    " should have returned 1, not %s" % repr(alignment_count)
+            count = len(alignment)
+            del alignment_count, alignment
+        elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
+            raise ValueError("Reading format '%s' is supported, but not writing"
+                             % format)
+        else:
+            raise ValueError("Unknown format '%s'" % format)
 
-    assert isinstance(count, int), "Internal error - the underlying %s " \
-           "writer should have returned the record count, not %s" \
-           % (format, repr(count))
+        assert isinstance(count, int), "Internal error - the underlying %s " \
+               "writer should have returned the record count, not %s" \
+               % (format, repr(count))
 
-    if handle_close:
-        handle.close()
-    
     return count
-    
+
 def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
@@ -493,16 +498,11 @@ def parse(handle, format, alphabet=None):
     #string mode (see the leading r before the opening quote).
     from Bio import AlignIO
 
-    handle_close = False
-    
-    if isinstance(handle, basestring):
-        #Hack for SFF, will need to make this more general in future
-        if format in _BinaryFormats :
-            handle = open(handle, "rb")
-        else :
-            handle = open(handle, "rU")
-        #TODO - On Python 2.5+ use with statement to close handle
-        handle_close = True
+    #Hack for SFF, will need to make this more general in future
+    if format in _BinaryFormats :
+        mode = 'rb'
+    else:
+        mode = 'rU'
 
     #Try and give helpful error messages:
     if not isinstance(format, basestring):
@@ -515,36 +515,27 @@ def parse(handle, format, alphabet=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:    
-    if format in _FormatToIterator:
-        iterator_generator = _FormatToIterator[format]
-        if alphabet is None:
-            i = iterator_generator(handle)
+    with as_handle(handle, mode) as fp:
+        #Map the file format to a sequence iterator:
+        if format in _FormatToIterator:
+            iterator_generator = _FormatToIterator[format]
+            if alphabet is None:
+                i = iterator_generator(fp)
+            else:
+                try:
+                    i = iterator_generator(fp, alphabet=alphabet)
+                except TypeError:
+                    i = _force_alphabet(iterator_generator(fp), alphabet)
+        elif format in AlignIO._FormatToIterator:
+            #Use Bio.AlignIO to read in the alignments
+            i = (r for alignment in AlignIO.parse(fp, format,
+                                                  alphabet=alphabet)
+                 for r in alignment)
         else:
-            try:
-                i = iterator_generator(handle, alphabet=alphabet)
-            except TypeError:
-                i = _force_alphabet(iterator_generator(handle), alphabet)
-    elif format in AlignIO._FormatToIterator:
-        #Use Bio.AlignIO to read in the alignments
-        #TODO - Can this helper function can be replaced with a generator
-        #expression, or something from itertools?
-        i = _iterate_via_AlignIO(handle, format, alphabet)
-    else:
-        raise ValueError("Unknown format '%s'" % format)
-    #This imposes some overhead... wait until we drop Python 2.4 to fix it
-    for r in i:
-        yield r
-    if handle_close:
-        handle.close()
-
-#This is a generator function
-def _iterate_via_AlignIO(handle, format, alphabet):
-    """Iterate over all records in several alignments (PRIVATE)."""
-    from Bio import AlignIO
-    for align in AlignIO.parse(handle, format, alphabet=alphabet):
-        for record in align:
-            yield record
+            raise ValueError("Unknown format '%s'" % format)
+        #This imposes some overhead... wait until we drop Python 2.4 to fix it
+        for r in i:
+            yield r
 
 def _force_alphabet(record_iterator, alphabet):
     """Iterate over records, over-riding the alphabet (PRIVATE)."""
@@ -631,7 +622,7 @@ def to_dict(sequences, key_function=None):
 
     If key_function is ommitted then record.id is used, on the assumption
     that the records objects returned are SeqRecords with a unique id.
-    
+
     If there are duplicate keys, an error is raised.
 
     Example usage, defaulting to using the record.id as key:
@@ -666,7 +657,7 @@ def to_dict(sequences, key_function=None):
     This approach is not suitable for very large sets of sequences, as all
     the SeqRecord objects are held in memory. Instead, consider using the
     Bio.SeqIO.index() function (if it supports your particular file format).
-    """    
+    """
     if key_function is None:
         key_function = lambda rec : rec.id
 
@@ -689,7 +680,7 @@ def index(filename, format, alphabet=None, key_function=None):
      - key_function - Optional callback function which when given a
                   SeqRecord identifier string should return a unique
                   key for the dictionary.
-    
+
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
 
@@ -770,7 +761,7 @@ def index(filename, format, alphabet=None, key_function=None):
     would impose a severe performance penalty as it would require the file
     to be completely parsed while building the index. Right now this is
     usually avoided.
-    
+
     See also: Bio.SeqIO.index_db() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
@@ -786,7 +777,7 @@ def index(filename, format, alphabet=None, key_function=None):
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:    
+    #Map the file format to a sequence iterator:
     import _index #Lazy import
     return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
 
@@ -796,7 +787,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 
     The index is stored in an SQLite database rather than in memory (as in the
     Bio.SeqIO.index(...) function).
-    
+
      - index_filename - Where to store the SQLite index
      - filenames - list of strings specifying file(s) to be indexed, or when
                   indexing a single file this can be given as a string.
@@ -809,7 +800,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
      - key_function - Optional callback function which when given a
                   SeqRecord identifier string should return a unique
                   key for the dictionary.
-    
+
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
 
@@ -831,7 +822,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'
 
     In this example the two files contain 85 and 10 records respectively.
-    
+
     See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
@@ -851,35 +842,11 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
-    #Map the file format to a sequence iterator:    
+    #Map the file format to a sequence iterator:
     import _index #Lazy import
     return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
                                           alphabet, key_function)
 
-def to_alignment(sequences, alphabet=None, strict=True):
-    """Returns a multiple sequence alignment (DEPRECATED).
-
-     - sequences -An iterator that returns SeqRecord objects,
-                  or simply a list of SeqRecord objects.  All
-                  the record sequences must be the same length.
-     - alphabet - Optional alphabet.  Stongly recommended.
-     - strict   - Dummy argument, used to enable strict error
-                  checking of sequence lengths and alphabets.
-                  This is now always done.
-
-    Using this function is now discouraged. You are now encouraged to use
-    Bio.AlignIO instead, e.g.
-
-    >>> from Bio import AlignIO
-    >>> filename = "Clustalw/protein.aln"
-    >>> alignment = AlignIO.read(filename, "clustal")
-    """
-    import warnings
-    import Bio
-    warnings.warn("The Bio.SeqIO.to_alignment(...) function is deprecated. "
-                  "Please use the Bio.Align.MultipleSeqAlignment(...) object "
-                  "directly instead.", Bio.BiopythonDeprecationWarning)
-    return MultipleSeqAlignment(sequences, alphabet)
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two sequence file formats, return number of records.
@@ -910,39 +877,28 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     GTTGCTTCTGGCGTGGGTGGGGGGG
     <BLANKLINE>
     """
-    if isinstance(in_file, basestring):
-        #Hack for SFF, will need to make this more general in future
-        if in_format in _BinaryFormats :
-            in_handle = open(in_file, "rb")
-        else :
-            in_handle = open(in_file, "rU")
-        in_close = True
-    else:
-        in_handle = in_file
-        in_close = False
+    #Hack for SFF, will need to make this more general in future
+    if in_format in _BinaryFormats :
+        in_mode = 'rb'
+    else :
+        in_mode = 'rU'
+
     #Don't open the output file until we've checked the input is OK?
-    if isinstance(out_file, basestring):
-        if out_format in ["sff", "sff_trim"] :
-            out_handle = open(out_file, "wb")
-        else :
-            out_handle = open(out_file, "w")
-        out_close = True
-    else:
-        out_handle = out_file
-        out_close = False
+    if out_format in ["sff", "sff_trim"] :
+        out_mode = 'wb'
+    else :
+        out_mode = 'w'
+
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
     from _convert import _handle_convert #Lazy import
-    count = _handle_convert(in_handle, in_format,
-                            out_handle, out_format,
-                            alphabet)
-    #Must now close any handles we opened
-    if in_close:
-        in_handle.close()
-    if out_close:
-        out_handle.close()
+    with as_handle(in_file, in_mode) as in_handle:
+        with as_handle(out_file, out_mode) as out_handle:
+            count = _handle_convert(in_handle, in_format,
+                                    out_handle, out_format,
+                                    alphabet)
     return count
-           
+
 def _test():
     """Run the Bio.SeqIO module's doctests.
 

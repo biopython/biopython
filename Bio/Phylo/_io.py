@@ -9,26 +9,14 @@ This API follows the same semantics as Biopython's `SeqIO` and `AlignIO`.
 """
 __docformat__ = "restructuredtext en"
 
-from Bio.Phylo import BaseTree, NewickIO, NexusIO
+from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO
 
-# Python 2.4 doesn't have ElementTree, which PhyloXMLIO needs
-try:
-    from Bio.Phylo import PhyloXMLIO
-except ImportError:
-    # TODO: should we issue a warning? the installer will have already whined
-    # raise MissingPythonDependencyError(
-    #         "Install an ElementTree implementation if you want to use "
-    #         "Bio.Phylo to parse phyloXML files.")
-    supported_formats = {
-            'newick':   NewickIO,
-            'nexus':    NexusIO,
-            }
-else:
-    supported_formats = {
-            'newick':   NewickIO,
-            'nexus':    NexusIO,
-            'phyloxml': PhyloXMLIO,
-            }
+
+supported_formats = {
+        'newick':   NewickIO,
+        'nexus':    NexusIO,
+        'phyloxml': PhyloXMLIO,
+        }
 
 
 def parse(file, format, **kwargs):
@@ -49,13 +37,12 @@ def parse(file, format, **kwargs):
     if isinstance(file, basestring):
         file = open(file, 'r')
         do_close = True
-    # Py2.4 compatibility: this should be in a try/finally block
-    # try:
-    for tree in getattr(supported_formats[format], 'parse')(file, **kwargs):
-        yield tree
-    # finally:
-    if do_close:
-        file.close()
+    try:
+        for tree in getattr(supported_formats[format], 'parse')(file, **kwargs):
+            yield tree
+    finally:
+        if do_close:
+            file.close()
 
 
 def read(file, format, **kwargs):

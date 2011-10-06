@@ -10,13 +10,53 @@ Classes:
 
 UndoHandle     File object decorator with support for undo-like operations.
 
-StringHandle   Wraps a file object around a string.
+StringHandle   Wraps a file object around a string.  This is now DEPRECATED,
+               and is likely to be removed in a future release of Biopython.
 
 SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
                to be removed in a future release of Biopython.
 
 """
+# For with statement in Python 2.5
+from __future__ import with_statement
+import contextlib
 import StringIO
+
+
+@contextlib.contextmanager
+def as_handle(handleish, mode='r'):
+    """
+    Context manager for arguments that can be passed to
+    SeqIO and AlignIO read, write, and parse methods: either file objects or strings.
+
+    When given a string, returns a file handle open to handleish with provided
+    mode which will be closed when the manager exits.
+
+    All other inputs are returned, and are *not* closed
+
+    - handleish  - Either a string or file handle
+    - mode       - Mode to open handleish (used only if handleish is a string)
+
+    Example:
+
+    >>> with as_handle('seqs.fasta', 'w') as fp:
+    ...     fp.write('>test\nACGT')
+    >>> fp.closed
+    True
+
+    >>> handle = open('seqs.fasta', 'w')
+    >>> with as_handle(handle) as fp:
+    ...     fp.write('>test\nACGT')
+    >>> fp.closed
+    False
+    >>> fp.close()
+    """
+    if isinstance(handleish, basestring):
+        with open(handleish, mode) as fp:
+            yield fp
+    else:
+        yield handleish
+
 
 class UndoHandle(object):
     """A Python handle that adds functionality for saving lines.
@@ -103,7 +143,12 @@ class UndoHandle(object):
 # I could make this faster by using cStringIO.
 # However, cStringIO (in v1.52) does not implement the
 # readlines method.
-StringHandle = StringIO.StringIO
+class StringHandle(StringIO.StringIO):
+    def __init__(self, buffer=''):
+        import warnings
+        import Bio
+        warnings.warn("This class is deprecated, and is likely to be removed in a future version of Biopython. Please use the class StringIO in the module StringIO in the Python standard library instead", Bio.BiopythonDeprecationWarning)
+        StringIO.StringIO.__init__(self, buffer)
 
 try:
     import sgmllib
@@ -120,18 +165,18 @@ else:
                 self.data = ''
             def handle_data(self, data):
                 self.data = self.data + data
-    
+
         def __init__(self):
             import warnings
             import Bio
             warnings.warn("This class is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
             self._parser = SGMLStripper.MyParser()
-    
+
         def strip(self, str):
             """S.strip(str) -> string
-    
+
             Strip the SGML tags from str.
-    
+
             """
             if not str:  # empty string, don't do anything.
                 return ''
@@ -141,7 +186,7 @@ else:
             # see if the last character is a newline.  If it is, and it's stripped
             # away, I'll add it back.
             is_newline = str[-1] in ['\n', '\r']
-            
+
             self._parser.data = ''    # clear the parser's data (don't reset)
             self._parser.feed(str)
             if self._parser.data:

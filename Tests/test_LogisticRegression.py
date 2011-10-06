@@ -8,6 +8,7 @@
 
 try:
     import numpy
+    from numpy import linalg #missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(

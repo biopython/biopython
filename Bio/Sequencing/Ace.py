@@ -8,8 +8,6 @@ Parser for ACE files output by PHRAP.
 Written by Frank Kauff (fkauff@duke.edu) and
 Cymon J. Cox (cymon@duke.edu)
 
-Uses the Biopython Parser interface: ParserSupport.py
-
 Usage:
 
 There are two ways of reading an ace file:
