@@ -509,73 +509,36 @@ def _spring_layout(desired, minimum, maximum, gap=0):
                 break
     if good:
         return desired
-    
-    #Try and divide it up in three...
-    partspan = (maximum - minimum) / 3.0
-    if partspan > gap:
-        low = [x for x in desired if x <= minimum+1*partspan-0.5*gap]
-        med = [x for x in desired if minimum+1*partspan+0.5*gap <= x <= minimum+2*partspan-0.5*gap]
-        high = [x for x in desired if x > minimum+2*partspan+0.5*gap]
-        if len(low)+len(med)+len(high) == count:
-            if len(low)*gap <= partspan-0.5*gap \
-            and len(med)*gap <= partspan-0.5*gap \
-            and len(high)*gap <= partspan-0.5*gap:
-                if not low and not med:
-                    return _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
-                elif not low and not high:
-                    return _spring_layout(med, minimum+1*partspan+0.5*gap, minimum+2*partspan-0.5*gap, gap)
-                elif not high and not med:
-                    return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap)
-                elif not med:
-                    return _spring_layout(low, minimum, minimum+1*partspan, gap) + \
-                           _spring_layout(high, minimum+2*partspan, maximum, gap)
-                elif not low:
-                    return _spring_layout(med, minimum, minimum+2*partspan-0.5*gap, gap) + \
-                           _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
-                elif not high:
-                    return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap) + \
-                           _spring_layout(med, minimum+1*partspan+0.5*gap, maximum, gap)
-                else:
-                    return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap) + \
-                           _spring_layout(med, minimum+1*partspan+0.5*gap, minimum+2*partspan-0.5*gap, gap) + \
-                           _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
-            elif (len(low)+len(med))*gap<= 2*partspan-0.5*gap \
-            and len(high)*gap <= partspan-0.5*gap:
-                    return _spring_layout(low+med, minimum, minimum+2*partspan-0.5*gap, gap) + \
-                           _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
-            elif len(low)*gap <= partspan-0.5*gap \
-            and (len(med)+len(high))*gap <= 2*partspan-0.5*gap:
-                    return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap) + \
-                           _spring_layout(med+high, minimum+1*partspan+0.5*gap, maximum, gap)
 
-    #Try and divide it up in two...
-    #Replies on nothing being at the break point!
-    halfspan = 0.5 * (maximum - minimum)
-    if halfspan > gap:
-        midpoint = 0.5 * (minimum + maximum)
-        low = [x for x in desired if x <= midpoint-0.5*gap]
-        high = [x for x in desired if x > midpoint+0.5*gap]
-        if len(low)+len(high) == count \
-        and len(low)*gap <= halfspan-0.5*gap \
-        and len(high)*gap <= halfspan-0.5*gap:
-            if not low:
-                return _spring_layout(high, midpoint+0.5*gap, maximum, gap)
-            elif not high:
-                return _spring_layout(low, minimum, midpoint-0.5*gap, gap)
-            elif min(high) - min(low) > gap:
-                return _spring_layout(low, minimum, midpoint-0.5*gap, gap) + \
-                       _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+    span = maximum - minimum
+    for split in [0.5*span, span/3.0, 2*span/3.0, 0.25*span, 0.75*span]:
+        midpoint = minimum + split
+        low = [x for x in desired if x <= midpoint - 0.5*gap]
+        high = [x for x in desired if x > midpoint + 0.5*gap]
+        if len(low)+len(high) < count:
+            #Bad split point, points right on boundary
+            continue
+        elif not low and len(high)*gap <= (span-split) + 0.5*gap:
+            #Give a little of the unused low space to the high points
+            return _spring_layout(high, midpoint + 0.5*gap, maximum, gap)
+        elif not high and len(low)*gap <= split + 0.5*gap:
+            #Give a little of the unused highspace to the low points
+            return _spring_layout(low, minimum, midpoint - 0.5*gap, gap)
+        elif len(low)*gap <= split - 0.5*gap \
+        and len(high)*gap <= (span-split) - 0.5*gap:
+            return _spring_layout(low, minimum, midpoint - 0.5*gap, gap) + \
+                   _spring_layout(high, midpoint+ 0.5*gap, maximum, gap)
     
     #This can be count-productive now we can split out into the telomere or
     #spacer-segment's vertical space...
     #Try not to spread out as far as the min/max unless needed
-    #low = min(desired)
-    #high = max(desired)
-    #if (high-low) / (count-1) >= gap:
-    #    #Good, we don't need the full range, and can position the
-    #    #min and max exactly as well :)
-    #    equal_step = (high-low) / (count-1)
-    #    return [low+i*equal_step for i in range(count)]
+    low = min(desired)
+    high = max(desired)
+    if (high-low) / (count-1) >= gap:
+        #Good, we don't need the full range, and can position the
+        #min and max exactly as well :)
+        equal_step = (high-low) / (count-1)
+        return [low+i*equal_step for i in range(count)]
 
     low = 0.5 * (minimum + min(desired))
     high = 0.5 * (max(desired) + maximum)
