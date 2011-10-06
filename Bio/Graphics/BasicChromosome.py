@@ -130,8 +130,8 @@ class Organism(_ChromosomeComponent):
 
         for sub_component in self._sub_components:
             # set the drawing location of the chromosome
-            sub_component.start_x_position = cur_x_pos
-            sub_component.end_x_position = cur_x_pos + .9 * x_pos_change
+            sub_component.start_x_position = cur_x_pos + 0.05 * x_pos_change
+            sub_component.end_x_position = cur_x_pos + 0.95 * x_pos_change
             sub_component.start_y_position = height - 1.5 * inch
             sub_component.end_y_position = self._legend_height + 1 * inch
 
