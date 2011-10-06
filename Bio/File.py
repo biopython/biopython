@@ -24,7 +24,7 @@ import StringIO
 
 
 @contextlib.contextmanager
-def as_handle(handleish, mode='r'):
+def as_handle(handleish, mode='r', **kwargs):
     """
     Context manager for arguments that can be passed to
     SeqIO and AlignIO read, write, and parse methods: either file objects or strings.
@@ -36,6 +36,7 @@ def as_handle(handleish, mode='r'):
 
     - handleish  - Either a string or file handle
     - mode       - Mode to open handleish (used only if handleish is a string)
+    - kwargs     - Further arguments to pass to open(...)
 
     Example:
 
@@ -52,7 +53,7 @@ def as_handle(handleish, mode='r'):
     >>> fp.close()
     """
     if isinstance(handleish, basestring):
-        with open(handleish, mode) as fp:
+        with open(handleish, mode, **kwargs) as fp:
             yield fp
     else:
         yield handleish
