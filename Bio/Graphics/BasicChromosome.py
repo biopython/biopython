@@ -487,6 +487,8 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     count = len(desired)
     if count <= 1:
         return desired #Easy!
+    if minimum >= maximum:
+        raise ValueError("Bad min/max %f and %f" % (minimum, maximum))
     if min(desired) < minimum or max(desired) > maximum:
         raise ValueError("Data %f to %f out of bounds (%f to %f)" \
                          % (min(desired), max(desired), minimum, maximum))
@@ -508,21 +510,53 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     if good:
         return desired
     
-    #Try and divide it up...
+    #Try and divide it up in three...
+    partspan = (maximum - minimum) / 3.0
+    if partspan > gap:
+        low = [x for x in desired if x <= minimum+1*partspan-0.5*gap]
+        med = [x for x in desired if minimum+1*partspan+0.5*gap <= x <= minimum+2*partspan-0.5*gap]
+        high = [x for x in desired if x > minimum+2*partspan+0.5*gap]
+        if len(low)+len(med)+len(high) == count \
+        and len(low)*gap <= partspan-0.5*gap \
+        and len(med)*gap <= partspan-0.5*gap \
+        and len(high)*gap <= partspan-0.5*gap:
+            if not low and not med:
+                return _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
+            elif not low and not high:
+                return _spring_layout(med, minimum+1*partspan+0.5*gap, minimum+2*partspan-0.5*gap, gap)
+            elif not high and not med:
+                return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap)
+            elif not med:
+                return _spring_layout(low, minimum, minimum+1*partspan, gap) + \
+                       _spring_layout(high, minimum+2*partspan, maximum, gap)
+            elif not low:
+                return _spring_layout(med, minimum, minimum+2*partspan-0.5*gap, gap) + \
+                       _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
+            elif not high:
+                return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap) + \
+                       _spring_layout(med, minimum+1*partspan+0.5*gap, maximum, gap)
+            else:
+                return _spring_layout(low, minimum, minimum+1*partspan-0.5*gap, gap) + \
+                       _spring_layout(med, minimum+1*partspan+0.5*gap, minimum+2*partspan-0.5*gap, gap) + \
+                       _spring_layout(high, minimum+2*partspan+0.5*gap, maximum, gap)
+
+    #Try and divide it up in two...
+    #Replies on nothing being at the break point!
     halfspan = 0.5 * (maximum - minimum)
-    midpoint = 0.5 * (minimum + maximum)
-    low = [x for x in desired if x <= midpoint-0.5*gap]
-    high = [x for x in desired if x > midpoint+0.5*gap]
-    if len(low)+len(high) == count \
-    and len(low)*gap <= halfspan-0.5*gap \
-    and len(high)*gap <= halfspan-0.5*gap:
-        if not low:
-            return _spring_layout(high, midpoint+0.5*gap, maximum, gap)
-        elif not high:
-            return _spring_layout(low, minimum, midpoint-0.5*gap, gap)
-        elif min(high) - min(low) > gap:
-            return _spring_layout(low, minimum, midpoint-0.5*gap, gap) + \
-                   _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+    if halfspan > gap:
+        midpoint = 0.5 * (minimum + maximum)
+        low = [x for x in desired if x <= midpoint-0.5*gap]
+        high = [x for x in desired if x > midpoint+0.5*gap]
+        if len(low)+len(high) == count \
+        and len(low)*gap <= halfspan-0.5*gap \
+        and len(high)*gap <= halfspan-0.5*gap:
+            if not low:
+                return _spring_layout(high, midpoint+0.5*gap, maximum, gap)
+            elif not high:
+                return _spring_layout(low, minimum, midpoint-0.5*gap, gap)
+            elif min(high) - min(low) > gap:
+                return _spring_layout(low, minimum, midpoint-0.5*gap, gap) + \
+                       _spring_layout(high, midpoint+0.5*gap, maximum, gap)
     
     #Try not to spread out as far as the min/max unless needed
     low = min(desired)
@@ -532,7 +566,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
         #min and max exactly as well :)
         equal_step = (high-low) / (count-1)
         return [low+i*equal_step for i in range(count)]
-
+    
     low = 0.5 * (minimum + min(desired))
     high = 0.5 * (max(desired) + maximum)
     if (high-low) / (count-1) >= gap:
