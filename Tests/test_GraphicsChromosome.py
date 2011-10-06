@@ -298,7 +298,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             #I haven't found a nice source of data for real Arabidopsis
             #cytobands, so these three are made up at random!
             cytobands = []
-            for color in [colors.grey, colors.darkgrey, colors.black]:
+            for color in [colors.gray, colors.darkgray, colors.black]:
                 start = (length - 1000000) * random.random()
                 end = min(length, start + 1000000)
                 cytobands.append((start, end, 0, None, color))
