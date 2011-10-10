@@ -284,32 +284,23 @@ class SeqFeature(object):
         if self.sub_features:
             if self.location_operator!="join":
                 raise ValueError(self.location_operator)
-            if self.strand == -1:
+            if self.location.strand == -1:
                 #This is a special case given how the GenBank parser works.
                 #Must avoid doing the reverse complement twice.
                 parts = []
-                for f_sub in self.sub_features:
-                    assert f_sub.strand==-1
-                    parts.append(parent_sequence[f_sub.location.nofuzzy_start:\
-                                                 f_sub.location.nofuzzy_end])
+                for f_sub in self.sub_features[::-1]:
+                    assert f_sub.location.strand==-1
+                    parts.append(f_sub.location.extract(parent_sequence))
             else:
                 #This copes with mixed strand features:
-                parts = [f_sub.extract(parent_sequence) \
+                parts = [f_sub.location.extract(parent_sequence) \
                          for f_sub in self.sub_features]
             #We use addition rather than a join to avoid alphabet issues:
             f_seq = parts[0]
             for part in parts[1:] : f_seq += part
+            return f_seq
         else:
-            f_seq = parent_sequence[self.location.nofuzzy_start:\
-                                    self.location.nofuzzy_end]
-        if self.strand == -1:
-            #TODO - MutableSeq?
-            try:
-                f_seq = f_seq.reverse_complement()
-            except AttributeError:
-                assert isinstance(f_seq, str)
-                f_seq = reverse_complement(f_seq)
-        return f_seq
+            return self.location.extract(parent_sequence)
     
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
@@ -753,6 +744,21 @@ class FeatureLocation(object):
         """
         return int(self._end)
 
+
+    def extract(self, parent_sequence):
+        """Extract feature sequence from the supplied parent sequence."""
+        if isinstance(parent_sequence, MutableSeq):
+            #This avoids complications with reverse complements
+            #(the MutableSeq reverse complement acts in situ)
+           parent_sequence = parent_sequence.toseq()
+        f_seq = parent_sequence[self.nofuzzy_start:self.nofuzzy_end]
+        if self.strand == -1:
+            try:
+                f_seq = f_seq.reverse_complement()
+            except AttributeError:
+                assert isinstance(f_seq, str)
+                f_seq = reverse_complement(f_seq)
+        return f_seq
 
 class AbstractPosition(object):
     """Abstract base class representing a position.
