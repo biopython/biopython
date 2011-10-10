@@ -29,24 +29,21 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: [0:1622]
-strand: 1
+location: [0:1622](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:9606']
     Key: map, Value: ['16']
     Key: organism, Value: ['Homo sapiens']
 
 type: gene
-location: [0:1622]
-strand: 1
+location: [0:1622](+)
 qualifiers: 
     Key: db_xref, Value: ['LocusID:1783']
     Key: gene, Value: ['DNCLI2']
     Key: note, Value: ['LIC2']
 
 type: CDS
-location: [6:1485]
-strand: 1
+location: [6:1485](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['LocusID:1783', 'GI:5453634']
@@ -103,22 +100,19 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
 Feaures
 type: source
-location: [0:513]
-strand: 1
+location: [0:513](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:3702']
     Key: organism, Value: ['Arabidopsis thaliana']
     Key: strain, Value: ['Columbia']
 
 type: gene
-location: [49:250]
-strand: 1
+location: [49:250](+)
 qualifiers: 
     Key: gene, Value: ['cor6.6']
 
 type: CDS
-location: [49:250]
-strand: 1
+location: [49:250](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:16230', 'SWISS-PROT:P31169']
@@ -171,62 +165,52 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Arabidopsis']
 Feaures
 type: source
-location: [0:880]
-strand: 1
+location: [0:880](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:3702']
     Key: organism, Value: ['Arabidopsis thaliana']
     Key: strain, Value: ['ssp. L. Heynh, Colombia']
 
 type: TATA_signal
-location: [8:20]
-strand: 1
+location: [8:20](+)
 qualifiers: 
 
 type: exon
-location: [43:160]
-strand: 1
+location: [43:160](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
     Key: number, Value: ['1']
 
 type: prim_transcript
-location: [43:>579]
-strand: 1
+location: [43:>579](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
 
 type: mRNA
-location: [43:>579]
-strand: 1
+location: [43:>579](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
 Sub-Features
 type: mRNA
-location: [43:160]
-strand: 1
+location: [43:160](+)
 qualifiers: 
 
 type: mRNA
-location: [319:390]
-strand: 1
+location: [319:390](+)
 qualifiers: 
 
 type: mRNA
-location: [503:>579]
-strand: 1
+location: [503:>579](+)
 qualifiers: 
 
 
 type: gene
-location: [43:579]
-strand: 1
+location: [43:579](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
 
 type: CDS
-location: [103:579]
-strand: 1
+location: [103:579](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:16354', 'SWISS-PROT:P31169']
@@ -235,67 +219,56 @@ qualifiers:
     Key: translation, Value: ['MSETNKNAFQAGQAAGKAERRRAMFCWTRPRMLLLQLELPRNRAGKSISDAAVGGVNFVKDKTGLNK']
 Sub-Features
 type: CDS
-location: [103:160]
-strand: 1
+location: [103:160](+)
 qualifiers: 
 
 type: CDS
-location: [319:390]
-strand: 1
+location: [319:390](+)
 qualifiers: 
 
 type: CDS
-location: [503:579]
-strand: 1
+location: [503:579](+)
 qualifiers: 
 
 
 type: intron
-location: [160:319]
-strand: 1
+location: [160:319](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
     Key: number, Value: ['1']
 
 type: exon
-location: [319:390]
-strand: 1
+location: [319:390](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
     Key: number, Value: ['2']
 
 type: intron
-location: [390:503]
-strand: 1
+location: [390:503](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
     Key: number, Value: ['2']
 
 type: exon
-location: [503:>579]
-strand: 1
+location: [503:>579](+)
 qualifiers: 
     Key: gene, Value: ['kin2']
     Key: number, Value: ['3']
 
 type: polyA_signal
-location: [619:625]
-strand: 1
+location: [619:625](+)
 qualifiers: 
 
 type: polyA_signal
-location: [640:646]
-strand: 1
+location: [640:646](+)
 qualifiers: 
 
 type: polyA_site
-location: [784:785]
-strand: 1
+location: [784:785](+)
 qualifiers: 
 
 type: polyA_site
-location: [799:800]
-strand: 1
+location: [799:800](+)
 qualifiers: 
 
 DB cross refs []
@@ -334,8 +307,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
 Feaures
 type: source
-location: [0:441]
-strand: 1
+location: [0:441](+)
 qualifiers: 
     Key: cultivar, Value: ['Jet neuf']
     Key: db_xref, Value: ['taxon:3708']
@@ -344,14 +316,12 @@ qualifiers:
     Key: tissue_type, Value: ['leaf']
 
 type: gene
-location: [33:300]
-strand: 1
+location: [33:300](+)
 qualifiers: 
     Key: gene, Value: ['kin1']
 
 type: CDS
-location: [33:231]
-strand: 1
+location: [33:231](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:167146']
@@ -361,22 +331,19 @@ qualifiers:
     Key: translation, Value: ['MADNKQSFQAGQASGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 
 type: polyA_signal
-location: [240:247]
-strand: 1
+location: [240:247](+)
 qualifiers: 
     Key: gene, Value: ['kin1']
     Key: note, Value: ['putative']
 
 type: polyA_signal
-location: [293:300]
-strand: 1
+location: [293:300](+)
 qualifiers: 
     Key: gene, Value: ['kin1']
     Key: note, Value: ['putative']
 
 type: polyA_site
-location: [440:441]
-strand: 1
+location: [440:441](+)
 qualifiers: 
     Key: gene, Value: ['kin1']
 
@@ -424,46 +391,39 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Streptophyta', 'Embryophyta', 'Tracheophyta', 'euphyllophytes', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'Rosidae', 'Capparales', 'Brassicaceae', 'Armoracia']
 Feaures
 type: source
-location: [0:206]
-strand: 1
+location: [0:206](+)
 qualifiers: 
     Key: country, Value: ['Russia:Bashkortostan']
     Key: db_xref, Value: ['taxon:3704']
     Key: organism, Value: ['Armoracia rusticana']
 
 type: mRNA
-location: [<0:>206]
-strand: 1
+location: [<0:>206](+)
 qualifiers: 
     Key: gene, Value: ['csp14']
 Sub-Features
 type: mRNA
-location: [<0:48]
-strand: 1
+location: [<0:48](+)
 qualifiers: 
 
 type: mRNA
-location: [142:>206]
-strand: 1
+location: [142:>206](+)
 qualifiers: 
 
 
 type: exon
-location: [0:48]
-strand: 1
+location: [0:48](+)
 qualifiers: 
     Key: gene, Value: ['csp14']
     Key: number, Value: ['2']
 
 type: gene
-location: [0:206]
-strand: 1
+location: [0:206](+)
 qualifiers: 
     Key: gene, Value: ['csp14']
 
 type: CDS
-location: [<0:>206]
-strand: 1
+location: [<0:>206](+)
 qualifiers: 
     Key: codon_start, Value: ['2']
     Key: db_xref, Value: ['GI:4538893']
@@ -473,26 +433,22 @@ qualifiers:
     Key: translation, Value: ['DKAKDAAAAAGASAQQAGKNISDAAAGGVNFVKEKTG']
 Sub-Features
 type: CDS
-location: [<0:48]
-strand: 1
+location: [<0:48](+)
 qualifiers: 
 
 type: CDS
-location: [142:>206]
-strand: 1
+location: [142:>206](+)
 qualifiers: 
 
 
 type: intron
-location: [48:142]
-strand: 1
+location: [48:142](+)
 qualifiers: 
     Key: gene, Value: ['csp14']
     Key: number, Value: ['2']
 
 type: exon
-location: [142:206]
-strand: 1
+location: [142:206](+)
 qualifiers: 
     Key: gene, Value: ['csp14']
     Key: number, Value: ['3']
@@ -533,22 +489,19 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
 Feaures
 type: source
-location: [0:282]
-strand: 1
+location: [0:282](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:3711']
     Key: dev_stage, Value: ['flower']
     Key: organism, Value: ['Brassica rapa']
 
 type: gene
-location: [23:221]
-strand: 1
+location: [23:221](+)
 qualifiers: 
     Key: gene, Value: ['kin']
 
 type: CDS
-location: [23:221]
-strand: 1
+location: [23:221](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:1209262']
@@ -600,45 +553,38 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Brassica']
 Feaures
 type: source
-location: [0:497]
-strand: 1
+location: [0:497](+)
 qualifiers: 
     Key: cultivar, Value: ['Cascade']
     Key: db_xref, Value: ['taxon:3708']
     Key: organism, Value: ['Brassica napus']
 
 type: mRNA
-location: [<0:>497]
-strand: 1
+location: [<0:>497](+)
 qualifiers: 
     Key: gene, Value: ['BN28a']
     Key: product, Value: ['BN28a']
 Sub-Features
 type: mRNA
-location: [<0:54]
-strand: 1
+location: [<0:54](+)
 qualifiers: 
 
 type: mRNA
-location: [240:309]
-strand: 1
+location: [240:309](+)
 qualifiers: 
 
 type: mRNA
-location: [422:>497]
-strand: 1
+location: [422:>497](+)
 qualifiers: 
 
 
 type: gene
-location: [<0:>497]
-strand: 1
+location: [<0:>497](+)
 qualifiers: 
     Key: gene, Value: ['BN28a']
 
 type: CDS
-location: [0:497]
-strand: 1
+location: [0:497](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:10121869']
@@ -649,18 +595,15 @@ qualifiers:
     Key: translation, Value: ['MADNKQSFQAGQAAGRAEEKGNVLMDKVKDAATAAGASAQTAGQKITEAAGGAVNLVKEKTGMNK']
 Sub-Features
 type: CDS
-location: [0:54]
-strand: 1
+location: [0:54](+)
 qualifiers: 
 
 type: CDS
-location: [240:309]
-strand: 1
+location: [240:309](+)
 qualifiers: 
 
 type: CDS
-location: [422:497]
-strand: 1
+location: [422:497](+)
 qualifiers: 
 
 
@@ -722,8 +665,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: [0:1326]
-strand: 1
+location: [0:1326](+)
 qualifiers: 
     Key: chromosome, Value: ['21']
     Key: clone, Value: ['IMAGE cDNA clone 125195']
@@ -733,28 +675,24 @@ qualifiers:
     Key: organism, Value: ['Homo sapiens']
 
 type: gene
-location: [340:756]
-strand: 1
+location: [340:756](+)
 qualifiers: 
     Key: gene, Value: ['FTCD']
 
 type: exon
-location: [340:384]
-strand: 1
+location: [340:384](+)
 qualifiers: 
     Key: gene, Value: ['FTCD']
     Key: number, Value: ['1']
 
 type: intron
-location: [384:617]
-strand: 1
+location: [384:617](+)
 qualifiers: 
     Key: gene, Value: ['FTCD']
     Key: number, Value: ['1']
 
 type: exon
-location: [617:756]
-strand: 1
+location: [617:756](+)
 qualifiers: 
     Key: gene, Value: ['FTCD']
     Key: number, Value: ['2']
@@ -803,8 +741,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: [0:741]
-strand: 1
+location: [0:741](+)
 qualifiers: 
     Key: chromosome, Value: ['1']
     Key: clone, Value: ['lambda hGT5-157']
@@ -816,25 +753,21 @@ qualifiers:
     Key: tissue_type, Value: ['liver']
 
 type: repeat_region
-location: [0:73]
-strand: 1
+location: [0:73](+)
 qualifiers: 
     Key: rpt_family, Value: ['Alu']
 
 type: promoter
-location: [0:513]
-strand: 1
+location: [0:513](+)
 qualifiers: 
 
 type: 5'UTR
-location: [513:609]
-strand: 1
+location: [513:609](+)
 qualifiers: 
     Key: gene, Value: ['GLUT5']
 
 type: exon
-location: [513:642]
-strand: 1
+location: [513:642](+)
 qualifiers: 
     Key: gene, Value: ['GLUT5']
     Key: number, Value: ['1']
@@ -910,8 +843,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Viridiplantae', 'Embryophyta', 'Tracheophyta', 'Spermatophyta', 'Magnoliophyta', 'eudicotyledons', 'core eudicots', 'Rosidae', 'eurosids II', 'Brassicales', 'Brassicaceae', 'Arabidopsis']
 Feaures
 type: source
-location: [0:86436]
-strand: 1
+location: [0:86436](+)
 qualifiers: 
     Key: chromosome, Value: ['1']
     Key: clone, Value: ['T25K16']
@@ -919,8 +851,7 @@ qualifiers:
     Key: organism, Value: ['Arabidopsis thaliana']
 
 type: CDS
-location: [3461:5332]
-strand: 1
+location: [3461:5332](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715633']
@@ -931,39 +862,32 @@ qualifiers:
     Key: translation, Value: ['MEDQVGFGFRPNDEELVGHYLRNKIEGNTSRDVEVAISEVNICSYDPWNLRFQSKYKSRDAMWYFFSRRENNKGNRQSRTTVSGKWKLTGESVEVKDQWGFCSEGFRGKIGHKRVLVFLDGRYPDKTKSDWVIHEFHYDLLPEHQKLCNVTLFRFSSYFRLSLLSPMFYTDELMCLPPEILQRTYVICRLEYKGDDADILSAYAIDPTPAFVPNMTSSAGSVVNQSRQRNSGSYNTYSEYDSANHGQQFNENSNIMQQQPLQGSFNPLLEYDFANHGGQWLSDYIDLQQQVPYLAPYENESEMIWKHVIEENFEFLVDERTSMQQHYSDHRPKKPVSGVLPDDSSDTETGSMIFEDTSSSTDSVGSSDEPGHTRIDDIPSLNIIEPLHNYKAQEQPKQQSKEKVISSQKSECEWKMAEDSIKIPPSTNTVKQSWIVLENAQWNYLKNMIIGVLLFISVISWIILVG']
 Sub-Features
 type: CDS
-location: [3461:3615]
-strand: 1
+location: [3461:3615](+)
 qualifiers: 
 
 type: CDS
-location: [3697:3978]
-strand: 1
+location: [3697:3978](+)
 qualifiers: 
 
 type: CDS
-location: [4076:4307]
-strand: 1
+location: [4076:4307](+)
 qualifiers: 
 
 type: CDS
-location: [4407:4797]
-strand: 1
+location: [4407:4797](+)
 qualifiers: 
 
 type: CDS
-location: [4875:5028]
-strand: 1
+location: [4875:5028](+)
 qualifiers: 
 
 type: CDS
-location: [5140:5332]
-strand: 1
+location: [5140:5332](+)
 qualifiers: 
 
 
 type: CDS
-location: [6616:8368]
-strand: -1
+location: [6616:8368](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715650']
@@ -974,39 +898,32 @@ qualifiers:
     Key: translation, Value: ['MAASEHRCVGCGFRVKSLFIQYSPGNIRLMKCGNCKEVADEYIECERMVCFNHFLSLFGPKVYRHVLYNAINPATVNIQVKNYFNSTSRCVVGEIHRQTYLKSPELIIDRSLLLRKSDEESSFSDSPVLLSIKVLIGVLSANAAFIISFAIATKGLLNEVSRESLLLQVWEFPMSVIFFVDILLLTSNSMALKGQTFKMFSMQIVFCCCYFGISQCKFVFKPVMTESTMTRCIAVCLIAHLIRFLVGQIFEPTIFLIQIGSLLQYMSYFFRIV']
 Sub-Features
 type: CDS
-location: [6616:6953]
-strand: -1
+location: [6616:6953](-)
 qualifiers: 
 
 type: CDS
-location: [7265:7351]
-strand: -1
+location: [7265:7351](-)
 qualifiers: 
 
 type: CDS
-location: [7463:7603]
-strand: -1
+location: [7463:7603](-)
 qualifiers: 
 
 type: CDS
-location: [7915:7998]
-strand: -1
+location: [7915:7998](-)
 qualifiers: 
 
 type: CDS
-location: [8086:8166]
-strand: -1
+location: [8086:8166](-)
 qualifiers: 
 
 type: CDS
-location: [8272:8368]
-strand: -1
+location: [8272:8368](-)
 qualifiers: 
 
 
 type: CDS
-location: [11565:12642]
-strand: -1
+location: [11565:12642](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715649']
@@ -1017,8 +934,7 @@ qualifiers:
     Key: translation, Value: ['MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPMMMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNGKMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRHRPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNTQRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPPPSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDNDDGDDGDDDQFAKKGKSSLSLNFNP']
 
 type: CDS
-location: [23220:30781]
-strand: 1
+location: [23220:30781](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715634']
@@ -1029,99 +945,80 @@ qualifiers:
     Key: translation, Value: ['MVMEDEPREATIKPSYWLDACEDISCDLIDDLVSEFDPSSVAVNESTDENGVINDFFGGIDHILDSIKNGGGLPNNGVSDTNSQINEVTVTPQVIAKETVKENGLQKNGGKRDEFSKEEGDKDRKRARVCSYQSERSNLSGRGHVNNSREGDRFMNRKRTRNWDEAGNNKKKRECNNYRRDGRDREVRGYWERDKVGSNELVYRSGTWEADHERDVKKVSGGNRECDVKAEENKSKPEERKEKVVEEQARRYQLDVLEQAKAKNTIAFLETGAGKTLIAILLIKSVHKDLMSQNRKMLSVFLVPKVPLVYQVPPNKKHQAEVIRNQTCFQVGHYCGEMGQDFWDSRRWQREFESKQFLKLTSFFLFSSTQVLVMTAQILLNILRHSIIRMETIDLLILDECHHAVKKHPYSLVMSEFYHTTPKDKRPAIFGMTASPVNLKGVSSQVDCAIKIRNLETKLDSTVCTIKDRKELEKHVPMPSEIVVEYDKAATMWSLHETIKQMIAAVEEAAQASSRKSKWQFMGARDAGAKDELRQVYGVSERTESDGAANLIHKLRAINYTLAELGQWCAYKVGQSFLSALQSDERVNFQVDVKFQESYLSEVVSLLQCELLEGAAAEKVAAEVGKPENGNAHDEMEEGELPDDPVVSGGEHVDEVIGAAVADGKVTPKVQSLIKLLLKYQHTADFRAIVFVERVVAALVLPKVRIKVFAELPSLSFIRCASMIGHNNSQEMKSSQMQDTISKFRDGHVTLLVATSVAEEGLDIRQCNVVMRFDLAKTVLAYIQSRGRARKPGSDYILMVERYIKSFKNYILIFVTTGHQISTDMSTCVTCRGNVSHAAFLRNARNSEETLRKEAIERTDLSHLKDTSRLISIDAVPGTVYKVEATGAMVSLNSAVGLVHFYCSQLPGDRYAILRPEFSMEKHEKPGGHTEYSCRLQLPCNAPFEILEGPVCSSMRLAQQVDIIVSACKKLHEMGAFTDMLLPDKGSGQDAEKADQDDEGEPVPGTARHREFYPEGVADVLKGEWVSSGKEVCESSKLFHLYMYNVRCVDFGSSKDPFLSEVSEFAILFGNELDAEVLSMSMDLYVARAMITKASLAFKGSLDITENQLSSLKKFHVRLMSIVLDVDVEPSTTPWDPAKAYLFVPVTDNTSMEPIKGINWELVEKITKTTAWDNPLQRARPDVYLGTNERTLGGDRREYGFGKLRHNIVFGQKSHPTYGIRGAVASFDVVRASGLLPVRDAFEKEVEEDLSKGKLMMADGCMVAEDLIGKIVTAAHSGKRFYVDSICYDMSAETSFPRKEGYLGPLEYNTYADYYKQKIYVVQDRLFFYFLHNLRLLRLYKSSSIMLFIRYGVDLNCKQQPLIKGRGVSYCKNLLSPRFEQSGESETVLDKTYYVFLPPELCVVHPLSGSLIRGAQRLPSIMRRVESMLLAVQLKNLISYPIPTSKILEALTAASCQETFCYERAELLGDAYLKWVVSRFLFLKYPQKHEGQLTRMRQQMVSNMVLYQFALVKGLQSYIQADRFAPSRWSAPGVPPVFDEDTKDGGSSFFDEEQKPVSEENSDVFEDGEMEDGELEGDLSSYRVLSSKTLADVVEALIGVYYVEGGKIAANHLMKWIGIHVEDDPDEVDGTLKNVNVPESVLKSIDFVGLERALKYEFKEKGLLVEAITHASRPSSGVSCYQRLEFVGDAVLDHLITRHLFFTYTSLPPGRLTDLRAAAVNNENFARVAVKHKLHLYLRHGSSALEKQVNKIKKQSILFSKSFKCLTVWLLFVFQIREFVKEVQTESSKPGFNSFGLGDCKAPKVLGDIVESIAGAIFLDSGKDTTAAWKVFQPLLQPMVTPETLPMHPVRELQERCQQQAEGLEYKASRSGNTATVEVFIDGVQVGVAQNPQKKMAQKLAARNALAALKEKEIAESKEKHINNGNAGEDQGENENGNKKNGHQPFTRQTLNDICLRKNWPMPSYRCVKEGGPAHAKRFTFGVRVNTSDRGWTDECIGEPMPSVKKAKDSAAVLLLELLNKTFS']
 Sub-Features
 type: CDS
-location: [23220:24174]
-strand: 1
+location: [23220:24174](+)
 qualifiers: 
 
 type: CDS
-location: [24243:24357]
-strand: 1
+location: [24243:24357](+)
 qualifiers: 
 
 type: CDS
-location: [24411:24664]
-strand: 1
+location: [24411:24664](+)
 qualifiers: 
 
 type: CDS
-location: [24742:25137]
-strand: 1
+location: [24742:25137](+)
 qualifiers: 
 
 type: CDS
-location: [25225:25445]
-strand: 1
+location: [25225:25445](+)
 qualifiers: 
 
 type: CDS
-location: [25526:25711]
-strand: 1
+location: [25526:25711](+)
 qualifiers: 
 
 type: CDS
-location: [25782:25905]
-strand: 1
+location: [25782:25905](+)
 qualifiers: 
 
 type: CDS
-location: [25993:26478]
-strand: 1
+location: [25993:26478](+)
 qualifiers: 
 
 type: CDS
-location: [26563:26730]
-strand: 1
+location: [26563:26730](+)
 qualifiers: 
 
 type: CDS
-location: [26813:26983]
-strand: 1
+location: [26813:26983](+)
 qualifiers: 
 
 type: CDS
-location: [27073:27235]
-strand: 1
+location: [27073:27235](+)
 qualifiers: 
 
 type: CDS
-location: [27319:27415]
-strand: 1
+location: [27319:27415](+)
 qualifiers: 
 
 type: CDS
-location: [27504:28133]
-strand: 1
+location: [27504:28133](+)
 qualifiers: 
 
 type: CDS
-location: [28313:28507]
-strand: 1
+location: [28313:28507](+)
 qualifiers: 
 
 type: CDS
-location: [28591:28782]
-strand: 1
+location: [28591:28782](+)
 qualifiers: 
 
 type: CDS
-location: [28861:30013]
-strand: 1
+location: [28861:30013](+)
 qualifiers: 
 
 type: CDS
-location: [30111:30518]
-strand: 1
+location: [30111:30518](+)
 qualifiers: 
 
 type: CDS
-location: [30603:30781]
-strand: 1
+location: [30603:30781](+)
 qualifiers: 
 
 
 type: CDS
-location: [31083:32372]
-strand: -1
+location: [31083:32372](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715648']
@@ -1132,49 +1029,40 @@ qualifiers:
     Key: translation, Value: ['MSEETKDNQRLQRPAPRLNERILSSLSRRSVAAHPWHDLEIGPGAPQIFNVVVEITKGSKVKYELDKKTGLIKVDRILYSSVVYPHNYGFVPRTLCEDNDPIDVLVIMQEPVLPGCFLRARAIGLMPMIDQGEKDDKIIAVCVDDPEYKHYTDIKELPPHRLSEIRRFFEDCILFLQCSSLFISIDLSTNKKNENKEVAVNDFLPSESAVEAIQYSMDLYAEYILHTLRR']
 Sub-Features
 type: CDS
-location: [31083:31126]
-strand: -1
+location: [31083:31126](-)
 qualifiers: 
 
 type: CDS
-location: [31222:31304]
-strand: -1
+location: [31222:31304](-)
 qualifiers: 
 
 type: CDS
-location: [31340:31515]
-strand: -1
+location: [31340:31515](-)
 qualifiers: 
 
 type: CDS
-location: [31634:31700]
-strand: -1
+location: [31634:31700](-)
 qualifiers: 
 
 type: CDS
-location: [31789:31897]
-strand: -1
+location: [31789:31897](-)
 qualifiers: 
 
 type: CDS
-location: [31983:32049]
-strand: -1
+location: [31983:32049](-)
 qualifiers: 
 
 type: CDS
-location: [32132:32161]
-strand: -1
+location: [32132:32161](-)
 qualifiers: 
 
 type: CDS
-location: [32248:32372]
-strand: -1
+location: [32248:32372](-)
 qualifiers: 
 
 
 type: CDS
-location: [33693:36763]
-strand: -1
+location: [33693:36763](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715647']
@@ -1185,44 +1073,36 @@ qualifiers:
     Key: translation, Value: ['MDTNTSGEELLAKARKPYTITKQRERWTEDEHERFLEALRLYGRAWQRIEEHIGTKTAVQIRSHAQKFFTKFGKAHSFWFTFQLEKEAEVKGIPVCQALDIEIPPPRPKRKPNTPYPRKPGNNGTSSSQVSSAKDAKLVSSASSSQLNQAFLDLEKMPFSEKTSTGKENQDENCSGVSTVNKYPLPTKVSGDIETSKTSTVDNAVQDVPKKNKDKDGNDGTTVHSMQNYPWHFHADIVNGNIAKCPQNHPSGMVSQDFMFHPMREETHGHANLQATTASATTTASHQAFPACHSQDDYRSFLQISSTFSNLIMSTLLQNPAAHAAATFAASVWPYASVGNSGDSSTPMSSSPPSITAIAAATVAAATAWWASHGLLPVCAPAPITCVPFSTVAVPTPAMTEMDTVENTQPFEKQNTALQDQNLASKSPASSSDDSDETGVTKLNADSKTNDDKIEEVVVTAAVHDSNTAQKKNLVDRSSCGSNTPSGSDAETDALDKMEKDKEDVKETDENQPDVIELNNRKIKMRDNNSNNNATTDSWKEVSEEGRIAFQALFARERLPQSFSPPQVAENVNRKQSDTSMPLAPNFKSQDSCAADQEGVVMIGVGTCKSLKTRQTGFKPYKRCSMEVKESQVGNINNQSDEKVCKRLRLEGEAST']
 Sub-Features
 type: CDS
-location: [33693:34029]
-strand: -1
+location: [33693:34029](-)
 qualifiers: 
 
 type: CDS
-location: [34102:35173]
-strand: -1
+location: [34102:35173](-)
 qualifiers: 
 
 type: CDS
-location: [35268:35349]
-strand: -1
+location: [35268:35349](-)
 qualifiers: 
 
 type: CDS
-location: [35431:35701]
-strand: -1
+location: [35431:35701](-)
 qualifiers: 
 
 type: CDS
-location: [36325:36387]
-strand: -1
+location: [36325:36387](-)
 qualifiers: 
 
 type: CDS
-location: [36511:36623]
-strand: -1
+location: [36511:36623](-)
 qualifiers: 
 
 type: CDS
-location: [36724:36763]
-strand: -1
+location: [36724:36763](-)
 qualifiers: 
 
 
 type: CDS
-location: [38599:40579]
-strand: -1
+location: [38599:40579](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715646']
@@ -1233,34 +1113,28 @@ qualifiers:
     Key: translation, Value: ['MAGDMQGVRVVEKYSPVIVMVMSNVAMGSVNALVKKALDVGVNHMVIGAYRMAISALILVPFAYVLERASLMQFFFLLGLSYTSATVSCALVSMLPAITFALALIFRTENVKILKTKAGMLKVIGTLICISGALFLTFYKGPQISNSHSHSHGGASHNNNDQDKANNWLLGCLYLTIGTVLLSLWMLFQGTLSIKYPCKYSSTCLMSIFAAFQCALLSLYKSRDVNDWIIDDRFVITVIIYAGVVGQAMTTVATTWGIKKLGAVFASAFFPLTLISATLFDFLILHTPLYLGSVIGSLVTITGLYMFLWGKNKETESSTALSSGMDNEAQYTTPNKDNDSKSPV']
 Sub-Features
 type: CDS
-location: [38599:38756]
-strand: -1
+location: [38599:38756](-)
 qualifiers: 
 
 type: CDS
-location: [38837:38989]
-strand: -1
+location: [38837:38989](-)
 qualifiers: 
 
 type: CDS
-location: [39110:39516]
-strand: -1
+location: [39110:39516](-)
 qualifiers: 
 
 type: CDS
-location: [39914:40031]
-strand: -1
+location: [39914:40031](-)
 qualifiers: 
 
 type: CDS
-location: [40376:40579]
-strand: -1
+location: [40376:40579](-)
 qualifiers: 
 
 
 type: CDS
-location: [45149:48868]
-strand: -1
+location: [45149:48868](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715645']
@@ -1271,44 +1145,36 @@ qualifiers:
     Key: translation, Value: ['MATAFAPTKLTATVPLHGSHENRLLLPIRLAPPSSFLGSTRSLSLRRLNHSNATRRSPVVSVQEVVKEKQSTNNTSLLITKEEGLELYEDMILGRSFEDMCAQMYYRGKMFGFVHLYNGQEAVSTGFIKLLTKSDSVVSTYRDHVHALSKGVSARAVMSELFGKVTGCCRGQGGSMHMFSKEHNMLGGFAFIGEGIPVATGAAFSSKYRREVLKQDCDDVTVAFFGDGTCNNGQFFECLNMAALYKLPIIFVVENNLWAIGMSHLRATSDPEIWKKGPAFGMPGVHVDGMDVLKVREVAKEAVTRARRGEGPTLVECETYRFRGHSLADPDELRDAAEKAKYAARDPIAALKKYLIENKLAKEAELKSIEKKIDELVEEAVEFADASPQPGRSQLLENVFADPKGFGIGPDGRYRSQPLQIKVSSSELSVLDEEKEEEVVKGEAEPNKDSVVSKAEPVKKPRPCELYVCNIPRSYDIAQLLDMFQPFGTVISVEVVSRNPQTGESRGSGYVTMGSINSAKIAIASLDGTVRARETKKQEVGGREMRVRYSVDMNPGTRRNPEVLNSTPKKILMYESQHKVYVGNLPWFTQPDGLRNHFSKFGTIVSTRVLHDRKTGRNRVFAFLSFTSGEERDAALSFNGTVNNMKVAESSSEKVSRRVSRKPTVLLLLQRHLLDTNNV']
 Sub-Features
 type: CDS
-location: [45149:45261]
-strand: -1
+location: [45149:45261](-)
 qualifiers: 
 
 type: CDS
-location: [45342:45656]
-strand: -1
+location: [45342:45656](-)
 qualifiers: 
 
 type: CDS
-location: [45718:45847]
-strand: -1
+location: [45718:45847](-)
 qualifiers: 
 
 type: CDS
-location: [46074:46313]
-strand: -1
+location: [46074:46313](-)
 qualifiers: 
 
 type: CDS
-location: [47447:47684]
-strand: -1
+location: [47447:47684](-)
 qualifiers: 
 
 type: CDS
-location: [47776:48554]
-strand: -1
+location: [47776:48554](-)
 qualifiers: 
 
 type: CDS
-location: [48637:48868]
-strand: -1
+location: [48637:48868](-)
 qualifiers: 
 
 
 type: CDS
-location: [49985:50656]
-strand: -1
+location: [49985:50656](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715644']
@@ -1319,24 +1185,20 @@ qualifiers:
     Key: translation, Value: ['MSTVGELACSYAVMILEDEGIAITADKIATLVKAAGVSIESYWPMLFAKMAEKRNVTDLIMNVGAGGGGGAPVAAAAPAAGGGAAAAPAAEEKKKDEPAEESDGDLGFGLFD']
 Sub-Features
 type: CDS
-location: [49985:50039]
-strand: -1
+location: [49985:50039](-)
 qualifiers: 
 
 type: CDS
-location: [50120:50333]
-strand: -1
+location: [50120:50333](-)
 qualifiers: 
 
 type: CDS
-location: [50584:50656]
-strand: -1
+location: [50584:50656](-)
 qualifiers: 
 
 
 type: CDS
-location: [51940:54196]
-strand: 1
+location: [51940:54196](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715635']
@@ -1347,34 +1209,28 @@ qualifiers:
     Key: translation, Value: ['MGKKNGSSSWLTAVKRAFRSPTKKDHSNDVEEDEEKKREKRRWFRKPATQESPVKSSGISPPAPQEDSLNVNSKPSPETAPSYATTTPPSNAGKPPSAVVPIATSASKTLAPRRIYYARENYAAVVIQTSFRGYLARRALRALKGLVKLQALVRGHNVRKQAKMTLRCMQALVRVQSRVLDQRKRLSHDGSRKSAFSDSHAVFESRYLQDLSDRQSMSREGSSAAEDWDDRPHTIDAVKVMLQRRRDTALRHDKTNLSQAFSQKMWRTVGNQSTEGHHEVELEEERPKWLDRWMATRPWDKRASSRASVDQRVSVKTVEIDTSQPYSRTGAGSPSRGQRPSSPSRTSHHYQSRNNFSATPSPAKSRPILIRSASPRCQRDPREDRDRAAYSYTSNTPSLRSNYSFTARSGCSISTTMVNNASLLPNYMASTESAKARIRSHSAPRQRPSTPERDRAGLVKKRLSYPVPPPAEYEDNNSLRSPSFKSVAGSHFGGMLEQQSNYSSCCTESNGVEISPASTSDFRNWLR']
 Sub-Features
 type: CDS
-location: [51940:52048]
-strand: 1
+location: [51940:52048](+)
 qualifiers: 
 
 type: CDS
-location: [52135:52432]
-strand: 1
+location: [52135:52432](+)
 qualifiers: 
 
 type: CDS
-location: [52639:52885]
-strand: 1
+location: [52639:52885](+)
 qualifiers: 
 
 type: CDS
-location: [53185:53326]
-strand: 1
+location: [53185:53326](+)
 qualifiers: 
 
 type: CDS
-location: [53404:54196]
-strand: 1
+location: [53404:54196](+)
 qualifiers: 
 
 
 type: CDS
-location: [57093:58680]
-strand: -1
+location: [57093:58680](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715643']
@@ -1385,8 +1241,7 @@ qualifiers:
     Key: translation, Value: ['MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLKYVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLTCLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQFQQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEVGILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANPNSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVVRTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQLMFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSRMTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTEEMTGNAWAGSIDQYPVKVVQ']
 
 type: CDS
-location: [59507:63513]
-strand: -1
+location: [59507:63513](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715642']
@@ -1397,24 +1252,20 @@ qualifiers:
     Key: translation, Value: ['MEKRSDSESVEILGDWDSPPPEERIVMVSVPTSPESDYARSNQPKEIESRVSDKETASASGEVAARRVLPPWMDPSYEWGGGKWKVDGRKNKNKKEKEKEKEEIIPFKEIIEALLGNSGDKVQQDNKVFEVAPSLHVVELRKTGDDTLEFHKVYFRFNLYQPVQLPLILFVVIRFSMLKIIHYHQFTMAHIKEFVCMWDTHLYKEITNLNIWDTLSSTLVLAIWTVNASHE']
 Sub-Features
 type: CDS
-location: [59507:59665]
-strand: -1
+location: [59507:59665](-)
 qualifiers: 
 
 type: CDS
-location: [61669:61826]
-strand: -1
+location: [61669:61826](-)
 qualifiers: 
 
 type: CDS
-location: [63132:63513]
-strand: -1
+location: [63132:63513](-)
 qualifiers: 
 
 
 type: CDS
-location: [64099:67214]
-strand: -1
+location: [64099:67214](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715641']
@@ -1425,79 +1276,64 @@ qualifiers:
     Key: translation, Value: ['MSGSRRKATPASRTRVGNYEMGRTLGEGSFAKVKYAKNTVTGDQAAIKILDREKVFRHKMVEQLKREISTMKLIKHPNVVEIIEVMASKTKIYIVLELVNGGELFDKIAQQGRLKEDEARRYFQQLINAVDYCHSRGVYHRDLKPENLILDANGVLKVSDFGLSAFSRQVREDGLLHTACGTPNYVAPEVLSDKGYDGAAADVWSCGVILFVLMAGYLPFDEPNLMTLYKRVRICKAEFSCPPWFSQGAKRVIKRILEPNPITRISIAELLEDEWFKKGYKPPSFDQDDEDITIDDVDAAFSNSKECLVTEKKEKPVSMNAFELISSSSEFSLENLFEKQAQLVKKETRFTSQRSASEIMSKMEETAKPLGFNVRKDNYKIKMKGDKSGRKGQLSVATEVFEVAPSLHVVELRKTGGDTLEFHKVCDSFYKNFSSGLKDVVWNTDAAAEEQKQ']
 Sub-Features
 type: CDS
-location: [64099:64177]
-strand: -1
+location: [64099:64177](-)
 qualifiers: 
 
 type: CDS
-location: [64271:64358]
-strand: -1
+location: [64271:64358](-)
 qualifiers: 
 
 type: CDS
-location: [64452:64509]
-strand: -1
+location: [64452:64509](-)
 qualifiers: 
 
 type: CDS
-location: [64602:64719]
-strand: -1
+location: [64602:64719](-)
 qualifiers: 
 
 type: CDS
-location: [64811:64919]
-strand: -1
+location: [64811:64919](-)
 qualifiers: 
 
 type: CDS
-location: [65032:65158]
-strand: -1
+location: [65032:65158](-)
 qualifiers: 
 
 type: CDS
-location: [65264:65354]
-strand: -1
+location: [65264:65354](-)
 qualifiers: 
 
 type: CDS
-location: [65434:65566]
-strand: -1
+location: [65434:65566](-)
 qualifiers: 
 
 type: CDS
-location: [65808:65862]
-strand: -1
+location: [65808:65862](-)
 qualifiers: 
 
 type: CDS
-location: [65963:66044]
-strand: -1
+location: [65963:66044](-)
 qualifiers: 
 
 type: CDS
-location: [66151:66259]
-strand: -1
+location: [66151:66259](-)
 qualifiers: 
 
 type: CDS
-location: [66379:66451]
-strand: -1
+location: [66379:66451](-)
 qualifiers: 
 
 type: CDS
-location: [66536:66599]
-strand: -1
+location: [66536:66599](-)
 qualifiers: 
 
 type: CDS
-location: [67025:67214]
-strand: -1
+location: [67025:67214](-)
 qualifiers: 
 
 
 type: CDS
-location: [69830:71700]
-strand: -1
+location: [69830:71700](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715640']
@@ -1508,29 +1344,24 @@ qualifiers:
     Key: translation, Value: ['MVSDLPLDEDDIALLKSPYCDDGGDEDVNSAPNIFTYDNVPLKKRHYLGTSDTFRSFEPLNEHACIVCDIADDGVVPCSGNECPLAVHRKCVELDCEDPATFYCPYCWFKEQATRSTALRTRGVAAAKTLVQYGCSELRSGDIVMTRENSQLENGSDNSLPMQLHENLHQLQELVKHLKARNSQLDESTDQFIDMEKSCGEAYAVVNDQPKRVLWTVNEEKMLREGVEKFSDTINKNMPWKKILEMGKGIFHTTRNSSDLKDKWRNMVRIIILIWLRSRLTSSSSSQRSEIKMERERNAGVMKKMSPTGTIQRLEFVGWYL']
 Sub-Features
 type: CDS
-location: [69830:69987]
-strand: -1
+location: [69830:69987](-)
 qualifiers: 
 
 type: CDS
-location: [70533:70670]
-strand: -1
+location: [70533:70670](-)
 qualifiers: 
 
 type: CDS
-location: [70742:71357]
-strand: -1
+location: [70742:71357](-)
 qualifiers: 
 
 type: CDS
-location: [71643:71700]
-strand: -1
+location: [71643:71700](-)
 qualifiers: 
 
 
 type: CDS
-location: [72284:73585]
-strand: 1
+location: [72284:73585](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715636']
@@ -1541,34 +1372,28 @@ qualifiers:
     Key: translation, Value: ['MQQQQSPQMFPMVPSIPPANNITTEQIQKYLDENKKLIMAIMENQNLGKLAECAQYQALLQKNLMYLAAIADAQPPPPTPGPSPSTAVAAQMATPHSGMQPPSYFMQHPQASPAGIFAPRGPLQFGSPLQFQDPQQQQQIHQQAMQGHMGIRPMGMTNNGMQHAMQQPETGLGGNVGLRGGKQDGADGQGKDDGK']
 Sub-Features
 type: CDS
-location: [72284:72371]
-strand: 1
+location: [72284:72371](+)
 qualifiers: 
 
 type: CDS
-location: [72788:72865]
-strand: 1
+location: [72788:72865](+)
 qualifiers: 
 
 type: CDS
-location: [72988:73097]
-strand: 1
+location: [72988:73097](+)
 qualifiers: 
 
 type: CDS
-location: [73189:73442]
-strand: 1
+location: [73189:73442](+)
 qualifiers: 
 
 type: CDS
-location: [73523:73585]
-strand: 1
+location: [73523:73585](+)
 qualifiers: 
 
 
 type: CDS
-location: [73806:74145]
-strand: -1
+location: [73806:74145](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715639']
@@ -1579,19 +1404,16 @@ qualifiers:
     Key: translation, Value: ['MASGGKAKYIIGALIGSFGISYIFDKVISDNKIFGGKDDLNGYLLVKISGTTPGTVSNKEWWAATDEKFQAWPRTAGPPVVMNPISRQNFIVKTRPE']
 Sub-Features
 type: CDS
-location: [73806:73990]
-strand: -1
+location: [73806:73990](-)
 qualifiers: 
 
 type: CDS
-location: [74035:74145]
-strand: -1
+location: [74035:74145](-)
 qualifiers: 
 
 
 type: CDS
-location: [75334:77148]
-strand: 1
+location: [75334:77148](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715637']
@@ -1602,29 +1424,24 @@ qualifiers:
     Key: translation, Value: ['MKEDRRLPHKRDAFQFLKTKAAYVIVIVLTYAFGYFSAYHYHQPLQQQLPPSTTAVETTKPQVCSIDNFRVTTPCGNLVPPELIRQTVIDRIFNGTSPYIDFPPPHAKKFLRPKRIKGWGSYGAVFENLIRRVKPKTIVEVGSFLGASAIHMANLTRRLGLEETQILCVDDFRGWPGFRDRFKDMALVNGDVLLMYQFMQNVVISDFSGSILPVPFSTGSALEKLCEWGVTADLVEIDAGHDFNSAWADINRAVRILRPGGVIFGHDYFTAADNRGVRRAVNLFAEINRLKVKTDGQHWVIDSVKVINKGTRFAISKTVAKIKEDANQWFFAQVLENQDLVNEQAVHISVKVLRGFLRDEHGKVLIHARRSFASVHSKLDATFLCWQWAMESMKSLRVDKIIFASEDNDLIGAVTRLPSWPSYKFQIHFLLGELIRSSNLGAHLIAKSVTMEDRRQSYVATGFPFWLKHLFEKERSIA']
 Sub-Features
 type: CDS
-location: [75334:76249]
-strand: 1
+location: [75334:76249](+)
 qualifiers: 
 
 type: CDS
-location: [76515:76653]
-strand: 1
+location: [76515:76653](+)
 qualifiers: 
 
 type: CDS
-location: [76732:76982]
-strand: 1
+location: [76732:76982](+)
 qualifiers: 
 
 type: CDS
-location: [77014:77148]
-strand: 1
+location: [77014:77148](+)
 qualifiers: 
 
 
 type: CDS
-location: [82722:84581]
-strand: -1
+location: [82722:84581](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715638']
@@ -1635,18 +1452,15 @@ qualifiers:
     Key: translation, Value: ['MFSLNMRTEIESLWVFALASKFNIYMQQHFASLLVAIAITWFTITIVFWSTPGGPAWGKYFFTRRFISLDYNRKYKNLIPGPRGFPLVGSMSLRSSHVAHQRIASVAEMSNAKRLMAFSLGDTKVVVTCHPAVAKEILNSSVFADRPVDETAYGLMFNRAMGFAPNGTYWRTLRRLGSNHLFNPKQIKQSEDQRRVIATQMVNAFARNPKSACAVRDLLKTASLCNMMGLVFGREYELESNNNLESECLKGLVEEGYDLLGTLNWTDHLPWLAGLDFQQIRFRCSQLVPKVNLLLSRIIHEQRAATGNFLDMLLSLQGSEKLSESDMVAVLWEMIFRGTDTVAVLVEWVLARIVMHPKVQLTVHDELDRVVGRSRTVDESDLPSLTYLTAMIKEVLRLHPPGPLLSWARLSITDTSVDGYHVPAGTTAMVNMWAIARDPHVWEDPLEFKPERFVAKEGEAEFSVFGSDLRLAPFGSGKRVCPGKNLGLTTVSFWVATLLHEFEWLPSVEANPPDLSEVLRLSCEMACPLIVNVSSRRKIIAWMF']
 Sub-Features
 type: CDS
-location: [82722:82738]
-strand: -1
+location: [82722:82738](-)
 qualifiers: 
 
 type: CDS
-location: [82750:83373]
-strand: -1
+location: [82750:83373](-)
 qualifiers: 
 
 type: CDS
-location: [83585:84581]
-strand: -1
+location: [83585:84581](-)
 qualifiers: 
 
 
@@ -1694,7 +1508,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:182]
-strand: None
 qualifiers: 
     Key: chromosome, Value: ['4']
     Key: db_xref, Value: ['taxon:10090']
@@ -1703,18 +1516,15 @@ qualifiers:
 
 type: Protein
 location: [0:182]
-strand: None
 qualifiers: 
     Key: product, Value: ['interferon beta, fibroblast']
 
 type: sig_peptide
 location: [0:21]
-strand: None
 qualifiers: 
 
 type: Region
 location: [0:182]
-strand: None
 qualifiers: 
     Key: db_xref, Value: ['CDD:pfam00143']
     Key: note, Value: ['interferon']
@@ -1722,13 +1532,11 @@ qualifiers:
 
 type: mat_peptide
 location: [21:182]
-strand: None
 qualifiers: 
     Key: product, Value: ['ifn-beta']
 
 type: Region
 location: [55:170]
-strand: None
 qualifiers: 
     Key: db_xref, Value: ['CDD:IFabd']
     Key: note, Value: ['IFabd']
@@ -1736,7 +1544,6 @@ qualifiers:
 
 type: CDS
 location: [0:182]
-strand: None
 qualifiers: 
     Key: coded_by, Value: ['NM_010510.1:21..569']
     Key: db_xref, Value: ['LocusID:15977', 'MGD:MGI:107657']
@@ -1810,23 +1617,20 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Tracheata', 'Hexapoda', 'Insecta', 'Pterygota', 'Neoptera', 'Endopterygota', 'Diptera', 'Brachycera', 'Muscomorpha', 'Ephydroidea', 'Drosophilidae', 'Drosophila']
 Feaures
 type: source
-location: [0:154329]
-strand: 1
+location: [0:154329](+)
 qualifiers: 
     Key: clone, Value: ['BAC BACR25B3']
     Key: db_xref, Value: ['taxon:7227']
     Key: organism, Value: ['Drosophila melanogaster']
 
 type: gene
-location: [22147:27773]
-strand: -1
+location: [22147:27773](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.11']
     Key: note, Value: ['']
 
 type: CDS
-location: [22147:27773]
-strand: -1
+location: [22147:27773](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946669']
@@ -1836,55 +1640,45 @@ qualifiers:
     Key: translation, Value: ['MACNCNQSMIYQSNERRDYNCPGAPQYPYNRFKGGVSLKDTPCMVLYICADFKSSKLSSAKPIISGPATTRAPAISYVCQPNDFKCVSHPHTCVRANMVCDGIYDCTDHSDEFNCIAGKGSGKSESNSGSGSFKRWKKSPEQGRRSLAKAVKNRKLRKRSFAKSRDYSLKLDDQSSNLRAGESTDVECYSSDDTYTDVVWERSDGAPLSNNVRQVGNRLVISNVSPSDAGNYVCKCKTDEGDLYTTSYKLEVEDQPHELKSSKIVYAKVGANADLQCGADESRQPTYRWSRQYGQLQAGRSLMNEKLSLDSVQANDAGTYICTAQYADGETADFPNILVVTGAIPQFRQEPRSYMSFPTLPNSSFKFNFELTFRPENGDGLLLFNGQTRGSGDYIALSLKDRYAEFRFDFGGKPMLVRAEEPLALNEWHTVRVSRFKRDGYIQVDEQHPVAFPTLQQIPQLDLIEDLYIGGVPNWELLPADAVSQQVGFVGCISRLTLQGRTVELIREAKYKEGITDCRPCAQGPCQNKGVCLESQTEQAYTCICQPGWTGRDCAIEGTQCTPGVCGAGRCENTENDMECLCPLNRSGDRCQYNEILNEHSLNFKGNSFAAYGTPKVTKVNITLSVRPASLEDSVILYTAESTLPSGDYLALVLRGGHAELLINTAARLDPVVVRSAEPLPLNRWTRIEIRRRLGEGILRVGDGPERKAKAPGSDRILSLKTHLYVGGYDRSTVKVNRDVNITKGFDGCISRLYNFQKPVNLLADIKDAANIQSCGETNMIGGDEDSDNEPPVPPPTPDVHENELQPYAMAPCASDPCENGGSCSEQEDVAVCSCPFGFSGKHCQEHLQLGFNASFRGDGYVELNRSHFQPALEQSYTSMGIVFTTNKPNGLLFWWGQEAGEEYTGQDFIAAAVVDGYVEYSMRLDGEEAVIRNSDIRVDNGERHIVIAKRDENTAILEVDRMLHSGETRPTSKKSMKLPGNVFVGGAPDLEVFTGFRYKHNLNGCIVVVEGETVGQINLSSAAVNGVNANVCPA']
 Sub-Features
 type: CDS
-location: [22147:22299]
-strand: -1
+location: [22147:22299](-)
 qualifiers: 
 
 type: CDS
-location: [22374:22791]
-strand: -1
+location: [22374:22791](-)
 qualifiers: 
 
 type: CDS
-location: [22859:23560]
-strand: -1
+location: [22859:23560](-)
 qualifiers: 
 
 type: CDS
-location: [23629:24555]
-strand: -1
+location: [23629:24555](-)
 qualifiers: 
 
 type: CDS
-location: [24615:24888]
-strand: -1
+location: [24615:24888](-)
 qualifiers: 
 
 type: CDS
-location: [25023:25178]
-strand: -1
+location: [25023:25178](-)
 qualifiers: 
 
 type: CDS
-location: [26676:27009]
-strand: -1
+location: [26676:27009](-)
 qualifiers: 
 
 type: CDS
-location: [27622:27773]
-strand: -1
+location: [27622:27773](-)
 qualifiers: 
 
 
 type: gene
-location: [29925:33978]
-strand: -1
+location: [29925:33978](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.10']
 
 type: CDS
-location: [29925:33978]
-strand: -1
+location: [29925:33978](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946670']
@@ -1894,60 +1688,49 @@ qualifiers:
     Key: translation, Value: ['MFLATLDTNDPTDIGTEDPVLTQIIVSIQKPEITIVPVGGSMTLSCSGRMRWSNSPVIVNWYKENSRLPENVEVQGGNLYLYDLQVSDSGVYICQAVNNETASVFKDTVSITITKKDQLSPAEIVNLPSHVTFEEYVNNEIICEVLGNPAPRVTWARVDGHADAQSTRTYDNRLIFDSPRKSDEGRYRCQAENDQNRDEKYVIVYVQSNPPQPPPQQDRLYITPEEINGLAGESFQLNCQFTSVASLRYDWSHNGRSLSSSPARNVEIRGNTLEVRDASESDSGVYTCVAYDVRTRRNFTESARVNIDRREEQPFGVLMRMMILTDSLINHSNKPIIESLEQNILIIQGEDYSITCEASGSPYPSIKWAKVHDFMPENVHISGNVLTIYGARFENRGVYSCVAENDHGSDLSSTSIDIEPRERPSVKIVSAPLQTFSVGAPASLYCTVEGIPDPTVEWVRVDGQPLSPRHKIQSPGYMVIDDIQLEDSGDYECRAKNIVGEATGVATITVQEPTLVQIIPDNRDLRLTEGDELSLTCVGSGVPNPEVEWVNEMALKRDLYSPPSNTAILKIYRVTKADAGIYTCHGKNEAGSDEAHVRVEVQERRGDIGGVDDDSDRDPINYNPPQQQNPGIHQPGSNQLLATDIGDNVTLTCDMFQPLNTRWERVDGAPLPRNAYTIKNRLEIVRVEQQNLGQYRCNGIGRDGNVKTYFVKELVLMPLPRIRFYPNIPLTVEAGQNLDVHCQVENVRPEDVHWSTDNNRPLPSSVRIVGSVLRFVSITQAAAGEYRCSAFNQYGNRSQIARVAVKKPADFHQVPQSQLQRHREGENIQLQCTVTDQYGVRAQDNVEFNWFRDDRRPLPNNARTDSQILVLTNLRPEDAGRYICNSYDVDRGQQLPEVSIDLQVLSE']
 Sub-Features
 type: CDS
-location: [29925:30108]
-strand: -1
+location: [29925:30108](-)
 qualifiers: 
 
 type: CDS
-location: [30269:30519]
-strand: -1
+location: [30269:30519](-)
 qualifiers: 
 
 type: CDS
-location: [30616:31076]
-strand: -1
+location: [30616:31076](-)
 qualifiers: 
 
 type: CDS
-location: [31196:31591]
-strand: -1
+location: [31196:31591](-)
 qualifiers: 
 
 type: CDS
-location: [31658:31836]
-strand: -1
+location: [31658:31836](-)
 qualifiers: 
 
 type: CDS
-location: [32323:32634]
-strand: -1
+location: [32323:32634](-)
 qualifiers: 
 
 type: CDS
-location: [32685:33289]
-strand: -1
+location: [32685:33289](-)
 qualifiers: 
 
 type: CDS
-location: [33532:33713]
-strand: -1
+location: [33532:33713](-)
 qualifiers: 
 
 type: CDS
-location: [33816:33978]
-strand: -1
+location: [33816:33978](-)
 qualifiers: 
 
 
 type: gene
-location: [36118:56153]
-strand: -1
+location: [36118:56153](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.1']
 
 type: CDS
-location: [36118:56153]
-strand: -1
+location: [36118:56153](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946671']
@@ -1957,150 +1740,121 @@ qualifiers:
     Key: translation, Value: ['MLLLQLLLQLLLLGKLLLGKTPPTVFGFRLLFAAFRFPLSLHFPHRMHDHFFVRGDTHSCGWKNSTTFTIRISAIYRYLNQCQANEFRCNNGDCIDARKRCNNVSDCSEGEDENEECPAACSGMEYQCRDGTRCISVSQQCDGHSDCSDGDDEEHCDGIVPKLRYTCPKGKFTCRDLSCISIVHRCDGRADCPNDRSDEEGCPCLYDKWQCDDGTCIAKELLCNGNIDCPEDISDERYCEGGYDSEECRFDEFHCGTGECIPMRQVCDNIYDCNDYSDEVNCVEGEEEDRVGIPIGHQPWRPASKHDDWLHEMDTSEYQVYQPSNVYEKANSQNPCASNQFRCTTSNVCIPLHLRCDGFYHCNDMSDEKSCEQYQRHTTTRRPLTLATPTSRITTQGPGLLERRNTTTATEASRWPWATKTTTIATTTSNPITTVGVANSPPQTCLENIEFACHNRDCISIESVCDGIPDCGRNEDEDDALCKCSGDKYKCQRGGGCIPKSQVCDGKPQCHDRSDESACHLHGRLNKTRLGVKCLESQYQCGDGSCISGYKRCNGIHDCADASDEYNCIYDYEDTYDTDPNNNPLNECDILEFECDYSQCLPLEKKCDGYADCEDMSDELECQSYTDHCLESEFECDSYCLPRDQLCNGIPNCQDGSDERNCTFCREDAYLCNTGECVADNQRCNGIADCADGSDERHCARIYCPPNKLACNGTCVSRRIKCDGIRDCLDGYDEMYCPETNNHYPTQNVNVIRPKLGPNPIPKSCRPHEWQCANLECIDSSLQCNEIKDCSDGSDEELSVCFGTATTRLKPSDCSPEQFYCDESCYNRSVRCNGHVDCSDGSDEVGCSLPCPQHQCPSGRCYTESERCDRHRHCEDGSDEANCTAILCKDNEFLCFDRQFCINATQQCDGYYDCRDFSDEQNCIGCYANQFRCNNGDCVSGSAPCNGYSECSDHSDELNCGGTQECLPNQFRCNSGQCVSSSVRCNGRTDCQDSSDEQNCGHRHTEVSQGLETTGVFTTSTTSTTAMTPLRIICPPTSFKCENGPCISLGLKCNGRVDCPYDGSDEADCGQISNDIDPADSNDRRPNQLNLKTYPDSQIIKESREVIFRCRDEGPARAKVKWSRPGGRPLPPGFTDRNGRLEIPNIRVEDAGTYVCEAVGYASYIPGQQVTVNLNVERSWGENKYEEIRSNRIRYGTVPHIDLEFFGLDNDVGSRPESACTEYQATCMNGECIDKSSICDGNPDCSDASDEQSCSLGLKCQPNQFMCSNSKCVDRTWRCDGENDCGDNSDETSCDPEPSGAPCRYNEFQCRSGHCIPKSFQCDNVPDCTDGTDEVGCMAPLPIRPPPQSVSLLEYEVLELTCVATGTPTPTIVWRLNWGHVPDKCESKSYGGTGTLRCPDMRPQDSGAYSCEIINTRGTHFVNPDTIVTVRPVRTDVCEAGFFNMLARKAEECVQCFCFGVAKACDSANLFTYAIHPPILSHRVVSVELSPLRQIVINEAAPGQDLLTLLHGVQFRATNVHFSGRETPYLALPADYMGNQLKSYGGNLRYEVNYRGSGRPVNGPDVIITGNRFTLTYRVRTQPGQNNRVSIPFVPGGWQKPDGRKASREEIMMILANVDNILIRLGYLDSTAREVDLINIALDSAGTADKGLGSASLVEKCQCPPGYVGDSCESCASGYVRQPGGPWLGHCVPFIPDSCPSGTYGDPRRGVPCKECPCPLTGSNNFASGCQQSPDGDVVCRCNEGYTGRRCEQCAAGYQGNPLAAGGICRRIPDTSCNVDGTYSVHSNGTCQCKDSVIGEQCDTCKSKSFHLNSFTYTGCIECFCSGVGLDCDSSTWYRDQVTSTFGRSRVDHGFVLVTNYMQPTPDTVPVSMAAEPNALSFIGSADQSGNTLYWSLPAAFLGNKLSSYGGKLTYTLSYSPLPNGIMSRNSAPDVVIKSGEDLRLIHYRKSQVVPSVANTYSVEIKESAWQRGDEVVANREHVLMALSDITAIYIKATYTTSTKEASLRQVTLDVATPTNLGTPRAVEVEQCRCPEGYLGLSCEQCAPGYARDPEGGIYLGLCRPCECNGHSKYCNSDTGDCEECSDNTEGPSCERCAAGYVGDATRGTIYDCQPDEGYPIPSPPAPGNQTLECTAYCQIEGIYDCRGNECLCKRNVIGDQCDQCRPGTYGLSAQNQDGCKECYCSGLASQCRSAALYRQLIPVDFILNAPLITDESGAVQDTENLIPDISRNMYTYTHTSYLPKYWSLRGSVLGNQLFSYGGRLSYSLIVESYGNYERGHDIVLIGNGLKLIWSRPDGNENQEEYNVRLHEDEQWTRQDRESARPASRSDFMTVLSDLQHILIRATPRVPTQSTSIGNVILESAVTTRTPGATHASDIELCQCPSGYVGTSCESCAPLHYRDASGSCSLCPCDVSNTESCDLVSGGYVECRCKARWKGDRCREIGE']
 Sub-Features
 type: CDS
-location: [36118:37213]
-strand: -1
+location: [36118:37213](-)
 qualifiers: 
 
 type: CDS
-location: [37280:39517]
-strand: -1
+location: [37280:39517](-)
 qualifiers: 
 
 type: CDS
-location: [39655:40042]
-strand: -1
+location: [39655:40042](-)
 qualifiers: 
 
 type: CDS
-location: [40344:40434]
-strand: -1
+location: [40344:40434](-)
 qualifiers: 
 
 type: CDS
-location: [40518:40612]
-strand: -1
+location: [40518:40612](-)
 qualifiers: 
 
 type: CDS
-location: [40680:40814]
-strand: -1
+location: [40680:40814](-)
 qualifiers: 
 
 type: CDS
-location: [41545:41620]
-strand: -1
+location: [41545:41620](-)
 qualifiers: 
 
 type: CDS
-location: [41854:42085]
-strand: -1
+location: [41854:42085](-)
 qualifiers: 
 
 type: CDS
-location: [42187:42415]
-strand: -1
+location: [42187:42415](-)
 qualifiers: 
 
 type: CDS
-location: [42750:42876]
-strand: -1
+location: [42750:42876](-)
 qualifiers: 
 
 type: CDS
-location: [43603:43837]
-strand: -1
+location: [43603:43837](-)
 qualifiers: 
 
 type: CDS
-location: [44240:44438]
-strand: -1
+location: [44240:44438](-)
 qualifiers: 
 
 type: CDS
-location: [44811:44928]
-strand: -1
+location: [44811:44928](-)
 qualifiers: 
 
 type: CDS
-location: [45147:45233]
-strand: -1
+location: [45147:45233](-)
 qualifiers: 
 
 type: CDS
-location: [45660:45793]
-strand: -1
+location: [45660:45793](-)
 qualifiers: 
 
 type: CDS
-location: [45975:46125]
-strand: -1
+location: [45975:46125](-)
 qualifiers: 
 
 type: CDS
-location: [46517:46688]
-strand: -1
+location: [46517:46688](-)
 qualifiers: 
 
 type: CDS
-location: [47221:47315]
-strand: -1
+location: [47221:47315](-)
 qualifiers: 
 
 type: CDS
-location: [47682:47831]
-strand: -1
+location: [47682:47831](-)
 qualifiers: 
 
 type: CDS
-location: [48410:48878]
-strand: -1
+location: [48410:48878](-)
 qualifiers: 
 
 type: CDS
-location: [49436:49562]
-strand: -1
+location: [49436:49562](-)
 qualifiers: 
 
 type: CDS
-location: [49762:49876]
-strand: -1
+location: [49762:49876](-)
 qualifiers: 
 
 type: CDS
-location: [49970:50102]
-strand: -1
+location: [49970:50102](-)
 qualifiers: 
 
 type: CDS
-location: [50318:50441]
-strand: -1
+location: [50318:50441](-)
 qualifiers: 
 
 type: CDS
-location: [50826:50937]
-strand: -1
+location: [50826:50937](-)
 qualifiers: 
 
 type: CDS
-location: [52848:52966]
-strand: -1
+location: [52848:52966](-)
 qualifiers: 
 
 type: CDS
-location: [56030:56153]
-strand: -1
+location: [56030:56153](-)
 qualifiers: 
 
 
 type: gene
-location: [70719:75241]
-strand: -1
+location: [70719:75241](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.2']
 
 type: CDS
-location: [70719:75241]
-strand: -1
+location: [70719:75241](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946672']
@@ -2110,45 +1864,37 @@ qualifiers:
     Key: translation, Value: ['MANSKVVAHDESLQGINDSEWQLMGDDIDDGLLDDVDETLKPMETKSEEEDLPTGNWFSQSVHRVRRSINRLFGSDDNQERGRRQQRERSQRNRDAINRQKELRRRQKEDHNRWKQMRMERQLEKQRLVKRTNHVVFNRATDPRKRASDLYDENEASGYHEEDTTLYRTYFVVNEPYDNEYRDRESVQFQNLQKLLDDDLRNFFHSNYEGNDDEEQEIRSTLERVEPTNDNFKIRVQLRIELPTSVNDFGSKLQQQLNVYNRIENLSAATDGVFSFTESSDIEEEAIDVTLPQEEVEGSGSDDSSCRGDATFTCPRSGKTICDEMRCDREIQCPDGEDEEYCNYPNVCTEDQFKCDDKCLELKKRCDGSIDCLDQTDEAGCINAPEPEPEPEPEPEPEPESEPEAEPEPEPEPEPESEPEQEPEPQVPEANGKFY']
 Sub-Features
 type: CDS
-location: [70719:70988]
-strand: -1
+location: [70719:70988](-)
 qualifiers: 
 
 type: CDS
-location: [71423:71621]
-strand: -1
+location: [71423:71621](-)
 qualifiers: 
 
 type: CDS
-location: [72604:72768]
-strand: -1
+location: [72604:72768](-)
 qualifiers: 
 
 type: CDS
-location: [72838:73016]
-strand: -1
+location: [72838:73016](-)
 qualifiers: 
 
 type: CDS
-location: [73085:73559]
-strand: -1
+location: [73085:73559](-)
 qualifiers: 
 
 type: CDS
-location: [75216:75241]
-strand: -1
+location: [75216:75241](-)
 qualifiers: 
 
 
 type: gene
-location: [121866:127124]
-strand: 1
+location: [121866:127124](+)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.3']
 
 type: CDS
-location: [121866:127124]
-strand: 1
+location: [121866:127124](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946673']
@@ -2158,60 +1904,49 @@ qualifiers:
     Key: translation, Value: ['MGAGNRKSETKTKTEAEIEIEMERDQFSIAANACMSMGPMLISKDKAPCSGGRVRHADSLHIYYAVDGKMTLLSNILDCGGCISAQRFTRLLRQSGSSGPSPSAPTAGTFESKSMLEPTSSHSLATGRVPLLHDFDASTTESPGTYVLDGVARVAQLALEPTVMDALPDSDTEQVLGNLNSSAPWNLTLASAAATNFENCSALFVNYTLPQTEFAIRKCELDGRWGSRPNATEVNPPGWTDYGPCYKPEIIRLMQQMGSKDFDAYIDIARRTRTLEIVGLCLSLFALIVSLLIFCTFRSLRNNRTKIHKNLFVAMVLQVIIRLTLYLDQFRRGNKEAATNTSLSVIENTPYLCEASYVLLEYARTAMFMWMFIEGLYLHNMVTVAVFQGSFPLKFFSRLGWCVPILMTTVWARCTVMYMDTSLGECLWNYNLTPYYWILEGPRLAVILLNFCFLVNIIRVLVMKLRQSQASDIEQTRKAVRAAIVLLPLLGITNLLHQLAPLKTATNFAVWSYGTHFLTSFQGFFIALIYCFLNGEVRAVLLKSLATQLSVRGHPEWAPKRASMYSGAYNTAPDTDAVQPAGDPSATGKRISPPNKRLNGRKPSSASIVMIHEPQQRQRLMPRLQNKAREKGKDRVEKTDAEAEPDPTISHIHSKEAGSARSRTRGSKWIMGICFRGQMCDAGLAKDAANIHDVANAADVDACSGSNNNYHNINNNNGSQNNNSIHCNHRDDDKVKGESQSDFKEPSNTNAESLVHLALFTAHTSNTQNNTHRNTIFTPIRRRNCS']
 Sub-Features
 type: CDS
-location: [121866:122046]
-strand: 1
+location: [121866:122046](+)
 qualifiers: 
 
 type: CDS
-location: [122173:122630]
-strand: 1
+location: [122173:122630](+)
 qualifiers: 
 
 type: CDS
-location: [123671:123823]
-strand: 1
+location: [123671:123823](+)
 qualifiers: 
 
 type: CDS
-location: [124062:124320]
-strand: 1
+location: [124062:124320](+)
 qualifiers: 
 
 type: CDS
-location: [124391:124688]
-strand: 1
+location: [124391:124688](+)
 qualifiers: 
 
 type: CDS
-location: [124754:125018]
-strand: 1
+location: [124754:125018](+)
 qualifiers: 
 
 type: CDS
-location: [125093:125254]
-strand: 1
+location: [125093:125254](+)
 qualifiers: 
 
 type: CDS
-location: [125316:125576]
-strand: 1
+location: [125316:125576](+)
 qualifiers: 
 
 type: CDS
-location: [126792:127124]
-strand: 1
+location: [126792:127124](+)
 qualifiers: 
 
 
 type: gene
-location: [128488:129414]
-strand: -1
+location: [128488:129414](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.4']
 
 type: CDS
-location: [128488:129414]
-strand: -1
+location: [128488:129414](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946674']
@@ -2221,35 +1956,29 @@ qualifiers:
     Key: translation, Value: ['MAAKDRLPIFPSRGAQTLMKSRLAGATKGHGLLKKKADALQMRFRLILGKIIETKTLMGQVMKEAAFSLAEVKFTTGDINQIVLQNVTKAQIKIRTKKDNVAGVTLPIFEPYTDGVDTYELAGLARGGQQLAKLKKNYQSAVRLLVQLASLQTSFVTLDDVIKVTNRRVNAIEHVIIPRINRTIEYIISELDELEREEFYRLKKIQDKKREARKASDKLRAEQRLLGQMAEAQEVQNILDEDGDEDLLF']
 Sub-Features
 type: CDS
-location: [128488:128715]
-strand: -1
+location: [128488:128715](-)
 qualifiers: 
 
 type: CDS
-location: [128776:129140]
-strand: -1
+location: [128776:129140](-)
 qualifiers: 
 
 type: CDS
-location: [129195:129313]
-strand: -1
+location: [129195:129313](-)
 qualifiers: 
 
 type: CDS
-location: [129373:129414]
-strand: -1
+location: [129373:129414](-)
 qualifiers: 
 
 
 type: gene
-location: [132239:132926]
-strand: 1
+location: [132239:132926](+)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.5']
 
 type: CDS
-location: [132239:132926]
-strand: 1
+location: [132239:132926](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946675']
@@ -2259,14 +1988,12 @@ qualifiers:
     Key: translation, Value: ['MEYKMIAPEHSEQVMEHLRRNFFADEPLNKAAGLCQNGSSCPALEAHCAEAIQHRMSVMAVDAKEKDTLKIVGVVLNGILKPGDTAKALSKLDCNDDADFRKIFDLLHRHNLKHNLFEHFDVDCMFDVRILSVDSCYRGQGIANELVKRSVAVAKKNGFRLLKADATGIFSQKIFRSHGFEVFSEQPYSKYTDENGKVILPVEAPHIKLQQLYKAICADDQDEKKQSL']
 
 type: gene
-location: [133491:134407]
-strand: -1
+location: [133491:134407](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.6']
 
 type: CDS
-location: [133491:134407]
-strand: -1
+location: [133491:134407](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946676']
@@ -2276,35 +2003,29 @@ qualifiers:
     Key: translation, Value: ['MNGLPPSKHYNLTHYQQRYNWDCGLSCIIMILSAQQREQLLGNFDAVCGEEGFGSSTWTIDLCYLLMRYQVRHEYFTQTLGIDPNYAQHTYYSKIIDKDERRVTRKFKDARAHGLRVEQRTVDMEVILRHLARHGPVILLTNASLLTCEVCKRNVLEKFGYAGHYVVLCGYDMAAQKLFYHNPEVHDGHICRCLIESMDTARRAYGTDEDIIFIYEKKETRE']
 Sub-Features
 type: CDS
-location: [133491:133595]
-strand: -1
+location: [133491:133595](-)
 qualifiers: 
 
 type: CDS
-location: [133662:133748]
-strand: -1
+location: [133662:133748](-)
 qualifiers: 
 
 type: CDS
-location: [133866:134135]
-strand: -1
+location: [133866:134135](-)
 qualifiers: 
 
 type: CDS
-location: [134197:134407]
-strand: -1
+location: [134197:134407](-)
 qualifiers: 
 
 
 type: gene
-location: [135478:136829]
-strand: 1
+location: [135478:136829](+)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.7']
 
 type: CDS
-location: [135478:136829]
-strand: 1
+location: [135478:136829](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946677']
@@ -2314,30 +2035,25 @@ qualifiers:
     Key: translation, Value: ['MVPIGAVHGGHPGVVHPPQQPLPTAPSGPNSLQPNSVGQPGATTSSNSSASNKSSLSVKPNYTLKFTLAGHTKAVSAVKFSPNGEWLASSSADKLIKIWGAYDGKFEKTISGHKLGISDVAWSSDSRLLVSGSDDKTLKVWELSTGKSLKTLKGHSNYVFCCNFNPQSNLIVSGSFDESVRIWDVRTGKCLKTLPAHSDPVSAVHFNRDGSLIVSSSYDGLCRIWDTASGQCLKTLIDDDNPPVSFVKFSPNGKYILAATLDNTLKLWDYSKGKCLKTYTGHKNEKYCIFANFSVTGGKWIVSGSEDNMVYIWNLQSKEVVQKLQGHTDTVLCTACHPTENIIASAALENDKTIKLWKSDT']
 Sub-Features
 type: CDS
-location: [135478:135749]
-strand: 1
+location: [135478:135749](+)
 qualifiers: 
 
 type: CDS
-location: [135960:136586]
-strand: 1
+location: [135960:136586](+)
 qualifiers: 
 
 type: CDS
-location: [136640:136829]
-strand: 1
+location: [136640:136829](+)
 qualifiers: 
 
 
 type: gene
-location: [145402:147087]
-strand: 1
+location: [145402:147087](+)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.8']
 
 type: CDS
-location: [145402:147087]
-strand: 1
+location: [145402:147087](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946678']
@@ -2346,25 +2062,21 @@ qualifiers:
     Key: translation, Value: ['MNSTTKHLLHCTLLITVIVTFEVFSGGIKIDENSFTLVDPWTEYGQLATVLLYLLRFLTLLTLPQVLFNFCGLVFYNAFPEKVVLKGSPLLAPFICIRVVTRGDFPDLVKTNVLRNMNTCLDTGLENFLIEVVTDKAVNLSQHRRIREIVVPKEYKTRTGALFKSRALQYCLEDNVNVLNDSDWIVHLDEETLLTENSVRGIINFVLDGKHPFGQGLITYANENVVNWLTTLADSFRVSDDMGKLRLQFKLFHKPLFSWKGSYVVTQVSAERSVSFDNGIDGSVAEDCFFAMRAFSQGYTFNFIEGEMYEKSPFTLLDFLQQRKRWLQGILLVVHSKMIPFKHKLLLGISVYSWVTMPLSTSNIIFAALYPIPCPNLVDFVCAFIAAINIYMYVFGVIKSFSLYRFGLFRFLACVLGAVCTIPVNVVIENVAVIWGLVGKKHKFYVVQKDVRVLETV']
 Sub-Features
 type: CDS
-location: [145402:146203]
-strand: 1
+location: [145402:146203](+)
 qualifiers: 
 
 type: CDS
-location: [146514:147087]
-strand: 1
+location: [146514:147087](+)
 qualifiers: 
 
 
 type: gene
-location: [148859:152785]
-strand: -1
+location: [148859:152785](-)
 qualifiers: 
     Key: gene, Value: ['EG:BACR25B3.9']
 
 type: CDS
-location: [148859:152785]
-strand: -1
+location: [148859:152785](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946679']
@@ -2374,58 +2086,46 @@ qualifiers:
     Key: translation, Value: ['MSSEDPSCVAVALRVRPLVQSELDRGCRIAVERSADGAPQVTVNRNESYTYNYVFDIDDSQKDLFETCVQAKVKKLLNGYNVTILAYGQTGSGKTYTMGTAFNGVLDDHVGVIPRAVHDIFTAIAEMQSEFRFAVTCSFVELYQEQFYDLFSSKTRDKATVDIREVKNRIIMPGLTELVVTSAQQVTDHLIRGSAGRAVAATAMNETSSRSHAIFTLTLVATKLDGKQSVTTSRFNLVDLAGSERCSKTLASGDRFKEGVNINKGLLALGNVINALGSGQAAGYIPYRQSKLTRLLQDSLGGNSITLMIACVSPADYNVAETLSTLRYADRALQIKNKPVVNLDPHAAEVNMLKDVIQKLRVELLSGGKMSSSLISAVGAAGLGAIPCEESLAGSMANAAEIQRLKEQVRTLQDRNRKLQQELHQSLLDLTEKEMRAHIAEQAHDKLRSHVSELKNKLDQREQAQFGNENTNGDNEMRDFSLLVNRVHVELQRTQEELESQGHESRQRLSSRSHTEGGESGGDEVHEMLHSHSEEYTNKQMNFAGELRNINRQLDLKQELHERIMRNFSRLDSDDEDVKLRLCNQKIDDLEAERRDLMDQLRNIKSKDISAKLAEERRKRLQLLEQEISDLRRKLITQANLLKIRDKEREKIQNLSTEIRTMKESKVKLIRAMRGESEKFRQWKMVREKELTQLKSKDRKMQSEIVRQQTLHSKQRQVLKRKCEEALAANKRLKDALERQASAQAQRHKYKDNGGSAAGSSNANAKTDSWVDRELEIILSLIDAEHSLEQLMEDRAVINNHYHLLQQEKTSDPAEAAEQARILASLEEELEMRNAQISDLQQKVCPTDLDSRIRSLAEGVQSLGESRTVSKQLLKTLVQQRRLQASSLNEQRTTLDELRAQLLDAQQQEDAASKRLRLLQSQHEEQMLAQQRAYEEKVSVLIRTANQRWAEARSPAEDQQRNQILEELLSSREALQQELDKLRAKNKSKSKAVKSEPQDLDDSFQIVDGNETVVLSDVSDDPDWVPSTSKSKRIQSDSRNVISPPEKQDANVTSLGNSSIQSLNSTSATEDGKRCKGCKCRTKCTTKRCGCLSGNNACSETCVCKSNCRNPLNLKDHASQCGDGDGQKDETEDADKSDDDGDDEPQTSKENAVKFVTPEAPGKVVASPKQTLQEPKAAATPLMNSNVVEDINGPKLAKMSGLAFDTPKRKFF']
 Sub-Features
 type: CDS
-location: [148859:148905]
-strand: -1
+location: [148859:148905](-)
 qualifiers: 
 
 type: CDS
-location: [148965:149462]
-strand: -1
+location: [148965:149462](-)
 qualifiers: 
 
 type: CDS
-location: [149545:151809]
-strand: -1
+location: [149545:151809](-)
 qualifiers: 
 
 type: CDS
-location: [151880:152032]
-strand: -1
+location: [151880:152032](-)
 qualifiers: 
 
 type: CDS
-location: [152105:152785]
-strand: -1
+location: [152105:152785](-)
 qualifiers: 
 
 
 type: gene
-location: [153489:1487]
-strand: 1
+location: [153489:1487](+)
 qualifiers: 
     Key: gene, Value: ['EG:BACR7C10.3']
 Sub-Features
 type: gene
-location: [153489:154269]
-strand: 1
+location: [153489:154269](+)
 qualifiers: 
 
 type: gene
-location: [40:610]
-ref: AL121804.2:None
-strand: 1
+location: AL121804.2[40:610](+)
 qualifiers: 
 
 type: gene
-location: [671:1487]
-ref: AL121804.2:None
-strand: 1
+location: AL121804.2[671:1487](+)
 qualifiers: 
 
 
 type: CDS
-location: [153489:1487]
-strand: 1
+location: [153489:1487](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946680']
@@ -2434,20 +2134,15 @@ qualifiers:
     Key: translation, Value: ['MEEEAPRFNVLEEAFNGNGNGCANVEATQSAILKVLTRVNRFQMRVRKHIEDNYTEFLPNNTSPDIFLEESGSLNREIHDMLENLGSEGLDALDEANVKMAGNGRQLREILLGLGVSEHVLRIDELFQCVEEAKATKDYLVLLDLVGRLRAFIYGDDSVDGDAQVATPEVRRIFKALECYETIKVKYHVQAYMLQQSLQERFDRLVQLQCKSFPTSRCVTLQVSRDQTQLQDIVQALFQEPYNPARLAEFLLDNCIEPVIMRPVMADYSEEADGGTYVRLSLSYATKEPSSAHVRPNYKQVLENLRLLLHTLAGINCSVSRDQHVFGIIGDHVKDKMLKLLVDECLIPAVPESTEEYQTSTLCEDVAQLEQLLVDSFIINPEQDRALGQFVEKYETYYRNRMYRRVLETAREIIQRDLQDMVLVAPNNHSAEVANDPFLFPRCMISKSAQDFVKLMDRILRQPTDKLGDQEADPIAGVISIMLHTYINEVPKVHRKLLESIPQQAVLFHNNCMFFTHWVAQHANKGIESLAALAKTLQATGQQHFRVQVDYQSSILMGIMQEFEFESTHTLGSGPLKLVRQCLRQLELLKNVWANVLPETVYNATFCELINTFVAELIRRVFTLRHISAQMACELSDLIDVVLQRAPTLFREPNEVVQVLSWLKLQQLKAMLNASLMEITELWGDGVGPLTASYKSDEIKHLIRALFQDTDWRAKAITQIV']
 Sub-Features
 type: CDS
-location: [153489:154269]
-strand: 1
+location: [153489:154269](+)
 qualifiers: 
 
 type: CDS
-location: [40:610]
-ref: AL121804.2:None
-strand: 1
+location: AL121804.2[40:610](+)
 qualifiers: 
 
 type: CDS
-location: [671:1487]
-ref: AL121804.2:None
-strand: 1
+location: AL121804.2[671:1487](+)
 qualifiers: 
 
 
@@ -2497,8 +2192,7 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: [0:2509]
-strand: 1
+location: [0:2509](+)
 qualifiers: 
     Key: chromosome, Value: ['12']
     Key: clone, Value: ['P1.516 (DMPC-HFFno.1B-0943F)']
@@ -2508,63 +2202,48 @@ qualifiers:
     Key: organism, Value: ['Homo sapiens']
 
 type: 5'UTR
-location: [one-of(1887,1900):2200]
-strand: 1
+location: [one-of(1887,1900):2200](+)
 qualifiers: 
     Key: gene, Value: ['TMPO']
 
 type: gene
-location: [1887:3234]
-strand: 1
+location: [1887:3234](+)
 qualifiers: 
     Key: gene, Value: ['TMPO']
 Sub-Features
 type: gene
-location: [1887:2509]
-strand: 1
+location: [1887:2509](+)
 qualifiers: 
 
 type: gene
-location: [0:270]
-ref: U18267.1:None
-strand: 1
+location: U18267.1[0:270](+)
 qualifiers: 
 
 type: gene
-location: [0:309]
-ref: U18268.1:None
-strand: 1
+location: U18268.1[0:309](+)
 qualifiers: 
 
 type: gene
-location: [0:6905]
-ref: U18270.1:None
-strand: 1
+location: U18270.1[0:6905](+)
 qualifiers: 
 
 type: gene
-location: [0:128]
-ref: U18269.1:None
-strand: 1
+location: U18269.1[0:128](+)
 qualifiers: 
 
 type: gene
-location: [0:3234]
-ref: U18271.1:None
-strand: 1
+location: U18271.1[0:3234](+)
 qualifiers: 
 
 
 type: exon
-location: [one-of(1887,1900):2479]
-strand: 1
+location: [one-of(1887,1900):2479](+)
 qualifiers: 
     Key: gene, Value: ['TMPO']
     Key: number, Value: ['1']
 
 type: CDS
-location: [2200:>128]
-strand: 1
+location: [2200:>128](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:885684']
@@ -2574,38 +2253,28 @@ qualifiers:
     Key: translation, Value: ['MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQHLTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKPRQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSSTPLPTISSSAENTRQNGSNDSDRYSDNEEDSKIELKLEKREPLKGRAKTPVTLKQRRVEHNQSYSQAGITETEWTSGS']
 Sub-Features
 type: CDS
-location: [2200:2479]
-strand: 1
+location: [2200:2479](+)
 qualifiers: 
 
 type: CDS
-location: [119:246]
-ref: U18267.1:None
-strand: 1
+location: U18267.1[119:246](+)
 qualifiers: 
 
 type: CDS
-location: [129:288]
-ref: U18268.1:None
-strand: 1
+location: U18268.1[129:288](+)
 qualifiers: 
 
 type: CDS
-location: [4690:4788]
-ref: U18270.1:None
-strand: 1
+location: U18270.1[4690:4788](+)
 qualifiers: 
 
 type: CDS
-location: [81:>128]
-ref: U18269.1:None
-strand: 1
+location: U18269.1[81:>128](+)
 qualifiers: 
 
 
 type: CDS
-location: [2200:1558]
-strand: 1
+location: [2200:1558](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:885683']
@@ -2615,26 +2284,19 @@ qualifiers:
     Key: translation, Value: ['MPEFLEDPSVLTKDKLKSELVANNVTLPAGEQRKDVYVQLYLQHLTARNRPPLPAGTNSKGPPDFSSDEEREPTPVLGSGAAAAGRSRAAVGRKATKKTDKPRQEDKDDLDVTELTNEDLLDQLVKYGVNPGPIVGTTRKLYEKKLLKLREQGTESRSSTPLPTISSSAENTRQNGSNDSDRYSDNEEGKKKEHKKVKSTRDIVPFSELGTTPSGGGFFQGISFPEISTRPPLGSTELQAAKKVHTSKGDLPREPLVATNLPGRGQLQKLASERNLFISCKSSHDRCLEKSSSSSSQPEHSAMLVSTAASPSLIKETTTGYYKDIVENICGREKSGIQPLCPERSHISDQSPLSSKRKALEESESSQLISPPLAQAIRDYVNSLLVQGGVGSLPGTSNSMPPLDVENIQKRIDQSKFQETEFLSPPRKVPRLSEKSVEERDSGSFVAFQNIPGSELMSSFAKTVVSHSLTTLGLEVAKQSQHDKIDASELSFPFHESILKVIEEEWQQVDRQLPSLACKYPVSSREATQILSVPKVDDEILGFISEATPLGGIQAASTESCNQQLDLALCRAYEAAASALQIATHTAFVAKAMQADISEAAQILSSDPSRTHQALGILSKTYDAASYICEAAFDEVKMAAHTMGNATVGRRYLWLKDCKINLASKNKLASTPFKGGTLFGGEVCKVIKKRGNKH']
 Sub-Features
 type: CDS
-location: [2200:2479]
-strand: 1
+location: [2200:2479](+)
 qualifiers: 
 
 type: CDS
-location: [119:246]
-ref: U18267.1:None
-strand: 1
+location: U18267.1[119:246](+)
 qualifiers: 
 
 type: CDS
-location: [129:288]
-ref: U18268.1:None
-strand: 1
+location: U18268.1[129:288](+)
 qualifiers: 
 
 type: CDS
-location: [38:1558]
-ref: U18270.1:None
-strand: 1
+location: U18270.1[38:1558](+)
 qualifiers: 
 
 
@@ -2682,16 +2344,14 @@ Key: taxonomy
 Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleostomi', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo']
 Feaures
 type: source
-location: [0:1250660]
-strand: 1
+location: [0:1250660](+)
 qualifiers: 
     Key: chromosome, Value: ['1']
     Key: db_xref, Value: ['taxon:9606']
     Key: organism, Value: ['Homo sapiens']
 
 type: source
-location: [0:3290]
-strand: 1
+location: [0:3290](+)
 qualifiers: 
     Key: clone, Value: ['RP11-13G5']
     Key: db_xref, Value: ['taxon:9606']
@@ -2699,22 +2359,19 @@ qualifiers:
     Key: organism, Value: ['Homo sapiens']
 
 type: misc_feature
-location: [215901:365470]
-strand: 1
+location: [215901:365470](+)
 qualifiers: 
     Key: note, Value: ['FISH-mapped clone']
     Key: standard_name, Value: ['RP11-242F24']
 
 type: variation
-location: [217507:217508]
-strand: 1
+location: [217507:217508](+)
 qualifiers: 
     Key: allele, Value: ['T', 'C']
     Key: db_xref, Value: ['dbSNP:811400']
 
 type: mRNA
-location: [342429:409092]
-strand: 1
+location: [342429:409092](+)
 qualifiers: 
     Key: db_xref, Value: ['LocusID:55735']
     Key: gene, Value: ['FLJ10737']
@@ -2722,78 +2379,63 @@ qualifiers:
     Key: transcript_id, Value: ['XM_057697.1']
 Sub-Features
 type: mRNA
-location: [342429:342515]
-strand: 1
+location: [342429:342515](+)
 qualifiers: 
 
 type: mRNA
-location: [363170:363300]
-strand: 1
+location: [363170:363300](+)
 qualifiers: 
 
 type: mRNA
-location: [365740:365814]
-strand: 1
+location: [365740:365814](+)
 qualifiers: 
 
 type: mRNA
-location: [376397:376499]
-strand: 1
+location: [376397:376499](+)
 qualifiers: 
 
 type: mRNA
-location: [390168:390297]
-strand: 1
+location: [390168:390297](+)
 qualifiers: 
 
 type: mRNA
-location: [391256:391379]
-strand: 1
+location: [391256:391379](+)
 qualifiers: 
 
 type: mRNA
-location: [392605:392679]
-strand: 1
+location: [392605:392679](+)
 qualifiers: 
 
 type: mRNA
-location: [398229:398419]
-strand: 1
+location: [398229:398419](+)
 qualifiers: 
 
 type: mRNA
-location: [399081:399167]
-strand: 1
+location: [399081:399167](+)
 qualifiers: 
 
 type: mRNA
-location: [399533:399650]
-strand: 1
+location: [399533:399650](+)
 qualifiers: 
 
 type: mRNA
-location: [405843:405913]
-strand: 1
+location: [405843:405913](+)
 qualifiers: 
 
 type: mRNA
-location: [406703:406761]
-strand: 1
+location: [406703:406761](+)
 qualifiers: 
 
 type: mRNA
-location: [406867:407010]
-strand: 1
+location: [406867:407010](+)
 qualifiers: 
 
 type: mRNA
-location: [407961:408091]
-strand: 1
+location: [407961:408091](+)
 qualifiers: 
 
 type: mRNA
-location: [408507:409092]
-strand: 1
+location: [408507:409092](+)
 qualifiers: 
 
 
@@ -2840,16 +2482,14 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'alpha subdivision', 'Rhizobiaceae group', 'Phyllobacteriaceae', 'Mesorhizobium']
 Feaures
 type: source
-location: [0:180]
-strand: 1
+location: [0:180](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:381']
     Key: organism, Value: ['Mesorhizobium loti']
     Key: strain, Value: ['MAFF303099']
 
 type: gene
-location: [19:120]
-strand: 1
+location: [19:120](+)
 qualifiers: 
     Key: gene, Value: ['fake']
 
@@ -2924,7 +2564,6 @@ Value: ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Euteleost
 Feaures
 type: source
 location: [0:360]
-strand: None
 qualifiers: 
     Key: chromosome, Value: ['1']
     Key: db_xref, Value: ['taxon:9606']
@@ -2933,13 +2572,11 @@ qualifiers:
 
 type: Protein
 location: [0:360]
-strand: None
 qualifiers: 
     Key: product, Value: ['cannabinoid receptor 2 (macrophage)']
 
 type: Region
 location: [49:299]
-strand: None
 qualifiers: 
     Key: db_xref, Value: ['CDD:pfam00001']
     Key: note, Value: ['7tm_1']
@@ -2947,7 +2584,6 @@ qualifiers:
 
 type: CDS
 location: [0:360]
-strand: None
 qualifiers: 
     Key: coded_by, Value: ['NM_001841.1:127..1209']
     Key: db_xref, Value: ['LocusID:1269', 'MIM:605051']
@@ -2999,92 +2635,77 @@ Value: ['Eukaryota', 'Metazoa', 'Arthropoda', 'Chelicerata', 'Arachnida', 'Scorp
 Feaures
 type: source
 location: [0:64]
-strand: None
 qualifiers: 
     Key: db_xref, Value: ['taxon:6871']
     Key: organism, Value: ['Buthus occitanus tunetanus']
 
 type: Protein
 location: [0:64]
-strand: None
 qualifiers: 
     Key: product, Value: ['Neurotoxin III']
 
 type: Bond
 location: [11:63]
-strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
 location: [11:12]
-strand: None
 qualifiers: 
 
 type: Bond
 location: [62:63]
-strand: None
 qualifiers: 
 
 
 type: Bond
 location: [15:36]
-strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
 location: [15:16]
-strand: None
 qualifiers: 
 
 type: Bond
 location: [35:36]
-strand: None
 qualifiers: 
 
 
 type: Bond
 location: [21:46]
-strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
 location: [21:22]
-strand: None
 qualifiers: 
 
 type: Bond
 location: [45:46]
-strand: None
 qualifiers: 
 
 
 type: Bond
 location: [25:48]
-strand: None
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
 Sub-Features
 type: Bond
 location: [25:26]
-strand: None
 qualifiers: 
 
 type: Bond
 location: [47:48]
-strand: None
 qualifiers: 
 
 
 type: Site
 location: [63:64]
-strand: None
 qualifiers: 
     Key: site_type, Value: ['amidation']
 
@@ -3132,8 +2753,7 @@ Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
 Feaures
 type: source
-location: [0:2007]
-strand: 1
+location: [0:2007](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:10786']
     Key: isolate, Value: ['483']
@@ -3142,8 +2762,7 @@ qualifiers:
     Key: organism, Value: ['Feline panleukopenia virus']
 
 type: CDS
-location: [0:2007]
-strand: 1
+location: [0:2007](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:1769754']
@@ -3195,8 +2814,7 @@ Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
 Feaures
 type: source
-location: [0:2007]
-strand: 1
+location: [0:2007](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:10786']
     Key: isolate, Value: ['94-1']
@@ -3205,8 +2823,7 @@ qualifiers:
     Key: organism, Value: ['Feline panleukopenia virus']
 
 type: CDS
-location: [0:2007]
-strand: 1
+location: [0:2007](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:1769756']
@@ -3258,8 +2875,7 @@ Key: taxonomy
 Value: ['Viruses', 'ssDNA viruses', 'Parvoviridae', 'Parvovirinae', 'Parvovirus']
 Feaures
 type: source
-location: [0:1755]
-strand: 1
+location: [0:1755](+)
 qualifiers: 
     Key: db_xref, Value: ['taxon:10786']
     Key: isolate, Value: ['94-1']
@@ -3268,8 +2884,7 @@ qualifiers:
     Key: organism, Value: ['Feline panleukopenia virus']
 
 type: CDS
-location: [0:1755]
-strand: 1
+location: [0:1755](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:1769758']
@@ -3342,8 +2957,7 @@ Key: taxonomy
 Value: ['Bacteria', 'Proteobacteria', 'Gammaproteobacteria', 'Enterobacteriales', 'Enterobacteriaceae', 'Yersinia']
 Feaures
 type: source
-location: [0:9609]
-strand: 1
+location: [0:9609](+)
 qualifiers: 
     Key: biovar, Value: ['Microtus']
     Key: db_xref, Value: ['taxon:229193']
@@ -3353,20 +2967,17 @@ qualifiers:
     Key: strain, Value: ['91001']
 
 type: repeat_region
-location: [0:1954]
-strand: 1
+location: [0:1954](+)
 qualifiers: 
 
 type: gene
-location: [86:1109]
-strand: 1
+location: [86:1109](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767718']
     Key: locus_tag, Value: ['YP_pPCP01']
 
 type: CDS
-location: [86:1109]
-strand: 1
+location: [86:1109](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478712', 'GeneID:2767718']
@@ -3378,39 +2989,34 @@ qualifiers:
     Key: translation, Value: ['MVTFETVMEIKILHKQGMSSRAIARELGISRNTVKRYLQAKSEPPKYTPRPAVASLLDEYRDYIRQRIADAHPYKIPATVIAREIRDQGYRGGMTILRAFIRSLSVPQEQEPAVRFETEPGRQMQVDWGTMRNGRSPLHVFVAVLGYSRMLYIEFTDNMRYDTLETCHRNAFRFFGGVPREVLYDNMKTVVLQRDAYQTGQHRFHPSLWQFGKEMGFSPRLCRPFRAQTKGKVERMVQYTRNSFYIPLMTRLRPMGITVDVETANRHGLRWLHDVANQRKHETIQARPCDRWLEEQQSMLALPPEKKEYDVHLDENLVNFDKHPLHHPLSIYDSFCRGVA']
 
 type: misc_feature
-location: [86:959]
-strand: 1
+location: [86:959](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:34222']
     Key: locus_tag, Value: ['YP_pPCP01']
     Key: note, Value: ['Transposase and inactivated derivatives [DNA replication, recombination, and repair]; Region: COG4584']
 
 type: misc_feature
-location: [<110:209]
-strand: 1
+location: [<110:209](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:186341']
     Key: locus_tag, Value: ['YP_pPCP01']
     Key: note, Value: ['Helix-turn-helix domain of Hin and related proteins, a family of DNA-binding domains unique to bacteria and represented by the Hin protein of Salmonella. The basic HTH domain is a simple fold comprised of three core helices that form a right-handed...; Region: HTH_Hin_like; cl01116']
 
 type: misc_feature
-location: [437:812]
-strand: 1
+location: [437:812](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:194099']
     Key: locus_tag, Value: ['YP_pPCP01']
     Key: note, Value: ['Integrase core domain; Region: rve; cl01316']
 
 type: gene
-location: [1105:1888]
-strand: 1
+location: [1105:1888](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767716']
     Key: locus_tag, Value: ['YP_pPCP02']
 
 type: CDS
-location: [1105:1888]
-strand: 1
+location: [1105:1888](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478713', 'GeneID:2767716']
@@ -3422,59 +3028,51 @@ qualifiers:
     Key: translation, Value: ['MMMELQHQRLMALAGQLQLESLISAAPALSQQAVDQEWSYMDFLEHLLHEEKLARHQRKQAMYTRMAAFPAVKTFEEYDFTFATGAPQKQLQSLRSLSFIERNENIVLLGPSGVGKTHLAIAMGYEAVRAGIKVRFTTAADLLLQLSTAQRQGRYKTTLQRGVMAPRLLIIDEIGYLPFSQEEAKLFFQVIAKRYEKSAMILTSNLPFGQWDQTFAGDAALTSAMLDRILHHSHVVQIKGESYRLRQKRKAGVIAEANPE']
 
 type: misc_feature
-location: [1108:1885]
-strand: 1
+location: [1108:1885](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:181681']
     Key: locus_tag, Value: ['YP_pPCP02']
     Key: note, Value: ['transposase/IS protein; Provisional; Region: PRK09183']
 
 type: misc_feature
-location: [1366:>1669]
-strand: 1
+location: [1366:>1669](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:99707']
     Key: locus_tag, Value: ['YP_pPCP02']
     Key: note, Value: ['The AAA+ (ATPases Associated with a wide variety of cellular Activities) superfamily represents an ancient group of ATPases belonging to the ASCE (for additional strand, catalytic E) division of the P-loop NTPase fold. The ASCE division also includes...; Region: AAA; cd00009']
 
 type: misc_feature
-location: [1432:1456]
-strand: 1
+location: [1432:1456](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:99707']
     Key: locus_tag, Value: ['YP_pPCP02']
     Key: note, Value: ['Walker A motif; other site']
 
 type: misc_feature
-location: [1435:1621]
-strand: 1
+location: [1435:1621](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:99707']
     Key: locus_tag, Value: ['YP_pPCP02']
     Key: note, Value: ['ATP binding site [chemical binding]; other site']
 Sub-Features
 type: misc_feature
-location: [1435:1459]
-strand: 1
+location: [1435:1459](+)
 qualifiers: 
 
 type: misc_feature
-location: [1618:1621]
-strand: 1
+location: [1618:1621](+)
 qualifiers: 
 
 
 type: misc_feature
-location: [1606:1624]
-strand: 1
+location: [1606:1624](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:99707']
     Key: locus_tag, Value: ['YP_pPCP02']
     Key: note, Value: ['Walker B motif; other site']
 
 type: gene
-location: [2924:3119]
-strand: 1
+location: [2924:3119](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767717']
     Key: gene, Value: ['rop']
@@ -3482,8 +3080,7 @@ qualifiers:
     Key: locus_tag, Value: ['YP_pPCP03']
 
 type: CDS
-location: [2924:3119]
-strand: 1
+location: [2924:3119](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478714', 'GeneID:2767717']
@@ -3497,8 +3094,7 @@ qualifiers:
     Key: translation, Value: ['MNKQQQTALNMARFIRSQSLILLEKLDALDADEQAAMCERLHELAEELQNSIQARFEAESETGT']
 
 type: misc_feature
-location: [2924:3107]
-strand: 1
+location: [2924:3107](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:145136']
     Key: gene, Value: ['rop']
@@ -3507,15 +3103,13 @@ qualifiers:
     Key: note, Value: ['Rop protein; Region: Rop; pfam01815']
 
 type: gene
-location: [3485:3857]
-strand: 1
+location: [3485:3857](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767720']
     Key: locus_tag, Value: ['YP_pPCP04']
 
 type: CDS
-location: [3485:3857]
-strand: 1
+location: [3485:3857](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478715', 'GeneID:2767720']
@@ -3527,23 +3121,20 @@ qualifiers:
     Key: translation, Value: ['MSKKRRPQKRPRRRRFFHRLRPPDEHHKNRRSSQRWRNPTGLKDTRRFPPEAPSCALLFRPCRLPDTSPPFSLREAWRFLIAHAVGISVRCRSFAPSWAVCTNPPFSPTTAPYPVTIVLSPTR']
 
 type: misc_feature
-location: [3497:3626]
-strand: 1
+location: [3497:3626](+)
 qualifiers: 
     Key: locus_tag, Value: ['YP_pPCP04']
     Key: note, Value: ['ProfileScan match to entry PS50323 ARG_RICH, E-value 8.981']
 
 type: gene
-location: [4342:4780]
-strand: 1
+location: [4342:4780](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
     Key: locus_tag, Value: ['YP_pPCP05']
 
 type: CDS
-location: [4342:4780]
-strand: 1
+location: [4342:4780](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
@@ -3556,16 +3147,14 @@ qualifiers:
     Key: translation, Value: ['MGGGMISKLFCLALIFLSSSGLAEKNTYTAKDILQNLELNTFGNSLSHGIYGKQTTFKQTEFTNIKSNTKKHIALINKDNSWMISLKILGIKRDEYTVCFEDFSLIRPPTYVAIHPLLIKKVKSGNFIVVKEIKKSIPGCTVYYH']
 
 type: gene
-location: [4814:5888]
-strand: -1
+location: [4814:5888](-)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767721']
     Key: gene, Value: ['pst']
     Key: locus_tag, Value: ['YP_pPCP06']
 
 type: CDS
-location: [4814:5888]
-strand: -1
+location: [4814:5888](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478717', 'GeneID:2767721']
@@ -3578,43 +3167,37 @@ qualifiers:
     Key: translation, Value: ['MSDTMVVNGSGGVPAFLFSGSTLSSYRPNFEANSITIALPHYVDLPGRSNFKLMYIMGFPIDTEMEKDSEYSNKIRQESKISKTEGTVSYEQKITVETGQEKDGVKVYRVMVLEGTIAESIEHLDKKENEDILNNNRNRIVLADNTVINFDNISQLKEFLRRSVNIVDHDIFSSNGFEGFNPTSHFPSNPSSDYFNSTGVTFGSGVDLGQRSKQDLLNDGVPQYIADRLDGYYMLRGKEAYDKVRTAPLTLSDNEAHLLSNIYIDKFSHKIEGLFNDANIGLRFSDLPLRTRTALVSIGYQKGFKLSRTAPTVWNKVIAKDWNGLVNAFNNIVDGMSDRRKREGALVQKDIDSGLLK']
 
 type: variation
-location: [5909:5911]
-strand: 1
+location: [5909:5911](+)
 qualifiers: 
     Key: note, Value: ['compared to AF053945']
     Key: replace, Value: ['']
 
 type: variation
-location: [5933:5933]
-strand: 1
+location: [5933:5933](+)
 qualifiers: 
     Key: note, Value: ['compared to AL109969']
     Key: replace, Value: ['a']
 
 type: variation
-location: [5933:5933]
-strand: 1
+location: [5933:5933](+)
 qualifiers: 
     Key: note, Value: ['compared to AF053945']
     Key: replace, Value: ['aa']
 
 type: variation
-location: [5947:5948]
-strand: 1
+location: [5947:5948](+)
 qualifiers: 
     Key: note, Value: ['compared to AL109969']
     Key: replace, Value: ['c']
 
 type: gene
-location: [6004:6421]
-strand: 1
+location: [6004:6421](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767719']
     Key: locus_tag, Value: ['YP_pPCP07']
 
 type: CDS
-location: [6004:6421]
-strand: 1
+location: [6004:6421](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478718', 'GeneID:2767719']
@@ -3626,23 +3209,20 @@ qualifiers:
     Key: translation, Value: ['MKFHFCDLNHSYKNQEGKIRSRKTAPGNIRKKQKGDNVSKTKSGRHRLSKTDKRLLAALVVAGYEERTARDLIQKHVYTLTQADLRHLVSEISNGVGQSQAYDAIYQARRIRLARKYLSGKKPEGVEPREGQEREDLP']
 
 type: variation
-location: [6524:6525]
-strand: 1
+location: [6524:6525](+)
 qualifiers: 
     Key: note, Value: ['compared to AF053945 and AL109969']
     Key: replace, Value: ['c']
 
 type: gene
-location: [6663:7602]
-strand: 1
+location: [6663:7602](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767715']
     Key: gene, Value: ['pla']
     Key: locus_tag, Value: ['YP_pPCP08']
 
 type: CDS
-location: [6663:7602]
-strand: 1
+location: [6663:7602](+)
 qualifiers: 
     Key: EC_number, Value: ['3.4.23.48']
     Key: codon_start, Value: ['1']
@@ -3656,8 +3236,7 @@ qualifiers:
     Key: translation, Value: ['MKKSSIVATIITILSGSANAASSQLIPNISPDSFTVAASTGMLSGKSHEMLYDAETGRKISQLDWKIKNVAILKGDISWDPYSFLTLNARGWTSLASGSGNMDDYDWMNENQSEWTDHSSHPATNVNHANEYDLNVKGWLLQDENYKAGITAGYQETRFSWTATGGSYSYNNGAYTGNFPKGVRVIGYNQRFSMPYIGLAGQYRINDFELNALFKFSDWVRAHDNDEHYMRDLTFREKTSGSRYYGTVINAGYYVTPNAKVFAEFTYSKYDEGKGGTQIIDKNSGDSVSIGGDAAGISNKNYTVTAGLQYRF']
 
 type: misc_feature
-location: [6663:7599]
-strand: 1
+location: [6663:7599](+)
 qualifiers: 
     Key: db_xref, Value: ['CDD:186487']
     Key: gene, Value: ['pla']
@@ -3665,15 +3244,13 @@ qualifiers:
     Key: note, Value: ['Omptin family; Region: Omptin; cl01886']
 
 type: gene
-location: [7788:8088]
-strand: -1
+location: [7788:8088](-)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767713']
     Key: locus_tag, Value: ['YP_pPCP09']
 
 type: CDS
-location: [7788:8088]
-strand: -1
+location: [7788:8088](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478720', 'GeneID:2767713']
@@ -3685,23 +3262,20 @@ qualifiers:
     Key: translation, Value: ['MRTLDEVIASRSPESQTRIKEMADEMILEVGLQMMREELQLSQKQVAEAMGISQPAVTKLEQRGNDLKLATLKRYVEAMGGKLSLDVELPTGRRVAFHV']
 
 type: misc_feature
-location: [7836:7995]
-strand: -1
+location: [7836:7995](-)
 qualifiers: 
     Key: db_xref, Value: ['CDD:195788']
     Key: locus_tag, Value: ['YP_pPCP09']
     Key: note, Value: ['Helix-turn-helix XRE-family like proteins. Prokaryotic DNA binding proteins belonging to the xenobiotic response element family of transcriptional regulators; Region: HTH_XRE; cl09100']
 
 type: gene
-location: [8087:8360]
-strand: -1
+location: [8087:8360](-)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767714']
     Key: locus_tag, Value: ['YP_pPCP10']
 
 type: CDS
-location: [8087:8360]
-strand: -1
+location: [8087:8360](-)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478721', 'GeneID:2767714']
@@ -3713,16 +3287,14 @@ qualifiers:
     Key: translation, Value: ['MADLKKLQVYGPELPRPYADTVKGSRYKNMKELRVQFSGRPIRAFYAFDPIRRAIVLCAGDKSNDKRFYEKLVRIAEDEFTAHLNTLESK']
 
 type: misc_feature
-location: [8090:>8357]
-strand: -1
+location: [8090:>8357](-)
 qualifiers: 
     Key: db_xref, Value: ['CDD:194142']
     Key: locus_tag, Value: ['YP_pPCP10']
     Key: note, Value: ['Phage derived protein Gp49-like (DUF891); Region: Gp49; cl01470']
 
 type: variation
-location: [8529:8529]
-strand: 1
+location: [8529:8529](+)
 qualifiers: 
     Key: note, Value: ['compared to AL109969']
     Key: replace, Value: ['tt']

@@ -217,9 +217,6 @@ class SeqFeature(object):
         out += "location: %s\n" % self.location
         if self.id and self.id != "<unknown id>":
             out += "id: %s\n" % self.id
-        if self.ref or self.ref_db:
-            out += "ref: %s:%s\n" % (self.ref, self.ref_db)
-        out += "strand: %s\n" % self.strand
         out += "qualifiers: \n"
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
@@ -404,10 +401,10 @@ class SeqFeature(object):
         >>> record = SeqIO.read("GenBank/NC_000932.gb", "gb")
         >>> for f in record.features:
         ...     if 1750 in f:
-        ...         print f.type, f.strand, f.location
-        source 1 [0:154478]
-        gene -1 [1716:4347]
-        tRNA -1 [1716:4347]
+        ...         print f.type, f.location
+        source [0:154478](+)
+        gene [1716:4347](-)
+        tRNA [1716:4347](-)
 
         Note that for a feature defined as a join of several subfeatures (e.g.
         the union of several exons) the gaps are not checked (e.g. introns).
@@ -417,9 +414,9 @@ class SeqFeature(object):
 
         >>> for f in record.features:
         ...     if 1760 in f:
-        ...         print f.type, f.strand, f.location
-        source 1 [0:154478]
-        gene -1 [1716:4347]
+        ...         print f.type, f.location
+        source [0:154478](+)
+        gene [1716:4347](-)
 
         Note that additional care may be required with fuzzy locations, for
         example just before a BeforePosition:
@@ -523,18 +520,24 @@ class FeatureLocation(object):
         i.e. Short form:
         
         >>> from Bio.SeqFeature import FeatureLocation
-        >>> loc = FeatureLocation(5,10)
+        >>> loc = FeatureLocation(5, 10, strand=-1)
+        >>> print loc
+        [5:10](-)
         
         Explicit form:
 
         >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
-        >>> loc = FeatureLocation(ExactPosition(5),ExactPosition(10))
+        >>> loc = FeatureLocation(ExactPosition(5), ExactPosition(10), strand=-1)
+        >>> print loc
+        [5:10](-)
 
         Other fuzzy positions are used similarly,
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc2 = FeatureLocation(BeforePosition(5),AfterPosition(10))
+        >>> loc2 = FeatureLocation(BeforePosition(5), AfterPosition(10), strand=-1)
+        >>> print loc2
+        [<5:>10](-)
 
         For nucleotide features you will also want to specify the strand,
         use 1 for the forward (plus) strand, -1 for the reverse (negative)
@@ -543,6 +546,8 @@ class FeatureLocation(object):
         proteins.
 
         >>> loc = FeatureLocation(5, 10, strand=+1)
+        >>> print loc
+        [5:10](+)
         >>> print loc.strand
         1
 
@@ -550,7 +555,9 @@ class FeatureLocation(object):
         sequence you are working with, but an explicit accession can
         be given with the optional ref and db_ref strings:
 
-        >>> loc = FeatureLocation(105172, 108462, ref="AL391218.9")
+        >>> loc = FeatureLocation(105172, 108462, ref="AL391218.9", strand=1)
+        >>> print loc
+        AL391218.9[105172:108462](+)
         >>> print loc.ref
         AL391218.9
 
@@ -588,7 +595,21 @@ class FeatureLocation(object):
         (zero based counting) which GenBank would call 123..150 (one based
         counting).
         """
-        return "[%s:%s]" % (self._start, self._end)
+        answer = "[%s:%s]" % (self._start, self._end)
+        if self.ref and self.ref_db:
+            answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
+        elif self.ref:
+            answer = self.ref + answer
+        #Is ref_db without ref meaningful?
+        if self.strand is None:
+            return answer
+        elif self.strand == +1:
+            return answer + "(+)"
+        elif self.strand == -1:
+            return answer + "(-)"
+        else:
+            #strand = 0, stranded but strand unknown, ? in GFF3
+            return answer + "(?)"
 
     def __repr__(self):
         """A string representation of the location for debugging."""

@@ -315,7 +315,7 @@ class SeqInterfaceTest(unittest.TestCase):
         test_features = self.item.features
         cds_feature = test_features[6]
         self.assertEqual(cds_feature.type, "CDS")
-        self.assertEqual(str(cds_feature.location), "[103:579]")
+        self.assertEqual(str(cds_feature.location), "[103:579](+)")
         for sub_feature in cds_feature.sub_features:
             self.assertEqual(sub_feature.type, "CDS")
             self.assertEqual(sub_feature.location_operator, "join")
@@ -660,7 +660,7 @@ class InDepthLoadTest(unittest.TestCase):
         # test single locations
         test_feature = features[0]
         self.assertEqual(test_feature.type, "source")
-        self.assertEqual(str(test_feature.location), "[0:206]")
+        self.assertEqual(str(test_feature.location), "[0:206](+)")
         self.assertEqual(len(test_feature.qualifiers.keys()), 3)
         self.assertEqual(test_feature.qualifiers["country"], ["Russia:Bashkortostan"])
         self.assertEqual(test_feature.qualifiers["organism"], ["Armoracia rusticana"])
@@ -669,12 +669,12 @@ class InDepthLoadTest(unittest.TestCase):
         # test split locations
         test_feature = features[4]
         self.assertEqual(test_feature.type, "CDS")
-        self.assertEqual(str(test_feature.location), "[0:206]")
+        self.assertEqual(str(test_feature.location), "[0:206](+)")
         self.assertEqual(len(test_feature.sub_features), 2)
-        self.assertEqual(str(test_feature.sub_features[0].location), "[0:48]")
+        self.assertEqual(str(test_feature.sub_features[0].location), "[0:48](+)")
         self.assertEqual(test_feature.sub_features[0].type, "CDS")
         self.assertEqual(test_feature.sub_features[0].location_operator, "join")
-        self.assertEqual(str(test_feature.sub_features[1].location), "[142:206]")
+        self.assertEqual(str(test_feature.sub_features[1].location), "[142:206](+)")
         self.assertEqual(test_feature.sub_features[1].type, "CDS")
         self.assertEqual(test_feature.sub_features[1].location_operator, "join")
         self.assertEqual(len(test_feature.qualifiers.keys()), 6)

@@ -1997,8 +1997,7 @@ entries $11$ and $12$ in the \texttt{features} list:
 \begin{verbatim}
 >>> print record.features[20]
 type: gene
-location: [4342:4780]
-strand: 1
+location: [4342:4780](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
@@ -2009,8 +2008,7 @@ qualifiers:
 \begin{verbatim}
 >>> print record.features[21]
 type: CDS
-location: [4342:4780]
-strand: 1
+location: [4342:4780](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
@@ -2052,8 +2050,7 @@ Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP
 \begin{verbatim}
 >>> print sub_record.features[0]
 type: gene
-location: [42:480]
-strand: 1
+location: [42:480](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
@@ -2063,9 +2060,7 @@ qualifiers:
 \begin{verbatim}
 >>> print sub_record.features[20]
 type: CDS
-location: [42:480]
-ref: None:None
-strand: 1
+location: [42:480](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
