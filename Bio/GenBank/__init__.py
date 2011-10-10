@@ -1000,8 +1000,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _re_complex_location.match(location_line):
             #e.g. "AL121804.2:41..610"
             if ":" in location_line:
-                cur_feature.ref, location_line = location_line.split(":")
-            cur_feature.location = _loc(location_line, self._expected_size, strand)
+                location_ref, location_line = location_line.split(":")
+                cur_feature.location = _loc(location_line, self._expected_size, strand)
+                cur_feature.location.ref = location_ref
+            else:
+                cur_feature.location = _loc(location_line, self._expected_size, strand)
             return
         if _re_complex_compound.match(location_line):
             i = location_line.find("(")

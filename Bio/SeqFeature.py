@@ -62,12 +62,14 @@ class SeqFeature(object):
     instance) the feature deals with. 1 indicates the plus strand, -1 
     indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
     while the default of None indicates that strand doesn't apply (dot in GFF3,
-    e.g. features on proteins). Note this is shortcut for accessing the
+    e.g. features on proteins). Note this is a shortcut for accessing the
     strand property of the feature's location.
     o id - A string identifier for the feature.
     o ref - A reference to another sequence. This could be an accession
-    number for some different sequence.
+    number for some different sequence. Note this is a shortcut for the
+    reference property of the feature's location.
     o ref_db - A different database for the reference accession number.
+    Note this is a shortcut for the reference property of the location
     o qualifiers - A dictionary of qualifiers on the feature. These are
     analagous to the qualifiers from a GenBank feature table. The keys of
     the dictionary are qualifier names, the values are the qualifier
@@ -143,8 +145,10 @@ class SeqFeature(object):
         if sub_features is None:
             sub_features = []
         self.sub_features = sub_features
-        self.ref = ref 
-        self.ref_db = ref_db
+        if ref is not None:
+            self.ref = ref
+        if ref_db is not None:
+            self.ref_db = ref_db
 
     def _get_strand(self):
         return self.location.strand
@@ -161,6 +165,33 @@ class SeqFeature(object):
                       doc = """Feature's strand
 
                             This is a shortcut for feature.location.strand
+                            """)
+
+    def _get_ref(self):
+        return self.location.ref
+    def _set_ref(self, value):
+        try:
+            self.location.ref = value
+        except AttributeError:
+            if self.location is None:
+                if value is not None:
+                    raise ValueError("Can't set ref without a location.")
+            else:
+                raise
+    ref = property(fget = _get_ref, fset = _set_ref,
+                   doc = """Feature location reference (e.g. accession).
+
+                         This is a shortcut for feature.location.ref
+                         """)
+
+    def _get_ref_db(self):
+        return self.location.ref_db
+    def _set_ref_db(self, value):
+        self.location.ref_db = value
+    ref_db = property(fget = _get_ref_db, fset = _set_ref_db,
+                      doc = """Feature location reference's database.
+
+                            This is a shortcut for feature.location.ref_db
                             """)
 
     def __repr__(self):
@@ -484,8 +515,8 @@ class FeatureLocation(object):
     thus a GenBank entry of 123..150 (one based counting) becomes a location
     of [122:150] (zero based counting).
     """
-    def __init__(self, start, end, strand=None):
-        """Specify the start and end of a sequence feature.
+    def __init__(self, start, end, strand=None, ref=None, ref_db=None):
+        """Specify the start, end, strand etc of a sequence feature.
 
         start and end arguments specify the values where the feature begins
         and ends. These can either by any of the *Position objects that
@@ -504,12 +535,6 @@ class FeatureLocation(object):
         >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
         >>> loc = FeatureLocation(ExactPosition(5),ExactPosition(10))
 
-        Or with strand:
-
-        >>> loc = FeatureLocation(5, 10, strand=+1)
-        >>> print loc.strand
-        1
-
         Other fuzzy positions are used similarly,
 
         >>> from Bio.SeqFeature import FeatureLocation
@@ -521,6 +546,19 @@ class FeatureLocation(object):
         strand, 0 for stranded but strand unknown (? in GFF3), or None for
         when the strand does not apply (dot in GFF3), e.g. features on
         proteins.
+
+        >>> loc = FeatureLocation(5, 10, strand=+1)
+        >>> print loc.strand
+        1
+
+        Normally feature locations are given relative to the parent
+        sequence you are working with, but an explicit accession can
+        be given with the optional ref and db_ref strings:
+
+        >>> loc = FeatureLocation(105172, 108462, ref="AL391218.9")
+        >>> print loc.ref
+        AL391218.9
+
         """
         if isinstance(start, AbstractPosition):
             self._start = start
@@ -528,7 +566,6 @@ class FeatureLocation(object):
             self._start = ExactPosition(start)
         else:
             raise TypeError(start)
-
         if isinstance(end, AbstractPosition):
             self._end = end
         elif isinstance(end, int):
@@ -536,6 +573,8 @@ class FeatureLocation(object):
         else:
             raise TypeError(end)
         self.strand = strand
+        self.ref = ref
+        self.ref_db = ref_db
 
     def _get_strand(self):
         return self._strand
@@ -558,12 +597,15 @@ class FeatureLocation(object):
 
     def __repr__(self):
         """A string representation of the location for debugging."""
-        if self.strand is None:
-            return "%s(%r, %r)" \
-                   % (self.__class__.__name__, self.start, self.end)
-        else:
-            return "%s(%r, %r, strand=%r)" \
-                   % (self.__class__.__name__, self.start, self.end, self.strand)
+        optional = ""
+        if self.strand is not None:
+            optional += ", strand=%r" % self.strand
+        if self.ref is not None:
+            optional += ", ref=%r" % self.ref
+        if self.ref_db is not None:
+            optional += ", ref_db=%r" % self.ref_db
+        return "%s(%r, %r%s)" \
+                   % (self.__class__.__name__, self.start, self.end, optional)
 
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
