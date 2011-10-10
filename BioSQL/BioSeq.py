@@ -295,36 +295,27 @@ def _retrieve_features(adaptor, primary_id):
                 dbname, version = lookup.get(location_id, (None, None))
                 subfeature = SeqFeature.SeqFeature()
                 subfeature.type = seqfeature_type
-                subfeature.location_operator = \
-                    _retrieve_location_qualifier_value(adaptor, location_id)
-                #TODO - See Bug 2677 - we don't yet record location_operator,
-                #so for consistency with older versions of Biopython default
-                #to assuming its a join.
-                if not subfeature.location_operator:
-                    subfeature.location_operator = "join"
                 subfeature.location = SeqFeature.FeatureLocation(start, end)
+                #subfeature.location_operator = \
+                #    _retrieve_location_qualifier_value(adaptor, location_id)
                 subfeature.strand = strand
                 subfeature.ref_db = dbname
                 subfeature.ref = version
                 feature.sub_features.append(subfeature)
-            # Assuming that the feature loc.op is the same as the sub_feature
-            # loc.op:
-            feature.location_operator = \
-                feature.sub_features[0].location_operator
             # Locations are in order, but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            start = locations[0][1]
-            end = locations[-1][2]
-            feature.location = SeqFeature.FeatureLocation(start, end)
-            # To get the parent strand (as done when parsing GenBank files),
-            # need to consider evil mixed strand examples like this,
-            # join(complement(69611..69724),139856..140087,140625..140650)
             strands = set(sf.strand for sf in feature.sub_features)
-            if len(strands) == 1:
-                feature.strand = feature.sub_features[0].strand
+            if len(strands)==1 and -1 in strands:
+                #Evil hack time for backwards compatibility
+                locs = [f.location for f in feature.sub_features[::-1]]
             else:
-                feature.strand = None  # i.e. mixed strands
-
+                #All forward, or mixed strands
+                locs = [f.location for f in feature.sub_features]
+            feature.location = SeqFeature.CompoundLocation(locs, seqfeature_type)
+            #TODO - See Bug 2677 - we don't yet record location_operator,
+            #so for consistency with older versions of Biopython default
+            #to assuming its a join.
+            feature.location_operator = "join"
         seq_feature_list.append(feature)
 
     return seq_feature_list

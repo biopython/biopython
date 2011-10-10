@@ -983,7 +983,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if _re_simple_compound.match(location_line):
             #e.g. join(<123..456,480..>500)
             i = location_line.find("(")
-            cur_feature.location_operator = location_line[:i]
+            #cur_feature.location_operator = location_line[:i]
             #we can split on the comma because these are simple locations
             for part in location_line[i+1:-1].split(","):
                 s, e = part.split("..")
@@ -993,9 +993,16 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                         location_operator=cur_feature.location_operator,
                         type=cur_feature.type)
                 cur_feature.sub_features.append(f)
-            s = cur_feature.sub_features[0].location.start
-            e = cur_feature.sub_features[-1].location.end
-            cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
+            #s = cur_feature.sub_features[0].location.start
+            #e = cur_feature.sub_features[-1].location.end
+            #cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
+            #TODO - Remove use of sub_features
+            if strand == -1:
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features[::-1]],
+                                                                   operator=location_line[:i])
+            else:
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features],
+                                                                   operator=location_line[:i])
             return
 
         #Handle the general case with more complex regular expressions
@@ -1011,7 +1018,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if _re_complex_compound.match(location_line):
             i = location_line.find("(")
-            cur_feature.location_operator = location_line[:i]
+            #cur_feature.location_operator = location_line[:i]
             #Can't split on the comma because of positions like one-of(1,2,3)
             for part in _split_compound_loc(location_line[i+1:-1]):
                 if part.startswith("complement("):
@@ -1041,14 +1048,20 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # a join feature on the forward strand they all have strand +1.
             # However, we must also consider evil mixed strand examples like
             # this, join(complement(69611..69724),139856..140087,140625..140650)
+            #
+            # TODO - Remove use of sub_features
             strands = set(sf.strand for sf in cur_feature.sub_features)
             if len(strands)==1:
                 strand = cur_feature.sub_features[0].strand
             else:
                 strand = None # i.e. mixed strands
-            s = cur_feature.sub_features[0].location.start
-            e = cur_feature.sub_features[-1].location.end
-            cur_feature.location = SeqFeature.FeatureLocation(s, e, strand)
+            if strand == -1:
+                #Reverse the backwards order used in GenBank files
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features[::-1]],
+                                                                   operator=location_line[:i])
+            else:
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features],
+                                                                   operator=location_line[:i])
             return
         #Not recognised
         if "order" in location_line and "join" in location_line:

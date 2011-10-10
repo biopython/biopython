@@ -3,7 +3,8 @@
 # as part of this package.
 from Bio.Seq import UnknownSeq
 from Bio.SeqUtils.CheckSum import seguid
-from Bio.SeqFeature import ExactPosition, FeatureLocation, SeqFeature
+from Bio.SeqFeature import ExactPosition, UnknownPosition
+from Bio.SeqFeature import FeatureLocation, CompoundLocation, SeqFeature
 from Bio.SeqRecord import SeqRecord
 
 
@@ -91,23 +92,27 @@ def compare_feature(old_f, new_f):
     #        "%s -> %s" % (old_f.location_operator, new_f.location_operator)
 
     # We dont store fuzzy locations:
-    try:
-        assert str(old_f.location) == str(new_f.location), \
-           "%s -> %s" % (str(old_f.location), str(new_f.location))
-    except AssertionError, e:
-        if isinstance(old_f.location.start, ExactPosition) and \
-           isinstance(old_f.location.end, ExactPosition):
-            # Its not a problem with fuzzy locations, re-raise
-            raise e
-        else:
-            assert old_f.location.nofuzzy_start == \
-                    new_f.location.nofuzzy_start, \
-                    "%s -> %s" % (old_f.location.nofuzzy_start,
-                                  new_f.location.nofuzzy_start)
-            assert old_f.location.nofuzzy_end == \
-                    new_f.location.nofuzzy_end, \
-                    "%s -> %s" % (old_f.location.nofuzzy_end,
-                                  new_f.location.nofuzzy_end)
+    assert old_f.location.start == new_f.location.start \
+    or (isinstance(old_f.location.start, UnknownPosition) and \
+        isinstance(new_f.location.start, UnknownPosition)), \
+               "%s -> %s" % (old_f.location.start, \
+                             new_f.location.start)
+    assert old_f.location.end == new_f.location.end \
+    or (isinstance(old_f.location.end, UnknownPosition) and \
+        isinstance(new_f.location.end, UnknownPosition)), \
+               "%s -> %s" % (old_f.location.end, \
+                             new_f.location.end)
+
+    assert isinstance(old_f.location, CompoundLocation) == \
+           isinstance(new_f.location, CompoundLocation)
+    if isinstance(old_f.location, CompoundLocation):
+         assert len(old_f.location.parts) == len(new_f.location.parts)
+         for old_l, new_l in zip(old_f.location.parts, new_f.location.parts):
+             assert old_l.start == new_l.start
+             assert old_l.end == new_l.end
+             assert old_l.strand == new_l.strand
+             assert old_l.ref == new_l.ref
+             assert old_l.ref_db == new_l.ref_db
 
     assert len(old_f.sub_features) == len(new_f.sub_features), \
         "number of sub_features: %s -> %s" % \

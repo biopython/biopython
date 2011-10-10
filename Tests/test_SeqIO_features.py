@@ -12,11 +12,12 @@ import os
 import unittest
 from Bio.Alphabet import generic_dna, generic_rna, generic_protein
 from Bio import SeqIO
+from Bio.Data.CodonTable import TranslationError
 from Bio.Seq import Seq, UnknownSeq, MutableSeq, reverse_complement
 from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
-                           BeforePosition, AfterPosition, OneOfPosition, \
-                           WithinPosition
+from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
+from Bio.SeqFeature import ExactPosition, BeforePosition, AfterPosition, \
+                           OneOfPosition,  WithinPosition
 from StringIO import StringIO
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
@@ -119,7 +120,7 @@ def compare_feature(old, new, ignore_sub_features=False):
     or old.location.nofuzzy_end != new.location.nofuzzy_end:
         raise ValueError("%s versus %s:\n%s\nvs:\n%s"
                          % (old.location, new.location, repr(old), repr(new)))
-    if old.strand != new.strand:
+    if old.strand is not None and old.strand != new.strand:
         raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.ref != new.ref:
         raise ValueError("Different ref:\n%s\nvs:\n%s" % (repr(old), repr(new)))
@@ -166,23 +167,22 @@ def compare_features(old_list, new_list, ignore_sub_features=False):
 
 
 def make_join_feature(f_list, ftype="misc_feature"):
-    #NOTE - Does NOT reorder the sub-features (which you may
-    #want to do for reverse strand features...)
+    #NOTE - Does NOT reorder the sub-features
     if len(set(f.strand for f in f_list))==1:
         strand = f_list[0].strand
     else:
         strand = None
     for f in f_list:
         f.type=ftype
-        f.location_operator="join"
-    jf = SeqFeature(FeatureLocation(f_list[0].location.start,
-                                    f_list[-1].location.end,
-                                    strand),
-                    type=ftype, location_operator="join")
-    assert jf.location.strand == strand
-    assert jf.strand == strand
-    jf.sub_features = f_list
-    return jf
+    if strand == -1:
+        #All reverse strand.
+        #Historical accident from GenBank parser means sub_features reversed
+        c_loc = CompoundLocation([f.location for f in f_list[::-1]])
+    else:
+        #All forward, or mixed strand
+        c_loc = CompoundLocation([f.location for f in f_list])
+    return SeqFeature(c_loc, ftype, sub_features = f_list)
+    #TODO - Don't use sub-features at all in this test
 
 #Prepare a single GenBank record with one feature with a %s place holder for
 #the feature location
@@ -991,9 +991,13 @@ class NC_000932(unittest.TestCase):
             #Get the nucleotides and translate them
             nuc = f.extract(gb_record.seq)
             self.assertEqual(len(nuc), len(f))
-            pro = nuc.translate(table=self.table, cds=True)
-            #print r.id, nuc, pro, r.seq
-            #print f
+            try:
+                pro = nuc.translate(table=self.table, cds=True)
+            except TranslationError, e:
+                print e
+                print r.id, nuc, self.table
+                print f
+                raise
             if pro[-1] == "*":
                 self.assertEqual(str(pro)[:-1], str(r.seq))
             else:

@@ -187,7 +187,7 @@ qualifiers:
     Key: gene, Value: ['kin2']
 
 type: mRNA
-location: [43:>579](+)
+location: join{[43:160](+), [319:390](+), [503:>579](+)}
 qualifiers: 
     Key: gene, Value: ['kin2']
 Sub-Features
@@ -210,7 +210,7 @@ qualifiers:
     Key: gene, Value: ['kin2']
 
 type: CDS
-location: [103:579](+)
+location: join{[103:160](+), [319:390](+), [503:579](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:16354', 'SWISS-PROT:P31169']
@@ -398,7 +398,7 @@ qualifiers:
     Key: organism, Value: ['Armoracia rusticana']
 
 type: mRNA
-location: [<0:>206](+)
+location: join{[<0:48](+), [142:>206](+)}
 qualifiers: 
     Key: gene, Value: ['csp14']
 Sub-Features
@@ -423,7 +423,7 @@ qualifiers:
     Key: gene, Value: ['csp14']
 
 type: CDS
-location: [<0:>206](+)
+location: join{[<0:48](+), [142:>206](+)}
 qualifiers: 
     Key: codon_start, Value: ['2']
     Key: db_xref, Value: ['GI:4538893']
@@ -560,7 +560,7 @@ qualifiers:
     Key: organism, Value: ['Brassica napus']
 
 type: mRNA
-location: [<0:>497](+)
+location: join{[<0:54](+), [240:309](+), [422:>497](+)}
 qualifiers: 
     Key: gene, Value: ['BN28a']
     Key: product, Value: ['BN28a']
@@ -584,7 +584,7 @@ qualifiers:
     Key: gene, Value: ['BN28a']
 
 type: CDS
-location: [0:497](+)
+location: join{[0:54](+), [240:309](+), [422:497](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:10121869']
@@ -851,7 +851,7 @@ qualifiers:
     Key: organism, Value: ['Arabidopsis thaliana']
 
 type: CDS
-location: [3461:5332](+)
+location: join{[3461:3615](+), [3697:3978](+), [4076:4307](+), [4407:4797](+), [4875:5028](+), [5140:5332](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715633']
@@ -887,7 +887,7 @@ qualifiers:
 
 
 type: CDS
-location: [6616:8368](-)
+location: join{[8272:8368](-), [8086:8166](-), [7915:7998](-), [7463:7603](-), [7265:7351](-), [6616:6953](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715650']
@@ -934,7 +934,7 @@ qualifiers:
     Key: translation, Value: ['MDLSLAPTTTTSSDQEQDRDQELTSNIGASSSSGPSGNNNNLPMMMIPPPEKEHMFDKVVTPSDVGKLNRLVIPKQHAERYFPLDSSNNQNGTLLNFQDRNGKMWRFRYSYWNSSQSYVMTKGWSRFVKEKKLDAGDIVSFQRGIGDESERSKLYIDWRHRPDMSLVQAHQFGNFGFNFNFPTTSQYSNRFHPLPEYNSVPIHRGLNIGNHQRSYYNTQRQEFVGYGYGNLAGRCYYTGSPLDHRNIVGSEPLVIDSVPVVPGRLTPVMLPPLPPPPSTAGKRLRLFGVNMECGNDYNQQEESWLVPRGEIGASSSSSSALRLNLSTDHDDDNDDGDDGDDDQFAKKGKSSLSLNFNP']
 
 type: CDS
-location: [23220:30781](+)
+location: join{[23220:24174](+), [24243:24357](+), [24411:24664](+), [24742:25137](+), [25225:25445](+), [25526:25711](+), [25782:25905](+), [25993:26478](+), [26563:26730](+), [26813:26983](+), [27073:27235](+), [27319:27415](+), [27504:28133](+), [28313:28507](+), [28591:28782](+), [28861:30013](+), [30111:30518](+), [30603:30781](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715634']
@@ -1018,7 +1018,7 @@ qualifiers:
 
 
 type: CDS
-location: [31083:32372](-)
+location: join{[32248:32372](-), [32132:32161](-), [31983:32049](-), [31789:31897](-), [31634:31700](-), [31340:31515](-), [31222:31304](-), [31083:31126](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715648']
@@ -1062,7 +1062,7 @@ qualifiers:
 
 
 type: CDS
-location: [33693:36763](-)
+location: join{[36724:36763](-), [36511:36623](-), [36325:36387](-), [35431:35701](-), [35268:35349](-), [34102:35173](-), [33693:34029](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715647']
@@ -1102,7 +1102,7 @@ qualifiers:
 
 
 type: CDS
-location: [38599:40579](-)
+location: join{[40376:40579](-), [39914:40031](-), [39110:39516](-), [38837:38989](-), [38599:38756](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715646']
@@ -1134,7 +1134,7 @@ qualifiers:
 
 
 type: CDS
-location: [45149:48868](-)
+location: join{[48637:48868](-), [47776:48554](-), [47447:47684](-), [46074:46313](-), [45718:45847](-), [45342:45656](-), [45149:45261](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715645']
@@ -1174,7 +1174,7 @@ qualifiers:
 
 
 type: CDS
-location: [49985:50656](-)
+location: join{[50584:50656](-), [50120:50333](-), [49985:50039](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715644']
@@ -1198,7 +1198,7 @@ qualifiers:
 
 
 type: CDS
-location: [51940:54196](+)
+location: join{[51940:52048](+), [52135:52432](+), [52639:52885](+), [53185:53326](+), [53404:54196](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715635']
@@ -1241,7 +1241,7 @@ qualifiers:
     Key: translation, Value: ['MERTNSIEMDRERLTAEMAFRDSSSAVIRIRRRLPDLLTSVKLKYVKLGLHNSCNVTTILFFLIILPLTGTVLVQLTGLTFDTFSELWSNQAVQLDTATRLTCLVFLSFVLTLYVANRSKPVYLVDFSCYKPEDERKISVDSFLTMTEENGSFTDDTVQFQQRISNRAGLGDETYLPRGITSTPPKLNMSEARAEAEAVMFGALDSLFEKTGIKPAEVGILIVNCSLFNPTPSLSAMIVNHYKMREDIKSYNLGGMGCSAGLISIDLANNLLKANPNSYAVVVSTENITLNWYFGNDRSMLLCNCIFRMGGAAILLSNRRQDRKKSKYSLVNVVRTHKGSDDKNYNCVYQKEDERGTIGVSLARELMSVAGDALKTNITTLGPMVLPLSEQLMFLISLVKRKMFKLKVKPYIPDFKLAFEHFCIHAGGRAVLDEVQKNLDLKDWHMEPSRMTLHRFGNTSSSSLWYEMAYTEAKGRVKAGDRLWQIAFGSGFKCNSAVWKALRPVSTEEMTGNAWAGSIDQYPVKVVQ']
 
 type: CDS
-location: [59507:63513](-)
+location: join{[63132:63513](-), [61669:61826](-), [59507:59665](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715642']
@@ -1265,7 +1265,7 @@ qualifiers:
 
 
 type: CDS
-location: [64099:67214](-)
+location: join{[67025:67214](-), [66536:66599](-), [66379:66451](-), [66151:66259](-), [65963:66044](-), [65808:65862](-), [65434:65566](-), [65264:65354](-), [65032:65158](-), [64811:64919](-), [64602:64719](-), [64452:64509](-), [64271:64358](-), [64099:64177](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715641']
@@ -1333,7 +1333,7 @@ qualifiers:
 
 
 type: CDS
-location: [69830:71700](-)
+location: join{[71643:71700](-), [70742:71357](-), [70533:70670](-), [69830:69987](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715640']
@@ -1361,7 +1361,7 @@ qualifiers:
 
 
 type: CDS
-location: [72284:73585](+)
+location: join{[72284:72371](+), [72788:72865](+), [72988:73097](+), [73189:73442](+), [73523:73585](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715636']
@@ -1393,7 +1393,7 @@ qualifiers:
 
 
 type: CDS
-location: [73806:74145](-)
+location: join{[74035:74145](-), [73806:73990](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715639']
@@ -1413,7 +1413,7 @@ qualifiers:
 
 
 type: CDS
-location: [75334:77148](+)
+location: join{[75334:76249](+), [76515:76653](+), [76732:76982](+), [77014:77148](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715637']
@@ -1441,7 +1441,7 @@ qualifiers:
 
 
 type: CDS
-location: [82722:84581](-)
+location: join{[83585:84581](-), [82750:83373](-), [82722:82738](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6715638']
@@ -1630,7 +1630,7 @@ qualifiers:
     Key: note, Value: ['']
 
 type: CDS
-location: [22147:27773](-)
+location: join{[27622:27773](-), [26676:27009](-), [25023:25178](-), [24615:24888](-), [23629:24555](-), [22859:23560](-), [22374:22791](-), [22147:22299](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946669']
@@ -1678,7 +1678,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.10']
 
 type: CDS
-location: [29925:33978](-)
+location: join{[33816:33978](-), [33532:33713](-), [32685:33289](-), [32323:32634](-), [31658:31836](-), [31196:31591](-), [30616:31076](-), [30269:30519](-), [29925:30108](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946670']
@@ -1730,7 +1730,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.1']
 
 type: CDS
-location: [36118:56153](-)
+location: join{[56030:56153](-), [52848:52966](-), [50826:50937](-), [50318:50441](-), [49970:50102](-), [49762:49876](-), [49436:49562](-), [48410:48878](-), [47682:47831](-), [47221:47315](-), [46517:46688](-), [45975:46125](-), [45660:45793](-), [45147:45233](-), [44811:44928](-), [44240:44438](-), [43603:43837](-), [42750:42876](-), [42187:42415](-), [41854:42085](-), [41545:41620](-), [40680:40814](-), [40518:40612](-), [40344:40434](-), [39655:40042](-), [37280:39517](-), [36118:37213](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946671']
@@ -1854,7 +1854,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.2']
 
 type: CDS
-location: [70719:75241](-)
+location: join{[75216:75241](-), [73085:73559](-), [72838:73016](-), [72604:72768](-), [71423:71621](-), [70719:70988](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946672']
@@ -1894,7 +1894,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.3']
 
 type: CDS
-location: [121866:127124](+)
+location: join{[121866:122046](+), [122173:122630](+), [123671:123823](+), [124062:124320](+), [124391:124688](+), [124754:125018](+), [125093:125254](+), [125316:125576](+), [126792:127124](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946673']
@@ -1946,7 +1946,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.4']
 
 type: CDS
-location: [128488:129414](-)
+location: join{[129373:129414](-), [129195:129313](-), [128776:129140](-), [128488:128715](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946674']
@@ -1993,7 +1993,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.6']
 
 type: CDS
-location: [133491:134407](-)
+location: join{[134197:134407](-), [133866:134135](-), [133662:133748](-), [133491:133595](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946676']
@@ -2025,7 +2025,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.7']
 
 type: CDS
-location: [135478:136829](+)
+location: join{[135478:135749](+), [135960:136586](+), [136640:136829](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946677']
@@ -2053,7 +2053,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.8']
 
 type: CDS
-location: [145402:147087](+)
+location: join{[145402:146203](+), [146514:147087](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946678']
@@ -2076,7 +2076,7 @@ qualifiers:
     Key: gene, Value: ['EG:BACR25B3.9']
 
 type: CDS
-location: [148859:152785](-)
+location: join{[152105:152785](-), [151880:152032](-), [149545:151809](-), [148965:149462](-), [148859:148905](-)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946679']
@@ -2107,7 +2107,7 @@ qualifiers:
 
 
 type: gene
-location: [153489:1487](+)
+location: join{[153489:154269](+), AL121804.2[40:610](+), AL121804.2[671:1487](+)}
 qualifiers: 
     Key: gene, Value: ['EG:BACR7C10.3']
 Sub-Features
@@ -2125,7 +2125,7 @@ qualifiers:
 
 
 type: CDS
-location: [153489:1487](+)
+location: join{[153489:154269](+), AL121804.2[40:610](+), AL121804.2[671:1487](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:6946680']
@@ -2207,7 +2207,7 @@ qualifiers:
     Key: gene, Value: ['TMPO']
 
 type: gene
-location: [1887:3234](+)
+location: join{[1887:2509](+), U18267.1[0:270](+), U18268.1[0:309](+), U18270.1[0:6905](+), U18269.1[0:128](+), U18271.1[0:3234](+)}
 qualifiers: 
     Key: gene, Value: ['TMPO']
 Sub-Features
@@ -2243,7 +2243,7 @@ qualifiers:
     Key: number, Value: ['1']
 
 type: CDS
-location: [2200:>128](+)
+location: join{[2200:2479](+), U18267.1[119:246](+), U18268.1[129:288](+), U18270.1[4690:4788](+), U18269.1[81:>128](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:885684']
@@ -2274,7 +2274,7 @@ qualifiers:
 
 
 type: CDS
-location: [2200:1558](+)
+location: join{[2200:2479](+), U18267.1[119:246](+), U18268.1[129:288](+), U18270.1[38:1558](+)}
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:885683']
@@ -2371,7 +2371,7 @@ qualifiers:
     Key: db_xref, Value: ['dbSNP:811400']
 
 type: mRNA
-location: [342429:409092](+)
+location: join{[342429:342515](+), [363170:363300](+), [365740:365814](+), [376397:376499](+), [390168:390297](+), [391256:391379](+), [392605:392679](+), [398229:398419](+), [399081:399167](+), [399533:399650](+), [405843:405913](+), [406703:406761](+), [406867:407010](+), [407961:408091](+), [408507:409092](+)}
 qualifiers: 
     Key: db_xref, Value: ['LocusID:55735']
     Key: gene, Value: ['FLJ10737']
@@ -2645,7 +2645,7 @@ qualifiers:
     Key: product, Value: ['Neurotoxin III']
 
 type: Bond
-location: [11:63]
+location: bond{[11:12], [62:63]}
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
@@ -2660,7 +2660,7 @@ qualifiers:
 
 
 type: Bond
-location: [15:36]
+location: bond{[15:16], [35:36]}
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
@@ -2675,7 +2675,7 @@ qualifiers:
 
 
 type: Bond
-location: [21:46]
+location: bond{[21:22], [45:46]}
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
@@ -2690,7 +2690,7 @@ qualifiers:
 
 
 type: Bond
-location: [25:48]
+location: bond{[25:26], [47:48]}
 qualifiers: 
     Key: bond_type, Value: ['disulfide']
     Key: note, Value: ['BY SIMILARITY.']
@@ -3049,7 +3049,7 @@ qualifiers:
     Key: note, Value: ['Walker A motif; other site']
 
 type: misc_feature
-location: [1435:1621](+)
+location: order{[1435:1459](+), [1618:1621](+)}
 qualifiers: 
     Key: db_xref, Value: ['CDD:99707']
     Key: locus_tag, Value: ['YP_pPCP02']
