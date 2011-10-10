@@ -237,12 +237,9 @@ class SeqFeature(object):
         return SeqFeature(location = self.location._shift(offset),
             type = self.type,
             location_operator = self.location_operator,
-            strand = self.strand,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
-            sub_features = [f._shift(offset) for f in self.sub_features],
-            ref = self.ref,
-            ref_db = self.ref_db)
+            sub_features = [f._shift(offset) for f in self.sub_features])
 
     def _flip(self, length):
         """Returns a copy of the feature with its location flipped (PRIVATE).
@@ -259,9 +256,7 @@ class SeqFeature(object):
             location_operator = self.location_operator,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
-            sub_features = [f._flip(length) for f in self.sub_features[::-1]],
-            ref = self.ref,
-            ref_db = self.ref_db)
+            sub_features = [f._flip(length) for f in self.sub_features[::-1]])
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence.
