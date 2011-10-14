@@ -112,10 +112,11 @@ def get_install_requires():
         dist_dir_i = None
     if dist_dir_i is not None:
         dist_dir = sys.argv[dist_dir_i+1]
-        if dist_dir.find("egg-dist-tmp") >= 0:
+        if "egg-dist-tmp" in dist_dir:
             is_automated = True
     # pip -- calls from python directly with "-c"
     if sys.argv in [["-c", "develop", "--no-deps"],
+                    ["--no-deps", "-c", "develop"],
                     ["-c", "egg_info"]]:
         is_automated = True
     if is_automated:
