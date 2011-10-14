@@ -370,7 +370,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from math import log
 import warnings
-from Bio import BiopythonWarning
+from Bio import BiopythonWarning, BiopythonParserWarning
 
 
 # define score offsets. See discussion for differences between Sanger and
@@ -1313,6 +1313,10 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     >>> sub_record = record[5:10]
     >>> print sub_record.id, sub_record.letter_annotations["phred_quality"]
     EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]
+
+    As of Biopython 1.59, this parser will accept files with negatives quality
+    scores but will replace them with the lowest possible PHRED score of zero.
+    This will trigger a warning, previously it raised a ValueError exception.
     """
     #Skip any text before the first record (e.g. blank lines, comments)
     while True:
@@ -1340,9 +1344,10 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
             line = handle.readline()
 
         if qualities and min(qualities) < 0:
-            raise ValueError(("Negative quality score %i found in %s. " + \
-                              "Are these Solexa scores, not PHRED scores?") \
-                             % (min(qualities), id))
+            warnings.warn(("Negative quality score %i found, " + \
+                           "substituting PHRED zero instead.") \
+                           % min(qualities), BiopythonParserWarning)
+            qualities = [max(0,q) for q in qualities]
         
         #Return the record and then continue...
         record = SeqRecord(UnknownSeq(len(qualities), alphabet),
