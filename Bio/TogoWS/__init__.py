@@ -31,6 +31,7 @@ http://soapy.sourceforge.net/
 """
 
 import urllib
+import urllib2
 import time
 from Bio import File
 
@@ -297,10 +298,16 @@ def _open(url, post=None):
         _open.previous = current
 
     #print url
-    if post:
-        handle = urllib.urlopen(url, urllib.urlencode(post))
-    else:
-        handle = urllib.urlopen(url)
+    try:
+        if post:
+            handle = urllib2.urlopen(url, urllib.urlencode(post))
+        else:
+            handle = urllib2.urlopen(url)
+    except urllib2.HTTPError, exception:
+        raise exception
+
+    #The following old error checking may not be needed now we
+    #use urllib2 to catch HTTP error codes...
 
     # Wrap the handle inside an UndoHandle.
     uhandle = File.UndoHandle(handle)
