@@ -906,6 +906,18 @@ class WithinPosition(int, AbstractPosition):
     >>> isinstance(p, int)
     True
 
+    Note this also applies for comparison to other position objects,
+    where again the integer behaviour is used:
+
+    >>> p == 10
+    True
+    >>> p == ExactPosition(10)
+    True
+    >>> p == BeforePosition(10)
+    True
+    >>> p == AfterPosition(10)
+    True
+
     If this were an end point, you would want the position to be 13:
 
     >>> p2 = WithinPosition(13,10,13)
@@ -915,6 +927,10 @@ class WithinPosition(int, AbstractPosition):
     (10.13)
     >>> int(p2)
     13
+    >>> p2 == 13
+    True
+    >>> p2 == ExactPosition(13)
+    True
 
     The old legacy properties of position and extension give the
     starting/lower/left position as an integer, and the distance
@@ -1023,6 +1039,17 @@ class BetweenPosition(int, AbstractPosition):
     >>> p2 == 123
     True
 
+    Note this potentially surprising behaviour:
+
+    >>> BetweenPosition(123, left=123, right=456) == ExactPosition(123)
+    True
+    >>> BetweenPosition(123, left=123, right=456) == BeforePosition(123)
+    True
+    >>> BetweenPosition(123, left=123, right=456) == AfterPosition(123)
+    True
+
+    i.e. For equality (and sorting) the position objects behave like
+    integers.
     """
     def __new__(cls, position, left, right):
         assert position==left or position==right
@@ -1082,6 +1109,15 @@ class BeforePosition(int, AbstractPosition):
     >>> p + 10
     15
 
+    Note this potentially surprising behaviour:
+
+    >>> p == ExactPosition(5)
+    True
+    >>> p == AfterPosition(5)
+    True
+
+    Just remember that for equality and sorting the position objects act
+    like integers.
     """
     #Subclasses int so can't use __init__
     def __new__(cls, position, extension = 0):
@@ -1142,6 +1178,15 @@ class AfterPosition(int, AbstractPosition):
     >>> isinstance(p, int)
     True
 
+    Note this potentially surprising behaviour:
+
+    >>> p == ExactPosition(7)
+    True
+    >>> p == BeforePosition(7)
+    True
+
+    Just remember that for equality and sorting the position objects act
+    like integers.
     """
     #Subclasses int so can't use __init__
     def __new__(cls, position, extension = 0):
