@@ -33,7 +33,6 @@ http://soapy.sourceforge.net/
 import urllib
 import urllib2
 import time
-from Bio import File
 
 #Caches:
 _search_db_names = None
@@ -306,41 +305,10 @@ def _open(url, post=None):
     except urllib2.HTTPError, exception:
         raise exception
 
-    #The following old error checking may not be needed now we
-    #use urllib2 to catch HTTP error codes...
-
-    # Wrap the handle inside an UndoHandle.
-    uhandle = File.UndoHandle(handle)
-
-    # Check for errors in the first 10 lines.
-    # This is kind of ugly.
-    lines = []
-    for i in range(10):
-        lines.append(uhandle.readline())
-    for i in range(9, -1, -1):
-        uhandle.saveline(lines[i])
-    data = ''.join(lines)
-
-    if data == '':
-        #ValueError? This can occur with an invalid formats or fields
-        #e.g. http://togows.dbcls.jp/entry/pubmed/16381885.au
-        #which is an invalid file format, I meant to try this
-        #instead http://togows.dbcls.jp/entry/pubmed/16381885/au
-        raise IOError("TogoWS replied with no data:\n%s % url")
-    if data == ' ':
-        #I've seen this on things which should work, e.g.
-        #e.g. http://togows.dbcls.jp/entry/genome/X52960.fasta
-        raise IOError("TogoWS replied with just a single space:\n%s" % url)
-    if data.startswith("Error: "):
-        #TODO - Should this be a value error (in some cases?)
-        raise IOError("TogoWS replied with an error message:\n\n%s\n\n%s" \
-                      % (data, url))
-    if "<title>We're sorry, but something went wrong</title>" in data:
-        #ValueError? This can occur with an invalid formats or fields
-        raise IOError("TogoWS replied: We're sorry, but something went wrong:\n%s" \
-                      % url)
-        
-    return uhandle
+    #We now trust TogoWS to have set an HTTP error code, that
+    #suffices for my current unit tests. Previously we would
+    #examine the start of the data returned back.
+    return handle
 
 _open.previous = 0
 
