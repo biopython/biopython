@@ -418,21 +418,21 @@ class TogoSearch(unittest.TestCase):
         """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
         self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
 
-#    def test_pubmed_search_porin(self):
-#        """Bio.TogoWS.search_iter("pubmed", "porin") etc
-#
-#        Count was 2782 at time of writing, this was choosen to
-#        be larger than the default chunk size for iteration,
-#        but still not too big to download the full list.
-#        """
-#        self.check("pubmed", "porin", ["21856844", "20956602"])
+    def test_pubmed_search_porin(self):
+        """Bio.TogoWS.search_iter("pubmed", "porin") etc
 
-#    def test_pdb_search_porin(self):
-#        """Bio.TogoWS.search_iter("pdb", "porin") etc
-#
-#        Count was about 130 at time of writing.
-#        """
-#        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
+        Count was 2804 at time of writing, this was choosen to
+        be larger than the default chunk size for iteration,
+        but still not too big to download the full list.
+        """
+        self.check("pubmed", "porin", ["21856844", "20956602"])
+
+    def test_pdb_search_porin(self):
+        """Bio.TogoWS.search_iter("pdb", "porin") etc
+
+        Count was about 130 at time of writing.
+        """
+        self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_embl_search_porin(self):
         """Bio.TogoWS.search_iter("embl", "human porin", limit=300) etc
