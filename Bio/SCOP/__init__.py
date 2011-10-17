@@ -888,7 +888,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     params = {'pdb' : pdb, 'key' : key, 'sid' : sid, 'disp' : disp,
               'dir' : dir, 'loc' : loc}
     variables = {}
-    for k, v in params.iteritmes():
+    for k, v in params.iteritems():
         if v is not None:
             variables[k] = v
     variables.update(keywds)
