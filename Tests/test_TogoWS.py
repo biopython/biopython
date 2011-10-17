@@ -419,13 +419,13 @@ class TogoSearch(unittest.TestCase):
         self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
 
     def test_pubmed_search_porin(self):
-        """Bio.TogoWS.search_iter("pubmed", "porin") etc
+        """Bio.TogoWS.search_iter("pubmed", "human porin") etc
 
-        Count was 2804 at time of writing, this was choosen to
+        Count was 339 at time of writing, this was choosen to
         be larger than the default chunk size for iteration,
         but still not too big to download the full list.
         """
-        self.check("pubmed", "porin", ["21856844", "20956602"])
+        self.check("pubmed", "human porin", ["21189321", "21835183"])
 
     def test_pdb_search_porin(self):
         """Bio.TogoWS.search_iter("pdb", "porin") etc
@@ -435,11 +435,11 @@ class TogoSearch(unittest.TestCase):
         self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_embl_search_porin(self):
-        """Bio.TogoWS.search_iter("embl", "human porin", limit=300) etc
+        """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
 
-        Count was about 517 at time of writing.
+        Count was about 255 at time of writing.
         """
-        self.check("embl", "human porin", limit=300)
+        self.check("embl", "human pore", limit=200)
 
     def test_uniprot_search_lung_cancer(self):
         """Bio.TogoWS.search_iter("uniprot", "lung+cancer", limit=150) etc
