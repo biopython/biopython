@@ -116,7 +116,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url="http://togows.dbcls.jp/entry/%s/%s" % (db, id)
+    url="http://togows.dbcls.jp/entry/%s/%s" % (db, urllib.quote(id))
     if field:
         url += "/" + field
     if format:
@@ -142,8 +142,8 @@ def search_count(db, query):
         import warnings
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See http://togows.dbcls.jp/search/ for options." % db)
-    #TODO - Encode spaces etc
-    handle = _open("http://togows.dbcls.jp/search/%s/%s/count" % (db, query))
+    handle = _open("http://togows.dbcls.jp/search/%s/%s/count" \
+                   % (db, urllib.quote(query)))
     count = int(handle.read().strip())
     handle.close()
     return count
@@ -228,8 +228,7 @@ def search(db, query, offset=None, limit=None, format=None):
         import warnings
         warnings.warn("TogoWS search does not explicitly support database '%s'. "
                       "See http://togows.dbcls.jp/search/ for options." % db)
-    #TODO - Encode spaces etc
-    url="http://togows.dbcls.jp/search/%s/%s" % (db, query)
+    url="http://togows.dbcls.jp/search/%s/%s" % (db, urllib.quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -282,8 +281,8 @@ def convert(data, in_format, out_format):
 def _open(url, post=None):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
-    Open a handle to TogoWS. Does some very simple error checking, and will
-    raise an IOError if it encounters an error.
+    Open a handle to TogoWS. Does some very simple error checking, and
+    will raise an IOError if it encounters an error.
 
     In the absense of clear guidelines, this function also enforces "up to
     three queries per second" to avoid abusing the TogoWS servers.
