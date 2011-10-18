@@ -33,6 +33,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib import colors
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge, ArcPath
 from reportlab.graphics import renderPDF, renderPS
@@ -330,7 +331,7 @@ class Chromosome(_ChromosomeComponent):
                  _place_labels(right_labels, y_min, y_max, h),
                  "start"),
             ]:
-            for (y1, y2, color, name) in labels:
+            for (y1, y2, color, back_color, name) in labels:
                 cur_drawing.add(Line(x1, y1, x2, y2,
                                      strokeColor = color,
                                      strokeWidth = 0.25))
@@ -340,6 +341,13 @@ class Chromosome(_ChromosomeComponent):
                 label_string.fontSize = h
                 if color_label:
                     label_string.fillColor = color
+                if back_color:
+                    w = stringWidth(name, label_string.fontName, label_string.fontSize)
+                    if x1 > x2:
+                        w = w * -1.0
+                    cur_drawing.add(Rect(x2, y2 - 0.1*h, w, h,
+                                         strokeColor=back_color,
+                                         fillColor=back_color))
                 cur_drawing.add(label_string)
 
 
@@ -676,7 +684,11 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
             fill_rectangle.strokeColor = color
             cur_drawing.add(fill_rectangle)
             if name:
-                value = (segment_y + segment_height - local_scale*start, color, name)
+                if fill_color == color:
+                    back_color = None
+                else:
+                    back_color = fill_color
+                value = (segment_y + segment_height - local_scale*start, color, back_color, name)
                 if strand == -1:
                     self._left_labels.append(value)
                 else:
