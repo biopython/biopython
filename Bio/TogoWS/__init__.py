@@ -154,7 +154,8 @@ def search_iter(db, query, limit=None, batch=100):
     db - database (string), see http://togows.dbcls.jp/search
     query - search term (string)
     limit - optional upper bound on number of search results
-    batch - number of search results to pull back each time talk to TogoWS
+    batch - number of search results to pull back each time talk to
+            TogoWS (currently limited to 100).
 
     You would use this function within a for loop, e.g.
 
@@ -167,11 +168,13 @@ def search_iter(db, query, limit=None, batch=100):
     count = search_count(db, query)
     if not count:
         raise StopIteration
+    #NOTE - We leave it to TogoWS to enforce any upper bound on each
+    #batch, they currently return an HTTP 400 Bad Request if above 100.
     remain = count
     if limit is not None:
         remain = min(remain, limit)
     offset = 1 #They don't use zero based counting
-    prev_ids = []
+    prev_ids = [] #Just cache the last batch for error checking
     while remain:
         batch = min(batch, remain)
         #print "%r left, asking for %r" % (remain, batch)
@@ -204,7 +207,8 @@ def search(db, query, offset=None, limit=None, format=None):
              By default plain text is returned, one result per line.
 
     At the time of writing, TogoWS applies a default count limit of 100
-    search results.
+    search results, and this is an upper bound. To access more results,
+    use the offset argument or the search_iter(...) function.
 
     TogoWS supports a long list of databases, including many from the NCBI
     (e.g. "ncbi-pubmed" or "pubmed", "ncbi-genbank" or "genbank", and
