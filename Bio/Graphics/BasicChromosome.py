@@ -292,6 +292,8 @@ class Chromosome(_ChromosomeComponent):
         Draws the label text and a coloured line linking it to the
         location (i.e. feature) it applies to.
         """
+        if not self._sub_components:
+            return
         color_label = self._color_labels
 
         segment_width = (self.end_x_position - self.start_x_position) \
