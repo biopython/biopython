@@ -751,8 +751,6 @@ class LinearDrawer(AbstractDrawer):
         if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
             return None
 
-        print "Cross links (1)"
-        
         startA = featureA.start
         if startA < self.start: startA = self.start
         startB = featureB.start
@@ -765,20 +763,16 @@ class LinearDrawer(AbstractDrawer):
 
         allowed_fragments = self.fragment_limits.keys()
 
-        print "Cross links (2)"
-
         start_fragmentA, start_offsetA = self.canvas_location(startA)
         end_fragmentA, end_offsetA = self.canvas_location(endA)
         if start_fragmentA not in allowed_fragments \
         or end_fragmentA not in allowed_fragments:
-            print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentA, end_fragmentA, allowed_fragments)
             return
 
         start_fragmentB, start_offsetB = self.canvas_location(startB)
         end_fragmentB, end_offsetB = self.canvas_location(endB)
         if start_fragmentB not in allowed_fragments \
         or end_fragmentB not in allowed_fragments:
-            print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentB, end_fragmentB, allowed_fragments)
             return
 
         if color == colors.white and border is None:   # Force black border on 
@@ -794,21 +788,15 @@ class LinearDrawer(AbstractDrawer):
         #We'll only draw something if BOTH on same fragment!
         for fragment in range(max(start_fragmentA, start_fragmentB),
                               min(end_fragmentA, end_fragmentB)+1):
-            print "Cross links (3) for fragment %i" % fragment
-
             btmA, ctrA, topA = self.track_offsets[trackA]
-            print "Cross links (4), A:", btmA, ctrA, topA
             btmA += self.fragment_lines[fragment][0]
             ctrA += self.fragment_lines[fragment][0]
             topA += self.fragment_lines[fragment][0]
-            print "Cross links (5), A:", btmA, ctrA, topA
     
             btmB, ctrB, topB = self.track_offsets[trackB]
-            print "Cross links (6), B:", btmB, ctrB, topB
             btmB += self.fragment_lines[fragment][0]
             ctrB += self.fragment_lines[fragment][0]
             topB += self.fragment_lines[fragment][0]
-            print "Cross links (7), B:", btmB, ctrB, topB
     
             if fragment == start_fragmentA:
                 xAs = self.x0 + start_offsetA
@@ -834,9 +822,7 @@ class LinearDrawer(AbstractDrawer):
             else:
                 yA = btmA
                 yB = topB
-    
-            print "Cross links (8)", [xAs, yA, xAe, yA, xBe, yB, xBs, yB], strokecolor, color
-    
+
             answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
                            strokeColor=strokecolor,
                            fillColor=color,
