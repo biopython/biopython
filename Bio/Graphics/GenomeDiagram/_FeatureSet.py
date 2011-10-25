@@ -114,7 +114,8 @@ class FeatureSet(object):
             internally in a Feature wrapper
         """
         id = self.next_id                                  # get id number
-        self.features[id] = Feature(self, id, feature)   # add feature
+        f = Feature(self, id, feature)
+        self.features[id] = f # add feature
         for key in kwargs:
             if key == "colour" or key == "color":
                 #Deal with "colour" as a special case by also mapping to color.
@@ -126,7 +127,7 @@ class FeatureSet(object):
                 continue
             setattr(self.features[id], key, kwargs[key])
         self.next_id += 1                                  # increment next id
-
+        return f
 
     def del_feature(self, feature_id):
         """ del_feature(self, feature_id)
