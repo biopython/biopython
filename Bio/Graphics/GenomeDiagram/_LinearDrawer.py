@@ -49,10 +49,7 @@ class LinearDrawer(AbstractDrawer):
 
         Methods:
 
-        o __init__(self, parent=None, pagesize='A3', orientation='landscape',
-                 x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0, fragments=10,
-                 fragment_size=0.9, track_size=0.75) Called on instantiation
+        o __init__(self, ...) Called on instantiation
 
         o set_page_size(self, pagesize, orientation)    Set the page size to the
                                                     passed size and orientation
@@ -175,12 +172,15 @@ class LinearDrawer(AbstractDrawer):
         o track_offsets     Dictionary of number of pixels that each track top,
                             center and bottom is offset from the base of a
                             fragment, keyed by track
+        
+        o cross_track_links List of tuples each with four entries (track A,
+                            feature A, track B, feature B) to be linked.
 
     """
     def __init__(self, parent=None, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, fragments=10,
-                 fragment_size=0.9, track_size=0.75):
+                 fragment_size=0.9, track_size=0.75, cross_track_links=None):
         """ __init__(self, parent, pagesize='A3', orientation='landscape',
                      x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                      start=None, end=None, tracklines=0, fragments=10,
@@ -232,11 +232,13 @@ class LinearDrawer(AbstractDrawer):
             o track_size    The proportion of the available track height that
                             should be taken up in drawing
 
+            o cross_track_links List of tuples each with four entries (track A,
+                                feature A, track B, feature B) to be linked.
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
                                   x, y, xl, xr, yt, yb, start, end,
-                                  tracklines)
+                                  tracklines, cross_track_links)
 
         # Useful measurements on the page
         self.fragments = fragments
@@ -271,6 +273,7 @@ class LinearDrawer(AbstractDrawer):
         for track_level in self.drawn_tracks: # only use tracks to be drawn
             self.current_track_level = track_level      # establish track level
             track = self._parent[track_level]           # get the track at that level
+            track._hacked_cur_level = track_level
             gbgs, glabels = self.draw_greytrack(track)  # get greytrack elements
             greytrack_bgs.append(gbgs)
             greytrack_labels.append(glabels)
@@ -282,15 +285,24 @@ class LinearDrawer(AbstractDrawer):
                 scale_axes.append(axes)
                 scale_labels.append(slabels)
 
+        feature_cross_links = []
+        for track_A, feature_A, track_B, feature_B in self.cross_track_links:
+            cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
+                                              track_B._hacked_cur_level, feature_B)
+            if cross_link:
+                feature_cross_links.append(cross_link)
+
         # Groups listed in order of addition to page (from back to front)
         # Draw track backgrounds
+        # Draw feature cross track links
         # Draw features and graphs
         # Draw scale axes
         # Draw scale labels
         # Draw feature labels
         # Draw track labels
-        element_groups = [greytrack_bgs, feature_elements, scale_axes,
-                         scale_labels, feature_labels, greytrack_labels]
+        element_groups = [greytrack_bgs, feature_cross_links,
+                          feature_elements, scale_axes,
+                          scale_labels, feature_labels, greytrack_labels]
         for element_group in element_groups:
             for element_list in element_group:
                 [self.drawing.add(element) for element in element_list]
@@ -362,7 +374,6 @@ class LinearDrawer(AbstractDrawer):
             ctr = btm+(top-btm)/2.                          # center offset
             track_offsets[track] = (btm, ctr, top)          
         self.track_offsets = track_offsets
-        
 
     def draw_test_tracks(self):
         """ draw_test_tracks(self)
@@ -388,7 +399,6 @@ class LinearDrawer(AbstractDrawer):
                                       strokeColor=colors.green))  # center line
                 self.drawing.add(Line(self.x0, trackbtm, self.xlim, trackbtm,
                                       strokeColor=colors.blue))  # bottom line
-        
 
     def draw_track(self, track):
         """ draw_track(self, track) -> ([element, element,...], [element, element,...])
@@ -644,7 +654,6 @@ class LinearDrawer(AbstractDrawer):
 
         return feature_elements, label_elements
 
-
     def draw_feature(self, feature):
         """ draw_feature(self, feature, parent_feature=None) -> ([element, element,...], [element, element,...])
 
@@ -683,7 +692,7 @@ class LinearDrawer(AbstractDrawer):
                         label_elements.append(label)
             
         return feature_elements, label_elements
-            
+
     def draw_feature_location(self, feature, locstart, locend):
         feature_boxes = []
         # Get start and end positions for feature/subfeatures
@@ -735,7 +744,75 @@ class LinearDrawer(AbstractDrawer):
         #    print locstart, locend, feature.strand, feature_boxes, feature.name
         return feature_boxes
 
+    def draw_cross_link(self, trackA, featureA, trackB, featureB):
+        if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
+            return None
+        if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
+            return None
+
+        print "Cross links (1)"
         
+        startA = featureA.start
+        if startA < self.start: startA = self.start
+        startB = featureB.start
+        if startB < self.start: startB = self.start
+
+        endA = featureA.end
+        if self.end < endA: endA = self.end
+        endB = featureA.end
+        if self.end < endB: endB = self.end
+
+        allowed_fragments = self.fragment_limits.keys()
+
+        print "Cross links (2)"
+
+        start_fragmentA, start_offsetA = self.canvas_location(startA)
+        end_fragmentA, end_offsetA = self.canvas_location(endA)
+        if start_fragmentA != end_fragmentA:
+            print "Different fragments %i and %i for %r" % (start_fragmentA, end_fragmentA, featureA)
+            return #TODO?
+        if start_fragmentA not in allowed_fragments \
+        or end_fragmentA not in allowed_fragments:
+            print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentA, end_fragmentA, allowed_fragments)
+            return
+
+        start_fragmentB, start_offsetB = self.canvas_location(startB)
+        end_fragmentB, end_offsetB = self.canvas_location(endB)
+        if start_fragmentB != end_fragmentB:
+            print "Different fragments %i and %i for %r" % (start_fragmentB, end_fragmentB, featureB)
+            return #TODO?
+        if start_fragmentB not in allowed_fragments \
+        or end_fragmentB not in allowed_fragments:
+            print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentB, end_fragmentB, allowed_fragments)
+            return
+
+        print "Cross links (3)"
+
+        btmA, ctrA, topA = self.track_offsets[trackA]
+        print "Cross links (4), A:", btmA, ctrA, topA
+        btmA += self.fragment_lines[start_fragmentA][0]
+        ctrA += self.fragment_lines[start_fragmentA][0]
+        topA += self.fragment_lines[start_fragmentA][0]
+        print "Cross links (5), A:", btmA, ctrA, topA
+
+        btmB, ctrB, topB = self.track_offsets[trackB]
+        print "Cross links (6), B:", btmB, ctrB, topB
+        btmB += self.fragment_lines[start_fragmentB][0]
+        ctrB += self.fragment_lines[start_fragmentB][0]
+        topB += self.fragment_lines[start_fragmentB][0]
+        print "Cross links (7), B:", btmB, ctrB, topB
+
+        xAs, xAe = self.x0 + start_offsetA, self.x0 + end_offsetA
+        xBs, xBe = self.x0 + start_offsetB, self.x0 + end_offsetB
+        yA = ctrA
+        yB = ctrB
+
+        print "Cross links (8)", [xAs, yA, xAe, yA, xBe, yB, xBs, yB]
+
+        return [Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
+                       strokeColor=colors.blue,
+                       fillColor=colors.lightblue,
+                       strokewidth=0)]
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
         """ get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)

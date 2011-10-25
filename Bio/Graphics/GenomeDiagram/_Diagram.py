@@ -229,6 +229,7 @@ class Diagram(object):
         self.fragment_size = fragment_size
         self.track_size = track_size
         self.circular = circular
+        self.cross_track_links = []
 
     def set_all_tracks(self, attr, value):
         """ set_all_tracks(self, attr, value)
@@ -248,7 +249,8 @@ class Diagram(object):
     def draw(self, format=None, pagesize=None, orientation=None,
              x=None, y=None, xl=None, xr=None, yt=None, yb=None,
              start=None, end=None, tracklines=None, fragments=None,
-             fragment_size=None, track_size=None, circular=None):
+             fragment_size=None, track_size=None, circular=None,
+             cross_track_links=None):
         """ draw(self, format=None, pagesize=None, orientation=None,
             x=None, y=None, xl=None, xr=None, yt=None, yb=None,
             start=None, end=None, tracklines=None, fragments=None,
@@ -271,7 +273,8 @@ class Diagram(object):
                                   tracklines or self.tracklines,
                                   fragments or self.fragments, 
                                   fragment_size or self.fragment_size, 
-                                  track_size or self.track_size)
+                                  track_size or self.track_size,
+                                  cross_track_links or self.cross_track_links)
         else:
             drawer = CircularDrawer(self, pagesize or self.pagesize, 
                                     orientation or self.orientation, 
@@ -281,7 +284,8 @@ class Diagram(object):
                                     end or self.end, 
                                     tracklines or self.tracklines,
                                     track_size or self.track_size,
-                                    circular or self.circular)
+                                    circular or self.circular,
+                                    cross_track_links or self.cross_track_links)
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
         

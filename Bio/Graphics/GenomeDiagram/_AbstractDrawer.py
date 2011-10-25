@@ -337,10 +337,12 @@ class AbstractDrawer(object):
 
         o length        Size of sequence to be drawn
         
+        o cross_track_links List of tuples each with four entries (track A,
+                            feature A, track B, feature B) to be linked.
     """
     def __init__(self, parent, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0):
+                 start=None, end=None, tracklines=0, cross_track_links=None):
         """ __init__(self, parent, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0)
@@ -381,6 +383,9 @@ class AbstractDrawer(object):
 
             o tracklines    Boolean flag to show (or not) lines delineating tracks
                             on the diagram            
+
+            o cross_track_links List of tuples each with four entries (track A,
+                                feature A, track B, feature B) to be linked.
         """
         self._parent = parent   # The calling Diagram object
 
@@ -389,6 +394,10 @@ class AbstractDrawer(object):
         self.set_margins(x, y, xl, xr, yt, yb)      # Set page margins
         self.set_bounds(start, end) # Set limits on what will be drawn
         self.tracklines = tracklines    # Set flags
+        if cross_track_links is None:
+            cross_track_links = []
+        else:
+            self.cross_track_links = cross_track_links
         
     def _set_xcentre(self, value):
         import warnings

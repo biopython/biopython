@@ -50,10 +50,7 @@ class CircularDrawer(AbstractDrawer):
 
         Methods:
 
-        o __init__(self, parent=None, pagesize='A3', orientation='landscape',
-                 x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0, track_size=0.75,
-                 circular=1) Called on instantiation
+        o __init__(self, ...) Called on instantiation
 
         o set_page_size(self, pagesize, orientation)    Set the page size to the
                                                     passed size and orientation
@@ -164,11 +161,13 @@ class CircularDrawer(AbstractDrawer):
         o sweep     Float (0->1) the proportion of the circle circumference to
                     use for the diagram
 
+        o cross_track_links List of tuples each with four entries (track A,
+                            feature A, track B, feature B) to be linked.
     """
     def __init__(self, parent=None, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, track_size=0.75,
-                 circular=1):
+                 circular=1, cross_track_links=None):
         """ __init__(self, parent, pagesize='A3', orientation='landscape',
                      x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                      start=None, end=None, tracklines=0, track_size=0.75,
@@ -216,11 +215,14 @@ class CircularDrawer(AbstractDrawer):
 
             o circular      Boolean flaw to show whether the passed sequence is
                             circular or not
+
+            o cross_track_links List of tuples each with four entries (track A,
+                                feature A, track B, feature B) to be linked.
         """
         # Use the superclass' instantiation method
         AbstractDrawer.__init__(self, parent, pagesize, orientation,
                                   x, y, xl, xr, yt, yb, start, end,
-                                  tracklines)
+                                  tracklines, cross_track_links)
 
         # Useful measurements on the page
         self.track_size = track_size

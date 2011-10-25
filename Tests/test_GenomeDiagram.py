@@ -666,6 +666,15 @@ class DiagramTest(unittest.TestCase):
         genbank_entry = self.record
         gdd = Diagram('Test Diagram')
 
+        gdt1 = Track('CDS features', greytrack=True,
+                     scale_largetick_interval=1e4,
+                     scale_smalltick_interval=1e3,
+                     greytrack_labels=10,
+                     greytrack_font_color="red",
+                     scale_format = "SInt")
+        gdt2 = Track('gene features', greytrack=1,
+                   scale_largetick_interval=1e4)
+
         #First add some feature sets:
         gdfs1 = FeatureSet(name='CDS features')
         gdfs2 = FeatureSet(name='gene features')
@@ -673,16 +682,21 @@ class DiagramTest(unittest.TestCase):
         gdfs4 = FeatureSet(name='repeat regions')
 
         cds_count = 0
+        prev_gene = None
         for feature in genbank_entry.features:
             if feature.type == 'CDS':
                 cds_count += 1
                 if cds_count % 2 == 0:
-                    gdfs1.add_feature(feature, color=colors.pink)
+                    f = gdfs1.add_feature(feature, color=colors.pink)
                 else:
-                    gdfs1.add_feature(feature, color=colors.red)
+                    f = gdfs1.add_feature(feature, color=colors.red)
+                if prev_gene:
+                    if prev_gene.start == f.start and prev_gene.end == f.end:
+                        gdd.cross_track_links.append((gdt1, f, gdt2, prev_gene))
+                    prev_gene = None
 
             if feature.type == 'gene':
-                gdfs2.add_feature(feature)
+                prev_gene = gdfs2.add_feature(feature)
 
             if feature.type == 'misc_feature':
                 gdfs3.add_feature(feature, color=colors.orange)
@@ -690,6 +704,7 @@ class DiagramTest(unittest.TestCase):
             if feature.type == 'repeat_region':
                 gdfs4.add_feature(feature, color=colors.purple)
 
+        #gdd.cross_track_links = gdd.cross_track_links[:1]
 
         gdfs1.set_all_features('label', 1)
         gdfs2.set_all_features('label', 1)
@@ -702,16 +717,8 @@ class DiagramTest(unittest.TestCase):
         #gdfs1.set_all_features('color', colors.red)
         gdfs2.set_all_features('color', colors.blue)
 
-        gdt1 = Track('CDS features', greytrack=True,
-                     scale_largetick_interval=1e4,
-                     scale_smalltick_interval=1e3,
-                     greytrack_labels=10,
-                     greytrack_font_color="red",
-                     scale_format = "SInt")
         gdt1.add_set(gdfs1)
 
-        gdt2 = Track('gene features', greytrack=1,
-                   scale_largetick_interval=1e4)
         gdt2.add_set(gdfs2)
                 
         gdt3 = Track('misc features and repeats', greytrack=1,
