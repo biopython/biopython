@@ -768,9 +768,6 @@ class LinearDrawer(AbstractDrawer):
 
         start_fragmentA, start_offsetA = self.canvas_location(startA)
         end_fragmentA, end_offsetA = self.canvas_location(endA)
-        if start_fragmentA != end_fragmentA:
-            print "Different fragments %i and %i for %r" % (start_fragmentA, end_fragmentA, featureA)
-            return #TODO?
         if start_fragmentA not in allowed_fragments \
         or end_fragmentA not in allowed_fragments:
             print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentA, end_fragmentA, allowed_fragments)
@@ -778,41 +775,59 @@ class LinearDrawer(AbstractDrawer):
 
         start_fragmentB, start_offsetB = self.canvas_location(startB)
         end_fragmentB, end_offsetB = self.canvas_location(endB)
-        if start_fragmentB != end_fragmentB:
-            print "Different fragments %i and %i for %r" % (start_fragmentB, end_fragmentB, featureB)
-            return #TODO?
         if start_fragmentB not in allowed_fragments \
         or end_fragmentB not in allowed_fragments:
             print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentB, end_fragmentB, allowed_fragments)
             return
 
-        print "Cross links (3)"
+        answer = []
+        #We'll only draw something if BOTH on same fragment!
+        for fragment in range(max(start_fragmentA, start_fragmentB),
+                              min(end_fragmentA, end_fragmentB)+1):
+            print "Cross links (3) for fragment %i" % fragment
 
-        btmA, ctrA, topA = self.track_offsets[trackA]
-        print "Cross links (4), A:", btmA, ctrA, topA
-        btmA += self.fragment_lines[start_fragmentA][0]
-        ctrA += self.fragment_lines[start_fragmentA][0]
-        topA += self.fragment_lines[start_fragmentA][0]
-        print "Cross links (5), A:", btmA, ctrA, topA
+            btmA, ctrA, topA = self.track_offsets[trackA]
+            print "Cross links (4), A:", btmA, ctrA, topA
+            btmA += self.fragment_lines[fragment][0]
+            ctrA += self.fragment_lines[fragment][0]
+            topA += self.fragment_lines[fragment][0]
+            print "Cross links (5), A:", btmA, ctrA, topA
+    
+            btmB, ctrB, topB = self.track_offsets[trackB]
+            print "Cross links (6), B:", btmB, ctrB, topB
+            btmB += self.fragment_lines[fragment][0]
+            ctrB += self.fragment_lines[fragment][0]
+            topB += self.fragment_lines[fragment][0]
+            print "Cross links (7), B:", btmB, ctrB, topB
+    
+            if fragment == start_fragmentA:
+                xAs = self.x0 + start_offsetA
+            else:
+                xAs = self.x0
+            if fragment == start_fragmentB:
+                xBs = self.x0 + start_offsetB
+            else:
+                xBs = self.x0
 
-        btmB, ctrB, topB = self.track_offsets[trackB]
-        print "Cross links (6), B:", btmB, ctrB, topB
-        btmB += self.fragment_lines[start_fragmentB][0]
-        ctrB += self.fragment_lines[start_fragmentB][0]
-        topB += self.fragment_lines[start_fragmentB][0]
-        print "Cross links (7), B:", btmB, ctrB, topB
+            if self.fragment_limits[fragment][1] < endA:
+                xAe = self.x0 + self.pagewidth
+            else:
+                xAe = self.x0 + end_offsetA
+            if self.fragment_limits[fragment][1] < endB:
+                xBe = self.x0 + self.pagewidth
+            else:
+                xBe = self.x0 + end_offsetB
 
-        xAs, xAe = self.x0 + start_offsetA, self.x0 + end_offsetA
-        xBs, xBe = self.x0 + start_offsetB, self.x0 + end_offsetB
-        yA = ctrA
-        yB = ctrB
-
-        print "Cross links (8)", [xAs, yA, xAe, yA, xBe, yB, xBs, yB]
-
-        return [Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
-                       strokeColor=colors.blue,
-                       fillColor=colors.lightblue,
-                       strokewidth=0)]
+            yA = ctrA
+            yB = ctrB
+    
+            print "Cross links (8)", [xAs, yA, xAe, yA, xBe, yB, xBs, yB]
+    
+            answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
+                           strokeColor=colors.blue,
+                           fillColor=colors.lightblue,
+                           strokewidth=0))
+        return answer
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
         """ get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element, element)
