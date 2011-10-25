@@ -286,9 +286,10 @@ class LinearDrawer(AbstractDrawer):
                 scale_labels.append(slabels)
 
         feature_cross_links = []
-        for track_A, feature_A, track_B, feature_B in self.cross_track_links:
+        for track_A, feature_A, track_B, feature_B, color, border in self.cross_track_links:
             cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
-                                              track_B._hacked_cur_level, feature_B)
+                                              track_B._hacked_cur_level, feature_B,
+                                              color, border)
             if cross_link:
                 feature_cross_links.append(cross_link)
 
@@ -744,7 +745,7 @@ class LinearDrawer(AbstractDrawer):
         #    print locstart, locend, feature.strand, feature_boxes, feature.name
         return feature_boxes
 
-    def draw_cross_link(self, trackA, featureA, trackB, featureB):
+    def draw_cross_link(self, trackA, featureA, trackB, featureB, color, border):
         if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
             return None
         if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
@@ -779,6 +780,15 @@ class LinearDrawer(AbstractDrawer):
         or end_fragmentB not in allowed_fragments:
             print "Different start %i or end %i not in allowed fragments %r" % (start_fragmentB, end_fragmentB, allowed_fragments)
             return
+
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill color
+        elif border is not None:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
+            strokecolor = border
 
         answer = []
         #We'll only draw something if BOTH on same fragment!
@@ -818,14 +828,18 @@ class LinearDrawer(AbstractDrawer):
             else:
                 xBe = self.x0 + end_offsetB
 
-            yA = ctrA
-            yB = ctrB
+            if ctrA < ctrB:
+                yA = topA
+                yB = btmB
+            else:
+                yA = btmA
+                yB = topB
     
-            print "Cross links (8)", [xAs, yA, xAe, yA, xBe, yB, xBs, yB]
+            print "Cross links (8)", [xAs, yA, xAe, yA, xBe, yB, xBs, yB], strokecolor, color
     
             answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
-                           strokeColor=colors.blue,
-                           fillColor=colors.lightblue,
+                           strokeColor=strokecolor,
+                           fillColor=color,
                            strokewidth=0))
         return answer
 

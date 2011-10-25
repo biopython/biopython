@@ -676,27 +676,51 @@ class DiagramTest(unittest.TestCase):
                    scale_largetick_interval=1e4)
 
         #First add some feature sets:
+        gdfsA = FeatureSet(name='CDS backgrounds')
+        gdfsB = FeatureSet(name='gene background')
+
+
         gdfs1 = FeatureSet(name='CDS features')
         gdfs2 = FeatureSet(name='gene features')
         gdfs3 = FeatureSet(name='misc_features')
         gdfs4 = FeatureSet(name='repeat regions')
 
-        cds_count = 0
         prev_gene = None
+        cds_count = 0
+        for feature in genbank_entry.features:
+            if feature.type == 'CDS':
+                cds_count += 1
+                if prev_gene:
+                    #Assuming it goes with this CDS!
+                    if cds_count % 2 == 0:
+                        dark, light = colors.peru, colors.tan
+                    else:
+                        dark, light = colors.burlywood, colors.bisque
+                    #Background for CDS,
+                    a = gdfsA.add_feature(SeqFeature(FeatureLocation(feature.location.start, feature.location.end, strand=0)),
+                                         color=dark)
+                    #Background for gene,
+                    b = gdfsB.add_feature(SeqFeature(FeatureLocation(prev_gene.location.start, prev_gene.location.end, strand=0)),
+                                          color=dark)
+                    #Cross link,
+                    gdd.cross_track_links.append((gdt1, a, gdt2, b,
+                                                  light, dark))
+                    prev_gene = None
+            if feature.type == 'gene':
+                prev_gene = feature
+
+        cds_count = 0
         for feature in genbank_entry.features:
             if feature.type == 'CDS':
                 cds_count += 1
                 if cds_count % 2 == 0:
-                    f = gdfs1.add_feature(feature, color=colors.pink)
+                    gdfs1.add_feature(feature, color=colors.pink, sigil="ARROW")
                 else:
-                    f = gdfs1.add_feature(feature, color=colors.red)
-                if prev_gene:
-                    if prev_gene.start == f.start and prev_gene.end == f.end:
-                        gdd.cross_track_links.append((gdt1, f, gdt2, prev_gene))
-                    prev_gene = None
+                    gdfs1.add_feature(feature, color=colors.red, sigil="ARROW")
 
             if feature.type == 'gene':
-                prev_gene = gdfs2.add_feature(feature)
+                #Note we set the colour of ALL the genes later on as a test,
+                gdfs2.add_feature(feature, sigil="ARROW")
 
             if feature.type == 'misc_feature':
                 gdfs3.add_feature(feature, color=colors.orange)
@@ -717,8 +741,10 @@ class DiagramTest(unittest.TestCase):
         #gdfs1.set_all_features('color', colors.red)
         gdfs2.set_all_features('color', colors.blue)
 
+        gdt1.add_set(gdfsA) #Before CDS so under them!
         gdt1.add_set(gdfs1)
 
+        gdt2.add_set(gdfsB) #Before genes so under them!
         gdt2.add_set(gdfs2)
                 
         gdt3 = Track('misc features and repeats', greytrack=1,
