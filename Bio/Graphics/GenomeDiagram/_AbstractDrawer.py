@@ -113,10 +113,13 @@ def draw_box(point1, point2,
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill color
-    elif border is not None:
+    elif border:
         if not isinstance(border, colors.Color):
             raise ValueError("Invalid border color %s" % repr(border))
         strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
 
     x1, y1, x2, y2 = min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)
     return Polygon([x1, y1, x2, y1, x2, y2, x1, y2],
@@ -148,8 +151,11 @@ def draw_polygon(list_of_points,
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill colour
-    elif border is not None:
+    elif border:
         strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
 
     xy_list = []
     for (x,y) in list_of_points:
@@ -189,8 +195,11 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill colour
-    elif border is not None:
+    elif border:
         strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
 
     # Depending on the orientation, we define the bottom left (x1, y1) and
     # top right (x2, y2) coordinates differently, but still draw the box
