@@ -779,10 +779,13 @@ class LinearDrawer(AbstractDrawer):
             strokecolor = colors.black                 # white boxes with
         elif border is None:                           # undefined border, else
             strokecolor = color                        # use fill color
-        elif border is not None:
+        if border:
             if not isinstance(border, colors.Color):
                 raise ValueError("Invalid border color %s" % repr(border))
             strokecolor = border
+        else:
+            #e.g. False
+            strokecolor = None
 
         answer = []
         #We'll only draw something if BOTH on same fragment!
