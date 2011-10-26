@@ -758,7 +758,7 @@ class LinearDrawer(AbstractDrawer):
 
         endA = featureA.end
         if self.end < endA: endA = self.end
-        endB = featureA.end
+        endB = featureB.end
         if self.end < endB: endB = self.end
 
         allowed_fragments = self.fragment_limits.keys()
