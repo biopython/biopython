@@ -212,7 +212,7 @@ class _IndexedSeqFileDict(_dict_base):
         """Would allow setting or replacing records, but not implemented."""
         raise NotImplementedError("An indexed a sequence file is read only.")
     
-    def update(self, **kwargs):
+    def update(self, *args, **kwargs):
         """Would allow adding more values, but not implemented."""
         raise NotImplementedError("An indexed a sequence file is read only.")
 
