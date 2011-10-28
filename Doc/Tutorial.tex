@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 29 September 2011 (Biopython 1.58+)}
+\date{Last Update -- 28 October 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10714,10 +10714,28 @@ GC\% related functions, which will probably be merged under
 
 \section{Chromosomes}
 
-The \verb|Bio.Graphics.BasicChromosome| module allows drawing of simple chromosomes.
+The \verb|Bio.Graphics.BasicChromosome| module allows drawing of chromosomes.
+
+\subsection{Simple Chromosomes}
 Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana}.
 
-I first downloaded the five sequenced chromosomes from the NCBI's FTP site
+\begin{latexonly}
+\begin{figure}[p]
+\centering
+\includegraphics[scale=0.45]{images/simple_chrom.pdf}
+\caption{Simple chromosome diagram for \textit{Arabidopsis thaliana}.}
+\label{fig:simplechromosome}
+\end{figure}
+\begin{figure}[p]
+\centering
+\includegraphics[scale=0.45]{images/tRNA_chrom.pdf}
+\caption{Chromosome diagram for \textit{Arabidopsis thaliana} showing tRNA genes.}
+\label{fig:simplechromosome}
+\end{figure}
+\end{latexonly}
+
+You can skip this bit, but first I downloaded the five sequenced chromosomes
+from the NCBI's FTP site
 \url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana} and then parsed
 them with \verb|Bio.SeqIO| to find out their lengths.  You could use the
 GenBank files for this, but it is faster to use the FASTA files for the
@@ -10725,11 +10743,11 @@ whole chromosomes:
 
 \begin{verbatim}
 from Bio import SeqIO
-entries = [("Chr I","CHR_I/NC_003070.fna"),
-          ("Chr II","CHR_II/NC_003071.fna"),
-          ("Chr III","CHR_III/NC_003074.fna"),
-          ("Chr IV","CHR_IV/NC_003075.fna"),
-          ("Chr V","CHR_V/NC_003076.fna")]
+entries = [("Chr I", "CHR_I/NC_003070.fna"),
+           ("Chr II", "CHR_II/NC_003071.fna"),
+           ("Chr III", "CHR_III/NC_003074.fna"),
+           ("Chr IV", "CHR_IV/NC_003075.fna"),
+           ("Chr V", "CHR_V/NC_003076.fna")]
 for (name, filename) in entries:
    record = SeqIO.read(filename,"fasta")
    print name, len(record)
@@ -10739,6 +10757,8 @@ for (name, filename) in entries:
 the following short demonstration of the \verb|BasicChromosome| module:
 
 \begin{verbatim}
+from reportlab.lib.units import cm
+
 from Bio.Graphics import BasicChromosome
 
 entries = [("Chr I", 30432563),
@@ -10747,17 +10767,20 @@ entries = [("Chr I", 30432563),
            ("Chr IV", 18585042),
            ("Chr V", 26992728)]
 
-max_length = max([length for name, length in entries])
-          
+telomere_length = 1000000 #For illustration
+         
 chr_diagram = BasicChromosome.Organism()
+chr_diagram._legend_height = 0 #TODO - Fix API here
+chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
+
 for name, length in entries:
    cur_chromosome = BasicChromosome.Chromosome(name)
-   #Set the length, adding and extra 20 percent for the tolomeres:
-   cur_chromosome.scale_num = max_length * 1.2
-   
+   #Set the scale to the length plus the two telomeres in bp:
+   cur_chromosome.scale_num = length + 2 * telomere_length
+      
    #Add an opening telomere
    start = BasicChromosome.TelomereSegment()
-   start.scale = 0.1 * max_length
+   start.scale = telomere_length
    cur_chromosome.add(start)
 
    #Add a body - using bp as the scale length here.
@@ -10767,7 +10790,7 @@ for name, length in entries:
 
    #Add a closing telomere
    end = BasicChromosome.TelomereSegment(inverted=True)
-   end.scale = 0.1 * max_length
+   end.scale = telomere_length
    cur_chromosome.add(end)
 
    #This chromosome is done
@@ -10780,25 +10803,90 @@ This should create a very simple PDF file, shown
 \begin{htmlonly}
 here:
 
-%The blank lines above and below are important to trigger paragrph breaks
-\imgsrc[width=650, height=574]{images/simple_chrom.png}
+%The blank lines above and below are important to trigger paragraph breaks
+\imgsrc[width=650, height=460]{images/simple_chrom.png}
 
 \end{htmlonly}
 \begin{latexonly}
 in Figure~\ref{fig:simplechromosome}.
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{images/simple_chrom.png}
-\caption{Simple chromosome diagram for \textit{Arabidopsis thaliana}.}
-\label{fig:simplechromosome}
-\end{figure}
 \end{latexonly}
-This example is deliberately short and sweet. One thing you might want to try is
-showing the location of features of interest - perhaps SNPs or genes.  Currently
-the \verb|ChromosomeSegment| object doesn't support sub-segments which would be
-one approach.  Instead, you must replace the single large segment with lots of
-smaller segments, maybe white ones for the boring regions, and colored ones for
-the regions of interest.
+This example is deliberately short and sweet. One thing you might want to
+try is showing the location of features of interest, as in the next example.
+
+\subsection{Annotated Chromosomes}
+
+Continuing from the previous example, let's also show the tRNA genes.
+We'll get their locations by parsing the GenBank files for the five
+\textit{Arabidopsis thaliana} chromosomes. You'll need to download these
+files from the NCBI FTP site
+\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana},
+and preserve the subdirectory names or edit the paths below:
+
+\begin{verbatim}
+from reportlab.lib.units import cm
+
+from Bio import SeqIO
+from Bio.Graphics import BasicChromosome
+
+entries = [("Chr I", "CHR_I/NC_003070.gbk"),
+           ("Chr II", "CHR_II/NC_003071.gbk"),
+           ("Chr III", "CHR_III/NC_003074.gbk"),
+           ("Chr IV", "CHR_IV/NC_003075.gbk"),
+           ("Chr V", "CHR_V/NC_003076.gbk")]
+
+telomere_length = 3000000 #For illustration
+
+chr_diagram = BasicChromosome.Organism()
+chr_diagram._legend_height = 0 #TODO - Fix API here
+chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
+
+for index, (name, filename) in enumerate(entries):
+    record = SeqIO.read(filename,"genbank")
+    length = len(record)
+
+    features = [f for f in record.features if f.type=="tRNA"]
+    #Record an Artemis style integer color in the feature's qualifiers,
+    #1 = Black, 2 = Red, 3 = Green, 4 = blue, 5 =cyan, 6 = purple 
+    for f in features: f.qualifiers["color"] = [index+2]
+
+    cur_chromosome = BasicChromosome.Chromosome(name)
+    #Set the scale to the length plus the two telomeres in bp:
+    cur_chromosome.scale_num = length + 2 * telomere_length
+
+    #Add an opening telomere
+    start = BasicChromosome.TelomereSegment()
+    start.scale = telomere_length
+    cur_chromosome.add(start)
+
+    #Add a body - again using bp as the scale length here.
+    body = BasicChromosome.AnnotatedChromosomeSegment(length, features)
+    body.scale = length
+    cur_chromosome.add(body)
+
+    #Add a closing telomere
+    end = BasicChromosome.TelomereSegment(inverted=True)
+    end.scale = telomere_length
+    cur_chromosome.add(end)
+
+    #This chromosome is done
+    chr_diagram.add(cur_chromosome)
+
+chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
+\end{verbatim}
+
+It might warn you about the labels being too close together - have a look
+at the forward strand (right hand side) of Chr I, but it should create a
+colorful PDF file, shown
+\begin{htmlonly}
+here:
+
+%The blank lines above and below are important to trigger paragraph breaks
+\imgsrc[width=650, height=460]{images/tRNA_chrom.png}
+
+\end{htmlonly}
+\begin{latexonly}
+in Figure~\ref{fig:simplechromosome}.
+\end{latexonly}
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}
