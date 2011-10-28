@@ -270,7 +270,6 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
         max_length = max([row[2] for row in entries])
  
         chr_diagram = BasicChromosome.Organism()
-        chr_diagram._legend_height = 0
         for name, acc, length, features, color in entries:
             if False:
                 #How I generated the values above... and tested passing in SeqFeatures

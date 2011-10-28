@@ -10770,7 +10770,6 @@ entries = [("Chr I", 30432563),
 telomere_length = 1000000 #For illustration
          
 chr_diagram = BasicChromosome.Organism()
-chr_diagram._legend_height = 0 #TODO - Fix API here
 chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
 
 for name, length in entries:
@@ -10837,7 +10836,6 @@ entries = [("Chr I", "CHR_I/NC_003070.gbk"),
 telomere_length = 3000000 #For illustration
 
 chr_diagram = BasicChromosome.Organism()
-chr_diagram._legend_height = 0 #TODO - Fix API here
 chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
 
 for index, (name, filename) in enumerate(entries):

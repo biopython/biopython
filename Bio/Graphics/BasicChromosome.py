@@ -101,7 +101,10 @@ class Organism(_ChromosomeComponent):
         # customizable attributes
         self.page_size = letter
         self.title_size = 20
-        self._legend_height = 2 * inch
+
+        #Do we need this given we don't draw a legend?
+        #If so, should be a public API...
+        self._legend_height = 0 # 2 * inch
 
         self.output_format = output_format
 
