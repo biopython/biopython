@@ -508,7 +508,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
 
     if equal_step < gap:
         import warnings
-        warnings.warn("Too many items to satify minimum gap %0.1f, equal step gives %0.1f" % (gap, equal_step))
+        warnings.warn("Too many labels to avoid overlap")
         #Crudest solution
         return [minimum+i*equal_step for i in range(count)]
     
