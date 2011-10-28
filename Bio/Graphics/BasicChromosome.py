@@ -465,7 +465,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         """
         if self.label is not None:
 
-            label_x = self.start_x_position + \
+            label_x = 0.5 * (self.start_x_position + self.end_x_position) + \
                       (self.chr_percent + 0.05) * (self.end_x_position -
                                                    self.start_x_position)
             label_y = ((self.start_y_position - self.end_y_position) / 2 +
