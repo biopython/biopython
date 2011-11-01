@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 28 October 2011 (Biopython 1.58+)}
+\date{Last Update -- 1 November 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4720,12 +4720,12 @@ need to check the parameters (e.g. the expectation value threshold and
 the gap values).
 
 For example, if you have a nucleotide sequence you want to search against
-the non-redundant database using BLASTN, and you know the GI number of your
+the nucleotide database (nt) using BLASTN, and you know the GI number of your
 query sequence, you can use:
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", "8332116")
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
 \end{verbatim}
 
 Alternatively, if we have our query sequence already in a FASTA formatted
@@ -4735,7 +4735,7 @@ and use that as the query argument:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> fasta_string = open("m_cold.fasta").read()
->>> result_handle = NCBIWWW.qblast("blastn", "nr", fasta_string)
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
 \end{verbatim}
 
 We could also have read in the FASTA file as a \verb|SeqRecord| and then
@@ -4745,7 +4745,7 @@ supplied just the sequence itself:
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
->>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq)
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
 \end{verbatim}
 
 Supplying just the sequence means that BLAST will assign an identifier
@@ -4757,7 +4757,7 @@ for your sequence automatically.  You might prefer to use the
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
->>> result_handle = NCBIWWW.qblast("blastn", "nr", record.format("fasta"))
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
 \end{verbatim}
 
 This approach makes more sense if you have your sequence(s) in a
@@ -4963,7 +4963,7 @@ BLAST results.  For example, using a GI number to do an online search:
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", "8332116")
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
 \end{verbatim}
 
 If instead you ran BLAST some other way, and have the
