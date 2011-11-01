@@ -529,7 +529,16 @@ class CircularDrawer(AbstractDrawer):
             #e.g. False
             strokecolor = None
 
-        return None
+        if ctrA < ctrB:
+            return [self._draw_arc_poly(topA, btmB,
+                           startangleA, endangleB,
+                           endangleB, startangleB,
+                           color, strokecolor)]
+        else:
+            return [self._draw_arc_poly(btmA, topB,
+                           startangleA, endangleB,
+                           endangleB, startangleB,
+                           color, strokecolor)]
 
 
     def draw_graph_set(self, set):
@@ -1038,6 +1047,14 @@ class CircularDrawer(AbstractDrawer):
             x3,y3 = (x0+outer_radius*endsin, y0+outer_radius*endcos)
             x4,y4 = (x0+outer_radius*startsin, y0+outer_radius*startcos)
             return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border)
+
+    def _draw_arc_poly(self, inner_radius, outer_radius,
+                       inner_startangle, inner_endangle,
+                       outer_startangle, outer_endangle,
+                       color, border=None,
+                       **kwargs):
+        #TODO
+        pass
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None,
