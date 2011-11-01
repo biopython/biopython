@@ -829,6 +829,8 @@ class LinearDrawer(AbstractDrawer):
             answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
                            strokeColor=strokecolor,
                            fillColor=color,
+                           #default is mitre/miter which can stick out too much:
+                           strokeLineJoin=1, #1=round
                            strokewidth=0))
         return answer
 
