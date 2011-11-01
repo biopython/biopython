@@ -287,6 +287,7 @@ class CircularDrawer(AbstractDrawer):
         for track_level in self._parent.get_drawn_levels():
             self.current_track_level = track_level
             track = self._parent[track_level]
+            track._hacked_cur_level = track_level
             gbgs, glabels = self.draw_greytrack(track)    # Greytracks
             greytrack_bgs.append(gbgs)
             greytrack_labels.append(glabels)
@@ -298,14 +299,24 @@ class CircularDrawer(AbstractDrawer):
                 scale_axes.append(axes)
                 scale_labels.append(slabels)
 
+        feature_cross_links = []
+        for track_A, feature_A, track_B, feature_B, color, border in self.cross_track_links:
+            cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
+                                              track_B._hacked_cur_level, feature_B,
+                                              color, border)
+            if cross_link:
+                feature_cross_links.append(cross_link)
+
         # Groups listed in order of addition to page (from back to front)
         # Draw track backgrounds
+        # Draw feature cross track links
         # Draw features and graphs
         # Draw scale axes
         # Draw scale labels
         # Draw feature labels
         # Draw track labels
-        element_groups = [greytrack_bgs, feature_elements,
+        element_groups = [greytrack_bgs, feature_cross_links,
+                          feature_elements,
                           scale_axes, scale_labels,
                           feature_labels, greytrack_labels
                           ]
@@ -482,6 +493,43 @@ class CircularDrawer(AbstractDrawer):
         #print locstart, locend, feature.name
         return sigil, labelgroup
 
+    def draw_cross_link(self, trackA, featureA, trackB, featureB, color, border):
+        if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
+            return None
+        if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
+            return None
+
+        startA = featureA.start
+        if startA < self.start: startA = self.start
+        startB = featureB.start
+        if startB < self.start: startB = self.start
+
+        endA = featureA.end
+        if self.end < endA: endA = self.end
+        endB = featureB.end
+        if self.end < endB: endB = self.end
+
+        startangleA, startcosA, startsinA = self.canvas_angle(startA)
+        startangleB, startcosB, startsinB = self.canvas_angle(startB)
+        endangleA, endcosA, endsinA = self.canvas_angle(endA)
+        endangleB, endcosB, endsinB = self.canvas_angle(endB)
+
+        btmA, ctrA, topA = self.track_radii[trackA]
+        btmB, ctrB, topB = self.track_radii[trackB]
+
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill color
+        if border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
+            strokecolor = border
+        else:
+            #e.g. False
+            strokecolor = None
+
+        return None
 
 
     def draw_graph_set(self, set):
