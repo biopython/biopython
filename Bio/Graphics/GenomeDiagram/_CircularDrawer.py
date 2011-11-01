@@ -517,28 +517,16 @@ class CircularDrawer(AbstractDrawer):
         btmA, ctrA, topA = self.track_radii[trackA]
         btmB, ctrB, topB = self.track_radii[trackB]
 
-        if color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        if border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            #e.g. False
-            strokecolor = None
-
         if ctrA < ctrB:
             return [self._draw_arc_poly(topA, btmB,
                            startangleA, endangleB,
                            endangleB, startangleB,
-                           color, strokecolor)]
+                           color, border)]
         else:
             return [self._draw_arc_poly(btmA, topB,
                            startangleA, endangleB,
                            endangleB, startangleB,
-                           color, strokecolor)]
+                           color, border)]
 
 
     def draw_graph_set(self, set):
@@ -1053,8 +1041,48 @@ class CircularDrawer(AbstractDrawer):
                        outer_startangle, outer_endangle,
                        color, border=None,
                        **kwargs):
-        #TODO
-        pass
+
+        if border is None:
+            border = color
+
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill colour
+        elif border is not None:
+            strokecolor = border
+
+        if abs(inner_endangle - inner_startangle)>0.01 \
+        or abs(outer_endangle - outer_startangle)>0.01:
+            # Wide arc, must use full curves
+            p = ArcPath(strokeColor=strokecolor,
+                        fillColor=color,
+                        strokewidth=0)
+            #Note reportlab counts angles anti-clockwise from the horizontal
+            #(as in mathematics, e.g. complex numbers and polar coordinates)
+            #but we use clockwise from the vertical.  Also reportlab uses
+            #degrees, but we use radians.
+            p.addArc(self.xcenter, self.ycenter, inner_radius,
+                     90 - (inner_endangle * 180 / pi), 90 - (inner_startangle * 180 / pi),
+                     moveTo=True)
+            p.addArc(self.xcenter, self.ycenter, outer_radius,
+                     90 - (outer_startangle * 180 / pi), 90 - (outer_endangle * 180 / pi),
+                     reverse=True)
+            p.closePath()
+            return p
+        else:
+            #Cheat and just use a four sided polygon.
+            # Calculate trig values for angle and coordinates
+            inner_startcos, inner_startsin = cos(inner_startangle), sin(inner_startangle)
+            inner_endcos, inner_endsin = cos(inner_endangle), sin(inner_endangle)
+            outer_startcos, outer_startsin = cos(outer_startangle), sin(outer_startangle)
+            outer_endcos, outer_endsin = cos(outer_endangle), sin(outer_endangle)
+            x0,y0 = self.xcenter, self.ycenter      # origin of the circle
+            x1,y1 = (x0+inner_radius*inner_startsin, y0+inner_radius*inner_startcos)
+            x2,y2 = (x0+inner_radius*inner_endsin, y0+inner_radius*inner_endcos)
+            x3,y3 = (x0+outer_radius*outer_endsin, y0+outer_radius*outer_endcos)
+            x4,y4 = (x0+outer_radius*outer_startsin, y0+outer_radius*outer_startcos)
+            return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border)
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None,
