@@ -439,10 +439,7 @@ class CircularDrawer(AbstractDrawer):
             kwargs["hrefURL"] = feature.url
             kwargs["hrefTitle"] = feature.name
 
-        if feature.color == colors.white:
-            border = colors.black
-        else:
-            border = feature.color
+        border = feature.border
 
         if feature.strand == 1:
             sigil = method(ctr, top, startangle, endangle, feature.color,
@@ -995,17 +992,17 @@ class CircularDrawer(AbstractDrawer):
         if colour is not None:
             color = colour
 
-        if border is None:
-            border = color
-
-        if color is None:
-            color = colour
         if color == colors.white and border is None:   # Force black border on 
             strokecolor = colors.black                 # white boxes with
         elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill colour
-        elif border is not None:
+            strokecolor = color                        # use fill color
+        elif border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
             strokecolor = border
+        else:
+            #e.g. False
+            strokecolor = None
 
         if abs(float(endangle - startangle))>.01:
             # Wide arc, must use full curves
@@ -1042,16 +1039,18 @@ class CircularDrawer(AbstractDrawer):
                        color, border=None,
                        **kwargs):
 
-        if border is None:
-            border = color
-
         if color == colors.white and border is None:   # Force black border on 
             strokecolor = colors.black                 # white boxes with
         elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill colour
-        elif border is not None:
+            strokecolor = color                        # use fill color
+        elif border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
             strokecolor = border
-
+        else:
+            #e.g. False
+            strokecolor = None
+        
         if abs(inner_endangle - inner_startangle)>0.01 \
         or abs(outer_endangle - outer_startangle)>0.01:
             # Wide arc, must use full curves
@@ -1092,17 +1091,17 @@ class CircularDrawer(AbstractDrawer):
         if colour is not None:
             color = colour
 
-        if border is None:
-            border = color
-
-        if color is None:
-            color = colour
         if color == colors.white and border is None:   # Force black border on 
             strokecolor = colors.black                 # white boxes with
         elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill colour
-        elif border is not None:
+            strokecolor = color                        # use fill color
+        elif border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
             strokecolor = border
+        else:
+            #e.g. False
+            strokecolor = None
 
         #if orientation == 'right':
         #    startangle, endangle = min(startangle, endangle), max(startangle, endangle)
