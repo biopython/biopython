@@ -1056,6 +1056,8 @@ class CircularDrawer(AbstractDrawer):
             # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
+                        #default is mitre/miter which can stick out too much:
+                        strokeLineJoin=1, #1=round
                         strokewidth=0)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)
@@ -1080,7 +1082,10 @@ class CircularDrawer(AbstractDrawer):
             x2,y2 = (x0+inner_radius*inner_endsin, y0+inner_radius*inner_endcos)
             x3,y3 = (x0+outer_radius*outer_endsin, y0+outer_radius*outer_endcos)
             x4,y4 = (x0+outer_radius*outer_startsin, y0+outer_radius*outer_startcos)
-            return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border)
+            return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border,
+                                #default is mitre/miter which can stick out too much:
+                                strokeLineJoin=1, #1=round
+                                )
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None,
