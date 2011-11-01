@@ -709,6 +709,10 @@ class DiagramTest(unittest.TestCase):
             if feature.type == 'gene':
                 prev_gene = feature
 
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2100,2110)), color=colors.red, border=colors.blue)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2200,2210)), color=colors.red, border=colors.blue)
+        gdd.cross_track_links.append((gdt1, a, gdt2, b, colors.red, colors.blue))
+
         cds_count = 0
         for feature in genbank_entry.features:
             if feature.type == 'CDS':

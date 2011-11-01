@@ -519,13 +519,13 @@ class CircularDrawer(AbstractDrawer):
 
         if ctrA < ctrB:
             return [self._draw_arc_poly(topA, btmB,
-                           startangleA, endangleB,
-                           endangleB, startangleB,
+                           startangleA, endangleA,
+                           startangleB, endangleB,
                            color, border)]
         else:
             return [self._draw_arc_poly(btmA, topB,
-                           startangleA, endangleB,
-                           endangleB, startangleB,
+                           startangleA, endangleA,
+                           startangleB, endangleB,
                            color, border)]
 
 
@@ -1064,10 +1064,9 @@ class CircularDrawer(AbstractDrawer):
             #degrees, but we use radians.
             p.addArc(self.xcenter, self.ycenter, inner_radius,
                      90 - (inner_endangle * 180 / pi), 90 - (inner_startangle * 180 / pi),
-                     moveTo=True)
+                     moveTo=True, reverse=True)
             p.addArc(self.xcenter, self.ycenter, outer_radius,
-                     90 - (outer_startangle * 180 / pi), 90 - (outer_endangle * 180 / pi),
-                     reverse=True)
+                     90 - (outer_endangle * 180 / pi), 90 - (outer_startangle * 180 / pi))
             p.closePath()
             return p
         else:
