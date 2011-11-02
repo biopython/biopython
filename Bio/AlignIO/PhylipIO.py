@@ -311,56 +311,57 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
     """
     Sequential Phylip format Iterator
     """
-    handle = self.handle
+    def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
+        handle = self.handle
 
-    if len(alignment)==0:
-        raise ValueError("Must have at least one sequence")
-    length_of_seqs = alignment.get_alignment_length()
-    for record in alignment:
-        if length_of_seqs != len(record.seq):
-            raise ValueError("Sequences must all be the same length")
-    if length_of_seqs <= 0:
-        raise ValueError("Non-empty sequences are required")
+        if len(alignment)==0:
+            raise ValueError("Must have at least one sequence")
+        length_of_seqs = alignment.get_alignment_length()
+        for record in alignment:
+            if length_of_seqs != len(record.seq):
+                raise ValueError("Sequences must all be the same length")
+        if length_of_seqs <= 0:
+            raise ValueError("Non-empty sequences are required")
 
-    # Check for repeated identifiers...
-    # Apply this test *after* cleaning the identifiers
-    names = []
-    for record in alignment:
-        name = record.id.strip()
-        #Either remove the banned characters, or map them to something
-        #else like an underscore "_" or pipe "|" character...
-        for char in "[](),":
-            name = name.replace(char,"")
-        for char in ":;":
-            name = name.replace(char,"|")
-        name = name[:id_width]
-        if name in names:
-            raise ValueError("Repeated name %r (originally %r), "
-                             "possibly due to truncation" \
-                             % (name, record.id))
-        names.append(name)
+        # Check for repeated identifiers...
+        # Apply this test *after* cleaning the identifiers
+        names = []
+        for record in alignment:
+            name = record.id.strip()
+            #Either remove the banned characters, or map them to something
+            #else like an underscore "_" or pipe "|" character...
+            for char in "[](),":
+                name = name.replace(char,"")
+            for char in ":;":
+                name = name.replace(char,"|")
+            name = name[:id_width]
+            if name in names:
+                raise ValueError("Repeated name %r (originally %r), "
+                                 "possibly due to truncation" \
+                                 % (name, record.id))
+            names.append(name)
 
-    # From experimentation, the use of tabs is not understood by the
-    # EMBOSS suite.  The nature of the expected white space is not
-    # defined in the PHYLIP documentation, simply "These are in free
-    # format, separated by blanks".  We'll use spaces to keep EMBOSS
-    # happy.
-    handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
-    for name, record in zip(names, alignment):
-        sequence = str(record.seq)
-        if "." in sequence:
-            raise ValueError("PHYLIP format no longer allows dots in "
-                             "sequence")
-        handle.write(name[:id_width].ljust(id_width))
-        handle.write(sequence)
-        handle.write("\n")
-    
+        # From experimentation, the use of tabs is not understood by the
+        # EMBOSS suite.  The nature of the expected white space is not
+        # defined in the PHYLIP documentation, simply "These are in free
+        # format, separated by blanks".  We'll use spaces to keep EMBOSS
+        # happy.
+        handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
+        for name, record in zip(names, alignment):
+            sequence = str(record.seq)
+            if "." in sequence:
+                raise ValueError("PHYLIP format no longer allows dots in "
+                                 "sequence")
+            handle.write(name[:id_width].ljust(id_width))
+            handle.write(sequence)
+            handle.write("\n")
+        
 
 class SequentialPhylipIterator(PhylipIterator):
     """
     Sequential Phylip format Iterator
     """
-        def next(self):
+    def next(self):
         handle = self.handle
 
         try:
