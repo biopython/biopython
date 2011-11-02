@@ -273,7 +273,6 @@ class LinearDrawer(AbstractDrawer):
         for track_level in self.drawn_tracks: # only use tracks to be drawn
             self.current_track_level = track_level      # establish track level
             track = self._parent[track_level]           # get the track at that level
-            track._hacked_cur_level = track_level
             gbgs, glabels = self.draw_greytrack(track)  # get greytrack elements
             greytrack_bgs.append(gbgs)
             greytrack_labels.append(glabels)
@@ -787,18 +786,28 @@ class LinearDrawer(AbstractDrawer):
             #e.g. False
             strokecolor = None
 
+        for track_level in self._parent.get_drawn_levels():
+            for feature_set in self._parent[track_level].get_sets():
+                if hasattr(feature_set, "features"):
+                    if cross_link.featureA in feature_set.features.values():
+                        trackA = track_level
+                    if cross_link.featureB in feature_set.features.values():
+                        trackB = track_level
+        if trackA == trackB: raise NotImplementedError()
+
+
         #TODO - Better drawing of flips when split between fragments
 
         answer = []
         #We'll only draw something if BOTH on same fragment!
         for fragment in range(max(start_fragmentA, start_fragmentB),
                               min(end_fragmentA, end_fragmentB)+1):
-            btmA, ctrA, topA = self.track_offsets[cross_link.trackA._hacked_cur_level]
+            btmA, ctrA, topA = self.track_offsets[trackA]
             btmA += self.fragment_lines[fragment][0]
             ctrA += self.fragment_lines[fragment][0]
             topA += self.fragment_lines[fragment][0]
     
-            btmB, ctrB, topB = self.track_offsets[cross_link.trackB._hacked_cur_level]
+            btmB, ctrB, topB = self.track_offsets[trackB]
             btmB += self.fragment_lines[fragment][0]
             ctrB += self.fragment_lines[fragment][0]
             topB += self.fragment_lines[fragment][0]

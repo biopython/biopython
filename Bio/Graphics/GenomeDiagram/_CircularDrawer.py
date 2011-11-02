@@ -287,7 +287,6 @@ class CircularDrawer(AbstractDrawer):
         for track_level in self._parent.get_drawn_levels():
             self.current_track_level = track_level
             track = self._parent[track_level]
-            track._hacked_cur_level = track_level
             gbgs, glabels = self.draw_greytrack(track)    # Greytracks
             greytrack_bgs.append(gbgs)
             greytrack_labels.append(glabels)
@@ -511,8 +510,17 @@ class CircularDrawer(AbstractDrawer):
         endangleA, endcosA, endsinA = self.canvas_angle(endA)
         endangleB, endcosB, endsinB = self.canvas_angle(endB)
 
-        btmA, ctrA, topA = self.track_radii[cross_link.trackA._hacked_cur_level]
-        btmB, ctrB, topB = self.track_radii[cross_link.trackB._hacked_cur_level]
+        for track_level in self._parent.get_drawn_levels():
+            for feature_set in self._parent[track_level].get_sets():
+                if hasattr(feature_set, "features"):
+                    if cross_link.featureA in feature_set.features.values():
+                        trackA = track_level
+                    if cross_link.featureB in feature_set.features.values():
+                        trackB = track_level
+        if trackA == trackB: raise NotImplementedError()
+
+        btmA, ctrA, topA = self.track_radii[trackA]
+        btmB, ctrB, topB = self.track_radii[trackB]
 
         if ctrA < ctrB:
             return [self._draw_arc_poly(topA, btmB,
