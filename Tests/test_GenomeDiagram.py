@@ -709,6 +709,7 @@ class DiagramTest(unittest.TestCase):
             if feature.type == 'gene':
                 prev_gene = feature
 
+        #Some cross links on the same linear diagram fragment,
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(2100,2110)), color=colors.red, border=colors.blue)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(2200,2210)), color=colors.red, border=colors.blue)
         gdd.cross_track_links.append(CrossLink(a, b, colors.red, colors.blue))
@@ -720,6 +721,24 @@ class DiagramTest(unittest.TestCase):
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(2250,2560)), color=colors.green, border=colors.blue)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(2300,2860)), color=colors.green, border=colors.blue)
         gdd.cross_track_links.append(CrossLink(a, b, colors.green, colors.blue))
+
+        #Some cross links where both parts are saddling the linear diagram fragment boundary,
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(3155,3250)), color=colors.orange, border=colors.red)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(3130,3300)), color=colors.orange, border=colors.red)
+        gdd.cross_track_links.append(CrossLink(a, b, colors.orange, colors.red))
+        #Nestled within that (drawn on top),
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(3180,3225)), color=colors.lightblue, border=colors.blue)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(3160,3275)), color=colors.lightblue, border=colors.blue)
+        gdd.cross_track_links.append(CrossLink(a, b, colors.lightblue, colors.blue, flip=True))
+
+        #Some cross links where two features are on either side of the linear diagram fragment boundary,
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(6275,6375)), color=colors.orange, border=colors.red)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(6430,6530)), color=colors.orange, border=colors.red)
+        gdd.cross_track_links.append(CrossLink(a, b, colors.orange, colors.red))
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(6430,6530)), color=colors.lightblue, border=colors.blue)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(6275,6375)), color=colors.lightblue, border=colors.blue)
+        gdd.cross_track_links.append(CrossLink(a, b, colors.lightblue, colors.blue, flip=True))
+
 
         cds_count = 0
         for feature in genbank_entry.features:
