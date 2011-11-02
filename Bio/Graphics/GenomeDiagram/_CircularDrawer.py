@@ -300,10 +300,10 @@ class CircularDrawer(AbstractDrawer):
                 scale_labels.append(slabels)
 
         feature_cross_links = []
-        for track_A, feature_A, track_B, feature_B, color, border in self.cross_track_links:
+        for track_A, feature_A, track_B, feature_B, color, border, flip in self.cross_track_links:
             cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
                                               track_B._hacked_cur_level, feature_B,
-                                              color, border)
+                                              color, border, flip)
             if cross_link:
                 feature_cross_links.append(cross_link)
 
@@ -490,7 +490,8 @@ class CircularDrawer(AbstractDrawer):
         #print locstart, locend, feature.name
         return sigil, labelgroup
 
-    def draw_cross_link(self, trackA, featureA, trackB, featureB, color, border):
+    def draw_cross_link(self, trackA, featureA, trackB, featureB,
+                        color, border, flip):
         if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
             return None
         if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
@@ -518,12 +519,12 @@ class CircularDrawer(AbstractDrawer):
             return [self._draw_arc_poly(topA, btmB,
                            startangleA, endangleA,
                            startangleB, endangleB,
-                           color, border)]
+                           color, border, flip)]
         else:
             return [self._draw_arc_poly(btmA, topB,
                            startangleA, endangleA,
                            startangleB, endangleB,
-                           color, border)]
+                           color, border, flip)]
 
 
     def draw_graph_set(self, set):
@@ -1036,7 +1037,7 @@ class CircularDrawer(AbstractDrawer):
     def _draw_arc_poly(self, inner_radius, outer_radius,
                        inner_startangle, inner_endangle,
                        outer_startangle, outer_endangle,
-                       color, border=None,
+                       color, border=None, flip=False,
                        **kwargs):
 
         if color == colors.white and border is None:   # Force black border on 
@@ -1067,7 +1068,8 @@ class CircularDrawer(AbstractDrawer):
                      90 - (inner_endangle * 180 / pi), 90 - (inner_startangle * 180 / pi),
                      moveTo=True, reverse=True)
             p.addArc(self.xcenter, self.ycenter, outer_radius,
-                     90 - (outer_endangle * 180 / pi), 90 - (outer_startangle * 180 / pi))
+                     90 - (outer_endangle * 180 / pi), 90 - (outer_startangle * 180 / pi),
+                     reverse=bool(flip))
             p.closePath()
             return p
         else:

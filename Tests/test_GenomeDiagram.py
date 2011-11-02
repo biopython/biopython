@@ -704,18 +704,22 @@ class DiagramTest(unittest.TestCase):
                                           color=dark)
                     #Cross link,
                     gdd.cross_track_links.append((gdt1, a, gdt2, b,
-                                                  light, dark))
+                                                  light, dark, False))
                     prev_gene = None
             if feature.type == 'gene':
                 prev_gene = feature
 
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(2100,2110)), color=colors.red, border=colors.blue)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(2200,2210)), color=colors.red, border=colors.blue)
-        gdd.cross_track_links.append((gdt1, a, gdt2, b, colors.red, colors.blue))
+        gdd.cross_track_links.append((gdt1, a, gdt2, b, colors.red, colors.blue, False))
+
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2150,2200)), color=colors.yellow, border=colors.blue)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2220,2290)), color=colors.yellow, border=colors.blue)
+        gdd.cross_track_links.append((gdt1, a, gdt2, b, colors.yellow, colors.blue, True))
 
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(2250,2560)), color=colors.green, border=colors.blue)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(2300,2860)), color=colors.green, border=colors.blue)
-        gdd.cross_track_links.append((gdt1, a, gdt2, b, colors.green, colors.blue))
+        gdd.cross_track_links.append((gdt1, a, gdt2, b, colors.green, colors.blue, False))
 
         cds_count = 0
         for feature in genbank_entry.features:

@@ -286,10 +286,10 @@ class LinearDrawer(AbstractDrawer):
                 scale_labels.append(slabels)
 
         feature_cross_links = []
-        for track_A, feature_A, track_B, feature_B, color, border in self.cross_track_links:
+        for track_A, feature_A, track_B, feature_B, color, border, flip in self.cross_track_links:
             cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
                                               track_B._hacked_cur_level, feature_B,
-                                              color, border)
+                                              color, border, flip)
             if cross_link:
                 feature_cross_links.append(cross_link)
 
@@ -745,7 +745,7 @@ class LinearDrawer(AbstractDrawer):
         #    print locstart, locend, feature.strand, feature_boxes, feature.name
         return feature_boxes
 
-    def draw_cross_link(self, trackA, featureA, trackB, featureB, color, border):
+    def draw_cross_link(self, trackA, featureA, trackB, featureB, color, border, flip):
         if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
             return None
         if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
@@ -787,6 +787,8 @@ class LinearDrawer(AbstractDrawer):
             #e.g. False
             strokecolor = None
 
+        #TODO - Better drawing of flips when split between fragments
+
         answer = []
         #We'll only draw something if BOTH on same fragment!
         for fragment in range(max(start_fragmentA, start_fragmentB),
@@ -825,13 +827,20 @@ class LinearDrawer(AbstractDrawer):
             else:
                 yA = btmA
                 yB = topB
-
-            answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
-                           strokeColor=strokecolor,
-                           fillColor=color,
-                           #default is mitre/miter which can stick out too much:
-                           strokeLineJoin=1, #1=round
-                           strokewidth=0))
+            if flip:
+                answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
+                               strokeColor=strokecolor,
+                               fillColor=color,
+                               #default is mitre/miter which can stick out too much:
+                               strokeLineJoin=1, #1=round
+                               strokewidth=0))
+            else:
+                answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
+                               strokeColor=strokecolor,
+                               fillColor=color,
+                               #default is mitre/miter which can stick out too much:
+                               strokeLineJoin=1, #1=round
+                               strokewidth=0))
         return answer
 
     def get_feature_sigil(self, feature, x0, x1, fragment, **kwargs):
