@@ -300,12 +300,10 @@ class CircularDrawer(AbstractDrawer):
                 scale_labels.append(slabels)
 
         feature_cross_links = []
-        for track_A, feature_A, track_B, feature_B, color, border, flip in self.cross_track_links:
-            cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
-                                              track_B._hacked_cur_level, feature_B,
-                                              color, border, flip)
-            if cross_link:
-                feature_cross_links.append(cross_link)
+        for cross_link_obj in self.cross_track_links:
+            cross_link_elements = self.draw_cross_link(cross_link_obj)
+            if cross_link_elements:
+                feature_cross_links.append(cross_link_elements)
 
         # Groups listed in order of addition to page (from back to front)
         # Draw track backgrounds
@@ -490,21 +488,22 @@ class CircularDrawer(AbstractDrawer):
         #print locstart, locend, feature.name
         return sigil, labelgroup
 
-    def draw_cross_link(self, trackA, featureA, trackB, featureB,
-                        color, border, flip):
-        if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
+    def draw_cross_link(self, cross_link):
+        if not self.is_in_bounds(cross_link.featureA.start) \
+        and not self.is_in_bounds(cross_link.featureA.end):
             return None
-        if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
+        if not self.is_in_bounds(cross_link.featureB.start) \
+        and not self.is_in_bounds(cross_link.featureB.end):
             return None
 
-        startA = featureA.start
+        startA = cross_link.featureA.start
         if startA < self.start: startA = self.start
-        startB = featureB.start
+        startB = cross_link.featureB.start
         if startB < self.start: startB = self.start
 
-        endA = featureA.end
+        endA = cross_link.featureA.end
         if self.end < endA: endA = self.end
-        endB = featureB.end
+        endB = cross_link.featureB.end
         if self.end < endB: endB = self.end
 
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
@@ -512,19 +511,19 @@ class CircularDrawer(AbstractDrawer):
         endangleA, endcosA, endsinA = self.canvas_angle(endA)
         endangleB, endcosB, endsinB = self.canvas_angle(endB)
 
-        btmA, ctrA, topA = self.track_radii[trackA]
-        btmB, ctrB, topB = self.track_radii[trackB]
+        btmA, ctrA, topA = self.track_radii[cross_link.trackA._hacked_cur_level]
+        btmB, ctrB, topB = self.track_radii[cross_link.trackB._hacked_cur_level]
 
         if ctrA < ctrB:
             return [self._draw_arc_poly(topA, btmB,
                            startangleA, endangleA,
                            startangleB, endangleB,
-                           color, border, flip)]
+                           cross_link.color, cross_link.border, cross_link.flip)]
         else:
             return [self._draw_arc_poly(btmA, topB,
                            startangleA, endangleA,
                            startangleB, endangleB,
-                           color, border, flip)]
+                           cross_link.color, cross_link.border, cross_link.flip)]
 
 
     def draw_graph_set(self, set):

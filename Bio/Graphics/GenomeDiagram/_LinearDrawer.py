@@ -286,12 +286,10 @@ class LinearDrawer(AbstractDrawer):
                 scale_labels.append(slabels)
 
         feature_cross_links = []
-        for track_A, feature_A, track_B, feature_B, color, border, flip in self.cross_track_links:
-            cross_link = self.draw_cross_link(track_A._hacked_cur_level, feature_A,
-                                              track_B._hacked_cur_level, feature_B,
-                                              color, border, flip)
-            if cross_link:
-                feature_cross_links.append(cross_link)
+        for cross_link_obj in self.cross_track_links:
+            cross_link_elements = self.draw_cross_link(cross_link_obj)
+            if cross_link_elements:
+                feature_cross_links.append(cross_link_elements)
 
         # Groups listed in order of addition to page (from back to front)
         # Draw track backgrounds
@@ -745,20 +743,22 @@ class LinearDrawer(AbstractDrawer):
         #    print locstart, locend, feature.strand, feature_boxes, feature.name
         return feature_boxes
 
-    def draw_cross_link(self, trackA, featureA, trackB, featureB, color, border, flip):
-        if not self.is_in_bounds(featureA.start) and not self.is_in_bounds(featureA.end):
+    def draw_cross_link(self, cross_link):
+        if not self.is_in_bounds(cross_link.featureA.start) \
+        and not self.is_in_bounds(cross_link.featureA.end):
             return None
-        if not self.is_in_bounds(featureB.start) and not self.is_in_bounds(featureB.end):
+        if not self.is_in_bounds(cross_link.featureB.start) \
+        and not self.is_in_bounds(cross_link.featureB.end):
             return None
 
-        startA = featureA.start
+        startA = cross_link.featureA.start
         if startA < self.start: startA = self.start
-        startB = featureB.start
+        startB = cross_link.featureB.start
         if startB < self.start: startB = self.start
 
-        endA = featureA.end
+        endA = cross_link.featureA.end
         if self.end < endA: endA = self.end
-        endB = featureB.end
+        endB = cross_link.featureB.end
         if self.end < endB: endB = self.end
 
         allowed_fragments = self.fragment_limits.keys()
@@ -775,14 +775,14 @@ class LinearDrawer(AbstractDrawer):
         or end_fragmentB not in allowed_fragments:
             return
 
-        if color == colors.white and border is None:   # Force black border on 
+        if cross_link.color == colors.white and border is None:   # Force black border on 
             strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        if border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
+        elif cross_link.border is None:                           # undefined border, else
+            strokecolor = cross_link.color                        # use fill color
+        if cross_link.border:
+            if not isinstance(cross_link.border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(cross_link.border))
+            strokecolor = cross_link.border
         else:
             #e.g. False
             strokecolor = None
@@ -793,12 +793,12 @@ class LinearDrawer(AbstractDrawer):
         #We'll only draw something if BOTH on same fragment!
         for fragment in range(max(start_fragmentA, start_fragmentB),
                               min(end_fragmentA, end_fragmentB)+1):
-            btmA, ctrA, topA = self.track_offsets[trackA]
+            btmA, ctrA, topA = self.track_offsets[cross_link.trackA._hacked_cur_level]
             btmA += self.fragment_lines[fragment][0]
             ctrA += self.fragment_lines[fragment][0]
             topA += self.fragment_lines[fragment][0]
     
-            btmB, ctrB, topB = self.track_offsets[trackB]
+            btmB, ctrB, topB = self.track_offsets[cross_link.trackB._hacked_cur_level]
             btmB += self.fragment_lines[fragment][0]
             ctrB += self.fragment_lines[fragment][0]
             topB += self.fragment_lines[fragment][0]
@@ -827,17 +827,17 @@ class LinearDrawer(AbstractDrawer):
             else:
                 yA = btmA
                 yB = topB
-            if flip:
+            if cross_link.flip:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
                                strokeColor=strokecolor,
-                               fillColor=color,
+                               fillColor=cross_link.color,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
             else:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
                                strokeColor=strokecolor,
-                               fillColor=color,
+                               fillColor=cross_link.color,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
