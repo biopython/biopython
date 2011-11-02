@@ -46,6 +46,8 @@ test_files = [
     ("phylip", 3, 1, 'Phylip/interlaced.phy'),
     ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
     ("phylip-relaxed", 12, 1, 'ExtendedPhylip/primates.phyx'),
+    ("phylip-sequential", 3, 1, 'Phylip/sequential.phy'),
+    ("phylip-sequential", 4, 1, 'Phylip/sequential.phy'),
     ("emboss", 4, 1, 'Emboss/alignret.txt'),
     ("emboss", 2, 5, 'Emboss/needle.txt'),
     ("emboss", 2, 1, 'Emboss/needle_asis.txt'),
@@ -174,6 +176,9 @@ def simple_alignment_comparison(alignments, alignments2, format):
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
             if format=="phylip":
+                assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
+                       "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="phylip-relaxed":
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="phylip-relaxed":
