@@ -814,21 +814,29 @@ class LinearDrawer(AbstractDrawer):
     
             if fragment == start_fragmentA:
                 xAs = self.x0 + start_offsetA
+                crop_leftA = False
             else:
                 xAs = self.x0
+                crop_leftA = True
             if fragment == start_fragmentB:
                 xBs = self.x0 + start_offsetB
+                crop_leftB = False
             else:
                 xBs = self.x0
+                crop_leftB = True
 
             if self.fragment_limits[fragment][1] < endA:
                 xAe = self.x0 + self.pagewidth
+                crop_rightA = True
             else:
                 xAe = self.x0 + end_offsetA
+                crop_rightA = False
             if self.fragment_limits[fragment][1] < endB:
                 xBe = self.x0 + self.pagewidth
+                crop_rightB = True
             else:
                 xBe = self.x0 + end_offsetB
+                crop_rightB = False
 
             if ctrA < ctrB:
                 yA = topA
@@ -836,7 +844,30 @@ class LinearDrawer(AbstractDrawer):
             else:
                 yA = btmA
                 yB = topB
-            if cross_link.flip:
+
+            if cross_link.flip and ((crop_leftA and not crop_rightA) or \
+                                    (crop_leftB and not crop_rightB)):
+                #On left end of fragment... force "crossing" to margin
+                answer.append(Polygon([xAs, yA, xAe, yA,
+                                       self.x0, 0.5 * (yA + yB),
+                                       xBe, yB, xBs, yB],
+                               strokeColor=strokecolor,
+                               fillColor=cross_link.color,
+                               #default is mitre/miter which can stick out too much:
+                               strokeLineJoin=1, #1=round
+                               strokewidth=0))
+            elif cross_link.flip and ((crop_rightA and not crop_leftA) or \
+                                      (crop_rightB and not crop_leftB)):
+                #On right end... force "crossing" to margin
+                answer.append(Polygon([xAs, yA, xAe, yA,
+                                       xBe, yB, xBs, yB,
+                                       self.x0 + self.pagewidth, 0.5 * (yA + yB)],
+                               strokeColor=strokecolor,
+                               fillColor=cross_link.color,
+                               #default is mitre/miter which can stick out too much:
+                               strokeLineJoin=1, #1=round
+                               strokewidth=0))
+            elif cross_link.flip:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
                                strokeColor=strokecolor,
                                fillColor=cross_link.color,
