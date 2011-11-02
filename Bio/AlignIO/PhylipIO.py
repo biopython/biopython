@@ -413,6 +413,13 @@ class SequentialPhylipIterator(PhylipIterator):
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append(s)
+        while True:
+            line = handle.readline()
+            if not line:
+                break
+            if self._is_header(line):
+                self._header = line
+                break
 
         records = (SeqRecord(Seq(s, self.alphabet), \
                              id=i, name=i, description=i) \
