@@ -38,6 +38,14 @@ from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
+def fill_and_border(base_color, alpha=0.5):
+    c = base_color.clone()
+    try:
+        c.alpha = alpha
+        return c, base_color
+    except AttributeError:
+        #Old ReportLab
+        return None, base_color
 
 ###############################################################################
 # Utility functions for graph plotting, originally in GenomeDiagram.Utilities #
@@ -710,49 +718,46 @@ class DiagramTest(unittest.TestCase):
                 prev_gene = feature
 
         #Some cross links on the same linear diagram fragment,
-        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2100,2110)), color=colors.red, border=colors.blue)
-        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2200,2210)), color=colors.red, border=colors.blue)
-        gdd.cross_track_links.append(CrossLink(a, b, colors.red, colors.blue))
+        f, c = fill_and_border(colors.red)
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2220,2230)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2200,2210)), color=f, border=c)
+        gdd.cross_track_links.append(CrossLink(a, b, f, c))
 
-        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2150,2200)), color=colors.yellow, border=colors.blue)
-        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2220,2290)), color=colors.yellow, border=colors.blue)
-        gdd.cross_track_links.append(CrossLink(a, b, colors.yellow, colors.blue, flip=True))
+        f, c = fill_and_border(colors.blue)
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2150,2200)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2220,2290)), color=f, border=c)
+        gdd.cross_track_links.append(CrossLink(a, b, f, c, flip=True))
 
-        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2250,2560)), color=colors.green, border=colors.blue)
-        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2300,2860)), color=colors.green, border=colors.blue)
-        gdd.cross_track_links.append(CrossLink(a, b, colors.green, colors.blue))
+        f, c = fill_and_border(colors.green)
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(2250,2560)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(2300,2860)), color=f, border=c)
+        gdd.cross_track_links.append(CrossLink(a, b, f, c))
 
         #Some cross links where both parts are saddling the linear diagram fragment boundary,
-        a = gdfsA.add_feature(SeqFeature(FeatureLocation(3155,3250)), color=colors.orange, border=colors.red)
-        b = gdfsB.add_feature(SeqFeature(FeatureLocation(3130,3300)), color=colors.orange, border=colors.red)
-        gdd.cross_track_links.append(CrossLink(a, b, colors.orange, colors.red))
+        f, c = fill_and_border(colors.red)
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(3155,3250)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(3130,3300)), color=f, border=c)
+        gdd.cross_track_links.append(CrossLink(a, b, f, c))
         #Nestled within that (drawn on top),
-        a = gdfsA.add_feature(SeqFeature(FeatureLocation(3180,3225)), color=colors.lightblue, border=colors.blue)
-        b = gdfsB.add_feature(SeqFeature(FeatureLocation(3160,3275)), color=colors.lightblue, border=colors.blue)
-        gdd.cross_track_links.append(CrossLink(a, b, colors.lightblue, colors.blue, flip=True))
+        f, c = fill_and_border(colors.blue)
+        a = gdfsA.add_feature(SeqFeature(FeatureLocation(3160,3275)), color=f, border=c)
+        b = gdfsB.add_feature(SeqFeature(FeatureLocation(3180,3225)), color=f, border=c)
+        gdd.cross_track_links.append(CrossLink(a, b, f, c, flip=True))
 
         #Some cross links where two features are on either side of the linear diagram fragment boundary,
-        c = colors.green
-        f = c.clone()
-        f.alpha = 0.5
+        f, c = fill_and_border(colors.green)
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(6450,6550)), color=f, border=c)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(6265,6365)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c))
-        c = colors.gold
-        f = c.clone()
-        f.alpha = 0.5
+        f, c = fill_and_border(colors.gold)
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(6265,6365)), color=f, border=c)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(6450,6550)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c))
-        c = colors.red
-        f = c.clone()
-        f.alpha = 0.5
+        f, c = fill_and_border(colors.red)
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(6275,6375)), color=f, border=c)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(6430,6530)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c, flip=True))
-        c = colors.blue
-        f = c.clone()
-        f.alpha = 0.5
+        f, c = fill_and_border(colors.blue)
         a = gdfsA.add_feature(SeqFeature(FeatureLocation(6430,6530)), color=f, border=c)
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(6275,6375)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c, flip=True))
