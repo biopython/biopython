@@ -309,7 +309,7 @@ class RelaxedPhylipIterator(PhylipIterator):
 
 class SequentialPhylipWriter(SequentialAlignmentWriter):
     """
-    Sequential Phylip format Iterator
+    Sequential Phylip format Writer
     """
     def write_alignment(self, alignment, id_width=_PHYLIP_ID_WIDTH):
         handle = self.handle
@@ -353,6 +353,8 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
                 raise ValueError("PHYLIP format no longer allows dots in "
                                  "sequence")
             handle.write(name[:id_width].ljust(id_width))
+            # Write the entire sequence to one line (see sequential format
+            # notes in the SequentialPhylipIterator docstring
             handle.write(sequence)
             handle.write("\n")
         
@@ -360,6 +362,12 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
 class SequentialPhylipIterator(PhylipIterator):
     """
     Sequential Phylip format Iterator
+
+    The sequential format carries the same restrictions as the normal
+    interleaved one, with the difference being that the sequences are listed
+    sequentially, each sequence written in its entirety before the start of
+    the next. According to the PHYLIP documentation for input file formatting,
+    newlines and spaces may optionally be entered at any point in the sequences.
     """
     def next(self):
         handle = self.handle
@@ -401,6 +409,7 @@ class SequentialPhylipIterator(PhylipIterator):
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
             while len(s) < length_of_seqs:
+                # The sequence may be split into multiple lines
                 line = handle.readline().strip()
                 if not line:
                     break
@@ -414,6 +423,7 @@ class SequentialPhylipIterator(PhylipIterator):
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
             seqs.append(s)
         while True:
+            # Find other alignments in the file
             line = handle.readline()
             if not line:
                 break
