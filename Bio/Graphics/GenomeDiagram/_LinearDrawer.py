@@ -799,9 +799,8 @@ class LinearDrawer(AbstractDrawer):
         #TODO - Better drawing of flips when split between fragments
 
         answer = []
-        #We'll only draw something if BOTH on same fragment!
-        for fragment in range(max(start_fragmentA, start_fragmentB),
-                              min(end_fragmentA, end_fragmentB)+1):
+        for fragment in range(min(start_fragmentA, start_fragmentB),
+                              max(end_fragmentA, end_fragmentB)+1):
             btmA, ctrA, topA = self.track_offsets[trackA]
             btmA += self.fragment_lines[fragment][0]
             ctrA += self.fragment_lines[fragment][0]
@@ -812,19 +811,6 @@ class LinearDrawer(AbstractDrawer):
             ctrB += self.fragment_lines[fragment][0]
             topB += self.fragment_lines[fragment][0]
     
-            if fragment == start_fragmentA:
-                xAs = self.x0 + start_offsetA
-                crop_leftA = False
-            else:
-                xAs = self.x0
-                crop_leftA = True
-            if fragment == start_fragmentB:
-                xBs = self.x0 + start_offsetB
-                crop_leftB = False
-            else:
-                xBs = self.x0
-                crop_leftB = True
-
             if self.fragment_limits[fragment][1] < endA:
                 xAe = self.x0 + self.pagewidth
                 crop_rightA = True
@@ -838,6 +824,28 @@ class LinearDrawer(AbstractDrawer):
                 xBe = self.x0 + end_offsetB
                 crop_rightB = False
 
+            if fragment < start_fragmentA:
+                xAs = self.x0 + self.pagewidth
+                xAe = xAs
+                crop_leftA = False
+            elif fragment == start_fragmentA:
+                xAs = self.x0 + start_offsetA
+                crop_leftA = False
+            else:
+                xAs = self.x0
+                crop_leftA = True
+
+            if fragment < start_fragmentB:
+                xBs = self.x0 + self.pagewidth
+                xBe = xBs
+                crop_leftB = False
+            elif fragment == start_fragmentB:
+                xBs = self.x0 + start_offsetB
+                crop_leftB = False
+            else:
+                xBs = self.x0
+                crop_leftB = True
+
             if ctrA < ctrB:
                 yA = topA
                 yB = btmB
@@ -845,7 +853,47 @@ class LinearDrawer(AbstractDrawer):
                 yA = btmA
                 yB = topB
 
-            if cross_link.flip and ((crop_leftA and not crop_rightA) or \
+            if fragment < start_fragmentB or end_fragmentB < fragment:
+                if cross_link.flip:
+                    #Just draw A as a triangle to left/right
+                    if fragment < start_fragmentB:
+                        extra = [self.x0 + self.pagewidth, 0.5 * (yA + yB)]
+                    else:
+                        extra = [self.x0 , 0.5 * (yA + yB)]
+                else:
+                    if fragment < start_fragmentB:
+                        extra = [self.x0 + self.pagewidth, 0.7*yA + 0.3*yB,
+                                 self.x0 + self.pagewidth, 0.3*yA + 0.7*yB]
+                    else:
+                        extra = [self.x0 , 0.3*yA + 0.7*yB,
+                                 self.x0 , 0.7*yA + 0.3*yB]
+                answer.append(Polygon([xAs, yA, xAe, yA] + extra,
+                               strokeColor=strokecolor,
+                               fillColor=cross_link.color,
+                               #default is mitre/miter which can stick out too much:
+                               strokeLineJoin=1, #1=round
+                               strokewidth=0))
+            elif fragment < start_fragmentA or end_fragmentA < fragment:
+                if cross_link.flip:
+                    #Just draw B as a triangle to left
+                    if fragment < start_fragmentA:
+                        extra = [self.x0 + self.pagewidth, 0.5 * (yA + yB)]
+                    else:
+                        extra = [self.x0 , 0.5 * (yA + yB)]
+                else:
+                    if fragment < start_fragmentA:
+                        extra = [self.x0 + self.pagewidth, 0.3*yA + 0.7*yB,
+                                 self.x0 + self.pagewidth, 0.7*yA + 0.3*yB]
+                    else:
+                        extra = [self.x0 , 0.7*yA + 0.3*yB,
+                                 self.x0 , 0.3*yA + 0.7*yB]
+                answer.append(Polygon([xBs, yB, xBe, yB] + extra,
+                               strokeColor=strokecolor,
+                               fillColor=cross_link.color,
+                               #default is mitre/miter which can stick out too much:
+                               strokeLineJoin=1, #1=round
+                               strokewidth=0))
+            elif cross_link.flip and ((crop_leftA and not crop_rightA) or \
                                     (crop_leftB and not crop_rightB)):
                 #On left end of fragment... force "crossing" to margin
                 answer.append(Polygon([xAs, yA, xAe, yA,
