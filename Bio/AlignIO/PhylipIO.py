@@ -400,11 +400,21 @@ class SequentialPhylipIterator(PhylipIterator):
             line = handle.readline().rstrip()
             sequence_id, s = self._split_id(line)
             ids.append(sequence_id)
+            while len(s) < length_of_seqs:
+                line = handle.readline().strip()
+                if not line:
+                    break
+                if line == "":
+                    continue
+                s = "".join([s, line.strip().replace(" ", "")])
+                if len(s) > length_of_seqs:
+                    raise ValueError("Found a record of length %i, should be %i" \
+                            % (len(s), length_of_seqs))
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
-            seqs.append([s])
+            seqs.append(s)
 
-        records = (SeqRecord(Seq("".join(s), self.alphabet), \
+        records = (SeqRecord(Seq(s, self.alphabet), \
                              id=i, name=i, description=i) \
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
