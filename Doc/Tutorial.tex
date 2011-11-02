@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 1 November 2011 (Biopython 1.58+)}
+\date{Last Update -- 2 November 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10180,7 +10180,7 @@ and PICT formats).
 \label{sec:genomediagram}
 \subsection{Introduction}
 
-The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50,
+The \verb|Bio.Graphics.GenomeDiagram| module was added to Biopython 1.50,
 having previously been available as a separate Python module dependent on Biopython.
 GenomeDiagram is described in the Bioinformatics journal publication Pritchard et al. (2006),
 \href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
@@ -10190,9 +10190,14 @@ which includes some examples images.
 
 As the name might suggest, GenomeDiagram was designed for drawing whole genomes, in
 particular prokaryotic genomes, either as linear diagrams (optionally broken up into
-fragments to fit better) or as circular wheel diagrams.  It proves also well suited
-to drawing quite detailed figures for smaller genomes such as phage, plasmids or
-mitochrondia.
+fragments to fit better) or as circular wheel diagrams.  Have a look at Figure 2 in
+Toth \textit{et al.} (2006),
+\href{http://dx.doi.org/10.1146/annurev.phyto.44.070505.143444}{doi:10.1146/annurev.phyto.44.070505.143444},
+for a good example. It proved also well suited to drawing quite detailed figures for
+smaller genomes such as phage, plasmids or mitochrondia, for example see Figures 1
+and 2 in van Leeuwenhoek \textit{et al.} (2009),
+\href{http://dx.doi.org/10.1007/s10482-009-9316-9}{doi:10.1007/s10482-009-9316-9}
+(shown with additional manual editing).
 
 This module is easiest to use if you have your genome loaded as a \verb|SeqRecord|
 object containing lots of \verb|SeqFeature| objects - for example as loaded from a
