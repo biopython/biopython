@@ -20,9 +20,14 @@ making dealing with fuzzy locations in EMBL/GenBank files much easier. Note
 as part of this work, the arguments to create fuzzy positions OneOfPosition
 and WithinPosition have changed in a non-backwards compatible way.
 
+The SeqFeature's strand and any database reference are now properties of the
+FeatureLocation object (a more logical placement), with proxy methods for
+backwards compatibility. As part of this change, if you print a location
+object it will now display any strand and database reference information.
+
 Bio.Graphics.BasicChromosome has been extended to allow simple sub-features
 to be drawn on chromosome segments, suitable to show the position of genes,
-SNPs or other loci. Note Bio.Graphics module requires the ReportLab library.
+SNPs or other loci. Note Bio.Graphics requires the ReportLab library.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:

@@ -1,5 +1,5 @@
 # Copyright 2000 by Jeffrey Chang, Brad Chapman.  All rights reserved.
-# Copyright 2006-2008 by Peter Cock.  All rights reserved.
+# Copyright 2006-2011 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -213,37 +213,37 @@ def _pos(pos_str, offset=0):
     else:
         return SeqFeature.ExactPosition(int(pos_str)+offset)
 
-def _loc(loc_str, expected_seq_length):
+def _loc(loc_str, expected_seq_length, strand):
     """FeatureLocation from non-compound non-complement location (PRIVATE).
     
     Simple examples,
 
-    >>> _loc("123..456", 1000)
-    FeatureLocation(ExactPosition(122),ExactPosition(456))
-    >>> _loc("<123..>456", 1000)
-    FeatureLocation(BeforePosition(122),AfterPosition(456))
+    >>> _loc("123..456", 1000, +1)
+    FeatureLocation(ExactPosition(122), ExactPosition(456), strand=1)
+    >>> _loc("<123..>456", 1000, strand = -1)
+    FeatureLocation(BeforePosition(122), AfterPosition(456), strand=-1)
 
     A more complex location using within positions,
 
-    >>> _loc("(9.10)..(20.25)", 1000)
-    FeatureLocation(WithinPosition(8, left=8, right=9),WithinPosition(25, left=20, right=25))
+    >>> _loc("(9.10)..(20.25)", 1000, 1)
+    FeatureLocation(WithinPosition(8, left=8, right=9), WithinPosition(25, left=20, right=25), strand=1)
 
     Notice how that will act as though it has overall start 8 and end 25.
 
     Zero length between feature,
 
-    >>> _loc("123^124", 1000)
-    FeatureLocation(ExactPosition(123),ExactPosition(123))
+    >>> _loc("123^124", 1000, 0)
+    FeatureLocation(ExactPosition(123), ExactPosition(123), strand=0)
     
     The expected sequence length is needed for a special case, a between
     position at the start/end of a circular genome:
 
-    >>> _loc("1000^1", 1000)
-    FeatureLocation(ExactPosition(1000),ExactPosition(1000))
+    >>> _loc("1000^1", 1000, 1)
+    FeatureLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
     
     Apart from this special case, between positions P^Q must have P+1==Q,
 
-    >>> _loc("123^456", 1000)
+    >>> _loc("123^456", 1000, 1)
     Traceback (most recent call last):
        ...
     ValueError: Invalid between location '123^456'
@@ -267,12 +267,12 @@ def _loc(loc_str, expected_seq_length):
                 pos = _pos(s)
             else:
                 raise ValueError("Invalid between location %s" % repr(loc_str))
-            return SeqFeature.FeatureLocation(pos, pos)
+            return SeqFeature.FeatureLocation(pos, pos, strand)
         else:
             #e.g. "123"
             s = loc_str
             e = loc_str
-    return SeqFeature.FeatureLocation(_pos(s,-1), _pos(e))
+    return SeqFeature.FeatureLocation(_pos(s,-1), _pos(e), strand)
 
 def _split_compound_loc(compound_loc):
     """Split a tricky compound location string (PRIVATE).
@@ -936,12 +936,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._cur_feature = SeqFeature.SeqFeature()
         self._cur_feature.type = content
 
-        # assume positive strand to start with if we have DNA or cDNA
-        # (labelled as mRNA). The complement in the location will 
-        # change this later if something is on the reverse strand
-        if self._seq_type.find("DNA") >= 0 or self._seq_type.find("mRNA") >= 0:
-            self._cur_feature.strand = 1
-
     def location(self, content):
         """Parse out location information from the location string.
 
@@ -963,19 +957,26 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         
         cur_feature = self._cur_feature
 
-        #Handle top level complement here for speed        
+        #Handle top level complement here for speed
         if location_line.startswith("complement("):
             assert location_line.endswith(")")
             location_line = location_line[11:-1]
-            cur_feature.strand = -1
-            #And continue...
+            strand = -1
+        elif self._seq_type.find("DNA") >= 0 \
+        or self._seq_type.find("RNA") >= 0:
+            #Nucleotide
+            strand = 1
+        else:
+            #Protein
+            strand = None
 
         #Special case handling of the most common cases for speed
         if _re_simple_location.match(location_line):
             #e.g. "123..456"
             s, e = location_line.split("..")
             cur_feature.location = SeqFeature.FeatureLocation(int(s)-1,
-                                                              int(e))
+                                                              int(e),
+                                                              strand)
             return
         if _re_simple_compound.match(location_line):
             #e.g. join(<123..456,480..>500)
@@ -985,21 +986,25 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             for part in location_line[i+1:-1].split(","):
                 s, e = part.split("..")
                 f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s)-1,
-                                                                     int(e)),
+                                                                     int(e),
+                                                                     strand),
                         location_operator=cur_feature.location_operator,
-                        strand=cur_feature.strand, type=cur_feature.type)
+                        type=cur_feature.type)
                 cur_feature.sub_features.append(f)
             s = cur_feature.sub_features[0].location.start
             e = cur_feature.sub_features[-1].location.end
-            cur_feature.location = SeqFeature.FeatureLocation(s,e)
+            cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
             return
         
         #Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             #e.g. "AL121804.2:41..610"
             if ":" in location_line:
-                cur_feature.ref, location_line = location_line.split(":")
-            cur_feature.location = _loc(location_line, self._expected_size)
+                location_ref, location_line = location_line.split(":")
+                cur_feature.location = _loc(location_line, self._expected_size, strand)
+                cur_feature.location.ref = location_ref
+            else:
+                cur_feature.location = _loc(location_line, self._expected_size, strand)
             return
         if _re_complex_compound.match(location_line):
             i = location_line.find("(")
@@ -1009,23 +1014,23 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 if part.startswith("complement("):
                     assert part[-1]==")"
                     part = part[11:-1]
-                    assert cur_feature.strand != -1, "Double complement?"
-                    strand = -1
+                    assert strand != -1, "Double complement?"
+                    part_strand = -1
                 else:
-                    strand = cur_feature.strand
+                    part_strand = strand
                 if ":" in part:
                     ref, part = part.split(":")
                 else:
                     ref = None
                 try:
-                    loc = _loc(part, self._expected_size)
+                    loc = _loc(part, self._expected_size, part_strand)
                 except ValueError, err:
                     print location_line
                     print part
                     raise err
                 f = SeqFeature.SeqFeature(location=loc, ref=ref,
                         location_operator=cur_feature.location_operator,
-                        strand=strand, type=cur_feature.type)
+                        type=cur_feature.type)
                 cur_feature.sub_features.append(f)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
@@ -1035,12 +1040,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # this, join(complement(69611..69724),139856..140087,140625..140650)
             strands = set(sf.strand for sf in cur_feature.sub_features)
             if len(strands)==1:
-                cur_feature.strand = cur_feature.sub_features[0].strand
+                strand = cur_feature.sub_features[0].strand
             else:
-                cur_feature.strand = None # i.e. mixed strands
+                strand = None # i.e. mixed strands
             s = cur_feature.sub_features[0].location.start
             e = cur_feature.sub_features[-1].location.end
-            cur_feature.location = SeqFeature.FeatureLocation(s,e)
+            cur_feature.location = SeqFeature.FeatureLocation(s, e, strand)
             return
         #Not recognised
         if "order" in location_line and "join" in location_line:

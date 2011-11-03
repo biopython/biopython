@@ -1,4 +1,4 @@
-# Copyright 2007-2010 by Peter Cock.  All rights reserved.
+# Copyright 2007-2011 by Peter Cock.  All rights reserved.
 #
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -127,58 +127,58 @@ def _insdc_feature_position_string(pos, offset=0):
         raise ValueError("Expected a SeqFeature position object.")
 
 
-def _insdc_location_string_ignoring_strand_and_subfeatures(feature, rec_length):
-    if feature.ref:
-        ref = "%s:" % feature.ref
+def _insdc_location_string_ignoring_strand_and_subfeatures(location, rec_length):
+    if location.ref:
+        ref = "%s:" % location.ref
     else:
         ref = ""
-    assert not feature.ref_db
-    if isinstance(feature.location.start, SeqFeature.ExactPosition) \
-    and isinstance(feature.location.end, SeqFeature.ExactPosition) \
-    and feature.location.start.position == feature.location.end.position:
+    assert not location.ref_db
+    if isinstance(location.start, SeqFeature.ExactPosition) \
+    and isinstance(location.end, SeqFeature.ExactPosition) \
+    and location.start.position == location.end.position:
         #Special case, for 12:12 return 12^13
         #(a zero length slice, meaning the point between two letters)
-        if feature.location.end.position == rec_length:
+        if location.end.position == rec_length:
             #Very special case, for a between position at the end of a
             #sequence (used on some circular genomes, Bug 3098) we have
             #N:N so return N^1
             return "%s%i^1" % (ref, rec_length)
         else:
-            return "%s%i^%i" % (ref, feature.location.end.position,
-                                feature.location.end.position+1)
-    if isinstance(feature.location.start, SeqFeature.ExactPosition) \
-    and isinstance(feature.location.end, SeqFeature.ExactPosition) \
-    and feature.location.start.position+1 == feature.location.end.position:
+            return "%s%i^%i" % (ref, location.end.position,
+                                location.end.position+1)
+    if isinstance(location.start, SeqFeature.ExactPosition) \
+    and isinstance(location.end, SeqFeature.ExactPosition) \
+    and location.start.position+1 == location.end.position:
         #Special case, for 11:12 return 12 rather than 12..12
         #(a length one slice, meaning a single letter)
-        return "%s%i" % (ref, feature.location.end.position)
-    elif isinstance(feature.location.start, SeqFeature.UnknownPosition) \
-    or isinstance(feature.location.end, SeqFeature.UnknownPosition):
+        return "%s%i" % (ref, location.end.position)
+    elif isinstance(location.start, SeqFeature.UnknownPosition) \
+    or isinstance(location.end, SeqFeature.UnknownPosition):
         #Special case for features from SwissProt/UniProt files
-        if isinstance(feature.location.start, SeqFeature.UnknownPosition) \
-        and isinstance(feature.location.end, SeqFeature.UnknownPosition):
+        if isinstance(location.start, SeqFeature.UnknownPosition) \
+        and isinstance(location.end, SeqFeature.UnknownPosition):
             #import warnings
             #warnings.warn("Feature with unknown location")
             #return "?"
             raise ValueError("Feature with unknown location")
-        elif isinstance(feature.location.start, SeqFeature.UnknownPosition):
+        elif isinstance(location.start, SeqFeature.UnknownPosition):
             #Treat the unknown start position as a BeforePosition
             return "%s<%i..%s" \
                 % (ref,
-                   feature.location.nofuzzy_end,
-                   _insdc_feature_position_string(feature.location.end))
+                   location.nofuzzy_end,
+                   _insdc_feature_position_string(location.end))
         else:
             #Treat the unknown end position as an AfterPosition
             return "%s%s..>%i" \
                 % (ref,
-                   _insdc_feature_position_string(feature.location.start),
-                   feature.location.nofuzzy_start)
+                   _insdc_feature_position_string(location.start),
+                   location.nofuzzy_start)
     else:
         #Typical case, e.g. 12..15 gets mapped to 11:15
         return ref \
-               + _insdc_feature_position_string(feature.location.start, +1) \
+               + _insdc_feature_position_string(location.start, +1) \
                + ".." + \
-               _insdc_feature_position_string(feature.location.end)
+               _insdc_feature_position_string(location.end)
 
 def _insdc_feature_location_string(feature, rec_length):
     """Build a GenBank/EMBL location string from a SeqFeature (PRIVATE).
@@ -207,17 +207,19 @@ def _insdc_feature_location_string(feature, rec_length):
         #assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
         #       % (repr(feature), feature.location_operator)
-        location = _insdc_location_string_ignoring_strand_and_subfeatures(feature, rec_length)
+        location = _insdc_location_string_ignoring_strand_and_subfeatures(feature.location, rec_length)
         if feature.strand == -1:
             location = "complement(%s)" % location
         return location
     # As noted above, treat reverse complement strand features carefully:
     if feature.strand == -1:
         for f in feature.sub_features:
-            assert f.strand == -1
+            if f.strand != -1:
+                raise ValueError("Inconsistent strands: %r for parent, %r for child" \
+                                 % (feature.strand, f.strand))
         return "complement(%s(%s))" \
                % (feature.location_operator,
-                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f, rec_length) \
+                  ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f.location, rec_length) \
                            for f in feature.sub_features))
     #if feature.strand == +1:
     #    for f in feature.sub_features:

@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 29 September 2011 (Biopython 1.58+)}
+\date{Last Update -- 2 November 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -1997,8 +1997,7 @@ entries $11$ and $12$ in the \texttt{features} list:
 \begin{verbatim}
 >>> print record.features[20]
 type: gene
-location: [4342:4780]
-strand: 1
+location: [4342:4780](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
@@ -2009,8 +2008,7 @@ qualifiers:
 \begin{verbatim}
 >>> print record.features[21]
 type: CDS
-location: [4342:4780]
-strand: 1
+location: [4342:4780](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
@@ -2052,8 +2050,7 @@ Our sub-record just has two features, the gene and CDS entries for \verb|YP_pPCP
 \begin{verbatim}
 >>> print sub_record.features[0]
 type: gene
-location: [42:480]
-strand: 1
+location: [42:480](+)
 qualifiers: 
     Key: db_xref, Value: ['GeneID:2767712']
     Key: gene, Value: ['pim']
@@ -2063,9 +2060,7 @@ qualifiers:
 \begin{verbatim}
 >>> print sub_record.features[20]
 type: CDS
-location: [42:480]
-ref: None:None
-strand: 1
+location: [42:480](+)
 qualifiers: 
     Key: codon_start, Value: ['1']
     Key: db_xref, Value: ['GI:45478716', 'GeneID:2767712']
@@ -4725,12 +4720,12 @@ need to check the parameters (e.g. the expectation value threshold and
 the gap values).
 
 For example, if you have a nucleotide sequence you want to search against
-the non-redundant database using BLASTN, and you know the GI number of your
+the nucleotide database (nt) using BLASTN, and you know the GI number of your
 query sequence, you can use:
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", "8332116")
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
 \end{verbatim}
 
 Alternatively, if we have our query sequence already in a FASTA formatted
@@ -4740,7 +4735,7 @@ and use that as the query argument:
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
 >>> fasta_string = open("m_cold.fasta").read()
->>> result_handle = NCBIWWW.qblast("blastn", "nr", fasta_string)
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", fasta_string)
 \end{verbatim}
 
 We could also have read in the FASTA file as a \verb|SeqRecord| and then
@@ -4750,7 +4745,7 @@ supplied just the sequence itself:
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
->>> result_handle = NCBIWWW.qblast("blastn", "nr", record.seq)
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
 \end{verbatim}
 
 Supplying just the sequence means that BLAST will assign an identifier
@@ -4762,7 +4757,7 @@ for your sequence automatically.  You might prefer to use the
 >>> from Bio.Blast import NCBIWWW
 >>> from Bio import SeqIO
 >>> record = SeqIO.read(open("m_cold.fasta"), format="fasta")
->>> result_handle = NCBIWWW.qblast("blastn", "nr", record.format("fasta"))
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", record.format("fasta"))
 \end{verbatim}
 
 This approach makes more sense if you have your sequence(s) in a
@@ -4968,7 +4963,7 @@ BLAST results.  For example, using a GI number to do an online search:
 
 \begin{verbatim}
 >>> from Bio.Blast import NCBIWWW
->>> result_handle = NCBIWWW.qblast("blastn", "nr", "8332116")
+>>> result_handle = NCBIWWW.qblast("blastn", "nt", "8332116")
 \end{verbatim}
 
 If instead you ran BLAST some other way, and have the
@@ -10185,7 +10180,7 @@ and PICT formats).
 \label{sec:genomediagram}
 \subsection{Introduction}
 
-The \verb|Bio.Graphics.GenomeDiagram| module is a new addition to Biopython 1.50,
+The \verb|Bio.Graphics.GenomeDiagram| module was added to Biopython 1.50,
 having previously been available as a separate Python module dependent on Biopython.
 GenomeDiagram is described in the Bioinformatics journal publication Pritchard et al. (2006),
 \href{http://dx.doi.org/10.1093/bioinformatics/btk021}{doi:10.1093/bioinformatics/btk021},
@@ -10195,9 +10190,14 @@ which includes some examples images.
 
 As the name might suggest, GenomeDiagram was designed for drawing whole genomes, in
 particular prokaryotic genomes, either as linear diagrams (optionally broken up into
-fragments to fit better) or as circular wheel diagrams.  It proves also well suited
-to drawing quite detailed figures for smaller genomes such as phage, plasmids or
-mitochrondia.
+fragments to fit better) or as circular wheel diagrams.  Have a look at Figure 2 in
+Toth \textit{et al.} (2006),
+\href{http://dx.doi.org/10.1146/annurev.phyto.44.070505.143444}{doi:10.1146/annurev.phyto.44.070505.143444},
+for a good example. It proved also well suited to drawing quite detailed figures for
+smaller genomes such as phage, plasmids or mitochrondia, for example see Figures 1
+and 2 in van Leeuwenhoek \textit{et al.} (2009),
+\href{http://dx.doi.org/10.1007/s10482-009-9316-9}{doi:10.1007/s10482-009-9316-9}
+(shown with additional manual editing).
 
 This module is easiest to use if you have your genome loaded as a \verb|SeqRecord|
 object containing lots of \verb|SeqFeature| objects - for example as loaded from a
@@ -10719,10 +10719,28 @@ GC\% related functions, which will probably be merged under
 
 \section{Chromosomes}
 
-The \verb|Bio.Graphics.BasicChromosome| module allows drawing of simple chromosomes.
+The \verb|Bio.Graphics.BasicChromosome| module allows drawing of chromosomes.
+
+\subsection{Simple Chromosomes}
 Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana}.
 
-I first downloaded the five sequenced chromosomes from the NCBI's FTP site
+\begin{latexonly}
+\begin{figure}[p]
+\centering
+\includegraphics[scale=0.45]{images/simple_chrom.pdf}
+\caption{Simple chromosome diagram for \textit{Arabidopsis thaliana}.}
+\label{fig:simplechromosome}
+\end{figure}
+\begin{figure}[p]
+\centering
+\includegraphics[scale=0.45]{images/tRNA_chrom.pdf}
+\caption{Chromosome diagram for \textit{Arabidopsis thaliana} showing tRNA genes.}
+\label{fig:simplechromosome}
+\end{figure}
+\end{latexonly}
+
+You can skip this bit, but first I downloaded the five sequenced chromosomes
+from the NCBI's FTP site
 \url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana} and then parsed
 them with \verb|Bio.SeqIO| to find out their lengths.  You could use the
 GenBank files for this, but it is faster to use the FASTA files for the
@@ -10730,11 +10748,11 @@ whole chromosomes:
 
 \begin{verbatim}
 from Bio import SeqIO
-entries = [("Chr I","CHR_I/NC_003070.fna"),
-          ("Chr II","CHR_II/NC_003071.fna"),
-          ("Chr III","CHR_III/NC_003074.fna"),
-          ("Chr IV","CHR_IV/NC_003075.fna"),
-          ("Chr V","CHR_V/NC_003076.fna")]
+entries = [("Chr I", "CHR_I/NC_003070.fna"),
+           ("Chr II", "CHR_II/NC_003071.fna"),
+           ("Chr III", "CHR_III/NC_003074.fna"),
+           ("Chr IV", "CHR_IV/NC_003075.fna"),
+           ("Chr V", "CHR_V/NC_003076.fna")]
 for (name, filename) in entries:
    record = SeqIO.read(filename,"fasta")
    print name, len(record)
@@ -10744,6 +10762,8 @@ for (name, filename) in entries:
 the following short demonstration of the \verb|BasicChromosome| module:
 
 \begin{verbatim}
+from reportlab.lib.units import cm
+
 from Bio.Graphics import BasicChromosome
 
 entries = [("Chr I", 30432563),
@@ -10752,31 +10772,36 @@ entries = [("Chr I", 30432563),
            ("Chr IV", 18585042),
            ("Chr V", 26992728)]
 
-max_length = max([length for name, length in entries])
-          
+max_len = 30432563 #Could compute this
+telomere_length = 1000000 #For illustration
+         
 chr_diagram = BasicChromosome.Organism()
+chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
+
 for name, length in entries:
-   cur_chromosome = BasicChromosome.Chromosome(name)
-   #Set the length, adding and extra 20 percent for the tolomeres:
-   cur_chromosome.scale_num = max_length * 1.2
-   
-   #Add an opening telomere
-   start = BasicChromosome.TelomereSegment()
-   start.scale = 0.1 * max_length
-   cur_chromosome.add(start)
+    cur_chromosome = BasicChromosome.Chromosome(name)
+    #Set the scale to the MAXIMUM length plus the two telomeres in bp,
+    #want the same scale used on all five chromosomes so they can be
+    #compared to each other
+    cur_chromosome.scale_num = max_len + 2 * telomere_length
 
-   #Add a body - using bp as the scale length here.
-   body = BasicChromosome.ChromosomeSegment()
-   body.scale = length
-   cur_chromosome.add(body)
+    #Add an opening telomere
+    start = BasicChromosome.TelomereSegment()
+    start.scale = telomere_length
+    cur_chromosome.add(start)
 
-   #Add a closing telomere
-   end = BasicChromosome.TelomereSegment(inverted=True)
-   end.scale = 0.1 * max_length
-   cur_chromosome.add(end)
+    #Add a body - using bp as the scale length here.
+    body = BasicChromosome.ChromosomeSegment()
+    body.scale = length
+    cur_chromosome.add(body)
 
-   #This chromosome is done
-   chr_diagram.add(cur_chromosome)
+    #Add a closing telomere
+    end = BasicChromosome.TelomereSegment(inverted=True)
+    end.scale = telomere_length
+    cur_chromosome.add(end)
+
+    #This chromosome is done
+    chr_diagram.add(cur_chromosome)
 
 chr_diagram.draw("simple_chrom.pdf", "Arabidopsis thaliana")
 \end{verbatim}
@@ -10785,25 +10810,91 @@ This should create a very simple PDF file, shown
 \begin{htmlonly}
 here:
 
-%The blank lines above and below are important to trigger paragrph breaks
-\imgsrc[width=650, height=574]{images/simple_chrom.png}
+%The blank lines above and below are important to trigger paragraph breaks
+\imgsrc[width=650, height=460]{images/simple_chrom.png}
 
 \end{htmlonly}
 \begin{latexonly}
 in Figure~\ref{fig:simplechromosome}.
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{images/simple_chrom.png}
-\caption{Simple chromosome diagram for \textit{Arabidopsis thaliana}.}
-\label{fig:simplechromosome}
-\end{figure}
 \end{latexonly}
-This example is deliberately short and sweet. One thing you might want to try is
-showing the location of features of interest - perhaps SNPs or genes.  Currently
-the \verb|ChromosomeSegment| object doesn't support sub-segments which would be
-one approach.  Instead, you must replace the single large segment with lots of
-smaller segments, maybe white ones for the boring regions, and colored ones for
-the regions of interest.
+This example is deliberately short and sweet. One thing you might want to
+try is showing the location of features of interest, as in the next example.
+
+\subsection{Annotated Chromosomes}
+
+Continuing from the previous example, let's also show the tRNA genes.
+We'll get their locations by parsing the GenBank files for the five
+\textit{Arabidopsis thaliana} chromosomes. You'll need to download these
+files from the NCBI FTP site
+\url{ftp://ftp.ncbi.nlm.nih.gov/genomes/Arabidopsis_thaliana},
+and preserve the subdirectory names or edit the paths below:
+
+\begin{verbatim}
+from reportlab.lib.units import cm
+
+from Bio import SeqIO
+from Bio.Graphics import BasicChromosome
+
+entries = [("Chr I", "CHR_I/NC_003070.gbk"),
+           ("Chr II", "CHR_II/NC_003071.gbk"),
+           ("Chr III", "CHR_III/NC_003074.gbk"),
+           ("Chr IV", "CHR_IV/NC_003075.gbk"),
+           ("Chr V", "CHR_V/NC_003076.gbk")]
+
+max_len = 30432563 #Could compute this
+telomere_length = 1000000 #For illustration
+
+chr_diagram = BasicChromosome.Organism()
+chr_diagram.page_size = (29.7*cm, 21*cm) #A4 landscape
+
+for index, (name, filename) in enumerate(entries):
+    record = SeqIO.read(filename,"genbank")
+    length = len(record)
+    features = [f for f in record.features if f.type=="tRNA"]
+    #Record an Artemis style integer color in the feature's qualifiers,
+    #1 = Black, 2 = Red, 3 = Green, 4 = blue, 5 =cyan, 6 = purple 
+    for f in features: f.qualifiers["color"] = [index+2]
+
+    cur_chromosome = BasicChromosome.Chromosome(name)
+    #Set the scale to the MAXIMUM length plus the two telomeres in bp,
+    #want the same scale used on all five chromosomes so they can be
+    #compared to each other
+    cur_chromosome.scale_num = max_len + 2 * telomere_length
+
+    #Add an opening telomere
+    start = BasicChromosome.TelomereSegment()
+    start.scale = telomere_length
+    cur_chromosome.add(start)
+
+    #Add a body - again using bp as the scale length here.
+    body = BasicChromosome.AnnotatedChromosomeSegment(length, features)
+    body.scale = length
+    cur_chromosome.add(body)
+
+    #Add a closing telomere
+    end = BasicChromosome.TelomereSegment(inverted=True)
+    end.scale = telomere_length
+    cur_chromosome.add(end)
+
+    #This chromosome is done
+    chr_diagram.add(cur_chromosome)
+
+chr_diagram.draw("tRNA_chrom.pdf", "Arabidopsis thaliana")
+\end{verbatim}
+
+It might warn you about the labels being too close together - have a look
+at the forward strand (right hand side) of Chr I, but it should create a
+colorful PDF file, shown
+\begin{htmlonly}
+here:
+
+%The blank lines above and below are important to trigger paragraph breaks
+\imgsrc[width=650, height=460]{images/tRNA_chrom.png}
+
+\end{htmlonly}
+\begin{latexonly}
+in Figure~\ref{fig:simplechromosome}.
+\end{latexonly}
 
 \chapter{Cookbook -- Cool things to do with it}
 \label{chapter:cookbook}

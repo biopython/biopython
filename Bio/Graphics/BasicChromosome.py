@@ -101,7 +101,10 @@ class Organism(_ChromosomeComponent):
         # customizable attributes
         self.page_size = letter
         self.title_size = 20
-        self._legend_height = 2 * inch
+
+        #Do we need this given we don't draw a legend?
+        #If so, should be a public API...
+        self._legend_height = 0 # 2 * inch
 
         self.output_format = output_format
 
@@ -292,6 +295,8 @@ class Chromosome(_ChromosomeComponent):
         Draws the label text and a coloured line linking it to the
         location (i.e. feature) it applies to.
         """
+        if not self._sub_components:
+            return
         color_label = self._color_labels
 
         segment_width = (self.end_x_position - self.start_x_position) \
@@ -460,7 +465,7 @@ class ChromosomeSegment(_ChromosomeComponent):
         """
         if self.label is not None:
 
-            label_x = self.start_x_position + \
+            label_x = 0.5 * (self.start_x_position + self.end_x_position) + \
                       (self.chr_percent + 0.05) * (self.end_x_position -
                                                    self.start_x_position)
             label_y = ((self.start_y_position - self.end_y_position) / 2 +
@@ -503,7 +508,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
 
     if equal_step < gap:
         import warnings
-        warnings.warn("Too many items to satify minimum gap %0.1f, equal step gives %0.1f" % (gap, equal_step))
+        warnings.warn("Too many labels to avoid overlap")
         #Crudest solution
         return [minimum+i*equal_step for i in range(count)]
     

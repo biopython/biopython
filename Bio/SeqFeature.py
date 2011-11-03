@@ -1,6 +1,6 @@
 # Copyright 2000-2003 Jeff Chang.
 # Copyright 2001-2008 Brad Chapman.
-# Copyright 2005-2010 by Peter Cock.
+# Copyright 2005-2011 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -62,11 +62,14 @@ class SeqFeature(object):
     instance) the feature deals with. 1 indicates the plus strand, -1 
     indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
     while the default of None indicates that strand doesn't apply (dot in GFF3,
-    e.g. features on proteins)
+    e.g. features on proteins). Note this is a shortcut for accessing the
+    strand property of the feature's location.
     o id - A string identifier for the feature.
     o ref - A reference to another sequence. This could be an accession
-    number for some different sequence.
+    number for some different sequence. Note this is a shortcut for the
+    reference property of the feature's location.
     o ref_db - A different database for the reference accession number.
+    Note this is a shortcut for the reference property of the location
     o qualifiers - A dictionary of qualifiers on the feature. These are
     analagous to the qualifiers from a GenBank feature table. The keys of
     the dictionary are qualifier names, the values are the qualifier
@@ -99,13 +102,26 @@ class SeqFeature(object):
         e.g. With no strand, on the forward strand, and on the reverse strand:
 
         >>> from Bio.SeqFeature import SeqFeature, FeatureLocation
-        >>> f1 = SeqFeature(FeatureLocation(5,10), type="domain")
-        >>> f2 = SeqFeature(FeatureLocation(7,110), strand=1, type="CDS")
-        >>> f3 = SeqFeature(FeatureLocation(9,108), strand=-1, type="CDS")
+        >>> f1 = SeqFeature(FeatureLocation(5, 10), type="domain")
+        >>> f1.strand == f1.location.strand == None
+        True
+        >>> f2 = SeqFeature(FeatureLocation(7, 110, strand=1), type="CDS")
+        >>> f2.strand == f2.location.strand == +1
+        True
+        >>> f3 = SeqFeature(FeatureLocation(9, 108, strand=-1), type="CDS")
+        >>> f3.strand == f3.location.strand == -1
+        True
 
         An invalid strand will trigger an exception:
 
-        >>> f4 = SeqFeature(FeatureLocation(50,60), strand=2)
+        >>> f4 = SeqFeature(FeatureLocation(50, 60), strand=2)
+        Traceback (most recent call last):
+           ...
+        ValueError: Strand should be +1, -1, 0 or None, not 2
+
+        Similarly if set via the FeatureLocation directly:
+
+        >>> loc4 = FeatureLocation(50, 60, strand=2)
         Traceback (most recent call last):
            ...
         ValueError: Strand should be +1, -1, 0 or None, not 2
@@ -114,16 +130,14 @@ class SeqFeature(object):
         as shorthand for the ExactPosition object. For non-exact locations, the
         FeatureLocation must be specified via the appropriate position objects.
         """
-        if strand not in [-1, 0, 1, None] :
-            raise ValueError("Strand should be +1, -1, 0 or None, not %s" \
-                             % repr(strand))
         if location is not None and not isinstance(location, FeatureLocation):
             raise TypeError("FeatureLocation (or None) required for the location")
         self.location = location
 
         self.type = type
         self.location_operator = location_operator
-        self.strand = strand
+        if strand is not None:
+            self.strand = strand
         self.id = id
         if qualifiers is None:
             qualifiers = {}
@@ -131,8 +145,54 @@ class SeqFeature(object):
         if sub_features is None:
             sub_features = []
         self.sub_features = sub_features
-        self.ref = ref 
-        self.ref_db = ref_db
+        if ref is not None:
+            self.ref = ref
+        if ref_db is not None:
+            self.ref_db = ref_db
+
+    def _get_strand(self):
+        return self.location.strand
+    def _set_strand(self, value):
+        try:
+            self.location.strand = value
+        except AttributeError:
+            if self.location is None:
+                if value is not None:
+                    raise ValueError("Can't set strand without a location.")
+            else:
+                raise
+    strand = property(fget = _get_strand, fset = _set_strand,
+                      doc = """Feature's strand
+
+                            This is a shortcut for feature.location.strand
+                            """)
+
+    def _get_ref(self):
+        return self.location.ref
+    def _set_ref(self, value):
+        try:
+            self.location.ref = value
+        except AttributeError:
+            if self.location is None:
+                if value is not None:
+                    raise ValueError("Can't set ref without a location.")
+            else:
+                raise
+    ref = property(fget = _get_ref, fset = _set_ref,
+                   doc = """Feature location reference (e.g. accession).
+
+                         This is a shortcut for feature.location.ref
+                         """)
+
+    def _get_ref_db(self):
+        return self.location.ref_db
+    def _set_ref_db(self, value):
+        self.location.ref_db = value
+    ref_db = property(fget = _get_ref_db, fset = _set_ref_db,
+                      doc = """Feature location reference's database.
+
+                            This is a shortcut for feature.location.ref_db
+                            """)
 
     def __repr__(self):
         """A string representation of the record for debugging."""
@@ -141,8 +201,6 @@ class SeqFeature(object):
             answer += ", type=%s" % repr(self.type)
         if self.location_operator:
             answer += ", location_operator=%s" % repr(self.location_operator)
-        if self.strand is not None:
-            answer += ", strand=%s" % repr(self.strand)
         if self.id and self.id != "<unknown id>":
             answer += ", id=%s" % repr(self.id)
         if self.ref:
@@ -159,9 +217,6 @@ class SeqFeature(object):
         out += "location: %s\n" % self.location
         if self.id and self.id != "<unknown id>":
             out += "id: %s\n" % self.id
-        if self.ref or self.ref_db:
-            out += "ref: %s:%s\n" % (self.ref, self.ref_db)
-        out += "strand: %s\n" % self.strand
         out += "qualifiers: \n"
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
@@ -179,12 +234,9 @@ class SeqFeature(object):
         return SeqFeature(location = self.location._shift(offset),
             type = self.type,
             location_operator = self.location_operator,
-            strand = self.strand,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
-            sub_features = [f._shift(offset) for f in self.sub_features],
-            ref = self.ref,
-            ref_db = self.ref_db)
+            sub_features = [f._shift(offset) for f in self.sub_features])
 
     def _flip(self, length):
         """Returns a copy of the feature with its location flipped (PRIVATE).
@@ -196,22 +248,12 @@ class SeqFeature(object):
 
         The annotation qaulifiers are copied.
         """
-        if self.strand == +1 :
-            new_strand = -1
-        elif self.strand == -1 :
-            new_strand = +1
-        else:
-            #When create new SeqFeature it will check this is 0 or None
-            new_strand = self.strand
         return SeqFeature(location = self.location._flip(length),
             type = self.type,
             location_operator = self.location_operator,
-            strand = new_strand,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
-            sub_features = [f._flip(length) for f in self.sub_features[::-1]],
-            ref = self.ref,
-            ref_db = self.ref_db)
+            sub_features = [f._flip(length) for f in self.sub_features[::-1]])
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence.
@@ -242,32 +284,23 @@ class SeqFeature(object):
         if self.sub_features:
             if self.location_operator!="join":
                 raise ValueError(self.location_operator)
-            if self.strand == -1:
+            if self.location.strand == -1:
                 #This is a special case given how the GenBank parser works.
                 #Must avoid doing the reverse complement twice.
                 parts = []
-                for f_sub in self.sub_features:
-                    assert f_sub.strand==-1
-                    parts.append(parent_sequence[f_sub.location.nofuzzy_start:\
-                                                 f_sub.location.nofuzzy_end])
+                for f_sub in self.sub_features[::-1]:
+                    assert f_sub.location.strand==-1
+                    parts.append(f_sub.location.extract(parent_sequence))
             else:
                 #This copes with mixed strand features:
-                parts = [f_sub.extract(parent_sequence) \
+                parts = [f_sub.location.extract(parent_sequence) \
                          for f_sub in self.sub_features]
             #We use addition rather than a join to avoid alphabet issues:
             f_seq = parts[0]
             for part in parts[1:] : f_seq += part
+            return f_seq
         else:
-            f_seq = parent_sequence[self.location.nofuzzy_start:\
-                                    self.location.nofuzzy_end]
-        if self.strand == -1:
-            #TODO - MutableSeq?
-            try:
-                f_seq = f_seq.reverse_complement()
-            except AttributeError:
-                assert isinstance(f_seq, str)
-                f_seq = reverse_complement(f_seq)
-        return f_seq
+            return self.location.extract(parent_sequence)
     
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
@@ -338,13 +371,8 @@ class SeqFeature(object):
                 for f in self.sub_features:
                     for i in f.location:
                         yield i
-        elif self.strand == -1:
-            for i in range(self.location.nofuzzy_end-1,
-                           self.location.nofuzzy_start-1, -1):
-                yield i
         else:
-            for i in range(self.location.nofuzzy_start,
-                           self.location.nofuzzy_end):
+            for i in self.location:
                 yield i
 
     def __contains__(self, value):
@@ -364,10 +392,10 @@ class SeqFeature(object):
         >>> record = SeqIO.read("GenBank/NC_000932.gb", "gb")
         >>> for f in record.features:
         ...     if 1750 in f:
-        ...         print f.type, f.strand, f.location
-        source 1 [0:154478]
-        gene -1 [1716:4347]
-        tRNA -1 [1716:4347]
+        ...         print f.type, f.location
+        source [0:154478](+)
+        gene [1716:4347](-)
+        tRNA [1716:4347](-)
 
         Note that for a feature defined as a join of several subfeatures (e.g.
         the union of several exons) the gaps are not checked (e.g. introns).
@@ -377,9 +405,9 @@ class SeqFeature(object):
 
         >>> for f in record.features:
         ...     if 1760 in f:
-        ...         print f.type, f.strand, f.location
-        source 1 [0:154478]
-        gene -1 [1716:4347]
+        ...         print f.type, f.location
+        source [0:154478](+)
+        gene [1716:4347](-)
 
         Note that additional care may be required with fuzzy locations, for
         example just before a BeforePosition:
@@ -470,8 +498,8 @@ class FeatureLocation(object):
     thus a GenBank entry of 123..150 (one based counting) becomes a location
     of [122:150] (zero based counting).
     """
-    def __init__(self, start, end):
-        """Specify the start and end of a sequence feature.
+    def __init__(self, start, end, strand=None, ref=None, ref_db=None):
+        """Specify the start, end, strand etc of a sequence feature.
 
         start and end arguments specify the values where the feature begins
         and ends. These can either by any of the *Position objects that
@@ -483,18 +511,46 @@ class FeatureLocation(object):
         i.e. Short form:
         
         >>> from Bio.SeqFeature import FeatureLocation
-        >>> loc = FeatureLocation(5,10)
+        >>> loc = FeatureLocation(5, 10, strand=-1)
+        >>> print loc
+        [5:10](-)
         
         Explicit form:
 
         >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
-        >>> loc = FeatureLocation(ExactPosition(5),ExactPosition(10))
+        >>> loc = FeatureLocation(ExactPosition(5), ExactPosition(10), strand=-1)
+        >>> print loc
+        [5:10](-)
 
         Other fuzzy positions are used similarly,
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> from Bio.SeqFeature import BeforePosition, AfterPosition
-        >>> loc2 = FeatureLocation(BeforePosition(5),AfterPosition(10))
+        >>> loc2 = FeatureLocation(BeforePosition(5), AfterPosition(10), strand=-1)
+        >>> print loc2
+        [<5:>10](-)
+
+        For nucleotide features you will also want to specify the strand,
+        use 1 for the forward (plus) strand, -1 for the reverse (negative)
+        strand, 0 for stranded but strand unknown (? in GFF3), or None for
+        when the strand does not apply (dot in GFF3), e.g. features on
+        proteins.
+
+        >>> loc = FeatureLocation(5, 10, strand=+1)
+        >>> print loc
+        [5:10](+)
+        >>> print loc.strand
+        1
+
+        Normally feature locations are given relative to the parent
+        sequence you are working with, but an explicit accession can
+        be given with the optional ref and db_ref strings:
+
+        >>> loc = FeatureLocation(105172, 108462, ref="AL391218.9", strand=1)
+        >>> print loc
+        AL391218.9[105172:108462](+)
+        >>> print loc.ref
+        AL391218.9
 
         """
         if isinstance(start, AbstractPosition):
@@ -503,13 +559,25 @@ class FeatureLocation(object):
             self._start = ExactPosition(start)
         else:
             raise TypeError(start)
-
         if isinstance(end, AbstractPosition):
             self._end = end
         elif isinstance(end, int):
             self._end = ExactPosition(end)
         else:
             raise TypeError(end)
+        self.strand = strand
+        self.ref = ref
+        self.ref_db = ref_db
+
+    def _get_strand(self):
+        return self._strand
+    def _set_strand(self, value):
+        if value not in [+1, -1, 0, None]:
+            raise ValueError("Strand should be +1, -1, 0 or None, not %r" \
+                             % value)
+        self._strand = value
+    strand = property(fget = _get_strand, fset = _set_strand,
+                      doc = "Strand of the location (+1, -1, 0 or None).")
 
     def __str__(self):
         """Returns a representation of the location (with python counting).
@@ -518,12 +586,33 @@ class FeatureLocation(object):
         (zero based counting) which GenBank would call 123..150 (one based
         counting).
         """
-        return "[%s:%s]" % (self._start, self._end)
+        answer = "[%s:%s]" % (self._start, self._end)
+        if self.ref and self.ref_db:
+            answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
+        elif self.ref:
+            answer = self.ref + answer
+        #Is ref_db without ref meaningful?
+        if self.strand is None:
+            return answer
+        elif self.strand == +1:
+            return answer + "(+)"
+        elif self.strand == -1:
+            return answer + "(-)"
+        else:
+            #strand = 0, stranded but strand unknown, ? in GFF3
+            return answer + "(?)"
 
     def __repr__(self):
         """A string representation of the location for debugging."""
-        return "%s(%s,%s)" \
-               % (self.__class__.__name__, repr(self.start), repr(self.end))
+        optional = ""
+        if self.strand is not None:
+            optional += ", strand=%r" % self.strand
+        if self.ref is not None:
+            optional += ", ref=%r" % self.ref
+        if self.ref_db is not None:
+            optional += ", ref_db=%r" % self.ref_db
+        return "%s(%r, %r%s)" \
+                   % (self.__class__.__name__, self.start, self.end, optional)
 
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
@@ -591,20 +680,39 @@ class FeatureLocation(object):
         [5, 6, 7, 8, 9]
         >>> [i for i in range(15) if i in loc]
         [5, 6, 7, 8, 9]
+
+        Note this is strand aware:
+
+        >>> loc = FeatureLocation(BeforePosition(5), AfterPosition(10), strand = -1)
+        >>> list(loc)
+        [9, 8, 7, 6, 5]
         """
-        for i in range(self._start, self._end):
-            yield i
+        if self.strand == -1:
+            for i in range(self._end - 1, self._start - 1, -1):
+                yield i
+        else:
+            for i in range(self._start, self._end):
+                yield i
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
         return FeatureLocation(start = self._start._shift(offset),
-                               end = self._end._shift(offset))
+                               end = self._end._shift(offset),
+                               strand = self.strand)
 
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE)."""
         #Note this will flip the start and end too!
+        if self.strand == +1:
+            flip_strand = -1
+        elif self.strand == -1:
+            flip_strand = +1
+        else:
+            #0 or None
+            flip_strand = self.strand
         return FeatureLocation(start = self._end._flip(length),
-                               end = self._start._flip(length))
+                               end = self._start._flip(length),
+                               strand = flip_strand)
 
     @property
     def start(self):
@@ -636,6 +744,21 @@ class FeatureLocation(object):
         """
         return int(self._end)
 
+
+    def extract(self, parent_sequence):
+        """Extract feature sequence from the supplied parent sequence."""
+        if isinstance(parent_sequence, MutableSeq):
+            #This avoids complications with reverse complements
+            #(the MutableSeq reverse complement acts in situ)
+           parent_sequence = parent_sequence.toseq()
+        f_seq = parent_sequence[self.nofuzzy_start:self.nofuzzy_end]
+        if self.strand == -1:
+            try:
+                f_seq = f_seq.reverse_complement()
+            except AttributeError:
+                assert isinstance(f_seq, str)
+                f_seq = reverse_complement(f_seq)
+        return f_seq
 
 class AbstractPosition(object):
     """Abstract base class representing a position.
@@ -783,6 +906,18 @@ class WithinPosition(int, AbstractPosition):
     >>> isinstance(p, int)
     True
 
+    Note this also applies for comparison to other position objects,
+    where again the integer behaviour is used:
+
+    >>> p == 10
+    True
+    >>> p == ExactPosition(10)
+    True
+    >>> p == BeforePosition(10)
+    True
+    >>> p == AfterPosition(10)
+    True
+
     If this were an end point, you would want the position to be 13:
 
     >>> p2 = WithinPosition(13,10,13)
@@ -792,6 +927,10 @@ class WithinPosition(int, AbstractPosition):
     (10.13)
     >>> int(p2)
     13
+    >>> p2 == 13
+    True
+    >>> p2 == ExactPosition(13)
+    True
 
     The old legacy properties of position and extension give the
     starting/lower/left position as an integer, and the distance
@@ -900,6 +1039,17 @@ class BetweenPosition(int, AbstractPosition):
     >>> p2 == 123
     True
 
+    Note this potentially surprising behaviour:
+
+    >>> BetweenPosition(123, left=123, right=456) == ExactPosition(123)
+    True
+    >>> BetweenPosition(123, left=123, right=456) == BeforePosition(123)
+    True
+    >>> BetweenPosition(123, left=123, right=456) == AfterPosition(123)
+    True
+
+    i.e. For equality (and sorting) the position objects behave like
+    integers.
     """
     def __new__(cls, position, left, right):
         assert position==left or position==right
@@ -959,6 +1109,15 @@ class BeforePosition(int, AbstractPosition):
     >>> p + 10
     15
 
+    Note this potentially surprising behaviour:
+
+    >>> p == ExactPosition(5)
+    True
+    >>> p == AfterPosition(5)
+    True
+
+    Just remember that for equality and sorting the position objects act
+    like integers.
     """
     #Subclasses int so can't use __init__
     def __new__(cls, position, extension = 0):
@@ -1019,6 +1178,15 @@ class AfterPosition(int, AbstractPosition):
     >>> isinstance(p, int)
     True
 
+    Note this potentially surprising behaviour:
+
+    >>> p == ExactPosition(7)
+    True
+    >>> p == BeforePosition(7)
+    True
+
+    Just remember that for equality and sorting the position objects act
+    like integers.
     """
     #Subclasses int so can't use __init__
     def __new__(cls, position, extension = 0):

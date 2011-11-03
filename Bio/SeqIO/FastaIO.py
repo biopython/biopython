@@ -46,7 +46,12 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
             id, name, descr = title2ids(line[1:].rstrip())
         else:
             descr = line[1:].rstrip()
-            id   = descr.split()[0]
+            try:
+                id = descr.split()[0]
+            except IndexError:
+                assert not descr, repr(line)
+                #Should we use SeqRecord default for no ID?
+                id = ""
             name = id
 
         lines = []
