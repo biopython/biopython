@@ -8477,106 +8477,80 @@ _|                                                 |________________________ D
 
 \end{verbatim}
 
-If you have \textbf{matplotlib}, \textbf{NetworkX}, \textbf{PyGraphviz} and \textbf{Graphviz}
-installed, you can create a graphic using the \verb|draw_graphviz| function, named after the
-corresponding function in NetworkX:
+If you have \textbf{matplotlib} or \textbf{pylab} installed, you can create a graphic
+using the \verb|draw| function (see Fig. \ref{fig:phylo-simple-draw}):
 
 \begin{verbatim}
 >>> tree.rooted = True
->>> Phylo.draw_graphiz(tree)
+>>> Phylo.draw(tree)
 \end{verbatim}
-
-This exports the tree object to a NetworkX graph, uses Graphviz to lay out the nodes, and
-displays it using matplotlib. There are a number of keyword arguments that can modify the
-resulting diagram, as described later in this chapter.
-
-\textit{Note:} If you're not using IPython with the \verb|-pylab| option, to display or save
-the figure, call the appropriate library function in PyLab or matplotlib:
-
-\begin{verbatim}
->>> import pylab
->>> pylab.show()
-\end{verbatim}
-
 
 \begin{htmlonly}
-\imgsrc[width=432, height=368]{images/phylo-rooted.png}
-\label{fig:phylo-rooted}
+\imgsrc[width=666, height=530]{images/phylo-simple-draw.png}
+\label{fig:phylo-simple-draw}
 \end{htmlonly}
 
 \begin{latexonly}
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.5\textwidth]{images/phylo-rooted.png}
-\caption{A rooted tree drawn with {\tt draw\_graphviz}.}
-\label{fig:phylo-rooted}
+\includegraphics[width=0.7\textwidth]{images/phylo-simple-draw.png}
+\caption{A rooted tree drawn with {\tt Phylo.draw}.}
+\label{fig:phylo-simple-draw}
 \end{figure}
 \end{latexonly}
 
-The difference between rooted and unrooted trees here is whether it shows the direction on
-branches. Since we rooted the tree, we can see the root must be along the branch with two
-``heads''.
 
+\subsection{Coloring branches within a tree}
 
-\subsection{Coloring branches with PhyloXML}
+The functions \verb|draw| and \verb|draw_graphviz| support the display of different
+colors and branch widths in a tree.
+As of Biopython 1.59, the \verb|color| and \verb|width| attributes are available on the
+basic Clade object and there's nothing extra required to use them.
+Both attributes refer to the branch leading the given clade, and apply recursively, so
+all descendent branches will also inherit the assigned width and color values during
+display.
 
-The PhyloXML specification allows assigning 24-bit color values to clades within a phylogeny.
-In order to colorize our tree, and later save those attributes along with the tree topology, we
-convert to a subclass of the basic tree object called Phylogeny, from the Bio.Phylo.PhyloXML
-module.
+In earlier versions of Biopython, these were special features of PhyloXML trees, and
+using the attributes required first converting the tree to a subclass of the basic tree
+object called Phylogeny, from the Bio.Phylo.PhyloXML module.
 
 In Biopython 1.55 and later, this is a convenient tree method:
 
 \begin{verbatim}
->>> phy = tree.as_phyloxml()
+>>> tree = tree.as_phyloxml()
 \end{verbatim}
 
-In Biopython 1.54, we can accomplish the same thing with one extra import:
+In Biopython 1.54, you can accomplish the same thing with one extra import:
 
 \begin{verbatim}
 >>> from Bio.Phylo.PhyloXML import Phylogeny
->>> phy = Phylogeny.from_tree(tree)
+>>> tree = Phylogeny.from_tree(tree)
 \end{verbatim}
 
-The object hierarchy still looks and behaves similarly:
-
-\begin{verbatim}
->>> print phy
-
-Phylogeny(rooted=True, name="")
-    Clade(branch_length=1.0)
-        Clade(branch_length=1.0)
-            Clade(branch_length=1.0)
-                Clade(branch_length=1.0, name="A")
-                Clade(branch_length=1.0, name="B")
-            Clade(branch_length=1.0)
-                Clade(branch_length=1.0, name="C")
-                Clade(branch_length=1.0, name="D")
-        Clade(branch_length=1.0)
-            Clade(branch_length=1.0, name="E")
-            Clade(branch_length=1.0, name="F")
-            Clade(branch_length=1.0, name="G")
-\end{verbatim}
+Note that the file formats Newick and Nexus don't support branch colors or widths, so
+if you use these attributes in Bio.Phylo, you will only be able to save the values in
+PhyloXML format. (You can still save a tree as Newick or Nexus, but the color and width
+values will be skipped in the output file.)
 
 Now we can begin assigning colors.
-
-First, color the root clade gray.  We can do that by assigning an RGB triple, an HTML-style
-hex string, or the name of one of the predefined colors.
+First, we'll color the root clade gray.  We can do that by assigning the 24-bit color
+value as an RGB triple, an HTML-style hex string, or the name of one of the predefined
+colors.
 
 \begin{verbatim}
->>> phy.root.color = (128, 128, 128)
+>>> tree.root.color = (128, 128, 128)
 \end{verbatim}
 
 Or:
 
 \begin{verbatim}
->>> phy.root.color = "#808080"
+>>> tree.root.color = "#808080"
 \end{verbatim}
 
 Or:
 
 \begin{verbatim}
->>> phy.root.color = "gray"
+>>> tree.root.color = "gray"
 \end{verbatim}
 
 Colors for a clade are treated as cascading down through the entire clade, so when we colorize
@@ -8588,7 +8562,7 @@ Let's target the most recent common ancestor (MRCA) of the nodes named ``E'' and
 we color that clade ``salmon'', the color will show up in the original tree.
 
 \begin{verbatim}
->>> mrca = phy.common_ancestor({"name": "E"}, {"name": "F"})
+>>> mrca = tree.common_ancestor({"name": "E"}, {"name": "F"})
 >>> mrca.color = "salmon"
 \end{verbatim}
 
@@ -8597,27 +8571,26 @@ entries, we can jump directly to that position in the tree by indexing it.  Here
 \verb|[0,1]| refers to the second child of the first child of the root.
 
 \begin{verbatim}
->>> phy.clade[0,1].color = "blue"
+>>> tree.clade[0,1].color = "blue"
 \end{verbatim}
 
-Finally, show our work --- using a different Graphviz engine for a slightly prettier layout.
+Finally, show our work (see Fig. \ref{fig:phylo-color-draw}):
 
 \begin{verbatim}
->>> Phylo.draw_graphviz(phy, prog="neato")
+>>> Phylo.draw(tree)
 \end{verbatim}
 
-
 \begin{htmlonly}
-\imgsrc[width=499, height=348]{images/phylo-color.png}
-\label{fig:phylo-color}
+\imgsrc[width=666, height=530]{images/phylo-color-draw.png}
+\label{fig:phylo-color-draw}
 \end{htmlonly}
 
 \begin{latexonly}
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.6\textwidth]{images/phylo-color.png}
-\caption{A colorized tree drawn with {\tt draw\_graphviz}, using {\tt neato} for node layout.}
-\label{fig:phylo-color}
+\includegraphics[width=0.7\textwidth]{images/phylo-color-draw.png}
+\caption{A colorized tree drawn with {\tt Phylo.draw}.}
+\label{fig:phylo-color-draw}
 \end{figure}
 \end{latexonly}
 
@@ -8633,7 +8606,7 @@ will show up there, too.
 
 \begin{verbatim}
 >>> import sys
->>> Phylo.write(phy, sys.stdout, "phyloxml")
+>>> Phylo.write(tree, sys.stdout, "phyloxml")
 
 <phy:phyloxml xmlns:phy="http://www.phyloxml.org">
   <phy:phylogeny rooted="true">
@@ -8717,12 +8690,12 @@ with SeqIO and AlignIO:
 \end{verbatim}
 
 
-\section{Viewing and exporting trees}
+\section{View and export trees}
 
 The simplest way to get an overview of a \verb|Tree| object is to \verb|print| it:
 
 \begin{verbatim}
->>> tree = Phylo.read("example.xml", "phyloxml")
+>>> tree = Phylo.read("Tests/PhyloXML/example.xml", "phyloxml")
 >>> print tree
 Phylogeny(rooted='True', description='phyloXML allows to use either a "branch_length"
 attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl...')
@@ -8736,10 +8709,10 @@ attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl..
 This is essentially an outline of the object hierarchy Biopython uses to represent a tree. But
 more likely, you'd want to see a drawing of the tree. There are two functions to do this.
 
-\verb|draw_ascii| prints an ascii-art drawing of the tree (a rooted phylogram) to standard
-output, or an open file handle if given. Not all of the available information about the tree is
-shown, but it provides a way to quickly view the tree without relying on any external
-dependencies.
+As we saw in the demo, \verb|draw_ascii| prints an ascii-art drawing of the tree (a
+rooted phylogram) to standard output, or an open file handle if given. Not all of the
+available information about the tree is shown, but it provides a way to quickly view the
+tree without relying on any external dependencies.
 
 \begin{verbatim}
 >>> tree = Phylo.read("example.xml", "phyloxml")
@@ -8754,7 +8727,8 @@ _|          |___________________________________________ B
 
 \verb|draw_graphviz| draws a more attractive cladogram, but requires that you have Graphviz,
 PyDot or PyGraphviz, NetworkX, and matplotlib (or pylab) installed. Using the same example as
-above, and the \verb|dot| program included with Graphviz, let's draw a rooted tree:
+above, and the \verb|dot| program included with Graphviz, let's draw a rooted tree (see
+Fig.~\ref{fig:phylo-dot}):
 
 \begin{verbatim}
 >>> tree = Phylo.read("example.xml", "phyloxml")
@@ -8770,7 +8744,7 @@ above, and the \verb|dot| program included with Graphviz, let's draw a rooted tr
 \end{htmlonly}
 
 \begin{latexonly}
-\begin{figure}[htb]
+\begin{figure}[tbp]
 \centering
 \includegraphics[width=0.4\textwidth]{images/phylo-dot.png}
 \caption{A simple rooted tree drawn with {\tt draw\_graphviz}, using {\tt dot} for node
@@ -8782,8 +8756,63 @@ layout.}
 (Tip: If you execute IPython with the \verb|-pylab| option, calling \verb|draw_graphviz| causes
 the matplotlib viewer to launch automatically without manually calling \verb|show()|.)
 
+This exports the tree object to a NetworkX graph, uses Graphviz to lay out the nodes, and
+displays it using matplotlib. 
+There are a number of keyword arguments that can modify the resulting diagram, including
+most of those accepted by the NetworkX functions \verb|networkx.draw| and
+\verb|networkx.draw_graphviz|.
+
+The display is also affected by the \verb|rooted| attribute of the given tree object.
+Rooted trees are shown with a ``head'' on each branch indicating direction (see
+Fig.~\ref{fig:phylo-rooted}):
+
+\begin{verbatim}
+>>> tree = Phylo.read("simple.dnd", "newick")
+>>> tree.rooted = True
+>>> Phylo.draw_graphiz(tree)
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=432, height=368]{images/phylo-rooted.png}
+\label{fig:phylo-rooted}
+\end{htmlonly}
+
+The ``prog'' argument specifies the Graphviz engine used for layout. The default,
+\verb|twopi|, behaves well for any size tree, reliably avoiding crossed branches. The
+\verb|neato| program may draw more attractive moderately-sized trees, but sometimes will
+cross branches (see Fig.~\ref{fig:phylo-color}). The \verb|dot| program may be useful
+with small trees, but tends to do surprising things with the layout of larger trees.
+
+\begin{latexonly}
+\begin{figure}[ptb]
+\centering
+\includegraphics[width=0.45\textwidth]{images/phylo-rooted.png}
+\caption{A rooted tree drawn with {\tt draw\_graphviz}.
+Since we rooted the tree, we can see the root must be along the branch with two
+directional ``heads''.
+}
+\label{fig:phylo-rooted}
+\end{figure}
+\begin{figure}[ptb]
+\centering
+\includegraphics[width=0.5\textwidth]{images/phylo-color.png}
+\caption{A colorized tree drawn with {\tt draw\_graphviz}, using {\tt neato} for node layout.}
+\label{fig:phylo-color}
+\end{figure}
+\end{latexonly}
+
+\begin{verbatim}
+>>> Phylo.draw_graphviz(tree, prog="neato")
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=499, height=348]{images/phylo-color.png}
+\label{fig:phylo-color}
+\end{htmlonly}
+
 This viewing mode is particularly handy for exploring larger trees, because the matplotlib
-viewer can zoom in on a selected region, thinning out a cluttered graphic.
+viewer can zoom in on a selected region, thinning out a cluttered graphic. (See
+Figs.~\ref{fig:phylo-apaf}, \ref{fig:phylo-apaf-zoom}).
 
 \begin{verbatim}
 >>> tree = Phylo.read("apaf.xml", "phyloxml")
@@ -8793,7 +8822,6 @@ viewer can zoom in on a selected region, thinning out a cluttered graphic.
 \begin{htmlonly}
 \imgsrc[width=519, height=400]{images/phylo-apaf.png}
 \label{fig:phylo-apaf}
-
 \imgsrc[width=506, height=400]{images/phylo-apaf-zoom.png}
 \label{fig:phylo-apaf-zoom}
 \end{htmlonly}
@@ -8808,7 +8836,7 @@ viewer can zoom in on a selected region, thinning out a cluttered graphic.
   \begin{figure}[btp]
     \centering
     \includegraphics[width=0.6\textwidth]{images/phylo-apaf-zoom.png}
-    \caption{A zoomed-in portion of the same tree.}
+    \caption{A zoomed-in portion of the same tree as Fig.~\ref{phylo-apaf}.}
     \label{fig:phylo-apaf-zoom}
   \end{figure}
 \end{latexonly}
@@ -9086,15 +9114,32 @@ The phyloXML file format includes fields for annotating trees with additional da
 visual cues.
 
 % TODO
-% visual cues -- color, width of branches
-%     - simple example
-%     - more cookbook entries in wiki
 % annotations -- see wiki and epydoc pages
 %     - on wiki, discuss each class
 
 See the PhyloXML page on the Biopython wiki (\url{http://biopython.org/wiki/PhyloXML}) for
 descriptions and examples of using the additional annotation features provided by PhyloXML.
 
+
+% The object hierarchy still looks and behaves similarly:
+
+% \begin{verbatim}
+% >>> print tree
+
+% Phylogeny(rooted=True, name="")
+%     Clade(branch_length=1.0)
+%         Clade(branch_length=1.0)
+%             Clade(branch_length=1.0)
+%                 Clade(branch_length=1.0, name="A")
+%                 Clade(branch_length=1.0, name="B")
+%             Clade(branch_length=1.0)
+%                 Clade(branch_length=1.0, name="C")
+%                 Clade(branch_length=1.0, name="D")
+%         Clade(branch_length=1.0)
+%             Clade(branch_length=1.0, name="E")
+%             Clade(branch_length=1.0, name="F")
+%             Clade(branch_length=1.0, name="G")
+% \end{verbatim}
 
 \section{Running external applications}
 \label{sec:PhyloApps}
