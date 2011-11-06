@@ -299,7 +299,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
         maxheight = tree.count_terminals()
         # Rows are defined by the tips
         heights = dict((tip, maxheight - i)
-                for i, tip in enumerate(tree.get_terminals()))
+                for i, tip in enumerate(reversed(tree.get_terminals())))
         # Internal nodes: place at midpoint of children
         def calc_row(clade):
             for subclade in clade:
