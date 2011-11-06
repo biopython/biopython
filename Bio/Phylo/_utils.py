@@ -360,7 +360,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
     pad = 0.05 * xmax
     plt.xlim(-pad, xmax + pad)
     # Also invert the y-axis (origin at the top)
-    plt.ylim(max(y_posns.itervalues()) + 1, 0)
+    # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
+    plt.ylim(max(y_posns.itervalues()) + 0.5, 0.5)
     if do_show:
         plt.show()
 
