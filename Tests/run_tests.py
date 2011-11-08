@@ -76,6 +76,7 @@ DOCTEST_MODULES = [
                    "Bio.AlignIO.StockholmIO",
                    "Bio.Alphabet",
                    "Bio.Application",
+                   "Bio.bgzf",
                    "Bio.Blast.Applications",
                    "Bio.Emboss.Applications",
                    "Bio.GenBank",
