@@ -887,7 +887,7 @@ def FastqGeneralIterator(handle):
         if line[0] == "@":
             break
 
-    while True:
+    while line:
         if line[0] != "@":
             raise ValueError("Records in Fastq files should start with '@' character")
         title_line = line[1:].rstrip()
@@ -938,8 +938,8 @@ def FastqGeneralIterator(handle):
 
         #Return the record and then continue...
         yield (title_line, seq_string, quality_string)
-        if not line : return #StopIteration at end of file
-    assert False, "Should not reach this line"
+    raise StopIteration
+
         
 #This is a generator function!
 def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
