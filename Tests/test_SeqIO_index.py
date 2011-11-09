@@ -375,7 +375,7 @@ for filename, format, alphabet in tests:
         f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
         return f
     setattr(IndexDictTests, "test_%s_%s_simple" \
-            % (filename.replace("/","_").replace(".","_"), format),
+            % (format, filename.replace("/","_").replace(".","_")),
             funct(filename, format, alphabet))
     del funct
 
@@ -384,7 +384,7 @@ for filename, format, alphabet in tests:
         f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
         return f
     setattr(IndexDictTests, "test_%s_%s_keyf" \
-            % (filename.replace("/","_").replace(".","_"), format),
+            % (format, filename.replace("/","_").replace(".","_")),
             funct(filename, format, alphabet))
     del funct
 
@@ -393,7 +393,7 @@ for filename, format, alphabet in tests:
         f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
         return f
     setattr(IndexDictTests, "test_%s_%s_get_raw" \
-            % (filename.replace("/","_").replace(".","_"), format),
+            % (format, filename.replace("/","_").replace(".","_")),
             funct(filename, format, alphabet))
     del funct
 
