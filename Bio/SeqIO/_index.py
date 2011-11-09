@@ -503,7 +503,7 @@ class SeqFileRandomAccess(object):
         elif compression=="gzip":
             self._handle = gzip.open(filename, "rb")
         elif compression=="bgzf":
-            self._handle = bgzf.bgzf_open(filename, "rb")
+            self._handle = bgzf.open(filename, "rb")
         else:
             raise ValueError("Compression type %r not supported" % compression)
         self._alphabet = alphabet

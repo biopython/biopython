@@ -74,6 +74,38 @@ is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
 compression (useful for intermediate files in memory to reduced
 CPU load).
 
+Warning about namespaces
+------------------------
+
+It is consider a bad idea to use "from XXX import *" in Python, because
+it pollutes the names space. This is a real issue with Bio.bgzf (and the
+standard Python library gzip) because they contain a function called open
+i.e. Suppose you do this:
+
+>>> from Bio.bgzf import *
+>>> print open.__module__
+Bio.bgzf
+
+Or,
+
+>>> from gzip import *
+>>> print open.__module__
+gzip
+
+Notice that the open function has been replaced. You can "fix" this if you
+need to by importing the built-in open function:
+
+>>> from __builtin__ import open
+>>> print open.__module__
+__builtin__
+
+However, what we recommend instead is to keep the name space, e.g.
+
+>>> from Bio import bgzf
+>>> print bgzf.open.__module__
+Bio.bgzf
+>>> print open.__module__
+__builtin__
 
 Example
 -------
@@ -180,6 +212,7 @@ import gzip
 import zlib
 import struct
 import __builtin__ #to access the usual open function
+
 from Bio._py3k import _as_bytes, _as_string
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
@@ -191,7 +224,9 @@ _bytes_BC = _as_bytes("BC")
 _empty_bytes_string = _as_bytes("")
 _bytes_newline = _as_bytes("\n")
 
-def bgzf_open(filename, mode="rb"):
+
+def open(filename, mode="rb"):
+    """Open a BGZF file for reading, writing or appending."""
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
     elif "w" in mode.lower() or "a" in mode.lower():
@@ -269,6 +304,7 @@ def BgzfBlocks(handle):
     decompressed length of the blocks contents (limited to 65536 in
     BGZF).
 
+    >>> from __builtin__ import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print "Start %i, length %i, data %i" % values
@@ -387,6 +423,7 @@ class BgzfReader(object):
     Let's use the BgzfBlocks function to have a peak at the BGZF blocks
     in an example BAM file,
 
+    >>> from __builtin__ import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
     ...     print "Start %i, length %i, data %i" % values
