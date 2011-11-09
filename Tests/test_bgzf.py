@@ -12,6 +12,9 @@ import unittest
 import gzip
 import os
 
+from Bio._py3k import _as_bytes
+_empty_bytes_string = _as_bytes("")
+
 from Bio import bgzf
 
 class BgzfTests(unittest.TestCase):
@@ -65,7 +68,7 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
         #Forward
-        new = ""
+        new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         for start, raw_len, data_len in blocks:
             #print start, raw_len, data_len
@@ -78,7 +81,7 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
         #Reverse
-        new = ""
+        new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
         for start, raw_len, data_len in blocks[::-1]:
             #print start, raw_len, data_len

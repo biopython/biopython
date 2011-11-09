@@ -180,10 +180,16 @@ import gzip
 import zlib
 import struct
 import __builtin__ #to access the usual open function
+from Bio._py3k import _as_bytes
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 #but need to use bytes on Python 3
 _bgzf_magic = struct.pack("<BBBB", 0x1f, 0x8b, 0x08, 0x04)
+_bgzf_header = struct.pack("<BBBBBBBBBBBBBBBB",
+                           0x1f, 0x8b, 0x08, 0x04, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0xff, 0x06, 0x00, 0x42, 0x43, 0x02, 0x00)
+_bytes_BC = _as_bytes("BC")
+_empty_bytes_string = _as_bytes("")
 
 def bgzf_open(filename, mode="rb"):
     if "r" in mode.lower():
@@ -347,7 +353,7 @@ def _load_bgzf_block(handle):
         subfield_len = struct.unpack("<H", handle.read(2))[0] #uint16_t
         subfield_data = handle.read(subfield_len)
         x_len += subfield_len + 4
-        if subfield_id == "BC":
+        if subfield_id == _bytes_BC:
             assert subfield_len == 2, "Wrong BC payload length"
             assert block_size is None, "Two BC subfields?"
             block_size = struct.unpack("<H", subfield_data)[0]+1 #uint16_t
@@ -481,7 +487,7 @@ class BgzfReader(object):
             block_size, self._buffer = _load_bgzf_block(handle)
         except StopIteration:
             #EOF
-            self._buffer = ""
+            self._buffer = _empty_bytes_string
         self._within_block_offset = 0
         #Finally save the block in our cache,
         self._buffers[self._block_start_offset] = self._buffer
@@ -513,7 +519,7 @@ class BgzfReader(object):
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
         elif size == 0:
-            return ""
+            return _empty_bytes_string
         elif self._within_block_offset + size < len(self._buffer):
             data = self._buffer[self._within_block_offset:self._within_block_offset + size]
             self._within_block_offset += size
@@ -562,7 +568,7 @@ class BgzfWriter(object):
                 raise ValueError("Must use write or append mode, not %r" % mode)
             handle = __builtin__.open(filename, mode)
         self._handle = handle
-        self._buffer = "" #Bytes string
+        self._buffer = _empty_bytes_string
         self.compresslevel = compresslevel
 
     def _write_block(self, block):
@@ -595,9 +601,7 @@ class BgzfWriter(object):
         #2 bytes: block length as BC sub field (2)
         #X bytes: the data
         #8 bytes: crc (4), uncompressed data length (4)
-        data = "\x1f\x8b\x08\x04\x00\x00\x00\x00" \
-             + "\x00\xff\x06\x00\x42\x43\x02\x00" \
-             + bsize + compressed + crc + uncompressed_length
+        data = _bgzf_header + bsize + compressed + crc + uncompressed_length
         self._handle.write(data)
 
     def write(self, data):
@@ -619,7 +623,7 @@ class BgzfWriter(object):
             self._write_block(self._buffer[:65535])
             self._buffer = self._buffer[65535:]
         self._write_block(self._buffer)
-        self._buffer = ""
+        self._buffer = _empty_bytes_string
         self._handle.flush()
 
     def close(self):
