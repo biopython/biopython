@@ -12,6 +12,7 @@ except ImportError:
     #where we don't expect this to be installed.
     sqlite3 = None
 
+import sys
 import os
 import unittest
 import gzip
@@ -34,6 +35,17 @@ from seq_tests_common import compare_record
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
+
+def gzip_open(filename, format):
+    #At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
+    #insists on giving byte strings (i.e. binary mode)
+    #TODO - Investigate if this is a Python 3 bug
+    if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
+        return gzip.open(filename)
+    handle = gzip.open(filename)
+    data = handle.read() #bytes!                                                                                                                                                             
+    handle.close()
+    return StringIO(_bytes_to_string(data))
 
 
 if sqlite3:
@@ -78,13 +90,12 @@ if sqlite3:
                               ["E3MFGYR02_no_manifest.sff", "greek.sff"])
 
 
-
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
         if comp:
-            h = gzip.open(filename)
+            h = gzip_open(filename, format)
             id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
             h.close()
         else:
@@ -147,7 +158,7 @@ class IndexDictTests(unittest.TestCase):
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
-            h = gzip.open(filename)
+            h = gzip_open(filename, format)
             id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
             h.close()
         else:
@@ -260,7 +271,7 @@ class IndexDictTests(unittest.TestCase):
             h = gzip.open(filename, "rb")
             raw_file = h.read()
             h.close()
-            h = gzip.open(filename)
+            h = gzip_open(filename, format)
             id_list = [rec.id.lower() for rec in \
                        SeqIO.parse(h, format, alphabet)]
             h.close()
