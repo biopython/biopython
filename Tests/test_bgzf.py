@@ -57,6 +57,21 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
+    def check_text(self, old_file, new_file):
+        h = open(old_file) #text mode!
+        old_line = h.readline()
+        old = old_line + h.read()
+        h.close()
+
+        h = bgzf.BgzfReader(new_file, "r") #Text mode!
+        new_line = h.readline()
+        new = new_line + h.read(len(old))
+        h.close()
+
+        self.assertEqual(old_line, new_line)
+        self.assertEqual(len(old), len(new))
+        self.assertEqual(old, new)
+
     def check_random(self, filename):
         """Check BGZF random access by reading blocks in forward & reverse order"""
         h = gzip.open(filename, "rb")
@@ -110,6 +125,10 @@ class BgzfTests(unittest.TestCase):
     def test_random_example_fastq(self):
         """Check random access to Quality/example.fastq.bgz"""
         self.check_random("Quality/example.fastq.bgz")
+
+    def test_text_example_fastq(self):
+        """Check text mode access to Quality/example.fastq.bgz"""
+        self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
 
     def test_bam_ex1(self):
         """Reproduce BGZF compression for BAM file"""
