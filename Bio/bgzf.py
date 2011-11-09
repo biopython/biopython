@@ -181,7 +181,7 @@ import zlib
 import struct
 import __builtin__ #to access the usual open function
 
-def bgzf_open(filename, mode):
+def bgzf_open(filename, mode="rb"):
     if "r" in mode.lower():
         return BgzfReader(filename, mode)
     elif "w" in mode.lower() or "a" in mode.lower():
