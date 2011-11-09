@@ -14,6 +14,7 @@ except ImportError:
 
 import os
 import unittest
+import gzip
 from StringIO import StringIO
 try:
     #This is in Python 2.6+, but we need it on Python 3
@@ -80,11 +81,16 @@ if sqlite3:
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
-    def simple_check(self, filename, format, alphabet):
+    def simple_check(self, filename, format, alphabet, comp):
         """Check indexing (without a key function)."""
-        id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
+        if comp:
+            h = gzip.open(filename)
+            id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
+            h.close()
+        else:
+            id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
-        rec_dict = SeqIO.index(filename, format, alphabet)
+        rec_dict = SeqIO.index(filename, format, alphabet, compression=comp)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict._proxy._handle.close() #TODO - Better solution
         del rec_dict
@@ -94,7 +100,8 @@ class IndexDictTests(unittest.TestCase):
 
         #In memory,
         #note here give filenames as list of strings
-        rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet)
+        rec_dict = SeqIO.index_db(":memory:", [filename], format,
+                                  alphabet, compression=comp)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
@@ -113,33 +120,42 @@ class IndexDictTests(unittest.TestCase):
         #To disk,
         #note here we give the filename as a single string
         #to confirm that works too (convience feature).
-        rec_dict = SeqIO.index_db(index_tmp, filename, format, alphabet)
+        rec_dict = SeqIO.index_db(index_tmp, filename, format,
+                                  alphabet, compression=comp)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload it...
-        rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
+        rec_dict = SeqIO.index_db(index_tmp, [filename], format,
+                                  alphabet, compression=comp)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
-        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
+        #TODO - Record the compression in the database too
+        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet, compression=comp)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
         del rec_dict
         os.remove(index_tmp)
     
-    def key_check(self, filename, format, alphabet):
+    def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
-        id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
+        if comp:
+            h = gzip.open(filename)
+            id_list = [rec.id for rec in SeqIO.parse(h, format, alphabet)]
+            h.close()
+        else:
+            id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
         key_list = [add_prefix(id) for id in id_list]
-        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
+        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix,
+                               compression=comp)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict._proxy._handle.close() #TODO - Better solution
         del rec_dict
@@ -149,15 +165,15 @@ class IndexDictTests(unittest.TestCase):
 
         #In memory,
         rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet,
-                                  add_prefix)
+                                  add_prefix, compression=comp)
         self.check_dict_methods(rec_dict, key_list, id_list)
         #check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy",
-                          key_function=add_prefix)
+                          key_function=add_prefix, compression=comp)
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"],
-                          key_function=add_prefix)
+                          key_function=add_prefix, compression=comp)
         rec_dict.close()
         del rec_dict
 
@@ -166,7 +182,7 @@ class IndexDictTests(unittest.TestCase):
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
-                                  add_prefix)
+                                  add_prefix, compression=comp)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -174,7 +190,7 @@ class IndexDictTests(unittest.TestCase):
 
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
-                                  add_prefix)
+                                  add_prefix, compression=comp)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -182,7 +198,7 @@ class IndexDictTests(unittest.TestCase):
 
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
-                                  key_function=add_prefix)
+                                  key_function=add_prefix, compression=comp)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -238,15 +254,25 @@ class IndexDictTests(unittest.TestCase):
         self.assertRaises(NotImplementedError, rec_dict.copy)
         self.assertRaises(NotImplementedError, rec_dict.fromkeys, [])
 
-    def get_raw_check(self, filename, format, alphabet):
-        handle = open(filename, "rb")
-        raw_file = handle.read()
-        handle.close()
+    def get_raw_check(self, filename, format, alphabet, comp):
         #Also checking the key_function here
-        id_list = [rec.id.lower() for rec in \
-                   SeqIO.parse(filename, format, alphabet)]
+        if comp:
+            h = gzip.open(filename, "rb")
+            raw_file = h.read()
+            h.close()
+            h = gzip.open(filename)
+            id_list = [rec.id.lower() for rec in \
+                       SeqIO.parse(h, format, alphabet)]
+            h.close()
+        else:
+            h = open(filename, "rb")
+            raw_file = h.read()
+            h.close()
+            id_list = [rec.id.lower() for rec in \
+                       SeqIO.parse(filename, format, alphabet)]
         rec_dict = SeqIO.index(filename, format, alphabet,
-                               key_function = lambda x : x.lower())
+                               key_function = lambda x : x.lower(),
+                               compression=comp)
         self.assertEqual(set(id_list), set(rec_dict.keys()))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
@@ -369,33 +395,39 @@ tests = [
     ]
 for filename, format, alphabet in tests:
     assert format in _FormatToRandomAccess
+    tasks = [(filename, None)]
+    if os.path.isfile(filename + ".gz"):
+        tasks.append((filename + ".gz", "gzip"))
+    if os.path.isfile(filename + ".bgz"):
+        tasks.append((filename + ".bgz","bgzf"))
+    for filename, comp in tasks:
 
-    def funct(fn,fmt,alpha):
-        f = lambda x : x.simple_check(fn, fmt, alpha)
-        f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
-        return f
-    setattr(IndexDictTests, "test_%s_%s_simple" \
-            % (format, filename.replace("/","_").replace(".","_")),
-            funct(filename, format, alphabet))
-    del funct
+        def funct(fn,fmt,alpha,c):
+            f = lambda x : x.simple_check(fn, fmt, alpha, c)
+            f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
+            return f
+        setattr(IndexDictTests, "test_%s_%s_simple" \
+                    % (format, filename.replace("/","_").replace(".","_")),
+                funct(filename, format, alphabet, comp))
+        del funct
 
-    def funct(fn,fmt,alpha):
-        f = lambda x : x.key_check(fn, fmt, alpha)
-        f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
-        return f
-    setattr(IndexDictTests, "test_%s_%s_keyf" \
-            % (format, filename.replace("/","_").replace(".","_")),
-            funct(filename, format, alphabet))
-    del funct
+        def funct(fn,fmt,alpha,c):
+            f = lambda x : x.key_check(fn, fmt, alpha, c)
+            f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
+            return f
+        setattr(IndexDictTests, "test_%s_%s_keyf" \
+                    % (format, filename.replace("/","_").replace(".","_")),
+                funct(filename, format, alphabet, comp))
+        del funct
 
-    def funct(fn,fmt,alpha):
-        f = lambda x : x.get_raw_check(fn, fmt, alpha)
-        f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
-        return f
-    setattr(IndexDictTests, "test_%s_%s_get_raw" \
-            % (format, filename.replace("/","_").replace(".","_")),
-            funct(filename, format, alphabet))
-    del funct
+        def funct(fn,fmt,alpha,c):
+            f = lambda x : x.get_raw_check(fn, fmt, alpha, c)
+            f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
+            return f
+        setattr(IndexDictTests, "test_%s_%s_get_raw" \
+                    % (format, filename.replace("/","_").replace(".","_")),
+                funct(filename, format, alphabet, comp))
+        del funct
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
