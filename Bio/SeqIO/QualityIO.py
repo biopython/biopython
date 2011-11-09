@@ -883,9 +883,12 @@ def FastqGeneralIterator(handle):
     #Skip any text before the first record (e.g. blank lines, comments?)
     while True:
         line = handle_readline()
-        if line == "" : return #Premature end of file, or just empty?
+        if not line:
+            return #Premature end of file, or just empty?
         if line[0] == "@":
             break
+        if isinstance(line[0], int):
+            raise ValueError("Is this handle in binary mode not text mode?")
 
     while line:
         if line[0] != "@":
