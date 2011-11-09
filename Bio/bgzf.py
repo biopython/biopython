@@ -474,8 +474,10 @@ class BgzfReader(object):
         if start_offset != self._block_start_offset:
             #Don't need to load the block if already there
             self._load_block(start_offset)
-        if within_block >= len(self._buffer):
-            raise ValueError("Invalid virtual offset, block size only %i" % len(self._buffer))
+        if within_block >= len(self._buffer) \
+        and not (within_block == 0 and len(self._buffer)==0):
+            raise ValueError("Within offset %i but block size only %i" \
+                             % (within_block, len(self._buffer)))
         self._within_block_offset = within_block
         return virtual_offset
 

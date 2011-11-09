@@ -12,7 +12,7 @@ import unittest
 import gzip
 import os
 
-from Bio.bgzf import BgzfWriter, BgzfBlocks
+from Bio import bgzf
 
 class BgzfTests(unittest.TestCase):
     def setUp(self):
@@ -29,7 +29,7 @@ class BgzfTests(unittest.TestCase):
         data = h.read()
         h.close()
 
-        h = BgzfWriter(output_file, "wb")
+        h = bgzf.BgzfWriter(output_file, "wb")
         h.write(data)
         h.flush()
         h.flush() #Second flush gives empty BGZF block as BAM EOF marker
@@ -46,13 +46,67 @@ class BgzfTests(unittest.TestCase):
 
     def check_blocks(self, old_file, new_file):
         h = open(old_file, "rb")
-        old = list(BgzfBlocks(h))
+        old = list(bgzf.BgzfBlocks(h))
         h.close()
         h = open(new_file, "rb")
-        new = list(BgzfBlocks(h))
+        new = list(bgzf.BgzfBlocks(h))
         h.close()
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
+
+    def check_random(self, filename):
+        """Check BGZF random access by reading blocks in forward & reverse order"""
+        h = gzip.open(filename, "rb")
+        old = h.read()
+        h.close()
+
+        h = open(filename, "rb")
+        blocks = list(bgzf.BgzfBlocks(h))
+        h.close()
+
+        #Forward
+        new = ""
+        h = bgzf.BgzfReader(filename, "rb")
+        for start, raw_len, data_len in blocks:
+            #print start, raw_len, data_len
+            h.seek(bgzf.make_virtual_offset(start,0))
+            data = h.read(data_len)
+            #self.assertEqual(start + raw_len, h._handle.tell())
+            new += data
+        h.close()
+        self.assertEqual(len(old), len(new))
+        self.assertEqual(old, new)
+
+        #Reverse
+        new = ""
+        h = bgzf.BgzfReader(filename, "rb")
+        for start, raw_len, data_len in blocks[::-1]:
+            #print start, raw_len, data_len
+            h.seek(bgzf.make_virtual_offset(start,0))
+            data = h.read(data_len)
+            #self.assertEqual(start + raw_len, h._handle.tell())
+            new = data + new
+        h.close()
+        self.assertEqual(len(old), len(new))
+        self.assertEqual(old, new)
+
+
+
+    def test_random_bam_ex1(self):
+        """Check random access to SamBam/ex1.bam"""
+        self.check_random("SamBam/ex1.bam")
+
+    def test_random_bam_ex1_refresh(self):
+        """Check random access to SamBam/ex1_refresh.bam"""
+        self.check_random("SamBam/ex1_refresh.bam")
+
+    def test_random_bam_ex1_header(self):
+        """Check random access to SamBam/ex1_header.bam"""
+        self.check_random("SamBam/ex1_header.bam")
+
+    def test_random_example_fastq(self):
+        """Check random access to Quality/example.fastq.bgz"""
+        self.check_random("Quality/example.fastq.bgz")
 
     def test_bam_ex1(self):
         """Reproduce BGZF compression for BAM file"""
