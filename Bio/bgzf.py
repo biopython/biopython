@@ -180,7 +180,7 @@ import gzip
 import zlib
 import struct
 import __builtin__ #to access the usual open function
-from Bio._py3k import _as_bytes
+from Bio._py3k import _as_bytes, _as_string
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 #but need to use bytes on Python 3
@@ -331,7 +331,7 @@ def BgzfBlocks(handle):
         yield start_offset, block_length, len(data)
 
 
-def _load_bgzf_block(handle):
+def _load_bgzf_block(handle, text_mode=False):
     #Change indentation later...
     magic = handle.read(4)
     if not magic:
@@ -375,7 +375,10 @@ def _load_bgzf_block(handle):
         crc = struct.pack("<I", crc)
     assert expected_crc == crc, \
            "CRC is %s, not %s" % (crc, expected_crc)
-    return block_size, data
+    if text_mode:
+        return block_size, _as_string(data)
+    else:
+        return block_size, data
 
 
 class BgzfReader(object):
@@ -452,11 +455,14 @@ class BgzfReader(object):
         if fileobj:
             assert filename is None and mode is None
             handle = fileobj
+            assert "b" in handle.mode.lower()
+            self._text = False
         else:
             if "w" in mode.lower() \
             or "a" in mode.lower():
                 raise ValueError("Must use read mode (default), not write or append mode")
-            handle = __builtin__.open(filename, mode)
+            self._text = "b" not in mode.lower()
+            handle = __builtin__.open(filename, "rb")
         self._handle = handle
         self.max_cache = max_cache
         self._buffers = {}
@@ -484,7 +490,7 @@ class BgzfReader(object):
             handle.seek(start_offset)
         self._block_start_offset = handle.tell()
         try:
-            block_size, self._buffer = _load_bgzf_block(handle)
+            block_size, self._buffer = _load_bgzf_block(handle, self._text)
         except StopIteration:
             #EOF
             self._buffer = _empty_bytes_string
@@ -535,11 +541,15 @@ class BgzfReader(object):
                 return data + self.read(size)
 
     def readline(self):
-        i = self._buffer.find(_bytes_newline, self._within_block_offset)
+        if self._text:
+            newline = "\n"
+        else:
+            newline = _bytes_newline
+        i = self._buffer.find(newline, self._within_block_offset)
         if i != -1:
             data = self._buffer[self._within_block_offset:i+1]
             self._within_block_offset = i + 1
-            assert data.endswith(_bytes_newline)
+            assert data.endswith(newline)
             return data
         else:
             data = self._buffer[self._within_block_offset:]
