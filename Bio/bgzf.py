@@ -432,9 +432,14 @@ class BgzfReader(object):
     'M\x01'
     >>> handle.close()
 
+    Note that you can use the max_cache argument to limit the number of
+    BGZF blocks cached in memory. The default is 100, and since each
+    block can be up to 64kb, the default cache could take up to 6MB of
+    RAM. The cache is not important for reading through the file in one
+    pass, but is important for improving performance of random access.
     """
 
-    def __init__(self, filename=None, mode=None, fileobj=None):
+    def __init__(self, filename=None, mode=None, fileobj=None, max_cache=100):
         if fileobj:
             assert filename is None and mode is None
             handle = fileobj
@@ -444,9 +449,27 @@ class BgzfReader(object):
                 raise ValueError("Must use read mode (default), not write or append mode")
             handle = __builtin__.open(filename, mode)
         self._handle = handle
+        self.max_cache = max_cache
+        self._buffers = {}
+        self._block_start_offset = None
         self._load_block()
 
     def _load_block(self, start_offset=None):
+        if start_offset is None:
+            start_offset = self._handle.tell()
+        if start_offset == self._block_start_offset:
+            self._within_block_offset = 0
+            return
+        elif start_offset in self._buffers:
+            #Already in cache
+            self._block_size, self._buffer = self._buffers[start_offset]
+            self._within_block_offset = 0
+            return
+        #Must hit the disk... first check cache limits,
+        while len(self._buffers) >= self.max_cache:
+            #TODO - Implemente LRU cache removal?
+            self._buffers.pop(0)
+        #Now load the block
         handle = self._handle
         if start_offset is not None:
             handle.seek(start_offset)
@@ -458,6 +481,8 @@ class BgzfReader(object):
             self._block_size = 0
             self._buffer = ""
         self._within_block_offset = 0
+        #Finally save the block in our cache,
+        self._buffers[self._block_start_offset] = (self._block_size, self._buffer)
 
     def tell(self):
         """Returns a 64-bit unsigned BGZF virtual offset."""
@@ -473,6 +498,7 @@ class BgzfReader(object):
         start_offset, within_block = split_virtual_offset(virtual_offset)
         if start_offset != self._block_start_offset:
             #Don't need to load the block if already there
+            #(this avoids a function call since _load_block would do nothing)
             self._load_block(start_offset)
         if within_block >= len(self._buffer) \
         and not (within_block == 0 and len(self._buffer)==0):
