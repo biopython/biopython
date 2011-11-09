@@ -190,6 +190,7 @@ _bgzf_header = struct.pack("<BBBBBBBBBBBBBBBB",
                            0x00, 0xff, 0x06, 0x00, 0x42, 0x43, 0x02, 0x00)
 _bytes_BC = _as_bytes("BC")
 _empty_bytes_string = _as_bytes("")
+_bytes_newline = _as_bytes("\n")
 
 def bgzf_open(filename, mode="rb"):
     if "r" in mode.lower():
@@ -535,11 +536,11 @@ class BgzfReader(object):
                 return data + self.read(size)
 
     def readline(self):
-        i = self._buffer.find("\n", self._within_block_offset)
+        i = self._buffer.find(_bytes_newline, self._within_block_offset)
         if i != -1:
             data = self._buffer[self._within_block_offset:i+1]
             self._within_block_offset = i + 1
-            assert data.endswith("\n")
+            assert data.endswith(_bytes_newline)
             return data
         else:
             data = self._buffer[self._within_block_offset:]
