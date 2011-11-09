@@ -462,7 +462,7 @@ class BgzfReader(object):
             return
         elif start_offset in self._buffers:
             #Already in cache
-            self._block_size, self._buffer = self._buffers[start_offset]
+            self._buffer = self._buffers[start_offset]
             self._within_block_offset = 0
             return
         #Must hit the disk... first check cache limits,
@@ -475,14 +475,13 @@ class BgzfReader(object):
             handle.seek(start_offset)
         self._block_start_offset = handle.tell()
         try:
-            self._block_size, self._buffer = _load_bgzf_block(handle)
+            block_size, self._buffer = _load_bgzf_block(handle)
         except StopIteration:
             #EOF
-            self._block_size = 0
             self._buffer = ""
         self._within_block_offset = 0
         #Finally save the block in our cache,
-        self._buffers[self._block_start_offset] = (self._block_size, self._buffer)
+        self._buffers[self._block_start_offset] = self._buffer
 
     def tell(self):
         """Returns a 64-bit unsigned BGZF virtual offset."""
