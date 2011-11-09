@@ -184,10 +184,9 @@ from Bio._py3k import _as_bytes
 
 #For Python 2 can just use: _bgzf_magic = '\x1f\x8b\x08\x04'
 #but need to use bytes on Python 3
-_bgzf_magic = struct.pack("<BBBB", 0x1f, 0x8b, 0x08, 0x04)
-_bgzf_header = struct.pack("<BBBBBBBBBBBBBBBB",
-                           0x1f, 0x8b, 0x08, 0x04, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0xff, 0x06, 0x00, 0x42, 0x43, 0x02, 0x00)
+_bgzf_magic = _as_bytes("\x1f\x8b\x08\x04")
+_bgzf_header = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00"
+                         "\x00\xff\x06\x00\x42\x43\x02\x00")
 _bytes_BC = _as_bytes("BC")
 _empty_bytes_string = _as_bytes("")
 _bytes_newline = _as_bytes("\n")
