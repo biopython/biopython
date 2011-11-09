@@ -207,13 +207,7 @@ _sff = _as_bytes(".sff")
 _hsh = _as_bytes(".hsh")
 _srt = _as_bytes(".srt")
 _mft = _as_bytes(".mft")
-#This is a hack because char 255 is special in unicode:
-try:
-    #This works on Python 2.6+ or Python 3.0
-    _flag = eval(r'b"\xff"')
-except SyntaxError:
-    #Must be on Python 2.4 or 2.5
-    _flag = "\xff" #Char 255
+_flag = _as_bytes("\xff")
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).

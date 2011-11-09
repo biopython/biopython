@@ -8,6 +8,7 @@ import sys
 
 if sys.version_info[0] >= 3:
     #Python 3 code (which will be converted using 2to3 script)
+    import codecs
 
     _bytes_to_string = lambda b: b.decode() # bytes to unicode string
     _string_to_bytes = lambda s: s.encode() # unicode string to bytes
@@ -17,7 +18,8 @@ if sys.version_info[0] >= 3:
         if isinstance(s, str):
             return s
         #Assume it is a bytes string
-        return s.decode()
+        #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        return codecs.latin_1_decode(s)[0]
 
 
     def _as_bytes(s):
@@ -28,7 +30,9 @@ if sys.version_info[0] >= 3:
         if isinstance(s, bytes):
             return s
         #Assume it is a unicode string
-        return s.encode()
+        #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
+        return codecs.latin_1_encode(s)[0]
+
     
     _as_string = _as_unicode
 
