@@ -312,7 +312,17 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
             state = state_ALIGN_CONS
             #Next line(s) should be consensus seq...
         elif line.startswith("; "):
-            key, value = [s.strip() for s in line[2:].split(": ",1)]
+            if ": " in line:
+                key, value = [s.strip() for s in line[2:].split(": ",1)]
+            else:
+                import warnings
+                #Seen in lalign36, specifically version 36.3.4 Apr, 2011
+                #Fixed in version 36.3.5b Oct, 2011(preload8)
+                warnings.warn("Missing colon in line: %r" % line)
+                try:
+                    key, value = [s.strip() for s in line[2:].split(" ",1)]
+                except ValueError:
+                    raise ValueError("Bad line: %r" % line)
             if state == state_QUERY_HEADER:
                 header_tags[key] = value
             elif state == state_ALIGN_HEADER:
