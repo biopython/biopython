@@ -348,11 +348,7 @@ class InsdcScanner(object):
         for feature_key, location_string, qualifiers in feature_tuples:
             consumer.feature_key(feature_key)
             consumer.location(location_string)
-            for q_key, q_value in qualifiers:
-                if q_value is None:
-                    consumer.feature_qualifier(q_key, q_value)
-                else:
-                    consumer.feature_qualifier(q_key, q_value.replace("\n"," "))
+            consumer.feature_qualifiers(qualifiers)
 
 
     def _feed_misc_lines(self, consumer, lines):

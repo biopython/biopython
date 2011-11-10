@@ -1035,27 +1035,28 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             raise LocationParserError(msg)
         raise LocationParserError(location_line)
 
-    def feature_qualifier(self, key, value):
-        """When we get a qualifier key and its value.
+    def feature_qualifiers(self, qualifiers):
+        """When we get a qualifier keys and their values.
         
         Can receive None, since you can have valueless keys such as /pseudo
         """
-        # Hack to try to preserve historical behaviour of /pseudo etc
-        if value is None:
-            if key not in self._cur_feature.qualifiers:
-                self._cur_feature.qualifiers[key] = [""]
-                return
-            
-        value = value.replace('"', '')
-        if self._feature_cleaner is not None:
-            value = self._feature_cleaner.clean_value(key, value)
-
-        # if the qualifier name exists, append the value
-        if key in self._cur_feature.qualifiers:
-            self._cur_feature.qualifiers[key].append(value)
-        # otherwise start a new list of the key with its values
-        else:
-            self._cur_feature.qualifiers[key] = [value]
+        for key, value in qualifiers:
+            # Hack to try to preserve historical behaviour of /pseudo etc
+            if value is None:
+                if key not in self._cur_feature.qualifiers:
+                    self._cur_feature.qualifiers[key] = [""]
+                    continue
+                
+            value = value.replace('"', '')
+            if self._feature_cleaner is not None:
+                value = self._feature_cleaner.clean_value(key, value)
+    
+            # if the qualifier name exists, append the value
+            if key in self._cur_feature.qualifiers:
+                self._cur_feature.qualifiers[key].append(value)
+            # otherwise start a new list of the key with its values
+            else:
+                self._cur_feature.qualifiers[key] = [value]
        
     def feature_qualifier_name(self, content_list):
         """Use feature_qualifier instead (OBSOLETE)."""
@@ -1338,10 +1339,11 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def location(self, content):
         self._cur_feature.location = self._clean_location(content)
 
-    def feature_qualifier(self, key, value):
-        self.feature_qualifier_name([key])
-        if value is not None:
-            self.feature_qualifier_description(value)
+    def feature_qualifiers(self, qualifiers):
+        for key, value in qualifiers:
+            self.feature_qualifier_name([key])
+            if value is not None:
+                self.feature_qualifier_description(value)
 
     def feature_qualifier_name(self, content_list):
         """Deal with qualifier names
