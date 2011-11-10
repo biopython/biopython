@@ -349,10 +349,12 @@ class InsdcScanner(object):
             consumer.feature_key(feature_key)
             consumer.location(location_string)
             for q_key, q_value in qualifiers:
-                consumer.feature_qualifier_name([q_key])
-                if q_value is not None:
-                    consumer.feature_qualifier_description(q_value.replace("\n"," "))
-                    
+                if q_value is None:
+                    consumer.feature_qualifier(q_key, q_value)
+                else:
+                    consumer.feature_qualifier(q_key, q_value.replace("\n"," "))
+
+
     def _feed_misc_lines(self, consumer, lines):
         """Handle any lines between features and sequence (list of strings), passing data to the consumer
         
@@ -753,7 +755,7 @@ class EmblScanner(InsdcScanner):
             else:
                 if self.debug:
                     print "Ignoring EMBL header line:\n%s" % line
-        
+
     def _feed_misc_lines(self, consumer, lines):
         #TODO - Should we do something with the information on the SQ line(s)?
         lines.append("")

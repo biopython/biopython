@@ -587,8 +587,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self._seq_data = []
         self._cur_reference = None
         self._cur_feature = None
-        self._cur_qualifier_key = None
-        self._cur_qualifier_value = None
         self._expected_size = None
 
     def locus(self, locus_name):
@@ -912,29 +910,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.annotations['references'].append(self._cur_reference)
             self._cur_reference = None
 
-    def _add_feature(self):
-        """Utility function to add a feature to the SeqRecord.
-
-        This does all of the appropriate checking to make sure we haven't
-        left any info behind, and that we are only adding info if it
-        exists.
-        """
-        if self._cur_feature:
-            # if we have a left over qualifier, add it to the qualifiers
-            # on the current feature
-            self._add_qualifier()
-
-            self._cur_qualifier_key = ''
-            self._cur_qualifier_value = ''
-            self.data.features.append(self._cur_feature)
-            
     def feature_key(self, content):
-        # if we already have a feature, add it on
-        self._add_feature()
-
         # start a new feature
         self._cur_feature = SeqFeature.SeqFeature()
         self._cur_feature.type = content
+        self.data.features.append(self._cur_feature)
 
     def location(self, content):
         """Parse out location information from the location string.
@@ -1055,50 +1035,35 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             raise LocationParserError(msg)
         raise LocationParserError(location_line)
 
-    def _add_qualifier(self):
-        """Add a qualifier to the current feature without loss of info.
-
-        If there are multiple qualifier keys with the same name we
-        would lose some info in the dictionary, so we append a unique
-        number to the end of the name in case of conflicts.
-        """
-        # if we've got a key from before, add it to the dictionary of
-        # qualifiers
-        if self._cur_qualifier_key:
-            key = self._cur_qualifier_key
-            value = "".join(self._cur_qualifier_value)
-            if self._feature_cleaner is not None:
-                value = self._feature_cleaner.clean_value(key, value)
-            # if the qualifier name exists, append the value
-            if key in self._cur_feature.qualifiers:
-                self._cur_feature.qualifiers[key].append(value)
-            # otherwise start a new list of the key with its values
-            else:
-                self._cur_feature.qualifiers[key] = [value]
-
-    def feature_qualifier_name(self, content_list):
-        """When we get a qualifier key, use it as a dictionary key.
+    def feature_qualifier(self, key, value):
+        """When we get a qualifier key and its value.
         
-        We receive a list of keys, since you can have valueless keys such as
-        /pseudo which would be passed in with the next key (since no other
-        tags separate them in the file)
+        Can receive None, since you can have valueless keys such as /pseudo
         """
-        for content in content_list:
-            # add a qualifier if we've got one
-            self._add_qualifier()
-
-            # assume the / and = have been removed, and it has been trimmed
-            assert '/' not in content and  '=' not in content \
-                   and content == content.strip(), content
+        # Hack to try to preserve historical behaviour of /pseudo etc
+        if value is None:
+            if key not in self._cur_feature.qualifiers:
+                self._cur_feature.qualifiers[key] = [""]
+                return
             
-            self._cur_qualifier_key = content
-            self._cur_qualifier_value = []
-        
+        value = value.replace('"', '')
+        if self._feature_cleaner is not None:
+            value = self._feature_cleaner.clean_value(key, value)
+
+        # if the qualifier name exists, append the value
+        if key in self._cur_feature.qualifiers:
+            self._cur_feature.qualifiers[key].append(value)
+        # otherwise start a new list of the key with its values
+        else:
+            self._cur_feature.qualifiers[key] = [value]
+       
+    def feature_qualifier_name(self, content_list):
+        """Use feature_qualifier instead (OBSOLETE)."""
+        raise NotImplementedError("Use the feature_qualifier method instead.")
+
     def feature_qualifier_description(self, content):
-        # get rid of the quotes surrounding the qualifier if we've got 'em
-        qual_value = content.replace('"', '')
-        
-        self._cur_qualifier_value.append(qual_value)
+        """Use feature_qualifier instead (OBSOLETE)."""
+        raise NotImplementedError("Use the feature_qualifier method instead.")
 
     def contig_location(self, content):
         """Deal with CONTIG information."""
@@ -1156,9 +1121,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             except KeyError:
                 pass
         
-        # add the last feature in the table which hasn't been added yet
-        self._add_feature()
-
         # add the sequence information
         # first, determine the alphabet
         # we default to an generic alphabet if we don't have a
@@ -1375,6 +1337,11 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def location(self, content):
         self._cur_feature.location = self._clean_location(content)
+
+    def feature_qualifier(self, key, value):
+        self.feature_qualifier_name([key])
+        if value is not None:
+            self.feature_qualifier_description(value)
 
     def feature_qualifier_name(self, content_list):
         """Deal with qualifier names
