@@ -758,7 +758,27 @@ class CircularDrawer(AbstractDrawer):
         trackheight = (top-ctr)
         
         # X-axis
-        if self.sweep < 1:
+        if track.start is not None or track.end is not None:
+            #Draw an arc, leaving out the wedge
+            p = ArcPath(strokeColor=track.scale_color, fillColor=None)
+            if track.start is not None:
+                startangle, startcos, startsin = self.canvas_angle(track.start)
+            elif self.start:
+                startangle, startcos, startsin = self.canvas_angle(self.start)
+            else:
+                startangle, startcos, startsin = self.canvas_angle(0)
+            if track.end is not None:
+                endangle, endcos, endsin = self.canvas_angle(track.end)
+            elif self.end:
+                endangle, endcos, endsin = self.canvas_angle(self.end)
+            else:
+                endangle, endcos, endsin = self.canvas_angle(self.length)
+            p.addArc(self.xcenter, self.ycenter, ctr,
+                     90 - (endangle * 180 / pi),
+                     90 - (startangle * 180 / pi))
+            scale_elements.append(p)
+            del p
+        elif self.sweep < 1:
             #Draw an arc, leaving out the wedge
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
             #Note reportlab counts angles anti-clockwise from the horizontal

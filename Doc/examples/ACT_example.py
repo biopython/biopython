@@ -110,7 +110,7 @@ for f, format in genomes:
                                 color=colors.lightblue,
                                 border=colors.blue)
 
-gd_diagram.draw(format="linear", fragments=4,
+gd_diagram.draw(format="linear", fragments=3,
                 orientation="landscape", pagesize=(20*cm,10*cm))
 gd_diagram.write(name + ".pdf", "PDF")
 
