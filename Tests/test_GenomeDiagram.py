@@ -764,7 +764,7 @@ class DiagramTest(unittest.TestCase):
         gdt6.add_set(gdgs3)
 
         #Add the tracks (from both features and graphs)
-        #Leave some white space in the middle
+        #Leave some white space in the middle/bottom
         gdd.add_track(gdt4, 3) # GC skew
         gdd.add_track(gdt5, 4) # GC and AT content
         gdd.add_track(gdt1, 5) # CDS features
@@ -772,15 +772,28 @@ class DiagramTest(unittest.TestCase):
         gdd.add_track(gdt3, 7) # Misc features and repeat feature
         gdd.add_track(gdt6, 8) # Feature depth
 
-        #Finally draw it in both formats,
+        #Finally draw it in both formats, and full view and partial
         gdd.draw(format='circular', orientation='landscape',
-             tracklines=0, pagesize='A0', circular=True)
+             tracklines=0, pagesize='A0')
         output_filename = os.path.join('Graphics', 'GD_by_obj_circular.pdf')
+        gdd.write(output_filename, 'PDF')
+
+        gdd.circular=False
+        gdd.draw(format='circular', orientation='landscape',
+             tracklines=0, pagesize='A0', start=3000, end=6000)
+        output_filename = os.path.join('Graphics', 'GD_by_obj_frag_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
         gdd.draw(format='linear', orientation='landscape',
              tracklines=0, pagesize='A0', fragments=3)
         output_filename = os.path.join('Graphics', 'GD_by_obj_linear.pdf')
+        gdd.write(output_filename, 'PDF')
+
+        gdd.set_all_tracks("greytrack_labels", 2)
+        gdd.draw(format='linear', orientation='landscape',
+             tracklines=0, pagesize=(30*cm,10*cm), fragments=1,
+             start=3000, end=6000)
+        output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
 if __name__ == "__main__":
