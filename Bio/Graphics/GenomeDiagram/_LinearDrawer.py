@@ -588,7 +588,7 @@ class LinearDrawer(AbstractDrawer):
                             graph_label_mid.append("%.3f" % midval)
                             graph_label_min.append("%.3f" % minval)
                             graph_label_max.append("%.3f" % maxval)
-                    for fragment in range(self.fragments):  # Add to all fragment axes
+                    for fragment in range(start_f, end_f+1):  # Add to all used fragment axes
                         tbtm = btm + self.fragment_lines[fragment][0]
                         tctr = ctr + self.fragment_lines[fragment][0]
                         ttop = top + self.fragment_lines[fragment][0]
@@ -782,20 +782,6 @@ class LinearDrawer(AbstractDrawer):
         endB = cross_link.featureB.end
         if self.end < endB: endB = self.end
 
-        allowed_fragments = self.fragment_limits.keys()
-
-        start_fragmentA, start_offsetA = self.canvas_location(startA)
-        end_fragmentA, end_offsetA = self.canvas_location(endA)
-        if start_fragmentA not in allowed_fragments \
-        or end_fragmentA not in allowed_fragments:
-            return
-
-        start_fragmentB, start_offsetB = self.canvas_location(startB)
-        end_fragmentB, end_offsetB = self.canvas_location(endB)
-        if start_fragmentB not in allowed_fragments \
-        or end_fragmentB not in allowed_fragments:
-            return
-
         if cross_link.color == colors.white and border is None:   # Force black border on 
             strokecolor = colors.black                 # white boxes with
         elif cross_link.border is None:                           # undefined border, else
@@ -809,14 +795,44 @@ class LinearDrawer(AbstractDrawer):
             strokecolor = None
 
         for track_level in self._parent.get_drawn_levels():
-            for feature_set in self._parent[track_level].get_sets():
+            track = self._parent[track_level]
+            for feature_set in track.get_sets():
                 if hasattr(feature_set, "features"):
                     if cross_link.featureA in feature_set.features.values():
                         trackA = track_level
+                        if track.start is not None:
+                            if endA < track.start:
+                                return
+                            startA = max(startA, track.start)
+                        if track.end is not None:
+                            if track.end < startA:
+                                return
+                            endA = min(endA, track.end)
                     if cross_link.featureB in feature_set.features.values():
                         trackB = track_level
+                        if track.start is not None:
+                            if endB < track.start:
+                                return
+                            startB = max(startB, track.start)
+                        if track.end is not None:
+                            if track.end < startB:
+                                return
+                            endB = min(endB, track.end)
         if trackA == trackB: raise NotImplementedError()
 
+        allowed_fragments = self.fragment_limits.keys()
+
+        start_fragmentA, start_offsetA = self.canvas_location(startA)
+        end_fragmentA, end_offsetA = self.canvas_location(endA)
+        if start_fragmentA not in allowed_fragments \
+        or end_fragmentA not in allowed_fragments:
+            return
+
+        start_fragmentB, start_offsetB = self.canvas_location(startB)
+        end_fragmentB, end_offsetB = self.canvas_location(endB)
+        if start_fragmentB not in allowed_fragments \
+        or end_fragmentB not in allowed_fragments:
+            return
 
         #TODO - Better drawing of flips when split between fragments
 
