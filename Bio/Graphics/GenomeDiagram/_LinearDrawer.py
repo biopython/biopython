@@ -688,6 +688,7 @@ class LinearDrawer(AbstractDrawer):
         feature_elements = []   # Holds diagram elements belonging to the feature
         label_elements = []     # Holds labels belonging to the feature
 
+        track = self._parent[self.current_track_level]
         # A single feature may be split into subfeatures, so loop over them
         for start, end in feature.locations:
             #print start, end, feature.name
@@ -699,12 +700,20 @@ class LinearDrawer(AbstractDrawer):
             #print locs
             for locstart, locend in locs:
                 #print locstart, locend, feature.name
+                if track.start is not None:
+                    if locend < track.start:
+                        continue
+                    locstart = max(locstart, track.start)
+                if track.end is not None:
+                    if track.end < locstart:
+                        continue
+                    locend = min(locend, track.end)
                 # Correct locations in case the feature overruns the drawn sequence
                 if locstart < self.start:
                     locstart = self.start
                 if locend > self.end:
                     locend = self.end
-
+                
                 feature_boxes = self.draw_feature_location(feature, locstart, locend)
                 for box, label in feature_boxes:
                     feature_elements.append(box)
