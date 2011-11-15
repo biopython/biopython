@@ -383,6 +383,7 @@ class CircularDrawer(AbstractDrawer):
         if feature.hide:    # Don't show feature: return early
             return feature_elements, label_elements
 
+        track = self._parent[self.current_track_level]
         # A single feature may be split into subfeatures, so loop over them
         for locstart, locend in feature.locations:
             if locend < self.start:
@@ -391,6 +392,14 @@ class CircularDrawer(AbstractDrawer):
             if self.end < locstart:
                 continue
             locend = min(locend, self.end)
+            if track.start is not None:
+                if locend < track.start:
+                    continue
+                locstart = max(locstart, track.start)
+            if track.end is not None:
+                if track.end < locstart:
+                    continue
+                locend = min(locend, track.end)
             # Get sigil for the feature/ each subfeature
             feature_sigil, label = self.get_feature_sigil(feature, locstart, locend)
             feature_elements.append(feature_sigil)
@@ -414,6 +423,7 @@ class CircularDrawer(AbstractDrawer):
         """
         # Establish the co-ordinates for the sigil
         btm, ctr, top = self.track_radii[self.current_track_level]
+        
         startangle, startcos, startsin = self.canvas_angle(locstart)
         endangle, endcos, endsin = self.canvas_angle(locend)
         midangle, midcos, midsin = self.canvas_angle(float(locend+locstart)/2)
