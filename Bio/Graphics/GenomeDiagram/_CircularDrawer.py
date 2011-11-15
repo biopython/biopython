@@ -505,19 +505,36 @@ class CircularDrawer(AbstractDrawer):
         endB = cross_link.featureB.end
         if self.end < endB: endB = self.end
 
+        for track_level in self._parent.get_drawn_levels():
+            track = self._parent[track_level]
+            for feature_set in track.get_sets():
+                if hasattr(feature_set, "features"):
+                    if cross_link.featureA in feature_set.features.values():
+                        trackA = track_level
+                        if track.start is not None:
+                            if endA < track.start:
+                                return
+                            startA = max(startA, track.start)
+                        if track.end is not None:
+                            if track.end < startA:
+                                return
+                            endA = min(endA, track.end)
+                    if cross_link.featureB in feature_set.features.values():
+                        trackB = track_level
+                        if track.start is not None:
+                            if endB < track.start:
+                                return
+                            startB = max(startB, track.start)
+                        if track.end is not None:
+                            if track.end < startB:
+                                return
+                            endB = min(endB, track.end)
+        if trackA == trackB: raise NotImplementedError()
+
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
         startangleB, startcosB, startsinB = self.canvas_angle(startB)
         endangleA, endcosA, endsinA = self.canvas_angle(endA)
         endangleB, endcosB, endsinB = self.canvas_angle(endB)
-
-        for track_level in self._parent.get_drawn_levels():
-            for feature_set in self._parent[track_level].get_sets():
-                if hasattr(feature_set, "features"):
-                    if cross_link.featureA in feature_set.features.values():
-                        trackA = track_level
-                    if cross_link.featureB in feature_set.features.values():
-                        trackB = track_level
-        if trackA == trackB: raise NotImplementedError()
 
         btmA, ctrA, topA = self.track_radii[trackA]
         btmB, ctrB, topB = self.track_radii[trackB]
