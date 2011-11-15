@@ -501,9 +501,9 @@ class AbstractDrawer(object):
         if start is not None and end is not None and start > end:
             start, end = end, start
 
-        if start is None or start < 1:  # Check validity of passed args and 
-            start = 1   # default to 1
-        if end is None or end < 1:
+        if start is None or start < 0:  # Check validity of passed args and 
+            start = 0   # default to 0
+        if end is None or end < 0:
             end = high + 1  # default to track range top limit
         
         self.start, self.end = int(start), int(end)

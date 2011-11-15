@@ -534,11 +534,11 @@ class LinearDrawer(AbstractDrawer):
             #Using tickiterval * (self.start//tickiterval) is a shortcut.
             for tickpos in range(tickiterval * (self.start//tickiterval),
                                  int(self.end), tickiterval):
-                if tickpos < self.start or self.end < tickpos:
+                if tickpos <= self.start or self.end <= tickpos:
                     continue
-                if track.start is not None and tickpos < track.start:
+                if track.start is not None and tickpos <= track.start:
                     continue
-                if track.end is not None and track.end < tickpos:
+                if track.end is not None and track.end <= tickpos:
                     continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
@@ -551,11 +551,11 @@ class LinearDrawer(AbstractDrawer):
             tickiterval = int(track.scale_smalltick_interval)
             for tickpos in range(tickiterval * (self.start//tickiterval),
                                  int(self.end), tickiterval):
-                if tickpos < self.start or self.end < tickpos:
+                if tickpos <= self.start or self.end <= tickpos:
                     continue
-                if track.start is not None and tickpos < track.start:
+                if track.start is not None and tickpos <= track.start:
                     continue
-                if track.end is not None and track.end < tickpos:
+                if track.end is not None and track.end <= tickpos:
                     continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
