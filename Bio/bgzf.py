@@ -168,14 +168,14 @@ brings us to the key point about BGZF, which is the block structure:
 
 >>> handle = open("GenBank/NC_000932.gb.bgz", "rb")
 >>> for values in BgzfBlocks(handle):
-...     print "Start %i, length %i, data %i" % values
-Start 0, length 15073, data 65536
-Start 15073, length 17857, data 65536
-Start 32930, length 22144, data 65536
-Start 55074, length 22230, data 65536
-Start 77304, length 14939, data 43478
-Start 92243, length 28, data 0
->>> handle.close()                             
+...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+Raw start 0, raw length 15073; data start 0, data length 65536
+Raw start 15073, raw length 17857; data start 65536, data length 65536
+Raw start 32930, raw length 22144; data start 131072, data length 65536
+Raw start 55074, raw length 22230; data start 196608, data length 65536
+Raw start 77304, raw length 14939; data start 262144, data length 43478
+Raw start 92243, raw length 28; data start 305622, data length 0
+>>> handle.close()
 
 By reading ahead 70,000 bytes we moved into the second BGZF block,
 and at that point the BGZF virtual offsets start to look different
@@ -307,15 +307,15 @@ def BgzfBlocks(handle):
     >>> from __builtin__ import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Start %i, length %i, data %i" % values
-    Start 0, length 18239, data 65536
-    Start 18239, length 18223, data 65536
-    Start 36462, length 18017, data 65536
-    Start 54479, length 17342, data 65536
-    Start 71821, length 17715, data 65536
-    Start 89536, length 17728, data 65536
-    Start 107264, length 17292, data 63398
-    Start 124556, length 28, data 0
+    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    Raw start 0, raw length 18239; data start 0, data length 65536
+    Raw start 18239, raw length 18223; data start 65536, data length 65536
+    Raw start 36462, raw length 18017; data start 131072, data length 65536
+    Raw start 54479, raw length 17342; data start 196608, data length 65536
+    Raw start 71821, raw length 17715; data start 262144, data length 65536
+    Raw start 89536, raw length 17728; data start 327680, data length 65536
+    Raw start 107264, raw length 17292; data start 393216, data length 63398
+    Raw start 124556, raw length 28; data start 456614, data length 0
     >>> handle.close()
 
     Indirectly we can tell this file came from an old version of
@@ -329,16 +329,16 @@ def BgzfBlocks(handle):
 
     >>> handle = open("SamBam/ex1_refresh.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Start %i, length %i, data %i" % values
-    Start 0, length 53, data 38
-    Start 53, length 18195, data 65434
-    Start 18248, length 18190, data 65409
-    Start 36438, length 18004, data 65483
-    Start 54442, length 17353, data 65519
-    Start 71795, length 17708, data 65411
-    Start 89503, length 17709, data 65466
-    Start 107212, length 17390, data 63854
-    Start 124602, length 28, data 0
+    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    Raw start 0, raw length 53; data start 0, data length 38
+    Raw start 53, raw length 18195; data start 38, data length 65434
+    Raw start 18248, raw length 18190; data start 65472, data length 65409
+    Raw start 36438, raw length 18004; data start 130881, data length 65483
+    Raw start 54442, raw length 17353; data start 196364, data length 65519
+    Raw start 71795, raw length 17708; data start 261883, data length 65411
+    Raw start 89503, raw length 17709; data start 327294, data length 65466
+    Raw start 107212, raw length 17390; data start 392760, data length 63854
+    Raw start 124602, raw length 28; data start 456614, data length 0
     >>> handle.close()
 
     The above example has no embedded SAM header (thus the first block
@@ -347,24 +347,27 @@ def BgzfBlocks(handle):
 
     >>> handle = open("SamBam/ex1_header.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Start %i, length %i, data %i" % values
-    Start 0, length 104, data 103
-    Start 104, length 18195, data 65434
-    Start 18299, length 18190, data 65409
-    Start 36489, length 18004, data 65483
-    Start 54493, length 17353, data 65519
-    Start 71846, length 17708, data 65411
-    Start 89554, length 17709, data 65466
-    Start 107263, length 17390, data 63854
-    Start 124653, length 28, data 0
+    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    Raw start 0, raw length 104; data start 0, data length 103
+    Raw start 104, raw length 18195; data start 103, data length 65434
+    Raw start 18299, raw length 18190; data start 65537, data length 65409
+    Raw start 36489, raw length 18004; data start 130946, data length 65483
+    Raw start 54493, raw length 17353; data start 196429, data length 65519
+    Raw start 71846, raw length 17708; data start 261948, data length 65411
+    Raw start 89554, raw length 17709; data start 327359, data length 65466
+    Raw start 107263, raw length 17390; data start 392825, data length 63854
+    Raw start 124653, raw length 28; data start 456679, data length 0
     >>> handle.close()
 
     """
+    data_start = 0
     while True:
         start_offset = handle.tell()
         #This may raise StopIteration which is perfect here
         block_length, data = _load_bgzf_block(handle)
-        yield start_offset, block_length, len(data)
+        data_len = len(data)
+        yield start_offset, block_length, data_start, data_len
+        data_start += data_len
 
 
 def _load_bgzf_block(handle, text_mode=False):
@@ -426,15 +429,15 @@ class BgzfReader(object):
     >>> from __builtin__ import open
     >>> handle = open("SamBam/ex1.bam", "rb")
     >>> for values in BgzfBlocks(handle):
-    ...     print "Start %i, length %i, data %i" % values
-    Start 0, length 18239, data 65536
-    Start 18239, length 18223, data 65536
-    Start 36462, length 18017, data 65536
-    Start 54479, length 17342, data 65536
-    Start 71821, length 17715, data 65536
-    Start 89536, length 17728, data 65536
-    Start 107264, length 17292, data 63398
-    Start 124556, length 28, data 0
+    ...     print "Raw start %i, raw length %i; data start %i, data length %i" % values
+    Raw start 0, raw length 18239; data start 0, data length 65536
+    Raw start 18239, raw length 18223; data start 65536, data length 65536
+    Raw start 36462, raw length 18017; data start 131072, data length 65536
+    Raw start 54479, raw length 17342; data start 196608, data length 65536
+    Raw start 71821, raw length 17715; data start 262144, data length 65536
+    Raw start 89536, raw length 17728; data start 327680, data length 65536
+    Raw start 107264, raw length 17292; data start 393216, data length 63398
+    Raw start 124556, raw length 28; data start 456614, data length 0
     >>> handle.close()
  
     Now let's see how to use this block information to jump to
