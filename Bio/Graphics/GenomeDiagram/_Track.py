@@ -70,6 +70,9 @@ class Track(object):
         o name      String describing the track
 
         o hide      Boolean, 0 if the track is not to be drawn
+        
+        o start, end    Integers (or None) specifying start/end to draw just
+                        a partial track.
 
         o greytrack     Boolean, 1 if a grey background to the track is to be
                         drawn
@@ -138,6 +141,7 @@ class Track(object):
                  scale_smallticks=0.3, scale_largetick_interval=1e6,
                  scale_smalltick_interval=1e4, scale_largetick_labels=1,
                  scale_smalltick_labels=0, axis_labels=1,
+                 start=None, end=None,
                  greytrack_font_colour = None, scale_colour=None):
         """ __init__(self, name=None, ...)
 
@@ -225,6 +229,8 @@ class Track(object):
         else:
             self.name = "Track"
         self.hide = hide
+        self.start = start
+        self.end = end
 
         # Attributes for the grey track background and labels
         self.greytrack = greytrack

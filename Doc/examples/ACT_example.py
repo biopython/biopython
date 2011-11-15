@@ -33,14 +33,14 @@ comparisons = [os.path.join(input_folder, file_a_vs_b)]
 
 #Create diagram with tracks, each with a feature set
 assert len(genomes) >= 2 and len(genomes) == len(comparisons)+1
-gd_diagram = Diagram(name, track_size=0.35)
+gd_diagram = Diagram(name, track_size=0.35, circular=False)
 tracks = dict()
 feature_sets = dict()
 records = dict()
 for f, format in genomes:
-    tracks[f] = gd_diagram.new_track(1, name=f)
-    feature_sets[f] = tracks[f].new_set()
     records[f] = SeqIO.read(f, format)
+    tracks[f] = gd_diagram.new_track(1, name=f, start=0.25*len(records[f]), end=0.75*len(records[f]))
+    feature_sets[f] = tracks[f].new_set()
     #Add a grey feature to mark the genome
     feature_sets[f].add_feature(SeqFeature(FeatureLocation(0,len(records[f]))),
                                 color=colors.lightgrey, border=False)
@@ -110,6 +110,10 @@ for f, format in genomes:
                                 color=colors.lightblue,
                                 border=colors.blue)
 
-gd_diagram.draw(format="linear", fragments=1,
+gd_diagram.draw(format="linear", fragments=4,
                 orientation="landscape", pagesize=(20*cm,10*cm))
 gd_diagram.write(name + ".pdf", "PDF")
+
+gd_diagram.draw(format="circular",
+                orientation="landscape", pagesize=(20*cm,20*cm))
+gd_diagram.write(name + "_c.pdf", "PDF")

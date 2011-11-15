@@ -439,6 +439,10 @@ class LinearDrawer(AbstractDrawer):
         assert self.start <= tickpos and tickpos <= self.end, \
                "Tick at %i, but showing %i to %i" \
                % (tickpos, self.start, self.end)
+        assert (track.start is None or track.start <= tickpos) and \
+               (track.end is None or tickpos <= track.end), \
+               "Tick at %i, but showing %r to %r for track" \
+               % (tickpos, track.start, track.end)
         fragment, tickx = self.canvas_location(tickpos) # Tick co-ordinates
         assert fragment >=0, \
                "Fragment %i, tickpos %i" % (fragment, tickpos)
@@ -487,20 +491,34 @@ class LinearDrawer(AbstractDrawer):
         trackheight = (top-ctr)
 
         # For each fragment, draw the scale for this track
-        for fragment in range(self.fragments):
+        if track.start is None:
+            start_f, start_x = self.canvas_location(self.start)
+        else:
+            start_f, start_x = self.canvas_location(max(self.start, track.start))
+        if track.end is None:
+            end_f, end_x = self.canvas_location(self.end)
+        else:
+            end_f, end_x = self.canvas_location(min(self.end, track.end))
+        for fragment in range(start_f, end_f+1):
             tbtm = btm + self.fragment_lines[fragment][0]
             tctr = ctr + self.fragment_lines[fragment][0]
             ttop = top + self.fragment_lines[fragment][0]
             # X-axis
-            if fragment == self.fragments - 1:
-                frag, x = self.canvas_location(self.end)
-                scale_elements.append(Line(self.x0, tctr, self.x0 + x, tctr,
-                                       strokeColor=track.scale_color))
+            if fragment == start_f:
+                x_left = start_x
             else:
-                scale_elements.append(Line(self.x0, tctr, self.xlim, tctr,
+                x_left = 0
+            if fragment == end_f:
+                x_right = end_x
+                # Y-axis end marker
+                scale_elements.append(Line(self.x0+x_right, tbtm, self.x0+x_right, ttop,
                                            strokeColor=track.scale_color))
-            # Y-axis
-            scale_elements.append(Line(self.x0, tbtm, self.x0, ttop,
+            else:
+                x_right = self.xlim - self.x0
+            scale_elements.append(Line(self.x0+x_left, tctr, self.x0+x_right, tctr,
+                                   strokeColor=track.scale_color))
+            # Y-axis start marker
+            scale_elements.append(Line(self.x0+x_left, tbtm, self.x0+x_left, ttop,
                                        strokeColor=track.scale_color))
         if track.scale_ticks:   # Ticks are required on the scale
             # Draw large ticks
@@ -514,12 +532,14 @@ class LinearDrawer(AbstractDrawer):
             #range(0,self.end,tickinterval) and the filter out the
             #ones before self.start - but this seems wasteful.
             #Using tickiterval * (self.start//tickiterval) is a shortcut.
-            largeticks = [pos for pos \
-                          in range(tickiterval * (self.start//tickiterval),
-                                   int(self.end),
-                                   tickiterval) \
-                          if pos >= self.start]
-            for tickpos in largeticks:
+            for tickpos in range(tickiterval * (self.start//tickiterval),
+                                 int(self.end), tickiterval):
+                if tickpos < self.start or self.end < tickpos:
+                    continue
+                if track.start is not None and tickpos < track.start:
+                    continue
+                if track.end is not None and track.end < tickpos:
+                    continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
                                              track.scale_largetick_labels)
@@ -529,12 +549,14 @@ class LinearDrawer(AbstractDrawer):
             # Draw small ticks
             ticklen = track.scale_smallticks * trackheight
             tickiterval = int(track.scale_smalltick_interval)
-            smallticks = [pos for pos \
-                          in range(tickiterval * (self.start//tickiterval),
-                                   int(self.end),
-                                   tickiterval) \
-                          if pos >= self.start]
-            for tickpos in smallticks:
+            for tickpos in range(tickiterval * (self.start//tickiterval),
+                                 int(self.end), tickiterval):
+                if tickpos < self.start or self.end < tickpos:
+                    continue
+                if track.start is not None and tickpos < track.start:
+                    continue
+                if track.end is not None and track.end < tickpos:
+                    continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
                                              track.scale_smalltick_labels)
