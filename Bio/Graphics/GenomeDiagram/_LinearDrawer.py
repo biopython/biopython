@@ -626,12 +626,31 @@ class LinearDrawer(AbstractDrawer):
         # Get track location
         btm, ctr, top = self.track_offsets[self.current_track_level]
 
+        if track.start is None:
+            start = self.start
+        else:
+            start = track.start
+        if track.end is None:
+            end = self.end
+        else:
+            end = track.end
+        start_fragment, start_offset = self.canvas_location(start)
+        end_fragment, end_offset = self.canvas_location(end)
+
         # Add greytrack to all fragments for this track
-        for fragment in range(self.fragments):
+        for fragment in range(start_fragment, end_fragment+1):
             tbtm = btm + self.fragment_lines[fragment][0]
             tctr = ctr + self.fragment_lines[fragment][0]
-            ttop = top + self.fragment_lines[fragment][0]  
-            box = draw_box((self.x0, tbtm), (self.xlim, ttop),  # Grey track bg
+            ttop = top + self.fragment_lines[fragment][0]
+            if fragment == start_fragment:
+                x1 = self.x0 + start_offset
+            else:
+                x1 = self.x0
+            if fragment == end_fragment:
+                x2 = self.x0 + end_offset
+            else:
+                x2 = self.xlim
+            box = draw_box((x1, tbtm), (x2, ttop),  # Grey track bg
                            colors.Color(0.96,0.96, 0.96))       # is just a box
             greytrack_bgs.append(box)
 
@@ -1334,8 +1353,12 @@ class LinearDrawer(AbstractDrawer):
         if fragment < 1:    # First fragment
             base_offset = base
             fragment = 0
+        elif fragment >= self.fragments:
+            fragment = self.fragments-1
+            base_offset = self.fragment_bases
         else:               # Calculate number of bases from start of fragment
             base_offset = base % self.fragment_bases
+        assert fragment < self.fragments, (base, self.start, self.end, self.length, self.fragment_bases)
         # Calculate number of pixels from start of fragment
         x_offset = 1. * self.pagewidth * base_offset / self.fragment_bases
         return fragment, x_offset

@@ -39,11 +39,9 @@ feature_sets = dict()
 records = dict()
 for f, format in genomes:
     records[f] = SeqIO.read(f, format)
-    tracks[f] = gd_diagram.new_track(1, name=f, start=0, end=len(records[f]))
+    tracks[f] = gd_diagram.new_track(1, name=f, start=0, end=len(records[f]),
+                                     greytrack=True, greytrack_labels=0)
     feature_sets[f] = tracks[f].new_set()
-    #Add a grey feature to mark the genome
-    feature_sets[f].add_feature(SeqFeature(FeatureLocation(0,len(records[f]))),
-                                color=colors.lightgrey, border=False)
 
 print "Drawing matches..."
 for i, crunch_file in enumerate(comparisons):

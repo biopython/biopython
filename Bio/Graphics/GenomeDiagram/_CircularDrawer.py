@@ -979,7 +979,24 @@ class CircularDrawer(AbstractDrawer):
         btm, ctr, top = self.track_radii[self.current_track_level]
 
         # Make background
-        if self.sweep < 1:
+        if track.start is not None or track.end is not None:
+            #Draw an arc, leaving out the wedge
+            p = ArcPath(strokeColor=track.scale_color, fillColor=None)
+            if track.start is not None:
+                startangle, startcos, startsin = self.canvas_angle(track.start)
+            elif self.start:
+                startangle, startcos, startsin = self.canvas_angle(self.start)
+            else:
+                startangle, startcos, startsin = self.canvas_angle(0)
+            if track.end is not None:
+                endangle, endcos, endsin = self.canvas_angle(track.end)
+            elif self.end:
+                endangle, endcos, endsin = self.canvas_angle(self.end)
+            else:
+                endangle, endcos, endsin = self.canvas_angle(self.length)
+            bg = self._draw_arc(btm, top, startangle, endangle,
+                                colors.Color(0.96, 0.96, 0.96))
+        elif self.sweep < 1:
             #Make a partial circle, a large arc box
             #This method assumes the correct center for us.
             bg = self._draw_arc(btm, top, 0, 2*pi*self.sweep,
