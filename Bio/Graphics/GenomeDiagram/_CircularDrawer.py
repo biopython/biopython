@@ -375,6 +375,12 @@ class CircularDrawer(AbstractDrawer):
 
         # A single feature may be split into subfeatures, so loop over them
         for locstart, locend in feature.locations:
+            if locend < self.start:
+                continue
+            locstart = max(locstart, self.start)
+            if self.end < locstart:
+                continue
+            locend = min(locend, self.end)
             # Get sigil for the feature/ each subfeature
             feature_sigil, label = self.get_feature_sigil(feature, locstart, locend)
             feature_elements.append(feature_sigil)

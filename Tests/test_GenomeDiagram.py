@@ -780,7 +780,7 @@ class DiagramTest(unittest.TestCase):
 
         gdd.circular=False
         gdd.draw(format='circular', orientation='landscape',
-             tracklines=0, pagesize='A0', start=3000, end=6000)
+             tracklines=0, pagesize='A0', start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_circular.pdf')
         gdd.write(output_filename, 'PDF')
 
@@ -792,7 +792,7 @@ class DiagramTest(unittest.TestCase):
         gdd.set_all_tracks("greytrack_labels", 2)
         gdd.draw(format='linear', orientation='landscape',
              tracklines=0, pagesize=(30*cm,10*cm), fragments=1,
-             start=3000, end=6000)
+             start=3000, end=6300)
         output_filename = os.path.join('Graphics', 'GD_by_obj_frag_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
