@@ -41,16 +41,7 @@ class Track(object):
 
         Methods:
 
-        o __init__(self, name=None, height=1, hide=0, greytrack=0,
-                 greytrack_labels=5, greytrack_fontsize=8,
-                 greytrack_font='Helvetica', greytrack_font_rotation=0,
-                 greytrack_fontcolor = colors.Color(0.6, 0.6, 0.6),
-                 scale=1, scale_color=colors.black, scale_font='Helvetica',
-                 scale_fontsize=6,
-                 scale_fontangle=45, scale_largeticks=0.5, scale_ticks=1,
-                 scale_smallticks=0.3, scale_largetick_interval=1e6,
-                 scale_smalltick_interval=1e4, scale_largetick_labels=1,
-                 scale_smalltick_labels=0) Called on instantiation
+        o __init__(self, name=None, ...) Called on instantiation
 
         o add_set(self, set)    Add a FeatureSet or GraphSet to the diagram
 
@@ -148,7 +139,7 @@ class Track(object):
                  scale_smalltick_interval=1e4, scale_largetick_labels=1,
                  scale_smalltick_labels=0, axis_labels=1,
                  greytrack_font_colour = None, scale_colour=None):
-        """ __init__(self, name=None, height=1)
+        """ __init__(self, name=None, ...)
 
             o height    Int describing the relative height to other tracks in the
                         diagram
