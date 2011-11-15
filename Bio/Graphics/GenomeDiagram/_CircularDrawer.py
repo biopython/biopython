@@ -778,6 +778,14 @@ class CircularDrawer(AbstractDrawer):
                      90 - (startangle * 180 / pi))
             scale_elements.append(p)
             del p
+            # Y-axis start marker
+            x0, y0 = self.xcenter+btm*startsin, self.ycenter+btm*startcos
+            x1, y1 = self.xcenter+top*startsin, self.ycenter+top*startcos
+            scale_elements.append(Line(x0, y0, x1, y1, strokeColor=track.scale_color))
+            # Y-axis end marker
+            x0, y0 = self.xcenter+btm*endsin, self.ycenter+btm*endcos
+            x1, y1 = self.xcenter+top*endsin, self.ycenter+top*endcos
+            scale_elements.append(Line(x0, y0, x1, y1, strokeColor=track.scale_color))
         elif self.sweep < 1:
             #Draw an arc, leaving out the wedge
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
@@ -789,6 +797,15 @@ class CircularDrawer(AbstractDrawer):
                      endangledegrees=90)
             scale_elements.append(p)
             del p
+            # Y-axis start marker
+            x0, y0 = self.xcenter, self.ycenter+btm
+            x1, y1 = self.xcenter, self.ycenter+top
+            scale_elements.append(Line(x0, y0, x1, y1, strokeColor=track.scale_color))
+            # Y-axis end marker
+            alpha = 2*pi*self.sweep
+            x0, y0 = self.xcenter+btm*sin(alpha), self.ycenter+btm*cos(alpha)
+            x1, y1 = self.xcenter+top*sin(alpha), self.ycenter+top*cos(alpha)
+            scale_elements.append(Line(x0, y0, x1, y1, strokeColor=track.scale_color))
         else:
             #Draw a full circle
             scale_elements.append(Circle(self.xcenter, self.ycenter, ctr,
@@ -807,12 +824,14 @@ class CircularDrawer(AbstractDrawer):
             #range(0,self.end,tickinterval) and the filter out the
             #ones before self.start - but this seems wasteful.
             #Using tickiterval * (self.start/tickiterval) is a shortcut.
-            largeticks = [pos for pos \
-                          in range(tickiterval * (self.start//tickiterval),
-                                   int(self.end),
-                                   tickiterval) \
-                          if pos >= self.start]
-            for tickpos in largeticks:
+            for tickpos in range(tickiterval * (self.start//tickiterval),
+                                 int(self.end), tickiterval):
+                if tickpos < self.start or self.end < tickpos:
+                    continue
+                if track.start is not None and tickpos < track.start:
+                    continue
+                if track.end is not None and track.end < tickpos:
+                    continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
                                              track.scale_largetick_labels)
@@ -822,12 +841,14 @@ class CircularDrawer(AbstractDrawer):
             # Draw small ticks
             ticklen = track.scale_smallticks * trackheight
             tickiterval = int(track.scale_smalltick_interval)
-            smallticks = [pos for pos \
-                          in range(tickiterval * (self.start//tickiterval),
-                                   int(self.end),
-                                   tickiterval) \
-                          if pos >= self.start]
-            for tickpos in smallticks:
+            for tickpos in range(tickiterval * (self.start//tickiterval),
+                                 int(self.end), tickiterval):
+                if tickpos < self.start or self.end < tickpos:
+                    continue
+                if track.start is not None and tickpos < track.start:
+                    continue
+                if track.end is not None and track.end < tickpos:
+                    continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
                                              track.scale_smalltick_labels)
@@ -994,19 +1015,18 @@ class CircularDrawer(AbstractDrawer):
                 endangle, endcos, endsin = self.canvas_angle(self.end)
             else:
                 endangle, endcos, endsin = self.canvas_angle(self.length)
-            bg = self._draw_arc(btm, top, startangle, endangle,
-                                colors.Color(0.96, 0.96, 0.96))
+            greytrack_bgs.append(self._draw_arc(btm, top, startangle, endangle,
+                                 colors.Color(0.96, 0.96, 0.96)))
         elif self.sweep < 1:
             #Make a partial circle, a large arc box
             #This method assumes the correct center for us.
-            bg = self._draw_arc(btm, top, 0, 2*pi*self.sweep,
-                                colors.Color(0.96, 0.96, 0.96))
+            greytrack_bgs.append(self._draw_arc(btm, top, 0, 2*pi*self.sweep,
+                                 colors.Color(0.96, 0.96, 0.96)))
         else:
             #Make a full circle (using a VERY thick linewidth)
-            bg = Circle(self.xcenter, self.ycenter, ctr, 
-                        strokeColor = colors.Color(0.96, 0.96, 0.96),
-                        fillColor=None, strokeWidth=top-btm)
-        greytrack_bgs.append(bg)
+            greytrack_bgs.append(Circle(self.xcenter, self.ycenter, ctr, 
+                                 strokeColor = colors.Color(0.96, 0.96, 0.96),
+                                 fillColor=None, strokeWidth=top-btm))
 
         if track.greytrack_labels:  # Labels are required for this track
             labelstep = self.length//track.greytrack_labels  # label interval

@@ -40,6 +40,8 @@ records = dict()
 for f, format in genomes:
     records[f] = SeqIO.read(f, format)
     tracks[f] = gd_diagram.new_track(1, name=f, start=0, end=len(records[f]),
+                                     scale_smalltick_interval=1000,
+                                     scale_largetick_interval=10000,
                                      greytrack=True, greytrack_labels=0)
     feature_sets[f] = tracks[f].new_set()
 
