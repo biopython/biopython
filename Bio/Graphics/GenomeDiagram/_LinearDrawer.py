@@ -520,6 +520,8 @@ class LinearDrawer(AbstractDrawer):
             # Y-axis start marker
             scale_elements.append(Line(self.x0+x_left, tbtm, self.x0+x_left, ttop,
                                        strokeColor=track.scale_color))
+
+        start, end = self._current_track_start_end()
         if track.scale_ticks:   # Ticks are required on the scale
             # Draw large ticks
             #I want the ticks to be consistently positioned relative to
@@ -534,11 +536,7 @@ class LinearDrawer(AbstractDrawer):
             #Using tickiterval * (self.start//tickiterval) is a shortcut.
             for tickpos in range(tickiterval * (self.start//tickiterval),
                                  int(self.end), tickiterval):
-                if tickpos <= self.start or self.end <= tickpos:
-                    continue
-                if track.start is not None and tickpos <= track.start:
-                    continue
-                if track.end is not None and track.end <= tickpos:
+                if tickpos <= start or end <= tickpos:
                     continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
@@ -551,11 +549,7 @@ class LinearDrawer(AbstractDrawer):
             tickiterval = int(track.scale_smalltick_interval)
             for tickpos in range(tickiterval * (self.start//tickiterval),
                                  int(self.end), tickiterval):
-                if tickpos <= self.start or self.end <= tickpos:
-                    continue
-                if track.start is not None and tickpos <= track.start:
-                    continue
-                if track.end is not None and track.end <= tickpos:
+                if tickpos <= start or end <= tickpos:
                     continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
@@ -707,37 +701,20 @@ class LinearDrawer(AbstractDrawer):
         feature_elements = []   # Holds diagram elements belonging to the feature
         label_elements = []     # Holds labels belonging to the feature
 
-        track = self._parent[self.current_track_level]
+        start, end = self._current_track_start_end()
         # A single feature may be split into subfeatures, so loop over them
-        for start, end in feature.locations:
-            #print start, end, feature.name
-            # Forward strand, start > end as it overlaps zero
-            if start > end:
-                locs = [(start, self.end), (self.start, end)]
-            else:
-                locs = [(start, end)]
-            #print locs
-            for locstart, locend in locs:
-                #print locstart, locend, feature.name
-                if track.start is not None:
-                    if locend < track.start:
-                        continue
-                    locstart = max(locstart, track.start)
-                if track.end is not None:
-                    if track.end < locstart:
-                        continue
-                    locend = min(locend, track.end)
-                # Correct locations in case the feature overruns the drawn sequence
-                if locstart < self.start:
-                    locstart = self.start
-                if locend > self.end:
-                    locend = self.end
-                
-                feature_boxes = self.draw_feature_location(feature, locstart, locend)
-                for box, label in feature_boxes:
-                    feature_elements.append(box)
-                    if label is not None:
-                        label_elements.append(label)
+        for locstart, locend in feature.locations:
+            if locend < start:
+                continue
+            locstart = max(locstart, start)
+            if end < locstart:
+                continue
+            locend = min(locend, end)
+            feature_boxes = self.draw_feature_location(feature, locstart, locend)
+            for box, label in feature_boxes:
+                feature_elements.append(box)
+                if label is not None:
+                    label_elements.append(label)
             
         return feature_elements, label_elements
 

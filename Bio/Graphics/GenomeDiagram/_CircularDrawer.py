@@ -383,23 +383,15 @@ class CircularDrawer(AbstractDrawer):
         if feature.hide:    # Don't show feature: return early
             return feature_elements, label_elements
 
-        track = self._parent[self.current_track_level]
+        start, end = self._current_track_start_end()
         # A single feature may be split into subfeatures, so loop over them
         for locstart, locend in feature.locations:
-            if locend < self.start:
+            if locend < start:
                 continue
-            locstart = max(locstart, self.start)
-            if self.end < locstart:
+            locstart = max(locstart, start)
+            if end < locstart:
                 continue
-            locend = min(locend, self.end)
-            if track.start is not None:
-                if locend < track.start:
-                    continue
-                locstart = max(locstart, track.start)
-            if track.end is not None:
-                if track.end < locstart:
-                    continue
-                locend = min(locend, track.end)
+            locend = min(locend, end)
             # Get sigil for the feature/ each subfeature
             feature_sigil, label = self.get_feature_sigil(feature, locstart, locend)
             feature_elements.append(feature_sigil)
@@ -820,6 +812,7 @@ class CircularDrawer(AbstractDrawer):
                                          strokeColor=track.scale_color,
                                          fillColor=None))
 
+        start, end = self._current_track_start_end()
         if track.scale_ticks:   # Ticks are required on the scale
             # Draw large ticks 
             #I want the ticks to be consistently positioned relative to
@@ -834,11 +827,7 @@ class CircularDrawer(AbstractDrawer):
             #Using tickiterval * (self.start/tickiterval) is a shortcut.
             for tickpos in range(tickiterval * (self.start//tickiterval),
                                  int(self.end), tickiterval):
-                if tickpos <= self.start or self.end <= tickpos:
-                    continue
-                if track.start is not None and tickpos <= track.start:
-                    continue
-                if track.end is not None and track.end <= tickpos:
+                if tickpos <= start or end <= tickpos:
                     continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
@@ -851,11 +840,7 @@ class CircularDrawer(AbstractDrawer):
             tickiterval = int(track.scale_smalltick_interval)
             for tickpos in range(tickiterval * (self.start//tickiterval),
                                  int(self.end), tickiterval):
-                if tickpos <= self.start or self.end <= tickpos:
-                    continue
-                if track.start is not None and tickpos <= track.start:
-                    continue
-                if track.end is not None and track.end <= tickpos:
+                if tickpos <= start or end <= tickpos:
                     continue
                 tick, label = self.draw_tick(tickpos, ctr, ticklen,
                                              track,
