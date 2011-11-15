@@ -529,5 +529,14 @@ class AbstractDrawer(object):
         """
         return self.length
         
-        
-    
+    def _current_track_start_end(self):        
+        track = self._parent[self.current_track_level]
+        if track.start is None:
+            start = self.start
+        else:
+            start = max(self.start, track.start)
+        if track.end is None:
+            end = self.end
+        else:
+            end = min(self.end, track.end)
+        return start, end

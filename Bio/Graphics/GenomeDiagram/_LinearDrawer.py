@@ -1200,15 +1200,17 @@ class LinearDrawer(AbstractDrawer):
         midval = (maxval + minval)/2.    # mid is the value at the X-axis
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = (top-btm)
-        #print self.start, self.end
-        newdata = intermediate_points(self.start, self.end,
-                                      graph[self.start:self.end])
-        #print newdata
+        
+        start, end = self._current_track_start_end()
+        data = intermediate_points(start, end, graph[start:end])
+
+        if not data:
+            return []
 
         # Create elements on the graph, indicating a large positive value by
         # the graph's poscolor, and a large negative value by the graph's
         # negcolor attributes
-        for pos0, pos1, val in newdata:
+        for pos0, pos1, val in data:
             fragment0, x0 = self.canvas_location(pos0)
             fragment1, x1 = self.canvas_location(pos1)
             x0, x1 = self.x0 + x0, self.x0 + x1     # account for margin
@@ -1289,8 +1291,11 @@ class LinearDrawer(AbstractDrawer):
         # Convert data into 'binned' blocks, covering half the distance to the
         # next data point on either side, accounting for the ends of fragments
         # and tracks
-        newdata = intermediate_points(self.start, self.end,
-                                      graph[self.start:self.end])
+        start, end = self._current_track_start_end()
+        data = intermediate_points(start, end, graph[start:end])
+
+        if not data:
+            return []
 
         # Whichever is the greatest difference: max-midval or min-midval, is
         # taken to specify the number of pixel units resolved along the
@@ -1300,7 +1305,7 @@ class LinearDrawer(AbstractDrawer):
             resolution = trackheight
         
         # Create elements for the bar graph based on newdata
-        for pos0, pos1, val in newdata:
+        for pos0, pos1, val in data:
             fragment0, x0 = self.canvas_location(pos0)
             fragment1, x1 = self.canvas_location(pos1)
             x0, x1 = self.x0 + x0, self.x0 + x1     # account for margin

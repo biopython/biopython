@@ -602,7 +602,12 @@ class CircularDrawer(AbstractDrawer):
         datarange = maxval - minval
         if datarange == 0:
             datarange = trackheight
-        data = graph[self.start:self.end]
+
+        start, end = self._current_track_start_end()
+        data = graph[start:end]
+        
+        if not data:
+            return []
 
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
@@ -668,8 +673,11 @@ class CircularDrawer(AbstractDrawer):
         # Convert data into 'binned' blocks, covering half the distance to the
         # next data point on either side, accounting for the ends of fragments
         # and tracks
-        newdata = intermediate_points(self.start, self.end,
-                                      graph[self.start:self.end])
+        start, end = self._current_track_start_end()
+        data = intermediate_points(start, end, graph[start:end])
+
+        if not data:
+            return []
 
         # Whichever is the greatest difference: max-midval or min-midval, is
         # taken to specify the number of pixel units resolved along the
@@ -679,7 +687,7 @@ class CircularDrawer(AbstractDrawer):
             resolution = trackheight
 
         # Create elements for the bar graph based on newdata
-        for pos0, pos1, val in newdata:
+        for pos0, pos1, val in data:
             pos0angle, pos0cos, pos0sin = self.canvas_angle(pos0)
             pos1angle, pos1cos, pos1sin = self.canvas_angle(pos1)
 
