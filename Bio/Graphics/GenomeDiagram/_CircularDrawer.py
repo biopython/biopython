@@ -851,7 +851,6 @@ class CircularDrawer(AbstractDrawer):
                     # Y-axis
                     for n in xrange(7):
                         angle = n * 1.0471975511965976
-                        print n, angle, startangle, endangle
                         if angle < startangle or endangle < angle:
                             continue
                         ticksin, tickcos = sin(angle), cos(angle)
