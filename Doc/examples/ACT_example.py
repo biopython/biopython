@@ -9,7 +9,8 @@ from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqIO
 
-#Modify this line to point at the Artemis/ACT example data
+#Modify this line to point at the Artemis/ACT example data which is online at:
+# https://github.com/sanger-pathogens/Artemis/tree/master/etc
 input_folder = "/Applications/Artemis/Artemis.app/Contents/artemis/etc"
 
 name = "af063097_v_b132222"
@@ -99,9 +100,6 @@ print "Drawing CDS features..."
 for f, format in genomes:
     record = records[f]
     feature_set = feature_sets[f]
-    #Add a grey feature to mark the genome
-    #feature_set.add_feature(SeqFeature(FeatureLocation(0,len(record))),
-    #                            color=colors.lightgrey)
     #Mark the CDS features
     for cds in record.features:
         if cds.type != "CDS":
