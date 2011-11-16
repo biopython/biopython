@@ -758,21 +758,12 @@ class CircularDrawer(AbstractDrawer):
         trackheight = (top-ctr)
         
         # X-axis
+        start, end = self._current_track_start_end()
         if track.start is not None or track.end is not None:
             #Draw an arc, leaving out the wedge
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
-            if track.start is not None:
-                startangle, startcos, startsin = self.canvas_angle(track.start)
-            elif self.start:
-                startangle, startcos, startsin = self.canvas_angle(self.start)
-            else:
-                startangle, startcos, startsin = self.canvas_angle(0)
-            if track.end is not None:
-                endangle, endcos, endsin = self.canvas_angle(track.end)
-            elif self.end:
-                endangle, endcos, endsin = self.canvas_angle(self.end)
-            else:
-                endangle, endcos, endsin = self.canvas_angle(self.length)
+            startangle, startcos, startsin = self.canvas_angle(start)
+            endangle, endcos, endsin = self.canvas_angle(end)
             p.addArc(self.xcenter, self.ycenter, ctr,
                      90 - (endangle * 180 / pi),
                      90 - (startangle * 180 / pi))
@@ -852,12 +843,17 @@ class CircularDrawer(AbstractDrawer):
         # Check to see if the track contains a graph - if it does, get the
         # minimum and maximum values, and put them on the scale Y-axis
         # at 60 degree intervals, ordering the labels by graph_id
+        startangle, startcos, startsin = self.canvas_angle(start)
+        endangle, endcos, endsin = self.canvas_angle(end)
         if track.axis_labels:
             for set in track.get_sets():
                 if set.__class__ is GraphSet:
                     # Y-axis
                     for n in xrange(7):
                         angle = n * 1.0471975511965976
+                        print n, angle, startangle, endangle
+                        if angle < startangle or endangle < angle:
+                            continue
                         ticksin, tickcos = sin(angle), cos(angle)
                         x0, y0 = self.xcenter+btm*ticksin, self.ycenter+btm*tickcos
                         x1, y1 = self.xcenter+top*ticksin, self.ycenter+top*tickcos
