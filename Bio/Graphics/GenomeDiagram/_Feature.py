@@ -175,13 +175,14 @@ class Feature(object):
             bounds += [start, end]
         else:
             for subfeature in self._feature.sub_features:
-                start = self._feature.location.nofuzzy_start
-                end = self._feature.location.nofuzzy_end
+                start = subfeature.location.nofuzzy_start
+                end = subfeature.location.nofuzzy_end
                 #if start > end and self.strand == -1:
                 #    start, end = end, start
                 self.locations.append((start, end))                
                 bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
+        #TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
         if self._feature.strand is None:
             #This is the SeqFeature default (None), but the drawing code
             #only expects 0, +1 or -1.
@@ -196,6 +197,7 @@ class Feature(object):
             if qualifier in self._feature.qualifiers:
                 self.name = self._feature.qualifiers[qualifier][0]
                 break
+        #Note will be 0 to N for origin wrapping feature on genome of length N 
         self.start, self.end = min(bounds), max(bounds)
 
 
