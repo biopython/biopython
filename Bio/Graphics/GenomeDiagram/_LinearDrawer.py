@@ -620,14 +620,7 @@ class LinearDrawer(AbstractDrawer):
         # Get track location
         btm, ctr, top = self.track_offsets[self.current_track_level]
 
-        if track.start is None:
-            start = self.start
-        else:
-            start = track.start
-        if track.end is None:
-            end = self.end
-        else:
-            end = track.end
+        start, end = self._current_track_start_end()
         start_fragment, start_offset = self.canvas_location(start)
         end_fragment, end_offset = self.canvas_location(end)
 
@@ -656,6 +649,10 @@ class LinearDrawer(AbstractDrawer):
                                fillColor=track.greytrack_fontcolor)
                 # Create a new labelgroup at each position the label is required
                 for x in range(int(self.x0), int(self.xlim), int(labelstep)):
+                    if fragment == start_fragment and x < start_offset:
+                        continue
+                    if fragment == end_fragment and end_offset < x + label.getBounds()[2]:
+                        continue
                     labelgroup = Group(label)
                     rotation = angle2trig(track.greytrack_font_rotation)
                     labelgroup.transform = (rotation[0], rotation[1], rotation[2],

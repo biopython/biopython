@@ -988,12 +988,13 @@ class CircularDrawer(AbstractDrawer):
         # Get track location
         btm, ctr, top = self.track_radii[self.current_track_level]
 
+        start, end = self._current_track_start_end()
+        startangle, startcos, startsin = self.canvas_angle(start)
+        endangle, endcos, endsin = self.canvas_angle(end)
+
         # Make background
         if track.start is not None or track.end is not None:
             #Draw an arc, leaving out the wedge
-            start, end = self._current_track_start_end()
-            startangle, startcos, startsin = self.canvas_angle(start)
-            endangle, endcos, endsin = self.canvas_angle(end)
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
             greytrack_bgs.append(self._draw_arc(btm, top, startangle, endangle,
                                  colors.Color(0.96, 0.96, 0.96)))
@@ -1016,6 +1017,8 @@ class CircularDrawer(AbstractDrawer):
                            fontSize=track.greytrack_fontsize,
                            fillColor=track.greytrack_fontcolor)
                 theta, costheta, sintheta = self.canvas_angle(pos)
+                if theta < startangle or endangle < theta:
+                    continue
                 x,y = self.xcenter+btm*sintheta, self.ycenter+btm*costheta  # start text halfway up marker
                 labelgroup = Group(label)
                 labelangle = self.sweep*2*pi*(pos-self.start)/self.length - pi/2
