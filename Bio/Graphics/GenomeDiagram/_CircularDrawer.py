@@ -991,19 +991,10 @@ class CircularDrawer(AbstractDrawer):
         # Make background
         if track.start is not None or track.end is not None:
             #Draw an arc, leaving out the wedge
+            start, end = self._current_track_start_end()
+            startangle, startcos, startsin = self.canvas_angle(start)
+            endangle, endcos, endsin = self.canvas_angle(end)
             p = ArcPath(strokeColor=track.scale_color, fillColor=None)
-            if track.start is not None:
-                startangle, startcos, startsin = self.canvas_angle(track.start)
-            elif self.start:
-                startangle, startcos, startsin = self.canvas_angle(self.start)
-            else:
-                startangle, startcos, startsin = self.canvas_angle(0)
-            if track.end is not None:
-                endangle, endcos, endsin = self.canvas_angle(track.end)
-            elif self.end:
-                endangle, endcos, endsin = self.canvas_angle(self.end)
-            else:
-                endangle, endcos, endsin = self.canvas_angle(self.length)
             greytrack_bgs.append(self._draw_arc(btm, top, startangle, endangle,
                                  colors.Color(0.96, 0.96, 0.96)))
         elif self.sweep < 1:
