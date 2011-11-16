@@ -491,14 +491,10 @@ class LinearDrawer(AbstractDrawer):
         trackheight = (top-ctr)
 
         # For each fragment, draw the scale for this track
-        if track.start is None:
-            start_f, start_x = self.canvas_location(self.start)
-        else:
-            start_f, start_x = self.canvas_location(max(self.start, track.start))
-        if track.end is None:
-            end_f, end_x = self.canvas_location(self.end)
-        else:
-            end_f, end_x = self.canvas_location(min(self.end, track.end))
+        start, end = self._current_track_start_end()
+        start_f, start_x = self.canvas_location(start)
+        end_f, end_x = self.canvas_location(end)
+
         for fragment in range(start_f, end_f+1):
             tbtm = btm + self.fragment_lines[fragment][0]
             tctr = ctr + self.fragment_lines[fragment][0]
@@ -586,6 +582,10 @@ class LinearDrawer(AbstractDrawer):
                         tbtm = btm + self.fragment_lines[fragment][0]
                         tctr = ctr + self.fragment_lines[fragment][0]
                         ttop = top + self.fragment_lines[fragment][0]
+                        if fragment == start_f:
+                            x_left = start_x
+                        else:
+                            x_left = 0
                         for val, pos in [(";".join(graph_label_min), tbtm),
                                          (";".join(graph_label_max), ttop),
                                          (";".join(graph_label_mid), tctr)]:
@@ -596,7 +596,7 @@ class LinearDrawer(AbstractDrawer):
                             labelgroup = Group(label)
                             rotation = angle2trig(track.scale_fontangle)
                             labelgroup.transform = (rotation[0], rotation[1], rotation[2],
-                                                    rotation[3], self.x0, pos)
+                                                    rotation[3], self.x0 + x_left, pos)
                             scale_labels.append(labelgroup)
 
         return scale_elements, scale_labels
