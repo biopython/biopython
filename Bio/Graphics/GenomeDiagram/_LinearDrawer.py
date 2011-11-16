@@ -1110,7 +1110,9 @@ class LinearDrawer(AbstractDrawer):
         datarange = maxval - minval
         if datarange == 0:
             datarange = trackheight
-        data = graph[self.start:self.end]
+        
+        start, end = self._current_track_start_end()
+        data = graph[start:end]
 
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
@@ -1188,6 +1190,7 @@ class LinearDrawer(AbstractDrawer):
         # the graph's poscolor, and a large negative value by the graph's
         # negcolor attributes
         for pos0, pos1, val in data:
+            #assert start <= pos0 <= pos1 <= end
             fragment0, x0 = self.canvas_location(pos0)
             fragment1, x1 = self.canvas_location(pos1)
             x0, x1 = self.x0 + x0, self.x0 + x1     # account for margin
@@ -1213,17 +1216,17 @@ class LinearDrawer(AbstractDrawer):
                 #if pos0 >= self.fragment_limits[fragment0][0]:
                 #    fragment0 += 1
                 fragment = fragment0
-                start = x0
+                start_x = x0
                 while self.fragment_limits[fragment][1] <= pos1:
                     #print pos0, self.fragment_limits[fragment][1], pos1
                     ttop = top + self.fragment_lines[fragment][0]
                     tbtm = btm + self.fragment_lines[fragment][0]
-                    heat_elements.append(draw_box((start, tbtm),
+                    heat_elements.append(draw_box((start_x, tbtm),
                                                   (self.xlim, ttop),
                                                   color=heat,
                                                   border=None))
                     fragment += 1
-                    start = self.x0
+                    start_x = self.x0
                 ttop = top + self.fragment_lines[fragment][0]
                 tbtm = btm + self.fragment_lines[fragment][0]
                 # Add the last part of the bar
