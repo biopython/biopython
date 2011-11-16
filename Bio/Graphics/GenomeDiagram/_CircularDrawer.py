@@ -717,13 +717,14 @@ class CircularDrawer(AbstractDrawer):
         midval = (maxval + minval)/2.    # mid is the value at the X-axis
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = (top-btm)
-        newdata = intermediate_points(self.start, self.end,
-                                      graph[self.start:self.end])
+
+        start, end = self._current_track_start_end()
+        data = intermediate_points(start, end, graph[start:end])
 
         # Create elements on the graph, indicating a large positive value by
         # the graph's poscolor, and a large negative value by the graph's
         # negcolor attributes
-        for pos0, pos1, val in newdata:
+        for pos0, pos1, val in data:
             pos0angle, pos0cos, pos0sin = self.canvas_angle(pos0)
             pos1angle, pos1cos, pos1sin = self.canvas_angle(pos1)
 
@@ -735,7 +736,7 @@ class CircularDrawer(AbstractDrawer):
             
             # Draw heat box
             heat_elements.append(self._draw_arc(btm, top, pos0angle, pos1angle,
-                                               heat, border=heat))
+                                                heat, border=heat))
         return heat_elements
 
 
