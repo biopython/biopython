@@ -321,11 +321,23 @@ class Track(object):
             Returns the lowest and highest base (or mark) numbers as a tuple
         """
         lows, highs = [], []            # Holds set of low and high values from sets
+        if self.start is not None:
+            lows.append(self.start)
+        if self.end is not None:
+            highs.append(self.end)
         for set in self._sets.values():
             low, high = set.range()     # Get each set range
             lows.append(low)
             highs.append(high)
-        return (min(lows), max(highs))  # Return lowest and highest values
+        if lows:
+            low = min(lows)
+        else:
+            low = None
+        if highs:
+            high = max(highs)
+        else:
+            high = None
+        return low, high  # Return lowest and highest values
     
 
     def to_string(self, verbose=0):
