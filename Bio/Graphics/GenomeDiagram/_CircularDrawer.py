@@ -1131,8 +1131,11 @@ class CircularDrawer(AbstractDrawer):
             #e.g. False
             strokecolor = None
         
-        if abs(inner_endangle - inner_startangle)>0.01 \
-        or abs(outer_endangle - outer_startangle)>0.01:
+        x0, y0 = self.xcenter, self.ycenter      # origin of the circle
+        if abs(inner_endangle - outer_startangle)>0.01 \
+        or abs(outer_endangle - inner_startangle)>0.01 \
+        or abs(inner_startangle - outer_startangle)>0.01 \
+        or abs(outer_startangle - outer_startangle)>0.01:
             # Wide arc, must use full curves
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
@@ -1143,12 +1146,45 @@ class CircularDrawer(AbstractDrawer):
             #(as in mathematics, e.g. complex numbers and polar coordinates)
             #but we use clockwise from the vertical.  Also reportlab uses
             #degrees, but we use radians.
-            p.addArc(self.xcenter, self.ycenter, inner_radius,
-                     90 - (inner_endangle * 180 / pi), 90 - (inner_startangle * 180 / pi),
+            i_start = 90 - (inner_startangle * 180 / pi)
+            i_end = 90 - (inner_endangle * 180 / pi)
+            o_start = 90 - (outer_startangle * 180 / pi)
+            o_end = 90 - (outer_endangle * 180 / pi)
+            p.addArc(x0, y0, inner_radius, i_end, i_start,
                      moveTo=True, reverse=True)
-            p.addArc(self.xcenter, self.ycenter, outer_radius,
-                     90 - (outer_endangle * 180 / pi), 90 - (outer_startangle * 180 / pi),
-                     reverse=bool(flip))
+            if flip:
+                #Flipped, join end to start,
+                dx = 0.1
+                x = dx
+                while x < 1:
+                    r = inner_radius + x*(outer_radius-inner_radius)
+                    a = (i_end + x*(o_start-i_end))*pi/180 #to radians for sin/cos
+                    p.lineTo(x0+r*cos(a), y0+r*sin(a))
+                    x += dx
+                p.addArc(x0, y0, outer_radius, o_end, o_start, reverse=True)
+                x = dx
+                while x < 1:
+                    r = outer_radius - x*(outer_radius-inner_radius)
+                    a = (o_end + x*(i_start-o_end))*pi/180 #to radians for sin/cos
+                    p.lineTo(x0+r*cos(a), y0+r*sin(a))
+                    x += dx
+            else:
+                #Not flipped, join start to start, end to end
+                dx = 0.1
+                x = dx
+                while x < 1:
+                    r = inner_radius + x*(outer_radius-inner_radius)
+                    a = (i_end + x*(o_end-i_end))*pi/180 #to radians for sin/cos
+                    p.lineTo(x0+r*cos(a), y0+r*sin(a))
+                    x += dx
+                p.addArc(x0, y0, outer_radius, o_end, o_start,
+                         reverse=False)
+                x = dx
+                while x < 1:
+                    r = outer_radius - x*(outer_radius-inner_radius)
+                    a = (o_start + x*(i_start-o_start))*pi/180 #to radians for sin/cos
+                    p.lineTo(x0+r*cos(a), y0+r*sin(a))
+                    x += dx
             p.closePath()
             return p
         else:
@@ -1158,7 +1194,6 @@ class CircularDrawer(AbstractDrawer):
             inner_endcos, inner_endsin = cos(inner_endangle), sin(inner_endangle)
             outer_startcos, outer_startsin = cos(outer_startangle), sin(outer_startangle)
             outer_endcos, outer_endsin = cos(outer_endangle), sin(outer_endangle)
-            x0,y0 = self.xcenter, self.ycenter      # origin of the circle
             x1,y1 = (x0+inner_radius*inner_startsin, y0+inner_radius*inner_startcos)
             x2,y2 = (x0+inner_radius*inner_endsin, y0+inner_radius*inner_endcos)
             x3,y3 = (x0+outer_radius*outer_endsin, y0+outer_radius*outer_endcos)
@@ -1301,7 +1336,7 @@ class CircularDrawer(AbstractDrawer):
                      90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
                      reverse=False)
             p.lineTo(x0+outer_radius*headsin, y0+outer_radius*headcos)
-            #TODO - two staight lines is only a good approximation for small
+            #Note - two staight lines is only a good approximation for small
             #head angle, in general will need to curved lines here:
             if abs(angle) < 0.5:
                 p.lineTo(x0+middle_radius*startsin, y0+middle_radius*startcos)
