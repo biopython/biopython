@@ -490,47 +490,52 @@ class CircularDrawer(AbstractDrawer):
         return sigil, labelgroup
 
     def draw_cross_link(self, cross_link):
-        if not self.is_in_bounds(cross_link.featureA.start) \
-        and not self.is_in_bounds(cross_link.featureA.end):
+        startA = cross_link.startA
+        startB = cross_link.startB
+        endA = cross_link.endA
+        endB = cross_link.endB
+           
+        if not self.is_in_bounds(startA) \
+        and not self.is_in_bounds(endA):
             return None
-        if not self.is_in_bounds(cross_link.featureB.start) \
-        and not self.is_in_bounds(cross_link.featureB.end):
+        if not self.is_in_bounds(startB) \
+        and not self.is_in_bounds(endB):
             return None
 
-        startA = cross_link.featureA.start
         if startA < self.start: startA = self.start
-        startB = cross_link.featureB.start
         if startB < self.start: startB = self.start
-
-        endA = cross_link.featureA.end
         if self.end < endA: endA = self.end
-        endB = cross_link.featureB.end
         if self.end < endB: endB = self.end
+
+        trackobjA = cross_link._trackA(self._parent.tracks.values())
+        trackobjB = cross_link._trackB(self._parent.tracks.values())
+        assert trackobjA is not None
+        assert trackobjB is not None
+        if trackobjA == trackobjB: raise NotImplementedError()
+
+        if trackobjA.start is not None:
+            if endA < trackobjA.start:
+                return
+            startA = max(startA, trackobjA.start)
+        if trackobjA.end is not None:
+            if trackobjA.end < startA:
+                return
+            endA = min(endA, trackobjA.end)
+        if trackobjB.start is not None:
+            if endB < trackobjB.start:
+                return
+            startB = max(startB, trackobjB.start)
+        if trackobjB.end is not None:
+            if trackobjB.end < startB:
+                return
+            endB = min(endB, trackobjB.end)
 
         for track_level in self._parent.get_drawn_levels():
             track = self._parent[track_level]
-            for feature_set in track.get_sets():
-                if hasattr(feature_set, "features"):
-                    if cross_link.featureA in feature_set.features.values():
-                        trackA = track_level
-                        if track.start is not None:
-                            if endA < track.start:
-                                return
-                            startA = max(startA, track.start)
-                        if track.end is not None:
-                            if track.end < startA:
-                                return
-                            endA = min(endA, track.end)
-                    if cross_link.featureB in feature_set.features.values():
-                        trackB = track_level
-                        if track.start is not None:
-                            if endB < track.start:
-                                return
-                            startB = max(startB, track.start)
-                        if track.end is not None:
-                            if track.end < startB:
-                                return
-                            endB = min(endB, track.end)
+            if track == trackobjA:
+                trackA = track_level
+            if track == trackobjB:
+                trackB = track_level
         if trackA == trackB: raise NotImplementedError()
 
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
