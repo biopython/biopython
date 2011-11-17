@@ -81,6 +81,7 @@ try:
     from setuptools.command.build_py import build_py
     from setuptools.command.build_ext import build_ext
     from setuptools.extension import Extension
+    _SETUPTOOLS = True
 except ImportError:
     from distutils.core import setup
     from distutils.core import Command
@@ -88,6 +89,7 @@ except ImportError:
     from distutils.command.build_py import build_py
     from distutils.command.build_ext import build_ext
     from distutils.extension import Extension
+    _SETUPTOOLS = False
 
 _CHECKED = None
 def check_dependencies_once():
@@ -100,9 +102,12 @@ def check_dependencies_once():
 
 def get_install_requires():
     install_requires = []
+    # skip this with distutils (otherwise get a warning)
+    if not _SETUPTOOLS:
+        return []
     # skip this with jython and pypy
     if os.name=="java" or is_pypy():
-        return install_requires
+        return []
     # check for easy_install and pip
     is_automated = False
     # easy_install: --dist-dir option passed
@@ -408,28 +413,34 @@ except NameError:
     src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
 os.chdir(src_path)
 sys.path.insert(0, src_path)
+
+setup_args = {
+    "name" : 'biopython',
+    "version" : __version__,
+    "author" : 'The Biopython Consortium',
+    "author_email" : 'biopython@biopython.org',
+    "url" : 'http://www.biopython.org/',
+    "description" : 'Freely available tools for computational molecular biology.',
+    "download_url" : 'http://biopython.org/DIST/',
+    "cmdclass" : {
+        "install" : install_biopython,
+        "build_py" : build_py_biopython,
+        "build_ext" : build_ext_biopython,
+        "test" : test_biopython,
+        },
+    "packages" : PACKAGES,
+    "ext_modules" : EXTENSIONS,
+    "package_data" : {
+        'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
+        'Bio.PopGen': ['SimCoal/data/*.par'],
+         },
+   }
+
+if _SETUPTOOLS:
+    setup_args["install_requires"] = get_install_requires()
+
 try:
-    setup(
-        name='biopython',
-        version=__version__,
-        author='The Biopython Consortium',
-        author_email='biopython@biopython.org',
-        url='http://www.biopython.org/',
-        description='Freely available tools for computational molecular biology.',
-        download_url='http://biopython.org/DIST/',
-        cmdclass={
-            "install" : install_biopython,
-            "build_py" : build_py_biopython,
-            "build_ext" : build_ext_biopython,
-            "test" : test_biopython,
-            },
-        packages=PACKAGES,
-        ext_modules=EXTENSIONS,
-        package_data = {'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
-                        'Bio.PopGen': ['SimCoal/data/*.par'],
-                       },
-        install_requires = get_install_requires(),
-        )
+    setup(**setup_args)
 finally:
     del sys.path[0]
     os.chdir(old_path)
