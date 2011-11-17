@@ -25,6 +25,12 @@ FeatureLocation object (a more logical placement), with proxy methods for
 backwards compatibility. As part of this change, if you print a location
 object it will now display any strand and database reference information.
 
+The installation setup.py now supports 'install_requires' when setuptools
+is installed. This avoids the manual dialog when installing Biopython via
+easy_install or pip and numpy is not installed. It also allows user libraries
+that require Biopython to include it in their install_requires and get
+automatical installation of dependencies.
+
 Bio.Graphics.BasicChromosome has been extended to allow simple sub-features
 to be drawn on chromosome segments, suitable to show the position of genes,
 SNPs or other loci. Note Bio.Graphics requires the ReportLab library.
