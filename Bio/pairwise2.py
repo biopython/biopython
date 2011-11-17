@@ -66,13 +66,18 @@ Some examples:
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
 
+The alignment function can also use known matrices already included in 
+Biopython ( Bio.SubsMat -> MatrixInfo ).
 
+>>> from Bio.SubsMat import MatrixInfo as matlist
+>>> matrix = matlist.blosum62
+>>> print pairwise2.align.globaldx("KEVLA", "EVL", matrix)
+	
 To see a description of the parameters for a function, please look at
 the docstring for the function.
 
 >>> print newalign.align.localds.__doc__
 localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
-
 """
 # The alignment functions take some undocumented keyword parameters:
 # - penalize_extend_when_opening: boolean
