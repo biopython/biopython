@@ -29,6 +29,10 @@ Bio.Graphics.BasicChromosome has been extended to allow simple sub-features
 to be drawn on chromosome segments, suitable to show the position of genes,
 SNPs or other loci. Note Bio.Graphics requires the ReportLab library.
 
+Bio.Graphics.GenomeDiagram has been extended to allow cross-links between
+tracks, and track specific start/end positions for showing regions. This
+can be used to imitate the output from the Artemis Comparison Tool (ACT).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
@@ -36,6 +40,7 @@ Brad Chapman
 Connor McCoy
 Eric Talevich
 Michiel de Hoon
+Leighton Pritchard
 Peter Cock
 
 ===================================================================
