@@ -39,12 +39,12 @@ from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
 def fill_and_border(base_color, alpha=0.5):
-    c = base_color.clone()
     try:
+        c = base_color.clone()
         c.alpha = alpha
         return c, base_color
     except AttributeError:
-        #Old ReportLab
+        #Old ReportLab, no transparency and/or no clone
         return None, base_color
 
 ###############################################################################
