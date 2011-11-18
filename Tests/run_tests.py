@@ -61,19 +61,8 @@ def is_numpy():
 
 # This is the list of modules containing docstring tests.
 # If you develop docstring tests for other modules, please add
-# those modules here.
-DOCTEST_MODULES = ["Bio.Alphabet",
-                   "Bio.Application",
-                   "Bio.Seq",
-                   "Bio.SeqFeature",
-                   "Bio.SeqRecord",
-                   "Bio.SeqIO",
-                   "Bio.SeqIO.AceIO",
-                   "Bio.SeqIO.PhdIO",
-                   "Bio.SeqIO.QualityIO",
-                   "Bio.SeqIO.SffIO",
-                   "Bio.SeqUtils",
-                   "Bio.Sequencing.Applications._Novoalign",
+# those modules here. Please sort names alphabetically.
+DOCTEST_MODULES = [
                    "Bio.Align",
                    "Bio.Align.Generic",
                    "Bio.Align.Applications._Clustalw",
@@ -84,14 +73,26 @@ DOCTEST_MODULES = ["Bio.Alphabet",
                    "Bio.Align.Applications._TCoffee",
                    "Bio.AlignIO",
                    "Bio.AlignIO.StockholmIO",
+                   "Bio.Alphabet",
+                   "Bio.Application",
                    "Bio.Blast.Applications",
                    "Bio.Emboss.Applications",
                    "Bio.GenBank",
                    "Bio.KEGG.Compound",
                    "Bio.KEGG.Enzyme",
+                   "Bio.Motif",
+                   "Bio.Seq",
+                   "Bio.SeqIO",
+                   "Bio.SeqIO.AceIO",
+                   "Bio.SeqIO.PhdIO",
+                   "Bio.SeqIO.QualityIO",
+                   "Bio.SeqIO.SffIO",
+                   "Bio.SeqFeature",
+                   "Bio.SeqRecord",
+                   "Bio.SeqUtils",
+                   "Bio.Sequencing.Applications._Novoalign",
                    "Bio.Wise",
                    "Bio.Wise.psw",
-                   "Bio.Motif",
                   ]
 #Silently ignore any doctests for modules requiring numpy!
 if is_numpy():
