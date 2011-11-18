@@ -65,7 +65,8 @@ class ColorTranslator(object):
 
             o color    Color defined as an int, a tuple of three ints 0->255
                        or a tuple of three floats 0 -> 1, or a string giving
-                       one of the named colors defined by ReportLab.
+                       one of the named colors defined by ReportLab, or a
+                       ReportLab color object (returned as is).
 
                        (This argument is overridden by a backwards compatible
                        argument with UK spelling, colour).
@@ -79,8 +80,10 @@ class ColorTranslator(object):
         
         if color is None:
             raise ValueError, "Passed color (or colour) must be a valid color type"
-        if type(color) == type(1):
+        elif isinstance(color, int):
             color = self.scheme_color(color)
+        elif isinstance(color, colors.Color):
+            return color
         elif isinstance(color, basestring):
             #Assume its a named reportlab color like "red".
             color = colors.toColor(color)
