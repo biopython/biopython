@@ -50,34 +50,37 @@ will return a list of the alignments between the two strings.  The
 parameters of the alignment function depends on the function called.
 Some examples:
 
->>> pairwise2.align.globalxx("ACCGT", "ACG")
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
     # for mismatches or gaps.
+    >>> pairwise2.align.globalxx("ACCGT", "ACG")
+    [('ACCGT', 'AC-G-', 3.0, 0, 5), ('ACCGT', 'A-CG-', 3.0, 0, 5)]
     
->>> pairwise2.align.localxx("ACCGT", "ACG")
     # Same thing as before, but with a local alignment.
+    >>> pairwise2.align.localxx("ACCGT", "ACG")
+    [('ACCGT', 'AC-G-', 3.0, 0, 4), ('ACCGT', 'A-CG-', 3.0, 0, 4)]
     
->>> pairwise2.align.globalmx("ACCGT", "ACG", 2, -1)
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
+    >>> pairwise2.align.globalmx("ACCGT", "ACG", 2, -1)
+    [('ACCGT', 'AC-G-', 6.0, 0, 5), ('ACCGT', 'A-CG-', 6.0, 0, 5)]
 
->>> pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1)
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
+    >>> pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1)
+    [('ACCGT', 'AC-G-', 5.0, 0, 5), ('ACCGT', 'A-CG-', 5.0, 0, 5)]
 
 The alignment function can also use known matrices already included in 
 Biopython ( Bio.SubsMat -> MatrixInfo ).
 
->>> from Bio.SubsMat import MatrixInfo as matlist
->>> matrix = matlist.blosum62
->>> print pairwise2.align.globaldx("KEVLA", "EVL", matrix)
-	
-To see a description of the parameters for a function, please look at
-the docstring for the function.
+    >>> from Bio.SubsMat import MatrixInfo as matlist
+    >>> matrix = matlist.blosum62
+    >>> print pairwise2.align.globaldx("KEVLA", "EVL", matrix)
+    [('KEVLA', '-EVL-', 13.0, 0, 5)]
 
->>> print newalign.align.localds.__doc__
-localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
+To see a description of the parameters for a function, please look at
+the docstring for the function via the help function, e.g.
+type help(pairwise2.align.localds) at the Python prompt.
 """
 # The alignment functions take some undocumented keyword parameters:
 # - penalize_extend_when_opening: boolean
@@ -802,3 +805,14 @@ try:
     from cpairwise2 import rint, _make_score_matrix_fast
 except ImportError:
     pass
+
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
