@@ -53,30 +53,76 @@ Some examples:
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
     # for mismatches or gaps.
-    >>> pairwise2.align.globalxx("ACCGT", "ACG")
-    [('ACCGT', 'AC-G-', 3.0, 0, 5), ('ACCGT', 'A-CG-', 3.0, 0, 5)]
+    >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
+    ...     print format_alignment(*a)
+    ACCGT
+    |||||
+    AC-G-
+      Score=3
+    <BLANKLINE>
+    ACCGT
+    |||||
+    A-CG-
+      Score=3
+    <BLANKLINE>
+
     
     # Same thing as before, but with a local alignment.
-    >>> pairwise2.align.localxx("ACCGT", "ACG")
-    [('ACCGT', 'AC-G-', 3.0, 0, 4), ('ACCGT', 'A-CG-', 3.0, 0, 4)]
+    >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
+    ...     print format_alignment(*a)
+    ACCGT
+    ||||
+    AC-G-
+      Score=3
+    <BLANKLINE>
+    ACCGT
+    ||||
+    A-CG-
+      Score=3
+    <BLANKLINE>
     
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
-    >>> pairwise2.align.globalmx("ACCGT", "ACG", 2, -1)
-    [('ACCGT', 'AC-G-', 6.0, 0, 5), ('ACCGT', 'A-CG-', 6.0, 0, 5)]
+    >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
+    ...     print format_alignment(*a)
+    ACCGT
+    |||||
+    AC-G-
+      Score=6
+    <BLANKLINE>
+    ACCGT
+    |||||
+    A-CG-
+      Score=6
+    <BLANKLINE>
 
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
-    >>> pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1)
-    [('ACCGT', 'AC-G-', 5.0, 0, 5), ('ACCGT', 'A-CG-', 5.0, 0, 5)]
+    >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
+    ...     print format_alignment(*a)
+    ACCGT
+    |||||
+    AC-G-
+      Score=5
+    <BLANKLINE>
+    ACCGT
+    |||||
+    A-CG-
+      Score=5
+    <BLANKLINE>
 
 The alignment function can also use known matrices already included in 
 Biopython ( Bio.SubsMat -> MatrixInfo ).
 
     >>> from Bio.SubsMat import MatrixInfo as matlist
     >>> matrix = matlist.blosum62
-    >>> print pairwise2.align.globaldx("KEVLA", "EVL", matrix)
-    [('KEVLA', '-EVL-', 13.0, 0, 5)]
+    >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
+    ...     print format_alignment(*a)
+    KEVLA
+    |||||
+    -EVL-
+      Score=13
+    <BLANKLINE>
 
 To see a description of the parameters for a function, please look at
 the docstring for the function via the help function, e.g.
