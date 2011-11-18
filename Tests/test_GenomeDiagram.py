@@ -45,7 +45,7 @@ def fill_and_border(base_color, alpha=0.5):
         return c, base_color
     except AttributeError:
         #Old ReportLab, no transparency and/or no clone
-        return None, base_color
+        return base_color, base_color
 
 ###############################################################################
 # Utility functions for graph plotting, originally in GenomeDiagram.Utilities #
