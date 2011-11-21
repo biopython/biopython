@@ -173,7 +173,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             print "OK"
         
         if "accessions" in record.annotations:
-            accs = set(record.annotations["accessions"])
+            accs = sorted(set(record.annotations["accessions"]))
             for key in accs:
                 assert key, "Blank accession in annotation %s" % repr(accs)
                 try:
