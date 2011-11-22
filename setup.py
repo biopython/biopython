@@ -294,7 +294,6 @@ PACKAGES = [
     'Bio.NeuralNetwork.Gene',
     'Bio.Nexus',
     'Bio.NMR',
-    'Bio.Parsers',
     'Bio.Pathway',
     'Bio.Pathway.Rep',
     'Bio.PDB',
