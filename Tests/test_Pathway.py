@@ -130,14 +130,19 @@ class MultiGraphTestCase(unittest.TestCase):
     def testRemoveNode(self):
         a = MultiGraph(['a','b','c','d','e'])
         a.add_edge('a','e','label1')
+        self.assertEqual(repr(a), "<MultiGraph: ('a': ('e', 'label1'))('b': )('c': )('d': )('e': )>")
         a.add_edge('b','e','label1')
         a.add_edge('c','e','label2')
         a.add_edge('d','e','label3')
         a.add_edge('e','d','label4')
         a.add_edge('a','b','label5')
+        self.assertEqual(repr(a), "<MultiGraph: ('a': ('b', 'label5'),('e', 'label1'))('b': ('e', 'label1'))('c': ('e', 'label2'))('d': ('e', 'label3'))('e': ('d', 'label4'))>")
         a.remove_node('e')
+        self.assertEqual(repr(a), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
         b = MultiGraph(['a','b','c','d'])
         b.add_edge('a','b','label5')
+        self.assertEqual(repr(b), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
+        self.assertEqual(repr(a), repr(b))
         self.assertEqual(a, b)#, "incorrect node removal")
 
         
