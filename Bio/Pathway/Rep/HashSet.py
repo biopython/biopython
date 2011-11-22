@@ -3,7 +3,12 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# TODO - Can we replace this with the python built in set object?
+import warnings
+warnings.warn("The module Bio.Pathway.Rep.HashSet is now deprecated, "
+              "and will be removed in a future release of Biopython. "
+              "Use Python's built in set object instead.",
+              DeprecationWarning)
+
 class HashSet(object):
     """A set abstraction supporting the basic set operations.
 
@@ -12,13 +17,13 @@ class HashSet(object):
     """
     def __init__(self, elements = []):
         """Initializes a new HashSet."""
-        self.__elements = {}
+        self._elements = {}
         for e in elements:
-            self.__elements[e] = 1
+            self._elements[e] = 1
             
     def __contains__(self, element):
         """Returns true iff this set contains element."""
-        return element in self.__elements
+        return element in self._elements
     
     def __eq__(self, set):
         """Returns true iff x == y for all elements in self, set."""
@@ -32,7 +37,7 @@ class HashSet(object):
 
     def __len__(self):
         """Returns the number of elements in this set."""
-        return len(self.__elements)
+        return len(self._elements)
 
     def __ne__(self, set):
         """Returns true iff this set is not equal to set.""" 
@@ -50,7 +55,7 @@ class HashSet(object):
 
     def add(self, element):
         """Adds element to this set."""
-        self.__elements[element] = 1
+        self._elements[element] = 1
 
     def contains(self, element):
         """Returns true iff this set contains element."""
@@ -59,19 +64,19 @@ class HashSet(object):
     def remove(self, element):
         """Removes element from this set."""
         try:
-            del self.__elements[element]
+            del self._elements[element]
         except KeyError:
             pass
 
     def list(self):
         """Returns the elements of this set in a list."""
-        return self.__elements.keys()
+        return self._elements.keys()
 
     # Information:
 
     def empty(self):
         """Returns true iff this set is empty."""
-        return len(self.__elements) == 0
+        return len(self._elements) == 0
 
     # Set operations:
 
