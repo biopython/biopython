@@ -179,8 +179,12 @@ class System(object):
         self.__reactions.remove(reaction)
 
     def reactions(self):
-        """Returns a list of the reactions in this system."""
-        return sorted(self.__reactions)
+        """Returns a list of the reactions in this system.
+        
+        Note the order is arbitrary!
+        """
+        #TODO - Define __lt__ so that Reactions can be sorted on Python?
+        return list(self.__reactions)
 
     def species(self):
         """Returns a list of the species in this system."""
