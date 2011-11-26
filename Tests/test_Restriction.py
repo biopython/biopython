@@ -80,11 +80,23 @@ class RestrictionBatches(unittest.TestCase):
         batch += EcoRV
         self.assertEqual(len(batch), 3)
 
+        # The usual way to test batch membership
+        self.assert_(EcoRV in batch)
+        self.assert_(EcoRI in batch)
+        self.assert_(KpnI in batch)
+        self.assert_(SmaI not in batch)
+        # Syntax sugar for the above
+        self.assert_('EcoRV' in batch)
+        self.assert_('SmaI' not in batch)
+
         batch.get(EcoRV)
         self.assertRaises(ValueError, batch.get, SmaI)
 
         batch.remove(EcoRV)
         self.assertEqual(len(batch), 2)
+
+        self.assert_(EcoRV not in batch)
+        self.assert_('EcoRV' not in batch)
 
     def test_batch_analysis(self):
         """Sequence analysis with a restriction batch.
