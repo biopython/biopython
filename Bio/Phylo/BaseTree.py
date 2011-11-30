@@ -580,11 +580,14 @@ class TreeMixin(object):
         function is straightforward.
         """
         # Read the iterable into a list to protect against in-place changes
-        internals = list(self.find_clades(target, False, 'level', **kwargs))
+        matches = list(self.find_clades(target, False, 'level', **kwargs))
+        if not matches:
+            # No matching nodes to collapse
+            return
         # Skip the root node -- it can't be collapsed
-        if internals[0] == self.root:
-            internals.pop(0)
-        for clade in internals:
+        if matches[0] == self.root:
+            matches.pop(0)
+        for clade in matches:
             self.collapse(clade)
 
     def ladderize(self, reverse=False):
