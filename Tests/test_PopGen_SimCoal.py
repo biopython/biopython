@@ -30,7 +30,7 @@ if not found:
 class AppTest(unittest.TestCase):
     """Tests simcoal execution via biopython.
     """
-    def startUp(self):
+    def setUp(self):
         self.tidy()
 
     def tearDown(self):
