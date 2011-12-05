@@ -55,18 +55,18 @@ class EnzymeComparison(unittest.TestCase):
     def test_comparisons(self):
         """Comparison operators between iso and neoschizomers.
         """
-        self.assert_(Acc65I == Acc65I)
-        self.assert_(Acc65I != KpnI)
-        self.assert_(not (Acc65I == Asp718I))
-        self.assert_(not (Acc65I != Asp718I))
-        self.assert_(Acc65I != EcoRI)
+        self.assertEqual(Acc65I, Acc65I)
+        self.assertNotEqual(Acc65I, KpnI)
+        self.assertFalse(Acc65I == Asp718I)
+        self.assertFalse(Acc65I != Asp718I)
+        self.assertNotEqual(Acc65I, EcoRI)
 
-        self.assert_(Acc65I >> KpnI)
-        self.assert_(not (Acc65I >> Asp718I))
+        self.assertTrue(Acc65I >> KpnI)
+        self.assertFalse(Acc65I >> Asp718I)
 
-        self.assert_(Acc65I % Asp718I)
-        self.assert_(Acc65I % Acc65I)
-        self.assert_(not (Acc65I % KpnI))
+        self.assertTrue(Acc65I % Asp718I)
+        self.assertTrue(Acc65I % Acc65I)
+        self.assertFalse(Acc65I % KpnI)
 
 
 class RestrictionBatches(unittest.TestCase):
@@ -81,13 +81,13 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(len(batch), 3)
 
         # The usual way to test batch membership
-        self.assert_(EcoRV in batch)
-        self.assert_(EcoRI in batch)
-        self.assert_(KpnI in batch)
-        self.assert_(SmaI not in batch)
+        self.assertTrue(EcoRV in batch)
+        self.assertTrue(EcoRI in batch)
+        self.assertTrue(KpnI in batch)
+        self.assertTrue(SmaI not in batch)
         # Syntax sugar for the above
-        self.assert_('EcoRV' in batch)
-        self.assert_('SmaI' not in batch)
+        self.assertTrue('EcoRV' in batch)
+        self.assertFalse('SmaI' in batch)
 
         batch.get(EcoRV)
         self.assertRaises(ValueError, batch.get, SmaI)
@@ -95,8 +95,8 @@ class RestrictionBatches(unittest.TestCase):
         batch.remove(EcoRV)
         self.assertEqual(len(batch), 2)
 
-        self.assert_(EcoRV not in batch)
-        self.assert_('EcoRV' not in batch)
+        self.assertTrue(EcoRV not in batch)
+        self.assertTrue('EcoRV' not in batch)
 
     def test_batch_analysis(self):
         """Sequence analysis with a restriction batch.
