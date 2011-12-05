@@ -1,0 +1,38 @@
+test_ClustalOmega_tool
+Checking error conditions
+=========================
+Empty file
+Failed (good)
+
+Single sequence
+Failed (good)
+
+Invalid sequence
+Failed (good)
+
+Checking normal situations
+==========================
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp with space.aln'
+Got an alignment, 2 sequences
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp_test.aln'
+Got an alignment, 2 sequences
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp_test.aln'
+requesting output guide tree file 'temp_test.dnd'
+Got an alignment, 2 sequences
+Calling clustalw on 'Registry/seqs.fasta' (with 2 records)
+using output file 'temp_test.aln'
+requesting output guide tree file 'temp with space.dnd'
+Got an alignment, 2 sequences
+Calling clustalw on 'Clustalw/temp horses.fasta' (with 10 records)
+using output file 'temp_test.aln'
+Got an alignment, 10 sequences
+Calling clustalw on 'Clustalw/temp horses.fasta' (with 10 records)
+using output file 'temp with space.aln'
+Got an alignment, 10 sequences
+Calling clustalw on 'temp_cw_prot.fasta' (with 40 records)
+using output file 'temp_cw_prot.aln'
+Got an alignment, 40 sequences
+Done
