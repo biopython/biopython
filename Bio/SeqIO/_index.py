@@ -88,6 +88,7 @@ class _IndexedSeqFileDict(_dict_base):
             #memory requirements. With the SQLite backend the length is kept
             #and is used to speed up the get_raw method (by about 3 times).
             if key in offsets:
+                self._proxy._handle.close()
                 raise ValueError("Duplicate key '%s'" % key)
             else:
                 offsets[key] = offset
