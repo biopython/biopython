@@ -42,6 +42,8 @@ class IndexDictTests(unittest.TestCase):
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
+        rec_dict._proxy._handle.close() #TODO - Better solution
+        del rec_dict
 
         if not sqlite3:
             return
@@ -50,18 +52,20 @@ class IndexDictTests(unittest.TestCase):
         #note here give filenames as list of strings
         rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
+        rec_dict.close()
+        del rec_dict
+
         #check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy")
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"])
-        rec_dict.close()
-        del rec_dict
 
         #Saving to file...
         index_tmp = filename + ".idx"
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
+
         #To disk,
         #note here we give the filename as a single string
         #to confirm that works too (convience feature).
@@ -69,11 +73,13 @@ class IndexDictTests(unittest.TestCase):
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
+
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
+
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
@@ -88,6 +94,8 @@ class IndexDictTests(unittest.TestCase):
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
+        rec_dict._proxy._handle.close() #TODO - Better solution
+        del rec_dict
 
         if not sqlite3:
             return
@@ -115,12 +123,14 @@ class IndexDictTests(unittest.TestCase):
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         del rec_dict
+
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         del rec_dict
+
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
                                   key_function=add_prefix)
