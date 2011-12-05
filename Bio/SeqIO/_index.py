@@ -277,30 +277,37 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                                      ("count",)).fetchone()
                 self._length = int(count)
                 if self._length == -1:
+                    con.close()
                     raise ValueError("Unfinished/partial database")
                 count, = con.execute("SELECT COUNT(key) FROM offset_data;").fetchone()
                 if self._length <> int(count):
+                    con.close()
                     raise ValueError("Corrupt database? %i entries not %i" \
                                      % (int(count), self._length))
                 self._format, = con.execute("SELECT value FROM meta_data WHERE key=?;",
                                            ("format",)).fetchone()
                 if format and format != self._format:
+                    con.close()
                     raise ValueError("Index file says format %s, not %s" \
                                      % (self._format, format))
                 self._filenames = [row[0] for row in \
                                   con.execute("SELECT name FROM file_data "
                                               "ORDER BY file_number;").fetchall()]
                 if filenames and len(filenames) != len(self._filenames):
+                    con.close()
                     raise ValueError("Index file says %i files, not %i" \
                                      % (len(self.filenames) != len(filenames)))
                 if filenames and filenames != self._filenames:
+                    con.close()
                     raise ValueError("Index file has different filenames")
             except _OperationalError, err:
+                con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
             #Now we have the format (from the DB if not given to us),
             try:
                 proxy_class = _FormatToRandomAccess[self._format]
             except KeyError:
+                con.close()
                 raise ValueError("Unsupported format '%s'" % self._format)
         else:
             self._filenames = filenames
@@ -358,6 +365,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                             "key_index ON offset_data(key);")
             except _IntegrityError, err:
+                self._proxies = random_access_proxies
+                self.close()
+                con.close()
                 raise ValueError("Duplicate key? %s" % err)
             con.execute("PRAGMA locking_mode=NORMAL")
             con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
