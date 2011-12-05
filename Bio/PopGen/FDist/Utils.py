@@ -111,6 +111,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
                 report_pops(num_pops)
             curr_pop = init_pop()
         lParser = work_rec.get_individual()
+    work_rec._handle.close() #TODO - Needs a proper fix
     pops.append(curr_pop)
     fd_rec.num_pops = num_pops
     for loci_pos in range(num_loci):
