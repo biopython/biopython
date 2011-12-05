@@ -245,6 +245,8 @@ class IndexDictTests(unittest.TestCase):
             else:
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
+        rec_dict._proxy._handle.close() #TODO - Better solution
+        del rec_dict
 
     if sqlite3:
         def test_duplicates_index_db(self):
