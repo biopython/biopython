@@ -105,6 +105,7 @@ class FileParserTest(unittest.TestCase):
                 continue
                 assert len(rec.populations[i]) == \
                            self.pops_indivs[index][1][i]
+            rec._handle.close() #TODO - Needs a proper fix
 
     def test_wrong_file_parser(self):
         """Testing the ability to deal with wrongly formatted files
