@@ -66,6 +66,7 @@ DOCTEST_MODULES = [
                    "Bio.Align",
                    "Bio.Align.Generic",
                    "Bio.Align.Applications._Clustalw",
+                   "Bio.Align.Applications._ClustalOmega",
                    "Bio.Align.Applications._Mafft",
                    "Bio.Align.Applications._Muscle",
                    "Bio.Align.Applications._Probcons",

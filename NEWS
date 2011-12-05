@@ -39,9 +39,13 @@ Bio.Graphics.GenomeDiagram has been extended to allow cross-links between
 tracks, and track specific start/end positions for showing regions. This
 can be used to imitate the output from the Artemis Comparison Tool (ACT).
 
+Bio.Align.Applications now includes a wrapper for the command line tool
+Clustal Omega for protein multiple sequence alignment.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Andreas Wilm (first contribution)
 Brad Chapman
 Connor McCoy
 Eric Talevich

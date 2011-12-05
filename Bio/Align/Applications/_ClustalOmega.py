@@ -1,4 +1,5 @@
-# Copyright 2009 by Cymon J. Cox.  All rights reserved.
+# Copyright 2011 by Andreas Wilm. All rights reserved.
+# Based on ClustalW wrapper copyright 2009 by Cymon J. Cox.
 #
 # Wrapper for Clustal Omega by Andreas Wilm (2011). Used _Clustalw.py
 # as template.
