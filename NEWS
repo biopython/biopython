@@ -1,10 +1,10 @@
 News for the Biopython Project
 ==============================
 
-This file contains release notes and general news about the Biopython
-project.  See also the DEPRECATED file which tracks the removal of
-obsolete modules or functions, and online http://biopython.org/wiki/News
-and http://news.open-bio.org/news/category/obf-projects/biopython/
+This file contains release notes and general news about the Biopython project.
+See also the DEPRECATED file which tracks the removal of obsolete modules or
+functions, and online http://biopython.org/wiki/News and
+http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
@@ -12,13 +12,13 @@ The latest news is at the top of this file.
 
 (In progress, not yet released) Biopython 1.59
 
-Please note that this release will *not* work on Python 2.4 (while the
-recent releases have worked despite us not officially supporting this).
+Please note that this release will *not* work on Python 2.4 (while the recent
+releases have worked despite us not officially supporting this).
 
 The position objects used in Bio.SeqFeature now act almost like integers,
-making dealing with fuzzy locations in EMBL/GenBank files much easier. Note
-as part of this work, the arguments to create fuzzy positions OneOfPosition
-and WithinPosition have changed in a non-backwards compatible way.
+making dealing with fuzzy locations in EMBL/GenBank files much easier. Note as
+part of this work, the arguments to create fuzzy positions OneOfPosition and
+WithinPosition have changed in a non-backwards compatible way.
 
 The SeqFeature's strand and any database reference are now properties of the
 FeatureLocation object (a more logical placement), with proxy methods for
@@ -31,16 +31,16 @@ easy_install or pip and numpy is not installed. It also allows user libraries
 that require Biopython to include it in their install_requires and get
 automatical installation of dependencies.
 
-Bio.Graphics.BasicChromosome has been extended to allow simple sub-features
-to be drawn on chromosome segments, suitable to show the position of genes,
-SNPs or other loci. Note Bio.Graphics requires the ReportLab library.
+Bio.Graphics.BasicChromosome has been extended to allow simple sub-features to
+be drawn on chromosome segments, suitable to show the position of genes, SNPs
+or other loci. Note Bio.Graphics requires the ReportLab library.
 
 Bio.Graphics.GenomeDiagram has been extended to allow cross-links between
-tracks, and track specific start/end positions for showing regions. This
-can be used to imitate the output from the Artemis Comparison Tool (ACT).
+tracks, and track specific start/end positions for showing regions. This can
+be used to imitate the output from the Artemis Comparison Tool (ACT).
 
-Bio.Align.Applications now includes a wrapper for the command line tool
-Clustal Omega for protein multiple sequence alignment.
+Bio.Align.Applications now includes a wrapper for command line tool Clustal
+Omega for protein multiple sequence alignment.
 
 Bio.AlignIO now supports sequential PHYLIP files (as well as interlaced
 PHYLIP files) as a separate format variant.
