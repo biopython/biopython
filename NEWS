@@ -45,6 +45,12 @@ Clustal Omega for protein multiple sequence alignment.
 Bio.AlignIO now supports sequential PHYLIP files (as well as interlaced
 PHYLIP files) as a separate format variant.
 
+New module Bio.TogoWS offers a wrapper for the TogoWS REST API, a web service
+based in Japan offering access to KEGG, DDBJ, PDBj, CBRC plus access to some
+NCBI, EBI resources including PubMed, GenBank and UniProt. This is much easier
+to use than the NCBI Entrez API, but should be especially useful for Biopython
+users based in Asia.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
