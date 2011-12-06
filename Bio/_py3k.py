@@ -43,6 +43,30 @@ if sys.version_info[0] >= 3:
         """
         return isinstance(i, int)
 
+    import io
+    def _binary_to_string_handle(handle):
+        """Treat a binary (bytes) handle like a text (unicode) handle."""
+        #See also http://bugs.python.org/issue5628
+        #and http://bugs.python.org/issue13541
+        #return io.TextIOWrapper(io.BufferedReader(handle))
+        class EvilHandleHack(object):
+            def __init__(self, handle):
+                self._handle = handle
+            def read(self, length=None):
+                return _as_string(self._handle.read(length))
+            def readline(self):
+                return _as_string(self._handle.readline())
+            def __iter__(self):
+                for line in self._handle:
+                    yield _as_string(line)
+            def close(self):
+                return self._handle.close()
+            def seek(self, pos):
+                return self._handle.seek(pos)
+            def tell(self):
+                return self._handle.tell(pos)
+        return EvilHandleHack(handle)
+
 else:
     #Python 2 code
 
@@ -68,3 +92,7 @@ else:
         #will be changed to "isinstance(i, int) or isinstance(i, int)"
         #but that doesn't matter.
         return isinstance(i, int) or isinstance(i, long)
+
+    def _binary_to_string_handle(handle):
+        """Treat a binary handle like a text handle."""
+        return handle
