@@ -33,7 +33,7 @@ http://soapy.sourceforge.net/
 import urllib
 import urllib2
 import time
-from Bio._py3k import _binary_to_string_handle
+from Bio._py3k import _binary_to_string_handle, _as_bytes
 
 #Caches:
 _search_db_names = None
@@ -303,7 +303,7 @@ def _open(url, post=None):
     #print url
     try:
         if post:
-            handle = urllib2.urlopen(url, urllib.urlencode(post))
+            handle = urllib2.urlopen(url, _as_bytes(urllib.urlencode(post)))
         else:
             handle = urllib2.urlopen(url)
     except urllib2.HTTPError, exception:
