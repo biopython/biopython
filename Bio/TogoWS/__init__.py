@@ -286,11 +286,10 @@ def convert(data, in_format, out_format):
 def _open(url, post=None):
     """Helper function to build the URL and open a handle to it (PRIVATE).
 
-    Open a handle to TogoWS. Does some very simple error checking, and
-    will raise an IOError if it encounters an error.
+    Open a handle to TogoWS, will raise an IOError if it encounters an error.
 
-    In the absense of clear guidelines, this function also enforces "up to
-    three queries per second" to avoid abusing the TogoWS servers.
+    In the absense of clear guidelines, this function enforces a limit of
+    "up to three queries per second" to avoid abusing the TogoWS servers.
     """
     delay = 0.333333333 #one third of a second
     current = time.time()
