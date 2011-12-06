@@ -65,6 +65,8 @@ _open        Internally used function.
 import urllib, urllib2, time, warnings
 import os.path
 
+from Bio._py3k import _binary_to_string_handle
+
 email = None
 tool = "biopython"
 
@@ -359,6 +361,6 @@ E-utilities.""", UserWarning)
     except urllib2.HTTPError, exception:
         raise exception
 
-    return handle
+    return _binary_to_string_handle(handle)
 
 _open.previous = 0
