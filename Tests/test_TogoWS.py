@@ -13,6 +13,8 @@ from StringIO import StringIO
 import requires_internet
 requires_internet.check()
 
+from Bio._py3k import _as_string
+
 #We want to test these:
 from Bio import TogoWS
 
@@ -110,7 +112,7 @@ class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885_ti(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="ti")"""
         handle = TogoWS.entry("pubmed", "16381885", field="ti")
-        data = handle.read().strip()
+        data = _as_string(handle.read()).strip()
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
@@ -118,7 +120,7 @@ class TogoEntry(unittest.TestCase):
     def test_pubmed_16381885_title(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")"""
         handle = TogoWS.entry("pubmed", "16381885", field="title")
-        data = handle.read().strip()
+        data = _as_string(handle.read()).strip()
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
@@ -127,7 +129,7 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("pubmed", "16381885", field="au")"""
         #Gives one name per line (i.e. \n separated), no dots
         handle = TogoWS.entry("pubmed", "16381885", field="au")
-        data = handle.read().strip().split("\n")
+        data = _as_string(handle.read()).strip().split("\n")
         handle.close()
         self.assertEqual(data, ['Kanehisa M', 'Goto S', 'Hattori M',
                                 'Aoki-Kinoshita KF', 'Itoh M',
@@ -138,7 +140,7 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("pubmed", "16381885", field="authors")"""
         #Gives names tab separated (i.e. \t separated)
         handle = TogoWS.entry("pubmed", "16381885", field="authors")
-        data = handle.read().strip().split("\t")
+        data = _as_string(handle.read()).strip().split("\t")
         handle.close()
         self.assertEqual(data, ['Kanehisa, M.', 'Goto, S.', 'Hattori, M.',
                                 'Aoki-Kinoshita, K. F.', 'Itoh, M.',
@@ -186,7 +188,7 @@ class TogoEntry(unittest.TestCase):
         handle = TogoWS.entry("pubmed", "16381885,19850725", field="authors")
         #Little hack to remove blank lines...
         #names = handle.read().replace("\n\n", "\n").strip().split("\n")
-        names = handle.read().strip().split("\n")
+        names = _as_string(handle.read()).strip().split("\n")
         handle.close()
         self.assertEqual(2, len(names))
         names1, names2 = names
@@ -208,7 +210,7 @@ class TogoEntry(unittest.TestCase):
     def test_ddbj_genbank_length(self):
         """Bio.TogoWS.entry("genbank", "NC_000913.2", field="length")"""
         handle = TogoWS.entry("genbank", "NC_000913.2", field="length")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "4639675")
 
@@ -225,49 +227,49 @@ class TogoEntry(unittest.TestCase):
     def test_ddbj_genbank_length(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
         handle = TogoWS.entry("ddbj", "X52960", field="length")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "248")
 
     def test_ddbj_genbank_seq(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="seq")"""
         handle = TogoWS.entry("ddbj", "X52960", field="seq")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(seguid(data), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
     def test_ddbj_genbank_definition(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="definition")"""
         handle = TogoWS.entry("ddbj", "X52960", field="definition")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1 (CbVd) RNA.")
 
     def test_ddbj_genbank_accession(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="accession")"""
         handle = TogoWS.entry("ddbj", "X52960", field="accession")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960")
 
     def test_ddbj_genbank_accession(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="version")"""
         handle = TogoWS.entry("ddbj", "X52960", field="version")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "1")
 
     def test_ddbj_genbank_acc_version(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="acc_version")"""
         handle = TogoWS.entry("ddbj", "X52960", field="acc_version")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960.1")
 
     def test_ddbj_genbank_organism(self):
         """Bio.TogoWS.entry("ddbj", "X52960", field="organism")"""
         handle = TogoWS.entry("ddbj", "X52960", field="organism")
-        data = handle.read().strip() #ignore trailing \n
+        data = _as_string(handle.read()).strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1")
         
@@ -284,7 +286,7 @@ class TogoEntry(unittest.TestCase):
     def test_ddbj_gff3(self):
         """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
         handle = TogoWS.entry("ddbj", "X52960", format="gff")
-        data = handle.read()
+        data = _as_string(handle.read())
         handle.close()
         self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
 
@@ -292,28 +294,28 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
         #Note - Using manual URL with genbank instead of nucleotide works
         handle = TogoWS.entry("nucleotide", "X52960", format="gff")
-        data = handle.read()
+        data = _as_string(handle.read())
         handle.close()
         self.assert_(data.startswith("##gff-version 3\nX52960\tGenbank\t"), data)
 
     def test_embl_AM905444_gff3(self):
         """Bio.TogoWS.entry("embl", "AM905444", format="gff")"""
         handle = TogoWS.entry("embl", "AM905444", format="gff")
-        data = handle.read()
+        data = _as_string(handle.read())
         handle.close()
         self.assert_(data.startswith("##gff-version 3\nAM905444\tembl\t"), data)
 
     def test_embl_AM905444_seq(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
         handle = TogoWS.entry("embl", "AM905444", field="seq")
-        data = handle.read().strip() #ignore any trailing \n
+        data = _as_string(handle.read()).strip() #ignore any trailing \n
         handle.close()
         self.assertEqual(seguid(data), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
     def test_embl_AM905444_definition(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="definition")"""
         handle = TogoWS.entry("embl", "AM905444", field="definition")
-        data = handle.read().strip() #ignore any trailing \n
+        data = _as_string(handle.read()).strip() #ignore any trailing \n
         handle.close()
         self.assertEqual(data, "Herbaspirillum seropedicae locus tag HS193.0074 for porin")
 
