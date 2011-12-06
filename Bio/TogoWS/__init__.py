@@ -33,6 +33,7 @@ http://soapy.sourceforge.net/
 import urllib
 import urllib2
 import time
+from Bio._py3k import _as_string
 
 #Caches:
 _search_db_names = None
@@ -44,7 +45,7 @@ _convert_formats = []
 def _get_fields(url):
     """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
     handle = _open(url)
-    fields = handle.read().strip().split()
+    fields = _as_string(handle.read()).strip().split()
     handle.close()
     return fields
 
