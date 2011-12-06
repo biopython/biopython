@@ -179,7 +179,7 @@ def search_iter(db, query, limit=None, batch=100):
     while remain:
         batch = min(batch, remain)
         #print "%r left, asking for %r" % (remain, batch)
-        ids = search(db, query, offset, batch).read().strip().split()
+        ids = _as_string(search(db, query, offset, batch).read()).strip().split()
         assert len(ids)==batch, "Got %i, expected %i" % (len(ids), batch)
         #print "offset %i, %s ... %s" % (offset, ids[0], ids[-1])
         if ids == prev_ids:
