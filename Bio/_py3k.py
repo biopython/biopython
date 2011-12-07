@@ -48,6 +48,7 @@ if sys.version_info[0] >= 3:
         """Treat a binary (bytes) handle like a text (unicode) handle."""
         #See also http://bugs.python.org/issue5628
         #and http://bugs.python.org/issue13541
+        #and http://bugs.python.org/issue13464 which should be fixed in Python 3.3
         #return io.TextIOWrapper(io.BufferedReader(handle))
         class EvilHandleHack(object):
             def __init__(self, handle):
