@@ -42,11 +42,15 @@ can be used to imitate the output from the Artemis Comparison Tool (ACT).
 Bio.Align.Applications now includes a wrapper for the command line tool
 Clustal Omega for protein multiple sequence alignment.
 
+Bio.AlignIO now supports sequential PHYLIP files (as well as interlaced
+PHYLIP files) as a separate format variant.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Andreas Wilm (first contribution)
 Brad Chapman
+Brandon Invergo
 Connor McCoy
 Eric Talevich
 Joao Rodrigues
