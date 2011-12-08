@@ -175,10 +175,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
 
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
-            if format=="phylip":
-                assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
-                       "'%s' vs '%s'" % (r1.id, r2.id)
-            elif format=="phylip-sequential":
+            if format in ["phylip", "phylip-sequential"]:
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="phylip-relaxed":
