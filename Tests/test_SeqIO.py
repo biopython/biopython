@@ -33,7 +33,8 @@ dna_alphas = [Alphabet.generic_dna]
 rna_alphas = [Alphabet.generic_rna]
 nucleotide_alphas = [Alphabet.generic_nucleotide,
                      Alphabet.Gapped(Alphabet.generic_nucleotide)]
-no_alpha_formats = ["fasta","clustal","phylip","phylip-relaxed","tab","ig",
+no_alpha_formats = ["fasta","clustal","phylip","phylip-relaxed",
+                    "phylip-sequential","tab","ig",
                     "stockholm","emboss", "fastq","fastq-solexa",
                     "fastq-illumina","qual"]
 possible_unknown_seq_formats = ["qual", "genbank", "gb", "embl", "imgt"]
@@ -380,7 +381,7 @@ def check_simple_write_read(records, indent=" "):
                 assert r1.seq.tostring() == r2.seq.tostring()
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
-            if format=="phylip":
+            if format in ["phylip", "phylip-sequential"]:
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="phylip-relaxed":
