@@ -540,11 +540,131 @@ class Confidence(PhyloElement):
         self.value = value
         self.type = type
 
+    # Comparison operators
+
+    def __hash__(self):
+        """Return the hash value of the object.
+
+        Hash values are integers. They are used to quickly compare dictionary
+        keys during a dictionary lookup. Numeric values that compare equal have
+        the same hash value (even if they are of different types, as is the
+        case for 1 and 1.0).
+        """
+        return id(self)
+
+    def __eq__(self, other):
+        if isinstance(other, Confidence):
+            return self.value == other.value
+        return self.value == other
+
+    def __ne__(self, other):
+        if isinstance(other, Confidence):
+            return self.value != other.value
+        return self.value != other
+
+    # Ordering -- see functools.total_ordering in Py2.7
+
+    def __lt__(self, other):
+        if isinstance(other, Confidence):
+            return self.value < other.value
+        return self.value < other
+
+    def __le__(self, other):
+        return self < other or self == other
+
+    def __gt__(self, other):
+        return not (self <= other)
+
+    def __ge__(self, other):
+        return not (self.value < other)
+
+    # Arithmetic operators, including reverse
+
+    def __add__(self, other):
+        return self.value + other
+
+    def __radd__(self, other):
+        return other + self.value
+
+    def __sub__(self, other):
+        return self.value - other
+
+    def __rsub__(self, other):
+        return other - self.value
+
+    def __mul__(self, other):
+        return self.value * other
+
+    def __rmul__(self, other):
+        return other * self.value
+
+    def __div__(self, other):
+        return self.value.__div__(other)
+
+    def __rdiv__(self, other):
+        return other.__div__(self.value)
+
+    def __truediv__(self, other):
+        """Rational-style division in Py3.0+.
+
+        Also active in Py2.5+ with __future__.division import.
+        """
+        return self.value / other
+
+    def __rtruediv__(self, other):
+        return other / self.value
+
+    def __floordiv__(self, other):
+        """C-style and old-style division in Py3.0+.
+
+        Also active in Py2.5+ with __future__.division import.
+        """
+        return self.value.__floordiv__(other)
+
+    def __rfloordiv__(self, other):
+        return other.__floordiv__(self.value)
+
+    def __mod__(self, other):
+        return self.value % other
+
+    def __rmod__(self, other):
+        return other % self.value
+
+    def __divmod__(self, other):
+        return divmod(self.value, other)
+
+    def __rdivmod__(self, other):
+        return divmod(other, self.value)
+
+    def __pow__(self, other, modulo=None):
+        if modulo is not None:
+            return pow(self.value, other, modulo)
+        return pow(self.value, other)
+
+    def __rpow__(self, other):
+        return pow(other, self.value)
+
+    # Unary arithmetic operations: -, +, abs()
+
+    def __neg__(self):
+        return -self.value
+
+    def __pos__(self):
+        return self.value
+
+    def __abs__(self):
+        return abs(self.value)
+
+    # Explicit coercion to numeric types: int, long, float
+
     def __float__(self):
         return float(self.value)
 
     def __int__(self):
         return int(self.value)
+
+    def __long__(self):
+        return long(self.value)
 
 
 class Date(PhyloElement):
