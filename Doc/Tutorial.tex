@@ -5850,7 +5850,7 @@ The main use of this is for GUI tools to provide automatic suggestions for searc
 
 The \verb+Entrez.read+ function reads the entire XML file returned by Entrez into a single Python object, which is kept in memory. To parse Entrez XML files too large to fit in memory, you can use the function \verb+Entrez.parse+. This is a generator function that reads records in the XML file one by one. This function is only useful if the XML file reflects a Python list object (in other words, if \verb+Entrez.read+ on a computer with infinite memory resources would return a Python list).
 
-For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ progam (see NCBI's ftp site for more information):
+For example, you can download the entire Entrez Gene database for a given organism as a file from NCBI's ftp site. These files can be very large. As an example, on September 4, 2009, the file \verb+Homo_sapiens.ags.gz+, containing the Entrez Gene database for human, had a size of 116576 kB. This file, which is in the \verb+ASN+ format, can be converted into an XML file using NCBI's \verb+gene2xml+ program (see NCBI's ftp site for more information):
 
 \begin{verbatim}
 gene2xml -b T -i Homo_sapiens.ags -o Homo_sapiens.xml
@@ -7969,11 +7969,11 @@ parameters can be varied, each template has a system name. The prefedined
 demographies/templates are:
 
 \begin{description}
-\item[Single population, constant size] The standard parameters are enough to specifity
+\item[Single population, constant size] The standard parameters are enough to specify
 it. Template name: simple.
 \item[Single population, bottleneck] As seen on figure \ref{fig:bottle}. The parameters
 are current population size (pop\_size on template ne3 on figure), time of expansion,
-given as the generation in the past when it occured (expand\_gen), 
+given as the generation in the past when it occurred (expand\_gen), 
 effective population size during bottleneck (ne2), time of contraction
 (contract\_gen) and original size in the remote past (ne3). Template name: bottle.
 \item[Island model] The typical island model. The total number of demes is specified
@@ -8117,7 +8117,7 @@ a 0.0001 mutation rate. Finally we have a microsatellite (or STR),
 with 0.0 recombination rate to the next locus (note, that as this
 is a single microsatellite which has no loci following, this
 recombination rate here is irrelevant), with a mutation rate
-of 0.001, geometric paramater of 0.0 and a range constraint
+of 0.001, geometric parameter of 0.0 and a range constraint
 of 0.0 (for information about this parameters please consult
 the SIMCOAL2 documentation, you can use them to simulate
 various mutation models, including the typical  -- for microsatellites --
@@ -8566,7 +8566,7 @@ we color that clade ``salmon'', the color will show up in the original tree.
 >>> mrca.color = "salmon"
 \end{verbatim}
 
-If we happend to know exactly where a certain clade is in the tree, in terms of nested list
+If we happened to know exactly where a certain clade is in the tree, in terms of nested list
 entries, we can jump directly to that position in the tree by indexing it.  Here, the index
 \verb|[0,1]| refers to the second child of the first child of the root.
 
@@ -9183,7 +9183,7 @@ programs like these.
 Biopython 1.58 brings support for PAML
 (\url{http://abacus.gene.ucl.ac.uk/software/paml.html}), a suite of programs for
 phylogenetic analysis by maximum likelihood. Currently the programs codeml, baseml and 
-yn00 are implemented. Due to PAML's usage of control files rather than commandline 
+yn00 are implemented. Due to PAML's usage of control files rather than command line 
 arguments to control runtime options, usage of this wrapper strays from the format of 
 other application wrappers in Biopython. 
 
@@ -12335,7 +12335,7 @@ The structure of the PSSM class hopefully makes it easy both to access elements 
 
 A potentially useful measure of evolutionary conservation is the information content of a sequence.
 
-A useful introduction to information theory targetted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
+A useful introduction to information theory targeted towards molecular biologists can be found at \url{http://www.lecb.ncifcrf.gov/~toms/paper/primer/}. For our purposes, we will be looking at the information content of a consesus sequence, or a portion of a consensus sequence. We calculate information content at a particular column in a multiple sequence alignment using the following formula:
 
 \begin{displaymath}
 IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
@@ -12352,7 +12352,7 @@ IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
   discretion. By default, it is automatically assigned to $0.05 = 1/20$ for a
   protein alphabet, and $0.25 = 1/4$ for a nucleic acid alphabet. This is for
   geting the information content without any assumption of prior
-  distribtions. When assuming priors, or when using a non-standard
+  distributions. When assuming priors, or when using a non-standard
   alphabet, you should supply the values for $Q_{i}$.
 \end{itemize}
 
@@ -12532,7 +12532,7 @@ Very nice. Now we've got our very own substitution matrix to play with!
 \href{http://open-bio.org/}{OBF} projects (BioPerl, BioJava etc) to support a
 shared database schema for storing sequence data. In theory, you could load a
 GenBank file into the database with BioPerl, then using Biopython extract this
-from the database as a record object with featues - and get more or less the same
+from the database as a record object with features - and get more or less the same
 thing as if you had loaded the GenBank file directly as a SeqRecord using
 \verb|Bio.SeqIO| (Chapter~\ref{chapter:Bio.SeqIO}).
 
@@ -12641,7 +12641,7 @@ Each Biopython test can have three important files and directories involved with
   \item \verb|test_Biospam.py| -- The actual test code for your module.
   \item \verb|Biospam| [optional]-- A directory where any necessary input files
     will be located. Any output files that will be generated should also
-    be written here (and preferrably cleaned up after the tests are
+    be written here (and preferably cleaned up after the tests are
     done) to prevent clogging up the main Tests directory.
   \item \verb|output/Biospam| -- [for print-and-compare tests only] This
     file contains the expected output from running \verb|test_Biospam.py|.
@@ -12926,7 +12926,7 @@ if __name__ == "__main__":
 \end{verbatim}
 
 This is only relevant if you want to run the docstring tests when you
-exectute \verb|python test_Biospam.py|; with
+execute \verb|python test_Biospam.py|; with
 \verb|python run_tests.py|, the docstring tests are run automatically
 (assuming they are included in the list of docstring tests in
 \verb|run_tests.py|, see the section below).
