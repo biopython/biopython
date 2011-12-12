@@ -1025,7 +1025,7 @@ ExtendedIUPACProtein())
 \end{verbatim}
 
 \noindent In the bacterial genetic code \texttt{GTG} is a valid start codon,
-and while it does \emph{normally} encode valine, if used as a start codon it
+and while it does \emph{normally} encode Valine, if used as a start codon it
 should be translated as methionine. This happens if you tell Biopython your
 sequence is a complete CDS:
 
@@ -1407,7 +1407,7 @@ The \verb|SeqRecord| class itself is quite simple, and offers the following info
 
   \item[name] -- A ``common'' name/id for the sequence -- a string. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
 
-  \item[description] -- A human readible description or expressive name for the sequence -- a string.
+  \item[description] -- A human readable description or expressive name for the sequence -- a string.
   
   \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a Python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information (e.g. from Stockholm/PFAM alignment files).
 
@@ -3852,7 +3852,7 @@ COATB_BPIF FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
            RA
 \end{verbatim}
 
-One of the big handicaps of the PHYLIP alignment file format is that the sequence identifiers are strictly truncated at ten characters.  In this example, as you can see the resulting names are still unique - but they are not very readable.  In this particular case, there is no clear way to compress the identifers, but for the sake of argument you may want to assign your own names or numbering system.  This following bit of code manipulates the record identifiers before saving the output:
+One of the big handicaps of the PHYLIP alignment file format is that the sequence identifiers are strictly truncated at ten characters.  In this example, as you can see the resulting names are still unique - but they are not very readable.  In this particular case, there is no clear way to compress the identifiers, but for the sake of argument you may want to assign your own names or numbering system.  This following bit of code manipulates the record identifiers before saving the output:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -5293,7 +5293,7 @@ Hopefully the \verb|BlastErrorParser| will make it much easier to debug and deal
 
 \section{Dealing with PSI-BLAST}
 
-You can run the standalone verion of PSI-BLAST (the legacy NCBI command line
+You can run the standalone version of PSI-BLAST (the legacy NCBI command line
 tool \verb|blastpgp|, or its replacement \verb|psiblast|) using the wrappers
 in \verb|Bio.Blast.Applications| module.
 
@@ -5308,7 +5308,7 @@ output and the \verb|PSIBlastParser| in \verb|Bio.Blast.NCBIStandalone|.
 
 \section{Dealing with RPS-BLAST}
 
-You can run the standalone verion of RPS-BLAST (either the legacy NCBI
+You can run the standalone version of RPS-BLAST (either the legacy NCBI
 command line tool \verb|rpsblast|, or its replacement with the same name)
 using the wrappers in \verb|Bio.Blast.Applications| module.
 
