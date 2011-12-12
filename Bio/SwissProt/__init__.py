@@ -467,7 +467,6 @@ def _read_rx(reference, value):
         if len(cols) != 2:
             warn = True
         else:
-            assert len(cols) == 2, "I don't understand RX line %s" % value
             reference.references.append((cols[0].rstrip(";"), cols[1].rstrip(".")))
     if warn:
         import warnings
