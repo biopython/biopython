@@ -448,22 +448,32 @@ def _read_rx(reference, value):
     # RX   MEDLINE=95385798; PubMed=7656980;
     # RX   PubMed=15060122; DOI=10.1136/jmg 2003.012781;
     # We look for these cases first and deal with them
+    warn = False
     if "=" in value:
         cols = value.split("; ")
         cols = [x.strip() for x in cols]
         cols = [x for x in cols if x]
         for col in cols:
             x = col.split("=")
+            if len(x) != 2 or x == ("DOI", "DOI"):
+                warn = True
+                break
             assert len(x) == 2, "I don't understand RX line %s" % value
-            key, value = x[0], x[1].rstrip(";")
-            reference.references.append((key, value))
+            reference.references.append((x[0], x[1].rstrip(";")))
     # otherwise we assume we have the type 'RX   MEDLINE; 85132727.'
     else:
         cols = value.split("; ")
         # normally we split into the three parts
-        assert len(cols) == 2, "I don't understand RX line %s" % value
-        reference.references.append((cols[0].rstrip(";"), cols[1].rstrip(".")))
-
+        if len(cols) != 2:
+            warn = True
+        else:
+            assert len(cols) == 2, "I don't understand RX line %s" % value
+            reference.references.append((cols[0].rstrip(";"), cols[1].rstrip(".")))
+    if warn:
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn("Possibly corrupt RX line %r" % value,
+                      BiopythonParserWarning)
 
 def _read_cc(record, line):
     key, value = line[5:8], line[9:].rstrip()
