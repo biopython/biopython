@@ -35,6 +35,9 @@ import urllib2
 import time
 from Bio._py3k import _binary_to_string_handle, _as_bytes
 
+#Constant
+_BASE_URL = "http://togows.dbcls.jp"
+
 #Caches:
 _search_db_names = None
 _entry_db_names = None
@@ -50,17 +53,17 @@ def _get_fields(url):
     return fields
 
 def _get_entry_dbs():
-    return _get_fields("http://togows.dbcls.jp/entry")
+    return _get_fields(_BASE_URL + "/entry")
 
 def _get_entry_fields(db):
-    return _get_fields("http://togows.dbcls.jp/entry/%s?fields" % db)
+    return _get_fields(_BASE_URL + "/entry/%s?fields" % db)
 
 def _get_entry_formats(db):
-    return _get_fields("http://togows.dbcls.jp/entry/%s?formats" % db)
+    return _get_fields(_BASE_URL + "/entry/%s?formats" % db)
 
 def _get_convert_formats():
     return [pair.split(".") for pair in \
-            _get_fields("http://togows.dbcls.jp/convert/")]
+            _get_fields(_BASE_URL + "/convert/")]
 
 def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
@@ -117,7 +120,7 @@ def entry(db, id, format=None, field=None):
 
     if isinstance(id, list):
         id = ",".join(id)
-    url="http://togows.dbcls.jp/entry/%s/%s" % (db, urllib.quote(id))
+    url = _BASE_URL + "/entry/%s/%s" % (db, urllib.quote(id))
     if field:
         url += "/" + field
     if format:
@@ -136,14 +139,14 @@ def search_count(db, query):
     """
     global _search_db_names
     if _search_db_names is None:
-        _search_db_names = _get_fields("http://togows.dbcls.jp/search")
+        _search_db_names = _get_fields(_BASE_URL + "/search")
     if db not in _search_db_names:
         #TODO - Make this a ValueError? Right now despite the HTML website
         #claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
         warnings.warn("TogoWS search does not officially support database '%s'. "
-                      "See http://togows.dbcls.jp/search/ for options." % db)
-    handle = _open("http://togows.dbcls.jp/search/%s/%s/count" \
+                      "See %s/search/ for options." % (db, _BASE_URL))
+    handle = _open(_BASE_URL + "/search/%s/%s/count" \
                    % (db, urllib.quote(query)))
     count = int(handle.read().strip())
     handle.close()
@@ -226,14 +229,14 @@ def search(db, query, offset=None, limit=None, format=None):
     """
     global _search_db_names
     if _search_db_names is None:
-        _search_db_names = _get_fields("http://togows.dbcls.jp/search")
+        _search_db_names = _get_fields(_BASE_URL + "/search")
     if db not in _search_db_names:
         #TODO - Make this a ValueError? Right now despite the HTML website
         #claiming to, the "gene" or "ncbi-gene" don't work and are not listed.
         import warnings
         warnings.warn("TogoWS search does not explicitly support database '%s'. "
-                      "See http://togows.dbcls.jp/search/ for options." % db)
-    url="http://togows.dbcls.jp/search/%s/%s" % (db, urllib.quote(query))
+                      "See %s/search/ for options." % (db, _BASE_URL))
+    url = _BASE_URL + "/search/%s/%s" % (db, urllib.quote(query))
     if offset is not None and limit is not None:
         try:
             offset = int(offset)
@@ -274,7 +277,7 @@ def convert(data, in_format, out_format):
     if [in_format, out_format] not in _convert_formats:
         msg = "\n".join("%s -> %s" % tuple(pair) for pair in _convert_formats)
         raise ValueError("Unsupported conversion. Choose from:\n%s" % msg)
-    url="http://togows.dbcls.jp/convert/%s.%s" % (in_format, out_format)
+    url = _BASE_URL + "/convert/%s.%s" % (in_format, out_format)
     #TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
         #Handle
@@ -315,5 +318,3 @@ def _open(url, post=None):
     return _binary_to_string_handle(handle)
 
 _open.previous = 0
-
-
