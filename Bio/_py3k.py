@@ -50,6 +50,8 @@ if sys.version_info[0] >= 3:
         #and http://bugs.python.org/issue13541
         #and http://bugs.python.org/issue13464 which should be fixed in Python 3.3
         #return io.TextIOWrapper(io.BufferedReader(handle))
+        #TODO - Re-evaluate this workaround under Python 3.3
+        #(perhaps we will only need it on Python 3.1 and 3.2?)
         class EvilHandleHack(object):
             def __init__(self, handle):
                 self._handle = handle
