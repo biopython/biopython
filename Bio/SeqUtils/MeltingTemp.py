@@ -24,6 +24,16 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True)
     68.14
 
+    You can also use a Seq object instead of a string,
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import generic_nucleotide
+    >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA', generic_nucleotide)
+    >>> print "%0.2f" % Tm_staluc(s)
+    59.87
+    >>> print "%0.2f" % Tm_staluc(s, rna=True)
+    68.14
+
     """
 
     #Credits: 
@@ -104,7 +114,7 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         return ocu
 
     R = 1.987 # universal gas constant in Cal/degrees C*Mol
-    sup = s.upper()
+    sup = str(s).upper() #turn any Seq object into a string (need index method)
     vsTC, vh = tercorr(sup)
     vs = vsTC
     
