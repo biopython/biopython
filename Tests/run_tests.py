@@ -92,6 +92,7 @@ DOCTEST_MODULES = [
                    "Bio.SeqFeature",
                    "Bio.SeqRecord",
                    "Bio.SeqUtils",
+                   "Bio.SeqUtils.MeltingTemp",
                    "Bio.Sequencing.Applications._Novoalign",
                    "Bio.Wise",
                    "Bio.Wise.psw",
