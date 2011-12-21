@@ -38,6 +38,8 @@ or other loci. Note Bio.Graphics requires the ReportLab library.
 Bio.Graphics.GenomeDiagram has been extended to allow cross-links between
 tracks, and track specific start/end positions for showing regions. This can
 be used to imitate the output from the Artemis Comparison Tool (ACT).
+Also, a new attribute circle_core makes it easier to have an empty space in
+the middle of a circular diagram (see tutorial).
 
 Bio.Align.Applications now includes a wrapper for command line tool Clustal
 Omega for protein multiple sequence alignment.

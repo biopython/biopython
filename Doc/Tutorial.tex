@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 12 December 2011 (Biopython 1.58+)}
+\date{Last Update -- 21 December 2011 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10255,9 +10255,10 @@ GenBank file (see Chapters~\ref{chapter:SeqRecord} and~\ref{chapter:Bio.SeqIO}).
 GenomeDiagram uses a nested set of objects.  At the top level, you have a diagram
 object representing a sequence (or sequence region) along the horizontal axis (or
 circle).  A diagram can contain one or more tracks, shown stacked vertically (or
-radially on circular diagrams).  These will all have the same length and represent
-the same sequence region.  You might use one track to show the gene locations,
-another to show regulatory regions, and a third track to show the GC percentage.
+radially on circular diagrams).  These will typically all have the same length
+and represent the same sequence region.  You might use one track to show the gene
+locations, another to show regulatory regions, and a third track to show the GC
+percentage. %Talk about cross-links here? Maybe better later...
 
 The most commonly used type of track will contain features, bundled together in
 feature-sets.  You might choose to use one feature-set for all your CDS features,
@@ -10354,9 +10355,8 @@ many pieces the genome gets broken up into.
 If you want to do a circular figure, then try this:
 
 \begin{verbatim}
-gd_diagram.move_track(1,3) # move track to make an empty space in the middle
 gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
-                start=0, end=len(record))
+                start=0, end=len(record), circle_core=0.7)
 gd_diagram.write("plasmid_circular.pdf", "PDF")
 \end{verbatim}
 
@@ -10637,11 +10637,13 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
 Now let's return to the pPCP1 plasmid from \textit{Yersinia pestis biovar
 Microtus}, and the top down approach used in Section~\ref{sec:gd_top_down},
 but take advantage of the sigil options we've now discussed.  This time
-we'll use arrows for the genes, and overlay them with strandless features
+we'll use arrows for the genes, and overlay them with strand-less features
 (as plain boxes) showing the position of some restriction digest sites.
 
+%NOTE - This *just* fits on one page in the PDF output :)
 \begin{verbatim}
 from reportlab.lib import colors
+from reportlab.lib.units import cm
 from Bio.Graphics import GenomeDiagram
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -10685,6 +10687,12 @@ gd_diagram.draw(format="linear", pagesize='A4', fragments=4,
 gd_diagram.write("plasmid_linear_nice.pdf", "PDF")
 gd_diagram.write("plasmid_linear_nice.eps", "EPS")
 gd_diagram.write("plasmid_linear_nice.svg", "SVG")
+
+gd_diagram.draw(format="circular", circular=True, pagesize=(20*cm,20*cm),
+                start=0, end=len(record), circle_core = 0.5)
+gd_diagram.write("plasmid_circular_nice.pdf", "PDF")
+gd_diagram.write("plasmid_circular_nice.eps", "EPS")
+gd_diagram.write("plasmid_circular_nice.svg", "SVG")
 \end{verbatim}
 
 \begin{htmlonly}
@@ -10692,9 +10700,12 @@ gd_diagram.write("plasmid_linear_nice.svg", "SVG")
 
 \imgsrc[width=550, height=400]{images/plasmid_linear_nice.png}
 
+\imgsrc[width=591, height=591]{images/plasmid_circular_nice.png}
+
 \end{htmlonly}
 \begin{latexonly}
-\noindent The expected output is shown in Figure~\ref{fig:plasmid_linear_nice}.
+\noindent The expected output is shown in Figures~\ref{fig:plasmid_linear_nice}
+and~\ref{fig:plasmid_circular_nice}.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/plasmid_linear_nice.png}
@@ -10702,6 +10713,14 @@ gd_diagram.write("plasmid_linear_nice.svg", "SVG")
 pPCP1 showing selected restriction digest sites (see
 Section~\ref{sec:gd_nice_example}).}
 \label{fig:plasmid_linear_nice}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/plasmid_circular_nice.png}
+\caption{Circular diagram for \textit{Yersinia pestis biovar Microtus} plasmid
+pPCP1 showing selected restriction digest sites (see
+Section~\ref{sec:gd_nice_example}).}
+\label{fig:plasmid_circular_nice}
 \end{figure}
 \end{latexonly}
 

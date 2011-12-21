@@ -237,13 +237,11 @@ class GraphTest(unittest.TestCase):
                  fragments=1,
                  start=0, end=points)
         gdd.write(os.path.join('Graphics', "line_graph.pdf"), "pdf")
-        #Circular diagram - move tracks to make an empty space in the middle
-        for track_number in gdd.tracks:
-            gdd.move_track(track_number,track_number+1)
+        #Circular diagram
         gdd.draw(tracklines=False,
                  pagesize=(15*cm,15*cm),
                  circular=True, #Data designed to be periodic
-                 start=0, end=points)
+                 start=0, end=points, circle_core=0.5)
         gdd.write(os.path.join('Graphics', "line_graph_c.pdf"), "pdf")
         
     def test_slicing(self):
@@ -281,12 +279,11 @@ class LabelTest(unittest.TestCase):
         #For the tutorial this might be useful:
         #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
-            #Circular diagram - move tracks to make an empty space in the middle
-            for track_number in self.gdd.tracks:
-                self.gdd.move_track(track_number,track_number+1)
+            #Circular diagram
             self.gdd.draw(tracklines=False,
                           pagesize=(15*cm,15*cm),
                           fragments=1,
+                          circle_core=0.5,
                           start=0, end=400)
             self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
     
@@ -357,12 +354,11 @@ class SigilsTest(unittest.TestCase):
         #For the tutorial this might be useful:
         #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
-            #Circular diagram - move tracks to make an empty space in the middle
-            for track_number in self.gdd.tracks:
-                self.gdd.move_track(track_number,track_number+1)
+            #Circular diagram
             self.gdd.draw(tracklines=False,
                           pagesize=(15*cm,15*cm),
                           fragments=1,
+                          circle_core=0.5,
                           start=0, end=400)
             self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
 
@@ -662,10 +658,7 @@ class DiagramTest(unittest.TestCase):
         output_filename = os.path.join('Graphics', 'GD_by_meth_linear.pdf')
         gdd.write(output_filename, 'PDF')
 
-        #Change the order and leave an empty space in the center:
-        gdd.move_track(1,3)
-
-        gdd.draw(format='circular', tracklines=False,
+        gdd.draw(format='circular', tracklines=False, circle_core=0.8,
                  pagesize=(20*cm,20*cm), circular=True)
         output_filename = os.path.join('Graphics', 'GD_by_meth_circular.pdf')
         gdd.write(output_filename, 'PDF')

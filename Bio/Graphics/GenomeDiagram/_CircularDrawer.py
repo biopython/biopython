@@ -167,7 +167,7 @@ class CircularDrawer(AbstractDrawer):
     def __init__(self, parent=None, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0, track_size=0.75,
-                 circular=1, cross_track_links=None):
+                 circular=1, circle_core=0.0, cross_track_links=None):
         """ __init__(self, parent, pagesize='A3', orientation='landscape',
                      x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                      start=None, end=None, tracklines=0, track_size=0.75,
@@ -216,6 +216,9 @@ class CircularDrawer(AbstractDrawer):
             o circular      Boolean flaw to show whether the passed sequence is
                             circular or not
 
+            o circle_core   The proportion of the available radius to leave
+                            empty at the center of a circular diagram (0 to 1).
+
             o cross_track_links List of tuples each with four entries (track A,
                                 feature A, track B, feature B) to be linked.
         """
@@ -226,6 +229,7 @@ class CircularDrawer(AbstractDrawer):
 
         # Useful measurements on the page
         self.track_size = track_size
+        self.circle_core = circle_core
         if circular == False:   # Determine the proportion of the circumference
             self.sweep = 0.9    # around which information will be drawn
         else:
@@ -252,14 +256,17 @@ class CircularDrawer(AbstractDrawer):
             trackunit_sum += trackheight    # increment total track unit height
             trackunits[track] = (heightholder, heightholder+trackheight)
             heightholder += trackheight     # move to next height
+
         trackunit_height = 0.5*min(self.pagewidth, self.pageheight)/trackunit_sum
+        track_core = trackunit_height * self.circle_core
+        trackunit_height = trackunit_height * (1-self.circle_core)
 
         # Calculate top and bottom radii for each track
         self.track_radii = {}      # The inner, outer and center radii for each track
         track_crop = trackunit_height*(1-self.track_size)/2.    # 'step back' in pixels
         for track in trackunits:
-            top = trackunits[track][1]*trackunit_height-track_crop
-            btm = trackunits[track][0]*trackunit_height+track_crop
+            top = trackunits[track][1]*trackunit_height-track_crop + track_core
+            btm = trackunits[track][0]*trackunit_height+track_crop + track_core
             ctr = btm+(top-btm)/2.
             self.track_radii[track] = (btm, ctr, top)
 
