@@ -38,6 +38,22 @@ class IOTests(unittest.TestCase):
         for tree in trees:
             self.assertEqual(len(tree.get_terminals()), 9)
 
+    def test_newick_write(self):
+        """Parse a Nexus file with multiple trees."""
+        # Tree with internal node labels
+        mem_file = StringIO()
+        tree = Phylo.read(StringIO('(A,B,(C,D)E)F;'), 'newick')
+        Phylo.write(tree, mem_file, 'newick')
+        mem_file.seek(0)
+        tree2 = Phylo.read(mem_file, 'newick')
+        # Sanity check
+        self.assertEqual(tree2.count_terminals(), 4)
+        # Check internal node labels were retained
+        internal_names = set(c.name
+                for c in tree2.get_nonterminals()
+                if c is not None)
+        self.assertEqual(internal_names, set(('E', 'F')))
+
     def test_format_branch_length(self):
         """Custom format string for Newick branch length serialization."""
         tree = Phylo.read(StringIO('A:0.1;'), 'newick')

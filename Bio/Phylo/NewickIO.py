@@ -190,7 +190,7 @@ class Writer(object):
             else:
                 subtrees = (newickize(sub) for sub in clade)
                 return '(%s)%s' % (','.join(subtrees),
-                                   make_info_string(clade))
+                        (clade.name or '') + make_info_string(clade))
 
         # Convert each tree to a string
         for tree in self.trees:
