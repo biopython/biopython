@@ -63,15 +63,8 @@ class Parser(object):
         handle = StringIO(treetext)
         return cls(handle)
 
-    def parse(self, values_are_confidence=False, rooted=False,
-            # XXX Deprecated kwarg -- remove after Biopython 1.58
-            values_are_support=None):
+    def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
-        # XXX Handling the deprecated kwarg -- remove after Biopython 1.58
-        if values_are_support is not None:
-            warnings.warn("use the argument values_are_confidence instead",
-                    BiopythonDeprecationWarning)
-            values_are_confidence = values_are_support
         self.values_are_confidence = values_are_confidence
         self.rooted = rooted    # XXX this attribue is useless
         buf = ''
@@ -181,25 +174,8 @@ class Writer(object):
     def to_strings(self, confidence_as_branch_length=False,
             branch_length_only=False, plain=False,
             plain_newick=True, ladderize=None, max_confidence=1.0,
-            format_confidence='%1.2f', format_branch_length='%1.5f',
-            # XXX Deprecated kwargs -- remove after Biopython 1.58
-            support_as_branchlengths=None, branchlengths_only=None,
-            max_support=None):
+            format_confidence='%1.2f', format_branch_length='%1.5f'):
         """Return an iterable of PAUP-compatible tree lines."""
-        # XXX Handling the deprecated kwargs -- remove after Biopython 1.58
-        if support_as_branchlengths is not None:
-            warnings.warn(
-                    "use the argument confidence_as_branch_length instead",
-                    BiopythonDeprecationWarning)
-            confidence_as_branch_length = support_as_branchlengths
-        if branchlengths_only is not None:
-            warnings.warn("use the argument branch_length_only instead",
-                    BiopythonDeprecationWarning)
-            branch_length_only = branchlengths_only
-        if max_support is not None:
-            warnings.warn("use the argument max_confidence instead",
-                    BiopythonDeprecationWarning)
-            max_confidence = max_support
         # If there's a conflict in the arguments, we override plain=True
         if confidence_as_branch_length or branch_length_only:
             plain = False
