@@ -1270,7 +1270,7 @@ class Nexus(object):
         if not undelete or (undelete and undelete[0]==''):
             return
 
-        with File.as_handle(filename, mode='w', encoding='utf-8') as fh:
+        with File.as_handle(filename, mode='w') as fh:
             if not omit_NEXUS:
                 fh.write('#NEXUS\n')
             if comment:
