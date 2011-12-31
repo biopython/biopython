@@ -578,10 +578,8 @@ class SffRandomAccess(SeqFileRandomAccess):
                 warnings.warn("Could not parse the SFF index: %s" % err)
                 assert count==0, "Partially populated index"
                 handle.seek(0)
-        else :
-            #TODO - Remove this debug warning?
-            import warnings
-            warnings.warn("No SFF index, doing it the slow way")
+        #We used to give a warning in this case, but Ion Torrent's
+        #SFF files don't have an index so that would be annoying.
         #Fall back on the slow way!
         count = 0
         for name, offset in SeqIO.SffIO._sff_do_slow_index(handle) :
