@@ -37,7 +37,7 @@ test_files = [
 #Following example is also used in test_Nexus.py
     ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
     ("stockholm", 2, 1, 'Stockholm/simple.sth'),
-    ("stockholm", 5, 1, 'Stockholm/funny.sth'),
+    ("stockholm", 6, 1, 'Stockholm/funny.sth'),
     ("phylip", 6, 1, 'Phylip/reference_dna.phy'),
     ("phylip", 6, 1, 'Phylip/reference_dna2.phy'),
     ("phylip",10, 1, 'Phylip/hennigian.phy'),

@@ -149,14 +149,14 @@ Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
 Testing reading stockholm format file Stockholm/funny.sth with 1 alignments
- Alignment 0, with 5 sequences of length 43
-  MMMEE alignment column 0
-  TQIVV alignment column 1
-  CHEMM alignment column 2
-  RVALL alignment column 3
-  ASDTT alignment column 4
-  ||||| ...
-  SYSEE alignment column 42
+ Alignment 0, with 6 sequences of length 43
+  MMMEEE alignment column 0
+  TQIVVV alignment column 1
+  CHEMMM alignment column 2
+  RVALLL alignment column 3
+  ASDTTT alignment column 4
+  |||||| ...
+  SYSEEE alignment column 42
  Checking can write/read as 'clustal' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet

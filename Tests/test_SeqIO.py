@@ -158,7 +158,7 @@ test_files = [ \
     ("embl",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("imgt",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
     ("stockholm", True,  'Stockholm/simple.sth', 2),
-    ("stockholm", True,  'Stockholm/funny.sth', 5),
+    ("stockholm", True,  'Stockholm/funny.sth', 6),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,
 #and are mostly from Joseph Felsenstein's PHYLIP v3.6 documentation:
     ("phylip", True,  'Phylip/reference_dna.phy', 6),

@@ -2512,16 +2512,16 @@ Testing reading stockholm format file Stockholm/funny.sth
  ID = 'O31698/18-71', Name='O31698',
  Seq='MIEADKVAHVQVGNNLEH--ALLVLTKT----GYTAIPVLDPS', length=43
  ...
- ID = 'O31699/88-139', Name='O31699',
+ ID and Name='363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00',
  Seq='EVMLTDIPRLHINDPIMK--GFGMVINN------GFVCVENDE', length=43
 Testing reading stockholm format file Stockholm/funny.sth as an alignment
- MMMEE alignment column 0
- TQIVV alignment column 1
- CHEMM alignment column 2
- RVALL alignment column 3
- ASDTT alignment column 4
- ||||| ...
- SYSEE alignment column 42
+ MMMEEE alignment column 0
+ TQIVVV alignment column 1
+ CHEMMM alignment column 2
+ RVALLL alignment column 3
+ ASDTTT alignment column 4
+ |||||| ...
+ SYSEEE alignment column 42
  Checking can write/read as 'fasta' format
  Checking can write/read as 'clustal' format
  Checking can write/read as 'phylip' format
@@ -2530,19 +2530,19 @@ Testing reading stockholm format file Stockholm/funny.sth as an alignment
  Checking can write/read as 'embl' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'fastq' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).
  Checking can write/read as 'fastq-illumina' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).
  Checking can write/read as 'fastq-solexa' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).
  Checking can write/read as 'genbank' format
- Failed: Need a Nucleotide or Protein alphabet
+ Failed: Locus identifier '363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00' is too long
  Checking can write/read as 'imgt' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phd' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).
  Checking can write/read as 'qual' format
- Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=O31699/88-139).
+ Failed: No suitable quality scores found in letter_annotations of SeqRecord (id=363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00).
  Checking can write/read as 'seqxml' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'sff' format
