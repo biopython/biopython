@@ -5235,6 +5235,7 @@ Each call to next will return a new record that we can deal with. Now we can ite
 
 The iterator allows you to deal with huge blast records without any memory problems, since things are read in one at a time. I have parsed tremendously huge files without any problems using this.
 
+%TODO - Remove this or update it for BLAST XML parser
 \subsection{Finding a bad record somewhere in a huge plain-text BLAST file}
 
 One really ugly problem that happens to me is that I'll be parsing a huge blast file for a while, and the parser will bomb out with a ValueError. This is a serious problem, since you can't tell if the ValueError is due to a parser problem, or a problem with the BLAST. To make it even worse, you have no idea where the parse failed, so you can't just ignore the error, since this could be ignoring an important data point.
