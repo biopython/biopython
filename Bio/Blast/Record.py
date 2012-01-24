@@ -339,7 +339,8 @@ class Parameters(object):
         self.gap_x_dropoff_final = (None, None)
         self.gap_trigger = (None, None)
         self.blast_cutoff = (None, None)
-    
+
+#TODO - Add a friendly __str__ method to BLAST results    
 class Blast(Header, DatabaseReport, Parameters):
     """Saves the results from a blast search.
 
