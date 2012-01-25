@@ -21,7 +21,7 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-from Bio._py3k import _as_string
+from Bio._py3k import _as_string, _as_bytes
 
 def qblast(program, database, sequence,
            auto_format=None,composition_based_statistics=None,
@@ -110,7 +110,7 @@ def qblast(program, database, sequence,
         ('CMD', 'Put'),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = urllib.urlencode(query)
+    message = _as_bytes(urllib.urlencode(query))
 
     # Send off the initial query to qblast.
     # Note the NCBI do not currently impose a rate limit here, other
@@ -142,7 +142,7 @@ def qblast(program, database, sequence,
         ('CMD', 'Get'),
         ]
     query = [x for x in parameters if x[1] is not None]
-    message = urllib.urlencode(query)
+    message = _as_bytes(urllib.urlencode(query))
 
     # Poll NCBI until the results are ready.  Use a 3 second wait
     delay = 3.0
