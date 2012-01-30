@@ -74,11 +74,12 @@ is at most 2^16 bytes, or 64kb. Note that this matches the BGZF
 compression (useful for intermediate files in memory to reduced
 CPU load).
 
+
 Warning about namespaces
 ------------------------
 
-It is consider a bad idea to use "from XXX import *" in Python, because
-it pollutes the names space. This is a real issue with Bio.bgzf (and the
+It is considered a bad idea to use "from XXX import *" in Python, because
+it pollutes the namespace. This is a real issue with Bio.bgzf (and the
 standard Python library gzip) because they contain a function called open
 i.e. Suppose you do this:
 
@@ -99,13 +100,14 @@ need to by importing the built-in open function:
 >>> print open.__module__
 __builtin__
 
-However, what we recommend instead is to keep the name space, e.g.
+However, what we recommend instead is to use the explicit namespace, e.g.
 
 >>> from Bio import bgzf
 >>> print bgzf.open.__module__
 Bio.bgzf
 >>> print open.__module__
 __builtin__
+
 
 Example
 -------
@@ -183,7 +185,7 @@ a simple offset into the decompressed data as exposed by the gzip
 library.
 
 Using the seek for the decompressed co-ordinates, 65536*3 + 126
-is equivalent to jumping the first thre blocks (each size 65536
+is equivalent to jumping the first three blocks (each size 65536
 after decompression) and starting at byte 126 of the third block
 (after decompression). For BGZF, we need to know the block's
 offset of 55074 and the offset within the block of 126 to get
