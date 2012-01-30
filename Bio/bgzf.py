@@ -544,12 +544,8 @@ class BgzfReader(object):
 
     def tell(self):
         """Returns a 64-bit unsigned BGZF virtual offset."""
-        if self._within_block_offset == 65536:
-            assert 65536 == len(self._buffer)
-            #At the end of one block, start of next
-            #TODO - Handle this in the read method?
-            self._load_block()
-        return make_virtual_offset(self._block_start_offset, self._within_block_offset)
+        return make_virtual_offset(self._block_start_offset,
+                                   self._within_block_offset)
 
     def seek(self, virtual_offset):
         """Seek to a 64-bit unsigned BGZF virtual offset."""
@@ -570,6 +566,7 @@ class BgzfReader(object):
             raise NotImplementedError("Don't be greedy, that could be massive!")
         elif size == 0:
             return _empty_bytes_string
+        #Note we don't want to be left at the very end of a block (except EOF)
         elif self._within_block_offset + size < len(self._buffer):
             data = self._buffer[self._within_block_offset:self._within_block_offset + size]
             self._within_block_offset += size
