@@ -11,6 +11,7 @@ See also the doctests in bgzf.py which are called via run_tests.py
 import unittest
 import gzip
 import os
+from random import shuffle
 
 from Bio._py3k import _as_bytes
 _empty_bytes_string = _as_bytes("")
@@ -89,9 +90,9 @@ class BgzfTests(unittest.TestCase):
             #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))
             data = h.read(data_len)
-            assert len(data) == data_len
+            self.assertEqual(len(data), data_len)
             #self.assertEqual(start + raw_len, h._handle.tell())
-            assert len(new) == data_start
+            self.assertEqual(len(new), data_start)
             new += data
         h.close()
         self.assertEqual(len(old), len(new))
@@ -104,7 +105,7 @@ class BgzfTests(unittest.TestCase):
             #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))
             data = h.read(data_len)
-            assert len(data) == data_len
+            self.assertEqual(len(data), data_len)
             #self.assertEqual(start + raw_len, h._handle.tell())
             new = data + new
         h.close()
@@ -135,6 +136,28 @@ class BgzfTests(unittest.TestCase):
             self.assertTrue(data in old)
             self.assertEqual(old.find(data), data_start + data_len // 2)
             h.close()
+
+        #Check seek/tell at block boundaries
+        v_offsets = []
+        for start, raw_len, data_start, data_len in blocks:
+            for within_offset in [0, 1, data_len // 2, data_len - 1]:
+                if within_offset < 0 or data_len <= within_offset:
+                    continue
+                voffset = bgzf.make_virtual_offset(start, within_offset)
+                real_offset = data_start + within_offset
+                v_offsets.append((voffset, real_offset))
+        shuffle(v_offsets)
+        h = bgzf.BgzfReader(filename, "rb", max_cache = 1)
+        for voffset, real_offset in v_offsets:
+            h.seek(0)
+            assert voffset >= 0 and real_offset >= 0
+            self.assertEqual(h.read(real_offset), old[:real_offset])
+            self.assertEqual(h.tell(), voffset)
+        for voffset, real_offset in v_offsets:
+            h.seek(voffset)
+            self.assertEqual(h.tell(), voffset)
+        h.close()
+
 
     def test_random_bam_ex1(self):
         """Check random access to SamBam/ex1.bam"""
