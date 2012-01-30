@@ -111,7 +111,30 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
-
+        #Jump back - non-sequential seeking
+        if len(blocks) >= 3:
+            h = bgzf.BgzfReader(filename, "rb", max_cache = 1)
+            #Seek to a late block in the file,
+            #half way into the third last block
+            start, raw_len, data_start, data_len = blocks[-3]
+            voffset = bgzf.make_virtual_offset(start, data_len // 2)
+            h.seek(voffset)
+            self.assertEqual(voffset, h.tell())
+            data = h.read(1000)
+            self.assertTrue(data in old)
+            self.assertEqual(old.find(data), data_start + data_len // 2)
+            #Now seek to an early block in the file,
+            #half way into the second block
+            start, raw_len, data_start, data_len = blocks[1]
+            h.seek(bgzf.make_virtual_offset(start, data_len // 2))
+            voffset = bgzf.make_virtual_offset(start, data_len // 2)
+            h.seek(voffset)
+            self.assertEqual(voffset, h.tell())
+            #Now read all rest of this block and start of next block
+            data = h.read(data_len + 1000)
+            self.assertTrue(data in old)
+            self.assertEqual(old.find(data), data_start + data_len // 2)
+            h.close()
 
     def test_random_bam_ex1(self):
         """Check random access to SamBam/ex1.bam"""
