@@ -578,6 +578,8 @@ class BgzfReader(object):
             data = self._buffer[self._within_block_offset:]
             size -= len(data)
             self._load_block() #will reset offsets
+            #TODO - Test with corner case of an empty block followed by
+            #a non-empty block
             if not self._buffer:
                 return data #EOF
             else:
