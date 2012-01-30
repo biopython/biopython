@@ -494,6 +494,8 @@ class BgzfReader(object):
     """
 
     def __init__(self, filename=None, mode=None, fileobj=None, max_cache=100):
+        if max_cache < 1:
+            raise ValueError("Use max_cache with a minimum of 1")
         if fileobj:
             assert filename is None and mode is None
             handle = fileobj
