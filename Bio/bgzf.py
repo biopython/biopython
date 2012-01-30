@@ -61,9 +61,9 @@ how big it is from this 'BC' header, and thus seek immediately to
 the second block, and so on.
 
 The BAM indexing scheme records read positions using a 64 bit
-'virtual offset', comprising coffset<<16|uoffset, where uoffset is
+'virtual offset', comprising coffset<<16|uoffset, where coffset is
 the file offset of the BGZF block containing the start of the read
-(unsigned integer using up to 64-16 = 48 bits), and coffset is the
+(unsigned integer using up to 64-16 = 48 bits), and uoffset is the
 offset within the (decompressed) block (unsigned 16 bit integer).
 
 This limits you to BAM files where the last block starts by 2^48
