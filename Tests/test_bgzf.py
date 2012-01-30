@@ -85,11 +85,13 @@ class BgzfTests(unittest.TestCase):
         #Forward
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
-        for start, raw_len, data_len in blocks:
-            #print start, raw_len, data_len
+        for start, raw_len, data_start, data_len in blocks:
+            #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))
             data = h.read(data_len)
+            assert len(data) == data_len
             #self.assertEqual(start + raw_len, h._handle.tell())
+            assert len(new) == data_start
             new += data
         h.close()
         self.assertEqual(len(old), len(new))
@@ -98,10 +100,11 @@ class BgzfTests(unittest.TestCase):
         #Reverse
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
-        for start, raw_len, data_len in blocks[::-1]:
-            #print start, raw_len, data_len
+        for start, raw_len, data_start, data_len in blocks[::-1]:
+            #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))
             data = h.read(data_len)
+            assert len(data) == data_len
             #self.assertEqual(start + raw_len, h._handle.tell())
             new = data + new
         h.close()
