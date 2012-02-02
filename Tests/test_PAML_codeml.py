@@ -177,7 +177,9 @@ class ModTest(unittest.TestCase):
                         "Small_Diff": None,
                         "cleandata": 1,
                         "fix_blength": 1,
-                        "method": 0}
+                        "method": 0,
+                        "rho": None,
+                        "fix_rho": None}
         self.cml.read_ctl_file(self.ctl_file)
         self.assertEqual(sorted(self.cml._options.keys()), sorted(target_options.keys()))
         for key in target_options:
