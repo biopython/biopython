@@ -9,6 +9,16 @@ import os.path
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PAML._paml import PamlError
 
+
+# Some constants to assist with testing:
+# This is the number of parameters that should be parsed for each 
+# NSsites site class model
+SITECLASS_PARAMS = {0: 6, 1: 4, 2: 4, 3: 4, 7: 5, 8: 9}
+# This is the default number of site classes per NSsites site
+# class model
+SITECLASSES = {0: None, 1: 2, 2: 3, 3: 3, 7: 10, 8: 11}
+
+
 class ModTest(unittest.TestCase):
     
     align_file = os.path.join("PAML", "alignment.phylip")
@@ -191,83 +201,212 @@ class ModTest(unittest.TestCase):
         self.assertRaises(ValueError, codeml.read, self.results_file)
         
     def testParseAllVersions(self):
-        for results_file in os.listdir(os.path.join("PAML",
-                "Results","codeml","versions")):
-            if os.path.isfile(results_file) and results_file[:6] == "codeml":
-                results = codeml.read(os.path.join("PAML",
-                    "Results", results_file))
+        versions_path = os.path.join("PAML", "Results", "codeml", "versions")
+        for results_file in versions_path:
+            results_path = os.path.join(versions_path, results_file)
+            if os.path.isfile(results_path) and results_file[:6] == "codeml":
+                results = codeml.read(results_path)
+                # There should be 4 top-level items: 'codon model', 'model', 
+                # 'version', & 'NSsites'
+                self.assertEqual(len(results), 4)
+                self.assertIn("NSsites", results)
+                # There should be 6 NSsites classes: 0, 1, 2, 3, 7 & 8
                 self.assertEqual(len(results["NSsites"]), 6)
-                self.assertEqual(len(results["NSsites"][0]), 7)
-                self.assertEqual(len(results["NSsites"][1]), 5)
-                self.assertEqual(len(results["NSsites"][2]), 5)
-                self.assertEqual(len(results["NSsites"][3]), 5)
-                self.assertEqual(len(results["NSsites"][7]), 6)
-                self.assertEqual(len(results["NSsites"][8]), 6)
+                # Each site class model should have 5 sub-items: 'lnL', 'tree', 
+                # 'description', 'parameters', & 'tree length'. It should
+                # have the correct number of parameters also.
+                for model_num in [0, 1, 2, 3, 7, 8]:
+                    model = results["NSsites"][model_num]
+                    self.assertEqual(len(model), 5)
+                    self.assertIn("parameters", model)
+                    params = model["parameters"]
+                    self.assertEqual(len(params), SITECLASS_PARAMS[model_num])
+                    self.assertIn("branches", params)
+                    branches = params["branches"]
+                    # There are 7 branches in the test case (specific to these
+                    # test cases)
+                    self.assertEqual(len(branches), 7)
+                    if "site classes" in params:
+                        self.assertEqual(len(params["site classes"]),
+                                         SITECLASSES[model_num])
     
     def testParseSEs(self):
-        SE_results_file = os.path.join("PAML", "Results", "codeml",
+        results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_SE.out")
-        SE_results = codeml.read(SE_results_file)
-        SE_models = SE_results.get("NSsites")
-        for model in SE_models:
-            SE_model = SE_models.get(model)
-            SE_parameters = SE_model.get("parameters")
-            self.assertNotEqual(SE_parameters.get("SEs"), None)
+        results = codeml.read(results_file)
+        self.assertEqual(len(results), 4)
+        self.assertIn("NSsites", results)
+        models = results["NSsites"]
+        # Only site class model 0 was simulated
+        self.assertEqual(len(models), 1)
+        self.assertIn(0, models)
+        model = models[0]
+        self.assertEqual(len(model), 5)
+        self.assertIn("parameters", model)
+        params = model["parameters"]
+        # There should be one new item in the parameters, "SEs" 
+        self.assertEqual(len(params), SITECLASS_PARAMS[0] + 1)
+        self.assertIn("SEs", params)
     
     def testParseAllNSsites(self):
+        # This test is redundant (see testParseAllVersions)
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_NSsites_all.out")
         results = codeml.read(results_file)
-        models = results.get("NSsites")
-        self.assertEqual(len(models), 6)
-        for model in models:
-            self.assertEqual(len(models.get(model)), 5)
+        # There should be 4 top-level items: 'codon model', 'model', 
+        # 'version', & 'NSsites'
+        self.assertEqual(len(results), 4)
+        self.assertIn("NSsites", results)
+        # There should be 6 NSsites classes: 0, 1, 2, 3, 7 & 8
+        self.assertEqual(len(results["NSsites"]), 6)
+        # Each site class model should have 5 sub-items: 'lnL', 'tree', 
+        # 'description', 'parameters', & 'tree length'. It should
+        # have the correct number of parameters also.
+        for model_num in [0, 1, 2, 3, 7, 8]:
+            model = results["NSsites"][model_num]
+            self.assertEqual(len(model), 5)
+            self.assertIn("parameters", model)
+            params = model["parameters"]
+            self.assertEqual(len(params), SITECLASS_PARAMS[model_num])
+            self.assertIn("branches", params)
+            branches = params["branches"]
+            # There are 7 branches in the test case (specific to these
+            # test cases)
+            self.assertEqual(len(branches), 7)
+            if "site classes" in params:
+                self.assertEqual(len(params["site classes"]),
+                                 SITECLASSES[model_num])
         
     def testParseBranchSiteA(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_branchsiteA.out")
         results = codeml.read(results_file)
+        # There are 5 top-level items in this case:
+        # 'codon model', 'model', 'version', 'NSsites' & 'site-class model'
         self.assertEqual(len(results), 5)
-        site_classes = results["NSsites"][2]["parameters"]["site classes"]
-        self.assertEqual(len(site_classes), 4)        
-        
+        self.assertIn("NSsites", results)
+        models = results["NSsites"]
+        # Only site class model 2 is simulated for Branch Site A
+        self.assertEqual(len(models), 1)
+        self.assertIn(2, models)
+        model = models[2]
+        self.assertEqual(len(model), 5)
+        self.assertIn("parameters", model)
+        params = model["parameters"]
+        # Branch Site A results lack a "branches" parameter     
+        self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1)
+        self.assertIn("site classes", params)
+        site_classes = params["site classes"]
+        # Branch Site A adds another site class
+        self.assertEqual(len(site_classes), SITECLASSES[2] + 1)        
+        for class_num in [0, 1, 2, 3]:
+            self.assertIn(class_num, site_classes)
+            site_class = site_classes[class_num]
+            self.assertEqual(len(site_class), 2)
+            self.assertIn("branch types", site_class)
+            branches = site_class["branch types"]
+            self.assertEqual(len(branches), 2)
+ 
     def testParseCladeModelC(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_clademodelC.out")
         results = codeml.read(results_file)
+        # 5 top-level items again in this case
         self.assertEqual(len(results), 5)
-        site_classes = results["NSsites"][2]["parameters"]["site classes"]
-        self.assertEqual(len(site_classes), 3)        
+        self.assertIn("NSsites", results)
+        models = results["NSsites"]
+        # Only site class model 2 is simulated for Clade Model C
+        self.assertEqual(len(models), 1)
+        self.assertIn(2, models)
+        model = models[2]
+        self.assertEqual(len(model), 5)
+        self.assertIn("parameters", model)
+        params = model["parameters"]
+        # Clade Model C results lack a "branches" parameter     
+        self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1)
+        self.assertIn("site classes", params)
+        site_classes = params["site classes"]
+        self.assertEqual(len(site_classes), SITECLASSES[2])        
+        for class_num in [0, 1, 2]:
+            self.assertIn(class_num, site_classes)
+            site_class = site_classes[class_num]
+            self.assertEqual(len(site_class), 2)
+            self.assertIn("branch types", site_class)
+            branches = site_class["branch types"]
+            self.assertEqual(len(branches), 2)
     
     def testParseNgene2Mgene012(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_ngene2_mgene012.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
-        site_classes = results["NSsites"][0]["parameters"]["rates"]
-        self.assertEqual(len(site_classes), 2)        
+        self.assertIn("NSsites", results)
+        models = results["NSsites"]
+        self.assertEqual(len(models), 1)
+        self.assertIn(0, models)
+        model = models[0]
+        self.assertEqual(len(model), 5)
+        self.assertIn("parameters", model)
+        params = model["parameters"]
+        # This type of model has fewer parameters for model 0
+        self.assertEqual(len(params), 4)
+        self.assertIn("rates", params)
+        rates = params["rates"]
+        self.assertEqual(len(rates), 2)        
     
     def testParseNgene2Mgene34(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_ngene2_mgene34.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
-        site_classes = results["NSsites"][0]["parameters"]["genes"]
-        self.assertEqual(len(site_classes), 2)   
+        self.assertIn("NSsites", results)
+        models = results["NSsites"]
+        self.assertEqual(len(models), 1)
+        self.assertIn(0, models)
+        model = models[0]
+        self.assertEqual(len(model), 5)
+        self.assertIn("parameters", model)
+        params = model["parameters"]
+        # This type of model has fewer parameters for model 0
+        self.assertEqual(len(params), 3)
+        self.assertIn("rates", params)
+        rates = params["rates"]
+        self.assertEqual(len(rates), 2)        
+        self.assertIn("genes", params)
+        genes = params["genes"]
+        self.assertEqual(len(genes), 2)   
     
     def testParseFreeBranch(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_freebranch.out")
         results = codeml.read(results_file)
         self.assertEqual(len(results), 4)
-        branches = results["NSsites"][0]["parameters"]["branches"]
+        self.assertIn("NSsites", results)
+        models = results["NSsites"]
+        self.assertEqual(len(models), 1)
+        self.assertIn(0, models)
+        model = models[0]
+        # With the free ratio model, you get 3 extra trees: dN tree,
+        # dS tree and omega tree
+        self.assertEqual(len(model), 8)
+        self.assertIn("parameters", model)
+        params = model["parameters"]
+        self.assertEqual(len(params), SITECLASS_PARAMS[0])
+        self.assertIn("branches", params)
+        # There should be 7 branches
+        branches = params["branches"]
         self.assertEqual(len(branches), 7) 
+        self.assertIn("omega", params)
+        omega = params["omega"]
+        self.assertEqual(len(omega), 7)
     
     def testParsePairwise(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_pairwise.out")
         results = codeml.read(results_file)
+        # Pairwise models have an extra top-level item: pairwise
         self.assertEqual(len(results), 5)
+        self.assertIn("pairwise", results)
         pairwise = results["pairwise"]
         self.assertEqual(len(pairwise), 5) 
     
@@ -275,16 +414,25 @@ class ModTest(unittest.TestCase):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_aa_model0.out")
         results = codeml.read(results_file)
+        # Amino Acid analysis has different top-levels:
+        # 'NSsites', 'model', 'version', 'lnL max', 'distances'
         self.assertEqual(len(results), 5)
+        self.assertIn("lnL max", results)
+        self.assertIn("distances", results)
         distances = results["distances"]
+        # non-pairwise AA analysis only gives raw distances
         self.assertEqual(len(distances), 1) 
 
     def testParseAAPairwise(self):
         results_file = os.path.join("PAML", "Results", "codeml",
             "codeml_aa_pairwise.out")
         results = codeml.read(results_file)
+        # Pairwise AA analysis has one top-level fewer than non-pairwise
         self.assertEqual(len(results), 4)
+        self.assertIn("lnL max", results)
+        self.assertIn("distances", results)
         distances = results["distances"]
+        # Pairwise AA analysis has ML & raw distances
         self.assertEqual(len(distances), 2) 
         
         
