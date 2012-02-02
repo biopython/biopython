@@ -181,7 +181,7 @@ def parse_model(lines, results):
         # Find the estimated trees only taking the tree if it has
         # lengths or rate estimates on the branches
         elif tree_re.match(line) is not None:
-            if ":" in line or "'#" in line:
+            if ":" in line or "#" in line:
                 if dS_tree_flag:
                     results["dS tree"] = line.strip()
                     dS_tree_flag = False
