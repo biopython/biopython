@@ -60,8 +60,10 @@ class Codeml(Paml):
                         "Small_Diff": None,
                         "cleandata": None, 
                         "fix_blength": None, 
-                        "method": None}
-                        
+                        "method": None,
+                        "rho": None,
+                        "fix_rho": None}
+        
     def write_ctl_file(self):
         """Dynamically build a CODEML control file from the options.
         
