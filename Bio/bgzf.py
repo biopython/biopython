@@ -523,6 +523,7 @@ class BgzfReader(object):
             #Already in cache
             self._buffer = self._buffers[start_offset]
             self._within_block_offset = 0
+            self._block_start_offset = start_offset
             return
         #Must hit the disk... first check cache limits,
         while len(self._buffers) >= self.max_cache:
