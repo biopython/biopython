@@ -511,17 +511,21 @@ class BgzfReader(object):
         self.max_cache = max_cache
         self._buffers = {}
         self._block_start_offset = None
-        self._load_block()
+        self._block_raw_length = None
+        self._load_block(handle.tell())
 
     def _load_block(self, start_offset=None):
         if start_offset is None:
-            start_offset = self._handle.tell()
+            #If the file is being read sequentially, then _handle.tell()
+            #should be pointing at the start of the next block.
+            #However, if seek has been used, we can't assume that.
+            start_offset = self._block_start_offset + self._block_raw_length
         if start_offset == self._block_start_offset:
             self._within_block_offset = 0
             return
         elif start_offset in self._buffers:
             #Already in cache
-            self._buffer = self._buffers[start_offset]
+            self._buffer, self._block_raw_length = self._buffers[start_offset]
             self._within_block_offset = 0
             self._block_start_offset = start_offset
             return
@@ -538,10 +542,12 @@ class BgzfReader(object):
             block_size, self._buffer = _load_bgzf_block(handle, self._text)
         except StopIteration:
             #EOF
+            block_size = 0
             self._buffer = _empty_bytes_string
         self._within_block_offset = 0
+        self._block_raw_length = block_size
         #Finally save the block in our cache,
-        self._buffers[self._block_start_offset] = self._buffer
+        self._buffers[self._block_start_offset] = self._buffer, block_size
 
     def tell(self):
         """Returns a 64-bit unsigned BGZF virtual offset."""
