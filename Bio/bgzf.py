@@ -592,9 +592,12 @@ class BgzfReader(object):
             #a non-empty block
             if not self._buffer:
                 return data #EOF
-            else:
+            elif size:
                 #TODO - Avoid recursion
                 return data + self.read(size)
+            else:
+                #Only needed the end of the last block
+                return data
 
     def readline(self):
         if self._text:
