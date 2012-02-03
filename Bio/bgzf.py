@@ -561,11 +561,16 @@ class BgzfReader(object):
             #Don't need to load the block if already there
             #(this avoids a function call since _load_block would do nothing)
             self._load_block(start_offset)
+            assert start_offset == self._block_start_offset
         if within_block >= len(self._buffer) \
         and not (within_block == 0 and len(self._buffer)==0):
             raise ValueError("Within offset %i but block size only %i" \
                              % (within_block, len(self._buffer)))
         self._within_block_offset = within_block
+        assert virtual_offset == self.tell(), \
+            "Did seek to %i (%i, %i), but tell says %i (%i, %i)" \
+            % (virtual_offset, start_offset, within_block,
+               self.tell(), self._block_start_offset, self._within_block_offset)
         return virtual_offset
 
     def read(self, size=-1):
@@ -577,6 +582,7 @@ class BgzfReader(object):
         elif self._within_block_offset + size < len(self._buffer):
             data = self._buffer[self._within_block_offset:self._within_block_offset + size]
             self._within_block_offset += size
+            assert data #Must be at least 1 byte
             return data
         else:
             data = self._buffer[self._within_block_offset:]
@@ -596,12 +602,9 @@ class BgzfReader(object):
         else:
             newline = _bytes_newline
         i = self._buffer.find(newline, self._within_block_offset)
-        if i != -1:
-            data = self._buffer[self._within_block_offset:i+1]
-            self._within_block_offset = i + 1
-            assert data.endswith(newline)
-            return data
-        else:
+        #Three cases to consider,
+        if i==-1:
+            #No newline, need to read in more data
             data = self._buffer[self._within_block_offset:]
             self._load_block() #will reset offsets
             if not self._buffer:
@@ -609,6 +612,19 @@ class BgzfReader(object):
             else:
                 #TODO - Avoid recursion
                 return data + self.readline()
+        elif i + 1 == len(self._buffer):
+            #Found new line, but right at end of block (SPECIAL)
+            data = self._buffer[self._within_block_offset:]
+            #Must now load the next block to ensure tell() works
+            self._load_block() #will reset offsets
+            assert data
+            return data
+        else:
+            #Found new line, not at end of block (easy case, no IO)
+            data = self._buffer[self._within_block_offset:i+1]
+            self._within_block_offset = i + 1
+            assert data.endswith(newline)
+            return data
 
     def close(self):
         self._handle.close()
