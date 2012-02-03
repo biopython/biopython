@@ -73,6 +73,48 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(len(old), len(new))
         self.assertEqual(old, new)
 
+    def check_by_line(self, old_file, new_file, old_gzip=False):
+        for cache in [1,10]:
+            for mode in ["r", "rb"]:
+                if old_gzip:
+                    h = gzip.open(old_file, mode)
+                else:
+                    h = open(old_file, mode)
+                old = h.read()
+                h.close()
+
+                h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
+                new = h.readline()
+                while True:
+                    line =  h.readline()
+                    if not line: break
+                    new += line
+                h.close()
+
+                self.assertEqual(len(old), len(new))
+                self.assertEqual(old, new)
+
+    def check_by_char(self,old_file, new_file, old_gzip=False):
+        for cache in [1,10]:
+            for mode in ["r", "rb"]:
+                if old_gzip:
+                    h = gzip.open(old_file,mode)
+                else:
+                    h = open(old_file, mode)
+                old = h.read()
+                h.close()
+
+                h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
+                new = h.readline()
+                while True:
+                    char = h.read(1)
+                    if not char: break
+                    new += char
+                h.close()
+
+                self.assertEqual(len(old), len(new))
+                self.assertEqual(old, new)
+
     def check_random(self, filename):
         """Check BGZF random access by reading blocks in forward & reverse order"""
         h = gzip.open(filename, "rb")
@@ -179,6 +221,16 @@ class BgzfTests(unittest.TestCase):
         """Check text mode access to Quality/example.fastq.bgz"""
         self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
 
+    def test_iter_example_fastq(self):
+        """Check iteration over Quality/example.fastq.bgz"""
+        self.check_by_line("Quality/example.fastq", "Quality/example.fastq.bgz")
+        self.check_by_char("Quality/example.fastq", "Quality/example.fastq.bgz")
+
+    def test_iter_example_gb(self):
+        """Check iteration over GenBank/NC_000932.gb.bgz"""
+        self.check_by_line("GenBank/NC_000932.gb", "GenBank/NC_000932.gb.bgz")
+        self.check_by_char("GenBank/NC_000932.gb", "GenBank/NC_000932.gb.bgz")
+
     def test_bam_ex1(self):
         """Reproduce BGZF compression for BAM file"""
         temp_file = self.temp_file
@@ -191,12 +243,15 @@ class BgzfTests(unittest.TestCase):
         #this example BAM file has simple block usage)
         self.check_blocks("SamBam/ex1.bam", temp_file)
 
+    def test_iter_bam_ex1(self):
+        """Check iteration over SamBam/ex1.bam"""
+        self.check_by_char("SamBam/ex1.bam", "SamBam/ex1.bam", True)
+
     def test_example_fastq(self):
         """Reproduce BGZF compression for a FASTQ file"""
         temp_file = self.temp_file
         self.rewrite("Quality/example.fastq.gz", temp_file)
         self.check_blocks("Quality/example.fastq.bgz", temp_file)
-
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
