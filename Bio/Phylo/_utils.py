@@ -333,7 +333,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
         # Add confidence
         if hasattr(clade, 'confidences'):
             # phyloXML supports multiple confidences
-            conf_label = ' '.join(map(str, map(float, clade.confidences)))
+            conf_label = '/'.join(map(str, map(float, clade.confidences)))
         elif clade.confidence is not None:
             conf_label = str(clade.confidence)
         else:
