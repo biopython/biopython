@@ -13,7 +13,7 @@ import gzip
 import os
 from random import shuffle
 
-from Bio._py3k import _as_bytes
+from Bio._py3k import _as_bytes, _as_string
 _empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
@@ -81,8 +81,15 @@ class BgzfTests(unittest.TestCase):
                 else:
                     h = open(old_file, mode)
                 old = h.read()
+                #Seems gzip can return bytes even if mode="r",
+                #perhaps a bug in Python 3.2?
+                if "b" in mode:
+                    old = _as_bytes(old)
+                else:
+                    old = _as_string(old)
                 h.close()
 
+                #Note using string addition to handle bytes or unicode
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 new = h.readline()
                 while True:
@@ -92,9 +99,11 @@ class BgzfTests(unittest.TestCase):
                 h.close()
 
                 self.assertEqual(len(old), len(new))
+                self.assertEqual(old[:10], new[:10], \
+                                 "%r vs %r, mode %r" % (old[:10], new[:10], mode))
                 self.assertEqual(old, new)
 
-    def check_by_char(self,old_file, new_file, old_gzip=False):
+    def check_by_char(self, old_file, new_file, old_gzip=False):
         for cache in [1,10]:
             for mode in ["r", "rb"]:
                 if old_gzip:
@@ -102,8 +111,15 @@ class BgzfTests(unittest.TestCase):
                 else:
                     h = open(old_file, mode)
                 old = h.read()
+                #Seems gzip can return bytes even if mode="r",
+                #perhaps a bug in Python 3.2?
+                if "b" in mode:
+                    old = _as_bytes(old)
+                else:
+                    old = _as_string(old)
                 h.close()
 
+                #Note using string addition to handle bytes or unicode
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 new = h.readline()
                 while True:
@@ -113,6 +129,9 @@ class BgzfTests(unittest.TestCase):
                 h.close()
 
                 self.assertEqual(len(old), len(new))
+                #If bytes vs unicode mismatch, give a short error message:
+                self.assertEqual(old[:10], new[:10], \
+                                 "%r vs %r, mode %r" % (old[:10], new[:10], mode))
                 self.assertEqual(old, new)
 
     def check_random(self, filename):
