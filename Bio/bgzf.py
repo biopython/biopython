@@ -21,7 +21,8 @@ decompression they are just (specialised) gzip files. What this
 module aims to facilitate is random access to BGZF files (using the
 'virtual offset' idea), and writing BGZF files (which means using
 suitably sized gzip blocks and writing the extra 'BC' field in the
-gzip headers). The existing gzip library is used internally.
+gzip headers). As in the gzip library, the zlib library is used
+internally.
 
 In addition to being required for random access to and writing of
 BAM files, the BGZF format can also be used on other sequential
