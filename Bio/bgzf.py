@@ -100,16 +100,12 @@ Notice that the open function has been replaced. You can "fix" this if you
 need to by importing the built-in open function:
 
 >>> from __builtin__ import open
->>> print open.__module__
-__builtin__
 
 However, what we recommend instead is to use the explicit namespace, e.g.
 
 >>> from Bio import bgzf
 >>> print bgzf.open.__module__
 Bio.bgzf
->>> print open.__module__
-__builtin__
 
 
 Example
