@@ -120,19 +120,15 @@ be decompressed using gzip,
 
 >>> import gzip
 >>> handle = gzip.open("GenBank/NC_000932.gb.bgz", "rb")
->>> handle.tell()
-0
+>>> assert 0 == handle.tell()
 >>> handle.readline()
 'LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009\n'
->>> handle.tell()
-80
+>>> assert 80 == handle.tell()
 >>> handle.readline()
 'DEFINITION  Arabidopsis thaliana chloroplast, complete genome.\n'
->>> handle.tell()
-143
+>>> assert 143 == handle.tell()
 >>> data = handle.read(70000)
->>> handle.tell()
-70143
+>>> assert 70143 == handle.tell()
 >>> handle.readline()
 'f="GeneID:844718"\n'
 >>> handle.readline()
@@ -146,19 +142,15 @@ We can also access the file using the BGZF reader - but pay
 attention to the file offsets which will be explained below:
 
 >>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "rb")
->>> handle.tell()
-0
+>>> assert 0 == handle.tell()
 >>> handle.readline()
 'LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009\n'
->>> handle.tell()
-80
+>>> assert 80 == handle.tell()
 >>> handle.readline()
 'DEFINITION  Arabidopsis thaliana chloroplast, complete genome.\n'
->>> handle.tell()
-143
+>>> assert 143 == handle.tell()
 >>> data = handle.read(70000)
->>> handle.tell()
-987828735
+>>> assert 987828735 == handle.tell()
 >>> handle.readline()
 'f="GeneID:844718"\n'
 >>> handle.readline()
@@ -449,12 +441,10 @@ class BgzfReader(object):
     specific parts of the decompressed BAM file:
 
     >>> handle = BgzfReader("SamBam/ex1.bam", "rb")
-    >>> handle.tell()
-    0
+    >>> assert 0 == handle.tell()
     >>> handle.read(4)
     'BAM\x01'
-    >>> handle.tell()
-    4
+    >>> assert 4 == handle.tell()
 
     So far nothing so strange, we got the magic marker used at the
     start of a decompressed BAM file, and the handle position makes
@@ -464,8 +454,7 @@ class BgzfReader(object):
     >>> data = handle.read(65536)
     >>> len(data)
     65536
-    >>> handle.tell()
-    1195311108
+    >>> assert 1195311108 == handle.tell()
 
     Expecting 4 + 65536 = 65540 were you? Well this is a BGZF 64-bit
     virtual offset, which means:
