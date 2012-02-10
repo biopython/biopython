@@ -630,15 +630,19 @@ class BgzfReader(object):
 
 class BgzfWriter(object):
 
-    def __init__(self, filename=None, mode=None, fileobj=None, compresslevel=6):
+    def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
         if fileobj:
-            assert filename is None and mode is None            
+            assert filename is None
             handle = fileobj
         else:
             if "w" not in mode.lower() \
             and "a" not in mode.lower():
                 raise ValueError("Must use write or append mode, not %r" % mode)
-            handle = __builtin__.open(filename, mode)
+            if "a" in mode.lower():
+                handle = __builtin__.open(filename, "ba")
+            else:
+                handle = __builtin__.open(filename, "bw")
+        self._text = "b" not in mode.lower()
         self._handle = handle
         self._buffer = _empty_bytes_string
         self.compresslevel = compresslevel
@@ -677,6 +681,8 @@ class BgzfWriter(object):
         self._handle.write(data)
 
     def write(self, data):
+        #TODO - Check bytes vs unicode
+        data = _as_bytes(data)
         #block_size = 2**16 = 65536
         data_len = len(data)
         if len(self._buffer) + data_len < 65536:
