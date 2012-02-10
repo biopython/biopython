@@ -498,17 +498,19 @@ class BgzfReader(object):
     def __init__(self, filename=None, mode=None, fileobj=None, max_cache=100):
         if max_cache < 1:
             raise ValueError("Use max_cache with a minimum of 1")
+        #Must open the BGZF file in binary mode, but we may want to
+        #treat the contents as either text or binary (unicode or
+        #bytes under Python 3)
         if fileobj:
             assert filename is None and mode is None
             handle = fileobj
             assert "b" in handle.mode.lower()
-            self._text = False
         else:
             if "w" in mode.lower() \
             or "a" in mode.lower():
                 raise ValueError("Must use read mode (default), not write or append mode")
-            self._text = "b" not in mode.lower()
             handle = __builtin__.open(filename, "rb")
+        self._text = "b" not in mode.lower()
         self._handle = handle
         self.max_cache = max_cache
         self._buffers = {}
@@ -545,7 +547,10 @@ class BgzfReader(object):
         except StopIteration:
             #EOF
             block_size = 0
-            self._buffer = _empty_bytes_string
+            if self._text:
+                self._buffer = ""
+            else:
+                self._buffer = _empty_bytes_string
         self._within_block_offset = 0
         self._block_raw_length = block_size
         #Finally save the block in our cache,
@@ -579,7 +584,10 @@ class BgzfReader(object):
         if size < 0:
             raise NotImplementedError("Don't be greedy, that could be massive!")
         elif size == 0:
-            return _empty_bytes_string
+            if self._text:
+                return ""
+            else:
+                return _empty_bytes_string
         #Note we don't want to be left at the very end of a block (except EOF)
         elif self._within_block_offset + size < len(self._buffer):
             data = self._buffer[self._within_block_offset:self._within_block_offset + size]
