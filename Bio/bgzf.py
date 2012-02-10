@@ -119,45 +119,36 @@ This is an ordinary GenBank file compressed using BGZF, so it can
 be decompressed using gzip,
 
 >>> import gzip
->>> handle = gzip.open("GenBank/NC_000932.gb.bgz", "rb")
+>>> handle = gzip.open("GenBank/NC_000932.gb.bgz", "r")
 >>> assert 0 == handle.tell()
->>> handle.readline()
-'LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009\n'
+>>> line = handle.readline()
 >>> assert 80 == handle.tell()
->>> handle.readline()
-'DEFINITION  Arabidopsis thaliana chloroplast, complete genome.\n'
+>>> line = handle.readline()
 >>> assert 143 == handle.tell()
 >>> data = handle.read(70000)
 >>> assert 70143 == handle.tell()
->>> handle.readline()
-'f="GeneID:844718"\n'
->>> handle.readline()
-'     CDS             complement(join(84337..84771,85454..85843))\n'
->>> offset = handle.seek(65536*3 + 126)
->>> handle.readline()
-'    68521 tatgtcattc gaaattgtat aaagacaact cctatttaat agagctattt gtgcaagtat\n'
 >>> handle.close()
 
 We can also access the file using the BGZF reader - but pay
 attention to the file offsets which will be explained below:
 
->>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "rb")
+>>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "r")
 >>> assert 0 == handle.tell()
->>> handle.readline()
-'LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009\n'
+>>> print handle.readline().rstrip()
+LOCUS       NC_000932             154478 bp    DNA     circular PLN 15-APR-2009
 >>> assert 80 == handle.tell()
->>> handle.readline()
-'DEFINITION  Arabidopsis thaliana chloroplast, complete genome.\n'
+>>> print handle.readline().rstrip()
+DEFINITION  Arabidopsis thaliana chloroplast, complete genome.
 >>> assert 143 == handle.tell()
 >>> data = handle.read(70000)
 >>> assert 987828735 == handle.tell()
->>> handle.readline()
-'f="GeneID:844718"\n'
->>> handle.readline()
-'     CDS             complement(join(84337..84771,85454..85843))\n'
+>>> print handle.readline().rstrip()
+f="GeneID:844718"
+>>> print handle.readline().rstrip()
+     CDS             complement(join(84337..84771,85454..85843))
 >>> offset = handle.seek(make_virtual_offset(55074, 126))
->>> handle.readline()
-'    68521 tatgtcattc gaaattgtat aaagacaact cctatttaat agagctattt gtgcaagtat\n'
+>>> print handle.readline().rstrip()
+    68521 tatgtcattc gaaattgtat aaagacaact cctatttaat agagctattt gtgcaagtat
 >>> handle.close()
 
 Notice the handle's offset looks different as a BGZF file. This
@@ -196,7 +187,7 @@ although there isn't any benefit over using gzip.open(...), unless
 you want to index BGZF compressed sequence files:
 
 >>> from Bio import SeqIO
->>> handle = BgzfReader("GenBank/NC_000932.gb.bgz", "rb")
+>>> handle = BgzfReader("GenBank/NC_000932.gb.bgz")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
 >>> print record.id
@@ -482,7 +473,7 @@ class BgzfReader(object):
     pass, but is important for improving performance of random access.
     """
 
-    def __init__(self, filename=None, mode=None, fileobj=None, max_cache=100):
+    def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
         if max_cache < 1:
             raise ValueError("Use max_cache with a minimum of 1")
         #Must open the BGZF file in binary mode, but we may want to
