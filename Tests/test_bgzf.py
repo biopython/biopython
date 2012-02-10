@@ -74,21 +74,21 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_by_line(self, old_file, new_file, old_gzip=False):
-        for cache in [1,10]:
-            for mode in ["r", "rb"]:
-                if old_gzip:
-                    h = gzip.open(old_file, mode)
-                else:
-                    h = open(old_file, mode)
-                old = h.read()
-                #Seems gzip can return bytes even if mode="r",
-                #perhaps a bug in Python 3.2?
-                if "b" in mode:
-                    old = _as_bytes(old)
-                else:
-                    old = _as_string(old)
-                h.close()
+        for mode in ["r", "rb"]:
+            if old_gzip:
+                h = gzip.open(old_file, mode)
+            else:
+                h = open(old_file, mode)
+            old = h.read()
+            #Seems gzip can return bytes even if mode="r",
+            #perhaps a bug in Python 3.2?
+            if "b" in mode:
+                old = _as_bytes(old)
+            else:
+                old = _as_string(old)
+            h.close()
 
+            for cache in [1,10]:
                 #Note using string addition to handle bytes or unicode
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 new = h.readline()
@@ -104,21 +104,21 @@ class BgzfTests(unittest.TestCase):
                 self.assertEqual(old, new)
 
     def check_by_char(self, old_file, new_file, old_gzip=False):
-        for cache in [1,10]:
-            for mode in ["r", "rb"]:
-                if old_gzip:
-                    h = gzip.open(old_file,mode)
-                else:
-                    h = open(old_file, mode)
-                old = h.read()
-                #Seems gzip can return bytes even if mode="r",
-                #perhaps a bug in Python 3.2?
-                if "b" in mode:
-                    old = _as_bytes(old)
-                else:
-                    old = _as_string(old)
-                h.close()
+        for mode in ["r", "rb"]:
+            if old_gzip:
+                h = gzip.open(old_file,mode)
+            else:
+                h = open(old_file, mode)
+            old = h.read()
+            #Seems gzip can return bytes even if mode="r",
+            #perhaps a bug in Python 3.2?
+            if "b" in mode:
+                old = _as_bytes(old)
+            else:
+                old = _as_string(old)
+            h.close()
 
+            for cache in [1,10]:
                 #Note using string addition to handle bytes or unicode
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
                 new = h.readline()
