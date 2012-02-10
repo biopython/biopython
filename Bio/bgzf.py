@@ -9,7 +9,7 @@ r"""Fairly low level API for working with BGZF files (e.g. BAM files).
 The SAM/BAM file format (Sequence Alignment/Map) comes in a plain text
 format (SAM), and a compressed binary format (BAM). The latter uses a
 modified form of gzip compression called BGZF, which in principle can
-be applied to any file format. This is described together with the
+be applied to any file format. BGZF is described together with the
 SAM/BAM file format at http://samtools.sourceforge.net/SAM1.pdf
 
 
@@ -21,13 +21,13 @@ decompression they are just (specialised) gzip files. What this
 module aims to facilitate is random access to BGZF files (using the
 'virtual offset' idea), and writing BGZF files (which means using
 suitably sized gzip blocks and writing the extra 'BC' field in the
-gzip headers). The existing gzip library will be used internally.
+gzip headers). The existing gzip library is used internally.
 
-Initially this will be used to provide random access and writing of
-BAM files. However, the BGZF format could also be used on other
-sequential data (in the sense of one record after another), such
-as most of the sequence data formats supported in Bio.SeqIO (like
-FASTA, FASTQ, GenBank, etc).
+In addition to being required for random access to and writing of
+BAM files, the BGZF format can also be used on other sequential
+data (in the sense of one record after another), such as most of
+the sequence data formats supported in Bio.SeqIO (like FASTA,
+FASTQ, GenBank, etc) or large MAF alignments.
 
 
 Technical Introduction to BGZF
@@ -40,16 +40,18 @@ concatenating them. Also, each block can have one of several compression
 levels (including uncompressed, which actually takes up a little bit
 more space due to the gzip header).
 
-What the BAM designers realised was that random access to data stored
-in traditional gzip files was slow, breaking the file into gzip blocks
-would allow fast random access to each block. To access a particular
-piece of the decompressed data, you just need to know which block it
-starts in (the offset of the gzip block start), and how far into the
-(decompressed) contents of the block you need to read.
+What the BAM designers realised was that while random access to data
+stored in traditional gzip files was slow, breaking the file into
+gzip blocks would allow fast random access to each block. To access
+a particular piece of the decompressed data, you just need to know
+which block it starts in (the offset of the gzip block start), and
+how far into the (decompressed) contents of the block you need to
+read.
 
 One problem with this is finding the gzip block sizes efficiently.
 You can do it with a standard gzip file, but it requires every block
-to be decompressed -- and that would be rather slow.
+to be decompressed -- and that would be rather slow. Additionally
+typical gzip files may use very large blocks.
 
 All that differs in BGZF is that compressed size of each gzip block
 is limited to 2^16 bytes, and an extra 'BC' field in the gzip header
