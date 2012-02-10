@@ -89,13 +89,11 @@ class BgzfTests(unittest.TestCase):
             h.close()
 
             for cache in [1,10]:
-                #Note using string addition to handle bytes or unicode
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
-                new = h.readline()
-                while True:
-                    line =  h.readline()
-                    if not line: break
-                    new += line
+                if "b" in mode:
+                    new = _empty_bytes_string.join(line for line in h)
+                else:
+                    new = "".join(line for line in h)
                 h.close()
 
                 self.assertEqual(len(old), len(new))
@@ -119,13 +117,17 @@ class BgzfTests(unittest.TestCase):
             h.close()
 
             for cache in [1,10]:
-                #Note using string addition to handle bytes or unicode
                 h = bgzf.BgzfReader(new_file, mode, max_cache=cache)
-                new = h.readline()
+                temp = []
                 while True:
                     char = h.read(1)
                     if not char: break
-                    new += char
+                    temp.append(char)
+                if "b" in mode:
+                    new = _empty_bytes_string.join(temp)
+                else:
+                    new = "".join(temp)
+                del temp
                 h.close()
 
                 self.assertEqual(len(old), len(new))

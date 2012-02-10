@@ -639,6 +639,15 @@ class BgzfReader(object):
             assert data.endswith(newline)
             return data
 
+    def next(self):
+        line = self.readline()
+        if not line:
+            raise StopIteration
+        return line
+
+    def __iter__(self):
+        return self
+
     def close(self):
         self._handle.close()
         self._buffer = None
