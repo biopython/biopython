@@ -274,7 +274,7 @@ class Atom(object):
         @param tran: the translation vector
         @type tran: size 3 Numeric array
         """
-        self.coord=numpy.dot(self.coord, rot)+tran
+        self.coord=numpy.dot(rot, self.coord)+tran
         
     def get_vector(self):
         """
