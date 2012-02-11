@@ -353,8 +353,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
             conf_label = str(clade.confidence)
         else:
             conf_label = None
-        if conf_label:
-            plt.text(x_start, y_here, str(float(clade.confidence)), fontsize=9)
+        if conf_label and show_confidence:
+            plt.text(x_start, y_here, conf_label, fontsize=9)
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
