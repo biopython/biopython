@@ -138,7 +138,6 @@ class PhymlCommandline(AbstractCommandline):
                 equate=False,
                 ),
 
-            # XXX is the '/' character ok in the long arg name?
             _Option(['-t', '--ts/tv', 'ts_tv_ratio'],
                 """Transition/transversion ratio. (DNA sequences only.)
 
@@ -205,6 +204,7 @@ class PhymlCommandline(AbstractCommandline):
                 r   : rate parameters are optimised.
                 n   : no parameter is optimised.
                 """
+                equate=False,
                 ),
 
             _Switch(['--rand_start', 'rand_start'],
