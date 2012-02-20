@@ -256,7 +256,7 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
     file.write('\n')
 
 
-def draw(tree, label_func=str, do_show=True, show_confidence=True):
+def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
     """Plot the given tree using matplotlib (or pylab).
 
     The graphic is a rooted tree, drawn with roughly the same algorithm as
@@ -268,6 +268,13 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
             but you can use a different function to select another string
             associated with each node. If this function returns None for a node,
             no label will be shown for that node.
+        do_show : bool
+            Whether to show() the plot automatically.
+        show_confidence : bool
+            Whether to display confidence values, if present on the tree.
+        axes : matplotlib/pylab axes
+            If a valid matplotlib.axes.Axes instance, the phylogram is plotted
+            in that Axes. By default (None), a new figure is created.
     """
     try:
         import matplotlib.pyplot as plt
@@ -308,11 +315,19 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
             # Closure over heights
             heights[clade] = (heights[clade.clades[0]] +
                                 heights[clade.clades[-1]]) / 2.0
-        calc_row(tree.root)
+
+        if tree.root.clades:
+            calc_row(tree.root)
         return heights
 
     x_posns = get_x_positions(tree)
     y_posns = get_y_positions(tree)
+    # The function draw_clade closes over the axes object
+    if axes is None:
+        fig = plt.figure()
+        axes = fig.add_subplot(1,1,1)
+    elif not isinstance(axes,plt.matplotlib.axes.Axes):
+        raise ValueError("Invalid argument for axes: %s" % axes)
 
     def draw_clade(clade, x_start, color='k', lw=1):
         """Recursively draw a tree, down from the given clade."""
@@ -324,44 +339,44 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True):
         if hasattr(clade, 'width') and clade.width is not None:
             lw = clade.width
         # Draw a horizontal line from start to here
-        plt.hlines(y_here, x_start, x_here, color=color, lw=lw)
+        axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
-            plt.text(x_here, y_here, ' ' + label,
+            axes.text(x_here, y_here, ' ' + label,
                     fontsize=10, verticalalignment='center')
         # Add confidence
         if hasattr(clade, 'confidences'):
             # phyloXML supports multiple confidences
-            conf_label = ' '.join(map(str, map(float, clade.confidences)))
+            conf_label = '/'.join(map(str, map(float, clade.confidences)))
         elif clade.confidence is not None:
             conf_label = str(clade.confidence)
         else:
             conf_label = None
-        if conf_label:
-            plt.text(x_start, y_here, str(float(clade.confidence)), fontsize=9)
+        if conf_label and show_confidence:
+            plt.text(x_start, y_here, conf_label, fontsize=9)
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
             y_bot = y_posns[clade.clades[-1]]
             # Only apply widths to horizontal lines, like Archaeopteryx
-            plt.vlines(x_here, y_bot, y_top, color=color)
+            axes.vlines(x_here, y_bot, y_top, color=color)
             # Draw descendents
             for child in clade:
-                draw_clade(child, x_here, color=color, lw=lw)
+                draw_clade(child, x_here, color, lw)
 
     draw_clade(tree.root, 0)
     if hasattr(tree, 'name') and tree.name:
-        plt.title(tree.name)
-    plt.xlabel('branch length')
-    plt.ylabel('taxa')
+        axes.set_title(tree.name)
+    axes.set_xlabel('branch length')
+    axes.set_ylabel('taxa')
     # Add margins around the tree to prevent overlapping the axes
-    xmin, xmax = plt.xlim()
+    xmin, xmax = axes.get_xlim()
     pad = 0.05 * xmax
-    plt.xlim(-pad, xmax + pad)
+    axes.set_xlim(-pad, xmax + pad)
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
-    plt.ylim(max(y_posns.itervalues()) + 0.5, 0.5)
+    axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
     if do_show:
         plt.show()
 

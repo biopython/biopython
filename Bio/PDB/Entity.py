@@ -84,6 +84,16 @@ class Entity(object):
         self.child_list.append(entity)
         self.child_dict[entity_id]=entity
     
+    def insert(self, pos, entity):
+        "Add a child to the Entity at a specified position."
+        entity_id=entity.get_id()
+        if self.has_id(entity_id):
+            raise PDBConstructionException( \
+                "%s defined twice" % str(entity_id))
+        entity.set_parent(self)
+        self.child_list[pos:pos] = [entity]
+        self.child_dict[entity_id]=entity        
+
     def get_iterator(self):
         "Return iterator over children."
         for child in self.child_list:
@@ -137,7 +147,35 @@ class Entity(object):
             self.full_id=tuple(l)
         return self.full_id
 
+    def transform(self, rot, tran):
+        """
+        Apply rotation and translation to the atomic coordinates.
 
+        Example:
+                >>> rotation=rotmat(pi, Vector(1,0,0))
+                >>> translation=array((0,0,1), 'f')
+                >>> entity.transform(rotation, translation)
+
+        @param rot: A right multiplying rotation matrix
+        @type rot: 3x3 Numeric array
+
+        @param tran: the translation vector
+        @type tran: size 3 Numeric array
+        """
+        for o in self.get_list():
+            o.transform(rot, tran)
+
+    def copy(self):
+        shallow = copy(self)
+        shallow.child_list = copy(self.child_list)
+        shallow.child_dict = copy(self.child_dict)
+        shallow.xtra = copy(self.xtra)
+        shallow.detach_parent()
+        for index, child in self.child_dict.items():
+            shallow.detach_child(index)
+            shallow.add(child.copy())
+        return shallow
+        
 
 class DisorderedEntityWrapper(object):
     """
@@ -249,5 +287,3 @@ class DisorderedEntityWrapper(object):
     def disordered_get_list(self):
         "Return list of children."
         return self.child_dict.values()
-
-        

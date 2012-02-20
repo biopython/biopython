@@ -29,7 +29,7 @@ from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
-
+from Bio.PDB import rotmat, Vector
 
 # NB: the 'A_' prefix ensures this test case is run first
 class A_ExceptionTest(unittest.TestCase):
@@ -819,6 +819,74 @@ class IterationTests(unittest.TestCase):
 #        print nums
 # 
 # -------------------------------------------------------------
+
+class TransformTests(unittest.TestCase):        
+
+    def setUp(self):
+        self.s = PDBParser(PERMISSIVE=True).get_structure(
+            'X', "PDB/a_structure.pdb")
+        self.m = self.s.get_list()[0]
+        self.c = self.m.get_list()[0]
+        self.r = self.c.get_list()[0]
+        self.a = self.r.get_list()[0]
+
+    def get_total_pos(self, o):
+        """
+        Returns the sum of the positions of atoms in an entity along
+        with the number of atoms.
+        """
+        if hasattr(o, "get_coord"):
+            return o.get_coord(), 1
+        total_pos = numpy.array((0.0,0.0,0.0))
+        total_count = 0
+        for p in o.get_list():
+            pos, count = self.get_total_pos(p)
+            total_pos += pos
+            total_count += count
+        return total_pos, total_count
+
+    def get_pos(self, o):
+        """
+        Returns the average atom position in an entity.
+        """
+        pos, count = self.get_total_pos(o)
+        return 1.0*pos/count
+
+    def test_transform(self):
+        """Transform entities (rotation and translation)."""
+        for o in (self.s, self.m, self.c, self.r, self.a):
+            rotation = rotmat(Vector(1,3,5), Vector(1,0,0))
+            translation=numpy.array((2.4,0,1), 'f')
+            oldpos = self.get_pos(o)
+            o.transform(rotation, translation)
+            newpos = self.get_pos(o)
+            newpos_check = numpy.dot(oldpos, rotation) +  translation 
+            for i in range(0, 3):
+                self.assertAlmostEqual(newpos[i], newpos_check[i])
+
+
+class CopyTests(unittest.TestCase):        
+
+    def setUp(self):
+        self.s = PDBParser(PERMISSIVE=True).get_structure(
+            'X', "PDB/a_structure.pdb")
+        self.m = self.s.get_list()[0]
+        self.c = self.m.get_list()[0]
+        self.r = self.c.get_list()[0]
+        self.a = self.r.get_list()[0]
+
+    def test_atom_copy(self):
+        aa = self.a.copy()
+        self.assertFalse(self.a is aa)
+        self.assertFalse(self.a.get_coord() is aa.get_coord())
+
+    def test_entitity_copy(self):
+        """Make a copy of a residue."""
+        for e in (self.s, self.m, self.c, self.r):
+            ee = e.copy()
+            self.assertFalse(e is ee)
+            self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

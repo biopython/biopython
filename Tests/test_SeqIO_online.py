@@ -58,7 +58,7 @@ class EntrezTests(unittest.TestCase):
     def simple(self, database, formats, entry, length, checksum):
         for f in formats:
             try:
-                handle = Entrez.efetch(db=database, id=entry, rettype=f)
+                handle = Entrez.efetch(db=database, id=entry, rettype=f, retmode="text")
                 record = SeqIO.read(handle, f)
                 handle.close()
             except IOError:

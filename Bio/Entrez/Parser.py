@@ -161,7 +161,7 @@ class DataHandler(object):
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results"""
-        if handle.closed:
+        if hasattr(handle, "closed") and handle.closed:
             #Should avoid a possible Segmentation Fault, see:
             #http://bugs.python.org/issue4877
             raise IOError("Can't parse a closed handle")
