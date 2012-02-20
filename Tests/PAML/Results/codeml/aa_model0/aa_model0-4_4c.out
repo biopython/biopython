@@ -1,6 +1,6 @@
 
-seed used = 897235289
-AAML (in paml version 4.4c, August 2010)  ../Tests/PAML/aa_alignment.phylip
+seed used = 1024005389
+AAML (in paml version 4.4c, August 2010)  ../Alignments/aa_alignment.phylip
 Model: Poisson for branchesns =   5  ls =  74
 
 
@@ -26,6 +26,22 @@ Pan_troglo       0.0000
 Gorilla_go       0.0000  0.0000
 Pongo_pygm       0.0000  0.0000  0.0000
 Macaca_mul       0.0000  0.0000  0.0000  0.0000
+
+
+Printing out site pattern counts
+
+         5          1  P
+
+Homo_sapie                                 A
+Pan_troglo                                 A
+Gorilla_go                                 A
+Pongo_pygm                                 A
+Macaca_mul                                 A
+
+
+
+   74
+
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 0

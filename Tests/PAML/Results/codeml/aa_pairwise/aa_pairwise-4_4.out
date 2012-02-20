@@ -1,6 +1,6 @@
 
 seed used = 1024005389
-AAML (in paml version 4.4c, August 2010)  ../Alignments/aa_alignment.phylip
+AAML (in paml version 4.4, January 2010)  ../Alignments/aa_alignment.phylip
 Model: Poisson for branchesns =   5  ls =  74
 
 

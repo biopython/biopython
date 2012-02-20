@@ -1,6 +1,4 @@
-
-seed used = 1024005389
-AAML (in paml version 4.4c, August 2010)  ../Alignments/aa_alignment.phylip
+AAML (in paml version 4.5, December 2011)  ../Alignments/aa_alignment.phylip
 Model: Poisson for branchesns =   5  ls =  74
 
 
@@ -32,11 +30,11 @@ Printing out site pattern counts
 
          5          1  P
 
-Homo_sapie                                 A
-Pan_troglo                                 A
-Gorilla_go                                 A
-Pongo_pygm                                 A
-Macaca_mul                                 A
+Homo_sapie   A
+Pan_troglo   A
+Gorilla_go   A
+Pongo_pygm   A
+Macaca_mul   A
 
 
 

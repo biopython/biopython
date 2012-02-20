@@ -1,6 +1,6 @@
 
-seed used = 894442881
-CODONML (in paml version 4.3, August 2009)  ../alignment.phylip
+seed used = 1024005845
+CODONML (in paml version 4.3, August 2009)  ../Alignments/alignment.phylip
 Model: One dN/dS ratio for branches
 Codon frequency model: F3x4
 Site-class models: 
@@ -108,9 +108,10 @@ Model 0: one-ratio
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
+check convergence..
 lnL(ntime:  7  np:  9):   -308.032819      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.519187 0.000100
+ 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.519167 0.000100
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -122,7 +123,7 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51919
+kappa (ts/tv) =  1.51917
 
 omega (dN/dS) =  0.00010
 
@@ -149,10 +150,9 @@ Model 1: NearlyNeutral (2 categories)
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
-check convergence..
 lnL(ntime:  7  np: 10):   -308.031692      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518329 0.999990 0.000001
+ 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518323 0.999990 0.000001
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -164,7 +164,7 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51833
+kappa (ts/tv) =  1.51832
 
 
 dN/dS (w) for site classes (K=2)
@@ -196,7 +196,7 @@ TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
 check convergence..
 lnL(ntime:  7  np: 12):   -308.031579      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518244 1.000000 0.000000 0.000001 1.000000
+ 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518252 1.000000 0.000000 0.000001 1.000000
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -208,7 +208,7 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51824
+kappa (ts/tv) =  1.51825
 
 
 dN/dS (w) for site classes (K=3)
@@ -272,9 +272,10 @@ Model 3: discrete (3 categories)
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
+check convergence..
 lnL(ntime:  7  np: 13):   -308.031579      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518246 0.409646 0.395063 0.000001 0.000001 0.000001
+ 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518240 0.298219 0.215788 0.000001 0.000001 0.000001
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -286,12 +287,12 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51825
+kappa (ts/tv) =  1.51824
 
 
 dN/dS (w) for site classes (K=3)
 
-p:   0.40965  0.39506  0.19529
+p:   0.29822  0.21579  0.48599
 w:   0.00000  0.00000  0.00000
 
 dN & dS for each branch
@@ -315,9 +316,9 @@ Model 7: beta (10 categories)
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
-lnL(ntime:  7  np: 10):   -308.031567      +0.000000
+lnL(ntime:  7  np: 10):   -308.031585      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518240 0.005000 99.000000
+ 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518237 0.005000 1.854292
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -332,60 +333,60 @@ Detailed output identifying parameters
 kappa (ts/tv) =  1.51824
 
 Parameters in M7 (beta):
- p=  0.00500  q= 99.00000
+ p=  0.00500  q=  1.85429
 
 
 dN/dS (w) for site classes (K=10)
 
 p:   0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000
-w:   0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
+w:   0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00001
 
 dN & dS for each branch
 
  branch          t       N       S   dN/dS      dN      dS  N*dN  S*dS
 
-   6..7       0.000    167.7     54.3     -nan     -nan   0.0000   -nan    0.0
-   7..8       0.000    167.7     54.3     -nan     -nan   0.0000   -nan    0.0
-   8..1       0.000    167.7     54.3     -nan     -nan   0.0000   -nan    0.0
-   8..2       0.013    167.7     54.3     -nan     -nan   0.0169   -nan    0.9
-   7..3       0.013    167.7     54.3     -nan     -nan   0.0169   -nan    0.9
-   6..4       0.000    167.7     54.3     -nan     -nan   0.0000   -nan    0.0
-   6..5       0.028    167.7     54.3     -nan     -nan   0.0351   -nan    1.9
+   6..7       0.000    167.7     54.3   0.0000   0.0000   0.0000    0.0    0.0
+   7..8       0.000    167.7     54.3   0.0000   0.0000   0.0000    0.0    0.0
+   8..1       0.000    167.7     54.3   0.0000   0.0000   0.0000    0.0    0.0
+   8..2       0.013    167.7     54.3   0.0000   0.0000   0.0183    0.0    1.0
+   7..3       0.013    167.7     54.3   0.0000   0.0000   0.0183    0.0    1.0
+   6..4       0.000    167.7     54.3   0.0000   0.0000   0.0000    0.0    0.0
+   6..5       0.028    167.7     54.3   0.0000   0.0000   0.0379    0.0    2.1
 
 
 Naive Empirical Bayes (NEB) analysis
-Time used:  0:55
+Time used:  0:30
 
 
 Model 8: beta&w>1 (11 categories)
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
-lnL(ntime:  7  np: 12):   -308.031692      +0.000000
+lnL(ntime:  7  np: 12):   -308.031680      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.518545 0.999990 0.005000 2.492313 1.000000
+ 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518306 0.999990 0.005000 99.000000 1.000000
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
 tree length =   0.05472
 
-(((1: 0.000004, 2: 0.013437): 0.000004, 3: 0.013431): 0.000004, 4: 0.000004, 5: 0.027837);
+(((1: 0.000004, 2: 0.013438): 0.000004, 3: 0.013431): 0.000004, 4: 0.000004, 5: 0.027839);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.013437): 0.000004, Gorilla_go: 0.013431): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.027837);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.013438): 0.000004, Gorilla_go: 0.013431): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.027839);
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51855
+kappa (ts/tv) =  1.51831
 
 Parameters in M8 (beta&w>1):
-  p0=  0.99999  p=  0.00500 q=  2.49231
+  p0=  0.99999  p=  0.00500 q= 99.00000
  (p1=  0.00001) w=  1.00000
 
 
 dN/dS (w) for site classes (K=11)
 
 p:   0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.10000  0.00001
-w:   0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00001  1.00000
+w:   0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  1.00000
 
 dN & dS for each branch
 
@@ -420,11 +421,11 @@ ws:   1.500  2.500  3.500  4.500  5.500  6.500  7.500  8.500  9.500 10.500
 
 Posterior on the grid
 
-p0:   0.000  0.000  0.000  0.000  0.000  0.001  0.003  0.014  0.083  0.899
+p0:   0.000  0.000  0.000  0.000  0.000  0.001  0.003  0.014  0.082  0.899
 p :   0.628  0.200  0.082  0.039  0.021  0.012  0.007  0.005  0.003  0.002
 q :   0.001  0.015  0.037  0.061  0.086  0.111  0.136  0.160  0.184  0.209
 ws:   0.332  0.183  0.122  0.088  0.068  0.055  0.046  0.040  0.035  0.031
 
-Time used:  1:31
+Time used:  1:54
 
-Time used:  1:31
+Time used:  1:54

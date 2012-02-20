@@ -1,9 +1,6 @@
-
-seed used = 1024007905
-CODONML (in paml version 4.3, August 2009)  ../Alignments/alignment.phylip
-Model: NSbranch3 for branches
+CODONML (in paml version 4.5, December 2011)  ../Alignments/alignment.phylip
+Model: One dN/dS ratio for branches
 Codon frequency model: F3x4
-Site-class models:  PositiveSelection
 ns =   5  ls =  74
 
 Codon usage in sequences
@@ -94,7 +91,7 @@ Average         T:0.20090    C:0.16306    A:0.37027    G:0.26577
 
 
 Nei & Gojobori 1986. dN/dS (dN, dS)
-(Note: This matrix is not used in later m.l. analysis.
+(Note: This matrix is not used in later ML. analysis.
 Use runmode = -2 for ML pairwise comparison.)
 
 Homo_sapie          
@@ -103,63 +100,74 @@ Gorilla_go           0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)
 Pongo_pygm          -1.0000 (0.0000 0.0000) 0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0207)
 Macaca_mul           0.0000 (0.0000 0.0421) 0.0000 (0.0000 0.0640) 0.0000 (0.0000 0.0640) 0.0000 (0.0000 0.0421)
 
-
-TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
-lnL(ntime:  7  np: 13):   -308.031579      +0.000000
-   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518240 1.000000 0.000000 0.000001 0.000001 0.000001
-
-Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
-
-tree length =   0.05472
-
-(((1: 0.000004, 2: 0.013438): 0.000004, 3: 0.013431): 0.000004, 4: 0.000004, 5: 0.027839);
-
-(((Homo_sapie: 0.000004, Pan_troglo: 0.013438): 0.000004, Gorilla_go: 0.013431): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.027839);
-
-Detailed output identifying parameters
-
-kappa (ts/tv) =  1.51824
+pairwise comparison, codon frequencies: F3x4.
 
 
-dN/dS (w) for site classes (K=3)
+2 (Pan_troglo) ... 1 (Homo_sapie)
+lnL = -291.465693
+  0.01262 999.00000  0.00100
 
-site class             0         1         2
-proportion        1.00000   0.00000   0.00000
-branch type 0:    0.00000   1.00000   0.00000
-branch type 1:    0.00000   1.00000   0.00000
-(note that p[2] is zero)
+t= 0.0126  S=    81.4  N=   140.6  dN/dS=  0.0010  dN = 0.0000  dS = 0.0115
 
 
+3 (Gorilla_go) ... 1 (Homo_sapie)
+lnL = -290.441129
+  0.01265 999.00000  0.00100
 
-Bayes Empirical Bayes (BEB) analysis (Yang, Wong & Nielsen 2005. Mol. Biol. Evol. 22:1107-1118)
-
-The grid (see ternary graph for p0-p1)
-
-w0:   0.050  0.150  0.250  0.350  0.450  0.550  0.650  0.750  0.850  0.950
-w2:   0.150  0.450  0.750  1.050  1.350  1.650  1.950  2.250  2.550  2.850
-w3:   0.150  0.450  0.750  1.050  1.350  1.650  1.950  2.250  2.550  2.850
+t= 0.0127  S=    81.7  N=   140.3  dN/dS=  0.0010  dN = 0.0000  dS = 0.0114
 
 
-Posterior on the grid
+3 (Gorilla_go) ... 2 (Pan_troglo)
+lnL = -296.416525
+  0.02582 999.00000  0.00100
 
-w0:   0.592  0.221  0.089  0.040  0.021  0.012  0.008  0.006  0.005  0.004
-w2:   0.259  0.157  0.116  0.094  0.080  0.071  0.063  0.058  0.053  0.049
-w3:   0.255  0.157  0.116  0.095  0.081  0.071  0.064  0.058  0.053  0.049
+t= 0.0258  S=    81.5  N=   140.5  dN/dS=  0.0010  dN = 0.0000  dS = 0.0234
 
-Posterior for p0-p1 (see the ternary graph)
 
- 0.000
- 0.000 0.000 0.000
- 0.000 0.000 0.000 0.000 0.000
- 0.000 0.000 0.000 0.000 0.000 0.000 0.000
- 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.001 0.001
- 0.000 0.000 0.000 0.000 0.000 0.000 0.001 0.001 0.001 0.002 0.004
- 0.001 0.001 0.001 0.000 0.001 0.001 0.001 0.001 0.001 0.002 0.003 0.005 0.011
- 0.002 0.001 0.001 0.001 0.001 0.001 0.002 0.001 0.002 0.002 0.004 0.005 0.009 0.014 0.031
- 0.004 0.003 0.004 0.003 0.003 0.003 0.004 0.003 0.004 0.004 0.006 0.006 0.011 0.013 0.026 0.040 0.090
- 0.011 0.007 0.009 0.006 0.008 0.006 0.008 0.006 0.009 0.008 0.012 0.011 0.017 0.018 0.031 0.038 0.076 0.115 0.255
+4 (Pongo_pygm) ... 1 (Homo_sapie)
+lnL = -284.119243
+  0.00001  0.40000  0.00100
 
-sum of density on p0-p1 =   1.000000
+t= 0.0000  S=    40.3  N=   181.7  dN/dS=  0.0010  dN = 0.0000  dS = 0.0000
 
-Time used:  0:14
+
+4 (Pongo_pygm) ... 2 (Pan_troglo)
+lnL = -291.465693
+  0.01262 999.00000  0.00100
+
+t= 0.0126  S=    81.4  N=   140.6  dN/dS=  0.0010  dN = 0.0000  dS = 0.0115
+
+
+4 (Pongo_pygm) ... 3 (Gorilla_go)
+lnL = -290.441129
+  0.01265 999.00000  0.00100
+
+t= 0.0127  S=    81.7  N=   140.3  dN/dS=  0.0010  dN = 0.0000  dS = 0.0114
+
+
+5 (Macaca_mul) ... 1 (Homo_sapie)
+lnL = -293.362778
+  0.03141  0.40000  0.00100
+
+t= 0.0314  S=    40.0  N=   182.0  dN/dS=  0.0010  dN = 0.0001  dS = 0.0579
+
+
+5 (Macaca_mul) ... 2 (Pan_troglo)
+lnL = -299.336634
+  0.04352  0.94237  0.00100
+
+t= 0.0435  S=    48.1  N=   173.9  dN/dS=  0.0010  dN = 0.0001  dS = 0.0667
+
+
+5 (Macaca_mul) ... 3 (Gorilla_go)
+lnL = -298.374374
+  0.04359  0.93928  0.00100
+
+t= 0.0436  S=    48.4  N=   173.6  dN/dS=  0.0010  dN = 0.0001  dS = 0.0665
+
+
+5 (Macaca_mul) ... 4 (Pongo_pygm)
+lnL = -293.362778
+  0.03141  0.40000  0.00100
+
+t= 0.0314  S=    40.0  N=   182.0  dN/dS=  0.0010  dN = 0.0001  dS = 0.0579
