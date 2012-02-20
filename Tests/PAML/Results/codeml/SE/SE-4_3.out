@@ -1,6 +1,6 @@
 
-seed used = 896531397
-CODONML (in paml version 4.3, August 2009)  ../Tests/PAML/alignment.phylip
+seed used = 1024020573
+CODONML (in paml version 4.3, August 2009)  ../Alignments/alignment.phylip
 Model: One dN/dS ratio for branches
 Codon frequency model: F3x4
 ns =   5  ls =  74
@@ -106,9 +106,9 @@ Macaca_mul           0.0000 (0.0000 0.0421) 0.0000 (0.0000 0.0640) 0.0000 (0.000
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
 lnL(ntime:  7  np:  9):   -308.032819      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.519162 0.000100
+ 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.519185 0.000100
 SEs for parameters:
- 7653690.37591 8000740.81408 7721856.17193  0.18942  3.72223 7448763.94153  0.75207 15.03440  1.48215
+ 4440893.61068 4810946.70622 4601222.38522  0.18104  3.86745 4366838.31025  0.73043 15.21761  1.48395
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -120,7 +120,7 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51916
+kappa (ts/tv) =  1.51918
 
 omega (dN/dS) =  0.00010
 

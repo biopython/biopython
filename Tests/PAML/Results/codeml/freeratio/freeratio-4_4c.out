@@ -1,6 +1,6 @@
 
-seed used = 898214873
-CODONML (in paml version 4.4c, August 2010)  ../Tests/PAML/alignment.phylip
+seed used = 1024008197
+CODONML (in paml version 4.4c, August 2010)  ../Alignments/alignment.phylip
 Model: free dN/dS Ratios for branches for branches
 Codon frequency model: F3x4
 ns =   5  ls =  74
@@ -104,9 +104,9 @@ Macaca_mul           0.0000 (0.0000 0.0421) 0.0000 (0.0000 0.0640) 0.0000 (0.000
 
 
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
-lnL(ntime:  7  np: 15):   -308.032796      +0.000000
+lnL(ntime:  7  np: 15):   -308.032801      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.519299 40.586987 37.501754 35.734297 0.000100 0.000100 33.274539 0.000100
+ 0.000004 0.000004 0.000004 0.013437 0.013431 0.000004 0.027837 1.519256 1.066251 1.080642 0.987881 0.000100 0.000100 1.183816 0.000100
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -118,32 +118,32 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51930
+kappa (ts/tv) =  1.51926
 
-w (dN/dS) for branches:  40.58699 37.50175 35.73430 0.00010 0.00010 33.27454 0.00010
+w (dN/dS) for branches:  1.06625 1.08064 0.98788 0.00010 0.00010 1.18382 0.00010
 
 dN & dS for each branch
 
  branch          t       N       S   dN/dS      dN      dS  N*dN  S*dS
 
-   6..7      0.000   167.7    54.3 40.5870  0.0000  0.0000   0.0   0.0
-   7..8      0.000   167.7    54.3 37.5018  0.0000  0.0000   0.0   0.0
-   8..1      0.000   167.7    54.3 35.7343  0.0000  0.0000   0.0   0.0
+   6..7      0.000   167.7    54.3  1.0663  0.0000  0.0000   0.0   0.0
+   7..8      0.000   167.7    54.3  1.0806  0.0000  0.0000   0.0   0.0
+   8..1      0.000   167.7    54.3  0.9879  0.0000  0.0000   0.0   0.0
    8..2      0.013   167.7    54.3  0.0001  0.0000  0.0183   0.0   1.0
    7..3      0.013   167.7    54.3  0.0001  0.0000  0.0183   0.0   1.0
-   6..4      0.000   167.7    54.3 33.2745  0.0000  0.0000   0.0   0.0
+   6..4      0.000   167.7    54.3  1.1838  0.0000  0.0000   0.0   0.0
    6..5      0.028   167.7    54.3  0.0001  0.0000  0.0379   0.0   2.1
 
 tree length for dN:       0.0000
 tree length for dS:       0.0745
 
 dS tree:
-(((Homo_sapie: 0.000000, Pan_troglo: 0.018307): 0.000000, Gorilla_go: 0.018298): 0.000000, Pongo_pygm: 0.000000, Macaca_mul: 0.037926);
+(((Homo_sapie: 0.000001, Pan_troglo: 0.018308): 0.000001, Gorilla_go: 0.018299): 0.000001, Pongo_pygm: 0.000001, Macaca_mul: 0.037927);
 dN tree:
-(((Homo_sapie: 0.000002, Pan_troglo: 0.000002): 0.000002, Gorilla_go: 0.000002): 0.000002, Pongo_pygm: 0.000002, Macaca_mul: 0.000004);
+(((Homo_sapie: 0.000001, Pan_troglo: 0.000002): 0.000001, Gorilla_go: 0.000002): 0.000001, Pongo_pygm: 0.000001, Macaca_mul: 0.000004);
 
 w ratios as labels for TreeView:
-(((Homo_sapie '#35.7343' , Pan_troglo '#0.0001' ) '#37.5018' , Gorilla_go '#0.0001' ) '#40.5870' , Pongo_pygm '#33.2745' , Macaca_mul '#0.0001' );
+(((Homo_sapie '#0.9879' , Pan_troglo '#0.0001' ) '#1.0806' , Gorilla_go '#0.0001' ) '#1.0663' , Pongo_pygm '#1.1838' , Macaca_mul '#0.0001' );
 
 
-Time used:  0:13
+Time used:  0:04

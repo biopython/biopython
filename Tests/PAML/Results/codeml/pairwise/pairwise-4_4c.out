@@ -1,6 +1,6 @@
 
-seed used = 897219505
-CODONML (in paml version 4.4c, August 2010)  ../Tests/PAML/alignment.phylip
+seed used = 1024020553
+CODONML (in paml version 4.4c, August 2010)  ../Alignments/alignment.phylip
 Model: One dN/dS ratio for branches
 Codon frequency model: F3x4
 ns =   5  ls =  74
@@ -127,10 +127,10 @@ t= 0.0258  S=    81.5  N=   140.5  dN/dS= 0.0010  dN= 0.0000  dS= 0.0234
 
 
 4 (Pongo_pygm) ... 1 (Homo_sapie)
-lnL = -284.119243
-  0.00001  0.40000  0.00100
+lnL = -284.119253
+  0.00001  0.40000  0.07259
 
-t= 0.0000  S=    40.3  N=   181.7  dN/dS= 0.0010  dN= 0.0000  dS= 0.0000
+t= 0.0000  S=    40.3  N=   181.7  dN/dS= 0.0726  dN= 0.0000  dS= 0.0000
 
 
 4 (Pongo_pygm) ... 2 (Pan_troglo)
@@ -149,7 +149,7 @@ t= 0.0127  S=    81.7  N=   140.3  dN/dS= 0.0010  dN= 0.0000  dS= 0.0114
 
 5 (Macaca_mul) ... 1 (Homo_sapie)
 lnL = -293.362778
-  0.03142  0.40000  0.00100
+  0.03141  0.40000  0.00100
 
 t= 0.0314  S=    40.0  N=   182.0  dN/dS= 0.0010  dN= 0.0001  dS= 0.0579
 
@@ -169,7 +169,7 @@ t= 0.0436  S=    48.4  N=   173.6  dN/dS= 0.0010  dN= 0.0001  dS= 0.0665
 
 
 5 (Macaca_mul) ... 4 (Pongo_pygm)
-lnL = -293.362778
-  0.03141  0.40000  0.00100
+lnL = -293.362779
+  0.03144  0.40000  0.00100
 
 t= 0.0314  S=    40.0  N=   182.0  dN/dS= 0.0010  dN= 0.0001  dS= 0.0579

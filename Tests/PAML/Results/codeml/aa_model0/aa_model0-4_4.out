@@ -1,6 +1,6 @@
 
 seed used = 1024005389
-AAML (in paml version 4.4c, August 2010)  ../Alignments/aa_alignment.phylip
+AAML (in paml version 4.4, January 2010)  ../Alignments/aa_alignment.phylip
 Model: Poisson for branchesns =   5  ls =  74
 
 
@@ -43,9 +43,16 @@ Macaca_mul                                 A
    74
 
 
-ML distances of aa seqs.
-Homo_sapie     
-Pan_troglo       0.0000
-Gorilla_go       0.0000  0.0000
-Pongo_pygm       0.0000  0.0000  0.0000
-Macaca_mul       0.0000  0.0000  0.0000  0.0000
+
+TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 0
+lnL(ntime:  7  np:  7):   -221.686260      +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.000004 0.000004 0.000004 0.000004
+
+tree length =   0.00003
+
+(((1: 0.000004, 2: 0.000004): 0.000004, 3: 0.000004): 0.000004, 4: 0.000004, 5: 0.000004);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.000004): 0.000004, Gorilla_go: 0.000004): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.000004);
+
+Time used:  0:00

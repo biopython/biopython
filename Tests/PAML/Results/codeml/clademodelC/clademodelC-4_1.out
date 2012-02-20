@@ -1,8 +1,8 @@
 
-seed used = 1024007905
-CODONML (in paml version 4.3, August 2009)  ../Alignments/alignment.phylip
+seed used = 1024007837
+CODONML (in paml version 4.1, August 2008)  ../Alignments/alignment.phylip
 Model: NSbranch3 for branches
-Codon frequency model: F3x4
+Codon frequencies: F3x4
 Site-class models:  PositiveSelection
 ns =   5  ls =  74
 
@@ -92,44 +92,30 @@ position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
 position  3:    T:0.17027    C:0.20541    A:0.36757    G:0.25676
 Average         T:0.20090    C:0.16306    A:0.37027    G:0.26577
 
-
-Nei & Gojobori 1986. dN/dS (dN, dS)
-(Note: This matrix is not used in later m.l. analysis.
-Use runmode = -2 for ML pairwise comparison.)
-
-Homo_sapie          
-Pan_troglo           0.0000 (0.0000 0.0207)
-Gorilla_go           0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)
-Pongo_pygm          -1.0000 (0.0000 0.0000) 0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0207)
-Macaca_mul           0.0000 (0.0000 0.0421) 0.0000 (0.0000 0.0640) 0.0000 (0.0000 0.0640) 0.0000 (0.0000 0.0421)
-
-
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
-lnL(ntime:  7  np: 13):   -308.031579      +0.000000
+lnL(ntime:  7  np: 13):   -308.030978     +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518240 1.000000 0.000000 0.000001 0.000001 0.000001
+ 0.000000 0.000000 0.000004 0.013438 0.013431 0.000004 0.027839 1.518342 1.000000 0.000000 0.000001 0.000001 0.000001
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
 tree length =   0.05472
 
-(((1: 0.000004, 2: 0.013438): 0.000004, 3: 0.013431): 0.000004, 4: 0.000004, 5: 0.027839);
+(((1: 0.000004, 2: 0.013438): 0.000000, 3: 0.013431): 0.000000, 4: 0.000004, 5: 0.027839);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.013438): 0.000004, Gorilla_go: 0.013431): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.027839);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.013438): 0.000000, Gorilla_go: 0.013431): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.027839);
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51824
+kappa (ts/tv) =  1.51834
 
 
-dN/dS (w) for site classes (K=3)
+dN/dS for site classes (K=3)
 
-site class             0         1         2
-proportion        1.00000   0.00000   0.00000
-branch type 0:    0.00000   1.00000   0.00000
-branch type 1:    0.00000   1.00000   0.00000
-(note that p[2] is zero)
-
+site class         0         1         2
+proportion       1.00000  0.00000  0.00000
+background w     0.00000  1.00000  0.00000
+foreground w     0.00000  1.00000  0.00000
 
 
 Bayes Empirical Bayes (BEB) analysis (Yang, Wong & Nielsen 2005. Mol. Biol. Evol. 22:1107-1118)
@@ -162,4 +148,4 @@ Posterior for p0-p1 (see the ternary graph)
 
 sum of density on p0-p1 =   1.000000
 
-Time used:  0:14
+Time used:  0:17

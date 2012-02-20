@@ -1,6 +1,6 @@
 
 seed used = 1024005389
-AAML (in paml version 4.4c, August 2010)  ../Alignments/aa_alignment.phylip
+AAML (in paml version 4.1, August 2008)  ../Alignments/aa_alignment.phylip
 Model: Poisson for branchesns =   5  ls =  74
 
 
@@ -14,7 +14,7 @@ Macaca_mul                     0.0000 0.0405 0.0270 0.0811 0.0405 0.0135 0.1622 
 
 Homogeneity statistic: X2 = 0.00000 G = 0.00000 
 
-Average                         0.0000  0.0405  0.0270  0.0811  0.0405  0.0135  0.1622  0.0541  0.0000  0.0541  0.0946  0.1351  0.0405  0.0135  0.0541  0.0405  0.0270  0.0000  0.0135  0.1081
+Average                        0.000000 0.040541 0.027027 0.081081 0.040541 0.013514 0.162162 0.054054 0.000000 0.054054 0.094595 0.135135 0.040541 0.013514 0.054054 0.040541 0.027027 0.000000 0.013514 0.108108
 
 # constant sites:     74 (100.00%)
 ln Lmax (unconstrained) = -192.057157
@@ -26,9 +26,6 @@ Pan_troglo       0.0000
 Gorilla_go       0.0000  0.0000
 Pongo_pygm       0.0000  0.0000  0.0000
 Macaca_mul       0.0000  0.0000  0.0000  0.0000
-
-
-Printing out site pattern counts
 
          5          1  P
 

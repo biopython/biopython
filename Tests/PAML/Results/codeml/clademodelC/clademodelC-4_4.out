@@ -1,6 +1,6 @@
 
-seed used = 1024007905
-CODONML (in paml version 4.3, August 2009)  ../Alignments/alignment.phylip
+seed used = 1024007961
+CODONML (in paml version 4.4, January 2010)  ../Alignments/alignment.phylip
 Model: NSbranch3 for branches
 Codon frequency model: F3x4
 Site-class models:  PositiveSelection
@@ -94,7 +94,7 @@ Average         T:0.20090    C:0.16306    A:0.37027    G:0.26577
 
 
 Nei & Gojobori 1986. dN/dS (dN, dS)
-(Note: This matrix is not used in later m.l. analysis.
+(Note: This matrix is not used in later ML. analysis.
 Use runmode = -2 for ML pairwise comparison.)
 
 Homo_sapie          
@@ -107,7 +107,7 @@ Macaca_mul           0.0000 (0.0000 0.0421) 0.0000 (0.0000 0.0640) 0.0000 (0.000
 TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
 lnL(ntime:  7  np: 13):   -308.031579      +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
- 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518240 1.000000 0.000000 0.000001 0.000001 0.000001
+ 0.000004 0.000004 0.000004 0.013438 0.013431 0.000004 0.027839 1.518272 1.000000 0.000000 0.000001 0.000001 0.000001
 
 Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
 
@@ -119,7 +119,7 @@ tree length =   0.05472
 
 Detailed output identifying parameters
 
-kappa (ts/tv) =  1.51824
+kappa (ts/tv) =  1.51827
 
 
 dN/dS (w) for site classes (K=3)
@@ -162,4 +162,4 @@ Posterior for p0-p1 (see the ternary graph)
 
 sum of density on p0-p1 =   1.000000
 
-Time used:  0:14
+Time used:  0:15
