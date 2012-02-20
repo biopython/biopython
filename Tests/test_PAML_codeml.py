@@ -21,16 +21,21 @@ SITECLASSES = {0: None, 1: 2, 2: 3, 3: 3, 7: 10, 8: 11}
 
 class ModTest(unittest.TestCase):
     
-    align_file = os.path.join("PAML", "alignment.phylip")
-    tree_file = os.path.join("PAML", "species.tree")
-    bad_tree_file = os.path.join("PAML", "bad.tree")
-    out_file = os.path.join("PAML", "test.out")
+    align_dir = os.path.join("PAML", "Alignments")
+    tree_dir = os.path.join("PAML", "Trees")
+    ctl_dir = os.path.join("PAML", "Control_files")
+    results_dir = os.path.join("PAML", "Results")
     working_dir = os.path.join("PAML", "codeml_test")
-    results_file = os.path.join("PAML", "bad_results.out")
-    bad_ctl_file1 = os.path.join("PAML", "bad1.ctl")
-    bad_ctl_file2 = os.path.join("PAML", "bad2.ctl")
-    bad_ctl_file3 = os.path.join("PAML", "bad3.ctl")
-    ctl_file = os.path.join("PAML", "codeml.ctl")
+
+    align_file = os.path.join(align_dir, "alignment.phylip")
+    tree_file = os.path.join(tree_dir, "species.tree")
+    bad_tree_file = os.path.join(tree_dir, "bad.tree")
+    out_file = os.path.join(results_dir, "test.out")
+    results_file = os.path.join(results_dir, "bad_results.out")
+    bad_ctl_file1 = os.path.join(ctl_dir, "bad1.ctl")
+    bad_ctl_file2 = os.path.join(ctl_dir, "bad2.ctl")
+    bad_ctl_file3 = os.path.join(ctl_dir, "bad3.ctl")
+    ctl_file = os.path.join(ctl_dir, "codeml", "codeml.ctl")
        
     def __del__(self):
         """Just in case CODEML creates some junk files, do a clean-up."""
@@ -202,242 +207,255 @@ class ModTest(unittest.TestCase):
     def testResultsParsable(self):
         self.assertRaises(ValueError, codeml.read, self.results_file)
         
-    def testParseAllVersions(self):
-        versions_path = os.path.join("PAML", "Results", "codeml", "versions")
-        for results_file in versions_path:
-            results_path = os.path.join(versions_path, results_file)
-            if os.path.isfile(results_path) and results_file[:6] == "codeml":
-                results = codeml.read(results_path)
-                # There should be 4 top-level items: 'codon model', 'model', 
-                # 'version', & 'NSsites'
-                self.assertEqual(len(results), 4)
-                self.assertIn("NSsites", results)
-                # There should be 6 NSsites classes: 0, 1, 2, 3, 7 & 8
-                self.assertEqual(len(results["NSsites"]), 6)
-                # Each site class model should have 5 sub-items: 'lnL', 'tree', 
-                # 'description', 'parameters', & 'tree length'. It should
-                # have the correct number of parameters also.
-                for model_num in [0, 1, 2, 3, 7, 8]:
-                    model = results["NSsites"][model_num]
-                    self.assertEqual(len(model), 5)
-                    self.assertIn("parameters", model)
-                    params = model["parameters"]
-                    self.assertEqual(len(params), SITECLASS_PARAMS[model_num])
-                    self.assertIn("branches", params)
-                    branches = params["branches"]
-                    # There are 7 branches in the test case (specific to these
-                    # test cases)
-                    self.assertEqual(len(branches), 7)
-                    if "site classes" in params:
-                        self.assertEqual(len(params["site classes"]),
-                                         SITECLASSES[model_num])
-    
     def testParseSEs(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_SE.out")
-        results = codeml.read(results_file)
-        self.assertEqual(len(results), 4)
-        self.assertIn("NSsites", results)
-        models = results["NSsites"]
-        # Only site class model 0 was simulated
-        self.assertEqual(len(models), 1)
-        self.assertIn(0, models)
-        model = models[0]
-        self.assertEqual(len(model), 5)
-        self.assertIn("parameters", model)
-        params = model["parameters"]
-        # There should be one new item in the parameters, "SEs" 
-        self.assertEqual(len(params), SITECLASS_PARAMS[0] + 1)
-        self.assertIn("SEs", params)
-    
-    def testParseAllNSsites(self):
-        # This test is redundant (see testParseAllVersions)
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_NSsites_all.out")
-        results = codeml.read(results_file)
-        # There should be 4 top-level items: 'codon model', 'model', 
-        # 'version', & 'NSsites'
-        self.assertEqual(len(results), 4)
-        self.assertIn("NSsites", results)
-        # There should be 6 NSsites classes: 0, 1, 2, 3, 7 & 8
-        self.assertEqual(len(results["NSsites"]), 6)
-        # Each site class model should have 5 sub-items: 'lnL', 'tree', 
-        # 'description', 'parameters', & 'tree length'. It should
-        # have the correct number of parameters also.
-        for model_num in [0, 1, 2, 3, 7, 8]:
-            model = results["NSsites"][model_num]
-            self.assertEqual(len(model), 5)
-            self.assertIn("parameters", model)
+        res_dir = os.path.join(self.results_dir, "codeml", "SE")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            self.assertEqual(len(results), 4, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            models = results["NSsites"]
+            # Only site class model 0 was simulated
+            self.assertEqual(len(models), 1, version_msg)
+            self.assertIn(0, models, version_msg)
+            model = models[0]
+            self.assertEqual(len(model), 5, version_msg)
+            self.assertIn("parameters", model, version_msg)
             params = model["parameters"]
-            self.assertEqual(len(params), SITECLASS_PARAMS[model_num])
-            self.assertIn("branches", params)
-            branches = params["branches"]
-            # There are 7 branches in the test case (specific to these
-            # test cases)
-            self.assertEqual(len(branches), 7)
-            if "site classes" in params:
-                self.assertEqual(len(params["site classes"]),
-                                 SITECLASSES[model_num])
+            # There should be one new item in the parameters, "SEs" 
+            self.assertEqual(len(params), SITECLASS_PARAMS[0] + 1, version_msg)
+            self.assertIn("SEs", params, version_msg)
+
+    def testParseAllNSsites(self):
+        res_dir = os.path.join(self.results_dir, "codeml", "all_NSsites")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                    
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            # There should be 4 top-level items: 'codon model', 'model', 
+            # 'version', & 'NSsites'
+            self.assertEqual(len(results), 4, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            # There should be 6 NSsites classes: 0, 1, 2, 3, 7 & 8
+            self.assertEqual(len(results["NSsites"]), 6, version_msg)
+            # Each site class model should have 5 sub-items: 'lnL', 'tree', 
+            # 'description', 'parameters', & 'tree length'. It should
+            # have the correct number of parameters also.
+            for model_num in [0, 1, 2, 3, 7, 8]:
+                model = results["NSsites"][model_num]
+                self.assertEqual(len(model), 5, version_msg)
+                self.assertIn("parameters", model, version_msg)
+                params = model["parameters"]
+                self.assertEqual(len(params), SITECLASS_PARAMS[model_num],
+                    version)
+                self.assertIn("branches", params, version_msg)
+                branches = params["branches"]
+                # There are 7 branches in the test case (specific to these
+                # test cases)
+                self.assertEqual(len(branches), 7, version_msg)
+                if "site classes" in params:
+                    self.assertEqual(len(params["site classes"]),
+                                 SITECLASSES[model_num], version_msg)
         
     def testParseBranchSiteA(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_branchsiteA.out")
-        results = codeml.read(results_file)
-        # There are 5 top-level items in this case:
-        # 'codon model', 'model', 'version', 'NSsites' & 'site-class model'
-        self.assertEqual(len(results), 5)
-        self.assertIn("NSsites", results)
-        models = results["NSsites"]
-        # Only site class model 2 is simulated for Branch Site A
-        self.assertEqual(len(models), 1)
-        self.assertIn(2, models)
-        model = models[2]
-        self.assertEqual(len(model), 5)
-        self.assertIn("parameters", model)
-        params = model["parameters"]
-        # Branch Site A results lack a "branches" parameter     
-        self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1)
-        self.assertIn("site classes", params)
-        site_classes = params["site classes"]
-        # Branch Site A adds another site class
-        self.assertEqual(len(site_classes), SITECLASSES[2] + 1)        
-        for class_num in [0, 1, 2, 3]:
-            self.assertIn(class_num, site_classes)
-            site_class = site_classes[class_num]
-            self.assertEqual(len(site_class), 2)
-            self.assertIn("branch types", site_class)
-            branches = site_class["branch types"]
-            self.assertEqual(len(branches), 2)
- 
+        res_dir = os.path.join(self.results_dir, "codeml", "branchsiteA")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]    
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            # There are 5 top-level items in this case:
+            # 'codon model', 'model', 'version', 'NSsites' & 'site-class model'
+            self.assertEqual(len(results), 5, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            models = results["NSsites"]
+            # Only site class model 2 is simulated for Branch Site A
+            self.assertEqual(len(models), 1, version_msg)
+            self.assertIn(2, models, version_msg)
+            model = models[2]
+            self.assertEqual(len(model), 5, version_msg)
+            self.assertIn("parameters", model, version_msg)
+            params = model["parameters"]
+            # Branch Site A results lack a "branches" parameter     
+            self.assertEqual(len(params), SITECLASS_PARAMS[2]-1, version_msg)
+            self.assertIn("site classes", params, version_msg)
+            site_classes = params["site classes"]
+            # Branch Site A adds another site class
+            self.assertEqual(len(site_classes), SITECLASSES[2]+1,
+                version)        
+            for class_num in [0, 1, 2, 3]:
+                self.assertIn(class_num, site_classes, version_msg)
+                site_class = site_classes[class_num]
+                self.assertEqual(len(site_class), 2, version_msg)
+                self.assertIn("branch types", site_class, version_msg)
+                branches = site_class["branch types"]
+                self.assertEqual(len(branches), 2, version_msg)
+
     def testParseCladeModelC(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_clademodelC.out")
-        results = codeml.read(results_file)
-        # 5 top-level items again in this case
-        self.assertEqual(len(results), 5)
-        self.assertIn("NSsites", results)
-        models = results["NSsites"]
-        # Only site class model 2 is simulated for Clade Model C
-        self.assertEqual(len(models), 1)
-        self.assertIn(2, models)
-        model = models[2]
-        self.assertEqual(len(model), 5)
-        self.assertIn("parameters", model)
-        params = model["parameters"]
-        # Clade Model C results lack a "branches" parameter     
-        self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1)
-        self.assertIn("site classes", params)
-        site_classes = params["site classes"]
-        self.assertEqual(len(site_classes), SITECLASSES[2])        
-        for class_num in [0, 1, 2]:
-            self.assertIn(class_num, site_classes)
-            site_class = site_classes[class_num]
-            self.assertEqual(len(site_class), 2)
-            self.assertIn("branch types", site_class)
-            branches = site_class["branch types"]
-            self.assertEqual(len(branches), 2)
-    
+        cladeC_res_dir = os.path.join(self.results_dir, "codeml",
+            "clademodelC")
+        for results_file in os.listdir(cladeC_res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))            
+            results_path = os.path.join(cladeC_res_dir, results_file)
+            results = codeml.read(results_path)
+            # 5 top-level items again in this case
+            self.assertEqual(len(results), 5, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            models = results["NSsites"]
+            # Only site class model 2 is simulated for Clade Model C
+            self.assertEqual(len(models), 1, version_msg)
+            self.assertIn(2, models, version_msg)
+            model = models[2]
+            self.assertEqual(len(model), 5, version_msg)
+            self.assertIn("parameters", model, version_msg)
+            params = model["parameters"]
+            # Clade Model C results lack a "branches" parameter     
+            self.assertEqual(len(params), SITECLASS_PARAMS[2] - 1, version_msg)
+            self.assertIn("site classes", params, version_msg)
+            site_classes = params["site classes"]
+            self.assertEqual(len(site_classes), SITECLASSES[2],
+                version)        
+            for class_num in [0, 1, 2]:
+                self.assertIn(class_num, site_classes, version_msg)
+                site_class = site_classes[class_num]
+                self.assertEqual(len(site_class), 2, version_msg)
+                self.assertIn("branch types", site_class, version_msg)
+                branches = site_class["branch types"]
+                self.assertEqual(len(branches), 2, version_msg)
+
     def testParseNgene2Mgene012(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_ngene2_mgene012.out")
-        results = codeml.read(results_file)
-        self.assertEqual(len(results), 4)
-        self.assertIn("NSsites", results)
-        models = results["NSsites"]
-        self.assertEqual(len(models), 1)
-        self.assertIn(0, models)
-        model = models[0]
-        self.assertEqual(len(model), 5)
-        self.assertIn("parameters", model)
-        params = model["parameters"]
-        # This type of model has fewer parameters for model 0
-        self.assertEqual(len(params), 4)
-        self.assertIn("rates", params)
-        rates = params["rates"]
-        self.assertEqual(len(rates), 2)        
-    
+        res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene012")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                   
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            self.assertEqual(len(results), 4, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            models = results["NSsites"]
+            self.assertEqual(len(models), 1, version_msg)
+            self.assertIn(0, models, version_msg)
+            model = models[0]
+            self.assertEqual(len(model), 5, version_msg)
+            self.assertIn("parameters", model, version_msg)
+            params = model["parameters"]
+            # This type of model has fewer parameters for model 0
+            self.assertEqual(len(params), 4, version_msg)
+            self.assertIn("rates", params, version_msg)
+            rates = params["rates"]
+            self.assertEqual(len(rates), 2, version_msg)        
+
     def testParseNgene2Mgene34(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_ngene2_mgene34.out")
-        results = codeml.read(results_file)
-        self.assertEqual(len(results), 4)
-        self.assertIn("NSsites", results)
-        models = results["NSsites"]
-        self.assertEqual(len(models), 1)
-        self.assertIn(0, models)
-        model = models[0]
-        self.assertEqual(len(model), 5)
-        self.assertIn("parameters", model)
-        params = model["parameters"]
-        # This type of model has fewer parameters for model 0
-        self.assertEqual(len(params), 3)
-        self.assertIn("rates", params)
-        rates = params["rates"]
-        self.assertEqual(len(rates), 2)        
-        self.assertIn("genes", params)
-        genes = params["genes"]
-        self.assertEqual(len(genes), 2)   
-    
-    def testParseFreeBranch(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_freebranch.out")
-        results = codeml.read(results_file)
-        self.assertEqual(len(results), 4)
-        self.assertIn("NSsites", results)
-        models = results["NSsites"]
-        self.assertEqual(len(models), 1)
-        self.assertIn(0, models)
-        model = models[0]
-        # With the free ratio model, you get 3 extra trees: dN tree,
-        # dS tree and omega tree
-        self.assertEqual(len(model), 8)
-        self.assertIn("parameters", model)
-        params = model["parameters"]
-        self.assertEqual(len(params), SITECLASS_PARAMS[0])
-        self.assertIn("branches", params)
-        # There should be 7 branches
-        branches = params["branches"]
-        self.assertEqual(len(branches), 7) 
-        self.assertIn("omega", params)
-        omega = params["omega"]
-        self.assertEqual(len(omega), 7)
-    
+        res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene34")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]    
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            self.assertEqual(len(results), 4, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            models = results["NSsites"]
+            self.assertEqual(len(models), 1, version_msg)
+            self.assertIn(0, models, version_msg)
+            model = models[0]
+            self.assertEqual(len(model), 5, version_msg)
+            self.assertIn("parameters", model, version_msg)
+            params = model["parameters"]
+            # This type of model has fewer parameters for model 0
+            self.assertEqual(len(params), 3, version_msg)
+            self.assertIn("rates", params, version_msg)
+            rates = params["rates"]
+            self.assertEqual(len(rates), 2, version_msg)        
+            self.assertIn("genes", params, version_msg)
+            genes = params["genes"]
+            self.assertEqual(len(genes), 2, version_msg)   
+
+    def testParseFreeRatio(self):
+        res_dir = os.path.join(self.results_dir, "codeml", "freeratio")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]    
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            self.assertEqual(len(results), 4, version_msg)
+            self.assertIn("NSsites", results, version_msg)
+            models = results["NSsites"]
+            self.assertEqual(len(models), 1, version_msg)
+            self.assertIn(0, models, version_msg)
+            model = models[0]
+            # With the free ratio model, you get 3 extra trees: dN tree,
+            # dS tree and omega tree
+            self.assertEqual(len(model), 8, version_msg)
+            self.assertIn("parameters", model, version_msg)
+            params = model["parameters"]
+            self.assertEqual(len(params), SITECLASS_PARAMS[0], version_msg)
+            self.assertIn("branches", params, version_msg)
+            # There should be 7 branches
+            branches = params["branches"]
+            self.assertEqual(len(branches), 7, version_msg) 
+            self.assertIn("omega", params, version_msg)
+            omega = params["omega"]
+            self.assertEqual(len(omega), 7, version_msg)
+
     def testParsePairwise(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_pairwise.out")
-        results = codeml.read(results_file)
-        # Pairwise models have an extra top-level item: pairwise
-        self.assertEqual(len(results), 5)
-        self.assertIn("pairwise", results)
-        pairwise = results["pairwise"]
-        self.assertEqual(len(pairwise), 5) 
-    
+        res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0] 
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                   
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            # Pairwise models have an extra top-level item: pairwise
+            self.assertEqual(len(results), 5, version_msg)
+            self.assertIn("pairwise", results, version_msg)
+            pairwise = results["pairwise"]
+            self.assertEqual(len(pairwise), 5, version_msg) 
+
     def testParseAA(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_aa_model0.out")
-        results = codeml.read(results_file)
-        # Amino Acid analysis has different top-levels:
-        # 'NSsites', 'model', 'version', 'lnL max', 'distances'
-        self.assertEqual(len(results), 5)
-        self.assertIn("lnL max", results)
-        self.assertIn("distances", results)
-        distances = results["distances"]
-        # non-pairwise AA analysis only gives raw distances
-        self.assertEqual(len(distances), 1) 
+        res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]  
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                  
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            # Amino Acid analysis has different top-levels:
+            # 'NSsites', 'model', 'version', 'lnL max', 'distances'
+            self.assertEqual(len(results), 5, version_msg)
+            self.assertIn("lnL max", results, version_msg)
+            self.assertIn("distances", results, version_msg)
+            distances = results["distances"]
+            # non-pairwise AA analysis only gives raw distances
+            self.assertEqual(len(distances), 1, version_msg) 
 
     def testParseAAPairwise(self):
-        results_file = os.path.join("PAML", "Results", "codeml",
-            "codeml_aa_pairwise.out")
-        results = codeml.read(results_file)
-        # Pairwise AA analysis has one top-level fewer than non-pairwise
-        self.assertEqual(len(results), 4)
-        self.assertIn("lnL max", results)
-        self.assertIn("distances", results)
-        distances = results["distances"]
-        # Pairwise AA analysis has ML & raw distances
-        self.assertEqual(len(distances), 2) 
-        
-        
+        res_dir = os.path.join(self.results_dir, "codeml", "aa_pairwise")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]    
+            version_msg = "Improper parsing for version {0}".format(
+                version.replace('_', '.'))                
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            # Pairwise AA analysis has one top-level fewer than non-pairwise
+            self.assertEqual(len(results), 4, version_msg)
+            self.assertIn("lnL max", results, version_msg)
+            self.assertIn("distances", results, version_msg)
+            distances = results["distances"]
+            # Pairwise AA analysis has ML & raw distances
+            self.assertEqual(len(distances), 2, version_msg) 
+    
+    
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
