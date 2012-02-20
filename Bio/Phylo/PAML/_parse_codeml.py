@@ -30,7 +30,11 @@ def parse_basics(lines, results):
     multi_models = False
     version_re = re.compile(".+ \(in paml version (\d+\.\d+[a-z]*).*")
     model_re = re.compile("Model:\s+(.+)")
-    codon_freq_re = re.compile("Codon frequency model:\s+(.+)")
+    # In codeml 4.1, the codon substitution model is headed by:
+    # "Codon frequencies:"
+    # In codeml 4.3+ it is headed by:
+    # "Codon frequency model:"
+    codon_freq_re = re.compile("Codon frequenc[a-z\s]{3,7}:\s+(.+)")
     siteclass_re = re.compile("Site-class models:\s*(.*)")
     for line in lines:
         # Find all floating point numbers in this line
