@@ -432,12 +432,17 @@ class ModTest(unittest.TestCase):
             results = codeml.read(results_path)
             # Amino Acid analysis has different top-levels:
             # 'NSsites', 'model', 'version', 'lnL max', 'distances'
-            self.assertEqual(len(results), 5, version_msg)
-            self.assertIn("lnL max", results, version_msg)
-            self.assertIn("distances", results, version_msg)
-            distances = results["distances"]
-            # non-pairwise AA analysis only gives raw distances
-            self.assertEqual(len(distances), 1, version_msg) 
+            # Version 4.1 doesn't seem to produce distances in the results
+            if version == "4_1":
+                self.assertEqual(len(results), 4, version_msg)
+                self.assertIn("lnL max", results, version_msg)
+            else:
+                self.assertEqual(len(results), 5, version_msg)
+                self.assertIn("lnL max", results, version_msg)
+                self.assertIn("distances", results, version_msg)
+                distances = results["distances"]
+                # non-pairwise AA analysis only gives raw distances
+                self.assertEqual(len(distances), 1, version_msg) 
 
     def testParseAAPairwise(self):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_pairwise")
