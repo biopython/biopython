@@ -7,7 +7,7 @@
       runmode = 0   * 0: user tree;  1: semi-automatic;  2: automatic
                     * 3: StepwiseAddition; (4,5):PerturbationNNI
 
-        model = 6   * 0:JC69, 1:K80, 2:F81, 3:F84, 4:HKY85
+        model = 7   * 0:JC69, 1:K80, 2:F81, 3:F84, 4:HKY85
                     * 5:T92, 6:TN93, 7:REV, 8:UNREST, 9:REVu; 10:UNRESTu
 
         Mgene = 1   * 0:rates, 1:separate; 2:diff pi, 3:diff kapa, 4:all diff

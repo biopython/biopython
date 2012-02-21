@@ -7,7 +7,7 @@
       runmode = 0   * 0: user tree;  1: semi-automatic;  2: automatic
                     * 3: StepwiseAddition; (4,5):PerturbationNNI
 
-        model = 6   * 0:JC69, 1:K80, 2:F81, 3:F84, 4:HKY85
+        model = 2   * 0:JC69, 1:K80, 2:F81, 3:F84, 4:HKY85
                     * 5:T92, 6:TN93, 7:REV, 8:UNREST, 9:REVu; 10:UNRESTu
 
         Mgene = 1   * 0:rates, 1:separate; 2:diff pi, 3:diff kapa, 4:all diff
@@ -25,7 +25,7 @@
           rho = 0
 	nparK = 0   * rate-class models. 1:rK, 2:rK&fK, 3:rK&MK(1/K), 4:rK&MK
 
-        nhomo = 0   * 0 & 1: homogeneous, 2: kappa for branches, 3: N1, 4: N2
+        nhomo = 1   * 0 & 1: homogeneous, 2: kappa for branches, 3: N1, 4: N2
         getSE = 0   * 0: don't want them, 1: want S.E.s of estimates
  RateAncestor = 0   * (0,1,2): rates (alpha>0) or ancestral states
 

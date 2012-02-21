@@ -26,7 +26,7 @@
 	nparK = 0   * rate-class models. 1:rK, 2:rK&fK, 3:rK&MK(1/K), 4:rK&MK
 
         nhomo = 0   * 0 & 1: homogeneous, 2: kappa for branches, 3: N1, 4: N2
-        getSE = 0   * 0: don't want them, 1: want S.E.s of estimates
+        getSE = 1   * 0: don't want them, 1: want S.E.s of estimates
  RateAncestor = 0   * (0,1,2): rates (alpha>0) or ancestral states
 
    Small_Diff = 7e-6
