@@ -251,8 +251,8 @@ class ModTest(unittest.TestCase):
             self.assertIn("rho", params, version_msg)
             self.assertIn("transition probs.", params, version_msg)
             trans_p = params["transition probs."]
-            self.assertEqual(len(trans_p), 4, version_msg)
-            self.assertEqual(len(trans_p[0]), 4, version_msg)
+            self.assertEqual(len(trans_p), 5, version_msg)
+            self.assertEqual(len(trans_p[0]), 5, version_msg)
  
     def testParseNhomo(self):
         res_dir = os.path.join(self.results_dir, "baseml", "nhomo")
