@@ -23,44 +23,29 @@ Macaca_mul   ACCGTACT
 
    82   35    1   59    1    1    1   42
 
+AAML (in paml version 4.5, December 2011)  PAML/Alignments/alignment.phylip
+Model: Empirical_F for branches (jones.dat) ns =   5  ls = 222
 
-BASEML (in paml version 4.5, December 2011)  PAML/Alignments/alignment.phylip  JC69 
+
 Frequencies..
-                                    T      C      A      G
-Homo_sapie                     0.2027 0.1622 0.3694 0.2658
-Pan_troglo                     0.1982 0.1667 0.3694 0.2658
-Gorilla_go                     0.2072 0.1577 0.3694 0.2658
-Pongo_pygm                     0.2027 0.1622 0.3694 0.2658
-Macaca_mul                     0.1937 0.1667 0.3739 0.2658
+                                    A      R      N      D      C      Q      E      G      H      I      L      K      M      F      P      S      T      W      Y      V
+Homo_sapie                     0.3694 0.0000 0.0000 0.0000 0.1622 0.0000 0.0000 0.2658 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.2027 0.0000 0.0000 0.0000
+Pan_troglo                     0.3694 0.0000 0.0000 0.0000 0.1667 0.0000 0.0000 0.2658 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.1982 0.0000 0.0000 0.0000
+Gorilla_go                     0.3694 0.0000 0.0000 0.0000 0.1577 0.0000 0.0000 0.2658 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.2072 0.0000 0.0000 0.0000
+Pongo_pygm                     0.3694 0.0000 0.0000 0.0000 0.1622 0.0000 0.0000 0.2658 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.2027 0.0000 0.0000 0.0000
+Macaca_mul                     0.3739 0.0000 0.0000 0.0000 0.1667 0.0000 0.0000 0.2658 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.1937 0.0000 0.0000 0.0000
 
 Homogeneity statistic: X2 = 0.00092 G = 0.00092 
 
-Average                         0.2009  0.1631  0.3703  0.2658
+Average                         0.3703  0.0000  0.0000  0.0000  0.1631  0.0000  0.0000  0.2658  0.0000  0.0000  0.0000  0.0000  0.0000  0.0000  0.0000  0.0000  0.2009  0.0000  0.0000  0.0000
 
 # constant sites:    218 (98.20%)
 ln Lmax (unconstrained) = -316.049385
 
+AA distances (raw proportions of different sites)
 
-Printing out site pattern counts
-
-         5          4  P
-
-Homo_sapie   TTTT
-Pan_troglo   TTCT
-Gorilla_go   TCTT
-Pongo_pygm   TTTT
-Macaca_mul   TTTC
-
-
-
-  218    1    1    2
-
-
-Distances: JC69 (alpha set at 0.00)
-This matrix is not used in later m.l. analysis.
-
-Homo_sapie       
-Pan_troglo         0.0045
-Gorilla_go         0.0045  0.0091
-Pongo_pygm         0.0000  0.0045  0.0045
-Macaca_mul         0.0091  0.0136  0.0136  0.0091
+Homo_sapie     
+Pan_troglo       0.0045
+Gorilla_go       0.0045  0.0090
+Pongo_pygm       0.0000  0.0045  0.0045
+Macaca_mul       0.0090  0.0135  0.0135  0.0090
