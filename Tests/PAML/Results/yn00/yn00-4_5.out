@@ -1,4 +1,29 @@
-YN00 ../Tests/PAML/alignment.phylip
+      5    222
+
+Homo_sapie   ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Pan_troglo   ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGC TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Gorilla_go   ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAT GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Pongo_pygm   ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Macaca_mul   ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTA TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTC GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+
+
+
+Printing out site pattern counts
+
+
+         5        102  P
+
+Homo_sapie            AAA AAG AAT ACA AGA ATC ATG ATT CAG CCA CCC CGA CTA CTC CTG GAA GAC GAG GAT GGA GGC GTA GTG GTT GTT GTT TAC TCA TCC TCT TGT TGT TTC TTG 
+Pan_troglo            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..C ... ... ... 
+Gorilla_go            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..T ... ... ... ... ... ... ... 
+Pongo_pygm            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... 
+Macaca_mul            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..A ..C ... ... ... ... ... ... ... ... ... 
+
+    5    5    2    2    2    2    3    2    1    3    1    1    1    2    3
+    8    4    4    2    1    3    3    2    1    1    1    1    1    1    1
+    1    2    1    1
+
+YN00 Alignments/alignment.phylip
 
 ns =   5	ls =  74
 
@@ -85,16 +110,17 @@ Val GTT 13 | Ala GCT  0 | Asp GAT 10 | Gly GGT  0
 
 (A) Nei-Gojobori (1986) method
 
-Nei M, Gojobori T (1986) Simple methods for estimating the numbers of synonymous and nonsynonymous nucleotide substitutions. Mol. Biol. Evol. 3:418-426
+
 
 Nei & Gojobori 1986. dN/dS (dN, dS)
+(Note: This matrix is not used in later ML. analysis.
+Use runmode = -2 for ML pairwise comparison.)
 
-Homo_sapie     
-Pan_troglo      0.0000(0.0000 0.0207)
-Gorilla_go      0.0000(0.0000 0.0207) 0.0000(0.0000 0.0421)
-Pongo_pygm     -1.0000(0.0000 0.0000) 0.0000(0.0000 0.0207) 0.0000(0.0000 0.0207)
-Macaca_mul      0.0000(0.0000 0.0421) 0.0000(0.0000 0.0640) 0.0000(0.0000 0.0640) 0.0000(0.0000 0.0421)
-NOTE: -1 means the method is inapplicable.
+Homo_sapie          
+Pan_troglo           0.0000 (0.0000 0.0207)
+Gorilla_go           0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0421)
+Pongo_pygm          -1.0000 (0.0000 0.0000) 0.0000 (0.0000 0.0207) 0.0000 (0.0000 0.0207)
+Macaca_mul           0.0000 (0.0000 0.0421) 0.0000 (0.0000 0.0640) 0.0000 (0.0000 0.0640) 0.0000 (0.0000 0.0421)
 
 
 (B) Yang & Nielsen (2000) method
@@ -122,7 +148,7 @@ seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
 Li W.-H., C.-I. Wu, Luo (1985) A new method for estimating synonymous and nonsynonymous rates of nucleotide substitutions considering the relative likelihood of nucleotide and codon changes. Mol. Biol. Evol. 2: 150-174.
 Li W-H (1993) Unbiased estimation of the rates of synonymous and nonsynonymous substitution. J. Mol. Evol. 36:96-99
 Pamilo P, Bianchi NO (1993) Evolution of the Zfx and Zfy genes - rates and interdependence between the genes. Mol. Biol. Evol. 10:271-281
-Yang Z (2006) Computational Molecular Evolution. Oxford University Press, Oxford, England
+Yang Z (2006) Computational Molecular Evolution. Oxford University Press, Oxford. Eqs. 2.12 & 2.13
 
 2 (Pan_troglo) vs. 1 (Homo_sapie)
 
