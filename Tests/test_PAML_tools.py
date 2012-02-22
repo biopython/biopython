@@ -28,9 +28,10 @@ def which(program):
         #do that, we can check for it in Program Files.
         likely_dirs = ["", #Current dir
                        prog_files,
-                       os.path.join(prog_files,"paml41"),
-                       os.path.join(prog_files,"paml43"),
-                       os.path.join(prog_files,"paml44")] + sys.path
+                       os.path.join(prog_files, "paml41"),
+                       os.path.join(prog_files, "paml43"),
+                       os.path.join(prog_files, "paml44"),
+                       os.path.join(prog_files, "paml45")] + sys.path
         os_path.extend(likely_dirs)
     for path in os.environ["PATH"].split(os.pathsep):
         exe_file = os.path.join(path, program)
@@ -70,22 +71,19 @@ class Common(unittest.TestCase):
 class CodemlTest(Common):
     "Tests for PAML tool codeml."""
 
-    align_file = os.path.join("PAML", "alignment.phylip")
-    tree_file = os.path.join("PAML", "species.tree")
-    out_file = os.path.join("PAML", "temp.out")
-    working_dir = os.path.join("PAML", "codeml_test")
-    ctl_file = os.path.join("PAML", "codeml.ctl")
-    del_files = [out_file, "2NG.dN", "2NG.dS", "2NG.t", "codeml.ctl",
-                 "lnf", "rst", "rst1", "rub"]
-
     def setUp(self):
-        self.cml = codeml.Codeml(working_dir=self.working_dir)
+        self.cml = codeml.Codeml()
 
     def testCodemlBinary(self):
         """Test that the codeml binary runs and generates correct output
         and is the correct version.
         """
-        self.cml.read_ctl_file(self.ctl_file)
+        ctl_file = os.path.join("PAML", "Control_files", "codeml", "codeml.ctl")
+        self.cml.read_ctl_file(ctl_file)
+        self.cml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
+        self.cml.tree = os.path.join("PAML", "Trees", "species.tree")
+        self.cml.out_file = os.path.join("PAML", "temp.out")
+        self.cml.working_dir = os.path.join("PAML", "codeml_test")
         results = self.cml.run()
         self.assertTrue(results["version"] > "4.0")
         self.assertTrue("NSsites" in results)
@@ -96,22 +94,19 @@ class CodemlTest(Common):
 class BasemlTest(Common):
     """Tests for PAML tool baseml."""
 
-    align_file = os.path.join("PAML", "alignment.phylip")
-    tree_file = os.path.join("PAML", "species.tree")
-    out_file = os.path.join("PAML", "temp.out")
-    working_dir = os.path.join("PAML", "baseml_test")
-    ctl_file = os.path.join("PAML", "baseml.ctl")
-    del_files = [out_file, "2base.t", "in.basemlg", "baseml.ctl",
-                 "lnf", "rates", "rst", "rst1", "rub", "temp.out"]
-
     def setUp(self):
-        self.bml = baseml.Baseml(working_dir=self.working_dir)
+        self.bml = baseml.Baseml()
 
     def testBasemlBinary(self):
         """Test that the baseml binary runs and generates correct output
         and is the correct version.
         """
-        self.bml.read_ctl_file(self.ctl_file)
+        ctl_file = os.path.join("PAML", "Control_files", "baseml", "baseml.ctl")
+        self.bml.read_ctl_file(ctl_file)
+        self.bml.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
+        self.bml.tree = os.path.join("PAML", "Trees", "species.tree")
+        self.bml.out_file = os.path.join("PAML", "temp.out")
+        self.bml.working_dir = os.path.join("PAML", "baseml_test")
         results = self.bml.run()
         self.assertTrue(results["version"] > "4.0")
         self.assertTrue("parameters" in results)
@@ -121,21 +116,18 @@ class BasemlTest(Common):
 class Yn00Test(Common):
     """Tests for PAML tool yn00."""
 
-    align_file = os.path.join("PAML", "alignment.phylip")
-    out_file = os.path.join("PAML", "temp.out")
-    working_dir = os.path.join("PAML", "yn00_test")
-    ctl_file = os.path.join("PAML", "yn00.ctl")
-    del_files = [out_file, "2YN.dN", "2YN.dS", "2YN.t", "yn00.ctl",
-                 "rst", "rst1", "rub"]
-
     def setUp(self):
-        self.yn = yn00.Yn00(working_dir=self.working_dir)
+        self.yn = yn00.Yn00()
 
     def testYn00Binary(self):
         """Test that the yn00 binary runs and generates correct output.
         yn00 output does not specify the version number.
         """
-        self.yn.read_ctl_file(self.ctl_file)
+        ctl_file = os.path.join("PAML", "Control_files", "yn00", "yn00.ctl")
+        self.yn.read_ctl_file(ctl_file)
+        self.yn.alignment = os.path.join("PAML", "Alignments", "alignment.phylip")
+        self.yn.out_file = os.path.join("PAML", "temp.out")
+        self.yn.working_dir = os.path.join("PAML", "yn00_test")
         results = self.yn.run()
         self.assertEqual(len(results), 5)
 
