@@ -130,6 +130,7 @@ def parse_rates(lines, parameters):
     """Parse the rate parameters.
     """
     Q_mat_found = False
+    trans_probs_found = False
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -165,6 +166,16 @@ def parse_rates(lines, parameters):
         # Example match: "alpha (gamma, K=5) = 192.47918"
         elif "alpha" in line and len(line_floats) > 0:
             parameters["alpha"] = line_floats[0]
+        # Find rho for auto-discrete-gamma model
+        elif "rho" in line and len(line_floats) > 0:
+            parameters["rho"] = line_floats[0]
+        elif "transition probabilities" in line:
+            parameters["transition probs."] = []
+            trans_probs_found = True
+        elif trans_probs_found and len(line_floats) > 0:
+            parameters["transition probs."].append(line_floats)
+            if len(parameters["transition probs."]) == len(parameters["rates"]):
+                trans_probs_found = False
     return parameters
 
 def parse_freqs(lines, parameters):
@@ -172,11 +183,12 @@ def parse_freqs(lines, parameters):
     """
     root_re = re.compile("Note: node (\d+) is root.")
     branch_freqs_found = False
+    base_freqs_found = False
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
-        # Find base frequencies
+        # Find base frequencies from baseml 4.3
         # Example match:
         # "Base frequencies:   0.20090  0.16306  0.37027  0.26577"  
         if "Base frequencies" in line and len(line_floats) > 0:
@@ -186,6 +198,24 @@ def parse_freqs(lines, parameters):
             base_frequencies["A"] = line_floats[2]
             base_frequencies["G"] = line_floats[3]
             parameters["base frequencies"] = base_frequencies
+        # Find base frequencies from baseml 4.1:
+        # Example match:
+        # "base frequency parameters
+        # "  0.20317  0.16768  0.36813  0.26102"
+        elif "base frequency parameters" in line:
+            base_freqs_found = True
+        # baseml 4.4 returns to having the base frequencies on the next line
+        # but the heading changed
+        elif "Base frequencies" in line and len(line_floats) == 0:
+            base_freqs_found = True
+        elif base_freqs_found and len(line_floats) > 0:
+            base_frequencies = {}
+            base_frequencies["T"] = line_floats[0]
+            base_frequencies["C"] = line_floats[1]
+            base_frequencies["A"] = line_floats[2]
+            base_frequencies["G"] = line_floats[3]
+            parameters["base frequencies"] = base_frequencies
+            base_freqs_found = False            
         # Find frequencies
         # Example match: 
         # "freq:   0.90121  0.96051  0.99831  1.03711  1.10287"
