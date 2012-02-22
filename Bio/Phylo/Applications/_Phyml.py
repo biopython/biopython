@@ -203,7 +203,7 @@ class PhymlCommandline(AbstractCommandline):
                 l   : branch length are optimised.
                 r   : rate parameters are optimised.
                 n   : no parameter is optimised.
-                """
+                """,
                 equate=False,
                 ),
 
