@@ -1,0 +1,245 @@
+      5    222
+
+Homo_sapie                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Pan_troglo                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGC TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Gorilla_go                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAT GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Pongo_pygm                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Macaca_mul                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTA TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTC GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+
+
+YN00 Alignments/alignment.phylip
+
+ns =   5	ls =  74
+
+Codon position x base (3x4) table for each sequence.
+
+Homo_sapie          
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.17568    C:0.20270    A:0.36486    G:0.25676
+
+Pan_troglo          
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.16216    C:0.21622    A:0.36486    G:0.25676
+
+Gorilla_go          
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.18919    C:0.18919    A:0.36486    G:0.25676
+
+Pongo_pygm          
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.17568    C:0.20270    A:0.36486    G:0.25676
+
+Macaca_mul          
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.14865    C:0.21622    A:0.37838    G:0.25676
+
+Average
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.17027    C:0.20541    A:0.36757    G:0.25676
+
+Codon usage for each species
+--------------------------------------------------------------------------------------------------
+Phe TTT  0  0  0  0  0 | Ser TCT  1  1  1  1  1 | Tyr TAT  0  0  1  0  0 | Cys TGT  3  2  3  3  3
+    TTC  1  1  1  1  1 |     TCC  1  1  1  1  1 |     TAC  1  1  0  1  1 |     TGC  0  1  0  0  0
+Leu TTA  0  0  0  0  0 |     TCA  1  1  1  1  1 | *** TAA  0  0  0  0  0 | *** TGA  0  0  0  0  0
+    TTG  1  1  1  1  1 |     TCG  0  0  0  0  0 |     TAG  0  0  0  0  0 | Trp TGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+Leu CTT  0  0  0  0  0 | Pro CCT  0  0  0  0  0 | His CAT  0  0  0  0  0 | Arg CGT  0  0  0  0  0
+    CTC  2  2  2  2  2 |     CCC  1  1  1  1  1 |     CAC  0  0  0  0  0 |     CGC  0  0  0  0  0
+    CTA  1  1  1  1  1 |     CCA  3  3  3  3  3 | Gln CAA  0  0  0  0  0 |     CGA  1  1  1  1  1
+    CTG  3  3  3  3  3 |     CCG  0  0  0  0  0 |     CAG  1  1  1  1  1 |     CGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+Ile ATT  2  2  2  2  2 | Thr ACT  0  0  0  0  0 | Asn AAT  2  2  2  2  2 | Ser AGT  0  0  0  0  0
+    ATC  2  2  2  2  2 |     ACC  0  0  0  0  0 |     AAC  0  0  0  0  0 |     AGC  0  0  0  0  0
+    ATA  0  0  0  0  0 |     ACA  2  2  2  2  2 | Lys AAA  5  5  5  5  5 | Arg AGA  2  2  2  2  2
+Met ATG  3  3  3  3  3 |     ACG  0  0  0  0  0 |     AAG  5  5  5  5  5 |     AGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+Val GTT  3  3  3  3  1 | Ala GCT  0  0  0  0  0 | Asp GAT  2  2  2  2  2 | Gly GGT  0  0  0  0  0
+    GTC  0  0  0  0  1 |     GCC  0  0  0  0  0 |     GAC  4  4  4  4  4 |     GGC  3  3  3  3  3
+    GTA  3  3  3  3  4 |     GCA  0  0  0  0  0 | Glu GAA  8  8  8  8  8 |     GGA  1  1  1  1  1
+    GTG  2  2  2  2  2 |     GCG  0  0  0  0  0 |     GAG  4  4  4  4  4 |     GGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+
+
+Sums
+--------------------------------------------------
+Phe TTT  0 | Ser TCT  5 | Tyr TAT  1 | Cys TGT 14
+    TTC  5 |     TCC  5 |     TAC  4 |     TGC  1
+Leu TTA  0 |     TCA  5 | *** TAA  0 | *** TGA  0
+    TTG  5 |     TCG  0 |     TAG  0 | Trp TGG  0
+--------------------------------------------------
+Leu CTT  0 | Pro CCT  0 | His CAT  0 | Arg CGT  0
+    CTC 10 |     CCC  5 |     CAC  0 |     CGC  0
+    CTA  5 |     CCA 15 | Gln CAA  0 |     CGA  5
+    CTG 15 |     CCG  0 |     CAG  5 |     CGG  0
+--------------------------------------------------
+Ile ATT 10 | Thr ACT  0 | Asn AAT 10 | Ser AGT  0
+    ATC 10 |     ACC  0 |     AAC  0 |     AGC  0
+    ATA  0 |     ACA 10 | Lys AAA 25 | Arg AGA 10
+Met ATG 15 |     ACG  0 |     AAG 25 |     AGG  0
+--------------------------------------------------
+Val GTT 13 | Ala GCT  0 | Asp GAT 10 | Gly GGT  0
+    GTC  1 |     GCC  0 |     GAC 20 |     GGC 15
+    GTA 16 |     GCA  0 | Glu GAA 40 |     GGA  5
+    GTG 10 |     GCG  0 |     GAG 20 |     GGG  0
+--------------------------------------------------
+
+
+
+(A) Nei-Gojobori (1986) method
+
+Nei M, Gojobori T (1986) Simple methods for estimating the numbers of synonymous and nonsynonymous nucleotide substitutions. Mol. Biol. Evol. 3:418-426
+
+Nei & Gojobori 1986. dN/dS (dN, dS)
+
+Homo_sapie     
+Pan_troglo      0.0000(0.0000 0.0207)
+Gorilla_go      0.0000(0.0000 0.0207) 0.0000(0.0000 0.0421)
+Pongo_pygm     -1.0000(0.0000 0.0000) 0.0000(0.0000 0.0207) 0.0000(0.0000 0.0207)
+Macaca_mul      0.0000(0.0000 0.0421) 0.0000(0.0000 0.0640) 0.0000(0.0000 0.0640) 0.0000(0.0000 0.0421)
+NOTE: -1 means the method is inapplicable.
+
+
+(B) Yang & Nielsen (2000) method
+
+Yang Z, Nielsen R (2000) Estimating synonymous and nonsynonymous substitution rates under realistic evolutionary models. Mol. Biol. Evol. 17:32-43
+
+(equal weighting of pathways)
+
+seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
+
+   2    1    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150 +- 0.0151
+   3    1    67.4   154.6   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150 +- 0.0150
+   3    2    67.3   154.7   0.0276  3.6564  0.0000 -0.0000 +- 0.0000  0.0303 +- 0.0215
+   4    1    67.3   154.7  -0.0000  3.6564 99.0000 -0.0000 +- 0.0000 -0.0000 +- 0.0000
+   4    2    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150 +- 0.0151
+   4    3    67.4   154.6   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150 +- 0.0150
+   5    1    66.8   155.2   0.0276  3.6564  0.0000 -0.0000 +- 0.0000  0.0306 +- 0.0218
+   5    2    66.7   155.3   0.0420  3.6564  0.0000 -0.0000 +- 0.0000  0.0466 +- 0.0272
+   5    3    67.0   155.0   0.0420  3.6564  0.0000 -0.0000 +- 0.0000  0.0464 +- 0.0271
+   5    4    66.8   155.2   0.0276  3.6564  0.0000 -0.0000 +- 0.0000  0.0306 +- 0.0218
+
+
+(C) LWL85, LPB93 & LWLm methods
+
+Li W.-H., C.-I. Wu, Luo (1985) A new method for estimating synonymous and nonsynonymous rates of nucleotide substitutions considering the relative likelihood of nucleotide and codon changes. Mol. Biol. Evol. 2: 150-174.
+Li W-H (1993) Unbiased estimation of the rates of synonymous and nonsynonymous substitution. J. Mol. Evol. 36:96-99
+Pamilo P, Bianchi NO (1993) Evolution of the Zfx and Zfy genes - rates and interdependence between the genes. Mol. Biol. Evol. 10:271-281
+Yang Z (2006) Computational Molecular Evolution. Oxford University Press, Oxford, England
+
+2 (Pan_troglo) vs. 1 (Homo_sapie)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    1.0000    0.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0000    0.0200    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0227 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0129 dN =  0.0000 w = 0.0000
+
+3 (Gorilla_go) vs. 1 (Homo_sapie)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    1.0000    0.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0000    0.0200    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0227 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0129 dN =  0.0000 w = 0.0000
+
+3 (Gorilla_go) vs. 2 (Pan_troglo)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    2.0000    0.0000  sum=   2.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0000    0.0408    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0463 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0264 dN =  0.0000 w = 0.0000
+
+4 (Pongo_pygm) vs. 1 (Homo_sapie)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    0.0000    0.0000  sum=   0.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0000    0.0000    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0000 dN =  0.0000 w =   -nan S =   45.0 N =  177.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0000 dN =  0.0000 w =   -nan
+
+4 (Pongo_pygm) vs. 2 (Pan_troglo)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    1.0000    0.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0000    0.0200    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0227 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0129 dN =  0.0000 w = 0.0000
+
+4 (Pongo_pygm) vs. 3 (Gorilla_go)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    1.0000    0.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    0.0000  sum=   0.0000
+A(i):     0.0000    0.0200    0.0000
+B(i):    -0.0000   -0.0000   -0.0000
+LWL85:  dS =  0.0227 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =    -nan dN =    -nan w =   -nan S =   -nan N =   -nan (rho = -nan)
+LPB93:  dS =  0.0129 dN =  0.0000 w = 0.0000
+
+5 (Macaca_mul) vs. 1 (Homo_sapie)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    0.0000    1.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    1.0000  sum=   1.0000
+A(i):     0.0000    0.0000    0.0381
+B(i):    -0.0000   -0.0000    0.0371
+LWL85:  dS =  0.0468 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =  0.0391 dN =  0.0000 w = 0.0000 S =   53.9 N =  168.1 (rho = 0.507)
+LPB93:  dS =  0.0506 dN =  0.0000 w = 0.0000
+
+5 (Macaca_mul) vs. 2 (Pan_troglo)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    1.0000    1.0000  sum=   2.0000
+Nv(i):    0.0000    0.0000    1.0000  sum=   1.0000
+A(i):     0.0000    0.0200    0.0381
+B(i):    -0.0000   -0.0000    0.0371
+LWL85:  dS =  0.0695 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =  0.0580 dN =  0.0000 w = 0.0000 S =   53.9 N =  168.1 (rho = 0.507)
+LPB93:  dS =  0.0635 dN =  0.0000 w = 0.0000
+
+5 (Macaca_mul) vs. 3 (Gorilla_go)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    1.0000    1.0000  sum=   2.0000
+Nv(i):    0.0000    0.0000    1.0000  sum=   1.0000
+A(i):     0.0000    0.0200    0.0381
+B(i):    -0.0000   -0.0000    0.0371
+LWL85:  dS =  0.0695 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =  0.0580 dN =  0.0000 w = 0.0000 S =   53.9 N =  168.1 (rho = 0.507)
+LPB93:  dS =  0.0635 dN =  0.0000 w = 0.0000
+
+5 (Macaca_mul) vs. 4 (Pongo_pygm)
+
+L(i):      143.0      51.0      28.0  sum=    222.0
+Ns(i):    0.0000    0.0000    1.0000  sum=   1.0000
+Nv(i):    0.0000    0.0000    1.0000  sum=   1.0000
+A(i):     0.0000    0.0000    0.0381
+B(i):    -0.0000   -0.0000    0.0371
+LWL85:  dS =  0.0468 dN =  0.0000 w = 0.0000 S =   45.0 N =  177.0
+LWL85m: dS =  0.0391 dN =  0.0000 w = 0.0000 S =   53.9 N =  168.1 (rho = 0.507)
+LPB93:  dS =  0.0506 dN =  0.0000 w = 0.0000
+

@@ -1,4 +1,29 @@
-YN00 ../Tests/PAML/alignment.phylip
+      5    222
+
+Homo_sapie                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Pan_troglo                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGC TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Gorilla_go                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAT GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Pongo_pygm                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTT TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTT GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+Macaca_mul                                 ATG CCA GTA ATC AAT ATT GAG GAC CTG ACA GAA AAG GAC AAA TTG AAG ATG GAA GTT GAC CAG CTC AAG AAA GAA GTG ACA CTG GAA AGA ATG CTA GTA TCC AAA TGT TGT GAA GAA GTA AGA GAT TAC GTC GAA GAA CGA TCT GGC GAG GAT CCA CTG GTA AAG GGC ATC CCA GAG GAC AAA AAT CCC TTC AAG GAG CTC AAA GGA GGC TGT GTG ATT TCA 
+
+
+
+Printing out site pattern counts
+
+
+         5        102  P
+
+Homo_sapie            AAA AAG AAT ACA AGA ATC ATG ATT CAG CCA CCC CGA CTA CTC CTG GAA GAC GAG GAT GGA GGC GTA GTG GTT GTT GTT TAC TCA TCC TCT TGT TGT TTC TTG 
+Pan_troglo            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..C ... ... ... 
+Gorilla_go            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..T ... ... ... ... ... ... ... 
+Pongo_pygm            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... 
+Macaca_mul            ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ..A ..C ... ... ... ... ... ... ... ... ... 
+
+    5    5    2    2    2    2    3    2    1    3    1    1    1    2    3
+    8    4    4    2    1    3    3    2    1    1    1    1    1    1    1
+    1    2    1    1
+
+YN00 Alignments/alignment.phylip
 
 ns =   5	ls =  74
 
