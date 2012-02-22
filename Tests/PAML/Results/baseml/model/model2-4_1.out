@@ -1,5 +1,5 @@
 
-seed used = 1024367517
+seed used = 1024664621
 
 BASEML (in paml version 4.1, August 2008)  Alignments/alignment.phylip  F81 dGamma (ncatG=5)
 Frequencies..
@@ -31,11 +31,11 @@ lnL(ntime:  7  np:  8):   -326.316397   +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
   0.00000  0.00000  0.00000  0.00452  0.00452  0.00000  0.00907 999.00000
 
-tree length =   0.01812
+tree length =   0.01811
 
 (((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.004520): 0.000000, Gorilla_go: 0.004520): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009071);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004516): 0.000000, Gorilla_go: 0.004517): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009069);
 
 Detailed output identifying parameters
 
