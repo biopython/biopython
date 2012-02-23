@@ -277,6 +277,21 @@ def egquery(**keywds):
     Return a handle to the results in XML format.
 
     Raises an IOError exception if there's a network error.
+
+    This quick example based on a longer version from the Biopython
+    Tutorial just checks there are over 60 matches for 'Biopython'
+    in PubMedCentral:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.egquery(term="biopython")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> for row in record["eGQueryResult"]:
+    ...     if "pmc" in row["DbName"]:
+    ...         print row["Count"] > 60
+    True
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
     variables = {}
