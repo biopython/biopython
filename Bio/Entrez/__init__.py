@@ -41,20 +41,26 @@ espell       Retrieves spelling suggestions.
 read         Parses the XML results returned by any of the above functions.
              Typical usage is:
 
+             >>> from Bio import Entrez
+             >>> Entrez.email = "Your.Name.Here@example.org"
              >>> handle = Entrez.einfo() # or esearch, efetch, ...
              >>> record = Entrez.read(handle)
+             >>> handle.close()
 
              where record is now a Python dictionary or list.
 
-parse        Parses the XML results returned by any of the above functions,
-             returning records one by one.
-             Typical usage is:
+parse        Parses the XML results returned by those of the above functions
+             which can return multiple records - such as efetch, esummary
+             and elink. Typical usage is:
 
-             >>> handle = Entrez.efetch(...) # or esummary, elink, ...
+             >>> handle = Entrez.efetch("pubmed", id="19304878,14630660", retmode="xml")
              >>> records = Entrez.parse(handle)
              >>> for record in records:
              ...     # each record is a Python dictionary or list.
-             ...     print record
+             ...     print record['MedlineCitation']['Article']['ArticleTitle']
+             Biopython: freely available Python tools for computational molecular biology and bioinformatics.
+             PDB file parser and structure class implemented in Python.
+             >>> handle.close()
 
              This function is appropriate only if the XML file contains
              multiple records, and is particular useful for large files. 
@@ -186,9 +192,12 @@ def einfo(**keywds):
 
     Short example:
 
-    from Bio import Entrez 
-    record = Entrez.read(Entrez.einfo())
-    print record['DbList']
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> record = Entrez.read(Entrez.einfo())
+    >>> 'pubmed' in record['DbList']
+    True
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
     variables = {}
@@ -245,10 +254,14 @@ def espell(**keywds):
 
     Short example:
 
-    from Bio import Entrez 
-    record = Entrez.read(Entrez.espell(term="biopythooon")) 
-    print record["Query"] 
-    print record["CorrectedQuery"] 
+    >>> from Bio import Entrez 
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> record = Entrez.read(Entrez.espell(term="biopythooon"))
+    >>> print record["Query"] 
+    biopythooon
+    >>> print record["CorrectedQuery"] 
+    biopython
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
     variables = {}
@@ -373,3 +386,14 @@ E-utilities.""", UserWarning)
     return _binary_to_string_handle(handle)
 
 _open.previous = 0
+
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()
