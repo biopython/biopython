@@ -11,16 +11,20 @@ from Bio.Phylo.PAML import baseml
 from Bio.Phylo.PAML._paml import PamlError
 
 class ModTest(unittest.TestCase):
-    
-    align_file = os.path.join("PAML", "alignment.phylip")
-    tree_file = os.path.join("PAML", "species.tree")
-    bad_tree_file = os.path.join("PAML", "bad.tree")
-    out_file = os.path.join("PAML", "test.out")
+    align_dir = os.path.join("PAML", "Alignments")
+    tree_dir = os.path.join("PAML", "Trees")
+    ctl_dir = os.path.join("PAML", "Control_files")
+    results_dir = os.path.join("PAML", "Results")
     working_dir = os.path.join("PAML", "baseml_test")
-    results_file = os.path.join("PAML", "bad_results.out")
-    bad_ctl_file1 = os.path.join("PAML", "bad1.ctl")
-    bad_ctl_file2 = os.path.join("PAML", "bad2.ctl")
-    ctl_file = os.path.join("PAML", "baseml.ctl")
+ 
+    align_file = os.path.join(align_dir, "alignment.phylip")
+    tree_file = os.path.join(tree_dir, "species.tree")
+    bad_tree_file = os.path.join(tree_dir, "bad.tree")
+    out_file = os.path.join(results_dir, "test.out")
+    results_file = os.path.join(results_dir, "bad_results.out")
+    bad_ctl_file1 = os.path.join(ctl_dir, "bad1.ctl")
+    bad_ctl_file2 = os.path.join(ctl_dir, "bad2.ctl")
+    ctl_file = os.path.join(ctl_dir, "baseml.ctl")
        
     def __del__(self):
         """Just in case BASEML creates some junk files, do a clean-up."""
@@ -196,12 +200,96 @@ class ModTest(unittest.TestCase):
                 self.assertEqual(len(results), 6)
                 self.assertEqual(len(results["parameters"]), 7)
     
+    def testParseModel(self):
+        res_dir = os.path.join(self.results_dir, "baseml", "model")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            model = results_file[5]
+            version_msg = "Improper parsing for model %s version %s"%(
+                model, version.replace('_', '.'))
+            results_path = os.path.join(res_dir, results_file)
+            results = baseml.read(results_path)
+            # There are 6 top-levels: parameters, tree, lnL, version,
+            # tree length and lnL max
+            self.assertEqual(len(results), 6, version_msg)
+            self.assertTrue("parameters" in results, version_msg)
+            params = results["parameters"]
+            self.assertTrue("alpha" in params, version_msg)
+            self.assertTrue("rates" in params, version_msg)
+            self.assertTrue("parameter list" in params, version_msg)
+            self.assertTrue("rate frequencies" in params, version_msg)
+            if model in ["1", "3", "4", "5", "6"]:
+                self.assertTrue("kappa" in params, version_msg)
+            if model in ["7", "8"]:
+                self.assertTrue("base frequencies" in params, version_msg)
+                self.assertTrue("rate parameters" in params, version_msg)
+                self.assertTrue("Q matrix" in params, version_msg)
+                qmat = params["Q matrix"]
+                self.assertEqual(len(qmat), 2, version_msg)
+                self.assertTrue("matrix" in qmat)
+                matrix = qmat["matrix"]
+                self.assertEqual(len(matrix), 4, version_msg)
+                self.assertEqual(len(matrix[0]), 4, version_msg)
+            
+    def testParseAlpha1Rho1(self):
+        # Test the auto-discrete gamma model
+        # Cannot test for baseml 4.3-4.5 due to bug in the program which
+        # prevents this analysis from completing
+        res_dir = os.path.join(self.results_dir, "baseml", "alpha1rho1")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            model = results_file[5]
+            version_msg = "Improper parsing for model %s version %s"%(
+                model, version.replace('_', '.'))
+            results_path = os.path.join(res_dir, results_file)
+            results = baseml.read(results_path)
+            # There are 6 top-levels: parameters, tree, lnL, version,
+            # tree length and lnL max
+            self.assertEqual(len(results), 6, version_msg)
+            self.assertTrue("parameters" in results, version_msg)
+            params = results["parameters"]
+            self.assertTrue("rho" in params, version_msg)
+            self.assertTrue("transition probs." in params, version_msg)
+            trans_p = params["transition probs."]
+            self.assertEqual(len(trans_p), 5, version_msg)
+            self.assertEqual(len(trans_p[0]), 5, version_msg)
+ 
+    def testParseNhomo(self):
+        res_dir = os.path.join(self.results_dir, "baseml", "nhomo")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            n = results_file[5]
+            version_msg = "Improper parsing for nhomo %s version %s"%(
+                n, version.replace('_', '.'))
+            results_path = os.path.join(res_dir, results_file)
+            results = baseml.read(results_path)
+            # There are 6 top-levels: parameters, tree, lnL, version,
+            # tree length and lnL max
+            self.assertEqual(len(results), 6, version_msg)
+            self.assertTrue("parameters" in results, version_msg)
+            params = results["parameters"]
+            if n == "1":
+                self.assertTrue("base frequencies" in params, version_msg)
+            else:
+                self.assertTrue("nodes" in params)
+                nodes = params["nodes"]
+                self.assertEqual(len(nodes), 8, version_msg)
+                self.assertEqual(len(nodes[1]), 2, version_msg)
+
     def testParseSEs(self):
-        SE_results_file = os.path.join("PAML", "Results", "baseml",
-                                       "baseml_SE.out")
-        SE_results = baseml.read(SE_results_file)
-        SE_parameters = SE_results.get("parameters")
-        self.assertNotEqual(SE_parameters.get("SEs"), None)
+        res_dir = os.path.join(self.results_dir, "baseml", "SE")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version %s"%(
+                version.replace('_', '.'))
+            results_path = os.path.join(res_dir, results_file)
+            results = baseml.read(results_path)
+            # There are 6 top-levels: parameters, tree, lnL, version,
+            # tree length and lnL max
+            self.assertEqual(len(results), 6, version_msg)
+            self.assertTrue("parameters" in results, version_msg)
+            params = results["parameters"]
+            self.assertTrue("SEs" in params, version_msg)
         
 
 if __name__ == "__main__":
