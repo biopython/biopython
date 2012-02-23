@@ -111,9 +111,15 @@ def efetch(db, **keywds):
 
     Short example:
 
-    from Bio import Entrez
-    handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb")
-    print handle.read()
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
+    >>> print handle.readline().strip()
+    LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
+    >>> handle.close()
+
+    Warning: The NCBI changed the default retmode in Feb 2012, so many
+    databases which previously returned text output now give XML.
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db' : db}
@@ -144,11 +150,18 @@ def esearch(db, term, **keywds):
 
     Short example:
 
-    from Bio import Entez
-    handle = Entrez.esearch(db="nucleotide", retmax=10, term="Opuntia")
-    record = Entrez.read(handle)
-    print record["Count"]
-    print record["IdList"]
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> record["Count"] >= 2
+    True
+    >>> "156535671" in record["IdList"]
+    True
+    >>> "156535673" in record["IdList"]
+    True
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
     variables = {'db' : db,
