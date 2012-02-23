@@ -53,6 +53,13 @@ NCBI, EBI resources including PubMed, GenBank and UniProt. This is much easier
 to use than the NCBI Entrez API, but should be especially useful for Biopython
 users based in Asia.
 
+Bio.Entrez function efetch has been updated to handle the NCBI's stricter
+handling of multiple ID arguments in EFetch 2.0, however the NCBI have also
+changed the retmode default argument so you may need to make this explict.
+e.g. retmode="text"
+
+Additionally there have been other minor bug fixes and more unit tests.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
