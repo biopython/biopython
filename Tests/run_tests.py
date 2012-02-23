@@ -330,73 +330,69 @@ class TestRunner(unittest.TextTestRunner):
         os.environ['LANG']=system_lang
         # Note the current directory:
         cur_dir = os.path.abspath(".")
-        # Run the actual test inside a try/except to catch import errors.
-        # Have to do a nested try because try/except/except/finally requires
-        # python 2.5+
         try:
-            try:
-                stdout = sys.stdout
-                sys.stdout = output
-                if name.startswith("test_"):
-                    sys.stderr.write("%s ... " % name)
-                    #It's either a unittest or a print-and-compare test
-                    suite = unittest.TestLoader().loadTestsFromName(name)
-                    if suite.countTestCases()==0:
-                        # This is a print-and-compare test instead of a
-                        # unittest-type test.
-                        test = ComparisonTestCase(name, output)
-                        suite = unittest.TestSuite([test])
-                else:
-                    #It's a doc test
-                    sys.stderr.write("%s docstring test ... " % name)
-                    #Can't use fromlist=name.split(".") until python 2.5+
-                    module = __import__(name, None, None, name.split("."))
-                    suite = doctest.DocTestSuite(module)
-                    del module
-                suite.run(result)
-                if cur_dir != os.path.abspath("."):
-                    sys.stderr.write("FAIL\n")
-                    result.stream.write(result.separator1+"\n")
-                    result.stream.write("ERROR: %s\n" % name)
-                    result.stream.write(result.separator2+"\n")
-                    result.stream.write("Current directory changed\n")
-                    result.stream.write("Was: %s\n" % cur_dir)
-                    result.stream.write("Now: %s\n" % os.path.abspath("."))
-                    os.chdir(cur_dir)
-                    if not result.wasSuccessful():
-                        result.printErrors()
-                    return False
-                elif result.wasSuccessful():
-                    sys.stderr.write("ok\n")
-                    return True
-                else:
-                    sys.stderr.write("FAIL\n")
+            stdout = sys.stdout
+            sys.stdout = output
+            if name.startswith("test_"):
+                sys.stderr.write("%s ... " % name)
+                #It's either a unittest or a print-and-compare test
+                suite = unittest.TestLoader().loadTestsFromName(name)
+                if suite.countTestCases()==0:
+                    # This is a print-and-compare test instead of a
+                    # unittest-type test.
+                    test = ComparisonTestCase(name, output)
+                    suite = unittest.TestSuite([test])
+            else:
+                #It's a doc test
+                sys.stderr.write("%s docstring test ... " % name)
+                #Can't use fromlist=name.split(".") until python 2.5+
+                module = __import__(name, None, None, name.split("."))
+                suite = doctest.DocTestSuite(module)
+                del module
+            suite.run(result)
+            if cur_dir != os.path.abspath("."):
+                sys.stderr.write("FAIL\n")
+                result.stream.write(result.separator1+"\n")
+                result.stream.write("ERROR: %s\n" % name)
+                result.stream.write(result.separator2+"\n")
+                result.stream.write("Current directory changed\n")
+                result.stream.write("Was: %s\n" % cur_dir)
+                result.stream.write("Now: %s\n" % os.path.abspath("."))
+                os.chdir(cur_dir)
+                if not result.wasSuccessful():
                     result.printErrors()
                 return False
-            except MissingExternalDependencyError, msg:
-                sys.stderr.write("skipping. %s\n" % msg)
+            elif result.wasSuccessful():
+                sys.stderr.write("ok\n")
                 return True
-            except Exception, msg:
-                # This happened during the import
-                sys.stderr.write("ERROR\n")
-                result.stream.write(result.separator1+"\n")
-                result.stream.write("ERROR: %s\n" % name)
-                result.stream.write(result.separator2+"\n")
-                result.stream.write(traceback.format_exc())
-                return False
-            except KeyboardInterrupt, err:
-                # Want to allow this, and abort the test
-                # (see below for special case)
-                raise err
-            except:
-                # This happens in Jython with java.lang.ClassFormatError:
-                # Invalid method Code length ...
-                sys.stderr.write("ERROR\n")
-                result.stream.write(result.separator1+"\n")
-                result.stream.write("ERROR: %s\n" % name)
-                result.stream.write(result.separator2+"\n")
-                result.stream.write(traceback.format_exc())
-                return False
+            else:
+                sys.stderr.write("FAIL\n")
+                result.printErrors()
+            return False
+        except MissingExternalDependencyError, msg:
+            sys.stderr.write("skipping. %s\n" % msg)
+            return True
+        except Exception, msg:
+            # This happened during the import
+            sys.stderr.write("ERROR\n")
+            result.stream.write(result.separator1+"\n")
+            result.stream.write("ERROR: %s\n" % name)
+            result.stream.write(result.separator2+"\n")
+            result.stream.write(traceback.format_exc())
+            return False
+        except KeyboardInterrupt, err:
+            # Want to allow this, and abort the test
+            # (see below for special case)
+            raise err
+        except:
+            # This happens in Jython with java.lang.ClassFormatError:
+            # Invalid method Code length ...
+            sys.stderr.write("ERROR\n")
+            result.stream.write(result.separator1+"\n")
+            result.stream.write("ERROR: %s\n" % name)
+            result.stream.write(result.separator2+"\n")
+            result.stream.write(traceback.format_exc())
+            return False
         finally:
             sys.stdout = stdout
             #Running under PyPy we were leaking file handles...
