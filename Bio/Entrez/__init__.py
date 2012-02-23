@@ -246,6 +246,19 @@ def esummary(**keywds):
     Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
+
+    This example discovers more about entry 30367 in the journals database:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.esummary(db="journals", id="30367")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> print record[0]["Id"]
+    30367
+    >>> print record[0]["Title"]
+    Computational biology and chemistry
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
     variables = {}
