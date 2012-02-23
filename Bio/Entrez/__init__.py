@@ -184,6 +184,23 @@ def elink(**keywds):
     Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
+
+    This example finds articles related to the Biopython application
+    note's entry in the PubMed database:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> pmid = "19304878"
+    >>> handle = Entrez.elink(dbfrom="pubmed", id=pmid, linkname="pubmed_pubmed")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> print record[0]["LinkSetDb"][0]["LinkName"]
+    pubmed_pubmed
+    >>> linked = [link["Id"] for link in record[0]["LinkSetDb"][0]["Link"]]
+    >>> "17121776" in linked
+    True
+
+    This is explained in much more detail in the Biopython Tutorial.
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
     variables = {}
