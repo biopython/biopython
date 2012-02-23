@@ -211,8 +211,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "SE")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -233,8 +233,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "all_NSsites")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                    
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')                    
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There should be 4 top-level items: 'codon model', 'model', 
@@ -266,8 +266,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "branchsiteA")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]    
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')                
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # There are 5 top-level items in this case:
@@ -302,8 +302,8 @@ class ModTest(unittest.TestCase):
             "clademodelC")
         for results_file in os.listdir(cladeC_res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))            
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(cladeC_res_dir, results_file)
             results = codeml.read(results_path)
             # 5 top-level items again in this case
@@ -335,8 +335,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene012")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                   
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -358,8 +358,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "ngene2_mgene34")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]    
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -384,8 +384,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "freeratio")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]    
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             self.assertEqual(len(results), 4, version_msg)
@@ -412,8 +412,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "pairwise")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0] 
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                   
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Pairwise models have an extra top-level item: pairwise
@@ -426,8 +426,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_model0")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]  
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                  
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Amino Acid analysis has different top-levels:
@@ -448,8 +448,8 @@ class ModTest(unittest.TestCase):
         res_dir = os.path.join(self.results_dir, "codeml", "aa_pairwise")
         for results_file in os.listdir(res_dir):
             version = results_file.split('-')[1].split('.')[0]    
-            version_msg = "Improper parsing for version {0}".format(
-                version.replace('_', '.'))                
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
             results = codeml.read(results_path)
             # Pairwise AA analysis has one top-level fewer than non-pairwise
