@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-25 February 2012: Biopython 1.59
+24 February 2012: Biopython 1.59
 
 Please note that this release will *not* work on Python 2.4 (while the recent
 releases have worked despite us not officially supporting this).
@@ -69,7 +69,7 @@ Brad Chapman
 Brandon Invergo
 Connor McCoy
 Eric Talevich
-Joao Rodrigues
+João Rodrigues
 Konrad Förstner (first contribution)
 Michiel de Hoon
 Matej Repič (first contribution)
