@@ -6482,11 +6482,11 @@ Now we download the list of GenBank identifiers:
 '6273285', '6273284']
 \end{verbatim}
 
-Now we use these GIs to download the GenBank records - note that you have to supply a comma separated list of GI numbers to Entrez:
+Now we use these GIs to download the GenBank records - note that with older versions of Biopython you had to supply a comma separated list of GI numbers to Entrez, as of Biopython 1.59 you can pass a list and this is converted for you:
 
 \begin{verbatim}
 >>> gi_str = ",".join(gi_list)
->>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb")
+>>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
 \end{verbatim}
 
 If you want to look at the raw GenBank files, you can read from this handle and print out the result:
@@ -6513,7 +6513,7 @@ In this case, we are just getting the raw records. To get the records in a more 
 
 \begin{verbatim}
 >>> from Bio import SeqIO
->>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb")
+>>> handle = Entrez.efetch(db="nuccore", id=gi_str, rettype="gb", retmode="text")
 >>> records = SeqIO.parse(handle, "gb")
 \end{verbatim}
 
@@ -6635,7 +6635,7 @@ out_handle = open("orchid_rpl16.fasta", "w")
 for start in range(0,count,batch_size):
     end = min(count, start+batch_size)
     print "Going to download record %i to %i" % (start+1, end)
-    fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta",
+    fetch_handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text",
                                  retstart=start, retmax=batch_size,
                                  webenv=webenv, query_key=query_key)
     data = fetch_handle.read()
