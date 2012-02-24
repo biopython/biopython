@@ -55,7 +55,7 @@ users based in Asia.
 
 Bio.Entrez function efetch has been updated to handle the NCBI's stricter
 handling of multiple ID arguments in EFetch 2.0, however the NCBI have also
-changed the retmode default argument so you may need to make this explict.
+changed the retmode default argument so you may need to make this explicit.
 e.g. retmode="text"
 
 Additionally there have been other minor bug fixes and more unit tests.
