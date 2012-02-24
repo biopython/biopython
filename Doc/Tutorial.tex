@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 24 Feb 2012 (Biopython 1.58+)}
+\date{Last Update -- 25 Feb 2012 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2575,7 +2575,7 @@ only one record, use the \verb|Bio.SeqIO.read()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="fasta", id="6273291")
+handle = Entrez.efetch(db="nucleotide", rettype="fasta", retmode="text", id="6273291")
 seq_record = SeqIO.read(handle, "fasta")
 handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
@@ -2600,7 +2600,7 @@ alias for ``genbank'' in \verb|Bio.SeqIO|.
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", id="6273291")
+handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", id="6273291")
 seq_record = SeqIO.read(handle, "gb") #using "gb" as an alias for "genbank"
 handle.close()
 print "%s with %i features" % (seq_record.id, len(seq_record.features))
@@ -2621,7 +2621,7 @@ so we must use the \verb|Bio.SeqIO.parse()| function:
 from Bio import Entrez
 from Bio import SeqIO
 Entrez.email = "A.N.Other@example.com"
-handle = Entrez.efetch(db="nucleotide", rettype="gb", \
+handle = Entrez.efetch(db="nucleotide", rettype="gb", retmode="text", \
                        id="6273291,6273290,6273289")
 for seq_record in SeqIO.parse(handle, "gb"):
     print seq_record.id, seq_record.description[:50] + "..."
