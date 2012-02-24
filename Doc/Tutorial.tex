@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 21 December 2011 (Biopython 1.58+)}
+\date{Last Update -- 24 Feb 2012 (Biopython 1.58+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5604,7 +5604,7 @@ One common usage is downloading sequences in the FASTA or GenBank/GenPept plain 
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
->>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394", rettype="gb", retmode="text")
 >>> print handle.read()
 LOCUS       EU490707                1302 bp    DNA     linear   PLN 05-MAY-2008
 DEFINITION  Selenipedium aequinoctiale maturase K (matK) gene, partial cds;
@@ -5678,10 +5678,13 @@ ORIGIN
 //
 \end{verbatim}
 
-The argument \verb+rettype="gb"+ lets us download this record in the GenBank format.
+The arguments \verb+rettype="gb"+ and \verb+retmode="text"+ let us download this record in the GenBank format.
+
 Note that until Easter 2009, the Entrez EFetch API let you use ``genbank'' as the
 return type, however the NCBI now insist on using the official return types of
 ``gb'' or ``gbwithparts'' (or ``gp'' for proteins) as described on online.
+Also not that until Feb 2012, the Entrez EFetch API would default to returning
+plain text files, but now defaults to XML.
 
 Alternatively, you could for example use \verb+rettype="fasta"+ to get the Fasta-format; see the \href{http://www.ncbi.nlm.nih.gov/entrez/query/static/efetchseq\_help.html}{EFetch Sequences Help page} for other options. Remember -- the available formats depend on which database you are downloading from - see the main \href{http://eutils.ncbi.nlm.nih.gov/entrez/query/static/efetch\_help.html}{EFetch Help page}.
 
@@ -5689,7 +5692,7 @@ If you fetch the record in one of the formats accepted by \verb+Bio.SeqIO+ (see 
 
 \begin{verbatim}
 >>> from Bio import Entrez, SeqIO
->>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb")
+>>> handle = Entrez.efetch(db="nucleotide", id="186972394",rettype="gb", retmode="text")
 >>> record = SeqIO.read(handle, "genbank")
 >>> handle.close()
 >>> print record
@@ -5710,7 +5713,7 @@ Entrez.email = "A.N.Other@example.com"     # Always tell NCBI who you are
 filename = "gi_186972394.gbk"
 if not os.path.isfile(filename):
     # Downloading...
-    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb")
+    net_handle = Entrez.efetch(db="nucleotide",id="186972394",rettype="gb", retmode="text")
     out_handle = open(filename, "w")
     out_handle.write(net_handle.read())
     out_handle.close()
