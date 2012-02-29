@@ -2280,6 +2280,51 @@ Also note that in an example like this, you should probably change the record
 identifiers since the NCBI references refer to the \emph{original} unmodified
 sequence.
 
+\section{Reverse-complementing SeqRecord objects}
+\label{sec:SeqRecord-reverse-complement}
+
+One of the new features in Biopython 1.57 was the \verb|SeqRecord| object's
+\verb|reverse_complement| method. This tries to balance easy of use with worries
+about what to do with the annotation in the reverse complemented record.
+
+For the sequence, this uses the Seq object's reverse complement method. Any
+features are transferred with the location and strand recalculated. Likewise
+any per-letter-annotation is also copied but reversed (which makes sense for
+typical examples like quality scores). However, transfer of most annotation
+is problematical.
+
+For instance, if the record ID was an accession, that accession should not really
+apply to the reverse complemented sequence, and transferring the identifier by
+default could easily cause subtle data corruption in downstream analysis.
+Therefore by default, the \verb|SeqRecord|'s id, name, description, annotations
+and database cross references are all \emph{not} transferred by default.
+
+The \verb|SeqRecord| object's \verb|reverse_complement| method takes a number
+of optional arguments corresponding to properties of the record. Setting these
+arguments to \verb|True| means copy the old values, while \verb|False| means
+drop the old values and use the default value. You can alternatively provide
+the new desired value instead.
+
+Consider this example record:
+
+%doctest ../Tests/GenBank
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> record = SeqIO.read("NC_005816.gb", "genbank")
+>>> print record.id, len(record), len(record.features), len(record.dbxrefs), len(record.annotations)
+NC_005816.1 9609 41 1 11
+\end{verbatim}
+
+Here we take the reverse complement and specify a new identifier -- but notice
+how most of the annotation is dropped (but not the features):
+
+%cont-doctest
+\begin{verbatim}
+>>> rc = record.reverse_complement(id="TESTING")
+>>> print rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len(rc.annotations)
+TESTING 9609 41 0 0
+\end{verbatim}
+
 \chapter{Sequence Input/Output}
 \label{chapter:Bio.SeqIO}
 
@@ -3240,6 +3285,7 @@ several file format specific optimisations and tricks.
 
 \subsection{Converting a file of sequences to their reverse complements}
 \label{sec:SeqIO-reverse-complement}
+
 Suppose you had a file of nucleotide sequences, and you wanted to turn it into a file containing their reverse complement sequences.  This time a little bit of work is required to transform the \verb|SeqRecord| objects we get from our input file into something suitable for saving to our output file.
 
 To start with, we'll use \verb|Bio.SeqIO.parse()| to load some nucleotide
@@ -3247,58 +3293,52 @@ sequences from a file, then print out their reverse complements using
 the \verb|Seq| object's built in \verb|.reverse_complement()| method (see Section~\ref{sec:seq-reverse-complement}):
 
 \begin{verbatim}
-from Bio import SeqIO
-for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
-    print record.id
-    print record.seq.reverse_complement()
+>>> from Bio import SeqIO
+>>> for record in SeqIO.parse("ls_orchid.gbk", "genbank"):
+...     print record.id
+...     print record.seq.reverse_complement()
 \end{verbatim}
 
 Now, if we want to save these reverse complements to a file, we'll need to make \verb|SeqRecord| objects.
-For this I think its most elegant to write our own function, where we can decide how to name our
-new records:
+We can use  the \verb|SeqRecord| object's built in \verb|.reverse_complement()| method (see Section~\ref{sec:SeqRecord-reverse-complement}) but we must decide how to name our new records.
 
+This is an excellent place to demonstrate the power of list comprehensions which make a list in memory:
+%doctest examples
 \begin{verbatim}
-from Bio.SeqRecord import SeqRecord
-
-def make_rc_record(record):
-    """Returns a new SeqRecord with the reverse complement sequence."""
-    return SeqRecord(seq = record.seq.reverse_complement(), \
-                     id = "rc_" + record.id, \
-                     description = "reverse complement")
-\end{verbatim}
-
-We can then use this to turn the input records into reverse complement records ready for output.  If you don't mind about having all the records in memory at once, then the Python \verb|map()| function is a very intuitive way of doing this:
-
-\begin{verbatim}
-from Bio import SeqIO
-records = map(make_rc_record, SeqIO.parse("ls_orchid.fasta", "fasta"))
-SeqIO.write(records, "rev_comp.fasta", "fasta")
-\end{verbatim}
-
-This is an excellent place to demonstrate the power of list comprehensions which in their simplest are a long-winded equivalent to using \verb|map()|, like this:
-
-\begin{verbatim}
-records = [make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
+>>> from Bio import SeqIO
+>>> records = [rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
+...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta")]
+>>> len(records)
+94
 \end{verbatim}
 
 \noindent Now list comprehensions have a nice trick up their sleeves, you can add a conditional statement:
 
+%cont-doctest examples
 \begin{verbatim}
-records = [make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700]
+>>> records = [rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
+...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700]
+>>> len(records)
+18
 \end{verbatim}
 
 That would create an in memory list of reverse complement records where the sequence length was under 700 base pairs. However, we can do exactly the same with a generator expression - but with the advantage that this does not create a list of all the records in memory at once:
 
+%cont-doctest examples
 \begin{verbatim}
-records = (make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
+>>> records = (rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
+...           for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
 \end{verbatim}
 
 As a complete example:
 
+%not a doctest as would have to remove the output file
 \begin{verbatim}
-from Bio import SeqIO
-records = (make_rc_record(rec) for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
-SeqIO.write(records, "rev_comp.fasta", "fasta")
+>>> from Bio import SeqIO
+>>> records = (rec.reverse_complement(id="rc_"+rec.id, description = "reverse complement") \
+...            for rec in SeqIO.parse("ls_orchid.fasta", "fasta") if len(rec)<700)
+>>> SeqIO.write(records, "rev_comp.fasta", "fasta")
+18
 \end{verbatim}
 
 There is a related example in Section~\ref{sec:SeqIO-translate}, translating each
@@ -10754,9 +10794,11 @@ of which we are focussing only on integrated prophage 5 (similar length).
 \end{itemize}
 
 You can download these using Entrez if you like, see Section~\ref{sec:efetch}
-for more details. For the third we've worked out roughly where on the genome
-the phage boundaries were taken as, and must also reverse complement the
-record to match the orientation of the first two phage:
+for more details. For the third record we've worked out where the phage is
+integrated into the genome, and slice the record to extract it (with the
+features preserved, see Section~\ref{sec:SeqRecord-slicing}), and must also
+reverse complement to match the orientation of the first two phage (again
+preserving the features, see Section~\ref{sec:SeqRecord-reverse-complement}):
 
 \begin{verbatim}
 from Bio import SeqIO
