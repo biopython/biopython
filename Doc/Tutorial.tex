@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 29 February 2012 (Biopython 1.59+)}
+\date{Last Update -- 1 March 2012 (Biopython 1.59+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -10805,7 +10805,7 @@ from Bio import SeqIO
 
 A_rec = SeqIO.read("NC_002703.gbk", "gb")
 B_rec = SeqIO.read("AF323668.gbk", "gb")
-C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement()
+C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(id="ProPhage5")
 \end{verbatim}
 
 The figure we are imitating used different colors for different gene functions.
@@ -10875,7 +10875,7 @@ gd_diagram.write(name + ".svg", "SVG")
 \noindent The expected output is shown in Figure~\ref{fig:three_track_simple}.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{images/three_track_simple.png}
+\includegraphics[width=\textwidth]{images/three_track_simple.png}
 \caption{Linear diagram with three tracks for Lactococcus phage Tuc2009
 (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
 \textit{Listeria innocua} Clip11262 (NC\_003212)
@@ -10888,10 +10888,168 @@ marked in the bottom phage. Another important point is here the phage are
 shown with different lengths - this is because they are all drawn to the same
 scale (they \emph{are} different lengths).
 
+The key difference from the published figure is they have color-coded links
+between similar proteins -- which is what we will do in the next section.
+
+\subsection{Cross-Links between tracks}
+\label{sec:gd_cross_links}
+
+Biopython 1.59 added the ability to draw cross links between tracks - both
+simple linear diagrams as we will show here, but also linear diagrams split
+into fragments and circular diagrams.
+
+Continuing the example from the previous section inspired by Figure 6 from
+\href{http://dx.doi.org/10.1128/?JB.184.21.6026-6036.2002}{Proux \textit{et al.} 2002},
+we would need a list of cross links between pairs of genes, along with a score
+or color to use. Realistically you might extract this from a BLAST file
+computationally, but here I have manually typed them in.
+
+My naming convention continues to refer to the three phage as A, B and C.
+Here are the links we want to show between A and B, given as a list of
+tuples (percentage similarity score, gene in A, gene in B).
+
+\begin{verbatim}
+#Tuc2009 (NC_002703) vs bIL285 (AF323668)
+A_vs_B = [
+    (99, "Tuc2009_01", "int"),
+    (33, "Tuc2009_03", "orf4"),
+    (94, "Tuc2009_05", "orf6"),
+    (100,"Tuc2009_06", "orf7"),
+    (97, "Tuc2009_07", "orf8"),
+    (98, "Tuc2009_08", "orf9"),
+    (98, "Tuc2009_09", "orf10"),
+    (100,"Tuc2009_10", "orf12"),
+    (100,"Tuc2009_11", "orf13"),
+    (94, "Tuc2009_12", "orf14"),
+    (87, "Tuc2009_13", "orf15"),
+    (94, "Tuc2009_14", "orf16"),
+    (94, "Tuc2009_15", "orf17"),
+    (88, "Tuc2009_17", "rusA"),
+    (91, "Tuc2009_18", "orf20"),
+    (93, "Tuc2009_19", "orf22"),
+    (71, "Tuc2009_20", "orf23"),
+    (51, "Tuc2009_22", "orf27"),
+    (97, "Tuc2009_23", "orf28"),
+    (88, "Tuc2009_24", "orf29"),
+    (26, "Tuc2009_26", "orf38"),
+    (19, "Tuc2009_46", "orf52"),
+    (77, "Tuc2009_48", "orf54"),
+    (91, "Tuc2009_49", "orf55"),
+    (95, "Tuc2009_52", "orf60"), 
+]
+\end{verbatim}
+
+Likewise for B and C:
+
+\begin{verbatim}
+#bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
+B_vs_C = [
+    (42, "orf39", "lin2581"),
+    (31, "orf40", "lin2580"),
+    (49, "orf41", "lin2579"), #terL
+    (54, "orf42", "lin2578"), #portal
+    (55, "orf43", "lin2577"), #protease
+    (33, "orf44", "lin2576"), #mhp
+    (51, "orf46", "lin2575"),
+    (33, "orf47", "lin2574"),
+    (40, "orf48", "lin2573"),
+    (25, "orf49", "lin2572"),
+    (50, "orf50", "lin2571"),
+    (48, "orf51", "lin2570"),
+    (24, "orf52", "lin2568"),
+    (30, "orf53", "lin2567"),
+    (28, "orf54", "lin2566"),
+]
+\end{verbatim}
+
+For the first and last phage these identifiers are locus tags, for the middle
+phage there are no locus tags so I've used gene names instead. The following
+little helper function lets us lookup a feature using either a locus tag or
+gene name:
+
+\begin{verbatim}
+def get_feature(features, id, tags=["locus_tag", "gene"]):
+    """Search list of SeqFeature objects for an identifier under the given tags."""
+    for f in features:
+        for key in tags:
+            #tag may not be present in this feature 
+            for x in f.qualifiers.get(key, []):
+                if x == id:
+                     return f
+    raise KeyError(id)
+\end{verbatim}
+
+We can now turn those list of identifier pairs into SeqFeature pairs, and thus
+find their location co-ordinates. We can now add all that code and the following
+snippet to the previous example (just before the \verb|gd_diagram.draw(...)|
+line) to add cross links to the figure:
+
+\begin{verbatim}
+from Bio.Graphics.GenomeDiagram import CrossLink
+from reportlab.lib import colors
+#Note it might have been clearer to assign the track numbers explicitly...                                                          
+for rec_X, tn_X, rec_Y, tn_Y, X_vs_Y in [(A_rec, 3, B_rec, 2, A_vs_B),
+                                         (B_rec, 2, C_rec, 1, B_vs_C)]:
+    track_X = gd_diagram.tracks[tn_X]
+    track_Y = gd_diagram.tracks[tn_Y]
+    for score, id_X, id_Y in X_vs_Y:
+        feature_X = get_feature(rec_X.features, id_X)
+        feature_Y = get_feature(rec_Y.features, id_Y)
+        color = colors.linearlyInterpolatedColor(colors.white, colors.firebrick, 0, 100, score)
+        link_xy = CrossLink((track_X, feature_X.location.start, feature_X.location.end),
+                            (track_Y, feature_Y.location.start, feature_Y.location.end),
+                            color, colors.lightgrey)
+        gd_diagram.cross_track_links.append(link_xy)
+\end{verbatim}
+
+There are several important pieces to this code. First the \verb|GenomeDiagram| object
+has a \verb|cross_track_links| attribute which is just a list of \verb|CrossLink| objects.
+Each \verb|CrossLink| object takes two sets of track-specific co-ordinates (here given
+as tuples, you can alternatively use a \verb|GenomeDiagram.Feature| object instead).
+You can optionally supply a colour, border color, and say if this link should be drawn
+flipped (useful for showing inversions).
+
+You can also see how we turn the BLAST percentage identity score into a colour,
+interpolating between white ($0\%$) and a dark red ($100\%$). In this example
+we don't have any problems with overlapping cross-links. One way to tackle that
+is to use transparency in ReportLab, by using colors with their alpha channel set.
+However, this kind of shaded color scheme combined with overlap transparency
+would be difficult to interpret.
+
+\begin{htmlonly}
+\noindent The result:
+
+\imgsrc[width=565, height=400]{images/three_track_cl.png}
+
+\end{htmlonly}
+\begin{latexonly}
+\noindent The expected output is shown in Figure~\ref{fig:three_track_cl}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/three_track_cl.png}
+\caption{Linear diagram with three tracks for Lactococcus phage Tuc2009
+(NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+\textit{Listeria innocua} Clip11262 (NC\_003212) plus basic cross-links
+shaded by percentage identity (see Section~\ref{sec:gd_cross_links}).}
+\label{fig:three_track_cl}
+\end{figure}
+\end{latexonly}
+
+There is still a lot more that can be done within Biopython to help
+improve this figure. First of all, the cross links in this case are
+between proteins which are drawn in a strand specific manor. It can
+help to add a background region (a feature using the 'BOX' sigil) on the
+feature track to extend the cross link. Also, we can reduce the vertical
+height of the feature tracks to allocate more to the links instead.
+
+Beyond that, finishing touches you might want to do manually in a vector
+image editor include fine tuning the placement of gene labels, and adding
+other custom annotation such as highlighting particular regions.
+
 \subsection{Further options}
 
-You can also enable tick marks to show the scale -- after all every graph
-should show its units.
+You can control the tick marks to show the scale -- after all every graph
+should show its units, and the number of the grey-track labels.
 
 Also, we have only used the \verb|FeatureSet| so far. GenomeDiagram also has
 a \verb|GraphSet| which can be used for show line graphs, bar charts and heat
