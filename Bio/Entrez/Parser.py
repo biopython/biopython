@@ -461,7 +461,8 @@ class DataHandler(object):
                 source = "http://www.ncbi.nlm.nih.gov/dtd/"
             else:
                 source = os.path.dirname(url)
-            url = os.path.join(source, systemId)
+            # urls always have a forward slash, don't use os.path.join
+            url = source.rstrip("/") + "/" + systemId
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)
