@@ -346,12 +346,13 @@ class LinearDrawer(AbstractDrawer):
             offsets of each track relative to the fragment top and bottom is
             stored in a dictionary - self.track_offsets, keyed by track number
         """
+        bot_track = min(min(self.drawn_tracks), 1)
         top_track = max(self.drawn_tracks)     # The 'highest' track number to draw
 
         trackunit_sum = 0           # Total number of 'units' for the tracks
         trackunits = {}             # The start and end units for each track, keyed by track number
         heightholder = 0            # placeholder variable
-        for track in range(1, top_track+1):    # for all track numbers to 'draw'
+        for track in range(bot_track, top_track+1): # for all track numbers to 'draw'
             try:
                 trackheight = self._parent[track].height    # Get track height
             except:
@@ -367,8 +368,8 @@ class LinearDrawer(AbstractDrawer):
         track_crop = trackunit_height*(1-self.track_size)/2.    # 'step back' in pixels
         assert track_crop >= 0
         for track in trackunits:
-            top = trackunits[track][1]*trackunit_height-track_crop  # top offset
-            btm = trackunits[track][0]*trackunit_height+track_crop  # bottom offset
+            top = trackunits[track][1]*trackunit_height - track_crop  # top offset
+            btm = trackunits[track][0]*trackunit_height + track_crop  # bottom offset
             ctr = btm+(top-btm)/2.                          # center offset
             track_offsets[track] = (btm, ctr, top)          
         self.track_offsets = track_offsets

@@ -243,12 +243,13 @@ class CircularDrawer(AbstractDrawer):
             radius for each track is stored in a dictionary - self.track_radii,
             keyed by track number
         """
+        bot_track = min(min(self.drawn_tracks), 1)
         top_track = max(self.drawn_tracks)     # The 'highest' track to draw
 
         trackunit_sum = 0           # Holds total number of 'units' taken up by all tracks
         trackunits = {}             # Holds start and end units for each track keyed by track number
         heightholder = 0            # placeholder variable
-        for track in range(1, top_track+1):    # track numbers to 'draw'
+        for track in range(bot_track, top_track+1):    # track numbers to 'draw'
             try:
                 trackheight = self._parent[track].height    # Get track height
             except:
@@ -265,8 +266,8 @@ class CircularDrawer(AbstractDrawer):
         self.track_radii = {}      # The inner, outer and center radii for each track
         track_crop = trackunit_height*(1-self.track_size)/2.    # 'step back' in pixels
         for track in trackunits:
-            top = trackunits[track][1]*trackunit_height-track_crop + track_core
-            btm = trackunits[track][0]*trackunit_height+track_crop + track_core
+            top = trackunits[track][1]*trackunit_height - track_crop + track_core
+            btm = trackunits[track][0]*trackunit_height + track_crop + track_core
             ctr = btm+(top-btm)/2.
             self.track_radii[track] = (btm, ctr, top)
 
