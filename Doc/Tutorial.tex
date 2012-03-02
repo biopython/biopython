@@ -10897,7 +10897,7 @@ simple linear diagrams as we will show here, but also linear diagrams split
 into fragments and circular diagrams.
 
 Continuing the example from the previous section inspired by Figure 6 from
-\href{http://dx.doi.org/10.1128/?JB.184.21.6026-6036.2002}{Proux \textit{et al.} 2002},
+\href{http://dx.doi.org/10.1128/JB.184.21.6026-6036.2002}{Proux \textit{et al.} 2002},
 we would need a list of cross links between pairs of genes, along with a score
 or color to use. Realistically you might extract this from a BLAST file
 computationally, but here I have manually typed them in.
@@ -11037,12 +11037,39 @@ There is still a lot more that can be done within Biopython to help
 improve this figure. First of all, the cross links in this case are
 between proteins which are drawn in a strand specific manor. It can
 help to add a background region (a feature using the 'BOX' sigil) on the
-feature track to extend the cross link. Also, we can reduce the vertical
-height of the feature tracks to allocate more to the links instead.
+feature track to extend the cross link. Also, we could reduce the vertical
+height of the feature tracks to allocate more to the links instead -- one
+way to do that is to allocate space for empty tracks. These improvements
+are demonstrated in the example script \texttt{Proux\_et\_al\_2002\_Figure\_6.py}
+included in the \texttt{Doc/examples} folder of the Biopython source code.
+%TODO - Add a link get the file directly (for Windows users etc).
+\begin{htmlonly}
+\noindent The result:
+
+\imgsrc[width=565, height=400]{images/three_track_cl2.png}
+
+\end{htmlonly}
+\begin{latexonly}
+\noindent The expected output is shown in Figure~\ref{fig:three_track_cl2}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/three_track_cl2.png}
+\caption{Linear diagram with three tracks for Lactococcus phage Tuc2009
+(NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
+\textit{Listeria innocua} Clip11262 (NC\_003212) plus cross-links
+shaded by percentage identity (see Section~\ref{sec:gd_cross_links2}).}
+\label{fig:three_track_cl2}
+\end{figure}
+\end{latexonly}
 
 Beyond that, finishing touches you might want to do manually in a vector
 image editor include fine tuning the placement of gene labels, and adding
 other custom annotation such as highlighting particular regions.
+
+Although not really necessary in this example since none of the cross-links
+overlap, using a transparent color in ReportLab is a very useful technique
+for superimposing multiple links. However, in this case a shaded color
+scheme should be avoided.
 
 \subsection{Further options}
 
