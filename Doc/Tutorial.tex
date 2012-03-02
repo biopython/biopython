@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 2 March 2012 (Biopython 1.59+)}
+\date{Last Update -- 2 March 2012 (Biopython 1.59)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4126,7 +4126,7 @@ FAADDAAKAAFDSLTAQATEMSGYAWALVVLVVGATVGIKLFKKFVSRA COATB_BPIF1/22-73
 
 Another common use of alignment addition would be to combine alignments for
 several different genes into a meta-alignment. Watch out though - the identifiers
-need to match up (see Section~\ref{{sec:SeqRecord-addition}} for how adding
+need to match up (see Section~\ref{sec:SeqRecord-addition} for how adding
 \verb|SeqRecord| objects works). You may find it helpful to first sort the
 alignment rows alphabetically by id:
 
@@ -8864,8 +8864,11 @@ directional ``heads''.
 \end{htmlonly}
 
 This viewing mode is particularly handy for exploring larger trees, because the matplotlib
-viewer can zoom in on a selected region, thinning out a cluttered graphic. (See
-Figs.~\ref{fig:phylo-apaf}, \ref{fig:phylo-apaf-zoom}).
+viewer can zoom in on a selected region, thinning out a cluttered graphic.
+\begin{latexonly}
+%Can't reference unless inside a figure
+(See Figs.~\ref{fig:phylo-apaf}, \ref{fig:phylo-apaf-zoom}).
+\end{latexonly}
 
 \begin{verbatim}
 >>> tree = Phylo.read("apaf.xml", "phyloxml")
@@ -8889,7 +8892,7 @@ Figs.~\ref{fig:phylo-apaf}, \ref{fig:phylo-apaf-zoom}).
   \begin{figure}[btp]
     \centering
     \includegraphics[width=0.6\textwidth]{images/phylo-apaf-zoom.png}
-    \caption{A zoomed-in portion of the same tree as Fig.~\ref{phylo-apaf}.}
+    \caption{A zoomed-in portion of the same tree as Fig.~\ref{fig:phylo-apaf}.}
     \label{fig:phylo-apaf-zoom}
   \end{figure}
 \end{latexonly}
@@ -11060,7 +11063,7 @@ included in the \texttt{Doc/examples} folder of the Biopython source code.
 \caption{Linear diagram with three tracks for Lactococcus phage Tuc2009
 (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
 \textit{Listeria innocua} Clip11262 (NC\_003212) plus cross-links
-shaded by percentage identity (see Section~\ref{sec:gd_cross_links2}).}
+shaded by percentage identity (see Section~\ref{sec:gd_cross_links}).}
 \label{fig:three_track_cl2}
 \end{figure}
 \end{latexonly}
@@ -11153,7 +11156,7 @@ Here is a very simple example - for which we'll use \textit{Arabidopsis thaliana
 \centering
 \includegraphics[scale=0.45]{images/tRNA_chrom.pdf}
 \caption{Chromosome diagram for \textit{Arabidopsis thaliana} showing tRNA genes.}
-\label{fig:simplechromosome}
+\label{fig:trnachromosome}
 \end{figure}
 \end{latexonly}
 
