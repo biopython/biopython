@@ -21,10 +21,19 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation
 
 name = "Proux Fig 6"
 
+#As explained in the Biopython Tutorial, these are three phage genomes. The first
+#two are self-containged GenBank files, but the third phage is integrated into a
+#bacterial genome, thus we slice the full record and also take the reverse
+#complement to match the strand orientation of the other two phage:
+
 A_rec = SeqIO.read("NC_002703.gbk", "gb")
 B_rec = SeqIO.read("AF323668.gbk", "gb")
 C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(name=True)
 records = dict((rec.name, rec) for rec in [A_rec, B_rec, C_rec])
+
+#Here we hard code the gene colors for simiplicity and to match the target image.
+#In practice you might have an automatic mapping based on the gene annotation
+#or some other classification:
 
 A_colors = [red]*5 + [grey]*8 + [orange]*2 + [grey]*2 + [orange] + [grey]*10 + [green]*4 \
          + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
@@ -33,6 +42,11 @@ B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [gr
          + [grey] + [brown]*4 + [blue]*3 + [lightblue]*3 + [grey]*5 + [purple]*2
 C_colors = [grey]*30 + [green]*5 + [brown]*4 + [blue]*2 + [grey, blue] + [lightblue]*2 \
          + [grey]*5
+
+#Here we hard code a list of cross-links with percentage identity scores, based
+#on a manual inspection of the target image (there could be mistakes here).
+#In practice you might generate the list of cross-mappings from a BLAST report
+#or similar computational analysis:
 
 #Tuc2009 (NC_002703) vs bIL285 (AF323668)
 A_vs_B = [
@@ -98,13 +112,17 @@ max_len = 0
 for i, record in enumerate([A_rec, B_rec, C_rec]):
     max_len = max(max_len, len(record))
     #Allocate tracks 5 (top), 3, 1 (bottom) for A, B, C
-    #(empty tracks 2 and 4 add useful white space)
+    #(empty tracks 2 and 4 add useful white space to emphasise the cross links
+    #and also serve to make the tracks vertically more compressed)
     gd_track_for_features = gd_diagram.new_track(5-2*i,
                             name=record.name,
                             greytrack=True,
                             start=0, end=len(record))
+    assert record.name not in feature_sets
     feature_sets[record.name] = gd_track_for_features.new_set()
 
+#We add dummy features to the tracks for each cross-link BEFORE we add the
+#arrow features for the genes. This ensures the genes appear on top:
 for X, Y, X_vs_Y in [("NC_002703", "AF323668", A_vs_B),
                      ("AF323668", "NC_003212", B_vs_C)]:
     features_X = records[X].features
