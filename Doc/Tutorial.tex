@@ -10805,7 +10805,7 @@ from Bio import SeqIO
 
 A_rec = SeqIO.read("NC_002703.gbk", "gb")
 B_rec = SeqIO.read("AF323668.gbk", "gb")
-C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(id="ProPhage5")
+C_rec = SeqIO.read("NC_003212.gbk", "gb")[2587879:2625807].reverse_complement(name=True)
 \end{verbatim}
 
 The figure we are imitating used different colors for different gene functions.
@@ -10836,9 +10836,7 @@ from Bio.Graphics import GenomeDiagram
 name = "Proux Fig 6"
 gd_diagram = GenomeDiagram.Diagram(name)
 max_len = 0
-for record, colors in [(A_rec, A_colors),
-                       (B_rec, B_colors),
-                       (C_rec, C_colors)]:
+for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_colors]):
     max_len = max(max_len, len(record))
     gd_track_for_features = gd_diagram.new_track(1,
                             name=record.name,
@@ -10852,7 +10850,7 @@ for record, colors in [(A_rec, A_colors),
             #Exclude this feature                                                                                                   
             continue
         gd_feature_set.add_feature(feature, sigil="ARROW",
-                                   color=colors[i], label=True,
+                                   color=gene_colors[i], label=True,
                                    name = str(i+1),
                                    label_position="start",
                                    label_size = 6, label_angle=0)
