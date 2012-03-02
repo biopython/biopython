@@ -35,7 +35,7 @@ records = dict((rec.name, rec) for rec in [A_rec, B_rec, C_rec])
 #In practice you might have an automatic mapping based on the gene annotation
 #or some other classification:
 
-A_colors = [red]*5 + [grey]*8 + [orange]*2 + [grey]*2 + [orange] + [grey]*10 + [green]*4 \
+A_colors = [red]*5 + [grey]*7 + [orange]*2 + [grey]*2 + [orange] + [grey]*11 + [green]*4 \
          + [grey] + [green]*2 + [grey, green] + [brown]*5 + [blue]*4 + [lightblue]*5 \
          + [grey, lightblue] + [purple]*2 + [grey]
 B_colors = [red]*6 + [grey]*8 + [orange]*2 + [grey] + [orange] + [grey]*21 + [green]*5 \
