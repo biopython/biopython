@@ -35,9 +35,7 @@ class BgzfTests(unittest.TestCase):
 
         h = bgzf.BgzfWriter(output_file, "wb")
         h.write(data)
-        h.flush()
-        h.flush() #Second flush gives empty BGZF block as BAM EOF marker
-        h.close()
+        h.close() #Gives empty BGZF block as BAM EOF marker
 
         h = gzip.open(output_file)
         new_data = h.read()

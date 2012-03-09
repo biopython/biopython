@@ -204,6 +204,8 @@ from Bio._py3k import _as_bytes, _as_string
 _bgzf_magic = _as_bytes("\x1f\x8b\x08\x04")
 _bgzf_header = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00"
                          "\x00\xff\x06\x00\x42\x43\x02\x00")
+_bgzf_eof = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
+                      "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00")
 _bytes_BC = _as_bytes("BC")
 _empty_bytes_string = _as_bytes("")
 _bytes_newline = _as_bytes("\n")
@@ -470,6 +472,8 @@ class BgzfReader(object):
     """
 
     def __init__(self, filename=None, mode="r", fileobj=None, max_cache=100):
+        #TODO - Assuming we can seek, check for 28 bytes EOF empty block
+        #and if missing warn about possible truncation (as in samtools)?
         if max_cache < 1:
             raise ValueError("Use max_cache with a minimum of 1")
         #Must open the BGZF file in binary mode, but we may want to
@@ -705,13 +709,14 @@ class BgzfWriter(object):
         self._handle.flush()
 
     def close(self):
+        """Flush data, write 28 bytes empty BGZF EOF marker, and close the BGZF file."""
         if self._buffer:
             self.flush()
-        #samtools seems to look for a magic EOF marker, just a 28 byte empty BGZF block,
-        #but we'll leave it up to the calling code to do that (e.g. flush twice).
-        #self._handle.write("\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC")
-        #self._handle.write("\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00")
-        #self._handle.flush()
+        #samtools will look for a magic EOF marker, just a 28 byte empty BGZF block,
+        #and if it is missing warns the BAM file may be truncated. In addition to
+        #samtools writing this block, so too does bgzip - so we should too.
+        self._handle.write(_bgzf_eof)
+        self._handle.flush()
         self._handle.close()
 
     def tell(self):
@@ -743,10 +748,6 @@ if __name__ == "__main__":
         w.write(data)
         if not data:
             break
-    #Works but much slower
-    #for data in sys.stdin:
-    #    w.write(data)
-    w.flush()
-    w.flush() #Double flush triggers an empty BGZF block as EOF marker
+    #Doing close with write an empty BGZF block as EOF marker:
     w.close()
     sys.stderr.write("BGZF data produced\n")
