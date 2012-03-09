@@ -55,7 +55,7 @@ class CIFlex:
     #<TokenizedComments>  :     { <SP> | <HT> | <eol> |}+ <Comments>
     tokenized_comments = r"[" + space + tab + eol + r"]+" + comments
     #<WhiteSpace>  :    { <SP> | <HT> | <eol> | <TokenizedComments>}+
-    whitespace = r"[" + space + tab + eol + tokenized_comments + r"]+" 
+    whitespace = r"(" + space + r"|" + tab +  r"|" + eol +  r"|" + tokenized_comments + r")+" 
 
     ### Character Strings and Text Fields
     #<CharString>  :    <UnquotedString> | <SingleQuotedString> | <DoubleQuotedString>
@@ -179,25 +179,17 @@ class CIFlex:
 
     t_INAPPLICABLE = r"\."
     t_UNKNOWN = r"\?"
-        
-    @TOKEN(eol_unquoted_string)
-    def t_EOL_UNQUOTED_STRING(self,t):
-        return t
-        
-    @TOKEN(noteol_unquoted_string)
-    def t_NOTEOL_UNQUOTED_STRING(self,t):
-        return t
     
+    @TOKEN(semi_text_field)
+    def t_SEMI_TEXT_FIELD(self,t):
+        return t
+
     @TOKEN(double_quoted_string)
     def t_DOUBLE_QUOTED_STRING(self,t):
         return t
     
     @TOKEN(single_quoted_string)
     def t_SINGLE_QUOTED_STRING(self,t):
-        return t
-
-    @TOKEN(semi_text_field)
-    def t_SEMI_TEXT_FIELD(self,t):
         return t
 
     @TOKEN(integer)
@@ -208,6 +200,14 @@ class CIFlex:
     def t_FLOAT(self,t):
         return t
         
+        
+    @TOKEN(eol_unquoted_string)
+    def t_EOL_UNQUOTED_STRING(self,t):
+        return t
+        
+    @TOKEN(noteol_unquoted_string)
+    def t_NOTEOL_UNQUOTED_STRING(self,t):
+        return t
     # Ignored characters: spaces and tabs
     t_ignore  = ' \t'
 
@@ -244,7 +244,7 @@ if len(sys.argv) == 2:
 
     with open(filename) as fh:
         m = CIFlex()  
-        m.build()
+        m.build(debug=1)
         m.test(fh.read())
 
 
