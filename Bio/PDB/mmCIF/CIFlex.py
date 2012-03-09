@@ -48,14 +48,17 @@ class CIFlex:
 
     ### WhiteSpace and Comments
     # (CR or CRLF or LF) hopefully will handle any platform's EOL
-    eol = r"(\r\n|\n|\r)"
+    _eol = r"\r\n|\n|\r"
+    eol = r"(" + _eol + r")"
     noteol = r"[^" + eol + r"]"
     #<Comments>  :  { '#' {<AnyPrintChar>}* <eol>}+
     comments = r"(" + pound + any_print_char + r"*" + eol + r")+"
     #<TokenizedComments>  :     { <SP> | <HT> | <eol> |}+ <Comments>
     tokenized_comments = r"[" + space + tab + eol + r"]+" + comments
     #<WhiteSpace>  :    { <SP> | <HT> | <eol> | <TokenizedComments>}+
-    whitespace = r"(" + space + r"|" + tab +  r"|" + eol +  r"|" + tokenized_comments + r")+" 
+    #whitespace = r"(" + space + r"|" + tab +  r"|" + eol +  r"|" + tokenized_comments + r")+" 
+    _whitespace = r" \t" + _eol
+    whitespace = r"[" + _whitespace + r"]" 
 
     ### Character Strings and Text Fields
     #<CharString>  :    <UnquotedString> | <SingleQuotedString> | <DoubleQuotedString>
@@ -63,7 +66,8 @@ class CIFlex:
     #<eol><UnquotedString>  :   <eol><OrdinaryChar> {<NonBlankChar>}*
     eol_unquoted_string = r"^" + ordinary_char + non_blank_char + r"*"
     #<noteol><UnquotedString>  :    <noteol>{<OrdinaryChar>|';'} {<NonBlankChar>}*
-    noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
+    # noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
+    noteol_unquoted_string = r"[ \t](" + semi_ordinary_char + non_blank_char + r"*)"
     #<SingleQuotedString><WhiteSpace>  :    <single_quote>{<AnyPrintChar>}* <single_quote> <WhiteSpace>
     single_quoted_string = single_quote + any_print_char + r"*" + single_quote + whitespace
     #<DoubleQuotedString><WhiteSpace>  :    <double_quote> {<AnyPrintChar>}* <double_quote> <WhiteSpace>
@@ -74,9 +78,9 @@ class CIFlex:
     #<eol><SemiColonTextField> : <eol>';' { {<AnyPrintChar>}* <eol>
     #                            {{<TextLeadChar> {<AnyPrintChar>}*}? <eol>}*
     #                            } ';'
-    _semi_text_header = eol + semi + any_print_char + r"*" + eol
+    _semi_text_header = r"^" + semi + any_print_char + r"*" + eol
     _semi_text_line = r"(" + text_lead_char + any_print_char + r"*)?" + eol
-    _semi_text_end = semi + whitespace
+    _semi_text_end = r"^" + semi + whitespace
     semi_text_field = _semi_text_header + r"(" + _semi_text_line + r")*" + _semi_text_end
     
     ### Numeric Values
@@ -93,7 +97,8 @@ class CIFlex:
     #<Float> : { <Integer><Exponent> |
     #          { {'+'|'-'} ? { {<Digit>} * '.' <UnsignedInteger> } |
     #          { <Digit>} + '.' } } {<Exponent>} ? } }
-    float_type = r"[+-]?(\d*\.\d+|\d+\.?)" + r"(" + exponent + r")?"
+    mantissa = r"[+-]?(\d*\.\d+|\d+\.?)"
+    float_type = mantissa + r"(" + exponent + r")?"
 
     ### Tags and Values
     #<Value>  :     { '.' | '?' | <Numeric> | <CharString> | <TextField> }
@@ -143,6 +148,9 @@ class CIFlex:
         "DOUBLE_QUOTED_STRING",
         "SINGLE_QUOTED_STRING",
         "SEMI_TEXT_FIELD",
+        # trying the breakdown
+        "SEMI_TEXT_HEADER",
+        "SEMI_TEXT_END",
         "INTEGER",
         "FLOAT",
     )
@@ -182,6 +190,14 @@ class CIFlex:
     
     @TOKEN(semi_text_field)
     def t_SEMI_TEXT_FIELD(self,t):
+        return t
+        
+    @TOKEN(_semi_text_header)
+    def t_SEMI_TEXT_HEADER(self,t):
+        return t
+    
+    @TOKEN(_semi_text_end)
+    def t_SEMI_TEXT_END(self,t):
         return t
 
     @TOKEN(double_quoted_string)
