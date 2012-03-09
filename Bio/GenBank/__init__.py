@@ -89,7 +89,7 @@ _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(_simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
                                  % (_simple_location, _simple_location))
-_complex_location = r"([a-zA-z][a-zA-Z0-9]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
+_complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
                     % (_pair_location, _solo_location, _between_location,
                        _within_location, _oneof_location)
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
@@ -126,6 +126,16 @@ assert _re_complex_location.match("one-of(3,6)..101")
 assert _re_complex_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert not _re_simple_compound.match("join(153490..154269,AL121804.2:41..610,AL121804.2:672..1487)")
 assert _re_complex_compound.match("join(complement(69611..69724),139856..140650)")
+
+#Trans-spliced example from NC_016406, note underscore in reference name:
+assert _re_complex_location.match("NC_016402.1:6618..6676")
+assert _re_complex_location.match("181647..181905")
+assert _re_complex_compound.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
+assert not _re_complex_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
+assert not _re_simple_compound.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
+assert not _re_complex_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
+assert not _re_simple_location.match("join(complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905)")
+
 
 def _pos(pos_str, offset=0):
     """Build a Position object (PRIVATE).
@@ -295,6 +305,8 @@ def _split_compound_loc(compound_loc):
     ['123..145', '200..one-of(209,211)', '300']
     >>> list(_split_compound_loc("123..145,200..one-of(209,211)"))
     ['123..145', '200..one-of(209,211)']
+    >>> list(_split_compound_loc("complement(149815..150200),complement(293787..295573),NC_016402.1:6618..6676,181647..181905"))
+    ['complement(149815..150200)', 'complement(293787..295573)', 'NC_016402.1:6618..6676', '181647..181905']
     """
     if "one-of(" in compound_loc:
         #Hard case
@@ -958,6 +970,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                               int(e),
                                                               strand)
             return
+
         if _re_simple_compound.match(location_line):
             #e.g. join(<123..456,480..>500)
             i = location_line.find("(")
@@ -986,10 +999,11 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             else:
                 cur_feature.location = _loc(location_line, self._expected_size, strand)
             return
+
         if _re_complex_compound.match(location_line):
             i = location_line.find("(")
             cur_feature.location_operator = location_line[:i]
-            #Can't split on the comma because of ositions like one-of(1,2,3)
+            #Can't split on the comma because of positions like one-of(1,2,3)
             for part in _split_compound_loc(location_line[i+1:-1]):
                 if part.startswith("complement("):
                     assert part[-1]==")"
