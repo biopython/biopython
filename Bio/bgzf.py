@@ -639,9 +639,9 @@ class BgzfWriter(object):
             and "a" not in mode.lower():
                 raise ValueError("Must use write or append mode, not %r" % mode)
             if "a" in mode.lower():
-                handle = __builtin__.open(filename, "ba")
+                handle = __builtin__.open(filename, "ab")
             else:
-                handle = __builtin__.open(filename, "bw")
+                handle = __builtin__.open(filename, "wb")
         self._text = "b" not in mode.lower()
         self._handle = handle
         self._buffer = _empty_bytes_string
