@@ -66,8 +66,15 @@ class CIFlex:
     #<eol><UnquotedString>  :   <eol><OrdinaryChar> {<NonBlankChar>}*
     eol_unquoted_string = r"^" + ordinary_char + non_blank_char + r"*"
     #<noteol><UnquotedString>  :    <noteol>{<OrdinaryChar>|';'} {<NonBlankChar>}*
-    noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
+    ### XXX this matches only 2+ char strings because 
+    ### the first char matches noteol
+    ### and the second char matches the required semi_ordinary_char
+    # noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
     #noteol_unquoted_string = r"[ \t](" + semi_ordinary_char + non_blank_char + r"*)"
+    ### XXX provided this is the last type of match, should work
+    ### eol_unquoted_string and semi_text_field 
+    ### together should enforce the semicolon rule
+    noteol_unquoted_string = non_blank_char + r"+"
     #<SingleQuotedString><WhiteSpace>  :    <single_quote>{<AnyPrintChar>}* <single_quote> <WhiteSpace>
     single_quoted_string = single_quote + any_print_char + r"*" + single_quote + whitespace
     #<DoubleQuotedString><WhiteSpace>  :    <double_quote> {<AnyPrintChar>}* <double_quote> <WhiteSpace>
@@ -181,9 +188,6 @@ class CIFlex:
     @TOKEN(tag)
     def t_TAG(self,t):
         return t
-
-    t_INAPPLICABLE = r"\."
-    t_UNKNOWN = r"\?"
     
     @TOKEN(semi_text_field)
     def t_SEMI_TEXT_FIELD(self,t):
@@ -206,13 +210,21 @@ class CIFlex:
     @TOKEN(float_type)
     def t_FLOAT(self,t):
         return t
-        
-    @TOKEN(noteol_unquoted_string)
-    def t_NOTEOL_UNQUOTED_STRING(self,t):
-        return t
 
+    def t_INAPPLICABLE(self,t):
+        r"\."
+        return t
+         
+    def t_UNKNOWN(self,t):
+        r"\?"
+        return t
+        
     @TOKEN(eol_unquoted_string)
     def t_EOL_UNQUOTED_STRING(self,t):
+        return t
+
+    @TOKEN(noteol_unquoted_string)
+    def t_NOTEOL_UNQUOTED_STRING(self,t):
         return t
 
     # Ignored characters: spaces and tabs
