@@ -12,7 +12,7 @@ class CIFlex:
     ### Single characters
     double_quote = r'"'
     single_quote = r"'"
-    pound = r"#"
+    pound = r"\#"
     dollar = r"$"
     underscore = r"_"
     semi = r";"
@@ -66,8 +66,8 @@ class CIFlex:
     #<eol><UnquotedString>  :   <eol><OrdinaryChar> {<NonBlankChar>}*
     eol_unquoted_string = r"^" + ordinary_char + non_blank_char + r"*"
     #<noteol><UnquotedString>  :    <noteol>{<OrdinaryChar>|';'} {<NonBlankChar>}*
-    # noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
-    noteol_unquoted_string = r"[ \t](" + semi_ordinary_char + non_blank_char + r"*)"
+    noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
+    #noteol_unquoted_string = r"[ \t](" + semi_ordinary_char + non_blank_char + r"*)"
     #<SingleQuotedString><WhiteSpace>  :    <single_quote>{<AnyPrintChar>}* <single_quote> <WhiteSpace>
     single_quoted_string = single_quote + any_print_char + r"*" + single_quote + whitespace
     #<DoubleQuotedString><WhiteSpace>  :    <double_quote> {<AnyPrintChar>}* <double_quote> <WhiteSpace>
