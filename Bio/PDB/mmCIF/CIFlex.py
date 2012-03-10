@@ -12,7 +12,7 @@ class CIFlex:
     ### Single characters
     double_quote = r'"'
     single_quote = r"'"
-    pound = r"\#"
+    pound = r"#"
     dollar = r"$"
     underscore = r"_"
     semi = r";"
@@ -148,9 +148,6 @@ class CIFlex:
         "DOUBLE_QUOTED_STRING",
         "SINGLE_QUOTED_STRING",
         "SEMI_TEXT_FIELD",
-        # trying the breakdown
-        "SEMI_TEXT_HEADER",
-        "SEMI_TEXT_END",
         "INTEGER",
         "FLOAT",
     )
@@ -190,14 +187,8 @@ class CIFlex:
     
     @TOKEN(semi_text_field)
     def t_SEMI_TEXT_FIELD(self,t):
-        return t
-        
-    @TOKEN(_semi_text_header)
-    def t_SEMI_TEXT_HEADER(self,t):
-        return t
-    
-    @TOKEN(_semi_text_end)
-    def t_SEMI_TEXT_END(self,t):
+        # remove \n by splitting into lines and joining
+        t.value = "".join(t.value.splitlines())
         return t
 
     @TOKEN(double_quoted_string)
@@ -216,14 +207,14 @@ class CIFlex:
     def t_FLOAT(self,t):
         return t
         
-        
-    @TOKEN(eol_unquoted_string)
-    def t_EOL_UNQUOTED_STRING(self,t):
-        return t
-        
     @TOKEN(noteol_unquoted_string)
     def t_NOTEOL_UNQUOTED_STRING(self,t):
         return t
+
+    @TOKEN(eol_unquoted_string)
+    def t_EOL_UNQUOTED_STRING(self,t):
+        return t
+
     # Ignored characters: spaces and tabs
     t_ignore  = ' \t'
 
@@ -235,8 +226,10 @@ class CIFlex:
     # Error handling rule
     def t_error(self,t):
         print "Illegal character '%s'" % t.value[0]
+        t.lexer.skipped_lines += t.value.count('\n')
         t.lexer.skip(1)
 
+    ### Public methods 
 
     def build(self, **kwargs):
         # set re.MULTILINE while preserving any user reflags
@@ -246,6 +239,8 @@ class CIFlex:
         kwargs["reflags"] = re_old | re.MULTILINE | re.I
 
         self.lexer = lex.lex(module=self,**kwargs)
+        # store number of skipped lines
+        self.lexer.skipped_lines = 0
 
     def test(self, data):
         self.lexer.input(data)
@@ -254,13 +249,18 @@ class CIFlex:
             if not token:
                 break
             print token 
+        if self.lexer.skipped_lines:
+            print "Skipped %s lines" % self.lexer.skipped_lines
 
 if len(sys.argv) == 2:
     filename = sys.argv[1]
 
     with open(filename) as fh:
+        # start new lexer class instance
         m = CIFlex()  
+        # build lexer with optional flags (i.e. debug=1 or optimize=1)
         m.build(debug=1)
+        # lex file
         m.test(fh.read())
 
 
