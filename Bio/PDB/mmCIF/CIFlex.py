@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
-import sys
-import re
-import ply.lex as lex
-from ply.lex import TOKEN
+import sys  # to get args
+import time # to time function
+import re  # to supply RE args to lexer
+import ply.lex as lex  # lexer
+from ply.lex import TOKEN  # to assign complex docstrings to tokens
 
 class CIFlex:
     ### Token source:
@@ -244,6 +245,7 @@ class CIFlex:
     ### Public methods 
 
     def build(self, **kwargs):
+        self._lexstart = time.clock()
         # set re.MULTILINE while preserving any user reflags
         re_old = 0
         if "reflags" in kwargs.keys():
@@ -253,6 +255,7 @@ class CIFlex:
         self.lexer = lex.lex(module=self,**kwargs)
         # store number of skipped lines
         self.lexer.skipped_lines = 0
+        self.lex_init = time.clock() - self._lexstart
 
     def test(self, data):
         self.lexer.input(data)
@@ -260,9 +263,11 @@ class CIFlex:
             token = self.lexer.token()
             if not token:
                 break
-            print token 
+            #print token 
         if self.lexer.skipped_lines:
             print "Skipped %s lines" % self.lexer.skipped_lines
+        self.lex_end = time.clock() - self._lexstart
+        print "Runtime: ", self.lex_end 
 
 if len(sys.argv) == 2:
     filename = sys.argv[1]
