@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys  # to get args
+import warnings # to warn
 import time # to time function
 import re  # to supply RE args to lexer
 import ply.lex as lex  # lexer
@@ -76,6 +77,8 @@ class CIFlex:
     ### eol_unquoted_string and semi_text_field 
     ### together should enforce the semicolon rule
     noteol_unquoted_string = non_blank_char + r"+"
+    ### XXX hack to collect alphanum
+    noteol_unquoted_string_2 = r"\d" + non_blank_char + r"+"
     #<SingleQuotedString><WhiteSpace>  :    <single_quote>{<AnyPrintChar>}* <single_quote> <WhiteSpace>
     single_quoted_string = single_quote + any_print_char + r"*" + single_quote + whitespace
     #<DoubleQuotedString><WhiteSpace>  :    <double_quote> {<AnyPrintChar>}* <double_quote> <WhiteSpace>
@@ -153,6 +156,7 @@ class CIFlex:
         "UNKNOWN",
         "EOL_UNQUOTED_STRING",
         "NOTEOL_UNQUOTED_STRING",
+        "NOTEOL_UNQUOTED_STRING_2",
         "DOUBLE_QUOTED_STRING",
         "SINGLE_QUOTED_STRING",
         "SEMI_TEXT_FIELD",
@@ -170,7 +174,25 @@ class CIFlex:
     def t_ANY_COMMENTS(self,t):
         t.lexer.lineno += t.value.count('\n')
         if t.lexer.current_state() == "loop":
+            #print t.lexer.loop_tags
+            #print t.lexer.loop_values
+            width = len(t.lexer.loop_tags)
+            numItems = len(t.lexer.loop_values)
+            if numItems%width:
+                warnings.warn("ERROR: Loop data is malformed", RuntimeWarning)
+            loop = []
+            for k, col in enumerate(t.lexer.loop_tags):
+                valIndex = k
+                valList = []
+                while valIndex < numItems:
+                    valList.append(t.lexer.loop_values[valIndex])
+                    valIndex += width
+                loop.append(col)
+                loop.append(valList)
+            t.type = "LOOP"
+            t.value = loop
             t.lexer.pop_state()
+            return t
         return None
         
     @TOKEN(data)
@@ -183,8 +205,12 @@ class CIFlex:
     def t_data_LOOP(self,t):
         if t.lexer.current_state() == "loop":
             warnings.warn("ERROR: Illegal nested loop.", RuntimeWarning)
-        t.lexer.push_state("loop")
-        return t
+        else:
+            # enter loop state
+            t.lexer.push_state("loop")
+            t.lexer.loop_tags = []
+            t.lexer.loop_values = []
+        return None
     
     @TOKEN(global_type)
     def t_data_GLOBAL(self,t):
@@ -201,44 +227,94 @@ class CIFlex:
     
     @TOKEN(tag)
     def t_data_loop_TAG(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_tags.append(t.value)
+            return None
         return t
     
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
+            
+    ### values
     @TOKEN(semi_text_field)
     def t_data_SEMI_TEXT_FIELD(self,t):
         # remove \n by splitting into lines and joining
         t.value = "".join(t.value.splitlines())
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
 
     @TOKEN(double_quoted_string)
     def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
+        t.value = t.value.strip()
         return t
     
     @TOKEN(single_quoted_string)
     def t_data_loop_SINGLE_QUOTED_STRING(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
+        t.value = t.value.strip()
+        return t
+
+    @TOKEN(noteol_unquoted_string_2)
+    def t_data_loop_NOTEOL_UNQUOTED_STRING_2(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
+        t.type = "NOTEOL_UNQUOTED_STRING"
         return t
 
     @TOKEN(integer)
     def t_data_loop_INTEGER(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
+        try:
+            t.value = int(t.value)
+        except ValueError:
+            warnings.warn("Integer size too large", RuntimeError)
+            t.value = "NaN"
         return t
 
     @TOKEN(float_type)
     def t_data_loop_FLOAT(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
 
     def t_data_loop_INAPPLICABLE(self,t):
         r"\."
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
          
     def t_data_loop_UNKNOWN(self,t):
         r"\?"
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
         
     @TOKEN(eol_unquoted_string)
     def t_data_loop_EOL_UNQUOTED_STRING(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
 
     @TOKEN(noteol_unquoted_string)
     def t_data_loop_NOTEOL_UNQUOTED_STRING(self,t):
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
 
     # Ignored characters: spaces and tabs
@@ -276,7 +352,7 @@ class CIFlex:
             token = self.lexer.token()
             if not token:
                 break
-            #print token 
+            print token 
         if self.lexer.skipped_lines:
             print "Skipped %s lines" % self.lexer.skipped_lines
         self.lex_end = time.clock() - self._lexstart
@@ -289,7 +365,7 @@ if len(sys.argv) == 2:
         # start new lexer class instance
         m = CIFlex()  
         # build lexer with optional flags (i.e. debug=1 or optimize=1)
-        m.build(debug=1)
+        m.build()
         # lex file
         m.test(fh.read())
 
