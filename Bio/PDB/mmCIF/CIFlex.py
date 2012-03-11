@@ -175,33 +175,14 @@ class CIFlex:
     
     states = (
         ("data", "exclusive"),
-        ("loop", "exclusive"),
-        ("semi", "exclusive"),
+        ("loop", "inclusive"),
     )
         
     @TOKEN(comments)
     def t_ANY_COMMENTS(self,t):
         t.lexer.lineno += t.value.count('\n')
         if t.lexer.current_state() == "loop":
-            #print t.lexer.loop_tags
-            #print t.lexer.loop_values
-            width = len(t.lexer.loop_tags)
-            numItems = len(t.lexer.loop_values)
-            if numItems%width:
-                warnings.warn("ERROR: Loop data is malformed", RuntimeWarning)
-            loop = []
-            for k, col in enumerate(t.lexer.loop_tags):
-                valIndex = k
-                valList = []
-                while valIndex < numItems:
-                    valList.append(t.lexer.loop_values[valIndex])
-                    valIndex += width
-                loop.append(col)
-                loop.append(valList)
-            t.type = "LOOP"
-            t.value = loop
             t.lexer.pop_state()
-            return t
         return None
         
     @TOKEN(data)
@@ -217,9 +198,7 @@ class CIFlex:
         else:
             # enter loop state
             t.lexer.push_state("loop")
-            t.lexer.loop_tags = []
-            t.lexer.loop_values = []
-        return None
+        return t
     
     @TOKEN(global_type)
     def t_data_GLOBAL(self,t):
@@ -236,109 +215,69 @@ class CIFlex:
     
     @TOKEN(tag)
     def t_data_loop_TAG(self,t):
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_tags.append(t.value)
-            return None
         return t
-    
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
             
     ### values
     @TOKEN(semi_text_field)
     def t_data_SEMI_TEXT_FIELD(self,t):
         # remove \n by splitting into lines and joining
         t.value = "".join(t.value.splitlines())
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
 
     @TOKEN(double_quoted_string)
-    def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
+    def t_data_DOUBLE_QUOTED_STRING(self,t):
         t.value = t.value.strip()
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
     
     @TOKEN(single_quoted_string)
-    def t_data_loop_SINGLE_QUOTED_STRING(self,t):
+    def t_data_SINGLE_QUOTED_STRING(self,t):
         t.value = t.value.strip()
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
 
     @TOKEN(noteol_unquoted_string_2)
-    def t_data_loop_NOTEOL_UNQUOTED_STRING_2(self,t):
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
+    def t_data_NOTEOL_UNQUOTED_STRING_2(self,t):
         t.type = "NOTEOL_UNQUOTED_STRING"
         return t
 
     @TOKEN(integer)
-    def t_data_loop_INTEGER(self,t):
+    def t_data_INTEGER(self,t):
         try:
             t.value = int(t.value)
         except ValueError:
             warnings.warn("ERROR: Integer size too large", RuntimeWarning)
             t.value = float("inf")
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
 
     @TOKEN(float_type)
-    def t_data_loop_FLOAT(self,t):
+    def t_data_FLOAT(self,t):
         try:
             t.value = float(t.value)
         except ValueError:
             warnings.warn("ERROR: Invalid float, fix regex", RuntimeWarning)
             t.value = float("nan")
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
 
-    def t_data_loop_INAPPLICABLE(self,t):
+    def t_data_INAPPLICABLE(self,t):
         r"\."
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
          
-    def t_data_loop_UNKNOWN(self,t):
+    def t_data_UNKNOWN(self,t):
         r"\?"
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         return t
         
     @TOKEN(eol_unquoted_string)
-    def t_data_loop_EOL_UNQUOTED_STRING(self,t):
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
+    def t_data_EOL_UNQUOTED_STRING(self,t):
         return t
     
     @TOKEN(illegal_eol_unquoted_string)
-    def t_data_loop_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
+    def t_data_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
         warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
         t.type = "EOL_UNQUOTED_STRING"
         t.value = t.value[1:]
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None        
         return t
 
     @TOKEN(noteol_unquoted_string)
-    def t_data_loop_NOTEOL_UNQUOTED_STRING(self,t):
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
+    def t_data_NOTEOL_UNQUOTED_STRING(self,t):
         return t
 
     # Ignored characters: spaces and tabs
@@ -376,7 +315,7 @@ class CIFlex:
             token = self.lexer.token()
             if not token:
                 break
-            print token 
+            #print token 
         if self.lexer.skipped_lines:
             print "Skipped %s lines" % self.lexer.skipped_lines
         self.lex_end = time.clock() - self._lexstart
