@@ -219,28 +219,28 @@ class CIFlex:
             
     ### values
     @TOKEN(semi_text_field)
-    def t_data_SEMI_TEXT_FIELD(self,t):
+    def t_data_loop_SEMI_TEXT_FIELD(self,t):
         # remove \n by splitting into lines and joining
         t.value = "".join(t.value.splitlines())
         return t
 
     @TOKEN(double_quoted_string)
-    def t_data_DOUBLE_QUOTED_STRING(self,t):
+    def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
         t.value = t.value.strip()
         return t
     
     @TOKEN(single_quoted_string)
-    def t_data_SINGLE_QUOTED_STRING(self,t):
+    def t_data_loop_SINGLE_QUOTED_STRING(self,t):
         t.value = t.value.strip()
         return t
 
     @TOKEN(noteol_unquoted_string_2)
-    def t_data_NOTEOL_UNQUOTED_STRING_2(self,t):
+    def t_data_loop_NOTEOL_UNQUOTED_STRING_2(self,t):
         t.type = "NOTEOL_UNQUOTED_STRING"
         return t
 
     @TOKEN(integer)
-    def t_data_INTEGER(self,t):
+    def t_data_loop_INTEGER(self,t):
         try:
             t.value = int(t.value)
         except ValueError:
@@ -249,7 +249,7 @@ class CIFlex:
         return t
 
     @TOKEN(float_type)
-    def t_data_FLOAT(self,t):
+    def t_data_loop_FLOAT(self,t):
         try:
             t.value = float(t.value)
         except ValueError:
@@ -257,27 +257,27 @@ class CIFlex:
             t.value = float("nan")
         return t
 
-    def t_data_INAPPLICABLE(self,t):
+    def t_data_loop_INAPPLICABLE(self,t):
         r"\."
         return t
          
-    def t_data_UNKNOWN(self,t):
+    def t_data_loop_UNKNOWN(self,t):
         r"\?"
         return t
         
     @TOKEN(eol_unquoted_string)
-    def t_data_EOL_UNQUOTED_STRING(self,t):
+    def t_data_loop_EOL_UNQUOTED_STRING(self,t):
         return t
     
     @TOKEN(illegal_eol_unquoted_string)
-    def t_data_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
+    def t_data_loop_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
         warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
         t.type = "EOL_UNQUOTED_STRING"
         t.value = t.value[1:]
         return t
 
     @TOKEN(noteol_unquoted_string)
-    def t_data_NOTEOL_UNQUOTED_STRING(self,t):
+    def t_data_loop_NOTEOL_UNQUOTED_STRING(self,t):
         return t
 
     # Ignored characters: spaces and tabs
