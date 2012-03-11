@@ -1,4 +1,6 @@
-#!/usr/bin/python
+# Created 2012 
+# Lenna X. Peterson
+# arklenna@gmail.com
 
 import sys  # to get args
 import warnings # to warn
@@ -8,7 +10,7 @@ import ply.lex as lex  # lexer
 from ply.lex import TOKEN  # to assign complex docstrings to tokens
 
 class CIFlex:
-    ### Token source:
+    ### <> Token source:
     # http://www.iucr.org/resources/cif/spec/version1.1/cifsyntax
     
     ### Single characters
@@ -32,24 +34,28 @@ class CIFlex:
     # backslash must be escaped
     
     #<OrdinaryChar>  :  { '!' | '%' | '&' | '(' | ')' | '*' | '+' | ',' | '-' | '.' | '/' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | ':' | '<' | '=' | '>' | '?' | '@' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' | '\' | '^' | '`' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | '{' | '|' | '}' | '~' }
+    ### XXX _ordinary_char must always be last in a combined character class
     _ordinary_char = r"!%&()*+,./0-9:<=>?@A-Z`a-z{|}~^\\-"
     ordinary_char = r"[" + _ordinary_char + r"]"
     semi_ordinary_char = r"[" + semi + _ordinary_char + r"]"
     
     #<NonBlankChar>  :  <OrdinaryChar> | <double_quote> | '#' | '$' | <single_quote> | '_' |';' | '[' | ']'
+    ### XXX do not change order of rbracket first and _ordinary_char last
     _non_blank_char = rbracket + double_quote + pound + dollar + single_quote + underscore + semi + lbracket + _ordinary_char
     non_blank_char = r"[" + _non_blank_char + r"]"
     
     #<TextLeadChar>  :  <OrdinaryChar> | <double_quote> | '#' | '$' | <single_quote> | '_' | <SP> | <HT> |'[' | ']'
+    ### XXX do not change order of rbracket first and _ordinary_char last
     _text_lead_char = rbracket + double_quote + pound + dollar + single_quote + underscore + space + tab + lbracket + _ordinary_char
     text_lead_char = r"[" + _text_lead_char + r"]"
     
     #<AnyPrintChar>  :  <OrdinaryChar> | <double_quote> | '#' | '$' | <single_quote> | '_' | <SP> | <HT> | ';' | '[' | ']'
+    ### XXX do not change order of rbracket first and _ordinary_char last
     _any_print_char = rbracket + double_quote + pound + dollar + single_quote + underscore + space + tab + semi + lbracket + _ordinary_char
     any_print_char = r"[" + _any_print_char + r"]"
 
     ### WhiteSpace and Comments
-    # (CR or CRLF or LF) hopefully will handle any platform's EOL
+    # (CR or CRLF or LF) any platform's EOL
     _eol = r"\r\n|\n|\r"
     eol = r"(" + _eol + r")"
     noteol = r"[^" + eol + r"]"
@@ -67,8 +73,9 @@ class CIFlex:
     # XXX yacc will do this XXX 
     #<eol><UnquotedString>  :   <eol><OrdinaryChar> {<NonBlankChar>}*
     eol_unquoted_string = r"^" + ordinary_char + non_blank_char + r"*"
+    illegal_eol_unquoted_string = r"^" + semi + non_blank_char + r"*"
     #<noteol><UnquotedString>  :    <noteol>{<OrdinaryChar>|';'} {<NonBlankChar>}*
-    ### XXX this matches only 2+ char strings because 
+    ### XXX these match only 2+ char strings because 
     ### the first char matches noteol
     ### and the second char matches the required semi_ordinary_char
     # noteol_unquoted_string = noteol + semi_ordinary_char + non_blank_char + r"*"
@@ -77,8 +84,9 @@ class CIFlex:
     ### eol_unquoted_string and semi_text_field 
     ### together should enforce the semicolon rule
     noteol_unquoted_string = non_blank_char + r"+"
-    ### XXX hack to collect alphanum
+    ### XXX hack to collect alphanum (otherwise integer is greedy)
     noteol_unquoted_string_2 = r"\d" + non_blank_char + r"+"
+    
     #<SingleQuotedString><WhiteSpace>  :    <single_quote>{<AnyPrintChar>}* <single_quote> <WhiteSpace>
     single_quoted_string = single_quote + any_print_char + r"*" + single_quote + whitespace
     #<DoubleQuotedString><WhiteSpace>  :    <double_quote> {<AnyPrintChar>}* <double_quote> <WhiteSpace>
@@ -119,7 +127,7 @@ class CIFlex:
 
     ### Reserved Words
     #<DATA_>  :     {'D' | 'd'} {'A' | 'a'} {'T' | 't'} {'A' | 'a'} '_'
-    data = r"data_"
+    data = r"data_" + non_blank_char + r"+"
     #<LOOP_>  :     {'L' | 'l'} {'O' | 'o'} {'O' | 'o'} {'P' | 'p'} '_'
     loop = r"loop_"
     #<GLOBAL_>  :   {'G' | 'g'} {'L' | 'l'} {'O' | 'o'} {'B' | 'b'} {'A' | 'a'} {'L' | 'l'} '_'
@@ -155,6 +163,7 @@ class CIFlex:
         "INAPPLICABLE",
         "UNKNOWN",
         "EOL_UNQUOTED_STRING",
+        "ILLEGAL_EOL_UNQUOTED_STRING",
         "NOTEOL_UNQUOTED_STRING",
         "NOTEOL_UNQUOTED_STRING_2",
         "DOUBLE_QUOTED_STRING",
@@ -248,18 +257,18 @@ class CIFlex:
 
     @TOKEN(double_quoted_string)
     def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
+        t.value = t.value.strip()
         if t.lexer.current_state() == "loop":
             t.lexer.loop_values.append(t.value)
             return None
-        t.value = t.value.strip()
         return t
     
     @TOKEN(single_quoted_string)
     def t_data_loop_SINGLE_QUOTED_STRING(self,t):
+        t.value = t.value.strip()
         if t.lexer.current_state() == "loop":
             t.lexer.loop_values.append(t.value)
             return None
-        t.value = t.value.strip()
         return t
 
     @TOKEN(noteol_unquoted_string_2)
@@ -272,18 +281,23 @@ class CIFlex:
 
     @TOKEN(integer)
     def t_data_loop_INTEGER(self,t):
-        if t.lexer.current_state() == "loop":
-            t.lexer.loop_values.append(t.value)
-            return None
         try:
             t.value = int(t.value)
         except ValueError:
-            warnings.warn("Integer size too large", RuntimeError)
-            t.value = "NaN"
+            warnings.warn("ERROR: Integer size too large", RuntimeWarning)
+            t.value = float("inf")
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None
         return t
 
     @TOKEN(float_type)
     def t_data_loop_FLOAT(self,t):
+        try:
+            t.value = float(t.value)
+        except ValueError:
+            warnings.warn("ERROR: Invalid float, fix regex", RuntimeWarning)
+            t.value = float("nan")
         if t.lexer.current_state() == "loop":
             t.lexer.loop_values.append(t.value)
             return None
@@ -308,6 +322,16 @@ class CIFlex:
         if t.lexer.current_state() == "loop":
             t.lexer.loop_values.append(t.value)
             return None
+        return t
+    
+    @TOKEN(illegal_eol_unquoted_string)
+    def t_data_loop_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
+        warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
+        t.type = "EOL_UNQUOTED_STRING"
+        t.value = t.value[1:]
+        if t.lexer.current_state() == "loop":
+            t.lexer.loop_values.append(t.value)
+            return None        
         return t
 
     @TOKEN(noteol_unquoted_string)
