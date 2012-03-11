@@ -159,85 +159,98 @@ class CIFlex:
         "INTEGER",
         "FLOAT",
     )
+    
+    states = (
+        ("data", "exclusive"),
+        ("loop", "exclusive"),
+        ("semi", "exclusive"),
+    )
         
     @TOKEN(comments)
-    def t_COMMENTS(self,t):
+    def t_ANY_COMMENTS(self,t):
         t.lexer.lineno += t.value.count('\n')
+        if t.lexer.current_state() == "loop":
+            t.lexer.pop_state()
         return None
         
     @TOKEN(data)
     def t_DATA(self,t):
         t.value = t.value[5:]
+        t.lexer.push_state("data")
         return t
     
     @TOKEN(loop)
-    def t_LOOP(self,t):
+    def t_data_LOOP(self,t):
+        if t.lexer.current_state() == "loop":
+            warnings.warn("ERROR: Illegal nested loop.", RuntimeWarning)
+        t.lexer.push_state("loop")
         return t
     
     @TOKEN(global_type)
-    def t_GLOBAL(self,t):
+    def t_data_GLOBAL(self,t):
         return t
     
     @TOKEN(save)
-    def t_SAVE(self,t):
+    def t_data_SAVE(self,t):
+        warnings.warn("ERROR: found save frame, this parser is not intended to handle dictionaries.", RuntimeWarning)
         return t
     
     @TOKEN(stop)
-    def t_STOP(self,t):
+    def t_data_STOP(self,t):
         return t
     
     @TOKEN(tag)
-    def t_TAG(self,t):
+    def t_data_loop_TAG(self,t):
         return t
     
     @TOKEN(semi_text_field)
-    def t_SEMI_TEXT_FIELD(self,t):
+    def t_data_SEMI_TEXT_FIELD(self,t):
         # remove \n by splitting into lines and joining
         t.value = "".join(t.value.splitlines())
         return t
 
     @TOKEN(double_quoted_string)
-    def t_DOUBLE_QUOTED_STRING(self,t):
+    def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
         return t
     
     @TOKEN(single_quoted_string)
-    def t_SINGLE_QUOTED_STRING(self,t):
+    def t_data_loop_SINGLE_QUOTED_STRING(self,t):
         return t
 
     @TOKEN(integer)
-    def t_INTEGER(self,t):
+    def t_data_loop_INTEGER(self,t):
         return t
 
     @TOKEN(float_type)
-    def t_FLOAT(self,t):
+    def t_data_loop_FLOAT(self,t):
         return t
 
-    def t_INAPPLICABLE(self,t):
+    def t_data_loop_INAPPLICABLE(self,t):
         r"\."
         return t
          
-    def t_UNKNOWN(self,t):
+    def t_data_loop_UNKNOWN(self,t):
         r"\?"
         return t
         
     @TOKEN(eol_unquoted_string)
-    def t_EOL_UNQUOTED_STRING(self,t):
+    def t_data_loop_EOL_UNQUOTED_STRING(self,t):
         return t
 
     @TOKEN(noteol_unquoted_string)
-    def t_NOTEOL_UNQUOTED_STRING(self,t):
+    def t_data_loop_NOTEOL_UNQUOTED_STRING(self,t):
         return t
 
     # Ignored characters: spaces and tabs
-    t_ignore  = ' \t'
+    t_ANY_ignore  = ' \t'
 
     # Newline rule to track line numbers
-    def t_newline(self,t):
+    def t_ANY_newline(self,t):
         r'\n+'
         t.lexer.lineno += len(t.value)
 
     # Error handling rule
-    def t_error(self,t):
+    def t_ANY_error(self,t):
         print "Illegal character '%s'" % t.value[0]
         t.lexer.skipped_lines += t.value.count('\n')
         t.lexer.skip(1)
