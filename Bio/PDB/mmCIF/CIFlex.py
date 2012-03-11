@@ -160,6 +160,7 @@ class CIFlex:
         # Contents:
         "TAG",
         ### VALUE:
+        "VALUE",
         "INAPPLICABLE",
         "UNKNOWN",
         "EOL_UNQUOTED_STRING",
@@ -221,63 +222,63 @@ class CIFlex:
     @TOKEN(semi_text_field)
     def t_data_loop_SEMI_TEXT_FIELD(self,t):
         # remove \n by splitting into lines and joining
+        t.type = "VALUE"
         t.value = "".join(t.value.splitlines())
         return t
 
     @TOKEN(double_quoted_string)
     def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
+        t.type = "VALUE"
         t.value = t.value.strip()
         return t
     
     @TOKEN(single_quoted_string)
     def t_data_loop_SINGLE_QUOTED_STRING(self,t):
+        t.type = "VALUE"
         t.value = t.value.strip()
         return t
 
     @TOKEN(noteol_unquoted_string_2)
     def t_data_loop_NOTEOL_UNQUOTED_STRING_2(self,t):
-        t.type = "NOTEOL_UNQUOTED_STRING"
+        t.type = "VALUE"
+#        t.type = "NOTEOL_UNQUOTED_STRING"
         return t
 
     @TOKEN(integer)
     def t_data_loop_INTEGER(self,t):
-        try:
-            t.value = int(t.value)
-        except ValueError:
-            warnings.warn("ERROR: Integer size too large", RuntimeWarning)
-            t.value = float("inf")
+        t.type = "VALUE"
         return t
 
     @TOKEN(float_type)
     def t_data_loop_FLOAT(self,t):
-        try:
-            t.value = float(t.value)
-        except ValueError:
-            warnings.warn("ERROR: Invalid float, fix regex", RuntimeWarning)
-            t.value = float("nan")
+        t.type = "VALUE"
         return t
 
     def t_data_loop_INAPPLICABLE(self,t):
         r"\."
+        t.type = "VALUE"
         return t
          
     def t_data_loop_UNKNOWN(self,t):
         r"\?"
+        t.type = "VALUE"
         return t
         
     @TOKEN(eol_unquoted_string)
     def t_data_loop_EOL_UNQUOTED_STRING(self,t):
+        t.type = "VALUE"
         return t
     
     @TOKEN(illegal_eol_unquoted_string)
     def t_data_loop_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
         warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
-        t.type = "EOL_UNQUOTED_STRING"
+        t.type = "VALUE"
         t.value = t.value[1:]
         return t
 
     @TOKEN(noteol_unquoted_string)
     def t_data_loop_NOTEOL_UNQUOTED_STRING(self,t):
+        t.type = "VALUE"
         return t
 
     # Ignored characters: spaces and tabs
