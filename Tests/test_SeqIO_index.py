@@ -1,4 +1,4 @@
-# Copyright 2009-2011 by Peter Cock.  All rights reserved.
+# Copyright 2009-2012 by Peter Cock.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -33,6 +33,50 @@ from seq_tests_common import compare_record
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
+
+
+if sqlite3:
+    class OldIndexTest(unittest.TestCase):
+        """Testing a pre-built index (make sure cross platform etc).
+
+        >>> from Bio import SeqIO
+        >>> d = SeqIO.index_db("triple_sff.idx", ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"], "sff")
+        >>> len(d)
+        54
+        """
+        def test_old(self):
+            """Load existing index with no options."""
+            d = SeqIO.index_db("Roche/triple_sff.idx")
+            self.assertEqual(54, len(d))
+
+        def test_old_format(self):
+            """Load existing index with correct format."""
+            d = SeqIO.index_db("Roche/triple_sff.idx", format="sff")
+            self.assertEqual(54, len(d))
+
+        def test_old_format_wrong(self):
+            """Load existing index with wrong format."""
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              "Roche/triple_sff.idx", format="fasta")
+
+        def test_old_files(self):
+            """Load existing index with correct files."""
+            d = SeqIO.index_db("Roche/triple_sff.idx",
+                               ["E3MFGYR02_no_manifest.sff", "greek.sff", "paired.sff"])
+            self.assertEqual(54, len(d))
+
+        def test_old_files_wrong(self):
+            """Load existing index with wrong files."""
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              "Roche/triple_sff.idx", ["a.sff", "b.sff", "c.sff"])
+
+        def test_old_files_wrong2(self):
+            """Load existing index with wrong number of files."""
+            self.assertRaises(ValueError, SeqIO.index_db,
+                              "Roche/triple_sff.idx",
+                              ["E3MFGYR02_no_manifest.sff", "greek.sff"])
+
+
 
 class IndexDictTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
