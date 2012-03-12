@@ -39,7 +39,7 @@ def add_prefix(key):
 def gzip_open(filename, format):
     #At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)
     #insists on giving byte strings (i.e. binary mode)
-    #TODO - Investigate if this is a Python 3 bug
+    #See http://bugs.python.org/issue13989
     if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
         return gzip.open(filename)
     handle = gzip.open(filename)
