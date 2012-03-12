@@ -858,7 +858,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                 #End of file, or start of next record
                 raise ValueError("Didn't find end of record")
             data.append(line)
-        return "".join(data)
+        return _as_bytes("").join(data)
 
     def get(self, offset) :
         #TODO - Can we handle this directly in the parser?
