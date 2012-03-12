@@ -147,8 +147,7 @@ class IndexDictTests(unittest.TestCase):
         del rec_dict
 
         #Now reload without passing filenames and format
-        #TODO - Record the compression in the database too
-        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet, compression=comp)
+        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
