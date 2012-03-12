@@ -296,7 +296,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 if filenames and len(filenames) != len(self._filenames):
                     con.close()
                     raise ValueError("Index file says %i files, not %i" \
-                                     % (len(self.filenames) != len(filenames)))
+                                     % (len(self._filenames), len(filenames)))
                 if filenames and filenames != self._filenames:
                     con.close()
                     raise ValueError("Index file has different filenames")
