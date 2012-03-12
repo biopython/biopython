@@ -199,7 +199,8 @@ class CIFlex:
         else:
             # enter loop state
             t.lexer.push_state("loop")
-        return t
+            return t
+        #return t
     
     @TOKEN(global_type)
     def t_data_GLOBAL(self,t):
@@ -221,27 +222,29 @@ class CIFlex:
     ### values
     @TOKEN(semi_text_field)
     def t_data_loop_SEMI_TEXT_FIELD(self,t):
+        # add \n to count
+        t.lexer.lineno += t.value.count('\n')
         # remove \n by splitting into lines and joining
-        t.type = "VALUE"
         t.value = "".join(t.value.splitlines())
+        t.type = "VALUE"
         return t
 
     @TOKEN(double_quoted_string)
     def t_data_loop_DOUBLE_QUOTED_STRING(self,t):
-        t.type = "VALUE"
         t.value = t.value.strip()
+        t.type = "VALUE"
         return t
     
     @TOKEN(single_quoted_string)
     def t_data_loop_SINGLE_QUOTED_STRING(self,t):
-        t.type = "VALUE"
         t.value = t.value.strip()
+        t.type = "VALUE"
         return t
 
     @TOKEN(noteol_unquoted_string_2)
     def t_data_loop_NOTEOL_UNQUOTED_STRING_2(self,t):
-        t.type = "VALUE"
 #        t.type = "NOTEOL_UNQUOTED_STRING"
+        t.type = "VALUE"
         return t
 
     @TOKEN(integer)
@@ -272,8 +275,8 @@ class CIFlex:
     @TOKEN(illegal_eol_unquoted_string)
     def t_data_loop_ILLEGAL_EOL_UNQUOTED_STRING(self,t):
         warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
-        t.type = "VALUE"
         t.value = t.value[1:]
+        t.type = "VALUE"
         return t
 
     @TOKEN(noteol_unquoted_string)
@@ -292,7 +295,7 @@ class CIFlex:
     # Error handling rule
     def t_ANY_error(self,t):
         print "Illegal character '%s'" % t.value[0]
-        t.lexer.skipped_lines += t.value.count('\n')
+        self.skipped_lines += t.value.count('\n')
         t.lexer.skip(1)
 
     ### Public methods 
@@ -307,7 +310,7 @@ class CIFlex:
 
         self.lexer = lex.lex(module=self,**kwargs)
         # store number of skipped lines
-        self.lexer.skipped_lines = 0
+        self.skipped_lines = 0
         self.lex_init = time.clock() - self._lexstart
 
     def test(self, data):
@@ -317,8 +320,8 @@ class CIFlex:
             if not token:
                 break
             #print token 
-        if self.lexer.skipped_lines:
-            print "Skipped %s lines" % self.lexer.skipped_lines
+        if self.skipped_lines:
+            print "Skipped %s lines" % self.skipped_lines
         self.lex_end = time.clock() - self._lexstart
         print "Runtime: ", self.lex_end 
 
