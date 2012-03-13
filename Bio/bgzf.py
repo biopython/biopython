@@ -489,6 +489,10 @@ class BgzfReader(object):
                 raise ValueError("Must use read mode (default), not write or append mode")
             handle = __builtin__.open(filename, "rb")
         self._text = "b" not in mode.lower()
+        if self._text:
+            self._newline = "\n"
+        else:
+            self._newline = _bytes_newline
         self._handle = handle
         self.max_cache = max_cache
         self._buffers = {}
@@ -602,11 +606,7 @@ class BgzfReader(object):
                 return data
 
     def readline(self):
-        if self._text:
-            newline = "\n"
-        else:
-            newline = _bytes_newline
-        i = self._buffer.find(newline, self._within_block_offset)
+        i = self._buffer.find(self._newline, self._within_block_offset)
         #Three cases to consider,
         if i==-1:
             #No newline, need to read in more data
@@ -628,7 +628,7 @@ class BgzfReader(object):
             #Found new line, not at end of block (easy case, no IO)
             data = self._buffer[self._within_block_offset:i+1]
             self._within_block_offset = i + 1
-            assert data.endswith(newline)
+            #assert data.endswith(self._newline)
             return data
 
     def next(self):
