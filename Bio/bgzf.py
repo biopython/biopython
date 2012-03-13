@@ -226,7 +226,7 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     The BAM indexing scheme records read positions using a 64 bit
     'virtual offset', comprising in C terms:
 
-    within_block_offset<<16 | block_start_offset
+    block_start_offset<<16 | within_block_offset
 
     Here block_start_offset is the file offset of the BGZF block
     start (unsigned integer using up to 64-16 = 48 bits), and
