@@ -26,10 +26,7 @@ class CIFlex:
         "TAG",
         # Values
         "VALUE",
-        "SEMI_HEADER",
-        "SEMI_LINES",
-        #"SEMI_END",
-        #"SEMI_TEXT_FIELD",
+        "SEMI_TEXT_FIELD",
         "SEMI_ERROR",
         "UNQ_NUM_STRING",
         "INTEGER",
@@ -78,33 +75,22 @@ class CIFlex:
     
     # line anchor, semi, any print chars
     _semi_text_header = r"^;[^\r\n]*$"
-    # line anchor, any non-semi print char, any print chars
-    _semi_text_lines = r"((^[^;\r\n][^\r\n]*)?(\r\n|\r|\n))*;[ \t\n]"
-    # line anchor, semi, whitespace
-    _semi_text_end = r"^;[ \t\r\n]"
-    semi_text_field = _semi_text_header + _semi_text_lines + _semi_text_end
-
-    #def t_data_SEMI_END(self,t):
-    #    t.value = t.value.rstrip()
-    #    return t
-    #t_data_SEMI_END.__doc__ = _semi_text_end
-
-    def t_data_SEMI_HEADER(self,t):
-        return t
-    t_data_SEMI_HEADER.__doc__ = _semi_text_header
-
-    def t_data_SEMI_LINES(self,t):
-        return t
-    t_data_SEMI_LINES.__doc__ = _semi_text_lines
+    # line anchor, any non-semi print char, any print chars, eol,
+    #     semi, whitespace
+    _semi_text_lines = r"((^[^;\r\n][^\r\n]*)?(\r\n|\r|\n))*;[ \t\r\n]"
+    semi_text_field = _semi_text_header + _semi_text_lines
     
-    #def t_data_SEMI_TEXT_FIELD(self,t):
-        ## add \n to count
-        #t.lexer.lineno += t.value.count('\n')
-        ## remove \n by splitting into lines and joining
-        #t.value = "".join(t.value.splitlines())
-        #t.type = "VALUE"
-        #return t
-    #t_data_SEMI_TEXT_FIELD.__doc__ = semi_text_field
+    def t_data_SEMI_TEXT_FIELD(self,t):
+        # add \n to count
+        t.lexer.lineno += t.value.count('\n')
+        # remove \n by splitting into lines and joining
+        sep = ""
+        if " " in t.value.strip():
+            sep = " "
+        t.value = sep.join(t.value.splitlines())
+        t.type = "VALUE"
+        return t
+    t_data_SEMI_TEXT_FIELD.__doc__ = semi_text_field
     
     # line anchor, semi, non blank chars
     # (that hasn't been recognized in a SEMI_TEXT_FIELD)
@@ -126,7 +112,7 @@ class CIFlex:
   
     def t_data_UNQ_STRING(self,t):
         r"[^ \t\r\n\[\]$][^ \t\r\n]*"
-        #t.type="VALUE"
+        t.type="VALUE"
         return t        
 
     # Ignored characters: spaces and tabs
