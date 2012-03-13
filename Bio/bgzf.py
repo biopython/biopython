@@ -543,17 +543,18 @@ class BgzfReader(object):
             #offset. Therefore for consistency, use the next block and a
             #within block offset of zero.
             return (self._block_start_offset + self._block_raw_length) << 16
-        #else:
-        #    #return make_virtual_offset(self._block_start_offset,
-        #    #                           self._within_block_offset)
-        #    #TODO - Include bounds checking as in make_virtual_offset?
-        #    return (self._block_start_offset<<16) | self._within_block_offset
-        return make_virtual_offset(self._block_start_offset,                 
-                                   self._within_block_offset)   
+        else:
+            #return make_virtual_offset(self._block_start_offset,
+            #                           self._within_block_offset)
+            #TODO - Include bounds checking as in make_virtual_offset?
+            return (self._block_start_offset<<16) | self._within_block_offset
 
     def seek(self, virtual_offset):
         """Seek to a 64-bit unsigned BGZF virtual offset."""
-        start_offset, within_block = split_virtual_offset(virtual_offset)
+        #Do this inline to avoid a function call,
+        #start_offset, within_block = split_virtual_offset(virtual_offset)
+        start_offset = virtual_offset>>16
+        within_block = virtual_offset ^ (start_offset<<16)
         if start_offset != self._block_start_offset:
             #Don't need to load the block if already there
             #(this avoids a function call since _load_block would do nothing)
@@ -564,10 +565,10 @@ class BgzfReader(object):
             raise ValueError("Within offset %i but block size only %i" \
                              % (within_block, len(self._buffer)))
         self._within_block_offset = within_block
-        assert virtual_offset == self.tell(), \
-            "Did seek to %i (%i, %i), but tell says %i (%i, %i)" \
-            % (virtual_offset, start_offset, within_block,
-               self.tell(), self._block_start_offset, self._within_block_offset)
+        #assert virtual_offset == self.tell(), \
+        #    "Did seek to %i (%i, %i), but tell says %i (%i, %i)" \
+        #    % (virtual_offset, start_offset, within_block,
+        #       self.tell(), self._block_start_offset, self._within_block_offset)
         return virtual_offset
 
     def read(self, size=-1):
