@@ -264,9 +264,9 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     ValueError: Require 0 <= block_start_offset < 2**48, got 281474976710656
 
     """
-    if within_block_offset < 0 or within_block_offset >= 2**16:
+    if within_block_offset < 0 or within_block_offset >= 65536:
         raise ValueError("Require 0 <= within_block_offset < 2**16, got %r" % within_block_offset)
-    if block_start_offset < 0 or block_start_offset >= 2**48:
+    if block_start_offset < 0 or block_start_offset >= 281474976710656:
         raise ValueError("Require 0 <= block_start_offset < 2**48, got %r" % block_start_offset)
     return (block_start_offset<<16) | within_block_offset
 
