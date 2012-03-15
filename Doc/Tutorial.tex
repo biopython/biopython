@@ -6387,7 +6387,7 @@ Let's now iterate over the records to print out some information about each reco
 >>> for record in records:
 ...     print "title:", record.get("TI", "?")
 ...     print "authors:", record.get("AU", "?")
-...     print "source:", record.get("CO", "?")
+...     print "source:", record.get("SO", "?")
 ...     print
 \end{verbatim}
 
@@ -6408,7 +6408,7 @@ Especially interesting to note is the list of authors, which is returned as a st
 >>> for record in records:
 ...     if not "AU" in record:
 ...         continue
-...     if search_author in record["	AU"]:
+...     if search_author in record["AU"]:
 ...         print "Author %s found: %s" % (search_author, record["SO"])
 \end{verbatim}
 
