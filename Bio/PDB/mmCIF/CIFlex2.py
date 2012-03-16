@@ -28,9 +28,9 @@ class CIFlex:
         "VALUE",
         "SEMI_TEXT_FIELD",
         "SEMI_ERROR",
-        "UNQ_NUM_STRING",
-        "INTEGER",
-        "UNQ_STRING",
+        "SQ_STR",
+        "DQ_STR",
+        "UNQ_STR",
     )
     
     states = (
@@ -41,6 +41,9 @@ class CIFlex:
     # Literal hash, any print chars
     def t_ANY_COMMENT(self,t):
         r"""\#[^\r\n]*"""
+        t.lexer.lineno += t.value.count('\n')
+        if t.lexer.current_state() == "loop":
+            t.lexer.pop_state()
         return None
     
     # DATA_, non blank chars
@@ -52,6 +55,11 @@ class CIFlex:
         
     def t_data_LOOP(self,t):
         r"LOOP_"
+        if t.lexer.current_state() == "loop":
+            warnings.warn("ERROR: Illegal nested loop.", RuntimeWarning)
+        else:
+            t.lexer.push_state("loop")
+            return t
         return t
 
     def t_ANY_GLOBAL(self,t):
@@ -69,7 +77,7 @@ class CIFlex:
         return t
     
     # _, non blank chars
-    def t_data_TAG(self,t):
+    def t_data_loop_TAG(self,t):
         r"_[^ \t\r\n]+"
         return t
     
@@ -80,37 +88,40 @@ class CIFlex:
     _semi_text_lines = r"((^[^;\r\n][^\r\n]*)?(\r\n|\r|\n))*;[ \t\r\n]"
     semi_text_field = _semi_text_header + _semi_text_lines
     
-    def t_data_SEMI_TEXT_FIELD(self,t):
+    def t_data_loop_SEMI_TEXT_FIELD(self,t):
         # add \n to count
         t.lexer.lineno += t.value.count('\n')
         # remove \n by splitting into lines and joining
         sep = ""
         if " " in t.value.strip():
             sep = " "
-        t.value = sep.join(t.value.splitlines())
+        t.value = sep.join(t.value.splitlines())[1:-1]
         t.type = "VALUE"
         return t
-    t_data_SEMI_TEXT_FIELD.__doc__ = semi_text_field
+    t_data_loop_SEMI_TEXT_FIELD.__doc__ = semi_text_field
     
     # line anchor, semi, non blank chars
     # (that hasn't been recognized in a SEMI_TEXT_FIELD)
-    def t_data_SEMI_ERROR(self,t):
+    def t_data_loop_SEMI_ERROR(self,t):
         r"^;[^ \t\r\n]*"
         warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
         t.value = t.value[1:]
         t.type = "VALUE"
         return t
-
-    #def t_data_UNQ_NUM_STRING(self,t):
-        #r"\d+[^ \t\r\n]*"
-        #return t
-
-    #def t_data_INTEGER(self,t):
-        #r"[+-]?\d+"
-        ##t.type="VALUE"
-        #return t
+    
+    def t_data_loop_SQ_STR(self,t):
+        r"'[^\r\n]*?'[ \t\r\n]"
+        t.value = t.value.rstrip()[1:-1]
+        t.type = "VALUE"
+        return t
+    
+    def t_data_loop_DQ_STR(self,t):
+        r'"[^\r\n]*?"[ \t\r\n]'
+        t.value = t.value.rstrip()[1:-1]
+        t.type = "VALUE"
+        return t
   
-    def t_data_UNQ_STRING(self,t):
+    def t_data_loop_UNQ_STR(self,t):
         r"[^ \t\r\n\[\]$][^ \t\r\n]*"
         t.type="VALUE"
         return t        
@@ -125,13 +136,14 @@ class CIFlex:
 
     # Error handling rule
     def t_ANY_error(self,t):
-        print "Illegal character '%s'" % t.value[0]
+        print "Illegal value '%s'" % t.value
         self.skipped_lines += t.value.count('\n')
         t.lexer.skip(1)
     
     ### Public methods
 
     def build(self, **kwargs):
+        self._lexstart = time.clock()
         # set re.MULTILINE while preserving any user reflags
         re_old = 0
         if "reflags" in kwargs.keys():
@@ -139,6 +151,10 @@ class CIFlex:
         kwargs["reflags"] = re_old | re.MULTILINE | re.I
 
         self.lexer = lex.lex(module=self,**kwargs)
+        
+        self.skipped_lines = 0
+        self.lex_init = time.clock() - self._lexstart
+        print "Lexer started", self.lex_init
 
     def test(self, data):
         self.lexer.input(data)
@@ -146,13 +162,16 @@ class CIFlex:
             token = self.lexer.token()
             if not token:
                 break
-            print token 
+            #print token 
+        self.lex_end = time.clock() - self._lexstart
+        print "Lexer runtime:", self.lex_end
+        print "Skipped %s lines" % self.skipped_lines
 
 if len(sys.argv) == 2:
     filename = sys.argv[1]
     with open(filename) as fh:
         m = CIFlex()
-        m.build(debug=1)
+        m.build()
         m.test(fh.read())
 
 # vim:sw=4:ts=4:expandtab

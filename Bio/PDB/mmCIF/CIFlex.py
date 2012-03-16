@@ -332,7 +332,7 @@ if len(sys.argv) == 2:
         # start new lexer class instance
         m = CIFlex()  
         # build lexer with optional flags (i.e. debug=1 or optimize=1)
-        m.build(debug=1)
+        m.build()
         # lex file
         m.test(fh.read())
 
