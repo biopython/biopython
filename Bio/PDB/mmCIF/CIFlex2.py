@@ -98,6 +98,7 @@ class CIFlex:
         t.value = sep.join(t.value.splitlines())[1:-1]
         t.type = "VALUE"
         return t
+    # set docstring
     t_data_loop_SEMI_TEXT_FIELD.__doc__ = semi_text_field
     
     # line anchor, semi, non blank chars
@@ -109,18 +110,24 @@ class CIFlex:
         t.type = "VALUE"
         return t
     
+    # cif allows internal quotes w/o trailing whitespace, i.e. 'it's a dog'
+    # reluctant * prevents grabbing too much
+    # sq, non-newline chars (reluctant!), sq, whitespace
     def t_data_loop_SQ_STR(self,t):
         r"'[^\r\n]*?'[ \t\r\n]"
         t.value = t.value.rstrip()[1:-1]
         t.type = "VALUE"
         return t
     
+    # dq, non-newline chars (reluctant!), dq, whitespace
     def t_data_loop_DQ_STR(self,t):
         r'"[^\r\n]*?"[ \t\r\n]'
         t.value = t.value.rstrip()[1:-1]
         t.type = "VALUE"
         return t
-  
+
+    # unquoted strings may not begin with brackets or $
+    # not space bracket $, non blank chars
     def t_data_loop_UNQ_STR(self,t):
         r"[^ \t\r\n\[\]$][^ \t\r\n]*"
         t.type="VALUE"
