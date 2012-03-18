@@ -169,17 +169,18 @@ class CIFlex:
             token = self.lexer.token()
             if not token:
                 break
-            #print token 
+            print token 
         self.lex_end = time.clock() - self._lexstart
         print "Lexer runtime:", self.lex_end
         print "Skipped %s lines" % self.skipped_lines
 
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-    with open(filename) as fh:
-        m = CIFlex()
-        m.build()
-        m.test(fh.read())
+if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        filename = sys.argv[1]
+        with open(filename) as fh:
+            m = CIFlex()
+            m.build()
+            m.test(fh.read())
 
 # vim:sw=4:ts=4:expandtab
