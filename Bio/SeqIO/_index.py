@@ -499,7 +499,7 @@ class SeqFileRandomAccess(object):
     def __init__(self, filename, format, alphabet):
         h = open(filename, "rb")
         try:
-            self._handle = bgzf.BgzfReader(fileobj=h)
+            self._handle = bgzf.BgzfReader(mode="rb", fileobj=h)
         except ValueError, e:
             assert "BGZF" in str(e)
             #Not a BGZF file
