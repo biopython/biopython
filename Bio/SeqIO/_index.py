@@ -89,6 +89,12 @@ class _IndexedSeqFileDict(_dict_base):
             #Note - we don't store the length because I want to minimise the
             #memory requirements. With the SQLite backend the length is kept
             #and is used to speed up the get_raw method (by about 3 times).
+            #The length should be provided by all the current backends except
+            #SFF where there is an existing Roche index we can reuse (very fast
+            #but lacks the record lengths)
+            #assert length or format in ["sff", "sff-trim"], \
+            #       "%s at offset %i given length %r (%s format %s)" \
+            #       % (key, offset, length, filename, format)
             if key in offsets:
                 self._proxy._handle.close()
                 raise ValueError("Duplicate key '%s'" % key)
@@ -916,20 +922,21 @@ class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
         while True:
             offset = handle.tell()
             line = handle.readline()
+            length = len(line)
             if marker_re.match(line):
                 #Now look for the first line which doesn't start ";"
                 while True:
                     line = handle.readline()
                     if line[0:1] != semi_char and line.strip():
                         key = line.split()[0]
-                        yield _bytes_to_string(key), offset, 0
+                        yield _bytes_to_string(key), offset, length
                         break
                     if not line:
                         raise ValueError("Premature end of file?")
+                    length += len(line)
             elif not line:
                 #End of file
                 break
-
 
     def get_raw(self, offset):
         handle = self._handle
