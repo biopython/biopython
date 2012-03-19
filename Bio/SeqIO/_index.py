@@ -827,6 +827,7 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         start_acc_marker = _as_bytes("<accession>")
         end_acc_marker = _as_bytes("</accession>")
         end_entry_marker = _as_bytes("</entry>")
+        less_than = _as_bytes("<")
         #Skip any header before first record
         while True:
             start_offset = handle.tell()
@@ -845,7 +846,8 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                 line = handle.readline()
                 if key is None and start_acc_marker in line:
                     assert end_acc_marker in line, line
-                    key = line[line.find(start_acc_marker)+11:].split(_as_bytes("<"))[0]
+                    key = line[line.find(start_acc_marker)+11:].split(less_than,1)[0]
+                    length += len(line)
                 elif end_entry_marker in line:
                     end_offset = handle.tell() - len(line) \
                                + line.find(end_entry_marker) + 8
@@ -853,16 +855,18 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
                 elif marker_re.match(line) or not line:
                     #Start of next record or end of file
                     raise ValueError("Didn't find end of record")
+                else:
+                    length += len(line)
             if not key:
                 raise ValueError("Did not find <accession> line in bytes %i to %i" \
                                  % (start_offset, end_offset))
-            yield _bytes_to_string(key), start_offset, None #end_offset - start_offset
+            yield _bytes_to_string(key), start_offset, length
             #Find start of next record
             while not marker_re.match(line) and line:
                 start_offset = handle.tell()
                 line = handle.readline()
         assert not line, repr(line)
-    
+
     def get_raw(self, offset):
         """Similar to the get method, but returns the record as a raw string."""
         handle = self._handle
