@@ -258,6 +258,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     def __init__(self, index_filename, filenames, format, alphabet,
                  key_function, compression, max_open=10):
         random_access_proxies = {}
+        self._compression = compression
         #TODO? - Don't keep filename list in memory (just in DB)?
         #Should save a chunk of memory if dealing with 1000s of files.
         #Furthermore could compare a generator to the DB on reloading
@@ -302,27 +303,6 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 if filenames and filenames != self._filenames:
                     con.close()
                     raise ValueError("Index file has different filenames")
-                if compression and isinstance(compression, basestring):
-                    #Do this after getting filenames in case that wasn't given as arg
-                    compression = [compression]*len(self._filenames)
-                if not compression:
-                    compression = [None]*len(self._filenames)
-                elif len(compression) != len(self._filenames):
-                    raise ValueError("%i compression values, but %i filenames" \
-                                     % (len(compression), len(self._filenames)))
-                try:
-                    self._compression = [row[0] for row in \
-                                         con.execute("SELECT compression FROM file_data "
-                                         "ORDER BY file_number;").fetchall()]
-                except _OperationalError, err:
-                    assert "no such column" in str(err)
-                    #Old indexes lack this column
-                    self._compression = compression
-                #Want to allow None and empty string to be equivalent
-                for old, new in zip(self._compression, compression):
-                    if old and new and old!=new:
-                        raise ValueError("%r compression vs %r in index file" \
-                                         % (new, old))
             except _OperationalError, err:
                 con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
@@ -333,18 +313,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.close()
                 raise ValueError("Unsupported format '%s'" % self._format)
         else:
-            if not filenames:
-                raise ValueError("No files given to index")
             self._filenames = filenames
             self._format = format
-            if not compression:
-                compression = [None] * len(filenames)
-            elif isinstance(compression, basestring):
-                compression = [compression] * len(filenames)
-            elif len(compression) != len(filenames):
-                raise ValueError("%i compression values, but %i filenames" \
-                                 % (len(compression), len(filenames)))
-            self._compression = compression
             if not format or not filenames:
                 raise ValueError("Filenames to index and format required")
             try:
@@ -368,14 +338,13 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                         ("format", format))
             #TODO - Record the alphabet?
             #TODO - Record the file size and modified date?
-            con.execute("CREATE TABLE file_data (file_number INTEGER, name TEXT, compression TEXT);")
+            con.execute("CREATE TABLE file_data (file_number INTEGER, name TEXT);")
             con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
             count = 0
             for i, filename in enumerate(filenames):
-                comp = compression[i]
-                con.execute("INSERT INTO file_data (file_number, name, compression) VALUES (?,?,?);",
-                            (i, filename, comp))
-                random_access_proxy = proxy_class(filename, format, alphabet, comp)
+                con.execute("INSERT INTO file_data (file_number, name) VALUES (?,?);",
+                            (i, filename))
+                random_access_proxy = proxy_class(filename, format, alphabet, compression)
                 if key_function:
                     offset_iter = ((key_function(k),i,o,l) for (k,o,l) in random_access_proxy)
                 else:
@@ -458,8 +427,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             #Open a new handle...
             proxy = _FormatToRandomAccess[self._format]( \
                         self._filenames[file_number],
-                        self._format, self._alphabet,
-                        self._compression[file_number])
+                        self._format, self._alphabet, self._compression)
             record = proxy.get(offset)
             proxies[file_number] = proxy
         if self._key_function:
