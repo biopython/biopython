@@ -43,7 +43,7 @@ def gzip_open(filename, format):
     if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
         return gzip.open(filename)
     handle = gzip.open(filename)
-    data = handle.read() #bytes!                                                                                                                                                             
+    data = handle.read() #bytes!
     handle.close()
     return StringIO(_bytes_to_string(data))
 
@@ -101,7 +101,7 @@ class IndexDictTests(unittest.TestCase):
         else:
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
-        rec_dict = SeqIO.index(filename, format, alphabet, compression=comp)
+        rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict._proxy._handle.close() #TODO - Better solution
         del rec_dict
@@ -112,7 +112,7 @@ class IndexDictTests(unittest.TestCase):
         #In memory,
         #note here give filenames as list of strings
         rec_dict = SeqIO.index_db(":memory:", [filename], format,
-                                  alphabet, compression=comp)
+                                  alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         del rec_dict
@@ -132,7 +132,7 @@ class IndexDictTests(unittest.TestCase):
         #note here we give the filename as a single string
         #to confirm that works too (convience feature).
         rec_dict = SeqIO.index_db(index_tmp, filename, format,
-                                  alphabet, compression=comp)
+                                  alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -140,15 +140,14 @@ class IndexDictTests(unittest.TestCase):
 
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format,
-                                  alphabet, compression=comp)
+                                  alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
-        #TODO - Record the compression in the database too
-        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet, compression=comp)
+        rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -165,8 +164,7 @@ class IndexDictTests(unittest.TestCase):
             id_list = [rec.id for rec in SeqIO.parse(filename, format, alphabet)]
 
         key_list = [add_prefix(id) for id in id_list]
-        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix,
-                               compression=comp)
+        rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict._proxy._handle.close() #TODO - Better solution
         del rec_dict
@@ -176,15 +174,15 @@ class IndexDictTests(unittest.TestCase):
 
         #In memory,
         rec_dict = SeqIO.index_db(":memory:", [filename], format, alphabet,
-                                  add_prefix, compression=comp)
+                                  add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         #check error conditions
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", format="dummy",
-                          key_function=add_prefix, compression=comp)
+                          key_function=add_prefix)
         self.assertRaises(ValueError, SeqIO.index_db,
                           ":memory:", filenames=["dummy"],
-                          key_function=add_prefix, compression=comp)
+                          key_function=add_prefix)
         rec_dict.close()
         del rec_dict
 
@@ -193,7 +191,7 @@ class IndexDictTests(unittest.TestCase):
         if os.path.isfile(index_tmp):
             os.remove(index_tmp)
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
-                                  add_prefix, compression=comp)
+                                  add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -201,7 +199,7 @@ class IndexDictTests(unittest.TestCase):
 
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet,
-                                  add_prefix, compression=comp)
+                                  add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -209,7 +207,7 @@ class IndexDictTests(unittest.TestCase):
 
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet,
-                                  key_function=add_prefix, compression=comp)
+                                  key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
         rec_dict._con.close() #hack for PyPy
@@ -282,8 +280,7 @@ class IndexDictTests(unittest.TestCase):
             id_list = [rec.id.lower() for rec in \
                        SeqIO.parse(filename, format, alphabet)]
         rec_dict = SeqIO.index(filename, format, alphabet,
-                               key_function = lambda x : x.lower(),
-                               compression=comp)
+                               key_function = lambda x : x.lower())
         self.assertEqual(set(id_list), set(rec_dict.keys()))
         self.assertEqual(len(id_list), len(rec_dict))
         for key in id_list:
@@ -407,8 +404,6 @@ tests = [
 for filename, format, alphabet in tests:
     assert format in _FormatToRandomAccess
     tasks = [(filename, None)]
-    if os.path.isfile(filename + ".gz"):
-        tasks.append((filename + ".gz", "gzip"))
     if os.path.isfile(filename + ".bgz"):
         tasks.append((filename + ".bgz","bgzf"))
     for filename, comp in tasks:

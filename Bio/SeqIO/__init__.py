@@ -669,7 +669,7 @@ def to_dict(sequences, key_function=None):
         d[key] = record
     return d
 
-def index(filename, format, alphabet=None, key_function=None, compression=None):
+def index(filename, format, alphabet=None, key_function=None):
     """Indexes a sequence file and returns a dictionary like object.
 
      - filename - string giving name of file to be indexed
@@ -680,8 +680,6 @@ def index(filename, format, alphabet=None, key_function=None, compression=None):
      - key_function - Optional callback function which when given a
                   SeqRecord identifier string should return a unique
                   key for the dictionary.
-     - compression - Optional argument for when the file is compressed,
-                  currently only "gzip" (slow) and "bgzf" are supported.
 
     This indexing function will return a dictionary like object, giving the
     SeqRecord objects as values:
@@ -701,19 +699,11 @@ def index(filename, format, alphabet=None, key_function=None, compression=None):
     >>> print records.get("Missing", None)
     None
 
-    If the FASTQ file was gzip compressed,
+    If the file is BGZF compressed, this is detected automatically. Ordinary
+    GZIP files are not supported:
 
     >>> from Bio import SeqIO
-    >>> records = SeqIO.index("Quality/example.fastq.gz", "fastq", compression="gzip")
-    >>> len(records)
-    3
-    >>> print records["EAS54_6_R1_2_1_540_792"].seq
-    TTGGCAGGCCAAGGCCGATGGATCA
-
-    Or if rather than gzip, BGZF was used which supports efficient random access:
-
-    >>> from Bio import SeqIO
-    >>> records = SeqIO.index("Quality/example.fastq.bgz", "fastq", compression="bgzf")
+    >>> records = SeqIO.index("Quality/example.fastq.bgz", "fastq")
     >>> len(records)
     3
     >>> print records["EAS54_6_R1_2_1_540_792"].seq
@@ -799,11 +789,10 @@ def index(filename, format, alphabet=None, key_function=None, compression=None):
 
     #Map the file format to a sequence iterator:
     import _index #Lazy import
-    return _index._IndexedSeqFileDict(filename, format, alphabet,
-                                      key_function, compression)
+    return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
-             key_function=None, compression=None):
+               key_function=None):
     """Index several sequence files and return a dictionary like object.
 
     The index is stored in an SQLite database rather than in memory (as in the
@@ -844,6 +833,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 
     In this example the two files contain 85 and 10 records respectively.
 
+    BGZF compressed files are supported, and detected automatically.
+
     See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
     """
     #Try and give helpful error messages:
@@ -866,7 +857,7 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     #Map the file format to a sequence iterator:
     import _index #Lazy import
     return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
-                                          alphabet, key_function, compression)
+                                          alphabet, key_function)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

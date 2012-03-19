@@ -71,13 +71,13 @@ class _IndexedSeqFileDict(_dict_base):
     Note that this dictionary is essentially read only. You cannot
     add or change values, pop values, nor clear the dictionary.
     """
-    def __init__(self, filename, format, alphabet, key_function, compression):
+    def __init__(self, filename, format, alphabet, key_function):
         #Use key_function=None for default value
         try:
             proxy_class = _FormatToRandomAccess[format]
         except KeyError:
             raise ValueError("Unsupported format '%s'" % format)
-        random_access_proxy = proxy_class(filename, format, alphabet, compression)
+        random_access_proxy = proxy_class(filename, format, alphabet)
         self._proxy = random_access_proxy
         self._key_function = key_function
         if key_function:
@@ -256,9 +256,8 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     one of the open handles is closed first.
     """
     def __init__(self, index_filename, filenames, format, alphabet,
-                 key_function, compression, max_open=10):
+                 key_function, max_open=10):
         random_access_proxies = {}
-        self._compression = compression
         #TODO? - Don't keep filename list in memory (just in DB)?
         #Should save a chunk of memory if dealing with 1000s of files.
         #Furthermore could compare a generator to the DB on reloading
@@ -344,7 +343,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             for i, filename in enumerate(filenames):
                 con.execute("INSERT INTO file_data (file_number, name) VALUES (?,?);",
                             (i, filename))
-                random_access_proxy = proxy_class(filename, format, alphabet, compression)
+                random_access_proxy = proxy_class(filename, format, alphabet)
                 if key_function:
                     offset_iter = ((key_function(k),i,o,l) for (k,o,l) in random_access_proxy)
                 else:
@@ -427,7 +426,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             #Open a new handle...
             proxy = _FormatToRandomAccess[self._format]( \
                         self._filenames[file_number],
-                        self._format, self._alphabet, self._compression)
+                        self._format, self._alphabet)
             record = proxy.get(offset)
             proxies[file_number] = proxy
         if self._key_function:
@@ -497,15 +496,15 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
 ##############################################################################
 
 class SeqFileRandomAccess(object):
-    def __init__(self, filename, format, alphabet, compression):
-        if not compression:
-            self._handle = open(filename, "rb")
-        elif compression=="gzip":
-            self._handle = gzip.open(filename, "rb")
-        elif compression=="bgzf":
-            self._handle = bgzf.open(filename, "rb")
-        else:
-            raise ValueError("Compression type %r not supported" % compression)
+    def __init__(self, filename, format, alphabet):
+        h = open(filename, "rb")
+        try:
+            self._handle = bgzf.BgzfReader(fileobj=h)
+        except ValueError, e:
+            assert "BGZF" in str(e)
+            #Not a BGZF file
+            h.seek(0)
+            self._handle = h
         self._alphabet = alphabet
         self._format = format
         #Load the parser class/function once an avoid the dict lookup in each
@@ -556,8 +555,8 @@ class SeqFileRandomAccess(object):
 
 class SffRandomAccess(SeqFileRandomAccess):
     """Random access to a Standard Flowgram Format (SFF) file."""
-    def __init__(self, filename, format, alphabet, compression):
-        SeqFileRandomAccess.__init__(self, filename, format, alphabet, compression)
+    def __init__(self, filename, format, alphabet):
+        SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         header_length, index_offset, index_length, number_of_reads, \
         self._flows_per_read, self._flow_chars, self._key_sequence \
             = SeqIO.SffIO._sff_file_header(self._handle)
@@ -630,8 +629,8 @@ class SffTrimedRandomAccess(SffRandomAccess) :
 ###################
 
 class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
-    def __init__(self, filename, format, alphabet, compression):
-        SeqFileRandomAccess.__init__(self, filename, format, alphabet, compression)
+    def __init__(self, filename, format, alphabet):
+        SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         marker = {"ace" : "CO ",
                   "embl" : "ID ",
                   "fasta" : ">",
@@ -901,8 +900,8 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
 
 class IntelliGeneticsRandomAccess(SeqFileRandomAccess):
     """Random access to a IntelliGenetics file."""
-    def __init__(self, filename, format, alphabet, compression):
-        SeqFileRandomAccess.__init__(self, filename, format, alphabet, compression)
+    def __init__(self, filename, format, alphabet):
+        SeqFileRandomAccess.__init__(self, filename, format, alphabet)
         self._marker_re = re.compile(_as_bytes("^;"))
 
     def __iter__(self):

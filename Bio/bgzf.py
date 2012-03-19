@@ -480,7 +480,7 @@ class BgzfReader(object):
         #treat the contents as either text or binary (unicode or
         #bytes under Python 3)
         if fileobj:
-            assert filename is None and mode is None
+            assert filename is None and (mode is None or mode=="r")
             handle = fileobj
             assert "b" in handle.mode.lower()
         else:
