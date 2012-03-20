@@ -996,7 +996,7 @@ class Nexus(object):
         the name CodonPositions and the partitions N,1,2,3
         """
 
-        prev_partitions=self.charpartitions
+        prev_partitions=self.charpartitions.keys()
         self._charpartition(options)
         # mcclade calls it CodonPositions, but you never know...
         codonname=[n for n in self.charpartitions if n not in prev_partitions]
