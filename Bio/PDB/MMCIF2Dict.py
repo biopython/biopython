@@ -8,10 +8,9 @@
 import os.path
 import warnings
 import Bio.PDB.mmCIF.MMCIFlex
-from UserDict import UserDict
 
 
-class MMCIF2Dict(UserDict):
+class MMCIF2Dict():
     # The token identifiers
     NAME=1
     LOOP=2
@@ -115,9 +114,6 @@ class MMCIF2Dict(UserDict):
                 token, value=get_token()
                 # print token, value
 
-    def __getitem__(self, key):
-        return self.data[key]
-
 
 if __name__=="__main__":
 
@@ -128,7 +124,8 @@ if __name__=="__main__":
 
     filename=sys.argv[1]    
 
-    mmcif_dict=MMCIF2Dict(filename)
+    cif2dict = MMCIF2Dict(filename)
+    mmcif_dict = cif2dict.data
 
     entry = ""
     print "Now type a key ('q' to end, 'k' for a list of all keys):"
