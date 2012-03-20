@@ -36,6 +36,7 @@ test_files = [
     ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py
     ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
+    ("nexus", 2, 1, 'Nexus/codonposset.nex'),
     ("stockholm", 2, 1, 'Stockholm/simple.sth'),
     ("stockholm", 6, 1, 'Stockholm/funny.sth'),
     ("phylip", 6, 1, 'Phylip/reference_dna.phy'),

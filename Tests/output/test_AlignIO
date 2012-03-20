@@ -135,6 +135,18 @@ Testing reading nexus format file Nexus/test_Nexus_input.nex with 1 alignments
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
+Testing reading nexus format file Nexus/codonposset.nex with 1 alignments
+ Alignment 0, with 2 sequences of length 22
+  AAAAAGGCATTGTGGTGGGAAT Aegotheles
+  ?????????TTGTGGTGGGAAT Aerodramus
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'nexus' format
+ Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
 Testing reading stockholm format file Stockholm/simple.sth with 1 alignments
  Alignment 0, with 2 sequences of length 104
   UUAAUCGAGCUCAACACUCUUCGUAUAUCCUC-UCA...UGU AP001509.1
