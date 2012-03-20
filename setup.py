@@ -359,13 +359,11 @@ else :
                'Bio/trie.c'],
               include_dirs=["Bio"]
               ),
-#Commented out due to the build dependency on flex, see Bug 2619
-#   Extension('Bio.PDB.mmCIF.MMCIFlex',
-#              ['Bio/PDB/mmCIF/lex.yy.c',
-#               'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
-#              include_dirs=["Bio"],
-#              libraries=["fl"]
-#              ),
+    Extension('Bio.PDB.mmCIF.MMCIFlex',
+             ['Bio/PDB/mmCIF/lex.yy.c',
+              'Bio/PDB/mmCIF/MMCIFlexmodule.c'],
+             include_dirs=["Bio"],
+             ),
     Extension('Bio.Nexus.cnexus',
               ['Bio/Nexus/cnexus.c']
               ),
