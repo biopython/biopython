@@ -10,6 +10,16 @@ import ply.lex as lex  # lexer
 from ply.lex import TOKEN  # to assign complex docstrings to tokens
 
 class CIFlex:
+    def __init__(self, **kwargs):
+        # combine re.MULTILINE and re.I with user reflags
+        re_old = 0
+        if "reflags" in kwargs.keys():
+            re_old = kwargs["reflags"]
+        kwargs["reflags"] = re_old | re.MULTILINE | re.I
+        self._kwargs = kwargs
+        self.build()
+    
+    ##### Lexer tokens #####
     # <AnyPrintChar> : [^\r\n]
     # <NonBlankChar> : [^ \t\r\n]
     # <eol> : (\r\n|\n|\r)
@@ -147,21 +157,17 @@ class CIFlex:
         self.skipped_lines += t.value.count('\n')
         t.lexer.skip(1)
     
-    ### Public methods
-
-    def build(self, **kwargs):
+    ##### Public methods #####
+    def build(self):
         self._lexstart = time.clock()
-        # set re.MULTILINE while preserving any user reflags
-        re_old = 0
-        if "reflags" in kwargs.keys():
-            re_old = kwargs["reflags"]
-        kwargs["reflags"] = re_old | re.MULTILINE | re.I
-
+        kwargs = self._kwargs
         self.lexer = lex.lex(module=self,**kwargs)
-        
         self.skipped_lines = 0
         self.lex_init = time.clock() - self._lexstart
         print "Lexer started", self.lex_init
+        
+    def getToken(self):
+        pass
 
     def test(self, data):
         self.lexer.input(data)
@@ -180,7 +186,6 @@ if __name__ == "__main__":
         filename = sys.argv[1]
         with open(filename) as fh:
             m = CIFlex()
-            m.build()
             m.test(fh.read())
 
 # vim:sw=4:ts=4:expandtab
