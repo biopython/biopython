@@ -10,7 +10,22 @@ import ply.lex as lex  # lexer
 from ply.lex import TOKEN  # to assign complex docstrings to tokens
 
 class CIFlex:
-    def __init__(self, **kwargs):
+    '''
+    Build PLY lexer for CIF/mmCIF data format and tokenize input.
+
+    Arguments: 
+    data (default None): bulk input (i.e. fh.read())
+    **kwargs: arguments to lexer (i.e. debug=1)
+            Consult PLY documentation. 
+
+    Note that PLY uses docstrings to store RE.
+
+    '''
+    def __init__(self, data=None, **kwargs):
+        '''
+        Build lexer with optional args, tokenize if input provided.
+
+        '''
         # combine re.MULTILINE and re.I with user reflags
         re_old = 0
         if "reflags" in kwargs.keys():
@@ -18,6 +33,9 @@ class CIFlex:
         kwargs["reflags"] = re_old | re.MULTILINE | re.I
         self._kwargs = kwargs
         self.build()
+        if data is not None:
+            self._data = data
+            self.input()
     
     ##### Lexer tokens #####
     # <AnyPrintChar> : [^\r\n]
@@ -137,7 +155,7 @@ class CIFlex:
         return t
 
     # unquoted strings may not begin with brackets or $
-    # not space bracket $, non blank chars
+    # [not space brackets $], non blank chars
     def t_data_loop_UNQ_STR(self,t):
         r"[^ \t\r\n\[\]$][^ \t\r\n]*"
         t.type="VALUE"
@@ -159,18 +177,25 @@ class CIFlex:
     
     ##### Public methods #####
     def build(self):
+        '''Build the lexer and start timers'''
         self._lexstart = time.clock()
-        kwargs = self._kwargs
-        self.lexer = lex.lex(module=self,**kwargs)
+        self.lexer = lex.lex(module=self,**self._kwargs)
         self.skipped_lines = 0
         self.lex_init = time.clock() - self._lexstart
         print "Lexer started", self.lex_init
         
-    def getToken(self):
-        pass
+    def input(self):
+        '''Feed the data into the lexer'''
+        self.lexer.input(self._data)
 
-    def test(self, data):
-        self.lexer.input(data)
+    def getToken(self):
+        '''Emit token type, value as a 2-tuple'''
+        token = self.lexer.token()
+        if token:
+            return (token.type, token.value)
+
+    def _test(self):
+        '''Iterate through and print tokens and time'''
         while True:
             token = self.lexer.token()
             if not token:
@@ -185,7 +210,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         filename = sys.argv[1]
         with open(filename) as fh:
-            m = CIFlex()
-            m.test(fh.read())
+            m = CIFlex(fh.read(), debug=1)
+            m._test()
 
 # vim:sw=4:ts=4:expandtab
