@@ -12,7 +12,15 @@ The latest news is at the top of this file.
 
 (In progress, not released yet) Biopython 1.60
 
-Nothing to mention so far.
+Nothing major to mention so far.
+
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Kamil Slowikowski (first contribution)
+Peter Cock
 
 ===================================================================
 
