@@ -43,6 +43,7 @@ FREE 			(eg. value )			7
 
 %%					
 
+
 void mmcif_set_file(FILE *fp)
 {
 	yyin=fp;
