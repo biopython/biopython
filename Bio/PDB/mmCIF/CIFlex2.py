@@ -19,9 +19,8 @@ class CIFlex:
     **kwargs: arguments to lexer (i.e. debug=1)
             Consult PLY documentation.
 
-    Note that PLY uses docstrings to store RE.
-
     '''
+    # Note that PLY uses docstrings to store RE.
     def __init__(self, data=None, **kwargs):
         '''
         Build lexer with optional args, tokenize if input provided.
@@ -38,28 +37,37 @@ class CIFlex:
             self._data = data
             self.input()
 
-    ##### Lexer tokens #####
+    #### Lexer tokens #####
     # <AnyPrintChar> : [^\r\n]
     # <NonBlankChar> : [^ \t\r\n]
     # <eol> : (\r\n|\n|\r)
 
+    tok_type = (
+        None,
+        "NAME",  # 1
+        "LOOP",  # 2
+        "DATA",  # 3
+        "SEMICOLONS",  # 4
+        "DOUBLEQUOTED",  # 5
+        "QUOTED",  # 6
+        "SIMPLE",  # 7
+    )
+
     tokens = (
         "COMMENT",
         # Reserved words:
-        "DATA",
-        "LOOP",
+        '3',  # DATA
+        '2',  # LOOP
         "GLOBAL",
         "SAVE",
         "STOP",
-        # Underscore begins tag
-        "TAG",
-        # Values
-        "VALUE",
-        "SEMI_TEXT_FIELD",
+        '1',  # NAME
+        # Value types:
+        '4',  # SEMICOLONS
         "SEMI_ERROR",
-        "SQ_STR",
-        "DQ_STR",
-        "UNQ_STR",
+        '6',  # QUOTED
+        '5',  # DOUBLEQUOTED
+        '7',  # SIMPLE
     )
 
     states = (
@@ -75,14 +83,16 @@ class CIFlex:
             t.lexer.pop_state()
         return None
 
+    # DATA=3
     # DATA_, non blank chars
-    def t_DATA(self, t):
+    def t_3(self, t):
         r"DATA_[^ \t\r\n]+"
         t.lexer.push_state("data")
         t.value = t.value[5:]
         return t
 
-    def t_data_LOOP(self, t):
+    # LOOP=2
+    def t_data_2(self, t):
         r"LOOP_"
         if t.lexer.current_state() == "loop":
             warnings.warn("ERROR: Illegal nested loop.", RuntimeWarning)
@@ -105,8 +115,9 @@ class CIFlex:
         r"STOP_"
         return t
 
+    # NAME=1
     # _, non blank chars
-    def t_data_loop_TAG(self, t):
+    def t_data_loop_1(self, t):
         r"_[^ \t\r\n]+"
         return t
 
@@ -117,7 +128,10 @@ class CIFlex:
     _semi_text_lines = r"((^[^;\r\n][^\r\n]*)?(\r\n|\r|\n))*;[ \t\r\n]"
     semi_text_field = _semi_text_header + _semi_text_lines
 
-    def t_data_loop_SEMI_TEXT_FIELD(self, t):
+    # SEMICOLONS=4
+    # @TOKEN sets docstring of next token definition
+    @TOKEN(semi_text_field)
+    def t_data_loop_4(self, t):
         # add \n to count
         t.lexer.lineno += t.value.count('\n')
         # remove \n by splitting into lines and joining
@@ -125,10 +139,7 @@ class CIFlex:
         if " " in t.value.strip():
             sep = " "
         t.value = sep.join(t.value.splitlines())[1:-1]
-        t.type = "VALUE"
         return t
-    # set docstring
-    t_data_loop_SEMI_TEXT_FIELD.__doc__ = semi_text_field
 
     # line anchor, semi, non blank chars
     # (that hasn't been recognized in a SEMI_TEXT_FIELD)
@@ -136,30 +147,30 @@ class CIFlex:
         r"^;[^ \t\r\n]*"
         warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
         t.value = t.value[1:]
-        t.type = "VALUE"
+        t.type = "7"
         return t
 
+    # QUOTED=6
     # cif allows internal quotes w/o trailing whitespace, i.e. 'it's a dog'
     # reluctant * prevents grabbing too much
     # sq, non-newline chars (reluctant!), sq, whitespace
-    def t_data_loop_SQ_STR(self, t):
+    def t_data_loop_6(self, t):
         r"'[^\r\n]*?'[ \t\r\n]"
         t.value = t.value.rstrip()[1:-1]
-        t.type = "VALUE"
         return t
 
+    # DOUBLEQUOTED=5
     # dq, non-newline chars (reluctant!), dq, whitespace
-    def t_data_loop_DQ_STR(self, t):
+    def t_data_loop_5(self, t):
         r'"[^\r\n]*?"[ \t\r\n]'
         t.value = t.value.rstrip()[1:-1]
-        t.type = "VALUE"
         return t
 
+    # SIMPLE=7
     # unquoted strings may not begin with brackets or $
     # [not space brackets $], non blank chars
-    def t_data_loop_UNQ_STR(self, t):
+    def t_data_loop_7(self, t):
         r"[^ \t\r\n\[\]$][^ \t\r\n]*"
-        t.type = "VALUE"
         return t
 
     # Ignored characters: spaces and tabs
@@ -199,10 +210,10 @@ class CIFlex:
     def _test(self):
         '''Iterate through and print tokens and time'''
         while True:
-            token = self.lexer.token()
-            if not token:
+            tok = self.lexer.token()
+            if not tok:
                 break
-            print token
+            print self.tok_type[int(tok.type)], tok.value
         self.lex_end = time.clock() - self._lexstart
         print "Lexer runtime:", self.lex_end
         print "Skipped %s lines" % self.skipped_lines
