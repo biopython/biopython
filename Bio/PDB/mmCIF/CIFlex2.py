@@ -14,14 +14,14 @@ class CIFlex:
     '''
     Build PLY lexer for CIF/mmCIF data format and tokenize input.
 
-    Arguments:
-    data (default None): bulk input (i.e. fh.read())
+    Options:
+    filename: filename to tokenize (default None)
     **kwargs: arguments to lexer (i.e. debug=1)
             Consult PLY documentation.
 
     '''
     # Note that PLY uses docstrings to store RE.
-    def __init__(self, data=None, **kwargs):
+    def __init__(self, filename=None, **kwargs):
         '''
         Build lexer with optional args, tokenize if input provided.
 
@@ -33,15 +33,17 @@ class CIFlex:
         kwargs["reflags"] = re_old | re.MULTILINE | re.I
         self._kwargs = kwargs
         self.build()
-        if data is not None:
-            self._data = data
-            self.input()
+        # Pass input to lexer if provided
+        if filename is not None:
+            with open(filename) as fh:
+                filedump = fh.read()
+            self.lexer.input(filedump)
 
     #### Lexer tokens #####
-    # <AnyPrintChar> : [^\r\n]
-    # <NonBlankChar> : [^ \t\r\n]
-    # <eol> : (\r\n|\n|\r)
+    # REFERENCE:
+    # http://www.iucr.org/resources/cif/spec/version1.1/cifsyntax
 
+    # Tuple indices match C/flex integer tokens
     tok_type = (
         None,
         "NAME",  # 1
@@ -53,27 +55,37 @@ class CIFlex:
         "SIMPLE",  # 7
     )
 
+    # PLY requires token names to be strings
     tokens = (
         "COMMENT",
+        '1',  # NAME
         # Reserved words:
-        '3',  # DATA
-        '2',  # LOOP
         "GLOBAL",
         "SAVE",
         "STOP",
-        '1',  # NAME
+        '2',  # LOOP
+        '3',  # DATA
         # Value types:
-        '4',  # SEMICOLONS
         "SEMI_ERROR",
-        '6',  # QUOTED
+        '4',  # SEMICOLONS
         '5',  # DOUBLEQUOTED
+        '6',  # QUOTED
         '7',  # SIMPLE
     )
 
+    ### Lexer states
+    # exclusive states only allow tokens assigned to that state
+    # Assignments appear in between t_ and _NAME in definition
+    # t_ANY_ token will be matched in any state
     states = (
         ("data", "exclusive"),
         ("loop", "exclusive"),
     )
+
+    ### Regex description reference
+    # <AnyPrintChar> : [^\r\n]
+    # <NonBlankChar> : [^ \t\r\n]
+    # <eol> : (\r\n|\n|\r)
 
     # Literal hash, any print chars
     def t_ANY_COMMENT(self, t):
@@ -87,6 +99,7 @@ class CIFlex:
     # DATA_, non blank chars
     def t_3(self, t):
         r"DATA_[^ \t\r\n]+"
+        # This state is intended to eventually handle multiple data blocks
         t.lexer.push_state("data")
         t.value = t.value[5:]
         return t
@@ -95,24 +108,28 @@ class CIFlex:
     def t_data_2(self, t):
         r"LOOP_"
         if t.lexer.current_state() == "loop":
-            warnings.warn("ERROR: Illegal nested loop.", RuntimeWarning)
+            warnings.warn("LEX ERROR: Illegal nested loop.", RuntimeWarning)
         else:
             t.lexer.push_state("loop")
             return t
         return t
 
-    def t_ANY_GLOBAL(self, t):
+    #def t_ANY_GLOBAL(self, t):
         r"GLOBAL_"
+        warnings.warn("LEX ERROR: Unhandled 'GLOBAL_' found", RuntimeWarning)
         return t
 
     # SAVE_, non blank chars
     def t_ANY_SAVE(self, t):
-        r"SAVE_[^ \t\r\n]+"
-        t.value = t.value[5:]
+        r"SAVE_[^ \t\r\n]*"
+        warnings.warn("LEX ERROR: Unhandled 'SAVE_' found", RuntimeWarning)
+        if len(t.value) > 5:
+            t.value = t.value[5:]
         return t
 
     def t_ANY_STOP(self, t):
         r"STOP_"
+        warnings.warn("LEX ERROR: Unhandled 'STOP_' found", RuntimeWarning)
         return t
 
     # NAME=1
@@ -121,6 +138,7 @@ class CIFlex:
         r"_[^ \t\r\n]+"
         return t
 
+    # SEMICOLONS=4
     # line anchor, semi, any print chars
     _semi_text_header = r"^;[^\r\n]*$"
     # line anchor, any non-semi print char, any print chars, eol,
@@ -128,26 +146,37 @@ class CIFlex:
     _semi_text_lines = r"((^[^;\r\n][^\r\n]*)?(\r\n|\r|\n))*;[ \t\r\n]"
     semi_text_field = _semi_text_header + _semi_text_lines
 
-    # SEMICOLONS=4
-    # @TOKEN sets docstring of next token definition
+    # @TOKEN sets docstring/re of next token definition
     @TOKEN(semi_text_field)
     def t_data_loop_4(self, t):
         # add \n to count
         t.lexer.lineno += t.value.count('\n')
         # remove \n by splitting into lines and joining
+        # break field into list of stripped lines
+        lines = [val.strip() for val in t.value.splitlines()]
+        # autodetect spaces in content (i.e. sentences vs. gene sequence)
         sep = ""
-        if " " in t.value.strip():
-            sep = " "
-        t.value = sep.join(t.value.splitlines())[1:-1]
+        whitespace = " "
+        if whitespace in t.value.strip():
+            sep = whitespace
+        # remove semicolons with slice
+        t.value = sep.join(lines)[1:-1]
         return t
 
     # line anchor, semi, non blank chars
-    # (that hasn't been recognized in a SEMI_TEXT_FIELD)
     def t_data_loop_SEMI_ERROR(self, t):
         r"^;[^ \t\r\n]*"
-        warnings.warn("ERROR: found illegal ';', removing", RuntimeWarning)
+        # XXX Removing the semicolon may not be the ideal behavior
+        warnings.warn("LEX WARNING: removing illegal ';'", RuntimeWarning)
         t.value = t.value[1:]
         t.type = "7"
+        return t
+
+    # DOUBLEQUOTED=5
+    # dq, non-newline chars (reluctant!), dq, whitespace
+    def t_data_loop_5(self, t):
+        r'"[^\r\n]*?"[ \t\r\n]'
+        t.value = t.value.rstrip()[1:-1]
         return t
 
     # QUOTED=6
@@ -156,13 +185,6 @@ class CIFlex:
     # sq, non-newline chars (reluctant!), sq, whitespace
     def t_data_loop_6(self, t):
         r"'[^\r\n]*?'[ \t\r\n]"
-        t.value = t.value.rstrip()[1:-1]
-        return t
-
-    # DOUBLEQUOTED=5
-    # dq, non-newline chars (reluctant!), dq, whitespace
-    def t_data_loop_5(self, t):
-        r'"[^\r\n]*?"[ \t\r\n]'
         t.value = t.value.rstrip()[1:-1]
         return t
 
@@ -193,19 +215,29 @@ class CIFlex:
         self._lexstart = time.clock()
         self.lexer = lex.lex(module=self, **self._kwargs)
         self.skipped_lines = 0
-        self.lex_init = time.clock() - self._lexstart
-        print "Lexer started", self.lex_init
+        self._lex_init = time.clock() - self._lexstart
+        #print "Lexer started", self._lex_init
 
-    def input(self):
-        '''Feed the data into the lexer'''
-        self.lexer.input(self._data)
+    # The following 3 classmethods (open_file, close_file, get_token)
+    #     emulate the behavior of the C module for MMCIF2Dict
+    @classmethod
+    def open_file(cls, filename):
+        '''Create class instance of this class (emulates C module)'''
+        cls._MMCIF2DictInstance = CIFlex(filename)
 
-    def getToken(self):
-        '''Emit token type, value as a 2-tuple'''
-        token = self.lexer.token()
+    @classmethod
+    def get_token(cls):
+        '''Emit int token type, value as a 2-tuple (emulates C module)'''
+        token = cls._MMCIF2DictInstance.lexer.token()
         if token:
-            return (token.type, token.value)
+            return (int(token.type), token.value)
+        # tuple of None avoids 'NoneType not iterable' warning
         return (None, None)
+
+    @classmethod
+    def close_file(cls):
+        '''Pretend to close file (emulates C module)'''
+        pass
 
     def _test(self):
         '''Iterate through and print tokens and time'''
@@ -213,18 +245,17 @@ class CIFlex:
             tok = self.lexer.token()
             if not tok:
                 break
+            # Get token name from tok_type by index
             print self.tok_type[int(tok.type)], tok.value
-        self.lex_end = time.clock() - self._lexstart
-        print "Lexer runtime:", self.lex_end
-        print "Skipped %s lines" % self.skipped_lines
+        self._lex_end = time.clock() - self._lexstart
+        #print "Lexer runtime:", self._lex_end
+        print "Lexer skipped %s lines" % self.skipped_lines
 
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         filename = sys.argv[1]
-        with open(filename) as fh:
-            filedump = fh.read()
-        m = CIFlex(filedump, debug=1)
+        m = CIFlex(filename, debug=1)
         m._test()
 
 # vim:sw=4:ts=4:expandtab
