@@ -49,8 +49,9 @@ void mmcif_set_file(FILE *fp)
 	yyin=fp;
 }	
 
-int mmcif_get_token()
+int mmcif_get_token(void)
 {
+	extern int yylex(void);
 	return yylex();
 }
 
@@ -58,6 +59,4 @@ char *mmcif_get_string(void)
 {
 	return yytext;
 }	
-
-
 
