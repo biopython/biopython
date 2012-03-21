@@ -43,12 +43,6 @@ FREE 			(eg. value )			7
 
 %%					
 
-int main()
-{
-	while(yylex() != 0) ;
-	return 0;
-}
-
 void mmcif_set_file(FILE *fp)
 {
 	yyin=fp;
