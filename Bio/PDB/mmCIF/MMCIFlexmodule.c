@@ -1,6 +1,6 @@
 #include <Python.h>
+#include "lex.yy.h"
 
-extern char *mmcif_get_string(void);
 
 FILE *fp;
 
@@ -13,7 +13,6 @@ static PyObject *MMCIFlex_open_file(PyObject *self, PyObject *args)
 
 	fp=fopen(filename, "r");	
 
-	extern void mmcif_set_file(FILE *fp);
 	mmcif_set_file(fp);
 
 	Py_INCREF(Py_None);
@@ -42,7 +41,6 @@ static PyObject *MMCIFlex_get_token(PyObject *self, PyObject *args)
 	char *value="";
 
 	/* get token number */
-	extern int mmcif_get_token(void);
 	flag=mmcif_get_token();
 
 	/* if flag==0 we are EOF */
