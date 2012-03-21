@@ -114,7 +114,7 @@ class CIFlex:
             return t
         return t
 
-    #def t_ANY_GLOBAL(self, t):
+    def t_ANY_GLOBAL(self, t):
         r"GLOBAL_"
         warnings.warn("LEX ERROR: Unhandled 'GLOBAL_' found", RuntimeWarning)
         return t
