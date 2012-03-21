@@ -1839,12 +1839,6 @@ void yyfree (void * ptr )
 
 
 
-int main()
-{
-	while(yylex() != 0) ;
-	return 0;
-}
-
 void mmcif_set_file(FILE *fp)
 {
 	yyin=fp;
