@@ -7,7 +7,7 @@
 
 import os.path
 import warnings
-import Bio.PDB.mmCIF.MMCIFlex
+import Bio.PDB.mmCIF.MMCIFlex as MMCIFlex
 
 
 class MMCIF2Dict():
@@ -27,11 +27,16 @@ class MMCIF2Dict():
         self.data[None]=[]
         if not os.path.isfile(filename):
             raise IOError("File not found.")
-        Bio.PDB.mmCIF.MMCIFlex.open_file(filename)
+        MMCIFlex.open_file(filename)
         self._make_mmcif_dict()
-        Bio.PDB.mmCIF.MMCIFlex.close_file()
+        MMCIFlex.close_file()
 
     def _make_mmcif_dict(self): 
+        """
+        Loop through PLY token (type, value) pairs.
+        Store data in class dict named data.
+
+        """
         # local copies
         NAME=self.NAME
         LOOP=self.LOOP
@@ -40,7 +45,7 @@ class MMCIF2Dict():
         DOUBLEQUOTED=self.DOUBLEQUOTED
         QUOTED=self.QUOTED
         SIMPLE=self.SIMPLE
-        get_token=Bio.PDB.mmCIF.MMCIFlex.get_token
+        get_token=MMCIFlex.get_token
         # are we looping?
         loop_flag=0
         # list of names in loop
