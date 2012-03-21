@@ -15,8 +15,7 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 
 class MMCIFParser(object):
     def get_structure(self, structure_id, filename):
-        _make_dict = MMCIF2Dict(filename)
-        self._mmcif_dict = _make_dict.data
+        self._mmcif_dict=MMCIF2Dict(filename)
         self._structure_builder=StructureBuilder()
         self._build_structure(structure_id)
         return self._structure_builder.get_structure()
