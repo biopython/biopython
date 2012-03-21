@@ -10,7 +10,7 @@ import warnings
 import Bio.PDB.mmCIF.MMCIFlex as MMCIFlex
 
 
-class MMCIF2Dict():
+class MMCIF2Dict(dict):
     # The token identifiers
     NAME=1
     LOOP=2
@@ -21,22 +21,21 @@ class MMCIF2Dict():
     SIMPLE=7
 
     def __init__(self, filename):
-        # this dict will contain the name/data pairs 
-        self.data={}
-        # entry for garbage
-        self.data[None]=[]
         if not os.path.isfile(filename):
             raise IOError("File not found.")
         MMCIFlex.open_file(filename)
-        self._make_mmcif_dict()
+        dict.__init__(self, **self._make_mmcif_dict())
         MMCIFlex.close_file()
 
     def _make_mmcif_dict(self): 
         """
-        Loop through PLY token (type, value) pairs.
-        Store data in class dict named data.
+        Loop through PLY token (type, value) pairs, return a dict.
 
         """
+        # this dict will contain the name/data pairs 
+        mmcif_dict = {}
+        # entry for garbage
+        mmcif_dict[None] = []
         # local copies
         NAME=self.NAME
         LOOP=self.LOOP
@@ -55,7 +54,6 @@ class MMCIF2Dict():
         # get first token/value pair
         token, value=get_token()
         # print token, value
-        mmcif_dict=self.data
         # loop until EOF (token==0)
         while token:
             if token==NAME:
@@ -118,6 +116,7 @@ class MMCIF2Dict():
             if token==None:
                 token, value=get_token()
                 # print token, value
+        return mmcif_dict
 
 
 if __name__=="__main__":
@@ -129,8 +128,7 @@ if __name__=="__main__":
 
     filename=sys.argv[1]    
 
-    cif2dict = MMCIF2Dict(filename)
-    mmcif_dict = cif2dict.data
+    mmcif_dict = MMCIF2Dict(filename)
 
     entry = ""
     print "Now type a key ('q' to end, 'k' for a list of all keys):"
