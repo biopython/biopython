@@ -194,6 +194,7 @@ class CIFlex:
         token = self.lexer.token()
         if token:
             return (token.type, token.value)
+        return (None, None)
 
     def _test(self):
         '''Iterate through and print tokens and time'''
@@ -211,7 +212,8 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         filename = sys.argv[1]
         with open(filename) as fh:
-            m = CIFlex(fh.read(), debug=1)
-            m._test()
+            filedump = fh.read()
+        m = CIFlex(filedump, debug=1)
+        m._test()
 
 # vim:sw=4:ts=4:expandtab
