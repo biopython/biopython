@@ -60,9 +60,9 @@ class CIFlex:
         "COMMENT",
         '1',  # NAME
         # Reserved words:
-        "GLOBAL",
-        "SAVE",
-        "STOP",
+        #"GLOBAL",
+        #"SAVE",
+        #"STOP",
         '2',  # LOOP
         '3',  # DATA
         # Value types:
@@ -205,8 +205,10 @@ class CIFlex:
 
     # Error handling rule
     def t_ANY_error(self, t):
-        print "Illegal value '%s'" % t.value
-        self.skipped_lines += t.value.count('\n')
+        #print "Illegal value '%s'" % t.value
+        newlines = t.value.count('\n')
+        t.lexer.lineno += newlines
+        self.skipped_lines += newlines
         t.lexer.skip(1)
 
     ##### Public methods #####
@@ -215,7 +217,7 @@ class CIFlex:
         self._lexstart = time.clock()
         self.lexer = lex.lex(module=self, **self._kwargs)
         self.skipped_lines = 0
-        self._lex_init = time.clock() - self._lexstart
+        #self._lex_init = time.clock() - self._lexstart
         #print "Lexer started", self._lex_init
 
     # The following 3 classmethods (open_file, close_file, get_token)
@@ -246,16 +248,16 @@ class CIFlex:
             if not tok:
                 break
             # Get token name from tok_type by index
-            print self.tok_type[int(tok.type)], tok.value
+            #print self.tok_type[int(tok.type)], tok.value
         self._lex_end = time.clock() - self._lexstart
-        #print "Lexer runtime:", self._lex_end
+        print "Lexer runtime:", self._lex_end
         print "Lexer skipped %s lines" % self.skipped_lines
 
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         filename = sys.argv[1]
-        m = CIFlex(filename, debug=1)
+        m = CIFlex(filename, optimize=1)
         m._test()
 
 # vim:sw=4:ts=4:expandtab
