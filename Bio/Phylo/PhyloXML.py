@@ -112,7 +112,7 @@ class Other(PhyloElement):
             children=None):
         self.tag = tag
         self.namespace = namespace
-        self.attributes = attributes
+        self.attributes = attributes or {}
         self.value = value
         self.children = children or []
 
