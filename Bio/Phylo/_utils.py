@@ -325,8 +325,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
     # The function draw_clade closes over the axes object
     if axes is None:
         fig = plt.figure()
-        axes = fig.add_subplot(1,1,1)
-    elif not isinstance(axes,plt.matplotlib.axes.Axes):
+        axes = fig.add_subplot(1, 1, 1)
+    elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
 
     def draw_clade(clade, x_start, color='k', lw=1):
@@ -354,7 +354,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
         else:
             conf_label = None
         if conf_label and show_confidence:
-            plt.text(x_start, y_here, conf_label, fontsize=9)
+            axes.text(x_start, y_here, conf_label, fontsize=9)
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
