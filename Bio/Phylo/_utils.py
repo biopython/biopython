@@ -262,6 +262,11 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
     The graphic is a rooted tree, drawn with roughly the same algorithm as
     draw_ascii.
 
+    Visual aspects of the plot can be modified using pyplot's own functions and
+    objects (via pylab or matplotlib). In particular, the pyplot.rcParams
+    object can be used to scale the font size (rcParams["font.size"]) and line
+    width (rcParams["lines.linewidth"]).
+
     :Parameters:
         label_func : callable
             A function to extract a label from a node. By default this is str(),
