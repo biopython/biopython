@@ -329,7 +329,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError("Invalid argument for axes: %s" % axes)
 
-    def draw_clade(clade, x_start, color='k', lw=1):
+    def draw_clade(clade, x_start, color, lw):
         """Recursively draw a tree, down from the given clade."""
         x_here = x_posns[clade]
         y_here = y_posns[clade]
@@ -337,15 +337,16 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
         if hasattr(clade, 'color') and clade.color is not None:
             color = clade.color.to_hex()
         if hasattr(clade, 'width') and clade.width is not None:
-            lw = clade.width
+            lw = clade.width * plt.rcParams['lines.linewidth']
         # Draw a horizontal line from start to here
         axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
             axes.text(x_here, y_here, ' ' + label,
-                    fontsize=10, verticalalignment='center')
-        # Add confidence
+                    fontsize=0.83*plt.rcParams['font.size'], # aesthetics
+                    verticalalignment='center')
+        # Add confidence as a label above the branch
         if hasattr(clade, 'confidences'):
             # phyloXML supports multiple confidences
             conf_label = '/'.join(map(str, map(float, clade.confidences)))
@@ -354,7 +355,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
         else:
             conf_label = None
         if conf_label and show_confidence:
-            axes.text(x_start, y_here, conf_label, fontsize=9)
+            axes.text(x_start, y_here, conf_label,
+                    fontsize=0.75*plt.rcParams['font.size']) # aesthetics
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
@@ -365,7 +367,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
             for child in clade:
                 draw_clade(child, x_here, color, lw)
 
-    draw_clade(tree.root, 0)
+    draw_clade(tree.root, 0, 'k', plt.rcParams['lines.linewidth'])
     if hasattr(tree, 'name') and tree.name:
         axes.set_title(tree.name)
     axes.set_xlabel('branch length')
