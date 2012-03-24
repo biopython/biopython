@@ -2,59 +2,58 @@
 #include "lex.yy.h"
 
 FILE *fp;
+char *classinst;
 
 PyObject *MMCIFlex__init__(PyObject *self, PyObject *args) {
     char *filename;
-    /*filename = "x";*/
-    char *classname;
 
-    if (!PyArg_ParseTuple(args, "s s", &classname &filename))
+    /* First member of args is a PyObject of the class instance */
+    if (!PyArg_ParseTuple(args, "Os", &classinst, &filename))
         return NULL;
 
-    /*printf("%s", classname);*/
-    /*printf("%s", filename);*/
+    /*printf("Opening file '%s'\n", filename);*/
 
-    /*fp = fopen(filename, "r");	*/
+    fp = fopen(filename, "r");  
 
-    /*mmcif_set_file(fp);*/
+    mmcif_set_file(fp);
 
-	Py_INCREF(Py_None);
-	return Py_None;
+    Py_INCREF(Py_None);
+    return Py_None;
 }
 
-/*PyObject *MMCIFlex__del__(PyObject *self, PyObject *args) {*/
-	/*[> verify no arguments <]*/
-    /*[>if (!PyArg_ParseTuple(args, ""))<]*/
-        /*[>return NULL;<]*/
+PyObject *MMCIFlex__del__(PyObject *self, PyObject *args) {
+    /* verify only argument is PyObject of class instance */
+    if (!PyArg_ParseTuple(args, "O", &classinst))
+        return NULL;
 
-	/*fclose(fp);*/
+    fclose(fp);
 
-	/*Py_INCREF(Py_None);*/
-	/*return Py_None;*/
-/*}	*/
+    Py_INCREF(Py_None);
+    return Py_None;
+}   
 
-/*PyObject *MMCIFlex_get_token(PyObject *self, PyObject *args) {*/
-	/*int flag;*/
-	/*char *value="";*/
+PyObject *MMCIFlex_get_token(PyObject *self, PyObject *args) {
+    int flag = 0;
+    char *value="";
 
-	/*[> get token number <]*/
-	/*flag=mmcif_get_token();*/
+    /* get token number */
+    flag=mmcif_get_token();
 
-	/*[> if flag==0 we are EOF <]*/
-	/*if(flag) {*/
-		/*value=mmcif_get_string();*/
-	/*}	*/
+    /* if flag==0 we are EOF */
+    if(flag) {
+        value=mmcif_get_string();
+    }   
 
-	/*[> return the (tokennumber, string) tuple <]*/
-	/*return Py_BuildValue("(is)", flag, value);*/
-/*}*/
+    /* return the (tokennumber, string) tuple */
+    return Py_BuildValue("(is)", flag, value);
+}
 
 PyMethodDef MMCIFlexMethods[] =
 {
-	{"__init__",	MMCIFlex__init__, 	METH_VARARGS},
-	/*{"__del__",	MMCIFlex__del__,	METH_VARARGS},*/
-	/*{"get_token",  	MMCIFlex_get_token, 	METH_VARARGS},*/
-	{NULL,      	NULL}        			/* Sentinel */
+    {"__init__", MMCIFlex__init__, METH_VARARGS, "Open file"},
+    {"__del__", MMCIFlex__del__, METH_VARARGS, "Close file"},
+    {"get_token", MMCIFlex_get_token, METH_VARARGS, "Emit tok (type,val)"},
+    {NULL, NULL}  /* Sentinel */
 };
 
 PyMethodDef ModuleMethods[] = { {NULL} };

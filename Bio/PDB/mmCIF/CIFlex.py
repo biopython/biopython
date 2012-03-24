@@ -1,6 +1,5 @@
-# Created 2012
-# Lenna X. Peterson
-# arklenna@gmail.com
+# Copyright 2012 Lenna X. Peterson (arklenna@gmail.com)
+# All rights reserved
 
 import sys  # to get args
 import warnings  # to warn
@@ -220,26 +219,13 @@ class CIFlex:
         #self._lex_init = time.clock() - self._lexstart
         #print "Lexer started", self._lex_init
 
-    # The following 3 classmethods (open_file, close_file, get_token)
-    #     emulate the behavior of the C module for MMCIF2Dict
-    @classmethod
-    def open_file(cls, filename):
-        '''Create class instance of this class (emulates C module)'''
-        cls._MMCIF2DictInstance = CIFlex(filename)
-
-    @classmethod
-    def get_token(cls):
-        '''Emit int token type, value as a 2-tuple (emulates C module)'''
-        token = cls._MMCIF2DictInstance.lexer.token()
+    def get_token(self):
+        '''Emit int token type, value as a 2-tuple'''
+        token = self.lexer.token()
         if token:
             return (int(token.type), token.value)
         # tuple of None avoids 'NoneType not iterable' warning
         return (None, None)
-
-    @classmethod
-    def close_file(cls):
-        '''Pretend to close file (emulates C module)'''
-        pass
 
     def _test(self):
         '''Iterate through and print tokens and time'''
