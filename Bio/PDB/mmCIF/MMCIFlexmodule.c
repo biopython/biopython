@@ -1,3 +1,13 @@
+/* Original author unknown
+ * Conversion from module-level functions to class-level functions
+ * copyright 2012 Lenna X. Peterson (arklenna@gmail.com)
+ * Module init function from:
+ * http://code.activestate.com/recipes/54352-defining-python-class-methods-in-c/
+ *
+ * This code is part of the Biopython distribution and governed by its
+ * license.  Please see the LICENSE file that should have been included
+ * as part of this package.
+ */
 #include <Python.h>
 #include "lex.yy.h"
 
