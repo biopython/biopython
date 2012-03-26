@@ -187,6 +187,8 @@ class MafIndex():
                                                "included Python 2.5+")
         
         # make sure maf_file exists, then open it up
+        maf_file = os.path.realpath(maf_file)
+
         if os.path.isfile(maf_file):
             self._maf_fp = open(maf_file, "r")
         else:
@@ -198,6 +200,16 @@ class MafIndex():
             self._con = con
             
             try:
+                idx_version = int(con.execute("SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])   
+                
+                if idx_version != 1:
+                    raise ValueError("Index version (%s) incompatible with this version of MafIndex" % (idx_version,))
+
+                filename = con.execute("SELECT value FROM meta_data WHERE key = 'filename'").fetchone()[0]
+                
+                if filename != maf_file:
+                    raise ValueError("Index uses a different file (%s != %s)" % (filename, maf_file))
+
                 db_target = con.execute("SELECT value FROM meta_data WHERE key = 'target_seqname'").fetchone()[0]      
                 
                 if db_target != target_seqname:
@@ -251,8 +263,10 @@ class MafIndex():
 
             # make the tables
             con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
+            con.execute("INSERT INTO meta_data (key, value) VALUES ('version', 1);")
             con.execute("INSERT INTO meta_data (key, value) VALUES ('record_count', -1);")
             con.execute("INSERT INTO meta_data (key, value) VALUES ('target_seqname', '%s');" % (target_seqname,))
+            con.execute("INSERT INTO meta_data (key, value) VALUES ('filename', '%s');" % (maf_file,))
             con.execute("CREATE TABLE offset_data (bin INTEGER, start INTEGER, end INTEGER, offset INTEGER);")
             
             insert_count = 0
@@ -522,7 +536,7 @@ class MafIndex():
         
 
     def __repr__(self):
-        return "MafIO.MafIndex(%r, target_seqname=%r" % (self._maf_fp.name,
+        return "MafIO.MafIndex(%r, target_seqname=%r)" % (self._maf_fp.name,
                                                          self.target_seqname)
 
     def __len__(self):
