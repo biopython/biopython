@@ -181,6 +181,7 @@ class MafIndex():
             from sqlite3 import dbapi2 as _sqlite
             from sqlite3 import IntegrityError as _IntegrityError
             from sqlite3 import OperationalError as _OperationalError
+            from sqlite3 import DatabaseError as _DatabaseError
         except ImportError:
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError("Requires sqlite3, which is "
@@ -195,11 +196,11 @@ class MafIndex():
             raise ValueError("Error opening %s -- file not found" % (maf_file,))
         
         # if sqlite_file exists, use the existing db, otherwise index the file
-        if os.path.isfile(sqlite_file):            
-            con = _sqlite.connect(sqlite_file)
-            self._con = con
-            
+        if os.path.isfile(sqlite_file):
             try:
+                con = _sqlite.connect(sqlite_file)
+                self._con = con
+
                 idx_version = int(con.execute("SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])   
                 
                 if idx_version != 1:
@@ -226,8 +227,8 @@ class MafIndex():
                     raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
 
                 self._record_count = records_found
-            except _OperationalError, err:
-                raise ValueError("Not a Biopython index database? %s" % err)
+            except (_OperationalError, _DatabaseError), err:
+                raise ValueError("Problem with SQLite database: %s" % err)
         else:
             con = _sqlite.connect(sqlite_file)
             self._con = con
