@@ -148,6 +148,7 @@ Testing reading nexus format file Nexus/codonposset.nex with 1 alignments
   AAAAAGGCATTGTGGTGGGAAT Aegotheles
   ?????????TTGTGGTGGGAAT Aerodramus
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Checking can write/read as 'phylip' format
  Checking can write/read as 'phylip-relaxed' format
@@ -327,6 +328,7 @@ Testing reading phylip-relaxed format file ExtendedPhylip/primates.phyx with 1 a
   |||||||||||| ...
   TTTTTTTTTTTT alignment column 897
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -341,6 +343,7 @@ Testing reading phylip-sequential format file Phylip/sequential.phy with 1 align
   MAHARVLLLALAVLATAAVAVASSSSFADSNPIRPV...VAA ALEU_HORVU
   ------MWATLPLLCAGAWLLGV--------PVCGA...PLV CATH_HUMAN
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -356,6 +359,7 @@ Testing reading phylip-sequential format file Phylip/sequential2.phy with 1 alig
   TSPASIRPPAGPSSRPAMVSSR--RPSPPPPRRPPG...SHE IXI_236
   TSPASLRPPAGPSSRPAMVSSRR-RPSPPGPRRPT-...SHE IXI_237
  Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
  Checking can write/read as 'nexus' format
  Failed: Need a DNA, RNA or Protein alphabet
  Checking can write/read as 'phylip' format
@@ -699,6 +703,8 @@ Testing reading maf format file MAF/humor.maf with 2 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
@@ -729,6 +735,8 @@ Testing reading maf format file MAF/bug2453.maf with 3 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
  Checking can write/read as 'stockholm' format
 Testing reading maf format file MAF/ucsc_test.maf with 3 alignments
  Alignment 0, with 5 sequences of length 42
@@ -757,6 +765,8 @@ Testing reading maf format file MAF/ucsc_test.maf with 3 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
  Checking can write/read as 'stockholm' format
 Testing reading maf format file MAF/ucsc_mm9_chr10.maf with 48 alignments
  Alignment 0, with 2 sequences of length 164
@@ -789,5 +799,7 @@ Testing reading maf format file MAF/ucsc_mm9_chr10.maf with 48 alignments
  Checking can write/read as 'nexus' format
  Failed: We can only write one Alignment to a Nexus file.
  Checking can write/read as 'phylip' format
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
  Checking can write/read as 'stockholm' format
 Finished tested reading files
