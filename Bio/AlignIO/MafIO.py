@@ -300,7 +300,7 @@ class MafIndex():
         startBin >>= _binFirstShift
         endBin >>= _binFirstShift
 
-        for i in xrange(0, len(binOffsets)):
+        for i in range(0, len(binOffsets)):
             if startBin == endBin:
                 return binOffsets[i] + startBin
 
@@ -422,7 +422,7 @@ class MafIndex():
                     
                     # blank out these positions for every seqname
                     for seqrec in multiseq:
-                        for pos in xrange(rec_start, rec_end):
+                        for pos in range(rec_start, rec_end):
                             split_by_position[seqrec.id][pos] = ""
                     
                     break
@@ -432,7 +432,7 @@ class MafIndex():
             # the true, chromosome/contig/etc position in the target seqname
             real_pos = rec_start
             
-            for gapped_pos in xrange(0, rec_length):
+            for gapped_pos in range(0, rec_length):
                 for seqrec in multiseq:
                     # keep track of this position's value for the target seqname
                     if seqrec.id == self.target_seqname: track_val = seqrec.seq[gapped_pos]
@@ -465,7 +465,7 @@ class MafIndex():
             append = seq_splice.append
             
             for exonstart, exonend in zip(starts, ends):
-                for real_pos in xrange(exonstart, exonend):
+                for real_pos in range(exonstart, exonend):
                     # if this seqname has this position, add it
                     if real_pos in seq_split:
                         append(seq_split[real_pos])
