@@ -335,12 +335,6 @@ if sqlite3:
             self.assertEqual(len(result), 1)
             self.assertEqual(len(result[0].seq), 1000)
             self.assertEqual(str(result[0].seq), "N" * 1000)
-        
-        def test_terminal_gaps_1(self):
-            pass
-
-        def test_terminal_gaps_2(self):
-            pass
 
     class TestSpliceBadMAF(unittest.TestCase):
         """Test in silico splicing on an incorrectly-formatted MAF"""
