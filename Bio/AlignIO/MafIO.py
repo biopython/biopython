@@ -271,9 +271,6 @@ class MafIndex():
         
         Converts a region to a list of bins that it may belong to, including largest
         and smallest bins.
-
-        If join is True, will return a comma-delimited list of bins, otherwise will
-        return a list.
         """
 
         bins = [0, 1]
