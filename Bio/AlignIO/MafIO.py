@@ -255,6 +255,10 @@ class MafIndex():
                                 if line_split[1] == target_seqname:
                                     start = int(line_split[2])
                                     end = int(line_split[2]) + int(line_split[3])
+                                    
+                                    if end - start <> len(line_split[6].replace("-", "")):
+                                        raise ValueError("Invalid length for target coordinates (expected %s, found %s)" % \
+                                                        (end - start, len(line_split[6].replace("-", ""))))
     
                                     yield (self._ucscbin(start, end), start, end, offset)
                                     
