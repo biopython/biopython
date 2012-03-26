@@ -71,53 +71,7 @@ class MafWriter(SequentialAlignmentWriter):
 
         return recs_out
         
-def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, expect_header = True):
-    track_data = False
-    header_data = False
-        
-    if expect_header == True:
-        def _parse_track_line(line):
-            _valid_track_keys = ("name", "mafDot", "visibility", "frames", "speciesOrder", "description")
-    
-            parsed_track_line = dict(x.split("=") for x in shlex.split(line)[1:])
-    
-            invalid_keys = [x for x in parsed_track_line.keys() if x not in _valid_track_keys]
-                
-            if len(invalid_keys) > 0:
-                raise ValueError("Error parsing MAF header -- invalid keys: %s" % (" ".join (invalid_keys,)))           
-    
-            if "speciesOrder" in parsed_track_line:
-                parsed_track_line["speciesOrder"] = parsed_track_line["speciesOrder"].split(" ")
-                    
-                if len(parsed_track_line["speciesOrder"]) <> len(set(parsed_track_line["speciesOrder"])):
-                    raise ValueError("Error parsing MAF header -- duplicate entry in speciesOrder")
-                    
-            return parsed_track_line
-            
-        def _parse_header_line(line):
-            _valid_header_keys = ("version", "scoring")
-    
-            parsed_header_line = dict(x.split("=") for x in shlex.split(line)[1:])
-    
-            invalid_keys = [x for x in parsed_header_line.keys() if x not in _valid_header_keys]
-                
-            if len(invalid_keys) > 0:
-                raise ValueError("Error parsing MAF header -- invalid keys: %s" % (" ".join (invalid_keys,)))
-                
-            return parsed_header_line
-        
-        header_line = handle.next()
-        
-        if header_line.startswith("track"):
-            track_data = _parse_track_line(header_line)
-            
-            header_line = handle.next()
-            
-        if header_line.startswith("##"):
-            header_data = _parse_header_line(header_line)
-        else:
-            raise ValueError("Did not find MAF header!")
-
+def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
     in_a_bundle = False
     
     annotations = []
@@ -309,7 +263,7 @@ class MafIndex():
             con.commit()
             
         # lastly, setup a MafIterator pointing at the open maf_file
-        self._mafiter = MafIterator(self._maf_fp, expect_header = False)
+        self._mafiter = MafIterator(self._maf_fp)
 
     @staticmethod
     def _region2bin(start, end):
