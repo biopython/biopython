@@ -54,7 +54,7 @@ class MafWriter(SequentialAlignmentWriter):
         # for now, use ._annotations private property, but restrict keys to those
         # specifically supported by the MAF format, according to spec
         try:
-            anno = " ".join(["%s=%s" % (x, y) for x, y in alignment._annotations.iteritems() if x in ("score", "pass")])
+            anno = " ".join(["%s=%s" % (x, y) for x, y in alignment._annotations.items() if x in ("score", "pass")])
         except AttributeError:
             anno = "score=0.00"
 
@@ -194,7 +194,7 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
             
             annotations = dict([x.split("=") for x in line.strip().split()[1:]])
                 
-            if len([x for x in annotations.iterkeys() if x not in ("score", "pass")]) > 0:
+            if len([x for x in annotations.keys() if x not in ("score", "pass")]) > 0:
                 raise ValueError("Error parsing alignment - invalid key in 'a' line")
         elif line.startswith("#"):
             # ignore comments
@@ -395,7 +395,7 @@ class MafIndex():
         
         # iterate through hits, fetching alignments from the MAF file and checking
         # to be sure we've retrieved the expected record
-        for offset, (rec_start, rec_end) in hits.iteritems():
+        for offset, (rec_start, rec_end) in hits.items():
             fetched = self.get_record (int(offset))
             
             for record in fetched:
@@ -497,7 +497,7 @@ class MafIndex():
             (self.target_seqname, len(split_by_position[self.target_seqname]), total_rec_length))
 
         # translates a position in the target_seqname sequence to its gapped length        
-        realpos_to_len = dict([(x, len(y)) for x, y in split_by_position[self.target_seqname].iteritems() if len(y) > 1])
+        realpos_to_len = dict([(x, len(y)) for x, y in split_by_position[self.target_seqname].items() if len(y) > 1])
 
         # splice together the exons            
         subseq = {}
@@ -534,7 +534,7 @@ class MafIndex():
         # check to make sure all sequences are the same length as the target seqname
         ref_subseq_len = len(subseq[self.target_seqname])
         
-        for seqid, seq in subseq.iteritems():
+        for seqid, seq in subseq.items():
             if len(seq) <> ref_subseq_len:
                 raise ValueError("Returning length %s for %s, expected %s" % \
                 (len(seq), seqid, ref_subseq_len))
@@ -542,7 +542,7 @@ class MafIndex():
         # finally, build a MultipleSeqAlignment object for our final sequences
         result_multiseq = []
         
-        for seqid, seq in subseq.iteritems():
+        for seqid, seq in subseq.items():
             seq = Seq(seq)
             
             seq = seq if strand == ref_first_strand else seq.reverse_complement()
