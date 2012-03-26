@@ -34,23 +34,14 @@ from reportlab.lib import colors
 from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
 
-class Track:
+class Track(object):
     """ Track
 
         Provides:
 
         Methods:
 
-        o __init__(self, name=None, height=1, hide=0, greytrack=0,
-                 greytrack_labels=5, greytrack_fontsize=8,
-                 greytrack_font='Helvetica', greytrack_font_rotation=0,
-                 greytrack_fontcolor = colors.Color(0.6, 0.6, 0.6),
-                 scale=1, scale_color=colors.black, scale_font='Helvetica',
-                 scale_fontsize=6,
-                 scale_fontangle=45, scale_largeticks=0.5, scale_ticks=1,
-                 scale_smallticks=0.3, scale_largetick_interval=1e6,
-                 scale_smalltick_interval=1e4, scale_largetick_labels=1,
-                 scale_smalltick_labels=0) Called on instantiation
+        o __init__(self, name=None, ...) Called on instantiation
 
         o add_set(self, set)    Add a FeatureSet or GraphSet to the diagram
 
@@ -79,6 +70,9 @@ class Track:
         o name      String describing the track
 
         o hide      Boolean, 0 if the track is not to be drawn
+        
+        o start, end    Integers (or None) specifying start/end to draw just
+                        a partial track.
 
         o greytrack     Boolean, 1 if a grey background to the track is to be
                         drawn
@@ -147,8 +141,9 @@ class Track:
                  scale_smallticks=0.3, scale_largetick_interval=1e6,
                  scale_smalltick_interval=1e4, scale_largetick_labels=1,
                  scale_smalltick_labels=0, axis_labels=1,
+                 start=None, end=None,
                  greytrack_font_colour = None, scale_colour=None):
-        """ __init__(self, name=None, height=1)
+        """ __init__(self, name=None, ...)
 
             o height    Int describing the relative height to other tracks in the
                         diagram
@@ -234,6 +229,8 @@ class Track:
         else:
             self.name = "Track"
         self.hide = hide
+        self.start = start
+        self.end = end
 
         # Attributes for the grey track background and labels
         self.greytrack = greytrack
@@ -324,11 +321,23 @@ class Track:
             Returns the lowest and highest base (or mark) numbers as a tuple
         """
         lows, highs = [], []            # Holds set of low and high values from sets
+        if self.start is not None:
+            lows.append(self.start)
+        if self.end is not None:
+            highs.append(self.end)
         for set in self._sets.values():
             low, high = set.range()     # Get each set range
             lows.append(low)
             highs.append(high)
-        return (min(lows), max(highs))  # Return lowest and highest values
+        if lows:
+            low = min(lows)
+        else:
+            low = None
+        if highs:
+            high = max(highs)
+        else:
+            high = None
+        return low, high  # Return lowest and highest values
     
 
     def to_string(self, verbose=0):
@@ -377,16 +386,13 @@ class Track:
 if __name__ == '__main__':
 
     # test code
-    from Bio import GenBank
+    from Bio import SeqIO
     from Bio.SeqFeature import SeqFeature
     from _FeatureSet import FeatureSet
     from _GraphSet import GraphSet
     from random import normalvariate
     
-    parser = GenBank.FeatureParser()
-    fhandle = open('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'r')
-    genbank_entry = parser.parse(fhandle)
-    fhandle.close()
+    genbank_entry = SeqIO.read('/data/genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
     gdfs1 = FeatureSet(0, 'Nanoarchaeum equitans CDS - CDS')
     gdfs2 = FeatureSet(1, 'Nanoarchaeum equitans CDS - gene')
@@ -413,5 +419,3 @@ if __name__ == '__main__':
         print set
 
     print gdt.get_element_limits()
-    
-

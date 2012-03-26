@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML source="Ensembl" sourceVersion="56" seqXMLversion="0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.4/seqxml.xsd">
+    <entry>
+        <species name="Homo sapiens" ncbiTaxID="9606"/>
+        <description>id is missing</description>
+        <DNAseq>AAGGCGTTAAACCC</DNAseq>
+    </entry>
+</seqXML>

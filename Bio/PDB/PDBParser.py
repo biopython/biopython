@@ -5,9 +5,14 @@
 
 """Parser for PDB files."""
 
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
+
 import warnings
 
 import numpy
+
+from Bio.File import as_handle
 
 from Bio.PDB.PDBExceptions import \
         PDBConstructionException, PDBConstructionWarning
@@ -18,7 +23,7 @@ from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
 
-class PDBParser:
+class PDBParser(object):
     """
     Parse a PDB file and return a Structure object.
     """
@@ -72,16 +77,13 @@ class PDBParser:
         self.trailer=None
         # Make a StructureBuilder instance (pass id of structure as parameter)
         self.structure_builder.init_structure(id)
-        handle_close = False
-        if isinstance(file, basestring):
-            file=open(file)
-            handle_close = True
-        self._parse(file.readlines())
+
+        with as_handle(file) as handle:
+            self._parse(handle.readlines())
+
         self.structure_builder.set_header(self.header)
         # Return the Structure instance
         structure = self.structure_builder.get_structure()
-        if handle_close:
-            file.close()
         
         if self.QUIET:
             warnings.filters = warning_list
@@ -108,6 +110,7 @@ class PDBParser:
     def _get_header(self, header_coords_trailer):
         "Get the header of the PDB file, return the rest."
         structure_builder=self.structure_builder
+        i = 0
         for i in range(0, len(header_coords_trailer)):
             structure_builder.set_line_counter(i+1)
             line=header_coords_trailer[i]

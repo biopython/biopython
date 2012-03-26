@@ -183,31 +183,35 @@ def t_cleaning_features():
 print "Testing feature cleaning..."
 t_cleaning_features()
 
-def t_bioformat():
-    """Test converting GenBank into different formats using Bioformat.
-    """
-    from Bio import formats
-    from Bio import SeqRecord
+def t_ensembl_locus():
+    line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG531_PATCH", c.data.name
+    assert c._expected_size == 1000000, c._expected_size
 
-    test_file = os.path.join("GenBank", "iro.gb")
-    test_handle = open(test_file)
-    format = formats["sequence"].identify(test_handle)
-    assert format.name == "genbank-records", \
-      "Identified format incorrectly: %s" % format.name
+    line = "LOCUS       HG531_PATCH 759984 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG531_PATCH", c.data.name
+    assert c._expected_size == 759984, c._expected_size
 
-    all_records = []
-    for record in SeqRecord.io.readFile(test_handle):
-        all_records.append(record)
+    line = "LOCUS       HG506_HG1000_1_PATCH 814959 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
+    assert c._expected_size == 814959, c._expected_size
 
-    assert len(all_records) == 1
-    assert all_records[0].id == "AL109817.1", \
-      "Unexpected record id: %s" % all_records[0].id
-    assert all_records[0].seq[0:10] == "cacaggccca", \
-      "Unexpected sequence: %s" % all_records[0].seq
-    assert all_records[0].description == \
-      "Homo sapiens mRNA full length insert cDNA clone EUROIMAGE 125195.", \
-      "Unexpected description: %s" % all_records[0].description
-    test_handle.close()
+    line = "LOCUS       HG506_HG1000_1_PATCH 1219964 bp DNA HTG 18-JUN-2011\n"
+    s = GenBank.Scanner.GenBankScanner()
+    c = GenBank._FeatureConsumer(True)
+    s._feed_first_line(c, line)
+    assert c.data.name == "HG506_HG1000_1_PATCH", c.data.name
+    assert c._expected_size == 1219964, c._expected_size
 
-print "Testing format conversions..."
-# t_bioformat() # XXX this is mucked up right now and still under work
+    print "Done"
+print "Testing EnsEMBL LOCUS lines..."
+t_ensembl_locus()

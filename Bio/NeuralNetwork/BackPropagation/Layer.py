@@ -15,7 +15,7 @@ def logistic_function(value):
     """
     return 1.0 / (1.0 + math.exp(-value))
 
-class AbstractLayer:
+class AbstractLayer(object):
     """Abstract base class for all layers.
     """
     def __init__(self, num_nodes, has_bias_node):

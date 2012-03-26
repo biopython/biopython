@@ -6,13 +6,15 @@
 """Atom class, used in Structure objects."""
 
 import numpy
+import warnings
+import copy
 
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.Vector import Vector
 from Bio.Data import IUPACData
 
-class Atom:
+class Atom(object):
     def __init__(self, name, coord, bfactor, occupancy, altloc, fullname, serial_number,
                  element=None):
         """
@@ -94,7 +96,6 @@ class Atom:
                 msg = "Could not assign element %r for Atom (name=%s) with given element %r" \
                       % (putative_element, self.name, element)
                 element = ""
-            import warnings
             warnings.warn(msg, PDBConstructionWarning)
                 
         return element
@@ -284,6 +285,17 @@ class Atom:
         """
         x,y,z=self.coord
         return Vector(x,y,z)
+
+    def copy(self):
+        """
+        Create a copy of the Atom.
+        Parent information is lost.
+        """
+        # Do a shallow copy then explicitly copy what needs to be deeper.
+        shallow = copy.copy(self)
+        shallow.detach_parent()
+        shallow.set_coord(copy.copy(self.get_coord()))
+        return shallow
 
 
 class DisorderedAtom(DisorderedEntityWrapper):

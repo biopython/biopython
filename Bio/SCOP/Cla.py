@@ -22,7 +22,7 @@ The latest CLA file can be found
 from Residues import * 
 
 
-class Record:
+class Record(object):
     """Holds information for one SCOP domain.
 
     sid         --  SCOP identifier. e.g. d1danl2

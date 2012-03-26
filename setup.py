@@ -25,6 +25,16 @@ import sys
 import os
 import shutil
 
+def is_pypy():
+    import platform
+    try:
+        if platform.python_implementation()=='PyPy':
+            return True
+    except AttributeError:
+        #New in Python 2.6, not in Jython yet either
+        pass
+    return False
+
 def get_yes_or_no(question, default):
     if default:
         option_str = "(Y/n)"
@@ -47,12 +57,10 @@ def get_yes_or_no(question, default):
     return response[0] == 'y'
 
 # Make sure I have the right Python version.
-if sys.version_info[:2] < (2, 4):
-    print ("Biopython requires Python 2.4 or better (but not Python 3 " \
+if sys.version_info[:2] < (2, 5):
+    print ("Biopython requires Python 2.5 or better (but not Python 3 " \
           + "yet).  Python %d.%d detected" % sys.version_info[:2])
     sys.exit(-1)
-elif sys.version_info[:2] == (2,4):
-    print ("WARNING - Biopython no longer officially supports Python 2.4")
 elif sys.version_info[0] == 3:
     print("WARNING - Biopython does not yet officially support Python 3")
     import do2to3
@@ -65,13 +73,23 @@ elif sys.version_info[0] == 3:
         if not os.path.isdir("build"):
             os.mkdir("build")
         do2to3.main(".", python3_source)
-    
-from distutils.core import setup
-from distutils.core import Command
-from distutils.command.install import install
-from distutils.command.build_py import build_py
-from distutils.command.build_ext import build_ext
-from distutils.extension import Extension
+
+# use setuptools, falling back on core modules if not found
+try:
+    from setuptools import setup, Command
+    from setuptools.command.install import install
+    from setuptools.command.build_py import build_py
+    from setuptools.command.build_ext import build_ext
+    from setuptools.extension import Extension
+    _SETUPTOOLS = True
+except ImportError:
+    from distutils.core import setup
+    from distutils.core import Command
+    from distutils.command.install import install
+    from distutils.command.build_py import build_py
+    from distutils.command.build_ext import build_ext
+    from distutils.extension import Extension
+    _SETUPTOOLS = False
 
 _CHECKED = None
 def check_dependencies_once():
@@ -81,6 +99,36 @@ def check_dependencies_once():
     if _CHECKED is None:
         _CHECKED = check_dependencies()
     return _CHECKED
+
+def get_install_requires():
+    install_requires = []
+    # skip this with distutils (otherwise get a warning)
+    if not _SETUPTOOLS:
+        return []
+    # skip this with jython and pypy
+    if os.name=="java" or is_pypy():
+        return []
+    # check for easy_install and pip
+    is_automated = False
+    # easy_install: --dist-dir option passed
+    try:
+        dist_dir_i = sys.argv.index("--dist-dir")
+    except ValueError:
+        dist_dir_i = None
+    if dist_dir_i is not None:
+        dist_dir = sys.argv[dist_dir_i+1]
+        if "egg-dist-tmp" in dist_dir:
+            is_automated = True
+    # pip -- calls from python directly with "-c"
+    if sys.argv in [["-c", "develop", "--no-deps"],
+                    ["--no-deps", "-c", "develop"],
+                    ["-c", "egg_info"]]:
+        is_automated = True
+    if is_automated:
+        global _CHECKED
+        if _CHECKED is None: _CHECKED = True
+        install_requires.append("numpy >= 1.5.1")
+    return install_requires
 
 def check_dependencies():
     """Return whether the installation should continue."""
@@ -97,6 +145,8 @@ def check_dependencies():
 
     if os.name=='java':
         return True #NumPy is not avaliable for Jython (for now)
+    if is_pypy():
+        return True #Full NumPy not available for PyPy (for now)
 
     print ("""
 Numerical Python (NumPy) is not installed.
@@ -199,6 +249,8 @@ def can_import(module_name):
         return None
 
 def is_Numpy_installed():
+    if is_pypy():
+        return False
     return bool(can_import("numpy"))
 
 # --- set up the packages we are going to install
@@ -213,7 +265,6 @@ PACKAGES = [
     'Bio.Blast',
     'Bio.CAPS',
     'Bio.Compass',
-    'Bio.Clustalw',
     'Bio.Crystal',
     'Bio.Data',
     'Bio.Emboss',
@@ -230,7 +281,6 @@ PACKAGES = [
     'Bio.Graphics',
     'Bio.Graphics.GenomeDiagram',
     'Bio.HMM',
-    'Bio.InterPro',
     'Bio.KEGG',
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
@@ -244,7 +294,6 @@ PACKAGES = [
     'Bio.NeuralNetwork.Gene',
     'Bio.Nexus',
     'Bio.NMR',
-    'Bio.Parsers',
     'Bio.Pathway',
     'Bio.Pathway.Rep',
     'Bio.PDB',
@@ -265,7 +314,10 @@ PACKAGES = [
     'Bio.SubsMat',
     'Bio.SVDSuperimposer',
     'Bio.SwissProt',
+    'Bio.TogoWS',
     'Bio.Phylo',
+    'Bio.Phylo.Applications',
+    'Bio.Phylo.PAML',
     'Bio.UniGene',
     'Bio.Wise',
     #Other top level packages,
@@ -281,6 +333,9 @@ NUMPY_PACKAGES = [
 
 if os.name == 'java' :
     # Jython doesn't support C extensions
+    EXTENSIONS = []
+elif is_pypy():
+    # Skip C extensions for now
     EXTENSIONS = []
 elif sys.version_info[0] == 3:
     # TODO - Must update our C extensions for Python 3
@@ -358,31 +413,34 @@ except NameError:
     src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
 os.chdir(src_path)
 sys.path.insert(0, src_path)
+
+setup_args = {
+    "name" : 'biopython',
+    "version" : __version__,
+    "author" : 'The Biopython Consortium',
+    "author_email" : 'biopython@biopython.org',
+    "url" : 'http://www.biopython.org/',
+    "description" : 'Freely available tools for computational molecular biology.',
+    "download_url" : 'http://biopython.org/DIST/',
+    "cmdclass" : {
+        "install" : install_biopython,
+        "build_py" : build_py_biopython,
+        "build_ext" : build_ext_biopython,
+        "test" : test_biopython,
+        },
+    "packages" : PACKAGES,
+    "ext_modules" : EXTENSIONS,
+    "package_data" : {
+        'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
+        'Bio.PopGen': ['SimCoal/data/*.par'],
+         },
+   }
+
+if _SETUPTOOLS:
+    setup_args["install_requires"] = get_install_requires()
+
 try:
-    setup(
-        name='biopython',
-        version=__version__,
-        author='The Biopython Consortium',
-        author_email='biopython@biopython.org',
-        url='http://www.biopython.org/',
-        description='Freely available tools for computational molecular biology.',
-        download_url='http://biopython.org/DIST/',
-        cmdclass={
-            "install" : install_biopython,
-            "build_py" : build_py_biopython,
-            "build_ext" : build_ext_biopython,
-            "test" : test_biopython,
-            },
-        packages=PACKAGES,
-        ext_modules=EXTENSIONS,
-        package_data = {'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
-                        'Bio.PopGen': ['SimCoal/data/*.par'],
-                       },
-        #install_requires = ['numpy>=1.0'],
-        #extras_require = {
-        #    'PDF' : ['reportlab>=2.0']
-        #    }
-        )
+    setup(**setup_args)
 finally:
     del sys.path[0]
     os.chdir(old_path)

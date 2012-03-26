@@ -11,16 +11,17 @@
 #=GS O83071/259-312 AC O83071
 #=GS O31698/88-139 AC O31698
 #=GS O31698/88-139 OS Bacillus subtilis
-O83071/192-246          MTCRAQLIAVPRASSLAE..AIACAQKM....RVSRVPVYERS
-#=GR O83071/192-246 SA  999887756453524252..55152525....36463774777
-O83071/259-312          MQHVSAPVFVFECTRLAY..VQHKLRAH....SRAVAIVLDEY
-#=GR O83071/259-312 SS  CCCCCHHHHHHHHHHHHH..EEEEEEEE....EEEEEEEEEEE
-O31698/18-71            MIEADKVAHVQVGNNLEH..ALLVLTKT....GYTAIPVLDPS
-#=GR O31698/18-71 SS    CCCHHHHHHHHHHHHHHH..EEEEEEEE....EEEEEEEEHHH
-O31698/88-139           EVMLTDIPRLHINDPIMK..GFGMVINN......GFVCVENDE
-#=GR O31698/88-139 SS   CCCCCCCHHHHHHHHHHH..HEEEEEEE....EEEEEEEEEEH
-#=GC SS_cons            CCCCCHHHHHHHHHHHHH..EEEEEEEE....EEEEEEEEEEH
-O31699/88-139           EVMLTDIPRLHINDPIMK..GFGMVINN......GFVCVENDE
-#=GR O31699/88-139 AS   ________________*__________________________
-#=GR_O31699/88-139_IN   ____________1______________2__________0____
+O83071/192-246                                                                                                     MTCRAQLIAVPRASSLAE..AIACAQKM....RVSRVPVYERS
+#=GR O83071/192-246 SA                                                                                             999887756453524252..55152525....36463774777
+O83071/259-312                                                                                                     MQHVSAPVFVFECTRLAY..VQHKLRAH....SRAVAIVLDEY
+#=GR O83071/259-312 SS                                                                                             CCCCCHHHHHHHHHHHHH..EEEEEEEE....EEEEEEEEEEE
+O31698/18-71                                                                                                       MIEADKVAHVQVGNNLEH..ALLVLTKT....GYTAIPVLDPS
+#=GR O31698/18-71 SS                                                                                               CCCHHHHHHHHHHHHHHH..EEEEEEEE....EEEEEEEEHHH
+O31698/88-139                                                                                                      EVMLTDIPRLHINDPIMK..GFGMVINN......GFVCVENDE
+#=GR O31698/88-139 SS                                                                                              CCCCCCCHHHHHHHHHHH..HEEEEEEE....EEEEEEEEEEH
+#=GC SS_cons                                                                                                       CCCCCHHHHHHHHHHHHH..EEEEEEEE....EEEEEEEEEEH
+O31699/88-139                                                                                                      EVMLTDIPRLHINDPIMK..GFGMVINN......GFVCVENDE
+#=GR O31699/88-139 AS                                                                                              ________________*__________________________
+#=GR_O31699/88-139_IN                                                                                              ____________1______________2__________0____
+363253|refseq_protein.50.proto_past_mitoc_micro_vira|gi|94986659|ref|YP_594592.1|awsonia_intraceuaris_PHE/MN1-00   EVMLTDIPRLHINDPIMK..GFGMVINN......GFVCVENDE
 //

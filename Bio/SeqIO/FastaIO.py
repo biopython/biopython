@@ -46,7 +46,12 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
             id, name, descr = title2ids(line[1:].rstrip())
         else:
             descr = line[1:].rstrip()
-            id   = descr.split()[0]
+            try:
+                id = descr.split()[0]
+            except IndexError:
+                assert not descr, repr(line)
+                #Should we use SeqRecord default for no ID?
+                id = ""
             name = id
 
         lines = []
@@ -54,14 +59,16 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
         while True:
             if not line : break
             if line[0] == ">": break
-            #Remove trailing whitespace, and any internal spaces
-            #(and any embedded \r which are possible in mangled files
-            #when not opened in universal read lines mode)
-            lines.append(line.rstrip().replace(" ","").replace("\r",""))
+            lines.append(line.rstrip())
             line = handle.readline()
 
+        #Remove trailing whitespace, and any internal spaces
+        #(and any embedded \r which are possible in mangled files
+        #when not opened in universal read lines mode)
+        result = "".join(lines).replace(" ", "").replace("\r", "")
+
         #Return the record and then continue...
-        yield SeqRecord(Seq("".join(lines), alphabet),
+        yield SeqRecord(Seq(result, alphabet),
                          id = id, name = name, description = descr)
 
         if not line : return #StopIteration

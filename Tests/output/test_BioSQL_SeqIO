@@ -68,9 +68,9 @@ Testing loading from fasta format file Registry/seqs.fasta
 Testing loading from swiss format file SwissProt/sp001
  - MGARGAPSRRRQAGRRLRY...DFE [c3fT2ic/6G/6gBCedsC+6smMsfk] len 348, Q13454
  - Retrieving by name/display_id 'N33_HUMAN', OK
- - Retrieving by accession 'Q14912', Failed
- - Retrieving by accession 'Q14911', Failed
  - Retrieving by accession 'Q13454', OK
+ - Retrieving by accession 'Q14911', Failed
+ - Retrieving by accession 'Q14912', Failed
 Testing loading from swiss format file SwissProt/sp002
  - MADQRQRSLSTSGESLYHV...GFN [PkMCOc0s3lly64iRyfhbezR8dJI] len 198, P54101
  - Retrieving by name/display_id 'CSP_MOUSE', OK
@@ -78,9 +78,9 @@ Testing loading from swiss format file SwissProt/sp002
 Testing loading from swiss format file SwissProt/sp003
  - MDDREDLVYQAKLAEQAER...ENQ [mnuAjdnQZbMFojll2PnV3xFklXQ] len 255, P42655
  - Retrieving by name/display_id '143E_HUMAN', OK
+ - Retrieving by accession 'P29360', Failed
  - Retrieving by accession 'P42655', OK
  - Retrieving by accession 'Q63631', Failed
- - Retrieving by accession 'P29360', Failed
 Testing loading from swiss format file SwissProt/sp004
  - TVKWIEAVALSDILEGDVL...DLS [ZRv7OfNYSCSMkMJJmNt8LPaNxYI] len 103, P23082
  - Retrieving by name/display_id 'NDOA_PSEPU', OK
@@ -102,17 +102,17 @@ Testing loading from swiss format file SwissProt/sp007
 Testing loading from swiss format file SwissProt/sp008
  - MAVMAPRTLVLLLSGALAL...CKV [oTL0BWZeACoxMc++WgT0XDz+sNg] len 365, P01892
  - Retrieving by name/display_id '1A02_HUMAN', OK
- - Retrieving by accession 'Q29837', Failed
- - Retrieving by accession 'Q29680', Failed
- - Retrieving by accession 'P30445', Failed
- - Retrieving by accession 'P30444', Failed
- - Retrieving by accession 'P30446', Failed
- - Retrieving by accession 'Q29899', Failed
- - Retrieving by accession 'P30514', Failed
- - Retrieving by accession 'Q95380', Failed
  - Retrieving by accession 'P01892', OK
- - Retrieving by accession 'Q95352', Failed
  - Retrieving by accession 'P06338', Failed
+ - Retrieving by accession 'P30444', Failed
+ - Retrieving by accession 'P30445', Failed
+ - Retrieving by accession 'P30446', Failed
+ - Retrieving by accession 'P30514', Failed
+ - Retrieving by accession 'Q29680', Failed
+ - Retrieving by accession 'Q29837', Failed
+ - Retrieving by accession 'Q29899', Failed
+ - Retrieving by accession 'Q95352', Failed
+ - Retrieving by accession 'Q95380', Failed
 Testing loading from swiss format file SwissProt/sp009
  - MAPAMEEIRQAQRAEGPAA...GAE [5Y08l+HJRDIlhLKzFEfkcKd1dkM] len 394, O23729
  - Retrieving by name/display_id 'CHS3_BROFI', OK
@@ -120,21 +120,21 @@ Testing loading from swiss format file SwissProt/sp009
 Testing loading from swiss format file SwissProt/sp010
  - MDKLDANVSSEEGFGSVEK...SDT [5+1AMJ2Bq46D7PZcb+0pVHgBY/U] len 388, Q13639
  - Retrieving by name/display_id '5H4_HUMAN', OK
- - Retrieving by accession 'Q9UBT4', Failed
  - Retrieving by accession 'Q13639', OK
+ - Retrieving by accession 'Q9NY73', Failed
+ - Retrieving by accession 'Q9UBM6', Failed
+ - Retrieving by accession 'Q9UBT4', Failed
  - Retrieving by accession 'Q9UE22', Failed
  - Retrieving by accession 'Q9UE23', Failed
- - Retrieving by accession 'Q9NY73', Failed
  - Retrieving by accession 'Q9UQR6', Failed
- - Retrieving by accession 'Q9UBM6', Failed
 Testing loading from swiss format file SwissProt/sp011
  - MGRRVPALRQLLVLAVLLL...LTH [u5J0gYBDy6pkr5W50INxN5oTpfc] len 700, P16235
  - Retrieving by name/display_id 'LSHR_RAT', OK
- - Retrieving by accession 'Q63808', Failed
- - Retrieving by accession 'Q63807', Failed
- - Retrieving by accession 'Q63809', Failed
- - Retrieving by accession 'P70646', Failed
  - Retrieving by accession 'P16235', OK
+ - Retrieving by accession 'P70646', Failed
+ - Retrieving by accession 'Q63807', Failed
+ - Retrieving by accession 'Q63808', Failed
+ - Retrieving by accession 'Q63809', Failed
 Testing loading from swiss format file SwissProt/sp012
  - MQIFVKTLTGKTITLEVES...GGN [IKk9x9IFxI3MfuQZK5Yj6GqrMoI] len 153, Q9Y736
  - Retrieving by name/display_id 'Q9Y736', OK
@@ -156,8 +156,8 @@ Testing loading from swiss format file SwissProt/sp015
 Testing loading from swiss format file SwissProt/sp016
  - MMFSGFNADYEASSSRCSS...LAL [R09jzTKeAyzIQYTQAsps2UWFyFE] len 380, P01100
  - Retrieving by name/display_id 'FOS_HUMAN', OK
- - Retrieving by accession 'P18849', Failed
  - Retrieving by accession 'P01100', OK
+ - Retrieving by accession 'P18849', Failed
 Testing loading from swiss format file Registry/EDD_RAT.dat
  - ARRERMTAREEASLRTLEG...GFV [lZx7bXx+In1Zm7KYv4OlWRUhy7g] len 920, Q62671
  - Retrieving by name/display_id 'EDD_RAT', OK

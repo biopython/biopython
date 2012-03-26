@@ -1,0 +1,79 @@
+<!--    
+	   This is the Current DTD which NLM has written for 
+        External  Use.  If you are a NCBI User, use the information
+        from the PubmedArticleSet.
+
+        Comments and suggestions are welcome.
+        (May 9, 2000)
+	
+        Corrections:
+        ~~~~~~~~~~~
+        Oct. 09 2002 
+        - "PubMedArticle" has been renamed to "PubmedArticle"
+        - All referencies to "PubMedArticle" has been removed
+        - "ProviderId" has been removed from PubmedData
+        - "URL" has been removed from PubmdeData
+		
+		$Id: pubmed_120101.dtd 340769 2011-10-12 20:01:45Z korobtch $
+        
+       -->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- Reference to Where the MEDLINECITATION DTD is located  -->
+<!ENTITY % Medline PUBLIC "-//NLM//DTD Medline, 01 Jan 2012//EN"
+      "nlmmedlinecitationset_120101.dtd">
+%Medline;
+<!-- ================================================================= -->
+<!ENTITY % ArticleTitle.Ref "ArticleTitle">
+<!ENTITY % ISSN.Ref "ISSN?">
+<!ENTITY % Pub.Date.Ref "PubDate?">
+<!ENTITY % iso.language.codes "(AF|AR|AZ|BG|CS|DA|DE|EN|EL|ES|FA|FI|FR|HE|
+                                   HU|HY|IN|IS|IT|IW|JA|KA|KO|LT|MK|ML|NL|NO|
+                                   PL|PT|PS|RO|RU|SL|SK|SQ|SR|SV|SW|TH|TR|UK|
+                                   VI|ZH)">
+<!ENTITY % pub.status.int "pmc | pmcr | pubmed | pubmedr | 
+                             premedline | medline | medliner | entrez | pmc-release">
+<!ENTITY % pub.status "(received | accepted | epublish | 
+                              ppublish | revised | aheadofprint | 
+                              retracted | %pub.status.int;)">
+<!ENTITY % art.id.type.int "pubmed | medline | pmcid | pmcbook | bookaccession">
+							
+<!ENTITY % art.id.type "(doi | pii | pmcpid | pmpid | pmc | mid |
+                              sici | %art.id.type.int;)">
+<!-- ================================================================= -->
+<!ELEMENT PubmedArticleSet (PubmedArticle | PubmedBookArticle)+>
+<!-- ================================================================= -->
+<!-- This is the top level element for PubMedArticle -->
+<!ELEMENT PubmedArticle (MedlineCitation, PubmedData?)>
+<!-- ================================================================= -->
+<!ENTITY % normal.date "Year, Month, Day, (Hour, (Minute, Second?)?)?">
+<!ELEMENT PubmedData (History?, PublicationStatus, ArticleIdList, ObjectList?)>
+<!ELEMENT PubMedPubDate (%normal.date;)>
+<!ATTLIST PubMedPubDate
+	PubStatus %pub.status; #REQUIRED
+>
+<!ELEMENT PublicationStatus (#PCDATA)>
+<!ELEMENT ArticleIdList (ArticleId+)>
+<!ELEMENT ArticleId (#PCDATA)>
+<!ATTLIST ArticleId
+	IdType %art.id.type; "pubmed"
+>
+<!ELEMENT History (PubMedPubDate+)>
+<!ELEMENT URL (#PCDATA)>
+<!ATTLIST URL
+	lang %iso.language.codes; #IMPLIED
+	Type ( FullText | Summary | fulltext | summary) #IMPLIED
+>
+<!ELEMENT ObjectList (Object)+>
+<!ELEMENT Object (Param)*>
+<!ATTLIST Object Type CDATA #REQUIRED>
+<!ELEMENT Param (#PCDATA)>
+<!ATTLIST Param Name CDATA #REQUIRED>
+<!ELEMENT Hour (#PCDATA)>
+<!ELEMENT Minute (#PCDATA)>
+<!ELEMENT Second (#PCDATA)>
+
+<!-- ================================================================= -->
+<!ENTITY % Bookdoc PUBLIC "-//NLM//DTD Bookdoc, 01 Jan 2012//EN" "bookdoc_120101.dtd">
+%Bookdoc;
+<!-- ================================================================= -->

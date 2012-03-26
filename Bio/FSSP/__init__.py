@@ -32,7 +32,7 @@ alignments_title= re.compile('## +ALIGNMENTS')
 alignments_rec = re.compile(' *[0-9]+ +-{0,1}[0-9]+')
 equiv_title = re.compile('## +EQUIVALENCES')
 
-class FSSPHeader:
+class FSSPHeader(object):
    def __init__(self):
       self.database = None
       self.pdbid = ''
@@ -55,7 +55,7 @@ class FSSPHeader:
             else:
                setattr(self,i,inline.split()[1])
 
-class PosAlign:
+class PosAlign(object):
    def __init__(self,inStr):
       inStr = inStr.strip()
       if len(inStr) != 1 and len(inStr)!= 2:
@@ -85,7 +85,7 @@ class PosAlign:
 
 
 
-class FSSPSumRec:
+class FSSPSumRec(object):
    """ Contains info from an FSSP summary record"""
    def __init__(self,in_str):
       self.raw = in_str
@@ -124,7 +124,7 @@ class FSSPSumRec:
       return self.raw
    __str__ = __repr__
 
-class FSSPAlignRec:
+class FSSPAlignRec(object):
    def __init__(self,in_fff_rec):
       # print in_fff_rec
       self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])

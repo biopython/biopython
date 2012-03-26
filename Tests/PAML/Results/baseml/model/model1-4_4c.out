@@ -1,0 +1,49 @@
+
+seed used = 1024367525
+
+BASEML (in paml version 4.4c, August 2010)  Alignments/alignment.phylip  K80 dGamma (ncatG=5)
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.2027 0.1622 0.3694 0.2658
+Pan_troglo                     0.1982 0.1667 0.3694 0.2658
+Gorilla_go                     0.2072 0.1577 0.3694 0.2658
+Pongo_pygm                     0.2027 0.1622 0.3694 0.2658
+Macaca_mul                     0.1937 0.1667 0.3739 0.2658
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                         0.2009  0.1631  0.3703  0.2658
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances:  K80 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo         0.0046(999.0000)
+Gorilla_go         0.0046(999.0000)  0.0093(999.0000)
+Pongo_pygm         0.0000(999.0000)  0.0046(999.0000)  0.0046(999.0000)
+Macaca_mul         0.0092( 2.0206)  0.0139( 4.1043)  0.0139( 4.1043)  0.0092( 2.0206)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np:  9):   -334.912612    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.004516 0.004518 0.000004 0.009091 6.038381 999.000000
+
+tree length =   0.01814
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004516): 0.000004, Gorilla_go: 0.004518): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.009091);
+
+Detailed output identifying parameters
+
+Parameters (kappa) in the rate matrix (K80) (Yang 1994 J Mol Evol 39:105-111):
+  6.03838
+
+alpha (gamma, K=5) = 999.00000
+rate:   0.95611  0.98294  0.99967  1.01660  1.04468
+freq:   0.20000  0.20000  0.20000  0.20000  0.20000
+
+check convergence..

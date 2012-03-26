@@ -1,6 +1,6 @@
 # BLASTN 2.0a19MP-WashU [05-Feb-1998] [Build decunix3.2 01:53:29 05-Feb-1998]
 # BLASTP 2.0.4 [Feb-24-1998]
-class Algorithm:
+class Algorithm(object):
     def __init__(self, name, version, description = ""):
         self.name = name                 # 'blastx', 'blastn', etc.
         self.version = version           # '2.1.2' or '2.0a19MP-WashU'
@@ -9,7 +9,7 @@ class Algorithm:
 # Query=  YAL001C YAL001C, Chr I from 147596 to 147665, and 147756 to 151168,
 #     reverse complement
 #         (3483 letters)
-class Query:
+class Query(object):
     def __init__(self, name, accession, description, length):
         self.name = name                # 'YAL001C'
         self.accession = accession      # or None if missing
@@ -18,19 +18,19 @@ class Query:
 
 # Database:  ArabidopsisN
 #            66,211 sequences; 69,074,155 total letters.
-class Database:
+class Database(object):
     def __init__(self, name, letters, entries):
         self.name = name            # ArabidopsisN
         self.letters = letters      # 69074155
         self.entries = entries      # 66211
 
-class TableInfo:
+class TableInfo(object):
     def __init__(self, full_description, info):
         self.__dict__.update(info)
         self.full_description = full_description
 
 
-class Search:
+class Search(object):
     def __init__(self, algorithm, query, database, table, hits,
                  parameters, statistics):
         self.algorithm = algorithm
@@ -41,7 +41,7 @@ class Search:
         self.parameters = parameters
         self.statistics = statistics
 
-class Hit:
+class Hit(object):
     def __init__(self, name, description, accession, length,
                  algorithm, hsps = None):
         self.name = name

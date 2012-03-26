@@ -10,12 +10,15 @@
 
 """Unit tests for the Bio.PDB module."""
 import os
+import tempfile
 import unittest
 import warnings
 from StringIO import StringIO
 
 try:
     import numpy
+    from numpy import dot #Missing on PyPy's micronumpy
+    del dot
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -26,7 +29,7 @@ from Bio.Alphabet import generic_protein
 from Bio.PDB import PDBParser, PPBuilder, CaPPBuilder, PDBIO
 from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
-
+from Bio.PDB import rotmat, Vector
 
 # NB: the 'A_' prefix ensures this test case is run first
 class A_ExceptionTest(unittest.TestCase):
@@ -142,7 +145,7 @@ class ParseTest(unittest.TestCase):
         p = PDBParser(PERMISSIVE=1)
         self.structure = p.get_structure("example", "PDB/a_structure.pdb")
         warnings.filters.pop()
- 
+
     def test_c_n(self):
         """Extract polypeptides using C-N."""
         ppbuild = PPBuilder()
@@ -159,7 +162,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
                          "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
                          str(s))
- 
+
     def test_ca_ca(self):
         """Extract polypeptides using CA-CA."""
         ppbuild = CaPPBuilder()
@@ -176,7 +179,7 @@ class ParseTest(unittest.TestCase):
         self.assertEqual("RCGSQGGGSTCPGLRCCSIWGWCGDSEPYCGRTCENKCWSGER"
                          "SDHRCGAAVGNPPCGQDRCCSVHGWCGGGNDYCSGGNCQYRC",
                          str(s))
- 
+
     def test_structure(self):
         """Verify the structure of the parsed example PDB file."""
         # Structure contains 2 models
@@ -490,7 +493,19 @@ class ParseTest(unittest.TestCase):
 
 class ParseReal(unittest.TestCase):
     """Testing with real PDB files."""
-    
+
+    def test_empty(self):
+        """Parse an empty file."""
+        parser = PDBParser()
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            struct = parser.get_structure('MT', filename)
+            # Structure has no children (models)
+            self.assertFalse(len(struct))
+        finally:
+            os.remove(filename)
+
     def test_c_n(self):
         """Extract polypeptides from 1A80."""
         parser = PDBParser(PERMISSIVE=False)
@@ -639,7 +654,6 @@ class ParseReal(unittest.TestCase):
 
     def test_model_numbering(self):
         """Preserve model serial numbers during I/O."""
-        tmp_path = "PDB/tmp.pdb"
         def confirm_numbering(struct):
             self.assertEqual(len(struct), 20)
             for idx, model in enumerate(struct):
@@ -651,13 +665,14 @@ class ParseReal(unittest.TestCase):
         # Round trip: serialize and parse again
         io = PDBIO()
         io.set_structure(struct1)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
         try:
-            io.save(tmp_path)
-            struct2 = parser.get_structure("1mot", tmp_path)
+            io.save(filename)
+            struct2 = parser.get_structure("1mot", filename)
             confirm_numbering(struct2)
         finally:
-            if os.path.isfile(tmp_path):
-                os.remove(tmp_path)
+            os.remove(filename)
 
 
 class Exposure(unittest.TestCase):
@@ -744,41 +759,39 @@ class Exposure(unittest.TestCase):
 
 class Atom_Element(unittest.TestCase):
     """induces Atom Element from Atom Name"""
-    
+
     def setUp(self):
         warnings.simplefilter('ignore', PDBConstructionWarning)
         pdb_filename = "PDB/a_structure.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
         warnings.filters.pop()
         self.residue = structure[0]['A'][('H_PCA', 1, ' ')]
-    
+
     def test_AtomElement(self):
         """ Atom Element """
         atoms = self.residue.child_list
-
         self.assertEqual('N', atoms[0].element) # N
         self.assertEqual('C', atoms[1].element) # Alpha Carbon
         self.assertEqual('CA', atoms[8].element) # Calcium
-        
+
     def test_ions(self):
         """Element for magnesium is assigned correctly."""
         pdb_filename = "PDB/ions.pdb"
         structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
-        warnings.filters.pop()
         # check magnesium atom
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
-        
+
 class IterationTests(unittest.TestCase):        
-    
+
     def setUp(self):
         self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
-        
+
     def test_get_chains(self):
         """Yields chains from different models separately."""
         chains = [chain.id for chain in self.struc.get_chains()]
         self.assertEqual(chains, ['A','A', 'B', ' '])
-        
+
     def test_get_residues(self):
         """Yields all residues from all models."""
         residues = [resi.id for resi in self.struc.get_residues()]
@@ -806,6 +819,74 @@ class IterationTests(unittest.TestCase):
 #        print nums
 # 
 # -------------------------------------------------------------
+
+class TransformTests(unittest.TestCase):        
+
+    def setUp(self):
+        self.s = PDBParser(PERMISSIVE=True).get_structure(
+            'X', "PDB/a_structure.pdb")
+        self.m = self.s.get_list()[0]
+        self.c = self.m.get_list()[0]
+        self.r = self.c.get_list()[0]
+        self.a = self.r.get_list()[0]
+
+    def get_total_pos(self, o):
+        """
+        Returns the sum of the positions of atoms in an entity along
+        with the number of atoms.
+        """
+        if hasattr(o, "get_coord"):
+            return o.get_coord(), 1
+        total_pos = numpy.array((0.0,0.0,0.0))
+        total_count = 0
+        for p in o.get_list():
+            pos, count = self.get_total_pos(p)
+            total_pos += pos
+            total_count += count
+        return total_pos, total_count
+
+    def get_pos(self, o):
+        """
+        Returns the average atom position in an entity.
+        """
+        pos, count = self.get_total_pos(o)
+        return 1.0*pos/count
+
+    def test_transform(self):
+        """Transform entities (rotation and translation)."""
+        for o in (self.s, self.m, self.c, self.r, self.a):
+            rotation = rotmat(Vector(1,3,5), Vector(1,0,0))
+            translation=numpy.array((2.4,0,1), 'f')
+            oldpos = self.get_pos(o)
+            o.transform(rotation, translation)
+            newpos = self.get_pos(o)
+            newpos_check = numpy.dot(oldpos, rotation) +  translation 
+            for i in range(0, 3):
+                self.assertAlmostEqual(newpos[i], newpos_check[i])
+
+
+class CopyTests(unittest.TestCase):        
+
+    def setUp(self):
+        self.s = PDBParser(PERMISSIVE=True).get_structure(
+            'X', "PDB/a_structure.pdb")
+        self.m = self.s.get_list()[0]
+        self.c = self.m.get_list()[0]
+        self.r = self.c.get_list()[0]
+        self.a = self.r.get_list()[0]
+
+    def test_atom_copy(self):
+        aa = self.a.copy()
+        self.assertFalse(self.a is aa)
+        self.assertFalse(self.a.get_coord() is aa.get_coord())
+
+    def test_entitity_copy(self):
+        """Make a copy of a residue."""
+        for e in (self.s, self.m, self.c, self.r):
+            ee = e.copy()
+            self.assertFalse(e is ee)
+            self.assertFalse(e.get_list()[0] is ee.get_list()[0])
+
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)

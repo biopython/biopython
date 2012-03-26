@@ -30,12 +30,10 @@ Note: This module should be regarded as a prototype only. API changes are likely
       Comments and feature requests are most welcome.
 """
 
-
-from Bio.Pathway.Rep.HashSet import *
 from Bio.Pathway.Rep.MultiGraph import *
 
 
-class Reaction:
+class Reaction(object):
     """Abstraction for a biochemical transformation.
 
     This class represents a (potentially reversible) biochemical
@@ -77,7 +75,7 @@ class Reaction:
         for r, value in reactants.iteritems():
             if value == 0:
                 del self.reactants[r]
-        self.catalysts  = HashSet(catalysts).list()
+        self.catalysts  = sorted(set(catalysts))
         self.data       = data
         self.reversible = reversible
 
@@ -147,7 +145,7 @@ class Reaction:
         return self.reactants.keys()
 
 
-class System:
+class System(object):
     """Abstraction for a collection of reactions.
 
     This class is used in the Bio.Pathway framework to represent an arbitrary
@@ -160,11 +158,11 @@ class System:
     
     def __init__(self, reactions = []):
         """Initializes a new System object."""
-        self.__reactions = HashSet(reactions)
+        self.__reactions = set(reactions)
 
     def __repr__(self):
         """Returns a debugging string representation of self."""
-        return "System(" + ",".join(map(repr,self.__reactions.list())) + ")"
+        return "System(" + ",".join(map(repr,self.__reactions)) + ")"
     
     def __str__(self):
         """Returns a string representation of self."""
@@ -181,14 +179,17 @@ class System:
         self.__reactions.remove(reaction)
 
     def reactions(self):
-        """Returns a list of the reactions in this system."""
-        return self.__reactions.list()
+        """Returns a list of the reactions in this system.
+        
+        Note the order is arbitrary!
+        """
+        #TODO - Define __lt__ so that Reactions can be sorted on Python?
+        return list(self.__reactions)
 
     def species(self):
         """Returns a list of the species in this system."""
-        s = HashSet(reduce(lambda s,x: s + x,
-                           [x.species() for x in self.reactions()], []))
-        return s.list()
+        return sorted(set(reduce(lambda s,x: s + x,
+                          [x.species() for x in self.reactions()], [])))
 
     def stochiometry(self):
         """Computes the stoichiometry matrix for self.
@@ -217,7 +218,7 @@ class System:
         return (species, reactions, stoch)
 
 
-class Interaction:
+class Interaction(object):
     """An arbitrary interaction between any number of species.
 
     This class definition is inteded solely as a minimal wrapper interface that should
@@ -244,7 +245,7 @@ class Interaction:
         return "<" + str(self.data) + ">"
     
 
-class Network:
+class Network(object):
     """A set of species that are explicitly linked by interactions.
 
     The network is a directed multigraph with labeled edges. The nodes in the graph

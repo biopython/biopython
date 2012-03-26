@@ -1,28 +1,145 @@
 News for the Biopython Project
 ==============================
 
-This file contains release notes and general news about the Biopython
-project.  See also the DEPRECATED file which tracks the removal of
-obsolete modules or functions, and online http://biopython.org/wiki/News
-and http://news.open-bio.org/news/category/obf-projects/biopython/
+This file contains release notes and general news about the Biopython project.
+See also the DEPRECATED file which tracks the removal of obsolete modules or
+functions, and online http://biopython.org/wiki/News and
+http://news.open-bio.org/news/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
 ===================================================================
 
-In progress: Biopython 1.58 (not yet released)
+(In progress, not released yet) Biopython 1.60
+
+Nothing major to mention so far.
+
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Kamil Slowikowski (first contribution)
+Peter Cock
+
+===================================================================
+
+24 February 2012: Biopython 1.59
+
+Please note that this release will *not* work on Python 2.4 (while the recent
+releases have worked despite us not officially supporting this).
+
+The position objects used in Bio.SeqFeature now act almost like integers,
+making dealing with fuzzy locations in EMBL/GenBank files much easier. Note as
+part of this work, the arguments to create fuzzy positions OneOfPosition and
+WithinPosition have changed in a non-backwards compatible way.
+
+The SeqFeature's strand and any database reference are now properties of the
+FeatureLocation object (a more logical placement), with proxy methods for
+backwards compatibility. As part of this change, if you print a location
+object it will now display any strand and database reference information.
+
+The installation setup.py now supports 'install_requires' when setuptools
+is installed. This avoids the manual dialog when installing Biopython via
+easy_install or pip and numpy is not installed. It also allows user libraries
+that require Biopython to include it in their install_requires and get
+automatical installation of dependencies.
+
+Bio.Graphics.BasicChromosome has been extended to allow simple sub-features to
+be drawn on chromosome segments, suitable to show the position of genes, SNPs
+or other loci. Note Bio.Graphics requires the ReportLab library.
+
+Bio.Graphics.GenomeDiagram has been extended to allow cross-links between
+tracks, and track specific start/end positions for showing regions. This can
+be used to imitate the output from the Artemis Comparison Tool (ACT).
+Also, a new attribute circle_core makes it easier to have an empty space in
+the middle of a circular diagram (see tutorial).
+
+Bio.Align.Applications now includes a wrapper for command line tool Clustal
+Omega for protein multiple sequence alignment.
+
+Bio.AlignIO now supports sequential PHYLIP files (as well as interlaced
+PHYLIP files) as a separate format variant.
+
+New module Bio.TogoWS offers a wrapper for the TogoWS REST API, a web service
+based in Japan offering access to KEGG, DDBJ, PDBj, CBRC plus access to some
+NCBI, EBI resources including PubMed, GenBank and UniProt. This is much easier
+to use than the NCBI Entrez API, but should be especially useful for Biopython
+users based in Asia.
+
+Bio.Entrez function efetch has been updated to handle the NCBI's stricter
+handling of multiple ID arguments in EFetch 2.0, however the NCBI have also
+changed the retmode default argument so you may need to make this explicit.
+e.g. retmode="text"
+
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Andreas Wilm (first contribution)
+Alessio Papini (first contribution)
+Brad Chapman
+Brandon Invergo
+Connor McCoy
+Eric Talevich
+João Rodrigues
+Konrad Förstner (first contribution)
+Michiel de Hoon
+Matej Repič (first contribution)
+Leighton Pritchard
+Peter Cock
+
+===================================================================
+
+18 August 2011: Biopython 1.58
+
+A new interface and parsers for the PAML (Phylogenetic Analysis by Maximum
+Likelihood) package of programs, supporting codeml, baseml and yn00 as well
+as a Python re-implementation of chi2 was added as the Bio.Phylo.PAML module.
+
+Bio.SeqIO now includes read and write support for the SeqXML, a simple XML
+format offering basic annotation support. See Schmitt et al (2011) in
+Briefings in Bioinformatics, http://dx.doi.org/10.1093/bib/bbr025
+
+Bio.SeqIO now includes read support for ABI files ("Sanger" capillary
+sequencing trace files, containing called sequence with PHRED qualities).
 
 The Bio.AlignIO "fasta-m10" parser was updated to cope with the >>><<< lines
 as used in Bill Pearson's FASTA version 3.36, without this fix the parser
 would only return alignments for the first query sequence.
 
+The Bio.AlignIO "phylip" parser and writer now treat a dot/period in the
+sequence as an error, in line with the official PHYLIP specification. Older
+verions of our code didn't do anything special with this character. Also,
+support for "phylip-relaxed" has been added which allows longer record names
+as used in RAxML and PHYML.
+
+Of potential interest to anyone subclassing Biopython objects, any remaining
+"old syle" Python classes have been switched to "new style" classes. This
+allows things like defining properties.
+
+Bio.HMM's Viterbi algorithm now expects the initial probabilities explicitly.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+Aaron Gallagher (first contribution)
+Bartek Wilczynski
+Bogdan T. (first contribution)
+Brandon Invergo (first contribution)
 Connor McCoy (first contribution)
+David Cain (first contribution)
 Eric Talevich
+Fábio Madeira (first contribution)
+Hongbo Zhu
 Joao Rodrigues
+Michiel de Hoon
 Peter Cock
+Thomas Schmitt (first contribution)
+Tiago Antao
+Walter Gillett
+Wibowo Arindrarto (first contribution)
 
 ===================================================================
 

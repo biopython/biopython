@@ -43,7 +43,7 @@ class TestUniprot(unittest.TestCase):
         # self.assertEqual(record.seqinfo, (348, 39676, '75818910'))
     
         self.assertEqual(len(seq_record.features), 1)           
-        self.assertEqual(repr(seq_record.features[0]), "SeqFeature(FeatureLocation(ExactPosition(0),ExactPosition(116)), type='chain', id='PRO_0000377969')")
+        self.assertEqual(repr(seq_record.features[0]), "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')")
 
         self.assertEqual(len(seq_record.annotations['references']), 2)
         self.assertEqual(seq_record.annotations['references'][0].authors, 'Jakob N.J., Mueller K., Bahr U., Darai G.')

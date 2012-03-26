@@ -50,29 +50,83 @@ will return a list of the alignments between the two strings.  The
 parameters of the alignment function depends on the function called.
 Some examples:
 
->>> pairwise2.align.globalxx("ACCGT", "ACG")
     # Find the best global alignment between the two sequences.
     # Identical characters are given 1 point.  No points are deducted
     # for mismatches or gaps.
+    >>> for a in pairwise2.align.globalxx("ACCGT", "ACG"):
+    ...     print format_alignment(*a)
+    ACCGT
+    |||||
+    AC-G-
+      Score=3
+    <BLANKLINE>
+    ACCGT
+    |||||
+    A-CG-
+      Score=3
+    <BLANKLINE>
+
     
->>> pairwise2.align.localxx("ACCGT", "ACG")
     # Same thing as before, but with a local alignment.
+    >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
+    ...     print format_alignment(*a)
+    ACCGT
+    ||||
+    AC-G-
+      Score=3
+    <BLANKLINE>
+    ACCGT
+    ||||
+    A-CG-
+      Score=3
+    <BLANKLINE>
     
->>> pairwise2.align.globalmx("ACCGT", "ACG", 2, -1)
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
+    >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
+    ...     print format_alignment(*a)
+    ACCGT
+    |||||
+    AC-G-
+      Score=6
+    <BLANKLINE>
+    ACCGT
+    |||||
+    A-CG-
+      Score=6
+    <BLANKLINE>
 
->>> pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1)
     # Same as above, except now 0.5 points are deducted when opening a
     # gap, and 0.1 points are deducted when extending it.
+    >>> for a in pairwise2.align.globalms("ACCGT", "ACG", 2, -1, -.5, -.1):
+    ...     print format_alignment(*a)
+    ACCGT
+    |||||
+    AC-G-
+      Score=5
+    <BLANKLINE>
+    ACCGT
+    |||||
+    A-CG-
+      Score=5
+    <BLANKLINE>
 
+The alignment function can also use known matrices already included in 
+Biopython ( Bio.SubsMat -> MatrixInfo ).
+
+    >>> from Bio.SubsMat import MatrixInfo as matlist
+    >>> matrix = matlist.blosum62
+    >>> for a in pairwise2.align.globaldx("KEVLA", "EVL", matrix):
+    ...     print format_alignment(*a)
+    KEVLA
+    |||||
+    -EVL-
+      Score=13
+    <BLANKLINE>
 
 To see a description of the parameters for a function, please look at
-the docstring for the function.
-
->>> print newalign.align.localds.__doc__
-localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
-
+the docstring for the function via the help function, e.g.
+type help(pairwise2.align.localds) at the Python prompt.
 """
 # The alignment functions take some undocumented keyword parameters:
 # - penalize_extend_when_opening: boolean
@@ -97,7 +151,7 @@ localds(sequenceA, sequenceB, match_dict, open, extend) -> alignments
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
-class align:
+class align(object):
     """This class provides functions that do alignments."""
     
     class alignment_function:
@@ -797,3 +851,14 @@ try:
     from cpairwise2 import rint, _make_score_matrix_fast
 except ImportError:
     pass
+
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
+    print "Done"
+
+if __name__ == "__main__":
+    _test()

@@ -31,7 +31,7 @@ from _Colors import ColorTranslator
 
 import string
 
-class Feature:
+class Feature(object):
     """ Class to wrap Bio.SeqFeature objects for GenomeDiagram
 
         Provides:
@@ -104,7 +104,7 @@ class Feature:
 
     """
     def __init__(self, parent=None, feature_id=None, feature=None,
-                 color=colors.lightgreen, label=0, colour=None):
+                 color=colors.lightgreen, label=0, border=None, colour=None):
         """ __init__(self, parent=None, feature_id=None, feature=None,
                  color=colors.lightgreen, label=0)
 
@@ -119,6 +119,9 @@ class Feature:
                        colour).  Either argument is overridden if 'color'
                        is found in feature qualifiers
 
+            o border   color.Color Color to draw the feature border, use
+                       None for the same as the fill color, False for no border.
+
             o label     Boolean, 1 if the label should be shown
         """
         #Let the UK spelling (colour) override the USA spelling (color)
@@ -131,6 +134,7 @@ class Feature:
         self.parent = parent
         self.id = feature_id        
         self.color = color            # default color to draw the feature
+        self.border = border
         self._feature = None            # Bio.SeqFeature object to wrap
         self.hide = 0                   # show by default
         self.sigil = 'BOX'
@@ -175,13 +179,14 @@ class Feature:
             bounds += [start, end]
         else:
             for subfeature in self._feature.sub_features:
-                start = self._feature.location.nofuzzy_start
-                end = self._feature.location.nofuzzy_end
+                start = subfeature.location.nofuzzy_start
+                end = subfeature.location.nofuzzy_end
                 #if start > end and self.strand == -1:
                 #    start, end = end, start
                 self.locations.append((start, end))                
                 bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
+        #TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
         if self._feature.strand is None:
             #This is the SeqFeature default (None), but the drawing code
             #only expects 0, +1 or -1.
@@ -189,20 +194,14 @@ class Feature:
         else:
             self.strand = int(self._feature.strand)                 # Feature strand
         if 'color' in self._feature.qualifiers:                # Artemis color (if present)
-            # Artemis color used to be only a single integer, but as of
-            # Oct '04 appears to be dot-delimited.  This is a quick fix to
-            # allow dot-delimited strings, but only use the first integer
-            artemis_color = self._feature.qualifiers['color'][0] # Local copy of string
-            if artemis_color.count('.'):                          # dot-delimited
-                artemis_color = artemis_color.split('.')[0]      # Use only first integer
-            else:                                     # Assume just an integer
-                artemis_color = artemis_color       # Use integer
-            self.color = self._colortranslator.artemis_color(artemis_color)
+            self.color = self._colortranslator.artemis_color( \
+                                         self._feature.qualifiers['color'][0])
         self.name = self.type
         for qualifier in self.name_qualifiers:            
             if qualifier in self._feature.qualifiers:
                 self.name = self._feature.qualifiers[qualifier][0]
                 break
+        #Note will be 0 to N for origin wrapping feature on genome of length N 
         self.start, self.end = min(bounds), max(bounds)
 
 

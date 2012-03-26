@@ -6,7 +6,7 @@
 """Class that maps (chain_id, residue_id) to a residue property."""
 
 
-class AbstractPropertyMap:
+class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
         self.property_dict=property_dict
         self.property_keys=property_keys

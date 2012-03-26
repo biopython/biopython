@@ -88,6 +88,9 @@ class Diagram(object):
         o yb           Float, the proportion of the page to take up with the 
                               bottom Y margin
 
+        o circle_core  Float, the proportion of the available radius to leave
+                       empty at the center of a circular diagram (0 to 1).
+
         o start        Int, the base/aa position to start the diagram at
 
         o end          Int, the base/aa position to end the diagram at
@@ -110,11 +113,8 @@ class Diagram(object):
 
         o __init__(self, name=None) Called on instantiation
 
-        o draw(self, format='circular', pagesize='A3', orientation='landscape',
-             x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-             start=None, end=None, tracklines=0, fragments=10,
-             fragment_size=0.9, track_size=0.75) Instructs the package to draw
-             the diagram
+        o draw(self, format='circular', ...) Instructs the package to draw
+            the diagram
 
         o write(self, filename='test1.ps', output='PS') Writes the drawn
             diagram to a specified file, in a specified format.
@@ -152,7 +152,7 @@ class Diagram(object):
          orientation='landscape', x=0.05, y=0.05, xl=None, 
          xr=None, yt=None, yb=None, start=None, end=None, 
          tracklines=False, fragments=10, fragment_size=0.9, 
-         track_size=0.75, circular=True):
+         track_size=0.75, circular=True, circle_core=0.0):
         """ __init__(self, name=None)
 
             o name  String describing the diagram
@@ -229,6 +229,8 @@ class Diagram(object):
         self.fragment_size = fragment_size
         self.track_size = track_size
         self.circular = circular
+        self.circle_core = circle_core
+        self.cross_track_links = []
 
     def set_all_tracks(self, attr, value):
         """ set_all_tracks(self, attr, value)
@@ -248,14 +250,9 @@ class Diagram(object):
     def draw(self, format=None, pagesize=None, orientation=None,
              x=None, y=None, xl=None, xr=None, yt=None, yb=None,
              start=None, end=None, tracklines=None, fragments=None,
-             fragment_size=None, track_size=None, circular=None):
-        """ draw(self, format=None, pagesize=None, orientation=None,
-            x=None, y=None, xl=None, xr=None, yt=None, yb=None,
-            start=None, end=None, tracklines=None, fragments=None,
-            fragment_size=None, track_size=None)
-
-            Draws the diagram using the passed parameters, if any, to override
-        previous settings for the diagram object.
+             fragment_size=None, track_size=None, circular=None,
+             circle_core=None, cross_track_links=None):
+        """Draw the diagram, with passed parameters overriding existing attributes.
         """
         # Pass the parameters to the drawer objects that will build the 
         # diagrams.  At the moment, we detect overrides with an or in the 
@@ -271,7 +268,8 @@ class Diagram(object):
                                   tracklines or self.tracklines,
                                   fragments or self.fragments, 
                                   fragment_size or self.fragment_size, 
-                                  track_size or self.track_size)
+                                  track_size or self.track_size,
+                                  cross_track_links or self.cross_track_links)
         else:
             drawer = CircularDrawer(self, pagesize or self.pagesize, 
                                     orientation or self.orientation, 
@@ -281,7 +279,9 @@ class Diagram(object):
                                     end or self.end, 
                                     tracklines or self.tracklines,
                                     track_size or self.track_size,
-                                    circular or self.circular)
+                                    circular or self.circular,
+                                    circle_core or self.circle_core,
+                                    cross_track_links or self.cross_track_links)
         drawer.draw()   # Tell the drawer to complete the drawing
         self.drawing = drawer.drawing  # Get the completed drawing
         

@@ -134,7 +134,7 @@ class ValidationError(ValueError):
         return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False." % self.name
 
 
-class DataHandler:
+class DataHandler(object):
 
     home = os.path.expanduser('~')
     local_dtd_dir = os.path.join(home, '.biopython', 'Bio', 'Entrez', 'DTDs')
@@ -161,6 +161,10 @@ class DataHandler:
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results"""
+        if hasattr(handle, "closed") and handle.closed:
+            #Should avoid a possible Segmentation Fault, see:
+            #http://bugs.python.org/issue4877
+            raise IOError("Can't parse a closed handle")
         try:
             self.parser.ParseFile(handle)
         except expat.ExpatError, e:
@@ -449,9 +453,16 @@ class DataHandler:
         elif urlinfo[0]=='':
             # Then this is a relative path to the DTD.
             # Look at the parent URL to find the full path.
-            url = self.dtd_urls[-1]
-            source = os.path.dirname(url)
-            url = os.path.join(source, systemId)
+            try:
+                url = self.dtd_urls[-1]
+            except IndexError:
+                # Assume the default URL for DTDs if the top parent
+                # does not contain an absolute path
+                source = "http://www.ncbi.nlm.nih.gov/dtd/"
+            else:
+                source = os.path.dirname(url)
+            # urls always have a forward slash, don't use os.path.join
+            url = source.rstrip("/") + "/" + systemId
         self.dtd_urls.append(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)

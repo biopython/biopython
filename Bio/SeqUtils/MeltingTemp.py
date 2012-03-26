@@ -12,10 +12,30 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
 
     dnac is DNA concentration [nM]
     saltc is salt concentration [mM].
-    rna=0 is for DNA/DNA (default), for RNA, rna should be 1.
-    
-    Sebastian Bassi <sbassi@genesdigitales.com>"""
-    
+    rna=0 is for DNA/DNA (default), use 1 for RNA/RNA hybridisation.
+
+    For DNA/DNA, see Allawi & SantaLucia (1997), Biochemistry 36: 10581-10594
+    For RNA/RNA, see Xia et al (1998), Biochemistry 37: 14719-14735
+
+    Example:
+
+    >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA')
+    59.87
+    >>> print "%0.2f" % Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA', rna=True)
+    68.14
+
+    You can also use a Seq object instead of a string,
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.Alphabet import generic_nucleotide
+    >>> s = Seq('CAGTCAGTACGTACGTGTACTGCCGTA', generic_nucleotide)
+    >>> print "%0.2f" % Tm_staluc(s)
+    59.87
+    >>> print "%0.2f" % Tm_staluc(s, rna=True)
+    68.14
+
+    """
+
     #Credits: 
     #Main author: Sebastian Bassi <sbassi@genesdigitales.com>
     #Overcount function: Greg Singer <singerg@tcd.ie>
@@ -77,12 +97,14 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
             dsL = ds + deltas
             # print "delta h=",dhL
             return dsL,dhL
+        else:
+            raise ValueError("rna = %r not supported" % rna)
 
     def overcount(st,p):
         """Returns how many p are on st, works even for overlapping"""
         ocu = 0
         x = 0
-        while 1:
+        while True:
             try:
                 i = st.index(p,x)
             except ValueError:
@@ -92,8 +114,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         return ocu
 
     R = 1.987 # universal gas constant in Cal/degrees C*Mol
-    sup = s.upper()
-    vsTC,vh = tercorr(sup)
+    sup = str(s).upper() #turn any Seq object into a string (need index method)
+    vsTC, vh = tercorr(sup)
     vs = vsTC
     
     k = (dnac/4.0)*1e-9
@@ -119,9 +141,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         vs = vs + (overcount(sup,"CG"))*27.2+(overcount(sup,"GC"))*\
         24.4 + (overcount(sup,"GG"))*19.9 + (overcount(sup,"CC"))*19.9
         ds = vs
-        dh = vh
-        
-    else:
+        dh = vh        
+    elif rna==1:
         #RNA/RNA hybridisation of Xia et al (1998)
         #Biochemistry 37: 14719-14735         
         vh = vh+(overcount(sup,"AA"))*6.82+(overcount(sup,"TT"))*6.6+\
@@ -142,6 +163,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         *36.9 + (overcount(sup,"GG"))*32.7 + (overcount(sup,"CC"))*29.7
         ds = vs
         dh = vh
+    else:
+        raise ValueError("rna = %r not supported" %rna)
 
     ds = ds-0.368*(len(s)-1)*math.log(saltc/1e3)
     tm = ((1000* (-dh))/(-ds+(R * (math.log(k)))))-273.15
@@ -149,8 +172,13 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     # print "dh="+str(dh)
     return tm
 
-if __name__ == "__main__":
-    print "Quick self test"
-    assert Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA') == 59.865612727457972
-    assert Tm_staluc('CAGTCAGTACGTACGTGTACTGCCGTA',rna=1) == 68.141611264576682
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    import doctest
+    print "Runing doctests..."
+    doctest.testmod()
     print "Done"
+
+if __name__ == "__main__":
+    _test()

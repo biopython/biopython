@@ -36,8 +36,9 @@ test_files = [
     ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py
     ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
+    ("nexus", 2, 1, 'Nexus/codonposset.nex'),
     ("stockholm", 2, 1, 'Stockholm/simple.sth'),
-    ("stockholm", 5, 1, 'Stockholm/funny.sth'),
+    ("stockholm", 6, 1, 'Stockholm/funny.sth'),
     ("phylip", 6, 1, 'Phylip/reference_dna.phy'),
     ("phylip", 6, 1, 'Phylip/reference_dna2.phy'),
     ("phylip",10, 1, 'Phylip/hennigian.phy'),
@@ -45,6 +46,9 @@ test_files = [
     ("phylip",10, 1, 'Phylip/random.phy'),
     ("phylip", 3, 1, 'Phylip/interlaced.phy'),
     ("phylip", 4, 1, 'Phylip/interlaced2.phy'),
+    ("phylip-relaxed", 12, 1, 'ExtendedPhylip/primates.phyx'),
+    ("phylip-sequential", 3, 1, 'Phylip/sequential.phy'),
+    ("phylip-sequential", 4, 1, 'Phylip/sequential2.phy'),
     ("emboss", 4, 1, 'Emboss/alignret.txt'),
     ("emboss", 2, 5, 'Emboss/needle.txt'),
     ("emboss", 2, 1, 'Emboss/needle_asis.txt'),
@@ -109,12 +113,12 @@ def check_simple_write_read(alignments, indent=" "):
         if not records_per_alignment \
         and format not in test_write_read_alignment_formats:
             continue
-        
+
         print indent+"Checking can write/read as '%s' format" % format
-        
+
         #Going to write to a handle...
         handle = StringIO()
-        
+
         try:
             c = AlignIO.write(alignments, handle=handle, format=format)
             assert c == len(alignments)
@@ -171,11 +175,17 @@ def simple_alignment_comparison(alignments, alignments2, format):
             #Check the bare minimum (ID and sequence) as
             #many formats can't store more than that.
 
+            #Check the sequence
+            assert r1.seq.tostring() == r2.seq.tostring()
+
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
-            if format=="phylip":
+            if format in ["phylip", "phylip-sequential"]:
                 assert r1.id.replace("[","").replace("]","")[:10] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
+            elif format=="phylip-relaxed":
+                assert r1.id.replace(" ", "").replace(':', '|') == r2.id, \
+                        "'%s' vs '%s'" % (r1.id, r2.id)
             elif format=="clustal":
                 assert r1.id.replace(" ","_")[:30] == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)

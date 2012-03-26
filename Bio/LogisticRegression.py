@@ -19,7 +19,7 @@ classify     Classify an observation into a class.
 import numpy
 import numpy.linalg
 
-class LogisticRegression:
+class LogisticRegression(object):
     """Holds information necessary to do logistic regression
     classification.
 

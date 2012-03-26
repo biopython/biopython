@@ -17,7 +17,7 @@ from reportlab.graphics.charts.markers import *
 
 from Bio.Graphics import _write
 
-class ComparativeScatterPlot:
+class ComparativeScatterPlot(object):
     """Display a scatter-type plot comparing two different kinds of info.
 
     Attributes;

@@ -152,7 +152,7 @@ def _open_scop_file(scop_dir_path, version, filetype):
     return handle
 
 
-class Scop:
+class Scop(object):
     """The entire SCOP hierarchy.
 
     root -- The root node of the hierarchy 
@@ -516,7 +516,7 @@ class Scop:
         
 
   
-class Node:
+class Node(object):
     """ A node in the Scop hierarchy
 
     sunid  -- SCOP unique identifiers. e.g. '14986'
@@ -683,7 +683,7 @@ class Domain(Node):
        
         return rec
             
-class Astral:
+class Astral(object):
     """Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
     as well as clusterings by percent id or evalue.
     """
@@ -888,7 +888,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
     params = {'pdb' : pdb, 'key' : key, 'sid' : sid, 'disp' : disp,
               'dir' : dir, 'loc' : loc}
     variables = {}
-    for k, v in params.iteritmes():
+    for k, v in params.iteritems():
         if v is not None:
             variables[k] = v
     variables.update(keywds)
@@ -903,19 +903,16 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
-    import urllib
-    from Bio import File
+    import urllib, urllib2
     # Open a handle to SCOP.
     options = urllib.urlencode(params)
-    if get:  # do a GET
-        fullcgi = cgi
-        if options:
-            fullcgi = "%s?%s" % (cgi, options)
-        handle = urllib.urlopen(fullcgi)
-    else:    # do a POST
-        handle = urllib.urlopen(cgi, options)
-
-    # Wrap the handle inside an UndoHandle.
-    uhandle = File.UndoHandle(handle)
-    # Should I check for 404?  timeout?  etc?
-    return uhandle
+    try:
+        if get:  # do a GET
+            if options:
+                cgi += "?" + options
+            handle = urllib2.urlopen(cgi)
+        else:    # do a POST
+            handle = urllib2.urlopen(cgi, data=options)
+    except urllib2.HTTPError, exception:
+        raise exception
+    return handle

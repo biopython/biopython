@@ -13,12 +13,6 @@ Goals:
     Make sure that all retrieval is working as expected.
     May catch some format changes early too.
 """
-import sys
-if sys.version_info[0] >= 3:
-    from Bio import MissingExternalDependencyError
-    raise MissingExternalDependencyError(\
-        "This test doesn't work on Python 3 (bytes vs unicode issue).")
-
 import unittest
 
 import requires_internet
@@ -64,7 +58,7 @@ class EntrezTests(unittest.TestCase):
     def simple(self, database, formats, entry, length, checksum):
         for f in formats:
             try:
-                handle = Entrez.efetch(db=database, id=entry, rettype=f)
+                handle = Entrez.efetch(db=database, id=entry, rettype=f, retmode="text")
                 record = SeqIO.read(handle, f)
                 handle.close()
             except IOError:

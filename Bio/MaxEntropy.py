@@ -15,7 +15,7 @@ XXX ref
 
 import numpy
 
-class MaxEntropy:
+class MaxEntropy(object):
     """Holds information for a Maximum Entropy classifier.
 
     Members:

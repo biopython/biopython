@@ -23,8 +23,11 @@
 
 """Parse the header of a PDB file."""
 
+# For 'with' on Python 2.5/Jython 2.5
+from __future__ import with_statement
 import re
 
+from Bio import File
 
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
@@ -112,20 +115,14 @@ def parse_pdb_header(infile):
     compound.
     """
     header = []
-    do_close = False
-    if isinstance(infile, basestring):
-        f = open(infile,'r')
-        do_close = True
-    else:
-        f = infile
-    for l in f:
-        record_type=l[0:6]
-        if record_type=='ATOM  ' or record_type=='HETATM' or record_type=='MODEL ':
-            break
-        else:
-            header.append(l)    
-    if do_close:
-        f.close()
+    with File.as_handle(infile, 'r') as f:
+        for l in f:
+            record_type=l[0:6]
+            if (record_type=='ATOM  ' or record_type=='HETATM' or
+                    record_type=='MODEL '):
+                break
+            else:
+                header.append(l)
     return _parse_pdb_header_list(header)
 
 def _parse_pdb_header_list(header):

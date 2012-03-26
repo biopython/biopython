@@ -1,10 +1,12 @@
-# Copyright 2009 by Peter Cock.  All rights reserved.
+# Copyright 2009-2011 by Peter Cock.  All rights reserved.
 # Parts copyright 1999 by Jeffrey Chang.  All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 import unittest
+from StringIO import StringIO
+
 from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
@@ -97,6 +99,17 @@ class TitleFunctions(unittest.TestCase):
             self.assertEqual(new.seq.alphabet, old.seq.alphabet)
         #Uncomment this for testing the methods are calling the right files:
         #print "{%s done}" % filename,
+
+    def test_no_name(self):
+        """Test FASTA record with no identifier."""
+        handle = StringIO(">\nACGT")
+        record = SeqIO.read(handle, "fasta")
+        handle.close()
+        self.assertEqual(str(record.seq), "ACGT")
+        self.assertEqual("", record.id)
+        self.assertEqual("", record.name)
+        self.assertEqual("", record.description)
+
 
 single_nucleic_files = ['Fasta/lupine.nu', 'Fasta/elderberry.nu',
                         'Fasta/phlox.nu', 'Fasta/centaurea.nu',

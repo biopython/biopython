@@ -16,6 +16,16 @@ class NexusTest1(unittest.TestCase):
     def tearDown(self):
         self.handle.close()
 
+    def test_WriteToFileName(self):
+        """Test writing to a given filename."""
+        filename = "Nexus/test_temp.nex"
+        if os.path.isfile(filename):
+            os.remove(filename)
+        n = Nexus.Nexus(self.handle)
+        n.write_nexus_data(filename)
+        self.assertTrue(os.path.isfile(filename))
+        os.remove(filename)
+
     def test_NexusTest1(self):
         """Test Nexus module"""
         # check data of main nexus file

@@ -1,0 +1,1371 @@
+test_AlignIO_FastaIO
+Testing reading fasta-m10 format file Fasta/output001.m10 with 4 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 108
+ - fa_bits: '25.3'
+ - fa_expect: '0.43'
+ - fa_frame: 'f'
+ - fa_init1: '43'
+ - fa_initn: '65'
+ - fa_opt: '71'
+ - fa_z-score: '92.7'
+ - mp_Algorithm: 'FASTA (3.5 Sept 2006) [optimized]'
+ - mp_KS: '-0.0000 (N=1069612839) at  20'
+ - mp_Parameters: 'BL50 matrix (15:-5) ktup: 2  join: 36, opt: 24, open/ext: -10/-2, width:  16'
+ - mp_extrap: '60000 500'
+ - mp_stats: "(shuffled [500]) Expectation_n fit: rho(ln(x))= 6.1549+/-0.00908; mu= -2.2550+/- 0.463  mean_var=53.4246+/-12.058, 0's: 0 Z-trim: 0  B-trim: 0 in 0/33  Lambda= 0.175470"
+ - pg_argv: '/home/username/Downloads/FASTA/fasta-35.3.6/fasta35 -Q -H -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.250'
+ - sw_overlap: '108'
+ - sw_score: '71'
+ - sw_sim: '0.574'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
+Seq('SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECGKTVSGFLRAAALGKKVNS...LSR', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|152973457|ref|YP_001338508.1|
+gi|152973457|ref|YP_001338508.1| ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFGRS------EVDTEHLLLA...LSR', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 931
+==============================================================================
+Alignment 1, with 2 sequences of length 64
+ - fa_bits: '23.4'
+ - fa_expect: '0.81'
+ - fa_frame: 'f'
+ - fa_init1: '33'
+ - fa_initn: '33'
+ - fa_opt: '63'
+ - fa_z-score: '87.7'
+ - mp_Algorithm: 'FASTA (3.5 Sept 2006) [optimized]'
+ - mp_KS: '-0.0000 (N=1069612839) at  20'
+ - mp_Parameters: 'BL50 matrix (15:-5) ktup: 2  join: 36, opt: 24, open/ext: -10/-2, width:  16'
+ - mp_extrap: '60000 500'
+ - mp_stats: "(shuffled [500]) Expectation_n fit: rho(ln(x))= 6.1549+/-0.00908; mu= -2.2550+/- 0.463  mean_var=53.4246+/-12.058, 0's: 0 Z-trim: 0  B-trim: 0 in 0/33  Lambda= 0.175470"
+ - pg_argv: '/home/username/Downloads/FASTA/fasta-35.3.6/fasta35 -Q -H -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.266'
+ - sw_overlap: '64'
+ - sw_score: '63'
+ - sw_sim: '0.656'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
+Seq('AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MRLGALQKKLFIDGKRVGDR...AIT', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|152973588|ref|YP_001338639.1|
+gi|152973588|ref|YP_001338639.1| F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIMWNALSKNRLFDG----NK...TLT', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 459
+==============================================================================
+Alignment 2, with 2 sequences of length 38
+ - fa_bits: '22.2'
+ - fa_expect: '0.49'
+ - fa_frame: 'f'
+ - fa_init1: '50'
+ - fa_initn: '50'
+ - fa_opt: '58'
+ - fa_z-score: '91.6'
+ - mp_Algorithm: 'FASTA (3.5 Sept 2006) [optimized]'
+ - mp_KS: '-0.0000 (N=1067190620) at  20'
+ - mp_Parameters: 'BL50 matrix (15:-5) ktup: 2  join: 36, opt: 24, open/ext: -10/-2, width:  16'
+ - mp_extrap: '60000 500'
+ - mp_stats: "(shuffled [500]) Expectation_n fit: rho(ln(x))= 3.7842+/-0.0102; mu= 9.7189+/- 0.536  mean_var=54.8927+/-12.828, 0's: 0 Z-trim: 0  B-trim: 0 in 0/33  Lambda= 0.173108"
+ - pg_argv: '/home/username/Downloads/FASTA/fasta-35.3.6/fasta35 -Q -H -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.289'
+ - sw_overlap: '38'
+ - sw_score: '58'
+ - sw_sim: '0.632'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
+Seq('MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE', ProteinAlphabet())
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|152973462|ref|YP_001338513.1|
+gi|152973462|ref|YP_001338513.1| hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ', ProteinAlphabet())
+ - original_length: 101
+==============================================================================
+Alignment 3, with 2 sequences of length 43
+ - fa_bits: '25.3'
+ - fa_expect: '0.36'
+ - fa_frame: 'f'
+ - fa_init1: '52'
+ - fa_initn: '52'
+ - fa_opt: '70'
+ - fa_z-score: '94.0'
+ - mp_Algorithm: 'FASTA (3.5 Sept 2006) [optimized]'
+ - mp_KS: '-0.0000 (N=1072013992) at  20'
+ - mp_Parameters: 'BL50 matrix (15:-5) ktup: 2  join: 37, opt: 25, open/ext: -10/-2, width:  16'
+ - mp_extrap: '60000 500'
+ - mp_stats: "(shuffled [500]) Expectation_n fit: rho(ln(x))= 3.6839+/- 0.011; mu= 15.3165+/- 0.586  mean_var=61.2646+/-13.548, 0's: 0 Z-trim: 0  B-trim: 0 in 0/33  Lambda= 0.163859"
+ - pg_argv: '/home/username/Downloads/FASTA/fasta-35.3.6/fasta35 -Q -H -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_cgap: '37'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '25'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.279'
+ - sw_overlap: '43'
+ - sw_score: '70'
+ - sw_sim: '0.651'
+------------------------------------------------------------------------------
+gi|10955265|ref|NP_052606.1|
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
+Seq('SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 346
+------------------------------------------------------------------------------
+gi|152973545|ref|YP_001338596.1|
+gi|152973545|ref|YP_001338596.1| putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC', ProteinAlphabet())
+ - original_length: 242
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output002.m10 with 6 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 88
+ - fa_bits: '26.5'
+ - fa_expect: '1.2'
+ - fa_frame: 'f'
+ - fa_init1: '55'
+ - fa_initn: '55'
+ - fa_opt: '77'
+ - fa_z-score: '110.8'
+ - mp_KS: '0.0215 (N=29) at  42'
+ - mp_extrap: '60000 5253'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 4.3805+/-0.00127; mu= 8.3307+/- 0.071  mean_var=55.5989+/-11.432, 0's: 1 Z-trim: 1  B-trim: 0 in 0/43  Lambda= 0.172005"
+ - pg_argv: '/opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.284'
+ - sw_overlap: '88'
+ - sw_score: '77'
+ - sw_sim: '0.545'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
+Seq('SGSNTRRRAISRPVR--LTAEEDQEIRKRAAECG-KTVSGFLRAAALGKKVNSL...AEV', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|162139799|ref|NP_309634.2|
+gi|162139799|ref|NP_309634.2| 23S rRNA pseudouridine synthase E [Escherichia coli O157:H7 str. Sakai]
+Seq('SQRSTRRKPENQPTRVILFNKPYDVLPQFTDEAGRKTLKEFIPVQGVYAAGRLD...VQV', ProteinAlphabet())
+ - original_length: 207
+==============================================================================
+Alignment 1, with 2 sequences of length 53
+ - fa_bits: '24.6'
+ - fa_expect: '5.8'
+ - fa_frame: 'f'
+ - fa_init1: '43'
+ - fa_initn: '43'
+ - fa_opt: '69'
+ - fa_z-score: '98.6'
+ - mp_KS: '0.0215 (N=29) at  42'
+ - mp_extrap: '60000 5253'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 4.3805+/-0.00127; mu= 8.3307+/- 0.071  mean_var=55.5989+/-11.432, 0's: 1 Z-trim: 1  B-trim: 0 in 0/43  Lambda= 0.172005"
+ - pg_argv: '/opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.283'
+ - sw_overlap: '53'
+ - sw_score: '69'
+ - sw_sim: '0.660'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s 107 aa - 107 aa
+Seq('EIRKRAAECGKTVSGFLRAAA-LGKKV----NSLTDDRVLKEVMRLGALQKKL', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|15831859|ref|NP_310632.1|
+gi|15831859|ref|NP_310632.1| trehalose-6-phosphate phosphatase [Escherichia coli O157:H7 str. Sakai]
+Seq('EIKPRGTSKGEAIAAFMQEAPFIGRTPVFLGDDLTDESGFAVVNRLGGMSVKI', ProteinAlphabet())
+ - original_length: 266
+==============================================================================
+Alignment 2, with 2 sequences of length 92
+ - fa_bits: '27.0'
+ - fa_expect: '2.3'
+ - fa_frame: 'f'
+ - fa_init1: '40'
+ - fa_initn: '64'
+ - fa_opt: '77'
+ - fa_z-score: '105.8'
+ - mp_KS: '0.0212 (N=29) at  44'
+ - mp_extrap: '60000 5253'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 3.9868+/-0.00133; mu= 9.5505+/- 0.074  mean_var=58.9770+/-12.363, 0's: 0 Z-trim: 0  B-trim: 194 in 1/42  Lambda= 0.167006"
+ - pg_argv: '/opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.250'
+ - sw_overlap: '92'
+ - sw_score: '77'
+ - sw_sim: '0.620'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
+Seq('SEFFSKIESDLKKKKSKGDVFFDLIIPNG-----GKKDRYVYTSFNGEKFSSYT...ATS', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|15829419|ref|NP_308192.1|
+gi|15829419|ref|NP_308192.1| serine endoprotease [Escherichia coli O157:H7 str. Sakai]
+Seq('TELNSELAKAMKVDAQRG-AFVSQVLPNSSAAKAGIKAGDVITSLNGKPISSFA...QSS', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 474
+==============================================================================
+Alignment 3, with 2 sequences of length 73
+ - fa_bits: '26.0'
+ - fa_expect: '2.4'
+ - fa_frame: 'f'
+ - fa_init1: '45'
+ - fa_initn: '73'
+ - fa_opt: '74'
+ - fa_z-score: '105.5'
+ - mp_KS: '0.0212 (N=29) at  44'
+ - mp_extrap: '60000 5253'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 3.9868+/-0.00133; mu= 9.5505+/- 0.074  mean_var=58.9770+/-12.363, 0's: 0 Z-trim: 0  B-trim: 194 in 1/42  Lambda= 0.167006"
+ - pg_argv: '/opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.274'
+ - sw_overlap: '73'
+ - sw_score: '74'
+ - sw_sim: '0.589'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
+Seq('FFDLIIPNGGKKDRYVYTSFNGEKFSSYTLNKVTKTDEYNDLSELSASFFKKNF...KKG', ProteinAlphabet())
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|15832592|ref|NP_311365.1|
+gi|15832592|ref|NP_311365.1| phosphoribosylaminoimidazole-succinocarboxamide synthase [Escherichia coli O157:H7 str. Sakai]
+Seq('LFDLFLKNDAMHDPMVNESYC-ETFGWVSKENLARMKE---LTYKANDVLKKLF...YKG', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 237
+==============================================================================
+Alignment 4, with 2 sequences of length 63
+ - fa_bits: '28.6'
+ - fa_expect: '0.51'
+ - fa_frame: 'f'
+ - fa_init1: '50'
+ - fa_initn: '50'
+ - fa_opt: '86'
+ - fa_z-score: '117.5'
+ - mp_KS: '0.0096 (N=29) at  50'
+ - mp_extrap: '60000 5253'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 4.3951+/-0.00131; mu= 12.1593+/- 0.073  mean_var=61.9743+/-12.803, 0's: 0 Z-trim: 1  B-trim: 15 in 1/42  Lambda= 0.162918"
+ - pg_argv: '/opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa'
+ - pg_cgap: '37'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '25'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.302'
+ - sw_overlap: '63'
+ - sw_score: '86'
+ - sw_sim: '0.635'
+------------------------------------------------------------------------------
+gi|10955265|ref|NP_052606.1|
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
+Seq('VDIKK-ETIESELHSKLPKSIDKIHEDIKKQLSCSLI--MKKID-VEMEDYSTY...AIE', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 346
+------------------------------------------------------------------------------
+gi|38704138|ref|NP_311957.2|
+gi|38704138|ref|NP_311957.2| hypothetical protein ECs3930 [Escherichia coli O157:H7 str. Sakai]
+Seq('IDPKKIEQIARQVHESMPKGIREFGEDVEKKIRQTLQAQLTRLDLVSREEFDVQ...TRE', ProteinAlphabet())
+ - original_length: 111
+==============================================================================
+Alignment 5, with 2 sequences of length 157
+ - fa_bits: '29.2'
+ - fa_expect: '0.95'
+ - fa_frame: 'f'
+ - fa_init1: '32'
+ - fa_initn: '32'
+ - fa_opt: '87'
+ - fa_z-score: '112.7'
+ - mp_KS: '0.0096 (N=29) at  50'
+ - mp_extrap: '60000 5253'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 4.3951+/-0.00131; mu= 12.1593+/- 0.073  mean_var=61.9743+/-12.803, 0's: 0 Z-trim: 1  B-trim: 15 in 1/42  Lambda= 0.162918"
+ - pg_argv: '/opt/fasta/fasta34 -m 10 -y 10 -X -13 -17 -Q -d 2 NC_002127.faa NC_002695.faa'
+ - pg_cgap: '37'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '25'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.210'
+ - sw_overlap: '157'
+ - sw_score: '87'
+ - sw_sim: '0.580'
+------------------------------------------------------------------------------
+gi|10955265|ref|NP_052606.1|
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa - 346 aa
+Seq('QYIMTTSNGDRVRAKIYKRGSIQFQGKYLQIASLINDFMCSILNMKEIVEQKNK...REI', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 346
+------------------------------------------------------------------------------
+gi|15833861|ref|NP_312634.1|
+gi|15833861|ref|NP_312634.1| hypothetical protein ECs4607 [Escherichia coli O157:H7 str. Sakai]
+Seq('EFIRLLSDHDQFEKDQISELTVAANALKLEVAK--NNY-----NMKYSFDTQTE...KKV', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 330
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output003.m10 with 3 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 55
+ - fa_bits: '17.7'
+ - fa_expect: '0.26'
+ - fa_frame: 'f'
+ - fa_init1: '43'
+ - fa_initn: '43'
+ - fa_opt: '45'
+ - fa_z-score: '64.1'
+ - mp_KS: '-0.0000 (N=0) at 8159228'
+ - mp_extrap: '60000 3'
+ - mp_stats: 'Altschul/Gish params: n0: 183 Lambda: 0.158 K: 0.019 H: 0.100'
+ - pg_argv: '/opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.255'
+ - sw_overlap: '55'
+ - sw_score: '59'
+ - sw_sim: '0.673'
+------------------------------------------------------------------------------
+gi|152973837|ref|YP_001338874.1|
+gi|152973837|ref|YP_001338874.1| hypothetical protein KPN_pKPN7p10262 [Klebsiella pneumoniae subsp. pneumonia 183 aa - 183 aa
+Seq('ISISNNKDQYEELQKEQGERDLKTVDQLVRIAAAGGGLRLSASTKTVDQLVRIAA', ProteinAlphabet())
+ - original_length: 183
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 str. Sakai]
+Seq('VRLTAEEDQ--EIRKRAAECG-KTVSGFLRAAALGKKVNSLTDDRVLKEVMRLGA', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+==============================================================================
+Alignment 1, with 2 sequences of length 22
+ - fa_bits: '19.2'
+ - fa_expect: '0.11'
+ - fa_frame: 'f'
+ - fa_init1: '35'
+ - fa_initn: '35'
+ - fa_opt: '38'
+ - fa_z-score: '71.3'
+ - mp_KS: '-0.0000 (N=0) at 8159228'
+ - mp_extrap: '60000 3'
+ - mp_stats: 'Altschul/Gish params: n0: 63 Lambda: 0.158 K: 0.019 H: 0.100'
+ - pg_argv: '/opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.364'
+ - sw_overlap: '22'
+ - sw_score: '38'
+ - sw_sim: '0.636'
+------------------------------------------------------------------------------
+gi|152973840|ref|YP_001338877.1|
+gi|152973840|ref|YP_001338877.1| RNA one modulator-like protein [Klebsiella pneumoniae subsp. pneumoniae  63 aa - 63 aa
+Seq('DDAEHLFRTLSSR-LDALQDGN', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 63
+------------------------------------------------------------------------------
+gi|10955265|ref|NP_052606.1|
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 str. Sakai]
+Seq('DDRANLFEFLSEEGITITEDNN', ProteinAlphabet())
+ - original_length: 346
+==============================================================================
+Alignment 2, with 2 sequences of length 63
+ - fa_bits: '20.4'
+ - fa_expect: '0.036'
+ - fa_frame: 'f'
+ - fa_init1: '37'
+ - fa_initn: '37'
+ - fa_opt: '57'
+ - fa_z-score: '80.0'
+ - mp_KS: '-0.0000 (N=0) at 8159228'
+ - mp_extrap: '60000 3'
+ - mp_stats: 'Altschul/Gish params: n0: 133 Lambda: 0.158 K: 0.019 H: 0.100'
+ - pg_argv: '/opt/fasta/fasta34 -p -m 10 -Q -b 2 -E 0.5 NC_009653.faa NC_002127.faa'
+ - pg_cgap: '36'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut: '24'
+ - pg_ver: '3.5 Sept 2006'
+ - sw_ident: '0.254'
+ - sw_overlap: '63'
+ - sw_score: '57'
+ - sw_sim: '0.651'
+------------------------------------------------------------------------------
+gi|152973841|ref|YP_001338878.1|
+gi|152973841|ref|YP_001338878.1| Excl1 protein [Klebsiella pneumoniae subsp. pneumoniae  133 aa - 133 aa
+Seq('VFGSFEQPKGEHLSGQVSEQ--RDTAFADQNEQVIRHLKQEIEHLNTLLLSKDS...QAM', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 133
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 str. Sakai]
+Seq('VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELSASFFKKNFDKINVNLLSKAT...KGI', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 126
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output004.m10 with 1 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 102
+ - bs_ident: '0.578'
+ - bs_overlap: '102'
+ - bs_sim: '0.578'
+ - fa_bits: '35.2'
+ - fa_expect: '0.045'
+ - fa_frame: 'f'
+ - fa_init1: '54'
+ - fa_initn: '54'
+ - fa_opt: '91'
+ - fa_z-score: '139.3'
+ - mp_Algorithm: 'FASTA (3.5 Sept 2006) [optimized]'
+ - mp_KS: '-0.0000 (N=1079006385) at  20'
+ - mp_Parameters: '+3/-2 matrix (3:-2) ktup: 6  join: 35, opt: 20, open/ext: -12/-4, width:  16'
+ - mp_extrap: '60000 5228'
+ - mp_stats: "Expectation_n fit: rho(ln(x))= 1.8467+/-0.00109; mu= 22.5671+/- 0.073  mean_var=40.1160+/- 8.182, 0's: 0 Z-trim: 2  B-trim: 0 in 0/44  Lambda= 0.202496"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-35.4.1/bin/fasta35 -m 10 -Q -H -B -E 0.1 -L -n -r +3/-2 NC_002127.ffn NC_002695.ffn'
+ - pg_cgap: '35'
+ - pg_ktup: '6'
+ - pg_matrix: '+3/-2 (3:-2)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-35.4.1/bin/fasta35'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-12 -4'
+ - pg_optcut: '20'
+ - pg_ver: '35.03'
+ - pg_ver_rel: '3.5 Sept 2006'
+------------------------------------------------------------------------------
+ref|NC_002127.1|:c1351-971
+ref|NC_002127.1|:c1351-971 - 381 nt
+Seq('AAAAAAGATAAAAAATATCAAATAGAAGCAATAAAAAATAAAGATAAAACTTTA...TCA', DNAAlphabet())
+ - original_length: 381
+------------------------------------------------------------------------------
+ref|NC_002695.1|:1970775-1971404
+ref|NC_002695.1|:1970775-1971404
+Seq('AGAGAAAATAAAACAAGTAATAAAATATTAATGGAAAAAATAAATTCTTGTTTA...ACA', DNAAlphabet())
+ - original_length: 630
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output005.m10 with 1 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 110
+ - mp_Algorithm: 'Smith-Waterman (SSE2, Michael Farrar 2006) (6.0 Mar 2007)'
+ - mp_KS: '-0.0000 (N=0) at  20'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2'
+ - mp_extrap: '60000 500'
+ - mp_stats: "(shuffled [500]) Expectation_n fit: rho(ln(x))= 5.9214+/-0.00691; mu= 3.1033+/- 0.354  mean_var=36.9389+/- 8.060, 0's: 0 Z-trim: 0  B-trim: 0 in 0/29  Lambda= 0.211024"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-35.3.6/ssearch35 -m 10 -q -E 0.5 -H NC_002127.faa NC_002128.faa'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'Smith-Waterman (SSE2, Michael Farrar 2006)'
+ - pg_open-ext: '-10 -2'
+ - pg_ver: '6.0 Mar 2007'
+ - sw_bits: '26.0'
+ - sw_expect: '0.025'
+ - sw_frame: 'f'
+ - sw_ident: '0.209'
+ - sw_overlap: '110'
+ - sw_s-w opt: '69'
+ - sw_score: '69'
+ - sw_sim: '0.555'
+ - sw_z-score: '108.8'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa - 126 aa
+Seq('IKNKDKTLFIVYAT-DIYSPSEFFSKIESDLKKKKSKGDV--FFDLIIPNGGKK...LSK', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|10955282|ref|NP_052623.1|
+gi|10955282|ref|NP_052623.1| hemolysin C [Escherichia coli O157:H7 str. Sakai]
+Seq('IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWMSGERKWFIDWIAPFGHNM...MSE', ProteinAlphabet())
+ - original_length: 163
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output006.m10 with 1 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 131
+ - bs_ident: '0.992'
+ - bs_overlap: '131'
+ - bs_sim: '0.992'
+ - fa_bits: '139.6'
+ - fa_expect: '7.2e-38'
+ - fa_frame: 'r'
+ - fa_init1: '646'
+ - fa_initn: '646'
+ - fa_opt: '646'
+ - fa_z-score: '712.3'
+ - mp_Algorithm: 'FASTA (3.5 Sept 2006) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: '+5/-4 matrix (5:-4) ktup: 6  join: 46, opt: 31, open/ext: -12/-4, width:  16'
+ - mp_extrap: '60000 500'
+ - mp_stats: '(shuffled [500]) MLE statistics: Lambda= 0.1428;  K=0.01152'
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-35.4.4/bin/fasta35 -H -q -E 0.05 -m 10 query.txt orchid_cds.txt'
+ - pg_cgap: '46'
+ - pg_ktup: '6'
+ - pg_matrix: '+5/-4 (5:-4)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-35.4.4/bin/fasta35'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-12 -4'
+ - pg_optcut: '31'
+ - pg_ver: '35.04'
+ - pg_ver_rel: '3.5 Sept 2006'
+------------------------------------------------------------------------------
+query
+query - 131 nt
+Seq('GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACAACGATTAATGAGGAGATT...CAT', DNAAlphabet())
+ - original_length: 131
+------------------------------------------------------------------------------
+gi|116660610|gb|EG558221.1|EG558221
+gi|116660610|gb|EG558221.1|EG558221 CR03001A07 Root CR03 cDNA library Catharanthus roseus cDNA clone CR03001A07 5', mRNA sequence
+Seq('GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACAACGATTAATGAGGAGATT...CAT', DNAAlphabet())
+ - original_length: 573
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output007.m10 with 9 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 108
+ - fa_bits: '28.5'
+ - fa_expect: '0.048'
+ - fa_frame: 'f'
+ - fa_init1: '43'
+ - fa_initn: '97'
+ - fa_opt: '71'
+ - fa_z-score: '109.6'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.783), E-opt: 0.2 (0.378), width:  16'
+ - mp_extrap: '60000 498'
+ - mp_stats: "(shuffled [498]) Expectation_n fit: rho(ln(x))= 3.0739+/-0.0105; mu= 13.5811+/- 0.558  mean_var=50.3269+/-12.335, 0's: 0 Z-trim(86.3): 0  B-trim: 0 in 0/33  Lambda= 0.180790"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.783)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.378)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.250'
+ - sw_overlap: '108'
+ - sw_score: '71'
+ - sw_sim: '0.574'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
+Seq('SGSNT-RRRAISRPVRLTAEED---QEIRKRAAECGKTVSGFLRAAALGKKVNS...LSR', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|152973457|ref|YP_001338508.1|
+gi|152973457|ref|YP_001338508.1| ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFGRS------EVDTEHLLLA...LSR', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 931
+==============================================================================
+Alignment 1, with 2 sequences of length 64
+ - fa_bits: '25.9'
+ - fa_expect: '0.14'
+ - fa_frame: 'f'
+ - fa_init1: '33'
+ - fa_initn: '66'
+ - fa_opt: '63'
+ - fa_z-score: '101.4'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.783), E-opt: 0.2 (0.378), width:  16'
+ - mp_extrap: '60000 498'
+ - mp_stats: "(shuffled [498]) Expectation_n fit: rho(ln(x))= 3.0739+/-0.0105; mu= 13.5811+/- 0.558  mean_var=50.3269+/-12.335, 0's: 0 Z-trim(86.3): 0  B-trim: 0 in 0/33  Lambda= 0.180790"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.783)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.378)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.266'
+ - sw_overlap: '64'
+ - sw_score: '63'
+ - sw_sim: '0.656'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
+Seq('AAECGKTVSGFLRAAALGKKVNSLTDDRVLKEV-MRLGALQKKLFIDGKRVGDR...AIT', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|152973588|ref|YP_001338639.1|
+gi|152973588|ref|YP_001338639.1| F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIMWNALSKNRLFDG----NK...TLT', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 459
+==============================================================================
+Alignment 2, with 2 sequences of length 45
+ - fa_bits: '22.0'
+ - fa_expect: '0.63'
+ - fa_frame: 'f'
+ - fa_init1: '37'
+ - fa_initn: '45'
+ - fa_opt: '51'
+ - fa_z-score: '89.6'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.783), E-opt: 0.2 (0.378), width:  16'
+ - mp_extrap: '60000 498'
+ - mp_stats: "(shuffled [498]) Expectation_n fit: rho(ln(x))= 3.0739+/-0.0105; mu= 13.5811+/- 0.558  mean_var=50.3269+/-12.335, 0's: 0 Z-trim(86.3): 0  B-trim: 0 in 0/33  Lambda= 0.180790"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.783)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.378)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.267'
+ - sw_overlap: '45'
+ - sw_score: '51'
+ - sw_sim: '0.622'
+------------------------------------------------------------------------------
+gi|10955263|ref|NP_052604.1|
+gi|10955263|ref|NP_052604.1| plasmid mobilization [Escherichia coli O157:H7 s - 107 aa
+Seq('EIRKRAAECGKTVSGFLRAAA-----LGKKVNSLTDDRVLKEVMR', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 107
+------------------------------------------------------------------------------
+gi|152973480|ref|YP_001338531.1|
+gi|152973480|ref|YP_001338531.1| Arsenate reductase (Arsenical pump modifier) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTDDQLIDFMLQ', ProteinAlphabet())
+ - original_length: 141
+==============================================================================
+Alignment 3, with 2 sequences of length 38
+ - fa_bits: '23.9'
+ - fa_expect: '0.15'
+ - fa_frame: 'f'
+ - fa_init1: '50'
+ - fa_initn: '78'
+ - fa_opt: '58'
+ - fa_z-score: '100.8'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.728), E-opt: 0.2 (0.331), width:  16'
+ - mp_extrap: '60000 493'
+ - mp_stats: "(shuffled [493]) Expectation_n fit: rho(ln(x))= 4.1464+/-0.0105; mu= 7.4394+/- 0.556  mean_var=56.5622+/-13.483, 0's: 0 Z-trim(85.2): 0  B-trim: 0 in 0/33  Lambda= 0.170534"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.728)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.331)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.289'
+ - sw_overlap: '38'
+ - sw_score: '58'
+ - sw_sim: '0.632'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
+Seq('MKKDKKYQIEAIKNKDKTLFIVYATDIYSPSEFFSKIE', ProteinAlphabet())
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|152973462|ref|YP_001338513.1|
+gi|152973462|ref|YP_001338513.1| hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ', ProteinAlphabet())
+ - original_length: 101
+==============================================================================
+Alignment 4, with 2 sequences of length 11
+ - fa_bits: '24.0'
+ - fa_expect: '0.6'
+ - fa_frame: 'f'
+ - fa_init1: '56'
+ - fa_initn: '73'
+ - fa_opt: '56'
+ - fa_z-score: '89.9'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.728), E-opt: 0.2 (0.331), width:  16'
+ - mp_extrap: '60000 493'
+ - mp_stats: "(shuffled [493]) Expectation_n fit: rho(ln(x))= 4.1464+/-0.0105; mu= 7.4394+/- 0.556  mean_var=56.5622+/-13.483, 0's: 0 Z-trim(85.2): 0  B-trim: 0 in 0/33  Lambda= 0.170534"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.728)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.331)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.727'
+ - sw_overlap: '11'
+ - sw_score: '56'
+ - sw_sim: '0.818'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
+Seq('FFDLIIPNGGK', ProteinAlphabet())
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|152973509|ref|YP_001338560.1|
+gi|152973509|ref|YP_001338560.1| probable sensor kinase (silver resistance) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('FFDLVIENPGK', ProteinAlphabet())
+ - original_length: 448
+==============================================================================
+Alignment 5, with 2 sequences of length 40
+ - fa_bits: '21.3'
+ - fa_expect: '0.72'
+ - fa_frame: 'f'
+ - fa_init1: '46'
+ - fa_initn: '61'
+ - fa_opt: '48'
+ - fa_z-score: '88.5'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.728), E-opt: 0.2 (0.331), width:  16'
+ - mp_extrap: '60000 493'
+ - mp_stats: "(shuffled [493]) Expectation_n fit: rho(ln(x))= 4.1464+/-0.0105; mu= 7.4394+/- 0.556  mean_var=56.5622+/-13.483, 0's: 0 Z-trim(85.2): 0  B-trim: 0 in 0/33  Lambda= 0.170534"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.728)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.331)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.300'
+ - sw_overlap: '40'
+ - sw_score: '48'
+ - sw_sim: '0.675'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
+Seq('DKTLFIVYATDIYSPSE-FFSKIESDLKKKKSKGD-VFFD', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|152973581|ref|YP_001338632.1|
+gi|152973581|ref|YP_001338632.1| inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('ESVVFILMAGFAMSVCYLFFSVLEKVINARKSKDESIYHD', ProteinAlphabet())
+ - original_length: 84
+==============================================================================
+Alignment 6, with 2 sequences of length 30
+ - fa_bits: '21.3'
+ - fa_expect: '0.72'
+ - fa_frame: 'f'
+ - fa_init1: '42'
+ - fa_initn: '63'
+ - fa_opt: '48'
+ - fa_z-score: '88.5'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.728), E-opt: 0.2 (0.331), width:  16'
+ - mp_extrap: '60000 493'
+ - mp_stats: "(shuffled [493]) Expectation_n fit: rho(ln(x))= 4.1464+/-0.0105; mu= 7.4394+/- 0.556  mean_var=56.5622+/-13.483, 0's: 0 Z-trim(85.2): 0  B-trim: 0 in 0/33  Lambda= 0.170534"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.728)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.331)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.267'
+ - sw_overlap: '30'
+ - sw_score: '48'
+ - sw_sim: '0.667'
+------------------------------------------------------------------------------
+gi|10955264|ref|NP_052605.1|
+gi|10955264|ref|NP_052605.1| hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s - 126 aa
+Seq('ASFFKKNFDKINVNLLSKATSFALKKGIPI', ProteinAlphabet())
+ - original_length: 126
+------------------------------------------------------------------------------
+gi|152973536|ref|YP_001338587.1|
+gi|152973536|ref|YP_001338587.1| putative inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('ASFSKEEQDKVAVDKVAADVAWQERMNKPV', ProteinAlphabet())
+ - original_length: 84
+==============================================================================
+Alignment 7, with 2 sequences of length 43
+ - fa_bits: '28.4'
+ - fa_expect: '0.041'
+ - fa_frame: 'f'
+ - fa_init1: '52'
+ - fa_initn: '72'
+ - fa_opt: '70'
+ - fa_z-score: '110.9'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.678), E-opt: 0.2 (0.278), width:  16'
+ - mp_extrap: '60000 444'
+ - mp_stats: "(shuffled [445]) Expectation_n fit: rho(ln(x))= 3.1750+/-0.0113; mu= 16.4403+/- 0.606  mean_var=50.7026+/-12.811, 0's: 0 Z-trim(83.1): 0  B-trim: 0 in 0/32  Lambda= 0.180119"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.678)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.278)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.279'
+ - sw_overlap: '43'
+ - sw_score: '70'
+ - sw_sim: '0.651'
+------------------------------------------------------------------------------
+gi|10955265|ref|NP_052606.1|
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s - 346 aa
+Seq('SELHSKLPKSIDKIHEDIKKQLSC-SLIMKKIDVEMEDYSTYC', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 346
+------------------------------------------------------------------------------
+gi|152973545|ref|YP_001338596.1|
+gi|152973545|ref|YP_001338596.1| putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC', ProteinAlphabet())
+ - original_length: 242
+==============================================================================
+Alignment 8, with 2 sequences of length 64
+ - fa_bits: '25.4'
+ - fa_expect: '0.59'
+ - fa_frame: 'f'
+ - fa_init1: '52'
+ - fa_initn: '95'
+ - fa_opt: '57'
+ - fa_z-score: '90.1'
+ - mp_Algorithm: 'FASTA (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at  30'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.678), E-opt: 0.2 (0.278), width:  16'
+ - mp_extrap: '60000 444'
+ - mp_stats: "(shuffled [445]) Expectation_n fit: rho(ln(x))= 3.1750+/-0.0113; mu= 16.4403+/- 0.606  mean_var=50.7026+/-12.811, 0's: 0 Z-trim(83.1): 0  B-trim: 0 in 0/32  Lambda= 0.180119"
+ - pg_argv: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36 -E 1 -m 10 NC_002127.faa NC_009649.faa'
+ - pg_join_E(): '1 (0.678)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: '/Users/pjcock/Downloads/Software/fasta-36.3.4/bin/fasta36'
+ - pg_name_alg: 'FASTA'
+ - pg_open-ext: '-10 -2'
+ - pg_optcut_E(): '0.2 (0.278)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.234'
+ - sw_overlap: '64'
+ - sw_score: '57'
+ - sw_sim: '0.609'
+------------------------------------------------------------------------------
+gi|10955265|ref|NP_052606.1|
+gi|10955265|ref|NP_052606.1| hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s - 346 aa
+Seq('ISGTYKGIDFLIKLMPSGGNTTIGRASGQNNTYFDEIALIIKENCLY--SDTKN...FSD', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 346
+------------------------------------------------------------------------------
+gi|152973505|ref|YP_001338556.1|
+gi|152973505|ref|YP_001338556.1| putative membrane fusion protein SilB [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]
+Seq('IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW---ISAAVPESIAYLLKDTSQ...YPD', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 430
+==============================================================================
+Testing reading fasta-m10 format file Fasta/output008.m10 with 12 alignments
+==============================================================================
+Alignment 0, with 2 sequences of length 65
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.792), E-opt: 0.1 (0.167), width:  16'
+ - mp_extrap: '60000 413'
+ - mp_stats: "(shuffled3 [413]) Expectation_n fit: rho(ln(x))= 0.1869+/-0.00911; mu= 49.2907+/- 0.667  mean_var=82.3490+/-39.486, 0's: 0 Z-trim(-1.0): 0  B-trim: 0 in 0/5  Lambda= 0.141334"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.792)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.167)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.231'
+ - sw_overlap: '65'
+ - sw_score: '70'
+ - sw_sim: '0.462'
+ - tfx_bits: '28.0'
+ - tfx_expect: '0.026'
+ - tfx_frame: 'f'
+ - tfx_init1: '53'
+ - tfx_initn: '106'
+ - tfx_opt: '70'
+ - tfx_z-score: '88.0'
+------------------------------------------------------------------------------
+sp|Q9NSY1|BMP2K_HUMAN
+sp|Q9NSY1|BMP2K_HUMAN BMP-2-inducible protein kinase OS=Homo sapiens GN=BMP2K - 1161 aa
+Seq('LQHRHPHQQQQQQQQQQQQQQQQQQQQQQQQQQQH---HHHHHHHLLQDAYMQQ...QML', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 1161
+------------------------------------------------------------------------------
+gi|283855822|gb|GQ290312.1|
+gi|283855822|gb|GQ290312.1| Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds
+Seq('IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHGLWRLHHHPVYLYAWILRL...GLL', ProteinAlphabet())
+ - original_length: 983
+==============================================================================
+Alignment 1, with 2 sequences of length 201
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.792), E-opt: 0.1 (0.167), width:  16'
+ - mp_extrap: '60000 413'
+ - mp_stats: "(shuffled3 [413]) Expectation_n fit: rho(ln(x))= 0.1869+/-0.00911; mu= 49.2907+/- 0.667  mean_var=82.3490+/-39.486, 0's: 0 Z-trim(-1.0): 0  B-trim: 0 in 0/5  Lambda= 0.141334"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.792)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.167)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.235'
+ - sw_overlap: '200'
+ - sw_score: '72'
+ - sw_sim: '0.450'
+ - tfx_bits: '27.7'
+ - tfx_expect: '0.034'
+ - tfx_frame: 'f'
+ - tfx_init1: '57'
+ - tfx_initn: '105'
+ - tfx_opt: '68'
+ - tfx_z-score: '85.8'
+------------------------------------------------------------------------------
+sp|Q9NSY1|BMP2K_HUMAN
+sp|Q9NSY1|BMP2K_HUMAN BMP-2-inducible protein kinase OS=Homo sapiens GN=BMP2K - 1161 aa
+Seq('GPEIL---LGQ-GPPQQPPQQHRVLQQLQQGDWRLQQLH-------LQHRHPHQ...NRS', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 1161
+------------------------------------------------------------------------------
+gi|57163782|ref|NM_001009242.1|
+gi|57163782|ref|NM_001009242.1| Felis catus rhodopsin (RHO), mRNA
+Seq('GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAGRLHVPAHRAWLPHQLPHA...QKS', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 1047
+==============================================================================
+Alignment 2, with 2 sequences of length 348
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.966'
+ - sw_overlap: '348'
+ - sw_score: '2298'
+ - sw_sim: '0.994'
+ - tfx_bits: '593.0'
+ - tfx_expect: '6.7e-173'
+ - tfx_frame: 'f'
+ - tfx_init1: '2298'
+ - tfx_initn: '2298'
+ - tfx_opt: '2298'
+ - tfx_z-score: '3150.5'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPI...APA', ProteinAlphabet())
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|57163782|ref|NM_001009242.1|
+gi|57163782|ref|NM_001009242.1| Felis catus rhodopsin (RHO), mRNA
+Seq('MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPI...APA', ProteinAlphabet())
+ - original_length: 1047
+==============================================================================
+Alignment 3, with 2 sequences of length 348
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.934'
+ - sw_overlap: '348'
+ - sw_score: '2237'
+ - sw_sim: '0.986'
+ - tfx_bits: '577.6'
+ - tfx_expect: '2.9e-168'
+ - tfx_frame: 'f'
+ - tfx_init1: '2237'
+ - tfx_initn: '2237'
+ - tfx_opt: '2237'
+ - tfx_z-score: '3067.2'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPI...APA', ProteinAlphabet())
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|18148870|dbj|AB062417.1|
+gi|18148870|dbj|AB062417.1| Synthetic construct Bos taurus gene for rhodopsin, complete cds
+Seq('MNGTEGPNFYVPFSNKTGVVRSPFEAPQYYLAEPWQFSMLAAYMFLLIMLGFPI...APA', ProteinAlphabet())
+ - original_length: 1047
+==============================================================================
+Alignment 4, with 2 sequences of length 326
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.951'
+ - sw_overlap: '326'
+ - sw_score: '2143'
+ - sw_sim: '0.994'
+ - tfx_bits: '553.8'
+ - tfx_expect: '4.1e-161'
+ - tfx_frame: 'f'
+ - tfx_init1: '2138'
+ - tfx_initn: '2138'
+ - tfx_opt: '2143'
+ - tfx_z-score: '2939.0'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('VPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQ...SAT', ProteinAlphabet())
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|283855822|gb|GQ290312.1|
+gi|283855822|gb|GQ290312.1| Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds
+Seq('VPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQ...STT', ProteinAlphabet())
+ - original_length: 983
+==============================================================================
+Alignment 5, with 2 sequences of length 354
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.833'
+ - sw_overlap: '354'
+ - sw_score: '2057'
+ - sw_sim: '0.952'
+ - tfx_bits: '532.4'
+ - tfx_expect: '1.8e-154'
+ - tfx_frame: 'f'
+ - tfx_init1: '2031'
+ - tfx_initn: '2080'
+ - tfx_opt: '2057'
+ - tfx_z-score: '2819.6'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPI...APA', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|2734705|gb|U59921.1|BBU59921
+gi|2734705|gb|U59921.1|BBU59921 Bufo bufo rhodopsin mRNA, complete cds
+Seq('MNGTEGPNFYIPMSNKTGVVRSPFEYPQYYLAEPWQYSILCAYMFLLILLGFPI...SPA', ProteinAlphabet())
+ - original_length: 1574
+==============================================================================
+Alignment 6, with 2 sequences of length 347
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.816'
+ - sw_overlap: '347'
+ - sw_score: '1993'
+ - sw_sim: '0.939'
+ - tfx_bits: '516.1'
+ - tfx_expect: '1.2e-149'
+ - tfx_frame: 'f'
+ - tfx_init1: '1951'
+ - tfx_initn: '1975'
+ - tfx_opt: '1993'
+ - tfx_z-score: '2732.8'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('MNGTEGPNFYVPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPI...QVA', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|12583664|dbj|AB043817.1|
+gi|12583664|dbj|AB043817.1| Conger myriaster conf gene for fresh water form rod opsin, complete cds
+Seq('MNGTEGPNFYIPMSNATGVVRSPFEYPQYYLAEPWAFSALSAYMFFLIIAGFPI...SVS', ProteinAlphabet())
+ - original_length: 1344
+==============================================================================
+Alignment 7, with 2 sequences of length 111
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.964'
+ - sw_overlap: '111'
+ - sw_score: '723'
+ - sw_sim: '0.991'
+ - tfx_bits: '195.8'
+ - tfx_expect: '1e-52'
+ - tfx_frame: 'f'
+ - tfx_init1: '723'
+ - tfx_initn: '2094'
+ - tfx_opt: '723'
+ - tfx_z-score: '992.9'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('VPFSNATGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQ...LGG', ProteinAlphabet())
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|283855845|gb|GQ290303.1|
+gi|283855845|gb|GQ290303.1| Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds
+Seq('VPFSNKTGVVRSPFEHPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQ...LGG', ProteinAlphabet())
+ - original_length: 4301
+==============================================================================
+Alignment 8, with 2 sequences of length 172
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.754'
+ - sw_overlap: '171'
+ - sw_score: '783'
+ - sw_sim: '0.795'
+ - tfx_bits: '195.8'
+ - tfx_expect: '1e-52'
+ - tfx_frame: 'f'
+ - tfx_init1: '499'
+ - tfx_initn: '1411'
+ - tfx_opt: '501'
+ - tfx_z-score: '992.9'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('RYIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIIIFFCYGQLVFTV...NKQ', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|283855845|gb|GQ290303.1|
+gi|283855845|gb|GQ290303.1| Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds
+Seq('RYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTV...NKQ', ProteinAlphabet())
+ - original_length: 4301
+==============================================================================
+Alignment 9, with 2 sequences of length 73
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.808'
+ - sw_overlap: '73'
+ - sw_score: '388'
+ - sw_sim: '0.904'
+ - tfx_bits: '195.8'
+ - tfx_expect: '1e-52'
+ - tfx_frame: 'f'
+ - tfx_init1: '379'
+ - tfx_initn: '431'
+ - tfx_opt: '388'
+ - tfx_z-score: '992.9'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('LGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPL...CGI', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|283855845|gb|GQ290303.1|
+gi|283855845|gb|GQ290303.1| Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds
+Seq('LAGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLALTWVMALACAAPPL...*GL', Gapped(ProteinAlphabet(), '-'))
+ - original_length: 4301
+==============================================================================
+Alignment 10, with 2 sequences of length 30
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.767'
+ - sw_overlap: '30'
+ - sw_score: '176'
+ - sw_sim: '0.933'
+ - tfx_bits: '195.8'
+ - tfx_expect: '1e-52'
+ - tfx_frame: 'f'
+ - tfx_init1: '171'
+ - tfx_initn: '213'
+ - tfx_opt: '176'
+ - tfx_z-score: '992.9'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('IMMNKQFRNCMLTTICCGKNPLGDDEASAT', ProteinAlphabet())
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|283855845|gb|GQ290303.1|
+gi|283855845|gb|GQ290303.1| Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds
+Seq('MLLAFQFRNCMLTTLCCGKNPLGDDEASTT', ProteinAlphabet())
+ - original_length: 4301
+==============================================================================
+Alignment 11, with 2 sequences of length 31
+ - mp_Algorithm: 'TFASTX (3.7 Nov 2010) [optimized]'
+ - mp_KS: '-0.0000 (N=0) at   0'
+ - mp_Parameters: 'BL50 matrix (15:-5), open/ext: -12/-2, shift: -20  ktup: 2, E-join: 0.5 (0.771), E-opt: 0.1 (0.292), width:  16'
+ - mp_extrap: '60000 357'
+ - mp_stats: "(shuffled3 [357]) Expectation_n fit: rho(ln(x))= 2.8576+/-0.0153; mu= 21.1891+/- 1.097  mean_var=53.5574+/-26.427, 0's: 0 Z-trim(81.7): 0  B-trim: 0 in 0/5  Lambda= 0.175253"
+ - pg_argv: 'tfastx36 -m 10 -E 0.05 four_human_proteins.fasta rhodopsin_nucs.fasta'
+ - pg_join_E(): '0.5 (0.771)'
+ - pg_ktup: '2'
+ - pg_matrix: 'BL50 (15:-5)'
+ - pg_name: 'tfastx36'
+ - pg_name_alg: 'TFASTX'
+ - pg_open_ext: '-12 -2'
+ - pg_optcut_E(): '0.1 (0.292)'
+ - pg_ver: '36.3.4 Apr, 2011'
+ - pg_ver_rel: '3.7 Nov 2010'
+ - sw_ident: '0.355'
+ - sw_overlap: '31'
+ - sw_score: '59'
+ - sw_sim: '0.613'
+ - tfx_bits: '26.9'
+ - tfx_expect: '0.017'
+ - tfx_frame: 'r'
+ - tfx_init1: '58'
+ - tfx_initn: '74'
+ - tfx_opt: '59'
+ - tfx_z-score: '91.3'
+------------------------------------------------------------------------------
+sp|P08100|OPSD_HUMAN
+sp|P08100|OPSD_HUMAN Rhodopsin OS=Homo sapiens GN=RHO - 348 aa
+Seq('AQQQESATTQKAEKEVTRMVIIMVIAFLICW', ProteinAlphabet())
+ - original_length: 348
+------------------------------------------------------------------------------
+gi|283855822|gb|GQ290312.1|
+gi|283855822|gb|GQ290312.1| Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds
+Seq('SQQIRNATTMMMTMRVTSFSAFWVVADSCCW', ProteinAlphabet())
+ - original_length: 983
+==============================================================================
+Finished tested reading files

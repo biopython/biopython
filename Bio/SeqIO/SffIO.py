@@ -207,13 +207,7 @@ _sff = _as_bytes(".sff")
 _hsh = _as_bytes(".hsh")
 _srt = _as_bytes(".srt")
 _mft = _as_bytes(".mft")
-#This is a hack because char 255 is special in unicode:
-try:
-    #This works on Python 2.6+ or Python 3.0
-    _flag = eval(r'b"\xff"')
-except SyntaxError:
-    #Must be on Python 2.4 or 2.5
-    _flag = "\xff" #Char 255
+_flag = _as_bytes("\xff")
 
 def _sff_file_header(handle):
     """Read in an SFF file header (PRIVATE).
@@ -571,17 +565,32 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
         if handle.read(padding).count(_null) != padding:
             raise ValueError("Post quality %i byte padding region contained data" \
                              % padding)
+    #Follow Roche and apply most aggressive of qual and adapter clipping.
+    #Note Roche seems to ignore adapter clip fields when writing SFF,
+    #and uses just the quality clipping values for any clipping.
+    clip_left = max(clip_qual_left, clip_adapter_left)
+    #Right clipping of zero means no clipping
+    if clip_qual_right:
+        if clip_adapter_right:
+            clip_right = min(clip_qual_right, clip_adapter_right)
+        else:
+            #Typical case with Roche SFF files
+            clip_right = clip_qual_right
+    elif clip_adapter_right:
+        clip_right = clip_adapter_right
+    else:
+        clip_right = seq_len
     #Now build a SeqRecord
     if trim:
-        seq = seq[clip_qual_left:clip_qual_right].upper()
-        quals = quals[clip_qual_left:clip_qual_right]
+        seq = seq[clip_left:clip_right].upper()
+        quals = quals[clip_left:clip_right]
         #Don't record the clipping values, flow etc, they make no sense now:
         annotations = {}
     else:
         #This use of mixed case mimics the Roche SFF tool's FASTA output
-        seq = seq[:clip_qual_left].lower() + \
-              seq[clip_qual_left:clip_qual_right].upper() + \
-              seq[clip_qual_right:].lower()
+        seq = seq[:clip_left].lower() + \
+              seq[clip_left:clip_right].upper() + \
+              seq[clip_right:].lower()
         annotations = {"flow_values":struct.unpack(read_flow_fmt, flow_values),
                        "flow_index":struct.unpack(temp_fmt, flow_index),
                        "flow_chars":flow_chars,
@@ -599,7 +608,6 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #record.letter_annotations["phred_quality"] = quals
     dict.__setitem__(record._per_letter_annotations,
                      "phred_quality", quals)
-    #TODO - adaptor clipping
     #Return the record and then continue...
     return record
 
@@ -639,6 +647,33 @@ def _sff_read_raw_record(handle, number_of_flows_per_read):
         raw += pad
     #Return the raw bytes
     return raw
+
+class _AddTellHandle(object):
+    """Wrapper for handles which do not support the tell method (PRIVATE).
+
+    Intended for use with things like network handles where tell (and reverse
+    seek) are not supported. The SFF file needs to track the current offset in
+    order to deal with the index block.
+    """
+    def __init__(self, handle):
+        self._handle = handle
+        self._offset = 0
+
+    def read(self, length):
+        data = self._handle.read(length)
+        self._offset += len(data)
+        return data
+
+    def tell(self):
+        return self._offset
+
+    def seek(self, offset):
+        if offset < self._offset:
+            raise RunTimeError("Can't seek backwards")
+        self._handle.read(offset - self._offset)
+
+    def close(self):
+        return self._handle.close()
 
 
 #This is a generator function!
@@ -714,6 +749,11 @@ def SffIterator(handle, alphabet=Alphabet.generic_dna, trim=False):
     if isinstance(Alphabet._get_base_alphabet(alphabet),
                   Alphabet.RNAAlphabet):
         raise ValueError("Invalid alphabet, SFF files do not hold RNA.")
+    try:
+        assert 0 == handle.tell()
+    except AttributeError:
+        #Probably a network handle or something like that
+        handle = _AddTellHandle(handle)
     header_length, index_offset, index_length, number_of_reads, \
     number_of_flows_per_read, flow_chars, key_sequence \
         = _sff_file_header(handle)

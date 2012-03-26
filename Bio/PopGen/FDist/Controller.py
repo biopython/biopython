@@ -31,7 +31,7 @@ def my_float(f):
     if f=="-nan": f="nan"
     return float(f)
 
-class FDistController:
+class FDistController(object):
     def __init__(self, fdist_dir = '', ext = None):
         """Initializes the controller.
         

@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Code to support writing parsers.
+"""Code to support writing parsers (OBSOLETE).
 
 
 
@@ -26,6 +26,11 @@ is_blank_line          Test whether a line is blank.
 
 """
 
+
+import warnings
+warnings.warn("The module Bio.ParserSupport is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
+
+
 import sys
 import traceback
 from types import *
@@ -41,7 +46,7 @@ except ImportError:
                      "This causes problems with some ParserSupport modules\n")
     xml_support = 0
 
-class AbstractParser:
+class AbstractParser(object):
     """Base class for other parsers.
 
     """
@@ -49,7 +54,7 @@ class AbstractParser:
         raise NotImplementedError("Please implement in a derived class")
 
     def parse_str(self, string):
-        return self.parse(File.StringHandle(string))
+        return self.parse(StringIO.StringIO(string))
 
     def parse_file(self, filename):
         h = open(filename)
@@ -59,7 +64,7 @@ class AbstractParser:
             h.close()
         return retval
 
-class AbstractConsumer:
+class AbstractConsumer(object):
     """Base class for other Consumers.
 
     Derive Consumers from this class and implement appropriate
@@ -118,13 +123,15 @@ class TaggingConsumer(AbstractConsumer):
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
 
-class SGMLStrippingConsumer:
+class SGMLStrippingConsumer(object):
     """A consumer that strips off SGML tags.
 
     This is meant to be used as a decorator for other consumers.
 
     """
     def __init__(self, consumer):
+        import Bio
+        warnings.warn("SGMLStrippingConsumer is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
         if type(consumer) is not InstanceType:
             raise ValueError("consumer should be an instance")
         self._consumer = consumer

@@ -95,6 +95,7 @@ class ConversionTest(unittest.TestCase):
             fd_rec = convert_genepop_to_fdist(gp_rec)
             assert(fd_rec.num_loci == 3)
             assert(fd_rec.num_pops == 3)
+            gp_rec._handle.close() #TODO - Needs a proper fix
 
     def tearDown(self):
         for handle in self.handles:

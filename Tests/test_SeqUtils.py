@@ -57,8 +57,9 @@ for feature in record.features:
             seq = record.seq[start:end]
         #Double check we have the CDS sequence expected
         #TODO - Use any cds_start option if/when added to deal with the met
-        assert "M" + str(seq[3:].translate(table)) \
-               == feature.qualifiers["translation"][0]+"*"
+        a = "M" + str(seq[3:].translate(table))
+        b = feature.qualifiers["translation"][0]+"*"
+        assert a == b, "%r vs %r" % (a,b)
         records.append(SeqRecord(seq, id=feature.qualifiers["protein_id"][0],
                                  description=feature.qualifiers["product"][0]))
 del start, end, table, seq

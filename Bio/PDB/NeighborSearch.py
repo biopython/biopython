@@ -13,7 +13,7 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import unfold_entities, entity_levels, uniqueify
 
 
-class NeighborSearch:
+class NeighborSearch(object):
     """
     This class can be used for two related purposes:
 
@@ -123,7 +123,7 @@ if __name__=="__main__":
 
     from numpy.random import random
 
-    class Atom:
+    class Atom(object):
         def __init__(self):
             self.coord=(100*random(3))
 

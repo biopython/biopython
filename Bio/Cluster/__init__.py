@@ -108,7 +108,7 @@ def _savetree(jobname, tree, order, transpose):
     return index
 
 
-class Record:
+class Record(object):
     """Store gene expression data.
 
 A Record stores the gene expression data and related information contained

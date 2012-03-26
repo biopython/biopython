@@ -6,7 +6,7 @@ for taking care of the transition from one generation to the next.
 # standard modules
 import sys
 
-class SteadyStateEvolver:
+class SteadyStateEvolver(object):
     """Evolve a population in place.
 
     This implements a Steady State GA, where the population of individuals
@@ -15,7 +15,7 @@ class SteadyStateEvolver:
     def __init__(self):
         raise NotImplementedError("Need to code this.")
         
-class GenerationEvolver:
+class GenerationEvolver(object):
     """Evolve a population from generation to generation.
 
     This implements a Generational GA, in which the population moves from

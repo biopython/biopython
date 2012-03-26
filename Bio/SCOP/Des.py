@@ -15,7 +15,7 @@ The latest DES file can be found
 """
 
 
-class Record:
+class Record(object):
     """Holds information for one node in the SCOP hierarchy.
 
     sunid       -- SCOP unique identifiers

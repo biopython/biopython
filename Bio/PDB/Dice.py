@@ -12,7 +12,7 @@ from Bio.PDB.PDBIO import PDBIO
 _hydrogen=re.compile("[123 ]*H.*")
 
 
-class ChainSelector:
+class ChainSelector(object):
     """
     Only accepts residues with right chainid
     and between start and end. Remove hydrogens, waters and ligands.

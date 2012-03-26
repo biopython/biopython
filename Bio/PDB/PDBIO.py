@@ -10,7 +10,7 @@ from Bio.Data.IUPACData import atom_weights # Allowed Elements
 _ATOM_FORMAT_STRING="%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s\n"
 
 
-class Select:
+class Select(object):
     """
     Default selection (everything) during writing - can be used as base class
     to implement selective output. This selects which entities will be written out.
@@ -44,7 +44,7 @@ class Select:
         return 1
 
 
-class PDBIO:
+class PDBIO(object):
     """
     Write a Structure object (or a subset of a Structure object) as a PDB file.
 

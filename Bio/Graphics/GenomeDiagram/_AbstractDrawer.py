@@ -113,10 +113,13 @@ def draw_box(point1, point2,
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill color
-    elif border is not None:
+    elif border:
         if not isinstance(border, colors.Color):
             raise ValueError("Invalid border color %s" % repr(border))
         strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
 
     x1, y1, x2, y2 = min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)
     return Polygon([x1, y1, x2, y1, x2, y2, x1, y2],
@@ -148,8 +151,11 @@ def draw_polygon(list_of_points,
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill colour
-    elif border is not None:
+    elif border:
         strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
 
     xy_list = []
     for (x,y) in list_of_points:
@@ -189,8 +195,11 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
         strokecolor = colors.black                 # white boxes with
     elif border is None:                           # undefined border, else
         strokecolor = color                        # use fill colour
-    elif border is not None:
+    elif border:
         strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
 
     # Depending on the orientation, we define the bottom left (x1, y1) and
     # top right (x2, y2) coordinates differently, but still draw the box
@@ -284,7 +293,7 @@ def intermediate_points(start, end, graph_data):
 # CLASSES
 ################################################################################
 
-class AbstractDrawer:
+class AbstractDrawer(object):
     """ AbstractDrawer
 
         Provides:
@@ -337,10 +346,12 @@ class AbstractDrawer:
 
         o length        Size of sequence to be drawn
         
+        o cross_track_links List of tuples each with four entries (track A,
+                            feature A, track B, feature B) to be linked.
     """
     def __init__(self, parent, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
-                 start=None, end=None, tracklines=0):
+                 start=None, end=None, tracklines=0, cross_track_links=None):
         """ __init__(self, parent, pagesize='A3', orientation='landscape',
                  x=0.05, y=0.05, xl=None, xr=None, yt=None, yb=None,
                  start=None, end=None, tracklines=0)
@@ -381,6 +392,9 @@ class AbstractDrawer:
 
             o tracklines    Boolean flag to show (or not) lines delineating tracks
                             on the diagram            
+
+            o cross_track_links List of tuples each with four entries (track A,
+                                feature A, track B, feature B) to be linked.
         """
         self._parent = parent   # The calling Diagram object
 
@@ -389,6 +403,10 @@ class AbstractDrawer:
         self.set_margins(x, y, xl, xr, yt, yb)      # Set page margins
         self.set_bounds(start, end) # Set limits on what will be drawn
         self.tracklines = tracklines    # Set flags
+        if cross_track_links is None:
+            cross_track_links = []
+        else:
+            self.cross_track_links = cross_track_links
         
     def _set_xcentre(self, value):
         import warnings
@@ -483,9 +501,9 @@ class AbstractDrawer:
         if start is not None and end is not None and start > end:
             start, end = end, start
 
-        if start is None or start < 1:  # Check validity of passed args and 
-            start = 1   # default to 1
-        if end is None or end < 1:
+        if start is None or start < 0:  # Check validity of passed args and 
+            start = 0   # default to 0
+        if end is None or end < 0:
             end = high + 1  # default to track range top limit
         
         self.start, self.end = int(start), int(end)
@@ -511,5 +529,14 @@ class AbstractDrawer:
         """
         return self.length
         
-        
-    
+    def _current_track_start_end(self):        
+        track = self._parent[self.current_track_level]
+        if track.start is None:
+            start = self.start
+        else:
+            start = max(self.start, track.start)
+        if track.end is None:
+            end = self.end
+        else:
+            end = min(self.end, track.end)
+        return start, end

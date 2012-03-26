@@ -41,20 +41,26 @@ espell       Retrieves spelling suggestions.
 read         Parses the XML results returned by any of the above functions.
              Typical usage is:
 
+             >>> from Bio import Entrez
+             >>> Entrez.email = "Your.Name.Here@example.org"
              >>> handle = Entrez.einfo() # or esearch, efetch, ...
              >>> record = Entrez.read(handle)
+             >>> handle.close()
 
              where record is now a Python dictionary or list.
 
-parse        Parses the XML results returned by any of the above functions,
-             returning records one by one.
-             Typical usage is:
+parse        Parses the XML results returned by those of the above functions
+             which can return multiple records - such as efetch, esummary
+             and elink. Typical usage is:
 
-             >>> handle = Entrez.efetch(...) # or esummary, elink, ...
+             >>> handle = Entrez.efetch("pubmed", id="19304878,14630660", retmode="xml")
              >>> records = Entrez.parse(handle)
              >>> for record in records:
              ...     # each record is a Python dictionary or list.
-             ...     print record
+             ...     print record['MedlineCitation']['Article']['ArticleTitle']
+             Biopython: freely available Python tools for computational molecular biology and bioinformatics.
+             PDB file parser and structure class implemented in Python.
+             >>> handle.close()
 
              This function is appropriate only if the XML file contains
              multiple records, and is particular useful for large files. 
@@ -64,6 +70,8 @@ _open        Internally used function.
 """
 import urllib, urllib2, time, warnings
 import os.path
+
+from Bio._py3k import _binary_to_string_handle
 
 email = None
 tool = "biopython"
@@ -103,13 +111,27 @@ def efetch(db, **keywds):
 
     Short example:
 
-    from Bio import Entrez
-    handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb")
-    print handle.read()
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.efetch(db="nucleotide", id="57240072", rettype="gb", retmode="text")
+    >>> print handle.readline().strip()
+    LOCUS       AY851612                 892 bp    DNA     linear   PLN 10-APR-2007
+    >>> handle.close()
+
+    Warning: The NCBI changed the default retmode in Feb 2012, so many
+    databases which previously returned text output now give XML.
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db' : db}
-    variables.update(keywds)
+    keywords = keywds
+    if "id" in keywds and isinstance(keywds["id"], list):
+        #Fix for NCBI change (probably part of EFetch 2,0, Feb 2012) where
+        #a list of ID strings now gives HTTP Error 500: Internal server error
+        #This was turned into ...&id=22307645&id=22303114&... which used to work
+        #while now the NCBI appear to insist on ...&id=22301129,22299544,...
+        keywords = keywds.copy() #Don't alter input dict!
+        keywords["id"] = ",".join(keywds["id"])
+    variables.update(keywords)
     return _open(cgi, variables)
 
 def esearch(db, term, **keywds):
@@ -128,11 +150,18 @@ def esearch(db, term, **keywds):
 
     Short example:
 
-    from Bio import Entez
-    handle = Entrez.esearch(db="nucleotide", retmax=10, term="Opuntia")
-    record = Entrez.read(handle)
-    print record["Count"]
-    print record["IdList"]
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.esearch(db="nucleotide", retmax=10, term="opuntia[ORGN] accD")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> record["Count"] >= 2
+    True
+    >>> "156535671" in record["IdList"]
+    True
+    >>> "156535673" in record["IdList"]
+    True
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
     variables = {'db' : db,
@@ -155,6 +184,23 @@ def elink(**keywds):
     Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
+
+    This example finds articles related to the Biopython application
+    note's entry in the PubMed database:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> pmid = "19304878"
+    >>> handle = Entrez.elink(dbfrom="pubmed", id=pmid, linkname="pubmed_pubmed")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> print record[0]["LinkSetDb"][0]["LinkName"]
+    pubmed_pubmed
+    >>> linked = [link["Id"] for link in record[0]["LinkSetDb"][0]["Link"]]
+    >>> "17121776" in linked
+    True
+
+    This is explained in much more detail in the Biopython Tutorial.
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
     variables = {}
@@ -176,9 +222,12 @@ def einfo(**keywds):
 
     Short example:
 
-    from Bio import Entrez 
-    record = Entrez.read(Entrez.einfo())
-    print record['DbList']
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> record = Entrez.read(Entrez.einfo())
+    >>> 'pubmed' in record['DbList']
+    True
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
     variables = {}
@@ -197,6 +246,19 @@ def esummary(**keywds):
     Return a handle to the results, by default in XML format.
 
     Raises an IOError exception if there's a network error.
+
+    This example discovers more about entry 30367 in the journals database:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.esummary(db="journals", id="30367")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> print record[0]["Id"]
+    30367
+    >>> print record[0]["Title"]
+    Computational biology and chemistry
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
     variables = {}
@@ -215,6 +277,21 @@ def egquery(**keywds):
     Return a handle to the results in XML format.
 
     Raises an IOError exception if there's a network error.
+
+    This quick example based on a longer version from the Biopython
+    Tutorial just checks there are over 60 matches for 'Biopython'
+    in PubMedCentral:
+
+    >>> from Bio import Entrez
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> handle = Entrez.egquery(term="biopython")
+    >>> record = Entrez.read(handle)
+    >>> handle.close()
+    >>> for row in record["eGQueryResult"]:
+    ...     if "pmc" in row["DbName"]:
+    ...         print row["Count"] > 60
+    True
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
     variables = {}
@@ -235,10 +312,14 @@ def espell(**keywds):
 
     Short example:
 
-    from Bio import Entrez 
-    record = Entrez.read(Entrez.espell(term="biopythooon")) 
-    print record["Query"] 
-    print record["CorrectedQuery"] 
+    >>> from Bio import Entrez 
+    >>> Entrez.email = "Your.Name.Here@example.org"
+    >>> record = Entrez.read(Entrez.espell(term="biopythooon"))
+    >>> print record["Query"] 
+    biopythooon
+    >>> print record["CorrectedQuery"] 
+    biopython
+
     """
     cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
     variables = {}
@@ -348,6 +429,7 @@ a user at the email address provided before blocking access to the
 E-utilities.""", UserWarning)
     # Open a handle to Entrez.
     options = urllib.urlencode(params, doseq=True)
+    #print cgi + "?" + options
     try:
         if post:
             #HTTP POST
@@ -359,6 +441,17 @@ E-utilities.""", UserWarning)
     except urllib2.HTTPError, exception:
         raise exception
 
-    return handle
+    return _binary_to_string_handle(handle)
 
 _open.previous = 0
+
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Runing doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+if __name__ == "__main__":
+    _test()

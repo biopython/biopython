@@ -3,7 +3,7 @@
 # as part of this package.
 
 try:
-    from numpy import array
+    from numpy import array, median
 except ImportError:
     from Bio import MissingExternalDependencyError
     raise MissingExternalDependencyError(

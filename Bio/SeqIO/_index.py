@@ -88,6 +88,7 @@ class _IndexedSeqFileDict(_dict_base):
             #memory requirements. With the SQLite backend the length is kept
             #and is used to speed up the get_raw method (by about 3 times).
             if key in offsets:
+                self._proxy._handle.close()
                 raise ValueError("Duplicate key '%s'" % key)
             else:
                 offsets[key] = offset
@@ -212,7 +213,7 @@ class _IndexedSeqFileDict(_dict_base):
         """Would allow setting or replacing records, but not implemented."""
         raise NotImplementedError("An indexed a sequence file is read only.")
     
-    def update(self, **kwargs):
+    def update(self, *args, **kwargs):
         """Would allow adding more values, but not implemented."""
         raise NotImplementedError("An indexed a sequence file is read only.")
 
@@ -276,30 +277,37 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                                      ("count",)).fetchone()
                 self._length = int(count)
                 if self._length == -1:
+                    con.close()
                     raise ValueError("Unfinished/partial database")
                 count, = con.execute("SELECT COUNT(key) FROM offset_data;").fetchone()
                 if self._length <> int(count):
+                    con.close()
                     raise ValueError("Corrupt database? %i entries not %i" \
                                      % (int(count), self._length))
                 self._format, = con.execute("SELECT value FROM meta_data WHERE key=?;",
                                            ("format",)).fetchone()
                 if format and format != self._format:
+                    con.close()
                     raise ValueError("Index file says format %s, not %s" \
                                      % (self._format, format))
                 self._filenames = [row[0] for row in \
                                   con.execute("SELECT name FROM file_data "
                                               "ORDER BY file_number;").fetchall()]
                 if filenames and len(filenames) != len(self._filenames):
+                    con.close()
                     raise ValueError("Index file says %i files, not %i" \
-                                     % (len(self.filenames) != len(filenames)))
+                                     % (len(self._filenames), len(filenames)))
                 if filenames and filenames != self._filenames:
+                    con.close()
                     raise ValueError("Index file has different filenames")
             except _OperationalError, err:
+                con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
             #Now we have the format (from the DB if not given to us),
             try:
                 proxy_class = _FormatToRandomAccess[self._format]
             except KeyError:
+                con.close()
                 raise ValueError("Unsupported format '%s'" % self._format)
         else:
             self._filenames = filenames
@@ -357,6 +365,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                             "key_index ON offset_data(key);")
             except _IntegrityError, err:
+                self._proxies = random_access_proxies
+                self.close()
+                con.close()
                 raise ValueError("Duplicate key? %s" % err)
             con.execute("PRAGMA locking_mode=NORMAL")
             con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
@@ -567,10 +578,8 @@ class SffRandomAccess(SeqFileRandomAccess):
                 warnings.warn("Could not parse the SFF index: %s" % err)
                 assert count==0, "Partially populated index"
                 handle.seek(0)
-        else :
-            #TODO - Remove this debug warning?
-            import warnings
-            warnings.warn("No SFF index, doing it the slow way")
+        #We used to give a warning in this case, but Ion Torrent's
+        #SFF files don't have an index so that would be annoying.
         #Fall back on the slow way!
         count = 0
         for name, offset in SeqIO.SffIO._sff_do_slow_index(handle) :
@@ -838,18 +847,18 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
         marker_re = self._marker_re
         end_entry_marker = _as_bytes("</entry>")
         handle.seek(offset)
-        data = handle.readline()
+        data = [handle.readline()]
         while True:
             line = handle.readline()
             i = line.find(end_entry_marker)
             if i != -1:
-                data += line[:i+8]
+                data.append(line[:i+8])
                 break
             if marker_re.match(line) or not line:
                 #End of file, or start of next record
                 raise ValueError("Didn't find end of record")
-            data += line
-        return data
+            data.append(line)
+        return _as_bytes("").join(data)
 
     def get(self, offset) :
         #TODO - Can we handle this directly in the parser?

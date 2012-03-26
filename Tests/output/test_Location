@@ -1,8 +1,9 @@
 test_Location
 Testing fuzzy representations...
 Exact: 5
-Within: (10.13)
-Between: (20^24)
+Within (as start, 10): (10.13)
+Within (as end, 13): (10.13)
+Between (as end, 24): (20^24)
 Before: <15
 After: >40
 Location: [5:(10.13)]

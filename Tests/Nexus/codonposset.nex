@@ -1,0 +1,25 @@
+#NEXUS
+[MacClade 4.05 registered to Computational Biologist, University]
+
+
+BEGIN DATA;
+       DIMENSIONS  NTAX=2 NCHAR=22;
+       FORMAT DATATYPE=DNA  MISSING=? GAP=- ;
+MATRIX
+[                           10        20 ]
+[                           .         .  ]
+
+Aegotheles         AAAAAGGCATTGTGGTGGGAAT   [22]
+Aerodramus         ?????????TTGTGGTGGGAAT   [13]
+;
+END;
+
+
+BEGIN CODONS;
+       CODONPOSSET * CodonPositions =
+               N: 1-10,
+               1: 11-22\3,
+               2: 12-22\3,
+               3: 13-22\3;
+       CODESET  * UNTITLED = Universal: all ;
+END;

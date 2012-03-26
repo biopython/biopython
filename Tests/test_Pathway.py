@@ -8,76 +8,9 @@ import unittest
 import sys
 
 # modules to be tested
-from Bio.Pathway import *
-from Bio.Pathway.Rep.HashSet import *
-from Bio.Pathway.Rep.Graph import *
-from Bio.Pathway.Rep.MultiGraph import *
-
-
-class HashSetTestCase(unittest.TestCase):
-
-    def testEquals(self):
-        self.assertEqual(HashSet(['a','b']), HashSet(['b','a']), "not equal to similar")
-        self.assertEqual(HashSet(), HashSet(), "empty set not equal to similar")
-        self.assertNotEqual(HashSet(['a','b','c']), HashSet(), "non-empty equal to empty")
-        self.assertNotEqual(HashSet(['a','b']), HashSet(['a','b','c']), "equal to superset")
-        self.assertNotEqual(HashSet(['a','b']), HashSet(['a']), "equal to subset")
-        
-    def testLen(self):
-        a = HashSet()
-        self.assertEqual(len(a), 0, "incorrect default size")
-        a.add('a')
-        a.add('b')
-        self.assertEqual(len(a), 2, "incorrect size")
-        a.remove('b')
-        self.assertEqual(len(a), 1, "incorrect size after removal")
-        a.add('a')
-        self.assertEqual(len(a), 1, "incorrect size after duplicate add")
-
-    def testContains(self):
-        n = HashSet()
-        self.assertTrue('a' not in n, "element in empty set")
-        self.assertTrue(not n.contains('a'), "element in empty set (2)")
-        a = HashSet(['a','b','c','d'])
-        self.assertTrue('a' in a, "contained element not found")
-        self.assertTrue('d' in a, "contained element not found")
-        self.assertTrue('e' not in a, "not contained element found")
-        self.assertTrue(68 not in a, "not contained element found")
-        self.assertTrue(a.contains('a'), "contained element not found (2)")
-        self.assertTrue(a.contains('d'), "contained element not found (2)")
-        self.assertTrue(not a.contains('e'), "not contained element found (2)")
-        self.assertTrue(not a.contains(68), "not contained element found (2)")
-        
-    def testList(self):
-        a = HashSet(['a', 'b', 'c', 'd', 'e'])
-        l = a.list()
-        l.sort()
-        self.assertEqual(l, ['a', 'b', 'c', 'd', 'e'], "incorrect list")
-        l = []
-        self.assertTrue('e' in a, "set rep exposure")
-
-    def testSetOps(self):
-        n = HashSet()
-        a = HashSet(['a', 'b', 'c'])
-        b = HashSet(['a', 'd', 'e', 'f'])
-        c = HashSet(['g', 'h'])
-        # union
-        self.assertEqual(a.union(b), HashSet(['a','b','c','d','e','f']), "incorrect union")
-        self.assertEqual(a.union(n), a, "incorrect union with empty set")
-        # intersection
-        self.assertEqual(a.intersection(b), HashSet(['a']), "incorrect intersection")
-        self.assertEqual(a.intersection(c), HashSet(), "incorrect intersection")
-        self.assertEqual(a.intersection(n), HashSet(), "incorrect intersection with empty set")
-        # difference
-        self.assertEqual(a.difference(b), HashSet(['b','c']), "incorrect difference")
-        self.assertEqual(a.difference(c), HashSet(['a','b','c']), "incorrect difference")
-        self.assertEqual(b.difference(a), HashSet(['d','e','f']), "incorrect difference")
-        # cartesian product
-        self.assertEqual(a.cartesian(c), HashSet([('a','g'),('a','h'),
-                                                  ('b','g'),('b','h'),
-                                                  ('c','g'),('c','h')]),
-                         "incorrect cartesian product")
-        self.assertEqual(a.cartesian(n), HashSet(), "incorrect cartesian product")
+from Bio.Pathway import Reaction
+from Bio.Pathway.Rep.Graph import Graph
+from Bio.Pathway.Rep.MultiGraph import MultiGraph
 
 
 class GraphTestCase(unittest.TestCase):
@@ -117,11 +50,11 @@ class GraphTestCase(unittest.TestCase):
     def testEdges(self):
         a = Graph(['a','b','c','d'])
         a.add_edge('a','b','label1')
-        self.assertEqual(a.child_edges('a'), [('b','label1')], "incorrect child edges")
+        self.assertEqual(a.child_edges('a'), [('b','label1')]) #, "incorrect child edges")
         a.add_edge('b','a','label2')
-        self.assertEqual(a.parent_edges('a'), [('b','label2')], "incorrect parent edges")
+        self.assertEqual(a.parent_edges('a'), [('b','label2')]) #, "incorrect parent edges")
         a.add_edge('b','c','label3')
-        self.assertEqual(a.parent_edges('c'), [('b','label3')], "incorrect parent edges")
+        self.assertEqual(a.parent_edges('c'), [('b','label3')]) #, "incorrect parent edges")
         l = a.children('b')
         l.sort()
         self.assertEqual(l, ['a', 'c'], "incorrect children")
@@ -179,15 +112,15 @@ class MultiGraphTestCase(unittest.TestCase):
     def testEdges(self):
         a = MultiGraph(['a','b','c','d'])
         a.add_edge('a','b','label1')
-        self.assertEqual(a.child_edges('a'), [('b','label1')], "incorrect child edges")
+        self.assertEqual(a.child_edges('a'), [('b','label1')]) #, "incorrect child edges")
         a.add_edge('a','b','label2')
         l = a.child_edges('a')
         l.sort()
-        self.assertEqual(l, [('b','label1'),('b','label2')], "incorrect child edges")
+        self.assertEqual(l, [('b','label1'),('b','label2')]) #, "incorrect child edges")
         a.add_edge('b','a','label2')
-        self.assertEqual(a.parent_edges('a'), [('b','label2')], "incorrect parent edges")
+        self.assertEqual(a.parent_edges('a'), [('b','label2')]) #, "incorrect parent edges")
         a.add_edge('b','c','label3')
-        self.assertEqual(a.parent_edges('c'), [('b','label3')], "incorrect parent edges")
+        self.assertEqual(a.parent_edges('c'), [('b','label3')]) #, "incorrect parent edges")
         l = a.children('b')
         l.sort()
         self.assertEqual(l, ['a', 'c'], "incorrect children")
@@ -197,14 +130,19 @@ class MultiGraphTestCase(unittest.TestCase):
     def testRemoveNode(self):
         a = MultiGraph(['a','b','c','d','e'])
         a.add_edge('a','e','label1')
+        self.assertEqual(repr(a), "<MultiGraph: ('a': ('e', 'label1'))('b': )('c': )('d': )('e': )>")
         a.add_edge('b','e','label1')
         a.add_edge('c','e','label2')
         a.add_edge('d','e','label3')
         a.add_edge('e','d','label4')
         a.add_edge('a','b','label5')
+        self.assertEqual(repr(a), "<MultiGraph: ('a': ('b', 'label5'),('e', 'label1'))('b': ('e', 'label1'))('c': ('e', 'label2'))('d': ('e', 'label3'))('e': ('d', 'label4'))>")
         a.remove_node('e')
+        self.assertEqual(repr(a), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
         b = MultiGraph(['a','b','c','d'])
         b.add_edge('a','b','label5')
+        self.assertEqual(repr(b), "<MultiGraph: ('a': ('b', 'label5'))('b': )('c': )('d': )>")
+        self.assertEqual(repr(a), repr(b))
         self.assertEqual(a, b)#, "incorrect node removal")
 
         
@@ -221,8 +159,8 @@ class ReactionTestCase(unittest.TestCase):
         self.r_4 = Reaction({"c":-1, "d":-1, "a":1, "e":2})
 
     def testEq(self):
-        self.assertEqual(self.r_1, self.r_1i, "not equal to similar")
-        self.assertNotEqual(self.r_3, self.r_4, "equal to different")
+        self.assertEqual(self.r_1, self.r_1i) #, "not equal to similar")
+        self.assertNotEqual(self.r_3, self.r_4) #, "equal to different")
         
     def testRev(self):
         self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")

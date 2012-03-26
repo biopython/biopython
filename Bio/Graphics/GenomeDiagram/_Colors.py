@@ -23,7 +23,7 @@
 # ReportLab imports
 from reportlab.lib import colors
 
-class ColorTranslator:
+class ColorTranslator(object):
     """ Class providing methods for translating representations of color into
     """
     def __init__(self, filename=None):
@@ -65,7 +65,8 @@ class ColorTranslator:
 
             o color    Color defined as an int, a tuple of three ints 0->255
                        or a tuple of three floats 0 -> 1, or a string giving
-                       one of the named colors defined by ReportLab.
+                       one of the named colors defined by ReportLab, or a
+                       ReportLab color object (returned as is).
 
                        (This argument is overridden by a backwards compatible
                        argument with UK spelling, colour).
@@ -79,8 +80,10 @@ class ColorTranslator:
         
         if color is None:
             raise ValueError, "Passed color (or colour) must be a valid color type"
-        if type(color) == type(1):
+        elif isinstance(color, int):
             color = self.scheme_color(color)
+        elif isinstance(color, colors.Color):
+            return color
         elif isinstance(color, basestring):
             #Assume its a named reportlab color like "red".
             color = colors.toColor(color)
@@ -132,12 +135,21 @@ class ColorTranslator:
         """ artemis_color(self, value)
 
             o value     An int representing a functional class in the Artemis
-                        color scheme (see www.sanger.ac.uk for a description)
+                        color scheme (see www.sanger.ac.uk for a description),
+                        or a string from a GenBank feature annotation for the
+                        color which may be dot delimited (in which case the
+                        first value is used).
 
             Takes an int representing a functional class in the Artemis color
             scheme, and returns the appropriate colors.Color object
         """
-        value = int(value)
+        try:
+            value = int(value)
+        except ValueError:
+            if value.count('.'):                           # dot-delimited
+                value = int(artemis_color.split('.',1)[0]) # Use only first integer
+            else:
+                raise
         if value in self._artemis_colorscheme:
             return self._artemis_colorscheme[value][0]
         else:

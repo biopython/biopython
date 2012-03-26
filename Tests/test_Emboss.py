@@ -84,7 +84,8 @@ def get_emboss_version():
                 % line)
             
 #To avoid confusing known errors from old versions of EMBOSS ...
-if get_emboss_version() < (6,1,0):
+emboss_version = get_emboss_version()
+if emboss_version < (6,1,0):
     raise MissingExternalDependencyError(\
         "Test requires EMBOSS 6.1.0 patch 3 or later.")
     
@@ -110,6 +111,7 @@ def emboss_convert(filename, old_format, new_format):
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
     child.stdin.close()
+    child.stderr.close()
     return child.stdout
 
 #Top level function as this makes it easier to use for debugging:
@@ -131,7 +133,12 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
                              shell=(sys.platform!="win32"))
     SeqIO.write(records, child.stdin, old_format)
     child.stdin.close()
-    return SeqIO.parse(child.stdout, new_format)
+    child.stderr.close()
+    #TODO - Is there a nice way to return an interator AND
+    #automatically close the handle?
+    records = list(SeqIO.parse(child.stdout, new_format))
+    child.stdout.close()
+    return records
 
 #Top level function as this makes it easier to use for debugging:
 def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
@@ -150,9 +157,24 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
                              stderr=subprocess.PIPE,
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
-    AlignIO.write(alignments, child.stdin, old_format)
+    try:
+        AlignIO.write(alignments, child.stdin, old_format)
+    except Exception, err:
+        child.stdin.close()
+        child.stderr.close()
+        child.stdout.close()
+        raise
     child.stdin.close()
-    return AlignIO.parse(child.stdout, new_format)
+    child.stderr.close()
+    #TODO - Is there a nice way to return an interator AND
+    #automatically close the handle? 
+    try:
+        aligns = list(AlignIO.parse(child.stdout, new_format))
+    except Exception, err:
+        child.stdout.close()
+        raise
+    child.stdout.close()
+    return aligns
 
 
 #Top level function as this makes it easier to use for debugging:
@@ -232,6 +254,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
                 continue
             handle = emboss_convert(filename, old_format, new_format)
             new_records = list(SeqIO.parse(handle, new_format))
+            handle.close()
             try:
                 self.assertTrue(compare_records(old_records, new_records))
             except ValueError, err:
@@ -245,6 +268,26 @@ class SeqRetSeqIOTests(unittest.TestCase):
                                    alphabet)
         #Check Bio.SeqIO can read EMBOSS seqret output...
         self.check_EMBOSS_to_SeqIO(filename, old_format, skip_formats)
+
+    def test_abi(self):
+        """SeqIO agrees with EMBOSS' Abi to FASTQ conversion."""
+        #This lets use check the id, sequence, and quality scores
+        for filename in ["Abi/3730.ab1", "Abi/empty.ab1"]:
+             old = SeqIO.read(filename, "abi")
+             handle = emboss_convert(filename, "abi", "fastq-sanger")
+             new = SeqIO.read(handle, "fastq-sanger")
+             handle.close()
+             if emboss_version == (6,4,0) and new.id == "EMBOSS_001":
+                 #Avoid bug in EMBOSS 6.4.0 (patch forthcoming)
+                 pass
+             else:
+                 self.assertEqual(old.id, new.id)
+             self.assertEqual(str(old.seq), str(new.seq))
+             if emboss_version < (6,3,0) and new.letter_annotations["phred_quality"] == [1]*len(old):
+                 #Apparent bug in EMBOSS 6.2.0.1 on Windows           
+                 pass
+             else:
+                 self.assertEqual(old.letter_annotations, new.letter_annotations)
 
     def test_genbank(self):
         """SeqIO & EMBOSS reading each other's conversions of a GenBank file."""
@@ -471,6 +514,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
+        child.stdout.close()
+        child.stderr.close()
 
     def test_needle_file(self):
         """needle with the asis trick, output to a file."""
@@ -528,6 +573,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
+        child.stdout.close()
+        child.stderr.close()
 
     def test_water_file2(self):
         """water with the asis trick and nucleotide FASTA file, output to a file."""
@@ -638,6 +685,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
+        child.stdout.close()
+        child.stderr.close()
 
     def test_water_needs_output(self):
         """water without output file or stdout/filter should give error."""
@@ -692,6 +741,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         #Check no error output:
         self.assertEqual(child.stderr.read(), "")
         self.assertEqual(0, child.wait())
+        child.stdout.close()
+        child.stderr.close()
         
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None):

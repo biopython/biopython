@@ -370,6 +370,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 from math import log
 import warnings
+from Bio import BiopythonWarning, BiopythonParserWarning
+
 
 # define score offsets. See discussion for differences between Sanger and
 # Solexa offsets.
@@ -510,9 +512,8 @@ def phred_quality_from_solexa(solexa_quality):
         #Assume None is used as some kind of NULL or NA value; return None
         return None
     if solexa_quality < -5:
-        import warnings
         warnings.warn("Solexa quality less than -5 passed, %s" \
-                      % repr(solexa_quality))
+                      % repr(solexa_quality), BiopythonWarning)
     return 10*log(10**(solexa_quality/10.0) + 1, 10)
 
 def _get_phred_quality(record):
@@ -619,7 +620,8 @@ def _get_sanger_quality_str(record):
         if None in qualities:
             raise TypeError("A quality value of None was found")
         if max(qualities) >= 93.5:
-            warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ")
+            warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ",
+                          BiopythonWarning)
         #This will apply the truncation at 93, giving max ASCII 126
         return "".join([chr(min(126, int(round(qp))+SANGER_SCORE_OFFSET)) \
                         for qp in qualities])
@@ -642,7 +644,8 @@ def _get_sanger_quality_str(record):
     #Must do this the slow way, first converting the PHRED scores into
     #Solexa scores:
     if max(qualities) >= 93.5:
-        warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ")
+        warnings.warn("Data loss - max PHRED quality 93 in Sanger FASTQ",
+                      BiopythonWarning)
     #This will apply the truncation at 93, giving max ASCII 126
     return "".join([chr(min(126, int(round(phred_quality_from_solexa(qs)))+SANGER_SCORE_OFFSET)) \
                     for qs in qualities])
@@ -683,7 +686,8 @@ def _get_illumina_quality_str(record):
         if None in qualities:
             raise TypeError("A quality value of None was found")
         if max(qualities) >= 62.5:
-            warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ")
+            warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ",
+                          BiopythonWarning)
         #This will apply the truncation at 62, giving max ASCII 126
         return "".join([chr(min(126, int(round(qp))+SOLEXA_SCORE_OFFSET)) \
                         for qp in qualities])
@@ -706,7 +710,8 @@ def _get_illumina_quality_str(record):
     #Must do this the slow way, first converting the PHRED scores into
     #Solexa scores:
     if max(qualities) >= 62.5:
-        warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ")
+        warnings.warn("Data loss - max PHRED quality 62 in Illumina FASTQ",
+                      BiopythonWarning)
     #This will apply the truncation at 62, giving max ASCII 126
     return "".join([chr(min(126, int(round(phred_quality_from_solexa(qs)))+SOLEXA_SCORE_OFFSET)) \
                     for qs in qualities])
@@ -747,7 +752,8 @@ def _get_solexa_quality_str(record):
         if None in qualities:
             raise TypeError("A quality value of None was found")
         if max(qualities) >= 62.5:
-            warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ")
+            warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ",
+                          BiopythonWarning)
         #This will apply the truncation at 62, giving max ASCII 126
         return "".join([chr(min(126, int(round(qs))+SOLEXA_SCORE_OFFSET)) \
                         for qs in qualities])
@@ -771,7 +777,8 @@ def _get_solexa_quality_str(record):
     #Must do this the slow way, first converting the PHRED scores into
     #Solexa scores:
     if max(qualities) >= 62.5:
-        warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ")
+        warnings.warn("Data loss - max Solexa quality 62 in Solexa FASTQ",
+                      BiopythonWarning)
     return "".join([chr(min(126,
                             int(round(solexa_quality_from_phred(qp))) + \
                             SOLEXA_SCORE_OFFSET)) \
@@ -1306,6 +1313,10 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
     >>> sub_record = record[5:10]
     >>> print sub_record.id, sub_record.letter_annotations["phred_quality"]
     EAS54_6_R1_2_1_443_348 [26, 26, 26, 26, 26]
+
+    As of Biopython 1.59, this parser will accept files with negatives quality
+    scores but will replace them with the lowest possible PHRED score of zero.
+    This will trigger a warning, previously it raised a ValueError exception.
     """
     #Skip any text before the first record (e.g. blank lines, comments)
     while True:
@@ -1333,9 +1344,10 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
             line = handle.readline()
 
         if qualities and min(qualities) < 0:
-            raise ValueError(("Negative quality score %i found in %s. " + \
-                              "Are these Solexa scores, not PHRED scores?") \
-                             % (min(qualities), id))
+            warnings.warn(("Negative quality score %i found, " + \
+                           "substituting PHRED zero instead.") \
+                           % min(qualities), BiopythonParserWarning)
+            qualities = [max(0,q) for q in qualities]
         
         #Return the record and then continue...
         record = SeqRecord(UnknownSeq(len(qualities), alphabet),

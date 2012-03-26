@@ -82,7 +82,7 @@ def annotate(m, ss_seq):
         residues[i].xtra["SS_PSEA"]=ss_seq[i]
     #os.system("rm "+fname)
 
-class PSEA:
+class PSEA(object):
     def __init__(self, model, filename):
         ss_seq=psea(filename)
         ss_seq=psea2HEC(ss_seq)

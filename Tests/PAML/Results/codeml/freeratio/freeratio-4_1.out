@@ -1,0 +1,138 @@
+
+seed used = 1024008133
+CODONML (in paml version 4.1, August 2008)  ../Alignments/alignment.phylip
+Model: free dN/dS Ratios for branches for branches
+Codon frequencies: F3x4
+ns =   5  ls =  74
+
+Codon usage in sequences
+--------------------------------------------------------------------------------------------------
+Phe TTT  0  0  0  0  0 | Ser TCT  1  1  1  1  1 | Tyr TAT  0  0  1  0  0 | Cys TGT  3  2  3  3  3
+    TTC  1  1  1  1  1 |     TCC  1  1  1  1  1 |     TAC  1  1  0  1  1 |     TGC  0  1  0  0  0
+Leu TTA  0  0  0  0  0 |     TCA  1  1  1  1  1 | *** TAA  0  0  0  0  0 | *** TGA  0  0  0  0  0
+    TTG  1  1  1  1  1 |     TCG  0  0  0  0  0 |     TAG  0  0  0  0  0 | Trp TGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+Leu CTT  0  0  0  0  0 | Pro CCT  0  0  0  0  0 | His CAT  0  0  0  0  0 | Arg CGT  0  0  0  0  0
+    CTC  2  2  2  2  2 |     CCC  1  1  1  1  1 |     CAC  0  0  0  0  0 |     CGC  0  0  0  0  0
+    CTA  1  1  1  1  1 |     CCA  3  3  3  3  3 | Gln CAA  0  0  0  0  0 |     CGA  1  1  1  1  1
+    CTG  3  3  3  3  3 |     CCG  0  0  0  0  0 |     CAG  1  1  1  1  1 |     CGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+Ile ATT  2  2  2  2  2 | Thr ACT  0  0  0  0  0 | Asn AAT  2  2  2  2  2 | Ser AGT  0  0  0  0  0
+    ATC  2  2  2  2  2 |     ACC  0  0  0  0  0 |     AAC  0  0  0  0  0 |     AGC  0  0  0  0  0
+    ATA  0  0  0  0  0 |     ACA  2  2  2  2  2 | Lys AAA  5  5  5  5  5 | Arg AGA  2  2  2  2  2
+Met ATG  3  3  3  3  3 |     ACG  0  0  0  0  0 |     AAG  5  5  5  5  5 |     AGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+Val GTT  3  3  3  3  1 | Ala GCT  0  0  0  0  0 | Asp GAT  2  2  2  2  2 | Gly GGT  0  0  0  0  0
+    GTC  0  0  0  0  1 |     GCC  0  0  0  0  0 |     GAC  4  4  4  4  4 |     GGC  3  3  3  3  3
+    GTA  3  3  3  3  4 |     GCA  0  0  0  0  0 | Glu GAA  8  8  8  8  8 |     GGA  1  1  1  1  1
+    GTG  2  2  2  2  2 |     GCG  0  0  0  0  0 |     GAG  4  4  4  4  4 |     GGG  0  0  0  0  0
+--------------------------------------------------------------------------------------------------
+
+Codon position x base (3x4) table for each sequence.
+
+#1: Homo_sapie     
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.17568    C:0.20270    A:0.36486    G:0.25676
+Average         T:0.20270    C:0.16216    A:0.36937    G:0.26577
+
+#2: Pan_troglo     
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.16216    C:0.21622    A:0.36486    G:0.25676
+Average         T:0.19820    C:0.16667    A:0.36937    G:0.26577
+
+#3: Gorilla_go     
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.18919    C:0.18919    A:0.36486    G:0.25676
+Average         T:0.20721    C:0.15766    A:0.36937    G:0.26577
+
+#4: Pongo_pygm     
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.17568    C:0.20270    A:0.36486    G:0.25676
+Average         T:0.20270    C:0.16216    A:0.36937    G:0.26577
+
+#5: Macaca_mul     
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.14865    C:0.21622    A:0.37838    G:0.25676
+Average         T:0.19369    C:0.16667    A:0.37387    G:0.26577
+
+Sums of codon usage counts
+------------------------------------------------------------------------------
+Phe F TTT       0 | Ser S TCT       5 | Tyr Y TAT       1 | Cys C TGT      14
+      TTC       5 |       TCC       5 |       TAC       4 |       TGC       1
+Leu L TTA       0 |       TCA       5 | *** * TAA       0 | *** * TGA       0
+      TTG       5 |       TCG       0 |       TAG       0 | Trp W TGG       0
+------------------------------------------------------------------------------
+Leu L CTT       0 | Pro P CCT       0 | His H CAT       0 | Arg R CGT       0
+      CTC      10 |       CCC       5 |       CAC       0 |       CGC       0
+      CTA       5 |       CCA      15 | Gln Q CAA       0 |       CGA       5
+      CTG      15 |       CCG       0 |       CAG       5 |       CGG       0
+------------------------------------------------------------------------------
+Ile I ATT      10 | Thr T ACT       0 | Asn N AAT      10 | Ser S AGT       0
+      ATC      10 |       ACC       0 |       AAC       0 |       AGC       0
+      ATA       0 |       ACA      10 | Lys K AAA      25 | Arg R AGA      10
+Met M ATG      15 |       ACG       0 |       AAG      25 |       AGG       0
+------------------------------------------------------------------------------
+Val V GTT      13 | Ala A GCT       0 | Asp D GAT      10 | Gly G GGT       0
+      GTC       1 |       GCC       0 |       GAC      20 |       GGC      15
+      GTA      16 |       GCA       0 | Glu E GAA      40 |       GGA       5
+      GTG      10 |       GCG       0 |       GAG      20 |       GGG       0
+------------------------------------------------------------------------------
+
+
+Codon position x base (3x4) table, overall
+
+position  1:    T:0.12162    C:0.16216    A:0.31081    G:0.40541
+position  2:    T:0.31081    C:0.12162    A:0.43243    G:0.13514
+position  3:    T:0.17027    C:0.20541    A:0.36757    G:0.25676
+Average         T:0.20090    C:0.16306    A:0.37027    G:0.26577
+
+TREE #  1:  (((1, 2), 3), 4, 5);   MP score: 4
+check convergence..
+lnL(ntime:  7  np: 15):   -308.032209     +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000000 0.000000 0.000004 0.013437 0.013431 0.000004 0.027837 1.519279 0.988162 1.002397 0.833797 0.000100 0.000100 0.993571 0.000100
+
+Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
+
+tree length =   0.05471
+
+(((1: 0.000004, 2: 0.013437): 0.000000, 3: 0.013431): 0.000000, 4: 0.000004, 5: 0.027837);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.013437): 0.000000, Gorilla_go: 0.013431): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.027837);
+
+Detailed output identifying parameters
+
+kappa (ts/tv) =  1.51928
+
+w (dN/dS) for branches:  0.98816 1.00240 0.83380 0.00010 0.00010 0.99357 0.00010
+
+dN & dS for each branch
+
+ branch           t        N        S    dN/dS       dN       dS   N*dN   S*dS
+
+   6..7       0.000    167.7     54.3   0.9882   0.0000   0.0000    0.0    0.0
+   7..8       0.000    167.7     54.3   1.0024   0.0000   0.0000    0.0    0.0
+   8..1       0.000    167.7     54.3   0.8338   0.0000   0.0000    0.0    0.0
+   8..2       0.013    167.7     54.3   0.0001   0.0000   0.0183    0.0    1.0
+   7..3       0.013    167.7     54.3   0.0001   0.0000   0.0183    0.0    1.0
+   6..4       0.000    167.7     54.3   0.9936   0.0000   0.0000    0.0    0.0
+   6..5       0.028    167.7     54.3   0.0001   0.0000   0.0379    0.0    2.1
+
+tree length for dN:      0.00001
+tree length for dS:      0.07453
+
+dS tree:
+(((Homo_sapie: 0.000002, Pan_troglo: 0.018307): 0.000000, Gorilla_go: 0.018298): 0.000000, Pongo_pygm: 0.000001, Macaca_mul: 0.037926);
+dN tree:
+(((Homo_sapie: 0.000001, Pan_troglo: 0.000002): 0.000000, Gorilla_go: 0.000002): 0.000000, Pongo_pygm: 0.000001, Macaca_mul: 0.000004);
+
+w ratios as labels for TreeView:
+(((Homo_sapie'#2' '#0.8338' : 0.000004, Pan_troglo'#3' '#0.0001' : 0.013437)'#1' '#1.0024' : 0.000000, Gorilla_go'#4' '#0.0001' : 0.013431) '#0.9882' : 0.000000, Pongo_pygm'#5' '#0.9936' : 0.000004, Macaca_mul'#6' '#0.0001' : 0.027837);
+
+
+Time used:  0:07

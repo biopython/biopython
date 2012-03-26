@@ -34,7 +34,7 @@ from reportlab.lib import colors
 
 from _Graph import GraphData
 
-class GraphSet:
+class GraphSet(object):
     """ GraphSet
 
         Provides:

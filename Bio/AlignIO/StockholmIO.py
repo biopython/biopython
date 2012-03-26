@@ -459,8 +459,12 @@ class StockholmIterator(AlignmentIterator):
         if identifier.find("/")!=-1:
             name, start_end = identifier.rsplit("/",1)
             if start_end.count("-")==1:
-                start, end = map(int, start_end.split("-"))
-                return (name, start, end)
+                try:
+                    start, end = map(int, start_end.split("-"))
+                    return (name, start, end)
+                except ValueError:
+                    # Non-integers after final '/' - fall through
+                    pass
         return (identifier, None, None)
     
     def _get_meta_data(self, identifier, meta_dict):

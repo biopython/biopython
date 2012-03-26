@@ -32,7 +32,7 @@ and for the drastic (n can be arbitrary to the length of the genome!):
 # standard modules
 import random
 
-class GeneralPointCrossover:
+class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.
 
        Ideas on how to use this class:

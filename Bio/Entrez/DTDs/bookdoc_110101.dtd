@@ -1,0 +1,78 @@
+<!-- 
+
+		PubMed Books and Documents DTD
+		
+	This DTD was created in December 2009 to accommodate the loading of book and 
+	book chapter records to PubMed. 
+	
+	Use the PUBLIC Identifier
+	
+	"-//NLM-NCBI//DTD PubMed Books Documents, 12-16-2009 v.1//EN"
+	
+	Delivered as "bookdoc.dtd"
+
+	1/29/2010 - changed "FirstPage" to "StartPage"
+	2/3/2010 - added ArticleIdList to BookDocument and added bookaccession as value in %art.id.type.int;
+	
+	-->
+
+
+
+<!--ENTITY % personal.name "( ForeName?, LastName, Initials, Suffix? )">
+<!ENTITY % author.name "((%personal.name; | CollectiveName), Affiliation?)"-->
+
+<!--ENTITY % normal.date "Year,Month,Day,(Hour,(Minute,Second?)?)?"-->
+
+<!ENTITY % booklinkatts		
+			  "book		CDATA			#IMPLIED
+				part		CDATA			#IMPLIED
+				sec		CDATA			#IMPLIED"  >
+
+
+<!ELEMENT BookDocumentSet (BookDocument*, DeleteDocument?)>
+<!ELEMENT BookDocument ( PMID, ArticleIdList, Book, LocationLabel*, ArticleTitle?, VernacularTitle?,
+	Pagination?, Language*, AuthorList*, GroupList?, PublicationType*, Abstract?, Sections?, KeywordList*, 
+	ContributionDate?, DateRevised?, CitationString?, GrantList?) >
+
+<!ELEMENT Book ( Publisher, BookTitle, PubDate, BeginningDate?, EndingDate?, AuthorList*, Volume?, VolumeTitle?, 
+	Edition?, CollectionTitle?, Isbn*, ELocationID*, Medium?, ReportNumber?) >
+<!ELEMENT Publisher (PublisherName, PublisherLocation?) >
+<!ELEMENT PublisherName      %text; >
+<!ELEMENT PublisherLocation (#PCDATA) >
+<!ELEMENT BookTitle      %text; >
+<!ATTLIST BookTitle	%booklinkatts; >
+
+<!ELEMENT ContributionDate ( Year, ((Month, Day?) | Season)? ) >
+<!ELEMENT BeginningDate ( Year, ((Month, Day?) | Season)? ) >
+<!ELEMENT EndingDate ( Year, ((Month, Day?) | Season)? ) >
+<!ELEMENT VolumeTitle %text; >
+<!ELEMENT Edition (#PCDATA) >
+<!ELEMENT CollectionTitle      %text; >
+<!ATTLIST CollectionTitle	%booklinkatts; >
+<!ELEMENT Isbn (#PCDATA) >
+<!ELEMENT Medium (#PCDATA) >
+<!ELEMENT ReportNumber (#PCDATA) >
+<!ELEMENT ContractNumber (#PCDATA) >
+<!ELEMENT CitationString      %text; >
+
+<!ATTLIST ArticleTitle	%booklinkatts; >
+
+
+<!ELEMENT LocationLabel		(#PCDATA)>
+<!ATTLIST LocationLabel
+			Type			(part|chapter|section|appendix|figure|table|box)			#IMPLIED >
+
+<!ATTLIST AuthorList Type ( authors | editors ) "authors">
+
+<!ELEMENT DeleteDocument (PMID*) >
+
+<!ELEMENT PubmedBookArticle (BookDocument, PubmedBookData?)>
+<!ELEMENT PubmedBookData (History?, PublicationStatus, ArticleIdList, ObjectList?)>
+
+<!ELEMENT Sections	(Section+) >
+<!ELEMENT Section	(LocationLabel?, SectionTitle, Section*) >
+
+<!ELEMENT SectionTitle	%text; >
+<!ATTLIST SectionTitle	%booklinkatts; >
+
+<!ELEMENT PubmedBookArticleSet (PubmedBookArticle)*>

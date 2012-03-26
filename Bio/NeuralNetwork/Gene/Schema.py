@@ -30,7 +30,7 @@ from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 from Bio.GA.Selection.Tournament import TournamentSelection
 from Bio.GA.Selection.Diversity import DiversitySelection
 
-class Schema:
+class Schema(object):
     """Deal with motifs that have ambiguity characters in it.
 
     This motif class allows specific ambiguity characters and tries to
@@ -172,7 +172,7 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
 
 # -- GA schema finder
 
-class GeneticAlgorithmFinder:
+class GeneticAlgorithmFinder(object):
     """Find schemas using a genetic algorithm approach.
 
     This approach to finding schema uses Genetic Algorithms to evolve
@@ -254,7 +254,7 @@ class GeneticAlgorithmFinder:
 
 # -- fitness classes
 
-class DifferentialSchemaFitness:
+class DifferentialSchemaFitness(object):
     """Calculate fitness for schemas that differentiate between sequences.
     """
     def __init__(self, positive_seqs, negative_seqs, schema_evaluator):
@@ -320,7 +320,7 @@ class DifferentialSchemaFitness:
         diff = (discerning_power * motif_size) / float(num_ambiguous)
         return diff
 
-class MostCountSchemaFitness:
+class MostCountSchemaFitness(object):
     """Calculate a fitness giving weight to schemas that match many times.
 
     This fitness function tries to maximize schemas which are found many
@@ -361,7 +361,7 @@ class MostCountSchemaFitness:
         return num_times
 
 # -- Helper classes
-class RandomMotifGenerator:
+class RandomMotifGenerator(object):
     """Generate a random motif within given parameters.
     """
     def __init__(self, alphabet, min_size = 12, max_size = 17):
@@ -394,7 +394,7 @@ class RandomMotifGenerator:
 
         return MutableSeq(motif, self._alphabet)
 
-class SimpleFinisher:
+class SimpleFinisher(object):
     """Determine when we are done evolving motifs.
 
     This takes the very simple approach of halting evolution when the
@@ -436,7 +436,7 @@ class SimpleFinisher:
         return 0
 # ---
 
-class SchemaFinder:
+class SchemaFinder(object):
     """Find schema in a set of sequences using a genetic algorithm approach.
 
     Finding good schemas is very difficult because it takes forever to
@@ -474,7 +474,7 @@ class SchemaFinder:
         return self._finder.find_schemas(fitness_evaluator.calculate_fitness,
                                          self.num_schemas)
 
-class SchemaCoder:
+class SchemaCoder(object):
     """Convert a sequence into a representation of ambiguous motifs (schemas).
 
     This takes a sequence, and returns the number of times specified
@@ -553,7 +553,7 @@ def matches_schema(pattern, schema, ambiguity_character = '*'):
 
     return 1
 
-class SchemaFactory:
+class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures.
     """
     def __init__(self, ambiguity_symbol = '*'):
