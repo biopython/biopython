@@ -16,7 +16,6 @@ import unittest
 import tempfile
 import filecmp
 
-from cStringIO import StringIO
 from Bio.AlignIO.MafIO import MafIndex
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
