@@ -212,6 +212,8 @@ class MafIndex():
                 
                 if records_found <> record_count:
                     raise ValueError("Expected %s records, found %s.  Corrupt index?" % (record_count, records_found))
+
+                self._record_count = records_found
             except _OperationalError, err:
                 raise ValueError("Not a Biopython index database? %s" % err)
         else:
@@ -518,3 +520,10 @@ class MafIndex():
                                              
         return MultipleSeqAlignment(result_multiseq)
         
+
+    def __repr__(self):
+        return "MafIO.MafIndex(%r, target_seqname=%r" % (self._maf_fp.name,
+                                                         self.target_seqname)
+
+    def __len__(self):
+        return self._record_count
