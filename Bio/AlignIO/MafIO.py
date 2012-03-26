@@ -16,6 +16,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align.Generic import Alignment
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import SequentialAlignmentWriter
+import shlex
 
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file.
@@ -76,8 +77,6 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
         
     if expect_header == True:
         def _parse_track_line(line):
-            import shlex
-            
             _valid_track_keys = ("name", "mafDot", "visibility", "frames", "speciesOrder", "description")
     
             parsed_track_line = dict(x.split("=") for x in shlex.split(line)[1:])
@@ -96,8 +95,6 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet, exp
             return parsed_track_line
             
         def _parse_header_line(line):
-            import shlex
-            
             _valid_header_keys = ("version", "scoring")
     
             parsed_header_line = dict(x.split("=") for x in shlex.split(line)[1:])
