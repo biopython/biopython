@@ -333,11 +333,12 @@ class MafIndex():
         hits = {}
         
         for exonstart, exonend in zip(starts, ends):
-            possible_bins = ", ".join(map(str, self._region2bin (exonstart, exonend)))
+            possible_bins = ", ".join(map(str, self._region2bin(exonstart, exonend)))
             
-            result = con.execute("SELECT * FROM offset_data WHERE bin IN (%s) AND "
-            "(end BETWEEN %s AND %s OR %s BETWEEN start AND end) ORDER BY start ASC;" \
-            % (possible_bins, exonstart, exonend, exonend))
+            result = con.execute("SELECT * FROM offset_data WHERE bin IN (%s) "
+                     "AND (end BETWEEN %s AND %s OR %s BETWEEN start AND end) "
+                     "ORDER BY start ASC;" \
+                     % (possible_bins, exonstart, exonend, exonend))
     
             rows = result.fetchall()
             
@@ -347,7 +348,7 @@ class MafIndex():
         # iterate through hits, fetching alignments from the MAF file and checking
         # to be sure we've retrieved the expected record
         for offset, (rec_start, rec_end) in hits.items():
-            fetched = self.get_record (int(offset))
+            fetched = self.get_record(int(offset))
             
             for record in fetched:
                 if record.id == self.target_seqname:
@@ -381,7 +382,7 @@ class MafIndex():
         # if there's no alignment, return filler for the assembly of the length given
         if len(fetched) == 0:
             return MultipleSeqAlignment([SeqRecord(Seq("N" * expected_letters),
-                                                   id = self.target_seqname)])
+                                                   id=self.target_seqname)])
         
         # find the intersection of all IDs in these alignments
         all_seqnames = set([x.id for y in fetched for x in y])
