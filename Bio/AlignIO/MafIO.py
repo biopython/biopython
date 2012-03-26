@@ -295,6 +295,8 @@ class MafIndex():
             
             con.commit()
             
+            self._record_count = insert_count
+            
         # lastly, setup a MafIterator pointing at the open maf_file
         self._mafiter = MafIterator(self._maf_fp)
 
