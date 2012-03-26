@@ -321,7 +321,7 @@ class MafIndex():
 
         return 0
             
-    def get_record(self, offset):
+    def _get_record(self, offset):
         """Retrieves a single MAF record located at the offset provided."""
         
         self._maf_fp.seek(offset)
@@ -360,7 +360,7 @@ class MafIndex():
         # iterate through hits, fetching alignments from the MAF file and checking
         # to be sure we've retrieved the expected record
         for offset, (rec_start, rec_end) in hits.items():
-            fetched = self.get_record(int(offset))
+            fetched = self._get_record(int(offset))
             
             for record in fetched:
                 if record.id == self.target_seqname:
