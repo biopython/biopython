@@ -405,7 +405,7 @@ class MafIndex():
         
         Accepts two lists of start and end positions on target_seqname, representing
         exons to be spliced in silico.  Returns a MultipleSeqAlignment of the
-        desired sequenced spliced together.
+        desired sequences spliced together.
         """
 
         # validate strand
@@ -423,7 +423,7 @@ class MafIndex():
             return MultipleSeqAlignment([SeqRecord(Seq("N" * expected_letters),
                                                    id=self._target_seqname)])
         
-        # find the intersection of all IDs in these alignments
+        # find the union of all IDs in these alignments
         all_seqnames = set([x.id for y in fetched for x in y])
                 
         # split every record by base position
