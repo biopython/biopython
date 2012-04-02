@@ -182,7 +182,7 @@ class MafIndex():
                                                "included Python 2.5+")
         
         self._target_seqname = target_seqname
-        self._maf_file = os.path.realpath(maf_file)
+        self._maf_file = maf_file
         
         # make sure maf_file exists, then open it up
         if os.path.isfile(self._maf_file):
@@ -204,6 +204,7 @@ class MafIndex():
     def __check_existing_db(self):
         """Basic sanity checks upon loading an existing index"""
 
+        import os
         from sqlite3 import OperationalError as _OperationalError
         from sqlite3 import DatabaseError as _DatabaseError
 
