@@ -34,6 +34,7 @@ warnings.warn("The module Bio.ParserSupport is now obsolete, and will be depreca
 import sys
 import traceback
 from types import *
+import StringIO
 
 from Bio import File
 
