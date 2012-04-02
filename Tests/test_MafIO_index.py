@@ -17,6 +17,7 @@ import tempfile
 import filecmp
 
 from Bio.AlignIO.MafIO import MafIndex
+from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -128,10 +129,15 @@ if sqlite3:
             if os.path.isfile(self.tmpfile):
                 os.remove(self.tmpfile)
             
-        def test_good(self):
+        def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEquals(len(idx), 48)
             self.assertTrue(filecmp.cmp("MAF/ucsc_mm9_chr10.mafindex", self.tmpfile))
+            
+        def test_good_big(self):
+            idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
+            self.assertEquals(len(idx), 983)
+            self.assertTrue(filecmp.cmp("MAF/ucsc_mm9_chr10_big.mafindex", self.tmpfile))
 
         def test_bundle_without_target(self):
             self.assertRaises(ValueError,
@@ -321,8 +327,8 @@ if sqlite3:
         """Test in silico splicing on a correctly-formatted MAF"""
 
         def setUp(self):
-            self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
-            self.assertEqual(len(self.idx), 48)
+            self.idx = MafIndex("MAF/ucsc_mm9_chr10_big.mafindex", "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
+            self.assertEqual(len(self.idx), 983)
 
         def test_invalid_strand(self):
             self.assertRaises(ValueError,
@@ -335,6 +341,27 @@ if sqlite3:
             self.assertEqual(len(result), 1)
             self.assertEqual(len(result[0].seq), 1000)
             self.assertEqual(str(result[0].seq), "N" * 1000)
+
+        def test_correct_retrieval_1(self):
+            """
+            This is the real thing. We're pulling the spliced alignment of
+            an actual gene (Cnksr3) in mouse. It should perfectly match the
+            spliced transcript pulled independently from UCSC.
+            """
+            
+            result = self.idx.get_spliced((3134303, 3185733, 3192055, 3193589,
+                                           3203538, 3206102, 3208126, 3211424,
+                                           3211872, 3217393, 3219697, 3220356,
+                                           3225954),
+                                          (3134909, 3185897, 3192258, 3193677,
+                                           3203580, 3206222, 3208186, 3211493,
+                                           3212019, 3217518, 3219906, 3220446,
+                                           3227479), "+")
+
+            cnksr3 = str(SeqIO.read("MAF/cnksr3.fa", "fasta").seq).upper()
+            mm9_seq = "".join([str(x.seq) for x in result if x.id.startswith("mm9")]).replace("-", "")
+
+            self.assertEqual(mm9_seq, cnksr3)
 
     class TestSpliceBadMAF(unittest.TestCase):
         """Test in silico splicing on an incorrectly-formatted MAF"""
