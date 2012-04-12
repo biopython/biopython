@@ -200,6 +200,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
 import sys
+import re
 
 from Bio._py3k import _bytes_to_string, _as_bytes
 _null = _as_bytes("\0")
@@ -516,7 +517,7 @@ def _sff_read_roche_index(handle):
         raise ValueError("Problem with index length? %i vs %i" \
                          % (handle.tell(), read_index_offset + read_index_size))
 
-
+_valid_UAN_read_name = re.compile(r'^[a-zA-Z0-9]{14}$')
 def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                          key_sequence, alphabet, trim=False):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
@@ -599,7 +600,7 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                        "clip_qual_right":clip_qual_right,
                        "clip_adapter_left":clip_adapter_left,
                        "clip_adapter_right":clip_adapter_right}
-    if name_length == 14:
+    if re.match(_valid_UAN_read_name, name):
         annotations["time"] = _get_read_time(name)
         annotations["region"] = _get_read_region(name)
         annotations["coords"] = _get_read_xy(name)
@@ -622,10 +623,13 @@ def _string_as_base_36(string):
     for c, power in zip(string[::-1], _powers_of_36):
         # For reference: ord('0') = 48, ord('9') = 57
         # For reference: ord('A') = 65, ord('Z') = 90
+        # For reference: ord('a') = 97, ord('z') = 122
         if 48 <= ord(c) <= 57:
             val = ord(c) - 22 # equivalent to: - ord('0') + 26
         elif 65 <= ord(c) <= 90:
             val = ord(c) - 65
+        elif 97 <= ord(c) <= 122:
+            val = ord(c) - 97
         else:
             # Invalid character
             val = 0
