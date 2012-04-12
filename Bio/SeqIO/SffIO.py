@@ -73,6 +73,20 @@ homopolymer stretch estimate, the value should be rounded to the nearest 100:
     ...        for value in record.annotations["flow_values"][:10]], '...'
     [1, 0, 1, 0, 0, 1, 0, 1, 0, 2] ...
 
+If a read name is exactly 14 alphanumeric characters, the annotations 
+dictionary will also contain meta-data about the read extracted by 
+interpretting the name as a 454 Sequencing System "Universal" Accession
+Number. Note that if a read name happens to be exactly 14 alphanumeric
+characters but was not generated automatically, these annotation records
+will contain nonsense information.
+
+    >>> print record.annotations["region"]
+    2
+    >>> print record.annotations["time"]
+    [2008, 1, 9, 16, 16, 0]
+    >>> print record.annotations["coords"]
+    (2434, 1658)
+
 As a convenience method, you can read the file with SeqIO format name "sff-trim"
 instead of "sff" to get just the trimmed sequences (without any annotation
 except for the PHRED quality scores):
