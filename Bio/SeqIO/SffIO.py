@@ -599,6 +599,10 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                        "clip_qual_right":clip_qual_right,
                        "clip_adapter_left":clip_adapter_left,
                        "clip_adapter_right":clip_adapter_right}
+    if name_length == 14:
+        annotations["time"] = _get_read_time(name)
+        annotations["region"] = _get_read_region(name)
+        annotations["coords"] = _get_read_xy(name)
     record = SeqRecord(Seq(seq, alphabet),
                        id=name,
                        name=name,
@@ -611,6 +615,47 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #Return the record and then continue...
     return record
 
+_powers_of_36 = [36**i for i in range(6)]
+def _string_as_base_36(string):
+    """Interpret a string as a base-36 number as per 454 manual."""
+    total = 0
+    for c, power in zip(string[::-1], _powers_of_36):
+        # For reference: ord('0') = 48, ord('9') = 57
+        # For reference: ord('A') = 65, ord('Z') = 90
+        if 48 <= ord(c) <= 57:
+            val = ord(c) - 22 # equivalent to: - ord('0') + 26
+        elif 65 <= ord(c) <= 90:
+            val = ord(c) - 65
+        else:
+            # Invalid character
+            val = 0
+        total += val * power 
+    return total
+
+def _get_read_xy(read_name):
+    """Extract coordinates from last 5 characters of read name."""
+    number = _string_as_base_36(read_name[9:])
+    return divmod(number, 4096)
+
+_time_denominators = [13 * 32 * 24 * 60 * 60,
+                      32 * 24 * 60 * 60,
+                      24 * 60 * 60,
+                      60 * 60,
+                      60]
+def _get_read_time(read_name):
+    """Extract time from first 6 characters of read name."""
+    time_list = []
+    remainder = _string_as_base_36(read_name[:6])
+    for denominator in _time_denominators:
+        this_term, remainder = divmod(remainder, denominator)
+        time_list.append(this_term)
+    time_list.append(remainder)
+    time_list[0] += 2000
+    return time_list
+
+def _get_read_region(read_name):
+    """Extract region from read name."""
+    return int(read_name[8])
 
 def _sff_read_raw_record(handle, number_of_flows_per_read):
     """Extract the next read in the file as a raw (bytes) string (PRIVATE)."""
