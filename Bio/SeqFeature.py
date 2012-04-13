@@ -696,12 +696,18 @@ class FeatureLocation(object):
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
+        if self.ref or self.ref_db:
+            #TODO - Return self?
+            raise ValueError("Feature references another sequence.")
         return FeatureLocation(start = self._start._shift(offset),
                                end = self._end._shift(offset),
                                strand = self.strand)
 
     def _flip(self, length):
         """Returns a copy of the location after the parent is reversed (PRIVATE)."""
+        if self.ref or self.ref_db:
+            #TODO - Return self?
+            raise ValueError("Feature references another sequence.")
         #Note this will flip the start and end too!
         if self.strand == +1:
             flip_strand = -1
@@ -747,6 +753,9 @@ class FeatureLocation(object):
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
+        if self.ref or self.ref_db:
+            #TODO - Take a dictionary as an optional argument?
+            raise ValueError("Feature references another sequence.")
         if isinstance(parent_sequence, MutableSeq):
             #This avoids complications with reverse complements
             #(the MutableSeq reverse complement acts in situ)

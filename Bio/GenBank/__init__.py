@@ -393,7 +393,7 @@ class LocationParserError(Exception):
     """Could not Properly parse out a location from a GenBank file.
     """
     pass
-                                                          
+
 class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects (OBSOLETE).
 
@@ -1047,7 +1047,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             msg = 'Combinations of "join" and "order" within the same ' + \
                   'location (nested operators) are illegal:\n' + location_line
             raise LocationParserError(msg)
-        raise LocationParserError(location_line)
+        #This used to be an error....
+        cur_feature.location = None
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r" \
+                                             % (location_line)))
+
 
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.

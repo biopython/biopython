@@ -23,6 +23,12 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.PDB.")
 
+try:
+    import Bio.PDB.mmCIF.MMCIFlex
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError("C extension MMCIFlex not installed.")
+
 from Bio.Seq import Seq
 from Bio.Alphabet import generic_protein
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning

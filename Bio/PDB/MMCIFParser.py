@@ -5,7 +5,7 @@
 
 """mmCIF parser (partly implemented in C)."""
 
-from string import letters
+from string import ascii_letters
 
 import numpy
 
@@ -120,7 +120,7 @@ class MMCIFParser(object):
         """Tries to return the icode. In MMCIF files this is just part of
         resseq! In PDB files, it's a separate field."""
         last_resseq_char=resseq[-1]
-        if last_resseq_char in letters:
+        if last_resseq_char in ascii_letters:
             icode=last_resseq_char
             int_resseq=int(resseq[0:-1])
         else:
