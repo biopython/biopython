@@ -1,4 +1,5 @@
-/* Original author unknown
+/* Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
+ *
  * Conversion from module-level functions to class-level functions
  * copyright 2012 Lenna X. Peterson (arklenna@gmail.com)
  * Module init function from:
