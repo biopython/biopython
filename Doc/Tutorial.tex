@@ -286,10 +286,9 @@ and HTML formats
   turns a list into a comma separated string automatically.
 
   \item \emph{Why doesn't} \verb|Bio.PDB.MMCIFParser| \emph{work? I see an import error about} \verb|MMCIFlex| \\
-  Since Biopython 1.42, the underlying \verb|Bio.PDB.mmCIF.MMCIFlex| module has
-  not been installed by default.  It requires a third party tool called flex
-  (fast lexical analyzer generator). At the time of writing, you'll have install
-  flex, then tweak your Biopython \verb|setup.py| file and reinstall from source.
+  From Biopython 1.42 to 1.59, the underlying \verb|Bio.PDB.mmCIF.MMCIFlex| module
+  was not been installed by default.  It required a third party tool called flex
+  (fast lexical analyzer generator). This should work with Biopython 1.60 onwards.
 
   \item \emph{Why doesn't} \verb|Bio.Blast.NCBIWWW.qblast()| \emph{give the same results as the NCBI BLAST website?} \\
   You need to specify the same options -- the NCBI often adjust the default settings on the website,

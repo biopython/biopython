@@ -16,6 +16,9 @@ The GenBank/EMBL parser will now give a warning on unrecognised feature
 locations and continue parsing (leaving the feature's location as None).
 Previously it would abort with an exception, which was often unhelpful.
 
+The Bio.PDB.MMCIFParser is now compiled by default (but is still not
+available under Jython, PyPy or Python 3).
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
