@@ -9,6 +9,19 @@
 from Bio import MissingExternalDependencyError
 
 try:
+    import matplotlib
+except ImportError:
+    raise MissingExternalDependencyError(
+            "Install matplotlib if you want to use Bio.Phylo._utils.")
+else:
+    # Don't use the Wx backend for matplotlib, use the simpler postscript
+    # backend -- we're not going to display or save the plot anyway, so it
+    # doesn't matter much, as long as it's not Wx.  See:
+    # http://lists.open-bio.org/pipermail/biopython-dev/2012-April/009559.html
+    matplotlib.use('ps')
+    from matplotlib import pyplot
+
+try:
     import networkx
 except ImportError:
     raise MissingExternalDependencyError(
@@ -23,12 +36,6 @@ except ImportError:
         raise MissingExternalDependencyError(
                 "Install PyGraphviz or Pydot if you want to use "
                 "Bio.Phylo._utils.")
-
-try:
-    from matplotlib import pyplot
-except ImportError:
-    raise MissingExternalDependencyError(
-            "Install matplotlib if you want to use Bio.Phylo._utils.")
 
 # OK, we can go ahead
 import unittest
