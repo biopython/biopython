@@ -250,19 +250,19 @@ def make_virtual_offset(block_start_offset, within_block_offset):
     ...
     ValueError: Require 0 <= within_block_offset < 2**16, got 65536
 
-    >>> make_virtual_offset(1,0)
-    65536
-    >>> make_virtual_offset(1,1)
-    65537
-    >>> make_virtual_offset(1, 2**16 - 1)
-    131071
+    >>> 65536 == make_virtual_offset(1,0)
+    True
+    >>> 65537 == make_virtual_offset(1,1)
+    True
+    >>> 131071 == make_virtual_offset(1, 2**16 - 1)
+    True
 
-    >>> make_virtual_offset(100000,0)
-    6553600000
-    >>> make_virtual_offset(100000,1)
-    6553600001
-    >>> make_virtual_offset(100000,10)
-    6553600010
+    >>> 6553600000 == make_virtual_offset(100000,0)
+    True
+    >>> 6553600001 == make_virtual_offset(100000,1)
+    True
+    >>> 6553600010 == make_virtual_offset(100000,10)
+    True
 
     >>> make_virtual_offset(2**48,0)
     Traceback (most recent call last):
@@ -271,18 +271,18 @@ def make_virtual_offset(block_start_offset, within_block_offset):
 
     """
     if within_block_offset < 0 or within_block_offset >= 65536:
-        raise ValueError("Require 0 <= within_block_offset < 2**16, got %r" % within_block_offset)
+        raise ValueError("Require 0 <= within_block_offset < 2**16, got %i" % within_block_offset)
     if block_start_offset < 0 or block_start_offset >= 281474976710656:
-        raise ValueError("Require 0 <= block_start_offset < 2**48, got %r" % block_start_offset)
+        raise ValueError("Require 0 <= block_start_offset < 2**48, got %i" % block_start_offset)
     return (block_start_offset<<16) | within_block_offset
 
 def split_virtual_offset(virtual_offset):
     """Divides a 64-bit BGZF virtual offset into block start & within block offsets.
 
-    >>> split_virtual_offset(6553600000)
-    (100000, 0)
-    >>> split_virtual_offset(6553600010)
-    (100000, 10)
+    >>> (100000, 0) == split_virtual_offset(6553600000)
+    True
+    >>> (100000, 10) == split_virtual_offset(6553600010)
+    True
 
     """
     start = virtual_offset>>16
