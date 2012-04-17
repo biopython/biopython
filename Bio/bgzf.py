@@ -4,13 +4,17 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-r"""Fairly low level API for working with BGZF files (e.g. BAM files).
+r"""Read and write BGZF compressed files (the GZIP variant used in BAM).
 
 The SAM/BAM file format (Sequence Alignment/Map) comes in a plain text
 format (SAM), and a compressed binary format (BAM). The latter uses a
-modified form of gzip compression called BGZF, which in principle can
-be applied to any file format. BGZF is described together with the
-SAM/BAM file format at http://samtools.sourceforge.net/SAM1.pdf
+modified form of gzip compression called BGZF (Blocked GNU Zip Format),
+which can be applied to any file format to provide compression with
+efficient random access. BGZF is described together with the SAM/BAM
+file format at http://samtools.sourceforge.net/SAM1.pdf
+
+Please read the text below about 'virtual offsets' before using BGZF
+files for random access.
 
 
 Aim of this module
@@ -29,6 +33,8 @@ BAM files, the BGZF format can also be used on other sequential
 data (in the sense of one record after another), such as most of
 the sequence data formats supported in Bio.SeqIO (like FASTA,
 FASTQ, GenBank, etc) or large MAF alignments.
+
+The Bio.SeqIO indexing functions use this module to support BGZF files.
 
 
 Technical Introduction to BGZF
@@ -328,8 +334,9 @@ def BgzfBlocks(handle):
     >>> handle.close()
 
     The above example has no embedded SAM header (thus the first block
-    is very small), while the next example does. Notice that the rest
-    of the blocks show the same sizes (the contain the same read data):
+    is very small at just 38 bytes of decompressed data), while the next
+    example does (a larger block of 103 bytes). Notice that the rest of
+    the blocks show the same sizes (they contain the same read data):
 
     >>> handle = open("SamBam/ex1_header.bam", "rb")
     >>> for values in BgzfBlocks(handle):
@@ -357,7 +364,7 @@ def BgzfBlocks(handle):
 
 
 def _load_bgzf_block(handle, text_mode=False):
-    #Change indentation later...
+    """Internal function to load the next BGZF function (PRIVATE)."""
     magic = handle.read(4)
     if not magic:
         #End of file
