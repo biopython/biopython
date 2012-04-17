@@ -12,6 +12,13 @@ The latest news is at the top of this file.
 
 (In progress, not released yet) Biopython 1.60
 
+New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
+Zip Format), a variant of GZIP with efficient random access, most commonly
+used as part of the BAM file format. This uses Python's zlib library
+internally, and provides a simple interface like Python's gzip library.
+Using this the Bio.SeqIO indexing functions now support BGZF compressed
+sequence files.
+
 The GenBank/EMBL parser will now give a warning on unrecognised feature
 locations and continue parsing (leaving the feature's location as None).
 Previously it would abort with an exception, which was often unhelpful.
