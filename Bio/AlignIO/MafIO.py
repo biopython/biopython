@@ -373,7 +373,11 @@ class MafIndex():
         hits = {}
         
         for exonstart, exonend in zip(starts, ends):
-            possible_bins = ", ".join(map(str, self._region2bin(exonstart, exonend)))
+            try:
+                possible_bins = ", ".join(map(str, self._region2bin(exonstart, exonend)))
+            except TypeError:
+                raise TypeError("Exon coordinates must be integers "
+                                 "(start=%s, end=%s)" % (exonstart, exonend))
             
             result = con.execute("SELECT * FROM offset_data WHERE bin IN (%s) "
                      "AND (end BETWEEN %s AND %s OR %s BETWEEN start AND end) "

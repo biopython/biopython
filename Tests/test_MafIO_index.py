@@ -261,6 +261,14 @@ if sqlite3:
             self.idx = MafIndex("MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEqual(len(self.idx), 48)
 
+        def test_invalid_type_1(self):
+            search = self.idx.search((500, 1000), ("string", 1500))
+            self.assertRaises(TypeError, search.next)
+
+        def test_invalid_type_2(self):
+            search = self.idx.search((500, 1000), (750, 1500.25))
+            self.assertRaises(TypeError, search.next)
+
         def test_invalid_exon_count(self):
             search = self.idx.search((0, 1000, 2000), (500, 1500))
             self.assertRaises(ValueError, search.next)
