@@ -857,7 +857,6 @@ class Writer(object):
     desc = _handle_simple(_ns('desc'))
     description = _handle_simple(_ns('description'))
     location = _handle_simple(_ns('location'))
-    mol_seq = _handle_simple(_ns('mol_seq'))
     name = _handle_simple(_ns('name'))
     rank = _handle_simple(_ns('rank'))
     scientific_name = _handle_simple(_ns('scientific_name'))
