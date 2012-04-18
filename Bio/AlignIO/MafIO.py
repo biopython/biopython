@@ -18,6 +18,8 @@ from Bio.Align import MultipleSeqAlignment
 from Interfaces import SequentialAlignmentWriter
 import shlex
 
+MAFINDEX_VERSION = 1
+
 class MafWriter(SequentialAlignmentWriter):
     """Accepts a MultipleSeqAlignment object, writes a MAF file"""
     
@@ -210,7 +212,7 @@ class MafIndex():
 
         try:
             idx_version = int(self._con.execute("SELECT value FROM meta_data WHERE key = 'version'").fetchone()[0])   
-            if idx_version != 1:
+            if idx_version != MAFINDEX_VERSION:
                 raise ValueError("Index version (%s) incompatible with this version of MafIndex" % (idx_version,))
 
             filename = self._con.execute("SELECT value FROM meta_data WHERE key = 'filename'").fetchone()[0]
