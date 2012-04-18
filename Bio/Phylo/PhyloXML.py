@@ -52,15 +52,21 @@ class Phyloxml(PhyloElement):
     elements from other namespaces.
 
     :Parameters:
-        attributes
+        attributes : dict
             (XML namespace definitions)
-        phylogenies
-            list of phylogenetic trees
-        other
-            list of arbitrary non-phyloXML elements, if any
+        phylogenies : list
+            The phylogenetic trees
+        other : list
+            Arbitrary non-phyloXML elements, if any
     """
     def __init__(self, attributes, phylogenies=None, other=None):
-        self.attributes = attributes
+        self.attributes = {
+                "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance", # standard
+                "xmlns": "http://www.phyloxml.org",
+                "xsi:schemaLocation": "http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd",
+                }
+        if attributes:
+            self.attributes.update(attributes)
         self.phylogenies = phylogenies or []
         self.other = other or []
 
