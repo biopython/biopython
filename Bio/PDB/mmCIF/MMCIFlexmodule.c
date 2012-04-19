@@ -26,6 +26,11 @@ PyObject *MMCIFlex__init__(PyObject *self, PyObject *args) {
 
     fp = fopen(filename, "r");  
 
+    if (fp == NULL) {
+        PyErr_SetString(PyExc_IOError, "File could not be opened");
+        return NULL;
+    }
+
     mmcif_set_file(fp);
 
     Py_INCREF(Py_None);
@@ -37,7 +42,9 @@ PyObject *MMCIFlex__del__(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "O", &classinst))
         return NULL;
 
-    fclose(fp);
+    if (fp != NULL) {
+        fclose(fp);
+    }
 
     Py_INCREF(Py_None);
     return Py_None;
