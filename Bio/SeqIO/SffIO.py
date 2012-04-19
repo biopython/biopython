@@ -55,6 +55,8 @@ tools (and the 3rd party tool sff_extract) for SFF to FASTA.
 The annotations dictionary also contains any adapter clip positions
 (usually zero), and information about the flows. e.g.
 
+    >>> len(record.annotations)
+    11
     >>> print record.annotations["flow_key"]
     TCAG
     >>> print record.annotations["flow_values"][:10], "..."
@@ -114,8 +116,14 @@ example above:
     AATCATCCAC ...
     >>> print record.letter_annotations["phred_quality"][:10], "..."
     [26, 15, 12, 21, 28, 21, 36, 28, 27, 27] ...
-    >>> print record.annotations
-    {'region': 2, 'coords': (2434, 1658), 'time': [2008, 1, 9, 16, 16, 0]}
+    >>> len(record.annotations)
+    3
+    >>> print record.annotations["region"]
+    2
+    >>> print record.annotations["coords"]
+    (2434, 1658)
+    >>> print record.annotations["time"]
+    [2008, 1, 9, 16, 16, 0]
 
 You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
