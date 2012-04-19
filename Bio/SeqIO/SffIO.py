@@ -89,7 +89,7 @@ will contain nonsense information.
 
 As a convenience method, you can read the file with SeqIO format name "sff-trim"
 instead of "sff" to get just the trimmed sequences (without any annotation
-except for the PHRED quality scores):
+except for the PHRED quality scores and anything encoded in the read names):
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
@@ -115,7 +115,7 @@ example above:
     >>> print record.letter_annotations["phred_quality"][:10], "..."
     [26, 15, 12, 21, 28, 21, 36, 28, 27, 27] ...
     >>> print record.annotations
-    {}
+    {'region': 2, 'coords': (2434, 1658), 'time': [2008, 1, 9, 16, 16, 0]}
 
 You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
