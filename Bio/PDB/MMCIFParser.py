@@ -32,9 +32,9 @@ class MMCIFParser(object):
             element_list = None
         seq_id_list=mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list=mmcif_dict["_atom_site.label_asym_id"]
-        x_list=map(float, mmcif_dict["_atom_site.Cartn_x"])
-        y_list=map(float, mmcif_dict["_atom_site.Cartn_y"])
-        z_list=map(float, mmcif_dict["_atom_site.Cartn_z"])
+        x_list=[float(x) for x in mmcif_dict["_atom_site.Cartn_x"]]
+        y_list=[float(y) for y in mmcif_dict["_atom_site.Cartn_y"]]
+        z_list=[float(z) for z in mmcif_dict["_atom_site.Cartn_z"]]
         alt_list=mmcif_dict["_atom_site.label_alt_id"]
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
@@ -122,7 +122,7 @@ class MMCIFParser(object):
             if aniso_flag==1:
                 u=(aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
-                mapped_anisou=map(float, u)
+                mapped_anisou=[float(anisou) for anisou in u ]
                 anisou_array=numpy.array(mapped_anisou, 'f')
                 structure_builder.set_anisou(anisou_array)
         # Now try to set the cell
