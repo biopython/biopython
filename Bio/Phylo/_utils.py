@@ -383,7 +383,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         # Add label above the branch (optional)
         conf_label = format_branch_label(clade)
         if conf_label:
-            axes.text(x_start, y_here, ' %s' % conf_label, fontsize='small')
+            axes.text(0.5*(x_start + x_here), y_here, conf_label,
+                    fontsize='small', horizontalalignment='center')
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
