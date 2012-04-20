@@ -133,15 +133,10 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     G = to_networkx(tree)
     Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
     try:
-        posi = networkx.pygraphviz_layout(Gi, prog, args=args)
+        posi = networkx.graphviz_layout(Gi, prog, args=args)
     except ImportError:
-        try:
-            posi = networkx.pydot_layout(Gi, prog)
-        except ImportError:
-            raise MissingPythonDependencyError(
-                    "Install PyGraphviz or Pydot if you want to use "
-                    "draw_graphviz.")
-    posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
+        raise MissingPythonDependencyError(
+                "Install PyGraphviz or pydot if you want to use draw_graphviz.")
 
     def get_label_mapping(G, selection):
         for node in G.nodes():
@@ -166,6 +161,8 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         kwargs['width'] = [isinstance(e[2], dict) and
                            e[2].get('width', 1.0) or 1.0
                            for e in G.edges(data=True)]
+
+    posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
