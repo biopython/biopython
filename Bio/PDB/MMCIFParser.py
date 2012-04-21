@@ -34,6 +34,7 @@ class MMCIFParser(object):
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
         fieldname_list=mmcif_dict["_atom_site.group_PDB"]
+        model_list = mmcif_dict["_atom_site.pdbx_PDB_model_num"]
         try:
             aniso_u11=mmcif_dict["_atom_site.aniso_U[1][1]"]
             aniso_u12=mmcif_dict["_atom_site.aniso_U[1][2]"]
@@ -54,11 +55,12 @@ class MMCIFParser(object):
         # Now loop over atoms and build the structure
         current_chain_id=None
         current_residue_id=None
-        current_model_id=0
+        #current_model_id=0
         structure_builder=self._structure_builder
         structure_builder.init_structure(structure_id)
-        structure_builder.init_model(current_model_id)
+        #structure_builder.init_model(current_model_id)
         structure_builder.init_seg(" ")
+        current_model_id = None
         for i in xrange(0, len(atom_id_list)):
             x=x_list[i]
             y=y_list[i]
@@ -77,6 +79,10 @@ class MMCIFParser(object):
                 hetatm_flag="H"
             else:
                 hetatm_flag=" "
+            model_id = model_list[i]
+            if current_model_id != model_id:
+                current_model_id = model_id
+                structure_builder.init_model(current_model_id)
             if current_chain_id!=chainid:
                 current_chain_id=chainid
                 structure_builder.init_chain(current_chain_id)
@@ -132,6 +138,9 @@ class MMCIFParser(object):
 if __name__=="__main__":
     import sys
 
+    if len(sys.argv) != 2:
+        print "Usage: python MMCIFparser.py filename"
+        raise SystemExit
     filename=sys.argv[1]
 
     p=MMCIFParser()
