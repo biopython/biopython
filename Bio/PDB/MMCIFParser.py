@@ -7,6 +7,10 @@
 
 from string import ascii_letters
 
+import platform
+if platform.python_implementation() == 'PyPy':
+    import numpypy
+
 import numpy
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict

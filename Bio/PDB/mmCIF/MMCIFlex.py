@@ -13,7 +13,7 @@ import ply.lex as lex  # lexer
 from ply.lex import TOKEN  # to assign complex docstrings to tokens
 
 
-class CIFlex:
+class MMCIFlex:
     '''
     Build PLY lexer for CIF/mmCIF data format and tokenize input.
 
@@ -247,7 +247,7 @@ class CIFlex:
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         filename = sys.argv[1]
-        m = CIFlex(filename, optimize=1)
+        m = MMCIFlex(filename, optimize=1)
         m._test()
 
 # vim:sw=4:ts=4:expandtab

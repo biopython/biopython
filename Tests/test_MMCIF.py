@@ -14,6 +14,9 @@ import tempfile
 import unittest
 import warnings
 
+import platform
+if platform.python_implementation() == "PyPy":
+    import numpypy
 try:
     import numpy
     from numpy import dot #Missing on PyPy's micronumpy
