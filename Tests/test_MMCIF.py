@@ -47,7 +47,7 @@ class ParseReal(unittest.TestCase):
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             #==========================================================
             #First try allowing non-standard amino acids,
-            polypeptides = ppbuild.build_peptides(structure[0], False)
+            polypeptides = ppbuild.build_peptides(structure['1'], False)
             self.assertEqual(len(polypeptides), 1)
             pp = polypeptides[0]
             # Check the start and end positions
@@ -64,7 +64,7 @@ class ParseReal(unittest.TestCase):
             #Now try strict version with only standard amino acids
             #Should ignore MSE 151 at start, and then break the chain
             #at MSE 185, and MSE 214,215
-            polypeptides = ppbuild.build_peptides(structure[0], True)
+            polypeptides = ppbuild.build_peptides(structure['1'], True)
             self.assertEqual(len(polypeptides), 3)
             #First fragment
             pp = polypeptides[0]
@@ -90,6 +90,12 @@ class ParseReal(unittest.TestCase):
             self.assertTrue(isinstance(s, Seq))
             self.assertEqual(s.alphabet, generic_protein)
             self.assertEqual("TACQG", str(s))
+
+    def testModels(self):
+        """Test file with multiple models"""
+        parser = MMCIFParser()
+        structure = parser.get_structure("example", "PDB/2BEG.cif")
+        self.assertEqual(len(structure), 10)
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
