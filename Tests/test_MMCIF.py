@@ -94,8 +94,38 @@ class ParseReal(unittest.TestCase):
     def testModels(self):
         """Test file with multiple models"""
         parser = MMCIFParser()
-        structure = parser.get_structure("example", "PDB/2BEG.cif")
-        self.assertEqual(len(structure), 10)
+        structure = parser.get_structure("example", "PDB/1LCD.cif")
+        self.assertEqual(len(structure), 3)
+        for ppbuild in [PPBuilder(), CaPPBuilder()]:
+                #==========================================================
+                #First try allowing non-standard amino acids,
+                polypeptides = ppbuild.build_peptides(structure['1'], False)
+                self.assertEqual(len(polypeptides), 1)
+                pp = polypeptides[0]
+                # Check the start and end positions
+                self.assertEqual(pp[0].get_id()[1], 1)
+                self.assertEqual(pp[-1].get_id()[1], 51)
+                # Check the sequence
+                s = pp.get_sequence()
+                self.assertTrue(isinstance(s, Seq))
+                self.assertEqual(s.alphabet, generic_protein)
+                #Here non-standard MSE are shown as M
+                self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", 
+                                 str(s))
+                #==========================================================
+                #Now try strict version with only standard amino acids
+                polypeptides = ppbuild.build_peptides(structure['1'], True)
+                self.assertEqual(len(polypeptides), 1)
+                pp = polypeptides[0]
+                # Check the start and end positions
+                self.assertEqual(pp[0].get_id()[1], 1)
+                self.assertEqual(pp[-1].get_id()[1], 51)
+                # Check the sequence
+                s = pp.get_sequence()
+                self.assertTrue(isinstance(s, Seq))
+                self.assertEqual(s.alphabet, generic_protein)
+                self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
+                                 str(s))
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
