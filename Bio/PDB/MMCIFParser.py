@@ -55,10 +55,8 @@ class MMCIFParser(object):
         # Now loop over atoms and build the structure
         current_chain_id=None
         current_residue_id=None
-        #current_model_id=0
         structure_builder=self._structure_builder
         structure_builder.init_structure(structure_id)
-        #structure_builder.init_model(current_model_id)
         structure_builder.init_seg(" ")
         current_model_id = -1
         for i in xrange(0, len(atom_id_list)):
