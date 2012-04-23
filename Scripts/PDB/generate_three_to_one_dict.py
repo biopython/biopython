@@ -14,6 +14,7 @@ import gzip
 import inspect
 import os
 import urllib
+import warnings
 
 url = "ftp://ftp.wwpdb.org/pub/pdb/data/monomers/components.cif.gz"
 
@@ -34,8 +35,8 @@ with open(gzname, 'wb') as gzh:
 
 # size as of 13 April 2012
 if os.path.getsize(gzname) < 29944258:
-    print "Downloaded file is too small."
-    raise SystemExit
+    warnings.warn("ERROR: Downloaded file is too small", 
+                  RuntimeWarning)
 
 fh = gzip.open(gzname, 'rb')
 
