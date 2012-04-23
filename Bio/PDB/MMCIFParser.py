@@ -34,7 +34,7 @@ class MMCIFParser(object):
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
         fieldname_list=mmcif_dict["_atom_site.group_PDB"]
-        model_list = mmcif_dict["_atom_site.pdbx_PDB_model_num"]
+        model_list = [int(n) for n in mmcif_dict["_atom_site.pdbx_PDB_model_num"]]
         try:
             aniso_u11=mmcif_dict["_atom_site.aniso_U[1][1]"]
             aniso_u12=mmcif_dict["_atom_site.aniso_U[1][2]"]
