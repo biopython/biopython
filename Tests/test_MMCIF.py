@@ -46,6 +46,8 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             #==========================================================
+            # Check that serial_num (model column) is stored properly
+            self.assertEqual(structure[0].serial_num, 1)
             #First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
             self.assertEqual(len(polypeptides), 1)
@@ -98,6 +100,10 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 3)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
                 #==========================================================
+                # Check that serial_num (model column) is stored properly
+                self.assertEqual(structure[0].serial_num, 1)
+                self.assertEqual(structure[1].serial_num, 2)
+                self.assertEqual(structure[2].serial_num, 3)
                 #First try allowing non-standard amino acids,
                 polypeptides = ppbuild.build_peptides(structure[0], False)
                 self.assertEqual(len(polypeptides), 1)
