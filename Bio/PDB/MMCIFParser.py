@@ -6,12 +6,13 @@
 """mmCIF parser (partly implemented in C)."""
 
 from string import ascii_letters
-import warnings
 
 import numpy
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.PDBExceptions import \
+        PDBConstructionException, PDBConstructionWarning
 
 
 class MMCIFParser(object):
@@ -45,7 +46,7 @@ class MMCIFParser(object):
             serial_list = None
         except ValueError:
             # Invalid model number (malformed file)
-            warnings.warn("ERROR: Invalid model number", RuntimeError)
+            raise PDBConstructionException("Invalid model number")
         try:
             aniso_u11=mmcif_dict["_atom_site.aniso_U[1][1]"]
             aniso_u12=mmcif_dict["_atom_site.aniso_U[1][2]"]
