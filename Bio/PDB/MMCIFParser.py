@@ -6,6 +6,7 @@
 """mmCIF parser (partly implemented in C)."""
 
 from string import ascii_letters
+import warnings
 
 import numpy
 
@@ -24,7 +25,10 @@ class MMCIFParser(object):
         mmcif_dict=self._mmcif_dict
         atom_id_list=mmcif_dict["_atom_site.label_atom_id"]
         residue_id_list=mmcif_dict["_atom_site.label_comp_id"]
-        element_list = mmcif_dict["_atom_site.type_symbol"]
+        try:
+            element_list = mmcif_dict["_atom_site.type_symbol"]
+        except KeyError:
+            element_list = None
         seq_id_list=mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list=mmcif_dict["_atom_site.label_asym_id"]
         x_list=map(float, mmcif_dict["_atom_site.Cartn_x"])
@@ -34,7 +38,14 @@ class MMCIFParser(object):
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
         fieldname_list=mmcif_dict["_atom_site.group_PDB"]
-        model_list = [int(n) for n in mmcif_dict["_atom_site.pdbx_PDB_model_num"]]
+        try:
+            serial_list = [int(n) for n in mmcif_dict["_atom_site.pdbx_PDB_model_num"]]
+        except KeyError:
+            # No model number column
+            serial_list = None
+        except ValueError:
+            # Invalid model number (malformed file)
+            warnings.warn("ERROR: Invalid model number", RuntimeError)
         try:
             aniso_u11=mmcif_dict["_atom_site.aniso_U[1][1]"]
             aniso_u12=mmcif_dict["_atom_site.aniso_U[1][2]"]
@@ -58,7 +69,10 @@ class MMCIFParser(object):
         structure_builder=self._structure_builder
         structure_builder.init_structure(structure_id)
         structure_builder.init_seg(" ")
-        current_model_id = -1
+        # Historically, Biopython PDB parser uses model_id to mean array index
+        # so serial_id means the Model ID specified in the file
+        current_model_id = 0
+        current_serial_id = 0 
         for i in xrange(0, len(atom_id_list)):
             x=x_list[i]
             y=y_list[i]
@@ -77,9 +91,16 @@ class MMCIFParser(object):
                 hetatm_flag="H"
             else:
                 hetatm_flag=" "
-            model_id = model_list[i]
-            if current_model_id != model_id:
-                current_model_id = model_id
+            if serial_list is not None:
+                # model column exists; use it
+                serial_id = serial_list[i]
+                if current_serial_id != serial_id:
+                    # if serial changes, update it and start new model
+                    current_serial_id = serial_id
+                    structure_builder.init_model(current_model_id, current_serial_id)
+                    current_model_id += 1
+            else:
+                # no explicit model column; initialize single model
                 structure_builder.init_model(current_model_id)
             if current_chain_id!=chainid:
                 current_chain_id=chainid
@@ -94,7 +115,7 @@ class MMCIFParser(object):
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, 
                     icode)
             coord=numpy.array((x, y, z), 'f')  
-            element = element_list[i]
+            element = element_list[i] if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
                 name, element=element)   
             if aniso_flag==1:
