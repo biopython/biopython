@@ -46,8 +46,10 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 1)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             #==========================================================
+            # Check that serial_num (model column) is stored properly
+            self.assertEqual(structure[0].serial_num, 1)
             #First try allowing non-standard amino acids,
-            polypeptides = ppbuild.build_peptides(structure['1'], False)
+            polypeptides = ppbuild.build_peptides(structure[0], False)
             self.assertEqual(len(polypeptides), 1)
             pp = polypeptides[0]
             # Check the start and end positions
@@ -64,7 +66,7 @@ class ParseReal(unittest.TestCase):
             #Now try strict version with only standard amino acids
             #Should ignore MSE 151 at start, and then break the chain
             #at MSE 185, and MSE 214,215
-            polypeptides = ppbuild.build_peptides(structure['1'], True)
+            polypeptides = ppbuild.build_peptides(structure[0], True)
             self.assertEqual(len(polypeptides), 3)
             #First fragment
             pp = polypeptides[0]
@@ -98,8 +100,12 @@ class ParseReal(unittest.TestCase):
         self.assertEqual(len(structure), 3)
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
                 #==========================================================
+                # Check that serial_num (model column) is stored properly
+                self.assertEqual(structure[0].serial_num, 1)
+                self.assertEqual(structure[1].serial_num, 2)
+                self.assertEqual(structure[2].serial_num, 3)
                 #First try allowing non-standard amino acids,
-                polypeptides = ppbuild.build_peptides(structure['1'], False)
+                polypeptides = ppbuild.build_peptides(structure[0], False)
                 self.assertEqual(len(polypeptides), 1)
                 pp = polypeptides[0]
                 # Check the start and end positions
@@ -114,7 +120,7 @@ class ParseReal(unittest.TestCase):
                                  str(s))
                 #==========================================================
                 #Now try strict version with only standard amino acids
-                polypeptides = ppbuild.build_peptides(structure['1'], True)
+                polypeptides = ppbuild.build_peptides(structure[0], True)
                 self.assertEqual(len(polypeptides), 1)
                 pp = polypeptides[0]
                 # Check the start and end positions
