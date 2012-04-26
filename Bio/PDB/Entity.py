@@ -41,6 +41,10 @@ class Entity(object):
         "Remove a child."
         return self.detach_child(id)
 
+    def __contains__(self, id):
+        "True if there is a child element with the given id."
+        return (id in self.child_dict)
+
     def __iter__(self):
         "Iterate over children."
         for child in self.child_list:
@@ -212,6 +216,10 @@ class DisorderedEntityWrapper(object):
     def __setitem__(self, id, child):
         "Add a child, associated with a certain id."
         self.child_dict[id]=child
+
+    def __contains__(self, id):
+        "True if the child has the given id."
+        return (id in self.selected_child)
 
     def __iter__(self):
         "Return the number of children."
