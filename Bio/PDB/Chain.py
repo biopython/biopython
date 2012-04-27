@@ -120,6 +120,10 @@ class Chain(Entity):
 
     # Public
 
+    def get_residues(self):
+        for r in self:
+            yield r
+
     def get_atoms(self):
         for r in self:
             for a in r:
