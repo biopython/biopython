@@ -178,7 +178,7 @@ class Entity(object):
 
         shallow.detach_parent()
 
-        for child in self.child_list.items():
+        for child in self.child_list:
             shallow.add(child.copy())
         return shallow
 
