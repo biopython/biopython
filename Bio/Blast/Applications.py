@@ -563,6 +563,9 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-searchsp", "searchsp"],
                     "Effective length of the search space (integer)",
                     equate=False),
+            _Option(["-max_hsps_per_subject", "max_hsps_per_subject"],
+                    "Override maximum number of HSPs per subject to save for ungapped searches (integer)",
+                    equate=False),
             #Extension options
             _Option(["-xdrop_ungap", "xdrop_ungap"],
                     "X-dropoff value (in bits) for ungapped extensions. Float.",
