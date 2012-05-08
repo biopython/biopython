@@ -228,7 +228,8 @@ class _Scanner:
             # Or, on BLAST 2.2.22+ there is no blank link - need to spot
             # the "... Score     E" line instead.
             read_and_call(uhandle, consumer.query_info, start='Query=')
-            #read_and_call_until(uhandle, consumer.query_info, blank=1)
+            # BLAST 2.2.25+ has a blank line before Length=
+            read_and_call_until(uhandle, consumer.query_info, start='Length=')
             while True:
                 line = uhandle.peekline()
                 if not line.strip() : break
@@ -1176,7 +1177,7 @@ class _HSPConsumer:
         
     def strand(self, line):
         self._hsp.strand = _re_search(
-            r"Strand = (\w+) / (\w+)", line,
+            r"Strand\s?=\s?(\w+)\s?/\s?(\w+)", line,
             "I could not find the strand in line\n%s" % line)
 
     def frame(self, line):
@@ -1185,7 +1186,7 @@ class _HSPConsumer:
         # Frame = +2 / +2
         if line.find('/') != -1:
             self._hsp.frame = _re_search(
-                r"Frame = ([-+][123]) / ([-+][123])", line,
+                r"Frame\s?=\s?([-+][123])\s?/\s?([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
         else:
             self._hsp.frame = _re_search(

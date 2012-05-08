@@ -1,0 +1,320 @@
+BLASTX 2.2.26+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: NCBI Protein Reference Sequences
+           11,879,989 sequences; 4,140,237,112 total letters
+
+
+
+Query= hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+
+repeatMasking=none
+
+Length=485
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+ref|XP_003278367.1|  PREDICTED: UPF0764 protein C16orf89-like [No...   121    2e-32
+ref|NP_001243358.1|  PDZ and LIM domain protein 5 isoform i [Homo...   114    1e-29
+ref|XP_002812869.1|  PREDICTED: histone demethylase UTY-like [Pon...  98.2    1e-23
+ref|XP_003309509.1|  PREDICTED: histone demethylase UTY-like [Pan...  97.1    3e-23
+ref|NP_001009002.1|  histone demethylase UTY [Pan troglodytes]         104    3e-23
+ref|NP_872601.1|  histone demethylase UTY isoform 1 [Homo sapiens]     104    4e-23
+ref|XP_001170404.1|  PREDICTED: UPF0764 protein C16orf89-like iso...   100    1e-22
+ref|XP_003269292.1|  PREDICTED: UPF0764 protein C16orf89-like iso...  99.0    3e-22
+ref|XP_003403869.1|  PREDICTED: hypothetical protein LOC548324 [H...  95.1    1e-21
+ref|NP_689672.4|  UPF0764 protein C16orf89 isoform 1 precursor [H...  94.7    1e-20
+ref|NP_001158011.1|  disrupted in schizophrenia 1 protein isoform...  89.7    3e-18
+ref|XP_003119509.1|  PREDICTED: hypothetical protein LOC100507445...  82.4    1e-17
+ref|XP_003308863.1|  PREDICTED: disrupted in schizophrenia 1 prot...  87.4    2e-17
+ref|ZP_02871977.1|  hypothetical protein cdivTM_17066 [candidate ...  72.8    6e-17
+ref|XP_003312100.1|  PREDICTED: putative calcium-sensing receptor...  69.7    3e-15
+ref|XP_003119043.1|  PREDICTED: hypothetical protein LOC100506191...  63.2    3e-14
+ref|ZP_02873125.1|  hypothetical protein cdivTM_22884 [candidate ...  72.0    9e-14
+ref|XP_003254420.1|  PREDICTED: elongator complex protein 4 isofo...  75.9    1e-13
+ref|XP_002801523.1|  PREDICTED: hypothetical protein LOC100424605...  71.6    2e-13
+ref|NP_001243297.1|  uncharacterized protein LOC100144595 [Homo s...  61.6    3e-13
+
+
+>ref|XP_003278367.1| PREDICTED: UPF0764 protein C16orf89-like [Nomascus leucogenys]
+Length=132
+
+ Score =  121 bits (304),  Expect = 2e-32
+ Identities = 69/95 (73%), Positives = 74/95 (78%), Gaps = 0/95 (0%)
+ Frame = -3
+
+Query  300  LRRSFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGF  121
+            LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF
+Sbjct  25   LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGF  84
+
+Query  120  YHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP  16
+             HVGQAGLE   SG+ P   SQS GI GVSH AQP
+Sbjct  85   LHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP  119
+
+
+ Score = 51.6 bits (122),  Expect = 2e-06
+ Identities = 34/72 (47%), Positives = 41/72 (57%), Gaps = 5/72 (7%)
+ Frame = -3
+
+Query  459  VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSFAL  280
+            V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  
+Sbjct  32   VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLH  86
+
+Query  279  VAQAGVQWLDLG  244
+            V QAG++ +  G
+Sbjct  87   VGQAGLELVTSG  98
+
+
+>ref|NP_001243358.1| PDZ and LIM domain protein 5 isoform i [Homo sapiens]
+Length=136
+
+ Score =  114 bits (286),  Expect = 1e-29
+ Identities = 63/88 (72%), Positives = 69/88 (78%), Gaps = 0/88 (0%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAG  100
+            ++ AGVQW +LG PQPP P FK FSCLS PSSWDYRH+PP L NFVFLVET F +VGQAG
+Sbjct  30   ISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPPRLANFVFLVETKFPYVGQAG  89
+
+Query  99   LEPPISGNLPAWASQSVGITGVSHHAQP  16
+            LE P SG+LP  ASQS  ITGVSH A P
+Sbjct  90   LELPTSGDLPTSASQSAKITGVSHRAWP  117
+
+
+ Score = 52.4 bits (124),  Expect = 1e-06
+ Identities = 33/69 (48%), Positives = 41/69 (59%), Gaps = 5/69 (7%)
+ Frame = -3
+
+Query  465  VSVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSF  286
+            +++  A VQ  +L S QPP+PEFK FS LSL SSWD R  PP  AN     F F +   F
+Sbjct  28   LTISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPPRLAN-----FVFLVETKF  82
+
+Query  285  ALVAQAGVQ  259
+              V QAG++
+Sbjct  83   PYVGQAGLE  91
+
+
+>ref|XP_002812869.1| PREDICTED: histone demethylase UTY-like [Pongo abelii]
+Length=110
+
+ Score = 98.2 bits (243),  Expect = 1e-23
+ Identities = 57/91 (63%), Positives = 64/91 (70%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAG  100
+            V  AGVQW +L   QPPP GFK FS LS  SSWD R  PP L+ FVFL+ETGF+HVGQAG
+Sbjct  19   VPHAGVQWHNLSSLQPPPSGFKPFSYLSLLSSWDQRRPPPRLVIFVFLIETGFHHVGQAG  78
+
+Query  99   LEPPISGNLPAWASQSVGITGVSHHAQPLCE  7
+            L+    G+ PA ASQS GI GVSH A P C+
+Sbjct  79   LKLLTLGDPPASASQSAGIRGVSHCAWPECQ  109
+
+
+>ref|XP_003309509.1| PREDICTED: histone demethylase UTY-like [Pan troglodytes]
+Length=101
+
+ Score = 97.1 bits (240),  Expect = 3e-23
+ Identities = 56/91 (62%), Positives = 62/91 (68%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAG  100
+            V  AGVQW +L   QPPP  FK FS LS  SSWD R  PPCL+ FVFL+ETGF HVGQAG
+Sbjct  10   VPHAGVQWHNLSSLQPPPSRFKPFSYLSLLSSWDQRRPPPCLVTFVFLIETGFRHVGQAG  69
+
+Query  99   LEPPISGNLPAWASQSVGITGVSHHAQPLCE  7
+            L+   SG+  A ASQS GI GVSH   P C+
+Sbjct  70   LKLLTSGDPSASASQSAGIRGVSHCTWPECQ  100
+
+
+ Score = 55.5 bits (132),  Expect = 5e-08
+ Identities = 37/73 (51%), Positives = 42/73 (58%), Gaps = 5/73 (7%)
+ Frame = -3
+
+Query  462  SVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSFA  283
+            SV  A VQ H+LSSLQPP   FK FS+LSL SSWD R PPP         F F +   F 
+Sbjct  9    SVPHAGVQWHNLSSLQPPPSRFKPFSYLSLLSSWDQRRPPP-----CLVTFVFLIETGFR  63
+
+Query  282  LVAQAGVQWLDLG  244
+             V QAG++ L  G
+Sbjct  64   HVGQAGLKLLTSG  76
+
+
+>ref|NP_001009002.1| histone demethylase UTY [Pan troglodytes]
+Length=1079
+
+ Score =  104 bits (260),  Expect = 3e-23
+ Identities = 59/91 (65%), Positives = 66/91 (73%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  291   SFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHV  112
+             SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HV
+Sbjct  989   SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHV  1048
+
+Query  111   GQAGLEPPISGNLPAWASQSVGITGVSHHAQ  19
+             GQA LE   SG L A ASQS GITGVSHHA+
+Sbjct  1049  GQAHLELLTSGGLLASASQSAGITGVSHHAR  1079
+
+
+ Score = 47.8 bits (112),  Expect = 3e-04
+ Identities = 25/41 (61%), Positives = 28/41 (68%), Gaps = 0/41 (0%)
+ Frame = -3
+
+Query  450   ARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPAN  328
+             A +Q  DLSSLQPP P FK FSHLSL +SW+ R  P  P N
+Sbjct  996   AGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTN  1036
+
+
+>ref|NP_872601.1| histone demethylase UTY isoform 1 [Homo sapiens]
+Length=1079
+
+ Score =  104 bits (259),  Expect = 4e-23
+ Identities = 59/91 (65%), Positives = 66/91 (73%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  291   SFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHV  112
+             SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HV
+Sbjct  989   SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHV  1048
+
+Query  111   GQAGLEPPISGNLPAWASQSVGITGVSHHAQ  19
+             GQA LE   SG L A ASQS GITGVSHHA+
+Sbjct  1049  GQACLELLTSGGLLASASQSAGITGVSHHAR  1079
+
+
+ Score = 47.8 bits (112),  Expect = 3e-04
+ Identities = 25/41 (61%), Positives = 28/41 (68%), Gaps = 0/41 (0%)
+ Frame = -3
+
+Query  450   ARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPAN  328
+             A +Q  DLSSLQPP P FK FSHLSL +SW+ R  P  P N
+Sbjct  996   AGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTN  1036
+
+
+>ref|XP_001170404.1| PREDICTED: UPF0764 protein C16orf89-like isoform 3 [Pan troglodytes]
+Length=440
+
+ Score =  100 bits (249),  Expect = 1e-22
+ Identities = 56/80 (70%), Positives = 61/80 (76%), Gaps = 1/80 (1%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINF-VFLVETGFYHVGQA  103
+            VAQAGVQW DLG  QP PPGFK FSCL  PSSWDYR MPP L+NF +FLVETGF+HV  A
+Sbjct  361  VAQAGVQWRDLGSLQPLPPGFKQFSCLILPSSWDYRSMPPYLVNFYIFLVETGFHHVAHA  420
+
+Query  102  GLEPPISGNLPAWASQSVGI  43
+            GLE  IS + P   SQSVG+
+Sbjct  421  GLELLISSDPPTSGSQSVGL  440
+
+
+ Score = 47.8 bits (112),  Expect = 2e-04
+ Identities = 34/70 (49%), Positives = 39/70 (56%), Gaps = 4/70 (6%)
+ Frame = -3
+
+Query  462  SVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSFA  283
+            SV  A VQ  DL SLQP  P FK FS L L SSWD R  PP+  N    F+ F +   F 
+Sbjct  360  SVAQAGVQWRDLGSLQPLPPGFKQFSCLILPSSWDYRSMPPYLVN----FYIFLVETGFH  415
+
+Query  282  LVAQAGVQWL  253
+             VA AG++ L
+Sbjct  416  HVAHAGLELL  425
+
+
+>ref|XP_003269292.1| PREDICTED: UPF0764 protein C16orf89-like isoform 2 [Nomascus 
+leucogenys]
+Length=402
+
+ Score = 99.0 bits (245),  Expect = 3e-22
+ Identities = 56/80 (70%), Positives = 60/80 (75%), Gaps = 1/80 (1%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINF-VFLVETGFYHVGQA  103
+            VAQAGVQW DLG  QP PPGFK F CL  PSSWDYR MPP L NF +FLVETGF+HV  A
+Sbjct  323  VAQAGVQWHDLGSLQPLPPGFKRFFCLILPSSWDYRSMPPYLANFYIFLVETGFHHVAHA  382
+
+Query  102  GLEPPISGNLPAWASQSVGI  43
+            GLE  IS +LP   SQSVG+
+Sbjct  383  GLELLISSDLPTSGSQSVGL  402
+
+
+ Score = 50.1 bits (118),  Expect = 4e-05
+ Identities = 35/70 (50%), Positives = 40/70 (57%), Gaps = 4/70 (6%)
+ Frame = -3
+
+Query  462  SVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSFA  283
+            SV  A VQ HDL SLQP  P FK F  L L SSWD R  PP+ AN    F+ F +   F 
+Sbjct  322  SVAQAGVQWHDLGSLQPLPPGFKRFFCLILPSSWDYRSMPPYLAN----FYIFLVETGFH  377
+
+Query  282  LVAQAGVQWL  253
+             VA AG++ L
+Sbjct  378  HVAHAGLELL  387
+
+
+>ref|XP_003403869.1| PREDICTED: hypothetical protein LOC548324 [Homo sapiens]
+ ref|XP_003403493.1| PREDICTED: hypothetical protein LOC548324 [Homo sapiens]
+Length=195
+
+ Score = 95.1 bits (235),  Expect = 1e-21
+ Identities = 55/82 (67%), Positives = 57/82 (70%), Gaps = 1/82 (1%)
+ Frame = -3
+
+Query  261  QWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPIS  82
+            QW DLG  QPP P FK FSCLS PSSWDYR  P    NF  LVE GF+HVGQA LE   S
+Sbjct  107  QWCDLGSLQPPSPRFKGFSCLSLPSSWDYRRAPSPA-NFCILVEMGFHHVGQADLELLTS  165
+
+Query  81   GNLPAWASQSVGITGVSHHAQP  16
+             +LP  ASQS GITGVSHHA P
+Sbjct  166  ADLPTSASQSAGITGVSHHAWP  187
+
+
+ Score = 46.6 bits (109),  Expect = 3e-04
+ Identities = 28/51 (55%), Positives = 33/51 (65%), Gaps = 3/51 (6%)
+ Frame = -3
+
+Query  480  FF*YRVSVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPAN  328
+            FF + +++ P   Q  DL SLQPP+P FK FS LSL SSWD R   P PAN
+Sbjct  96   FFRWSLALSPR--QWCDLGSLQPPSPRFKGFSCLSLPSSWDYR-RAPSPAN  143
+
+
+>ref|NP_689672.4| UPF0764 protein C16orf89 isoform 1 precursor [Homo sapiens]
+Length=402
+
+ Score = 94.7 bits (234),  Expect = 1e-20
+ Identities = 54/80 (68%), Positives = 60/80 (75%), Gaps = 1/80 (1%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINF-VFLVETGFYHVGQA  103
+            VAQAGVQW +LG  QP PPGFK FSCL  PSSWDYR +PP L NF +FLVETGF+HV  A
+Sbjct  323  VAQAGVQWRNLGSLQPLPPGFKQFSCLILPSSWDYRSVPPYLANFYIFLVETGFHHVAHA  382
+
+Query  102  GLEPPISGNLPAWASQSVGI  43
+            GLE  IS + P   SQSVG+
+Sbjct  383  GLELLISRDPPTSGSQSVGL  402
+
+
+
+Lambda     K      H
+   0.318    0.134    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 101801941670
+
+
+  Database: NCBI Protein Reference Sequences
+    Posted date:  Mar 18, 2012  8:41 PM
+  Number of letters in database: 4,140,237,112
+  Number of sequences in database:  11,879,989
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Neighboring words threshold: 12
+Window for multiple hits: 40

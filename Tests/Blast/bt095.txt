@@ -1,0 +1,255 @@
+TBLASTX 2.2.26+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: NCBI Transcript Reference Sequences
+           2,903,055 sequences; 4,626,651,242 total letters
+
+
+
+Query= gi|356995852:1-490 Mus musculus POU domain, class 5, transcription
+factor 1 (Pou5f1), transcript variant 1, mRNA
+
+Length=490
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value   N
+
+ref|NM_013633.3|  Mus musculus POU domain, class 5, transcription...   418    2e-115  1
+ref|XR_141831.1|  PREDICTED: Mus musculus predicted gene, 19553 (...   415    3e-114  1
+ref|XR_107064.1|  PREDICTED: Mus musculus hypothetical LOC1005051...   403    8e-111  1
+ref|XR_105908.1|  PREDICTED: Mus musculus hypothetical LOC1005051...   403    8e-111  1
+ref|NM_001009178.2|  Rattus norvegicus POU class 5 homeobox 1 (Po...   349    2e-94   1
+ref|XM_528230.3|  PREDICTED: Pan troglodytes POU class 5 homeobox...   126    2e-27   1
+ref|XR_021762.2|  PREDICTED: Pan troglodytes POU domain, class 5,...   125    4e-27   1
+ref|NR_034180.1|  Homo sapiens POU class 5 homeobox 1 pseudogene ...   125    4e-27   1
+ref|XM_002752481.1|  PREDICTED: Callithrix jacchus POU domain, cl...   125    5e-27   1
+ref|XM_002746317.1|  PREDICTED: Callithrix jacchus POU domain, cl...   125    5e-27   1
+ref|XM_001135162.2|  PREDICTED: Pan troglodytes POU class 5 homeo...   124    1e-26   1
+ref|NM_001114955.1|  Macaca mulatta POU class 5 homeobox 1 (POU5F...   124    1e-26   1
+ref|NR_033594.1|  Mus musculus predicted gene 5712 (Gm5712), non-...   124    1e-26   1
+ref|NM_001252041.1|  Pan troglodytes POU class 5 homeobox 1 (POU5...   124    1e-26   1
+ref|XR_024993.2|  PREDICTED: Pan troglodytes POU domain, class 5,...   124    1e-26   1
+ref|NM_002701.4|  Homo sapiens POU class 5 homeobox 1 (POU5F1), t...   124    1e-26   1
+ref|XM_002809098.1|  PREDICTED: Pongo abelii POU domain, class 5,...   122    5e-26   1
+ref|XM_003505863.1|  PREDICTED: Cricetulus griseus POU domain, cl...   121    1e-25   1
+ref|NM_001173441.1|  Felis catus POU class 5 homeobox 1 (POU5F1),...   120    1e-25   1
+ref|NR_036440.1|  Homo sapiens POU class 5 homeobox 1 pseudogene ...   120    2e-25   1
+
+
+>ref|NM_013633.3| Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), 
+transcript variant 1, mRNA
+Length=1353
+
+ Score =  418 bits (908),  Expect = 2e-115
+ Identities = 163/163 (100%), Positives = 163/163 (100%), Gaps = 0/163 (0%)
+ Frame = +1/+1
+
+Query  1    EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*AS  180
+            EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*AS
+Sbjct  1    EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*AS  180
+
+Query  181  KGLQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHE  360
+            KGLQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHE
+Sbjct  181  KGLQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHE  360
+
+Query  361  WKATQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N  489
+            WKATQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N
+Sbjct  361  WKATQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N  489
+
+
+>ref|XR_141831.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA
+ ref|XR_105837.2| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA
+ ref|XR_141464.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA
+ ref|XR_141446.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA
+Length=570
+
+ Score =  415 bits (900),  Expect = 3e-114
+ Identities = 162/163 (99%), Positives = 162/163 (99%), Gaps = 0/163 (0%)
+ Frame = +1/-1
+
+Query  1    EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*AS  180
+            EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*AS
+Sbjct  570  EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*AS  391
+
+Query  181  KGLQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHE  360
+            KGLQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHE
+Sbjct  390  KGLQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHE  211
+
+Query  361  WKATQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N  489
+            WKATQREPPLSPVPTAPMP*SWRRWNQL RSPRT*KPCRRS*N
+Sbjct  210  WKATQREPPLSPVPTAPMP*SWRRWNQLQRSPRT*KPCRRS*N  82
+
+
+>ref|XR_107064.1| PREDICTED: Mus musculus hypothetical LOC100505104 (LOC100505104), 
+partial miscRNA
+Length=505
+
+ Score =  403 bits (875),  Expect = 8e-111
+ Identities = 157/158 (99%), Positives = 157/158 (99%), Gaps = 0/158 (0%)
+ Frame = +1/-1
+
+Query  16   LGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKGLQV  195
+            LGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKGLQV
+Sbjct  505  LGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKGLQV  326
+
+Query  196  GLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWKATQ  375
+            GLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWKATQ
+Sbjct  325  GLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWKATQ  146
+
+Query  376  REPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N  489
+            REPPLSPVPTAPMP*SWRRWNQL RSPRT*KPCRRS*N
+Sbjct  145  REPPLSPVPTAPMP*SWRRWNQLQRSPRT*KPCRRS*N  32
+
+
+>ref|XR_105908.1| PREDICTED: Mus musculus hypothetical LOC100505104 (LOC100505104), 
+partial miscRNA
+Length=505
+
+ Score =  403 bits (875),  Expect = 8e-111
+ Identities = 157/158 (99%), Positives = 157/158 (99%), Gaps = 0/158 (0%)
+ Frame = +1/-1
+
+Query  16   LGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKGLQV  195
+            LGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKGLQV
+Sbjct  505  LGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKGLQV  326
+
+Query  196  GLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWKATQ  375
+            GLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWKATQ
+Sbjct  325  GLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWKATQ  146
+
+Query  376  REPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N  489
+            REPPLSPVPTAPMP*SWRRWNQL RSPRT*KPCRRS*N
+Sbjct  145  REPPLSPVPTAPMP*SWRRWNQLQRSPRT*KPCRRS*N  32
+
+
+>ref|NM_001009178.2| Rattus norvegicus POU class 5 homeobox 1 (Pou5f1), mRNA
+ gb|BC158566.1| Rattus norvegicus POU class 5 homeobox 1, mRNA (cDNA clone MGC:187285 
+IMAGE:9092936), complete cds
+Length=1388
+
+ Score =  349 bits (757),  Expect = 2e-94
+ Identities = 138/161 (86%), Positives = 143/161 (89%), Gaps = 0/161 (0%)
+ Frame = +1/+1
+
+Query  7    KPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVGVMGQQGWSRAGWILEPG*ASKG  186
+            K SLGE SFHQAPGSG PPSPWLDTWLQTSPSHPH VGVMGQQGWSRAGW LEPG*AS+G
+Sbjct  19   KQSLGESSFHQAPGSGSPPSPWLDTWLQTSPSHPHLVGVMGQQGWSRAGWTLEPG*ASRG  198
+
+Query  187  LQVGLESDQAQRYWGSPHVRPHTSSAEGWHTVDLRLDWA*SPKLAWRLCSLRARQEHEWK  366
+            LQVGLESDQ QR WGSP V  HTSS EGWHTVDLRLDWA*SPKLAWRLCS RARQEHEW+
+Sbjct  199  LQVGLESDQVQRCWGSPRVPQHTSSVEGWHTVDLRLDWA*SPKLAWRLCSPRARQEHEWR  378
+
+Query  367  ATQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N  489
+            AT+REPPL PV  AP P*SWRRWN +PRSPR *KPCRRS*+
+Sbjct  379  ATRREPPLGPVLPAPAP*SWRRWNLVPRSPRI*KPCRRS*S  501
+
+
+>ref|XM_528230.3| PREDICTED: Pan troglodytes POU class 5 homeobox 1B (POU5F1B), 
+mRNA
+Length=1601
+
+ Score =  126 bits (274),  Expect = 2e-27
+ Identities = 53/73 (73%), Positives = 59/73 (81%), Gaps = 0/73 (0%)
+ Frame = -1/-2
+
+Query  433  TFSNFTALGRSAQGSEEVPSELLSTRAPAWPSGCKVSTPTWGTRPSPT*GPQYAIPPQNS  254
+            +FS+FTA G + QGS E PSELLST  PA PSG +VS P WGT P+PT*GPQYAIPPQNS
+Sbjct  640  SFSSFTAPGGTVQGSGEAPSELLSTPTPASPSG*EVSKPPWGTSPAPT*GPQYAIPPQNS  461
+
+Query  253  YAGGHGEIPNTSE  215
+            Y GGHG IP+TSE
+Sbjct  460  YGGGHGGIPHTSE  422
+
+
+>ref|XR_021762.2| PREDICTED: Pan troglodytes POU domain, class 5, transcription 
+factor 1-like (LOC741863), miscRNA
+Length=1218
+
+ Score =  125 bits (272),  Expect = 4e-27
+ Identities = 53/73 (73%), Positives = 60/73 (82%), Gaps = 0/73 (0%)
+ Frame = -1/-2
+
+Query  433  TFSNFTALGRSAQGSEEVPSELLSTRAPAWPSGCKVSTPTWGTRPSPT*GPQYAIPPQNS  254
+            +FS+FTA G + QGS EVPSELLST  PA PSG +VS P WGT  +PT*GPQYAIPPQNS
+Sbjct  380  SFSSFTAPGGTVQGSREVPSELLSTLTPASPSG*EVSKPPWGTSRTPT*GPQYAIPPQNS  201
+
+Query  253  YAGGHGEIPNTSE  215
+            Y+GGHG IP+TSE
+Sbjct  200  YSGGHGGIPHTSE  162
+
+
+>ref|NR_034180.1| Homo sapiens POU class 5 homeobox 1 pseudogene 4 (POU5F1P4), 
+non-coding RNA
+Length=1083
+
+ Score =  125 bits (272),  Expect = 4e-27
+ Identities = 53/73 (73%), Positives = 60/73 (82%), Gaps = 0/73 (0%)
+ Frame = -1/-1
+
+Query  433  TFSNFTALGRSAQGSEEVPSELLSTRAPAWPSGCKVSTPTWGTRPSPT*GPQYAIPPQNS  254
+            +FS+FTA G + QGS EVPSELLST  PA PSG +VS P WGT  +PT*GPQYAIPPQNS
+Sbjct  381  SFSSFTAPGGTVQGSREVPSELLSTLTPASPSG*EVSKPPWGTSRTPT*GPQYAIPPQNS  202
+
+Query  253  YAGGHGEIPNTSE  215
+            Y+GGHG IP+TSE
+Sbjct  201  YSGGHGGIPHTSE  163
+
+
+>ref|XM_002752481.1| PREDICTED: Callithrix jacchus POU domain, class 5, transcription 
+factor 1-like (LOC100389924), mRNA
+Length=1368
+
+ Score =  125 bits (271),  Expect = 5e-27
+ Identities = 53/72 (74%), Positives = 58/72 (81%), Gaps = 0/72 (0%)
+ Frame = -1/-2
+
+Query  433  TFSNFTALGRSAQGSEEVPSELLSTRAPAWPSGCKVSTPTWGTRPSPT*GPQYAIPPQNS  254
+            +FS+FTA G   QGS E PSELLST APA PSG +VS P WGT P+PT*GPQYAIPPQNS
+Sbjct  416  SFSSFTAPGGMVQGSGEAPSELLSTPAPASPSG*EVSKPPWGTSPTPT*GPQYAIPPQNS  237
+
+Query  253  YAGGHGEIPNTS  218
+            Y GGHG IP+TS
+Sbjct  236  YGGGHGGIPHTS  201
+
+
+>ref|XM_002746317.1| PREDICTED: Callithrix jacchus POU domain, class 5, transcription 
+factor 1-like (LOC100384946), mRNA
+Length=1417
+
+ Score =  125 bits (271),  Expect = 5e-27
+ Identities = 53/72 (74%), Positives = 58/72 (81%), Gaps = 0/72 (0%)
+ Frame = -1/-1
+
+Query  433  TFSNFTALGRSAQGSEEVPSELLSTRAPAWPSGCKVSTPTWGTRPSPT*GPQYAIPPQNS  254
+            +FS+FTA G   QGS E PSELLST APA PSG +VS P WGT P+PT*GPQYAIPPQNS
+Sbjct  466  SFSSFTAPGGMVQGSGEAPSELLSTPAPASPSG*EVSKPPWGTSPTPT*GPQYAIPPQNS  287
+
+Query  253  YAGGHGEIPNTS  218
+            Y GGHG IP+TS
+Sbjct  286  YGGGHGGIPHTS  251
+
+
+
+Lambda     K      H
+   0.318    0.134    0.401 
+
+
+Effective search space used: 149315297940
+
+
+  Database: NCBI Transcript Reference Sequences
+    Posted date:  Mar 1, 2012  8:32 PM
+  Number of letters in database: 4,626,651,242
+  Number of sequences in database:  2,903,055
+
+
+
+Matrix: BLOSUM62
+Neighboring words threshold: 13
+Window for multiple hits: 40
