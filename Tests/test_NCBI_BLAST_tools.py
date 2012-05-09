@@ -216,6 +216,9 @@ class CheckCompleteArgList(unittest.TestCase):
             extra = extra.difference(["-best_hit_overhang",
                                       "-best_hit_score_edge",
                                       "-culling_limit"])
+        if "-max_hsps_per_subject" in extra:
+            #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
+            extra.remove("-max_hsps_per_subject")
 
         if extra or missing:
             import warnings
