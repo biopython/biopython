@@ -314,22 +314,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 
-import AbiIO
-import AceIO
-import FastaIO
-import IgIO  # IntelliGenetics or MASE format
-import InsdcIO  # EMBL and GenBank
-import PdbIO
-import PhdIO
-import PirIO
-import SeqXmlIO
-import SffIO
-import SwissIO
-import TabIO
-import QualityIO  # FastQ and qual files
-import UniprotIO
-
-
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
 #
@@ -339,49 +323,50 @@ import UniprotIO
 #
 #Most alignment file formats will be handled via Bio.AlignIO
 
-_FormatToIterator = {"fasta": FastaIO.FastaIterator,
-                     "gb": InsdcIO.GenBankIterator,
-                     "genbank": InsdcIO.GenBankIterator,
-                     "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
-                     "embl": InsdcIO.EmblIterator,
-                     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
-                     "imgt": InsdcIO.ImgtIterator,
-                     "ig": IgIO.IgIterator,
-                     "swiss": SwissIO.SwissIterator,
-                     "pdb-atom": PdbIO.PdbAtomIterator,
-                     "pdb-seqres": PdbIO.PdbSeqresIterator,
-                     "phd": PhdIO.PhdIterator,
-                     "ace": AceIO.AceIterator,
-                     "tab": TabIO.TabIterator,
-                     "pir": PirIO.PirIterator,
-                     "fastq": QualityIO.FastqPhredIterator,
-                     "fastq-sanger": QualityIO.FastqPhredIterator,
-                     "fastq-solexa": QualityIO.FastqSolexaIterator,
-                     "fastq-illumina": QualityIO.FastqIlluminaIterator,
-                     "qual": QualityIO.QualPhredIterator,
-                     "sff": SffIO.SffIterator,
+
+_FormatToIterator = {"fasta" : ('FastaIO', 'FastaIterator'),
+                     "gb" : ('InsdcIO', 'GenBankIterator'),
+                     "genbank" : ('InsdcIO', 'GenBankIterator'),
+                     "genbank-cds" : ('InsdcIO', 'GenBankCdsFeatureIterator'),
+                     "embl" : ('InsdcIO', 'EmblIterator'),
+                     "embl-cds" : ('InsdcIO', 'EmblCdsFeatureIterator'),
+                     "imgt" : ('InsdcIO', 'ImgtIterator'),
+                     "ig" : ('IgIO', 'IgIterator'),
+                     "swiss" : ('SwissIO', 'SwissIterator'),
+                     "pdb-atom": ('PdbIO', 'PdbAtomIterator'),
+                     "pdb-seqres": ('PdbIO', 'PdbSeqresIterator'),
+                     "phd" : ('PhdIO', 'PhdIterator'),
+                     "ace" : ('AceIO', 'AceIterator'),
+                     "tab" : ('TabIO', 'TabIterator'),
+                     "pir" : ('PirIO', 'PirIterator'),
+                     "fastq" : ('QualityIO', 'FastqPhredIterator'),
+                     "fastq-sanger" : ('QualityIO', 'FastqPhredIterator'),
+                     "fastq-solexa" : ('QualityIO', 'FastqSolexaIterator'),
+                     "fastq-illumina" : ('QualityIO', 'FastqIlluminaIterator'),
+                     "qual" : ('QualityIO', 'QualPhredIterator'),
+                     "sff": ('SffIO', 'SffIterator'),
                      #Not sure about this in the long run:
-                     "sff-trim": SffIO._SffTrimIterator,
-                     "uniprot-xml": UniprotIO.UniprotIterator,
-                     "seqxml": SeqXmlIO.SeqXmlIterator,
-                     "abi": AbiIO.AbiIterator,
-                     "abi-trim": AbiIO._AbiTrimIterator,
+                     "sff-trim": ('SffIO', '_SffTrimIterator'),
+                     "uniprot-xml": ('UniprotIO', 'UniprotIterator'),
+                     "seqxml" : ('SeqXmlIO', 'SeqXmlIterator'),
+                     "abi": ('AbiIO', 'AbiIterator'),
+                     "abi-trim": ('AbiIO', '_AbiTrimIterator'),
                      }
 
-_FormatToWriter = {"fasta": FastaIO.FastaWriter,
-                   "gb": InsdcIO.GenBankWriter,
-                   "genbank": InsdcIO.GenBankWriter,
-                   "embl": InsdcIO.EmblWriter,
-                   "imgt": InsdcIO.ImgtWriter,
-                   "tab": TabIO.TabWriter,
-                   "fastq": QualityIO.FastqPhredWriter,
-                   "fastq-sanger": QualityIO.FastqPhredWriter,
-                   "fastq-solexa": QualityIO.FastqSolexaWriter,
-                   "fastq-illumina": QualityIO.FastqIlluminaWriter,
-                   "phd": PhdIO.PhdWriter,
-                   "qual": QualityIO.QualPhredWriter,
-                   "sff": SffIO.SffWriter,
-                   "seqxml": SeqXmlIO.SeqXmlWriter,
+_FormatToWriter = {"fasta" : ('FastaIO', 'FastaWriter'),
+                   "gb" : ('InsdcIO', 'GenBankWriter'),
+                   "genbank" : ('InsdcIO', 'GenBankWriter'),
+                   "embl" : ('InsdcIO', 'EmblWriter'),
+                   "imgt" : ('InsdcIO', 'ImgtWriter'),
+                   "tab" : ('TabIO', 'TabWriter'),
+                   "fastq" : ('QualityIO', 'FastqPhredWriter'),
+                   "fastq-sanger" : ('QualityIO', 'FastqPhredWriter'),
+                   "fastq-solexa" : ('QualityIO', 'FastqSolexaWriter'),
+                   "fastq-illumina" : ('QualityIO', 'FastqIlluminaWriter'),
+                   "phd" : ('PhdIO', 'PhdWriter'),
+                   "qual" : ('QualityIO', 'QualPhredWriter'),
+                   "sff" : ('SffIO', 'SffWriter'),
+                   "seqxml" : ('SeqXmlIO', 'SeqXmlWriter'),
                    }
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
@@ -422,7 +407,9 @@ def write(sequences, handle, format):
     with as_handle(handle, mode) as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
-            writer_class = _FormatToWriter[format]
+            mod_name, writer_name = _FormatToWriter[format]
+            mod = __import__('Bio.SeqIO.%s' % mod_name, fromlist=[1])
+            writer_class = getattr(mod, writer_name)
             count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
             #Try and turn all the records into a single alignment,
@@ -522,7 +509,9 @@ def parse(handle, format, alphabet=None):
     with as_handle(handle, mode) as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
+            mod_name, iterator_name = _FormatToIterator[format]
+            mod = __import__('Bio.SeqIO.%s' % mod_name, fromlist=[1])
+            iterator_generator = getattr(mod, iterator_name)
             if alphabet is None:
                 i = iterator_generator(fp)
             else:
