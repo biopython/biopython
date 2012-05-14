@@ -48,7 +48,9 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         self._format = format
         #Load the parser class/function once an avoid the dict lookup in each
         #__getitem__ call:
-        i = SeqIO._FormatToIterator[format]
+        mod_name, iterator_name = SeqIO._FormatToIterator[format]
+        mod = __import__('Bio.SeqIO.%s' % mod_name, fromlist=[1])
+        i = getattr(mod, iterator_name)
         #The following alphabet code is a bit nasty... duplicates logic in
         #Bio.SeqIO.parse()
         if alphabet is None:
