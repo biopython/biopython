@@ -65,24 +65,66 @@ __docformat__ = 'epytext en'
 from Bio.File import as_handle
 
 
-import BlastIO
-import BlatIO
-import EmbossIO
-import FastaIO
-import HmmerIO
+# dictionary of supported formats and its iterator
+_ITERATOR = {
+        'blast-tab': ('BlastIO', 'blast_tabular_iterator'),
+        'blast-text': ('BlastIO', 'blast_text_iterator'),
+        'blast-xml': ('BlastIO', 'blast_xml_iterator'),
+        'blat-psl': ('BlatIO', 'blast_psl_iterator'),
+        'fasta': ('FastaIO', 'fasta_m10_iterator'),
+        'hmmer-text': ('HmmerIO', 'hmmer_text_iterator'),
+}
+
+# dictionary of supported formats for random access
+_RANDOM_ACCESS = {
+        'blast-tab': ('BlastIO', 'BlastTabularRandomAccess'),
+        'blast-text': ('BlastIO', 'BlastTextRandomAccess'),
+        'blast-xml': ('BlastIO', 'BlastXmlRandomAccess'),
+        'blat-psl': ('BlatIO', 'BlatPslRandomAccess'),
+        'fasta': ('FastaIO', 'FastaM10RandomAccess'),
+        'hmmer-text': ('HmmerIO', 'HmmerTextRandomAccess'),
+}
 
 
-_FormatToIterator = {}
-
-
-def parse(handle, format):
+def parse(handle, format=None):
     """Turns a search output file into an iterator returning Result objects.
 
     - handle    - Handle to the file, or the filename as a string.
     - format    - Lower case string denoting one of the supported formats.
 
     """
+    # map file format to iterator name
+    try:
+        iterator_tuple = _ITERATOR[format]
+    except KeyError:
+        # handle the errors with helpful messages
+        if format is None:
+            raise ValueError("Format required (lower case string)")
+        elif not isinstance(format, basestring):
+            raise TypeError("Need a string for the file format (lower case)")
+        elif format != format.lower():
+            raise ValueError("Format string '%s' should be lower case" % \
+                    format)
+        else:
+            raise ValueError("Unknown format '%s'. Supported formats are "
+                    "'%s'" % (format, "', '".join(_ITERATOR.keys())))
 
+    # check the handle argument and raise errors accordingly
+    if not isinstance(handle, (basestring, file)):
+        raise TypeError("Handle must be either a handle to a file or its "
+                "name as string")
+
+    # get the iterator object after importing its module
+    mod_name, iterator_name = iterator_tuple
+    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[1])
+    iterator = getattr(mod, iterator_name)
+
+    # and start iterating
+    with as_handle(handle) as source_file:
+        generator = iterator(source_file)
+
+        for result in generator:
+            yield result
 
 
 def read(handle, format):
@@ -92,10 +134,16 @@ def read(handle, format):
     - format    - Lower case string denoting one of the supported formats.
 
     """
+    generator = parse(handle, format)
+
+    try:
+        return generator.next()
+    except StopIteration:
+        raise ValueError("No results found in handle")
 
 
 
-def to_dict(queries, key_function=None):
+def to_dict(queries, key_function=lambda rec: rec.id):
     """Turns a Result iterator or list into a dictionary.
 
     - queries   - Iterator returning Result objects or a list containing
@@ -111,7 +159,13 @@ def to_dict(queries, key_function=None):
     keys are present, an error will be raised.
 
     """
-
+    results = {}
+    for query in queries:
+        key = key_function(query)
+        if key in results:
+            raise ValueError("Duplicate key '%s'" % key)
+        results[key] = query
+    return results
 
 
 def index(handle, format, key_function=None):
