@@ -144,35 +144,28 @@ from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
-import StockholmIO
-import ClustalIO
-import NexusIO
-import PhylipIO
-import EmbossIO
-import FastaIO
-
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
-_FormatToIterator = {  # "fasta" is done via Bio.SeqIO
-                     "clustal" : ClustalIO.ClustalIterator,
-                     "emboss" : EmbossIO.EmbossIterator,
-                     "fasta-m10" : FastaIO.FastaM10Iterator,
-                     "nexus" : NexusIO.NexusIterator,
-                     "phylip" : PhylipIO.PhylipIterator,
-                     "phylip-sequential" : PhylipIO.SequentialPhylipIterator,
-                     "phylip-relaxed" : PhylipIO.RelaxedPhylipIterator,
-                     "stockholm" : StockholmIO.StockholmIterator,
+_FormatToIterator = {#"fasta" is done via Bio.SeqIO
+                     "clustal" : ('ClustalIO', 'ClustalIterator'),
+                     "emboss" : ('EmbossIO', 'EmbossIterator'),
+                     "fasta-m10" : ('FastaIO', 'FastaM10Iterator'),
+                     "nexus" : ('NexusIO', 'NexusIterator'),
+                     "phylip" : ('PhylipIO', 'PhylipIterator'),
+                     "phylip-sequential" : ('PhylipIO', 'SequentialPhylipIterator'),
+                     "phylip-relaxed" : ('PhylipIO', 'RelaxedPhylipIterator'),
+                     "stockholm" : ('StockholmIO', 'StockholmIterator'),
                      }
 
-_FormatToWriter = {  # "fasta" is done via Bio.SeqIO
-                     # "emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "nexus" : NexusIO.NexusWriter,
-                   "phylip" : PhylipIO.PhylipWriter,
-                   "phylip-sequential" : PhylipIO.SequentialPhylipWriter,
-                   "phylip-relaxed" : PhylipIO.RelaxedPhylipWriter,
-                   "stockholm" : StockholmIO.StockholmWriter,
-                   "clustal" : ClustalIO.ClustalWriter,
+_FormatToWriter = {#"fasta" is done via Bio.SeqIO
+                   #"emboss" : EmbossIO.EmbossWriter, (unfinished)
+                   "nexus" : ('NexusIO', 'NexusWriter'),
+                   "phylip" : ('PhylipIO', 'PhylipWriter'),
+                   "phylip-sequential" : ('PhylipIO', 'SequentialPhylipWriter'),
+                   "phylip-relaxed" : ('PhylipIO', 'RelaxedPhylipWriter'),
+                   "stockholm" : ('StockholmIO', 'StockholmWriter'),
+                   "clustal" : ('ClustalIO', 'ClustalWriter'),
                    }
 
 
@@ -208,7 +201,9 @@ def write(alignments, handle, format):
     with as_handle(handle, 'w') as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
-            writer_class = _FormatToWriter[format]
+            mod_name, writer_name = _FormatToWriter[format]
+            mod = __import__('Bio.AlignIO.%s' % mod_name, fromlist=[1])
+            writer_class = getattr(mod, writer_name)
             count = writer_class(fp).write_file(alignments)
         elif format in SeqIO._FormatToWriter:
             #Exploit the existing SeqIO parser to do the dirty work!
@@ -346,7 +341,9 @@ def parse(handle, format, seq_count=None, alphabet=None):
     with as_handle(handle, 'rU') as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
+            mod_name, iterator_name = _FormatToIterator[format]
+            mod = __import__('Bio.AlignIO.%s' % mod_name, fromlist=[1])
+            iterator_generator = getattr(mod, iterator_name)
             if alphabet is None :
                 i = iterator_generator(fp, seq_count)
             else:
