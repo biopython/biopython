@@ -119,7 +119,7 @@ def _get_handler(format, mapping):
     mod_name, obj_name = obj_info
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[1])
 
-    return getattr(mod, mod_name)
+    return getattr(mod, obj_name)
 
 
 def parse(handle, format=None):
