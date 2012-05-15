@@ -85,16 +85,6 @@ _INDEXER_MAP = {
         'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
 }
 
-# dictionary of supported formats for index_db()
-_INDEXER_DB_MAP = {
-        'blast-tab': ('BlastIO', 'BlastTabularIndexerDb'),
-        'blast-text': ('BlastIO', 'BlastTextIndexerDb'),
-        'blast-xml': ('BlastIO', 'BlastXmlIndexerDb'),
-        'blat-psl': ('BlatIO', 'BlatPslIndexerDb'),
-        'fasta': ('FastaIO', 'FastaM10IndexerDb'),
-        'hmmer-text': ('HmmerIO', 'HmmerTextIndexerDb'),
-}
-
 # dictionary of supported conversions for convert()
 _CONVERSION_MAP = {
         ('blast-xml', 'blast-tab'): ('_convert', '_blastxml_to_blasttab'),
@@ -103,19 +93,11 @@ _CONVERSION_MAP = {
 }
 
 
-def _get_object(handle, format, mapping, has_multiple_handles=False):
-    """Returns the object to handle the given format.
+def _get_handler(format, mapping):
+    """Returns the object to handle the given format according to the mapping.
 
-    - handle -- Handle to the file, or the filename as a string.
-    - format -- Lower case string denoting one of the supported formats.
-    - mapping -- Dictionary of format and object name mapping.
-    - has_multiple_handles -- Boolean, if set to True then no exception is
-                              raised if the handle is a list. This is to
-                              handle calls from SearchIO.index_db, where it
-                              is allowed to have more than one input files.
-
-    Also checks whether a given input (handle, format) is supported in the
-    given mapping.
+    format -- Lower case string denoting one of the supported formats.
+    mapping -- Dictionary of format and object name mapping.
 
     """
     # map file format to iterator name
@@ -134,16 +116,6 @@ def _get_object(handle, format, mapping, has_multiple_handles=False):
             raise ValueError("Unknown format '%s'. Supported formats are "
                     "'%s'" % (format, "', '".join(mapping.keys())))
 
-    # check the handle argument and raise errors accordingly
-    if not has_multiple_handles:
-        if not isinstance(handle, (basestring, file)):
-            raise TypeError("Handle must be either a handle to a file or its "
-                    "name as string")
-    else:
-        # slightly different handling for index_db (has_multiple_handles is True)
-        if not isinstance(handle, (basestring, list, tuple)):
-            raise TypeError("Need a string as filename or a list of filenames")
-
     mod_name, obj_name = obj_info
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[1])
 
@@ -153,12 +125,17 @@ def _get_object(handle, format, mapping, has_multiple_handles=False):
 def parse(handle, format=None):
     """Turns a search output file into an iterator returning Result objects.
 
-    - handle    - Handle to the file, or the filename as a string.
-    - format    - Lower case string denoting one of the supported formats.
+    handle -- Handle to the file, or the filename as a string.
+    format -- Lower case string denoting one of the supported formats.
 
     """
+    # check if handle type is correct
+    if not isinstance(handle, (basestring, file)):
+        raise TypeError("Handle must either be a handle to a file or its "
+                "name as string")
+
     # get the iterator object and do error checking
-    iterator = _get_object(handle, format, _ITERATOR_MAP)
+    iterator = _get_handler(format, _ITERATOR_MAP)
 
     # and start iterating
     with as_handle(handle) as source_file:
@@ -171,8 +148,8 @@ def parse(handle, format=None):
 def read(handle, format):
     """Turns a search output file into a single Result.
 
-    - handle    - Handle to the file, or the filename as a string.
-    - format    - Lower case string denoting one of the supported formats.
+    handle -- Handle to the file, or the filename as a string.
+    format -- Lower case string denoting one of the supported formats.
 
     """
     generator = parse(handle, format)
@@ -186,10 +163,10 @@ def read(handle, format):
 def to_dict(queries, key_function=lambda rec: rec.id):
     """Turns a Result iterator or list into a dictionary.
 
-    - queries   - Iterator returning Result objects or a list containing
-                  Result objects.
-    - key_function - Optional callback function which when given a
-                     Result should return a unique key for the dictionary.
+    queries -- Iterator returning Result objects or a list containing
+               Result objects.
+    key_function -- Optional callback function which when given a
+                    Result should return a unique key for the dictionary.
 
     e.g. key_function = lambda rec : rec.id
     or,  key_function = lambda rec : rec.id.split('|')[0]
@@ -217,8 +194,13 @@ def index(handle, format, key_function=None):
                      Result should return a unique key for the dictionary.
 
     """
+    # check if handle type is correct
+    if not isinstance(handle, (basestring, file)):
+        raise TypeError("Handle must either be a handle to a file or its "
+                "name as string")
+
     # get the indexer object and do error checking
-    indexer = _get_object(handle, format, _INDEXER_MAP)
+    indexer = _get_handler(format, _INDEXER_MAP)
 
     return indexer(handle, key_function)    
 
@@ -237,18 +219,20 @@ def index_db(index_filename, filenames=None, format=None, key_function=None):
                      key for the dictionary.
 
     """
-    # get the indexer object and do error checking
-    indexer_db = _get_object(filenames, format, _INDEXER_DB_MAP, True)
-
-    # check index_filename
+    # check index_filename and filenames
     if not isinstance(index_filename, basestring):
         raise TypeError("Need a string as index filename")
+    if not isinstance(filenames, (basestring, list, tuple)):
+        raise TypeError("Handle must either be a string as filename or a "
+                "list of filenames")
 
     # cast filenames to list if it's a string
     if isinstance(filenames, basestring):
         filenames = [filenames]
 
-    return indexer_db(index_filename, filenames, format, key_function)
+    # get the indexer object and do error checking
+    indexer = _get_handler(format, _INDEXER_MAP)
+
 
 
 def convert(in_file, in_format, out_file, out_format):
