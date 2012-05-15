@@ -23,7 +23,7 @@ More information are available through these links:
 
 """
 
-from Bio.SearchIO._objects import Result, Hit, HSP
+from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
 
 
 def fasta_m10_iterator(handle):
@@ -32,6 +32,15 @@ def fasta_m10_iterator(handle):
     handle -- Handle to the file, or the filename as string.
 
     """
+
+
+
+class FastaM10Indexer(SearchIndexer):
+
+    """Indexer class for FASTA m10 output."""
+
+    def __init__(self, handle):
+        pass
 
 
 

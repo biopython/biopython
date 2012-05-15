@@ -27,7 +27,7 @@ For legacy BLAST outputs, see the Bio.Blast module.
 
 """
 
-from Bio.SearchIO._objects import Result, Hit, HSP
+from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
 
 
 def blast_xml_iterator(handle):
@@ -60,6 +60,33 @@ def blast_text_iterator(handle):
     handle -- Handle to the file, or the filename as string.
 
     """
+
+
+
+class BlastXmlIndexer(SearchIndexer):
+
+    """Indexer class for BLAST+ XML output."""
+
+    def __init__(self, handle):
+        pass
+
+
+
+class BlastTabularIndexer(SearchIndexer):
+
+    """Indexer class for BLAST+ tabular output."""
+
+    def __init__(self, handle):
+        pass
+
+
+
+class BlastTextIndexer(SearchIndexer):
+
+    """Indexer class for BLAST+ plain text output."""
+
+    def __init__(self, handle):
+        pass
 
 
 

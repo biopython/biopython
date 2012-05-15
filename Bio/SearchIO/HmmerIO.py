@@ -21,7 +21,7 @@ More information are available through these links:
 
 """
 
-from Bio.SearchIO._objects import Result, Hit, HSP
+from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
 
 
 def hmmer_text_iterator(handle):
@@ -30,6 +30,15 @@ def hmmer_text_iterator(handle):
     handle -- Handle to the file, or the filename as string.
 
     """
+
+
+
+class HmmerTextIndexer(SearchIndexer):
+
+    """Indexer class for HMMER plain text output."""
+
+    def __init__(self, handle):
+        pass
 
 
 

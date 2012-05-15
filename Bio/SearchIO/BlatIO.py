@@ -22,7 +22,7 @@ More information are available through these links:
 
 """
 
-from Bio.SearchIO._objects import Result, Hit, HSP
+from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
 
 
 def blat_psl_iterator(handle):
@@ -31,6 +31,15 @@ def blat_psl_iterator(handle):
     handle -- Handle to the file, or the filename as string.
 
     """
+
+
+
+class BlatPslIndexer(SearchIndexer):
+
+    """Indexer class for BLAT PSL output."""
+
+    def __init__(self, handle):
+        pass
 
 
 

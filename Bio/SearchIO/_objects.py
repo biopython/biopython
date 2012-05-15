@@ -31,3 +31,10 @@ class HSP(object):
     """Class representing high-scoring alignment regions of the query and hit.
 
     """
+
+
+class SearchIndexer(object):
+
+    """Iterator that returns file positions of results in a Search output file.
+
+    """
