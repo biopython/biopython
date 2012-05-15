@@ -220,16 +220,10 @@ def index_db(index_filename, filenames=None, format=None, \
                      key for the dictionary.
 
     """
-    # check index_filename and filenames
-    if not isinstance(index_filename, basestring):
-        raise TypeError("Need a string as index filename")
-    if not isinstance(filenames, (basestring, list, tuple)):
-        raise TypeError("Handle must either be a string as filename or a "
-                "list of filenames")
-
-    # cast filenames to list if it's a string
-    if isinstance(filenames, basestring):
-        filenames = [filenames]
+    # cast filenames to list if it's not a list
+    # (can we check if it's a string or a generator?)
+    if not isinstance(filenames, list):
+        filenames = list(filenames)
 
     # get the indexer object and do error checking
     indexer = _get_handler(format, _INDEXER_MAP)
