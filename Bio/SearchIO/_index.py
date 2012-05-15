@@ -3,10 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+#TODO: factor out this module with SeqIO's _index to stay DRY
+
 """Custom indexing for Bio.SearchIO objects (PRIVATE).
 
 """
 
+import itertools
+import os
 from sqlite3 import dbapi2 as sqlite
 from sqlite3 import IntegrityError, OperationalError
 
@@ -15,27 +19,29 @@ try:
 except ImportError:
     from UserDict import DictMixin as _dict_base
 
+from Bio import SearchIO
+
 
 class IndexedSearch(_dict_base):
 
     """Dictionary-like object for implementing Search indexing.
 
     """
-    def __init__(self, handle, format, indexer, key_function):
+    def __init__(self, filename, format, key_function):
         """Initializes IndexedSearch instance.
 
-        handle -- The source filename as string.
+        filename -- The source filename as string.
         format -- Lower case string denoting one of the supported formats.
-        indexer -- Format-specific Indexer class that.
         key_function -- Optional callbak function which when given a Result
                         should return a unique key for the dictionary.
 
         """
-        self._source = handle
+        self._filename = filename
         self._format = format
         self._key_function = key_function
 
-        indexed_obj = indexer(handle)
+        indexer_class = SearchIO._get_object(format, SearchIO._INDEXER_MAP)
+        indexed_obj = indexer_class(filename)
         self._indexer = indexed_obj
 
         # default key function is lambda rec: rec.id
@@ -54,7 +60,7 @@ class IndexedSearch(_dict_base):
 
     def __repr__(self):
         return "IndexedSearch('%r', '%r', key_function=%r)" % \
-                (self._source, self._format, self._key_function)
+                (self._filename, self._format, self._key_function)
 
     def __str__(self):
         if self:
@@ -162,3 +168,244 @@ class IndexedSearch(_dict_base):
     def fromkeys(self, *args, **kwargs):
         raise NotImplementedError("An indexed search output file does not "
                 "support this.")
+
+
+class DbIndexedSearch(IndexedSearch):
+
+    """Dictionary-like object for implementing storable Search indexing.
+
+    """
+
+    def __init__(self, index_filename, filenames, format, key_function, \
+            max_open=10, overwrite=False):
+        """Initializes a DbIndexedSearch instance.
+
+        index_filename -- The SQLite filename.
+        filenames -- List of strings specifying file(s) to be indexed, or when
+                     indexing a single file this can be given as a string.
+                     (optional if reloading an existing index, but must match)
+        format -- Lower case string denoting one of the supported formats.
+                  (optional if reloading an existing index, but must match)
+        indexer -- Format-specific Indexer class.
+        key_function - Optional callback function which when given a
+                       Result identifier string should return a unique
+                       key for the dictionary.
+        max_open -- Integer of maximum open file objects allowed.
+        overwrite -- Boolean, whether to overwrite existing index database
+                     (if it exists) or not.
+
+        """
+        indexer_proxies = {}
+        indexer_class = SearchIO._get_object(format, SearchIO._INDEXER_MAP)
+        self._indexer_class = indexer_class
+
+        # remove index_filename if overwrite is True and the file exists
+        if overwrite and os.path.isfile(index_filename):
+            os.remove(index_filename)
+
+        if os.path.isfile(index_filename):
+            con = sqlite.connect(index_filename)
+            self._con = con
+            try:
+                # get the # of result offsets stored in the database
+                count, = con.execute("SELECT value FROM meta_data WHERE key=?;", \
+                        ('count',)).fetchone()
+                self._length = int(count)
+                if self._length == -1:
+                    con.close()
+                    raise ValueError("Unfinished/partial database")
+
+                # count the # of result offsets stored in the database
+                # for cross-checking
+                count, = con.execute("SELECT COUNT(key) FROM "
+                        "offset_data;").fetchone()
+                if self._length != int(count):
+                    con.close()
+                    raise ValueError("Corrupt database? %i entries not %i" % \
+                            (int(count), self._length))
+
+                # check if the database format is the same as the given format
+                self._format, = con.execute("SELECT value FROM meta_data "
+                        "WHERE key=?;", ('format',)).fetchone()
+                if format and format != self._format:
+                    con.close()
+                    raise ValueError("Incorrect format specified: '%s', "
+                            "expected: '%s'" % (format, self._format))
+
+                # check filenames # and names
+                self._filenames = (row[0] for row in \
+                        con.execute("SELECT name FROM file_data ORDER BY "
+                            "file_number;").fetchall())
+                if filenames and len(filenames) != len(self._filenames):
+                    con.close()
+                    raise ValueError("Index file says %i files, not %i" % \
+                            (len(self._filenames), len(filenames)))
+                if filenames and filenames != self._filenames:
+                    con.close()
+                    raise ValueError("Index file has different filenames")
+
+            except OperationalError, err:
+                con.close()
+                raise ValueError("Not a Biopython index database? %s" % err)
+        else:
+            self._filenames = filenames
+            self._format = format
+
+            # create the index db file
+            con = sqlite.connect(index_filename)
+            self._con = con
+
+            # speed optimization
+            con.execute("PRAGMA synchronous=OFF")
+            con.execute("PRAGMA locking_mode=EXCLUSIVE")
+
+            # create the tables
+            # meta_data: for storing # of results and file format
+            # file_data: for storing source filenames
+            # offset_data: for storing index, offset pair
+            con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
+            con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ('count', -1))
+            con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                    ('format', format))
+            con.execute("CREATE TABLE file_data (file_number INTEGER, "
+                    "name TEXT);")
+            con.execute("CREATE TABLE offset_data (key TEXT, file_number "
+                    "INTEGER, offset INTEGER, length INTEGER);")
+            
+            # and fill them up
+            count = 0
+            for idx, filename in enumerate(filenames):
+                # fill the file_data
+                con.execute("INSERT INTO file_data(file_number, name) VALUES "
+                        "(?,?);", (idx, filename))
+                indexed_obj = indexer_class(filename)
+                offset_iter = ((key_function(key), idx, offset, length) for \
+                        (key, offset, length) in indexed_obj)
+
+                # and the results in a file into offset_data
+                while True:
+                    batch = list(itertools.islice(offset_iter, 100))
+                    if not batch:
+                        break
+                    con.executemany("INSERT INTO offset_data " \
+                            "(key,file_number,offset,length) VALUES (?,?,?,?);", \
+                            batch)
+                    con.commit()
+                    count += len(batch)
+
+                # check if we can still open more file objects
+                if len(indexer_proxies) < max_open:
+                    indexer_proxies[idx] = indexed_obj
+                else:
+                    indexed_obj._handle.close()
+
+            self._length = count
+
+            try:
+                con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
+                        "key_index ON offset_data(key);")
+            except IntegrityError, err:
+                self._proxies = indexer_proxies
+                self.close()
+                con.close()
+                raise ValueError("Duplicate key? %s" % err)
+
+            con.execute("PRAGMA locking_mode=NORMAL")
+            con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
+                    (count, "count"))
+
+            con.commit()
+
+        self._proxies = indexer_proxies
+        self._max_open = max_open
+        self._index_filename = index_filename
+        self._key_function = key_function
+
+    def __repr__(self):
+        return "IndexedSearch('%r', '%r', 'sources=%r', key_function=%r)" % \
+                (self._index_filename, self._format, self._filenames, \
+                self._key_function)
+
+    def __contains__(self, key):
+        return bool(self._con.execute("SELECT key FROM offset_data WHERE "
+            "key=?;", (key,)).fetchone())
+
+    def __len__(self):
+        return self._length
+
+    def __iter__(self):
+        for row in self._con.execute("SELECT key FROM offset_data;"):
+            yield str(row[0])
+
+    # handle python2
+    if hasattr(dict, 'iteritems'):
+        def keys(self):
+            return [str(row[0]) for row in \
+                    self._con.execute("SELECT key FROM offset_data;").fetchall()]
+
+    def __getitem__(self, key):
+        row = self._con.execute("SELECT file_number, offset FROM offset_data "
+                "WHERE key=?;", (key,)).fetchone()
+        if not row:
+            raise KeyError
+        file_number, offset = row
+        proxies = self._proxies
+
+        if file_number in proxies:
+            result = proxies[file_number].get(offset)
+        else:
+            if len(proxies) >= self._max_open:
+                proxies.popitem()[1]._handle.close()
+            # open a new handle
+            proxy = self._indexer_class(self._filenames[file_number])
+            result = proxy.get(offset)
+            proxies[file_number] = proxy
+
+        key2 = self._key_function(result.id)
+        if key != key2:
+            raise ValueError("Key does not match (%s vs %s)" % (key, key2))
+
+        return result
+
+    def get_raw(self, key):
+        """Similar to get, but returns the raw string of the Result object.
+
+        Note that any text or information in the search output file located
+        prior to the first result is ignored.
+
+        """
+        row = self._con.execute("SELECT file_number, offset, length FROM "
+                "offset_data WHERE key=?;", (key,)).fetchone()
+
+        if not row:
+            raise KeyError("Key '%s' does not point to any result in "
+                    "index." % key)
+
+        file_number, offset, length = row
+        proxies = self._proxies
+        if file_number in proxies:
+            if length:
+                handle = proxies[file_number]._handle
+                handle.seek(offset)
+                return handle.read(length)
+            else:
+                return proxies[file_number].get_raw(offset)
+        else:
+            if len(proxies) >= self._max_open:
+                proxies.popitem()[1]._handle.close()
+            # open a new handle
+            proxy = self._indexer_class(self._filenames[file_number])
+            proxies[file_number] = proxy
+            if length:
+                handle = proxy._handle
+                handle.seek(offset)
+                return handle.read(length)
+            else:
+                return proxy.get_raw(offset)
+
+    def close(self):
+        """Close any open file handles."""
+        proxies = self._proxies
+        while proxies:
+            proxies.popitem()[1]._handle.close()
