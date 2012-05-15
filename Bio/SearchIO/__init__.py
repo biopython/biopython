@@ -185,7 +185,7 @@ def to_dict(queries, key_function=lambda rec: rec.id):
     return results
 
 
-def index(handle, format, key_function=None):
+def index(handle, format, key_function=lambda rec: rec.id):
     """Indexes a search output file and returns a dictionary-like object.
 
     - handle    - Handle to the file, or the filename as a string.
@@ -195,17 +195,18 @@ def index(handle, format, key_function=None):
 
     """
     # check if handle type is correct
-    if not isinstance(handle, (basestring, file)):
-        raise TypeError("Handle must either be a handle to a file or its "
-                "name as string")
+    if not isinstance(handle, basestring):
+        raise TypeError("Handle must be a string of filename")
 
     # get the indexer object and do error checking
     indexer = _get_handler(format, _INDEXER_MAP)
 
-    return indexer(handle, key_function)    
+    from Bio.SearchIO._index import IndexedSearch
+    return IndexedSearch(handle, format, indexer, key_function)
 
 
-def index_db(index_filename, filenames=None, format=None, key_function=None):
+def index_db(index_filename, filenames=None, format=None, \
+        key_function=lambda rec: rec.id):
     """Indexes several search output files into an SQLite database.
 
     - index_filename - The SQLite filename.
@@ -233,6 +234,9 @@ def index_db(index_filename, filenames=None, format=None, key_function=None):
     # get the indexer object and do error checking
     indexer = _get_handler(format, _INDEXER_MAP)
 
+    from Bio.SearchIO._index import DbIndexedSearch
+    return DbIndexedSearch(index_filename, filenames, format, indexer, \
+            key_function)
 
 
 def convert(in_file, in_format, out_file, out_format):
