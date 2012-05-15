@@ -198,11 +198,8 @@ def index(handle, format, key_function=lambda rec: rec.id):
     if not isinstance(handle, basestring):
         raise TypeError("Handle must be a string of filename")
 
-    # get the indexer object and do error checking
-    indexer = _get_handler(format, _INDEXER_MAP)
-
     from Bio.SearchIO._index import IndexedSearch
-    return IndexedSearch(handle, format, indexer, key_function)
+    return IndexedSearch(handle, format, key_function)
 
 
 def index_db(index_filename, filenames=None, format=None, \
@@ -225,12 +222,8 @@ def index_db(index_filename, filenames=None, format=None, \
     if not isinstance(filenames, list):
         filenames = list(filenames)
 
-    # get the indexer object and do error checking
-    indexer = _get_handler(format, _INDEXER_MAP)
-
     from Bio.SearchIO._index import DbIndexedSearch
-    return DbIndexedSearch(index_filename, filenames, format, indexer, \
-            key_function)
+    return DbIndexedSearch(index_filename, filenames, format, key_function)
 
 
 def convert(in_file, in_format, out_file, out_format):
