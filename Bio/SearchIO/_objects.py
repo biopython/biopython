@@ -64,6 +64,11 @@ class Result(object):
         # this also makes it more malleable, which could be useful in the future.
         self._hits = OrderedDict(*args, **kwargs)
 
+        # check if there's any non-Hit objects
+        # TODO: is there a way to do this before self._hits creation?
+        if not all([isinstance(x, Hit) for x in self.hits]):
+            raise TypeError("Result object values must be a Hit object.")
+
     def __repr__(self):
         return "Result(program='%s', query='%s', target='%s', %i hits)" % \
                 (self.program, self.query, self.target, len(self._hits))
