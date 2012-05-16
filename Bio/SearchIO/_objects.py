@@ -138,6 +138,9 @@ class Result(object):
         # if key doesn't exist but a default is set, return the default value
         return default
 
+    def __iter__(self):
+        return iter(self.iterhits())
+
     def __contains__(self, key):
         return key in self._hits
 
