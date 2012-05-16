@@ -157,8 +157,8 @@ class Result(object):
 
     def __reversed__(self):
         items = reversed(self._hits.items())
-        return Result(self.program, self.query, self.target, self.header, \
-                items)
+        return self.__class__(self.program, self.query, self.target, \
+                self.header, items)
 
     def __setitem__(self, key, value):
         """Custom Search __setitem__.
@@ -241,8 +241,8 @@ class Result(object):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
             items = self._hits.items()[key]
-            return Result(self.program, self.query, self.target, self.header, \
-                    items)
+            return self.__class__(self.program, self.query, self.target, \
+                    self.header, items)
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(key, int):
