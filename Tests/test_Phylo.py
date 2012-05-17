@@ -94,6 +94,18 @@ class TreeTests(unittest.TestCase):
         tree.root_with_outgroup('19_NEMVE', '20_NEMVE')
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        # Now, at an external node
+        tree.root_with_outgroup('1_BRAFL')
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        # Specifying outgroup branch length mustn't change the total tree size
+        tree.root_with_outgroup('2_BRAFL', outgroup_branch_length=0.5)
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        tree.root_with_outgroup('36_BRAFL', '37_BRAFL',
+                outgroup_branch_length=0.5)
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
         # On small contrived trees, testing edge cases
         for small_nwk in (
                 '(A,B,(C,D));',

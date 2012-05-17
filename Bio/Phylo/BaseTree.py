@@ -314,7 +314,7 @@ class TreeMixin(object):
         >>> matches.next()
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
-        """ 
+        """
         if terminal is not None:
             kwargs['terminal'] = terminal
         is_matching_elem = _combine_matchers(target, kwargs, False)
@@ -390,7 +390,7 @@ class TreeMixin(object):
     def common_ancestor(self, targets, *more_targets):
         """Most recent common ancestor (clade) of all the given targets.
 
-        Edge cases: 
+        Edge cases:
         - If no target is given, returns self.root
         - If 1 target is given, returns the target
         - If any target is not found in this tree, raises a ValueError
@@ -456,7 +456,7 @@ class TreeMixin(object):
 
     def is_bifurcating(self):
         """Return True if tree downstream of node is strictly bifurcating.
-        
+
         I.e., all nodes have either 2 or 0 children (internal or external,
         respectively). The root may have 3 descendents and still be considered
         part of a bifurcating tree, because it has no ancestor.
@@ -509,7 +509,7 @@ class TreeMixin(object):
         """True if target is a descendent of this tree.
 
         Not required to be a direct descendent.
-        
+
         To check only direct descendents of a clade, simply use list membership
         testing: ``if subclade in clade: ...``
         """
@@ -743,7 +743,9 @@ class Tree(TreeElement, TreeMixin):
         from Bio.Phylo.PhyloXML import Phylogeny
         return Phylogeny.from_tree(self, **kwargs)
 
-    def root_with_outgroup(self, outgroup_targets, *more_targets):
+    # XXX Compatibility: In Python 2.6+, **kwargs can be replaced with the named
+    # keyword argument outgroup_branch_length=None
+    def root_with_outgroup(self, outgroup_targets, *more_targets, **kwargs):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
         Operates in-place.
@@ -757,6 +759,14 @@ class Tree(TreeElement, TreeMixin):
           trifurcating root, keeping branches the same
         - If the original root was bifurcating, drop it from the tree,
           preserving total branch lengths
+
+        :param outgroup_branch_length: length of the branch leading to the
+            outgroup after rerooting. If not specified (None), then:
+
+            - If the outgroup is an internal node (not a single terminal taxon),
+              then use that node as the new root.
+            - Otherwise, create a new root node as the parent of the outgroup.
+
         """
         # This raises a ValueError if any target is not in this tree
         # Otherwise, common_ancestor guarantees outgroup is in this tree
@@ -767,19 +777,30 @@ class Tree(TreeElement, TreeMixin):
             return
 
         prev_blen = outgroup.branch_length
-        if outgroup.is_terminal():
+        # Hideous kludge because Py2.x doesn't allow keyword args after *args
+        outgroup_branch_length = kwargs.get('outgroup_branch_length')
+        if outgroup_branch_length is not None:
+            assert 0 <= outgroup_branch_length <= prev_blen, \
+                    "outgroup_branch_length must be between 0 and the " \
+                    "original length of the branch leading to the outgroup."
+
+        if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup
-            outgroup.branch_length = 0.0
+            outgroup.branch_length = outgroup_branch_length or 0.0
             new_root = self.root.__class__(
                     branch_length=self.root.branch_length, clades=[outgroup])
             # The first branch reversal (see the upcoming loop) is modified
             if len(outgroup_path) == 1:
-                # Trivial tree like '(A,B);
+                # No nodes between the original root and outgroup to rearrange.
+                # Most of the code below will be skipped, but we still need
+                # 'new_parent' pointing at the new root.
                 new_parent = new_root
             else:
                 parent = outgroup_path.pop(-2)
+                # First iteration of reversing the path to the outgroup
                 parent.clades.pop(parent.clades.index(outgroup))
-                prev_blen, parent.branch_length = parent.branch_length, prev_blen
+                (prev_blen, parent.branch_length) = (parent.branch_length,
+                        prev_blen - outgroup.branch_length)
                 new_root.clades.insert(0, parent)
                 new_parent = parent
         else:
@@ -828,7 +849,7 @@ class Tree(TreeElement, TreeMixin):
         """True if the root of this tree is terminal."""
         return (not self.root.clades)
 
-    # Convention from SeqRecord and Alignment classes  
+    # Convention from SeqRecord and Alignment classes
 
     def __format__(self, format_spec):
         """Serialize the tree as a string in the specified file format.
