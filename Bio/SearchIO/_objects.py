@@ -19,40 +19,42 @@ from Bio.Align import MultipleSeqAlignment
 
 class Result(object):
 
+    # TODO: Improve Docstrings
+    # TODO: Check for self.filter()? Or implement this in SearchIO.parse?
+
     """Class representing search results from a single query.
 
-    The Result object represents a search result from a single query. It
-    is a subclass of Python's built in OrderedDict class, so it
-    behaves quite similar to OrderedDict, with the following caveats:
+    The Result object represents a search result from a single query, with
+    the following behaviors:
 
     * You can get the corresponding Hit object by using the Hit ID as key
     * Hit ID keys must be a string. This limitation was put to enable
       indexing and/or slicing of the Result object.
-    * Iteration over Result returns the Hit objects contained within.
+    * Iteration over Result returns the Hit objects within.
 
     """
 
-    def __init__(self, program, query, target, header={}, *args, **kwargs):
+    def __init__(self, program, query, target, meta={}, *args, **kwargs):
         """Initializes a Result object.
 
         program -- String of search program name.
         query -- String of query sequence ID.
         target -- String of database name to search against.
-        header -- Dictionary of additional information about the search.
+        meta -- Dictionary of additional information about the search.
                   This is the information stored in the header of the
                   search output file (anything prior to the first result,
                   if it exists) and varies depending on the search program
                   used.
 
         """
-        # header must be a dict
-        if not isinstance(header, dict):
-            raise TypeError("Header argument must be a dictionary object.")
+        # meta must be a dict
+        if not isinstance(meta, dict):
+            raise TypeError("Meta argument must be a dictionary object.")
 
         self.program = program
         self.query = query
         self.target = target
-        self.header = header
+        self.meta = meta
 
         # We're implementing Result as a wrapper for OrderedDict;
         # it could be implemented as a subclass of OrderedDict, but iterating
@@ -148,12 +150,12 @@ class Result(object):
     def __reversed__(self):
         items = reversed(list(self._hits.items()))
         return self.__class__(self.program, self.query, self.target, \
-                self.header, items)
+                self.meta, items)
 
     def __setitem__(self, hit_key, hit):
         """Custom Search __setitem__.
 
-        Key must be a string and value must be a Hit object.
+        Hit key must be a string and hit must be a Hit object.
 
         """
         if not isinstance(hit_key, basestring):
@@ -166,7 +168,7 @@ class Result(object):
         """Custom Search __getitem__.
 
         Allows value retrieval by its key, location index, or a slice of
-        location index. Also allows direct HSP retrieval if key is a tuple
+        location index. Also allows direct HSP retrieval if hit key is a tuple
         or list of hit ID and HSP index.
 
         """
@@ -203,7 +205,7 @@ class Result(object):
             # Result object if it's a slice?
             items = list(self._hits.items())[hit_key]
             return self.__class__(self.program, self.query, self.target, \
-                    self.header, items)
+                    self.meta, items)
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
