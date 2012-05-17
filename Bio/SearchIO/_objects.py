@@ -146,6 +146,28 @@ class Result(object):
         except ValueError:
             return -1
 
+    def sort(self, cmp=None, key=lambda hit: hit.evalue, reverse=False):
+        """Sorts the Hit objects.
+
+        The sort creates a new Hit container object, but appears to be
+        in-place since the new Hit container replaces the old one.
+
+        By default, sorting is based on the expect values of the Hit objects,
+        from the smallest to the largest. If the Hit objects does not have any
+        expect values (e.g. BLAT Hit objects), then sorting is based on the
+        Hit IDs.
+
+        """
+        # create the new sorted OrderedDict
+        try:
+            sorted_hits = OrderedDict(sorted(self.items, cmp, key, reverse))
+        except AttributeError:
+            key = lambda hit: hit.id
+            sorted_hits = OrderedDict(sorted(self.items, cmp, key, reverse))
+
+        # and replace the old one
+        self._hits = sorted_hits
+
     # marker for default self.pop() return value
     # this method is adapted from Python's built in OrderedDict.pop
     # implementation
