@@ -250,6 +250,21 @@ class Result(object):
             raise ValueError("Expected Hit with query ID '%s', found '%s' "
                     "instead." % (self.id, hit.query_id))
 
+    def append(self, hit):
+        """Adds a Hit object to the end of Result.
+
+        This is a shorthand for adding Hit using a dictionary notation with a
+        slightly different behavior. If the Result object already has a Hit
+        with the same ID as the appended Hit, it will raise an error.
+
+        """
+        self._validate_hit(hit)
+        if hit.id not in self:
+            self._hits[hit.id] = hit
+        else:
+            raise ValueError("Hit '%s' already present in this Result." % \
+                    hit.id)
+
     # marker for default self.pop() return value
     # this method is adapted from Python's built in OrderedDict.pop
     # implementation
