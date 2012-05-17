@@ -329,31 +329,80 @@ class Result(object):
         self._hits = sorted_hits
 
 
-
-
-
-
-
-        """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Hit(object):
 
     """Class representing the entire database entry of a sequence match.
 
     """
+
+    def __init__(self, hit_id, query, hsps=[]):
+        """Initializes a Hit object.
+
+        query -- String of the query name used to obtain this hit.
+        hit_id -- String of unique identifier for this hit.
+        hsps -- List containing HSP objects.
+
+        """
+        self.query = query
+        self.id = hit_id
+
+        if not hsps:
+            raise ValueError("Hit object must contain at least one HSP object.")
+
+        self._hsps = []
+        for hsp in hsps:
+            self.append(hsp)
+
+    def __repr__(self):
+        return "Hit(id='%s', %i alignments)" % (self.id, \
+                self.query, len(self))
+    @property
+    def hsps(self):
+        return self._hsps
+
+    def __iter__(self):
+        return iter(self._hsps)
+
+    def __len__(self):
+        return len(self._hsps)
+
+    def __nonzero__(self):
+        return bool(self._hsps)
+
+    def __reversed__(self):
+        return self.__class__(self.id, self.query, reversed(self._hsps))
+
+    def __setitem__(self, idx, hsps):
+        self._validate_hsps(hsps)
+        self._hsps[idx] = hsps
+
+    def __getitem__(self, idx):
+        # if key is slice, return a new Hit instance
+        if isinstance(idx, slice):
+            return self.__class__(self.id, self.query, self._hsps[idx])
+        return self._hsps[idx]
+
+    def __delitem__(self, idx):
+        del self._hsps[idx]
+
+    def _validate_hsp(self, hsp):
+        if not isinstance(hsp, HSP):
+            raise TypeError("Hit objects can only contain HSP objects.")
+        if hsp.hit_id != self.id:
+            raise ValueError("Only HSP objects from the same Hit can be added.")
+
+    def append(self, hsp):
+        self._validate_hsp(hsp)
+        self._hsps.append(hsp)
+
+    def pop(self, index=-1):
+        return self._hsps.pop(index)
+
+    def reverse(self):
+        self._hsps.reverse()
+
+    def sort(self, key=None, reverse=False):
+        self._hsps.sort(key=key, reverse=reverse)
 
 
 class HSP(object):
