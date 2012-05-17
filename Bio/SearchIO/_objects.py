@@ -173,6 +173,9 @@ class Result(object):
         return default
 
     def __contains__(self, key):
+        """Checks whether a Hit object or a Hit object with the given ID exists."""
+        if isinstance(key, Hit):
+            return key.id in self._hits
         return key in self._hits
 
     def __len__(self):
