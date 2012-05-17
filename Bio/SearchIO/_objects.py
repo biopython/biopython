@@ -152,9 +152,16 @@ class Result(object):
         Hit key must be a string and hit must be a Hit object.
 
         """
+        # only accept string keys
         if not isinstance(hit_key, basestring):
             raise TypeError("Result object keys must be a string.")
-        self._validate_hit(hit)
+        # hit must be a Hit object
+        if not isinstance(hit, Hit):
+            raise TypeError("Result objects can only contain Hit objects.")
+        # and it must have the same query ID as this object's ID
+        if hit.query_id != self.id:
+            raise ValueError("Expected Hit with query ID '%s', found '%s' "
+                    "instead." % (self.id, hit.query_id))
 
         self._hits[hit_key] = hit
 
@@ -235,14 +242,6 @@ class Result(object):
 
         for key in hit_keys:
             del self._hits[key]
-
-    def _validate_hit(self, hit):
-        """Checks whether the Hit object is of the correct type and has the right query ID."""
-        if not isinstance(hit, Hit):
-            raise TypeError("Result objects can only contain Hit objects.")
-        if hit.query_id != self.id:
-            raise ValueError("Expected Hit with query ID '%s', found '%s' "
-                    "instead." % (self.id, hit.query_id))
 
     def append(self, hit):
         """Adds a Hit object to the end of Result.
