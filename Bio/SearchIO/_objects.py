@@ -34,11 +34,11 @@ class Result(object):
 
     """
 
-    def __init__(self, program, query, target, meta={}, *args, **kwargs):
+    def __init__(self, program, target, query_id, meta={}, *args, **kwargs):
         """Initializes a Result object.
 
         program -- String of search program name.
-        query -- String of query sequence ID.
+        query_id -- String of query sequence ID.
         target -- String of database name to search against.
         meta -- Dictionary of additional information about the search.
                   This is the information stored in the header of the
@@ -52,7 +52,7 @@ class Result(object):
             raise TypeError("Meta argument must be a dictionary object.")
 
         self.program = program
-        self.query = query
+        self.id = query_id
         self.target = target
         self.meta = meta
 
@@ -73,8 +73,8 @@ class Result(object):
             self._validate_hit(hit)
 
     def __repr__(self):
-        return "Result(program='%s', query='%s', target='%s', %i hits)" % \
-                (self.program, self.query, self.target, len(self._hits))
+        return "Result(program='%s', target='%s', id='%s', %i hits)" % \
+                (self.program, self.target, self.id, len(self._hits))
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -149,7 +149,7 @@ class Result(object):
 
     def __reversed__(self):
         items = reversed(list(self._hits.items()))
-        return self.__class__(self.program, self.query, self.target, \
+        return self.__class__(self.program, self.id, self.target, \
                 self.meta, items)
 
     def __setitem__(self, hit_key, hit):
@@ -204,7 +204,7 @@ class Result(object):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
             items = list(self._hits.items())[hit_key]
-            return self.__class__(self.program, self.query, self.target, \
+            return self.__class__(self.program, self.id, self.target, \
                     self.meta, items)
 
         # if key is an int, then retrieve the Hit at the int index
@@ -244,7 +244,7 @@ class Result(object):
 
     def _validate_hit(self, hit):
         """Checks whether the Hit object is of the correct type and has the right query ID."""
-        if not isinstance(hit, HSP):
+        if not isinstance(hit, Hit):
             raise TypeError("Result objects can only contain Hit objects.")
         if hit.query_id != self.id:
             raise ValueError("Only Hit objects from the same Result can be added.")
@@ -337,15 +337,15 @@ class Hit(object):
 
     """
 
-    def __init__(self, hit_id, query, hsps=[]):
+    def __init__(self, hit_id, query_id, hsps=[]):
         """Initializes a Hit object.
 
-        query -- String of the query name used to obtain this hit.
+        query_id -- String of the query name used to obtain this hit.
         hit_id -- String of unique identifier for this hit.
         hsps -- List containing HSP objects.
 
         """
-        self.query = query
+        self.query_id= query_id
         self.id = hit_id
 
         if not hsps:
@@ -356,8 +356,8 @@ class Hit(object):
             self.append(hsp)
 
     def __repr__(self):
-        return "Hit(id='%s', %i alignments)" % (self.id, \
-                self.query, len(self))
+        return "Hit(id='%s', %i alignments)" % (self.id, len(self))
+
     @property
     def hsps(self):
         return self._hsps
@@ -372,7 +372,7 @@ class Hit(object):
         return bool(self._hsps)
 
     def __reversed__(self):
-        return self.__class__(self.id, self.query, reversed(self._hsps))
+        return self.__class__(self.id, self.query_id, reversed(self._hsps))
 
     def __setitem__(self, idx, hsps):
         self._validate_hsps(hsps)
@@ -381,7 +381,7 @@ class Hit(object):
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
-            return self.__class__(self.id, self.query, self._hsps[idx])
+            return self.__class__(self.id, self.query_id, self._hsps[idx])
         return self._hsps[idx]
 
     def __delitem__(self, idx):
