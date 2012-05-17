@@ -410,7 +410,11 @@ class Hit(object):
         if not isinstance(hsp, HSP):
             raise TypeError("Hit objects can only contain HSP objects.")
         if hsp.hit_id != self.id:
-            raise ValueError("Only HSP objects from the same Hit can be added.")
+            raise ValueError("Expected HSP with hit ID '%s', found '%s' "
+                    "instead." % (self.id, hsp.hit_id))
+        if hsp.query_id != self.query_id:
+            raise ValueError("Expected HSP with query ID '%s', found '%s' "
+                    "instead." % (self.query_id, hsp.query_id))
 
     def append(self, hsp):
         self._validate_hsp(hsp)
