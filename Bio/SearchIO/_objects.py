@@ -154,26 +154,42 @@ class Result(object):
         except ValueError:
             return -1
 
-    def sort(self, cmp=None, key=lambda hit: hit.evalue, reverse=False):
+    def sort(self, key=None, reverse=False):
+        # no cmp argument to make sort more Python 3-like
         """Sorts the Hit objects.
+
+        key -- Function used to sort the Hit objects.
+        reverse -- Boolean, whether to reverse the sorting or not.
+
+        By default, sorting is based on the expect values of the Hit objects,
+        from the smallest to the largest. If the Hit objects do not have any
+        expect values (e.g. BLAT Hit objects), then no sorting is performed.
 
         The sort creates a new Hit container object, but appears to be
         in-place since the new Hit container replaces the old one.
 
-        By default, sorting is based on the expect values of the Hit objects,
-        from the smallest to the largest. If the Hit objects does not have any
-        expect values (e.g. BLAT Hit objects), then sorting is based on the
-        Hit IDs.
-
         """
-        # create the new sorted OrderedDict
-        try:
-            sorted_hits = OrderedDict(sorted(self.items, cmp, key, reverse))
-        except AttributeError:
-            key = lambda hit: hit.id
-            sorted_hits = OrderedDict(sorted(self.items, cmp, key, reverse))
+        # if no key is specified, attempt to sort by Hit evalue
+        if key is None:
+            try:
+                sorted_hits = OrderedDict(sorted(self.items, \
+                        key=lambda hit: hit.evalue, reverse=reverse))
+            # handle cases where the Hit objects doesn't have evalue
+            except AttributeError:
+                # if reverse is set to True, reverse the ordering
+                # we don't use sorted() since no __eq__ etc. magic methods
+                # are defined for Hit objects
+                if reverse:
+                    sorted_hits = OrderedDict(self.items[::-1])
+                # otherwise the object is the same as the old one
+                else:
+                    sorted_hits = self._hits
+        # otherwise try to sort using the given parameters
+        # and let any exceptions rise to the top
+        else:
+            sorted_hits = OrderedDict(sorted(self.items, key=key, \
+                    reverse=reverse))
 
-        # and replace the old one
         self._hits = sorted_hits
 
     # marker for default self.pop() return value
