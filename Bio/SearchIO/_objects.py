@@ -65,13 +65,21 @@ class Result(object):
         self._hits = OrderedDict(*args, **kwargs)
 
         # check if there's any non-Hit objects
-        # TODO: is there a way to do this before self._hits creation?
-        if not all([isinstance(x, Hit) for x in self.hits]):
-            raise TypeError("Result object values must be a Hit object.")
+        # TODO: is there a way to do this before self._hits creation that's
+        # compatible with OrderedDict creation?
+        for hit in self.hits:
+            self._validate_hit(hit)
 
     def __repr__(self):
         return "Result(program='%s', query='%s', target='%s', %i hits)" % \
                 (self.program, self.query, self.target, len(self._hits))
+
+    def _validate_hit(self, hit):
+        """Checks whether the Hit object is of the correct type and has the right query ID."""
+        if not isinstance(hit, HSP):
+            raise TypeError("Result objects can only contain Hit objects.")
+        if hit.query_id != self.id:
+            raise ValueError("Only Hit objects from the same Result can be added.")
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -222,8 +230,7 @@ class Result(object):
         """
         if not isinstance(key, basestring):
             raise TypeError("Result object keys must be a string.")
-        if not isinstance(value, Hit):
-            raise TypeError("Result object values must be a Hit object.")
+        self._validate_hit(value)
 
         self._hits[key] = value
 
