@@ -73,35 +73,64 @@ class Result(object):
         return "Result(program='%s', query='%s', target='%s', %i hits)" % \
                 (self.program, self.query, self.target, len(self._hits))
 
-    @property
-    def hits(self):
-        """Returns a list of Hit objects contained by this object."""
-        return self._hits.values()
+    # handle Python 2 OrderedDict behavior
+    if hasattr(OrderedDict, 'iteritems'):
 
-    @property
-    def ids(self):
-        """Returns a list of Hit IDs contained by this object."""
-        return self._hits.keys()
+        @property
+        def hits(self):
+            """Returns a list of Hit objects contained by this object."""
+            return self._hits.values()
 
-    @property
-    def items(self):
-        """Returns a tuple of Hit ID and Hit object contained by this object."""
-        return self._hits.items()
+        @property
+        def hit_ids(self):
+            """Returns a list of Hit IDs contained by this object."""
+            return self._hits.keys()
 
-    def iterhits(self):
-        """Returns an iterator over the Hit objects."""
-        for hit in self._hits.values():
-            yield hit
+        @property
+        def items(self):
+            """Returns a tuple of Hit ID and Hit object contained by this object."""
+            return self._hits.items()
 
-    def iterids(self):
-        """Returns an iterator over the ID of the Hit objects."""
-        for hit_id in self._hits.keys():
-            yield hit_id
+        def iterhits(self):
+            """Returns an iterator over the Hit objects."""
+            for hit in self._hits.itervalues():
+                yield hit
 
-    def iteritems(self):
-        """Returns an iterator of a tuple of Hit ID and Hit objects."""
-        for item in self._hits.items():
-            yield item
+        def iterhit_ids(self):
+            """Returns an iterator over the ID of the Hit objects."""
+            for hit_id in self._hits.iterkeys():
+                yield hit_id
+
+        def iteritems(self):
+            """Returns an iterator of a tuple of Hit ID and Hit objects."""
+            for item in self._hits.iteritems():
+                yield item
+
+        def __iter__(self):
+            return iter(self.iterhits)
+
+    else:
+
+        @property
+        def hits(self):
+            """Returns an iterator over the Hit objects contained by this object."""
+            for hit in self._hits.values():
+                yield hit
+
+        @property
+        def hit_ids(self):
+            """Returns an iterator over the Hit IDs contained by this object."""
+            for hit_id in  self._hits.keys():
+                yield hit_id
+
+        @property
+        def items(self):
+            """Returns an iterator over the Hit ID and Hit object contained by this object."""
+            for item in self._hits.items():
+                yield item
+
+        def __iter__(self):
+            return iter(self.hits)
 
     def rank(self, key):
         """Returns the rank of a given Hit ID, 0-based.
@@ -110,7 +139,7 @@ class Result(object):
 
         """
         try:
-            return self.ids.index(key)
+            return list(self.hit_ids).index(key)
         except ValueError:
             return -1
 
@@ -132,7 +161,7 @@ class Result(object):
         # if key is an integer (index)
         # get the ID for the Hit object at that index
         if isinstance(key, int):
-            key = self.ids[key]
+            key = list(self.hit_ids)[key]
 
         try:
             return self._hits.pop(key)
@@ -142,9 +171,6 @@ class Result(object):
                 raise KeyError(key)
         # if key doesn't exist but a default is set, return the default value
         return default
-
-    def __iter__(self):
-        return iter(self.iterhits())
 
     def __contains__(self, key):
         return key in self._hits
@@ -156,7 +182,7 @@ class Result(object):
         return bool(self._hits)
 
     def __reversed__(self):
-        items = reversed(self._hits.items())
+        items = reversed(list(self._hits.items()))
         return self.__class__(self.program, self.query, self.target, \
                 self.header, items)
 
@@ -187,10 +213,10 @@ class Result(object):
         # if it's an integer or slice, get the corresponding key first
         # and put it into a list
         if isinstance(key, int):
-            keys = [self.ids[key]]
+            keys = [list(self.hit_ids)[key]]
         # the same, if it's a slice
         elif isinstance(key, slice):
-            keys = self.ids[key]
+            keys = list(self.hit_ids)[key]
         # if it's already a list or tuple, we just reassign it to a new name
         elif isinstance(key, (list, tuple)):
             keys = key
@@ -229,7 +255,7 @@ class Result(object):
                 hit = self._hits[hit_id]
             elif isinstance(hit_id, int):
                 # if not, retrieve from the list
-                hit = self.hits[hit_id]
+                hit = list(self.hits)[hit_id]
             else:
                 raise TypeError("Hit index must be a string or an integer if "
                         "double-index slicing is performed.")
@@ -240,13 +266,13 @@ class Result(object):
         elif isinstance(key, slice):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
-            items = self._hits.items()[key]
+            items = list(self._hits.items())[key]
             return self.__class__(self.program, self.query, self.target, \
                     self.header, items)
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(key, int):
-            return self.hits[key]
+            return list(self.hits)[key]
 
         # if key is a string, then do a regular dictionary retrieval
         return self._hits[key]
