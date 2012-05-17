@@ -247,7 +247,8 @@ class Result(object):
         if not isinstance(hit, Hit):
             raise TypeError("Result objects can only contain Hit objects.")
         if hit.query_id != self.id:
-            raise ValueError("Only Hit objects from the same Result can be added.")
+            raise ValueError("Expected Hit with query ID '%s', found '%s' "
+                    "instead." % (self.id, hit.query_id))
 
     # marker for default self.pop() return value
     # this method is adapted from Python's built in OrderedDict.pop
