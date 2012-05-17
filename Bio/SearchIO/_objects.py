@@ -74,15 +74,11 @@ class Result(object):
         return "Result(program='%s', query='%s', target='%s', %i hits)" % \
                 (self.program, self.query, self.target, len(self._hits))
 
-    def _validate_hit(self, hit):
-        """Checks whether the Hit object is of the correct type and has the right query ID."""
-        if not isinstance(hit, HSP):
-            raise TypeError("Result objects can only contain Hit objects.")
-        if hit.query_id != self.id:
-            raise ValueError("Only Hit objects from the same Result can be added.")
-
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
+
+        def __iter__(self):
+            return iter(self.iterhits)
 
         @property
         def hits(self):
@@ -114,10 +110,10 @@ class Result(object):
             for item in self._hits.iteritems():
                 yield item
 
-        def __iter__(self):
-            return iter(self.iterhits)
-
     else:
+
+        def __iter__(self):
+            return iter(self.hits)
 
         @property
         def hits(self):
@@ -137,10 +133,150 @@ class Result(object):
             for item in self._hits.items():
                 yield item
 
-        def __iter__(self):
-            return iter(self.hits)
+    def __contains__(self, hit_key):
+        """Checks whether a Hit object or a Hit object with the given ID exists."""
+        if isinstance(hit_key, Hit):
+            return hit_key.id in self._hits
+        return hit_key in self._hits
 
-    def rank(self, key):
+    def __len__(self):
+        return len(self._hits)
+
+    def __nonzero__(self):
+        return bool(self._hits)
+
+    def __reversed__(self):
+        items = reversed(list(self._hits.items()))
+        return self.__class__(self.program, self.query, self.target, \
+                self.header, items)
+
+    def __setitem__(self, hit_key, hit):
+        """Custom Search __setitem__.
+
+        Key must be a string and value must be a Hit object.
+
+        """
+        if not isinstance(hit_key, basestring):
+            raise TypeError("Result object keys must be a string.")
+        self._validate_hit(hit)
+
+        self._hits[hit_key] = hit
+
+    def __getitem__(self, hit_key):
+        """Custom Search __getitem__.
+
+        Allows value retrieval by its key, location index, or a slice of
+        location index. Also allows direct HSP retrieval if key is a tuple
+        or list of hit ID and HSP index.
+
+        """
+        # allow for direct HSP retrieval if key is list / tuple
+        # of two items (hit index / id, hsp rank)
+        # retrieve Hit object first, then get the HSP according
+        # to the given index
+        if isinstance(hit_key, (tuple, list)):
+            # ensure the tuple / list has at least 2 items
+            try:
+                hit_id = hit_key[0]
+                # note that this allows the second item to be a slice as well
+                hsp_rank = hit_key[1]
+            except IndexError:
+                raise ValueError("Expected tuple or list with 2 items, found: "
+                        "%i item(s)." % len(hit_key))
+
+            # allow for hit retrieval by string ID or integer index
+            if isinstance(hit_id, basestring):
+                # if key is string, we can retrieve directly from the dict
+                hit = self._hits[hit_id]
+            elif isinstance(hit_id, int):
+                # if not, retrieve from the list
+                hit = list(self.hits)[hit_id]
+            else:
+                raise TypeError("Hit index must be a string or an integer if "
+                        "double-index slicing is performed.")
+
+            return hit[hsp_rank]
+
+        # retrieval using slice objects returns another Result object
+        elif isinstance(hit_key, slice):
+            # should we return just a list of Hits instead of a full blown
+            # Result object if it's a slice?
+            items = list(self._hits.items())[hit_key]
+            return self.__class__(self.program, self.query, self.target, \
+                    self.header, items)
+
+        # if key is an int, then retrieve the Hit at the int index
+        elif isinstance(hit_key, int):
+            return list(self.hits)[hit_key]
+
+        # if key is a string, then do a regular dictionary retrieval
+        return self._hits[hit_key]
+
+    def __delitem__(self, hit_key):
+        """Custom Search __delitem__
+
+        If key is a string, then the method will delete the Hit object whose
+        ID matches the string. If key is an integer or a slice object, then
+        the Hit objects within that range will be deleted.
+
+        Also accepts a list of strings, which will delete all the Hit whose ID
+        matches the strings in the list.
+
+        """
+        # if it's an integer or slice, get the corresponding key first
+        # and put it into a list
+        if isinstance(hit_key, int):
+            hit_keys = [list(self.hit_ids)[hit_key]]
+        # the same, if it's a slice
+        elif isinstance(hit_key, slice):
+            hit_keys = list(self.hit_ids)[hit_key]
+        # if it's already a list or tuple, we just reassign it to a new name
+        elif isinstance(hit_key, (list, tuple)):
+            hit_keys = hit_key
+        # otherwise put it in a list
+        else:
+            hit_keys = [hit_key]
+
+        for key in hit_keys:
+            del self._hits[key]
+
+    def _validate_hit(self, hit):
+        """Checks whether the Hit object is of the correct type and has the right query ID."""
+        if not isinstance(hit, HSP):
+            raise TypeError("Result objects can only contain Hit objects.")
+        if hit.query_id != self.id:
+            raise ValueError("Only Hit objects from the same Result can be added.")
+
+    # marker for default self.pop() return value
+    # this method is adapted from Python's built in OrderedDict.pop
+    # implementation
+    __marker = object()
+
+    def pop(self, hit_key, default=__marker):
+        """Removes the specified key and return its value.
+
+        Similar to __getitem__, pop also allows Hit retrieval (removal in this
+        case) by its index in addition to its ID.
+
+        If the key does not exist and default is given, return the default
+        value. Otherwise a KeyError will be raised.
+
+        """
+        # if key is an integer (index)
+        # get the ID for the Hit object at that index
+        if isinstance(hit_key, int):
+            hit_key = list(self.hit_ids)[hit_key]
+
+        try:
+            return self._hits.pop(hit_key)
+        except KeyError:
+            # if key doesn't exist and no default is set, raise a KeyError
+            if default is self.__marker:
+                raise KeyError(hit_key)
+        # if key doesn't exist but a default is set, return the default value
+        return default
+
+    def rank(self, hit_key):
         """Returns the rank of a given Hit ID, 0-based.
 
         Also accepts a Hit object as the argument, which returns the rank of
@@ -148,9 +284,9 @@ class Result(object):
 
         """
         try:
-            if isinstance(key, Hit):
-                return list(self.hit_ids).index(key.id)
-            return list(self.hit_ids).index(key)
+            if isinstance(hit_key, Hit):
+                return list(self.hit_ids).index(hit_key.id)
+            return list(self.hit_ids).index(hit_key)
         except ValueError:
             return -1
 
@@ -192,141 +328,25 @@ class Result(object):
 
         self._hits = sorted_hits
 
-    # marker for default self.pop() return value
-    # this method is adapted from Python's built in OrderedDict.pop
-    # implementation
-    __marker = object()
 
-    def pop(self, key, default=__marker):
-        """Removes the specified key and return its value.
 
-        Similar to __getitem__, pop also allows Hit retrieval (removal in this
-        case) by its index in addition to its ID.
 
-        If the key does not exist and default is given, return the default
-        value. Otherwise a KeyError will be raised.
+
+
 
         """
-        # if key is an integer (index)
-        # get the ID for the Hit object at that index
-        if isinstance(key, int):
-            key = list(self.hit_ids)[key]
 
-        try:
-            return self._hits.pop(key)
-        except KeyError:
-            # if key doesn't exist and no default is set, raise a KeyError
-            if default is self.__marker:
-                raise KeyError(key)
-        # if key doesn't exist but a default is set, return the default value
-        return default
 
-    def __contains__(self, key):
-        """Checks whether a Hit object or a Hit object with the given ID exists."""
-        if isinstance(key, Hit):
-            return key.id in self._hits
-        return key in self._hits
 
-    def __len__(self):
-        return len(self._hits)
 
-    def __nonzero__(self):
-        return bool(self._hits)
 
-    def __reversed__(self):
-        items = reversed(list(self._hits.items()))
-        return self.__class__(self.program, self.query, self.target, \
-                self.header, items)
 
-    def __setitem__(self, key, value):
-        """Custom Search __setitem__.
 
-        Key must be a string and value must be a Hit object.
 
-        """
-        if not isinstance(key, basestring):
-            raise TypeError("Result object keys must be a string.")
-        self._validate_hit(value)
 
-        self._hits[key] = value
 
-    def __delitem__(self, key):
-        """Custom Search __delitem__
 
-        If key is a string, then the method will delete the Hit object whose
-        ID matches the string. If key is an integer or a slice object, then
-        the Hit objects within that range will be deleted.
 
-        Also accepts a list of strings, which will delete all the Hit whose ID
-        matches the strings in the list.
-
-        """
-        # if it's an integer or slice, get the corresponding key first
-        # and put it into a list
-        if isinstance(key, int):
-            keys = [list(self.hit_ids)[key]]
-        # the same, if it's a slice
-        elif isinstance(key, slice):
-            keys = list(self.hit_ids)[key]
-        # if it's already a list or tuple, we just reassign it to a new name
-        elif isinstance(key, (list, tuple)):
-            keys = key
-        # otherwise put it in a list
-        else:
-            keys = [key]
-
-        for k in keys:
-            del self._hits[k]
-
-    def __getitem__(self, key):
-        """Custom Search __getitem__.
-
-        Allows value retrieval by its key, location index, or a slice of
-        location index. Also allows direct HSP retrieval if key is a tuple
-        or list of hit ID and HSP index.
-
-        """
-        # allow for direct HSP retrieval if key is list / tuple
-        # of two items (hit index / id, hsp rank)
-        # retrieve Hit object first, then get the HSP according
-        # to the given index
-        if isinstance(key, (tuple, list)):
-            # ensure the tuple / list has at least 2 items
-            try:
-                hit_id = key[0]
-                # note that this allows the second item to be a slice as well
-                hsp_rank = key[1]
-            except IndexError:
-                raise ValueError("Expected tuple or list with 2 items, found: "
-                        "%i item(s)." % len(key))
-
-            # allow for hit retrieval by string ID or integer index
-            if isinstance(hit_id, basestring):
-                # if key is string, we can retrieve directly from the dict
-                hit = self._hits[hit_id]
-            elif isinstance(hit_id, int):
-                # if not, retrieve from the list
-                hit = list(self.hits)[hit_id]
-            else:
-                raise TypeError("Hit index must be a string or an integer if "
-                        "double-index slicing is performed.")
-
-            return hit[hsp_rank]
-
-        # retrieval using slice objects returns another Result object
-        elif isinstance(key, slice):
-            # should we return just a list of Hits instead of a full blown
-            # Result object if it's a slice?
-            items = list(self._hits.items())[key]
-            return self.__class__(self.program, self.query, self.target, \
-                    self.header, items)
-
-        # if key is an int, then retrieve the Hit at the int index
-        elif isinstance(key, int):
-            return list(self.hits)[key]
-
-        # if key is a string, then do a regular dictionary retrieval
-        return self._hits[key]
 
 
 class Hit(object):
