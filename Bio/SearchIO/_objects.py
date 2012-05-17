@@ -135,10 +135,13 @@ class Result(object):
     def rank(self, key):
         """Returns the rank of a given Hit ID, 0-based.
 
-        If the given key is not found, returns -1 instead.
+        Also accepts a Hit object as the argument, which returns the rank of
+        the Hit object ID. If the given key is not found, returns -1 instead.
 
         """
         try:
+            if isinstance(key, Hit):
+                return list(self.hit_ids).index(key.id)
             return list(self.hit_ids).index(key)
         except ValueError:
             return -1
