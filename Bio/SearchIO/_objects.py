@@ -80,7 +80,7 @@ class Result(object):
     if hasattr(OrderedDict, 'iteritems'):
 
         def __iter__(self):
-            return iter(self.iterhits)
+            return iter(self.iterhits())
 
         @property
         def hits(self):
@@ -149,7 +149,7 @@ class Result(object):
 
     def __reversed__(self):
         items = reversed(list(self._hits.items()))
-        return self.__class__(self.program, self.id, self.target, \
+        return self.__class__(self.program, self.target, self.id, \
                 self.meta, items)
 
     def __setitem__(self, hit_key, hit):
@@ -204,7 +204,7 @@ class Result(object):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
             items = list(self._hits.items())[hit_key]
-            return self.__class__(self.program, self.id, self.target, \
+            return self.__class__(self.program, self.target, self.id, \
                     self.meta, items)
 
         # if key is an int, then retrieve the Hit at the int index
