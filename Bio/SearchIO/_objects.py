@@ -252,9 +252,8 @@ class Result(object):
         with the same ID as the appended Hit, it will raise an error.
 
         """
-        self._validate_hit(hit)
         if hit.id not in self:
-            self._hits[hit.id] = hit
+            self[hit.id] = hit
         else:
             raise ValueError("Hit '%s' already present in this Result." % \
                     hit.id)
