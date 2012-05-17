@@ -34,17 +34,19 @@ class Result(object):
 
     """
 
-    def __init__(self, program, target, query_id, meta={}, *args, **kwargs):
+    def __init__(self, program, target, query_id, hits=[], meta={}):
         """Initializes a Result object.
 
         program -- String of search program name.
         query_id -- String of query sequence ID.
         target -- String of database name to search against.
-        meta -- Dictionary of additional information about the search.
-                  This is the information stored in the header of the
-                  search output file (anything prior to the first result,
-                  if it exists) and varies depending on the search program
-                  used.
+        hits -- List of Hit objects or a list of two-item tuples/lists,
+                each containing a string Hit identifier as the first item and
+                a Hit object as the second.
+        meta -- Dictionary of additional information about the search. This is
+                the information stored in the header of the search output file
+                (anything prior to the first result, if it exists) and varies
+                depending on the search program used.
 
         """
         # meta must be a dict
@@ -55,22 +57,14 @@ class Result(object):
         self.id = query_id
         self.target = target
         self.meta = meta
+        self._hits = OrderedDict()
 
-        # We're implementing Result as a wrapper for OrderedDict;
-        # it could be implemented as a subclass of OrderedDict, but iterating
-        # over Result would then return the dict keys instead of the Hit objects
-        # contained within. I haven't found an elegant way to make it return
-        # the Hit objects without breaking the other methods (e.g. keys())
-        # The tradeoff of implementing it as and OrderedDict wrapper is that
-        # there's more methods to define, so the code is more verbose. However
-        # this also makes it more malleable, which could be useful in the future.
-        self._hits = OrderedDict(*args, **kwargs)
-
-        # check if there's any non-Hit objects
-        # TODO: is there a way to do this before self._hits creation that's
-        # compatible with OrderedDict creation?
-        for hit in self.hits:
-            self._validate_hit(hit)
+        # validate Hit objects and fill up self._hits
+        for hit in hits:
+            if isinstance(hit, Hit):
+                self.append(hit)
+            elif isinstance(hit, (tuple, list)):
+                self[hit[0]] = hit[1]
 
     def __repr__(self):
         return "Result(program='%s', target='%s', id='%s', %i hits)" % \
@@ -150,7 +144,7 @@ class Result(object):
     def __reversed__(self):
         items = reversed(list(self._hits.items()))
         return self.__class__(self.program, self.target, self.id, \
-                self.meta, items)
+                items, self.meta)
 
     def __setitem__(self, hit_key, hit):
         """Custom Search __setitem__.
@@ -205,7 +199,7 @@ class Result(object):
             # Result object if it's a slice?
             items = list(self._hits.items())[hit_key]
             return self.__class__(self.program, self.target, self.id, \
-                    self.meta, items)
+                    items, self.meta)
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
