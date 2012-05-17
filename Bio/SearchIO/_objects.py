@@ -255,7 +255,7 @@ class Result(object):
     # implementation
     __marker = object()
 
-    def pop(self, hit_key, default=__marker):
+    def pop(self, hit_key=-1, default=__marker):
         """Removes the specified key and return its value.
 
         Similar to __getitem__, pop also allows Hit retrieval (removal in this
@@ -268,6 +268,9 @@ class Result(object):
         # if key is an integer (index)
         # get the ID for the Hit object at that index
         if isinstance(hit_key, int):
+            # raise the appropriate error if there is no hit
+            if not self:
+                raise IndexError("pop from empty list")
             hit_key = list(self.hit_ids)[hit_key]
 
         try:
