@@ -383,7 +383,13 @@ class Hit(object):
         return self.__class__(self.id, self.query_id, reversed(self._hsps))
 
     def __setitem__(self, idx, hsps):
-        self._validate_hsps(hsps)
+        # handle case if hsps is a list of hsp
+        if isinstance(hsps, (list, tuple)):
+            for hsp in hsps:
+                self._validate_hsp(hsp)
+        else:
+            self._validate_hsp(hsps)
+
         self._hsps[idx] = hsps
 
     def __getitem__(self, idx):
