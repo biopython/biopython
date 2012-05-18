@@ -30,19 +30,19 @@ class Result(object):
 
     """
 
-    def __init__(self, program, target, query_id, hits=[], meta={}):
+    def __init__(self, program, target, query_id, hits=[], meta={}, \
+            hit_key_function=None):
         """Initializes a Result object.
 
         program -- String of search program name.
         query_id -- String of query sequence ID.
         target -- String of database name to search against.
-        hits -- List of Hit objects or a list of two-item tuples/lists,
-                each containing a string Hit identifier as the first item and
-                a Hit object as the second.
+        hits -- List of Hit objects.
         meta -- Dictionary of additional information about the search. This is
                 the information stored in the header of the search output file
                 (anything prior to the first result, if it exists) and varies
                 depending on the search program used.
+        hit_key_function -- Function to define hit keys.
 
         """
         # meta must be a dict
@@ -53,14 +53,13 @@ class Result(object):
         self.id = query_id
         self.target = target
         self.meta = meta
+        self._hit_key_function = hit_key_function
         self._hits = OrderedDict()
 
         # validate Hit objects and fill up self._hits
         for hit in hits:
-            if isinstance(hit, Hit):
-                self.append(hit)
-            elif isinstance(hit, (tuple, list)):
-                self[hit[0]] = hit[1]
+            # validation is handled by __setitem__
+            self.append(hit)
 
     def __repr__(self):
         return "Result(program='%s', target='%s', id='%s', %i hits)" % \
@@ -128,7 +127,7 @@ class Result(object):
     def __contains__(self, hit_key):
         """Checks whether a Hit object or a Hit object with the given ID exists."""
         if isinstance(hit_key, Hit):
-            return hit_key.id in self._hits
+            return self._hit_key_function(hit_key) in self._hits
         return hit_key in self._hits
 
     def __len__(self):
@@ -138,9 +137,9 @@ class Result(object):
         return bool(self._hits)
 
     def __reversed__(self):
-        items = reversed(list(self._hits.items()))
+        hits = reversed(list(self.hits))
         return self.__class__(self.program, self.target, self.id, \
-                items, self.meta)
+                hits, self.meta, self._hit_key_function)
 
     def __setitem__(self, hit_key, hit):
         """Custom Search __setitem__.
@@ -200,9 +199,9 @@ class Result(object):
         elif isinstance(hit_key, slice):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
-            items = list(self._hits.items())[hit_key]
+            hits = list(self.hits)[hit_key]
             return self.__class__(self.program, self.target, self.id, \
-                    items, self.meta)
+                    hits, self.meta, self._hit_key_function)
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
@@ -242,16 +241,18 @@ class Result(object):
     def append(self, hit):
         """Adds a Hit object to the end of Result.
 
-        This is a shorthand for adding Hit using a dictionary notation with a
-        slightly different behavior. If the Result object already has a Hit
-        with the same ID as the appended Hit, it will raise an error.
-
         """
-        if hit.id not in self:
-            self[hit.id] = hit
+        # if a custom hit_key_function is supplied, use it to define th hit key
+        if self._hit_key_function is not None:
+            hit_key = self._hit_key_function(hit)
+        else:
+            hit_key = hit.id
+
+        if hit_key not in self:
+            self[hit_key] = hit
         else:
             raise ValueError("Hit '%s' already present in this Result." % \
-                    hit.id)
+                    hit_key)
 
     # marker for default self.pop() return value
     # this method is adapted from Python's built in OrderedDict.pop
