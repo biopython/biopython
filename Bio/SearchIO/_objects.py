@@ -7,14 +7,10 @@
 
 """
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from Bio.SearchIO._aux import OrderedDict
-
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
+from Bio._py3k import OrderedDict
 
 
 class Result(object):
