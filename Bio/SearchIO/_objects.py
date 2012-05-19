@@ -351,18 +351,22 @@ class Hit(object):
 
         query_id -- String of the query name used to obtain this hit.
         hit_id -- String of unique identifier for this hit.
-        hsps -- List containing HSP objects.
+        hsps -- Iterable returning HSP objects.
 
         """
         self.query_id= query_id
         self.id = hit_id
 
+        # Hit must contain a minimum of one HSP object
         if not hsps:
             raise ValueError("Hit object must contain at least one HSP object.")
 
         self._hsps = []
         for hsp in hsps:
-            self.append(hsp)
+            # validate each HSP
+            self._validate_hsp(hsp)
+            # and store it them as an instance attribute
+            self._hsps.append(hsp)
 
     def __repr__(self):
         return "Hit(id='%s', %i alignments)" % (self.id, len(self))
