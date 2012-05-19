@@ -369,7 +369,11 @@ class Hit(object):
             self._hsps.append(hsp)
 
     def __repr__(self):
-        return "Hit(id='%s', %i alignments)" % (self.id, len(self))
+        if len(self) == 1:
+            al = 'alignment'
+        else:
+            al = 'alignments'
+        return "Hit(id='%s', %i %s)" % (self.id, len(self), al)
 
     @property
     def hsps(self):
