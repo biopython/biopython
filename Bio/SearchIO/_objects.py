@@ -7,9 +7,10 @@
 
 """
 
+from Bio.Align import MultipleSeqAlignment
+from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Align import MultipleSeqAlignment
 from Bio._py3k import OrderedDict
 
 
@@ -430,6 +431,91 @@ class HSP(object):
     """Class representing high-scoring alignment regions of the query and hit.
 
     """
+
+    def __init__(self, hit_id, query_id, hit_seq='', query_seq='', \
+            alphabet=single_letter_alphabet):
+        """Initializes an HSP object.
+
+        hit_id -- String, Hit ID of the HSP object.
+        query_id -- String of the search query ID.
+        hit_seq -- String or SeqRecord object of the aligned Hit sequence.
+        query_seq -- String or SeqRecord object of the aligned query sequence.
+
+        """
+        self.hit_id = hit_id
+        self.query_id = query_id
+        self._alphabet = alphabet
+
+        # only accept hit_seq and query_seq as string or SeqRecord objects
+        if not isinstance(hit_seq, (SeqRecord, basestring)) or \
+                not isinstance(query_seq, (SeqRecord, basestring)):
+            raise TypeError("HSP sequence must be a string or a "
+                    "SeqRecord object.")
+
+        # only initialize MultipleSeqAlignment if hit_seq and query_seq is given
+        if hit_seq and query_seq:
+
+            # if hit_seq is a string, create a new SeqRecord object
+            if isinstance(hit_seq, basestring):
+                hit = SeqRecord(Seq(hit_seq, alphabet), id=hit_id, \
+                        name='hit', description='aligned hit sequence')
+            # otherwise hit is the hit_seq
+            else:
+                hit = hit_seq
+
+            # same thing for query
+            if isinstance(query_seq, basestring):
+                query = SeqRecord(Seq(query_seq, alphabet), id=query_id, \
+                        name='query', description='aligned query sequence')
+            else:
+                query = query_seq
+
+            self.query = query
+            self.hit = hit
+            self.alignment = MultipleSeqAlignment([query, hit], alphabet)
+
+        else:
+            self.query, self.hit, self.alignment = None, None, None
+
+    def __repr__(self):
+        info = "hit='%s'" % self.hit_id
+
+        try:
+            info += ", length=%i" % len(self)
+        except TypeError:
+            pass
+
+        try:
+            info += ", evalue=%s" % str(self.evalue)
+        except AttributeError:
+            pass
+
+        return "HSP(%s)" % (info)
+
+    def __len__(self):
+        if hasattr(self, 'alignment'):
+            return len(self.query)
+        else:
+            try:
+                return self.length
+            except AttributeError:
+                raise TypeError("HSP objects without alignment does not have any length.")
+
+    def __getitem__(self, idx):
+        if hasattr(self, 'alignment'):
+            return self.__class__(self.hit_id, self.query_id, self.hit[idx], \
+                    self.query[idx], self._alphabet)
+        else:
+            raise TypeError("Slicing for HSP objects without alignment is not supported.")
+
+    def __delitem__(self, idx):
+        raise TypeError("HSP objects are read-only.")
+
+    def __setitem__(self, idx, value):
+        raise TypeError("HSP objects are read-only.")
+
+    def __iter__(self):
+        raise TypeError("HSP objects do not support iteration.")
 
 
 class SearchIndexer(object):
