@@ -14,7 +14,33 @@ from Bio.SeqRecord import SeqRecord
 from Bio._py3k import OrderedDict
 
 
-class Result(object):
+class _StickyObject(object):
+
+    """Abstract class that defines a method to transfer instance attributes."""
+
+    _NON_STICKY_ATTRS = ()
+
+    def _transfer_attrs(self, obj):
+        """Transfer instance attributes to the given object.
+
+        This method is used to transfer attributes set externally (for example
+        using setattr()) to a new object created from this one (for example
+        from slicing).
+
+        The reason this method is necessary is because different parsers will
+        set different attributes for each Result, Hit, or HSP object they use,
+        depending on the attributes they found in the search output file.
+        Ideally, we want these attributes to 'stick' with any new instance
+        object created from the original one.
+
+        """
+        # list of attribute names we don't want to transfer
+        for attr in self.__dict__.keys():
+            if attr not in self._NON_STICKY_ATTRS:
+                setattr(obj, attr, self.__dict__[attr])
+
+
+class Result(_StickyObject):
 
     # TODO: Improve Docstrings
     # TODO: Check for self.filter()? Or implement this in SearchIO.parse?
@@ -30,6 +56,10 @@ class Result(object):
     * Iteration over Result returns the Hit objects within.
 
     """
+
+    # attributes we don't want to transfer when creating a new Result class
+    # from this one
+    _NON_STICKY_ATTRS = ('_hits',)
 
     def __init__(self, program, target, query_id, hits=[], meta={}, \
             hit_key_function=None):
@@ -139,8 +169,10 @@ class Result(object):
 
     def __reversed__(self):
         hits = reversed(list(self.hits))
-        return self.__class__(self.program, self.target, self.id, \
+        obj =  self.__class__(self.program, self.target, self.id, \
                 hits, self.meta, self._hit_key_function)
+        self._transfer_attrs(obj)
+        return obj
 
     def __setitem__(self, hit_key, hit):
         """Custom Search __setitem__.
@@ -201,8 +233,10 @@ class Result(object):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
             hits = list(self.hits)[hit_key]
-            return self.__class__(self.program, self.target, self.id, \
+            obj = self.__class__(self.program, self.target, self.id, \
                     hits, self.meta, self._hit_key_function)
+            self._transfer_attrs(obj)
+            return obj
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
@@ -340,11 +374,15 @@ class Result(object):
         self._hits = sorted_hits
 
 
-class Hit(object):
+class Hit(_StickyObject):
 
     """Class representing the entire database entry of a sequence match.
 
     """
+
+    # attributes we don't want to transfer when creating a new Hit class
+    # from this one
+    _NON_STICKY_ATTRS = ('_hsps',)
 
     def __init__(self, hit_id, query_id, hsps=[]):
         """Initializes a Hit object.
@@ -389,7 +427,9 @@ class Hit(object):
         return bool(self._hsps)
 
     def __reversed__(self):
-        return self.__class__(self.id, self.query_id, reversed(self._hsps))
+        obj = self.__class__(self.id, self.query_id, reversed(self._hsps))
+        self._transfer_attrs(obj)
+        return obj
 
     def __setitem__(self, idx, hsps):
         # handle case if hsps is a list of hsp
@@ -404,7 +444,9 @@ class Hit(object):
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
-            return self.__class__(self.id, self.query_id, self._hsps[idx])
+            obj = self.__class__(self.id, self.query_id, self._hsps[idx])
+            self._transfer_attrs(obj)
+            return obj
         return self._hsps[idx]
 
     def __delitem__(self, idx):
@@ -434,11 +476,15 @@ class Hit(object):
         self._hsps.sort(key=key, reverse=reverse)
 
 
-class HSP(object):
+class HSP(_StickyObject):
 
     """Class representing high-scoring alignment regions of the query and hit.
 
     """
+
+    # attributes we don't want to transfer when creating a new HSP class
+    # from this one
+    _NON_STICKY_ATTRS = ('hit', 'query', 'alignment',)
 
     def __init__(self, hit_id, query_id, hit_seq='', query_seq='', \
             alphabet=single_letter_alphabet):
@@ -511,8 +557,10 @@ class HSP(object):
 
     def __getitem__(self, idx):
         if hasattr(self, 'alignment'):
-            return self.__class__(self.hit_id, self.query_id, self.hit[idx], \
+            obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
                     self.query[idx], self._alphabet)
+            self._transfer_attrs(obj)
+            return obj
         else:
             raise TypeError("Slicing for HSP objects without alignment is not supported.")
 
