@@ -61,18 +61,18 @@ class Result(_StickyObject):
     # from this one
     _NON_STICKY_ATTRS = ('_hits',)
 
-    def __init__(self, program, target, query_id, hits=[], meta={}, \
-            hit_key_function=None):
+    def __init__(self, query_id, hits=[], meta={}, program='<unknown>', \
+            target='<unknown>', hit_key_function=None):
         """Initializes a Result object.
 
-        program -- String of search program name.
         query_id -- String of query sequence ID.
-        target -- String of database name to search against.
         hits -- List of Hit objects.
         meta -- Dictionary of additional information about the search. This is
                 the information stored in the header of the search output file
                 (anything prior to the first result, if it exists) and varies
                 depending on the search program used.
+        program -- String of search program name.
+        target -- String of database name to search against.
         hit_key_function -- Function to define hit keys.
 
         """
@@ -80,10 +80,10 @@ class Result(_StickyObject):
         if not isinstance(meta, dict):
             raise TypeError("Meta argument must be a dictionary object.")
 
-        self.program = program
         self.id = query_id
-        self.target = target
         self.meta = meta
+        self.program = program
+        self.target = target
         self._hit_key_function = hit_key_function
         self._hits = OrderedDict()
 
@@ -172,8 +172,8 @@ class Result(_StickyObject):
 
     def __reversed__(self):
         hits = reversed(list(self.hits))
-        obj =  self.__class__(self.program, self.target, self.id, \
-                hits, self.meta, self._hit_key_function)
+        obj =  self.__class__(self.id, hits, self.meta, self.program, \
+                self.target, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -236,8 +236,8 @@ class Result(_StickyObject):
             # should we return just a list of Hits instead of a full blown
             # Result object if it's a slice?
             hits = list(self.hits)[hit_key]
-            obj = self.__class__(self.program, self.target, self.id, \
-                    hits, self.meta, self._hit_key_function)
+            obj =  self.__class__(self.id, hits, self.meta, self.program, \
+                    self.target, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
