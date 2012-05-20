@@ -229,7 +229,10 @@ class Result(_StickyObject):
                 raise TypeError("Hit index must be a string or an integer if "
                         "double-index slicing is performed.")
 
-            return hit[hsp_rank]
+            # return a list of hsps if hsp_rank is a slice object, instead
+            # of simply slicing the hit object (which would return another hit
+            # object)
+            return hit.hsps[hsp_rank]
 
         # retrieval using slice objects returns another Result object
         elif isinstance(hit_key, slice):
