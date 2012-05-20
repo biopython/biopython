@@ -93,8 +93,11 @@ class Result(_StickyObject):
             self.append(hit)
 
     def __repr__(self):
-        return "Result(program='%s', target='%s', id='%s', %i hits)" % \
-                (self.program, self.target, self.id, len(self._hits))
+        hit = 'hit'
+        if len(self) != 1:
+            hit += 's'
+        return "Result(program='%s', target='%s', id='%s', %i %s)" % \
+                (self.program, self.target, self.id, len(self), hit)
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -407,11 +410,11 @@ class Hit(_StickyObject):
             self._hsps.append(hsp)
 
     def __repr__(self):
-        if len(self) == 1:
-            al = 'alignment'
-        else:
-            al = 'alignments'
-        return "Hit(id='%s', %i %s)" % (self.id, len(self), al)
+        al = 'alignment'
+        if len(self) != 1:
+            al += 's'
+        return "Hit(id='%s', query_id='%s', %i %s)" % (self.id, \
+                self.query_id, len(self), al)
 
     @property
     def hsps(self):
@@ -532,16 +535,16 @@ class HSP(_StickyObject):
             self.query, self.hit, self.alignment = None, None, None
 
     def __repr__(self):
-        info = "hit='%s'" % self.hit_id
-
-        try:
-            info += ", length=%i" % len(self)
-        except TypeError:
-            pass
+        info = "hit_id='%s', query_id='%s'" % (self.hit_id, self.query_id)
 
         try:
             info += ", evalue=%s" % str(self.evalue)
         except AttributeError:
+            pass
+
+        try:
+            info += ", %i-column alignment" % len(self)
+        except TypeError:
             pass
 
         return "HSP(%s)" % (info)
