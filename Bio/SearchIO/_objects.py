@@ -62,7 +62,7 @@ class Result(_StickyObject):
     _NON_STICKY_ATTRS = ('_hits',)
 
     def __init__(self, query_id, hits=[], meta={}, program='<unknown>', \
-            target='<unknown>', hit_key_function=None):
+            target='<unknown>', hit_key_function=lambda hit: hit.id):
         """Initializes a Result object.
 
         query_id -- String of query sequence ID.
