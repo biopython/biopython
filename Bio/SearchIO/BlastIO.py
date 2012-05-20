@@ -36,7 +36,71 @@ def blast_xml_iterator(handle):
     handle -- Handle to the file, or the filename as string.
 
     """
+    # TODO: improve parser performance
+    from Bio.Blast.NCBIXML import parse
+    for query in parse(handle):
+        # HACK: query is the first word before any space
+        query_id = query.query.split(' ')[0]
+        program = query.application
+        target = query.database
 
+        # meta information about search, stored prior to any hits in the file
+        meta = {
+            'program_version': query.version,
+            'program_reference': query.reference,
+            'parameter_score_match': query.sc_mismatch,
+            'parameter_score_mismatch': query.sc_mismatch,
+            # only defined in blastp, blastx, tblastx
+            'parameter_matrix': query.matrix,
+            'parameter_evalue': float(query.expect),
+            'parameter_gap_open': query.gap_penalties[0],
+            'parameter_gap_extend': query.gap_penalties[1],
+        }
+
+        result = Result(query_id, program=program, target=target, meta=meta)
+        for hit in query.alignments:
+            hit_id = hit.hit_id
+
+            hsps = []
+            for hsp in hit.hsps:
+                query_seq = hsp.query
+                hit_seq = hsp.sbjct
+                hsp_obj = HSP(hit_id, query_id, hit_seq, query_seq)
+
+                # set other parsed hsp attributes
+                hsp_attrs = {
+                    'bitscore': hsp.bits,
+                    'bitscore_raw': hsp.score,
+                    'evalue': hsp.expect,
+                    'frame': hsp.frame,
+                    'gap_num': hsp.gaps,
+                    'hit_start_idx': hsp.sbjct_start,
+                    'hit_stop_idx': hsp.sbjct_end,
+                    'homology': hsp.match,
+                    'identity_num': hsp.identities,
+                    'positive_num': hsp.positives,
+                    'query_start_idx': hsp.query_start,
+                    'query_stop_idx': hsp.query_end,
+                }
+                for attr in hsp_attrs:
+                    setattr(hsp_obj, attr, hsp_attrs[attr])
+
+                # append hsp to temporary list
+                hsps.append(hsp_obj)
+
+            # create hit object with the hsps
+            hit_obj = Hit(hit_id, query_id, hsps)
+
+            # set other parsed hit attributes
+            hit_attrs = {
+                'full_length': hit.length
+            }
+            for attr in hit_attrs:
+                setattr(hit_obj, attr, hit_attrs[attr])
+
+            result.append(hit_obj)
+
+        yield result
 
 
 def blast_tabular_iterator(handle):
