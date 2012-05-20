@@ -118,3 +118,33 @@ xbt008.xml - blastp 2.2.18
 xbt009.xml - blastx 2.2.22+ (the new C++ tool blastx, not blastall - compare with bt081.txt file)
 xbt010.xml - blastp 2.2.22+ (the new C++ tool blastp, not blastall)
 xbt011.xml - RPSBLAST 2.2.18 (the old C tool blastpgp)
+
+xbt012.xml - BLASTN 2.2.26+    multiple queries
+xbt013.xml - BLASTN 2.2.26+    single query with no result
+xbt014.xml - BLASTN 2.2.26+    single query with results containing single hsp
+xbt015.xml - BLASTN 2.2.26+    single query with results containing multiple hsps
+xbt016.xml - BLASTN 2.2.26+    multiple queries, remote search on NCBI's database
+
+xbt017.xml - BLASTP 2.2.26+    multiple queries
+xbt018.xml - BLASTP 2.2.26+    single query with no result
+xbt019.xml - BLASTP 2.2.26+    single query with results containing single hsp
+xbt020.xml - BLASTP 2.2.26+    single query with results containing multiple hsps
+xbt021.xml - BLASTP 2.2.26+    multiple queries, remote search on NCBI's database
+
+xbt022.xml - BLASTX 2.2.26+    multiple queries
+xbt023.xml - BLASTX 2.2.26+    single query with no result
+xbt024.xml - BLASTX 2.2.26+    single query with results containing single hsp
+xbt025.xml - BLASTX 2.2.26+    single query with results containing multiple hsps
+xbt026.xml - BLASTX 2.2.26+    multiple queries, remote search on NCBI's database
+
+xbt027.xml - TBLASTN 2.2.26+    multiple queries
+xbt028.xml - TBLASTN 2.2.26+    single query with no result
+xbt029.xml - TBLASTN 2.2.26+    single query with results containing single hsp
+xbt030.xml - TBLASTN 2.2.26+    single query with results containing multiple hsps
+xbt031.xml - TBLASTN 2.2.26+    multiple queries, remote search on NCBI's database
+
+xbt032.xml - TBLASTX 2.2.26+    multiple queries
+xbt033.xml - TBLASTX 2.2.26+    single query with no result
+xbt034.xml - TBLASTX 2.2.26+    single query with results containing single hsp
+xbt035.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
+xbt036.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
