@@ -254,30 +254,58 @@ class Result(_StickyObject):
     def __delitem__(self, hit_key):
         """Custom Search __delitem__
 
-        If key is a string, then the method will delete the Hit object whose
+        If hit_key is a string, then the method will delete the Hit object whose
         ID matches the string. If key is an integer or a slice object, then
         the Hit objects within that range will be deleted.
 
-        Also accepts a list of strings, which will delete all the Hit whose ID
-        matches the strings in the list.
+        The method can also delete HSP objects within a given Hit object if
+        hit_key is given as a tuple or list of two items: the Hit index and
+        the HSP index.
 
         """
-        # if it's an integer or slice, get the corresponding key first
-        # and put it into a list
-        if isinstance(hit_key, int):
-            hit_keys = [list(self.hit_ids)[hit_key]]
-        # the same, if it's a slice
-        elif isinstance(hit_key, slice):
-            hit_keys = list(self.hit_ids)[hit_key]
-        # if it's already a list or tuple, we just reassign it to a new name
-        elif isinstance(hit_key, (list, tuple)):
-            hit_keys = hit_key
-        # otherwise put it in a list
-        else:
-            hit_keys = [hit_key]
+        if isinstance(hit_key, (list, tuple)):
+            # if hit_key is a list or tuple, deletion is done at the hsp level
+            try:
+                hit_id = hit_key[0]
+                # note that this allows the second item to be a slice as well
+                hsp_rank = hit_key[1]
+            except IndexError:
+                raise ValueError("Expected tuple or list with 2 items, found: "
+                        "%i item(s)." % len(hit_key))
 
-        for key in hit_keys:
-            del self._hits[key]
+            # allow for hit retrieval by string ID or integer index
+            if isinstance(hit_id, basestring):
+                # if key is string, we can retrieve directly from the dict
+                hit = self._hits[hit_id]
+            elif isinstance(hit_id, int):
+                # if not, retrieve from the list
+                hit = list(self.hits)[hit_id]
+            else:
+                raise TypeError("Hit index must be a string or an integer if "
+                        "double-index slicing is performed.")
+
+            # delete the HSPs from the hit and assign it to replace the old hit
+            # TODO: this allows cases where a Hit object can have 0 HSPs ~ is
+            # it ok to allow this? should we delete the hit object instead?
+            del hit[hsp_rank]
+            self._hits[self._hit_key_function(hit)] = hit
+            return
+
+        else:
+            # if hit_key an integer or slice, get the corresponding key first
+            # and put it into a list
+            if isinstance(hit_key, int):
+                hit_keys = [list(self.hit_ids)[hit_key]]
+            # the same, if it's a slice
+            elif isinstance(hit_key, slice):
+                hit_keys = list(self.hit_ids)[hit_key]
+            # otherwise put it in a list
+            else:
+                hit_keys = [hit_key]
+
+            for key in hit_keys:
+                del self._hits[key]
+            return
 
     def append(self, hit):
         """Adds a Hit object to the end of Result.
