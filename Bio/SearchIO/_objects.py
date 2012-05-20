@@ -387,25 +387,29 @@ class Result(_StickyObject):
         # if no key is specified, attempt to sort by Hit evalue
         if key is None:
             try:
-                sorted_hits = OrderedDict(sorted(self.items, \
-                        key=lambda hit: hit.evalue, reverse=reverse))
+                sorted_hits = sorted(self.hits, key=lambda hit: hit.evalue, \
+                        reverse=reverse)
             # handle cases where the Hit objects doesn't have evalue
             except AttributeError:
                 # if reverse is set to True, reverse the ordering
                 # we don't use sorted() since no __eq__ etc. magic methods
                 # are defined for Hit objects
                 if reverse:
-                    sorted_hits = OrderedDict(self.items[::-1])
-                # otherwise the object is the same as the old one
+                    sorted_hits = self.hits[::-1]
+                # otherwise the object is the same as the old one and no
+                # sorting is required
                 else:
-                    sorted_hits = self._hits
+                    return
         # otherwise try to sort using the given parameters
         # and let any exceptions rise to the top
         else:
-            sorted_hits = OrderedDict(sorted(self.items, key=key, \
-                    reverse=reverse))
+            sorted_hits = sorted(self.hits, key=key, reverse=reverse)
 
-        self._hits = sorted_hits
+        new_hits = OrderedDict()
+        for hit in sorted_hits:
+            new_hits[self._hit_key_function(hit)] = hit
+
+        self._hits = new_hits
 
 
 class Hit(_StickyObject):
