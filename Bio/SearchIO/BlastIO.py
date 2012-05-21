@@ -30,6 +30,13 @@ For legacy BLAST outputs, see the Bio.Blast module.
 from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
 
 
+def _safe_float(value):
+    """Float caster that handles None."""
+    if value is not None:
+        return float(value)
+    return value
+
+
 def blast_xml_iterator(handle):
     """Generator function to parse BLAST+ XML output as Result objects.
 
@@ -40,26 +47,55 @@ def blast_xml_iterator(handle):
     from Bio.Blast.NCBIXML import parse
     for query in parse(handle):
         # HACK: query is the first word before any space
-        query_id = query.query.split(' ')[0]
+        parsed_id = query.query.split(' ', 1)
+        try:
+            query_id, query_description = parsed_id
+        except ValueError:
+            query_id, query_description = parsed_id[0], None
         program = query.application
         target = query.database
 
         # meta information about search, stored prior to any hits in the file
         meta = {
+            # present in all blast flavors
             'program_version': query.version,
             'program_reference': query.reference,
-            'parameter_score_match': query.sc_mismatch,
-            'parameter_score_mismatch': query.sc_mismatch,
+            'param_score_match': _safe_float(query.sc_match),
+            'param_score_mismatch': _safe_float(query.sc_mismatch),
             # only defined in blastp, blastx, tblastx
-            'parameter_matrix': query.matrix,
-            'parameter_evalue': float(query.expect),
-            'parameter_gap_open': query.gap_penalties[0],
-            'parameter_gap_extend': query.gap_penalties[1],
+            'param_matrix': query.matrix,
+            'param_evalue_threshold': _safe_float(query.expect),
+            'param_filter': query.filter,
+            'param_gap_open': _safe_float(query.gap_penalties[0]),
+            'param_gap_extend': _safe_float(query.gap_penalties[1]),
         }
 
         result = Result(query_id, program=program, target=target, meta=meta)
+
+        # set attributes of the Result object
+        result_attrs = {
+            'description': query_description,
+            'query_length': query.query_length,
+            'stat_db_sequences': query.database_sequences,
+            'stat_db_length': query.database_length,
+            'stat_eff_search_space': query.effective_search_space,
+            'stat_kappa': query.ka_params[1],
+            'stat_lambda': query.ka_params[0],
+            'stat_entropy': query.ka_params[2],
+        }
+        for attr in result_attrs:
+            setattr(result, attr, result_attrs[attr])
+
+        # fill the Result object with Hits
         for hit in query.alignments:
+            # HACK: hit id the first word in hit_def before any space
+            #parsed_id = hit.hit_def.split(' ', 1)
+            #try:
+            #    hit_id, hit_description = parsed_id
+            #except ValueError:
+            #    hit_id, hit_description = parsed_id[0], None
             hit_id = hit.hit_id
+            hit_description = hit.hit_def
 
             hsps = []
             for hsp in hit.hsps:
@@ -67,18 +103,19 @@ def blast_xml_iterator(handle):
                 hit_seq = hsp.sbjct
                 hsp_obj = HSP(hit_id, query_id, hit_seq, query_seq)
 
-                # set other parsed hsp attributes
+                # set attributes of the HSP object
                 hsp_attrs = {
                     'bitscore': hsp.bits,
                     'bitscore_raw': hsp.score,
                     'evalue': hsp.expect,
-                    'frame': hsp.frame,
                     'gap_num': hsp.gaps,
+                    'hit_frame': hsp.frame[1],
                     'hit_start_idx': hsp.sbjct_start,
                     'hit_stop_idx': hsp.sbjct_end,
                     'homology': hsp.match,
                     'identity_num': hsp.identities,
                     'positive_num': hsp.positives,
+                    'query_frame': hsp.frame[0],
                     'query_start_idx': hsp.query_start,
                     'query_stop_idx': hsp.query_end,
                 }
@@ -91,9 +128,10 @@ def blast_xml_iterator(handle):
             # create hit object with the hsps
             hit_obj = Hit(hit_id, query_id, hsps)
 
-            # set other parsed hit attributes
+            # set attributes of the Hit object
             hit_attrs = {
-                'full_length': hit.length
+                'description': hit_description,
+                'seq_length': hit.length,
             }
             for attr in hit_attrs:
                 setattr(hit_obj, attr, hit_attrs[attr])
