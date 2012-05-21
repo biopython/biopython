@@ -111,13 +111,13 @@ class Result(_StickyObject):
             return self._hits.values()
 
         @property
-        def hit_ids(self):
+        def hit_keys(self):
             """Returns a list of Hit IDs contained by this object."""
             return self._hits.keys()
 
         @property
         def items(self):
-            """Returns a tuple of Hit ID and Hit object contained by this object."""
+            """Returns a list of tuples of Hit ID and Hit object contained by this object."""
             return self._hits.items()
 
         def iterhits(self):
@@ -125,13 +125,13 @@ class Result(_StickyObject):
             for hit in self._hits.itervalues():
                 yield hit
 
-        def iterhit_ids(self):
+        def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
             for hit_id in self._hits.iterkeys():
                 yield hit_id
 
         def iteritems(self):
-            """Returns an iterator of a tuple of Hit ID and Hit objects."""
+            """Returns an iterator of tuples of Hit ID and Hit objects."""
             for item in self._hits.iteritems():
                 yield item
 
@@ -147,7 +147,7 @@ class Result(_StickyObject):
                 yield hit
 
         @property
-        def hit_ids(self):
+        def hit_keys(self):
             """Returns an iterator over the Hit IDs contained by this object."""
             for hit_id in  self._hits.keys():
                 yield hit_id
@@ -295,10 +295,10 @@ class Result(_StickyObject):
             # if hit_key an integer or slice, get the corresponding key first
             # and put it into a list
             if isinstance(hit_key, int):
-                hit_keys = [list(self.hit_ids)[hit_key]]
+                hit_keys = [list(self.hit_keys)[hit_key]]
             # the same, if it's a slice
             elif isinstance(hit_key, slice):
-                hit_keys = list(self.hit_ids)[hit_key]
+                hit_keys = list(self.hit_keys)[hit_key]
             # otherwise put it in a list
             else:
                 hit_keys = [hit_key]
@@ -344,7 +344,7 @@ class Result(_StickyObject):
             # raise the appropriate error if there is no hit
             if not self:
                 raise IndexError("pop from empty list")
-            hit_key = list(self.hit_ids)[hit_key]
+            hit_key = list(self.hit_keys)[hit_key]
 
         try:
             return self._hits.pop(hit_key)
@@ -355,8 +355,11 @@ class Result(_StickyObject):
         # if key doesn't exist but a default is set, return the default value
         return default
 
-    def rank(self, hit_key):
-        """Returns the rank of a given Hit ID, 0-based.
+    def index(self, hit_key):
+        """Returns the index of a given hit key, zero-based.
+
+        Argument:
+        hit_key -- String of hit key or Hit object.
 
         Also accepts a Hit object as the argument, which returns the rank of
         the Hit object ID. If the given key is not found, returns -1 instead.
@@ -364,8 +367,8 @@ class Result(_StickyObject):
         """
         try:
             if isinstance(hit_key, Hit):
-                return list(self.hit_ids).index(hit_key.id)
-            return list(self.hit_ids).index(hit_key)
+                return list(self.hit_keys).index(hit_key.id)
+            return list(self.hit_keys).index(hit_key)
         except ValueError:
             return -1
 

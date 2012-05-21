@@ -63,10 +63,10 @@ class ResultCases(unittest.TestCase):
         hits = [x for x in self.result.hits]
         self.assertEqual([hit11, hit21, hit31], hits)
 
-    def test_hit_ids(self):
-        # hit_ids should return hit keys (which default to hit ids)
-        hit_ids = [x for x in self.result.hit_ids]
-        self.assertEqual(['hit1', 'hit2', 'hit3'], hit_ids)
+    def test_hit_keys(self):
+        # hit_keys should return hit keys (which default to hit ids)
+        hit_keys = [x for x in self.result.hit_keys]
+        self.assertEqual(['hit1', 'hit2', 'hit3'], hit_keys)
 
     def test_items(self):
         # items should return tuples of hit key, hit object pair
@@ -216,15 +216,15 @@ class ResultCases(unittest.TestCase):
         self.assertEqual([hit11, hit21, hit31], self.result.hits)
         self.result.append(hit41)
         self.assertEqual([hit11, hit21, hit31, hit41], self.result.hits)
-        self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'], self.result.hit_ids)
+        self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'], self.result.hit_keys)
 
     def test_append_custom_hit_key_function_ok(self):
         self.result._hit_key_function = lambda hit: hit.id + '_custom'
         # append should assign hit keys according to _hit_key_function
-        self.assertEqual(['hit1', 'hit2', 'hit3'], self.result.hit_ids)
+        self.assertEqual(['hit1', 'hit2', 'hit3'], self.result.hit_keys)
         self.result.append(hit41)
         self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4_custom'], \
-                self.result.hit_ids)
+                self.result.hit_keys)
 
     def test_append_id_exists(self):
         # append should raise an error if hit_key already exist
@@ -250,15 +250,15 @@ class ResultCases(unittest.TestCase):
         self.assertEqual(hit, hit21)
         self.assertEqual([hit11, hit31], self.result.hits)
 
-    def test_rank(self):
-        # rank should accept hit objects or hit key strings
-        self.assertEqual(2, self.result.rank('hit3'))
-        self.assertEqual(2, self.result.rank(hit31))
+    def test_index(self):
+        # index should accept hit objects or hit key strings
+        self.assertEqual(2, self.result.index('hit3'))
+        self.assertEqual(2, self.result.index(hit31))
 
-    def test_rank_not_present(self):
+    def test_index_not_present(self):
         # rank should return -1 if the hit key or hit object is not present
-        self.assertEqual(-1, self.result.rank('hit4'))
-        self.assertEqual(-1, self.result.rank(hit41))
+        self.assertEqual(-1, self.result.index('hit4'))
+        self.assertEqual(-1, self.result.index(hit41))
 
     def test_sort_default_no_evalue(self):
         # sort without any arguments should keep the Hits in the same order
