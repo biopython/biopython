@@ -110,14 +110,14 @@ def blast_xml_iterator(handle):
                     'evalue': hsp.expect,
                     'gap_num': hsp.gaps,
                     'hit_frame': hsp.frame[1],
-                    'hit_start_idx': hsp.sbjct_start,
-                    'hit_stop_idx': hsp.sbjct_end,
+                    'hit_from': hsp.sbjct_start,
+                    'hit_to': hsp.sbjct_end,
                     'homology': hsp.match,
                     'identity_num': hsp.identities,
                     'positive_num': hsp.positives,
                     'query_frame': hsp.frame[0],
-                    'query_start_idx': hsp.query_start,
-                    'query_stop_idx': hsp.query_end,
+                    'query_from': hsp.query_start,
+                    'query_to': hsp.query_end,
                 }
                 for attr in hsp_attrs:
                     setattr(hsp_obj, attr, hsp_attrs[attr])
