@@ -133,18 +133,16 @@ xbt021.xml - BLASTP 2.2.26+    multiple queries, remote search on NCBI's databas
 
 xbt022.xml - BLASTX 2.2.26+    multiple queries
 xbt023.xml - BLASTX 2.2.26+    single query with no result
-xbt024.xml - BLASTX 2.2.26+    single query with results containing single hsp
-xbt025.xml - BLASTX 2.2.26+    single query with results containing multiple hsps
-xbt026.xml - BLASTX 2.2.26+    multiple queries, remote search on NCBI's database
+xbt024.xml - BLASTX 2.2.26+    single query with results containing multiple hsps
+xbt025.xml - BLASTX 2.2.26+    multiple queries, remote search on NCBI's database
 
-xbt027.xml - TBLASTN 2.2.26+    multiple queries
-xbt028.xml - TBLASTN 2.2.26+    single query with no result
-xbt029.xml - TBLASTN 2.2.26+    single query with results containing single hsp
-xbt030.xml - TBLASTN 2.2.26+    single query with results containing multiple hsps
-xbt031.xml - TBLASTN 2.2.26+    multiple queries, remote search on NCBI's database
+xbt026.xml - TBLASTN 2.2.26+    multiple queries
+xbt027.xml - TBLASTN 2.2.26+    single query with no result
+xbt028.xml - TBLASTN 2.2.26+    single query with results containing single hsp
+xbt029.xml - TBLASTN 2.2.26+    single query with results containing multiple hsps
+xbt030.xml - TBLASTN 2.2.26+    multiple queries, remote search on NCBI's database
 
-xbt032.xml - TBLASTX 2.2.26+    multiple queries
-xbt033.xml - TBLASTX 2.2.26+    single query with no result
-xbt034.xml - TBLASTX 2.2.26+    single query with results containing single hsp
-xbt035.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
-xbt036.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
+xbt031.xml - TBLASTX 2.2.26+    multiple queries
+xbt032.xml - TBLASTX 2.2.26+    single query with no result
+xbt034.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
+xbt035.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
