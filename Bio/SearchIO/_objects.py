@@ -3,9 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO objects to model homology search program outputs (PRIVATE).
+"""Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
-"""
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
@@ -42,18 +41,106 @@ class _StickyObject(object):
 
 class Result(_StickyObject):
 
-    # TODO: Improve Docstrings
     # TODO: Check for self.filter()? Or implement this in SearchIO.parse?
 
     """Class representing search results from a single query.
 
-    The Result object represents a search result from a single query, with
-    the following behaviors:
+    The Result object is a container for storing all search hits from a single
+    search query. It is the top-level object returned by SearchIO's two main
+    functions, SearchIO.read:
 
-    * You can get the corresponding Hit object by using the Hit ID as key
-    * Hit ID keys must be a string. This limitation was put to enable
-      indexing and/or slicing of the Result object.
-    * Iteration over Result returns the Hit objects within.
+    >>> from Bio import SearchIO
+    >>> result = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+    >>> result
+    Result(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 5 hits)
+
+    and SearchIO.parse:
+
+    >>> results = SearchIO.parse('tblastx_human_wnts.xml', 'blast-xml')
+    >>> result = results.next()
+    >>> result
+    Result(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 5 hits)
+
+    Result is basically a container of the hits (see Hit objects) from one
+    query sequence. Its length is how many hits it has and iteration over a
+    Result object returns Hit objects.
+
+    >>> len(result)
+    5
+    >>> for hit in result:
+    ...     print hit.id
+    ...
+    gi|195230749|ref|NM_003391.2|
+    gi|281183280|ref|NM_001168718.1|
+    gi|281182577|ref|NM_001168597.1|
+    gi|274325896|ref|NM_001168687.1|
+    gi|209529663|ref|NM_001135848.1|
+
+    Result objects behaves like a hybrid of Python's built-in list and
+    dictionary, enabling retrieval of search hits using its index (integer) or
+    its key (string, defaults to ID).
+
+    Indexing using integers works exactly the same as Python lists:
+
+    >>> first_hit = result[0]
+    >>> first_hit
+    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+
+    >>> last_hit = result[-1]
+    >>> last_hit
+    Hit(id='gi|209529663|ref|NM_001135848.1|', query_id='gi|195230749:301-1383', 10 alignments)
+
+    Indexing using hit IDs works just like Python dictionaries. This is useful
+    if you know what you are expecting from the search beforehand.
+
+    >>> result['gi|195230749|ref|NM_003391.2|']
+    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+
+    To get a list of all the hits contained in a Result object, you can use
+    the hits attribute. To obtain all the hit keys, the hit_keys attribute
+    is used.
+
+    >>> result.hits
+    [Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|281183280|ref|NM_001168718.1|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|281182577|ref|NM_001168597.1|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|274325896|ref|NM_001168687.1|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|209529663|ref|NM_001135848.1|', query_id='gi|195230749:301-1383', 10 alignments)]
+
+    >>> result.hit_keys
+    [u'gi|195230749|ref|NM_003391.2|', u'gi|281183280|ref|NM_001168718.1|', u'gi|281182577|ref|NM_001168597.1|', u'gi|274325896|ref|NM_001168687.1|', u'gi|209529663|ref|NM_001135848.1|']
+
+    Similar to Python lists, you can also slice Result objects. However,
+    instead of returning a list, slicing will return a new Result object.
+    The new Result object will have its hits sliced accordingly and attributes
+    present in the unsliced Result object are retained.
+
+    >>> result
+    Result(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 5 hits)
+    >>> sliced_result = result[:3]
+    >>> sliced_result
+    Result(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 3 hits)
+    >>> len(result)
+    5
+    >>> len(sliced_result)
+    3
+    >>> result.program
+    u'TBLASTX'
+    >>> result.program == sliced_result.program
+    True
+    >>> result[0] in sliced_result
+    True
+    >>> result[4] in sliced_result
+    False
+
+    You can check whether a hit is present in a Result object using its key
+    (defaults to hit ID) or the Hit object itself.
+
+    >>> hit = result[0]
+    >>> hit in result
+    True
+    >>> hit.id in result
+    True
+
+    Finally, Result objects has other methods normally used in Python lists:
+    append(), index(), pop(), and sort(). Consult their documentation for more
+    information.
 
     """
 
@@ -65,15 +152,17 @@ class Result(_StickyObject):
             target='<unknown>', hit_key_function=lambda hit: hit.id):
         """Initializes a Result object.
 
+        Arguments:
         query_id -- String of query sequence ID.
-        hits -- List of Hit objects.
-        meta -- Dictionary of additional information about the search. This is
-                the information stored in the header of the search output file
-                (anything prior to the first result, if it exists) and varies
-                depending on the search program used.
-        program -- String of search program name.
-        target -- String of database name to search against.
-        hit_key_function -- Function to define hit keys.
+        hits     -- Iterator returning Hit objects.
+        meta     -- Dictionary of additional information about the search.
+                    This is the information stored in the header of the
+                    search output file (anything prior to the first result,
+                    if it exists) and varies depending on the search program.
+        program  -- String of search program name.
+        target   -- String of database name to search against.
+        hit_key_function -- Function to define hit keys, defaults to a function
+                            that return Hit object IDs.
 
         """
         # meta must be a dict
@@ -178,7 +267,7 @@ class Result(_StickyObject):
         return obj
 
     def __setitem__(self, hit_key, hit):
-        """Custom Search __setitem__.
+        """Custom Search object item assignment.
 
         Hit key must be a string and hit must be a Hit object.
 
@@ -197,7 +286,7 @@ class Result(_StickyObject):
         self._hits[hit_key] = hit
 
     def __getitem__(self, hit_key):
-        """Custom Search __getitem__.
+        """Custom Search object item retrieval.
 
         Allows value retrieval by its key, location index, or a slice of
         location index. Also allows direct HSP retrieval if hit key is a tuple
@@ -252,7 +341,7 @@ class Result(_StickyObject):
         return self._hits[hit_key]
 
     def __delitem__(self, hit_key):
-        """Custom Search __delitem__
+        """Custom Search object item deletion.
 
         If hit_key is a string, then the method will delete the Hit object whose
         ID matches the string. If key is an integer or a slice object, then
@@ -310,6 +399,15 @@ class Result(_StickyObject):
     def append(self, hit):
         """Adds a Hit object to the end of Result.
 
+        Argument:
+        hit -- Hit object.
+
+        The hit key used for the appended Hit object depends on the
+        hit_key_function used to initialize the Result object. Any Hit object
+        appended must have the same query_id attribute as the Result object's
+        id attribute. If the hit key already exists, a ValueError will be
+        raised.
+
         """
         # if a custom hit_key_function is supplied, use it to define th hit key
         if self._hit_key_function is not None:
@@ -329,13 +427,42 @@ class Result(_StickyObject):
     __marker = object()
 
     def pop(self, hit_key=-1, default=__marker):
-        """Removes the specified key and return its value.
+        """Removes the specified hit key and return the Hit object.
 
-        Similar to __getitem__, pop also allows Hit retrieval (removal in this
-        case) by its index in addition to its ID.
+        Arguments:
+        hit_key -- Integer index or string of hit key that points to a Hit
+                   object.
+        default -- Value that will be returned if the Hit object with the
+                   specified index or hit key is not found.
 
-        If the key does not exist and default is given, return the default
-        value. Otherwise a KeyError will be raised.
+        By default, pop will remove and return the last Hit object in the
+        Result object. To remove specific Hit objects, you can use its integer
+        index or its hit key.
+
+        >>> from Bio import SearchIO
+        >>> result = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+        >>> len(result)
+        5
+        >>> for hit in result:
+        ...     print hit.id
+        ...
+        gi|195230749|ref|NM_003391.2|
+        gi|281183280|ref|NM_001168718.1|
+        gi|281182577|ref|NM_001168597.1|
+        gi|274325896|ref|NM_001168687.1|
+        gi|209529663|ref|NM_001135848.1|
+
+        >>> result.pop()
+        Hit(id='gi|209529663|ref|NM_001135848.1|', query_id='gi|195230749:301-1383', 10 alignments)
+
+        >>> result.pop(0)
+        Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+
+        >>> result.pop('gi|281182577|ref|NM_001168597.1|')
+        Hit(id='gi|281182577|ref|NM_001168597.1|', query_id='gi|195230749:301-1383', 10 alignments)
+
+        >>> len(result)
+        2
 
         """
         # if key is an integer (index)
@@ -361,8 +488,18 @@ class Result(_StickyObject):
         Argument:
         hit_key -- String of hit key or Hit object.
 
-        Also accepts a Hit object as the argument, which returns the rank of
-        the Hit object ID. If the given key is not found, returns -1 instead.
+        >>> from Bio import SearchIO
+        >>> result = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+        >>> result.index('gi|209529663|ref|NM_001135848.1|')
+        4
+        >>> hit = result['gi|209529663|ref|NM_001135848.1|']
+        >>> result.index(hit)
+        4
+        >>> result.index('my_key')
+        -1
+
+        This method is useful for finding out the integer index (usually
+        correlated with search rank) of a given hit key.
 
         """
         try:
@@ -376,8 +513,40 @@ class Result(_StickyObject):
         # no cmp argument to make sort more Python 3-like
         """Sorts the Hit objects.
 
+        Arguments:
         key -- Function used to sort the Hit objects.
         reverse -- Boolean, whether to reverse the sorting or not.
+
+        >>> from Bio import SearchIO
+        >>> result = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+        >>> for hit in result:
+        ...     print hit.id
+        ...
+        gi|195230749|ref|NM_003391.2|
+        gi|281183280|ref|NM_001168718.1|
+        gi|281182577|ref|NM_001168597.1|
+        gi|274325896|ref|NM_001168687.1|
+        gi|209529663|ref|NM_001135848.1|
+
+        >>> result.sort(reverse=True)
+        >>> for hit in result:
+        ...     print hit.id
+        ...
+        gi|209529663|ref|NM_001135848.1|
+        gi|274325896|ref|NM_001168687.1|
+        gi|281182577|ref|NM_001168597.1|
+        gi|281183280|ref|NM_001168718.1|
+        gi|195230749|ref|NM_003391.2|
+
+        >>> result.sort(key=lambda hit: hit.id)
+        >>> for hit in result:
+        ...     print hit.id
+        ...
+        gi|195230749|ref|NM_003391.2|
+        gi|209529663|ref|NM_001135848.1|
+        gi|274325896|ref|NM_001168687.1|
+        gi|281182577|ref|NM_001168597.1|
+        gi|281183280|ref|NM_001168718.1|
 
         By default, sorting is based on the expect values of the Hit objects,
         from the smallest to the largest. If the Hit objects do not have any
@@ -417,7 +586,78 @@ class Result(_StickyObject):
 
 class Hit(_StickyObject):
 
-    """Class representing the entire database entry of a sequence match.
+    """Class representing a single database hit of a search result.
+
+    Hit objects are the second-level container in the SearchIO module. They
+    are the objects contained within a Result object (see Result). Each Hit
+    object is uniquely identified by its ID and the query ID that results in
+    its creation.
+
+    >>> from Bio import SearchIO
+    >>> result = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+    >>> hit = result[0]
+    >>> hit
+    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+
+    Hit objects themselves are container for the basic SearchIO unit: the
+    HSP object (see HSP). Since these HSPs usually do not have any unique
+    IDs, Hit objects behave very similar to a Python built-in list.
+
+    The length of a Hit object is how many HSPs it contains and iteration
+    over Hit objects return these HSPs:
+
+    >>> len(hit)
+    10
+    >>> for hsp in hit:
+    ...     print hsp.hit_id, hsp.evalue, len(hsp)
+    gi|195230749|ref|NM_003391.2| 0.0 340
+    gi|195230749|ref|NM_003391.2| 0.0 253
+    gi|195230749|ref|NM_003391.2| 0.0 69
+    gi|195230749|ref|NM_003391.2| 0.0 361
+    gi|195230749|ref|NM_003391.2| 0.0 178
+    gi|195230749|ref|NM_003391.2| 0.0 161
+    gi|195230749|ref|NM_003391.2| 0.0 237
+    gi|195230749|ref|NM_003391.2| 0.0 106
+    gi|195230749|ref|NM_003391.2| 0.0 288
+    gi|195230749|ref|NM_003391.2| 0.0 28
+
+    Like built-in Python lists, you can index Hit objects with integers or
+    slice them. Slicing a Hit object will return a new Hit object with its
+    HSPs properly sliced but any other attributes retained.
+
+    >>> hit[0]
+    HSP(hit_id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', evalue=0.0, 340-column alignment)
+    >>> hit[-1]
+    HSP(hit_id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', evalue=0.0, 28-column alignment)
+
+    >>> hit
+    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+    >>> sliced_hit = hit[:3]
+    >>> sliced_hit
+    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 3 alignments)
+    >>> len(hit)
+    10
+    >>> len(sliced_hit)
+    3
+    >>> hit.description
+    u'Homo sapiens wingless-type MMTV integration site family member 2 (WNT2), transcript variant 1, mRNA'
+    >>> hit.description == sliced_hit.description
+    True
+    >>> hit[0] in sliced_hit
+    True
+    >>> hit[6] in sliced_hit
+    False
+
+    You can check whether an hsp is present in a Result object using the HSP
+    object itself.
+
+    >>> hsp = hit[0]
+    >>> hsp in hit
+    True
+
+    Finally, similar to Python built-in list, the Hit object also has the
+    append(), pop(), reverse(), and sort() method, which behave similar to
+    their list method counterparts.
 
     """
 
@@ -428,9 +668,10 @@ class Hit(_StickyObject):
     def __init__(self, hit_id, query_id, hsps=[]):
         """Initializes a Hit object.
 
+        Arguments:
         query_id -- String of the query name used to obtain this hit.
-        hit_id -- String of unique identifier for this hit.
-        hsps -- Iterable returning HSP objects.
+        hit_id   -- String of unique identifier for this hit.
+        hsps     -- Iterable returning HSP objects.
 
         """
         self.query_id= query_id
@@ -494,6 +735,12 @@ class Hit(_StickyObject):
         del self._hsps[idx]
 
     def _validate_hsp(self, hsp):
+        """Validates an HSP object.
+
+        Valid HSP objects have the same hit_id as the Hit object ID and the
+        same query_id as the Hit object's query_id.
+
+        """
         if not isinstance(hsp, HSP):
             raise TypeError("Hit objects can only contain HSP objects.")
         if hsp.hit_id != self.id:
@@ -521,6 +768,65 @@ class HSP(_StickyObject):
 
     """Class representing high-scoring alignment regions of the query and hit.
 
+    Although HSP objects represent a pairwise alignment of the query and hit
+    sequences, in reality some file formats such as BLAST+'s standard tabular
+    format do not output any alignments at all. This is why, depending on
+    the search output file format, an HSP object may or may not contain a real
+    sequence alignment.
+
+    If the parsed search output file contains alignments, the HSP object will
+    have an alignment attribute which is Biopython's MultipleSeqAlignment
+    object. The HSP object will have a query and a hit attribute, each being
+    Biopython's SeqRecord object. Without any alignments, these attributes are
+    set to None.
+
+    >>> from Bio import SearchIO
+    >>> result = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+    >>> hsp = result[0][0]
+    >>> hsp
+    HSP(hit_id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', evalue=0.0, 340-column alignment)
+
+    >>> print hsp.alignment
+    SingleLetterAlphabet() alignment with 2 rows and 340 columns
+    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749:301-1383
+    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749|ref|NM_003391.2|
+    >>> print hsp.query
+    ID: gi|195230749:301-1383
+    Name: query
+    Description: aligned query sequence
+    Number of features: 0
+    Seq('EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAISQGVAEWTAE...AT*', SingleLetterAlphabet())
+    >>> print hsp.hit
+    ID: gi|195230749|ref|NM_003391.2|
+    Name: hit
+    Description: aligned hit sequence
+    Number of features: 0
+    Seq('EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAISQGVAEWTAE...AT*', SingleLetterAlphabet())
+
+    For the most part, an HSP object is read-only. It does not support item
+    assignment, item deletion, or even iteration. It does, however, support item
+    slicing. Slicing on an HSP object will return another HSP object with
+    an alignment consisting of sliced SeqRecords.
+
+    >>> print hsp.alignment
+    SingleLetterAlphabet() alignment with 2 rows and 340 columns
+    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749:301-1383
+    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749|ref|NM_003391.2|
+    >>> print hsp[10:20].alignment
+    SingleLetterAlphabet() alignment with 2 rows and 20 columns
+    ATGGSSRVMCDNVPGLVSSQ gi|195230749:301-1383
+    ATGGSSRVMCDNVPGLVSSQ gi|195230749|ref|NM_003391.2|
+
+    Finally, doing a len() on an HSP object will return the column length of
+    the contained pairwise alignment. Note that this is different from a
+    MultipleSeqAlignment object where doing a len() would return how many
+    SeqRecords make up the MultipleSeqAlignment object.
+
+    >>> len(hsp)
+    340
+    >>> len(hsp[:50])
+    50
+
     """
 
     # attributes we don't want to transfer when creating a new HSP class
@@ -531,9 +837,10 @@ class HSP(_StickyObject):
             alphabet=single_letter_alphabet):
         """Initializes an HSP object.
 
-        hit_id -- String, Hit ID of the HSP object.
-        query_id -- String of the search query ID.
-        hit_seq -- String or SeqRecord object of the aligned Hit sequence.
+        Arguments:
+        hit_id    -- String, Hit ID of the HSP object.
+        query_id  -- String of the search query ID.
+        hit_seq   -- String or SeqRecord object of the aligned Hit sequence.
         query_seq -- String or SeqRecord object of the aligned query sequence.
 
         """
@@ -620,3 +927,29 @@ class SearchIndexer(object):
     """Iterator that returns file positions of results in a Search output file.
 
     """
+
+
+
+def _test():
+    """Run the Bio.SearchIO module's doctests.
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+
+    test_dir = os.path.join('Tests', 'Blast')
+
+    if os.path.isdir(os.path.join('..', '..', test_dir)):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join('..', '..', test_dir))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        print "Done"
+
+
+# if not used as a module, run the doctest
+if __name__ == "__main__":
+    _test()
