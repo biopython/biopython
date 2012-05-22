@@ -37,7 +37,7 @@ def parse_basics(lines, results):
     # In codeml 4.3+ it is headed by:
     # "Codon frequency model:"
     codon_freq_re = re.compile("Codon frequenc[a-z\s]{3,7}:\s+(.+)")
-    siteclass_re = re.compile("Site-class models:\s*(.*)")
+    siteclass_re = re.compile("Site-class models:\s*([^\s]+)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -99,9 +99,9 @@ def parse_nssites(lines, results, multi_models, multi_genes):
         current_model = {"one-ratio" : 0,
                         "NearlyNeutral" : 1,
                         "PositiveSelection" : 2,
-                        "discrete (4 categories)" : 3,
-                        "beta (4 categories)" : 7,
-                        "beta&w>1 (5 categories)" : 8}[siteclass_model]
+                        "discrete" : 3,
+                        "beta" : 7,
+                        "beta&w>1" : 8}[siteclass_model]
         if multi_genes:
             genes = results["genes"]
             current_gene = None
