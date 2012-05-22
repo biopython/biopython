@@ -301,10 +301,6 @@ class HitCases(unittest.TestCase):
     def setUp(self):
         self.hit = Hit('hit1', 'query1', [hsp111, hsp112, hsp113])
 
-    def test_init_no_hsps(self):
-        # init without hsp objects should fail
-        self.assertRaises(ValueError, Hit, 'hit1', 'query1', [])
-
     def test_repr(self):
         # test for cases with 1 or other alignment numbers
         self.assertEqual("Hit(id='hit1', query_id='query1', 3 alignments)", \

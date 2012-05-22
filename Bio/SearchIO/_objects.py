@@ -677,10 +677,6 @@ class Hit(_StickyObject):
         self.query_id= query_id
         self.id = hit_id
 
-        # Hit must contain a minimum of one HSP object
-        if not hsps:
-            raise ValueError("Hit object must contain at least one HSP object.")
-
         self._hsps = []
         for hsp in hsps:
             # validate each HSP
