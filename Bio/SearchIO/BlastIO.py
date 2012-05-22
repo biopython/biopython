@@ -30,115 +30,231 @@ For legacy BLAST outputs, see the Bio.Blast module.
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
 
 
-def _safe_float(value):
-    """Float caster that handles None."""
-    if value is not None:
-        return float(value)
-    return value
-
-
 def blast_xml_iterator(handle):
     """Generator function to parse BLAST+ XML output as QueryResult objects.
 
     handle -- Handle to the file, or the filename as string.
 
     """
-    # TODO: improve parser performance
-    from Bio.Blast.NCBIXML import parse
-    for record in parse(handle):
-        # HACK: query is the first word before any space
-        parsed_id = record.query.split(' ', 1)
-        try:
-            query_id, query_description = parsed_id
-        except ValueError:
-            query_id, query_description = parsed_id[0], None
-        program = record.application
-        target = record.database
+    # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
+    try:
+        from xml.etree import cElementTree as ET
+    except ImportError:
+        from xml.etree import ElementTree as ET
 
-        # meta information about search, stored prior to any hits in the file
-        meta = {
-            # present in all blast flavors
-            'program_version': record.version,
-            'program_reference': record.reference,
-            'param_score_match': _safe_float(record.sc_match),
-            'param_score_mismatch': _safe_float(record.sc_mismatch),
-            # only defined in blastp, blastx, tblastx
-            'param_matrix': record.matrix,
-            'param_evalue_threshold': _safe_float(record.expect),
-            'param_filter': record.filter,
-            'param_gap_open': _safe_float(record.gap_penalties[0]),
-            'param_gap_extend': _safe_float(record.gap_penalties[1]),
-        }
+    def _parse_hit(root_hit_elem):
+        """Iterator that transforms Iteration_hits XML elements into Hit objects.
 
-        qresult = QueryResult(query_id, program=program, target=target, meta=meta)
+        Arguments:
+        root_hit_elem -- Element object of the Iteration_hits tag.
 
-        # set attributes of the QueryResult object
-        qresult_attrs = {
-            'description': query_description,
-            'query_length': record.query_length,
-            'stat_db_sequences': record.database_sequences,
-            'stat_db_length': record.database_length,
-            'stat_eff_search_space': record.effective_search_space,
-            'stat_kappa': record.ka_params[1],
-            'stat_lambda': record.ka_params[0],
-            'stat_entropy': record.ka_params[2],
-        }
-        for attr in qresult_attrs:
-            setattr(qresult, attr, qresult_attrs[attr])
+        """
+        # Hit level processing
+        # Hits are stored in the Iteration_hits tag, with the following
+        # DTD
+        # <!ELEMENT Hit (
+        #        Hit_num,
+        #        Hit_id,
+        #        Hit_def,
+        #        Hit_accession,
+        #        Hit_len,
+        #        Hit_hsps?)>
 
-        # fill the QueryResult object with Hits
-        for hit in record.alignments:
-            # HACK: hit id the first word in hit_def before any space
-            #parsed_id = hit.hit_def.split(' ', 1)
-            #try:
-            #    hit_id, hit_description = parsed_id
-            #except ValueError:
-            #    hit_id, hit_description = parsed_id[0], None
-            hit_id = hit.hit_id
-            hit_description = hit.hit_def
+        if root_hit_elem is None:
+            root_hit_elem = []
 
-            hsps = []
-            for hsp in hit.hsps:
-                query_seq = hsp.query
-                hit_seq = hsp.sbjct
-                hsp_obj = HSP(hit_id, query_id, hit_seq, query_seq)
+        for hit_elem in root_hit_elem:
 
-                # set attributes of the HSP object
-                hsp_attrs = {
-                    'bitscore': hsp.bits,
-                    'bitscore_raw': hsp.score,
-                    'evalue': hsp.expect,
-                    'gap_num': hsp.gaps,
-                    'hit_frame': hsp.frame[1],
-                    'hit_from': hsp.sbjct_start,
-                    'hit_to': hsp.sbjct_end,
-                    'homology': hsp.match,
-                    'identity_num': hsp.identities,
-                    'positive_num': hsp.positives,
-                    'query_frame': hsp.frame[0],
-                    'query_from': hsp.query_start,
-                    'query_to': hsp.query_end,
-                }
-                for attr in hsp_attrs:
-                    setattr(hsp_obj, attr, hsp_attrs[attr])
+            # create empty hit object
+            hit_id = hit_elem.find('Hit_id').text
+            hit = Hit(hit_id, query_id)
 
-                # append hsp to temporary list
-                hsps.append(hsp_obj)
+            hit.description = hit_elem.find('Hit_def').text
+            hit.accession = hit_elem.find('Hit_accession').text
+            hit.seq_length = int(hit_elem.find('Hit_len').text)
 
-            # create hit object with the hsps
-            hit_obj = Hit(hit_id, query_id, hsps)
+            for hsp in _parse_hsp(hit_elem.find('Hit_hsps'), hit_id):
+                hit.append(hsp)
 
-            # set attributes of the Hit object
-            hit_attrs = {
-                'description': hit_description,
-                'seq_length': hit.length,
-            }
-            for attr in hit_attrs:
-                setattr(hit_obj, attr, hit_attrs[attr])
+            # delete element after we finish parsing it
+            hit_elem.clear()
+            yield hit
 
-            qresult.append(hit_obj)
+    def _parse_hsp(root_hsp_elem, hit_id):
+        """Iterator that transforms Hit_hsps XML elements into HSP objects.
 
-        yield qresult
+        Arguments:
+        root_hsp_elem -- Element object of the Hit_hsps tag.
+        hit_id -- String of hit ID to initialize all HSP objects.
+
+        """
+        # Hit_hsps DTD:
+        # <!ELEMENT Hsp (
+        #        Hsp_num,
+        #        Hsp_bit-score,
+        #        Hsp_score,
+        #        Hsp_evalue,
+        #        Hsp_query-from,
+        #        Hsp_query-to,
+        #        Hsp_hit-from,
+        #        Hsp_hit-to,
+        #        Hsp_pattern-from?,
+        #        Hsp_pattern-to?,
+        #        Hsp_query-frame?,
+        #        Hsp_hit-frame?,
+        #        Hsp_identity?,
+        #        Hsp_positive?,
+        #        Hsp_gaps?,
+        #        Hsp_align-len?,
+        #        Hsp_density?,
+        #        Hsp_qseq,
+        #        Hsp_hseq,
+        #        Hsp_midline?)>
+
+        # if value is None, feed the loop below and empty list
+        if root_hsp_elem is None:
+            root_hsp_elem = []
+
+        for hsp_elem in root_hsp_elem:
+            # get the hit, and query tags first as they are required
+            # to initialize the HSP object
+            hit_seq = hsp_elem.find('Hsp_hseq').text
+            query_seq = hsp_elem.find('Hsp_qseq').text
+            hsp = HSP(hit_id, query_id, hit_seq, query_seq)
+
+            hsp.bitscore = float(hsp_elem.find('Hsp_bit-score').text)
+            hsp.bitscore_raw = float(hsp_elem.find('Hsp_score').text)
+            hsp.evalue = float(hsp_elem.find('Hsp_evalue').text)
+            hsp.query_from = int(hsp_elem.find('Hsp_query-from').text)
+            hsp.query_to = int(hsp_elem.find('Hsp_query-to').text)
+            hsp.hit_from = int(hsp_elem.find('Hsp_hit-from').text)
+            hsp.hit_to = int(hsp_elem.find('Hsp_hit-to').text)
+            hsp.query_frame = int(hsp_elem.find('Hsp_query-frame').text)
+            hsp.hit_frame = int(hsp_elem.find('Hsp_hit-frame').text)
+            hsp.identity_num = int(hsp_elem.find('Hsp_identity').text)
+            hsp.positive_num = int(hsp_elem.find('Hsp_positive').text)
+            hsp.gap_num = int(hsp_elem.find('Hsp_gaps').text)
+            hsp.homology = hsp_elem.find('Hsp_midline').text
+
+            # optional attributes
+            try:
+                hsp.pattern_from = int(hsp_elem.find('Hsp_pattern-from').text)
+            except AttributeError:
+                hsp.pattern_from = None
+
+            try:
+                hsp.pattern_to = int(hsp_elem.find('Hsp_pattern-to').text)
+            except AttributeError:
+                hsp.pattern_to = None
+
+            try:
+                hsp.density = float(hsp_elem.find('Hsp_density').text)
+            except AttributeError:
+                hsp.density = None
+
+            # delete element after we finish parsing it
+            hsp_elem.clear()
+            yield hsp
+
+    # dictionary for containing all information prior to the first query
+    meta = {}
+
+    # dictionary for mapping tag name and meta key name
+    _tag_meta_map = {
+        'BlastOutput_program': 'program',
+        'BlastOutput_db': 'target',
+        'BlastOutput_version': 'program_version',
+        'BlastOutput_reference': 'program_reference',
+        'BlastOutput_query-ID': 'query_id',
+        'BlastOutput_query-def': 'query_description',
+        'BlastOutput_query-len': 'query_length',
+        'Parameters_matrix': 'param_matrix',
+        'Parameters_expect': 'param_evalue_threshold',
+        'Parameters_gap-open': 'param_gap_open',
+        'Parameters_gap-extend': 'param_gap_extend',
+        'Parameters_filter': 'param_filter',
+        'Parameters_sc-match': 'param_score_match',
+        'Parameters_sc-mismatch': 'param_score_mismatch',
+    }
+
+    xml_iter = ET.iterparse(handle)
+
+    # parse the preamble part (anything prior to the first result)
+    for event, elem in xml_iter:
+        # get the tag values and store them into meta
+        if event == 'end' and elem.tag in _tag_meta_map:
+            meta_key = _tag_meta_map[elem.tag]
+
+            if meta_key  == 'param_evalue_threshold':
+                meta[meta_key] = float(elem.text)
+            elif meta_key in ['param_gap_open', 'param_gap_extend', \
+                    'param_score_match', 'param_score_mismatch']:
+                meta[meta_key] = int(elem.text)
+            else:
+                meta[meta_key] = elem.text
+            # delete element after we finish parsing it
+            elem.clear()
+            continue
+        break
+
+    # we only want the version number, sans the program name
+    meta['program_version'] = meta['program_version'].split(' ', 1)[1]
+
+    # parse the queries
+    for event, qresult_elem in xml_iter:
+        # </Iteration> marks the end of a single query
+        # which means we can process it
+        if event == 'end' and qresult_elem.tag == 'Iteration':
+
+            # get program and target
+            program = meta['program']
+            target = meta['target']
+
+            # we'll use the order outlined in the BLAST XML schema
+            # <!ELEMENT Iteration (
+            #        Iteration_iter-num,
+            #        Iteration_query-ID?,
+            #        Iteration_query-def?,
+            #        Iteration_query-len?,
+            #        Iteration_hits?,
+            #        Iteration_stat?,
+            #        Iteration_message?)>
+
+            # we need the query ID to instantiate the QueryResult object
+            query_id = qresult_elem.find('Iteration_query-ID').text
+
+            qresult = QueryResult(query_id, program=program, target=target, meta=meta)
+            qresult.description = qresult_elem.find('Iteration_query-def').text
+            qresult.query_length = int(qresult_elem.find('Iteration_query-len').text)
+
+            # statistics are stored Iteration_stat's 'grandchildren' with the
+            # following DTD
+            # <!ELEMENT Statistics (
+            #        Statistics_db-num,
+            #        Statistics_db-len,
+            #        Statistics_hsp-len,
+            #        Statistics_eff-space,
+            #        Statistics_kappa,
+            #        Statistics_lambda,
+            #        Statistics_entropy)>
+
+            stat_elem = qresult_elem.find('Iteration_stat').find('Statistics')
+
+            qresult.stat_db_num = int(stat_elem.find('Statistics_db-num').text)
+            qresult.stat_db_len = float(stat_elem.find('Statistics_db-len').text)
+            qresult.stat_eff_space = float(stat_elem.find('Statistics_eff-space').text)
+            qresult.stat_kappa = float(stat_elem.find('Statistics_kappa').text)
+            qresult.stat_lambda = float(stat_elem.find('Statistics_lambda').text)
+            qresult.stat_entropy = float(stat_elem.find('Statistics_entropy').text)
+
+            for hit in _parse_hit(qresult_elem.find('Iteration_hits')):
+                # only append the Hit object if we have HSPs
+                if hit:
+                    qresult.append(hit)
+
+            # delete element after we finish parsing it
+            qresult_elem.clear()
+            yield qresult
 
 
 def blast_tabular_iterator(handle):
