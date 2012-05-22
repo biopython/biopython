@@ -26,7 +26,7 @@ class ModTest(unittest.TestCase):
     bad_ctl_file2 = os.path.join(ctl_dir, "bad2.ctl")
     ctl_file = os.path.join(ctl_dir, "baseml.ctl")
        
-    def __del__(self):
+    def tearDown(self):
         """Just in case BASEML creates some junk files, do a clean-up."""
         del_files = [self.out_file, "2base.t", 
             "in.basemlg", "baseml.ctl", "lnf", "rates", "rst", "rst1", 
@@ -36,7 +36,8 @@ class ModTest(unittest.TestCase):
                 os.remove(filename)
         if os.path.exists(self.working_dir):
             for filename in os.listdir(self.working_dir):
-                os.remove(filename)
+                filepath = os.path.join(self.working_dir, filename)
+                os.remove(filepath)
             os.rmdir(self.working_dir)
     
     def setUp(self):
