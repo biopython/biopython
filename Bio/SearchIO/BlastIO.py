@@ -27,7 +27,7 @@ For legacy BLAST outputs, see the Bio.Blast module.
 
 """
 
-from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
 
 
 def _safe_float(value):
@@ -38,56 +38,56 @@ def _safe_float(value):
 
 
 def blast_xml_iterator(handle):
-    """Generator function to parse BLAST+ XML output as Result objects.
+    """Generator function to parse BLAST+ XML output as QueryResult objects.
 
     handle -- Handle to the file, or the filename as string.
 
     """
     # TODO: improve parser performance
     from Bio.Blast.NCBIXML import parse
-    for query in parse(handle):
+    for record in parse(handle):
         # HACK: query is the first word before any space
-        parsed_id = query.query.split(' ', 1)
+        parsed_id = record.query.split(' ', 1)
         try:
             query_id, query_description = parsed_id
         except ValueError:
             query_id, query_description = parsed_id[0], None
-        program = query.application
-        target = query.database
+        program = record.application
+        target = record.database
 
         # meta information about search, stored prior to any hits in the file
         meta = {
             # present in all blast flavors
-            'program_version': query.version,
-            'program_reference': query.reference,
-            'param_score_match': _safe_float(query.sc_match),
-            'param_score_mismatch': _safe_float(query.sc_mismatch),
+            'program_version': record.version,
+            'program_reference': record.reference,
+            'param_score_match': _safe_float(record.sc_match),
+            'param_score_mismatch': _safe_float(record.sc_mismatch),
             # only defined in blastp, blastx, tblastx
-            'param_matrix': query.matrix,
-            'param_evalue_threshold': _safe_float(query.expect),
-            'param_filter': query.filter,
-            'param_gap_open': _safe_float(query.gap_penalties[0]),
-            'param_gap_extend': _safe_float(query.gap_penalties[1]),
+            'param_matrix': record.matrix,
+            'param_evalue_threshold': _safe_float(record.expect),
+            'param_filter': record.filter,
+            'param_gap_open': _safe_float(record.gap_penalties[0]),
+            'param_gap_extend': _safe_float(record.gap_penalties[1]),
         }
 
-        result = Result(query_id, program=program, target=target, meta=meta)
+        qresult = QueryResult(query_id, program=program, target=target, meta=meta)
 
-        # set attributes of the Result object
-        result_attrs = {
+        # set attributes of the QueryResult object
+        qresult_attrs = {
             'description': query_description,
-            'query_length': query.query_length,
-            'stat_db_sequences': query.database_sequences,
-            'stat_db_length': query.database_length,
-            'stat_eff_search_space': query.effective_search_space,
-            'stat_kappa': query.ka_params[1],
-            'stat_lambda': query.ka_params[0],
-            'stat_entropy': query.ka_params[2],
+            'query_length': record.query_length,
+            'stat_db_sequences': record.database_sequences,
+            'stat_db_length': record.database_length,
+            'stat_eff_search_space': record.effective_search_space,
+            'stat_kappa': record.ka_params[1],
+            'stat_lambda': record.ka_params[0],
+            'stat_entropy': record.ka_params[2],
         }
-        for attr in result_attrs:
-            setattr(result, attr, result_attrs[attr])
+        for attr in qresult_attrs:
+            setattr(qresult, attr, qresult_attrs[attr])
 
-        # fill the Result object with Hits
-        for hit in query.alignments:
+        # fill the QueryResult object with Hits
+        for hit in record.alignments:
             # HACK: hit id the first word in hit_def before any space
             #parsed_id = hit.hit_def.split(' ', 1)
             #try:
@@ -136,13 +136,13 @@ def blast_xml_iterator(handle):
             for attr in hit_attrs:
                 setattr(hit_obj, attr, hit_attrs[attr])
 
-            result.append(hit_obj)
+            qresult.append(hit_obj)
 
-        yield result
+        yield qresult
 
 
 def blast_tabular_iterator(handle):
-    """Generator function to parse BLAST+ tabular output as Result objects.
+    """Generator function to parse BLAST+ tabular output as QueryResult objects.
 
     handle -- Handle to the file, or the filename as string.
 
@@ -157,7 +157,7 @@ def blast_tabular_iterator(handle):
 
 
 def blast_text_iterator(handle):
-    """Generator function to parse BLAST+ plain text output as Result objects.
+    """Generator function to parse BLAST+ plain text output as QueryResult objects.
 
     handle -- Handle to the file, or the filename as string.
 
