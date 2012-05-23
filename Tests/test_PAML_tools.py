@@ -61,11 +61,6 @@ class Common(unittest.TestCase):
         for filename in del_files:
             if os.path.exists(filename):
                 os.remove(filename)
-        if os.path.exists(self.working_dir):
-            for filename in os.listdir(self.working_dir):
-                if filename in del_files:
-                    os.remove(os.path.join(self.working_dir, filename))
-            os.rmdir(self.working_dir)
 
 
 class CodemlTest(Common):
