@@ -261,6 +261,37 @@ class ModTest(unittest.TestCase):
                 if "site classes" in params:
                     self.assertEqual(len(params["site classes"]),
                                  SITECLASSES[model_num], version_msg)
+
+    def testParseNSsite3(self):
+        res_dir = os.path.join(self.results_dir, "codeml", "NSsite3")
+        for results_file in os.listdir(res_dir):
+            version = results_file.split('-')[1].split('.')[0]
+            version_msg = "Improper parsing for version %s" \
+                        % version.replace('_', '.')                    
+            results_path = os.path.join(res_dir, results_file)
+            results = codeml.read(results_path)
+            # There should be 5 top-level items: 'codon model', 'model', 
+            # 'version', 'NSsites' & site-class model, the last of which
+            # is only there when only one NSsites class is used
+            self.assertEqual(len(results), 5, version_msg)
+            self.assertTrue('site-class model' in results, version_msg)
+            self.assertEqual(results['site-class model'], 'discrete', 
+                    version_msg)
+            self.assertTrue("NSsites" in results, version_msg)
+            # There should be 1 NSsites classe: 3
+            self.assertEqual(len(results["NSsites"]), 1, version_msg)
+            # Each site class model should have 5 sub-items: 'lnL', 'tree', 
+            # 'description', 'parameters', & 'tree length'. It should
+            # have the correct number of parameters also.
+            model = results["NSsites"][3]
+            self.assertEqual(len(model), 5, version_msg)
+            self.assertTrue("parameters" in model, version_msg)
+            params = model["parameters"]
+            self.assertEqual(len(params), SITECLASS_PARAMS[3],
+                version)
+            self.assertTrue("site classes" in params, version_msg)
+            site_classes = params["site classes"]
+            self.assertEqual(len(site_classes), 4, version_msg)
         
     def testParseBranchSiteA(self):
         res_dir = os.path.join(self.results_dir, "codeml", "branchsiteA")
