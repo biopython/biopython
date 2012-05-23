@@ -37,7 +37,7 @@ def parse_basics(lines, results):
     # In codeml 4.3+ it is headed by:
     # "Codon frequency model:"
     codon_freq_re = re.compile("Codon frequenc[a-z\s]{3,7}:\s+(.+)")
-    siteclass_re = re.compile("Site-class models:\s*([^\s]+)")
+    siteclass_re = re.compile("Site-class models:\s*([^\s]*)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
