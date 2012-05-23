@@ -13,6 +13,7 @@ from Bio.SearchIO import parse, read
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'
+FMT = 'blast-xml'
 
 
 def get_file(filename):
@@ -20,13 +21,11 @@ def get_file(filename):
     return os.path.join(TEST_DIR, filename)
 
 
-class BlastXmlCases(unittest.TestCase):
+class BlastnXmlCases(unittest.TestCase):
 
-    fmt = 'blast-xml'
-
-    def test_blastn_multiple(self):
+    def test_xbt012(self):
         xml_file = get_file('xbt012.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -190,9 +189,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_blastn_no_qresult(self):
+    def test_xbt013(self):
         xml_file = get_file('xbt013.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -228,9 +227,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastn_single_hsp(self):
+    def test_xbt014(self):
         xml_file = get_file('xbt014.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -297,9 +296,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastn_multiple_hsps(self):
+    def test_xbt015(self):
         xml_file = get_file('xbt015.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -391,9 +390,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastn_remote(self):
+    def test_xbt016(self):
         xml_file = get_file('xbt016.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -543,9 +542,12 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_blastp_multiple(self):
+
+class BlastpXmlCases(unittest.TestCase):
+
+    def test_xbt017(self):
         xml_file = get_file('xbt017.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -709,9 +711,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_blastp_no_qresult(self):
+    def test_xbt018(self):
         xml_file = get_file('xbt018.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -750,9 +752,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastp_single_hsp(self):
+    def test_xbt019(self):
         xml_file = get_file('xbt019.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -818,9 +820,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastp_multiple_hsps(self):
+    def test_xbt020(self):
         xml_file = get_file('xbt020.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -925,9 +927,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastp_remote(self):
+    def test_xbt021(self):
         xml_file = get_file('xbt021.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -1088,9 +1090,12 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_blastx_multiple(self):
+
+class BlastxXmlCases(unittest.TestCase):
+
+    def test_xbt022(self):
         xml_file = get_file('xbt022.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -1257,9 +1262,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_blastx_no_qresult(self):
+    def test_xbt023(self):
         xml_file = get_file('xbt023.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -1295,9 +1300,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastx_multiple_hsps(self):
+    def test_xbt024(self):
         xml_file = get_file('xbt024.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -1404,9 +1409,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_blastx_remote(self):
+    def test_xbt025(self):
         xml_file = get_file('xbt025.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -1571,9 +1576,12 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tblastn_multiple(self):
+
+class TblastnXmlCases(unittest.TestCase):
+
+    def test_xbt026(self):
         xml_file = get_file('xbt026.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -1735,9 +1743,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tblastn_no_qresult(self):
+    def test_xbt027(self):
         xml_file = get_file('xbt027.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -1771,9 +1779,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tblastn_single_hsp(self):
+    def test_xbt028(self):
         xml_file = get_file('xbt028.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -1835,9 +1843,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tblastn_multiple_hsps(self):
+    def test_xbt029(self):
         xml_file = get_file('xbt029.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -1939,9 +1947,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tblastn_remote(self):
+    def test_xbt030(self):
         xml_file = get_file('xbt030.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -2102,9 +2110,12 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tblastx_multiple(self):
+
+class TblastxXmlCases(unittest.TestCase):
+
+    def test_xbt031(self):
         xml_file = get_file('xbt031.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
@@ -2268,9 +2279,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tblastx_no_qresult(self):
+    def test_xbt032(self):
         xml_file = get_file('xbt032.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -2304,9 +2315,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tblastx_multiple_hsps(self):
+    def test_xbt033(self):
         xml_file = get_file('xbt033.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         qresult = qresults.next()
@@ -2411,9 +2422,9 @@ class BlastXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tblastx_remote(self):
+    def test_xbt034(self):
         xml_file = get_file('xbt034.xml')
-        qresults = parse(xml_file, self.fmt)
+        qresults = parse(xml_file, FMT)
         counter = 0
 
         # test each qresult's attributes
