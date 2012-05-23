@@ -42,6 +42,16 @@ def blast_xml_iterator(handle):
     except ImportError:
         from xml.etree import ElementTree as ET
 
+    def _get_elem_data(elem, name, caster=None):
+        """XML element text retriever that casts and handles None."""
+        try:
+            if caster is not None:
+                return caster(elem.find(name).text)
+            else:
+                return elem.find(name).text
+        except AttributeError:
+            return None
+
     def _parse_hit(root_hit_elem):
         """Iterator that transforms Iteration_hits XML elements into Hit objects.
 
@@ -60,6 +70,7 @@ def blast_xml_iterator(handle):
         #        Hit_len,
         #        Hit_hsps?)>
 
+        # feed the loop below an empty list so iteration still works
         if root_hit_elem is None:
             root_hit_elem = []
 
@@ -129,28 +140,17 @@ def blast_xml_iterator(handle):
             hsp.query_to = int(hsp_elem.find('Hsp_query-to').text)
             hsp.hit_from = int(hsp_elem.find('Hsp_hit-from').text)
             hsp.hit_to = int(hsp_elem.find('Hsp_hit-to').text)
-            hsp.query_frame = int(hsp_elem.find('Hsp_query-frame').text)
-            hsp.hit_frame = int(hsp_elem.find('Hsp_hit-frame').text)
-            hsp.identity_num = int(hsp_elem.find('Hsp_identity').text)
-            hsp.positive_num = int(hsp_elem.find('Hsp_positive').text)
-            hsp.gap_num = int(hsp_elem.find('Hsp_gaps').text)
-            hsp.homology = hsp_elem.find('Hsp_midline').text
 
             # optional attributes
-            try:
-                hsp.pattern_from = int(hsp_elem.find('Hsp_pattern-from').text)
-            except AttributeError:
-                hsp.pattern_from = None
-
-            try:
-                hsp.pattern_to = int(hsp_elem.find('Hsp_pattern-to').text)
-            except AttributeError:
-                hsp.pattern_to = None
-
-            try:
-                hsp.density = float(hsp_elem.find('Hsp_density').text)
-            except AttributeError:
-                hsp.density = None
+            hsp.query_frame = _get_elem_data(hsp_elem, 'Hsp_query-frame', int)
+            hsp.hit_frame = _get_elem_data(hsp_elem, 'Hsp_hit-frame', int)
+            hsp.identity_num = _get_elem_data(hsp_elem, 'Hsp_identity', int)
+            hsp.positive_num = _get_elem_data(hsp_elem, 'Hsp_positive', int)
+            hsp.gap_num = _get_elem_data(hsp_elem, 'Hsp_gaps', int)
+            hsp.homology = _get_elem_data(hsp_elem, 'Hsp_midline')
+            hsp.pattern_from = _get_elem_data(hsp_elem, 'Hsp_pattern-from', int)
+            hsp.pattern_to = _get_elem_data(hsp_elem, 'Hsp_pattern-to', int)
+            hsp.density = _get_elem_data(hsp_elem, 'Hsp_density', float)
 
             # delete element after we finish parsing it
             hsp_elem.clear()
@@ -181,7 +181,7 @@ def blast_xml_iterator(handle):
 
     # parse the preamble part (anything prior to the first result)
     for event, elem in xml_iter:
-        # get the tag values and store them into meta
+        # get the tag values, cast appropriately, store into meta
         if event == 'end' and elem.tag in _tag_meta_map:
             meta_key = _tag_meta_map[elem.tag]
 
@@ -206,11 +206,7 @@ def blast_xml_iterator(handle):
         # which means we can process it
         if event == 'end' and qresult_elem.tag == 'Iteration':
 
-            # get program and target
-            program = meta['program']
-            target = meta['target']
-
-            # we'll use the order outlined in the BLAST XML schema
+            # we'll use the following schema
             # <!ELEMENT Iteration (
             #        Iteration_iter-num,
             #        Iteration_query-ID?,
@@ -220,14 +216,17 @@ def blast_xml_iterator(handle):
             #        Iteration_stat?,
             #        Iteration_message?)>
 
-            # we need the query ID to instantiate the QueryResult object
+            # get the values required for QueryResult instantiation
             query_id = qresult_elem.find('Iteration_query-ID').text
-
+            program = meta['program']
+            target = meta['target']
             qresult = QueryResult(query_id, program=program, target=target, meta=meta)
-            qresult.description = qresult_elem.find('Iteration_query-def').text
-            qresult.query_length = int(qresult_elem.find('Iteration_query-len').text)
 
-            # statistics are stored Iteration_stat's 'grandchildren' with the
+            # optional attributes
+            qresult.description = _get_elem_data(qresult_elem, 'Iteration_query-def')
+            qresult.query_length = _get_elem_data(qresult_elem, 'Iteration_query-len', int)
+
+            # statistics are stored in Iteration_stat's 'grandchildren' with the
             # following DTD
             # <!ELEMENT Statistics (
             #        Statistics_db-num,
@@ -238,14 +237,16 @@ def blast_xml_iterator(handle):
             #        Statistics_lambda,
             #        Statistics_entropy)>
 
-            stat_elem = qresult_elem.find('Iteration_stat').find('Statistics')
+            stat_iter_elem = qresult_elem.find('Iteration_stat')
+            if stat_iter_elem is not None:
+                stat_elem = stat_iter_elem.find('Statistics')
 
-            qresult.stat_db_num = int(stat_elem.find('Statistics_db-num').text)
-            qresult.stat_db_len = float(stat_elem.find('Statistics_db-len').text)
-            qresult.stat_eff_space = float(stat_elem.find('Statistics_eff-space').text)
-            qresult.stat_kappa = float(stat_elem.find('Statistics_kappa').text)
-            qresult.stat_lambda = float(stat_elem.find('Statistics_lambda').text)
-            qresult.stat_entropy = float(stat_elem.find('Statistics_entropy').text)
+                qresult.stat_db_num = int(stat_elem.find('Statistics_db-num').text)
+                qresult.stat_db_len = float(stat_elem.find('Statistics_db-len').text)
+                qresult.stat_eff_space = float(stat_elem.find('Statistics_eff-space').text)
+                qresult.stat_kappa = float(stat_elem.find('Statistics_kappa').text)
+                qresult.stat_lambda = float(stat_elem.find('Statistics_lambda').text)
+                qresult.stat_entropy = float(stat_elem.find('Statistics_entropy').text)
 
             for hit in _parse_hit(qresult_elem.find('Iteration_hits')):
                 # only append the Hit object if we have HSPs
