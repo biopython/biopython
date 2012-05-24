@@ -162,15 +162,18 @@ def blast_xml_iterator(handle):
     meta = {}
     # dictionary for mapping tag name and meta key name
     _tag_meta_map = {
-        'BlastOutput_program': 'program',
         'BlastOutput_db': 'target',
-        'BlastOutput_version': 'program_version',
+        'BlastOutput_program': 'program',
         'BlastOutput_reference': 'program_reference',
-        'Parameters_matrix': 'param_matrix',
+        'BlastOutput_version': 'program_version',
         'Parameters_expect': 'param_evalue_threshold',
-        'Parameters_gap-open': 'param_gap_open',
-        'Parameters_gap-extend': 'param_gap_extend',
+        'Parameters_entrez-query': 'param_entrez_query',
         'Parameters_filter': 'param_filter',
+        'Parameters_gap-extend': 'param_gap_extend',
+        'Parameters_gap-open': 'param_gap_open',
+        'Parameters_include': 'param_include',
+        'Parameters_matrix': 'param_matrix',
+        'Parameters_pattern': 'param_pattern',
         'Parameters_sc-match': 'param_score_match',
         'Parameters_sc-mismatch': 'param_score_mismatch',
     }
