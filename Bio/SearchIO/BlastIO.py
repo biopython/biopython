@@ -27,6 +27,8 @@ For legacy BLAST outputs, see the Bio.Blast module.
 
 """
 
+import re
+
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
 
 
@@ -184,6 +186,9 @@ def blast_xml_iterator(handle):
         'BlastOutput_query-len': 'query_length',
     }
 
+    # compile RE patterns
+    _re_version = re.compile(r'\d+\.\d+\.\d+\+?')
+
     xml_iter = ET.iterparse(handle)
 
     # parse the preamble part (anything prior to the first result)
@@ -212,8 +217,9 @@ def blast_xml_iterator(handle):
             continue
         break
 
-    # we only want the version number, sans the program name
-    meta['program_version'] = meta['program_version'].split(' ', 1)[1]
+    # we only want the version number, sans the program name or date
+    meta['program_version'] = re.search(_re_version, \
+            meta['program_version']).group(0)
 
     # parse the queries
     for event, qresult_elem in xml_iter:
