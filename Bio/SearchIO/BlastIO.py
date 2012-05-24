@@ -197,7 +197,7 @@ def blast_xml_iterator(handle):
     # parse the preamble part (anything prior to the first result)
     for event, elem in xml_iter:
         # get the tag values, cast appropriately, store into meta
-        if event == 'end' and elem.tag in _tag_meta_map:
+        if elem.tag in _tag_meta_map:
             meta_key = _tag_meta_map[elem.tag]
 
             if meta_key  == 'param_evalue_threshold':
@@ -213,12 +213,14 @@ def blast_xml_iterator(handle):
         # capture fallback values
         # these are used only if the first <Iteration> does not have any
         # ID, ref, or len.
-        elif event == 'end' and elem.tag in _tag_fallback_map:
+        elif elem.tag in _tag_fallback_map:
             fallback_key = _tag_fallback_map[elem.tag]
             _fallback[fallback_key] = elem.text
             elem.clear()
             continue
-        break
+
+        if elem.tag == 'BlastOutput_param':
+            break
 
     # we only want the version number, sans the program name or date
     meta['program_version'] = re.search(_re_version, \
