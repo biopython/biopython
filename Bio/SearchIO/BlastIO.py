@@ -281,7 +281,7 @@ def blast_xml_iterator(handle):
                 stat_elem = stat_iter_elem.find('Statistics')
 
                 qresult.stat_db_num = int(stat_elem.find('Statistics_db-num').text)
-                qresult.stat_db_len = float(stat_elem.find('Statistics_db-len').text)
+                qresult.stat_db_len = int(stat_elem.find('Statistics_db-len').text)
                 qresult.stat_eff_space = float(stat_elem.find('Statistics_eff-space').text)
                 qresult.stat_kappa = float(stat_elem.find('Statistics_kappa').text)
                 qresult.stat_lambda = float(stat_elem.find('Statistics_lambda').text)
