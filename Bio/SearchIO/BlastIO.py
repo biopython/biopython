@@ -158,16 +158,12 @@ def blast_xml_iterator(handle):
 
     # dictionary for containing all information prior to the first query
     meta = {}
-
     # dictionary for mapping tag name and meta key name
     _tag_meta_map = {
         'BlastOutput_program': 'program',
         'BlastOutput_db': 'target',
         'BlastOutput_version': 'program_version',
         'BlastOutput_reference': 'program_reference',
-        'BlastOutput_query-ID': 'query_id',
-        'BlastOutput_query-def': 'query_description',
-        'BlastOutput_query-len': 'query_length',
         'Parameters_matrix': 'param_matrix',
         'Parameters_expect': 'param_evalue_threshold',
         'Parameters_gap-open': 'param_gap_open',
@@ -175,6 +171,17 @@ def blast_xml_iterator(handle):
         'Parameters_filter': 'param_filter',
         'Parameters_sc-match': 'param_score_match',
         'Parameters_sc-mismatch': 'param_score_mismatch',
+    }
+
+    # these are fallback tags that store information on the first query
+    # outside the <Iteration> tag
+    # only used if query_{ID,def,len} is not found in <Iteration>
+    # (seen in legacy Blast <2.2.14)
+    _fallback = {}
+    _tag_fallback_map = {
+        'BlastOutput_query-ID': 'query_id',
+        'BlastOutput_query-def': 'query_description',
+        'BlastOutput_query-len': 'query_length',
     }
 
     xml_iter = ET.iterparse(handle)
@@ -193,6 +200,14 @@ def blast_xml_iterator(handle):
             else:
                 meta[meta_key] = elem.text
             # delete element after we finish parsing it
+            elem.clear()
+            continue
+        # capture fallback values
+        # these are used only if the first <Iteration> does not have any
+        # ID, ref, or len.
+        elif event == 'end' and elem.tag in _tag_fallback_map:
+            fallback_key = _tag_fallback_map[elem.tag]
+            _fallback[fallback_key] = elem.text
             elem.clear()
             continue
         break
@@ -217,14 +232,27 @@ def blast_xml_iterator(handle):
             #        Iteration_message?)>
 
             # get the values required for QueryResult instantiation
-            query_id = qresult_elem.find('Iteration_query-ID').text
+            try:
+                query_id = qresult_elem.find('Iteration_query-ID').text
+            except AttributeError:
+                query_id = _fallback['query_id']
             program = meta['program']
             target = meta['target']
-            qresult = QueryResult(query_id, program=program, target=target, meta=meta)
+            qresult = QueryResult(query_id, program=program, target=target, \
+                    meta=meta)
 
-            # optional attributes
-            qresult.description = _get_elem_data(qresult_elem, 'Iteration_query-def')
-            qresult.query_length = _get_elem_data(qresult_elem, 'Iteration_query-len', int)
+            # assign attributes, with fallbacks
+            try:
+                description = qresult_elem.find('Iteration_query-def').text
+            except AttributeError:
+                description = _fallback['query_description']
+            try:
+                query_length = int(qresult_elem.find('Iteration_query-len').text)
+            except AttributeError:
+                query_length = int(_fallback['query_length'])
+
+            qresult.description = description
+            qresult.query_length = query_length
 
             # statistics are stored in Iteration_stat's 'grandchildren' with the
             # following DTD
