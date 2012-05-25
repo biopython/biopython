@@ -82,9 +82,9 @@ def blast_xml_iterator(handle):
             hit_id = hit_elem.find('Hit_id').text
             hit = Hit(hit_id, query_id)
 
-            hit.description = hit_elem.find('Hit_def').text
-            hit.accession = hit_elem.find('Hit_accession').text
-            hit.seq_length = int(hit_elem.find('Hit_len').text)
+            hit.desc = hit_elem.find('Hit_def').text
+            hit.acc = hit_elem.find('Hit_accession').text
+            hit.seq_len = int(hit_elem.find('Hit_len').text)
 
             for hsp in _parse_hsp(hit_elem.find('Hit_hsps'), hit_id):
                 hit.append(hsp)
@@ -146,8 +146,8 @@ def blast_xml_iterator(handle):
             # optional attributes
             hsp.query_frame = _get_elem_data(hsp_elem, 'Hsp_query-frame', int)
             hsp.hit_frame = _get_elem_data(hsp_elem, 'Hsp_hit-frame', int)
-            hsp.identity_num = _get_elem_data(hsp_elem, 'Hsp_identity', int)
-            hsp.positive_num = _get_elem_data(hsp_elem, 'Hsp_positive', int)
+            hsp.ident_num = _get_elem_data(hsp_elem, 'Hsp_identity', int)
+            hsp.pos_num = _get_elem_data(hsp_elem, 'Hsp_positive', int)
             hsp.gap_num = _get_elem_data(hsp_elem, 'Hsp_gaps', int)
             hsp.homology = _get_elem_data(hsp_elem, 'Hsp_midline')
             hsp.pattern_from = _get_elem_data(hsp_elem, 'Hsp_pattern-from', int)
@@ -185,8 +185,8 @@ def blast_xml_iterator(handle):
     _fallback = {}
     _tag_fallback_map = {
         'BlastOutput_query-ID': 'query_id',
-        'BlastOutput_query-def': 'query_description',
-        'BlastOutput_query-len': 'query_length',
+        'BlastOutput_query-def': 'query_desc',
+        'BlastOutput_query-len': 'query_len',
     }
 
     # compile RE patterns
@@ -256,14 +256,14 @@ def blast_xml_iterator(handle):
             try:
                 description = qresult_elem.find('Iteration_query-def').text
             except AttributeError:
-                description = _fallback['query_description']
+                description = _fallback['query_desc']
             try:
-                query_length = int(qresult_elem.find('Iteration_query-len').text)
+                query_len = int(qresult_elem.find('Iteration_query-len').text)
             except AttributeError:
-                query_length = int(_fallback['query_length'])
+                query_len = int(_fallback['query_len'])
 
-            qresult.description = description
-            qresult.query_length = query_length
+            qresult.desc = description
+            qresult.seq_len = query_len
 
             # statistics are stored in Iteration_stat's 'grandchildren' with the
             # following DTD

@@ -43,8 +43,8 @@ class BlastnXmlCases(unittest.TestCase):
         # test parsed values of qresult
         self.assertEqual('gi|1348916|gb|G26684.1|G26684', qresult.id)
         self.assertEqual('human STS STS_D11570, sequence tagged site', \
-                qresult.description)
-        self.assertEqual(285, qresult.query_length)
+                qresult.desc)
+        self.assertEqual(285, qresult.seq_len)
         self.assertEqual(371021, qresult.stat_db_num)
         self.assertEqual(1233631384, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -55,8 +55,8 @@ class BlastnXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|9950606|gb|AE004854.1|', hit.id)
-        self.assertEqual('Pseudomonas aeruginosa PAO1, section 415 of 529 of the complete genome', hit.description)
-        self.assertEqual(11884, hit.seq_length)
+        self.assertEqual('Pseudomonas aeruginosa PAO1, section 415 of 529 of the complete genome', hit.desc)
+        self.assertEqual(11884, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -70,8 +70,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(6030, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(19, hsp.identity_num)
-        self.assertEqual(19, hsp.positive_num)
+        self.assertEqual(19, hsp.ident_num)
+        self.assertEqual(19, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(19, len(hsp))
         self.assertEqual('CAGGCCAGCGACTTCTGGG', hsp.query.seq.tostring())
@@ -82,8 +82,8 @@ class BlastnXmlCases(unittest.TestCase):
         # parse last hit
         hit = qresult[-1]
         self.assertEqual('gi|15073988|emb|AL591786.1|SME591786', hit.id)
-        self.assertEqual('Sinorhizobium meliloti 1021 complete chromosome; segment 5/12', hit.description)
-        self.assertEqual(299350, hit.seq_length)
+        self.assertEqual('Sinorhizobium meliloti 1021 complete chromosome; segment 5/12', hit.desc)
+        self.assertEqual(299350, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -97,8 +97,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(83628, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(-1, hsp.hit_frame)
-        self.assertEqual(20, hsp.identity_num)
-        self.assertEqual(20, hsp.positive_num)
+        self.assertEqual(20, hsp.ident_num)
+        self.assertEqual(20, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(21, len(hsp))
         self.assertEqual('TGAAAGGAAATNAAAATGGAA', hsp.query.seq.tostring())
@@ -136,8 +136,8 @@ class BlastnXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(7702306.0, qresult.stat_eff_space)
@@ -150,8 +150,8 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         self.assertEqual('Query_2', qresult.id)
-        self.assertEqual('gi|356995852:1-490 Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.description)
-        self.assertEqual(490, qresult.query_length)
+        self.assertEqual('gi|356995852:1-490 Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.desc)
+        self.assertEqual(490, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(32217922.0, qresult.stat_eff_space)
@@ -164,8 +164,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|0', hit.id)
         self.assertEqual('gi|356995852|ref|NM_013633.3| Mus musculus POU '
                 'domain, class 5, transcription factor 1 (Pou5f1), '
-                'transcript variant 1, mRNA', hit.description)
-        self.assertEqual(1353, hit.seq_length)
+                'transcript variant 1, mRNA', hit.desc)
+        self.assertEqual(1353, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -179,8 +179,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(490, hsp.identity_num)
-        self.assertEqual(490, hsp.positive_num)
+        self.assertEqual(490, hsp.ident_num)
+        self.assertEqual(490, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(490, len(hsp))
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.query.seq.tostring())
@@ -192,8 +192,8 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         self.assertEqual('Query_3', qresult.id)
-        self.assertEqual('hg19_dna range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.description)
-        self.assertEqual(66, qresult.query_length)
+        self.assertEqual('hg19_dna range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.desc)
+        self.assertEqual(66, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(3545672.0, qresult.stat_eff_space)
@@ -206,8 +206,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|6', hit.id)
         self.assertEqual('gi|94721341|ref|NM_001040441.1| Homo sapiens zinc '
                 'finger and BTB domain containing 8A (ZBTB8A), mRNA', \
-                        hit.description)
-        self.assertEqual(7333, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(7333, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -220,8 +220,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(3738, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(62, hsp.identity_num)
-        self.assertEqual(62, hsp.positive_num)
+        self.assertEqual(62, hsp.ident_num)
+        self.assertEqual(62, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(62, len(hsp))
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
@@ -238,8 +238,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(2876, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(53, hsp.identity_num)
-        self.assertEqual(53, hsp.positive_num)
+        self.assertEqual(53, hsp.ident_num)
+        self.assertEqual(53, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(53, len(hsp))
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', hsp.query.seq.tostring())
@@ -250,8 +250,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|7', hit.id)
         self.assertEqual('gi|332865372|ref|XM_003318468.1| PREDICTED: Pan '
                 'troglodytes zinc finger protein 273, transcript variant 1 '
-                '(ZNF273), mRNA', hit.description)
-        self.assertEqual(4430, hit.seq_length)
+                '(ZNF273), mRNA', hit.desc)
+        self.assertEqual(4430, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -264,8 +264,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(2735, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(-1, hsp.hit_frame)
-        self.assertEqual(64, hsp.identity_num)
-        self.assertEqual(64, hsp.positive_num)
+        self.assertEqual(64, hsp.ident_num)
+        self.assertEqual(64, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(66, len(hsp))
         self.assertEqual('TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
@@ -299,8 +299,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('blastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(7702306.0, qresult.stat_eff_space)
@@ -340,8 +340,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('Query_1', qresult.id)
         self.assertEqual('gi|356995852:1-490 Mus musculus POU domain, class 5, transcription '
                 'factor 1 (Pou5f1), transcript variant 1, mRNA', \
-                        qresult.description)
-        self.assertEqual(490, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(490, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(32217922.0, qresult.stat_eff_space)
@@ -354,8 +354,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|0', hit.id)
         self.assertEqual('gi|356995852|ref|NM_013633.3| Mus musculus POU '
                 'domain, class 5, transcription factor 1 (Pou5f1), '
-                'transcript variant 1, mRNA', hit.description)
-        self.assertEqual(1353, hit.seq_length)
+                'transcript variant 1, mRNA', hit.desc)
+        self.assertEqual(1353, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -369,8 +369,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(490, hsp.identity_num)
-        self.assertEqual(490, hsp.positive_num)
+        self.assertEqual(490, hsp.ident_num)
+        self.assertEqual(490, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(490, len(hsp))
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.query.seq.tostring())
@@ -393,8 +393,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('Query_1', qresult.id)
         self.assertEqual('hg19_dna range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
                 'strand=+ repeatMasking=none',
-                        qresult.description)
-        self.assertEqual(66, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(66, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(3545672.0, qresult.stat_eff_space)
@@ -407,8 +407,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|6', hit.id)
         self.assertEqual('gi|94721341|ref|NM_001040441.1| Homo sapiens zinc '
                 'finger and BTB domain containing 8A (ZBTB8A), mRNA', \
-                        hit.description)
-        self.assertEqual(7333, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(7333, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -421,8 +421,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(3738, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(62, hsp.identity_num)
-        self.assertEqual(62, hsp.positive_num)
+        self.assertEqual(62, hsp.ident_num)
+        self.assertEqual(62, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(62, len(hsp))
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
@@ -439,8 +439,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(2876, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(53, hsp.identity_num)
-        self.assertEqual(53, hsp.positive_num)
+        self.assertEqual(53, hsp.ident_num)
+        self.assertEqual(53, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(53, len(hsp))
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', hsp.query.seq.tostring())
@@ -451,8 +451,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|7', hit.id)
         self.assertEqual('gi|332865372|ref|XM_003318468.1| PREDICTED: Pan '
                 'troglodytes zinc finger protein 273, transcript variant 1 '
-                '(ZNF273), mRNA', hit.description)
-        self.assertEqual(4430, hit.seq_length)
+                '(ZNF273), mRNA', hit.desc)
+        self.assertEqual(4430, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -465,8 +465,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(2735, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(-1, hsp.hit_frame)
-        self.assertEqual(64, hsp.identity_num)
-        self.assertEqual(64, hsp.positive_num)
+        self.assertEqual(64, hsp.ident_num)
+        self.assertEqual(64, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(66, len(hsp))
         self.assertEqual('TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
@@ -503,8 +503,8 @@ class BlastnXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -519,8 +519,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|356995852:1-490 Mus musculus POU domain, class 5, transcription '
                 'factor 1 (Pou5f1), transcript variant 1, mRNA', \
-                        qresult.description)
-        self.assertEqual(490, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(490, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -533,8 +533,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|356995852|ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU '
                 'domain, class 5, transcription factor 1 (Pou5f1), '
-                'transcript variant 1, mRNA', hit.description)
-        self.assertEqual(1353, hit.seq_length)
+                'transcript variant 1, mRNA', hit.desc)
+        self.assertEqual(1353, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -548,8 +548,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(490, hsp.identity_num)
-        self.assertEqual(490, hsp.positive_num)
+        self.assertEqual(490, hsp.ident_num)
+        self.assertEqual(490, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(490, len(hsp))
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.query.seq.tostring())
@@ -563,8 +563,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('Query_3', qresult.id)
         self.assertEqual('hg19_dna range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
                 'strand=+ repeatMasking=none',
-                        qresult.description)
-        self.assertEqual(66, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(66, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -577,8 +577,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|332237160|ref|XM_003267724.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys ATG14 autophagy '
                 'related 14 homolog (S. cerevisiae) (ATG14), mRNA', \
-                        hit.description)
-        self.assertEqual(4771, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(4771, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -591,8 +591,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(2926, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(62, hsp.identity_num)
-        self.assertEqual(62, hsp.positive_num)
+        self.assertEqual(62, hsp.ident_num)
+        self.assertEqual(62, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(62, len(hsp))
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
@@ -603,8 +603,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|332254616|ref|XM_003276378.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys S100P binding '
                 'protein, transcript variant 2 (S100PBP), mRNA', \
-                        hit.description)
-        self.assertEqual(4345, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(4345, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -617,8 +617,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(2792, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(-1, hsp.hit_frame)
-        self.assertEqual(64, hsp.identity_num)
-        self.assertEqual(64, hsp.positive_num)
+        self.assertEqual(64, hsp.ident_num)
+        self.assertEqual(64, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(66, len(hsp))
         self.assertEqual('TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
@@ -652,8 +652,8 @@ class BlastpXmlCases(unittest.TestCase):
         
         self.assertEqual('gi|49176427|ref|NP_418280.3|', qresult.id)
         self.assertEqual('component of Sec-independent translocase [Escherichia coli K12]', \
-                qresult.description)
-        self.assertEqual(103, qresult.query_length)
+                qresult.desc)
+        self.assertEqual(103, qresult.seq_len)
         self.assertEqual(2934173, qresult.stat_db_num)
         self.assertEqual(1011751523, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -664,8 +664,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|49176427|ref|NP_418280.3|', hit.id)
-        self.assertEqual('component of Sec-independent translocase [Escherichia coli K12] >gi|26250604|ref|NP_756644.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|30064867|ref|NP_839038.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|24115132|ref|NP_709642.1| hypothetical protein SF3914 [Shigella flexneri 2a str. 301] >gi|24054404|gb|AAN45349.1| orf, conserved hypothetical protein [Shigella flexneri 2a str. 301] >gi|2367310|gb|AAC76839.1| component of Sec-independent translocase [Escherichia coli K12] >gi|30043127|gb|AAP18849.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|26111035|gb|AAN83218.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|3193217|gb|AAC19240.1| MttA1 [Escherichia coli] >gi|7444818|pir||E65188 hypothetical 11.3 kD protein in udp-rfaH intergenic region - Escherichia coli (strain K-12)', hit.description)
-        self.assertEqual(103, hit.seq_length)
+        self.assertEqual('component of Sec-independent translocase [Escherichia coli K12] >gi|26250604|ref|NP_756644.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|30064867|ref|NP_839038.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|24115132|ref|NP_709642.1| hypothetical protein SF3914 [Shigella flexneri 2a str. 301] >gi|24054404|gb|AAN45349.1| orf, conserved hypothetical protein [Shigella flexneri 2a str. 301] >gi|2367310|gb|AAC76839.1| component of Sec-independent translocase [Escherichia coli K12] >gi|30043127|gb|AAP18849.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|26111035|gb|AAN83218.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|3193217|gb|AAC19240.1| MttA1 [Escherichia coli] >gi|7444818|pir||E65188 hypothetical 11.3 kD protein in udp-rfaH intergenic region - Escherichia coli (strain K-12)', hit.desc)
+        self.assertEqual(103, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -679,8 +679,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(103, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(103, hsp.identity_num)
-        self.assertEqual(103, hsp.positive_num)
+        self.assertEqual(103, hsp.ident_num)
+        self.assertEqual(103, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(103, len(hsp))
         self.assertEqual('MRLCLIIIYHRGTCMGGISIWQXXXXXXXXXXXFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.query.seq.tostring())
@@ -691,8 +691,8 @@ class BlastpXmlCases(unittest.TestCase):
         # parse last hit
         hit = qresult[-1]
         self.assertEqual('gi|39593039|emb|CAE64508.1|', hit.id)
-        self.assertEqual('Hypothetical protein CBG09238 [Caenorhabditis briggsae]', hit.description)
-        self.assertEqual(960, hit.seq_length)
+        self.assertEqual('Hypothetical protein CBG09238 [Caenorhabditis briggsae]', hit.desc)
+        self.assertEqual(960, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -706,8 +706,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(459, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(19, hsp.identity_num)
-        self.assertEqual(33, hsp.positive_num)
+        self.assertEqual(19, hsp.ident_num)
+        self.assertEqual(33, hsp.pos_num)
         self.assertEqual(4, hsp.gap_num)
         self.assertEqual(51, len(hsp))
         self.assertEqual('KAMSDDEPKQD---KTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQ', hsp.query.seq.tostring())
@@ -737,8 +737,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('nr', qresult.target)
         
         self.assertEqual('31493', qresult.id)
-        self.assertEqual('unnamed protein product', qresult.description)
-        self.assertEqual(70, qresult.query_length)
+        self.assertEqual('unnamed protein product', qresult.desc)
+        self.assertEqual(70, qresult.seq_len)
         self.assertEqual(15287, qresult.stat_db_num)
         self.assertEqual(7033566, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -749,8 +749,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|151942244|gb|EDN60600.1|', hit.id)
-        self.assertEqual('cytosolic iron-sulfur protein assembly protein [Saccharomyces cerevisiae YJM789]', hit.description)
-        self.assertEqual(330, hit.seq_length)
+        self.assertEqual('cytosolic iron-sulfur protein assembly protein [Saccharomyces cerevisiae YJM789]', hit.desc)
+        self.assertEqual(330, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -764,8 +764,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(163, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(16, hsp.identity_num)
-        self.assertEqual(27, hsp.positive_num)
+        self.assertEqual(16, hsp.ident_num)
+        self.assertEqual(27, hsp.pos_num)
         self.assertEqual(2, hsp.gap_num)
         self.assertEqual(50, len(hsp))
         self.assertEqual('AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP', hsp.query.seq.tostring())
@@ -776,8 +776,8 @@ class BlastpXmlCases(unittest.TestCase):
         # parse last hit
         hit = qresult[-1]
         self.assertEqual('gi|151567870|pdb|2PM9|B', hit.id)
-        self.assertEqual('Chain B, Crystal Structure Of Yeast Sec1331 VERTEX ELEMENT OF THE Copii Vesicular Coat', hit.description)
-        self.assertEqual(297, hit.seq_length)
+        self.assertEqual('Chain B, Crystal Structure Of Yeast Sec1331 VERTEX ELEMENT OF THE Copii Vesicular Coat', hit.desc)
+        self.assertEqual(297, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -790,8 +790,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(109, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(11, hsp.identity_num)
-        self.assertEqual(23, hsp.positive_num)
+        self.assertEqual(11, hsp.ident_num)
+        self.assertEqual(23, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(42, len(hsp))
         self.assertEqual('TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP', hsp.query.seq.tostring())
@@ -824,8 +824,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('gi|585505|sp|Q08386|MOPB_RHOCA', qresult.id)
-        self.assertEqual('Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein', qresult.description)
-        self.assertEqual(270, qresult.query_length)
+        self.assertEqual('Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein', qresult.desc)
+        self.assertEqual(270, qresult.seq_len)
         self.assertEqual(27252, qresult.stat_db_num)
         self.assertEqual(13958303, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -839,8 +839,8 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1        
 
         self.assertEqual('gi|129628|sp|P07175.1|PARA_AGRTU', qresult.id)
-        self.assertEqual('Protein parA', qresult.description)
-        self.assertEqual(222, qresult.query_length)
+        self.assertEqual('Protein parA', qresult.desc)
+        self.assertEqual(222, qresult.seq_len)
         self.assertEqual(27252, qresult.stat_db_num)
         self.assertEqual(13958303, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -876,8 +876,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('lcl|1_0', qresult.id)
-        self.assertEqual('Fake', qresult.description)
-        self.assertEqual(9, qresult.query_length)
+        self.assertEqual('Fake', qresult.desc)
+        self.assertEqual(9, qresult.seq_len)
         self.assertEqual(6589360, qresult.stat_db_num)
         self.assertEqual(2253133281, qresult.stat_db_len)
         self.assertEqual(2.02782e+10, qresult.stat_eff_space)
@@ -909,8 +909,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('nr', qresult.target)
         
         self.assertEqual('1', qresult.id)
-        self.assertEqual('gi|3298468|dbj|BAA31520.1| SAMIPF', qresult.description)
-        self.assertEqual(107, qresult.query_length)
+        self.assertEqual('gi|3298468|dbj|BAA31520.1| SAMIPF', qresult.desc)
+        self.assertEqual(107, qresult.seq_len)
         self.assertEqual(8994603, qresult.stat_db_num)
         self.assertEqual(-1216159329, qresult.stat_db_len)
         self.assertEqual(76934807744, qresult.stat_eff_space)
@@ -921,8 +921,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|3298468|dbj|BAA31520.1|', hit.id)
-        self.assertEqual('SAMIPF [Aster tripolium]', hit.description)
-        self.assertEqual(107, hit.seq_length)
+        self.assertEqual('SAMIPF [Aster tripolium]', hit.desc)
+        self.assertEqual(107, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -935,8 +935,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(107, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(107, hsp.identity_num)
-        self.assertEqual(107, hsp.positive_num)
+        self.assertEqual(107, hsp.ident_num)
+        self.assertEqual(107, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(107, len(hsp))
         self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.query.seq.tostring())
@@ -947,8 +947,8 @@ class BlastpXmlCases(unittest.TestCase):
         # parse last hit
         hit = qresult[-1]
         self.assertEqual('gi|162809290|dbj|BAF95576.1|', hit.id)
-        self.assertEqual('tonoplast intrinsic protein [Nicotiana tabacum]', hit.description)
-        self.assertEqual(251, hit.seq_length)
+        self.assertEqual('tonoplast intrinsic protein [Nicotiana tabacum]', hit.desc)
+        self.assertEqual(251, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -962,8 +962,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(187, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(91, hsp.identity_num)
-        self.assertEqual(95, hsp.positive_num)
+        self.assertEqual(91, hsp.ident_num)
+        self.assertEqual(95, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(107, len(hsp))
         self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.query.seq.tostring())
@@ -1001,8 +1001,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(32, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(32, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(156650.0, qresult.stat_eff_space)
@@ -1016,8 +1016,8 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
-        self.assertEqual(102, qresult.query_length)
+                'subsp. subtilis str. 168]', qresult.desc)
+        self.assertEqual(102, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(361344, qresult.stat_eff_space)
@@ -1030,8 +1030,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|1', hit.id)
         self.assertEqual('gi|308175296|ref|YP_003922001.1| membrane bound '
                 'lipoprotein [Bacillus amyloliquefaciens DSM 7]', \
-                hit.description)
-        self.assertEqual(100, hit.seq_length)
+                hit.desc)
+        self.assertEqual(100, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -1045,8 +1045,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(69, hsp.identity_num)
-        self.assertEqual(81, hsp.positive_num)
+        self.assertEqual(69, hsp.ident_num)
+        self.assertEqual(81, hsp.pos_num)
         self.assertEqual(2, hsp.gap_num)
         self.assertEqual(102, len(hsp))
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.query.seq.tostring())
@@ -1058,8 +1058,8 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         self.assertEqual('Query_3', qresult.id)
-        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.description)
-        self.assertEqual(98, qresult.query_length)
+        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.desc)
+        self.assertEqual(98, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(345626, qresult.stat_eff_space)
@@ -1071,8 +1071,8 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gnl|BL_ORD_ID|5', hit.id)
         self.assertEqual('gi|11464971|ref|NP_062422.1| pleckstrin '
-                '[Mus musculus]', hit.description)
-        self.assertEqual(350, hit.seq_length)
+                '[Mus musculus]', hit.desc)
+        self.assertEqual(350, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1085,8 +1085,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(98, hsp.identity_num)
-        self.assertEqual(98, hsp.positive_num)
+        self.assertEqual(98, hsp.ident_num)
+        self.assertEqual(98, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
@@ -1103,8 +1103,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(345, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(29, hsp.identity_num)
-        self.assertEqual(48, hsp.positive_num)
+        self.assertEqual(29, hsp.ident_num)
+        self.assertEqual(48, hsp.pos_num)
         self.assertEqual(6, hsp.gap_num)
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
@@ -1114,8 +1114,8 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|9', hit.id)
         self.assertEqual('gi|350596020|ref|XP_003360649.2| PREDICTED: '
-                'pleckstrin-like [Sus scrofa]', hit.description)
-        self.assertEqual(228, hit.seq_length)
+                'pleckstrin-like [Sus scrofa]', hit.desc)
+        self.assertEqual(228, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1128,8 +1128,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(94, hsp.identity_num)
-        self.assertEqual(96, hsp.positive_num)
+        self.assertEqual(94, hsp.ident_num)
+        self.assertEqual(96, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
@@ -1167,8 +1167,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(32, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(32, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(156650.0, qresult.stat_eff_space)
@@ -1207,8 +1207,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         self.assertEqual('Query_1', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
-        self.assertEqual(102, qresult.query_length)
+                'subsp. subtilis str. 168]', qresult.desc)
+        self.assertEqual(102, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(361344, qresult.stat_eff_space)
@@ -1221,8 +1221,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|1', hit.id)
         self.assertEqual('gi|308175296|ref|YP_003922001.1| membrane bound '
                 'lipoprotein [Bacillus amyloliquefaciens DSM 7]', \
-                hit.description)
-        self.assertEqual(100, hit.seq_length)
+                hit.desc)
+        self.assertEqual(100, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -1236,8 +1236,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(69, hsp.identity_num)
-        self.assertEqual(81, hsp.positive_num)
+        self.assertEqual(69, hsp.ident_num)
+        self.assertEqual(81, hsp.pos_num)
         self.assertEqual(2, hsp.gap_num)
         self.assertEqual(102, len(hsp))
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.query.seq.tostring())
@@ -1274,8 +1274,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.description)
-        self.assertEqual(98, qresult.query_length)
+        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.desc)
+        self.assertEqual(98, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(345626, qresult.stat_eff_space)
@@ -1287,8 +1287,8 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gnl|BL_ORD_ID|5', hit.id)
         self.assertEqual('gi|11464971|ref|NP_062422.1| pleckstrin '
-                '[Mus musculus]', hit.description)
-        self.assertEqual(350, hit.seq_length)
+                '[Mus musculus]', hit.desc)
+        self.assertEqual(350, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1301,8 +1301,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(98, hsp.identity_num)
-        self.assertEqual(98, hsp.positive_num)
+        self.assertEqual(98, hsp.ident_num)
+        self.assertEqual(98, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
@@ -1319,8 +1319,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(345, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(29, hsp.identity_num)
-        self.assertEqual(48, hsp.positive_num)
+        self.assertEqual(29, hsp.ident_num)
+        self.assertEqual(48, hsp.pos_num)
         self.assertEqual(6, hsp.gap_num)
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
@@ -1330,8 +1330,8 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|9', hit.id)
         self.assertEqual('gi|350596020|ref|XP_003360649.2| PREDICTED: '
-                'pleckstrin-like [Sus scrofa]', hit.description)
-        self.assertEqual(228, hit.seq_length)
+                'pleckstrin-like [Sus scrofa]', hit.desc)
+        self.assertEqual(228, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1344,8 +1344,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(94, hsp.identity_num)
-        self.assertEqual(96, hsp.positive_num)
+        self.assertEqual(94, hsp.ident_num)
+        self.assertEqual(96, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
@@ -1383,8 +1383,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(32, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(32, qresult.seq_len)
         self.assertEqual(12504708, qresult.stat_db_num)
         self.assertEqual(4346765131, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -1398,8 +1398,8 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
-        self.assertEqual(102, qresult.query_length)
+                'subsp. subtilis str. 168]', qresult.desc)
+        self.assertEqual(102, qresult.seq_len)
         self.assertEqual(12504708, qresult.stat_db_num)
         self.assertEqual(4346765131, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -1410,8 +1410,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.id)
-        self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] >gi|221311516|ref|ZP_03593363.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] >gi|221315843|ref|ZP_03597648.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. NCIB 3610] >gi|221320757|ref|ZP_03602051.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. JH642] >gi|221325043|ref|ZP_03606337.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. SMY] >gi|321313111|ref|YP_004205398.1| unnamed protein product [Bacillus subtilis BSn5]', hit.description)
-        self.assertEqual(102, hit.seq_length)
+        self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] >gi|221311516|ref|ZP_03593363.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] >gi|221315843|ref|ZP_03597648.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. NCIB 3610] >gi|221320757|ref|ZP_03602051.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. JH642] >gi|221325043|ref|ZP_03606337.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. SMY] >gi|321313111|ref|YP_004205398.1| unnamed protein product [Bacillus subtilis BSn5]', hit.desc)
+        self.assertEqual(102, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -1425,8 +1425,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(102, hsp.identity_num)
-        self.assertEqual(102, hsp.positive_num)
+        self.assertEqual(102, hsp.ident_num)
+        self.assertEqual(102, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(102, len(hsp))
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.query.seq.tostring())
@@ -1438,8 +1438,8 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         self.assertEqual('Query_3', qresult.id)
-        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.description)
-        self.assertEqual(98, qresult.query_length)
+        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.desc)
+        self.assertEqual(98, qresult.seq_len)
         self.assertEqual(12504708, qresult.stat_db_num)
         self.assertEqual(4346765131, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -1450,8 +1450,8 @@ class BlastpXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|11464971|ref|NP_062422.1|', hit.id)
-        self.assertEqual('pleckstrin [Mus musculus]', hit.description)
-        self.assertEqual(350, hit.seq_length)
+        self.assertEqual('pleckstrin [Mus musculus]', hit.desc)
+        self.assertEqual(350, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1464,8 +1464,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(98, hsp.identity_num)
-        self.assertEqual(98, hsp.positive_num)
+        self.assertEqual(98, hsp.ident_num)
+        self.assertEqual(98, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
@@ -1482,8 +1482,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(345, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(29, hsp.identity_num)
-        self.assertEqual(48, hsp.positive_num)
+        self.assertEqual(29, hsp.ident_num)
+        self.assertEqual(48, hsp.pos_num)
         self.assertEqual(6, hsp.gap_num)
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
@@ -1493,8 +1493,8 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|350596020|ref|XP_003360649.2|', hit.id)
         self.assertEqual('PREDICTED: pleckstrin-like [Sus scrofa]', \
-                hit.description)
-        self.assertEqual(228, hit.seq_length)
+                hit.desc)
+        self.assertEqual(228, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1507,8 +1507,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(94, hsp.identity_num)
-        self.assertEqual(96, hsp.positive_num)
+        self.assertEqual(94, hsp.ident_num)
+        self.assertEqual(96, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
@@ -1542,8 +1542,8 @@ class BlastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('gi|1347369|gb|G25137.1|G25137', qresult.id)
-        self.assertEqual('human STS EST48004, sequence tagged site', qresult.description)
-        self.assertEqual(556, qresult.query_length)
+        self.assertEqual('human STS EST48004, sequence tagged site', qresult.desc)
+        self.assertEqual(556, qresult.seq_len)
         self.assertEqual(2934173, qresult.stat_db_num)
         self.assertEqual(1011751523, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -1555,8 +1555,8 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|12654095|gb|AAH00859.1|', hit.id)
         self.assertEqual('Unknown (protein for IMAGE:3459481) [Homo sapiens]', \
-                        hit.description)
-        self.assertEqual(319, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(319, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -1569,8 +1569,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(288, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(122, hsp.identity_num)
-        self.assertEqual(123, hsp.positive_num)
+        self.assertEqual(122, hsp.ident_num)
+        self.assertEqual(123, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(133, len(hsp))
         self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE', hsp.query.seq.tostring())
@@ -1580,8 +1580,8 @@ class BlastxXmlCases(unittest.TestCase):
         # test parsed values of last hit
         hit = qresult[-1]
         self.assertEqual('gi|72081091|ref|XP_800619.1|', hit.id)
-        self.assertEqual('PREDICTED: hypothetical protein XP_795526 [Strongylocentrotus purpuratus]', hit.description)
-        self.assertEqual(337, hit.seq_length)
+        self.assertEqual('PREDICTED: hypothetical protein XP_795526 [Strongylocentrotus purpuratus]', hit.desc)
+        self.assertEqual(337, hit.seq_len)
 
         hsp = hit[0]
         self.assertEqual(32.3426, hsp.bitscore)
@@ -1593,8 +1593,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(172, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(21, hsp.identity_num)
-        self.assertEqual(37, hsp.positive_num)
+        self.assertEqual(21, hsp.ident_num)
+        self.assertEqual(37, hsp.pos_num)
         self.assertEqual(3, hsp.gap_num)
         self.assertEqual('AGTNSRWEVIANYMNI--HSSSGVKRT-AKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ', hsp.query.seq.tostring())
         self.assertEqual('SSSNSSSKASASSSNVGASSSSGTKKSDSKSSNESSKSKRDKEDHKEGSINRSKDEKVSKEHRVVKE', hsp.hit.seq.tostring())
@@ -1624,8 +1624,8 @@ class BlastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('1', qresult.id)
-        self.assertEqual('gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence', qresult.description)
-        self.assertEqual(1002, qresult.query_length)
+        self.assertEqual('gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence', qresult.desc)
+        self.assertEqual(1002, qresult.seq_len)
         self.assertEqual(8994603, qresult.stat_db_num)
         self.assertEqual(-1216159329, qresult.stat_db_len)
         self.assertEqual(367397307882, qresult.stat_eff_space)
@@ -1636,8 +1636,8 @@ class BlastxXmlCases(unittest.TestCase):
         # test parsed values of the first hit
         hit = qresult[0]
         self.assertEqual('gi|149390769|gb|ABR25402.1|', hit.id)
-        self.assertEqual('unknown [Oryza sativa (indica cultivar-group)]', hit.description)
-        self.assertEqual(26, hit.seq_length)
+        self.assertEqual('unknown [Oryza sativa (indica cultivar-group)]', hit.desc)
+        self.assertEqual(26, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -1650,8 +1650,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(26, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(24, hsp.identity_num)
-        self.assertEqual(25, hsp.positive_num)
+        self.assertEqual(24, hsp.ident_num)
+        self.assertEqual(25, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(26, len(hsp))
         self.assertEqual('HMLVSKIKPCMCKYEQIQTVKLRMAH', hsp.query.seq.tostring())
@@ -1685,8 +1685,8 @@ class BlastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -1701,8 +1701,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|356995852:1-490 Mus musculus POU domain, class 5, transcription '
                 'factor 1 (Pou5f1), transcript variant 1, mRNA', \
-                        qresult.description)
-        self.assertEqual(490, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(490, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(673486.0, qresult.stat_eff_space)
@@ -1715,8 +1715,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|10', hit.id)
         self.assertEqual('gi|125490392|ref|NP_038661.2| POU domain, class 5'
                 ', transcription factor 1 isoform 1 [Mus musculus]', \
-                        hit.description)
-        self.assertEqual(352, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(352, hit.seq_len)
         self.assertEqual(3, len(hit))
 
         hsp = hit[0]
@@ -1729,8 +1729,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(140, hsp.hit_to)
         self.assertEqual(3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(140, hsp.identity_num)
-        self.assertEqual(140, hsp.positive_num)
+        self.assertEqual(140, hsp.ident_num)
+        self.assertEqual(140, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(140, len(hsp))
         self.assertEqual('MAGHLAXXXXXXXXXXXXXXXXXLEPGWVDPRTWLSFQXXXXXXXXXXXSEVLGISPCPPAYEFCGGMAYCXXXXXXXXXXXXXXETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.query.seq.tostring())
@@ -1744,8 +1744,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('Query_3', qresult.id)
         self.assertEqual('hg19_dna range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
                 'strand=+ repeatMasking=none',
-                        qresult.description)
-        self.assertEqual(485, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(485, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(662354, qresult.stat_eff_space)
@@ -1758,8 +1758,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|15', hit.id)
         self.assertEqual('gi|332258565|ref|XP_003278367.1| PREDICTED: '
                 'UPF0764 protein C16orf89-like [Nomascus leucogenys]',
-                        hit.description)
-        self.assertEqual(132, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1772,8 +1772,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(119, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(69, hsp.identity_num)
-        self.assertEqual(74, hsp.positive_num)
+        self.assertEqual(69, hsp.ident_num)
+        self.assertEqual(74, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(95, len(hsp))
         self.assertEqual('LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', hsp.query.seq.tostring())
@@ -1790,8 +1790,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(34, hsp.identity_num)
-        self.assertEqual(41, hsp.positive_num)
+        self.assertEqual(34, hsp.ident_num)
+        self.assertEqual(41, hsp.pos_num)
         self.assertEqual(5, hsp.gap_num)
         self.assertEqual(72, len(hsp))
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG', hsp.query.seq.tostring())
@@ -1801,8 +1801,8 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|19', hit.id)
         self.assertEqual('gi|33188429|ref|NP_872601.1| histone demethylase '
-                'UTY isoform 1 [Homo sapiens]', hit.description)
-        self.assertEqual(1079, hit.seq_length)
+                'UTY isoform 1 [Homo sapiens]', hit.desc)
+        self.assertEqual(1079, hit.seq_len)
         self.assertEqual(6, len(hit))
 
         hsp = hit[0]
@@ -1815,8 +1815,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(1079, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(59, hsp.identity_num)
-        self.assertEqual(66, hsp.positive_num)
+        self.assertEqual(59, hsp.ident_num)
+        self.assertEqual(66, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(91, len(hsp))
         self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
@@ -1851,8 +1851,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -1891,8 +1891,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('Query_1', qresult.id)
         self.assertEqual('hg19_dna range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
                 'strand=+ repeatMasking=none',
-                        qresult.description)
-        self.assertEqual(485, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(485, qresult.seq_len)
         self.assertEqual(20, qresult.stat_db_num)
         self.assertEqual(6406, qresult.stat_db_len)
         self.assertEqual(662354, qresult.stat_eff_space)
@@ -1905,8 +1905,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|15', hit.id)
         self.assertEqual('gi|332258565|ref|XP_003278367.1| PREDICTED: '
                 'UPF0764 protein C16orf89-like [Nomascus leucogenys]',
-                        hit.description)
-        self.assertEqual(132, hit.seq_length)
+                        hit.desc)
+        self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -1919,8 +1919,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(119, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(69, hsp.identity_num)
-        self.assertEqual(74, hsp.positive_num)
+        self.assertEqual(69, hsp.ident_num)
+        self.assertEqual(74, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(95, len(hsp))
         self.assertEqual('LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', hsp.query.seq.tostring())
@@ -1937,8 +1937,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(34, hsp.identity_num)
-        self.assertEqual(41, hsp.positive_num)
+        self.assertEqual(34, hsp.ident_num)
+        self.assertEqual(41, hsp.pos_num)
         self.assertEqual(5, hsp.gap_num)
         self.assertEqual(72, len(hsp))
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG', hsp.query.seq.tostring())
@@ -1948,8 +1948,8 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|19', hit.id)
         self.assertEqual('gi|33188429|ref|NP_872601.1| histone demethylase '
-                'UTY isoform 1 [Homo sapiens]', hit.description)
-        self.assertEqual(1079, hit.seq_length)
+                'UTY isoform 1 [Homo sapiens]', hit.desc)
+        self.assertEqual(1079, hit.seq_len)
         self.assertEqual(6, len(hit))
 
         hsp = hit[0]
@@ -1962,8 +1962,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(1079, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(59, hsp.identity_num)
-        self.assertEqual(66, hsp.positive_num)
+        self.assertEqual(59, hsp.ident_num)
+        self.assertEqual(66, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(91, len(hsp))
         self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
@@ -2001,8 +2001,8 @@ class BlastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(12504708, qresult.stat_db_num)
         self.assertEqual(4346765131, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2017,8 +2017,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|356995852:1-490 Mus musculus POU domain, class 5, transcription '
                 'factor 1 (Pou5f1), transcript variant 1, mRNA', \
-                        qresult.description)
-        self.assertEqual(490, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(490, qresult.seq_len)
         self.assertEqual(12504708, qresult.stat_db_num)
         self.assertEqual(4346765131, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2030,8 +2030,8 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hit.id)
         self.assertEqual('POU domain, class 5, transcription factor 1 '
-                'isoform 1 [Mus musculus]', hit.description)
-        self.assertEqual(352, hit.seq_length)
+                'isoform 1 [Mus musculus]', hit.desc)
+        self.assertEqual(352, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -2044,8 +2044,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(140, hsp.hit_to)
         self.assertEqual(3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(140, hsp.identity_num)
-        self.assertEqual(140, hsp.positive_num)
+        self.assertEqual(140, hsp.ident_num)
+        self.assertEqual(140, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(140, len(hsp))
         self.assertEqual('MAGHLAXXXXXXXXXXXXXXXXXLEPGWVDPRTWLSFQXXXXXXXXXXXSEVLGISPCPPAYEFCGGMAYCXXXXXXXXXXXXXXETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.query.seq.tostring())
@@ -2059,8 +2059,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('Query_3', qresult.id)
         self.assertEqual('hg19_dna range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
                 'strand=+ repeatMasking=none',
-                        qresult.description)
-        self.assertEqual(485, qresult.query_length)
+                        qresult.desc)
+        self.assertEqual(485, qresult.seq_len)
         self.assertEqual(12504708, qresult.stat_db_num)
         self.assertEqual(4346765131, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2072,8 +2072,8 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|332258565|ref|XP_003278367.1|', hit.id)
         self.assertEqual('PREDICTED: UPF0764 protein C16orf89-like [Nomascus '
-                'leucogenys]', hit.description)
-        self.assertEqual(132, hit.seq_length)
+                'leucogenys]', hit.desc)
+        self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2086,8 +2086,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(119, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(69, hsp.identity_num)
-        self.assertEqual(74, hsp.positive_num)
+        self.assertEqual(69, hsp.ident_num)
+        self.assertEqual(74, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(95, len(hsp))
         self.assertEqual('LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', hsp.query.seq.tostring())
@@ -2104,8 +2104,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(34, hsp.identity_num)
-        self.assertEqual(41, hsp.positive_num)
+        self.assertEqual(34, hsp.ident_num)
+        self.assertEqual(41, hsp.pos_num)
         self.assertEqual(5, hsp.gap_num)
         self.assertEqual(72, len(hsp))
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG', hsp.query.seq.tostring())
@@ -2115,8 +2115,8 @@ class BlastxXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|57113895|ref|NP_001009002.1|', hit.id)
         self.assertEqual('histone demethylase UTY [Pan troglodytes]', \
-                hit.description)
-        self.assertEqual(1079, hit.seq_length)
+                hit.desc)
+        self.assertEqual(1079, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2129,8 +2129,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(1079, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(59, hsp.identity_num)
-        self.assertEqual(66, hsp.positive_num)
+        self.assertEqual(59, hsp.ident_num)
+        self.assertEqual(66, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(91, len(hsp))
         self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
@@ -2165,8 +2165,8 @@ class TblastnXmlCases(unittest.TestCase):
         # test parsed values of qresult
         self.assertEqual('gi|729325|sp|P39483|DHG2_BACME', qresult.id)
         self.assertEqual('Glucose 1-dehydrogenase II (GLCDH-II)', \
-                qresult.description)
-        self.assertEqual(261, qresult.query_length)
+                qresult.desc)
+        self.assertEqual(261, qresult.seq_len)
         self.assertEqual(251887, qresult.stat_db_num)
         self.assertEqual(438542399, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2177,8 +2177,8 @@ class TblastnXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|58264321|ref|XM_569317.1|', hit.id)
-        self.assertEqual('Filobasidiella neoformans glucose 1-dehydrogenase, putative (CNB05760) mRNA, complete cds', hit.description)
-        self.assertEqual(904, hit.seq_length)
+        self.assertEqual('Filobasidiella neoformans glucose 1-dehydrogenase, putative (CNB05760) mRNA, complete cds', hit.desc)
+        self.assertEqual(904, hit.seq_len)
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
@@ -2192,8 +2192,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(762, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(84, hsp.identity_num)
-        self.assertEqual(143, hsp.positive_num)
+        self.assertEqual(84, hsp.ident_num)
+        self.assertEqual(143, hsp.pos_num)
         self.assertEqual(9, hsp.gap_num)
         self.assertEqual(252, len(hsp))
         self.assertEqual('LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGVENPVPSH---ELSLENWNQVIDTNLTGAFLGSREAIKYFVENDIKG-NVINMSSVHEMIPWPLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADGGM', hsp.query.seq.tostring())
@@ -2203,8 +2203,8 @@ class TblastnXmlCases(unittest.TestCase):
         # parse last hit
         hit = qresult[-1]
         self.assertEqual('gi|450259|gb|L27825.1|EMEVERA1AA', hit.id)
-        self.assertEqual('Emericella nidulans (verA) gene, complete cds, ORF 1 gene, complete cds, and ORF 2 gene, 5\' end', hit.description)
-        self.assertEqual(4310, hit.seq_length)
+        self.assertEqual('Emericella nidulans (verA) gene, complete cds, ORF 1 gene, complete cds, and ORF 2 gene, 5\' end', hit.desc)
+        self.assertEqual(4310, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2217,8 +2217,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1253, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(3, hsp.hit_frame)
-        self.assertEqual(76, hsp.identity_num)
-        self.assertEqual(113, hsp.positive_num)
+        self.assertEqual(76, hsp.ident_num)
+        self.assertEqual(113, hsp.pos_num)
         self.assertEqual(31, hsp.gap_num)
         self.assertEqual(228, len(hsp))
         self.assertEqual('LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGV-----------ENPVPS-HELSLE-----NWNQVIDTNLTGAFLGSREAIKYFVENDIKGNVINMSSVHEMIPW-PLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPI----------NAEKFADPE', hsp.query.seq.tostring())
@@ -2255,8 +2255,8 @@ class TblastnXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(32, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(32, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2270,8 +2270,8 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
-        self.assertEqual(102, qresult.query_length)
+                'subsp. subtilis str. 168]', qresult.desc)
+        self.assertEqual(102, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(1217216.0, qresult.stat_eff_space)
@@ -2284,8 +2284,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|10', hit.id)
         self.assertEqual('gi|145479850|ref|XM_001425911.1| Paramecium '
                 'tetraurelia hypothetical protein (GSPATT00004923001) '
-                'partial mRNA', hit.description)
-        self.assertEqual(4632, hit.seq_length)
+                'partial mRNA', hit.desc)
+        self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -2298,8 +2298,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1872, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(15, hsp.identity_num)
-        self.assertEqual(26, hsp.positive_num)
+        self.assertEqual(15, hsp.ident_num)
+        self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, len(hsp))
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
@@ -2311,8 +2311,8 @@ class TblastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         self.assertEqual('Query_3', qresult.id)
-        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.description)
-        self.assertEqual(98, qresult.query_length)
+        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.desc)
+        self.assertEqual(98, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(1130272.0, qresult.stat_eff_space)
@@ -2324,8 +2324,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gnl|BL_ORD_ID|14', hit.id)
         self.assertEqual('gi|350596019|ref|XM_003360601.2| PREDICTED: Sus '
-                'scrofa pleckstrin-like (LOC100626968), mRNA', hit.description)
-        self.assertEqual(772, hit.seq_length)
+                'scrofa pleckstrin-like (LOC100626968), mRNA', hit.desc)
+        self.assertEqual(772, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2338,8 +2338,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(388, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(94, hsp.identity_num)
-        self.assertEqual(96, hsp.positive_num)
+        self.assertEqual(94, hsp.ident_num)
+        self.assertEqual(96, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
@@ -2356,8 +2356,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(754, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(21, hsp.identity_num)
-        self.assertEqual(33, hsp.positive_num)
+        self.assertEqual(21, hsp.ident_num)
+        self.assertEqual(33, hsp.pos_num)
         self.assertEqual(4, hsp.gap_num)
         self.assertEqual(71, len(hsp))
         self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
@@ -2367,8 +2367,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|17', hit.id)
         self.assertEqual('gi|338714227|ref|XM_001492113.3| PREDICTED: Equus '
-                'caballus pleckstrin-like (LOC100051039), mRNA', hit.description)
-        self.assertEqual(1390, hit.seq_length)
+                'caballus pleckstrin-like (LOC100051039), mRNA', hit.desc)
+        self.assertEqual(1390, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2381,8 +2381,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(466, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(96, hsp.identity_num)
-        self.assertEqual(97, hsp.positive_num)
+        self.assertEqual(96, hsp.ident_num)
+        self.assertEqual(97, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
@@ -2416,8 +2416,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(32, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(32, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2453,8 +2453,8 @@ class TblastnXmlCases(unittest.TestCase):
 
         self.assertEqual('Query_1', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
-        self.assertEqual(102, qresult.query_length)
+                'subsp. subtilis str. 168]', qresult.desc)
+        self.assertEqual(102, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(1217216.0, qresult.stat_eff_space)
@@ -2467,8 +2467,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|10', hit.id)
         self.assertEqual('gi|145479850|ref|XM_001425911.1| Paramecium '
                 'tetraurelia hypothetical protein (GSPATT00004923001) '
-                'partial mRNA', hit.description)
-        self.assertEqual(4632, hit.seq_length)
+                'partial mRNA', hit.desc)
+        self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -2481,8 +2481,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1872, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(15, hsp.identity_num)
-        self.assertEqual(26, hsp.positive_num)
+        self.assertEqual(15, hsp.ident_num)
+        self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, len(hsp))
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
@@ -2516,8 +2516,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.description)
-        self.assertEqual(98, qresult.query_length)
+        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.desc)
+        self.assertEqual(98, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(1130272.0, qresult.stat_eff_space)
@@ -2529,8 +2529,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gnl|BL_ORD_ID|14', hit.id)
         self.assertEqual('gi|350596019|ref|XM_003360601.2| PREDICTED: Sus '
-                'scrofa pleckstrin-like (LOC100626968), mRNA', hit.description)
-        self.assertEqual(772, hit.seq_length)
+                'scrofa pleckstrin-like (LOC100626968), mRNA', hit.desc)
+        self.assertEqual(772, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2543,8 +2543,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(388, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(94, hsp.identity_num)
-        self.assertEqual(96, hsp.positive_num)
+        self.assertEqual(94, hsp.ident_num)
+        self.assertEqual(96, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
@@ -2561,8 +2561,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(754, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(21, hsp.identity_num)
-        self.assertEqual(33, hsp.positive_num)
+        self.assertEqual(21, hsp.ident_num)
+        self.assertEqual(33, hsp.pos_num)
         self.assertEqual(4, hsp.gap_num)
         self.assertEqual(71, len(hsp))
         self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
@@ -2572,8 +2572,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|17', hit.id)
         self.assertEqual('gi|338714227|ref|XM_001492113.3| PREDICTED: Equus '
-                'caballus pleckstrin-like (LOC100051039), mRNA', hit.description)
-        self.assertEqual(1390, hit.seq_length)
+                'caballus pleckstrin-like (LOC100051039), mRNA', hit.desc)
+        self.assertEqual(1390, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2586,8 +2586,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(466, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(96, hsp.identity_num)
-        self.assertEqual(97, hsp.positive_num)
+        self.assertEqual(96, hsp.ident_num)
+        self.assertEqual(97, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
@@ -2623,8 +2623,8 @@ class TblastnXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(32, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(32, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2638,8 +2638,8 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis '
-                'subsp. subtilis str. 168]', qresult.description)
-        self.assertEqual(102, qresult.query_length)
+                'subsp. subtilis str. 168]', qresult.desc)
+        self.assertEqual(102, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2651,8 +2651,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
         self.assertEqual('Paramecium tetraurelia hypothetical protein '
-                '(GSPATT00004923001) partial mRNA', hit.description)
-        self.assertEqual(4632, hit.seq_length)
+                '(GSPATT00004923001) partial mRNA', hit.desc)
+        self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -2665,8 +2665,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1872, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(15, hsp.identity_num)
-        self.assertEqual(26, hsp.positive_num)
+        self.assertEqual(15, hsp.ident_num)
+        self.assertEqual(26, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(43, len(hsp))
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
@@ -2678,8 +2678,8 @@ class TblastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         self.assertEqual('Query_3', qresult.id)
-        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.description)
-        self.assertEqual(98, qresult.query_length)
+        self.assertEqual('gi|11464971:4-101 pleckstrin [Mus musculus]', qresult.desc)
+        self.assertEqual(98, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2691,8 +2691,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|354480463|ref|XM_003502378.1|', hit.id)
         self.assertEqual('PREDICTED: Cricetulus griseus pleckstrin-like '
-                '(LOC100773128), mRNA', hit.description)
-        self.assertEqual(1119, hit.seq_length)
+                '(LOC100773128), mRNA', hit.desc)
+        self.assertEqual(1119, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2705,8 +2705,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(369, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(98, hsp.identity_num)
-        self.assertEqual(98, hsp.positive_num)
+        self.assertEqual(98, hsp.ident_num)
+        self.assertEqual(98, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
@@ -2723,8 +2723,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1101, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(30, hsp.identity_num)
-        self.assertEqual(50, hsp.positive_num)
+        self.assertEqual(30, hsp.ident_num)
+        self.assertEqual(50, hsp.pos_num)
         self.assertEqual(6, hsp.gap_num)
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDF-GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
@@ -2734,8 +2734,8 @@ class TblastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|338714227|ref|XM_001492113.3|', hit.id)
         self.assertEqual('PREDICTED: Equus caballus pleckstrin-like '
-                '(LOC100051039), mRNA', hit.description)
-        self.assertEqual(1390, hit.seq_length)
+                '(LOC100051039), mRNA', hit.desc)
+        self.assertEqual(1390, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
@@ -2748,8 +2748,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(466, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(96, hsp.identity_num)
-        self.assertEqual(97, hsp.positive_num)
+        self.assertEqual(96, hsp.ident_num)
+        self.assertEqual(97, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
@@ -2785,8 +2785,8 @@ class TblastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('gi|1348853|gb|G26621.1|G26621', qresult.id)
-        self.assertEqual('human STS STS_D12006, sequence tagged site', qresult.description)
-        self.assertEqual(615, qresult.query_length)
+        self.assertEqual('human STS STS_D12006, sequence tagged site', qresult.desc)
+        self.assertEqual(615, qresult.seq_len)
         self.assertEqual(3533718, qresult.stat_db_num)
         # why is the value negative? is this a blast bug?
         self.assertEqual(-1496331888, qresult.stat_db_len)
@@ -2798,8 +2798,8 @@ class TblastxXmlCases(unittest.TestCase):
 
         hit = qresult[0]
         self.assertEqual('gi|18072170|gb|AC010333.7|', hit.id)
-        self.assertEqual('Homo sapiens chromosome 16 clone CTD-3037G24, complete sequence', hit.description)
-        self.assertEqual(159870, hit.seq_length)
+        self.assertEqual('Homo sapiens chromosome 16 clone CTD-3037G24, complete sequence', hit.desc)
+        self.assertEqual(159870, hit.seq_len)
         self.assertEqual(13, len(hit))
 
         hsp = hit[0]
@@ -2812,8 +2812,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(44677, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(-3, hsp.hit_frame)
-        self.assertEqual(117, hsp.identity_num)
-        self.assertEqual(117, hsp.positive_num)
+        self.assertEqual(117, hsp.ident_num)
+        self.assertEqual(117, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(118, len(hsp))
         self.assertEqual('ECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.query.seq.tostring())
@@ -2822,8 +2822,8 @@ class TblastxXmlCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('gi|4309961|gb|AC005993.2|AC005993', hit.id)
-        self.assertEqual('Homo sapiens PAC clone RP6-114E22 from 14, complete sequence', hit.description)
-        self.assertEqual(143943, hit.seq_length)
+        self.assertEqual('Homo sapiens PAC clone RP6-114E22 from 14, complete sequence', hit.desc)
+        self.assertEqual(143943, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
@@ -2836,8 +2836,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(43763, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(3, hsp.hit_frame)
-        self.assertEqual(13, hsp.identity_num)
-        self.assertEqual(19, hsp.positive_num)
+        self.assertEqual(13, hsp.ident_num)
+        self.assertEqual(19, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(28, len(hsp))
         self.assertEqual('PLTKAHRLFQTSIVFYVTCFTASSQQLL', hsp.query.seq.tostring())
@@ -2874,8 +2874,8 @@ class TblastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -2889,8 +2889,8 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|347972582:1-35 Anopheles gambiae str. PEST AGAP011294-PA '
-                '(DEFI_ANOGA) mRNA, complete cds', qresult.description)
-        self.assertEqual(35, qresult.query_length)
+                '(DEFI_ANOGA) mRNA, complete cds', qresult.desc)
+        self.assertEqual(35, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(182144.0, qresult.stat_eff_space)
@@ -2903,8 +2903,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|18', hit.id)
         self.assertEqual('gi|347972582|ref|XM_309352.4| Anopheles gambiae '
                 'str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', \
-                hit.description)
-        self.assertEqual(309, hit.seq_length)
+                hit.desc)
+        self.assertEqual(309, hit.seq_len)
         self.assertEqual(6, len(hit))
 
         hsp = hit[0]
@@ -2917,8 +2917,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(35, hsp.hit_to)
         self.assertEqual(3, hsp.query_frame)
         self.assertEqual(3, hsp.hit_frame)
-        self.assertEqual(11, hsp.identity_num)
-        self.assertEqual(11, hsp.positive_num)
+        self.assertEqual(11, hsp.ident_num)
+        self.assertEqual(11, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(11, len(hsp))
         self.assertEqual('EVCNDRLYHCR', hsp.query.seq.tostring())
@@ -2931,8 +2931,8 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_3', qresult.id)
         self.assertEqual('gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, '
-                'complete cds', qresult.description)
-        self.assertEqual(350, qresult.query_length)
+                'complete cds', qresult.desc)
+        self.assertEqual(350, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(1975088.0, qresult.stat_eff_space)
@@ -2944,8 +2944,8 @@ class TblastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gnl|BL_ORD_ID|19', hit.id)
         self.assertEqual('gi|296147483|ref|NM_001183135.1| Saccharomyces '
-                'cerevisiae S288c Mon2p (MON2) mRNA, complete cds', hit.description)
-        self.assertEqual(4911, hit.seq_length)
+                'cerevisiae S288c Mon2p (MON2) mRNA, complete cds', hit.desc)
+        self.assertEqual(4911, hit.seq_len)
         self.assertEqual(8, len(hit))
 
         hsp = hit[0]
@@ -2958,8 +2958,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(349, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(116, hsp.identity_num)
-        self.assertEqual(116, hsp.positive_num)
+        self.assertEqual(116, hsp.ident_num)
+        self.assertEqual(116, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(116, len(hsp))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.hit.seq.tostring())
@@ -2976,8 +2976,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(373, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(-3, hsp.hit_frame)
-        self.assertEqual(6, hsp.identity_num)
-        self.assertEqual(9, hsp.positive_num)
+        self.assertEqual(6, hsp.ident_num)
+        self.assertEqual(9, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(11, len(hsp))
         self.assertEqual('KFWMPSLRLLI', hsp.query.seq.tostring())
@@ -2988,8 +2988,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|23', hit.id)
         self.assertEqual('gi|254579534|ref|XM_002495708.1| Zygosaccharomyces '
                 'rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds', \
-                hit.description)
-        self.assertEqual(4866, hit.seq_length)
+                hit.desc)
+        self.assertEqual(4866, hit.seq_len)
         self.assertEqual(6, len(hit))
 
         hsp = hit[0]
@@ -3002,8 +3002,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(348, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(57, hsp.identity_num)
-        self.assertEqual(72, hsp.positive_num)
+        self.assertEqual(57, hsp.ident_num)
+        self.assertEqual(72, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(84, len(hsp))
         self.assertEqual('IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', hsp.query.seq.tostring())
@@ -3037,8 +3037,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -3074,8 +3074,8 @@ class TblastxXmlCases(unittest.TestCase):
 
         self.assertEqual('Query_1', qresult.id)
         self.assertEqual('gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, '
-                'complete cds', qresult.description)
-        self.assertEqual(350, qresult.query_length)
+                'complete cds', qresult.desc)
+        self.assertEqual(350, qresult.seq_len)
         self.assertEqual(24, qresult.stat_db_num)
         self.assertEqual(68522, qresult.stat_db_len)
         self.assertEqual(1975088.0, qresult.stat_eff_space)
@@ -3087,8 +3087,8 @@ class TblastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gnl|BL_ORD_ID|19', hit.id)
         self.assertEqual('gi|296147483|ref|NM_001183135.1| Saccharomyces '
-                'cerevisiae S288c Mon2p (MON2) mRNA, complete cds', hit.description)
-        self.assertEqual(4911, hit.seq_length)
+                'cerevisiae S288c Mon2p (MON2) mRNA, complete cds', hit.desc)
+        self.assertEqual(4911, hit.seq_len)
         self.assertEqual(8, len(hit))
 
         hsp = hit[0]
@@ -3101,8 +3101,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(349, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(116, hsp.identity_num)
-        self.assertEqual(116, hsp.positive_num)
+        self.assertEqual(116, hsp.ident_num)
+        self.assertEqual(116, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(116, len(hsp))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.hit.seq.tostring())
@@ -3119,8 +3119,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(373, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(-3, hsp.hit_frame)
-        self.assertEqual(6, hsp.identity_num)
-        self.assertEqual(9, hsp.positive_num)
+        self.assertEqual(6, hsp.ident_num)
+        self.assertEqual(9, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(11, len(hsp))
         self.assertEqual('KFWMPSLRLLI', hsp.query.seq.tostring())
@@ -3131,8 +3131,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('gnl|BL_ORD_ID|23', hit.id)
         self.assertEqual('gi|254579534|ref|XM_002495708.1| Zygosaccharomyces '
                 'rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds', \
-                hit.description)
-        self.assertEqual(4866, hit.seq_length)
+                hit.desc)
+        self.assertEqual(4866, hit.seq_len)
         self.assertEqual(6, len(hit))
 
         hsp = hit[0]
@@ -3145,8 +3145,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(348, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(57, hsp.identity_num)
-        self.assertEqual(72, hsp.positive_num)
+        self.assertEqual(57, hsp.ident_num)
+        self.assertEqual(72, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(84, len(hsp))
         self.assertEqual('IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', hsp.query.seq.tostring())
@@ -3183,8 +3183,8 @@ class TblastxXmlCases(unittest.TestCase):
 
         # test parsed values of the first qresult
         self.assertEqual('Query_1', qresult.id)
-        self.assertEqual('random_s00', qresult.description)
-        self.assertEqual(128, qresult.query_length)
+        self.assertEqual('random_s00', qresult.desc)
+        self.assertEqual(128, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -3198,8 +3198,8 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_2', qresult.id)
         self.assertEqual('gi|347972582:1-35 Anopheles gambiae str. PEST AGAP011294-PA '
-                '(DEFI_ANOGA) mRNA, complete cds', qresult.description)
-        self.assertEqual(35, qresult.query_length)
+                '(DEFI_ANOGA) mRNA, complete cds', qresult.desc)
+        self.assertEqual(35, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -3211,8 +3211,8 @@ class TblastxXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|347972582|ref|XM_309352.4|', hit.id)
         self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA '
-                '(DEFI_ANOGA) mRNA, complete cds', hit.description)
-        self.assertEqual(309, hit.seq_length)
+                '(DEFI_ANOGA) mRNA, complete cds', hit.desc)
+        self.assertEqual(309, hit.seq_len)
         self.assertEqual(3, len(hit))
 
         hsp = hit[0]
@@ -3225,8 +3225,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(35, hsp.hit_to)
         self.assertEqual(3, hsp.query_frame)
         self.assertEqual(3, hsp.hit_frame)
-        self.assertEqual(11, hsp.identity_num)
-        self.assertEqual(11, hsp.positive_num)
+        self.assertEqual(11, hsp.ident_num)
+        self.assertEqual(11, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(11, len(hsp))
         self.assertEqual('EVCNDRLYHCR', hsp.query.seq.tostring())
@@ -3239,8 +3239,8 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('Query_3', qresult.id)
         self.assertEqual('gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, '
-                'complete cds', qresult.description)
-        self.assertEqual(350, qresult.query_length)
+                'complete cds', qresult.desc)
+        self.assertEqual(350, qresult.seq_len)
         self.assertEqual(2922980, qresult.stat_db_num)
         self.assertEqual(4670255720, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
@@ -3254,8 +3254,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, '
                 'complete cds >gi|116616412|gb|EF059095.1| Synthetic '
                 'construct Saccharomyces cerevisiae clone FLH203015.01X '
-                'MON2, complete sequence', hit.description)
-        self.assertEqual(4911, hit.seq_length)
+                'MON2, complete sequence', hit.desc)
+        self.assertEqual(4911, hit.seq_len)
         self.assertEqual(7, len(hit))
 
         hsp = hit[0]
@@ -3268,8 +3268,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(349, hsp.hit_to)
         self.assertEqual(2, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(116, hsp.identity_num)
-        self.assertEqual(116, hsp.positive_num)
+        self.assertEqual(116, hsp.ident_num)
+        self.assertEqual(116, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(116, len(hsp))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.hit.seq.tostring())
@@ -3286,8 +3286,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(42, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(14, hsp.identity_num)
-        self.assertEqual(14, hsp.positive_num)
+        self.assertEqual(14, hsp.ident_num)
+        self.assertEqual(14, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(14, len(hsp))
         self.assertEqual('MAMNTGGFDSMQRQ', hsp.query.seq.tostring())
@@ -3297,8 +3297,8 @@ class TblastxXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|254579534|ref|XM_002495708.1|', hit.id)
         self.assertEqual('Zygosaccharomyces rouxii hypothetical protein '
-                '(ZYRO0C02266g) mRNA, complete cds', hit.description)
-        self.assertEqual(4866, hit.seq_length)
+                '(ZYRO0C02266g) mRNA, complete cds', hit.desc)
+        self.assertEqual(4866, hit.seq_len)
         self.assertEqual(4, len(hit))
 
         hsp = hit[0]
@@ -3311,8 +3311,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(348, hsp.hit_to)
         self.assertEqual(1, hsp.query_frame)
         self.assertEqual(1, hsp.hit_frame)
-        self.assertEqual(57, hsp.identity_num)
-        self.assertEqual(72, hsp.positive_num)
+        self.assertEqual(57, hsp.ident_num)
+        self.assertEqual(72, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(84, len(hsp))
         self.assertEqual('IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', hsp.query.seq.tostring())

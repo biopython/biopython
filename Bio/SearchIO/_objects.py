@@ -895,7 +895,7 @@ class HSP(_StickyObject):
             return len(self.query)
         else:
             try:
-                return self.length
+                return self.len
             except AttributeError:
                 raise TypeError("HSP objects without alignment does not have any length.")
 
