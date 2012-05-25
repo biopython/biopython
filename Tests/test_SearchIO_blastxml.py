@@ -23,6 +23,93 @@ def get_file(filename):
 
 class BlastnXmlCases(unittest.TestCase):
 
+    def test_xbt002(self):
+        xml_file = get_file('xbt002.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test each qresult's attributes
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('2.2.12', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
+        self.assertEqual(1, qresult.meta['param_score_match'])
+        self.assertEqual(-3, qresult.meta['param_score_mismatch'])
+        self.assertEqual(5, qresult.meta['param_gap_open'])
+        self.assertEqual(2, qresult.meta['param_gap_extend'])
+
+        # test parsed values of qresult
+        self.assertEqual('gi|1348916|gb|G26684.1|G26684', qresult.id)
+        self.assertEqual('human STS STS_D11570, sequence tagged site', \
+                qresult.description)
+        self.assertEqual(285, qresult.query_length)
+        self.assertEqual(371021, qresult.stat_db_num)
+        self.assertEqual(1233631384, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.710603, qresult.stat_kappa)
+        self.assertEqual(1.37406, qresult.stat_lambda)
+        self.assertEqual(1.30725, qresult.stat_entropy)
+        self.assertEqual(2, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|9950606|gb|AE004854.1|', hit.id)
+        self.assertEqual('Pseudomonas aeruginosa PAO1, section 415 of 529 of the complete genome', hit.description)
+        self.assertEqual(11884, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(38.1576, hsp.bitscore)
+        self.assertEqual(19, hsp.bitscore_raw)
+        self.assertEqual(1.0598, hsp.evalue)
+        self.assertEqual(68, hsp.query_from)
+        self.assertEqual(86, hsp.query_to)
+        self.assertEqual(6012, hsp.hit_from)
+        self.assertEqual(6030, hsp.hit_to)
+        self.assertEqual(1, hsp.query_frame)
+        self.assertEqual(1, hsp.hit_frame)
+        self.assertEqual(19, hsp.identity_num)
+        self.assertEqual(19, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(19, len(hsp))
+        self.assertEqual('CAGGCCAGCGACTTCTGGG', hsp.query.seq.tostring())
+        self.assertEqual('CAGGCCAGCGACTTCTGGG', hsp.hit.seq.tostring())
+        self.assertEqual('|||||||||||||||||||', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        # parse last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|15073988|emb|AL591786.1|SME591786', hit.id)
+        self.assertEqual('Sinorhizobium meliloti 1021 complete chromosome; segment 5/12', hit.description)
+        self.assertEqual(299350, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(36.1753, hsp.bitscore)
+        self.assertEqual(18, hsp.bitscore_raw)
+        self.assertEqual(4.18768, hsp.evalue)
+        self.assertEqual(204, hsp.query_from)
+        self.assertEqual(224, hsp.query_to)
+        self.assertEqual(83648, hsp.hit_from)
+        self.assertEqual(83628, hsp.hit_to)
+        self.assertEqual(1, hsp.query_frame)
+        self.assertEqual(-1, hsp.hit_frame)
+        self.assertEqual(20, hsp.identity_num)
+        self.assertEqual(20, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(21, len(hsp))
+        self.assertEqual('TGAAAGGAAATNAAAATGGAA', hsp.query.seq.tostring())
+        self.assertEqual('TGAAAGGAAATCAAAATGGAA', hsp.hit.seq.tostring())
+        self.assertEqual('||||||||||| |||||||||', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
     def test_xbt012(self):
         xml_file = get_file('xbt012.xml')
         qresults = parse(xml_file, FMT)
@@ -544,6 +631,348 @@ class BlastnXmlCases(unittest.TestCase):
 
 
 class BlastpXmlCases(unittest.TestCase):
+
+    def test_xbt001(self):
+        xml_file = get_file('xbt001.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('2.2.12', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
+        self.assertEqual('L;', qresult.meta['param_filter'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('nr', qresult.target)
+        
+        self.assertEqual('gi|49176427|ref|NP_418280.3|', qresult.id)
+        self.assertEqual('component of Sec-independent translocase [Escherichia coli K12]', \
+                qresult.description)
+        self.assertEqual(103, qresult.query_length)
+        self.assertEqual(2934173, qresult.stat_db_num)
+        self.assertEqual(1011751523, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(212, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|49176427|ref|NP_418280.3|', hit.id)
+        self.assertEqual('component of Sec-independent translocase [Escherichia coli K12] >gi|26250604|ref|NP_756644.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|30064867|ref|NP_839038.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|24115132|ref|NP_709642.1| hypothetical protein SF3914 [Shigella flexneri 2a str. 301] >gi|24054404|gb|AAN45349.1| orf, conserved hypothetical protein [Shigella flexneri 2a str. 301] >gi|2367310|gb|AAC76839.1| component of Sec-independent translocase [Escherichia coli K12] >gi|30043127|gb|AAP18849.1| hypothetical protein S3840 [Shigella flexneri 2a str. 2457T] >gi|26111035|gb|AAN83218.1| Sec-independent protein translocase protein tatA [Escherichia coli CFT073] >gi|3193217|gb|AAC19240.1| MttA1 [Escherichia coli] >gi|7444818|pir||E65188 hypothetical 11.3 kD protein in udp-rfaH intergenic region - Escherichia coli (strain K-12)', hit.description)
+        self.assertEqual(103, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(185.267, hsp.bitscore)
+        self.assertEqual(469, hsp.bitscore_raw)
+        self.assertEqual(4.20576e-46, hsp.evalue)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(103, hsp.query_to)
+        self.assertEqual(1, hsp.hit_from)
+        self.assertEqual(103, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(103, hsp.identity_num)
+        self.assertEqual(103, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(103, len(hsp))
+        self.assertEqual('MRLCLIIIYHRGTCMGGISIWQXXXXXXXXXXXFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.query.seq.tostring())
+        self.assertEqual('MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.hit.seq.tostring())
+        self.assertEqual('MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        # parse last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|39593039|emb|CAE64508.1|', hit.id)
+        self.assertEqual('Hypothetical protein CBG09238 [Caenorhabditis briggsae]', hit.description)
+        self.assertEqual(960, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(31.5722, hsp.bitscore)
+        self.assertEqual(70, hsp.bitscore_raw)
+        self.assertEqual(7.7721, hsp.evalue)
+        self.assertEqual(55, hsp.query_from)
+        self.assertEqual(102, hsp.query_to)
+        self.assertEqual(410, hsp.hit_from)
+        self.assertEqual(459, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(19, hsp.identity_num)
+        self.assertEqual(33, hsp.positive_num)
+        self.assertEqual(4, hsp.gap_num)
+        self.assertEqual(51, len(hsp))
+        self.assertEqual('KAMSDDEPKQD---KTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQ', hsp.query.seq.tostring())
+        self.assertEqual('KKEADDKAKKDLEAKTKKEADEKAKKEADEKA-KKEAEAKTKEAEAKTKKE', hsp.hit.seq.tostring())
+        self.assertEqual('K  +DD+ K+D   KT ++AD  AK  AD++A   + +AKT++A+   K++', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_xbt006(self):
+        xml_file = get_file('xbt006.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('2.2.18+', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('nr', qresult.target)
+        
+        self.assertEqual('31493', qresult.id)
+        self.assertEqual('unnamed protein product', qresult.description)
+        self.assertEqual(70, qresult.query_length)
+        self.assertEqual(15287, qresult.stat_db_num)
+        self.assertEqual(7033566, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(10, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|151942244|gb|EDN60600.1|', hit.id)
+        self.assertEqual('cytosolic iron-sulfur protein assembly protein [Saccharomyces cerevisiae YJM789]', hit.description)
+        self.assertEqual(330, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(33.113, hsp.bitscore)
+        self.assertEqual(74, hsp.bitscore_raw)
+        self.assertEqual(0.0185319, hsp.evalue)
+        self.assertEqual(15, hsp.query_from)
+        self.assertEqual(62, hsp.query_to)
+        self.assertEqual(114, hsp.hit_from)
+        self.assertEqual(163, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(16, hsp.identity_num)
+        self.assertEqual(27, hsp.positive_num)
+        self.assertEqual(2, hsp.gap_num)
+        self.assertEqual(50, len(hsp))
+        self.assertEqual('AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP', hsp.query.seq.tostring())
+        self.assertEqual('AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP', hsp.hit.seq.tostring())
+        self.assertEqual('AW+ D   +A C  +  V I+E  +SG ++  +  L+EH+  V  + W P', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        # parse last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|151567870|pdb|2PM9|B', hit.id)
+        self.assertEqual('Chain B, Crystal Structure Of Yeast Sec1331 VERTEX ELEMENT OF THE Copii Vesicular Coat', hit.description)
+        self.assertEqual(297, hit.seq_length)
+        self.assertEqual(2, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(30.8018, hsp.bitscore)
+        self.assertEqual(68, hsp.bitscore_raw)
+        self.assertEqual(0.0919731, hsp.evalue)
+        self.assertEqual(21, hsp.query_from)
+        self.assertEqual(62, hsp.query_to)
+        self.assertEqual(68, hsp.hit_from)
+        self.assertEqual(109, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(11, hsp.identity_num)
+        self.assertEqual(23, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(42, len(hsp))
+        self.assertEqual('TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP', hsp.query.seq.tostring())
+        self.assertEqual('TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP', hsp.hit.seq.tostring())
+        self.assertEqual('T +A C  + +V I+++   +W+++     H+  V  + WAP', hsp.homology)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_xbt007(self):
+        xml_file = get_file('xbt007.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+        
+        qresult = qresults.next()
+        counter += 1
+        
+        # test meta variables, only for the first one
+        self.assertEqual('2.2.18+', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', 
+                        qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(0.01, qresult.meta['param_evalue_threshold'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('m L; R -d repeat/repeat_9606;', qresult.meta['param_filter'])
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('gpipe/9606/Previous/protein', qresult.target)
+
+        # test parsed values of the first qresult
+        self.assertEqual('gi|585505|sp|Q08386|MOPB_RHOCA', qresult.id)
+        self.assertEqual('Molybdenum-pterin-binding protein mopB >gi|310278|gb|AAA71913.1| molybdenum-pterin-binding protein', qresult.description)
+        self.assertEqual(270, qresult.query_length)
+        self.assertEqual(27252, qresult.stat_db_num)
+        self.assertEqual(13958303, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(0, len(qresult))
+
+        # second qresult
+        qresult = qresults.next()
+        counter += 1        
+
+        self.assertEqual('gi|129628|sp|P07175.1|PARA_AGRTU', qresult.id)
+        self.assertEqual('Protein parA', qresult.description)
+        self.assertEqual(222, qresult.query_length)
+        self.assertEqual(27252, qresult.stat_db_num)
+        self.assertEqual(13958303, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(0, len(qresult))
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(2, counter)
+
+    def test_xbt008(self):
+        xml_file = get_file('xbt008.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test each qresult's attributes
+        qresult = qresults.next()
+        counter += 1
+
+        # test meta variables, only for the first one
+        self.assertEqual('2.2.18', qresult.meta['program_version'])
+        self.assertEqual('~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.', 
+                        qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(1e-05, qresult.meta['param_evalue_threshold'])
+        self.assertEqual('F', qresult.meta['param_filter'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('/Users/pjcock/Downloads/Software/blast-2.2.18/data/nr', qresult.target)
+
+        # test parsed values of the first qresult
+        self.assertEqual('lcl|1_0', qresult.id)
+        self.assertEqual('Fake', qresult.description)
+        self.assertEqual(9, qresult.query_length)
+        self.assertEqual(6589360, qresult.stat_db_num)
+        self.assertEqual(2253133281, qresult.stat_db_len)
+        self.assertEqual(2.02782e+10, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(0, len(qresult))
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_xbt010(self):
+        xml_file = get_file('xbt010.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('2.2.22+', qresult.meta['program_version'])
+        self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(1e-06, qresult.meta['param_evalue_threshold'])
+        self.assertEqual('F', qresult.meta['param_filter'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('blastp', qresult.program)
+        self.assertEqual('nr', qresult.target)
+        
+        self.assertEqual('1', qresult.id)
+        self.assertEqual('gi|3298468|dbj|BAA31520.1| SAMIPF', qresult.description)
+        self.assertEqual(107, qresult.query_length)
+        self.assertEqual(8994603, qresult.stat_db_num)
+        self.assertEqual(-1216159329, qresult.stat_db_len)
+        self.assertEqual(76934807744, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(10, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|3298468|dbj|BAA31520.1|', hit.id)
+        self.assertEqual('SAMIPF [Aster tripolium]', hit.description)
+        self.assertEqual(107, hit.seq_length)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(204.912011757068, hsp.bitscore)
+        self.assertEqual(520, hsp.bitscore_raw)
+        self.assertEqual(1.77242652875017e-51, hsp.evalue)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(107, hsp.query_to)
+        self.assertEqual(1, hsp.hit_from)
+        self.assertEqual(107, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(107, hsp.identity_num)
+        self.assertEqual(107, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(107, len(hsp))
+        self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.query.seq.tostring())
+        self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.hit.seq.tostring())
+        self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        # parse last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|162809290|dbj|BAF95576.1|', hit.id)
+        self.assertEqual('tonoplast intrinsic protein [Nicotiana tabacum]', hit.description)
+        self.assertEqual(251, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(177.948041442853, hsp.bitscore)
+        self.assertEqual(450, hsp.bitscore_raw)
+        self.assertEqual(2.0302699895292e-43, hsp.evalue)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(107, hsp.query_to)
+        self.assertEqual(81, hsp.hit_from)
+        self.assertEqual(187, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(91, hsp.identity_num)
+        self.assertEqual(95, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(107, len(hsp))
+        self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.query.seq.tostring())
+        self.assertEqual('GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFALSAGVSVWNAFVFEIVMTFGLVYTVYATAIDPKKGDLGVIAPIAIGFIVGANI', hsp.hit.seq.tostring())
+        self.assertEqual('GGHVNPAVTFGAFVGGNITL RGI+YIIAQLLGSTVAC LL+F T  M+ G F+LSAGV V NA VFEIVMTFGLVYTVYATAIDPKKG LG IAPIAIGFIVGANI', hsp.homology)
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+    # def test_xbt011(self):
+    # PSI-blast, handle later
 
     def test_xbt017(self):
         xml_file = get_file('xbt017.xml')
@@ -1093,6 +1522,142 @@ class BlastpXmlCases(unittest.TestCase):
 
 class BlastxXmlCases(unittest.TestCase):
 
+    def test_xbt003(self):
+        xml_file = get_file('xbt003.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+        
+        self.assertEqual('2.2.12', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
+        self.assertEqual('L;', qresult.meta['param_filter'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('blastx', qresult.program)
+        self.assertEqual('nr', qresult.target)
+
+        # test parsed values of the first qresult
+        self.assertEqual('gi|1347369|gb|G25137.1|G25137', qresult.id)
+        self.assertEqual('human STS EST48004, sequence tagged site', qresult.description)
+        self.assertEqual(556, qresult.query_length)
+        self.assertEqual(2934173, qresult.stat_db_num)
+        self.assertEqual(1011751523, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+
+        # test parsed values of the first hit
+        hit = qresult[0]
+        self.assertEqual('gi|12654095|gb|AAH00859.1|', hit.id)
+        self.assertEqual('Unknown (protein for IMAGE:3459481) [Homo sapiens]', \
+                        hit.description)
+        self.assertEqual(319, hit.seq_length)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(247.284, hsp.bitscore)
+        self.assertEqual(630, hsp.bitscore_raw)
+        self.assertEqual(1.69599e-64, hsp.evalue)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(399, hsp.query_to)
+        self.assertEqual(156, hsp.hit_from)
+        self.assertEqual(288, hsp.hit_to)
+        self.assertEqual(1, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(122, hsp.identity_num)
+        self.assertEqual(123, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(133, len(hsp))
+        self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE', hsp.query.seq.tostring())
+        self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFEGPYTDFTPWTTEEQKLLEQALKTYPVNTPERWEKIAEAVPGRTKK', hsp.hit.seq.tostring())
+        self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERF GPYTDFTP TTE QKL EQAL TYPVNT ERW  IA AVPGR K+', hsp.homology)
+
+        # test parsed values of last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|72081091|ref|XP_800619.1|', hit.id)
+        self.assertEqual('PREDICTED: hypothetical protein XP_795526 [Strongylocentrotus purpuratus]', hit.description)
+        self.assertEqual(337, hit.seq_length)
+
+        hsp = hit[0]
+        self.assertEqual(32.3426, hsp.bitscore)
+        self.assertEqual(72, hsp.bitscore_raw)
+        self.assertEqual(8.57476, hsp.evalue)
+        self.assertEqual(40, hsp.query_from)
+        self.assertEqual(231, hsp.query_to)
+        self.assertEqual(106, hsp.hit_from)
+        self.assertEqual(172, hsp.hit_to)
+        self.assertEqual(1, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(21, hsp.identity_num)
+        self.assertEqual(37, hsp.positive_num)
+        self.assertEqual(3, hsp.gap_num)
+        self.assertEqual('AGTNSRWEVIANYMNI--HSSSGVKRT-AKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ', hsp.query.seq.tostring())
+        self.assertEqual('SSSNSSSKASASSSNVGASSSSGTKKSDSKSSNESSKSKRDKEDHKEGSINRSKDEKVSKEHRVVKE', hsp.hit.seq.tostring())
+        self.assertEqual('+ +NS  +  A+  N+   SSSG K++ +K     +KS +  + H++  IN+   +K  KEH VV +', hsp.homology)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_xbt009(self):
+        xml_file = get_file('xbt009.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+        
+        self.assertEqual('2.2.22+', qresult.meta['program_version'])
+        self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(0.0001, qresult.meta['param_evalue_threshold'])
+        self.assertEqual('L;', qresult.meta['param_filter'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('blastx', qresult.program)
+        self.assertEqual('nr', qresult.target)
+
+        # test parsed values of the first qresult
+        self.assertEqual('1', qresult.id)
+        self.assertEqual('gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence', qresult.description)
+        self.assertEqual(1002, qresult.query_length)
+        self.assertEqual(8994603, qresult.stat_db_num)
+        self.assertEqual(-1216159329, qresult.stat_db_len)
+        self.assertEqual(367397307882, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+
+        # test parsed values of the first hit
+        hit = qresult[0]
+        self.assertEqual('gi|149390769|gb|ABR25402.1|', hit.id)
+        self.assertEqual('unknown [Oryza sativa (indica cultivar-group)]', hit.description)
+        self.assertEqual(26, hit.seq_length)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(54.2989775733826, hsp.bitscore)
+        self.assertEqual(129, hsp.bitscore_raw)
+        self.assertEqual(1.83262460293058e-05, hsp.evalue)
+        self.assertEqual(911, hsp.query_from)
+        self.assertEqual(988, hsp.query_to)
+        self.assertEqual(1, hsp.hit_from)
+        self.assertEqual(26, hsp.hit_to)
+        self.assertEqual(2, hsp.query_frame)
+        self.assertEqual(0, hsp.hit_frame)
+        self.assertEqual(24, hsp.identity_num)
+        self.assertEqual(25, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(26, len(hsp))
+        self.assertEqual('HMLVSKIKPCMCKYEQIQTVKLRMAH', hsp.query.seq.tostring())
+        self.assertEqual('HMLVSKIKPCMCKYELIRTVKLRMAH', hsp.hit.seq.tostring())
+        self.assertEqual('HMLVSKIKPCMCKYE I+TVKLRMAH', hsp.homology)
+
     def test_xbt022(self):
         xml_file = get_file('xbt022.xml')
         qresults = parse(xml_file, FMT)
@@ -1578,6 +2143,91 @@ class BlastxXmlCases(unittest.TestCase):
 
 
 class TblastnXmlCases(unittest.TestCase):
+
+    def test_xbt004(self):
+        xml_file = get_file('xbt004.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('2.2.12', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
+        self.assertEqual(0.001, qresult.meta['param_evalue_threshold'])
+        self.assertEqual(11, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('L;', qresult.meta['param_filter'])
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('nr', qresult.target)
+        
+        # test parsed values of qresult
+        self.assertEqual('gi|729325|sp|P39483|DHG2_BACME', qresult.id)
+        self.assertEqual('Glucose 1-dehydrogenase II (GLCDH-II)', \
+                qresult.description)
+        self.assertEqual(261, qresult.query_length)
+        self.assertEqual(251887, qresult.stat_db_num)
+        self.assertEqual(438542399, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.041, qresult.stat_kappa)
+        self.assertEqual(0.267, qresult.stat_lambda)
+        self.assertEqual(0.14, qresult.stat_entropy)
+        self.assertEqual(100, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|58264321|ref|XM_569317.1|', hit.id)
+        self.assertEqual('Filobasidiella neoformans glucose 1-dehydrogenase, putative (CNB05760) mRNA, complete cds', hit.description)
+        self.assertEqual(904, hit.seq_length)
+        self.assertEqual(1, len(hit))
+        self.assertRaises(IndexError, hit.__getitem__, 1)
+
+        hsp = hit[0]
+        self.assertEqual(148.288, hsp.bitscore)
+        self.assertEqual(373, hsp.bitscore_raw)
+        self.assertEqual(1.46834e-35, hsp.evalue)
+        self.assertEqual(5, hsp.query_from)
+        self.assertEqual(250, hsp.query_to)
+        self.assertEqual(16, hsp.hit_from)
+        self.assertEqual(762, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(1, hsp.hit_frame)
+        self.assertEqual(84, hsp.identity_num)
+        self.assertEqual(143, hsp.positive_num)
+        self.assertEqual(9, hsp.gap_num)
+        self.assertEqual(252, len(hsp))
+        self.assertEqual('LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGVENPVPSH---ELSLENWNQVIDTNLTGAFLGSREAIKYFVENDIKG-NVINMSSVHEMIPWPLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADGGM', hsp.query.seq.tostring())
+        self.assertEqual('LQGKVVAITGCSTGIGRAIAIGAAKNGANVVLHHLGDSTASDIAQVQEECKQAGAKTVVVPGDIAEAKTANEIVSAAVSSFSRIDVLISNAGI---CPFHSFLDLPHPLWKRVQDVNLNGSFYVVQAVANQMAKQEPKGGSIVAVSSISALMGGGEQCHYTPTKAGIKSLMESCAIALGPMGIRCNSVLPGTIETNINKEDLSNPEKRADQIRRVPLGRLGKPEDLVGPTLFFASDLSNYCTGASVLVDGGM', hsp.hit.seq.tostring())
+        self.assertEqual('L+ KVV +TG S G+GRA+A+   +  + VV+++  +   +   + + E  +AG + ++V GD+ + +    +V  AV  F  +DV+I+NAG+    P H   +L    W +V D NL G+F   +       + + KG +++ +SS+  ++      HY  +K G+K + E+ A+   P GIR N++ PG I+T IN E  ++PE+RAD    +P+G +GKPE++     F AS  ++Y TG ++  DGGM', hsp.homology)
+
+        # parse last hit
+        hit = qresult[-1]
+        self.assertEqual('gi|450259|gb|L27825.1|EMEVERA1AA', hit.id)
+        self.assertEqual('Emericella nidulans (verA) gene, complete cds, ORF 1 gene, complete cds, and ORF 2 gene, 5\' end', hit.description)
+        self.assertEqual(4310, hit.seq_length)
+        self.assertEqual(2, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(91.2781, hsp.bitscore)
+        self.assertEqual(225, hsp.bitscore_raw)
+        self.assertEqual(1.31998e-20, hsp.evalue)
+        self.assertEqual(5, hsp.query_from)
+        self.assertEqual(204, hsp.query_to)
+        self.assertEqual(579, hsp.hit_from)
+        self.assertEqual(1253, hsp.hit_to)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(3, hsp.hit_frame)
+        self.assertEqual(76, hsp.identity_num)
+        self.assertEqual(113, hsp.positive_num)
+        self.assertEqual(31, hsp.gap_num)
+        self.assertEqual(228, len(hsp))
+        self.assertEqual('LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGV-----------ENPVPS-HELSLE-----NWNQVIDTNLTGAFLGSREAIKYFVENDIKGNVINMSSVHEMIPW-PLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPI----------NAEKFADPE', hsp.query.seq.tostring())
+        self.assertEqual('LDGKVALVTGAGRGIGAAIAVALGQPGAKVVVNYANSREAAEKVVDEIKSNAQSAISIQADVGDPDAVTKLMDQAVEHFGYLDIVSSNAGIVSFGHVKDVTPDVCVPSPYESPVEL*PQQEFDRVFRVNTRGQFFVAREAYRHLREG---GRIILTSSNTASVKGVPRHAVYSGSKGAIDTFVRCLAIDCGDKKITVNAVAPGAIKTDMFLSVSREYIPNGETFTDEQ', hsp.hit.seq.tostring())
+        self.assertEqual('L  KV +VTG  +G+G A+AV  GQ  +KVVVNY ++ E A +V  EI+     AI ++ DV   + V  L++ AV+ FG LD++ +NAG+           +  VPS +E  +E      +++V   N  G F  +REA ++  E    G +I  SS    +   P    Y+ SKG +      LA++   K I VN + PGAI T +          N E F D +', hsp.homology)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
 
     def test_xbt026(self):
         xml_file = get_file('xbt026.xml')
@@ -2113,6 +2763,91 @@ class TblastnXmlCases(unittest.TestCase):
 
 class TblastxXmlCases(unittest.TestCase):
 
+    def test_xbt005(self):
+        xml_file = get_file('xbt005.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+        
+        # test the first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        # test meta variables, only for the first one
+        self.assertEqual('2.2.12', qresult.meta['program_version'])
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
+        self.assertEqual('BLOSUM80', qresult.meta['param_matrix'])
+        self.assertEqual(1, qresult.meta['param_evalue_threshold'])
+        self.assertEqual('L;', qresult.meta['param_filter'])
+        self.assertEqual(10, qresult.meta['param_gap_open'])
+        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('tblastx', qresult.program)
+        self.assertEqual('nr', qresult.target)
+
+        # test parsed values of the first qresult
+        self.assertEqual('gi|1348853|gb|G26621.1|G26621', qresult.id)
+        self.assertEqual('human STS STS_D12006, sequence tagged site', qresult.description)
+        self.assertEqual(615, qresult.query_length)
+        self.assertEqual(3533718, qresult.stat_db_num)
+        # why is the value negative? is this a blast bug?
+        self.assertEqual(-1496331888, qresult.stat_db_len)
+        self.assertEqual(0, qresult.stat_eff_space)
+        self.assertEqual(0.177051, qresult.stat_kappa)
+        self.assertEqual(0.342969, qresult.stat_lambda)
+        self.assertEqual(0.656794, qresult.stat_entropy)
+        self.assertEqual(10, len(qresult))        
+
+        hit = qresult[0]
+        self.assertEqual('gi|18072170|gb|AC010333.7|', hit.id)
+        self.assertEqual('Homo sapiens chromosome 16 clone CTD-3037G24, complete sequence', hit.description)
+        self.assertEqual(159870, hit.seq_length)
+        self.assertEqual(13, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(329.561, hsp.bitscore)
+        self.assertEqual(661.0, hsp.bitscore_raw)
+        self.assertEqual(5.29552e-90, hsp.evalue)
+        self.assertEqual(2, hsp.query_from)
+        self.assertEqual(355, hsp.query_to)
+        self.assertEqual(44324, hsp.hit_from)
+        self.assertEqual(44677, hsp.hit_to)
+        self.assertEqual(-3, hsp.query_frame)
+        self.assertEqual(-3, hsp.hit_frame)
+        self.assertEqual(117, hsp.identity_num)
+        self.assertEqual(117, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(118, len(hsp))
+        self.assertEqual('ECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.query.seq.tostring())
+        self.assertEqual('ECCFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.hit.seq.tostring())
+        self.assertEqual('EC FIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.homology)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|4309961|gb|AC005993.2|AC005993', hit.id)
+        self.assertEqual('Homo sapiens PAC clone RP6-114E22 from 14, complete sequence', hit.description)
+        self.assertEqual(143943, hit.seq_length)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual(41.0922, hsp.bitscore)
+        self.assertEqual(78, hsp.bitscore_raw)
+        self.assertEqual(0.716571, hsp.evalue)
+        self.assertEqual(167, hsp.query_from)
+        self.assertEqual(250, hsp.query_to)
+        self.assertEqual(43680, hsp.hit_from)
+        self.assertEqual(43763, hsp.hit_to)
+        self.assertEqual(2, hsp.query_frame)
+        self.assertEqual(3, hsp.hit_frame)
+        self.assertEqual(13, hsp.identity_num)
+        self.assertEqual(19, hsp.positive_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(28, len(hsp))
+        self.assertEqual('PLTKAHRLFQTSIVFYVTCFTASSQQLL', hsp.query.seq.tostring())
+        self.assertEqual('PLNKYHTIFQISLCFYLFCYNMAQKQLL', hsp.hit.seq.tostring())
+        self.assertEqual('PL K H +FQ S+ FY+ C+  + +QLL', hsp.homology)        
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+        
     def test_xbt031(self):
         xml_file = get_file('xbt031.xml')
         qresults = parse(xml_file, FMT)
