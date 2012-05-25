@@ -13,11 +13,40 @@ from Bio.SeqRecord import SeqRecord
 from Bio._py3k import OrderedDict
 
 
-class _StickyObject(object):
+# attributes that should be converted from text
+_INTS = (
+        # qresult-specific attributes
+        'param_gap_open', 'param_gap_extend', 'param_score_match',
+        'param_score_mismatch', 'stat_db_num', 'stat_db_len',
+        # hsp-specific attributes
+        'len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
+        'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
+        'hit_frame', 'gap_opens',
+        # attributes used in qresult, hit, and/or hsp
+        'seq_len',
+)
+_FLOATS = (
+        # qresult-specific attributes
+        'param_evalue_threshold', 'stat_eff_space', 'stat_kappa',
+        'stat_lambda', 'stat_entropy',
+        # hsp attributes
+        'bitscore', 'bitscore_raw', 'evalue', 'ident_pct', 'pos_pct',
+)
 
-    """Abstract class that defines a method to transfer instance attributes."""
+
+class BaseSearchObject(object):
+
+    """Abstract class for SearchIO objects."""
 
     _NON_STICKY_ATTRS = ()
+
+    def __setattr__(self, name, value):
+        if isinstance(value, basestring):
+            if name in _INTS:
+                value = int(value)
+            elif name in _FLOATS:
+                value = float(value)
+        object.__setattr__(self, name, value)
 
     def _transfer_attrs(self, obj):
         """Transfer instance attributes to the given object.
@@ -39,7 +68,7 @@ class _StickyObject(object):
                 setattr(obj, attr, self.__dict__[attr])
 
 
-class QueryResult(_StickyObject):
+class QueryResult(BaseSearchObject):
 
     # TODO: Check for self.filter()? Or implement this in SearchIO.parse?
 
@@ -584,7 +613,7 @@ class QueryResult(_StickyObject):
         self._hits = new_hits
 
 
-class Hit(_StickyObject):
+class Hit(BaseSearchObject):
 
     """Class representing a single database hit of a search result.
 
@@ -760,7 +789,7 @@ class Hit(_StickyObject):
         self._hsps.sort(key=key, reverse=reverse)
 
 
-class HSP(_StickyObject):
+class HSP(BaseSearchObject):
 
     """Class representing high-scoring alignment regions of the query and hit.
 

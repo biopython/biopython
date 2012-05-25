@@ -44,13 +44,47 @@ def blast_xml_iterator(handle):
     except ImportError:
         from xml.etree import ElementTree as ET
 
-    def _get_elem_data(elem, name, caster=None):
+    # element - optional qresult attribute name mapping
+    _elem_qresult_opt = {
+        'Statistics_db-num': 'stat_db_num',
+        'Statistics_db-len': 'stat_db_len',
+        'Statistics_eff-space': 'stat_eff_space',
+        'Statistics_kappa': 'stat_kappa',
+        'Statistics_lambda': 'stat_lambda',
+        'Statistics_entropy': 'stat_entropy',
+    }
+
+    # element - hit attribute name mapping
+    _elem_hit = {
+        'Hit_def': 'desc',
+        'Hit_accession': 'acc',
+        'Hit_len': 'seq_len',
+    }
+
+    # element - hsp attribute name mapping
+    _elem_hsp = {
+        'Hsp_bit-score': 'bitscore',
+        'Hsp_score': 'bitscore_raw',
+        'Hsp_evalue': 'evalue',
+        'Hsp_query-from': 'query_from',
+        'Hsp_query-to': 'query_to',
+        'Hsp_hit-from': 'hit_from',
+        'Hsp_hit-to': 'hit_to',
+        'Hsp_query-frame': 'query_frame',
+        'Hsp_hit-frame': 'hit_frame',
+        'Hsp_identity': 'ident_num',
+        'Hsp_positive': 'pos_num',
+        'Hsp_gaps': 'gap_num',
+        'Hsp_midline': 'homology',
+        'Hsp_pattern-from': 'pattern_from',
+        'Hsp_pattern-to': 'pattern_to',
+        'Hsp_density': 'density',
+    }
+
+    def _get_elem_data(elem, name):
         """XML element text retriever that casts and handles None."""
         try:
-            if caster is not None:
-                return caster(elem.find(name).text)
-            else:
-                return elem.find(name).text
+            return elem.find(name).text
         except AttributeError:
             return None
 
@@ -82,9 +116,9 @@ def blast_xml_iterator(handle):
             hit_id = hit_elem.find('Hit_id').text
             hit = Hit(hit_id, query_id)
 
-            hit.desc = hit_elem.find('Hit_def').text
-            hit.acc = hit_elem.find('Hit_accession').text
-            hit.seq_len = int(hit_elem.find('Hit_len').text)
+            for hit_tag in _elem_hit:
+                setattr(hit, _elem_hit[hit_tag], \
+                        _get_elem_data(hit_elem, hit_tag))
 
             for hsp in _parse_hsp(hit_elem.find('Hit_hsps'), hit_id):
                 hit.append(hsp)
@@ -135,24 +169,9 @@ def blast_xml_iterator(handle):
             query_seq = hsp_elem.find('Hsp_qseq').text
             hsp = HSP(hit_id, query_id, hit_seq, query_seq)
 
-            hsp.bitscore = float(hsp_elem.find('Hsp_bit-score').text)
-            hsp.bitscore_raw = float(hsp_elem.find('Hsp_score').text)
-            hsp.evalue = float(hsp_elem.find('Hsp_evalue').text)
-            hsp.query_from = int(hsp_elem.find('Hsp_query-from').text)
-            hsp.query_to = int(hsp_elem.find('Hsp_query-to').text)
-            hsp.hit_from = int(hsp_elem.find('Hsp_hit-from').text)
-            hsp.hit_to = int(hsp_elem.find('Hsp_hit-to').text)
-
-            # optional attributes
-            hsp.query_frame = _get_elem_data(hsp_elem, 'Hsp_query-frame', int)
-            hsp.hit_frame = _get_elem_data(hsp_elem, 'Hsp_hit-frame', int)
-            hsp.ident_num = _get_elem_data(hsp_elem, 'Hsp_identity', int)
-            hsp.pos_num = _get_elem_data(hsp_elem, 'Hsp_positive', int)
-            hsp.gap_num = _get_elem_data(hsp_elem, 'Hsp_gaps', int)
-            hsp.homology = _get_elem_data(hsp_elem, 'Hsp_midline')
-            hsp.pattern_from = _get_elem_data(hsp_elem, 'Hsp_pattern-from', int)
-            hsp.pattern_to = _get_elem_data(hsp_elem, 'Hsp_pattern-to', int)
-            hsp.density = _get_elem_data(hsp_elem, 'Hsp_density', float)
+            for hsp_tag in _elem_hsp:
+                setattr(hsp, _elem_hsp[hsp_tag], \
+                        _get_elem_data(hsp_elem, hsp_tag))
 
             # delete element after we finish parsing it
             hsp_elem.clear()
@@ -258,9 +277,9 @@ def blast_xml_iterator(handle):
             except AttributeError:
                 description = _fallback['query_desc']
             try:
-                query_len = int(qresult_elem.find('Iteration_query-len').text)
+                query_len = qresult_elem.find('Iteration_query-len').text
             except AttributeError:
-                query_len = int(_fallback['query_len'])
+                query_len = _fallback['query_len']
 
             qresult.desc = description
             qresult.seq_len = query_len
@@ -280,12 +299,9 @@ def blast_xml_iterator(handle):
             if stat_iter_elem is not None:
                 stat_elem = stat_iter_elem.find('Statistics')
 
-                qresult.stat_db_num = int(stat_elem.find('Statistics_db-num').text)
-                qresult.stat_db_len = int(stat_elem.find('Statistics_db-len').text)
-                qresult.stat_eff_space = float(stat_elem.find('Statistics_eff-space').text)
-                qresult.stat_kappa = float(stat_elem.find('Statistics_kappa').text)
-                qresult.stat_lambda = float(stat_elem.find('Statistics_lambda').text)
-                qresult.stat_entropy = float(stat_elem.find('Statistics_entropy').text)
+                for stat_tag in _elem_qresult_opt:
+                    setattr(qresult, _elem_qresult_opt[stat_tag], \
+                            _get_elem_data(stat_elem, stat_tag))
 
             for hit in _parse_hit(qresult_elem.find('Iteration_hits')):
                 # only append the Hit object if we have HSPs

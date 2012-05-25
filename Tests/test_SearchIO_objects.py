@@ -14,7 +14,7 @@ to all formats.
 import unittest
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import BaseSearchObject, QueryResult, Hit, HSP
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -35,6 +35,30 @@ hit21 = Hit('hit2', 'query1', [hsp211])
 hit31 = Hit('hit3', 'query1', [hsp311, hsp312])
 hit41 = Hit('hit4', 'query1', [hsp411])
 hit12 = Hit('hit1', 'query2', [hsp121])
+
+
+class BaseSearchObjectCases(unittest.TestCase):
+
+    def setUp(self):
+        self.base = BaseSearchObject()
+
+    def test_setattr_string(self):
+        # string should stay as string if the attribute name is not listed in
+        # _objects._{INTS,FLOATS}
+        setattr(self.base, 'test', 'attribute')
+        self.assertEqual('attribute', self.base.test)
+
+    def test_setattr_int(self):
+        # string should be cast into int if the attribute name is listed in
+        # _objects._INTS
+        setattr(self.base, 'seq_len', '29312')
+        self.assertEqual(29312, self.base.seq_len)
+
+    def test_setattr_float(self):
+        # string should be cast into float if the attribute name is listed in
+        # _objects._FLOATS
+        setattr(self.base, 'evalue', '22.23')
+        self.assertEqual(22.23, self.base.evalue)
 
 
 class QueryResultCases(unittest.TestCase):
