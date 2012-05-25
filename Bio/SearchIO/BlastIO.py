@@ -309,7 +309,140 @@ def blast_tabular_iterator(handle):
     the default ones.
 
     """
+    # column to class attribute map
+    _column_qresult = {
+        'query id': 'id',               # qseqid
+        'query length': 'seq_len'       # qlen
+    }
+    _column_hit = {
+        'subject id': 'id',             # sseqid
+        'subject acc.': 'acc',          # sacc
+        'subject length': 'seq_len',    # slen
+    }
+    _column_hsp = {
+        'bit score': 'bitscore',        # bitscore
+        'score': 'bitscore_raw',        # score
+        'evalue': 'evalue',             # evalue
+        'alignment length': 'len',      # length
+        'identical': 'ident_num',       # nident
+        '% identity': 'ident_pct',      # pident
+        'positives': 'pos_num',         # positive
+        '% positives': 'pos_pct',       # ppos
+        'mismatches': 'mismatch_num',   # mismatch
+        'gaps': 'gap_num',              # gaps
+        'q. start': 'query_from',       # qstart
+        'q. end': 'query_to',           # qend
+        's. start': 'hit_from',         # sstart
+        's. end': 'hit_to',             # send
+        'query frame': 'query_frame',   # qframe
+        'subject frame': 'hit_frame',   # sframe
+        'query seq': 'query',           # qseq
+        'subject seq': 'hit',           # sseq
+        'gap opens': 'gap_opens',       # gap opens
+    }
+    # ignored columns (for now) are:
+    # query gi -- qgi
+    # query acc -- qacc
+    # query acc.ver -- qaccver
+    # subject ids --  sallseqid
+    # subject gi -- sgi
+    # subject gis -- sallgi
+    # subject acc.ver -- saccver
+    # alignment length -- length
+    # query/sbjct frames -- frames
+    # BTOP -- btop
 
+    # column order in the non-commented tabular output variant
+    # values must be keys inside the column-attribute maps above
+    _default_order = ['query id', 'subject id', '% identity', \
+            'alignment length', 'mismatches', 'gap opens', 'q. start', \
+            'q. end', 's. start', 's. end', 'evalue', 'bit score']
+
+    def _parse_row(line, column_order):
+        # returns a dict of assigned var names to level names
+        columns = line.strip().split('\t')
+        assert len(columns) == len(column_order)
+        qresult, hit, hsp = {}, {}, {}
+
+        for idx, value in enumerate(columns):
+            attr_name = column_order[idx]
+
+            if attr_name in _column_qresult:
+                qresult[_column_qresult[attr_name]] = value
+
+            elif attr_name in _column_hit:
+                hit[_column_hit[attr_name]] = value
+
+            elif attr_name in _column_hsp:
+                hsp[_column_hsp[attr_name]] = value
+
+            else:
+                raise ValueError("Column '%s' not supported in SearchIO." % \
+                        attr_name)
+
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
+
+    while True:
+        line = handle.readline()
+        if line.startswith('#'):
+            #column_order = ...
+            pass
+        else:
+            column_order = _default_order
+            break
+
+    parsed = _parse_row(line, column_order)
+    while True:
+
+        # create qresult object, setattr with parsed values
+        qid_cache = parsed['qresult']['id']
+        qresult = QueryResult(qid_cache)
+        for qresult_attr in parsed['qresult']:
+            setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
+
+        # append hit to qresult while qresult.id is the same as the
+        # previous row
+        while True:
+
+            # create hit object, setattr with parsed values
+            hid_cache = parsed['hit']['id']
+            hit = Hit(hid_cache, qid_cache)
+            for hit_attr in parsed['hit']:
+                setattr(hit, hit_attr, parsed['hit'][hit_attr])
+
+            # append hsp to hit while hit.id and qresult.id are the same
+            # as the previous row
+            while True:
+
+                # create hsp object, setattr with parsed values, append to hit
+                hsp = HSP(hid_cache, qid_cache)
+                for hsp_attr in parsed['hsp']:
+                    setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
+                hit.append(hsp)
+
+                # read next line and parse it if it exists
+                line = handle.readline()
+                if line:
+                    parsed = _parse_row(line, column_order)
+                # if line doesn't exist (file end), break out of loop
+                else:
+                    break
+                # if hit.id or qresult.id is different, break out of loop
+                if hid_cache != parsed['hit']['id'] or \
+                        qid_cache != parsed['qresult']['id']:
+                    break
+
+            # append hsp-filled hit into qresult
+            qresult.append(hit)
+            # if qresult.id is different compared to the previous line
+            # break out of loop
+            if not line or qid_cache != parsed['qresult']['id']:
+                break
+
+        yield qresult
+
+        if not line:
+            break
 
 
 def blast_text_iterator(handle):
