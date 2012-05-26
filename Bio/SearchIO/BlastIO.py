@@ -75,6 +75,7 @@ def blast_xml_iterator(handle):
         'Hsp_identity': 'ident_num',
         'Hsp_positive': 'pos_num',
         'Hsp_gaps': 'gap_num',
+        'Hsp_align-len': 'init_len',
         'Hsp_midline': 'homology',
         'Hsp_pattern-from': 'pattern_from',
         'Hsp_pattern-to': 'pattern_to',
@@ -336,6 +337,7 @@ def blast_tabular_iterator(handle):
         'subject length': 'seq_len',    # slen
     }
     _column_hsp = {
+        'alignment length': 'init_len', # length
         'bit score': 'bitscore',        # bitscore
         'score': 'bitscore_raw',        # score
         'evalue': 'evalue',             # evalue

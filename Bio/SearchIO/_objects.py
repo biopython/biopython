@@ -19,7 +19,7 @@ _INTS = (
         'param_gap_open', 'param_gap_extend', 'param_score_match',
         'param_score_mismatch', 'stat_db_num', 'stat_db_len',
         # hsp-specific attributes
-        'len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
+        'init_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
         'hit_frame', 'gap_opens',
         # attributes used in qresult, hit, and/or hsp
@@ -920,13 +920,12 @@ class HSP(BaseSearchObject):
         return "HSP(%s)" % (info)
 
     def __len__(self):
-        if hasattr(self, 'alignment'):
+        # len should return alignment length if alignment is not None
+        try:
+            assert len(self.query) == len(self.hit)
             return len(self.query)
-        else:
-            try:
-                return self.len
-            except AttributeError:
-                raise TypeError("HSP objects without alignment does not have any length.")
+        except TypeError:
+            raise TypeError("HSP objects without alignment does not have any length.")
 
     def __getitem__(self, idx):
         if hasattr(self, 'alignment'):
