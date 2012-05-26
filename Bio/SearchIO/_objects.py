@@ -928,7 +928,7 @@ class HSP(BaseSearchObject):
             raise TypeError("HSP objects without alignment does not have any length.")
 
     def __getitem__(self, idx):
-        if hasattr(self, 'alignment'):
+        if self.alignment is not None:
             obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
                     self.query[idx], self._alphabet)
             self._transfer_attrs(obj)
