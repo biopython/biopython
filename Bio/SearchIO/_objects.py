@@ -945,6 +945,132 @@ class HSP(BaseSearchObject):
     def __iter__(self):
         raise TypeError("HSP objects do not support iteration.")
 
+    @property
+    def query_is_plus(self):
+        if not hasattr(self, '_query_is_plus'):
+            # for BLAT, strand determines direction
+            if hasattr(self, 'query_strand'):
+                if '-' not in self.query_strand:
+                    self._query_is_plus = True
+            # for BLAST, frame determines direction
+            elif hasattr(self, 'query_frame'):
+                if abs(self.query_frame) == self.query_frame:
+                    self._query_is_plus = True
+            # for BLAST tabular output, start and stop positions
+            # determines direction
+            # note that if frame is printed in the output file,
+            # it will take precedent over this
+            elif self._query_from < self._query_to:
+                self._query_is_plus = True
+
+            # if none of the above is true, defaults to false
+            if not hasattr(self, '_query_is_plus'):
+                self._query_is_plus = False
+
+        return self._query_is_plus
+
+    @property
+    def query_is_minus(self):
+        return not self.query_is_plus
+
+    @property
+    def query_from(self):
+        # return parsed _query_to value if query is minus and parsed
+        # _query_from is less than parsed _query_to
+        if self.query_is_minus:
+            if self._query_from < self._query_to:
+                return self._query_to
+            else:
+                return self._query_from
+        else:
+            if self._query_to < self._query_from:
+                return self._query_to
+            else:
+                return self._query_from
+
+    @query_from.setter
+    def query_from(self, value):
+        self._query_from = value
+
+    @property
+    def query_to(self):
+        # return parsed _query_from value if query is minus and parsed
+        # _query_to value is greater than parsed _query_from
+        if self.query_is_minus:
+            if self._query_to > self._query_from:
+                return self._query_from
+            else:
+                return self._query_to
+        else:
+            if self._query_from > self._query_to:
+                return self._query_from
+            else:
+                return self._query_to
+
+    @query_to.setter
+    def query_to(self, value):
+        self._query_to = value
+
+    @property
+    def hit_is_plus(self):
+        # read the query counterpart for explanation
+        if not hasattr(self, '_hit_is_plus'):
+            if hasattr(self, 'hit_strand'):
+                if '-' not in self.query_strand:
+                    self._hit_is_plus = True
+            elif hasattr(self, 'hit_frame'):
+                if abs(self.hit_frame) == self.hit_frame:
+                    self._hit_is_plus = True
+            elif self._hit_from < self._hit_to:
+                self._hit_is_plus = True
+
+            if not hasattr(self, '_hit_is_plus'):
+                self._hit_is_plus = False
+
+        return self._hit_is_plus
+
+    @property
+    def hit_is_minus(self):
+        return not self.hit_is_plus
+
+    @property
+    def hit_from(self):
+        # return parsed _hit_to value if hit is minus and parsed
+        # _hit_from is less than parsed _hit_to
+        if self.hit_is_minus:
+            if self._hit_from < self._hit_to:
+                return self._hit_to
+            else:
+                return self._hit_from
+        else:
+            if self._hit_to < self._hit_from:
+                return self._hit_to
+            else:
+                return self._hit_from
+
+    @hit_from.setter
+    def hit_from(self, value):
+        self._hit_from = value
+
+    @property
+    def hit_to(self):
+        # return parsed _hit_from value if hit is minus and parsed
+        # _hit_to value is greater than parsed _hit_from
+        if self.hit_is_minus:
+            if self._hit_to > self._hit_from:
+                return self._hit_from
+            else:
+                return self._hit_to
+        else:
+            if self._hit_from > self._hit_to:
+                return self._hit_from
+            else:
+                return self._hit_to
+
+    @hit_to.setter
+    def hit_to(self, value):
+        self._hit_to = value
+
 
 class SearchIndexer(object):
 

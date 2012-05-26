@@ -556,6 +556,152 @@ class HSPWithAlignmentCases(unittest.TestCase):
         # iteration not supported
         self.assertRaises(TypeError, iter, self.hsp)
 
+    def test_query_is_plus_from_strand_ok(self):
+        # query_is_plus is True if strand does not have '-'
+        # and strand should take precedent over everything else
+        self.hsp.query_strand = '+'
+        self.hsp.query_frame = 2
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_plus_from_strand_frame_conflict(self):
+        # query_is_plus is True if strand does not have '-'
+        # and strand should take precedent over everything else
+        self.hsp.query_strand = '+'
+        self.hsp.query_frame = -2
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_plus_from_strand_fromto_conflict(self):
+        # query_is_plus is True if strand does not have '-'
+        # and strand should take precedent over everything else
+        self.hsp.query_strand = '+'
+        self.hsp.query_frame = 2
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_plus_from_strand_all_conflict(self):
+        # query_is_plus is True if strand does not have '-'
+        # and strand should take precedent over everything else
+        self.hsp.query_strand = '+'
+        self.hsp.query_frame = -2
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_plus_from_frame_ok(self):
+        self.hsp.query_frame = 2
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_plus_from_fromto_conflict(self):
+        self.hsp.query_frame = 2
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_plus_from_fromto(self):
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertTrue(self.hsp.query_is_plus)
+        self.assertFalse(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_strand_ok(self):
+        # query_is_plus is False if strand has '-'
+        # and strand should take precedent over everything else
+        self.hsp.query_strand = '-'
+        self.hsp.query_frame = -2
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_strand_frame_conflict(self):
+        self.hsp.query_strand = '-'
+        self.hsp.query_frame = 2
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_strand_fromto_conflict(self):
+        self.hsp.query_strand = '-'
+        self.hsp.query_frame = -2
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_strand_all_conflict(self):
+        self.hsp.query_strand = '-'
+        self.hsp.query_frame = 2
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_frame_ok(self):
+        self.hsp.query_frame = -2
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_fromto_conflict(self):
+        self.hsp.query_frame = -2
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_is_minus_from_fromto(self):
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertFalse(self.hsp.query_is_plus)
+        self.assertTrue(self.hsp.query_is_minus)
+
+    def test_query_plus_from_smaller(self):
+        # if query is plus and from < to, query_from returns _query_from
+        self.hsp._query_is_plus = True
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertEqual(1, self.hsp.query_from)
+        self.assertEqual(10, self.hsp.query_to)
+
+    def test_query_plus_from_bigger(self):
+        # if query is plus and from > to, query_from returns _query_to
+        self.hsp._query_is_plus = True
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertEqual(1, self.hsp.query_from)
+        self.assertEqual(10, self.hsp.query_to)
+
+    def test_query_minus_from_smaller(self):
+        # if query is minus and from < to, query_from returns _query_to
+        self.hsp._query_is_plus = False
+        self.hsp.query_from = 1
+        self.hsp.query_to = 10
+        self.assertEqual(10, self.hsp.query_from)
+        self.assertEqual(1, self.hsp.query_to)
+
+    def test_query_minus_from_bigger(self):
+        # if query is minus and from > to, query_from returns _query_from
+        self.hsp._query_is_plus = False
+        self.hsp.query_from = 10
+        self.hsp.query_to = 1
+        self.assertEqual(10, self.hsp.query_from)
+        self.assertEqual(1, self.hsp.query_to)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
