@@ -377,7 +377,8 @@ def blast_tabular_iterator(handle):
     def _parse_result_row(line, column_order):
         # returns a dict of assigned var names to level names
         columns = line.strip().split('\t')
-        assert len(columns) == len(column_order)
+        assert len(column_order) == len(columns), "Expected %i columns, found: " \
+            "%i" % (len(column_order), len(columns))
         qresult, hit, hsp = {}, {}, {}
 
         for idx, value in enumerate(columns):
