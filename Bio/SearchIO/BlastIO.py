@@ -330,11 +330,14 @@ def blast_tabular_iterator(handle):
     # column to class attribute map
     _column_qresult = {
         'query id': 'id',               # qseqid
+        'query acc.': 'acc',            # qacc
+        'query acc.ver': 'acc_ver',     # qaccver
         'query length': 'seq_len'       # qlen
     }
     _column_hit = {
         'subject id': 'id',             # sseqid
         'subject acc.': 'acc',          # sacc
+        'subject acc.ver': 'acc_ver',   # saccver
         'subject length': 'seq_len',    # slen
     }
     _column_hsp = {
@@ -362,13 +365,9 @@ def blast_tabular_iterator(handle):
             _column_hsp.keys()
     # ignored columns (for now) are:
     # query gi -- qgi
-    # query acc -- qacc
-    # query acc.ver -- qaccver
     # subject ids --  sallseqid
     # subject gi -- sgi
     # subject gis -- sallgi
-    # subject acc.ver -- saccver
-    # query/sbjct frames -- frames
     # BTOP -- btop
 
     # column order in the non-commented tabular output variant
@@ -376,6 +375,9 @@ def blast_tabular_iterator(handle):
     _default_fields = ['query id', 'subject id', '% identity', \
             'alignment length', 'mismatches', 'gap opens', 'q. start', \
             'q. end', 's. start', 's. end', 'evalue', 'bit score']
+    # these fields must exist in order for the parser to work
+    _min_query_fields = set(['query id', 'query acc.', 'query acc.ver'])
+    _min_hit_fields = set(['subject id', 'subject acc.', 'subject acc.ver'])
 
     def _parse_result_row(line, fields):
         # returns a dict of assigned var names to level names
@@ -470,6 +472,11 @@ def blast_tabular_iterator(handle):
                                 "supported by SearchIO. The data in the " \
                                 "corresponding column will be ignored." % field
                         warnings.warn(message)
+                # if set(fields) has a null intersection with minimum required
+                # fields for hit and query, raise an exception
+                if set(fields).isdisjoint(_min_query_fields) or \
+                        set(fields).isdisjoint(_min_hit_fields):
+                    raise ValueError("Required field is not found.")
                 line = _read_forward(handle)
             # parse result rows, using non-commented tabular iterator
             # which returns line and qresult
@@ -499,7 +506,15 @@ def blast_tabular_iterator(handle):
             parsed = _parse_result_row(line, fields)
 
             # create qresult object, setattr with parsed values
-            qid_cache = parsed['qresult']['id']
+            # use 'id', with 'acc' and 'acc_ver' fallbacks
+            # one of these must have a value since we've checked whether
+            # they exist or not in the tabc parser
+            qid_cache = parsed['qresult'].get('id')
+            if qid_cache is None:
+                qid_cache = parsed['qresult'].get('acc')
+            if qid_cache is None:
+                qid_cache = parsed['qresult'].get('acc_ver')
+
             qresult = QueryResult(qid_cache)
             for qresult_attr in parsed['qresult']:
                 setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
@@ -510,6 +525,11 @@ def blast_tabular_iterator(handle):
 
                 # create hit object, setattr with parsed values
                 hid_cache = parsed['hit']['id']
+                if hid_cache is None:
+                    hid_cache = parsed['hit'].get('acc')
+                if hid_cache is None:
+                    hid_cache = parsed['hit'].get('acc_ver')
+
                 hit = Hit(hid_cache, qid_cache)
                 for hit_attr in parsed['hit']:
                     setattr(hit, hit_attr, parsed['hit'][hit_attr])
