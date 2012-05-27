@@ -376,7 +376,7 @@ def blast_tabular_iterator(handle):
             'alignment length', 'mismatches', 'gap opens', 'q. start', \
             'q. end', 's. start', 's. end', 'evalue', 'bit score']
 
-    def _parse_row(line, column_order):
+    def _parse_result_row(line, column_order):
         # returns a dict of assigned var names to level names
         columns = line.strip().split('\t')
         assert len(columns) == len(column_order)
@@ -409,7 +409,7 @@ def blast_tabular_iterator(handle):
             column_order = _default_order
             break
 
-    parsed = _parse_row(line, column_order)
+    parsed = _parse_result_row(line, column_order)
     while True:
 
         # create qresult object, setattr with parsed values
@@ -441,7 +441,7 @@ def blast_tabular_iterator(handle):
                 # read next line and parse it if it exists
                 line = handle.readline()
                 if line:
-                    parsed = _parse_row(line, column_order)
+                    parsed = _parse_result_row(line, column_order)
                 # if line doesn't exist (file end), break out of loop
                 else:
                     break
