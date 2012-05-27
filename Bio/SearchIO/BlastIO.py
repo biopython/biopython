@@ -357,9 +357,10 @@ def blast_tabular_iterator(handle):
         's. end': 'hit_to',             # send
         'query frame': 'query_frame',   # qframe
         'subject frame': 'hit_frame',   # sframe
+        'query/sbjct frames': 'frames', # frames
         'query seq': 'query',           # qseq
         'subject seq': 'hit',           # sseq
-        'gap opens': 'gapopen_num',       # gap opens
+        'gap opens': 'gapopen_num',     # gap opens
     }
     _supported_fields = _column_qresult.keys() + _column_hit.keys() + \
             _column_hsp.keys()
@@ -542,6 +543,12 @@ def blast_tabular_iterator(handle):
                     hsp = HSP(hid_cache, qid_cache)
                     for hsp_attr in parsed['hsp']:
                         setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
+                    # try to set hit_frame and/or query_frame if frames
+                    # attribute is set
+                    if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):
+                        setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
+                    if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
+                        setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
                     hit.append(hsp)
 
                     # read next line and parse it if it exists
