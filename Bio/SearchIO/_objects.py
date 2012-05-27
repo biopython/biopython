@@ -21,7 +21,7 @@ _INTS = (
         # hsp-specific attributes
         'init_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
-        'hit_frame', 'gap_opens',
+        'hit_frame', 'gapopen_num',
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
 )

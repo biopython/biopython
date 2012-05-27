@@ -355,7 +355,7 @@ def blast_tabular_iterator(handle):
         'subject frame': 'hit_frame',   # sframe
         'query seq': 'query',           # qseq
         'subject seq': 'hit',           # sseq
-        'gap opens': 'gap_opens',       # gap opens
+        'gap opens': 'gapopen_num',       # gap opens
     }
     # ignored columns (for now) are:
     # query gi -- qgi
