@@ -28,6 +28,7 @@ For legacy BLAST outputs, see the Bio.Blast module.
 """
 
 import re
+import warnings
 
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
 
@@ -408,7 +409,7 @@ def blast_tabular_iterator(handle):
             # if line has characters and stripping does not remove them,
             # return the line
             if line and line.strip():
-                return line
+                return line.strip()
             # line has whitespace characters, continue reading the next line
             elif line and not line.strip():
                 continue
@@ -416,15 +417,86 @@ def blast_tabular_iterator(handle):
             elif not line:
                 return
 
-    def _tab_parser(handle, first_line):
-        """Parser for the plain tab BLAST+ output."""
+    def _tabc_parser(handle, first_line):
+        """Parser for the commented tab BLAST+ output."""
 
         line = first_line
-        column_order = _default_order
+        program, version, query_id, query_desc, target = [None] * 5
 
         while True:
 
-            parsed = _parse_result_row(line, column_order)
+            # parse program and version
+            # example: # BLASTX 2.2.26+
+            if 'BLAST' in line and 'processed' not in line:
+                # program is not None means we've encountered another
+                # start of a query, but the program variable has not been reset
+                # this happens if the previous query has 0 results, in which
+                # case we want to yield an empty QueryResult object with
+                # all the parsed properties
+                if program is not None:
+                    qresult = QueryResult(query_id)
+                    qresult.program = program
+                    qresult.meta = {'program_version': version}
+                    qresult.description = query_desc
+                    qresult.target = target
+                    yield line, qresult
+                    program, version, query_id, query_desc, target = [None] * 5
+                program, version = line.strip()[len('# '):].split(' ')
+                program = program.lower()
+                line = _read_forward(handle)
+            # parse query id (and description if available)
+            # example: # Query: gi|356995852 Mus musculus POU domain
+            elif 'Query' in line:
+                query_id = line[len('# Query: '):].strip()
+                if ' ' in query_id:
+                    query_id, query_desc = query_id.split(' ', 1)
+                else:
+                    query_desc = None
+                line = _read_forward(handle)
+            # parse target database
+            # example: # Database: db/minirefseq_protein
+            elif 'Database' in line:
+                target = line[len('# Database: '):].strip()
+                line = _read_forward(handle)
+            # parse column order, crucial for parsing the result rows
+            # example: # Fields: query id, query gi, query acc., query length
+            elif 'Fields' in line:
+                fields = line[len('# Fields: '):].strip()
+                fields = fields.split(', ')
+                # warn if there are unsupported columns
+                for field in fields:
+                    if field not in _supported_fields:
+                        message = "Warning: field '%s' is not yet " \
+                                "supported by SearchIO. The data in the " \
+                                "corresponding column will be ignored." % field
+                        warnings.warn(message)
+                line = _read_forward(handle)
+            # parse result rows, using non-commented tabular iterator
+            # which returns line and qresult
+            # no need to do readline() here since it's already done by the iterator
+            elif line and not line.startswith('#'):
+                for line, qresult in _tab_parser(handle, line, fields):
+                    qresult.program = program
+                    qresult.meta = {'program_version': version}
+                    qresult.description = query_desc
+                    qresult.target = target
+                    yield line, qresult
+                program, version, query_id, query_desc, target = [None] * 5
+            # otherwise, keep on readline()-ing
+            else:
+                line = _read_forward(handle)
+
+            if not line:
+                break
+
+    def _tab_parser(handle, first_line, fields=_default_fields):
+        """Parser for the plain tab BLAST+ output."""
+
+        line = first_line
+
+        while True:
+
+            parsed = _parse_result_row(line, fields)
 
             # create qresult object, setattr with parsed values
             qid_cache = parsed['qresult']['id']
@@ -453,12 +525,12 @@ def blast_tabular_iterator(handle):
                     hit.append(hsp)
 
                     # read next line and parse it if it exists
-                    line = handle.readline()
+                    line = _read_forward(handle)
                     # if line doesn't exist (file end), break out of loop
-                    if line:
-                        parsed = _parse_result_row(line, column_order)
-                    else:
+                    if not line or line.startswith('#'):
                         break
+                    else:
+                        parsed = _parse_result_row(line, fields)
                     # if hit.id or qresult.id is different, break out of loop
                     if hid_cache != parsed['hit']['id'] or \
                             qid_cache != parsed['qresult']['id']:
@@ -469,23 +541,24 @@ def blast_tabular_iterator(handle):
 
                 # if qresult.id is different compared to the previous line
                 # break out of loop
-                if not line or qid_cache != parsed['qresult']['id']:
+                if not line or qid_cache != parsed['qresult']['id'] or \
+                        line.startswith('#'):
                     break
 
-            yield qresult
+            yield line, qresult
 
-            if not line:
+            if not line or line.startswith('#'):
                 break
 
     line = _read_forward(handle)
     if line is None:
         return
     elif line.startswith('#'):
-        parser = _tab_parser
+        parser = _tabc_parser
     else:
         parser = _tab_parser
 
-    for qresult in parser(handle, line):
+    for line, qresult in parser(handle, line):
         yield qresult
 
 
