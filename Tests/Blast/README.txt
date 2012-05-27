@@ -4,6 +4,7 @@ BLAST TEST DATA FILES
 This directory contains various data files for testing the
 BLAST-related code in Biopython.
 
+
 BLAST OUTPUT FILES (plain text)
 -------------------------------
 
@@ -104,6 +105,7 @@ bt096 tblastx  2.2.26+           refseq_rna               tblastx with multiple 
 
 * bt008 is not included because the file is too big (>15Mb).
 
+
 BLAST OUTPUT FILES (XML)
 ------------------------
 
@@ -146,3 +148,33 @@ xbt031.xml - TBLASTX 2.2.26+    multiple queries
 xbt032.xml - TBLASTX 2.2.26+    single query with no result
 xbt034.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
 xbt035.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
+
+
+BLAST OUTPUT FILES (TAB without comments)
+-----------------------------------------
+
+tbt01.txt - TBLASTX 2.2.26+    multiple queries with nonstandard column ordering
+
+tbt001.txt - BLASTN 2.2.26+    multiple queries
+tbt002.txt - BLASTN 2.2.26+    single query with no result
+tbt003.txt - BLASTN 2.2.26+    single query with results containing single hsp
+tbt004.txt - BLASTN 2.2.26+    single query with results containing multiple hsps
+
+tbt005.txt - BLASTP 2.2.26+    multiple queries
+tbt006.txt - BLASTP 2.2.26+    single query with no result
+tbt007.txt - BLASTP 2.2.26+    single query with results containing single hsp
+tbt008.txt - BLASTP 2.2.26+    single query with results containing multiple hsps
+
+tbt009.txt - BLASTX 2.2.26+    multiple queries
+tbt010.txt - BLASTX 2.2.26+    single query with no result
+tbt011.txt - BLASTX 2.2.26+    single query with results containing multiple hsps
+
+tbt012.txt - TBLASTN 2.2.26+    multiple queries
+tbt013.txt - TBLASTN 2.2.26+    single query with no result
+tbt014.txt - TBLASTN 2.2.26+    single query with results containing single hsp
+tbt015.txt - TBLASTN 2.2.26+    single query with results containing multiple hsps
+
+tbt016.txt - TBLASTX 2.2.26+    multiple queries
+tbt017.txt - TBLASTX 2.2.26+    single query with no result
+tbt018.txt - TBLASTX 2.2.26+    single query with results containing multiple hsps
+
