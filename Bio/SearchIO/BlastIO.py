@@ -399,67 +399,93 @@ def blast_tabular_iterator(handle):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
-    while True:
-        line = handle.readline()
-        if line.startswith('#'):
-            #column_order = ...
-            pass
-        else:
-            column_order = _default_order
-            break
+    def _read_forward(handle):
+        """Reads through whitespaces at the beginning of handle, returns the first
+        non-whitespace only line."""
+        while True:
+            line = handle.readline()
+            # if line has characters and stripping does not remove them,
+            # return the line
+            if line and line.strip():
+                return line
+            # line has whitespace characters, continue reading the next line
+            elif line and not line.strip():
+                continue
+            # if line ends, return None
+            elif not line:
+                return
 
-    parsed = _parse_result_row(line, column_order)
-    while True:
+    def _tab_parser(handle, first_line):
+        """Parser for the plain tab BLAST+ output."""
 
-        # create qresult object, setattr with parsed values
-        qid_cache = parsed['qresult']['id']
-        qresult = QueryResult(qid_cache)
-        for qresult_attr in parsed['qresult']:
-            setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
+        line = first_line
+        column_order = _default_order
 
-        # append hit to qresult while qresult.id is the same as the
-        # previous row
         while True:
 
-            # create hit object, setattr with parsed values
-            hid_cache = parsed['hit']['id']
-            hit = Hit(hid_cache, qid_cache)
-            for hit_attr in parsed['hit']:
-                setattr(hit, hit_attr, parsed['hit'][hit_attr])
+            parsed = _parse_result_row(line, column_order)
 
-            # append hsp to hit while hit.id and qresult.id are the same
-            # as the previous row
+            # create qresult object, setattr with parsed values
+            qid_cache = parsed['qresult']['id']
+            qresult = QueryResult(qid_cache)
+            for qresult_attr in parsed['qresult']:
+                setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
+
+            # append hit to qresult while qresult.id is the same as the
+            # previous row
             while True:
 
-                # create hsp object, setattr with parsed values, append to hit
-                hsp = HSP(hid_cache, qid_cache)
-                for hsp_attr in parsed['hsp']:
-                    setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
-                hit.append(hsp)
+                # create hit object, setattr with parsed values
+                hid_cache = parsed['hit']['id']
+                hit = Hit(hid_cache, qid_cache)
+                for hit_attr in parsed['hit']:
+                    setattr(hit, hit_attr, parsed['hit'][hit_attr])
 
-                # read next line and parse it if it exists
-                line = handle.readline()
-                if line:
-                    parsed = _parse_result_row(line, column_order)
-                # if line doesn't exist (file end), break out of loop
-                else:
-                    break
-                # if hit.id or qresult.id is different, break out of loop
-                if hid_cache != parsed['hit']['id'] or \
-                        qid_cache != parsed['qresult']['id']:
+                # append hsp to hit while hit.id and qresult.id are the same
+                # as the previous row
+                while True:
+
+                    # create hsp object, setattr with parsed values, append to hit
+                    hsp = HSP(hid_cache, qid_cache)
+                    for hsp_attr in parsed['hsp']:
+                        setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
+                    hit.append(hsp)
+
+                    # read next line and parse it if it exists
+                    line = handle.readline()
+                    # if line doesn't exist (file end), break out of loop
+                    if line:
+                        parsed = _parse_result_row(line, column_order)
+                    else:
+                        break
+                    # if hit.id or qresult.id is different, break out of loop
+                    if hid_cache != parsed['hit']['id'] or \
+                            qid_cache != parsed['qresult']['id']:
+                        break
+
+                # append hsp-filled hit into qresult
+                qresult.append(hit)
+
+                # if qresult.id is different compared to the previous line
+                # break out of loop
+                if not line or qid_cache != parsed['qresult']['id']:
                     break
 
-            # append hsp-filled hit into qresult
-            qresult.append(hit)
-            # if qresult.id is different compared to the previous line
-            # break out of loop
-            if not line or qid_cache != parsed['qresult']['id']:
+            yield qresult
+
+            if not line:
                 break
 
-        yield qresult
+    line = _read_forward(handle)
+    if line is None:
+        return
+    elif line.startswith('#'):
+        parser = _tab_parser
+    else:
+        parser = _tab_parser
 
-        if not line:
-            break
+    for qresult in parser(handle, line):
+        yield qresult
 
 
 def blast_text_iterator(handle):
