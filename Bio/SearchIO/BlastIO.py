@@ -357,6 +357,8 @@ def blast_tabular_iterator(handle):
         'subject seq': 'hit',           # sseq
         'gap opens': 'gapopen_num',       # gap opens
     }
+    _supported_fields = _column_qresult.keys() + _column_hit.keys() + \
+            _column_hsp.keys()
     # ignored columns (for now) are:
     # query gi -- qgi
     # query acc -- qacc
@@ -370,19 +372,19 @@ def blast_tabular_iterator(handle):
 
     # column order in the non-commented tabular output variant
     # values must be keys inside the column-attribute maps above
-    _default_order = ['query id', 'subject id', '% identity', \
+    _default_fields = ['query id', 'subject id', '% identity', \
             'alignment length', 'mismatches', 'gap opens', 'q. start', \
             'q. end', 's. start', 's. end', 'evalue', 'bit score']
 
-    def _parse_result_row(line, column_order):
+    def _parse_result_row(line, fields):
         # returns a dict of assigned var names to level names
         columns = line.strip().split('\t')
-        assert len(column_order) == len(columns), "Expected %i columns, found: " \
-            "%i" % (len(column_order), len(columns))
+        assert len(fields) == len(columns), "Expected %i columns, found: " \
+            "%i" % (len(fields), len(columns))
         qresult, hit, hsp = {}, {}, {}
 
         for idx, value in enumerate(columns):
-            attr_name = column_order[idx]
+            attr_name = fields[idx]
 
             if attr_name in _column_qresult:
                 qresult[_column_qresult[attr_name]] = value
