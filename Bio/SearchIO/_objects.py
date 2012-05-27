@@ -1083,8 +1083,8 @@ class HSP(BaseSearchObject):
     def init_len(self):
         if not hasattr(self, '_init_len'):
             try:
-                self._init_len = self.ident_num + self.mismatch_num + \
-                        self.gap_num
+                self._init_len = self._ident_num + self._mismatch_num + \
+                        self._gap_num
             except AttributeError:
                 raise ValueError("Not enough is known to compute this property.")
         return self._init_len
@@ -1097,8 +1097,8 @@ class HSP(BaseSearchObject):
     def ident_num(self):
         if not hasattr(self, '_ident_num'):
             try:
-                self._ident_num = self.init_len - self.mismatch_num - \
-                        self.gap_num
+                self._ident_num = self._init_len - self._mismatch_num - \
+                        self._gap_num
             except AttributeError:
                 raise ValueError("Not enough is known to compute this property.")
         return self._ident_num
@@ -1111,8 +1111,8 @@ class HSP(BaseSearchObject):
     def mismatch_num(self):
         if not hasattr(self, '_mismatch_num'):
             try:
-                self._mismatch_num = self.init_len - self.ident_num - \
-                        self.gap_num
+                self._mismatch_num = self._init_len - self._ident_num - \
+                        self._gap_num
             except AttributeError:
                 raise ValueError("Not enough is known to compute this property.")
         return self._mismatch_num
@@ -1125,8 +1125,8 @@ class HSP(BaseSearchObject):
     def gap_num(self):
         if not hasattr(self, '_gap_num'):
             try:
-                self._gap_num = self.init_len - self.ident_num - \
-                        self.mismatch_num
+                self._gap_num = self._init_len - self._ident_num - \
+                        self._mismatch_num
             except AttributeError:
                 raise ValueError("Not enough is known to compute this property.")
         return self._gap_num
