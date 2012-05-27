@@ -1071,6 +1071,112 @@ class HSP(BaseSearchObject):
     def hit_to(self, value):
         self._hit_to = value
 
+    # The properties init_len, gap_num, mismatch_num, and ident_num are all
+    # interconnected ~ we can infer the value of one if the others are all
+    # known. So the idea here is to enable the HSP object to compute these
+    # values if enough is known.
+    # However, the golden rule here is that *parsed values takes precedent
+    # over computed values*. So if the parsed information is available,
+    # computation is never done as the parsed values are used instead.
+
+    @property
+    def init_len(self):
+        if not hasattr(self, '_init_len'):
+            try:
+                self._init_len = self.ident_num + self.mismatch_num + \
+                        self.gap_num
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._init_len
+
+    @init_len.setter
+    def init_len(self, value):
+        self._init_len = value
+
+    @property
+    def ident_num(self):
+        if not hasattr(self, '_ident_num'):
+            try:
+                self._ident_num = self.init_len - self.mismatch_num - \
+                        self.gap_num
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._ident_num
+
+    @ident_num.setter
+    def ident_num(self, value):
+        self._ident_num = value
+
+    @property
+    def mismatch_num(self):
+        if not hasattr(self, '_mismatch_num'):
+            try:
+                self._mismatch_num = self.init_len - self.ident_num - \
+                        self.gap_num
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._mismatch_num
+
+    @mismatch_num.setter
+    def mismatch_num(self, value):
+        self._mismatch_num = value
+
+    @property
+    def gap_num(self):
+        if not hasattr(self, '_gap_num'):
+            try:
+                self._gap_num = self.init_len - self.ident_num - \
+                        self.mismatch_num
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._gap_num
+
+    @gap_num.setter
+    def gap_num(self, value):
+        self._gap_num = value
+
+    # for percent values (ident_pct, pos_pct, and gap_pct), the same golden
+    # rule follows: parsed values takes precedent over computed values
+
+    @property
+    def ident_pct(self):
+        if not hasattr(self, '_ident_pct'):
+            try:
+                self._ident_pct = self.ident_num / float(self.init_len) * 100
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._ident_pct
+
+    @ident_pct.setter
+    def ident_pct(self, value):
+        self._ident_pct = value
+
+    @property
+    def pos_pct(self):
+        if not hasattr(self, '_pos_pct'):
+            try:
+                self._pos_pct = self.pos_num / float(self.init_len) * 100
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._pos_pct
+
+    @pos_pct.setter
+    def pos_pct(self, value):
+        self._pos_pct = value
+
+    @property
+    def gap_pct(self):
+        if not hasattr(self, '_gap_pct'):
+            try:
+                self._gap_pct = self.gap_num / float(self.init_len) * 100
+            except AttributeError:
+                raise ValueError("Not enough is known to compute this property.")
+        return self._gap_pct
+
+    @gap_pct.setter
+    def gap_pct(self, value):
+        self._gap_pct = value
+
 
 class SearchIndexer(object):
 
