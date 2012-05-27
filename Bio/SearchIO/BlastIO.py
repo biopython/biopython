@@ -341,7 +341,6 @@ def blast_tabular_iterator(handle):
         'bit score': 'bitscore',        # bitscore
         'score': 'bitscore_raw',        # score
         'evalue': 'evalue',             # evalue
-        'alignment length': 'len',      # length
         'identical': 'ident_num',       # nident
         '% identity': 'ident_pct',      # pident
         'positives': 'pos_num',         # positive
@@ -366,7 +365,6 @@ def blast_tabular_iterator(handle):
     # subject gi -- sgi
     # subject gis -- sallgi
     # subject acc.ver -- saccver
-    # alignment length -- length
     # query/sbjct frames -- frames
     # BTOP -- btop
 
