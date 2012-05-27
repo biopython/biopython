@@ -394,10 +394,9 @@ def blast_tabular_iterator(handle):
 
             elif attr_name in _column_hsp:
                 hsp[_column_hsp[attr_name]] = value
-
+            # make sure that any unhandled field is not supported
             else:
-                raise ValueError("Column '%s' not supported in SearchIO." % \
-                        attr_name)
+                assert attr_name not in _supported_fields
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
