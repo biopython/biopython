@@ -393,7 +393,8 @@ def blast_tabular_iterator(handle):
     _default_fields = ['query id', 'subject id', '% identity', \
             'alignment length', 'mismatches', 'gap opens', 'q. start', \
             'q. end', 's. start', 's. end', 'evalue', 'bit score']
-    # these fields must exist in order for the parser to work
+    # one field from each of the following sets must exist in order for the
+    # parser to work
     _min_query_fields = set(['query id', 'query acc.', 'query acc.ver'])
     _min_hit_fields = set(['subject id', 'subject acc.', 'subject acc.ver'])
 
