@@ -33,6 +33,23 @@ import warnings
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
 
 
+def read_forward(handle):
+    """Reads through whitespaces at the beginning of handle, returns the first
+    non-whitespace only line."""
+    while True:
+        line = handle.readline()
+        # if line has characters and stripping does not remove them,
+        # return the line
+        if line and line.strip():
+            return line.strip()
+        # line has whitespace characters, continue reading the next line
+        elif line and not line.strip():
+            continue
+        # if line ends, return None
+        elif not line:
+            return
+
+
 def blast_xml_iterator(handle):
     """Generator function to parse BLAST+ XML output as QueryResult objects.
 
@@ -404,22 +421,6 @@ def blast_tabular_iterator(handle):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
-    def _read_forward(handle):
-        """Reads through whitespaces at the beginning of handle, returns the first
-        non-whitespace only line."""
-        while True:
-            line = handle.readline()
-            # if line has characters and stripping does not remove them,
-            # return the line
-            if line and line.strip():
-                return line.strip()
-            # line has whitespace characters, continue reading the next line
-            elif line and not line.strip():
-                continue
-            # if line ends, return None
-            elif not line:
-                return
-
     def _tabc_parser(handle, first_line):
         """Parser for the commented tab BLAST+ output."""
 
@@ -446,7 +447,7 @@ def blast_tabular_iterator(handle):
                     program, version, query_id, query_desc, target = [None] * 5
                 program, version = line.strip()[len('# '):].split(' ')
                 program = program.lower()
-                line = _read_forward(handle)
+                line = read_forward(handle)
             # parse query id (and description if available)
             # example: # Query: gi|356995852 Mus musculus POU domain
             elif 'Query' in line:
@@ -455,12 +456,12 @@ def blast_tabular_iterator(handle):
                     query_id, query_desc = query_id.split(' ', 1)
                 else:
                     query_desc = None
-                line = _read_forward(handle)
+                line = read_forward(handle)
             # parse target database
             # example: # Database: db/minirefseq_protein
             elif 'Database' in line:
                 target = line[len('# Database: '):].strip()
-                line = _read_forward(handle)
+                line = read_forward(handle)
             # parse column order, crucial for parsing the result rows
             # example: # Fields: query id, query gi, query acc., query length
             elif 'Fields' in line:
@@ -478,7 +479,7 @@ def blast_tabular_iterator(handle):
                 if set(fields).isdisjoint(_min_query_fields) or \
                         set(fields).isdisjoint(_min_hit_fields):
                     raise ValueError("Required field is not found.")
-                line = _read_forward(handle)
+                line = read_forward(handle)
             # parse result rows, using non-commented tabular iterator
             # which returns line and qresult
             # no need to do readline() here since it's already done by the iterator
@@ -492,7 +493,7 @@ def blast_tabular_iterator(handle):
                 program, version, query_id, query_desc, target = [None] * 5
             # otherwise, keep on readline()-ing
             else:
-                line = _read_forward(handle)
+                line = read_forward(handle)
 
             if not line:
                 break
@@ -552,7 +553,7 @@ def blast_tabular_iterator(handle):
                     hit.append(hsp)
 
                     # read next line and parse it if it exists
-                    line = _read_forward(handle)
+                    line = read_forward(handle)
                     # if line doesn't exist (file end), break out of loop
                     if not line or line.startswith('#'):
                         break
@@ -577,7 +578,7 @@ def blast_tabular_iterator(handle):
             if not line or line.startswith('#'):
                 break
 
-    line = _read_forward(handle)
+    line = read_forward(handle)
     if line is None:
         return
     elif line.startswith('#'):
