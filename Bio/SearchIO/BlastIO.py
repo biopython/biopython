@@ -580,7 +580,7 @@ def blast_tabular_iterator(handle):
 
     line = read_forward(handle)
     if line is None:
-        return
+        yield []
     elif line.startswith('#'):
         parser = _tabc_parser
     else:
