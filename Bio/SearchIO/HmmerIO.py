@@ -36,7 +36,7 @@ re_opt = re.compile(r'^# (.+):\s+(.+)$')
 # regex for parsing query id and length
 qre_id_len = re.compile(r'^Query:\s*(.*)\s+\[\w=(\d+)\]')
 # regex for hsp validation
-hre_validate = re.compile(r'score:\s(\d+\.?\d+)\sbits.*value:\s(.*)')
+hre_validate = re.compile(r'score:\s(-?\d+\.?\d+)\sbits.*value:\s(.*)')
 # regexes for parsing hsp alignment blocks
 hre_annot_line = re.compile(r'^(\s+)(.+)\s(\w+)')
 hre_id_line = re.compile(r'^(\s+\S+\s+\d+ )(.+) (\d+)')
