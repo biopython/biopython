@@ -1,0 +1,789 @@
+# Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""Tests for SearchIO BlastIO parsers."""
+
+
+import os
+import unittest
+import warnings
+
+from Bio.SearchIO import parse, read
+
+# test case files are in the Blast directory
+TEST_DIR = 'Blast'
+FMT = 'blast-tab'
+
+
+def get_file(filename):
+    """Returns the path of a test file."""
+    return os.path.join(TEST_DIR, filename)
+
+
+class BlastnTabCases(unittest.TestCase):
+
+    def test_tbt001(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output (tbt001)"
+
+        xml_file = get_file('tbt001.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(34.88, hsp.ident_pct)
+        self.assertEqual(43, hsp.init_len)
+        self.assertEqual(28, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(31, hsp.query_from)
+        self.assertEqual(73, hsp.query_to)
+        self.assertEqual(1744, hsp.hit_from)
+        self.assertEqual(1872, hsp.hit_to)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(33.90, hsp.ident_pct)
+        self.assertEqual(59, hsp.init_len)
+        self.assertEqual(31, hsp.mismatch_num)
+        self.assertEqual(1, hsp.gapopen_num)
+        self.assertEqual(44, hsp.query_from)
+        self.assertEqual(94, hsp.query_to)
+        self.assertEqual(1057, hsp.hit_from)
+        self.assertEqual(1233, hsp.hit_to)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+
+        # test last qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual(4, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(4, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(95.92, hsp.ident_pct)
+        self.assertEqual(98, hsp.init_len)
+        self.assertEqual(4, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(98, hsp.query_to)
+        self.assertEqual(95, hsp.hit_from)
+        self.assertEqual(388, hsp.hit_to)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(29.58, hsp.ident_pct)
+        self.assertEqual(71, hsp.init_len)
+        self.assertEqual(46, hsp.mismatch_num)
+        self.assertEqual(2, hsp.gapopen_num)
+        self.assertEqual(30, hsp.query_from)
+        self.assertEqual(96, hsp.query_to)
+        self.assertEqual(542, hsp.hit_from)
+        self.assertEqual(754, hsp.hit_to)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(2, counter)
+
+    def test_tbt002(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output (tbt002)"
+
+        xml_file = get_file('tbt002.txt')
+        qresults = parse(xml_file, FMT)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+
+    def test_tbt003(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output (tbt003)"
+
+        xml_file = get_file('tbt003.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(34.88, hsp.ident_pct)
+        self.assertEqual(43, hsp.init_len)
+        self.assertEqual(28, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(31, hsp.query_from)
+        self.assertEqual(73, hsp.query_to)
+        self.assertEqual(1744, hsp.hit_from)
+        self.assertEqual(1872, hsp.hit_to)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(33.90, hsp.ident_pct)
+        self.assertEqual(59, hsp.init_len)
+        self.assertEqual(31, hsp.mismatch_num)
+        self.assertEqual(1, hsp.gapopen_num)
+        self.assertEqual(44, hsp.query_from)
+        self.assertEqual(94, hsp.query_to)
+        self.assertEqual(1057, hsp.hit_from)
+        self.assertEqual(1233, hsp.hit_to)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_tbt004(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output (tbt004)"
+
+        xml_file = get_file('tbt004.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual(4, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(4, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(95.92, hsp.ident_pct)
+        self.assertEqual(98, hsp.init_len)
+        self.assertEqual(4, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(98, hsp.query_to)
+        self.assertEqual(95, hsp.hit_from)
+        self.assertEqual(388, hsp.hit_to)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(29.58, hsp.ident_pct)
+        self.assertEqual(71, hsp.init_len)
+        self.assertEqual(46, hsp.mismatch_num)
+        self.assertEqual(2, hsp.gapopen_num)
+        self.assertEqual(30, hsp.query_from)
+        self.assertEqual(96, hsp.query_to)
+        self.assertEqual(542, hsp.hit_from)
+        self.assertEqual(754, hsp.hit_to)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_tbt005(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt005)"
+
+        xml_file = get_file('tbt005.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual(0, len(qresult))
+
+        # test second qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(34.88, hsp.ident_pct)
+        self.assertEqual(43, hsp.init_len)
+        self.assertEqual(28, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(31, hsp.query_from)
+        self.assertEqual(73, hsp.query_to)
+        self.assertEqual(1744, hsp.hit_from)
+        self.assertEqual(1872, hsp.hit_to)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(33.90, hsp.ident_pct)
+        self.assertEqual(59, hsp.init_len)
+        self.assertEqual(31, hsp.mismatch_num)
+        self.assertEqual(1, hsp.gapopen_num)
+        self.assertEqual(44, hsp.query_from)
+        self.assertEqual(94, hsp.query_to)
+        self.assertEqual(1057, hsp.hit_from)
+        self.assertEqual(1233, hsp.hit_to)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+
+        # test last qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual(4, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(4, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(95.92, hsp.ident_pct)
+        self.assertEqual(98, hsp.init_len)
+        self.assertEqual(4, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(98, hsp.query_to)
+        self.assertEqual(95, hsp.hit_from)
+        self.assertEqual(388, hsp.hit_to)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(29.58, hsp.ident_pct)
+        self.assertEqual(71, hsp.init_len)
+        self.assertEqual(46, hsp.mismatch_num)
+        self.assertEqual(2, hsp.gapopen_num)
+        self.assertEqual(30, hsp.query_from)
+        self.assertEqual(96, hsp.query_to)
+        self.assertEqual(542, hsp.hit_from)
+        self.assertEqual(754, hsp.hit_to)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(3, counter)
+
+    def test_tbt006(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt006)"
+
+        xml_file = get_file('tbt006.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual(0, len(qresult))
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_tbt007(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt007)"
+
+        xml_file = get_file('tbt007.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(34.88, hsp.ident_pct)
+        self.assertEqual(43, hsp.init_len)
+        self.assertEqual(28, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(31, hsp.query_from)
+        self.assertEqual(73, hsp.query_to)
+        self.assertEqual(1744, hsp.hit_from)
+        self.assertEqual(1872, hsp.hit_to)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(33.90, hsp.ident_pct)
+        self.assertEqual(59, hsp.init_len)
+        self.assertEqual(31, hsp.mismatch_num)
+        self.assertEqual(1, hsp.gapopen_num)
+        self.assertEqual(44, hsp.query_from)
+        self.assertEqual(94, hsp.query_to)
+        self.assertEqual(1057, hsp.hit_from)
+        self.assertEqual(1233, hsp.hit_to)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_tbt008(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt008)"
+
+        xml_file = get_file('tbt008.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual(4, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(4, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(95.92, hsp.ident_pct)
+        self.assertEqual(98, hsp.init_len)
+        self.assertEqual(4, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(98, hsp.query_to)
+        self.assertEqual(95, hsp.hit_from)
+        self.assertEqual(388, hsp.hit_to)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(29.58, hsp.ident_pct)
+        self.assertEqual(71, hsp.init_len)
+        self.assertEqual(46, hsp.mismatch_num)
+        self.assertEqual(2, hsp.gapopen_num)
+        self.assertEqual(30, hsp.query_from)
+        self.assertEqual(96, hsp.query_to)
+        self.assertEqual(542, hsp.hit_from)
+        self.assertEqual(754, hsp.hit_to)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
+    def test_tbt009(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output (tbt009)"
+
+        xml_file = get_file('tbt009.txt')
+        qresults = parse(xml_file, FMT)
+
+        # nonstandard, noncommented output should raise an error
+        self.assertRaises(AssertionError, qresults.next, )
+
+    def test_tbt010(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt010)"
+
+        xml_file = get_file('tbt010.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual(0, len(qresult))
+
+        # test second qresult
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            qresult = qresults.next()
+            counter += 1
+            # 5 warnings for 5 incompatible columns
+            self.assertEqual(len(w), 5)
+            self.assertTrue(issubclass(w[-1].category, UserWarning))
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc_ver)
+        self.assertEqual(102, qresult.seq_len)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.acc)
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.acc_ver)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(4632, hit.seq_len)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(34.88, hsp.ident_pct)
+        self.assertEqual(43, hsp.init_len)
+        self.assertEqual(28, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(31, hsp.query_from)
+        self.assertEqual(73, hsp.query_to)
+        self.assertEqual(1744, hsp.hit_from)
+        self.assertEqual(1872, hsp.hit_to)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+        self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
+        self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', hsp.hit.seq.tostring())
+        self.assertEqual(78, hsp.bitscore_raw)
+        self.assertEqual(15, hsp.ident_num)
+        self.assertEqual(26, hsp.pos_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(60.47, hsp.pos_pct)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(1, hsp.hit_frame)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.acc)
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.acc_ver)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(33.90, hsp.ident_pct)
+        self.assertEqual(59, hsp.init_len)
+        self.assertEqual(31, hsp.mismatch_num)
+        self.assertEqual(1, hsp.gapopen_num)
+        self.assertEqual(44, hsp.query_from)
+        self.assertEqual(94, hsp.query_to)
+        self.assertEqual(1057, hsp.hit_from)
+        self.assertEqual(1233, hsp.hit_to)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+        self.assertEqual('GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL', hsp.query.seq.tostring())
+        self.assertEqual('GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL', hsp.hit.seq.tostring())
+        self.assertEqual(70.0, hsp.bitscore_raw)
+        self.assertEqual(20, hsp.ident_num)
+        self.assertEqual(29, hsp.pos_num)
+        self.assertEqual(8, hsp.gap_num)
+        self.assertEqual(49.15, hsp.pos_pct)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(1, hsp.hit_frame)
+
+        # test last qresult
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            qresult = qresults.next()
+            counter += 1
+            # 5 warnings for 5 incompatible columns
+            self.assertEqual(len(w), 5)
+            self.assertTrue(issubclass(w[-1].category, UserWarning))
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual('gi|11464971:4-101', qresult.acc)
+        self.assertEqual('gi|11464971:4-101', qresult.acc_ver)
+        self.assertEqual(98, qresult.seq_len)
+        self.assertEqual(4, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.acc)
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.acc_ver)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(772, hit.seq_len)
+        self.assertEqual(4, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(95.92, hsp.ident_pct)
+        self.assertEqual(98, hsp.init_len)
+        self.assertEqual(4, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(1, hsp.query_from)
+        self.assertEqual(98, hsp.query_to)
+        self.assertEqual(95, hsp.hit_from)
+        self.assertEqual(388, hsp.hit_to)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
+        self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
+        self.assertEqual(506.0, hsp.bitscore_raw)
+        self.assertEqual(94, hsp.ident_num)
+        self.assertEqual(96, hsp.pos_num)
+        self.assertEqual(0, hsp.gap_num)
+        self.assertEqual(97.96, hsp.pos_pct)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(2, hsp.hit_frame)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(29.58, hsp.ident_pct)
+        self.assertEqual(71, hsp.init_len)
+        self.assertEqual(46, hsp.mismatch_num)
+        self.assertEqual(2, hsp.gapopen_num)
+        self.assertEqual(30, hsp.query_from)
+        self.assertEqual(96, hsp.query_to)
+        self.assertEqual(542, hsp.hit_from)
+        self.assertEqual(754, hsp.hit_to)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+        self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
+        self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', hsp.hit.seq.tostring())
+        self.assertEqual(73.0, hsp.bitscore_raw)
+        self.assertEqual(21, hsp.ident_num)
+        self.assertEqual(33, hsp.pos_num)
+        self.assertEqual(4, hsp.gap_num)
+        self.assertEqual(46.48, hsp.pos_pct)
+        self.assertEqual(0, hsp.query_frame)
+        self.assertEqual(2, hsp.hit_frame)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(3, counter)
+
+    def test_tbt011(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt011)"
+
+        xml_file = get_file('tbt011.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual(0, len(qresult))
+
+        # test second qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+
+        # test last qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual(4, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(4, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(3, counter)
+
+    def test_tbt012(self):
+        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt012)"
+
+        xml_file = get_file('tbt012.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('refseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual('VJ37CF56012', qresult.rid)
+        self.assertEqual(0, len(qresult))
+
+        # test second qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('refseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual('VJ37CF56012', qresult.rid)
+        self.assertEqual(3, len(qresult))
+
+        # test last qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('refseq_rna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual('VJ37CF56012', qresult.rid)
+        self.assertEqual(5, len(qresult))
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(3, counter)
+
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
