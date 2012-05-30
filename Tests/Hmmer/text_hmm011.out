@@ -3,7 +3,7 @@
 # Copyright (C) 2010 Howard Hughes Medical Institute.
 # Freely distributed under the GNU General Public License (GPLv3).
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# query HMM file:                  mult.hmm
+# query HMM file:                  h01.hmm
 # target sequence database:        /home/bow/db/hmmer/uniprot_sprot.fasta
 # output directed to file:         hmmer_cases/text_hmmsearch_spc_noali.out
 # per-seq hits tabular output:     hmmer_cases/tab_hmmsearch_spc_noali.out
@@ -12,33 +12,6 @@
 # sequence reporting threshold:    score >= 480
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-Query:       globins4  [M=149]
-Scores for complete sequences (score includes all domains):
-   --- full sequence ---   --- best 1 domain ---    -#dom-
-    E-value  score  bias    E-value  score  bias    exp  N  Sequence Description
-    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
-
-   [No hits detected that satisfy reporting thresholds]
-
-
-Domain annotation for each sequence:
-
-   [No targets detected that satisfy reporting thresholds]
-
-
-Internal pipeline statistics summary:
--------------------------------------
-Query model(s):                            1  (149 nodes)
-Target sequences:                     535698  (190107059 residues)
-Passed MSV filter:                     20698  (0.0386374); expected 10714.0 (0.02)
-Passed bias filter:                    16985  (0.0317063); expected 10714.0 (0.02)
-Passed Vit filter:                      2311  (0.004314); expected 535.7 (0.001)
-Passed Fwd filter:                      1104  (0.00206086); expected 5.4 (1e-05)
-Initial search space (Z):             535698  [actual number of targets]
-Domain search space  (domZ):               0  [number of targets reported over threshold]
-# CPU time: 14.21u 0.18s 00:00:14.39 Elapsed: 00:00:03.90
-# Mc/sec: 7263.06
-//
 Query:       Pkinase  [M=260]
 Accession:   PF00069.17
 Description: Protein kinase domain
@@ -110,6 +83,6 @@ Passed Vit filter:                      4968  (0.00927388); expected 535.7 (0.00
 Passed Fwd filter:                      3953  (0.00737916); expected 5.4 (1e-05)
 Initial search space (Z):             535698  [actual number of targets]
 Domain search space  (domZ):               7  [number of targets reported over threshold]
-# CPU time: 39.26u 0.25s 00:00:39.51 Elapsed: 00:00:10.43
-# Mc/sec: 4739.01
+# CPU time: 39.12u 0.35s 00:00:39.47 Elapsed: 00:00:10.79
+# Mc/sec: 4580.89
 //
