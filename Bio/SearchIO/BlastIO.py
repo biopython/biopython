@@ -497,6 +497,14 @@ def blast_tabular_iterator(handle):
                 line = read_forward(handle)
 
             if not line:
+                #TODO: refactor this, not DRY enough
+                if program is not None:
+                    qresult = QueryResult(query_id)
+                    qresult.program = program
+                    qresult.meta = {'program_version': version}
+                    qresult.description = query_desc
+                    qresult.target = target
+                    yield line, qresult
                 break
 
     def _tab_parser(handle, first_line, fields=_default_fields):
