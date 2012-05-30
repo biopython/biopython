@@ -878,14 +878,28 @@ class HSP(BaseSearchObject):
         if hit_seq and query_seq:
             self.add_alignment(hit_seq, query_seq, alphabet)
 
-    def add_alignment(self, hit_seq, query_seq, alphabet=single_letter_alphabet):
-        """Adds a hit and query sequence to an instantiated HSP object."""
-        # only accept hit_seq and query_seq as string or SeqRecord objects
-        if not isinstance(hit_seq, (SeqRecord, basestring)) or \
-                not isinstance(query_seq, (SeqRecord, basestring)):
+    def add_query(self, query_seq, alphabet):
+        """Adds a query sequence to an instantiated HSP object."""
+        # only accept query_seq as string or SeqRecord objects
+        if not isinstance(query_seq, (SeqRecord, basestring)):
             raise TypeError("HSP sequence must be a string or a "
                     "SeqRecord object.")
+        # if query_seq is a string, create a new SeqRecord object
+        if isinstance(query_seq, basestring):
+            query = SeqRecord(Seq(query_seq, alphabet), id=self.hit_id, \
+                    name='query', description='aligned query sequence')
+        # otherwise query is the query_seq
+        else:
+            query = query_seq
 
+        self.query = query
+
+    def add_hit(self, hit_seq, alphabet):
+        """Adds a hit sequence to an instantiated HSP object."""
+        # only accept hit_seq as string or SeqRecord objects
+        if not isinstance(hit_seq, (SeqRecord, basestring)):
+            raise TypeError("HSP sequence must be a string or a "
+                    "SeqRecord object.")
         # if hit_seq is a string, create a new SeqRecord object
         if isinstance(hit_seq, basestring):
             hit = SeqRecord(Seq(hit_seq, alphabet), id=self.hit_id, \
@@ -894,16 +908,13 @@ class HSP(BaseSearchObject):
         else:
             hit = hit_seq
 
-        # same thing for query
-        if isinstance(query_seq, basestring):
-            query = SeqRecord(Seq(query_seq, alphabet), id=self.query_id, \
-                    name='query', description='aligned query sequence')
-        else:
-            query = query_seq
-
-        self.query = query
         self.hit = hit
-        self.alignment = MultipleSeqAlignment([query, hit], alphabet)
+
+    def add_alignment(self, hit_seq, query_seq, alphabet=single_letter_alphabet):
+        """Adds a hit and query sequence to an instantiated HSP object."""
+        self.add_query(query_seq, alphabet)
+        self.add_hit(hit_seq, alphabet)
+        self.alignment = MultipleSeqAlignment([self.query, self.hit], alphabet)
 
     def __repr__(self):
         info = "hit_id='%s', query_id='%s'" % (self.hit_id, self.query_id)
