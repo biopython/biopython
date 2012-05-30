@@ -1,0 +1,56 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             s01.fasta
+# target HMM database:             /home/bow/db/hmmer/Pfam-A.hmm
+# output directed to file:         hmmer_cases/text_hmmscan_s01.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmscan_s01.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmscan_s01.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       gi|4885477|ref|NP_005359.1|  [L=154]
+Description: myoglobin [Homo sapiens]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+      6e-21   74.6   0.3    9.2e-21   74.0   0.2    1.3  1  Globin   Globin
+
+
+Domain annotation for each model (and alignments):
+>> Globin  Globin
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   74.0   0.2   6.7e-25   9.2e-21       1     107 [.       7     112 ..       7     113 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 74.0 bits;  conditional E-value: 6.7e-25
+                                  HHHHHHHHHHHHCHHHHHHHHHHHHHHHHHSGGGGGGGCCCTTTT.HHHHHTSCHHHHHHHHHHHHHHHHHHCTTSHHHHHH CS
+                       Globin   1 qkalvkaswekvkanaeeigaeilkrlfkaypdtkklFkkfgdls.aedlksspkfkahakkvlaaldeavknldnddnlka 81 
+                                  +++lv   w+kv+a+++ +g+e+l rlfk +p+t ++F kf+ l+  +++k s+++k+h+++vl al+ ++k+   ++ ++a
+  gi|4885477|ref|NP_005359.1|   7 EWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKsEDEMKASEDLKKHGATVLTALGGILKK---KGHHEA 85 
+                                  5789*********************************************************************...6899** PP
+
+                                  HHHHHHHHHHTT-.--HHHHCCHHHHH CS
+                       Globin  82 alkklgarHakrg.vdpanfklfgeal 107
+                                  ++k l+++Ha+++ ++ ++ + ++e++
+  gi|4885477|ref|NP_005359.1|  86 EIKPLAQSHATKHkIPVKYLEFISECI 112
+                                  *********************999998 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (154 residues)
+Target model(s):                       13672  (2396357 nodes)
+Passed MSV filter:                       458  (0.0334991); expected 273.4 (0.02)
+Passed bias filter:                      404  (0.0295494); expected 273.4 (0.02)
+Passed Vit filter:                        31  (0.00226741); expected 13.7 (0.001)
+Passed Fwd filter:                         1  (7.31422e-05); expected 0.1 (1e-05)
+Initial search space (Z):              13672  [actual number of targets]
+Domain search space  (domZ):               1  [number of targets reported over threshold]
+# CPU time: 0.28u 0.17s 00:00:00.45 Elapsed: 00:00:00.21
+# Mc/sec: 1757.33
+//

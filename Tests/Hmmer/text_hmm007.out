@@ -1,0 +1,69 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             s04.fasta
+# target HMM database:             /home/bow/db/hmmer/Pfam-A.hmm
+# output directed to file:         hmmer_cases/text_hmmscan_spc_noali.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmscan_spc_noali.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmscan_spc_noali.out
+# show alignments in output:       no
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       gi|125490392|ref|NP_038661.2|  [L=352]
+Description: POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model       Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------    -----------
+      7e-37  124.8   0.5    1.4e-36  123.9   0.3    1.5  1  Pou         Pou domain - N-terminal to homeobox domain
+    2.1e-18   65.5   1.1    4.1e-18   64.6   0.7    1.5  1  Homeobox    Homeobox domain
+  ------ inclusion threshold ------
+      0.012   15.6   0.0       0.16   12.0   0.0    2.2  2  HTH_31      Helix-turn-helix domain
+      0.039   13.5   0.0      0.095   12.3   0.0    1.6  1  Homeobox_KN Homeobox KN domain
+       0.14   10.5   0.1       0.26    9.6   0.1    1.4  1  DUF521      Protein of unknown function (DUF521)
+
+
+Domain annotation for each model:
+>> Pou  Pou domain - N-terminal to homeobox domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  123.9   0.3     5e-40   1.4e-36       3      75 .]     133     205 ..     131     205 .. 0.97
+
+>> Homeobox  Homeobox domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   64.6   0.7   1.5e-21   4.1e-18       1      57 []     224     280 ..     224     280 .. 0.98
+
+>> HTH_31  Helix-turn-helix domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.0   0.0   5.7e-05      0.16       1      35 [.     141     181 ..     141     184 .. 0.96
+   2 ?    0.8   0.0      0.19   5.2e+02      39      62 ..     245     268 ..     243     270 .. 0.86
+
+>> Homeobox_KN  Homeobox KN domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   12.3   0.0   3.5e-05     0.095       7      39 ..     244     276 ..     241     277 .. 0.91
+
+>> DUF521  Protein of unknown function (DUF521)
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?    9.6   0.1   9.4e-05      0.26     273     334 ..     221     280 ..     197     294 .. 0.77
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (352 residues)
+Target model(s):                       13672  (2396357 nodes)
+Passed MSV filter:                       603  (0.0441047); expected 273.4 (0.02)
+Passed bias filter:                      465  (0.0340111); expected 273.4 (0.02)
+Passed Vit filter:                        44  (0.00321826); expected 13.7 (0.001)
+Passed Fwd filter:                         5  (0.000365711); expected 0.1 (1e-05)
+Initial search space (Z):              13672  [actual number of targets]
+Domain search space  (domZ):               5  [number of targets reported over threshold]
+# CPU time: 0.51u 0.14s 00:00:00.65 Elapsed: 00:00:00.24
+# Mc/sec: 3514.66
+//

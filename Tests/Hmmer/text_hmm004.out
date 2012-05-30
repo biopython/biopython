@@ -1,0 +1,67 @@
+# hmmscan :: search sequence(s) against a profile database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query sequence file:             s02.fasta
+# target HMM database:             /home/bow/db/hmmer/Pfam-A.hmm
+# output directed to file:         hmmer_cases/text_hmmscan_s02.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmscan_s02.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmscan_s02.out
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       gi|126362951:116-221  [L=106]
+Description: leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]
+Scores for complete sequence (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Model    Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+    1.4e-09   38.2   0.4    2.1e-09   37.6   0.3    1.3  1  Ig_3     Immunoglobulin domain
+    3.5e-05   23.7   0.1    4.3e-05   23.4   0.1    1.1  1  Ig_2     Immunoglobulin domain
+
+
+Domain annotation for each model (and alignments):
+>> Ig_3  Immunoglobulin domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   37.6   0.3     3e-13   2.1e-09       1      73 [.       9      84 ..       9      88 .. 0.94
+
+  Alignments for each domain:
+  == domain 1    score: 37.6 bits;  conditional E-value: 3e-13
+                  Ig_3  1 kPvisvspsptvtsggnvtLtCsaeggpppptisWy.....ietppelqgsegssssestLtissvtsedsgtYtCva 73
+                          kP++s++psp+v+sggnv L+C ++     + +s +     +++   +++++ ++ss +++++ +v+++ +  Y+C+a
+  gi|126362951:116-221  9 KPTLSAQPSPVVNSGGNVILQCDSQVA--FDGFSLCkegedEHPQCLNSQPHARGSSRAIFSVGPVSPSRRWWYRCYA 84
+                          8************************99..78888888****************************************9 PP
+
+>> Ig_2  Immunoglobulin domain
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !   23.4   0.1   6.2e-09   4.3e-05       1      80 []       9     104 ..       9     104 .. 0.71
+
+  Alignments for each domain:
+  == domain 1    score: 23.4 bits;  conditional E-value: 6.2e-09
+                  Ig_2   1 kpvlvapp.svvtegenvtLtCsapgnptprvqwykdg.vels......qsqnq........lfipnvsaedsgtYtCra....rnseg 69 
+                           kp+l+a+p +vv++g nv L+C ++    + +++ k+g +e +      +            + +  vs++    Y+C+a    + +e+
+  gi|126362951:116-221   9 KPTLSAQPsPVVNSGGNVILQCDSQVA-FDGFSLCKEGeDEHPqclnsqP---HargssraiFSVGPVSPSRRWWYRCYAydsnSPYEW 93 
+                           799998885779*************85.899***9988655554443320...134455543444669************884433445 PP
+
+                  Ig_2  70 gktstsveltv 80 
+                           + +s+ +el v
+  gi|126362951:116-221  94 SLPSDLLELLV 104
+                           88888888766 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query sequence(s):                         1  (106 residues)
+Target model(s):                       13672  (2396357 nodes)
+Passed MSV filter:                       153  (0.0111908); expected 273.4 (0.02)
+Passed bias filter:                      143  (0.0104593); expected 273.4 (0.02)
+Passed Vit filter:                        11  (0.000804564); expected 13.7 (0.001)
+Passed Fwd filter:                         2  (0.000146284); expected 0.1 (1e-05)
+Initial search space (Z):              13672  [actual number of targets]
+Domain search space  (domZ):               2  [number of targets reported over threshold]
+# CPU time: 0.26u 0.12s 00:00:00.38 Elapsed: 00:00:00.19
+# Mc/sec: 1336.91
+//

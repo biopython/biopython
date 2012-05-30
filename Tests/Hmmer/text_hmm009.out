@@ -1,0 +1,40 @@
+# hmmsearch :: search profile(s) against a sequence database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query HMM file:                  h00.hmm
+# target sequence database:        /home/bow/db/hmmer/uniprot_sprot.fasta
+# output directed to file:         hmmer_cases/text_hmmsearch_h00.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmsearch_h00.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmsearch_h00.out
+# sequence reporting threshold:    score >= 480
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       globins4  [M=149]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence Description
+    ------- ------ -----    ------- ------ -----   ---- --  -------- -----------
+
+   [No hits detected that satisfy reporting thresholds]
+
+
+Domain annotation for each sequence (and alignments):
+
+   [No targets detected that satisfy reporting thresholds]
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (149 nodes)
+Target sequences:                     535698  (190107059 residues)
+Passed MSV filter:                     20698  (0.0386374); expected 10714.0 (0.02)
+Passed bias filter:                    16985  (0.0317063); expected 10714.0 (0.02)
+Passed Vit filter:                      2311  (0.004314); expected 535.7 (0.001)
+Passed Fwd filter:                      1104  (0.00206086); expected 5.4 (1e-05)
+Initial search space (Z):             535698  [actual number of targets]
+Domain search space  (domZ):               0  [number of targets reported over threshold]
+# CPU time: 14.31u 0.13s 00:00:14.44 Elapsed: 00:00:03.95
+# Mc/sec: 7171.13
+//
