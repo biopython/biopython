@@ -1,5 +1,9 @@
-gi|16080617|ref|NP_391444.1|	gi|308175296|ref|YP_003922001.1|	67.65	102	31	1	1	102	1	100	2e-46	 139
-gi|16080617|ref|NP_391444.1|	gi|375363999|ref|YP_005132038.1|	45.71	105	52	2	1	101	1	104	7e-27	89.0
-gi|16080617|ref|NP_391444.1|	gi|154687679|ref|YP_001422840.1|	45.71	105	52	2	1	101	1	104	8e-27	89.0
-gi|16080617|ref|NP_391444.1|	gi|311070071|ref|YP_003974994.1|	43.27	104	54	2	1	100	1	103	1e-24	83.2
-gi|16080617|ref|NP_391444.1|	gi|332258565|ref|XP_003278367.1|	28.00	25	18	0	60	84	80	104	7.1	15.8
+# TBLASTN 2.2.26+
+# Query: gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+# Database: db/minirefseq_rna
+# Fields: query id, subject id, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+# 3 hits found
+gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|	34.88	43	28	0	31	73	1744	1872	1e-05	34.7
+gi|16080617|ref|NP_391444.1|	gi|72012412|ref|XM_777959.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
+gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
+# BLAST processed 1 queries

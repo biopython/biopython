@@ -150,31 +150,20 @@ xbt034.xml - TBLASTX 2.2.26+    single query with results containing multiple hs
 xbt035.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
 
 
-BLAST OUTPUT FILES (TAB without comments)
------------------------------------------
+BLAST OUTPUT FILES (tabular format)
+-----------------------------------
 
-tbt01.txt - TBLASTX 2.2.26+    multiple queries with nonstandard column ordering
+tbt001.txt - TBLASTN 2.2.26+    multiple queries
+tbt002.txt - TBLASTN 2.2.26+    single query with no result
+tbt003.txt - TBLASTN 2.2.26+    single query with results containing single hsp
+tbt004.txt - TBLASTN 2.2.26+    single query with results containing multiple hsps
 
-tbt001.txt - BLASTN 2.2.26+    multiple queries
-tbt002.txt - BLASTN 2.2.26+    single query with no result
-tbt003.txt - BLASTN 2.2.26+    single query with results containing single hsp
-tbt004.txt - BLASTN 2.2.26+    single query with results containing multiple hsps
+tbt005.txt - TBLASTN 2.2.26+    multiple queries with comments
+tbt006.txt - TBLASTN 2.2.26+    single query with no result with comments
+tbt007.txt - TBLASTN 2.2.26+    single query with results containing single hsp with comments
+tbt008.txt - TBLASTN 2.2.26+    single query with results containing multiple hsps with comments
 
-tbt005.txt - BLASTP 2.2.26+    multiple queries
-tbt006.txt - BLASTP 2.2.26+    single query with no result
-tbt007.txt - BLASTP 2.2.26+    single query with results containing single hsp
-tbt008.txt - BLASTP 2.2.26+    single query with results containing multiple hsps
-
-tbt009.txt - BLASTX 2.2.26+    multiple queries
-tbt010.txt - BLASTX 2.2.26+    single query with no result
-tbt011.txt - BLASTX 2.2.26+    single query with results containing multiple hsps
-
-tbt012.txt - TBLASTN 2.2.26+    multiple queries
-tbt013.txt - TBLASTN 2.2.26+    single query with no result
-tbt014.txt - TBLASTN 2.2.26+    single query with results containing single hsp
-tbt015.txt - TBLASTN 2.2.26+    single query with results containing multiple hsps
-
-tbt016.txt - TBLASTX 2.2.26+    multiple queries
-tbt017.txt - TBLASTX 2.2.26+    single query with no result
-tbt018.txt - TBLASTX 2.2.26+    single query with results containing multiple hsps
-
+tbt009.txt - TBLASTX 2.2.26+    multiple queries with nonstandard column ordering
+tbt010.txt - TBLASTN 2.2.26+    multiple queries with all columns, commented
+tbt011.txt - TBLASTN 2.2.26+    multiple queries with custom columns
+tbt012.txt - TBLASTN 2.2.26+    remote multiple queries with standard columns, commented
