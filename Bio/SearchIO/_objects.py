@@ -21,7 +21,7 @@ _INTS = (
         # hsp-specific attributes
         'init_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
-        'hit_frame', 'gapopen_num',
+        'hit_frame', 'gapopen_num', 'env_from', 'env_to',
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
 )
@@ -30,7 +30,8 @@ _FLOATS = (
         'param_evalue_threshold', 'stat_eff_space', 'stat_kappa',
         'stat_lambda', 'stat_entropy',
         # hsp attributes
-        'bitscore', 'bitscore_raw', 'evalue', 'ident_pct', 'pos_pct',
+        'bitscore', 'bitscore_raw', 'evalue', 'ident_pct', 'pos_pct', 'bias',
+        'evalue_cond', 'acc_avg',
 )
 
 
