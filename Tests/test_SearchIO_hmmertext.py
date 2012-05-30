@@ -1471,7 +1471,7 @@ class HmmerscanCases(unittest.TestCase):
 class HmmersearchCases(unittest.TestCase):
 
     def test_hmm009(self):
-        "Test parsing hmmerscan 3.0 (text_hmm009)"
+        "Test parsing hmmersearch 3.0 (text_hmm009)"
 
         xml_file = get_file('text_hmm009.out')
         qresults = parse(xml_file, FMT)
@@ -1492,7 +1492,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_hmm010(self):
-        "Test parsing hmmerscan 3.0 (text_hmm010)"
+        "Test parsing hmmersearch 3.0 (text_hmm010)"
 
         xml_file = get_file('text_hmm010.out')
         qresults = parse(xml_file, FMT)
@@ -1505,6 +1505,8 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
         self.assertEqual('3.0', qresult.meta['program_version'])
         self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.acc)
+        self.assertEqual('Protein kinase domain', qresult.desc)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
@@ -1647,7 +1649,7 @@ class HmmersearchCases(unittest.TestCase):
         #self.assertEqual(1, counter)
 
     def test_hmm011(self):
-        "Test parsing hmmerscan 3.0 (text_hmm011)"
+        "Test parsing hmmersearch 3.0 (text_hmm011)"
 
         xml_file = get_file('text_hmm011.out')
         qresults = parse(xml_file, FMT)
@@ -1660,6 +1662,8 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
         self.assertEqual('3.0', qresult.meta['program_version'])
         self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.acc)
+        self.assertEqual('Protein kinase domain', qresult.desc)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
@@ -1762,7 +1766,7 @@ class HmmersearchCases(unittest.TestCase):
         #self.assertEqual(1, counter)
 
     def test_hmm012(self):
-        "Test parsing hmmerscan 3.0 (text_hmm012)"
+        "Test parsing hmmersearch 3.0 (text_hmm012)"
 
         xml_file = get_file('text_hmm012.out')
         qresults = parse(xml_file, FMT)
@@ -1775,6 +1779,8 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
         self.assertEqual('3.0', qresult.meta['program_version'])
         self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.acc)
+        self.assertEqual('Protein kinase domain', qresult.desc)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
@@ -1917,7 +1923,7 @@ class HmmersearchCases(unittest.TestCase):
         #self.assertEqual(1, counter)
 
     def test_hmm013(self):
-        "Test parsing hmmerscan 3.0 (text_hmm013)"
+        "Test parsing hmmersearch 3.0 (text_hmm013)"
 
         xml_file = get_file('text_hmm013.out')
         qresults = parse(xml_file, FMT)
@@ -1942,6 +1948,8 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
         self.assertEqual('3.0', qresult.meta['program_version'])
         self.assertEqual('Pkinase', qresult.id)
+        self.assertEqual('PF00069.17', qresult.acc)
+        self.assertEqual('Protein kinase domain', qresult.desc)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 

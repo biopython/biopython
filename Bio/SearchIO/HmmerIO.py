@@ -148,11 +148,19 @@ class HmmerTextIterator(object):
             self.qresult.meta = self.meta
             self.qresult.program = self.meta['program']
             self.qresult.target = self.meta['target']
-            # get description, if it exists
-            self.line = self.read_forward()
-            if self.line.startswith('Description:'):
-                desc = self.line.split(' ', 1)[1]
-                self.qresult.desc = desc
+            
+            # get description and accession, if they exist
+            while True:
+                self.line = self.read_forward()
+
+                if self.line.startswith('Accession:'):
+                    acc = self.line.strip().split(' ', 1)[1]
+                    self.qresult.acc = acc.strip()
+                elif self.line.startswith('Description:'):
+                    desc = self.line.strip().split(' ', 1)[1]
+                    self.qresult.desc = desc.strip()
+                elif self.line.startswith('Scores for '):
+                    break
 
             while True:
                 self.parse_hit()
