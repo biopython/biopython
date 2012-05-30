@@ -226,7 +226,7 @@ class HmmerTextIterator(object):
             # row[3:6] is not parsed, since the info is available the the HSP level
             hit.domain_exp_num = row[6]
             hit.domain_obs_num = row[7]
-            hit.desc = row[8]
+            hit.desc = row[9]
             # don't forget to attach the boolean is_in_inclusion
             hit.is_in_inclusion = is_in_inclusion
 
