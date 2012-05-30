@@ -426,7 +426,7 @@ def blast_tabular_iterator(handle):
         """Parser for the commented tab BLAST+ output."""
 
         line = first_line
-        program, version, query_id, query_desc, target = [None] * 5
+        program, version, query_id, query_desc, target, rid = [None] * 6
 
         while True:
 
@@ -444,8 +444,10 @@ def blast_tabular_iterator(handle):
                     qresult.meta = {'program_version': version}
                     qresult.description = query_desc
                     qresult.target = target
+                    if rid is not None:
+                        qresult.rid = rid
                     yield line, qresult
-                    program, version, query_id, query_desc, target = [None] * 5
+                    program, version, query_id, query_desc, target, rid = [None] * 6
                 program, version = line.strip()[len('# '):].split(' ')
                 program = program.lower()
                 line = read_forward(handle)
@@ -462,6 +464,10 @@ def blast_tabular_iterator(handle):
             # example: # Database: db/minirefseq_protein
             elif 'Database' in line:
                 target = line[len('# Database: '):].strip()
+                line = read_forward(handle)
+            # try to parse RID, if present (from remote blast searches)
+            elif 'RID' in line:
+                rid = line[len('# RID: '):].strip()
                 line = read_forward(handle)
             # parse column order, crucial for parsing the result rows
             # example: # Fields: query id, query gi, query acc., query length
@@ -490,8 +496,10 @@ def blast_tabular_iterator(handle):
                     qresult.meta = {'program_version': version}
                     qresult.description = query_desc
                     qresult.target = target
+                    if rid is not None:
+                        qresult.rid = rid
                     yield line, qresult
-                program, version, query_id, query_desc, target = [None] * 5
+                program, version, query_id, query_desc, target, rid = [None] * 6
             # otherwise, keep on readline()-ing
             else:
                 line = read_forward(handle)
