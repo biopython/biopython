@@ -373,7 +373,7 @@ def blast_tabular_iterator(handle):
         's. start': 'hit_from',         # sstart
         's. end': 'hit_to',             # send
         'query frame': 'query_frame',   # qframe
-        'subject frame': 'hit_frame',   # sframe
+        'sbjct frame': 'hit_frame',   # sframe
         'query/sbjct frames': 'frames', # frames
         'query seq': 'query',           # qseq
         'subject seq': 'hit',           # sseq
