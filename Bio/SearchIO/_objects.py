@@ -953,7 +953,7 @@ class HSP(BaseSearchObject):
         if not hasattr(self, '_query_is_plus'):
             # for BLAT, strand determines direction
             if hasattr(self, 'query_strand'):
-                if '-' not in self.query_strand:
+                if self.query_strand >= 0:
                     self._query_is_plus = True
             # for BLAST, frame determines direction
             elif hasattr(self, 'query_frame'):
@@ -978,18 +978,8 @@ class HSP(BaseSearchObject):
 
     @property
     def query_from(self):
-        # return parsed _query_to value if query is minus and parsed
-        # _query_from is less than parsed _query_to
-        if self.query_is_minus:
-            if self._query_from < self._query_to:
-                return self._query_to
-            else:
-                return self._query_from
-        else:
-            if self._query_to < self._query_from:
-                return self._query_to
-            else:
-                return self._query_from
+        # from is always less than to, regardless of strand
+        return min(self._query_from, self._query_to)
 
     @query_from.setter
     def query_from(self, value):
@@ -997,18 +987,8 @@ class HSP(BaseSearchObject):
 
     @property
     def query_to(self):
-        # return parsed _query_from value if query is minus and parsed
-        # _query_to value is greater than parsed _query_from
-        if self.query_is_minus:
-            if self._query_to > self._query_from:
-                return self._query_from
-            else:
-                return self._query_to
-        else:
-            if self._query_from > self._query_to:
-                return self._query_from
-            else:
-                return self._query_to
+        # to is always greater than from, regardless of strand
+        return max(self._query_from, self._query_to)
 
     @query_to.setter
     def query_to(self, value):
@@ -1019,7 +999,7 @@ class HSP(BaseSearchObject):
         # read the query counterpart for explanation
         if not hasattr(self, '_hit_is_plus'):
             if hasattr(self, 'hit_strand'):
-                if '-' not in self.query_strand:
+                if self.query_strand < 0:
                     self._hit_is_plus = True
             elif hasattr(self, 'hit_frame'):
                 if abs(self.hit_frame) == self.hit_frame:
@@ -1038,18 +1018,8 @@ class HSP(BaseSearchObject):
 
     @property
     def hit_from(self):
-        # return parsed _hit_to value if hit is minus and parsed
-        # _hit_from is less than parsed _hit_to
-        if self.hit_is_minus:
-            if self._hit_from < self._hit_to:
-                return self._hit_to
-            else:
-                return self._hit_from
-        else:
-            if self._hit_to < self._hit_from:
-                return self._hit_to
-            else:
-                return self._hit_from
+        # from is always less than to, regardless of strand
+        return min(self._hit_from, self._hit_to)
 
     @hit_from.setter
     def hit_from(self, value):
@@ -1057,18 +1027,8 @@ class HSP(BaseSearchObject):
 
     @property
     def hit_to(self):
-        # return parsed _hit_from value if hit is minus and parsed
-        # _hit_to value is greater than parsed _hit_from
-        if self.hit_is_minus:
-            if self._hit_to > self._hit_from:
-                return self._hit_from
-            else:
-                return self._hit_to
-        else:
-            if self._hit_from > self._hit_to:
-                return self._hit_from
-            else:
-                return self._hit_to
+        # to is always greater than from, regardless of strand
+        return max(self._hit_from, self._hit_to)
 
     @hit_to.setter
     def hit_to(self, value):
