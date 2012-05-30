@@ -18,6 +18,8 @@ _INTS = (
         # qresult-specific attributes
         'param_gap_open', 'param_gap_extend', 'param_score_match',
         'param_score_mismatch', 'stat_db_num', 'stat_db_len',
+        # hit-specific attributes
+        'domain_obs_num',
         # hsp-specific attributes
         'init_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
@@ -29,6 +31,8 @@ _FLOATS = (
         # qresult-specific attributes
         'param_evalue_threshold', 'stat_eff_space', 'stat_kappa',
         'stat_lambda', 'stat_entropy',
+        # hit-specific attributes
+        'domain_exp_num',
         # hsp attributes
         'bitscore', 'bitscore_raw', 'evalue', 'ident_pct', 'pos_pct', 'bias',
         'evalue_cond', 'acc_avg',
