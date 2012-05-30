@@ -283,7 +283,7 @@ class HmmerTextIterator(object):
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
                 hsp = HSP(hid, self.qresult.id)
-                hsp.index = parsed[0]
+                hsp.domain_index = parsed[0]
                 hsp.is_in_inclusion = parsed[1] == '!'
                 hsp.bitscore = parsed[2]
                 hsp.bias = parsed[3]
