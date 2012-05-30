@@ -877,8 +877,6 @@ class HSP(BaseSearchObject):
         # only initialize MultipleSeqAlignment if hit_seq and query_seq is given
         if hit_seq and query_seq:
             self.add_alignment(hit_seq, query_seq, alphabet)
-        else:
-            self.query, self.hit, self.alignment = None, None, None
 
     def add_alignment(self, hit_seq, query_seq, alphabet=single_letter_alphabet):
         """Adds a hit and query sequence to an instantiated HSP object."""
@@ -927,11 +925,11 @@ class HSP(BaseSearchObject):
         try:
             assert len(self.query) == len(self.hit)
             return len(self.query)
-        except TypeError:
+        except AttributeError:
             raise TypeError("HSP objects without alignment does not have any length.")
 
     def __getitem__(self, idx):
-        if self.alignment is not None:
+        if hasattr(self, 'alignment'):
             obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
                     self.query[idx], self._alphabet)
             self._transfer_attrs(obj)

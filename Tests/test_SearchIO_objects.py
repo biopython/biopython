@@ -454,9 +454,9 @@ class HSPCases(unittest.TestCase):
 
     def test_seq_objects(self):
         # hsp should have no query, hit, and alignment objects
-        self.assertTrue(self.hsp.query is None)
-        self.assertTrue(self.hsp.hit is None)
-        self.assertTrue(self.hsp.alignment is None)
+        self.assertFalse(hasattr(self.hsp, 'query'))
+        self.assertFalse(hasattr(self.hsp, 'hit'))
+        self.assertFalse(hasattr(self.hsp, 'alignment'))
 
     def test_len(self):
         self.assertRaises(TypeError, len, self.hsp)
