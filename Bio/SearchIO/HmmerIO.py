@@ -268,9 +268,12 @@ class HmmerTextIterator(object):
 
             # parse the hsp table for the current hit
             while True:
+                # break out of hsp parsing if there are no hits, it's the last hsp
+                # or it's the start of a new hit
                 if self.line.startswith('   [No targets detected that satisfy') or \
                         self.line.startswith('Internal pipeline statistics summary:') or \
-                        self.line.startswith('  Alignments for each domain:'):
+                        self.line.startswith('  Alignments for each domain:') or \
+                        self.line.startswith('>>'):
                     break
 
                 parsed = filter(None, self.line.strip().split(' '))
