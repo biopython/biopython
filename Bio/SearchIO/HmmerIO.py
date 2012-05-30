@@ -388,12 +388,12 @@ class HmmerTextIterator(object):
                     hsp.alignment_annotation = annot
                     if self.meta['program'] == 'hmmscan':
                         hsp.add_alignment(hmmseq, aliseq)
-                        hsp.hit.description = 'HMM sequence'
-                        hsp.query.description = 'protein sequence'
+                        hsp.hit.description = 'hit HMM model'
+                        hsp.query.description = 'query protein sequence'
                     else:
                         hsp.add_alignment(aliseq, hmmseq)
-                        hsp.hit.description = 'protein sequence'
-                        hsp.query.description = 'HMM sequence'
+                        hsp.hit.description = 'hit protein sequence'
+                        hsp.query.description = 'query HMM model'
                     dom_counter += 1
                     hmmseq = ''
                     aliseq = ''
