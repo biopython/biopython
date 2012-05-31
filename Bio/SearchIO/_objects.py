@@ -228,20 +228,23 @@ class QueryResult(BaseSearchObject):
         def __iter__(self):
             return iter(self.iterhits())
 
-        @property
-        def hits(self):
-            """Returns a list of Hit objects contained by this object."""
+        def _hits_get(self):
             return self._hits.values()
 
-        @property
-        def hit_keys(self):
-            """Returns a list of Hit IDs contained by this object."""
+        hits = property(fget=_hits_get, \
+                doc="""Returns a list of Hit objects contained by this object.""")
+
+        def _hit_keys_get(self):
             return self._hits.keys()
 
-        @property
-        def items(self):
-            """Returns a list of tuples of Hit ID and Hit object contained by this object."""
+        hit_keys = property(fget=_hit_keys_get, \
+                doc="""Returns a list of Hit IDs contained by this object.""")
+
+        def _items_get(self):
             return self._hits.items()
+
+        items = property(fget=_items_get, \
+            doc="""Returns a list of tuples of Hit ID and Hit object contained by this object.""")
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
@@ -725,9 +728,10 @@ class Hit(BaseSearchObject):
         return "Hit(id='%s', query_id='%s', %i %s)" % (self.id, \
                 self.query_id, len(self), al)
 
-    @property
-    def hsps(self):
+    def _hsps_get(self):
         return self._hsps
+
+    hsps = property(fget=_hsps_get)
 
     def __iter__(self):
         return iter(self._hsps)
@@ -989,23 +993,23 @@ class HSP(BaseSearchObject):
     def query_is_minus(self):
         return not self.query_is_plus
 
-    @property
-    def query_from(self):
+    def _query_from_get(self):
         # from is always less than to, regardless of strand
         return min(self._query_from, self._query_to)
 
-    @query_from.setter
-    def query_from(self, value):
+    def _query_from_set(self, value):
         self._query_from = value
 
-    @property
-    def query_to(self):
+    query_from = property(fget=_query_from_get, fset=_query_from_set)
+
+    def _query_to_get(self):
         # to is always greater than from, regardless of strand
         return max(self._query_from, self._query_to)
 
-    @query_to.setter
-    def query_to(self, value):
+    def _query_to_set(self, value):
         self._query_to = value
+
+    query_to = property(fget=_query_to_get, fset=_query_to_set)
 
     @property
     def hit_is_plus(self):
@@ -1029,23 +1033,23 @@ class HSP(BaseSearchObject):
     def hit_is_minus(self):
         return not self.hit_is_plus
 
-    @property
-    def hit_from(self):
+    def _hit_from_get(self):
         # from is always less than to, regardless of strand
         return min(self._hit_from, self._hit_to)
 
-    @hit_from.setter
-    def hit_from(self, value):
+    def _hit_from_set(self, value):
         self._hit_from = value
 
-    @property
-    def hit_to(self):
+    hit_from = property(fget=_hit_from_get, fset=_hit_from_set)
+
+    def _hit_to_get(self):
         # to is always greater than from, regardless of strand
         return max(self._hit_from, self._hit_to)
 
-    @hit_to.setter
-    def hit_to(self, value):
+    def _hit_to_set(self, value):
         self._hit_to = value
+
+    hit_to = property(fget=_hit_to_get, fset=_hit_to_set)
 
     # The properties init_len, gap_num, mismatch_num, and ident_num are all
     # interconnected ~ we can infer the value of one if the others are all
@@ -1055,8 +1059,7 @@ class HSP(BaseSearchObject):
     # over computed values*. So if the parsed information is available,
     # computation is never done as the parsed values are used instead.
 
-    @property
-    def init_len(self):
+    def _init_len_get(self):
         if not hasattr(self, '_init_len'):
             try:
                 self._init_len = self._ident_num + self._mismatch_num + \
@@ -1065,12 +1068,12 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._init_len
 
-    @init_len.setter
-    def init_len(self, value):
+    def _init_len_set(self, value):
         self._init_len = value
 
-    @property
-    def ident_num(self):
+    init_len = property(fget=_init_len_get, fset=_init_len_set)
+
+    def _ident_num_get(self):
         if not hasattr(self, '_ident_num'):
             try:
                 self._ident_num = self._init_len - self._mismatch_num - \
@@ -1079,12 +1082,12 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._ident_num
 
-    @ident_num.setter
-    def ident_num(self, value):
+    def _ident_num_set(self, value):
         self._ident_num = value
 
-    @property
-    def mismatch_num(self):
+    ident_num = property(fget=_ident_num_get, fset=_ident_num_set)
+
+    def _mismatch_num_get(self):
         if not hasattr(self, '_mismatch_num'):
             try:
                 self._mismatch_num = self._init_len - self._ident_num - \
@@ -1093,12 +1096,12 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._mismatch_num
 
-    @mismatch_num.setter
-    def mismatch_num(self, value):
+    def _mismatch_num_set(self, value):
         self._mismatch_num = value
 
-    @property
-    def gap_num(self):
+    mismatch_num = property(fget=_mismatch_num_get, fset=_mismatch_num_set)
+
+    def _gap_num_get(self):
         if not hasattr(self, '_gap_num'):
             try:
                 self._gap_num = self._init_len - self._ident_num - \
@@ -1107,15 +1110,15 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._gap_num
 
-    @gap_num.setter
-    def gap_num(self, value):
+    def _gap_num_set(self, value):
         self._gap_num = value
+
+    gap_num = property(fget=_gap_num_get, fset=_gap_num_set)
 
     # for percent values (ident_pct, pos_pct, and gap_pct), the same golden
     # rule follows: parsed values takes precedent over computed values
 
-    @property
-    def ident_pct(self):
+    def _ident_pct_get(self):
         if not hasattr(self, '_ident_pct'):
             try:
                 self._ident_pct = self.ident_num / float(self.init_len) * 100
@@ -1123,12 +1126,12 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._ident_pct
 
-    @ident_pct.setter
-    def ident_pct(self, value):
+    def _ident_pct_set(self, value):
         self._ident_pct = value
 
-    @property
-    def pos_pct(self):
+    ident_pct = property(fget=_ident_pct_get, fset=_ident_pct_set)
+
+    def _pos_pct_get(self):
         if not hasattr(self, '_pos_pct'):
             try:
                 self._pos_pct = self.pos_num / float(self.init_len) * 100
@@ -1136,12 +1139,12 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._pos_pct
 
-    @pos_pct.setter
-    def pos_pct(self, value):
+    def _pos_pct_set(self, value):
         self._pos_pct = value
 
-    @property
-    def gap_pct(self):
+    pos_pct = property(fget=_pos_pct_get, fset=_pos_pct_set)
+
+    def _gap_pct_get(self):
         if not hasattr(self, '_gap_pct'):
             try:
                 self._gap_pct = self.gap_num / float(self.init_len) * 100
@@ -1149,9 +1152,10 @@ class HSP(BaseSearchObject):
                 raise ValueError("Not enough is known to compute this property.")
         return self._gap_pct
 
-    @gap_pct.setter
-    def gap_pct(self, value):
+    def _gap_pct_set(self, value):
         self._gap_pct = value
+
+    gap_pct = property(fget=_gap_pct_get, fset=_gap_pct_set)
 
 
 class SearchIndexer(object):
