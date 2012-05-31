@@ -855,18 +855,16 @@ class Tree(TreeElement, TreeMixin):
         # Also, all this rerooting causes floating-point inaccuracies to
         # accumulate, I think. (See unit test.)
 
-        # Build a table of pairwise distances between all tips
-        table = {}
+        # Identify the largest pairwise distance
+        max_distance = 0.0
         tips = tree.get_terminals()
         for tip in tips:
             tree.root_with_outgroup(tip)
-            table[tip] = tree.depths()
-        # Identify the largest pairwise distance
-        table_flat = []
-        for node1, data in table.iteritems():
-            for node2, depth in data.iteritems():
-                table_flat.append((node1, node2, depth))
-        tip1, tip2, max_distance = max(table_flat, key=lambda nnd: nnd[2])
+            new_max = max(tree.depths().iteritems(), key=lambda nd: nd[1])
+            if new_max[1] > max_distance:
+                tip1 = tip
+                tip2 = new_max[0]
+                max_distance = new_max[1]
         tree.root_with_outgroup(tip1)
         # Identify the midpoint and reroot there.
         # Trace the path to the outgroup tip until all of the root depth has
