@@ -45,7 +45,7 @@ hre_id_line = re.compile(r'^(\s+\S+\s+\d+ )(.+) (\d+)')
 def hmmer_text_iterator(handle):
     """Generator function to parse HMMER plain text output as QueryResult objects.
 
-    handle -- Handle to the file, or the filename as string.
+    handle -- Handle to the file.
 
     """
     iterator = HmmerTextIterator(handle)
@@ -71,8 +71,7 @@ class HmmerTextIterator(object):
             yield qresult
 
     def read_forward(self):
-        """Reads through whitespaces at the beginning of handle, returns the first
-        non-whitespace line."""
+        """Reads through whitespaces, returns the first non-whitespace line."""
         while True:
             line = self.handle.readline()
             # if line has characters and stripping does not remove them,
@@ -84,6 +83,14 @@ class HmmerTextIterator(object):
             # if line ends, return None
             elif not line:
                 return
+
+    def read_until(self, bool_func):
+        """Reads the file handle until the given function returns True."""
+        while True:
+            if not self.line or bool_func(self.line):
+                return
+            else:
+                self.line = self.read_forward()
 
     def parse_preamble(self):
         """Parses HMMER preamble (lines beginning with '#')."""
@@ -128,11 +135,8 @@ class HmmerTextIterator(object):
 
     def parse_qresult(self):
         """Parses a HMMER3 query block."""
-        while True:
-            if self.line.startswith('Query:'):
-                break
-            else:
-                self.line = self.read_forward()
+
+        self.read_until(lambda line: line.startswith('Query:'))
 
         while True:
 
@@ -162,6 +166,7 @@ class HmmerTextIterator(object):
                 elif self.line.startswith('Scores for '):
                     break
 
+            # parse the query hits
             while True:
                 self.parse_hit()
                 if not self.line:
@@ -181,14 +186,10 @@ class HmmerTextIterator(object):
 
     def parse_hit(self):
         """Parses a HMMER3 hit block, beginning with the hit table."""
-        # get to the end of the hit table delimiter
-        while True:
-            if not self.line:
-                break
-            elif self.line.startswith('    ------- ------ -----'):
-                self.line = self.read_forward()
-                break
-            self.line = self.read_forward()
+        # get to the end of the hit table delimiter and read one more line
+        self.read_until(lambda line: \
+                line.startswith('    ------- ------ -----'))
+        self.line = self.read_forward()
 
         # assume every hit is in inclusion threshold until the inclusion
         # threshold line is encountered
@@ -245,18 +246,8 @@ class HmmerTextIterator(object):
     def parse_hsp(self):
         """Parses a HMMER3 hsp block, beginning with the hsp table."""
         # read through until the beginning of the hsp block
-        while True:
-            if not self.line or self.line.startswith('Internal pipeline'):
-                break
-            elif self.line.startswith('Domain annotation for each '):
-                self.line = self.read_forward()
-                break
-            self.line = self.read_forward()
-
-        if not self.line or self.line.startswith('   [No targets detected'):
-            return
-        elif self.line.startswith('Internal pipeline'):
-            return
+        self.read_until(lambda line: line.startswith('Internal pipeline') \
+                or line.startswith('>>'))
 
         # start parsing the hsp block
         while True:
@@ -267,12 +258,10 @@ class HmmerTextIterator(object):
             # ensure that the parsed hit ID is in the qresult object
             assert hid in self.qresult, "Unexpected hit ID: %s" % hid
 
-            # read through the hsp table header
-            while True:
-                if self.line.startswith(' ---   ------ ----- --------'):
-                    self.line = self.read_forward()
-                    break
-                self.line = self.read_forward()
+            # read through the hsp table header and move one more line
+            self.read_until(lambda line: \
+                    line.startswith(' ---   ------ ----- --------'))
+            self.line = self.read_forward()
 
             # parse the hsp table for the current hit
             while True:
