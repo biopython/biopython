@@ -120,6 +120,28 @@ class TreeTests(unittest.TestCase):
                 self.assertAlmostEqual(orig_tree_len,
                                        tree.total_branch_length())
 
+    def test_root_at_midpoint(self):
+        """Tree.root_at_midpoint: reroot at the tree's midpoint."""
+        for treefname, fmt in [(EX_APAF, 'phyloxml'),
+                               (EX_BCL2, 'phyloxml'),
+                               # (EX_NEWICK, 'newick'),
+                              ]:
+            tree = Phylo.read(treefname, fmt)
+            orig_tree_len = tree.total_branch_length()
+            # Total branch length does not change
+            tree.root_at_midpoint()
+            self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+            # Root is bifurcating
+            self.assertEqual(len(tree.root.clades), 2)
+            # Deepest tips under each child of the root are equally deep
+            deep_tip_0, deep_dist_0 = max(tree.clade[0].depths().iteritems(),
+                                        key=lambda kv: kv[1])
+            deep_tip_1, deep_dist_1 = max(tree.clade[1].depths().iteritems(),
+                                        key=lambda kv: kv[1])
+            self.assertAlmostEqual(deep_dist_0, deep_dist_1,
+                                   # XXX Rounding errors accumulate?
+                                   delta=orig_tree_len*0.001)
+
     # Magic method
     def test_str(self):
         """Tree.__str__: pretty-print to a string.
