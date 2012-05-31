@@ -561,13 +561,6 @@ def blast_tabular_iterator(handle):
                     hsp = HSP(hid_cache, qid_cache)
                     for hsp_attr in parsed['hsp']:
                         setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
-                    # try to create alignment, hit, or query sequences:
-                    if 'query' in parsed['hsp'] and 'hit' in parsed['hsp']:
-                        hsp.add_alignment(hsp.hit, hsp.query)
-                    elif 'query' in parsed['hsp']:
-                        hsp.add_query(hsp.query)
-                    elif 'hit' in parsed['hsp']:
-                        hsp.add_hit(hsp.hit)
                     # try to set hit_frame and/or query_frame if frames
                     # attribute is set
                     if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):

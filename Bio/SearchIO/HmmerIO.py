@@ -387,12 +387,14 @@ class HmmerTextIterator(object):
                         self.line.startswith('Internal pipeline'):
                     hsp.alignment_annotation = annot
                     if self.meta['program'] == 'hmmscan':
-                        hsp.add_alignment(hmmseq, aliseq)
+                        hsp.hit = hmmseq
                         hsp.hit.description = 'hit HMM model'
+                        hsp.query = aliseq
                         hsp.query.description = 'query protein sequence'
                     else:
-                        hsp.add_alignment(aliseq, hmmseq)
+                        hsp.hit = aliseq
                         hsp.hit.description = 'hit protein sequence'
+                        hsp.query = hmmseq
                         hsp.query.description = 'query HMM model'
                     dom_counter += 1
                     hmmseq = ''
