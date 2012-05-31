@@ -894,7 +894,7 @@ class HSP(BaseSearchObject):
                     "SeqRecord object.")
         # if query_seq is a string, create a new SeqRecord object
         if isinstance(query_seq, basestring):
-            query = SeqRecord(Seq(query_seq, alphabet), id=self.hit_id, \
+            query = SeqRecord(Seq(query_seq, alphabet), id=self.query_id, \
                     name='query', description='aligned query sequence')
         # otherwise query is the query_seq
         else:
