@@ -965,33 +965,31 @@ class HSP(BaseSearchObject):
     def __iter__(self):
         raise TypeError("HSP objects do not support iteration.")
 
-    @property
-    def query_is_plus(self):
-        if not hasattr(self, '_query_is_plus'):
-            # for BLAT, strand determines direction
-            if hasattr(self, 'query_strand'):
-                if self.query_strand >= 0:
-                    self._query_is_plus = True
-            # for BLAST, frame determines direction
-            elif hasattr(self, 'query_frame'):
-                if abs(self.query_frame) == self.query_frame:
-                    self._query_is_plus = True
-            # for BLAST tabular output, start and stop positions
-            # determines direction
-            # note that if frame is printed in the output file,
-            # it will take precedent over this
-            elif self._query_from < self._query_to:
-                self._query_is_plus = True
+    def _query_strand_get(self):
+        if not hasattr(self, '_query_strand'):
+            # attempt to get strand from frame
+            try:
+                self._query_strand = self.query_frame / \
+                        abs(self.query_frame)
+            # handle if query frame is 0
+            except ZeroDivisionError:
+                self._query_strand = 0
+            # handle if query frame is None
+            except TypeError:
+                self._query_strand = None
+            # and handle cases if query_frame is not set
+            except AttributeError:
+                raise AttributeError("Not enough is known to compute query_strand")
+        return self._query_strand
 
-            # if none of the above is true, defaults to false
-            if not hasattr(self, '_query_is_plus'):
-                self._query_is_plus = False
+    def _query_strand_set(self, value):
+        # follow SeqFeature's convention
+        if not value in [-1, 0, 1, None]:
+            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
+                    value)
+        self._query_strand = value
 
-        return self._query_is_plus
-
-    @property
-    def query_is_minus(self):
-        return not self.query_is_plus
+    query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
 
     def _query_from_get(self):
         # from is always less than to, regardless of strand
@@ -1011,27 +1009,31 @@ class HSP(BaseSearchObject):
 
     query_to = property(fget=_query_to_get, fset=_query_to_set)
 
-    @property
-    def hit_is_plus(self):
-        # read the query counterpart for explanation
-        if not hasattr(self, '_hit_is_plus'):
-            if hasattr(self, 'hit_strand'):
-                if self.query_strand < 0:
-                    self._hit_is_plus = True
-            elif hasattr(self, 'hit_frame'):
-                if abs(self.hit_frame) == self.hit_frame:
-                    self._hit_is_plus = True
-            elif self._hit_from < self._hit_to:
-                self._hit_is_plus = True
+    def _hit_strand_get(self):
+        if not hasattr(self, '_hit_strand'):
+            # attempt to get strand from frame
+            try:
+                self._hit_strand = self.hit_frame / \
+                        abs(self.hit_frame)
+            # handle if hit frame is 0
+            except ZeroDivisionError:
+                self._hit_strand = 0
+            # handle if hit frame is None
+            except TypeError:
+                self._hit_strand = None
+            # and handle if hit_frame doesn't exist
+            except AttributeError:
+                raise AttributeError("Not enought is known to compute strand")
+        return self._hit_strand
 
-            if not hasattr(self, '_hit_is_plus'):
-                self._hit_is_plus = False
+    def _hit_strand_set(self, value):
+        # follow SeqFeature's convention
+        if not value in [-1, 0, 1, None]:
+            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
+                    value)
+        self._hit_strand = value
 
-        return self._hit_is_plus
-
-    @property
-    def hit_is_minus(self):
-        return not self.hit_is_plus
+    hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set)
 
     def _hit_from_get(self):
         # from is always less than to, regardless of strand
