@@ -332,8 +332,6 @@ class HmmerTextIterator(object):
             #regx = re.search(hre_validate, self.line)
             #assert hsp.bitscore == float(regx.group(1))
             #assert hsp.evalue_cond == float(regx.group(2))
-            spc_len = None
-            ali_len = None
             hmmseq = ''
             aliseq = ''
             annot = {}
