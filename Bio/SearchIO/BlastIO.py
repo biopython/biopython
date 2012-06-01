@@ -344,40 +344,80 @@ def blast_tabular_iterator(handle):
     the default ones.
 
     """
+    # longname-shortname map
+    # maps the column names shown in a commented output to its short name
+    # (the one used in the command line)
+    _long_short_map = {
+        'query id': 'qseqid',
+        'query acc.': 'qacc',
+        'query acc.ver': 'qaccver',
+        'query length': 'qlen',
+        'subject id': 'sseqid',
+        'subject acc.': 'sacc',
+        'subject acc.ver': 'saccver',
+        'subject length': 'slen',
+        'alignment length': 'length',
+        'bit score': 'bitscore',
+        'score': 'score',
+        'evalue': 'evalue',
+        'identical': 'nident',
+        '% identity': 'pident',
+        'positives': 'positive',
+        '% positives': 'ppos',
+        'mismatches': 'mismatch',
+        'gaps': 'gaps',
+        'q. start': 'qstart',
+        'q. end': 'qend',
+        's. start': 'sstart',
+        's. end': 'send',
+        'query frame': 'qframe',
+        'sbjct frame': 'sframe',
+        'query/sbjct frames': 'frames',
+        'query seq': 'qseq',
+        'subject seq': 'sseq',
+        'gap opens': 'gapopen',
+        # unsupported columns
+        'query gi': 'qgi',
+        'subject ids': 'sallseqid',
+        'subject gi': 'sgi',
+        'subject gis': 'sallgi',
+        'BTOP': 'btop',
+    }
+
     # column to class attribute map
     _column_qresult = {
-        'query id': 'id',               # qseqid
-        'query acc.': 'acc',            # qacc
-        'query acc.ver': 'acc_ver',     # qaccver
-        'query length': 'seq_len'       # qlen
+        'qseqid': 'id',
+        'qacc': 'acc',
+        'qaccver': 'acc_ver',
+        'qlen': 'seq_len',
     }
     _column_hit = {
-        'subject id': 'id',             # sseqid
-        'subject acc.': 'acc',          # sacc
-        'subject acc.ver': 'acc_ver',   # saccver
-        'subject length': 'seq_len',    # slen
+        'sseqid': 'id',
+        'sacc': 'acc',
+        'saccver': 'acc_ver',
+        'slen': 'seq_len',
     }
     _column_hsp = {
-        'alignment length': 'init_len', # length
-        'bit score': 'bitscore',        # bitscore
-        'score': 'bitscore_raw',        # score
-        'evalue': 'evalue',             # evalue
-        'identical': 'ident_num',       # nident
-        '% identity': 'ident_pct',      # pident
-        'positives': 'pos_num',         # positive
-        '% positives': 'pos_pct',       # ppos
-        'mismatches': 'mismatch_num',   # mismatch
-        'gaps': 'gap_num',              # gaps
-        'q. start': 'query_from',       # qstart
-        'q. end': 'query_to',           # qend
-        's. start': 'hit_from',         # sstart
-        's. end': 'hit_to',             # send
-        'query frame': 'query_frame',   # qframe
-        'sbjct frame': 'hit_frame',   # sframe
-        'query/sbjct frames': 'frames', # frames
-        'query seq': 'query',           # qseq
-        'subject seq': 'hit',           # sseq
-        'gap opens': 'gapopen_num',     # gap opens
+        'length': 'init_len',
+        'bitscore': 'bitscore',
+        'score': 'bitscore_raw',
+        'evalue': 'evalue',
+        'nident': 'ident_num',
+        'pident': 'ident_pct',
+        'positive': 'pos_num',
+        'ppos': 'pos_pct',
+        'mismatch': 'mismatch_num',
+        'gaps': 'gap_num',
+        'qstart': 'query_from',
+        'qend': 'query_to',
+        'sstart': 'hit_from',
+        'send': 'hit_to',
+        'qframe': 'query_frame',
+        'sframe': 'hit_frame',
+        'frames': 'frames',
+        'qseq': 'query',
+        'sseq': 'hit',
+        'gapopen': 'gapopen_num',
     }
     _supported_fields = _column_qresult.keys() + _column_hit.keys() + \
             _column_hsp.keys()
@@ -390,13 +430,12 @@ def blast_tabular_iterator(handle):
 
     # column order in the non-commented tabular output variant
     # values must be keys inside the column-attribute maps above
-    _default_fields = ['query id', 'subject id', '% identity', \
-            'alignment length', 'mismatches', 'gap opens', 'q. start', \
-            'q. end', 's. start', 's. end', 'evalue', 'bit score']
+    _default_fields = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch', \
+            'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore']
     # one field from each of the following sets must exist in order for the
     # parser to work
-    _min_query_fields = set(['query id', 'query acc.', 'query acc.ver'])
-    _min_hit_fields = set(['subject id', 'subject acc.', 'subject acc.ver'])
+    _min_query_fields = set(['qseqid', 'qacc', 'qaccver'])
+    _min_hit_fields = set(['sseqid', 'sacc', 'saccver'])
 
     def _parse_result_row(line, fields):
         # returns a dict of assigned var names to level names
@@ -472,8 +511,9 @@ def blast_tabular_iterator(handle):
             # parse column order, crucial for parsing the result rows
             # example: # Fields: query id, query gi, query acc., query length
             elif 'Fields' in line:
-                fields = line[len('# Fields: '):].strip()
-                fields = fields.split(', ')
+                raw_field_str = line[len('# Fields: '):].strip()
+                long_fields = raw_field_str.split(', ')
+                fields = [_long_short_map[long_name] for long_name in long_fields]
                 # warn if there are unsupported columns
                 for field in fields:
                     if field not in _supported_fields:
