@@ -85,8 +85,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qkalvkaswekvkanaeeigaeilkrlfkaypdtkklFkkfgdls.aedlksspkfkahakkvlaaldeavknldnddnlkaalkklgarHakrg.vdpanfklfgeal', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++lv   w+kv+a+++ +g+e+l rlfk +p+t ++F kf+ l+  +++k s+++k+h+++vl al+ ++k+   ++ ++a++k l+++Ha+++ ++ ++ + ++e++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('EWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKsEDEMKASEDLKKHGATVLTALGGILKK---KGHHEAEIKPLAQSHATKHkIPVKYLEFISECI', \
                 hsp.query.seq.tostring())
         self.assertEqual('5789*********************************************************************...6899***********************999998', \
@@ -134,8 +132,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.94, hsp.acc_avg)
         self.assertEqual('kPvisvspsptvtsggnvtLtCsaeggpppptisWy.....ietppelqgsegssssestLtissvtsedsgtYtCva', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('kP++s++psp+v+sggnv L+C ++     + +s +     +++   +++++ ++ss +++++ +v+++ +  Y+C+a', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KPTLSAQPSPVVNSGGNVILQCDSQVA--FDGFSLCkegedEHPQCLNSQPHARGSSRAIFSVGPVSPSRRWWYRCYA', \
                 hsp.query.seq.tostring())
         self.assertEqual('8************************99..78888888****************************************9', \
@@ -170,8 +166,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.71, hsp.acc_avg)
         self.assertEqual('kpvlvapp.svvtegenvtLtCsapgnptprvqwykdg.vels......qsqnq........lfipnvsaedsgtYtCra....rnseggktstsveltv', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('kp+l+a+p +vv++g nv L+C ++    + +++ k+g +e +      +            + +  vs++    Y+C+a    + +e++ +s+ +el v', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KPTLSAQPsPVVNSGGNVILQCDSQVA-FDGFSLCKEGeDEHPqclnsqP---HargssraiFSVGPVSPSRRWWYRCYAydsnSPYEWSLPSDLLELLV', \
                 hsp.query.seq.tostring())
         self.assertEqual('799998885779*************85.899***9988655554443320...134455543444669************88443344588888888766', \
@@ -221,8 +215,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqkilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAvecL', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++++ l+++++e++++e+p++Wp+++ +l  l++++++++el++ iL++l+e++++f  ++l  +rr++++++l++++++i+++ll+ l+++v+k+               ++++  a+L++l+ +++w+++++i +++  ll++l+ lLn++el+  A+ecL', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMERIFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAECL', \
                 hsp.query.seq.tostring())
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8', \
@@ -249,8 +241,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('swvswidiglivnspllsllfqlLndpe', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('s+v+w  ++l+++s +++ +f+ Ln++e', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('SFVQWEAMTLFLES-VITQMFRTLNREE', \
                 hsp.query.seq.tostring())
         self.assertEqual('899*********98.8888899998776', \
@@ -288,8 +278,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll', \
                 hsp.hit.seq.tostring())
-        self.assertEqual(' ++++++  P ++++ l+++ +k+    vR++++++L++ ++ +W+         ++  ek +++n++ +l+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI', \
                 hsp.query.seq.tostring())
         self.assertEqual('56788886699*********.6555899******************........999999****99999887', \
@@ -316,8 +304,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qqlpeeekelIrnnllnll', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('q+lp++ + +I ++l + +', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QTLPPQRRRDIQQTLTQNM', \
                 hsp.query.seq.tostring())
         self.assertEqual('6899*******99998865', \
@@ -365,8 +351,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('++ ++ele+fak +kq+ri+Lg+tqadvg +lg+l+Gk+fsqttIcrFEalqLslknmckL+pllekW+eea+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD', \
                 hsp.query.seq.tostring())
         self.assertEqual('67899******************************************************************96', \
@@ -404,8 +388,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+rkRt++++     Le +F k+++ps ++++++A++lgL++++V+vWF+NrR+k k+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR', \
                 hsp.query.seq.tostring())
         self.assertEqual('79****************************************************997', \
@@ -441,8 +423,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.96, hsp.acc_avg)
         self.assertEqual('aLGarLralReraGLtqeevAerlg......vSastlsrlE', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++ +L++ R + G tq++v+  lg      +S++t++r E', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE', \
                 hsp.query.seq.tostring())
         self.assertEqual('6999***********************************99', \
@@ -467,8 +447,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('rgrpsaavlaalaralgldpaera', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('++ ps+++++ +a+ lgl+ + ++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('CPKPSLQQITHIANQLGLEKDVVR', \
                 hsp.query.seq.tostring())
         self.assertEqual('678**************9988765', \
@@ -504,8 +482,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.91, hsp.acc_avg)
         self.assertEqual('hnPYPskevkeelakqTglsrkqidnWFiNaRr', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+ P Ps +++  +a+q gl  + +  WF N R ', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQ', \
                 hsp.query.seq.tostring())
         self.assertEqual('56779*************************996', \
@@ -541,8 +517,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.77, hsp.acc_avg)
         self.assertEqual('adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+ +++ + +++++   +++ ++l cP  sl++++++a++l  +k    v+++ +  r+  ++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR', \
                 hsp.query.seq.tostring())
         self.assertEqual('345666667778888899************************99..9999999988876554', \
@@ -625,8 +599,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qkalvkaswekvkanaeeigaeilkrlfkaypdtkklFkkfgdls.aedlksspkfkahakkvlaaldeavknldnddnlkaalkklgarHakrg.vdpanfklfgeal', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++lv   w+kv+a+++ +g+e+l rlfk +p+t ++F kf+ l+  +++k s+++k+h+++vl al+ ++k+   ++ ++a++k l+++Ha+++ ++ ++ + ++e++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('EWQLVLNVWGKVEADIPGHGQEVLIRLFKGHPETLEKFDKFKHLKsEDEMKASEDLKKHGATVLTALGGILKK---KGHHEAEIKPLAQSHATKHkIPVKYLEFISECI', \
                 hsp.query.seq.tostring())
         self.assertEqual('5789*********************************************************************...6899***********************999998', \
@@ -685,8 +657,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.94, hsp.acc_avg)
         self.assertEqual('kPvisvspsptvtsggnvtLtCsaeggpppptisWy.....ietppelqgsegssssestLtissvtsedsgtYtCva', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('kP++s++psp+v+sggnv L+C ++     + +s +     +++   +++++ ++ss +++++ +v+++ +  Y+C+a', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KPTLSAQPSPVVNSGGNVILQCDSQVA--FDGFSLCkegedEHPQCLNSQPHARGSSRAIFSVGPVSPSRRWWYRCYA', \
                 hsp.query.seq.tostring())
         self.assertEqual('8************************99..78888888****************************************9', \
@@ -721,8 +691,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.71, hsp.acc_avg)
         self.assertEqual('kpvlvapp.svvtegenvtLtCsapgnptprvqwykdg.vels......qsqnq........lfipnvsaedsgtYtCra....rnseggktstsveltv', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('kp+l+a+p +vv++g nv L+C ++    + +++ k+g +e +      +            + +  vs++    Y+C+a    + +e++ +s+ +el v', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KPTLSAQPsPVVNSGGNVILQCDSQVA-FDGFSLCKEGeDEHPqclnsqP---HargssraiFSVGPVSPSRRWWYRCYAydsnSPYEWSLPSDLLELLV', \
                 hsp.query.seq.tostring())
         self.assertEqual('799998885779*************85.899***9988655554443320...134455543444669************88443344588888888766', \
@@ -783,8 +751,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqkilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAvecL', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++++ l+++++e++++e+p++Wp+++ +l  l++++++++el++ iL++l+e++++f  ++l  +rr++++++l++++++i+++ll+ l+++v+k+               ++++  a+L++l+ +++w+++++i +++  ll++l+ lLn++el+  A+ecL', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMERIFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAECL', \
                 hsp.query.seq.tostring())
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8', \
@@ -811,8 +777,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('swvswidiglivnspllsllfqlLndpe', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('s+v+w  ++l+++s +++ +f+ Ln++e', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('SFVQWEAMTLFLES-VITQMFRTLNREE', \
                 hsp.query.seq.tostring())
         self.assertEqual('899*********98.8888899998776', \
@@ -850,8 +814,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll', \
                 hsp.hit.seq.tostring())
-        self.assertEqual(' ++++++  P ++++ l+++ +k+    vR++++++L++ ++ +W+         ++  ek +++n++ +l+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI', \
                 hsp.query.seq.tostring())
         self.assertEqual('56788886699*********.6555899******************........999999****99999887', \
@@ -878,8 +840,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qqlpeeekelIrnnllnll', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('q+lp++ + +I ++l + +', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QTLPPQRRRDIQQTLTQNM', \
                 hsp.query.seq.tostring())
         self.assertEqual('6899*******99998865', \
@@ -938,8 +898,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.97, hsp.acc_avg)
         self.assertEqual('eldleeleefakefkqrrikLgltqadvgsalgalyGkefsqttIcrFEalqLslknmckLkpllekWLeeae', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('++ ++ele+fak +kq+ri+Lg+tqadvg +lg+l+Gk+fsqttIcrFEalqLslknmckL+pllekW+eea+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KALQKELEQFAKLLKQKRITLGYTQADVGLTLGVLFGKVFSQTTICRFEALQLSLKNMCKLRPLLEKWVEEAD', \
                 hsp.query.seq.tostring())
         self.assertEqual('67899******************************************************************96', \
@@ -977,8 +935,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('rrkRttftkeqleeLeelFeknrypsaeereeLAkklgLterqVkvWFqNrRakekk', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+rkRt++++     Le +F k+++ps ++++++A++lgL++++V+vWF+NrR+k k+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQKGKR', \
                 hsp.query.seq.tostring())
         self.assertEqual('79****************************************************997', \
@@ -1014,8 +970,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.96, hsp.acc_avg)
         self.assertEqual('aLGarLralReraGLtqeevAerlg......vSastlsrlE', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++ +L++ R + G tq++v+  lg      +S++t++r E', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QFAKLLKQKRITLGYTQADVGLTLGvlfgkvFSQTTICRFE', \
                 hsp.query.seq.tostring())
         self.assertEqual('6999***********************************99', \
@@ -1040,8 +994,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.86, hsp.acc_avg)
         self.assertEqual('rgrpsaavlaalaralgldpaera', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('++ ps+++++ +a+ lgl+ + ++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('CPKPSLQQITHIANQLGLEKDVVR', \
                 hsp.query.seq.tostring())
         self.assertEqual('678**************9988765', \
@@ -1077,8 +1029,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.91, hsp.acc_avg)
         self.assertEqual('hnPYPskevkeelakqTglsrkqidnWFiNaRr', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+ P Ps +++  +a+q gl  + +  WF N R ', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('KCPKPSLQQITHIANQLGLEKDVVRVWFCNRRQ', \
                 hsp.query.seq.tostring())
         self.assertEqual('56779*************************996', \
@@ -1114,8 +1064,6 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(0.77, hsp.acc_avg)
         self.assertEqual('adlaavleelnkakkeevdlvvlGcPhlsleeleelaellkgrkkkvsvelvvttsravlsk', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+ +++ + +++++   +++ ++l cP  sl++++++a++l  +k    v+++ +  r+  ++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QARKRKRTSIENRVRWSLETMFLKCPKPSLQQITHIANQLGLEK--DVVRVWFCNRRQKGKR', \
                 hsp.query.seq.tostring())
         self.assertEqual('345666667778888899************************99..9999999988876554', \
@@ -1362,8 +1310,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('kflrnklaealaelflqeypnqWpsffddllsllssspsglelllriLkvlpeEiadfsrskleqerrnelkdllrsqvqkilelllqileqsvskk...............sselveatLkclsswvswidiglivnsp..llsllfqlLndpelreaAvecL', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('+++++ l+++++e++++e+p++Wp+++ +l  l++++++++el++ iL++l+e++++f  ++l  +rr++++++l++++++i+++ll+ l+++v+k+               ++++  a+L++l+ +++w+++++i +++  ll++l+ lLn++el+  A+ecL', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('NHIKDALSRIVVEMIKREWPQHWPDMLIELDTLSKQGETQTELVMFILLRLAEDVVTF--QTLPPQRRRDIQQTLTQNMERIFSFLLNTLQENVNKYqqvktdtsqeskaqaNCRVGVAALNTLAGYIDWVSMSHITAENckLLEILCLLLNEQELQLGAAECL', \
                 hsp.query.seq.tostring())
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8', \
@@ -1390,8 +1336,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('swvswidiglivnspllsllfqlLndpe', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('s+v+w  ++l+++s +++ +f+ Ln++e', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('SFVQWEAMTLFLES-VITQMFRTLNREE', \
                 hsp.query.seq.tostring())
         self.assertEqual('899*********98.8888899998776', \
@@ -1429,8 +1373,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qLnqlekqkPgflsallqilanksldlevRqlAalyLknlItkhWkseeaqrqqqlpeeekelIrnnllnll', \
                 hsp.hit.seq.tostring())
-        self.assertEqual(' ++++++  P ++++ l+++ +k+    vR++++++L++ ++ +W+         ++  ek +++n++ +l+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FCEEFKEKCPICVPCGLRLA-EKTQVAIVRHFGLQILEHVVKFRWN--------GMSRLEKVYLKNSVMELI', \
                 hsp.query.seq.tostring())
         self.assertEqual('56788886699*********.6555899******************........999999****99999887', \
@@ -1457,8 +1399,6 @@ class HmmerscanCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('qqlpeeekelIrnnllnll', \
                 hsp.hit.seq.tostring())
-        self.assertEqual('q+lp++ + +I ++l + +', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('QTLPPQRRRDIQQTLTQNM', \
                 hsp.query.seq.tostring())
         self.assertEqual('6899*******99998865', \
@@ -1542,8 +1482,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('+ell+ lG+Gs+GkV+ ++k   ++ g+ +A+K+lkk + k + + +++ E  il++++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lH  gii+rDLKpeNiLld++g++ki+DFGl+k+++ +++++++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e+++ ilk kl  ++  s    +e+++l++ l++++p +Rl      +eei++hp++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF', \
                 hsp.hit.seq.tostring())
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997', \
@@ -1570,8 +1508,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('ye++e +G Gs+++++++++k t  ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++ylv+e+++gg+l d + +++++se+e+ +++++i++ ++ylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++DvWslG++ly++l g +pf +  +++ +e++++i ++k+  +  +++s s+ +kd+++k+l+ dp++Rlta ++lkhpw+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI', \
                 hsp.hit.seq.tostring())
         self.assertEqual('7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7', \
@@ -1609,8 +1545,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('+ell+ lG+GsfGkV+ +kk + ++    +A+K+lkk + k + + +++ E  il +++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lHs gii+rDLKpeNiLld++g++k++DFGl+k+   +++k+++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e++ +ilk kl  ++  s    +e+++l++ l++++pa+Rl      +eei++h+++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF', \
                 hsp.hit.seq.tostring())
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886', \
@@ -1637,8 +1571,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('ye++e +G Gs+++++++++k t+ ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++y+v+e+++gg+l d + +++ +se+e+  ++ +i + +eylH +g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++D+WslGv+ly++ltg +pf +  +++ +e++++i ++k + +   ++s s+++kdl++k+l+ dp++Rlta+ +l+hpw+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI', \
                 hsp.hit.seq.tostring())
         self.assertEqual('7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7', \
@@ -1816,8 +1748,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('+ell+ lG+Gs+GkV+ ++k   ++ g+ +A+K+lkk + k + + +++ E  il++++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lH  gii+rDLKpeNiLld++g++ki+DFGl+k+++ +++++++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e+++ ilk kl  ++  s    +e+++l++ l++++p +Rl      +eei++hp++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF', \
                 hsp.hit.seq.tostring())
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997', \
@@ -1844,8 +1774,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('ye++e +G Gs+++++++++k t  ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++ylv+e+++gg+l d + +++++se+e+ +++++i++ ++ylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++DvWslG++ly++l g +pf +  +++ +e++++i ++k+  +  +++s s+ +kd+++k+l+ dp++Rlta ++lkhpw+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI', \
                 hsp.hit.seq.tostring())
         self.assertEqual('7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7', \
@@ -1883,8 +1811,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('+ell+ lG+GsfGkV+ +kk + ++    +A+K+lkk + k + + +++ E  il +++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lHs gii+rDLKpeNiLld++g++k++DFGl+k+   +++k+++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e++ +ilk kl  ++  s    +e+++l++ l++++pa+Rl      +eei++h+++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF', \
                 hsp.hit.seq.tostring())
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886', \
@@ -1911,8 +1837,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('ye++e +G Gs+++++++++k t+ ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++y+v+e+++gg+l d + +++ +se+e+  ++ +i + +eylH +g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++D+WslGv+ly++ltg +pf +  +++ +e++++i ++k + +   ++s s+++kdl++k+l+ dp++Rlta+ +l+hpw+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI', \
                 hsp.hit.seq.tostring())
         self.assertEqual('7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7', \
@@ -1985,8 +1909,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('+ell+ lG+Gs+GkV+ ++k   ++ g+ +A+K+lkk + k + + +++ E  il++++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lH  gii+rDLKpeNiLld++g++ki+DFGl+k+++ +++++++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e+++ ilk kl  ++  s    +e+++l++ l++++p +Rl      +eei++hp++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF', \
                 hsp.hit.seq.tostring())
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997', \
@@ -2013,8 +1935,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('ye++e +G Gs+++++++++k t  ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++ylv+e+++gg+l d + +++++se+e+ +++++i++ ++ylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++DvWslG++ly++l g +pf +  +++ +e++++i ++k+  +  +++s s+ +kd+++k+l+ dp++Rlta ++lkhpw+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI', \
                 hsp.hit.seq.tostring())
         self.assertEqual('7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7', \
@@ -2052,8 +1972,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('+ell+ lG+GsfGkV+ +kk + ++    +A+K+lkk + k + + +++ E  il +++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lHs gii+rDLKpeNiLld++g++k++DFGl+k+   +++k+++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e++ +ilk kl  ++  s    +e+++l++ l++++pa+Rl      +eei++h+++', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF', \
                 hsp.hit.seq.tostring())
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886', \
@@ -2080,8 +1998,6 @@ class HmmersearchCases(unittest.TestCase):
                 hsp.alignment_annotation['CS'])
         self.assertEqual('yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl', \
                 hsp.query.seq.tostring())
-        self.assertEqual('ye++e +G Gs+++++++++k t+ ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++y+v+e+++gg+l d + +++ +se+e+  ++ +i + +eylH +g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++D+WslGv+ly++ltg +pf +  +++ +e++++i ++k + +   ++s s+++kdl++k+l+ dp++Rlta+ +l+hpw+', \
-                hsp.alignment_annotation['homology'])
         self.assertEqual('YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI', \
                 hsp.hit.seq.tostring())
         self.assertEqual('7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7', \

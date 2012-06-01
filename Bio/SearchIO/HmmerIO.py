@@ -344,16 +344,6 @@ class HmmerTextIterator(object):
 
                 regx = None
 
-                if spc_len is None:
-                    # assume that self.line is a query or hit line
-                    try:
-                        regx = re.search(hre_id_line, self.line)
-                        spc_len = len(regx.group(1))
-                    # if not, then the self.line is an annotation line
-                    except AttributeError:
-                        regx = re.search(hre_annot_line, self.line)
-                        spc_len = len(regx.group(1))
-
                 # check for hit or query line
                 # we don't check for the hit or query id specifically yet
                 # to anticipate special cases where query id == hit id
@@ -368,16 +358,6 @@ class HmmerTextIterator(object):
                     elif len(hmmseq) > len(aliseq):
                         aliseq += regx.group(2)
                     assert len(hmmseq) >= len(aliseq)
-                # homology self.line is only encountered when len(hmmseq) > len(aliseq)
-                # and its length is len(hmmseq) - len(aliseq)
-                elif len(hmmseq) > len(aliseq):
-                    # note that ali_len changes depending on the difference of hmmseq
-                    # and aliseq
-                    ali_len = len(hmmseq) - len(aliseq)
-                    if 'homology' in annot:
-                        annot['homology'] += self.line[spc_len:spc_len+ali_len]
-                    else:
-                        annot['homology'] = self.line[spc_len:spc_len+ali_len]
                 # check for blank self.line
                 elif not self.line.strip():
                     pass
@@ -399,18 +379,17 @@ class HmmerTextIterator(object):
                     dom_counter += 1
                     hmmseq = ''
                     aliseq = ''
-                    spc_len = None
-                    ali_len = None
                     annot = {}
                     break
-                # otherwise it's an annotation self.line
+                # otherwise check if it's an annotation line and parse it
                 else:
                     regx = re.search(hre_annot_line, self.line)
-                    annot_name = regx.group(3)
-                    if annot_name in annot:
-                        annot[annot_name] += regx.group(2)
-                    else:
-                        annot[annot_name] = regx.group(2)
+                    if regx:
+                        annot_name = regx.group(3)
+                        if annot_name in annot:
+                            annot[annot_name] += regx.group(2)
+                        else:
+                            annot[annot_name] = regx.group(2)
 
                 self.line = self.handle.readline()
 
