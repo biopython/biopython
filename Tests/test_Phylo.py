@@ -138,9 +138,8 @@ class TreeTests(unittest.TestCase):
                                         key=lambda kv: kv[1])
             deep_tip_1, deep_dist_1 = max(tree.clade[1].depths().iteritems(),
                                         key=lambda kv: kv[1])
-            self.assertAlmostEqual(deep_dist_0, deep_dist_1,
-                                   # XXX Rounding errors accumulate?
-                                   delta=orig_tree_len*0.001)
+            # XXX Rounding errors accumulate?
+            self.assertAlmostEqual(deep_dist_0, deep_dist_1, 1)
 
     # Magic method
     def test_str(self):
