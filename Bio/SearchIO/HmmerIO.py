@@ -380,7 +380,10 @@ class HmmerTextIterator(object):
                     annot = {}
                     break
                 # otherwise check if it's an annotation line and parse it
-                else:
+                # len(hmmseq) is only != len(aliseq) when the cursor is parsing
+                # the homology character. Since we're not parsing that, we
+                # check for when the condition is False
+                elif len(hmmseq) == len(aliseq):
                     regx = re.search(hre_annot_line, self.line)
                     if regx:
                         annot_name = regx.group(3)
