@@ -67,7 +67,7 @@ from Bio.File import as_handle
 
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
-        'blast-tab': ('BlastIO', 'blast_tabular_iterator'),
+        'blast-tab': ('BlastIO', 'blast_tab_iterator'),
         'blast-text': ('BlastIO', 'blast_text_iterator'),
         'blast-xml': ('BlastIO', 'blast_xml_iterator'),
         'blat-psl': ('BlatIO', 'blast_psl_iterator'),

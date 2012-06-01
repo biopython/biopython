@@ -332,7 +332,7 @@ def blast_xml_iterator(handle):
             yield qresult
 
 
-def blast_tabular_iterator(handle):
+def blast_tab_iterator(handle):
     """Generator function to parse BLAST+ tabular output as QueryResult objects.
 
     handle -- Handle to the file, or the filename as string.
@@ -531,7 +531,7 @@ def blast_tabular_iterator(handle):
             # which returns line and qresult
             # no need to do readline() here since it's already done by the iterator
             elif line and not line.startswith('#'):
-                for line, qresult in _tab_parser(handle, line, fields):
+                for line, qresult in BlastTabIterator(handle, line, fields):
                     qresult.program = program
                     qresult.meta = {'program_version': version}
                     qresult.description = query_desc
@@ -555,95 +555,102 @@ def blast_tabular_iterator(handle):
                     yield line, qresult
                 break
 
-    def _tab_parser(handle, first_line, fields=_default_fields):
-        """Parser for the plain tab BLAST+ output."""
+    class BlastTabIterator(object):
 
-        line = first_line
+        """Parser for the Blast tabular format."""
 
-        while True:
+        def __init__(self, handle, line=None, fields=_default_fields):
+            self.handle = handle
+            self.line = line
+            self.fields = fields
 
-            parsed = _parse_result_row(line, fields)
+        def __iter__(self):
+            if self.line is None:
+                self.line = read_forward(self.handle)
 
-            # create qresult object, setattr with parsed values
-            # use 'id', with 'acc' and 'acc_ver' fallbacks
-            # one of these must have a value since we've checked whether
-            # they exist or not in the tabc parser
-            qid_cache = parsed['qresult'].get('id')
-            if qid_cache is None:
-                qid_cache = parsed['qresult'].get('acc')
-            if qid_cache is None:
-                qid_cache = parsed['qresult'].get('acc_ver')
-
-            qresult = QueryResult(qid_cache)
-            for qresult_attr in parsed['qresult']:
-                setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
-
-            # append hit to qresult while qresult.id is the same as the
-            # previous row
             while True:
+                parsed = _parse_result_row(self.line, self.fields)
+                # create qresult object, setattr with parsed values
+                # use 'id', with 'acc' and 'acc_ver' fallbacks
+                # one of these must have a value since we've checked whether
+                # they exist or not in the tabc parser
+                qid_cache = parsed['qresult'].get('id')
+                if qid_cache is None:
+                    qid_cache = parsed['qresult'].get('acc')
+                if qid_cache is None:
+                    qid_cache = parsed['qresult'].get('acc_ver')
 
-                # create hit object, setattr with parsed values
-                hid_cache = parsed['hit']['id']
-                if hid_cache is None:
-                    hid_cache = parsed['hit'].get('acc')
-                if hid_cache is None:
-                    hid_cache = parsed['hit'].get('acc_ver')
+                qresult = QueryResult(qid_cache)
+                for qresult_attr in parsed['qresult']:
+                    setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
 
-                hit = Hit(hid_cache, qid_cache)
-                for hit_attr in parsed['hit']:
-                    setattr(hit, hit_attr, parsed['hit'][hit_attr])
-
-                # append hsp to hit while hit.id and qresult.id are the same
-                # as the previous row
+                # append hit to qresult while qresult.id is the same as the
+                # previous row
                 while True:
 
-                    # create hsp object, setattr with parsed values, append to hit
-                    hsp = HSP(hid_cache, qid_cache)
-                    for hsp_attr in parsed['hsp']:
-                        setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
-                    # try to set hit_frame and/or query_frame if frames
-                    # attribute is set
-                    if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):
-                        setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
-                    if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
-                        setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
-                    hit.append(hsp)
+                    # create hit object, setattr with parsed values
+                    hid_cache = parsed['hit']['id']
+                    if hid_cache is None:
+                        hid_cache = parsed['hit'].get('acc')
+                    if hid_cache is None:
+                        hid_cache = parsed['hit'].get('acc_ver')
 
-                    # read next line and parse it if it exists
-                    line = read_forward(handle)
-                    # if line doesn't exist (file end), break out of loop
-                    if not line or line.startswith('#'):
+                    hit = Hit(hid_cache, qid_cache)
+                    for hit_attr in parsed['hit']:
+                        setattr(hit, hit_attr, parsed['hit'][hit_attr])
+
+                    # append hsp to hit while hit.id and qresult.id are the same
+                    # as the previous row
+                    while True:
+
+                        # create hsp object, setattr with parsed values, append to hit
+                        hsp = HSP(hid_cache, qid_cache)
+                        for hsp_attr in parsed['hsp']:
+                            setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
+                        # try to set hit_frame and/or query_frame if frames
+                        # attribute is set
+                        if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):
+                            setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
+                        if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
+                            setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
+                        hit.append(hsp)
+
+                        # read next line and parse it if it exists
+                        self.line = read_forward(handle)
+                        # if line doesn't exist (file end), break out of loop
+                        if not self.line or self.line.startswith('#'):
+                            break
+                        else:
+                            parsed = _parse_result_row(self.line, self.fields)
+                        # if hit.id or qresult.id is different, break out of loop
+                        if hid_cache != parsed['hit']['id'] or \
+                                qid_cache != parsed['qresult']['id']:
+                            break
+
+                    print hit
+                    # append hsp-filled hit into qresult
+                    qresult.append(hit)
+
+                    # if qresult.id is different compared to the previous line
+                    # break out of loop
+                    if not self.line or qid_cache != parsed['qresult']['id'] or \
+                            self.line.startswith('#'):
                         break
-                    else:
-                        parsed = _parse_result_row(line, fields)
-                    # if hit.id or qresult.id is different, break out of loop
-                    if hid_cache != parsed['hit']['id'] or \
-                            qid_cache != parsed['qresult']['id']:
-                        break
 
-                # append hsp-filled hit into qresult
-                qresult.append(hit)
+                yield self.line, qresult
 
-                # if qresult.id is different compared to the previous line
-                # break out of loop
-                if not line or qid_cache != parsed['qresult']['id'] or \
-                        line.startswith('#'):
+                if not self.line or self.line.startswith('#'):
                     break
-
-            yield line, qresult
-
-            if not line or line.startswith('#'):
-                break
 
     line = read_forward(handle)
     if line is None:
         raise StopIteration
     elif line.startswith('#'):
-        parser = _tabc_parser
+        parser = _tabc_parser(handle, line)
     else:
-        parser = _tab_parser
+        parser = BlastTabIterator(handle, line)
 
-    for line, qresult in parser(handle, line):
+    for line, qresult in parser:
         yield qresult
 
 
