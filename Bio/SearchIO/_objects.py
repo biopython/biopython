@@ -863,10 +863,6 @@ class HSP(BaseSearchObject):
 
     """
 
-    # attributes we don't want to transfer when creating a new HSP class
-    # from this one
-    _NON_STICKY_ATTRS = ('_hit', '_query', 'alignment',)
-
     def __init__(self, hit_id, query_id, hit_seq='', query_seq='', \
             alphabet=single_letter_alphabet):
         """Initializes an HSP object.
@@ -962,7 +958,6 @@ class HSP(BaseSearchObject):
         if hasattr(self, 'alignment'):
             obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
                     self.query[idx], self._alphabet)
-            self._transfer_attrs(obj)
             return obj
         else:
             raise TypeError("Slicing for HSP objects without alignment is not supported.")

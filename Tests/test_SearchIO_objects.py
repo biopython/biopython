@@ -536,11 +536,12 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.assertEqual('ATG--', sliced_hsp.query.seq.tostring())
 
     def test_getitem_attrs(self):
-        # attributes from the original instance should be present in the new
+        # attributes from the original instance should not be present in the new
         # objects, except for query, hit, and alignment
         setattr(self.hsp, 'attr_original', 1000)
+        self.assertTrue(hasattr(self.hsp, 'attr_original'))
         new_hsp = self.hsp[:5]
-        self.assertEqual(1000, new_hsp.attr_original)
+        self.assertFalse(hasattr(new_hsp, 'attr_original'))
 
     def test_setitem(self):
         # setitem not supported
