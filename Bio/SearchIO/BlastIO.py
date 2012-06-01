@@ -94,7 +94,7 @@ def blast_xml_iterator(handle):
         'Hsp_positive': 'pos_num',
         'Hsp_gaps': 'gap_num',
         'Hsp_align-len': 'init_len',
-        'Hsp_midline': 'homology',
+        #'Hsp_midline': 'homology',
         'Hsp_pattern-from': 'pattern_from',
         'Hsp_pattern-to': 'pattern_to',
         'Hsp_density': 'density',

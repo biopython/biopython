@@ -77,7 +77,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(19, len(hsp))
         self.assertEqual('CAGGCCAGCGACTTCTGGG', hsp.query.seq.tostring())
         self.assertEqual('CAGGCCAGCGACTTCTGGG', hsp.hit.seq.tostring())
-        self.assertEqual('|||||||||||||||||||', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # parse last hit
@@ -105,7 +104,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(21, len(hsp))
         self.assertEqual('TGAAAGGAAATNAAAATGGAA', hsp.query.seq.tostring())
         self.assertEqual('TGAAAGGAAATCAAAATGGAA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||| |||||||||', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
@@ -188,7 +186,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, len(hsp))
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.query.seq.tostring())
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -230,7 +227,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(62, len(hsp))
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(98.9927, hsp.bitscore)
@@ -249,7 +245,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(53, len(hsp))
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('|||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|7', hit.id)
@@ -276,7 +271,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(66, len(hsp))
         self.assertEqual('TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('TCACGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -382,7 +376,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, len(hsp))
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.query.seq.tostring())
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
 
@@ -435,7 +428,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(62, len(hsp))
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(98.9927, hsp.bitscore)
@@ -454,7 +446,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(53, len(hsp))
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('|||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|7', hit.id)
@@ -481,7 +472,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(66, len(hsp))
         self.assertEqual('TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('TCACGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||||', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -565,7 +555,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(490, len(hsp))
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.query.seq.tostring())
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGGCCCCCGGCTCGGGGTGCCCACCTTCCCCATGGCTGGACACCTGGCTTCAGACTTCGCCTTCTCACCCCCACCAGGTGGGGGTGATGGGTCAGCAGGGCTGGAGCCGGGCTGGGTGGATCCTCGAACCTGGCTAAGCTTCCAAGGGCCTCCAGGTGGGCCTGGAATCGGACCAGGCTCAGAGGTATTGGGGATCTCCCCATGTCCGCCCGCATACGAGTTCTGCGGAGGGATGGCATACTGTGGACCTCAGGTTGGACTGGGCCTAGTCCCCCAAGTTGGCGTGGAGACTTTGCAGCCTGAGGGCCAGGCAGGAGCACGAGTGGAAAGCAACTCAGAGGGAACCTCCTCTGAGCCCTGTGCCGACCGCCCCAATGCCGTGAAGTTGGAGAAGGTGGAACCAACTCCCGAGGAGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -609,7 +598,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(62, len(hsp))
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gi|332254616|ref|XM_003276378.1|', hit.id)
@@ -636,7 +624,6 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(66, len(hsp))
         self.assertEqual('TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.query.seq.tostring())
         self.assertEqual('TCATGCCACTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', hsp.hit.seq.tostring())
-        self.assertEqual('||| |||| |||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -699,7 +686,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(103, len(hsp))
         self.assertEqual('MRLCLIIIYHRGTCMGGISIWQXXXXXXXXXXXFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.query.seq.tostring())
         self.assertEqual('MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.hit.seq.tostring())
-        self.assertEqual('MRLCLIIIYHRGTCMGGISIWQLLIIAVIVVLLFGTKKLGSIGSDLGASIKGFKKAMSDDEPKQDKTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQV', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # parse last hit
@@ -727,7 +713,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(51, len(hsp))
         self.assertEqual('KAMSDDEPKQD---KTSQDADFTAKTIADKQADTNQEQAKTEDAKRHDKEQ', hsp.query.seq.tostring())
         self.assertEqual('KKEADDKAKKDLEAKTKKEADEKAKKEADEKA-KKEAEAKTKEAEAKTKKE', hsp.hit.seq.tostring())
-        self.assertEqual('K  +DD+ K+D   KT ++AD  AK  AD++A   + +AKT++A+   K++', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
@@ -786,7 +771,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(50, len(hsp))
         self.assertEqual('AWNKDRTQIAICPNNHEVHIYE--KSGAKWNKVHELKEHNGQVTGIDWAP', hsp.query.seq.tostring())
         self.assertEqual('AWSNDGYYLATCSRDKSVWIWETDESGEEYECISVLQEHSQDVKHVIWHP', hsp.hit.seq.tostring())
-        self.assertEqual('AW+ D   +A C  +  V I+E  +SG ++  +  L+EH+  V  + W P', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # parse last hit
@@ -813,7 +797,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(42, len(hsp))
         self.assertEqual('TQIAICPNNHEVHIYEKSGAKWNKVHELKEHNGQVTGIDWAP', hsp.query.seq.tostring())
         self.assertEqual('TILASCSYDGKVMIWKEENGRWSQIAVHAVHSASVNSVQWAP', hsp.hit.seq.tostring())
-        self.assertEqual('T +A C  + +V I+++   +W+++     H+  V  + WAP', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -959,7 +942,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(107, len(hsp))
         self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.query.seq.tostring())
         self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.hit.seq.tostring())
-        self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # parse last hit
@@ -987,7 +969,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(107, len(hsp))
         self.assertEqual('GGHVNPAVTFGAFVGGNITLLRGIVYIIAQLLGSTVACLLLKFVTNDMAVGVFSLSAGVGVTNALVFEIVMTFGLVYTVYATAIDPKKGSLGTIAPIAIGFIVGANI', hsp.query.seq.tostring())
         self.assertEqual('GGHVNPAVTFGAFVGGNITLFRGILYIIAQLLGSTVACFLLEFATGGMSTGAFALSAGVSVWNAFVFEIVMTFGLVYTVYATAIDPKKGDLGVIAPIAIGFIVGANI', hsp.hit.seq.tostring())
-        self.assertEqual('GGHVNPAVTFGAFVGGNITL RGI+YIIAQLLGSTVAC LL+F T  M+ G F+LSAGV V NA VFEIVMTFGLVYTVYATAIDPKKG LG IAPIAIGFIVGANI', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
     # def test_xbt011(self):
@@ -1071,7 +1052,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, len(hsp))
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.query.seq.tostring())
         self.assertEqual('MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEGTYVGLADTHTIEVTVDHEPVSFDITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN', hsp.hit.seq.tostring())
-        self.assertEqual('MKK    LFFILLL+GCGV ++KSQGED      + TKEGTYVGLADTHTIEVTVD+EPVS DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -1112,7 +1092,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(43.5134, hsp.bitscore)
@@ -1131,7 +1110,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHDVKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA', hsp.hit.seq.tostring())
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|9', hit.id)
@@ -1157,7 +1135,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -1266,7 +1243,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, len(hsp))
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.query.seq.tostring())
         self.assertEqual('MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEGTYVGLADTHTIEVTVDHEPVSFDITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN', hsp.hit.seq.tostring())
-        self.assertEqual('MKK    LFFILLL+GCGV ++KSQGED      + TKEGTYVGLADTHTIEVTVD+EPVS DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # check if we've finished iteration over qresults
@@ -1332,7 +1308,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(43.5134, hsp.bitscore)
@@ -1351,7 +1326,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHDVKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA', hsp.hit.seq.tostring())
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|9', hit.id)
@@ -1377,7 +1351,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -1459,7 +1432,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(102, len(hsp))
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.query.seq.tostring())
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.hit.seq.tostring())
-        self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -1499,7 +1471,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(43.5134, hsp.bitscore)
@@ -1518,7 +1489,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQDFGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHDVKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA', hsp.hit.seq.tostring())
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gi|350596020|ref|XP_003360649.2|', hit.id)
@@ -1544,7 +1514,6 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -1607,7 +1576,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(133, len(hsp))
         self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFXGPYTDFTPXTTEXQKLXEQALNTYPVNTXERWXXIAVAVPGRXKE', hsp.query.seq.tostring())
         self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERFEGPYTDFTPWTTEEQKLLEQALKTYPVNTPERWEKIAEAVPGRTKK', hsp.hit.seq.tostring())
-        self.assertEqual('DLQLLIKAVNLFPAGTNSRWEVIANYMNIHSSSGVKRTAKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQADNATPSERF GPYTDFTP TTE QKL EQAL TYPVNT ERW  IA AVPGR K+', hsp.homology)
 
         # test parsed values of last hit
         hit = qresult[-1]
@@ -1630,7 +1598,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(3, hsp.gap_num)
         self.assertEqual('AGTNSRWEVIANYMNI--HSSSGVKRT-AKDVIGKAKSLQKLDPHQKDDINKKAFDKFKKEHGVVPQ', hsp.query.seq.tostring())
         self.assertEqual('SSSNSSSKASASSSNVGASSSSGTKKSDSKSSNESSKSKRDKEDHKEGSINRSKDEKVSKEHRVVKE', hsp.hit.seq.tostring())
-        self.assertEqual('+ +NS  +  A+  N+   SSSG K++ +K     +KS +  + H++  IN+   +K  KEH VV +', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -1689,7 +1656,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(26, len(hsp))
         self.assertEqual('HMLVSKIKPCMCKYEQIQTVKLRMAH', hsp.query.seq.tostring())
         self.assertEqual('HMLVSKIKPCMCKYELIRTVKLRMAH', hsp.hit.seq.tostring())
-        self.assertEqual('HMLVSKIKPCMCKYE I+TVKLRMAH', hsp.homology)
 
     def test_xbt022(self):
         xml_file = get_file('xbt022.xml')
@@ -1769,7 +1735,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(140, len(hsp))
         self.assertEqual('MAGHLAXXXXXXXXXXXXXXXXXLEPGWVDPRTWLSFQXXXXXXXXXXXSEVLGISPCPPAYEFCGGMAYCXXXXXXXXXXXXXXETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.query.seq.tostring())
         self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGPPGGPGIGPGSEVLGISPCPPAYEFCGGMAYCGPQVGLGLVPQVGVETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.hit.seq.tostring())
-        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGPPGGPGIGPGSEVLGISPCPPAYEFCGGMAYCGPQVGLGLVPQVGVETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.homology)
         #self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -1813,7 +1778,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(95, len(hsp))
         self.assertEqual('LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', hsp.query.seq.tostring())
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', hsp.hit.seq.tostring())
-        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(51.6026, hsp.bitscore)
@@ -1832,7 +1796,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(72, len(hsp))
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG', hsp.query.seq.tostring())
         self.assertEqual('VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG', hsp.hit.seq.tostring())
-        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  V QAG++ +  G', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|19', hit.id)
@@ -1858,7 +1821,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(91, len(hsp))
         self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
         self.assertEqual('SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHVGQACLELLTSGGLLASASQSAGITGVSHHAR', hsp.hit.seq.tostring())
-        self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -1963,7 +1925,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(95, len(hsp))
         self.assertEqual('LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', hsp.query.seq.tostring())
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', hsp.hit.seq.tostring())
-        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(51.6026, hsp.bitscore)
@@ -1982,7 +1943,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(72, len(hsp))
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG', hsp.query.seq.tostring())
         self.assertEqual('VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG', hsp.hit.seq.tostring())
-        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  V QAG++ +  G', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|19', hit.id)
@@ -2008,7 +1968,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(91, len(hsp))
         self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
         self.assertEqual('SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHVGQACLELLTSGGLLASASQSAGITGVSHHAR', hsp.hit.seq.tostring())
-        self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2091,7 +2050,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(140, len(hsp))
         self.assertEqual('MAGHLAXXXXXXXXXXXXXXXXXLEPGWVDPRTWLSFQXXXXXXXXXXXSEVLGISPCPPAYEFCGGMAYCXXXXXXXXXXXXXXETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.query.seq.tostring())
         self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGPPGGPGIGPGSEVLGISPCPPAYEFCGGMAYCGPQVGLGLVPQVGVETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.hit.seq.tostring())
-        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGPPGGPGIGPGSEVLGISPCPPAYEFCGGMAYCGPQVGLGLVPQVGVETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -2134,7 +2092,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(95, len(hsp))
         self.assertEqual('LRRSFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', hsp.query.seq.tostring())
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', hsp.hit.seq.tostring())
-        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(51.6026, hsp.bitscore)
@@ -2153,7 +2110,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(72, len(hsp))
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANXXXXXXXXFLRRSFALVAQAGVQWLDLG', hsp.query.seq.tostring())
         self.assertEqual('VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG', hsp.hit.seq.tostring())
-        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  V QAG++ +  G', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gi|57113895|ref|NP_001009002.1|', hit.id)
@@ -2179,7 +2135,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(91, len(hsp))
         self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
         self.assertEqual('SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHVGQAHLELLTSGGLLASASQSAGITGVSHHAR', hsp.hit.seq.tostring())
-        self.assertEqual('SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HVGQA LE   SG L A ASQS GITGVSHHA+', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2243,7 +2198,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(252, len(hsp))
         self.assertEqual('LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGVENPVPSH---ELSLENWNQVIDTNLTGAFLGSREAIKYFVENDIKG-NVINMSSVHEMIPWPLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPINAEKFADPEQRADVESMIPMGYIGKPEEIASVAAFLASSQASYVTGITLFADGGM', hsp.query.seq.tostring())
         self.assertEqual('LQGKVVAITGCSTGIGRAIAIGAAKNGANVVLHHLGDSTASDIAQVQEECKQAGAKTVVVPGDIAEAKTANEIVSAAVSSFSRIDVLISNAGI---CPFHSFLDLPHPLWKRVQDVNLNGSFYVVQAVANQMAKQEPKGGSIVAVSSISALMGGGEQCHYTPTKAGIKSLMESCAIALGPMGIRCNSVLPGTIETNINKEDLSNPEKRADQIRRVPLGRLGKPEDLVGPTLFFASDLSNYCTGASVLVDGGM', hsp.hit.seq.tostring())
-        self.assertEqual('L+ KVV +TG S G+GRA+A+   +  + VV+++  +   +   + + E  +AG + ++V GD+ + +    +V  AV  F  +DV+I+NAG+    P H   +L    W +V D NL G+F   +       + + KG +++ +SS+  ++      HY  +K G+K + E+ A+   P GIR N++ PG I+T IN E  ++PE+RAD    +P+G +GKPE++     F AS  ++Y TG ++  DGGM', hsp.homology)
 
         # parse last hit
         hit = qresult[-1]
@@ -2269,7 +2223,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(228, len(hsp))
         self.assertEqual('LKDKVVVVTGGSKGLGRAMAVRFGQEQSKVVVNYRSNXXXXXXXXXXXXXXGGQAIIVRGDVTKEEDVVNLVETAVKEFGSLDVMINNAGV-----------ENPVPS-HELSLE-----NWNQVIDTNLTGAFLGSREAIKYFVENDIKGNVINMSSVHEMIPW-PLFVHYAASKGGMKLMTETLALEYAPKGIRVNNIGPGAIDTPI----------NAEKFADPE', hsp.query.seq.tostring())
         self.assertEqual('LDGKVALVTGAGRGIGAAIAVALGQPGAKVVVNYANSREAAEKVVDEIKSNAQSAISIQADVGDPDAVTKLMDQAVEHFGYLDIVSSNAGIVSFGHVKDVTPDVCVPSPYESPVEL*PQQEFDRVFRVNTRGQFFVAREAYRHLREG---GRIILTSSNTASVKGVPRHAVYSGSKGAIDTFVRCLAIDCGDKKITVNAVAPGAIKTDMFLSVSREYIPNGETFTDEQ', hsp.hit.seq.tostring())
-        self.assertEqual('L  KV +VTG  +G+G A+AV  GQ  +KVVVNY ++ E A +V  EI+     AI ++ DV   + V  L++ AV+ FG LD++ +NAG+           +  VPS +E  +E      +++V   N  G F  +REA ++  E    G +I  SS    +   P    Y+ SKG +      LA++   K I VN + PGAI T +          N E F D +', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2351,7 +2304,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(43, len(hsp))
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
         self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', hsp.hit.seq.tostring())
-        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -2392,7 +2344,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(32.7278, hsp.bitscore)
@@ -2411,7 +2362,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(71, len(hsp))
         self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
         self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', hsp.hit.seq.tostring())
-        self.assertEqual('+ +Y       P G I L+G  +TS      GK  F+ +     T  +  +F QAA  +ER  W++ I+ A', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|17', hit.id)
@@ -2437,7 +2387,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
         self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
-        self.assertEqual('KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2538,7 +2487,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(43, len(hsp))
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
         self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', hsp.hit.seq.tostring())
-        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         self.assertRaises(StopIteration, qresults.next, )
@@ -2601,7 +2549,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', hsp.hit.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(32.7278, hsp.bitscore)
@@ -2620,7 +2567,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(71, len(hsp))
         self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
         self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', hsp.hit.seq.tostring())
-        self.assertEqual('+ +Y       P G I L+G  +TS      GK  F+ +     T  +  +F QAA  +ER  W++ I+ A', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|17', hit.id)
@@ -2646,7 +2592,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
         self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
-        self.assertEqual('KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
@@ -2726,7 +2671,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(43, len(hsp))
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', hsp.query.seq.tostring())
         self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', hsp.hit.seq.tostring())
-        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp.homology)
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -2767,7 +2711,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(43.8986, hsp.bitscore)
@@ -2786,7 +2729,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(100, len(hsp))
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDF-GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', hsp.query.seq.tostring())
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNHDGKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA', hsp.hit.seq.tostring())
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gi|338714227|ref|XM_001492113.3|', hit.id)
@@ -2812,7 +2754,6 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
         self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
-        self.assertEqual('KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2877,7 +2818,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(118, len(hsp))
         self.assertEqual('ECXFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.query.seq.tostring())
         self.assertEqual('ECCFIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.hit.seq.tostring())
-        self.assertEqual('EC FIMLYIFPARIWST*VICPPEQWL*RRKLSSGQKLLRRCGKTGYIKNNAGLK*PMRFCQGILH*CI*SKSGPIQRMWLKAPFWPFLFLLRALHTFPLFLSKWTK*RVS*VEGHSD', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gi|4309961|gb|AC005993.2|AC005993', hit.id)
@@ -2902,7 +2842,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(28, len(hsp))
         self.assertEqual('PLTKAHRLFQTSIVFYVTCFTASSQQLL', hsp.query.seq.tostring())
         self.assertEqual('PLNKYHTIFQISLCFYLFCYNMAQKQLL', hsp.hit.seq.tostring())
-        self.assertEqual('PL K H +FQ S+ FY+ C+  + +QLL', hsp.homology)        
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2984,7 +2923,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, len(hsp))
         self.assertEqual('EVCNDRLYHCR', hsp.query.seq.tostring())
         self.assertEqual('EVCNDRLYHCR', hsp.hit.seq.tostring())
-        self.assertEqual('EVCNDRLYHCR', hsp.homology)
         #self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -3026,7 +2964,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(116, len(hsp))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.hit.seq.tostring())
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.query.seq.tostring())
-        self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(18.9375, hsp.bitscore)
@@ -3045,7 +2982,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, len(hsp))
         self.assertEqual('KFWMPSLRLLI', hsp.query.seq.tostring())
         self.assertEqual('KKWVPPVKLLI', hsp.hit.seq.tostring())
-        self.assertEqual('K W+P ++LLI', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|23', hit.id)
@@ -3072,7 +3008,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(84, len(hsp))
         self.assertEqual('IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', hsp.query.seq.tostring())
         self.assertEqual('IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK', hsp.hit.seq.tostring())
-        self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -3172,7 +3107,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(116, len(hsp))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.hit.seq.tostring())
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.query.seq.tostring())
-        self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(18.9375, hsp.bitscore)
@@ -3191,7 +3125,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, len(hsp))
         self.assertEqual('KFWMPSLRLLI', hsp.query.seq.tostring())
         self.assertEqual('KKWVPPVKLLI', hsp.hit.seq.tostring())
-        self.assertEqual('K W+P ++LLI', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gnl|BL_ORD_ID|23', hit.id)
@@ -3218,7 +3151,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(84, len(hsp))
         self.assertEqual('IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', hsp.query.seq.tostring())
         self.assertEqual('IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK', hsp.hit.seq.tostring())
-        self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -3299,7 +3231,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, len(hsp))
         self.assertEqual('EVCNDRLYHCR', hsp.query.seq.tostring())
         self.assertEqual('EVCNDRLYHCR', hsp.hit.seq.tostring())
-        self.assertEqual('EVCNDRLYHCR', hsp.homology)
         #self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
@@ -3343,7 +3274,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(116, len(hsp))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.hit.seq.tostring())
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.query.seq.tostring())
-        self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.homology)
 
         hsp = hit[-1]
         self.assertEqual(36.3494, hsp.bitscore)
@@ -3362,7 +3292,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(14, len(hsp))
         self.assertEqual('MAMNTGGFDSMQRQ', hsp.query.seq.tostring())
         self.assertEqual('MAMNTGGFDSMQRQ', hsp.hit.seq.tostring())
-        self.assertEqual('MAMNTGGFDSMQRQ', hsp.homology)
 
         hit = qresult[-1]
         self.assertEqual('gi|254579534|ref|XM_002495708.1|', hit.id)
@@ -3388,7 +3317,6 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(84, len(hsp))
         self.assertEqual('IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', hsp.query.seq.tostring())
         self.assertEqual('IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIPVDKLSDVLDAFIEANQLAMDIKLK', hsp.hit.seq.tostring())
-        self.assertEqual('IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP  +LS++LDAFIEA  LAM+I+LK', hsp.homology)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
