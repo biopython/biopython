@@ -182,29 +182,21 @@ class QueryResult(BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_hits',)
 
-    def __init__(self, query_id, hits=[], meta={}, program='<unknown>', \
+    def __init__(self, query_id, hits=[], program='<unknown>', \
             target='<unknown>', hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
         Arguments:
         query_id -- String of query sequence ID.
         hits     -- Iterator returning Hit objects.
-        meta     -- Dictionary of additional information about the search.
-                    This is the information stored in the header of the
-                    search output file (anything prior to the first result,
-                    if it exists) and varies depending on the search program.
         program  -- String of search program name.
         target   -- String of database name to search against.
         hit_key_function -- Function to define hit keys, defaults to a function
                             that return Hit object IDs.
 
         """
-        # meta must be a dict
-        if not isinstance(meta, dict):
-            raise TypeError("Meta argument must be a dictionary object.")
 
         self.id = query_id
-        self.meta = meta
         self.program = program
         self.target = target
         self._hit_key_function = hit_key_function
@@ -298,7 +290,7 @@ class QueryResult(BaseSearchObject):
 
     def __reversed__(self):
         hits = reversed(list(self.hits))
-        obj =  self.__class__(self.id, hits, self.meta, self.program, \
+        obj =  self.__class__(self.id, hits, self.program, \
                 self.target, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -365,7 +357,7 @@ class QueryResult(BaseSearchObject):
             # should we return just a list of Hits instead of a full blown
             # QueryResult object if it's a slice?
             hits = list(self.hits)[hit_key]
-            obj =  self.__class__(self.id, hits, self.meta, self.program, \
+            obj =  self.__class__(self.id, hits, self.program, \
                     self.target, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj

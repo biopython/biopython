@@ -32,13 +32,13 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.12', qresult.meta['program_version'])
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual(1, qresult.meta['param_score_match'])
-        self.assertEqual(-3, qresult.meta['param_score_mismatch'])
-        self.assertEqual(5, qresult.meta['param_gap_open'])
-        self.assertEqual(2, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.12', qresult.version)
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual(1, qresult.param_score_match)
+        self.assertEqual(-3, qresult.param_score_mismatch)
+        self.assertEqual(5, qresult.param_gap_open)
+        self.assertEqual(2, qresult.param_gap_extend)
 
         # test parsed values of qresult
         self.assertEqual('gi|1348916|gb|G26684.1|G26684', qresult.id)
@@ -120,17 +120,17 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
                 'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
                 'sequences\", J Comput Biol 2000; 7(1-2):203-14.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual(1.0, qresult.meta['param_score_match'])
-        self.assertEqual(-2.0, qresult.meta['param_score_mismatch'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;m;', qresult.meta['param_filter'])
-        self.assertEqual(0.0, qresult.meta['param_gap_open'])
-        self.assertEqual(0.0, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual(1.0, qresult.param_score_match)
+        self.assertEqual(-2.0, qresult.param_score_mismatch)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;m;', qresult.param_filter)
+        self.assertEqual(0.0, qresult.param_gap_open)
+        self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -285,17 +285,17 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
                 'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
                 'sequences\", J Comput Biol 2000; 7(1-2):203-14.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual(1.0, qresult.meta['param_score_match'])
-        self.assertEqual(-2.0, qresult.meta['param_score_mismatch'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;m;', qresult.meta['param_filter'])
-        self.assertEqual(0.0, qresult.meta['param_gap_open'])
-        self.assertEqual(0.0, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual(1.0, qresult.param_score_match)
+        self.assertEqual(-2.0, qresult.param_score_mismatch)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;m;', qresult.param_filter)
+        self.assertEqual(0.0, qresult.param_gap_open)
+        self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
         self.assertEqual('Query_1', qresult.id)
@@ -323,17 +323,17 @@ class BlastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
                 'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
                 'sequences\", J Comput Biol 2000; 7(1-2):203-14.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual(1.0, qresult.meta['param_score_match'])
-        self.assertEqual(-2.0, qresult.meta['param_score_mismatch'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;m;', qresult.meta['param_filter'])
-        self.assertEqual(0.0, qresult.meta['param_gap_open'])
-        self.assertEqual(0.0, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual(1.0, qresult.param_score_match)
+        self.assertEqual(-2.0, qresult.param_score_mismatch)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;m;', qresult.param_filter)
+        self.assertEqual(0.0, qresult.param_gap_open)
+        self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -487,17 +487,17 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Zheng Zhang, Scott Schwartz, Lukas Wagner, and '
                 'Webb Miller (2000), \"A greedy algorithm for aligning DNA '
                 'sequences\", J Comput Biol 2000; 7(1-2):203-14.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual(1.0, qresult.meta['param_score_match'])
-        self.assertEqual(-2.0, qresult.meta['param_score_mismatch'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;m;', qresult.meta['param_filter'])
-        self.assertEqual(0.0, qresult.meta['param_gap_open'])
-        self.assertEqual(0.0, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual(1.0, qresult.param_score_match)
+        self.assertEqual(-2.0, qresult.param_score_mismatch)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;m;', qresult.param_filter)
+        self.assertEqual(0.0, qresult.param_gap_open)
+        self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
         self.assertEqual('refseq_rna', qresult.target)
 
@@ -640,13 +640,13 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.12', qresult.meta['program_version'])
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.12', qresult.version)
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('nr', qresult.target)
         
@@ -727,12 +727,12 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.18+', qresult.meta['program_version'])
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.18+', qresult.version)
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('nr', qresult.target)
         
@@ -811,14 +811,14 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
         
         # test meta variables, only for the first one
-        self.assertEqual('2.2.18+', qresult.meta['program_version'])
+        self.assertEqual('2.2.18+', qresult.version)
         self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', 
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(0.01, qresult.meta['param_evalue_threshold'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
-        self.assertEqual('m L; R -d repeat/repeat_9606;', qresult.meta['param_filter'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(0.01, qresult.param_evalue_threshold)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
+        self.assertEqual('m L; R -d repeat/repeat_9606;', qresult.param_filter)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('gpipe/9606/Previous/protein', qresult.target)
 
@@ -863,14 +863,14 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.18', qresult.meta['program_version'])
+        self.assertEqual('2.2.18', qresult.version)
         self.assertEqual('~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.', 
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(1e-05, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(1e-05, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('/Users/pjcock/Downloads/Software/blast-2.2.18/data/nr', qresult.target)
 
@@ -898,13 +898,13 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.22+', qresult.meta['program_version'])
-        self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(1e-06, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.22+', qresult.version)
+        self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(1e-06, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('nr', qresult.target)
         
@@ -984,18 +984,18 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
                 'PSI-BLAST: a new generation of protein database search '
                 'programs\", Nucleic Acids Res. 25:3389-3402.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1150,18 +1150,18 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
                 'PSI-BLAST: a new generation of protein database search '
                 'programs\", Nucleic Acids Res. 25:3389-3402.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1190,18 +1190,18 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
                 'PSI-BLAST: a new generation of protein database search '
                 'programs\", Nucleic Acids Res. 25:3389-3402.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1258,18 +1258,18 @@ class BlastpXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
                 'PSI-BLAST: a new generation of protein database search '
                 'programs\", Nucleic Acids Res. 25:3389-3402.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1366,18 +1366,18 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), \"Gapped BLAST and '
                 'PSI-BLAST: a new generation of protein database search '
                 'programs\", Nucleic Acids Res. 25:3389-3402.', \
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('F', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('F', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('refseq_protein', qresult.target)
 
@@ -1530,13 +1530,13 @@ class BlastxXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         
-        self.assertEqual('2.2.12', qresult.meta['program_version'])
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.12', qresult.version)
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
         self.assertEqual('nr', qresult.target)
 
@@ -1611,13 +1611,13 @@ class BlastxXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
         
-        self.assertEqual('2.2.22+', qresult.meta['program_version'])
-        self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(0.0001, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.22+', qresult.version)
+        self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(0.0001, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
         self.assertEqual('nr', qresult.target)
 
@@ -1667,18 +1667,18 @@ class BlastxXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), "Gapped BLAST '
                 'and PSI-BLAST: a new generation of protein database search '
                 'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1834,18 +1834,18 @@ class BlastxXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), "Gapped BLAST '
                 'and PSI-BLAST: a new generation of protein database search '
                 'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1872,18 +1872,18 @@ class BlastxXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), "Gapped BLAST '
                 'and PSI-BLAST: a new generation of protein database search '
                 'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
         self.assertEqual('db/minirefseq_protein', qresult.target)
 
@@ -1983,18 +1983,18 @@ class BlastxXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb '
                 'Miller, and David J. Lipman (1997), "Gapped BLAST '
                 'and PSI-BLAST: a new generation of protein database search '
                 'programs", Nucleic Acids Res. 25:3389-3402.',
-                        qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                        qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
         self.assertEqual('refseq_protein', qresult.target)
 
@@ -2151,13 +2151,13 @@ class TblastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.12', qresult.meta['program_version'])
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(0.001, qresult.meta['param_evalue_threshold'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
+        self.assertEqual('2.2.12', qresult.version)
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(0.001, qresult.param_evalue_threshold)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
+        self.assertEqual('L;', qresult.param_filter)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('nr', qresult.target)
         
@@ -2238,17 +2238,17 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -2400,17 +2400,17 @@ class TblastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -2436,17 +2436,17 @@ class TblastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -2500,17 +2500,17 @@ class TblastnXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -2606,17 +2606,17 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('refseq_rna', qresult.target)
 
@@ -2772,13 +2772,13 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.12', qresult.meta['program_version'])
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM80', qresult.meta['param_matrix'])
-        self.assertEqual(1, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(10, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+        self.assertEqual('2.2.12', qresult.version)
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM80', qresult.param_matrix)
+        self.assertEqual(1, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(10, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
         self.assertEqual('nr', qresult.target)
 
@@ -2857,17 +2857,17 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -3021,17 +3021,17 @@ class TblastxXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -3057,17 +3057,17 @@ class TblastxXmlCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
 
@@ -3166,17 +3166,17 @@ class TblastxXmlCases(unittest.TestCase):
         counter += 1
 
         # test meta variables, only for the first one
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro '
                 'A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, '
                 'and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a '
                 'new generation of protein database search programs", '
-                'Nucleic Acids Res. 25:3389-3402.', qresult.meta['program_reference'])
-        self.assertEqual('BLOSUM62', qresult.meta['param_matrix'])
-        self.assertEqual(10.0, qresult.meta['param_evalue_threshold'])
-        self.assertEqual('L;', qresult.meta['param_filter'])
-        self.assertEqual(11, qresult.meta['param_gap_open'])
-        self.assertEqual(1, qresult.meta['param_gap_extend'])
+                'Nucleic Acids Res. 25:3389-3402.', qresult.reference)
+        self.assertEqual('BLOSUM62', qresult.param_matrix)
+        self.assertEqual(10.0, qresult.param_evalue_threshold)
+        self.assertEqual('L;', qresult.param_filter)
+        self.assertEqual(11, qresult.param_gap_open)
+        self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
         self.assertEqual('refseq_rna', qresult.target)
 

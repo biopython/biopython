@@ -276,11 +276,11 @@ def blast_xml_iterator(handle):
     # dictionary for containing all information prior to the first query
     meta = {}
     # dictionary for mapping tag name and meta key name
-    _tag_meta_map = {
+    _elem_meta = {
         'BlastOutput_db': 'target',
         'BlastOutput_program': 'program',
-        'BlastOutput_reference': 'program_reference',
-        'BlastOutput_version': 'program_version',
+        'BlastOutput_version': 'version',
+        'BlastOutput_reference': 'reference',
         'Parameters_expect': 'param_evalue_threshold',
         'Parameters_entrez-query': 'param_entrez_query',
         'Parameters_filter': 'param_filter',
@@ -298,7 +298,7 @@ def blast_xml_iterator(handle):
     # only used if query_{ID,def,len} is not found in <Iteration>
     # (seen in legacy Blast <2.2.14)
     _fallback = {}
-    _tag_fallback_map = {
+    _elem_fallback_map = {
         'BlastOutput_query-ID': 'query_id',
         'BlastOutput_query-def': 'query_desc',
         'BlastOutput_query-len': 'query_len',
@@ -312,8 +312,8 @@ def blast_xml_iterator(handle):
     # parse the preamble part (anything prior to the first result)
     for event, elem in xml_iter:
         # get the tag values, cast appropriately, store into meta
-        if event == 'end' and elem.tag in _tag_meta_map:
-            meta_key = _tag_meta_map[elem.tag]
+        if event == 'end' and elem.tag in _elem_meta:
+            meta_key = _elem_meta[elem.tag]
 
             if meta_key  == 'param_evalue_threshold':
                 meta[meta_key] = float(elem.text)
@@ -328,8 +328,8 @@ def blast_xml_iterator(handle):
         # capture fallback values
         # these are used only if the first <Iteration> does not have any
         # ID, ref, or len.
-        elif event == 'end' and elem.tag in _tag_fallback_map:
-            fallback_key = _tag_fallback_map[elem.tag]
+        elif event == 'end' and elem.tag in _elem_fallback_map:
+            fallback_key = _elem_fallback_map[elem.tag]
             _fallback[fallback_key] = elem.text
             elem.clear()
             continue
@@ -338,8 +338,8 @@ def blast_xml_iterator(handle):
             break
 
     # we only want the version number, sans the program name or date
-    meta['program_version'] = re.search(_re_version, \
-            meta['program_version']).group(0)
+    meta['version'] = re.search(_re_version, \
+            meta['version']).group(0)
 
     # parse the queries
     for event, qresult_elem in xml_iter:
@@ -357,17 +357,11 @@ def blast_xml_iterator(handle):
             #        Iteration_stat?,
             #        Iteration_message?)>
 
-            # get the values required for QueryResult instantiation
+            # assign query attributes with fallbacks
             try:
                 query_id = qresult_elem.find('Iteration_query-ID').text
             except AttributeError:
                 query_id = _fallback['query_id']
-            program = meta['program']
-            target = meta['target']
-            qresult = QueryResult(query_id, program=program, target=target, \
-                    meta=meta)
-
-            # assign attributes, with fallbacks
             try:
                 description = qresult_elem.find('Iteration_query-def').text
             except AttributeError:
@@ -377,8 +371,12 @@ def blast_xml_iterator(handle):
             except AttributeError:
                 query_len = _fallback['query_len']
 
+            # create qresult and assign its attributes
+            qresult = QueryResult(query_id)
             qresult.desc = description
             qresult.seq_len = query_len
+            for meta_attr in meta:
+                setattr(qresult, meta_attr, meta[meta_attr])
 
             # statistics are stored in Iteration_stat's 'grandchildren' with the
             # following DTD
@@ -453,7 +451,9 @@ class BlastTabIterator(object):
                 # no fields means the query has no result, so we'll yield
                 # and empty query object with the parsed comments
                 elif 'fields' not in comments:
-                    qresult = self._add_qresult_attrs(QueryResult(''), comments)
+                    qresult = QueryResult('')
+                    for key, value in comments.items():
+                        setattr(qresult, key, value)
                     yield qresult
                 # otherwise, we'll use the plain qresult parser to parse
                 # the result lines
@@ -461,7 +461,8 @@ class BlastTabIterator(object):
                     # set fields according to the parsed comments
                     self.fields = comments['fields']
                     for qresult in self.parse_qresult():
-                        qresult = self._add_qresult_attrs(qresult, comments)
+                        for key, value in comments.items():
+                            setattr(qresult, key, value)
                         yield qresult
                 # if there's no more lines, break
                 if not self.line:
@@ -471,26 +472,6 @@ class BlastTabIterator(object):
         else:
             for qresult in self.parse_qresult():
                 yield qresult
-
-    def _add_qresult_attrs(self, qresult, comments):
-        """Sets QueryResult attributes.
-
-        Arguments:
-        qresult -- QueryResult object.
-        comments -- Dictionary containing tab file comments.
-
-        """
-        if not qresult.id:
-            qresult.id = comments['id']
-        qresult.program = comments['program']
-        qresult.meta['program_version'] = comments['version']
-        qresult.target = comments['target']
-        if 'desc' in comments:
-            qresult.desc = comments['desc']
-        if 'rid' in comments:
-            qresult.rid = comments['rid']
-
-        return qresult
 
     def read_forward(self):
         """Reads through whitespaces, returns the first non-whitespace line."""

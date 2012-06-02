@@ -36,7 +36,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(32, qresult.seq_len)
         self.assertEqual(0, len(qresult))
@@ -47,7 +47,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
         self.assertEqual('myoglobin [Homo sapiens]', qresult.desc)
         self.assertEqual(154, qresult.seq_len)
@@ -96,7 +96,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|126362951:116-221', qresult.id)
         self.assertEqual('leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]', qresult.desc)
         self.assertEqual(106, qresult.seq_len)
@@ -177,7 +177,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
         self.assertEqual('exportin-5 [Homo sapiens]', qresult.desc)
         self.assertEqual(1204, qresult.seq_len)
@@ -315,7 +315,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
         self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.desc)
         self.assertEqual(352, qresult.seq_len)
@@ -539,7 +539,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(32, qresult.seq_len)
         self.assertEqual(0, len(qresult))
@@ -561,7 +561,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
         self.assertEqual('myoglobin [Homo sapiens]', qresult.desc)
         self.assertEqual(154, qresult.seq_len)
@@ -621,7 +621,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|126362951:116-221', qresult.id)
         self.assertEqual('leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]', qresult.desc)
         self.assertEqual(106, qresult.seq_len)
@@ -713,7 +713,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
         self.assertEqual('exportin-5 [Homo sapiens]', qresult.desc)
         self.assertEqual(1204, qresult.seq_len)
@@ -862,7 +862,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
         self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.desc)
         self.assertEqual(352, qresult.seq_len)
@@ -1086,7 +1086,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
         self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.desc)
         self.assertEqual(352, qresult.seq_len)
@@ -1272,7 +1272,7 @@ class HmmerscanCases(unittest.TestCase):
 
         self.assertEqual('hmmscan', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
         self.assertEqual('exportin-5 [Homo sapiens]', qresult.desc)
         self.assertEqual(1204, qresult.seq_len)
@@ -1422,7 +1422,7 @@ class HmmersearchCases(unittest.TestCase):
 
         self.assertEqual('hmmsearch', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('globins4', qresult.id)
         self.assertEqual(149, qresult.seq_len)
         self.assertEqual(0, len(qresult))
@@ -1443,7 +1443,7 @@ class HmmersearchCases(unittest.TestCase):
 
         self.assertEqual('hmmsearch', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
         self.assertEqual('Protein kinase domain', qresult.desc)
@@ -1592,7 +1592,7 @@ class HmmersearchCases(unittest.TestCase):
 
         self.assertEqual('hmmsearch', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
         self.assertEqual('Protein kinase domain', qresult.desc)
@@ -1709,7 +1709,7 @@ class HmmersearchCases(unittest.TestCase):
 
         self.assertEqual('hmmsearch', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
         self.assertEqual('Protein kinase domain', qresult.desc)
@@ -1859,7 +1859,7 @@ class HmmersearchCases(unittest.TestCase):
 
         self.assertEqual('hmmsearch', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('globins4', qresult.id)
         self.assertEqual(149, qresult.seq_len)
         self.assertEqual(0, len(qresult))
@@ -1870,7 +1870,7 @@ class HmmersearchCases(unittest.TestCase):
 
         self.assertEqual('hmmsearch', qresult.program)
         self.assertEqual('/home/bow/db/hmmer/uniprot_sprot.fasta', qresult.target)
-        self.assertEqual('3.0', qresult.meta['program_version'])
+        self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
         self.assertEqual('Protein kinase domain', qresult.desc)

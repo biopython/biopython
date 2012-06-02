@@ -59,15 +59,14 @@ class HmmerTextIterator(object):
 
     def __init__(self, handle):
         self.handle = handle
-        self.meta = {}
+        self._meta = {}
         self.line = self.read_forward()
         self.parse_preamble()
 
     def __iter__(self):
         for qresult in self.parse_qresult():
-            qresult.meta = self.meta
-            qresult.program = self.meta['program']
-            qresult.target = self.meta['target']
+            qresult.program = self._meta['program']
+            qresult.target = self._meta['target']
             yield qresult
 
     def read_forward(self):
@@ -118,18 +117,18 @@ class HmmerTextIterator(object):
                 # try parsing program
                 regx = re.search(re_program, self.line)
                 if regx:
-                    self.meta['program'] = regx.group(1)
+                    self._meta['program'] = regx.group(1)
                 # try parsing version
                 regx = re.search(re_version, self.line)
                 if regx:
-                    self.meta['program_version'] = regx.group(1)
+                    self._meta['version'] = regx.group(1)
             elif has_opts:
                 regx = re.search(re_opt, self.line)
                 # if target in regx.group(1), then we store the key as target
                 if 'target' in regx.group(1):
-                    self.meta['target'] = regx.group(2)
+                    self._meta['target'] = regx.group(2)
                 else:
-                    self.meta[regx.group(1)] = regx.group(2)
+                    self._meta[regx.group(1)] = regx.group(2)
 
             self.line = self.read_forward()
 
@@ -149,9 +148,9 @@ class HmmerTextIterator(object):
             # create qresult object
             self.qresult = QueryResult(id)
             self.qresult.seq_len = seq_len
-            self.qresult.meta = self.meta
-            self.qresult.program = self.meta['program']
-            self.qresult.target = self.meta['target']
+            self.qresult.program = self._meta['program']
+            self.qresult.version = self._meta['version']
+            self.qresult.target = self._meta['target']
             
             # get description and accession, if they exist
             while True:
@@ -289,7 +288,7 @@ class HmmerTextIterator(object):
                 # depending on whether the program is hmmsearch or hmmscan,
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
-                if self.meta['program'] == 'hmmscan':
+                if self._meta['program'] == 'hmmscan':
                     hsp.hit_from = parsed[6]
                     hsp.hit_to = parsed[7]
                     hsp.hit_endtype = parsed[8]
@@ -364,7 +363,7 @@ class HmmerTextIterator(object):
                         self.line.startswith('>>') or \
                         self.line.startswith('Internal pipeline'):
                     hsp.alignment_annotation = annot
-                    if self.meta['program'] == 'hmmscan':
+                    if self._meta['program'] == 'hmmscan':
                         hsp.hit = hmmseq
                         hsp.hit.description = 'hit HMM model'
                         hsp.query = aliseq

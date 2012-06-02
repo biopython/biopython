@@ -248,7 +248,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
 
@@ -258,7 +258,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
 
@@ -306,7 +306,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual(4, len(qresult))
 
@@ -359,7 +359,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
 
@@ -379,7 +379,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
 
@@ -437,7 +437,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual(4, len(qresult))
 
@@ -500,7 +500,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
 
@@ -515,7 +515,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc_ver)
@@ -594,7 +594,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('gi|11464971:4-101', qresult.acc)
         self.assertEqual('gi|11464971:4-101', qresult.acc_ver)
@@ -672,7 +672,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
 
@@ -682,7 +682,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
 
@@ -714,7 +714,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual(4, len(qresult))
 
@@ -752,7 +752,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('refseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('VJ37CF56012', qresult.rid)
         self.assertEqual(0, len(qresult))
@@ -763,7 +763,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('refseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('VJ37CF56012', qresult.rid)
         self.assertEqual(3, len(qresult))
@@ -774,7 +774,7 @@ class BlastnTabCases(unittest.TestCase):
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('refseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.meta['program_version'])
+        self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('VJ37CF56012', qresult.rid)
         self.assertEqual(5, len(qresult))
