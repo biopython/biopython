@@ -374,54 +374,101 @@ class BlastTabIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ tab output."""
 
+    def __init__(self, *args, **kwargs):
+        SearchIndexer.__init__(self, *args, **kwargs)
+        # find out if file is commented or not first
+        line = read_forward(self._handle)
+        if line.startswith('# '):
+            self.is_commented = True
+        else:
+            self.is_commented = False
+        # and reset handle
+        self._handle.seek(0)
+
     def __iter__(self):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        tab_char = _as_bytes('\t')
-        qresult_key = None
 
-        while True:
-            # get end offset here since we only know a qresult ends after
-            # encountering the next one
-            end_offset = handle.tell()
-            line = handle.readline()
+        if not self.is_commented:
+            tab_char = _as_bytes('\t')
+            qresult_key = None
+            while True:
+                # get end offset here since we only know a qresult ends after
+                # encountering the next one
+                end_offset = handle.tell()
+                #line = handle.readline()
+                line = read_forward(handle)
 
-            if qresult_key is None:
-                qresult_key = line.split(tab_char)[0]
-            else:
-                curr_key = line.split(tab_char)[0]
+                if qresult_key is None:
+                    qresult_key = line.split(tab_char)[0]
+                else:
+                    curr_key = line.split(tab_char)[0]
 
-                if curr_key != qresult_key:
+                    if curr_key != qresult_key:
+                        yield _bytes_to_string(qresult_key), start_offset, \
+                                end_offset - start_offset
+                        qresult_key = curr_key
+                        start_offset = end_offset
+
+                # break if we've reached EOF
+                if not line:
+                    break
+        else:
+            # mark of a new query
+            query_mark = None
+            # mark of the query's ID
+            qid_mark = '# Query: '
+
+            while True:
+                end_offset = handle.tell()
+                line = read_forward(handle)
+
+                if query_mark is None:
+                    query_mark = line
+                elif line.startswith(qid_mark):
+                    qresult_key = line[len(qid_mark):].split()[0]
+                elif line == query_mark or 'BLAST processed' in line:
                     yield _bytes_to_string(qresult_key), start_offset, \
                             end_offset - start_offset
-                    qresult_key = curr_key
                     start_offset = end_offset
-
-            # break if we'v reached EOF
-            if not line:
-                break
-
+                elif not line:
+                    break
 
     def get_raw(self, offset):
         """Returns the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
-        tab_char = _as_bytes('\t')
-        qresult_key = None
         qresult_raw = ''
 
-        while True:
-            line = handle.readline()
-            # get the key if the first line (qresult key)
-            if qresult_key is None:
-                qresult_key = line.split(tab_char)[0]
+        if not self.is_commented:
+            tab_char = _as_bytes('\t')
+            qresult_key = None
+            while True:
+                line = read_forward(handle, strip=False)
+                # get the key if the first line (qresult key)
+                if qresult_key is None:
+                    qresult_key = line.split(tab_char)[0]
+                else:
+                    curr_key = line.split(tab_char)[0]
+                    # only break when qresult is finished (key is different)
+                    if curr_key != qresult_key:
+                        break
+                # append to the raw string as long as qresult is the same
                 qresult_raw += line
-            else:
-                curr_key = line.split(tab_char)[0]
-                # only break when qresult is finished (key is different)
-                if curr_key != qresult_key:
+        else:
+            # query mark is the line marking a new query
+            # something like '# TBLASTN 2.2.25+'
+            query_mark = None
+            while True:
+                line = read_forward(handle, strip=False)
+                if query_mark is None:
+                    query_mark = line
+                # if we've encountered another query mark, it's the start of
+                # another query
+                # if 'BLAST processed' is in line, it's one line before EOF
+                elif line == query_mark or 'BLAST processed' in line:
                     break
                 # append to the raw string as long as qresult is the same
                 qresult_raw += line
