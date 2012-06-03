@@ -23,7 +23,8 @@ More information are available through these links:
 
 """
 
-from Bio.SearchIO._objects import Result, Hit, HSP, SearchIndexer
+from Bio.SearchIO._objects import Result, Hit, HSP
+from Bio.SearchIO._index import SearchIndexer
 
 
 def fasta_m10_iterator(handle):

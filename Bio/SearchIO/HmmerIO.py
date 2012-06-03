@@ -23,7 +23,8 @@ More information are available through these links:
 
 import re
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._index import SearchIndexer
 
 
 # precompile regex patterns for faster processing
