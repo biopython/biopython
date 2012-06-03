@@ -82,7 +82,7 @@ class IndexedSearch(_dict_base):
         self._index = index
 
     def __repr__(self):
-        return "IndexedSearch('%r', '%r', key_function=%r)" % \
+        return "IndexedSearch('%s', '%s', key_function=%r)" % \
                 (self._filename, self._format, self._key_function)
 
     def __str__(self):
@@ -259,9 +259,9 @@ class DbIndexedSearch(IndexedSearch):
                             "expected: '%s'" % (format, self._format))
 
                 # check filenames # and names
-                self._filenames = (row[0] for row in \
+                self._filenames = [row[0] for row in \
                         con.execute("SELECT name FROM file_data ORDER BY "
-                            "file_number;").fetchall())
+                            "file_number;").fetchall()]
                 if filenames and len(filenames) != len(self._filenames):
                     con.close()
                     raise ValueError("Index file says %i files, not %i" % \
@@ -354,7 +354,7 @@ class DbIndexedSearch(IndexedSearch):
         self._key_function = key_function
 
     def __repr__(self):
-        return "IndexedSearch('%r', '%r', 'sources=%r', key_function=%r)" % \
+        return "DbIndexedSearch('%s', '%s', sources=%r, key_function=%r)" % \
                 (self._index_filename, self._format, self._filenames, \
                 self._key_function)
 
