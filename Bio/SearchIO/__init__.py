@@ -217,10 +217,10 @@ def index_db(index_filename, filenames=None, format=None, \
                      key for the dictionary.
 
     """
-    # cast filenames to list if it's not a list
+    # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)
-    if not isinstance(filenames, list):
-        filenames = list(filenames)
+    if isinstance(filenames, basestring):
+        filenames = [filenames]
 
     from Bio.SearchIO._index import DbIndexedSearch
     return DbIndexedSearch(index_filename, filenames, format, key_function)
