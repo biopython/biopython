@@ -47,7 +47,7 @@ class IndexedSearch(_dict_base):
     """Dictionary-like object for implementing Search indexing.
 
     """
-    def __init__(self, filename, format, key_function):
+    def __init__(self, filename, format, key_function=lambda qresult: qresult.id):
         """Initializes IndexedSearch instance.
 
         filename -- The source filename as string.
@@ -65,8 +65,11 @@ class IndexedSearch(_dict_base):
         self._indexer = indexed_obj
 
         # default key function is lambda rec: rec.id
-        offset_iter = ((key_function(key), offset, length) for \
-                (key, offset, length) in indexed_obj)
+        if key_function:
+            offset_iter = ((key_function(key), offset, length) for \
+                    (key, offset, length) in indexed_obj)
+        else:
+            offset_iter = indexed_obj
 
         index = {}
         for key, offset, length in offset_iter:
@@ -141,7 +144,10 @@ class IndexedSearch(_dict_base):
 
     def __getitem__(self, key):
         result = self._indexer.get(self._index[key])
-        key2 = self._key_function(result.id)
+        if self._key_function:
+            key2 = self._key_function(result.id)
+        else:
+            key2 = result.id
 
         if key != key2:
             raise ValueError("Key did not match (%s vs %s)" % (key, key2))
@@ -299,9 +305,14 @@ class DbIndexedSearch(IndexedSearch):
                 # fill the file_data
                 con.execute("INSERT INTO file_data(file_number, name) VALUES "
                         "(?,?);", (idx, filename))
-                indexed_obj = indexer_class(filename)
-                offset_iter = ((key_function(key), idx, offset, length) for \
-                        (key, offset, length) in indexed_obj)
+                indexed_obj = indexer_class(filename, format)
+
+                if key_function:
+                    offset_iter = ((key_function(key), idx, offset, length) for \
+                            (key, offset, length) in indexed_obj)
+                else:
+                    offset_iter = ((key, idx, offset, length) for (key, offset, \
+                            length) in indexed_obj)
 
                 # and the results in a file into offset_data
                 while True:
@@ -378,11 +389,14 @@ class DbIndexedSearch(IndexedSearch):
             if len(proxies) >= self._max_open:
                 proxies.popitem()[1]._handle.close()
             # open a new handle
-            proxy = self._indexer_class(self._filenames[file_number])
+            proxy = self._indexer_class(self._filenames[file_number], self._format)
             result = proxy.get(offset)
             proxies[file_number] = proxy
 
-        key2 = self._key_function(result.id)
+        if self._key_function:
+            key2 = self._key_function(result.id)
+        else:
+            key2 = result.id
         if key != key2:
             raise ValueError("Key does not match (%s vs %s)" % (key, key2))
 

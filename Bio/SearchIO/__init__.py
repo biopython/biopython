@@ -185,7 +185,7 @@ def to_dict(queries, key_function=lambda rec: rec.id):
     return results
 
 
-def index(handle, format, key_function=lambda rec: rec.id):
+def index(handle, format, key_function=None):
     """Indexes a search output file and returns a dictionary-like object.
 
     - handle    - Handle to the file, or the filename as a string.
@@ -203,7 +203,7 @@ def index(handle, format, key_function=lambda rec: rec.id):
 
 
 def index_db(index_filename, filenames=None, format=None, \
-        key_function=lambda rec: rec.id):
+        key_function=None):
     """Indexes several search output files into an SQLite database.
 
     - index_filename - The SQLite filename.
