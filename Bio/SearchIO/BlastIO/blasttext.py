@@ -5,7 +5,8 @@
 
 """Bio.SearchIO parser for BLAST+ plain text output formats."""
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._index import SearchIndexer
 
 
 def blast_text_iterator(handle):

@@ -13,6 +13,7 @@ import itertools
 import os
 from sqlite3 import dbapi2 as sqlite
 from sqlite3 import IntegrityError, OperationalError
+from StringIO import StringIO
 
 try:
     from collections import UserDict as _dict_base
@@ -20,6 +21,25 @@ except ImportError:
     from UserDict import DictMixin as _dict_base
 
 from Bio import SearchIO
+from Bio._py3k import _bytes_to_string
+
+
+class SearchIndexer(object):
+
+    """Iterator that returns file positions of results in a Search output file.
+
+    """
+
+    def __init__(self, filename, format):
+        self._handle = open(filename, 'rb')
+        self._format = format
+        self._parser = SearchIO._get_handler(format, SearchIO._ITERATOR_MAP)
+
+    def _parse(self, handle):
+        return self._parser(handle).next()
+
+    def get(self, offset):
+        return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
 
 
 class IndexedSearch(_dict_base):

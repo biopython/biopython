@@ -7,7 +7,8 @@
 
 import re
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._index import SearchIndexer
 
 
 def blast_xml_iterator(handle):

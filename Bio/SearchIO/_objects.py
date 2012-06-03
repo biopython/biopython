@@ -1158,14 +1158,6 @@ class HSP(BaseSearchObject):
     gap_pct = property(fget=_gap_pct_get, fset=_gap_pct_set)
 
 
-class SearchIndexer(object):
-
-    """Iterator that returns file positions of results in a Search output file.
-
-    """
-
-
-
 def _test():
     """Run the Bio.SearchIO module's doctests.
 
