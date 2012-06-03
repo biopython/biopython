@@ -117,7 +117,7 @@ def _get_handler(format, mapping):
                     "'%s'" % (format, "', '".join(mapping.keys())))
 
     mod_name, obj_name = obj_info
-    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[1])
+    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
 
     return getattr(mod, obj_name)
 
