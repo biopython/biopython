@@ -50,7 +50,7 @@ specified as well (not all output formats from a given program is supported).
  - blast-text   - BLAST+ plain text output.
  - blat-psl     - The default output of BLAT (PSL format). Variants with or
                   without header are both supported.
- - fasta        - Bill Pearson's FASTA -m 10 output.
+ - fasta-m10    - Bill Pearson's FASTA -m 10 output.
  - hmmer-text   - HMMER regular text output format. Supported HMMER
                   subprograms are hmmerscan and hmmersearch.
 
@@ -71,17 +71,17 @@ _ITERATOR_MAP = {
         'blast-text': ('BlastIO', 'blast_text_iterator'),
         'blast-xml': ('BlastIO', 'blast_xml_iterator'),
         'blat-psl': ('BlatIO', 'blast_psl_iterator'),
-        'fasta': ('FastaIO', 'fasta_m10_iterator'),
+        'fasta-m10': ('FastaIO', 'fasta_m10_iterator'),
         'hmmer-text': ('HmmerIO', 'hmmer_text_iterator'),
 }
 
 # dictionary of supported formats for index()
 _INDEXER_MAP = {
-        'blast-tab': ('BlastIO', 'BlastTabularIndexer'),
+        'blast-tab': ('BlastIO', 'BlastTabIndexer'),
         'blast-text': ('BlastIO', 'BlastTextIndexer'),
         'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
         'blat-psl': ('BlatIO', 'BlatPslIndexer'),
-        'fasta': ('FastaIO', 'FastaM10Indexer'),
+        'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
         'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
 }
 
