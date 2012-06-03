@@ -61,13 +61,6 @@ def blast_xml_iterator(handle):
         'Hsp_density': 'density',
     }
 
-    def _get_elem_data(elem, name):
-        """XML element text retriever that casts and handles None."""
-        try:
-            return elem.find(name).text
-        except AttributeError:
-            return None
-
     def _parse_hit(root_hit_elem):
         """Iterator that transforms Iteration_hits XML elements into Hit objects.
 
@@ -93,12 +86,11 @@ def blast_xml_iterator(handle):
         for hit_elem in root_hit_elem:
 
             # create empty hit object
-            hit_id = hit_elem.find('Hit_id').text
+            hit_id = hit_elem.findtext('Hit_id')
             hit = Hit(hit_id, query_id)
 
             for hit_tag in _elem_hit:
-                setattr(hit, _elem_hit[hit_tag], \
-                        _get_elem_data(hit_elem, hit_tag))
+                setattr(hit, _elem_hit[hit_tag], hit_elem.findtext(hit_tag))
 
             for hsp in _parse_hsp(hit_elem.find('Hit_hsps'), hit_id):
                 hit.append(hsp)
@@ -145,13 +137,12 @@ def blast_xml_iterator(handle):
         for hsp_elem in root_hsp_elem:
             # get the hit, and query tags first as they are required
             # to initialize the HSP object
-            hit_seq = hsp_elem.find('Hsp_hseq').text
-            query_seq = hsp_elem.find('Hsp_qseq').text
+            hit_seq = hsp_elem.findtext('Hsp_hseq')
+            query_seq = hsp_elem.findtext('Hsp_qseq')
             hsp = HSP(hit_id, query_id, hit_seq, query_seq)
 
             for hsp_tag in _elem_hsp:
-                setattr(hsp, _elem_hsp[hsp_tag], \
-                        _get_elem_data(hsp_elem, hsp_tag))
+                setattr(hsp, _elem_hsp[hsp_tag], hsp_elem.findtext(hsp_tag))
 
             # delete element after we finish parsing it
             hsp_elem.clear()
@@ -279,7 +270,7 @@ def blast_xml_iterator(handle):
 
                 for stat_tag in _elem_qresult_opt:
                     setattr(qresult, _elem_qresult_opt[stat_tag], \
-                            _get_elem_data(stat_elem, stat_tag))
+                            stat_elem.findtext(stat_tag))
 
             for hit in _parse_hit(qresult_elem.find('Iteration_hits')):
                 # only append the Hit object if we have HSPs
