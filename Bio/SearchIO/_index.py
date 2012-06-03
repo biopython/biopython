@@ -60,8 +60,8 @@ class IndexedSearch(_dict_base):
         self._format = format
         self._key_function = key_function
 
-        indexer_class = SearchIO._get_object(format, SearchIO._INDEXER_MAP)
-        indexed_obj = indexer_class(filename)
+        indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
+        indexed_obj = indexer_class(filename, format)
         self._indexer = indexed_obj
 
         # default key function is lambda rec: rec.id
@@ -216,7 +216,7 @@ class DbIndexedSearch(IndexedSearch):
 
         """
         indexer_proxies = {}
-        indexer_class = SearchIO._get_object(format, SearchIO._INDEXER_MAP)
+        indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
         self._indexer_class = indexer_class
 
         # remove index_filename if overwrite is True and the file exists
