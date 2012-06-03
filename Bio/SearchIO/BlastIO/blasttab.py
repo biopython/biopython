@@ -106,6 +106,21 @@ _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
 _MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
 
 
+def read_forward(handle, strip=True):
+    """Reads through whitespaces, returns the first non-whitespace line."""
+    while True:
+        line = handle.readline()
+        # return the line if it has characters
+        if line and line.strip():
+            if strip:
+                return line.strip()
+            else:
+                return line
+        # or if has no characters (EOF)
+        elif not line:
+            return line
+
+
 def blast_tab_iterator(handle):
     """Generator function to parse BLAST+ tabular output as QueryResult objects.
 
@@ -131,13 +146,13 @@ class BlastTabIterator(object):
         self.fields = fields
         self.cache = {}
         if line is None:
-            self.line = self.read_forward()
+            self.line = read_forward(self.handle)
         else:
             self.line = line
 
     def __iter__(self):
         # stop iteration if file has no lines
-        if self.line is None:
+        if not self.line:
             raise StopIteration
         # if line starts with '#', it's a commented file
         # so we'll parse the comments
@@ -172,18 +187,6 @@ class BlastTabIterator(object):
             for qresult in self.parse_qresult():
                 yield qresult
 
-    def read_forward(self):
-        """Reads through whitespaces, returns the first non-whitespace line."""
-        while True:
-            line = self.handle.readline()
-            # if line has characters and stripping does not remove them,
-            # return the line
-            if line and line.strip():
-                return line.strip()
-            # if line ends, return None
-            elif not line:
-                return
-
     def parse_comments(self):
         """Returns a dictionary containing tab file comments."""
 
@@ -195,7 +198,7 @@ class BlastTabIterator(object):
                 program_line = self.line[len(' #'):].split(' ')
                 comments['program'] = program_line[0].lower()
                 comments['version'] = program_line[1]
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
             # parse query id and description (if available)
             # example: # Query: gi|356995852 Mus musculus POU domain
             elif 'Query' in self.line:
@@ -203,16 +206,16 @@ class BlastTabIterator(object):
                 comments['id'] = query_line[0]
                 if len(query_line) > 1:
                     comments['desc'] = ' '.join(query_line[1:])
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
             # parse target database
             # example: # Database: db/minirefseq_protein
             elif 'Database' in self.line:
                 comments['target'] = self.line[len('# Database: '):]
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
             # parse RID (from remote searches)
             elif 'RID' in self.line:
                 comments['rid'] = self.line[len('# RID: '):]
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
             # parse column order, required for parsing the result lines
             # example: # Fields: query id, query gi, query acc., query length
             elif 'Fields' in self.line:
@@ -232,15 +235,15 @@ class BlastTabIterator(object):
                         set(fields).isdisjoint(_MIN_HIT_FIELDS):
                     raise ValueError("Required field is not found.")
                 comments['fields'] = fields
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
             # if the line has these strings, it's either the end of a comment
             # or the end of a file, so we return all the comments we've parsed
             elif ' hits found' in self.line or 'processed' in self.line:
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
                 return comments
             # otherwise, keep on reading the lines
             else:
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
 
             if not self.line:
                 return
@@ -346,7 +349,7 @@ class BlastTabIterator(object):
                 hit.append(hsp)
 
                 # read next line and parse it if it exists
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
                 # if line doesn't exist (file end), break out of loop
                 if not self.line or self.line.startswith('#'):
                     break
