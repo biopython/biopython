@@ -7,6 +7,7 @@
 
 import warnings
 
+from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
 
@@ -370,9 +371,59 @@ class BlastTabIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ tab output."""
 
-    def __init__(self, handle):
-        pass
+    def __iter__(self):
+        """Iterates over the file handle; yields key, start offset, and length."""
+        handle = self._handle
+        handle.seek(0)
+        start_offset = handle.tell()
+        tab_char = _as_bytes('\t')
+        qresult_key = None
 
+        while True:
+            # get end offset here since we only know a qresult ends after
+            # encountering the next one
+            end_offset = handle.tell()
+            line = handle.readline()
+
+            if qresult_key is None:
+                qresult_key = line.split(tab_char)[0]
+            else:
+                curr_key = line.split(tab_char)[0]
+
+                if curr_key != qresult_key:
+                    yield _bytes_to_string(qresult_key), start_offset, \
+                            end_offset - start_offset
+                    qresult_key = curr_key
+                    start_offset = end_offset
+
+            # break if we'v reached EOF
+            if not line:
+                break
+
+
+    def get_raw(self, offset):
+        """Returns the raw string of a QueryResult object from the given offset."""
+        handle = self._handle
+        handle.seek(offset)
+        tab_char = _as_bytes('\t')
+        qresult_key = None
+        qresult_raw = ''
+
+        while True:
+            line = handle.readline()
+            # get the key if the first line (qresult key)
+            if qresult_key is None:
+                qresult_key = line.split(tab_char)[0]
+                qresult_raw += line
+            else:
+                curr_key = line.split(tab_char)[0]
+                # only break when qresult is finished (key is different)
+                if curr_key != qresult_key:
+                    break
+                # append to the raw string as long as qresult is the same
+                qresult_raw += line
+
+        return qresult_raw
 
 
 def _test():
