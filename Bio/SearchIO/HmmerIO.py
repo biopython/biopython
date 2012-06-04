@@ -29,18 +29,18 @@ from Bio.SearchIO._index import SearchIndexer
 
 # precompile regex patterns for faster processing
 # regex for program name capture
-re_program = re.compile(r'^# (\w*hmm\w+) :: .*$')
+_RE_PROGRAM = re.compile(r'^# (\w*hmm\w+) :: .*$')
 # regex for version string capture
-re_version = re.compile(r'# \w+ ([\w+\.]+) .*; http.*$')
+_RE_VERSION = re.compile(r'# \w+ ([\w+\.]+) .*; http.*$')
 # regex for option string capture
-re_opt = re.compile(r'^# (.+):\s+(.+)$')
+_RE_OPT = re.compile(r'^# (.+):\s+(.+)$')
 # regex for parsing query id and length
-qre_id_len = re.compile(r'^Query:\s*(.*)\s+\[\w=(\d+)\]')
+_QRE_ID_LEN = re.compile(r'^Query:\s*(.*)\s+\[\w=(\d+)\]')
 # regex for hsp validation
-hre_validate = re.compile(r'score:\s(-?\d+\.?\d+)\sbits.*value:\s(.*)')
+_HRE_VALIDATE = re.compile(r'score:\s(-?\d+\.?\d+)\sbits.*value:\s(.*)')
 # regexes for parsing hsp alignment blocks
-hre_annot_line = re.compile(r'^(\s+)(.+)\s(\w+)')
-hre_id_line = re.compile(r'^(\s+\S+\s+\d+ )(.+) (\d+)')
+_HRE_ANNOT_LINE = re.compile(r'^(\s+)(.+)\s(\w+)')
+_HRE_ID_LINE = re.compile(r'^(\s+\S+\s+\d+ )(.+) (\d+)')
 
 
 def hmmer_text_iterator(handle):
@@ -49,8 +49,7 @@ def hmmer_text_iterator(handle):
     handle -- Handle to the file.
 
     """
-    iterator = HmmerTextIterator(handle)
-    for qresult in iterator:
+    for qresult in HmmerTextIterator(handle):
         yield qresult
 
 
@@ -60,9 +59,8 @@ class HmmerTextIterator(object):
 
     def __init__(self, handle):
         self.handle = handle
-        self._meta = {}
         self.line = self.read_forward()
-        self.parse_preamble()
+        self._meta = self.parse_preamble()
 
     def __iter__(self):
         for qresult in self.parse_qresult():
@@ -78,11 +76,9 @@ class HmmerTextIterator(object):
             # return the line
             if line and line.strip():
                 return line
-            elif line and not line.strip():
-                continue
             # if line ends, return None
             elif not line:
-                return
+                return line
 
     def read_until(self, bool_func):
         """Reads the file handle until the given function returns True."""
@@ -94,6 +90,7 @@ class HmmerTextIterator(object):
 
     def parse_preamble(self):
         """Parses HMMER preamble (lines beginning with '#')."""
+        meta = {}
         # bool flag for storing state ~ whether we are parsing the option self.lines
         # or not
         has_opts = False
@@ -116,22 +113,24 @@ class HmmerTextIterator(object):
             elif not has_opts:
                 # XXX: is there a better way to do the regex check?
                 # try parsing program
-                regx = re.search(re_program, self.line)
+                regx = re.search(_RE_PROGRAM, self.line)
                 if regx:
-                    self._meta['program'] = regx.group(1)
+                    meta['program'] = regx.group(1)
                 # try parsing version
-                regx = re.search(re_version, self.line)
+                regx = re.search(_RE_VERSION, self.line)
                 if regx:
-                    self._meta['version'] = regx.group(1)
+                    meta['version'] = regx.group(1)
             elif has_opts:
-                regx = re.search(re_opt, self.line)
+                regx = re.search(_RE_OPT, self.line)
                 # if target in regx.group(1), then we store the key as target
                 if 'target' in regx.group(1):
-                    self._meta['target'] = regx.group(2)
+                    meta['target'] = regx.group(2)
                 else:
-                    self._meta[regx.group(1)] = regx.group(2)
+                    meta[regx.group(1)] = regx.group(2)
 
             self.line = self.read_forward()
+
+        return meta
 
     def parse_qresult(self):
         """Parses a HMMER3 query block."""
@@ -143,7 +142,7 @@ class HmmerTextIterator(object):
             assert self.line.startswith('Query:')
 
             # get query id and length
-            regx = re.search(qre_id_len, self.line)
+            regx = re.search(_QRE_ID_LEN, self.line)
             id = regx.group(1).strip()
             seq_len = regx.group(2)
             # create qresult object
@@ -202,7 +201,6 @@ class HmmerTextIterator(object):
             elif self.line.startswith('  ------ inclusion'):
                 is_in_inclusion = False
                 self.line = self.read_forward()
-                continue
             # if there are no hits, then there are no hsps
             # so we forward-read until 'Internal pipeline..'
             elif self.line.startswith('   [No hits detected that satisfy reporting'):
@@ -325,11 +323,11 @@ class HmmerTextIterator(object):
                 break
             assert self.line.startswith('  == domain %i' % (dom_counter + 1))
             # alias hsp to local var
-            # but not that we're still changing the attrs of the actual
+            # but note that we're still changing the attrs of the actual
             # hsp inside the qresult as we're not creating a copy
             hsp = self.qresult[hid][dom_counter]
             # XXX: should we validate again here? regex is expensive..
-            #regx = re.search(hre_validate, self.line)
+            #regx = re.search(_HRE_VALIDATE, self.line)
             #assert hsp.bitscore == float(regx.group(1))
             #assert hsp.evalue_cond == float(regx.group(2))
             hmmseq = ''
@@ -343,11 +341,9 @@ class HmmerTextIterator(object):
                 regx = None
 
                 # check for hit or query line
-                # we don't check for the hit or query id specifically yet
+                # we don't check for the hit or query id specifically
                 # to anticipate special cases where query id == hit id
-
-                # check for query id
-                regx = re.search(hre_id_line, self.line)
+                regx = re.search(_HRE_ID_LINE, self.line)
                 if regx:
                     # the first hit/query self.line we encounter is the hmmseq
                     if len(hmmseq) == len(aliseq):
@@ -356,9 +352,6 @@ class HmmerTextIterator(object):
                     elif len(hmmseq) > len(aliseq):
                         aliseq += regx.group(2)
                     assert len(hmmseq) >= len(aliseq)
-                # check for blank self.line
-                elif not self.line.strip():
-                    pass
                 # check for start of new domain
                 elif self.line.startswith('  == domain') or \
                         self.line.startswith('>>') or \
@@ -369,7 +362,7 @@ class HmmerTextIterator(object):
                         hsp.hit.description = 'hit HMM model'
                         hsp.query = aliseq
                         hsp.query.description = 'query protein sequence'
-                    else:
+                    elif self._meta['program'] == 'hmmsearch':
                         hsp.hit = aliseq
                         hsp.hit.description = 'hit protein sequence'
                         hsp.query = hmmseq
@@ -382,9 +375,9 @@ class HmmerTextIterator(object):
                 # otherwise check if it's an annotation line and parse it
                 # len(hmmseq) is only != len(aliseq) when the cursor is parsing
                 # the homology character. Since we're not parsing that, we
-                # check for when the condition is False
+                # check for when the condition is False (i.e. when it's ==)
                 elif len(hmmseq) == len(aliseq):
-                    regx = re.search(hre_annot_line, self.line)
+                    regx = re.search(_HRE_ANNOT_LINE, self.line)
                     if regx:
                         annot_name = regx.group(3)
                         if annot_name in annot:
