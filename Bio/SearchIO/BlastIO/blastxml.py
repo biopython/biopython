@@ -4,65 +4,111 @@
 # as part of this package.
 
 """Bio.SearchIO parser for BLAST+ XML output formats."""
+# for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
 
 import re
+try:
+    from xml.etree import cElementTree as ET
+except ImportError:
+    from xml.etree import ElementTree as ET
 
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
 
 
+# compile RE patterns
+_RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
+
+
+# element - optional qresult attribute name mapping
+_ELEM_QRESULT_OPT = {
+    'Statistics_db-num': 'stat_db_num',
+    'Statistics_db-len': 'stat_db_len',
+    'Statistics_eff-space': 'stat_eff_space',
+    'Statistics_kappa': 'stat_kappa',
+    'Statistics_lambda': 'stat_lambda',
+    'Statistics_entropy': 'stat_entropy',
+}
+
+# element - hit attribute name mapping
+_ELEM_HIT = {
+    'Hit_def': 'desc',
+    'Hit_accession': 'acc',
+    'Hit_len': 'seq_len',
+}
+
+# element - hsp attribute name mapping
+_ELEM_HSP = {
+    'Hsp_bit-score': 'bitscore',
+    'Hsp_score': 'bitscore_raw',
+    'Hsp_evalue': 'evalue',
+    'Hsp_query-from': 'query_from',
+    'Hsp_query-to': 'query_to',
+    'Hsp_hit-from': 'hit_from',
+    'Hsp_hit-to': 'hit_to',
+    'Hsp_query-frame': 'query_frame',
+    'Hsp_hit-frame': 'hit_frame',
+    'Hsp_identity': 'ident_num',
+    'Hsp_positive': 'pos_num',
+    'Hsp_gaps': 'gap_num',
+    'Hsp_align-len': 'init_len',
+    #'Hsp_midline': 'homology',
+    'Hsp_pattern-from': 'pattern_from',
+    'Hsp_pattern-to': 'pattern_to',
+    'Hsp_density': 'density',
+}
+
+# dictionary for mapping tag name and meta key name
+_ELEM_META = {
+    'BlastOutput_db': 'target',
+    'BlastOutput_program': 'program',
+    'BlastOutput_version': 'version',
+    'BlastOutput_reference': 'reference',
+    'Parameters_expect': 'param_evalue_threshold',
+    'Parameters_entrez-query': 'param_entrez_query',
+    'Parameters_filter': 'param_filter',
+    'Parameters_gap-extend': 'param_gap_extend',
+    'Parameters_gap-open': 'param_gap_open',
+    'Parameters_include': 'param_include',
+    'Parameters_matrix': 'param_matrix',
+    'Parameters_pattern': 'param_pattern',
+    'Parameters_sc-match': 'param_score_match',
+    'Parameters_sc-mismatch': 'param_score_mismatch',
+}
+
+# these are fallback tags that store information on the first query
+# outside the <Iteration> tag
+# only used if query_{ID,def,len} is not found in <Iteration>
+# (seen in legacy Blast <2.2.14)
+_ELEM_QRESULTfallback = {
+    'BlastOutput_query-ID': 'id',
+    'BlastOutput_query-def': 'desc',
+    'BlastOutput_query-len': 'len',
+}
+
+
 def blast_xml_iterator(handle):
     """Generator function to parse BLAST+ XML output as QueryResult objects.
 
-    handle -- Handle to the file, or the filename as string.
+    handle -- Handle to the file.
 
     """
-    # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
-    try:
-        from xml.etree import cElementTree as ET
-    except ImportError:
-        from xml.etree import ElementTree as ET
+    for qresult in BlastXmlIterator(handle):
+        yield qresult
 
-    # element - optional qresult attribute name mapping
-    _elem_qresult_opt = {
-        'Statistics_db-num': 'stat_db_num',
-        'Statistics_db-len': 'stat_db_len',
-        'Statistics_eff-space': 'stat_eff_space',
-        'Statistics_kappa': 'stat_kappa',
-        'Statistics_lambda': 'stat_lambda',
-        'Statistics_entropy': 'stat_entropy',
-    }
 
-    # element - hit attribute name mapping
-    _elem_hit = {
-        'Hit_def': 'desc',
-        'Hit_accession': 'acc',
-        'Hit_len': 'seq_len',
-    }
+class BlastXmlIterator(object):
 
-    # element - hsp attribute name mapping
-    _elem_hsp = {
-        'Hsp_bit-score': 'bitscore',
-        'Hsp_score': 'bitscore_raw',
-        'Hsp_evalue': 'evalue',
-        'Hsp_query-from': 'query_from',
-        'Hsp_query-to': 'query_to',
-        'Hsp_hit-from': 'hit_from',
-        'Hsp_hit-to': 'hit_to',
-        'Hsp_query-frame': 'query_frame',
-        'Hsp_hit-frame': 'hit_frame',
-        'Hsp_identity': 'ident_num',
-        'Hsp_positive': 'pos_num',
-        'Hsp_gaps': 'gap_num',
-        'Hsp_align-len': 'init_len',
-        #'Hsp_midline': 'homology',
-        'Hsp_pattern-from': 'pattern_from',
-        'Hsp_pattern-to': 'pattern_to',
-        'Hsp_density': 'density',
-    }
+    def __init__(self, handle):
+        self.xmlhandle = ET.iterparse(handle, events=('start', 'end'))
+        self._meta, self._fallback = self.parse_preamble()
 
-    def _parse_hit(root_hit_elem):
-        """Iterator that transforms Iteration_hits XML elements into Hit objects.
+    def __iter__(self):
+        for qresult in self.parse_qresult():
+            yield qresult
+
+    def parse_hit(self, root_hit_elem, query_id):
+        """Generator that transforms Iteration_hits XML elements into Hit objects.
 
         Arguments:
         root_hit_elem -- Element object of the Iteration_hits tag.
@@ -89,17 +135,18 @@ def blast_xml_iterator(handle):
             hit_id = hit_elem.findtext('Hit_id')
             hit = Hit(hit_id, query_id)
 
-            for hit_tag in _elem_hit:
-                setattr(hit, _elem_hit[hit_tag], hit_elem.findtext(hit_tag))
+            for hit_tag in _ELEM_HIT:
+                setattr(hit, _ELEM_HIT[hit_tag], hit_elem.findtext(hit_tag))
 
-            for hsp in _parse_hsp(hit_elem.find('Hit_hsps'), hit_id):
+            for hsp in self.parse_hsp(hit_elem.find('Hit_hsps'), query_id, \
+                    hit_id):
                 hit.append(hsp)
 
             # delete element after we finish parsing it
             hit_elem.clear()
             yield hit
 
-    def _parse_hsp(root_hsp_elem, hit_id):
+    def parse_hsp(self, root_hsp_elem, query_id, hit_id):
         """Iterator that transforms Hit_hsps XML elements into HSP objects.
 
         Arguments:
@@ -141,145 +188,121 @@ def blast_xml_iterator(handle):
             query_seq = hsp_elem.findtext('Hsp_qseq')
             hsp = HSP(hit_id, query_id, hit_seq, query_seq)
 
-            for hsp_tag in _elem_hsp:
-                setattr(hsp, _elem_hsp[hsp_tag], hsp_elem.findtext(hsp_tag))
+            for hsp_tag in _ELEM_HSP:
+                setattr(hsp, _ELEM_HSP[hsp_tag], hsp_elem.findtext(hsp_tag))
 
             # delete element after we finish parsing it
             hsp_elem.clear()
             yield hsp
 
-    # dictionary for containing all information prior to the first query
-    meta = {}
-    # dictionary for mapping tag name and meta key name
-    _elem_meta = {
-        'BlastOutput_db': 'target',
-        'BlastOutput_program': 'program',
-        'BlastOutput_version': 'version',
-        'BlastOutput_reference': 'reference',
-        'Parameters_expect': 'param_evalue_threshold',
-        'Parameters_entrez-query': 'param_entrez_query',
-        'Parameters_filter': 'param_filter',
-        'Parameters_gap-extend': 'param_gap_extend',
-        'Parameters_gap-open': 'param_gap_open',
-        'Parameters_include': 'param_include',
-        'Parameters_matrix': 'param_matrix',
-        'Parameters_pattern': 'param_pattern',
-        'Parameters_sc-match': 'param_score_match',
-        'Parameters_sc-mismatch': 'param_score_mismatch',
-    }
+    def parse_preamble(self):
+        """Parses all tag data prior to the first query result."""
+        # dictionary for containing all information prior to the first query
+        meta = {}
+        # dictionary for fallback information
+        fallback = {}
 
-    # these are fallback tags that store information on the first query
-    # outside the <Iteration> tag
-    # only used if query_{ID,def,len} is not found in <Iteration>
-    # (seen in legacy Blast <2.2.14)
-    _fallback = {}
-    _elem_fallback_map = {
-        'BlastOutput_query-ID': 'query_id',
-        'BlastOutput_query-def': 'query_desc',
-        'BlastOutput_query-len': 'query_len',
-    }
+        # parse the preamble part (anything prior to the first result)
+        for event, elem in self.xmlhandle:
+            # get the tag values, cast appropriately, store into meta
+            if event == 'end' and elem.tag in _ELEM_META:
+                meta_key = _ELEM_META[elem.tag]
 
-    # compile RE patterns
-    _re_version = re.compile(r'\d+\.\d+\.\d+\+?')
+                if meta_key  == 'param_evalue_threshold':
+                    meta[meta_key] = float(elem.text)
+                elif meta_key in ['param_gap_open', 'param_gap_extend', \
+                        'param_score_match', 'param_score_mismatch']:
+                    meta[meta_key] = int(elem.text)
+                else:
+                    meta[meta_key] = elem.text
+                # delete element after we finish parsing it
+                elem.clear()
+                continue
+            # capture fallback values
+            # these are used only if the first <Iteration> does not have any
+            # ID, ref, or len.
+            elif event == 'end' and elem.tag in _ELEM_QRESULTfallback:
+                fallback_key = _ELEM_QRESULTfallback[elem.tag]
+                fallback[fallback_key] = elem.text
+                elem.clear()
+                continue
 
-    xml_iter = ET.iterparse(handle, events=('start', 'end'))
+            if event == 'start' and elem.tag == 'BlastOutput_iterations':
+                break
 
-    # parse the preamble part (anything prior to the first result)
-    for event, elem in xml_iter:
-        # get the tag values, cast appropriately, store into meta
-        if event == 'end' and elem.tag in _elem_meta:
-            meta_key = _elem_meta[elem.tag]
+        # we only want the version number, sans the program name or date
+        meta['version'] = re.search(_RE_VERSION, \
+                meta['version']).group(0)
 
-            if meta_key  == 'param_evalue_threshold':
-                meta[meta_key] = float(elem.text)
-            elif meta_key in ['param_gap_open', 'param_gap_extend', \
-                    'param_score_match', 'param_score_mismatch']:
-                meta[meta_key] = int(elem.text)
-            else:
-                meta[meta_key] = elem.text
-            # delete element after we finish parsing it
-            elem.clear()
-            continue
-        # capture fallback values
-        # these are used only if the first <Iteration> does not have any
-        # ID, ref, or len.
-        elif event == 'end' and elem.tag in _elem_fallback_map:
-            fallback_key = _elem_fallback_map[elem.tag]
-            _fallback[fallback_key] = elem.text
-            elem.clear()
-            continue
+        return meta, fallback
 
-        if event == 'start' and elem.tag == 'BlastOutput_iterations':
-            break
+    def parse_qresult(self):
+        """Parses query results."""
+        # parse the queries
+        for event, qresult_elem in self.xmlhandle:
+            # </Iteration> marks the end of a single query
+            # which means we can process it
+            if event == 'end' and qresult_elem.tag == 'Iteration':
 
-    # we only want the version number, sans the program name or date
-    meta['version'] = re.search(_re_version, \
-            meta['version']).group(0)
+                # we'll use the following schema
+                # <!ELEMENT Iteration (
+                #        Iteration_iter-num,
+                #        Iteration_query-ID?,
+                #        Iteration_query-def?,
+                #        Iteration_query-len?,
+                #        Iteration_hits?,
+                #        Iteration_stat?,
+                #        Iteration_message?)>
 
-    # parse the queries
-    for event, qresult_elem in xml_iter:
-        # </Iteration> marks the end of a single query
-        # which means we can process it
-        if event == 'end' and qresult_elem.tag == 'Iteration':
+                # assign query attributes with fallbacks
+                try:
+                    query_id = qresult_elem.find('Iteration_query-ID').text
+                except AttributeError:
+                    query_id = self._fallback['id']
+                try:
+                    description = qresult_elem.find('Iteration_query-def').text
+                except AttributeError:
+                    description = self._fallback['desc']
+                try:
+                    query_len = qresult_elem.find('Iteration_query-len').text
+                except AttributeError:
+                    query_len = self._fallback['len']
 
-            # we'll use the following schema
-            # <!ELEMENT Iteration (
-            #        Iteration_iter-num,
-            #        Iteration_query-ID?,
-            #        Iteration_query-def?,
-            #        Iteration_query-len?,
-            #        Iteration_hits?,
-            #        Iteration_stat?,
-            #        Iteration_message?)>
+                # create qresult and assign its attributes
+                qresult = QueryResult(query_id)
+                qresult.desc = description
+                qresult.seq_len = query_len
+                for meta_attr in self._meta:
+                    setattr(qresult, meta_attr, self._meta[meta_attr])
 
-            # assign query attributes with fallbacks
-            try:
-                query_id = qresult_elem.find('Iteration_query-ID').text
-            except AttributeError:
-                query_id = _fallback['query_id']
-            try:
-                description = qresult_elem.find('Iteration_query-def').text
-            except AttributeError:
-                description = _fallback['query_desc']
-            try:
-                query_len = qresult_elem.find('Iteration_query-len').text
-            except AttributeError:
-                query_len = _fallback['query_len']
+                # statistics are stored in Iteration_stat's 'grandchildren' with the
+                # following DTD
+                # <!ELEMENT Statistics (
+                #        Statistics_db-num,
+                #        Statistics_db-len,
+                #        Statistics_hsp-len,
+                #        Statistics_eff-space,
+                #        Statistics_kappa,
+                #        Statistics_lambda,
+                #        Statistics_entropy)>
 
-            # create qresult and assign its attributes
-            qresult = QueryResult(query_id)
-            qresult.desc = description
-            qresult.seq_len = query_len
-            for meta_attr in meta:
-                setattr(qresult, meta_attr, meta[meta_attr])
+                stat_iter_elem = qresult_elem.find('Iteration_stat')
+                if stat_iter_elem is not None:
+                    stat_elem = stat_iter_elem.find('Statistics')
 
-            # statistics are stored in Iteration_stat's 'grandchildren' with the
-            # following DTD
-            # <!ELEMENT Statistics (
-            #        Statistics_db-num,
-            #        Statistics_db-len,
-            #        Statistics_hsp-len,
-            #        Statistics_eff-space,
-            #        Statistics_kappa,
-            #        Statistics_lambda,
-            #        Statistics_entropy)>
+                    for stat_tag in _ELEM_QRESULT_OPT:
+                        setattr(qresult, _ELEM_QRESULT_OPT[stat_tag], \
+                                stat_elem.findtext(stat_tag))
 
-            stat_iter_elem = qresult_elem.find('Iteration_stat')
-            if stat_iter_elem is not None:
-                stat_elem = stat_iter_elem.find('Statistics')
+                for hit in self.parse_hit(qresult_elem.find('Iteration_hits'), \
+                        query_id):
+                    # only append the Hit object if we have HSPs
+                    if hit:
+                        qresult.append(hit)
 
-                for stat_tag in _elem_qresult_opt:
-                    setattr(qresult, _elem_qresult_opt[stat_tag], \
-                            stat_elem.findtext(stat_tag))
-
-            for hit in _parse_hit(qresult_elem.find('Iteration_hits')):
-                # only append the Hit object if we have HSPs
-                if hit:
-                    qresult.append(hit)
-
-            # delete element after we finish parsing it
-            qresult_elem.clear()
-            yield qresult
+                # delete element after we finish parsing it
+                qresult_elem.clear()
+                yield qresult
 
 
 class BlastXmlIndexer(SearchIndexer):
