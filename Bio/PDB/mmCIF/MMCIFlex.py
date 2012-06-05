@@ -13,7 +13,7 @@ import ply.lex as lex  # lexer
 from ply.lex import TOKEN  # to assign complex docstrings to tokens
 
 
-class MMCIFlex:
+class MMCIFlex(object):
     '''
     Build PLY lexer for CIF/mmCIF data format and tokenize input.
 
