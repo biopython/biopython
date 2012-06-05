@@ -139,7 +139,7 @@ class TreeTests(unittest.TestCase):
             deep_tip_1, deep_dist_1 = max(tree.clade[1].depths().iteritems(),
                                         key=lambda kv: kv[1])
             # XXX Rounding errors accumulate?
-            self.assertAlmostEqual(deep_dist_0, deep_dist_1, 1)
+            self.assertAlmostEqual(deep_dist_0, deep_dist_1, places=1)
 
     # Magic method
     def test_str(self):
