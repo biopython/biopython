@@ -596,6 +596,18 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.assertEqual(1, self.hsp.query_from)
         self.assertEqual(10, self.hsp.query_to)
 
+    def test_query_span_ok(self):
+        # span is to - from + 1
+        self.hsp.query_from = 10
+        self.hsp.query_to = 99
+        self.assertEqual(90, self.hsp.query_span)
+
+    def test_query_span_ok_2(self):
+        # span is to - from + 1
+        self.hsp.query_from = 99
+        self.hsp.query_to = 10
+        self.assertEqual(90, self.hsp.query_span)
+
     def test_hit_strand_set_ok(self):
         # only 1, 0, -1, and None is allowed as strands
         for value in [-1, 0, 1, None]:
@@ -634,6 +646,18 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.hsp.query_to = 1
         self.assertEqual(1, self.hsp.query_from)
         self.assertEqual(10, self.hsp.query_to)
+
+    def test_hit_span_ok(self):
+        # span is to - from + 1
+        self.hsp.query_from = 10
+        self.hsp.query_to = 99
+        self.assertEqual(90, self.hsp.query_span)
+
+    def test_hit_span_ok_2(self):
+        # span is to - from + 1
+        self.hsp.query_from = 99
+        self.hsp.query_to = 10
+        self.assertEqual(90, self.hsp.query_span)
 
 
 if __name__ == "__main__":
