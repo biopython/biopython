@@ -30,10 +30,8 @@ class SearchIndexer(object):
 
     """
 
-    def __init__(self, filename, format):
+    def __init__(self, filename):
         self._handle = open(filename, 'rb')
-        self._format = format
-        self._parser = SearchIO._get_handler(format, SearchIO._ITERATOR_MAP)
 
     def _parse(self, handle):
         return self._parser(handle).next()
@@ -47,7 +45,7 @@ class IndexedSearch(_dict_base):
     """Dictionary-like object for implementing Search indexing.
 
     """
-    def __init__(self, filename, format, key_function=lambda qresult: qresult.id):
+    def __init__(self, filename, format, key_function=None):
         """Initializes IndexedSearch instance.
 
         filename -- The source filename as string.
@@ -61,7 +59,7 @@ class IndexedSearch(_dict_base):
         self._key_function = key_function
 
         indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
-        indexed_obj = indexer_class(filename, format)
+        indexed_obj = indexer_class(filename)
         self._indexer = indexed_obj
 
         # default key function is lambda rec: rec.id
@@ -305,7 +303,7 @@ class DbIndexedSearch(IndexedSearch):
                 # fill the file_data
                 con.execute("INSERT INTO file_data(file_number, name) VALUES "
                         "(?,?);", (idx, filename))
-                indexed_obj = indexer_class(filename, format)
+                indexed_obj = indexer_class(filename)
 
                 if key_function:
                     offset_iter = ((key_function(key), idx, offset, length) for \
