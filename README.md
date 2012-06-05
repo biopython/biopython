@@ -1,12 +1,13 @@
-**Biopython README file**
+Biopython README file
+=========
  
 The Biopython Project is an international association of developers of freely
 available Python tools for computational molecular biology.
 
-Our website http://www.biopython.org provides an online resource for modules,
+Our [website](http://www.biopython.org) provides an online resource for modules,
 scripts, and web links for developers of Python-based software for life
 science research.  This is hosted by the Open Bioinformatics Foundation or
-O|B|F, http://www.open-bio.org, who also host BioPerl etc.
+[O|B|F](http://www.open-bio.org), who also host BioPerl etc.
 
 This Biopython package is made available under generous terms.  Please
 see the LICENSE file for further details.
@@ -20,79 +21,85 @@ molecular biology and bioinformatics. Bioinformatics 2009 Jun 1; 25(11) 1422-3
 http://dx.doi.org/10.1093/bioinformatics/btp163 pmid:19304878
 
 
-**For the impatient**
+For the impatient
+=========
 
 To build and install Biopython, download and unzip the source code, go to this
 directory at the command line, and type:
 
-python setup.py build
-python setup.py test
-sudo python setup.py install
+    $ python setup.py build
+    $ python setup.py test
+    $ sudo python setup.py install
 
-**System Requirements**
+System Requirements
+=========
 
-o Python 2.4, 2.5, 2.6 or 2.7, see http://www.python.org
+- [Python 2.4, 2.5, 2.6 or 2.7](http://www.python.org).
   We are phasing out support for Python 2.4.
   See below for notes about testing with Python 3.
   
-o NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
+- [NumPy](http://numpy.scipy.org) (optional, but strongly recommended).
   This package is only used in the computationally-oriented modules.
   It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
   think you might need these modules, then please install NumPy first BEFORE
   installing Biopython. The older Numeric library is no longer supported in
   Biopython.
 
-o ReportLab, see http://www.reportlab.org/downloads.html (optional)
+- [ReportLab](http://www.reportlab.org/downloads.html) (optional)
   This package is only used in Bio.Graphics, so if you do not need this
   functionality, you will not need to install this package.  You can install
   it later if needed.
 
-o psycopg2, see http://initd.org/software/psycopg/ (optional) or
-  PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
+- [psycopg2](http://initd.org/software/psycopg/) (optional) or
+  [PyGreSQL (pgdb)](http://www.pygresql.org/) (optional)
   These packages are used by BioSQL to access a PostgreSQL database.
 
-o MySQLdb, see http://sourceforge.net/projects/mysql-python (optional)
+- [MySQLdb](http://sourceforge.net/projects/mysql-python) (optional)
   This package is used by BioSQL or Bio.GFF to access a MySQL database.
 
 In addition there are a number of useful third party tools you may wish to
 install such as standalone NCBI BLAST, EMBOSS or ClustalW.
 
 
-**Python 3.x**
+Python 3.x
+=========
 
 Note we do not intend to support Python 3.0, please use Python 3.1 or later.
 Python 3 support is still incomplete (and we do not yet officially support
 using Biopython with Python 3), but the majority of modules are largely
 functional. In order to be able to run Biopython with Python 3 it is first
 converted using the 2to3 script. This is done automatically by the setup.py
-script. Use "python3 setup.py build" etc (see installation notes below).
+script. Use `python3 setup.py build` etc (see installation notes below).
 
 
-**Installation**
+Installation
+=========
 
-*** Make sure that Python is installed correctly ***
+**Make sure that Python is installed correctly**
 
 Installation should be as simple as going to the biopython source code
 directory, and typing:
 
-	'python setup.py build'
-	'python setup.py test'
-	'sudo python setup.py install'
+    python setup.py build
+    python setup.py test
+    sudo python setup.py install
 
 If you need to do additional configuration, e.g. changing the base
-directory, please type 'python setup.py', or see the documentation for
+directory, please type `python setup.py`, or see the documentation for
 Distutils.
 
 
-**Testing**
+Testing
+=========
 
 Biopython includes a suite of regression tests to check if everything is
 running correctly.  To do the tests, go to the biopython source code directory
 and type:
 
-	'python setup.py test'
+    $ python setup.py test
 
 Do not panic if you see messages warning of skipped tests:
+
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
 
 This most likely means that a package is not installed.  You can
@@ -101,24 +108,25 @@ planning on using.  If you did want to use that module, please install
 the required dependency and re-run the tests.
 
 
-**Source Code Repository**
+Source Code Repository
+=========
 
 Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
-currently uses git for distributed source code control, hosted by github
-at http://github.com/biopython/biopython
+currently uses git for distributed source code control, [hosted by github](http://github.com/biopython/biopython).
 
 Until late September 2009, Biopython source code was kept in CVS running
 on the OBF servers. These will remain online for a while as "read only"
 static backups of everything up to and including Biopython 1.52.
 
 
-**Bugs**
+Bugs
+=========
 
 While we try to ship a robust package, bugs inevitably pop up.  If you are
 having problems that might be caused by a bug in Biopython, it is possible
 that it has already been identified. Update to the latest release if you are
 not using it already, and retry. If the problem persists, please search our
-bug database at http://redmine.open-bio.org/projects/biopython and our
+[bug database](http://redmine.open-bio.org/projects/biopython) and our
 mailing lists to see if it has already been reported (and hopefully fixed),
 and if not please do report the bug. We can't fix problems we don't know
 about ;)
@@ -133,26 +141,32 @@ when doing this, because the code in github is not as well-tested as released
 code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or the mailing list at
-biopython@biopython.org.  In the bug report, please let us know (1) which
-operating system and hardware you are using, (2) the Python version, (3) the
-Biopython version (or git version/date), (4) traceback that occurs, and also
-ideally (5) the code that breaks, and (6) a data file that causes the problem.
+biopython@biopython.org.  In the bug report, please let us know:
+
+ 1. which operating system and hardware you are using
+ 2. the Python version
+ 3. the Biopython version (or git version/date)
+ 4. traceback that occurs
+ 5. the code that breaks
+ 6. a data file that causes the problem
 
 
-**Contributing, Bug Reports**
+Contributing, Bug Reports
+=========
 
 Biopython is run by volunteers from all over the world, with many types of
 backgrounds. We are always looking for people interested in helping with code
 development, web-site management, documentation writing, technical
 administration, and whatever else comes up.
 
-If you wish to contribute, please visit the web site http://www.biopython.org
-and join our "mailing list":http://biopython.org/wiki/Mailing_lists
+If you wish to contribute, please visit the [web site](http://www.biopython.org)
+and join our [mailing list](http://biopython.org/wiki/Mailing_lists).
 
 
-**Distribution Structure**
+Distribution Structure
+=========
 
-README       -- This file.
+README.md    -- This file.
 
 NEWS         -- Release notes and news
 
