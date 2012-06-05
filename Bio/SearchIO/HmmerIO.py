@@ -53,13 +53,26 @@ def hmmer_text_iterator(handle):
         yield qresult
 
 
+def read_forward(handle):
+    """Reads through whitespaces, returns the first non-whitespace line."""
+    while True:
+        line = handle.readline()
+        # if line has characters and stripping does not remove them,
+        # return the line
+        if line and line.strip():
+            return line
+        # if line ends, return None
+        elif not line:
+            return line
+
+
 class HmmerTextIterator(object):
 
     """Iterator for the HMMER 3.0 text output."""
 
     def __init__(self, handle):
         self.handle = handle
-        self.line = self.read_forward()
+        self.line = read_forward(self.handle)
         self._meta = self.parse_preamble()
 
     def __iter__(self):
@@ -86,7 +99,7 @@ class HmmerTextIterator(object):
             if not self.line or bool_func(self.line):
                 return
             else:
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
 
     def parse_preamble(self):
         """Parses HMMER preamble (lines beginning with '#')."""
@@ -128,7 +141,7 @@ class HmmerTextIterator(object):
                 else:
                     meta[regx.group(1)] = regx.group(2)
 
-            self.line = self.read_forward()
+            self.line = read_forward(self.handle)
 
         return meta
 
@@ -154,7 +167,7 @@ class HmmerTextIterator(object):
             
             # get description and accession, if they exist
             while True:
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
 
                 if self.line.startswith('Accession:'):
                     acc = self.line.strip().split(' ', 1)[1]
@@ -172,14 +185,14 @@ class HmmerTextIterator(object):
                     break
                 if self.line.startswith('Internal pipeline'):
                     while True:
-                        self.line = self.read_forward()
+                        self.line = read_forward(self.handle)
                         if '//' in self.line or not self.line:
                             break
                 if '//' in self.line or not self.line:
                     break
 
             yield self.qresult
-            self.line = self.read_forward()
+            self.line = read_forward(self.handle)
             if not self.line:
                 break
 
@@ -188,7 +201,7 @@ class HmmerTextIterator(object):
         # get to the end of the hit table delimiter and read one more line
         self.read_until(lambda line: \
                 line.startswith('    ------- ------ -----'))
-        self.line = self.read_forward()
+        self.line = read_forward(self.handle)
 
         # assume every hit is in inclusion threshold until the inclusion
         # threshold line is encountered
@@ -200,12 +213,12 @@ class HmmerTextIterator(object):
                 break
             elif self.line.startswith('  ------ inclusion'):
                 is_in_inclusion = False
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
             # if there are no hits, then there are no hsps
             # so we forward-read until 'Internal pipeline..'
             elif self.line.startswith('   [No hits detected that satisfy reporting'):
                 while True:
-                    self.line = self.read_forward()
+                    self.line = read_forward(self.handle)
                     if self.line.startswith('Internal pipeline'):
                         return
             elif self.line.startswith('Domain annotation for each '):
@@ -239,7 +252,7 @@ class HmmerTextIterator(object):
 
             self.qresult.append(hit)
 
-            self.line = self.read_forward()
+            self.line = read_forward(self.handle)
 
     def parse_hsp(self):
         """Parses a HMMER3 hsp block, beginning with the hsp table."""
@@ -259,7 +272,7 @@ class HmmerTextIterator(object):
             # read through the hsp table header and move one more line
             self.read_until(lambda line: \
                     line.startswith(' ---   ------ ----- --------'))
-            self.line = self.read_forward()
+            self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit
             while True:
@@ -307,7 +320,7 @@ class HmmerTextIterator(object):
                 hsp.acc_avg = parsed[15]
 
                 self.qresult[hid].append(hsp)
-                self.line = self.read_forward()
+                self.line = read_forward(self.handle)
 
             # parse the hsp alignments
             if self.line.startswith('  Alignments for each domain:'):
@@ -315,7 +328,7 @@ class HmmerTextIterator(object):
 
     def parse_hsp_alignment(self, hid):
         """Parses a HMMER3 HSP alignment block."""
-        self.line = self.read_forward()
+        self.line = read_forward(self.handle)
         dom_counter = 0
         while True:
             if self.line.startswith('>>') or \
