@@ -387,7 +387,7 @@ class DbIndexedSearch(IndexedSearch):
             if len(proxies) >= self._max_open:
                 proxies.popitem()[1]._handle.close()
             # open a new handle
-            proxy = self._indexer_class(self._filenames[file_number], self._format)
+            proxy = self._indexer_class(self._filenames[file_number])
             result = proxy.get(offset)
             proxies[file_number] = proxy
 
