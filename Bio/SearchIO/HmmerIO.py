@@ -77,8 +77,8 @@ class HmmerTextIterator(object):
 
     def __iter__(self):
         for qresult in self.parse_qresult():
-            qresult.program = self._meta['program']
-            qresult.target = self._meta['target']
+            qresult.program = self._meta.get('program')
+            qresult.target = self._meta.get('target')
             yield qresult
 
     def read_forward(self):
@@ -161,9 +161,10 @@ class HmmerTextIterator(object):
             # create qresult object
             self.qresult = QueryResult(id)
             self.qresult.seq_len = seq_len
-            self.qresult.program = self._meta['program']
-            self.qresult.version = self._meta['version']
-            self.qresult.target = self._meta['target']
+
+            self.qresult.program = self._meta.get('program')
+            self.qresult.version = self._meta.get('version')
+            self.qresult.target = self._meta.get('target')
             
             # get description and accession, if they exist
             while True:
@@ -300,7 +301,7 @@ class HmmerTextIterator(object):
                 # depending on whether the program is hmmsearch or hmmscan,
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
-                if self._meta['program'] == 'hmmscan':
+                if self._meta.get('program') == 'hmmscan':
                     hsp.hit_from = parsed[6]
                     hsp.hit_to = parsed[7]
                     hsp.hit_endtype = parsed[8]
@@ -370,12 +371,12 @@ class HmmerTextIterator(object):
                         self.line.startswith('>>') or \
                         self.line.startswith('Internal pipeline'):
                     hsp.alignment_annotation = annot
-                    if self._meta['program'] == 'hmmscan':
+                    if self._meta.get('program') == 'hmmscan':
                         hsp.hit = hmmseq
                         hsp.hit.description = 'hit HMM model'
                         hsp.query = aliseq
                         hsp.query.description = 'query protein sequence'
-                    elif self._meta['program'] == 'hmmsearch':
+                    elif self._meta.get('program') == 'hmmsearch':
                         hsp.hit = aliseq
                         hsp.hit.description = 'hit protein sequence'
                         hsp.query = hmmseq
