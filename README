@@ -143,10 +143,17 @@ when doing this, because the code in github is not as well-tested as released
 code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or the mailing list at
-biopython@biopython.org.  In the bug report, please let us know (1) which
-operating system and hardware you are using, (2) the Python version, (3) the
-Biopython version (or git version/date), (4) traceback that occurs, and also
-ideally (5) the code that breaks, and (6) a data file that causes the problem.
+biopython@biopython.org.  In the bug report, please let us know:
+
+ 1. Which operating system and hardware (32 bit or 64 bit) you are using
+ 2. Python version
+ 3. Biopython version (or git version/date)
+ 4. Traceback that occurs (the full error message)
+
+    And also ideally:
+
+ 5. Example code that breaks
+ 6. A data file that causes the problem
 
 
 Contributing, Bug Reports
