@@ -333,6 +333,7 @@ class BlastXmlIndexer(SearchIndexer):
         handle = self._handle
         handle.seek(0)
         re_id = re.compile(r'<Iteration_query-ID>(.*?)</Iteration_query-ID>')
+        re_id_part = re.compile(r'</Iteration_query-ID>')
         counter = 0
 
         while True:
@@ -342,11 +343,23 @@ class BlastXmlIndexer(SearchIndexer):
             for qstart_idx in self.get_offsets(block, qstart_mark):
                 # get the id of the query (re.search gets the 1st result)
                 regx = re.search(re_id, block[qstart_idx:])
-                # use the fallback value if ID element doesn't exist
                 try:
                     qstart_id = regx.group(1).split(' ', 1)[0]
+                # handle cases where the iteration query ID tag lies in a block
+                # split
                 except AttributeError:
-                    qstart_id = self._fallback['id']
+                    # if we still haven't found the query ID, use the
+                    # fallback value
+                    if re.search(re_id_part, block[qstart_idx:]):
+                        qstart_id = self._fallback['id']
+                    else:
+                        # extend the cached read
+                        block_ext = block + handle.read(block_size)
+                        regx = re.search(re_id, block_ext[qstart_idx:])
+                        qstart_id = regx.group(1).split(' ', 1)[0]
+                        # set file pointer to the position before block_ext
+                        handle.seek((counter + 1) * block_size)
+
                 # TODO: should we also get the length? not done for now
                 qlen = 0
                 # yield results
