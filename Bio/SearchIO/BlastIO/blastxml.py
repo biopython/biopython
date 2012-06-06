@@ -12,6 +12,7 @@ try:
 except ImportError:
     from xml.etree import ElementTree as ET
 
+from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
 
@@ -227,12 +228,13 @@ class BlastXmlIterator(object):
                 elem.clear()
                 continue
 
-            if event == 'start' and elem.tag == 'BlastOutput_iterations':
+            if event == 'start' and elem.tag == 'Iteration':
                 break
 
         # we only want the version number, sans the program name or date
-        meta['version'] = re.search(_RE_VERSION, \
-                meta['version']).group(0)
+        if meta.get('version') is not None:
+            meta['version'] = re.search(_RE_VERSION, \
+                    meta['version']).group(0)
 
         return meta, fallback
 
@@ -309,8 +311,83 @@ class BlastXmlIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ XML output."""
 
-    def __init__(self, handle):
-        pass
+    def __init__(self, *args, **kwargs):
+        SearchIndexer.__init__(self, *args, **kwargs)
+        self._parser = blast_xml_iterator
+        self.qstart_mark = _as_bytes('<Iteration>')
+        self.qend_mark = _as_bytes('</Iteration>')
+        self.block_size = 16384
+        # TODO: better way to do this?
+        iter_obj = BlastXmlIterator(self._handle)
+        self._meta, self._fallback = iter_obj._meta, iter_obj._fallback
+
+    def get_offsets(self, string, sub, offset=0):
+        idx = string.find(sub, offset)
+        while idx >= 0:
+            yield idx
+            idx = string.find(sub, idx + 1)
+
+    def __iter__(self):
+        qstart_mark = self.qstart_mark
+        block_size = self.block_size
+        handle = self._handle
+        handle.seek(0)
+        re_id = re.compile(r'<Iteration_query-ID>(.*?)</Iteration_query-ID>')
+        counter = 0
+
+        while True:
+            # read file content (every block size) and store into block
+            block = handle.read(block_size)
+            # for each iteration start mark
+            for qstart_idx in self.get_offsets(block, qstart_mark):
+                # get the id of the query (re.search gets the 1st result)
+                regx = re.search(re_id, block[qstart_idx:])
+                # use the fallback value if ID element doesn't exist
+                try:
+                    qstart_id = regx.group(1).split(' ', 1)[0]
+                except AttributeError:
+                    qstart_id = self._fallback['id']
+                # TODO: should we also get the length? not done for now
+                qlen = 0
+                # yield results
+                # don't forget to take into account the block size
+                yield qstart_id, counter * block_size + qstart_idx, qlen
+
+            counter += 1
+
+            if not block:
+                break
+
+    def get_raw(self, offset):
+        qend_mark = self.qend_mark
+        block_size = self.block_size
+        handle = self._handle
+        handle.seek(offset)
+        counter = 0
+        qresult_raw = ''
+
+        while True:
+            block = handle.read(block_size)
+
+            # if we reach EOF without encountering any query end mark
+            if not block:
+                raise ValueError("Query end not found")
+
+            qresult_raw += block
+            qend_idx = qresult_raw.find(qend_mark)
+
+            # if a match is found, return the raw qresult string
+            if qend_idx > 0:
+                return qresult_raw[:qend_idx + len(qend_mark)]
+            # otherwise, increment the counter and go on to the next iteration
+            counter += 1
+
+    def get(self, offset):
+        qresult = SearchIndexer.get(self, offset)
+        # set qresult object attributes with values from preamble
+        for key, value in self._meta.items():
+            setattr(qresult, key, value)
+        return qresult
 
 
 def _test():
