@@ -329,6 +329,7 @@ class BlastXmlIndexer(SearchIndexer):
 
     def __iter__(self):
         qstart_mark = self.qstart_mark
+        qend_mark = self.qend_mark
         block_size = self.block_size
         handle = self._handle
         handle.seek(0)
@@ -360,11 +361,26 @@ class BlastXmlIndexer(SearchIndexer):
                         # set file pointer to the position before block_ext
                         handle.seek((counter + 1) * block_size)
 
-                # TODO: should we also get the length? not done for now
-                qlen = 0
-                # yield results
-                # don't forget to take into account the block size
-                yield qstart_id, counter * block_size + qstart_idx, qlen
+                # now for getting the length
+                # try finding it in the block
+                qlen = block[qstart_idx:].find(qend_mark)
+
+                # if not there, loop until query end is found
+                block_ext = block
+                while qlen < 0:
+                    ext = handle.read(block_size)
+                    if not ext:
+                        raise ValueError("Query end for %s not found" % qstart_id)
+                    block_ext += ext
+                    qlen = block_ext[qstart_idx:].find(qend_mark)
+
+                # adjust for read blocks
+                qstart_idx = counter * block_size + qstart_idx
+                qlen = len(qend_mark) + qlen
+                # move pointer to original position
+                handle.seek((counter + 1) * block_size)
+                # yield key, offset, length
+                yield qstart_id, qstart_idx, qlen
 
             counter += 1
 
