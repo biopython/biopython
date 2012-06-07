@@ -96,6 +96,7 @@ _CONVERSION_MAP = {
 def _get_handler(format, mapping):
     """Returns the object to handle the given format according to the mapping.
 
+    Arguments:
     format -- Lower case string denoting one of the supported formats.
     mapping -- Dictionary of format and object name mapping.
 
@@ -123,8 +124,9 @@ def _get_handler(format, mapping):
 
 
 def parse(handle, format=None):
-    """Turns a search output file into an iterator returning Result objects.
+    """Turns a search output file into an iterator returning QueryResult objects.
 
+    Arguments:
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
 
@@ -141,13 +143,14 @@ def parse(handle, format=None):
     with as_handle(handle) as source_file:
         generator = iterator(source_file)
 
-        for result in generator:
-            yield result
+        for qresult in generator:
+            yield qresult
 
 
 def read(handle, format):
-    """Turns a search output file into a single Result.
+    """Turns a search output file into a single QueryResult.
 
+    Arguments:
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
 
@@ -157,16 +160,17 @@ def read(handle, format):
     try:
         return generator.next()
     except StopIteration:
-        raise ValueError("No results found in handle")
+        raise ValueError("No query results found in handle")
 
 
-def to_dict(queries, key_function=lambda rec: rec.id):
-    """Turns a Result iterator or list into a dictionary.
+def to_dict(qresults, key_function=lambda rec: rec.id):
+    """Turns a QueryResult iterator or list into a dictionary.
 
-    queries -- Iterator returning Result objects or a list containing
-               Result objects.
+    Arguments:
+    qresults -- Iterator returning QueryResult objects or a list containing
+                QueryResult objects.
     key_function -- Optional callback function which when given a
-                    Result should return a unique key for the dictionary.
+                    QUeryResult should return a unique key for the dictionary.
 
     e.g. key_function = lambda rec : rec.id
     or,  key_function = lambda rec : rec.id.split('|')[0]
@@ -176,22 +180,23 @@ def to_dict(queries, key_function=lambda rec: rec.id):
     keys are present, an error will be raised.
 
     """
-    results = {}
-    for query in queries:
-        key = key_function(query)
-        if key in results:
+    qdict = {}
+    for qresult in qresults:
+        key = key_function(qresult)
+        if key in qdict:
             raise ValueError("Duplicate key '%s'" % key)
-        results[key] = query
-    return results
+        qdict[key] = qresult
+    return qdict
 
 
 def index(handle, format, key_function=None):
     """Indexes a search output file and returns a dictionary-like object.
 
-    - handle    - Handle to the file, or the filename as a string.
-    - format    - Lower case string denoting one of the supported formats.
-    - key_function - Optional callback function which when given a
-                     Result should return a unique key for the dictionary.
+    Arguments:
+    handle -- Handle to the file, or the filename as a string.
+    format -- Lower case string denoting one of the supported formats.
+    key_function -- Optional callback function which when given a
+                    QueryResult should return a unique key for the dictionary.
 
     """
     # check if handle type is correct
@@ -206,15 +211,16 @@ def index_db(index_filename, filenames=None, format=None, \
         key_function=None):
     """Indexes several search output files into an SQLite database.
 
-    - index_filename - The SQLite filename.
-    - filenames - List of strings specifying file(s) to be indexed, or when
-                  indexing a single file this can be given as a string.
-                  (optional if reloading an existing index, but must match)
-    - format    - Lower case string denoting one of the supported formats.
-                  (optional if reloading an existing index, but must match)
-    - key_function - Optional callback function which when given a
-                     Result identifier string should return a unique
-                     key for the dictionary.
+    Arguments:
+    index_filename -- The SQLite filename.
+    filenames -- List of strings specifying file(s) to be indexed, or when
+                 indexing a single file this can be given as a string.
+                 (optional if reloading an existing index, but must match)
+    format -- Lower case string denoting one of the supported formats.
+              (optional if reloading an existing index, but must match)
+    key_function -- Optional callback function which when given a
+                    QueryResult identifier string should return a unique
+                    key for the dictionary.
 
     """
     # cast filenames to list if it's a string
@@ -229,10 +235,11 @@ def index_db(index_filename, filenames=None, format=None, \
 def convert(in_file, in_format, out_file, out_format):
     """Convert between two search output formats, return number of records.
 
-     - in_file      - Handle to the input file, or the filename as string.
-     - in_format    - Lower case string denoting the format of the input file.
-     - out_file     - Handle to the output file, or the filename as string.
-     - out_format   - Lower case string denoting the format of the output file.
+    Arguments:
+    in_file -- Handle to the input file, or the filename as string.
+    in_format -- Lower case string denoting the format of the input file.
+    out_file -- Handle to the output file, or the filename as string.
+    out_format -- Lower case string denoting the format of the output file.
 
     Conversion is currently limited to operations between search output files
     from one homology search program. An error will be raised if the attempted
