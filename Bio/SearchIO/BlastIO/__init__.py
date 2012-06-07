@@ -27,9 +27,9 @@ For legacy BLAST outputs, see the Bio.Blast module.
 
 """
 
-from blasttab import blast_tab_iterator, BlastTabIterator, BlastTabIndexer
-from blastxml import blast_xml_iterator, BlastXmlIterator, BlastXmlIndexer
-from blasttext import blast_text_iterator, BlastTextIndexer
+from blasttab import *
+from blastxml import *
+from blasttext import *
 
 
 def _test():
