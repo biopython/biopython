@@ -288,20 +288,43 @@ class QueryResultCases(unittest.TestCase):
         # sort without any arguments should keep the Hits in the same order
         # if the hit objects do not have any evalue attributes
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
-        self.qresult.sort()
+        sorted_qresult = self.qresult.sort()
+        self.assertEqual([hit11, hit21, hit31], sorted_qresult.hits)
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
 
     def test_sort_reverse_ok(self):
         # sorting with reverse=True should return a QueryResult with Hits reversed
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
-        self.qresult.sort(reverse=True)
-        self.assertEqual([hit31, hit21, hit11], self.qresult.hits)
+        sorted_qresult = self.qresult.sort(reverse=True)
+        self.assertEqual([hit31, hit21, hit11], sorted_qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
 
     def test_sort_key_ok(self):
         # if custom key is given, sort using it
         key = lambda hit: len(hit)
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
-        self.qresult.sort(key=key)
+        sorted_qresult = self.qresult.sort(key=key)
+        self.assertEqual([hit21, hit31, hit11], sorted_qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+
+    def test_sort_in_place_ok(self):
+        # sort without any arguments should keep the Hits in the same order
+        # if the hit objects do not have any evalue attributes
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.qresult.sort(in_place=True)
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+
+    def test_sort_reverse_in_place_ok(self):
+        # sorting with reverse=True should return a QueryResult with Hits reversed
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.qresult.sort(reverse=True, in_place=True)
+        self.assertEqual([hit31, hit21, hit11], self.qresult.hits)
+
+    def test_sort_key_in_place_ok(self):
+        # if custom key is given, sort using it
+        key = lambda hit: len(hit)
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.qresult.sort(key=key, in_place=True)
         self.assertEqual([hit21, hit31, hit11], self.qresult.hits)
 
 
@@ -429,7 +452,15 @@ class HitCases(unittest.TestCase):
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
         # sort by hsp length
         key = lambda hsp: len(hsp)
-        self.hit.sort(key=key)
+        sorted_hit = self.hit.sort(key=key)
+        self.assertEqual([hsp112, hsp113, hsp111], sorted_hit.hsps)
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+
+    def test_sort_in_place(self):
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        # sort by hsp length
+        key = lambda hsp: len(hsp)
+        self.hit.sort(key=key, in_place=True)
         self.assertEqual([hsp112, hsp113, hsp111], self.hit.hsps)
 
 

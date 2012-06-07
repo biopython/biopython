@@ -554,7 +554,7 @@ class QueryResult(BaseSearchObject):
         except ValueError:
             return -1
 
-    def sort(self, key=None, reverse=False):
+    def sort(self, key=None, reverse=False, in_place=False):
         # no cmp argument to make sort more Python 3-like
         """Sorts the Hit objects.
 
@@ -611,11 +611,19 @@ class QueryResult(BaseSearchObject):
         else:
             sorted_hits = sorted(self.hits, key=key, reverse=reverse)
 
-        new_hits = OrderedDict()
-        for hit in sorted_hits:
-            new_hits[self._hit_key_function(hit)] = hit
+        # if sorting is in-place, don't create a new QueryResult object
+        if in_place:
+            new_hits = OrderedDict()
+            for hit in sorted_hits:
+                new_hits[self._hit_key_function(hit)] = hit
+            self._hits = new_hits
+        # otherwise, return a new sorted QueryResult object
+        else:
+            obj =  self.__class__(self.id, sorted_hits, self.program, \
+                    self.target, self._hit_key_function)
+            self._transfer_attrs(obj)
+            return obj
 
-        self._hits = new_hits
 
 
 class Hit(BaseSearchObject):
@@ -798,8 +806,15 @@ class Hit(BaseSearchObject):
     def reverse(self):
         self._hsps.reverse()
 
-    def sort(self, key=None, reverse=False):
-        self._hsps.sort(key=key, reverse=reverse)
+    def sort(self, key=None, reverse=False, in_place=False):
+        if in_place:
+            self._hsps.sort(key=key, reverse=reverse)
+        else:
+            hsps = self.hsps[:]
+            hsps.sort(key=key, reverse=reverse)
+            obj = self.__class__(self.id, self.query_id, hsps)
+            self._transfer_attrs(obj)
+            return obj
 
 
 class HSP(BaseSearchObject):
