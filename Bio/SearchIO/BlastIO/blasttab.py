@@ -141,14 +141,10 @@ class BlastTabIterator(object):
 
     """Parser for the Blast tabular format."""
 
-    def __init__(self, handle, fields=_DEFAULT_FIELDS, line=None):
+    def __init__(self, handle, fields=_DEFAULT_FIELDS):
         self.handle = handle
         self.fields = fields
-        self.cache = {}
-        if line is None:
-            self.line = read_forward(self.handle)
-        else:
-            self.line = line
+        self.line = read_forward(self.handle)
 
     def __iter__(self):
         # stop iteration if file has no lines
