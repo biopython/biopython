@@ -146,8 +146,8 @@ xbt030.xml - TBLASTN 2.2.26+    multiple queries, remote search on NCBI's databa
 
 xbt031.xml - TBLASTX 2.2.26+    multiple queries
 xbt032.xml - TBLASTX 2.2.26+    single query with no result
-xbt034.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
-xbt035.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
+xbt033.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
+xbt034.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
 
 
 BLAST OUTPUT FILES (tabular format)
