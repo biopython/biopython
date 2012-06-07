@@ -601,24 +601,13 @@ class QueryResult(BaseSearchObject):
         in-place since the new Hit container replaces the old one.
 
         """
-        # if no key is specified, attempt to sort by Hit evalue
         if key is None:
-            try:
-                sorted_hits = sorted(self.hits, key=lambda hit: hit.evalue, \
-                        reverse=reverse)
-            # handle cases where the Hit objects doesn't have evalue
-            except AttributeError:
-                # if reverse is set to True, reverse the ordering
-                # we don't use sorted() since no __eq__ etc. magic methods
-                # are defined for Hit objects
-                if reverse:
-                    sorted_hits = self.hits[::-1]
-                # otherwise the object is the same as the old one and no
-                # sorting is required
-                else:
-                    return
-        # otherwise try to sort using the given parameters
-        # and let any exceptions rise to the top
+            # if reverse is True, reverse the hits
+            if reverse:
+                sorted_hits = self.hits[::-1]
+            # otherwise (default options) make a copy of the hits
+            else:
+                sorted_hits = self.hits[:]
         else:
             sorted_hits = sorted(self.hits, key=key, reverse=reverse)
 

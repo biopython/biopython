@@ -284,26 +284,12 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(-1, self.qresult.index('hit4'))
         self.assertEqual(-1, self.qresult.index(hit41))
 
-    def test_sort_default_no_evalue(self):
+    def test_sort_ok(self):
         # sort without any arguments should keep the Hits in the same order
         # if the hit objects do not have any evalue attributes
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
         self.qresult.sort()
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
-
-    def test_sort_default_with_evalue(self):
-        # create local mock objects to avoid conflict with other tests
-        hit11 = Hit('hit1', 'query1', [hsp111, hsp112, hsp113, hsp114])
-        hit21 = Hit('hit2', 'query1', [hsp211])
-        hit31 = Hit('hit3', 'query1', [hsp311])
-        qresult = QueryResult('query1', [hit11, hit21, hit31])
-        # if the hit objects has evalues, sort should be based on that
-        qresult.hits[0].evalue = 1
-        qresult.hits[1].evalue = 10
-        qresult.hits[2].evalue = 1e-10
-        self.assertEqual([hit11, hit21, hit31], qresult.hits)
-        qresult.sort()
-        self.assertEqual([hit31, hit11, hit21], qresult.hits)
 
     def test_sort_reverse_ok(self):
         # sorting with reverse=True should return a QueryResult with Hits reversed
