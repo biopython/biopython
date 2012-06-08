@@ -474,6 +474,118 @@ class BlastTabIndexer(SearchIndexer):
         return qresult_raw
 
 
+class BlastTabWriter(object):
+
+    """Writer for blast-tab output format."""
+
+    def __init__(self, handle, fields=_DEFAULT_FIELDS, commented=False):
+        self.handle = handle
+        self.fields = fields
+        self.commented = commented
+        if commented:
+            # inverse mapping of the long-short name map, required
+            # for writing comments
+            self.inv_field_map = dict((value, key) for key, value in \
+                    _LONG_SHORT_MAP.items())
+
+    def write_file(self, qresults):
+        """Writes to the handle, returns how many QueryResult objects are written."""
+        handle = self.handle
+        qresult_counter, hit_counter, hsp_counter = 0, 0, 0
+
+        for qresult in qresults:
+            if self.commented:
+                handle.write(self.build_comments(qresult))
+            if qresult:
+                handle.write(self.build_rows(qresult))
+                qresult_counter += 1
+                hit_counter += len(qresult)
+                hsp_counter += sum([len(hit) for hit in qresult])
+            # if it's commented and there are no hits in the qresult, we still
+            # print the comments
+            elif not qresult and self.commented:
+                qresult_counter += 1
+
+        # commented files have a line saying how many queries were processed
+        if self.commented:
+            handle.write('# BLAST processed %i queries' % qresult_counter)
+
+        return qresult_counter, hit_counter, hsp_counter
+
+    def build_comments(self, qresult):
+        """Returns a string of a QueryResult tabular comment."""
+        inv_field_map = self.inv_field_map
+        comments = []
+
+        # try to anticipate qresults without version
+        if not hasattr(qresult, 'version'):
+            program_line = '# %s' % qresult.program.upper()
+        else:
+            program_line = '# %s %s' % (qresult.program.upper(), qresult.version)
+        comments.append(program_line)
+        # description may or may not be present, so we'll do a try here
+        try:
+            comments.append('# Query: %s %s' % (qresult.id, qresult.desc))
+        except AttributeError:
+            comments.append('# Query: %s' % qresult.id)
+        # try appending RID line, if present
+        try:
+            comments.append('# RID: %s' % qresult.rid)
+        except AttributeError:
+            pass
+        comments.append('# Database: %s' % qresult.target)
+        # qresults without hits don't show the Fields comment
+        if qresult:
+            comments.append('# Fields: %s' % \
+                    ', '.join([inv_field_map[field] for field in self.fields]))
+        comments.append('# %i hits found' % len(qresult))
+
+        return '\n'.join(comments) + '\n'
+
+    def build_rows(self, qresult):
+        """Returns a string containing tabular rows of the QueryResult object."""
+        qresult_lines = []
+        for hit in qresult:
+            for hsp in hit:
+
+                line = []
+                for field in self.fields:
+                    # get the column value ~ could either be an attribute
+                    # of qresult, hit, or hsp
+                    if field in _COLUMN_QRESULT:
+                        value = getattr(qresult, _COLUMN_QRESULT[field])
+                    elif field in _COLUMN_HIT:
+                        value = getattr(hit, _COLUMN_HIT[field])
+                    elif field in _COLUMN_HSP:
+                        value = getattr(hsp, _COLUMN_HSP[field])
+                    else:
+                        assert field not in _SUPPORTED_FIELDS
+                        continue
+
+                    # adjust formatting to mimic native blast-tab output
+                    # as much as possible
+                    if field in ['evalue']:
+                        if value == 0:
+                            value = '0.0'
+                        else:
+                            value = '%0.0e' % value
+                    elif field in ['pident', 'ppos']:
+                        value = '%.2f' % value
+                    elif field in ['bitscore']:
+                        if float(int(value)) == value:
+                            value = '%.0f' % value
+                        else:
+                            value = '%.1f' % value
+                    else:
+                        value = str(value)
+                    line.append(value)
+
+                hsp_line = '\t'.join(line)
+                qresult_lines.append(hsp_line)
+
+        return '\n'.join(qresult_lines) + '\n'
+
+
 def _test():
     """Run the Bio.SearchIO.BlastIO module's doctests.
 
