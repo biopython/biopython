@@ -257,22 +257,31 @@ class BlastXmlIterator(object):
                 #        Iteration_message?)>
 
                 # assign query attributes with fallbacks
-                try:
-                    query_id = qresult_elem.find('Iteration_query-ID').text
-                except AttributeError:
+                query_id = qresult_elem.findtext('Iteration_query-ID')
+                if query_id is None:
                     query_id = self._fallback['id']
-                try:
-                    description = qresult_elem.find('Iteration_query-def').text
-                except AttributeError:
-                    description = self._fallback['desc']
-                try:
-                    query_len = qresult_elem.find('Iteration_query-len').text
-                except AttributeError:
+
+                query_desc = qresult_elem.findtext('Iteration_query-def')
+                if query_desc is None:
+                    query_desc = self._fallback['desc']
+
+                query_len = qresult_elem.findtext('Iteration_query-len')
+                if query_len is None:
                     query_len = self._fallback['len']
+
+                # handle blast searches against databases with Blast's IDs
+                # TODO: handle Blast IDs of legacy blast suite?
+                if query_id.startswith('Query_'):
+                    id_desc = query_desc.split(' ', 1)
+                    query_id = id_desc[0]
+                    try:
+                        query_desc = id_desc[1]
+                    except IndexError:
+                        query_desc = ''
 
                 # create qresult and assign its attributes
                 qresult = QueryResult(query_id)
-                qresult.desc = description
+                qresult.desc = query_desc
                 qresult.seq_len = query_len
                 for meta_attr in self._meta:
                     setattr(qresult, meta_attr, self._meta[meta_attr])
@@ -300,6 +309,16 @@ class BlastXmlIterator(object):
                         query_id):
                     # only append the Hit object if we have HSPs
                     if hit:
+
+                        # handle blast searches against databases with Blast's IDs
+                        if 'BL_ORD_ID' in hit.id:
+                            real_id = hit.desc.split(' ')[0]
+                            # only change the ID if it's not yet present in qresult
+                            if real_id not in qresult:
+                                id_desc = hit.desc.split(' ', 1)
+                                hit.id = id_desc[0]
+                                hit.desc = id_desc[1]
+
                         qresult.append(hit)
 
                 # delete element after we finish parsing it
