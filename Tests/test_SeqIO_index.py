@@ -116,18 +116,21 @@ class IndexDictTests(unittest.TestCase):
         rec_dict = SeqIO.index_db(index_tmp, filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
+        rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload it...
         rec_dict = SeqIO.index_db(index_tmp, [filename], format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
+        rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
+        rec_dict._con.close() #hack for PyPy
         del rec_dict
         os.remove(index_tmp)
     
@@ -166,6 +169,7 @@ class IndexDictTests(unittest.TestCase):
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
+        rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload it...
@@ -173,6 +177,7 @@ class IndexDictTests(unittest.TestCase):
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
+        rec_dict._con.close() #hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
@@ -180,6 +185,7 @@ class IndexDictTests(unittest.TestCase):
                                   key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
+        rec_dict._con.close() #hack for PyPy
         del rec_dict
         os.remove(index_tmp)
         #Done
