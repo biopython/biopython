@@ -572,10 +572,10 @@ class BlastTabWriter(object):
                     elif field in ['pident', 'ppos']:
                         value = '%.2f' % value
                     elif field in ['bitscore']:
-                        if float(int(value)) == value:
-                            value = '%.0f' % value
-                        else:
+                        if value < 100:
                             value = '%.1f' % value
+                        else:
+                            value = '%i' % value
                     else:
                         value = str(value)
                     line.append(value)
