@@ -5,6 +5,7 @@
 
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
+import re
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
@@ -24,6 +25,7 @@ _INTS = (
         'init_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
         'hit_frame', 'gapopen_num', 'env_from', 'env_to', 'domain_index',
+        'gapopen_num',
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
 )
@@ -37,6 +39,9 @@ _FLOATS = (
         'bitscore', 'bitscore_raw', 'evalue', 'ident_pct', 'pos_pct', 'bias',
         'evalue_cond', 'acc_avg',
 )
+
+# precompile regex patterns
+_RE_GAPOPEN = re.compile(r'\w-')
 
 
 class BaseSearchObject(object):
@@ -1163,6 +1168,25 @@ class HSP(BaseSearchObject):
         self._gap_num = value
 
     gap_num = property(fget=_gap_num_get, fset=_gap_num_set)
+
+    def _gapopen_num_get(self):
+        """Computes the number of gap openings in an HSP object."""
+        if not hasattr(self, '_gapopen_num'):
+            try:
+                query_gapopen = len(re.findall(_RE_GAPOPEN, \
+                        self.query.seq.tostring()))
+                hit_gapopen = len(re.findall(_RE_GAPOPEN, \
+                        self.hit.seq.tostring()))
+                self._gapopen_num = query_gapopen + hit_gapopen
+            except AttributeError:
+                raise ValueError("Not enough is known to compute gap openings")
+
+        return self._gapopen_num
+
+    def _gapopen_num_set(self, value):
+        self._gapopen_num = value
+
+    gapopen_num = property(fget=_gapopen_num_get, fset=_gapopen_num_set)
 
     # for percent values (ident_pct, pos_pct, and gap_pct), the same golden
     # rule follows: parsed values takes precedent over computed values
