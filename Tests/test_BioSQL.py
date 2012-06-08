@@ -39,6 +39,7 @@ try:
         server = BioSeqDatabase.open_database(driver = DBDRIVER,
                                               user = DBUSER, passwd = DBPASSWD,
                                               host = DBHOST)
+    server.close()
     del server
 except Exception, e:
     message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
