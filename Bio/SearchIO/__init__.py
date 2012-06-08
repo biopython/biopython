@@ -85,6 +85,14 @@ _INDEXER_MAP = {
         'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
 }
 
+# dictionary of supported formats for write()
+_WRITER_MAP = {
+        'blast-tab': ('BlastIO', 'BlastTabWriter'),
+        'blast-xml': ('BlastIO', 'BlastXmlWriter'),
+        'blat-psl': ('BlatIO', 'BlatPslIndexer'),
+        'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
+}
+
 # dictionary of supported conversions for convert()
 _CONVERSION_MAP = {
         ('blast-xml', 'blast-tab'): ('_convert', '_blastxml_to_blasttab'),
@@ -113,6 +121,9 @@ def _get_handler(format, mapping):
         elif format != format.lower():
             raise ValueError("Format string '%s' should be lower case" % \
                     format)
+        elif mapping == _WRITER_MAP and format in _ITERATOR_MAP:
+            raise ValueError("Reading format '%s' is supported, but not "
+                    "writing" % format)
         else:
             raise ValueError("Unknown format '%s'. Supported formats are "
                     "'%s'" % (format, "', '".join(mapping.keys())))
@@ -231,6 +242,32 @@ def index_db(index_filename, filenames=None, format=None, \
     from Bio.SearchIO._index import DbIndexedSearch
     return DbIndexedSearch(index_filename, filenames, format, key_function)
 
+
+def write(qresults, handle, format):
+    """Writes QueryResult objects to a file in the given format.
+
+    Arguments:
+    qresults -- An iterator returning QueryResult objects or a single
+                QueryResult object.
+    handle -- Handle to the file, or the filename as a string.
+    format -- Lower case string denoting one of the supported formats.
+
+    """
+    # check if handle type is correct
+    if not isinstance(handle, (basestring, file)):
+        raise TypeError("Handle must either be a handle to a file or its "
+                "name as string")
+
+    # get the writer object and do error checking
+    writer_class = _get_handler(format, _WRITER_MAP)
+
+    # write to the handle
+    with as_handle(handle, 'w') as target_file:
+        writer = writer_class(target_file)
+        # count how many qresults, hits, and hsps
+        qresult_count, hit_count, hsp_count = writer.write_file(qresults)
+
+    return qresult_count, hit_count, hsp_count
 
 def convert(in_file, in_format, out_file, out_format):
     """Convert between two search output formats, return number of records.
