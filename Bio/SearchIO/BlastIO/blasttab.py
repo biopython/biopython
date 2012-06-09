@@ -556,34 +556,110 @@ class BlastTabWriter(object):
                         value = getattr(qresult, _COLUMN_QRESULT[field])
                     elif field in _COLUMN_HIT:
                         value = getattr(hit, _COLUMN_HIT[field])
+                    # special case, since 'frames' can be determined from
+                    # query frame and hit frame
+                    elif field == 'frames':
+                        value = '%i/%i' % (hsp.query_frame, hsp.hit_frame)
                     elif field in _COLUMN_HSP:
                         value = getattr(hsp, _COLUMN_HSP[field])
                     else:
                         assert field not in _SUPPORTED_FIELDS
                         continue
 
-                    # adjust formatting to mimic native blast-tab output
-                    # as much as possible
-                    if field in ['evalue']:
-                        if value == 0:
-                            value = '0.0'
-                        else:
-                            value = '%0.0e' % value
-                    elif field in ['pident', 'ppos']:
-                        value = '%.2f' % value
-                    elif field in ['bitscore']:
-                        if value < 100:
-                            value = '%.1f' % value
-                        else:
-                            value = '%i' % value
-                    else:
-                        value = str(value)
+                    value = self.adjust_output(field, value)
                     line.append(value)
+
+                # adjust from and to according to strand, if from and to
+                # is included in the output field
+                if not set(self.fields).isdisjoint(set(['qstart', 'qend', \
+                        'sstart', 'send'])):
+                    line = self.adjust_fromto(hsp, line)
 
                 hsp_line = '\t'.join(line)
                 qresult_lines.append(hsp_line)
 
         return '\n'.join(qresult_lines) + '\n'
+
+    def adjust_fromto(self, hsp, value_list):
+        """Adjusts 'from' and 'to' properties according to strand."""
+        # try to determine whether strand is minus or not
+        # TODO: is there a better way to do this without accessing the private
+        # attributes?
+        try:
+            qstrand_is_minus = hsp.query_strand < 0
+        except AttributeError:
+            if hsp._query_to < hsp._query_from:
+                qstrand_is_minus = True
+            else:
+                qstrand_is_minus = False
+        # switch from <--> to if strand is -1
+        if qstrand_is_minus:
+            if 'qstart' in self.fields:
+                field_idx = self.fields.index('qstart')
+                value_list[field_idx] = str(hsp.query_to)
+
+            if 'qend' in self.fields:
+                field_idx = self.fields.index('qend')
+                value_list[field_idx] = str(hsp.query_from)
+
+        try:
+            hstrand_is_minus = hsp.hit_strand < 0
+        except AttributeError:
+            if hsp._hit_to < hsp._hit_from:
+                hstrand_is_minus = True
+            else:
+                hstrand_is_minus = False
+        if hstrand_is_minus:
+            if 'sstart' in self.fields:
+                field_idx = self.fields.index('sstart')
+                value_list[field_idx] = str(hsp.hit_to)
+
+            if 'send' in self.fields:
+                field_idx = self.fields.index('send')
+                value_list[field_idx] = str(hsp.hit_from)
+
+        return value_list
+
+    def adjust_output(self, field, value):
+        """Adjusts formatting of the given field and value to mimic native tab output."""
+
+        # evalue formatting, adapted from BLAST+ source:
+        # src/objtools/align_format/align_format_util.cpp#L668
+        if field == 'evalue':
+            if value < 1.0e-180:
+                value = '0.0'
+            elif value < 1.0e-99:
+                value = '%2.0e' % value
+            elif value < 0.0009:
+                value = '%3.0e' % value
+            elif value < 0.1:
+                value = '%4.3f' % value
+            elif value < 1.0:
+                value = '%3.2f' % value
+            elif value < 10.0:
+                value = '%2.1f' % value
+            else:
+                value = '%5.0f' % value
+
+        # pident and ppos formatting
+        elif field in ['pident', 'ppos']:
+            value = '%.2f' % value
+
+        # evalue formatting, adapted from BLAST+ source:
+        # src/objtools/align_format/align_format_util.cpp#L723
+        elif field == 'bitscore':
+            if value > 9999:
+                value = '%4.3e' % value
+            elif value > 99.9:
+                value = '%4.0d' % value
+            else:
+                value = '%4.1f' % value
+
+        # everything else
+        else:
+            value = str(value)
+
+        return value
 
 
 def _test():
