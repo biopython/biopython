@@ -132,15 +132,15 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0.0, qresult.param_gap_open)
         self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         # test parsed values of the first qresult
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(7702306.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(7616765.0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
@@ -152,9 +152,9 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.desc)
         self.assertEqual(490, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(32217922.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(31860807.0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
@@ -194,9 +194,9 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.desc)
         self.assertEqual(66, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(3545672.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(3506256.0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
@@ -213,7 +213,7 @@ class BlastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(115.613, hsp.bitscore)
         self.assertEqual(62, hsp.bitscore_raw)
-        self.assertEqual(5.58273e-29, hsp.evalue)
+        self.assertEqual(5.52066e-29, hsp.evalue)
         self.assertEqual(5, hsp.query_from)
         self.assertEqual(66, hsp.query_to)
         self.assertEqual(3677, hsp.hit_from)
@@ -231,7 +231,7 @@ class BlastnXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(98.9927, hsp.bitscore)
         self.assertEqual(53, hsp.bitscore_raw)
-        self.assertEqual(5.62236e-24, hsp.evalue)
+        self.assertEqual(5.55986e-24, hsp.evalue)
         self.assertEqual(6, hsp.query_from)
         self.assertEqual(58, hsp.query_to)
         self.assertEqual(2824, hsp.hit_from)
@@ -257,7 +257,7 @@ class BlastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(111.919, hsp.bitscore)
         self.assertEqual(60, hsp.bitscore_raw)
-        self.assertEqual(7.22171e-28, hsp.evalue)
+        self.assertEqual(7.14143e-28, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(66, hsp.query_to)
         self.assertEqual(2735, hsp.hit_from)
@@ -297,13 +297,13 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0.0, qresult.param_gap_open)
         self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(7702306.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(7616765.0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
@@ -335,16 +335,16 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(0.0, qresult.param_gap_open)
         self.assertEqual(0.0, qresult.param_gap_extend)
         self.assertEqual('blastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         self.assertEqual('gi|356995852:1-490', qresult.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription '
                 'factor 1 (Pou5f1), transcript variant 1, mRNA', \
                         qresult.desc)
         self.assertEqual(490, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(32217922.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(31860807.0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
@@ -395,9 +395,9 @@ class BlastnXmlCases(unittest.TestCase):
                 'strand=+ repeatMasking=none',
                         qresult.desc)
         self.assertEqual(66, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(3545672.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(3506256.0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
@@ -414,7 +414,7 @@ class BlastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(115.613, hsp.bitscore)
         self.assertEqual(62, hsp.bitscore_raw)
-        self.assertEqual(5.58273e-29, hsp.evalue)
+        self.assertEqual(5.52066e-29, hsp.evalue)
         self.assertEqual(5, hsp.query_from)
         self.assertEqual(66, hsp.query_to)
         self.assertEqual(3677, hsp.hit_from)
@@ -432,7 +432,7 @@ class BlastnXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(98.9927, hsp.bitscore)
         self.assertEqual(53, hsp.bitscore_raw)
-        self.assertEqual(5.62236e-24, hsp.evalue)
+        self.assertEqual(5.55986e-24, hsp.evalue)
         self.assertEqual(6, hsp.query_from)
         self.assertEqual(58, hsp.query_to)
         self.assertEqual(2824, hsp.hit_from)
@@ -458,7 +458,7 @@ class BlastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(111.919, hsp.bitscore)
         self.assertEqual(60, hsp.bitscore_raw)
-        self.assertEqual(7.22171e-28, hsp.evalue)
+        self.assertEqual(7.14143e-28, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(66, hsp.query_to)
         self.assertEqual(2735, hsp.hit_from)
@@ -505,8 +505,8 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
@@ -521,8 +521,8 @@ class BlastnXmlCases(unittest.TestCase):
                 'factor 1 (Pou5f1), transcript variant 1, mRNA', \
                         qresult.desc)
         self.assertEqual(490, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
@@ -562,11 +562,10 @@ class BlastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207307-1207372 5\'pad=0 3\'pad=0 '
-                'strand=+ repeatMasking=none',
-                        qresult.desc)
+                'strand=+ repeatMasking=none', qresult.desc)
         self.assertEqual(66, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.46, qresult.stat_kappa)
         self.assertEqual(1.28, qresult.stat_lambda)
@@ -576,15 +575,14 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|332237160|ref|XM_003267724.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys ATG14 autophagy '
-                'related 14 homolog (S. cerevisiae) (ATG14), mRNA', \
-                        hit.desc)
+                'related 14 homolog (S. cerevisiae) (ATG14), mRNA', hit.desc)
         self.assertEqual(4771, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
         self.assertEqual(115.613, hsp.bitscore)
         self.assertEqual(62, hsp.bitscore_raw)
-        self.assertEqual(3.31905e-23, hsp.evalue)
+        self.assertEqual(3.35972e-23, hsp.evalue)
         self.assertEqual(5, hsp.query_from)
         self.assertEqual(66, hsp.query_to)
         self.assertEqual(2865, hsp.hit_from)
@@ -602,15 +600,14 @@ class BlastnXmlCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('gi|332254616|ref|XM_003276378.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys S100P binding '
-                'protein, transcript variant 2 (S100PBP), mRNA', \
-                        hit.desc)
+                'protein, transcript variant 2 (S100PBP), mRNA', hit.desc)
         self.assertEqual(4345, hit.seq_len)
         self.assertEqual(1, len(hit))
 
         hsp = hit[0]
         self.assertEqual(111.919, hsp.bitscore)
         self.assertEqual(60, hsp.bitscore_raw)
-        self.assertEqual(4.29347e-22, hsp.evalue)
+        self.assertEqual(4.34607e-22, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(66, hsp.query_to)
         self.assertEqual(2792, hsp.hit_from)
@@ -997,7 +994,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         # test parsed values of the first qresult
         self.assertEqual('random_s00', qresult.id)
@@ -1161,7 +1158,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         # test parsed values of the first qresult
         self.assertEqual('random_s00', qresult.id)
@@ -1201,7 +1198,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
@@ -1267,7 +1264,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.desc)
@@ -1379,8 +1376,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(32, qresult.seq_len)
-        self.assertEqual(12504708, qresult.stat_db_num)
-        self.assertEqual(4346765131, qresult.stat_db_len)
+        self.assertEqual(12646943, qresult.stat_db_num)
+        self.assertEqual(4397139428, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -1393,8 +1390,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.desc)
         self.assertEqual(102, qresult.seq_len)
-        self.assertEqual(12504708, qresult.stat_db_num)
-        self.assertEqual(4346765131, qresult.stat_db_len)
+        self.assertEqual(12646943, qresult.stat_db_num)
+        self.assertEqual(4397139428, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -1411,7 +1408,7 @@ class BlastpXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(205.297, hsp.bitscore)
         self.assertEqual(521, hsp.bitscore_raw)
-        self.assertEqual(1.43621e-66, hsp.evalue)
+        self.assertEqual(1.45285e-66, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(102, hsp.query_to)
         self.assertEqual(1, hsp.hit_from)
@@ -1433,8 +1430,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.desc)
         self.assertEqual(98, qresult.seq_len)
-        self.assertEqual(12504708, qresult.stat_db_num)
-        self.assertEqual(4346765131, qresult.stat_db_len)
+        self.assertEqual(12646943, qresult.stat_db_num)
+        self.assertEqual(4397139428, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -1450,7 +1447,7 @@ class BlastpXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(205.682, hsp.bitscore)
         self.assertEqual(522, hsp.bitscore_raw)
-        self.assertEqual(1.52643e-63, hsp.evalue)
+        self.assertEqual(1.54412e-63, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(98, hsp.query_to)
         self.assertEqual(4, hsp.hit_from)
@@ -1468,7 +1465,7 @@ class BlastpXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(43.5134, hsp.bitscore)
         self.assertEqual(101, hsp.bitscore_raw)
-        self.assertEqual(0.0019682, hsp.evalue)
+        self.assertEqual(0.00199101, hsp.evalue)
         self.assertEqual(3, hsp.query_from)
         self.assertEqual(96, hsp.query_to)
         self.assertEqual(246, hsp.hit_from)
@@ -1492,7 +1489,7 @@ class BlastpXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
-        self.assertEqual(1.33713e-62, hsp.evalue)
+        self.assertEqual(1.35263e-62, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(98, hsp.query_to)
         self.assertEqual(4, hsp.hit_from)
@@ -1671,7 +1668,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         # test parsed values of the first qresult
         self.assertEqual('random_s00', qresult.id)
@@ -1684,46 +1681,6 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(-1, qresult.stat_lambda)
         self.assertEqual(-1, qresult.stat_entropy)
         self.assertEqual(0, len(qresult))
-
-        # test parsed values of the second qresult
-        qresult = qresults.next()
-        counter += 1
-        self.assertEqual('gi|356995852:1-490', qresult.id)
-        self.assertEqual('Mus musculus POU domain, class 5, transcription '
-                'factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.desc)
-        self.assertEqual(490, qresult.seq_len)
-        self.assertEqual(20, qresult.stat_db_num)
-        self.assertEqual(6406, qresult.stat_db_len)
-        self.assertEqual(673486.0, qresult.stat_eff_space)
-        self.assertEqual(0.041, qresult.stat_kappa)
-        self.assertEqual(0.267, qresult.stat_lambda)
-        self.assertEqual(0.14, qresult.stat_entropy)
-        self.assertEqual(5, len(qresult))
-
-        hit = qresult[0]
-        self.assertEqual('gi|125490392|ref|NP_038661.2|', hit.id)
-        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', hit.desc)
-        self.assertEqual(352, hit.seq_len)
-        self.assertEqual(3, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual(192.2, hsp.bitscore)
-        self.assertEqual(487, hsp.bitscore_raw)
-        self.assertEqual(5.46624e-63, hsp.evalue)
-        self.assertEqual(69, hsp.query_from)
-        self.assertEqual(488, hsp.query_to)
-        self.assertEqual(1, hsp.hit_from)
-        self.assertEqual(140, hsp.hit_to)
-        self.assertEqual(3, hsp.query_frame)
-        self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(140, hsp.ident_num)
-        self.assertEqual(140, hsp.pos_num)
-        self.assertEqual(0, hsp.gap_num)
-        self.assertEqual(140, hsp.init_len)
-        self.assertEqual(140, len(hsp))
-        self.assertEqual('MAGHLAXXXXXXXXXXXXXXXXXLEPGWVDPRTWLSFQXXXXXXXXXXXSEVLGISPCPPAYEFCGGMAYCXXXXXXXXXXXXXXETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.query.seq.tostring())
-        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGPPGGPGIGPGSEVLGISPCPPAYEFCGGMAYCGPQVGLGLVPQVGVETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.hit.seq.tostring())
-        #self.assertRaises(IndexError, hit.__getitem__, 1)
 
         # test parsed values of the third qresult
         qresult = qresults.next()
@@ -1808,7 +1765,7 @@ class BlastxXmlCases(unittest.TestCase):
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
-        self.assertEqual(3, counter)
+        self.assertEqual(2, counter)
 
     def test_xbt023(self):
         xml_file = get_file('xbt023.xml')
@@ -1831,7 +1788,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
@@ -1869,7 +1826,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastx', qresult.program)
-        self.assertEqual('db/minirefseq_protein', qresult.target)
+        self.assertEqual('db/minirefseq_prot', qresult.target)
 
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.desc)
@@ -1981,8 +1938,8 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(12504708, qresult.stat_db_num)
-        self.assertEqual(4346765131, qresult.stat_db_len)
+        self.assertEqual(12646943, qresult.stat_db_num)
+        self.assertEqual(4397139428, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -1992,53 +1949,12 @@ class BlastxXmlCases(unittest.TestCase):
         # test parsed values of the second qresult
         qresult = qresults.next()
         counter += 1
-        self.assertEqual('gi|356995852:1-490', qresult.id)
-        self.assertEqual('Mus musculus POU domain, class 5, transcription '
-                'factor 1 (Pou5f1), transcript variant 1, mRNA', qresult.desc)
-        self.assertEqual(490, qresult.seq_len)
-        self.assertEqual(12504708, qresult.stat_db_num)
-        self.assertEqual(4346765131, qresult.stat_db_len)
-        self.assertEqual(0, qresult.stat_eff_space)
-        self.assertEqual(0.041, qresult.stat_kappa)
-        self.assertEqual(0.267, qresult.stat_lambda)
-        self.assertEqual(0.14, qresult.stat_entropy)
-        self.assertEqual(5, len(qresult))
-
-        hit = qresult[0]
-        self.assertEqual('gi|125490392|ref|NP_038661.2|', hit.id)
-        self.assertEqual('POU domain, class 5, transcription factor 1 '
-                'isoform 1 [Mus musculus]', hit.desc)
-        self.assertEqual(352, hit.seq_len)
-        self.assertEqual(1, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual(192.2, hsp.bitscore)
-        self.assertEqual(487, hsp.bitscore_raw)
-        self.assertEqual(3.7091e-57, hsp.evalue)
-        self.assertEqual(69, hsp.query_from)
-        self.assertEqual(488, hsp.query_to)
-        self.assertEqual(1, hsp.hit_from)
-        self.assertEqual(140, hsp.hit_to)
-        self.assertEqual(3, hsp.query_frame)
-        self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(140, hsp.ident_num)
-        self.assertEqual(140, hsp.pos_num)
-        self.assertEqual(0, hsp.gap_num)
-        self.assertEqual(140, hsp.init_len)
-        self.assertEqual(140, len(hsp))
-        self.assertEqual('MAGHLAXXXXXXXXXXXXXXXXXLEPGWVDPRTWLSFQXXXXXXXXXXXSEVLGISPCPPAYEFCGGMAYCXXXXXXXXXXXXXXETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.query.seq.tostring())
-        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGPPGGPGIGPGSEVLGISPCPPAYEFCGGMAYCGPQVGLGLVPQVGVETLQPEGQAGARVESNSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.hit.seq.tostring())
-        self.assertRaises(IndexError, hit.__getitem__, 1)
-
-        # test parsed values of the third qresult
-        qresult = qresults.next()
-        counter += 1
         self.assertEqual('hg19_dna', qresult.id)
         self.assertEqual('range=chr1:1207057-1207541 5\'pad=0 3\'pad=0 '
                 'strand=+ repeatMasking=none', qresult.desc)
         self.assertEqual(485, qresult.seq_len)
-        self.assertEqual(12504708, qresult.stat_db_num)
-        self.assertEqual(4346765131, qresult.stat_db_len)
+        self.assertEqual(12646943, qresult.stat_db_num)
+        self.assertEqual(4397139428, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -2055,7 +1971,7 @@ class BlastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(121.709, hsp.bitscore)
         self.assertEqual(304, hsp.bitscore_raw)
-        self.assertEqual(2.0032e-32, hsp.evalue)
+        self.assertEqual(2.02642e-32, hsp.evalue)
         self.assertEqual(16, hsp.query_from)
         self.assertEqual(300, hsp.query_to)
         self.assertEqual(25, hsp.hit_from)
@@ -2073,7 +1989,7 @@ class BlastxXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(51.6026, hsp.bitscore)
         self.assertEqual(122, hsp.bitscore_raw)
-        self.assertEqual(1.85654e-06, hsp.evalue)
+        self.assertEqual(1.87805e-06, hsp.evalue)
         self.assertEqual(244, hsp.query_from)
         self.assertEqual(459, hsp.query_to)
         self.assertEqual(32, hsp.hit_from)
@@ -2089,32 +2005,32 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG', hsp.hit.seq.tostring())
 
         hit = qresult[-1]
-        self.assertEqual('gi|57113895|ref|NP_001009002.1|', hit.id)
-        self.assertEqual('histone demethylase UTY [Pan troglodytes]', hit.desc)
-        self.assertEqual(1079, hit.seq_len)
+        self.assertEqual('gi|332815399|ref|XP_003309509.1|', hit.id)
+        self.assertEqual('PREDICTED: histone demethylase UTY-like [Pan troglodytes]', hit.desc)
+        self.assertEqual(101, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
-        self.assertEqual(104.76, hsp.bitscore)
-        self.assertEqual(260, hsp.bitscore_raw)
-        self.assertEqual(3.15863e-23, hsp.evalue)
-        self.assertEqual(19, hsp.query_from)
-        self.assertEqual(291, hsp.query_to)
-        self.assertEqual(989, hsp.hit_from)
-        self.assertEqual(1079, hsp.hit_to)
+        self.assertEqual(97.0561, hsp.bitscore)
+        self.assertEqual(240, hsp.bitscore_raw)
+        self.assertEqual(2.76414e-23, hsp.evalue)
+        self.assertEqual(7, hsp.query_from)
+        self.assertEqual(279, hsp.query_to)
+        self.assertEqual(10, hsp.hit_from)
+        self.assertEqual(100, hsp.hit_to)
         self.assertEqual(-3, hsp.query_frame)
         self.assertEqual(0, hsp.hit_frame)
-        self.assertEqual(59, hsp.ident_num)
-        self.assertEqual(66, hsp.pos_num)
+        self.assertEqual(56, hsp.ident_num)
+        self.assertEqual(62, hsp.pos_num)
         self.assertEqual(0, hsp.gap_num)
         self.assertEqual(91, hsp.init_len)
         self.assertEqual(91, len(hsp))
-        self.assertEqual('SFALVAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQ', hsp.query.seq.tostring())
-        self.assertEqual('SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHVGQAHLELLTSGGLLASASQSAGITGVSHHAR', hsp.hit.seq.tostring())
+        self.assertEqual('VAQAGVQWLDLGXXXXXXPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQPLCE', hsp.query.seq.tostring())
+        self.assertEqual('VPHAGVQWHNLSSLQPPPSRFKPFSYLSLLSSWDQRRPPPCLVTFVFLIETGFRHVGQAGLKLLTSGDPSASASQSAGIRGVSHCTWPECQ', hsp.hit.seq.tostring())
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
-        self.assertEqual(3, counter)
+        self.assertEqual(2, counter)
 
 
 class TblastnXmlCases(unittest.TestCase):
@@ -2225,14 +2141,14 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         # test parsed values of the first qresult
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(32, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(-1, qresult.stat_kappa)
         self.assertEqual(-1, qresult.stat_lambda)
@@ -2246,9 +2162,9 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis '
                 'subsp. subtilis str. 168]', qresult.desc)
         self.assertEqual(102, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(1217216.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(1205400.0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
         self.assertEqual(0.14, qresult.stat_entropy)
@@ -2263,7 +2179,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(34.6538, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
-        self.assertEqual(1.09472e-05, hsp.evalue)
+        self.assertEqual(1.08241e-05, hsp.evalue)
         self.assertEqual(31, hsp.query_from)
         self.assertEqual(73, hsp.query_to)
         self.assertEqual(1744, hsp.hit_from)
@@ -2285,9 +2201,9 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.desc)
         self.assertEqual(98, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(1130272.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(1119300.0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
         self.assertEqual(0.14, qresult.stat_entropy)
@@ -2302,7 +2218,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
-        self.assertEqual(1.59038e-67, hsp.evalue)
+        self.assertEqual(1.57249e-67, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(98, hsp.query_to)
         self.assertEqual(95, hsp.hit_from)
@@ -2320,7 +2236,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(32.7278, hsp.bitscore)
         self.assertEqual(73, hsp.bitscore_raw)
-        self.assertEqual(4.12155e-05, hsp.evalue)
+        self.assertEqual(4.07518e-05, hsp.evalue)
         self.assertEqual(30, hsp.query_from)
         self.assertEqual(96, hsp.query_to)
         self.assertEqual(542, hsp.hit_from)
@@ -2336,28 +2252,28 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', hsp.hit.seq.tostring())
 
         hit = qresult[-1]
-        self.assertEqual('gi|338714227|ref|XM_001492113.3|', hit.id)
-        self.assertEqual('PREDICTED: Equus caballus pleckstrin-like (LOC100051039), mRNA', hit.desc)
-        self.assertEqual(1390, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual('gi|365982352|ref|XM_003667962.1|', hit.id)
+        self.assertEqual('Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA', hit.desc)
+        self.assertEqual(4932, hit.seq_len)
+        self.assertEqual(1, len(hit))
 
         hsp = hit[0]
-        self.assertEqual(202.986, hsp.bitscore)
-        self.assertEqual(515, hsp.bitscore_raw)
-        self.assertEqual(1.5394e-66, hsp.evalue)
-        self.assertEqual(1, hsp.query_from)
-        self.assertEqual(98, hsp.query_to)
-        self.assertEqual(173, hsp.hit_from)
-        self.assertEqual(466, hsp.hit_to)
+        self.assertEqual(19.631, hsp.bitscore)
+        self.assertEqual(39, hsp.bitscore_raw)
+        self.assertEqual(1.65923, hsp.evalue)
+        self.assertEqual(12, hsp.query_from)
+        self.assertEqual(54, hsp.query_to)
+        self.assertEqual(3181, hsp.hit_from)
+        self.assertEqual(3336, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
-        self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(96, hsp.ident_num)
-        self.assertEqual(97, hsp.pos_num)
-        self.assertEqual(0, hsp.gap_num)
-        self.assertEqual(98, hsp.init_len)
-        self.assertEqual(98, len(hsp))
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
+        self.assertEqual(1, hsp.hit_frame)
+        self.assertEqual(16, hsp.ident_num)
+        self.assertEqual(23, hsp.pos_num)
+        self.assertEqual(9, hsp.gap_num)
+        self.assertEqual(52, hsp.init_len)
+        self.assertEqual(52, len(hsp))
+        self.assertEqual('GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS', hsp.query.seq.tostring())
+        self.assertEqual('GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS', hsp.hit.seq.tostring())
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2383,13 +2299,13 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(32, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(-1, qresult.stat_kappa)
         self.assertEqual(-1, qresult.stat_lambda)
@@ -2419,14 +2335,14 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.desc)
         self.assertEqual(102, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(1217216.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(1205400.0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
         self.assertEqual(0.14, qresult.stat_entropy)
@@ -2441,7 +2357,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(34.6538, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
-        self.assertEqual(1.09472e-05, hsp.evalue)
+        self.assertEqual(1.08241e-05, hsp.evalue)
         self.assertEqual(31, hsp.query_from)
         self.assertEqual(73, hsp.query_to)
         self.assertEqual(1744, hsp.hit_from)
@@ -2480,14 +2396,14 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.desc)
         self.assertEqual(98, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(1130272.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(1119300.0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
         self.assertEqual(0.14, qresult.stat_entropy)
@@ -2502,7 +2418,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
-        self.assertEqual(1.59038e-67, hsp.evalue)
+        self.assertEqual(1.57249e-67, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(98, hsp.query_to)
         self.assertEqual(95, hsp.hit_from)
@@ -2520,7 +2436,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(32.7278, hsp.bitscore)
         self.assertEqual(73, hsp.bitscore_raw)
-        self.assertEqual(4.12155e-05, hsp.evalue)
+        self.assertEqual(4.07518e-05, hsp.evalue)
         self.assertEqual(30, hsp.query_from)
         self.assertEqual(96, hsp.query_to)
         self.assertEqual(542, hsp.hit_from)
@@ -2536,28 +2452,28 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', hsp.hit.seq.tostring())
 
         hit = qresult[-1]
-        self.assertEqual('gi|338714227|ref|XM_001492113.3|', hit.id)
-        self.assertEqual('PREDICTED: Equus caballus pleckstrin-like (LOC100051039), mRNA', hit.desc)
-        self.assertEqual(1390, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual('gi|365982352|ref|XM_003667962.1|', hit.id)
+        self.assertEqual('Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA', hit.desc)
+        self.assertEqual(4932, hit.seq_len)
+        self.assertEqual(1, len(hit))
 
         hsp = hit[0]
-        self.assertEqual(202.986, hsp.bitscore)
-        self.assertEqual(515, hsp.bitscore_raw)
-        self.assertEqual(1.5394e-66, hsp.evalue)
-        self.assertEqual(1, hsp.query_from)
-        self.assertEqual(98, hsp.query_to)
-        self.assertEqual(173, hsp.hit_from)
-        self.assertEqual(466, hsp.hit_to)
+        self.assertEqual(19.631, hsp.bitscore)
+        self.assertEqual(39, hsp.bitscore_raw)
+        self.assertEqual(1.65923, hsp.evalue)
+        self.assertEqual(12, hsp.query_from)
+        self.assertEqual(54, hsp.query_to)
+        self.assertEqual(3181, hsp.hit_from)
+        self.assertEqual(3336, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
-        self.assertEqual(2, hsp.hit_frame)
-        self.assertEqual(96, hsp.ident_num)
-        self.assertEqual(97, hsp.pos_num)
-        self.assertEqual(0, hsp.gap_num)
-        self.assertEqual(98, hsp.init_len)
-        self.assertEqual(98, len(hsp))
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
+        self.assertEqual(1, hsp.hit_frame)
+        self.assertEqual(16, hsp.ident_num)
+        self.assertEqual(23, hsp.pos_num)
+        self.assertEqual(9, hsp.gap_num)
+        self.assertEqual(52, hsp.init_len)
+        self.assertEqual(52, len(hsp))
+        self.assertEqual('GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS', hsp.query.seq.tostring())
+        self.assertEqual('GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS', hsp.hit.seq.tostring())
 
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
@@ -2590,8 +2506,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(32, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -2604,8 +2520,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]', qresult.desc)
         self.assertEqual(102, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -2621,7 +2537,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(34.6538, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
-        self.assertEqual(0.746153, hsp.evalue)
+        self.assertEqual(0.755176, hsp.evalue)
         self.assertEqual(31, hsp.query_from)
         self.assertEqual(73, hsp.query_to)
         self.assertEqual(1744, hsp.hit_from)
@@ -2643,8 +2559,8 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('pleckstrin [Mus musculus]', qresult.desc)
         self.assertEqual(98, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0.041, qresult.stat_kappa)
         self.assertEqual(0.267, qresult.stat_lambda)
@@ -2660,7 +2576,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(205.297, hsp.bitscore)
         self.assertEqual(521, hsp.bitscore_raw)
-        self.assertEqual(1.44426e-63, hsp.evalue)
+        self.assertEqual(1.46172e-63, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(98, hsp.query_to)
         self.assertEqual(76, hsp.hit_from)
@@ -2678,7 +2594,7 @@ class TblastnXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(43.8986, hsp.bitscore)
         self.assertEqual(102, hsp.bitscore_raw)
-        self.assertEqual(0.000535139, hsp.evalue)
+        self.assertEqual(0.00054161, hsp.evalue)
         self.assertEqual(3, hsp.query_from)
         self.assertEqual(96, hsp.query_to)
         self.assertEqual(802, hsp.hit_from)
@@ -2694,19 +2610,19 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNHDGKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA', hsp.hit.seq.tostring())
 
         hit = qresult[-1]
-        self.assertEqual('gi|338714227|ref|XM_001492113.3|', hit.id)
-        self.assertEqual('PREDICTED: Equus caballus pleckstrin-like (LOC100051039), mRNA', hit.desc)
-        self.assertEqual(1390, hit.seq_len)
+        self.assertEqual('gi|390474391|ref|XM_002757683.2|', hit.id)
+        self.assertEqual('PREDICTED: Callithrix jacchus pleckstrin (PLEK), mRNA', hit.desc)
+        self.assertEqual(1402, hit.seq_len)
         self.assertEqual(2, len(hit))
 
         hsp = hit[0]
         self.assertEqual(202.986, hsp.bitscore)
         self.assertEqual(515, hsp.bitscore_raw)
-        self.assertEqual(1.04924e-61, hsp.evalue)
+        self.assertEqual(1.27031e-61, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(98, hsp.query_to)
-        self.assertEqual(173, hsp.hit_from)
-        self.assertEqual(466, hsp.hit_to)
+        self.assertEqual(161, hsp.hit_from)
+        self.assertEqual(454, hsp.hit_to)
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
         self.assertEqual(96, hsp.ident_num)
@@ -2715,7 +2631,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(98, hsp.init_len)
         self.assertEqual(98, len(hsp))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.query.seq.tostring())
-        self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
+        self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.hit.seq.tostring())
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
@@ -2831,14 +2747,14 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         # test parsed values of the first qresult
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(-1, qresult.stat_kappa)
         self.assertEqual(-1, qresult.stat_lambda)
@@ -2848,51 +2764,12 @@ class TblastxXmlCases(unittest.TestCase):
         # test parsed values of the second qresult
         qresult = qresults.next()
         counter += 1
-        self.assertEqual('gi|347972582:1-35', qresult.id)
-        self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', qresult.desc)
-        self.assertEqual(35, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(182144.0, qresult.stat_eff_space)
-        self.assertEqual(0.133956144488482, qresult.stat_kappa)
-        self.assertEqual(0.317605957635731, qresult.stat_lambda)
-        self.assertEqual(0.401214524497119, qresult.stat_entropy)
-        self.assertEqual(5, len(qresult))
-
-        hit = qresult[0]
-        self.assertEqual('gi|347972582|ref|XM_309352.4|', hit.id)
-        self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit.desc)
-        self.assertEqual(309, hit.seq_len)
-        self.assertEqual(6, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual(34.0583, hsp.bitscore)
-        self.assertEqual(68, hsp.bitscore_raw)
-        self.assertEqual(2.03639e-05, hsp.evalue)
-        self.assertEqual(3, hsp.query_from)
-        self.assertEqual(35, hsp.query_to)
-        self.assertEqual(3, hsp.hit_from)
-        self.assertEqual(35, hsp.hit_to)
-        self.assertEqual(3, hsp.query_frame)
-        self.assertEqual(3, hsp.hit_frame)
-        self.assertEqual(11, hsp.ident_num)
-        self.assertEqual(11, hsp.pos_num)
-        self.assertEqual(0, hsp.gap_num)
-        self.assertEqual(11, hsp.init_len)
-        self.assertEqual(11, len(hsp))
-        self.assertEqual('EVCNDRLYHCR', hsp.query.seq.tostring())
-        self.assertEqual('EVCNDRLYHCR', hsp.hit.seq.tostring())
-        #self.assertRaises(IndexError, hit.__getitem__, 1)
-
-        # test parsed values of the third qresult
-        qresult = qresults.next()
-        counter += 1
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.desc)
         self.assertEqual(350, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(1975088.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(1954618.0, qresult.stat_eff_space)
         self.assertEqual(0.133956144488482, qresult.stat_kappa)
         self.assertEqual(0.317605957635731, qresult.stat_lambda)
         self.assertEqual(0.401214524497119, qresult.stat_entropy)
@@ -2907,7 +2784,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(289.739, hsp.bitscore)
         self.assertEqual(626, hsp.bitscore_raw)
-        self.assertEqual(2.37998e-81, hsp.evalue)
+        self.assertEqual(2.35531e-81, hsp.evalue)
         self.assertEqual(2, hsp.query_from)
         self.assertEqual(349, hsp.query_to)
         self.assertEqual(2, hsp.hit_from)
@@ -2925,7 +2802,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(18.9375, hsp.bitscore)
         self.assertEqual(35, hsp.bitscore_raw)
-        self.assertEqual(7.86812, hsp.evalue)
+        self.assertEqual(7.78658, hsp.evalue)
         self.assertEqual(293, hsp.query_from)
         self.assertEqual(325, hsp.query_to)
         self.assertEqual(341, hsp.hit_from)
@@ -2949,7 +2826,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(141.279, hsp.bitscore)
         self.assertEqual(302, hsp.bitscore_raw)
-        self.assertEqual(1.16777e-36, hsp.evalue)
+        self.assertEqual(1.15566e-36, hsp.evalue)
         self.assertEqual(97, hsp.query_from)
         self.assertEqual(348, hsp.query_to)
         self.assertEqual(97, hsp.hit_from)
@@ -2966,7 +2843,7 @@ class TblastxXmlCases(unittest.TestCase):
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
-        self.assertEqual(3, counter)
+        self.assertEqual(2, counter)
 
     def test_xbt032(self):
         xml_file = get_file('xbt032.xml')
@@ -2988,13 +2865,13 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(-1, qresult.stat_kappa)
         self.assertEqual(-1, qresult.stat_lambda)
@@ -3024,14 +2901,14 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(11, qresult.param_gap_open)
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('tblastx', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
 
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.desc)
         self.assertEqual(350, qresult.seq_len)
-        self.assertEqual(24, qresult.stat_db_num)
-        self.assertEqual(68522, qresult.stat_db_len)
-        self.assertEqual(1975088.0, qresult.stat_eff_space)
+        self.assertEqual(23, qresult.stat_db_num)
+        self.assertEqual(67750, qresult.stat_db_len)
+        self.assertEqual(1954618.0, qresult.stat_eff_space)
         self.assertEqual(0.133956144488482, qresult.stat_kappa)
         self.assertEqual(0.317605957635731, qresult.stat_lambda)
         self.assertEqual(0.401214524497119, qresult.stat_entropy)
@@ -3046,7 +2923,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(289.739, hsp.bitscore)
         self.assertEqual(626, hsp.bitscore_raw)
-        self.assertEqual(2.37998e-81, hsp.evalue)
+        self.assertEqual(2.35531e-81, hsp.evalue)
         self.assertEqual(2, hsp.query_from)
         self.assertEqual(349, hsp.query_to)
         self.assertEqual(2, hsp.hit_from)
@@ -3064,7 +2941,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(18.9375, hsp.bitscore)
         self.assertEqual(35, hsp.bitscore_raw)
-        self.assertEqual(7.86812, hsp.evalue)
+        self.assertEqual(7.78658, hsp.evalue)
         self.assertEqual(293, hsp.query_from)
         self.assertEqual(325, hsp.query_to)
         self.assertEqual(341, hsp.hit_from)
@@ -3088,7 +2965,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(141.279, hsp.bitscore)
         self.assertEqual(302, hsp.bitscore_raw)
-        self.assertEqual(1.16777e-36, hsp.evalue)
+        self.assertEqual(1.15566e-36, hsp.evalue)
         self.assertEqual(97, hsp.query_from)
         self.assertEqual(348, hsp.query_to)
         self.assertEqual(97, hsp.hit_from)
@@ -3135,8 +3012,8 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual('', qresult.desc)
         self.assertEqual(128, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0, qresult.stat_kappa)
         self.assertEqual(0, qresult.stat_lambda)
@@ -3146,50 +3023,11 @@ class TblastxXmlCases(unittest.TestCase):
         # test parsed values of the second qresult
         qresult = qresults.next()
         counter += 1
-        self.assertEqual('gi|347972582:1-35', qresult.id)
-        self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', qresult.desc)
-        self.assertEqual(35, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
-        self.assertEqual(0, qresult.stat_eff_space)
-        self.assertEqual(0, qresult.stat_kappa)
-        self.assertEqual(0, qresult.stat_lambda)
-        self.assertEqual(0, qresult.stat_entropy)
-        self.assertEqual(1, len(qresult))
-
-        hit = qresult[0]
-        self.assertEqual('gi|347972582|ref|XM_309352.4|', hit.id)
-        self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit.desc)
-        self.assertEqual(309, hit.seq_len)
-        self.assertEqual(3, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual(34.0583, hsp.bitscore)
-        self.assertEqual(68, hsp.bitscore_raw)
-        self.assertEqual(1.38453, hsp.evalue)
-        self.assertEqual(3, hsp.query_from)
-        self.assertEqual(35, hsp.query_to)
-        self.assertEqual(3, hsp.hit_from)
-        self.assertEqual(35, hsp.hit_to)
-        self.assertEqual(3, hsp.query_frame)
-        self.assertEqual(3, hsp.hit_frame)
-        self.assertEqual(11, hsp.ident_num)
-        self.assertEqual(11, hsp.pos_num)
-        self.assertEqual(0, hsp.gap_num)
-        self.assertEqual(11, hsp.init_len)
-        self.assertEqual(11, len(hsp))
-        self.assertEqual('EVCNDRLYHCR', hsp.query.seq.tostring())
-        self.assertEqual('EVCNDRLYHCR', hsp.hit.seq.tostring())
-        #self.assertRaises(IndexError, hit.__getitem__, 1)
-
-        # test parsed values of the third qresult
-        qresult = qresults.next()
-        counter += 1
         self.assertEqual('gi|296147483:1-350', qresult.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', qresult.desc)
         self.assertEqual(350, qresult.seq_len)
-        self.assertEqual(2922980, qresult.stat_db_num)
-        self.assertEqual(4670255720, qresult.stat_db_len)
+        self.assertEqual(2933984, qresult.stat_db_num)
+        self.assertEqual(4726730735, qresult.stat_db_len)
         self.assertEqual(0, qresult.stat_eff_space)
         self.assertEqual(0, qresult.stat_kappa)
         self.assertEqual(0, qresult.stat_lambda)
@@ -3208,7 +3046,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(289.739, hsp.bitscore)
         self.assertEqual(626, hsp.bitscore_raw)
-        self.assertEqual(1.04512e-76, hsp.evalue)
+        self.assertEqual(1.05874e-76, hsp.evalue)
         self.assertEqual(2, hsp.query_from)
         self.assertEqual(349, hsp.query_to)
         self.assertEqual(2, hsp.hit_from)
@@ -3226,7 +3064,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[-1]
         self.assertEqual(36.3494, hsp.bitscore)
         self.assertEqual(73, hsp.bitscore_raw)
-        self.assertEqual(9.00552e-54, hsp.evalue)
+        self.assertEqual(9.12288e-54, hsp.evalue)
         self.assertEqual(1, hsp.query_from)
         self.assertEqual(42, hsp.query_to)
         self.assertEqual(1, hsp.hit_from)
@@ -3251,7 +3089,7 @@ class TblastxXmlCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual(141.279, hsp.bitscore)
         self.assertEqual(302, hsp.bitscore_raw)
-        self.assertEqual(5.12803e-32, hsp.evalue)
+        self.assertEqual(5.19486e-32, hsp.evalue)
         self.assertEqual(97, hsp.query_from)
         self.assertEqual(348, hsp.query_to)
         self.assertEqual(97, hsp.hit_from)
@@ -3268,7 +3106,26 @@ class TblastxXmlCases(unittest.TestCase):
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
-        self.assertEqual(3, counter)
+        self.assertEqual(2, counter)
+
+class BlastXmlSpecialCases(unittest.TestCase):
+
+    def test_xbt035(self):
+        xml_file = get_file('xbt035.xml')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test each qresult's attributes
+        qresult = qresults.next()
+        counter += 1
+
+        # test the Hit IDs only, since this is a special case
+        hit1 = qresult[0]
+        hit2 = qresult[1]
+        self.assertEqual('gi|347972582|ref|XM_309352.4|', hit1.id)
+        self.assertEqual('Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit1.desc)
+        self.assertEqual('gnl|BL_ORD_ID|17', hit2.id)
+        self.assertEqual('gi|347972582|ref|XM_309352.4| Anopheles gambiae str. PEST AGAP011294-PA (DEFI_ANOGA) mRNA, complete cds', hit2.desc)
 
 
 if __name__ == "__main__":

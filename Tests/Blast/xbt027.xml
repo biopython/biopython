@@ -4,7 +4,7 @@
   <BlastOutput_program>tblastn</BlastOutput_program>
   <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
-  <BlastOutput_db>db/minirefseq_rna</BlastOutput_db>
+  <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
   <BlastOutput_query-def>random_s00</BlastOutput_query-def>
   <BlastOutput_query-len>32</BlastOutput_query-len>
@@ -25,8 +25,8 @@
       <Iteration_query-len>32</Iteration_query-len>
       <Iteration_stat>
         <Statistics>
-          <Statistics_db-num>24</Statistics_db-num>
-          <Statistics_db-len>68522</Statistics_db-len>
+          <Statistics_db-num>23</Statistics_db-num>
+          <Statistics_db-len>67750</Statistics_db-len>
           <Statistics_hsp-len>0</Statistics_hsp-len>
           <Statistics_eff-space>0</Statistics_eff-space>
           <Statistics_kappa>-1</Statistics_kappa>

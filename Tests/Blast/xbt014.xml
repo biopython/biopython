@@ -4,7 +4,7 @@
   <BlastOutput_program>blastn</BlastOutput_program>
   <BlastOutput_version>BLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb Miller (2000), &quot;A greedy algorithm for aligning DNA sequences&quot;, J Comput Biol 2000; 7(1-2):203-14.</BlastOutput_reference>
-  <BlastOutput_db>db/minirefseq_rna</BlastOutput_db>
+  <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
   <BlastOutput_query-def>gi|356995852:1-490 Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA</BlastOutput_query-def>
   <BlastOutput_query-len>490</BlastOutput_query-len>
@@ -120,7 +120,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>446.163</Hsp_bit-score>
               <Hsp_score>241</Hsp_score>
-              <Hsp_evalue>1.58378e-127</Hsp_evalue>
+              <Hsp_evalue>1.56622e-127</Hsp_evalue>
               <Hsp_query-from>69</Hsp_query-from>
               <Hsp_query-to>487</Hsp_query-to>
               <Hsp_hit-from>1</Hsp_hit-from>
@@ -148,7 +148,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>433.236</Hsp_bit-score>
               <Hsp_score>234</Hsp_score>
-              <Hsp_evalue>1.23303e-123</Hsp_evalue>
+              <Hsp_evalue>1.21936e-123</Hsp_evalue>
               <Hsp_query-from>69</Hsp_query-from>
               <Hsp_query-to>490</Hsp_query-to>
               <Hsp_hit-from>1</Hsp_hit-from>
@@ -168,10 +168,10 @@
       </Iteration_hits>
       <Iteration_stat>
         <Statistics>
-          <Statistics_db-num>24</Statistics_db-num>
-          <Statistics_db-len>68522</Statistics_db-len>
+          <Statistics_db-num>23</Statistics_db-num>
+          <Statistics_db-len>67750</Statistics_db-len>
           <Statistics_hsp-len>17</Statistics_hsp-len>
-          <Statistics_eff-space>32217922</Statistics_eff-space>
+          <Statistics_eff-space>31860807</Statistics_eff-space>
           <Statistics_kappa>0.46</Statistics_kappa>
           <Statistics_lambda>1.28</Statistics_lambda>
           <Statistics_entropy>0.85</Statistics_entropy>

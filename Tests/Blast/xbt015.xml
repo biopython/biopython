@@ -4,7 +4,7 @@
   <BlastOutput_program>blastn</BlastOutput_program>
   <BlastOutput_version>BLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb Miller (2000), &quot;A greedy algorithm for aligning DNA sequences&quot;, J Comput Biol 2000; 7(1-2):203-14.</BlastOutput_reference>
-  <BlastOutput_db>db/minirefseq_rna</BlastOutput_db>
+  <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
   <BlastOutput_query-def>hg19_dna range=chr1:1207307-1207372 5&apos;pad=0 3&apos;pad=0 strand=+ repeatMasking=none</BlastOutput_query-def>
   <BlastOutput_query-len>66</BlastOutput_query-len>
@@ -36,7 +36,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>115.613</Hsp_bit-score>
               <Hsp_score>62</Hsp_score>
-              <Hsp_evalue>5.58273e-29</Hsp_evalue>
+              <Hsp_evalue>5.52066e-29</Hsp_evalue>
               <Hsp_query-from>5</Hsp_query-from>
               <Hsp_query-to>66</Hsp_query-to>
               <Hsp_hit-from>3677</Hsp_hit-from>
@@ -55,7 +55,7 @@
               <Hsp_num>2</Hsp_num>
               <Hsp_bit-score>98.9927</Hsp_bit-score>
               <Hsp_score>53</Hsp_score>
-              <Hsp_evalue>5.62236e-24</Hsp_evalue>
+              <Hsp_evalue>5.55986e-24</Hsp_evalue>
               <Hsp_query-from>6</Hsp_query-from>
               <Hsp_query-to>58</Hsp_query-to>
               <Hsp_hit-from>2824</Hsp_hit-from>
@@ -83,7 +83,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>115.613</Hsp_bit-score>
               <Hsp_score>62</Hsp_score>
-              <Hsp_evalue>5.58273e-29</Hsp_evalue>
+              <Hsp_evalue>5.52066e-29</Hsp_evalue>
               <Hsp_query-from>5</Hsp_query-from>
               <Hsp_query-to>66</Hsp_query-to>
               <Hsp_hit-from>2865</Hsp_hit-from>
@@ -111,7 +111,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>111.919</Hsp_bit-score>
               <Hsp_score>60</Hsp_score>
-              <Hsp_evalue>7.22171e-28</Hsp_evalue>
+              <Hsp_evalue>7.14143e-28</Hsp_evalue>
               <Hsp_query-from>1</Hsp_query-from>
               <Hsp_query-to>66</Hsp_query-to>
               <Hsp_hit-from>2857</Hsp_hit-from>
@@ -139,7 +139,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>111.919</Hsp_bit-score>
               <Hsp_score>60</Hsp_score>
-              <Hsp_evalue>7.22171e-28</Hsp_evalue>
+              <Hsp_evalue>7.14143e-28</Hsp_evalue>
               <Hsp_query-from>1</Hsp_query-from>
               <Hsp_query-to>66</Hsp_query-to>
               <Hsp_hit-from>2705</Hsp_hit-from>
@@ -167,7 +167,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>111.919</Hsp_bit-score>
               <Hsp_score>60</Hsp_score>
-              <Hsp_evalue>7.22171e-28</Hsp_evalue>
+              <Hsp_evalue>7.14143e-28</Hsp_evalue>
               <Hsp_query-from>1</Hsp_query-from>
               <Hsp_query-to>66</Hsp_query-to>
               <Hsp_hit-from>2800</Hsp_hit-from>
@@ -187,10 +187,10 @@
       </Iteration_hits>
       <Iteration_stat>
         <Statistics>
-          <Statistics_db-num>24</Statistics_db-num>
-          <Statistics_db-len>68522</Statistics_db-len>
+          <Statistics_db-num>23</Statistics_db-num>
+          <Statistics_db-len>67750</Statistics_db-len>
           <Statistics_hsp-len>14</Statistics_hsp-len>
-          <Statistics_eff-space>3545672</Statistics_eff-space>
+          <Statistics_eff-space>3506256</Statistics_eff-space>
           <Statistics_kappa>0.46</Statistics_kappa>
           <Statistics_lambda>1.28</Statistics_lambda>
           <Statistics_entropy>0.85</Statistics_entropy>

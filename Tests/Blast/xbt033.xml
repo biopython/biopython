@@ -4,7 +4,7 @@
   <BlastOutput_program>tblastx</BlastOutput_program>
   <BlastOutput_version>TBLASTX 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
-  <BlastOutput_db>db/minirefseq_rna</BlastOutput_db>
+  <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
   <BlastOutput_query-def>gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds</BlastOutput_query-def>
   <BlastOutput_query-len>350</BlastOutput_query-len>
@@ -26,16 +26,16 @@
       <Iteration_hits>
         <Hit>
           <Hit_num>1</Hit_num>
-          <Hit_id>gnl|BL_ORD_ID|19</Hit_id>
+          <Hit_id>gnl|BL_ORD_ID|18</Hit_id>
           <Hit_def>gi|296147483|ref|NM_001183135.1| Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds</Hit_def>
-          <Hit_accession>19</Hit_accession>
+          <Hit_accession>18</Hit_accession>
           <Hit_len>4911</Hit_len>
           <Hit_hsps>
             <Hsp>
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>289.739</Hsp_bit-score>
               <Hsp_score>626</Hsp_score>
-              <Hsp_evalue>2.37998e-81</Hsp_evalue>
+              <Hsp_evalue>2.35531e-81</Hsp_evalue>
               <Hsp_query-from>2</Hsp_query-from>
               <Hsp_query-to>349</Hsp_query-to>
               <Hsp_hit-from>2</Hsp_hit-from>
@@ -54,7 +54,7 @@
               <Hsp_num>2</Hsp_num>
               <Hsp_bit-score>278.742</Hsp_bit-score>
               <Hsp_score>602</Hsp_score>
-              <Hsp_evalue>4.86409e-78</Hsp_evalue>
+              <Hsp_evalue>4.81367e-78</Hsp_evalue>
               <Hsp_query-from>2</Hsp_query-from>
               <Hsp_query-to>349</Hsp_query-to>
               <Hsp_hit-from>2</Hsp_hit-from>
@@ -73,7 +73,7 @@
               <Hsp_num>3</Hsp_num>
               <Hsp_bit-score>274.618</Hsp_bit-score>
               <Hsp_score>593</Hsp_score>
-              <Hsp_evalue>8.48031e-77</Hsp_evalue>
+              <Hsp_evalue>8.39242e-77</Hsp_evalue>
               <Hsp_query-from>1</Hsp_query-from>
               <Hsp_query-to>348</Hsp_query-to>
               <Hsp_hit-from>1</Hsp_hit-from>
@@ -92,7 +92,7 @@
               <Hsp_num>4</Hsp_num>
               <Hsp_bit-score>270.036</Hsp_bit-score>
               <Hsp_score>583</Hsp_score>
-              <Hsp_evalue>2.03122e-75</Hsp_evalue>
+              <Hsp_evalue>2.01017e-75</Hsp_evalue>
               <Hsp_query-from>3</Hsp_query-from>
               <Hsp_query-to>350</Hsp_query-to>
               <Hsp_hit-from>3</Hsp_hit-from>
@@ -111,7 +111,7 @@
               <Hsp_num>5</Hsp_num>
               <Hsp_bit-score>229.713</Hsp_bit-score>
               <Hsp_score>495</Hsp_score>
-              <Hsp_evalue>2.79251e-63</Hsp_evalue>
+              <Hsp_evalue>2.76357e-63</Hsp_evalue>
               <Hsp_query-from>3</Hsp_query-from>
               <Hsp_query-to>350</Hsp_query-to>
               <Hsp_hit-from>3</Hsp_hit-from>
@@ -130,7 +130,7 @@
               <Hsp_num>6</Hsp_num>
               <Hsp_bit-score>197.639</Hsp_bit-score>
               <Hsp_score>425</Hsp_score>
-              <Hsp_evalue>2.04546e-58</Hsp_evalue>
+              <Hsp_evalue>2.02426e-58</Hsp_evalue>
               <Hsp_query-from>94</Hsp_query-from>
               <Hsp_query-to>348</Hsp_query-to>
               <Hsp_hit-from>94</Hsp_hit-from>
@@ -149,7 +149,7 @@
               <Hsp_num>7</Hsp_num>
               <Hsp_bit-score>36.3494</Hsp_bit-score>
               <Hsp_score>73</Hsp_score>
-              <Hsp_evalue>2.04546e-58</Hsp_evalue>
+              <Hsp_evalue>2.02426e-58</Hsp_evalue>
               <Hsp_query-from>1</Hsp_query-from>
               <Hsp_query-to>42</Hsp_query-to>
               <Hsp_hit-from>1</Hsp_hit-from>
@@ -168,7 +168,7 @@
               <Hsp_num>8</Hsp_num>
               <Hsp_bit-score>18.9375</Hsp_bit-score>
               <Hsp_score>35</Hsp_score>
-              <Hsp_evalue>7.86812</Hsp_evalue>
+              <Hsp_evalue>7.78658</Hsp_evalue>
               <Hsp_query-from>293</Hsp_query-from>
               <Hsp_query-to>325</Hsp_query-to>
               <Hsp_hit-from>341</Hsp_hit-from>
@@ -187,16 +187,16 @@
         </Hit>
         <Hit>
           <Hit_num>2</Hit_num>
-          <Hit_id>gnl|BL_ORD_ID|20</Hit_id>
+          <Hit_id>gnl|BL_ORD_ID|19</Hit_id>
           <Hit_def>gi|365982352|ref|XM_003667962.1| Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA</Hit_def>
-          <Hit_accession>20</Hit_accession>
+          <Hit_accession>19</Hit_accession>
           <Hit_len>4932</Hit_len>
           <Hit_hsps>
             <Hsp>
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>152.734</Hsp_bit-score>
               <Hsp_score>327</Hsp_score>
-              <Hsp_evalue>5.33273e-42</Hsp_evalue>
+              <Hsp_evalue>5.27746e-42</Hsp_evalue>
               <Hsp_query-from>94</Hsp_query-from>
               <Hsp_query-to>348</Hsp_query-to>
               <Hsp_hit-from>88</Hsp_hit-from>
@@ -215,7 +215,7 @@
               <Hsp_num>2</Hsp_num>
               <Hsp_bit-score>26.2688</Hsp_bit-score>
               <Hsp_score>51</Hsp_score>
-              <Hsp_evalue>5.33273e-42</Hsp_evalue>
+              <Hsp_evalue>5.27746e-42</Hsp_evalue>
               <Hsp_query-from>69</Hsp_query-from>
               <Hsp_query-to>110</Hsp_query-to>
               <Hsp_hit-from>63</Hsp_hit-from>
@@ -234,7 +234,7 @@
               <Hsp_num>3</Hsp_num>
               <Hsp_bit-score>67.9658</Hsp_bit-score>
               <Hsp_score>142</Hsp_score>
-              <Hsp_evalue>1.07304e-24</Hsp_evalue>
+              <Hsp_evalue>1.06192e-24</Hsp_evalue>
               <Hsp_query-from>186</Hsp_query-from>
               <Hsp_query-to>350</Hsp_query-to>
               <Hsp_hit-from>180</Hsp_hit-from>
@@ -253,7 +253,7 @@
               <Hsp_num>4</Hsp_num>
               <Hsp_bit-score>52.8449</Hsp_bit-score>
               <Hsp_score>109</Hsp_score>
-              <Hsp_evalue>1.07304e-24</Hsp_evalue>
+              <Hsp_evalue>1.06192e-24</Hsp_evalue>
               <Hsp_query-from>21</Hsp_query-from>
               <Hsp_query-to>137</Hsp_query-to>
               <Hsp_hit-from>15</Hsp_hit-from>
@@ -272,7 +272,7 @@
               <Hsp_num>5</Hsp_num>
               <Hsp_bit-score>61.0927</Hsp_bit-score>
               <Hsp_score>127</Hsp_score>
-              <Hsp_evalue>1.60656e-12</Hsp_evalue>
+              <Hsp_evalue>1.5899e-12</Hsp_evalue>
               <Hsp_query-from>41</Hsp_query-from>
               <Hsp_query-to>349</Hsp_query-to>
               <Hsp_hit-from>35</Hsp_hit-from>
@@ -291,7 +291,7 @@
               <Hsp_num>6</Hsp_num>
               <Hsp_bit-score>42.7643</Hsp_bit-score>
               <Hsp_score>87</Hsp_score>
-              <Hsp_evalue>5.28782e-07</Hsp_evalue>
+              <Hsp_evalue>5.23301e-07</Hsp_evalue>
               <Hsp_query-from>67</Hsp_query-from>
               <Hsp_query-to>261</Hsp_query-to>
               <Hsp_hit-from>61</Hsp_hit-from>
@@ -310,7 +310,7 @@
               <Hsp_num>7</Hsp_num>
               <Hsp_bit-score>23.9778</Hsp_bit-score>
               <Hsp_score>46</Hsp_score>
-              <Hsp_evalue>0.0284739</Hsp_evalue>
+              <Hsp_evalue>0.0281788</Hsp_evalue>
               <Hsp_query-from>68</Hsp_query-from>
               <Hsp_query-to>118</Hsp_query-to>
               <Hsp_hit-from>62</Hsp_hit-from>
@@ -329,7 +329,7 @@
               <Hsp_num>8</Hsp_num>
               <Hsp_bit-score>23.5196</Hsp_bit-score>
               <Hsp_score>45</Hsp_score>
-              <Hsp_evalue>0.0284739</Hsp_evalue>
+              <Hsp_evalue>0.0281788</Hsp_evalue>
               <Hsp_query-from>103</Hsp_query-from>
               <Hsp_query-to>153</Hsp_query-to>
               <Hsp_hit-from>3213</Hsp_hit-from>
@@ -348,7 +348,7 @@
               <Hsp_num>9</Hsp_num>
               <Hsp_bit-score>21.6867</Hsp_bit-score>
               <Hsp_score>41</Hsp_score>
-              <Hsp_evalue>1.17021</Hsp_evalue>
+              <Hsp_evalue>1.15808</Hsp_evalue>
               <Hsp_query-from>167</Hsp_query-from>
               <Hsp_query-to>256</Hsp_query-to>
               <Hsp_hit-from>33</Hsp_hit-from>
@@ -367,7 +367,7 @@
               <Hsp_num>10</Hsp_num>
               <Hsp_bit-score>18.9375</Hsp_bit-score>
               <Hsp_score>35</Hsp_score>
-              <Hsp_evalue>7.86812</Hsp_evalue>
+              <Hsp_evalue>7.78658</Hsp_evalue>
               <Hsp_query-from>306</Hsp_query-from>
               <Hsp_query-to>338</Hsp_query-to>
               <Hsp_hit-from>300</Hsp_hit-from>
@@ -386,16 +386,16 @@
         </Hit>
         <Hit>
           <Hit_num>3</Hit_num>
-          <Hit_id>gnl|BL_ORD_ID|21</Hit_id>
+          <Hit_id>gnl|BL_ORD_ID|20</Hit_id>
           <Hit_def>gi|366988334|ref|XM_003673886.1| Naumovozyma castellii CBS 4309 hypothetical protein (NCAS0A09950) mRNA, complete cds</Hit_def>
-          <Hit_accession>21</Hit_accession>
+          <Hit_accession>20</Hit_accession>
           <Hit_len>4938</Hit_len>
           <Hit_hsps>
             <Hsp>
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>143.112</Hsp_bit-score>
               <Hsp_score>306</Hsp_score>
-              <Hsp_evalue>3.27806e-37</Hsp_evalue>
+              <Hsp_evalue>3.24409e-37</Hsp_evalue>
               <Hsp_query-from>94</Hsp_query-from>
               <Hsp_query-to>348</Hsp_query-to>
               <Hsp_hit-from>94</Hsp_hit-from>
@@ -414,7 +414,7 @@
               <Hsp_num>2</Hsp_num>
               <Hsp_bit-score>62.4673</Hsp_bit-score>
               <Hsp_score>130</Hsp_score>
-              <Hsp_evalue>1.25267e-20</Hsp_evalue>
+              <Hsp_evalue>1.23969e-20</Hsp_evalue>
               <Hsp_query-from>189</Hsp_query-from>
               <Hsp_query-to>350</Hsp_query-to>
               <Hsp_hit-from>189</Hsp_hit-from>
@@ -433,7 +433,7 @@
               <Hsp_num>3</Hsp_num>
               <Hsp_bit-score>44.5971</Hsp_bit-score>
               <Hsp_score>91</Hsp_score>
-              <Hsp_evalue>1.25267e-20</Hsp_evalue>
+              <Hsp_evalue>1.23969e-20</Hsp_evalue>
               <Hsp_query-from>39</Hsp_query-from>
               <Hsp_query-to>137</Hsp_query-to>
               <Hsp_hit-from>39</Hsp_hit-from>
@@ -452,7 +452,7 @@
               <Hsp_num>4</Hsp_num>
               <Hsp_bit-score>54.2195</Hsp_bit-score>
               <Hsp_score>112</Hsp_score>
-              <Hsp_evalue>1.88327e-10</Hsp_evalue>
+              <Hsp_evalue>1.86376e-10</Hsp_evalue>
               <Hsp_query-from>1</Hsp_query-from>
               <Hsp_query-to>345</Hsp_query-to>
               <Hsp_hit-from>1</Hsp_hit-from>
@@ -471,7 +471,7 @@
               <Hsp_num>5</Hsp_num>
               <Hsp_bit-score>29.4763</Hsp_bit-score>
               <Hsp_score>58</Hsp_score>
-              <Hsp_evalue>0.00528904</Hsp_evalue>
+              <Hsp_evalue>0.00523423</Hsp_evalue>
               <Hsp_query-from>2</Hsp_query-from>
               <Hsp_query-to>136</Hsp_query-to>
               <Hsp_hit-from>2</Hsp_hit-from>
@@ -490,7 +490,7 @@
               <Hsp_num>6</Hsp_num>
               <Hsp_bit-score>29.0181</Hsp_bit-score>
               <Hsp_score>57</Hsp_score>
-              <Hsp_evalue>0.00726627</Hsp_evalue>
+              <Hsp_evalue>0.00719097</Hsp_evalue>
               <Hsp_query-from>3</Hsp_query-from>
               <Hsp_query-to>134</Hsp_query-to>
               <Hsp_hit-from>3</Hsp_hit-from>
@@ -509,7 +509,7 @@
               <Hsp_num>7</Hsp_num>
               <Hsp_bit-score>22.1449</Hsp_bit-score>
               <Hsp_score>42</Hsp_score>
-              <Hsp_evalue>0.851784</Hsp_evalue>
+              <Hsp_evalue>0.842956</Hsp_evalue>
               <Hsp_query-from>35</Hsp_query-from>
               <Hsp_query-to>85</Hsp_query-to>
               <Hsp_hit-from>35</Hsp_hit-from>
@@ -528,7 +528,7 @@
               <Hsp_num>8</Hsp_num>
               <Hsp_bit-score>20.3121</Hsp_bit-score>
               <Hsp_score>38</Hsp_score>
-              <Hsp_evalue>3.03436</Hsp_evalue>
+              <Hsp_evalue>3.00291</Hsp_evalue>
               <Hsp_query-from>278</Hsp_query-from>
               <Hsp_query-to>316</Hsp_query-to>
               <Hsp_hit-from>4179</Hsp_hit-from>
@@ -547,16 +547,16 @@
         </Hit>
         <Hit>
           <Hit_num>4</Hit_num>
-          <Hit_id>gnl|BL_ORD_ID|22</Hit_id>
+          <Hit_id>gnl|BL_ORD_ID|21</Hit_id>
           <Hit_def>gi|255710474|ref|XM_002551475.1| Lachancea thermotolerans CBS 6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds</Hit_def>
-          <Hit_accession>22</Hit_accession>
+          <Hit_accession>21</Hit_accession>
           <Hit_len>4845</Hit_len>
           <Hit_hsps>
             <Hsp>
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>141.737</Hsp_bit-score>
               <Hsp_score>303</Hsp_score>
-              <Hsp_evalue>8.50004e-37</Hsp_evalue>
+              <Hsp_evalue>8.41195e-37</Hsp_evalue>
               <Hsp_query-from>97</Hsp_query-from>
               <Hsp_query-to>348</Hsp_query-to>
               <Hsp_hit-from>94</Hsp_hit-from>
@@ -575,7 +575,7 @@
               <Hsp_num>2</Hsp_num>
               <Hsp_bit-score>45.0554</Hsp_bit-score>
               <Hsp_score>92</Hsp_score>
-              <Hsp_evalue>1.08045e-07</Hsp_evalue>
+              <Hsp_evalue>1.06925e-07</Hsp_evalue>
               <Hsp_query-from>186</Hsp_query-from>
               <Hsp_query-to>350</Hsp_query-to>
               <Hsp_hit-from>183</Hsp_hit-from>
@@ -594,7 +594,7 @@
               <Hsp_num>3</Hsp_num>
               <Hsp_bit-score>29.0181</Hsp_bit-score>
               <Hsp_score>57</Hsp_score>
-              <Hsp_evalue>0.00726627</Hsp_evalue>
+              <Hsp_evalue>0.00719097</Hsp_evalue>
               <Hsp_query-from>40</Hsp_query-from>
               <Hsp_query-to>249</Hsp_query-to>
               <Hsp_hit-from>37</Hsp_hit-from>
@@ -613,7 +613,7 @@
               <Hsp_num>4</Hsp_num>
               <Hsp_bit-score>21.2285</Hsp_bit-score>
               <Hsp_score>40</Hsp_score>
-              <Hsp_evalue>1.60768</Hsp_evalue>
+              <Hsp_evalue>1.59101</Hsp_evalue>
               <Hsp_query-from>233</Hsp_query-from>
               <Hsp_query-to>256</Hsp_query-to>
               <Hsp_hit-from>230</Hsp_hit-from>
@@ -632,7 +632,7 @@
               <Hsp_num>5</Hsp_num>
               <Hsp_bit-score>18.9375</Hsp_bit-score>
               <Hsp_score>35</Hsp_score>
-              <Hsp_evalue>7.86812</Hsp_evalue>
+              <Hsp_evalue>7.78658</Hsp_evalue>
               <Hsp_query-from>2</Hsp_query-from>
               <Hsp_query-to>31</Hsp_query-to>
               <Hsp_hit-from>2922</Hsp_hit-from>
@@ -651,16 +651,16 @@
         </Hit>
         <Hit>
           <Hit_num>5</Hit_num>
-          <Hit_id>gnl|BL_ORD_ID|23</Hit_id>
+          <Hit_id>gnl|BL_ORD_ID|22</Hit_id>
           <Hit_def>gi|254579534|ref|XM_002495708.1| Zygosaccharomyces rouxii hypothetical protein (ZYRO0C02266g) mRNA, complete cds</Hit_def>
-          <Hit_accession>23</Hit_accession>
+          <Hit_accession>22</Hit_accession>
           <Hit_len>4866</Hit_len>
           <Hit_hsps>
             <Hsp>
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>141.279</Hsp_bit-score>
               <Hsp_score>302</Hsp_score>
-              <Hsp_evalue>1.16777e-36</Hsp_evalue>
+              <Hsp_evalue>1.15566e-36</Hsp_evalue>
               <Hsp_query-from>97</Hsp_query-from>
               <Hsp_query-to>348</Hsp_query-to>
               <Hsp_hit-from>97</Hsp_hit-from>
@@ -679,7 +679,7 @@
               <Hsp_num>2</Hsp_num>
               <Hsp_bit-score>51.0121</Hsp_bit-score>
               <Hsp_score>105</Hsp_score>
-              <Hsp_evalue>1.93277e-16</Hsp_evalue>
+              <Hsp_evalue>1.91273e-16</Hsp_evalue>
               <Hsp_query-from>204</Hsp_query-from>
               <Hsp_query-to>350</Hsp_query-to>
               <Hsp_hit-from>204</Hsp_hit-from>
@@ -698,7 +698,7 @@
               <Hsp_num>3</Hsp_num>
               <Hsp_bit-score>41.8479</Hsp_bit-score>
               <Hsp_score>85</Hsp_score>
-              <Hsp_evalue>1.93277e-16</Hsp_evalue>
+              <Hsp_evalue>1.91273e-16</Hsp_evalue>
               <Hsp_query-from>15</Hsp_query-from>
               <Hsp_query-to>140</Hsp_query-to>
               <Hsp_hit-from>15</Hsp_hit-from>
@@ -717,7 +717,7 @@
               <Hsp_num>4</Hsp_num>
               <Hsp_bit-score>45.0554</Hsp_bit-score>
               <Hsp_score>92</Hsp_score>
-              <Hsp_evalue>1.08045e-07</Hsp_evalue>
+              <Hsp_evalue>1.06925e-07</Hsp_evalue>
               <Hsp_query-from>51</Hsp_query-from>
               <Hsp_query-to>347</Hsp_query-to>
               <Hsp_hit-from>51</Hsp_hit-from>
@@ -736,7 +736,7 @@
               <Hsp_num>5</Hsp_num>
               <Hsp_bit-score>21.2285</Hsp_bit-score>
               <Hsp_score>40</Hsp_score>
-              <Hsp_evalue>1.60768</Hsp_evalue>
+              <Hsp_evalue>1.59101</Hsp_evalue>
               <Hsp_query-from>35</Hsp_query-from>
               <Hsp_query-to>100</Hsp_query-to>
               <Hsp_hit-from>3295</Hsp_hit-from>
@@ -755,7 +755,7 @@
               <Hsp_num>6</Hsp_num>
               <Hsp_bit-score>19.3957</Hsp_bit-score>
               <Hsp_score>36</Hsp_score>
-              <Hsp_evalue>5.72712</Hsp_evalue>
+              <Hsp_evalue>5.66777</Hsp_evalue>
               <Hsp_query-from>24</Hsp_query-from>
               <Hsp_query-to>137</Hsp_query-to>
               <Hsp_hit-from>1125</Hsp_hit-from>
@@ -775,10 +775,10 @@
       </Iteration_hits>
       <Iteration_stat>
         <Statistics>
-          <Statistics_db-num>24</Statistics_db-num>
-          <Statistics_db-len>68522</Statistics_db-len>
+          <Statistics_db-num>23</Statistics_db-num>
+          <Statistics_db-len>67750</Statistics_db-len>
           <Statistics_hsp-len>27</Statistics_hsp-len>
-          <Statistics_eff-space>1975088</Statistics_eff-space>
+          <Statistics_eff-space>1954618</Statistics_eff-space>
           <Statistics_kappa>0.133956144488482</Statistics_kappa>
           <Statistics_lambda>0.317605957635731</Statistics_lambda>
           <Statistics_entropy>0.401214524497119</Statistics_entropy>

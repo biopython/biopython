@@ -4,7 +4,7 @@
   <BlastOutput_program>blastn</BlastOutput_program>
   <BlastOutput_version>BLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb Miller (2000), &quot;A greedy algorithm for aligning DNA sequences&quot;, J Comput Biol 2000; 7(1-2):203-14.</BlastOutput_reference>
-  <BlastOutput_db>db/minirefseq_rna</BlastOutput_db>
+  <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
   <BlastOutput_query-def>random_s00</BlastOutput_query-def>
   <BlastOutput_query-len>128</BlastOutput_query-len>
@@ -27,10 +27,10 @@
       <Iteration_hits></Iteration_hits>
       <Iteration_stat>
         <Statistics>
-          <Statistics_db-num>24</Statistics_db-num>
-          <Statistics_db-len>68522</Statistics_db-len>
+          <Statistics_db-num>23</Statistics_db-num>
+          <Statistics_db-len>67750</Statistics_db-len>
           <Statistics_hsp-len>15</Statistics_hsp-len>
-          <Statistics_eff-space>7702306</Statistics_eff-space>
+          <Statistics_eff-space>7616765</Statistics_eff-space>
           <Statistics_kappa>0.46</Statistics_kappa>
           <Statistics_lambda>1.28</Statistics_lambda>
           <Statistics_entropy>0.85</Statistics_entropy>

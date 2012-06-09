@@ -4,7 +4,7 @@
   <BlastOutput_program>tblastn</BlastOutput_program>
   <BlastOutput_version>TBLASTN 2.2.26+</BlastOutput_version>
   <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
-  <BlastOutput_db>db/minirefseq_rna</BlastOutput_db>
+  <BlastOutput_db>db/minirefseq_mrna</BlastOutput_db>
   <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
   <BlastOutput_query-def>gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]</BlastOutput_query-def>
   <BlastOutput_query-len>102</BlastOutput_query-len>
@@ -35,7 +35,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>34.6538</Hsp_bit-score>
               <Hsp_score>78</Hsp_score>
-              <Hsp_evalue>1.09472e-05</Hsp_evalue>
+              <Hsp_evalue>1.08241e-05</Hsp_evalue>
               <Hsp_query-from>31</Hsp_query-from>
               <Hsp_query-to>73</Hsp_query-to>
               <Hsp_hit-from>1744</Hsp_hit-from>
@@ -63,7 +63,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>31.5722</Hsp_bit-score>
               <Hsp_score>70</Hsp_score>
-              <Hsp_evalue>0.000104026</Hsp_evalue>
+              <Hsp_evalue>0.000102856</Hsp_evalue>
               <Hsp_query-from>44</Hsp_query-from>
               <Hsp_query-to>94</Hsp_query-to>
               <Hsp_hit-from>1057</Hsp_hit-from>
@@ -91,7 +91,7 @@
               <Hsp_num>1</Hsp_num>
               <Hsp_bit-score>31.5722</Hsp_bit-score>
               <Hsp_score>70</Hsp_score>
-              <Hsp_evalue>0.000104026</Hsp_evalue>
+              <Hsp_evalue>0.000102856</Hsp_evalue>
               <Hsp_query-from>44</Hsp_query-from>
               <Hsp_query-to>94</Hsp_query-to>
               <Hsp_hit-from>1057</Hsp_hit-from>
@@ -111,10 +111,10 @@
       </Iteration_hits>
       <Iteration_stat>
         <Statistics>
-          <Statistics_db-num>24</Statistics_db-num>
-          <Statistics_db-len>68522</Statistics_db-len>
+          <Statistics_db-num>23</Statistics_db-num>
+          <Statistics_db-len>67750</Statistics_db-len>
           <Statistics_hsp-len>46</Statistics_hsp-len>
-          <Statistics_eff-space>1217216</Statistics_eff-space>
+          <Statistics_eff-space>1205400</Statistics_eff-space>
           <Statistics_kappa>0.041</Statistics_kappa>
           <Statistics_lambda>0.267</Statistics_lambda>
           <Statistics_entropy>0.14</Statistics_entropy>
