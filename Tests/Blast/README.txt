@@ -149,6 +149,8 @@ xbt032.xml - TBLASTX 2.2.26+    single query with no result
 xbt033.xml - TBLASTX 2.2.26+    single query with results containing multiple hsps
 xbt034.xml - TBLASTX 2.2.26+    multiple queries, remote search on NCBI's database
 
+xbt035.xml - BLASTN 2.2.26+     single query, against a database with duplicate entries
+
 
 BLAST OUTPUT FILES (tabular format)
 -----------------------------------
@@ -163,7 +165,7 @@ tbt006.txt - TBLASTN 2.2.26+    single query with no result with comments
 tbt007.txt - TBLASTN 2.2.26+    single query with results containing single hsp with comments
 tbt008.txt - TBLASTN 2.2.26+    single query with results containing multiple hsps with comments
 
-tbt009.txt - TBLASTX 2.2.26+    multiple queries with nonstandard column ordering
-tbt010.txt - TBLASTN 2.2.26+    multiple queries with all columns, commented
-tbt011.txt - TBLASTN 2.2.26+    multiple queries with custom columns
+tbt009.txt - TBLASTX 2.2.26+    multiple queries with custom columns
+tbt010.txt - TBLASTN 2.2.26+    multiple queries with custom columns, commented
+tbt011.txt - TBLASTN 2.2.26+    multiple queries with all columns, commented
 tbt012.txt - TBLASTN 2.2.26+    remote multiple queries with standard columns, commented
