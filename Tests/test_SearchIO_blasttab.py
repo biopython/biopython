@@ -25,7 +25,7 @@ def get_file(filename):
 class BlastnTabCases(unittest.TestCase):
 
     def test_tbt001(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output (tbt001)"
+        "Test parsing TBLASTN 2.2.26+ tabular output (tbt001)"
 
         xml_file = get_file('tbt001.txt')
         qresults = parse(xml_file, FMT)
@@ -81,12 +81,12 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
-        self.assertEqual(4, len(qresult))
+        self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
         self.assertEqual('gi|11464971:4-101', hit.query_id)
-        self.assertEqual(4, len(hit))
+        self.assertEqual(2, len(hit))
 
         hsp = hit[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
@@ -121,7 +121,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(2, counter)
 
     def test_tbt002(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output (tbt002)"
+        "Test parsing TBLASTN 2.2.26+ tabular output (tbt002)"
 
         xml_file = get_file('tbt002.txt')
         qresults = parse(xml_file, FMT)
@@ -130,7 +130,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
 
     def test_tbt003(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output (tbt003)"
+        "Test parsing TBLASTN 2.2.26+ tabular output (tbt003)"
 
         xml_file = get_file('tbt003.txt')
         qresults = parse(xml_file, FMT)
@@ -186,7 +186,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_tbt004(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output (tbt004)"
+        "Test parsing TBLASTN 2.2.26+ tabular output (tbt004)"
 
         xml_file = get_file('tbt004.txt')
         qresults = parse(xml_file, FMT)
@@ -196,12 +196,12 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('gi|11464971:4-101', qresult.id)
-        self.assertEqual(4, len(qresult))
+        self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
         self.assertEqual('gi|11464971:4-101', hit.query_id)
-        self.assertEqual(4, len(hit))
+        self.assertEqual(2, len(hit))
 
         hsp = hit[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
@@ -236,7 +236,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_tbt005(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt005)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt005)"
 
         xml_file = get_file('tbt005.txt')
         qresults = parse(xml_file, FMT)
@@ -247,7 +247,7 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
@@ -257,7 +257,7 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
@@ -305,15 +305,15 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
-        self.assertEqual(4, len(qresult))
+        self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
         self.assertEqual('gi|11464971:4-101', hit.query_id)
-        self.assertEqual(4, len(hit))
+        self.assertEqual(2, len(hit))
 
         hsp = hit[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
@@ -348,7 +348,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(3, counter)
 
     def test_tbt006(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt006)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt006)"
 
         xml_file = get_file('tbt006.txt')
         qresults = parse(xml_file, FMT)
@@ -358,7 +358,7 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
@@ -368,7 +368,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_tbt007(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt007)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt007)"
 
         xml_file = get_file('tbt007.txt')
         qresults = parse(xml_file, FMT)
@@ -378,7 +378,7 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
@@ -426,7 +426,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_tbt008(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt008)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt008)"
 
         xml_file = get_file('tbt008.txt')
         qresults = parse(xml_file, FMT)
@@ -436,15 +436,15 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
-        self.assertEqual(4, len(qresult))
+        self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
         self.assertEqual('gi|11464971:4-101', hit.query_id)
-        self.assertEqual(4, len(hit))
+        self.assertEqual(2, len(hit))
 
         hsp = hit[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
@@ -479,7 +479,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_tbt009(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output (tbt009)"
+        "Test parsing TBLASTN 2.2.26+ tabular output (tbt009)"
 
         xml_file = get_file('tbt009.txt')
         qresults = parse(xml_file, FMT)
@@ -488,7 +488,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(AssertionError, qresults.next, )
 
     def test_tbt010(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt010)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt011)"
 
         xml_file = get_file('tbt010.txt')
         qresults = parse(xml_file, FMT)
@@ -499,7 +499,87 @@ class BlastnTabCases(unittest.TestCase):
         counter += 1
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.version)
+        self.assertEqual('random_s00', qresult.id)
+        self.assertEqual(0, len(qresult))
+
+        # test second qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.version)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+
+        # test last qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
+        self.assertEqual('2.2.26+', qresult.version)
+        self.assertEqual('gi|11464971:4-101', qresult.id)
+        self.assertEqual(5, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|11464971:4-101', hit.query_id)
+        self.assertEqual(2, len(hit))
+
+        hsp = hit[0]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(2e-67, hsp.evalue)
+        self.assertEqual(199, hsp.bitscore)
+
+        hsp = hit[-1]
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
+        self.assertEqual('gi|11464971:4-101', hsp.query_id)
+        self.assertEqual(4e-05, hsp.evalue)
+        self.assertEqual(32.7, hsp.bitscore)
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(3, counter)
+
+    def test_tbt011(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt010)"
+
+        xml_file = get_file('tbt011.txt')
+        qresults = parse(xml_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('tblastn', qresult.program)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(0, len(qresult))
@@ -514,7 +594,7 @@ class BlastnTabCases(unittest.TestCase):
             self.assertTrue(issubclass(w[-1].category, UserWarning))
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc)
@@ -593,13 +673,13 @@ class BlastnTabCases(unittest.TestCase):
             self.assertTrue(issubclass(w[-1].category, UserWarning))
 
         self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
+        self.assertEqual('db/minirefseq_mrna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('gi|11464971:4-101', qresult.acc)
         self.assertEqual('gi|11464971:4-101', qresult.acc_ver)
         self.assertEqual(98, qresult.seq_len)
-        self.assertEqual(4, len(qresult))
+        self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
@@ -607,7 +687,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.acc_ver)
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(772, hit.seq_len)
-        self.assertEqual(4, len(hit))
+        self.assertEqual(2, len(hit))
 
         hsp = hit[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
@@ -659,88 +739,8 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tbt011(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt011)"
-
-        xml_file = get_file('tbt011.txt')
-        qresults = parse(xml_file, FMT)
-        counter = 0
-
-        # test first qresult
-        qresult = qresults.next()
-        counter += 1
-
-        self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.version)
-        self.assertEqual('random_s00', qresult.id)
-        self.assertEqual(0, len(qresult))
-
-        # test second qresult
-        qresult = qresults.next()
-        counter += 1
-
-        self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.version)
-        self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
-        self.assertEqual(3, len(qresult))
-
-        hit = qresult[0]
-        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
-        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
-        self.assertEqual(1, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
-        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
-        self.assertEqual(1e-05, hsp.evalue)
-        self.assertEqual(34.7, hsp.bitscore)
-
-        hit = qresult[-1]
-        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
-        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
-        self.assertEqual(1, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
-        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
-        self.assertEqual(1e-04, hsp.evalue)
-        self.assertEqual(31.6, hsp.bitscore)
-
-        # test last qresult
-        qresult = qresults.next()
-        counter += 1
-
-        self.assertEqual('tblastn', qresult.program)
-        self.assertEqual('db/minirefseq_rna', qresult.target)
-        self.assertEqual('2.2.26+', qresult.version)
-        self.assertEqual('gi|11464971:4-101', qresult.id)
-        self.assertEqual(4, len(qresult))
-
-        hit = qresult[0]
-        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
-        self.assertEqual('gi|11464971:4-101', hit.query_id)
-        self.assertEqual(4, len(hit))
-
-        hsp = hit[0]
-        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
-        self.assertEqual('gi|11464971:4-101', hsp.query_id)
-        self.assertEqual(2e-67, hsp.evalue)
-        self.assertEqual(199, hsp.bitscore)
-
-        hsp = hit[-1]
-        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
-        self.assertEqual('gi|11464971:4-101', hsp.query_id)
-        self.assertEqual(4e-05, hsp.evalue)
-        self.assertEqual(32.7, hsp.bitscore)
-
-        # check if we've finished iteration over qresults
-        self.assertRaises(StopIteration, qresults.next, )
-        self.assertEqual(3, counter)
-
     def test_tbt012(self):
-        "Test parsing TBLASTN 2.2.24+ tabular output with comments (tbt012)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt012)"
 
         xml_file = get_file('tbt012.txt')
         qresults = parse(xml_file, FMT)
@@ -754,7 +754,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('refseq_rna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('random_s00', qresult.id)
-        self.assertEqual('VJ37CF56012', qresult.rid)
+        self.assertEqual('X76FDCG9016', qresult.rid)
         self.assertEqual(0, len(qresult))
 
         # test second qresult
@@ -765,7 +765,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('refseq_rna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
-        self.assertEqual('VJ37CF56012', qresult.rid)
+        self.assertEqual('X76FDCG9016', qresult.rid)
         self.assertEqual(3, len(qresult))
 
         # test last qresult
@@ -776,7 +776,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('refseq_rna', qresult.target)
         self.assertEqual('2.2.26+', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
-        self.assertEqual('VJ37CF56012', qresult.rid)
+        self.assertEqual('X76FDCG9016', qresult.rid)
         self.assertEqual(5, len(qresult))
 
         # check if we've finished iteration over qresults
