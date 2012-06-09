@@ -94,11 +94,13 @@ _WRITER_MAP = {
 }
 
 # dictionary of supported conversions for convert()
-_CONVERSION_MAP = {
-        ('blast-xml', 'blast-tab'): ('_convert', '_blastxml_to_blasttab'),
-        ('blast-xml', 'blast-text'): ('_convert', '_blastxml_to_blasttext'),
+_CONVERSIONS = (
+        ('blast-tab', 'blast-tab'),
+        ('blast-xml', 'blast-xml'),
+        ('blast-xml', 'blast-tab'),
+        ('blast-xml', 'blast-text'),
         # ...
-}
+)
 
 
 def _get_handler(format, mapping):
@@ -291,13 +293,12 @@ def convert(in_file, in_format, out_file, out_format):
     """
     convert_pair = (in_format, out_format)
 
-    try:
-        converter = _CONVERSION_MAP[convert_pair]
-    except KeyError:
+    if convert_pair not in _CONVERSIONS:
         raise ValueError("Conversion from '%s' to '%s' is not supported" % \
                 (in_format, out_format))
 
-    converter(in_format, out_format)
+    qresults = parse(in_file, in_format)
+    return write(qresults, out_file, out_format)
 
 
 def _test():
