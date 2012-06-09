@@ -158,7 +158,7 @@ def parse(handle, format=None):
             yield qresult
 
 
-def read(handle, format):
+def read(handle, format=None):
     """Turns a search output file into a single QueryResult.
 
     Arguments:
@@ -200,7 +200,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     return qdict
 
 
-def index(handle, format, key_function=None):
+def index(handle, format=None, key_function=None):
     """Indexes a search output file and returns a dictionary-like object.
 
     Arguments:
@@ -243,7 +243,7 @@ def index_db(index_filename, filenames=None, format=None, \
     return DbIndexedSearch(index_filename, filenames, format, key_function)
 
 
-def write(qresults, handle, format):
+def write(qresults, handle, format=None):
     """Writes QueryResult objects to a file in the given format.
 
     Arguments:
