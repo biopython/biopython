@@ -303,21 +303,24 @@ class HmmerTextIterator(object):
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
                 if self._meta.get('program') == 'hmmscan':
-                    hsp.hit_from = parsed[6]
-                    hsp.hit_to = parsed[7]
+                    # adjust 'from' and 'to' coordinates to 0-based ones
+                    hsp.hit_from = int(parsed[6]) - 1
+                    hsp.hit_to = int(parsed[7]) - 1
+                    hsp.query_from = int(parsed[9]) - 1
+                    hsp.query_to = int(parsed[10]) - 1
                     hsp.hit_endtype = parsed[8]
-                    hsp.query_from = parsed[9]
-                    hsp.query_to = parsed[10]
                     hsp.query_endtype = parsed[11]
                 else:
-                    hsp.hit_from = parsed[9]
-                    hsp.hit_to = parsed[10]
+                    # adjust 'from' and 'to' coordinates to 0-based ones
+                    hsp.hit_from = int(parsed[9]) - 1
+                    hsp.hit_to = int(parsed[10]) - 1
+                    hsp.query_from = int(parsed[6]) - 1
+                    hsp.query_to = int(parsed[7]) - 1
                     hsp.hit_endtype = parsed[11]
-                    hsp.query_from = parsed[6]
-                    hsp.query_to = parsed[7]
                     hsp.query_endtype = parsed[8]
-                hsp.env_from = parsed[12]
-                hsp.env_to = parsed[13]
+                # adjust 'from' and 'to' coordinates to 0-based ones
+                hsp.env_from = int(parsed[12]) - 1
+                hsp.env_to = int(parsed[13]) - 1
                 hsp.env_endtype = parsed[14]
                 hsp.acc_avg = parsed[15]
 

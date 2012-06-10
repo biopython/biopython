@@ -263,6 +263,9 @@ class BlastTabIterator(object):
                 hit[_COLUMN_HIT[attr_name]] = value
 
             elif attr_name in _COLUMN_HSP:
+                # adjust 'from' and 'to' coordinates to 0-based ones
+                if attr_name in ['qstart', 'qend', 'sstart', 'send']:
+                    value = int(value) - 1
                 hsp[_COLUMN_HSP[attr_name]] = value
             # make sure that any unhandled field is not supported
             else:

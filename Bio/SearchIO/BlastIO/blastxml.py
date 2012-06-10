@@ -190,7 +190,12 @@ class BlastXmlIterator(object):
             hsp = HSP(hit_id, query_id, hit_seq, query_seq)
 
             for hsp_tag in _ELEM_HSP:
-                setattr(hsp, _ELEM_HSP[hsp_tag], hsp_elem.findtext(hsp_tag))
+                value = hsp_elem.findtext(hsp_tag)
+                # adjust 'from' and 'to' coordinates to 0-based ones
+                if value is not None and ('-from' in hsp_tag or '-to' \
+                        in hsp_tag):
+                    value = int(value) - 1
+                setattr(hsp, _ELEM_HSP[hsp_tag], value)
 
             # delete element after we finish parsing it
             hsp_elem.clear()
