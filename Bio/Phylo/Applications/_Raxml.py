@@ -6,15 +6,6 @@
 
 Derived from the help page for RAxML version 7.3 by Alexandros Stamatakis, but
 should work for any version 7.X (and probably earlier for most options).
-
-Homepage: http://wwwkramer.in.tum.de/exelixis/software.html
-
-Citation:
-
-    Stamatakis A.
-    RAxML-VI-HPC: Maximum Likelihood-based Phylogenetic Analyses with Thousands
-    of Taxa and Mixed Models.
-    Bioinformatics 2006, 22(21):2688-2690.
 """
 __docformat__ = "restructuredtext en"
 
@@ -28,10 +19,19 @@ class RaxmlCommandline(AbstractCommandline):
     The parameter 'parsimony_seed' (-p) must also be set for RAxML, but if you
     do not specify it, this wrapper will set the seed to 10000 for you.
 
+    Homepage: http://wwwkramer.in.tum.de/exelixis/software.html
+
+    Citation:
+
+        Stamatakis A.
+        RAxML-VI-HPC: Maximum Likelihood-based Phylogenetic Analyses with
+        Thousands of Taxa and Mixed Models.
+        Bioinformatics 2006, 22(21):2688-2690.
+
     Example:
 
         >>> from Bio.Phylo.Applications import RaxmlCommandline
-        >>> cmd = RaxmlCommandline(sequences="Tests/interlaced2.phy",
+        >>> cmd = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
         ...                        model="PROTCATWAG", name="interlaced2")
         >>> print cmd
         raxmlHPC -m PROTCATWAG -n int -p 10000 -s Tests/interlaced2.phy
