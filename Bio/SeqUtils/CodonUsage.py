@@ -3,7 +3,7 @@ from CodonUsageIndices import SharpEcoliIndex
 from Bio import SeqIO # To parse a FASTA file
 
 
-_codons_dict = {'TTT':0, 'TTC':0, 'TTA':0, 'TTG':0, 'CTT':0, 
+CodonsDict = {'TTT':0, 'TTC':0, 'TTA':0, 'TTG':0, 'CTT':0, 
 'CTC':0, 'CTA':0, 'CTG':0, 'ATT':0, 'ATC':0, 
 'ATA':0, 'ATG':0, 'GTT':0, 'GTC':0, 'GTA':0, 
 'GTG':0, 'TAT':0, 'TAC':0, 'TAA':0, 'TAG':0, 
@@ -19,7 +19,7 @@ _codons_dict = {'TTT':0, 'TTC':0, 'TTA':0, 'TTG':0, 'CTT':0,
 
 
 # this dictionary shows which codons encode the same AA
-_aa_to_codons = {
+SynonymousCodons = {
     'CYS': ['TGT', 'TGC'], 
     'ASP': ['GAT', 'GAC'],
     'SER': ['TCT', 'TCG', 'TCA', 'TCC', 'AGC', 'AGT'],
@@ -83,10 +83,10 @@ class CodonAdaptationIndex(object):
     
         # now to calculate the index we first need to sum the number of times
         # synonymous codons were used all together.
-        for aa in _aa_to_codons:
+        for aa in SynonymousCodons:
             total = 0.0
             rcsu = [] # RCSU values are CodonCount/((1/num of synonymous codons) * sum of all synonymous codons)
-            codons = _aa_to_codons[aa]
+            codons = SynonymousCodons[aa]
             
             for codon in codons:
                 total += self.codon_count[codon]
@@ -133,7 +133,7 @@ class CodonAdaptationIndex(object):
         handle = open(fasta_file, 'r')
         
         # make the codon dictionary local
-        self.codon_count = _codons_dict.copy()
+        self.codon_count = CodonsDict.copy()
 
         # iterate over sequence and count all the codons in the FastaFile.
         for cur_record in SeqIO.parse(handle, "fasta"):
