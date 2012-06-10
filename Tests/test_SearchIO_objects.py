@@ -71,8 +71,8 @@ class QueryResultCases(unittest.TestCase):
         self.assertRaises(TypeError, QueryResult, 'query_id', meta='test')
 
     def test_repr(self):
-        self.assertEqual("QueryResult(program='<unknown>', target='<unknown>', "
-                "id='query1', 3 hits)", repr(self.qresult))
+        self.assertEqual("QueryResult(id='query1', 3 hits)", \
+                repr(self.qresult))
 
     def test_iter(self):
         # iteration should return hits contained
@@ -336,10 +336,8 @@ class HitCases(unittest.TestCase):
 
     def test_repr(self):
         # test for cases with 1 or other alignment numbers
-        self.assertEqual("Hit(id='hit1', query_id='query1', 3 alignments)", \
+        self.assertEqual("Hit(id='hit1', query_id='query1', 3 hsps)", \
                 repr(self.hit))
-        self.assertEqual("Hit(id='hit1', query_id='query1', 1 alignment)", \
-                repr(self.hit[:1]))
 
     def test_hsps(self):
         # hsps should return the list of hsps contained
@@ -481,9 +479,6 @@ class HSPCases(unittest.TestCase):
     def test_repr(self):
         # test for minimum repr
         self.assertEqual("HSP(hit_id='hit_id', query_id='query_id')", repr(self.hsp))
-        # with evalue
-        self.hsp.evalue = 1e-25
-        self.assertEqual("HSP(hit_id='hit_id', query_id='query_id', evalue=1e-25)", repr(self.hsp))
 
     def test_getitem(self):
         # getitem not supported without alignment
@@ -539,10 +534,6 @@ class HSPWithAlignmentCases(unittest.TestCase):
         # test for minimum repr
         self.assertEqual("HSP(hit_id='hit_id', query_id='query_id', 12-column "
                 "alignment)", repr(self.hsp))
-        # with evalue
-        self.hsp.evalue = 1e-25
-        self.assertEqual("HSP(hit_id='hit_id', query_id='query_id', "
-                "evalue=1e-25, 12-column alignment)", repr(self.hsp))
 
     def test_getitem(self):
         # getitem is supported when alignment is present

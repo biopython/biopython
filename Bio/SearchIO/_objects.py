@@ -187,25 +187,27 @@ class QueryResult(BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_hits',)
 
-    def __init__(self, query_id, hits=[], program='<unknown>', \
-            target='<unknown>', hit_key_function=lambda hit: hit.id):
+    def __init__(self, id=None, hits=[], hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
         Arguments:
         query_id -- String of query sequence ID.
         hits     -- Iterator returning Hit objects.
-        program  -- String of search program name.
-        target   -- String of database name to search against.
         hit_key_function -- Function to define hit keys, defaults to a function
                             that return Hit object IDs.
 
         """
+        if id is None:
+            raise ValueError("Query ID string is required for QueryResult "
+                    "creation")
 
-        self.id = query_id
-        self.program = program
-        self.target = target
+        self.id = id
         self._hit_key_function = hit_key_function
         self._hits = OrderedDict()
+        # default program, target, and version
+        self.program = '<unknown>'
+        self.target = '<unknown>'
+        self.version = '<unknown>'
 
         # validate Hit objects and fill up self._hits
         for hit in hits:
@@ -213,11 +215,7 @@ class QueryResult(BaseSearchObject):
             self.append(hit)
 
     def __repr__(self):
-        hit = 'hit'
-        if len(self) != 1:
-            hit += 's'
-        return "QueryResult(program='%s', target='%s', id='%s', %i %s)" % \
-                (self.program, self.target, self.id, len(self), hit)
+        return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -295,8 +293,7 @@ class QueryResult(BaseSearchObject):
 
     def __reversed__(self):
         hits = reversed(list(self.hits))
-        obj =  self.__class__(self.id, hits, self.program, \
-                self.target, self._hit_key_function)
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -362,8 +359,7 @@ class QueryResult(BaseSearchObject):
             # should we return just a list of Hits instead of a full blown
             # QueryResult object if it's a slice?
             hits = list(self.hits)[hit_key]
-            obj =  self.__class__(self.id, hits, self.program, \
-                    self.target, self._hit_key_function)
+            obj =  self.__class__(self.id, hits, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
@@ -458,16 +454,14 @@ class QueryResult(BaseSearchObject):
     def filter_hit(self, hit_filter_func):
         """Creates a new QueryResult object whose Hit objects pass the filter function."""
         hits = [hit for hit in self.hits if hit_filter_func(hit)]
-        obj =  self.__class__(self.id, hits, self.program, \
-                self.target, self._hit_key_function)
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
     def filter_hsp(self, hsp_filter_func):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
         hits = [hit for hit in self.hits if hit.filter_hsp(hsp_filter_func)]
-        obj =  self.__class__(self.id, hits, self.program, \
-                self.target, self._hit_key_function)
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
@@ -624,8 +618,7 @@ class QueryResult(BaseSearchObject):
             self._hits = new_hits
         # otherwise, return a new sorted QueryResult object
         else:
-            obj =  self.__class__(self.id, sorted_hits, self.program, \
-                    self.target, self._hit_key_function)
+            obj =  self.__class__(self.id, sorted_hits, self._hit_key_function)
             self._transfer_attrs(obj)
             return obj
 
@@ -712,7 +705,7 @@ class Hit(BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_hsps',)
 
-    def __init__(self, hit_id, query_id, hsps=[]):
+    def __init__(self, id=None, query_id=None, hsps=[]):
         """Initializes a Hit object.
 
         Arguments:
@@ -721,8 +714,13 @@ class Hit(BaseSearchObject):
         hsps     -- Iterable returning HSP objects.
 
         """
+        if id is None:
+            raise ValueError("Hit ID string is required for Hit creation")
+        if query_id is None:
+            raise ValueError("Query ID string is required for Hit creation")
+
+        self.id = id
         self.query_id= query_id
-        self.id = hit_id
 
         self._hsps = []
         for hsp in hsps:
@@ -732,11 +730,8 @@ class Hit(BaseSearchObject):
             self._hsps.append(hsp)
 
     def __repr__(self):
-        al = 'alignment'
-        if len(self) != 1:
-            al += 's'
-        return "Hit(id='%s', query_id='%s', %i %s)" % (self.id, \
-                self.query_id, len(self), al)
+        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
+                len(self))
 
     def _hsps_get(self):
         return self._hsps
@@ -887,7 +882,7 @@ class HSP(BaseSearchObject):
 
     """
 
-    def __init__(self, hit_id, query_id, hit_seq='', query_seq='', \
+    def __init__(self, hit_id=None, query_id=None, hit_seq='', query_seq='', \
             alphabet=single_letter_alphabet):
         """Initializes an HSP object.
 
@@ -898,6 +893,11 @@ class HSP(BaseSearchObject):
         query_seq -- String or SeqRecord object of the aligned query sequence.
 
         """
+        if hit_id is None:
+            raise ValueError("Hit ID string is required for HSP creation")
+        if query_id is None:
+            raise ValueError("Query ID string is required for HSP creation")
+
         self.hit_id = hit_id
         self.query_id = query_id
         self._alphabet = alphabet
@@ -956,12 +956,7 @@ class HSP(BaseSearchObject):
     hit = property(fget=_hit_get, fset=_hit_set)
 
     def __repr__(self):
-        info = "hit_id='%s', query_id='%s'" % (self.hit_id, self.query_id)
-
-        try:
-            info += ", evalue=%s" % str(self.evalue)
-        except AttributeError:
-            pass
+        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
 
         try:
             info += ", %i-column alignment" % len(self)
