@@ -316,7 +316,7 @@ class BlastXmlIterator(object):
                     if hit:
 
                         # handle blast searches against databases with Blast's IDs
-                        if 'BL_ORD_ID' in hit.id:
+                        if hit.id.startswith('gnl|BL_ORD_ID|'):
                             real_id = hit.desc.split(' ')[0]
                             # only change the ID if it's not yet present in qresult
                             if real_id not in qresult:
