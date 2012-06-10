@@ -81,7 +81,7 @@ _ELEM_META = {
 # outside the <Iteration> tag
 # only used if query_{ID,def,len} is not found in <Iteration>
 # (seen in legacy Blast <2.2.14)
-_ELEM_QRESULTfallback = {
+_ELEM_QRESULT_FALLBACK = {
     'BlastOutput_query-ID': 'id',
     'BlastOutput_query-def': 'desc',
     'BlastOutput_query-len': 'len',
@@ -222,8 +222,8 @@ class BlastXmlIterator(object):
             # capture fallback values
             # these are used only if the first <Iteration> does not have any
             # ID, ref, or len.
-            elif event == 'end' and elem.tag in _ELEM_QRESULTfallback:
-                fallback_key = _ELEM_QRESULTfallback[elem.tag]
+            elif event == 'end' and elem.tag in _ELEM_QRESULT_FALLBACK:
+                fallback_key = _ELEM_QRESULT_FALLBACK[elem.tag]
                 fallback[fallback_key] = elem.text
                 elem.clear()
                 continue
