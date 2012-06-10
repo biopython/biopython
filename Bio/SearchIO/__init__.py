@@ -145,11 +145,6 @@ def parse(handle, format=None):
     format -- Lower case string denoting one of the supported formats.
 
     """
-    # check if handle type is correct
-    if not isinstance(handle, (basestring, file)):
-        raise TypeError("Handle must either be a handle to a file or its "
-                "name as string")
-
     # get the iterator object and do error checking
     iterator = _get_handler(format, _ITERATOR_MAP)
 
