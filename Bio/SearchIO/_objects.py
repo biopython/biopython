@@ -1114,7 +1114,7 @@ class HSP(BaseSearchObject):
                 self._init_len = self._ident_num + self._mismatch_num + \
                         self._gap_num
             except AttributeError:
-                raise ValueError("Not enough is known to compute initial length")
+                raise AttributeError("Not enough is known to compute initial length")
         return self._init_len
 
     def _init_len_set(self, value):
@@ -1128,7 +1128,7 @@ class HSP(BaseSearchObject):
                 self._ident_num = self._init_len - self._mismatch_num - \
                         self._gap_num
             except AttributeError:
-                raise ValueError("Not enough is known to compute identities")
+                raise AttributeError("Not enough is known to compute identities")
         return self._ident_num
 
     def _ident_num_set(self, value):
@@ -1142,7 +1142,7 @@ class HSP(BaseSearchObject):
                 self._mismatch_num = self._init_len - self._ident_num - \
                         self._gap_num
             except AttributeError:
-                raise ValueError("Not enough is known to compute mismatches")
+                raise AttributeError("Not enough is known to compute mismatches")
         return self._mismatch_num
 
     def _mismatch_num_set(self, value):
@@ -1156,7 +1156,7 @@ class HSP(BaseSearchObject):
                 self._gap_num = self._init_len - self._ident_num - \
                         self._mismatch_num
             except AttributeError:
-                raise ValueError("Not enough is known to compute gaps")
+                raise AttributeError("Not enough is known to compute gaps")
         return self._gap_num
 
     def _gap_num_set(self, value):
@@ -1174,7 +1174,7 @@ class HSP(BaseSearchObject):
                         self.hit.seq.tostring()))
                 self._gapopen_num = query_gapopen + hit_gapopen
             except AttributeError:
-                raise ValueError("Not enough is known to compute gap openings")
+                raise AttributeError("Not enough is known to compute gap openings")
 
         return self._gapopen_num
 
@@ -1191,7 +1191,7 @@ class HSP(BaseSearchObject):
             try:
                 self._ident_pct = self.ident_num / float(self.init_len) * 100
             except AttributeError:
-                raise ValueError("Not enough is known to compute identity percentage")
+                raise AttributeError("Not enough is known to compute identity percentage")
         return self._ident_pct
 
     def _ident_pct_set(self, value):
@@ -1204,7 +1204,7 @@ class HSP(BaseSearchObject):
             try:
                 self._pos_pct = self.pos_num / float(self.init_len) * 100
             except AttributeError:
-                raise ValueError("Not enough is known to compute positive percentage")
+                raise AttributeError("Not enough is known to compute positive percentage")
         return self._pos_pct
 
     def _pos_pct_set(self, value):
@@ -1217,7 +1217,7 @@ class HSP(BaseSearchObject):
             try:
                 self._gap_pct = self.gap_num / float(self.init_len) * 100
             except AttributeError:
-                raise ValueError("Not enough is known to compute gap percentage")
+                raise AttributeError("Not enough is known to compute gap percentage")
         return self._gap_pct
 
     def _gap_pct_set(self, value):
