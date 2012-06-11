@@ -417,9 +417,6 @@ class HmmerTextIndexer(SearchIndexer):
         # set query start and end marks
         self.qresult_start = _as_bytes('Query: ')
         self.qresult_end = _as_bytes('//')
-        # get meta information
-        # TODO: better way to do this instead of using the class directly?
-        self._meta =  HmmerTextIterator(self._handle)._meta
 
     def __iter__(self):
         handle = self._handle
@@ -427,15 +424,15 @@ class HmmerTextIndexer(SearchIndexer):
         start_offset = handle.tell()
 
         while True:
-            end_offset = handle.tell()
             line = read_forward(handle)
+            end_offset = handle.tell()
 
             if line.startswith(self.qresult_start):
                 regx = re.search(_QRE_ID_LEN, line)
                 qresult_key = regx.group(1).strip()
                 # qresult start offset is the offset of this line
                 # (starts with the start mark)
-                start_offset = end_offset
+                start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
                 yield _bytes_to_string(qresult_key), start_offset, \
                         end_offset - start_offset
@@ -445,34 +442,28 @@ class HmmerTextIndexer(SearchIndexer):
 
     def get_raw(self, offset):
         handle = self._handle
-        handle.seek(offset)
         qresult_raw = ''
 
+        # read header first
+        handle.seek(0)
         while True:
-            line = read_forward(handle)
-            # parse seq_len and id from the first line
-            if not qresult_raw:
-                assert line.startswith(self.qresult_start)
-                # get query id and length
-                regx = re.search(_QRE_ID_LEN, line)
-                self._meta['id'] = regx.group(1).strip()
-                self._meta['seq_len'] = regx.group(2)
-                qresult_raw += line
-            # break when we've reached qresult end
-            elif line.startswith(self.qresult_end):
+            line = handle.readline()
+            if line.startswith(self.qresult_start):
                 break
             qresult_raw += line
 
-        return qresult_raw
+        # and read the qresult raw string
+        handle.seek(offset)
+        while True:
+            # preserve whitespace, don't use read_forward
+            line = handle.readline()
+            qresult_raw += line
 
-    def get(self, offset):
-        qresult = SearchIndexer.get(self, offset)
-        # modify qresult object with header / meta values
-        qresult.seq_len = self._meta['seq_len']
-        qresult.program = self._meta['program']
-        qresult.version = self._meta['version']
-        qresult.target = self._meta['target']
-        return qresult
+            # break when we've reached qresult end
+            if line.startswith(self.qresult_end):
+                break
+
+        return qresult_raw
 
 
 def _test():
