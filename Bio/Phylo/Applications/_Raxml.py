@@ -34,7 +34,7 @@ class RaxmlCommandline(AbstractCommandline):
         >>> cmd = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
         ...                        model="PROTCATWAG", name="interlaced2")
         >>> print cmd
-        raxmlHPC -m PROTCATWAG -n int -p 10000 -s Tests/interlaced2.phy
+        raxmlHPC -m PROTCATWAG -n interlaced2 -p 10000 -s Tests/Phylip/interlaced2.phy
         >>> out, err = cmd()
 
     """
