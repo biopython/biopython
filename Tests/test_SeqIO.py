@@ -587,12 +587,16 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             assert base_alpha == given_base
     for given_alpha in bad:
         #These should all fail...
+        h = open(t_filename,mode)
         try:
-            print SeqIO.parse(open(t_filename,mode),t_format,given_alpha).next()
+            print SeqIO.parse(h,t_format,given_alpha).next()
+            h.close()
             assert False, "Forcing wrong alphabet, %s, should fail (%s)" \
                    % (repr(given_alpha), t_filename)
         except ValueError:
+            #Good - should fail
             pass
+        h.close()
     del good, bad, given_alpha, base_alpha
 
     if t_alignment:
@@ -600,7 +604,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
               % (t_format, t_filename)
 
         alignment = MultipleSeqAlignment(SeqIO.parse( \
-                    handle=open(t_filename,mode), format=t_format))
+                    handle=t_filename, format=t_format))
         assert len(alignment) == t_count
 
         alignment_len = alignment.get_alignment_length()
