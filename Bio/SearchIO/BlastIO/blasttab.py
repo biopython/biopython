@@ -428,6 +428,7 @@ class BlastTabIndexer(SearchIndexer):
 
                 if query_mark is None:
                     query_mark = line
+                    start_offset = end_offset
                 elif line.startswith(qid_mark):
                     qresult_key = line[len(qid_mark):].split()[0]
                 elif line == query_mark or 'BLAST processed' in line:
@@ -469,10 +470,13 @@ class BlastTabIndexer(SearchIndexer):
                 # if we've encountered another query mark, it's the start of
                 # another query
                 # if 'BLAST processed' is in line, it's one line before EOF
-                elif line == query_mark or 'BLAST processed' in line:
+                elif line == query_mark:
                     break
                 # append to the raw string as long as qresult is the same
                 qresult_raw += line
+
+                if 'BLAST processed' in line:
+                    break
 
         return qresult_raw
 
