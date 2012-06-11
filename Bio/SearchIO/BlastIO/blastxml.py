@@ -197,6 +197,11 @@ class BlastXmlIterator(object):
                     value = int(value) - 1
                 setattr(hsp, _ELEM_HSP[hsp_tag], value)
 
+            # set the homology characters into alignment_annotation dict
+            hm_chars = hsp_elem.findtext('Hsp_midline')
+            hsp.alignment_annotation = {}
+            hsp.alignment_annotation['homology'] = hm_chars
+
             # delete element after we finish parsing it
             hsp_elem.clear()
             yield hsp
@@ -449,6 +454,22 @@ class BlastXmlIndexer(SearchIndexer):
             setattr(qresult, key, value)
         return qresult
 
+
+class BlastXmlWriter(object):
+
+    """Writer for blast-xml output format."""
+
+    def __init__(self, handle):
+        self.handle = handle
+
+    def write_file(self, qresults):
+        pass
+
+    def build_preamble(self):
+        pass
+
+    def build_qresults(self):
+        pass
 
 def _test():
     """Run the Bio.SearchIO.BlastIO module's doctests.
