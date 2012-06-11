@@ -488,7 +488,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(AssertionError, qresults.next, )
 
     def test_tbt010(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt011)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt010)"
 
         xml_file = get_file('tbt010.txt')
         qresults = parse(xml_file, FMT)
@@ -568,7 +568,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(3, counter)
 
     def test_tbt011(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt010)"
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt011)"
 
         xml_file = get_file('tbt011.txt')
         qresults = parse(xml_file, FMT)
