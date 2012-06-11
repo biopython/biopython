@@ -5,12 +5,30 @@
 
 """Unit tests for Bio.Phylo.Applications wrappers."""
 
+import sys
 import os
 import unittest
-# from cStringIO import StringIO
 
 from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline
+
+#Try to avoid problems when the OS is in another language
+os.environ['LANG'] = 'C'
+
+phyml_exe = None
+if sys.platform=="win32":
+    raise MissingExternalDependencyError(\
+        "Testing PhyML on Windows not supported yet")
+else:
+    import commands
+    output = commands.getoutput("phyml -version")
+    if "not found" not in output and "PhyML v3.0" in output:
+        phyml_exe = "phyml"
+
+if not phyml_exe:
+    raise MissingExternalDependencyError(\
+        "Install PhyML 3.0 if you want to use the Bio.Phylo.Applications wrapper.")
+
 
 # Example Phylip file with 4 aligned protein sequences
 EX_PHYLIP = 'Phylip/interlaced2.phy'
@@ -20,7 +38,7 @@ class AppTests(unittest.TestCase):
 
     def test_phyml(self):
         """Run PhyML using the wrapper."""
-        cmd = PhymlCommandline(input=EX_PHYLIP, datatype='aa')
+        cmd = PhymlCommandline(phyml_exe, input=EX_PHYLIP, datatype='aa')
         # Smoke test
         try:
             out, err = cmd()
