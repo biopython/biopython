@@ -19,24 +19,25 @@ class RaxmlCommandline(AbstractCommandline):
     The parameter 'parsimony_seed' (-p) must also be set for RAxML, but if you
     do not specify it, this wrapper will set the seed to 10000 for you.
 
-    Homepage: http://wwwkramer.in.tum.de/exelixis/software.html
+    Example:
+
+    >>> from Bio.Phylo.Applications import RaxmlCommandline
+    >>> raxml_cline = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
+    ...                                model="PROTCATWAG", name="interlaced2")
+    >>> print raxml_cline
+    raxmlHPC -m PROTCATWAG -n interlaced2 -p 10000 -s Tests/Phylip/interlaced2.phy
+
+    You would typically run the command line with raxml_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
 
     Citation:
 
-        Stamatakis A.
-        RAxML-VI-HPC: Maximum Likelihood-based Phylogenetic Analyses with
-        Thousands of Taxa and Mixed Models.
-        Bioinformatics 2006, 22(21):2688-2690.
+    Stamatakis A.
+    RAxML-VI-HPC: Maximum Likelihood-based Phylogenetic Analyses with
+    Thousands of Taxa and Mixed Models.
+    Bioinformatics 2006, 22(21):2688-2690.
 
-    Example:
-
-        >>> from Bio.Phylo.Applications import RaxmlCommandline
-        >>> cmd = RaxmlCommandline(sequences="Tests/Phylip/interlaced2.phy",
-        ...                        model="PROTCATWAG", name="interlaced2")
-        >>> print cmd
-        raxmlHPC -m PROTCATWAG -n interlaced2 -p 10000 -s Tests/Phylip/interlaced2.phy
-        >>> out, err = cmd()
-
+    Homepage: http://wwwkramer.in.tum.de/exelixis/software.html 
     """
 
     def __init__(self, cmd='raxmlHPC', **kwargs):

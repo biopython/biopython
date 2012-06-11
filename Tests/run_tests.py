@@ -83,6 +83,7 @@ DOCTEST_MODULES = [
                    "Bio.KEGG.Enzyme",
                    "Bio.Motif",
                    "Bio.pairwise2",
+                   "Bio.Phylo.Applications._Raxml",
                    "Bio.Seq",
                    "Bio.SeqIO",
                    "Bio.SeqIO.AceIO",
