@@ -582,7 +582,9 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
             assert isinstance(base_alpha, given_base.__class__)
             assert base_alpha == given_base
         if t_count == 1:
-            record = SeqIO.read(open(t_filename,mode),t_format,given_alpha)
+            h = open(t_filename,mode)
+            record = SeqIO.read(h,t_format,given_alpha)
+            h.close()
             assert isinstance(base_alpha, given_base.__class__)
             assert base_alpha == given_base
     for given_alpha in bad:
