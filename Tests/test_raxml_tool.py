@@ -5,13 +5,28 @@
 
 """Unit tests for Bio.Phylo.Applications wrappers."""
 
+import sys
 import os
 import unittest
-# from cStringIO import StringIO
 
 from Bio import Phylo
 from Bio.Phylo.Applications import RaxmlCommandline
+from Bio import MissingExternalDependencyError
 
+raxml_exe = None
+if sys.platform=="win32":
+    raise MissingExternalDependencyError(\
+          "Testing RAxML on Windows not supported yet")
+else:
+    import commands
+    output = commands.getoutput("raxmlHPC -v")
+    if "not found" not in output and "This is RAxML" in output:
+        raxml_exe = "raxmlHPC"
+if not raxml_exe:
+    raise MissingExternalDependencyError(\
+        "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
+
+                                
 # Example Phylip file with 4 aligned protein sequences
 EX_PHYLIP = 'Phylip/interlaced2.phy'
 
@@ -20,7 +35,8 @@ class AppTests(unittest.TestCase):
 
     def test_raxml(self):
         """Run RAxML using the wrapper."""
-        cmd = RaxmlCommandline(sequences=EX_PHYLIP, model="PROTCATWAG",
+        cmd = RaxmlCommandline(raxml_exe,
+                               sequences=EX_PHYLIP, model="PROTCATWAG",
                                name="test")
         # The parsimony seed should be set automatically
         self.assert_('-p' in str(cmd))

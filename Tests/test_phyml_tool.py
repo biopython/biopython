@@ -11,6 +11,7 @@ import unittest
 
 from Bio import Phylo
 from Bio.Phylo.Applications import PhymlCommandline
+from Bio import MissingExternalDependencyError
 
 #Try to avoid problems when the OS is in another language
 os.environ['LANG'] = 'C'
