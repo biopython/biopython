@@ -535,11 +535,11 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     # Check Bio.SeqIO.read(...)
     if t_count == 1:
-        record = SeqIO.read(handle=open(t_filename,mode), format=t_format)
+        record = SeqIO.read(t_filename, format=t_format)
         assert isinstance(record, SeqRecord)
     else:
         try:
-            record = SeqIO.read(open(t_filename), t_format)
+            record = SeqIO.read(t_filename, t_format)
             assert False, "Bio.SeqIO.read(...) should have failed"
         except ValueError:
             #Expected to fail
@@ -577,7 +577,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
     for given_alpha in good:
         #These should all work...
         given_base = Alphabet._get_base_alphabet(given_alpha)
-        for record in SeqIO.parse(open(t_filename,mode),t_format,given_alpha):
+        for record in SeqIO.parse(t_filename,t_format,given_alpha):
             base_alpha = Alphabet._get_base_alphabet(record.seq.alphabet)
             assert isinstance(base_alpha, given_base.__class__)
             assert base_alpha == given_base
