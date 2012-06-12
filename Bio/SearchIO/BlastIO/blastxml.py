@@ -7,6 +7,8 @@
 # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
 
 import re
+from itertools import chain
+from xml.sax.saxutils import XMLGenerator
 try:
     from xml.etree import cElementTree as ET
 except ImportError:
@@ -53,7 +55,6 @@ _ELEM_HSP = {
     'Hsp_pattern-to': 'pattern_to',
     'Hsp_density': 'density',
 }
-
 # dictionary for mapping tag name and meta key name
 _ELEM_META = {
     'BlastOutput_db': 'target',
@@ -71,7 +72,6 @@ _ELEM_META = {
     'Parameters_sc-match': 'param_score_match',
     'Parameters_sc-mismatch': 'param_score_mismatch',
 }
-
 # these are fallback tags that store information on the first query
 # outside the <Iteration> tag
 # only used if query_{ID,def,len} is not found in <Iteration>
@@ -81,6 +81,85 @@ _ELEM_QRESULT_FALLBACK = {
     'BlastOutput_query-def': 'desc',
     'BlastOutput_query-len': 'len',
 }
+# element-attribute maps, for writing
+_WRITE_MAPS = {
+    'preamble': (
+        ('program', 'program'),
+        ('version', 'version'),
+        ('reference', 'reference'),
+        ('db', 'target'),
+        ('query-ID', 'id'),
+        ('query-def', 'desc'),
+        ('query-len', 'seq_len'),
+        ('param', None),
+    ),
+    'param': (
+        ('matrix', 'param_matrix'),
+        ('expect', 'param_evalue_threshold'),
+        ('sc-match', 'param_score_match'),
+        ('sc-mismatch', 'param_score_mismatch'),
+        ('gap-open', 'param_gap_open'),
+        ('gap-extend', 'param_gap_extend'),
+        ('filter', 'param_filter'),
+        ('pattern', 'param_pattern'),
+        ('entrez-query', 'param_entrez_query'),
+    ),
+    'qresult': (
+        ('query-ID', 'id'),
+        ('query-def', 'desc'),
+        ('query-len', 'seq_len'),
+    ),
+    'stat': (
+        ('db-num', 'stat_db_num'),
+        ('db-len', 'stat_db_len'),
+        ('hsp-len', 'stat_hsp_len'),
+        ('eff-space', 'stat_eff_space'),
+        ('kappa', 'stat_kappa'),
+        ('lambda', 'stat_lambda'),
+        ('entropy', 'stat_entropy'),
+    ),
+    'hit': (
+        ('id', 'id'),
+        ('def', 'desc'),
+        ('accession', 'acc'),
+        ('len', 'seq_len'),
+    ),
+    'hsp': (
+        ('bit-score', 'bitscore'),
+        ('score', 'bitscore_raw'),
+        ('evalue', 'evalue'),
+        ('query-from', 'query_from'),
+        ('query-to', 'query_to'),
+        ('hit-from', 'hit_from'),
+        ('hit-to', 'hit_to'),
+        ('pattern-from', 'pattern_from'),
+        ('pattern-to', 'pattern_to'),
+        ('query-frame', 'query_frame'),
+        ('hit-frame', 'hit_frame'),
+        ('identity', 'ident_num'),
+        ('positive', 'pos_num'),
+        ('gaps', 'gap_num'),
+        ('align-len', None),
+        ('density', 'density'),
+        ('qseq', 'query'),
+        ('hseq', 'hit'),
+        ('midline', None),
+    ),
+}
+# optional elements, based on the DTD
+_DTD_OPT = (
+    'BlastOutput_query-seq', 'BlastOutput_mbstat', 'Iteration_query-def',
+    'Iteration_query-len', 'Iteration-hits', 'Iteration_stat',
+    'Iteration_message', 'Parameters_matrix', 'Parameters_include',
+    'Parameters_sc-match', 'Parameters_sc-mismatch', 'Parameters_filter',
+    'Parameters_pattern', 'Parameters_entrez-query', 'Hit_hsps',
+    'Hsp_pattern-from', 'Hsp_patten-to', 'Hsp_query-frame', 'Hsp_hit-frame',
+    'Hsp_identity', 'Hsp_positive', 'Hsp_gaps', 'Hsp_align-len', 'Hsp_density',
+    'Hsp_midline',
+)
+
+# compile RE patterns
+_RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
 
 
 def blast_xml_iterator(handle):
@@ -450,21 +529,232 @@ class BlastXmlIndexer(SearchIndexer):
         return qresult
 
 
+class _BlastXmlGenerator(XMLGenerator):
+
+    """Event-based XML Generator."""
+
+    def __init__(self, out, encoding='utf-8', indent=" ", increment=2):
+        XMLGenerator.__init__(self, out, encoding)
+        # the indentation character
+        self._indent = indent
+        # nest level
+        self._level = 0
+        # how many indentation character should we increment per level
+        self._increment = increment
+        # container for names of tags with children
+        self._parent_stack = []
+
+    def startDocument(self):
+        """Starts the XML document."""
+        self._write('<?xml version="1.0"?>\n'
+                '<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" '
+                '"http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">\n')
+
+    def startElement(self, name, attrs={}, children=False):
+        """Starts an XML element.
+
+        Arguments:
+        name -- String of element name.
+        attrs -- Dictionary of element attributes.
+        children -- Boolean, whether the element has children or not.
+
+        """
+        self.ignorableWhitespace(self._indent * self._level)
+        XMLGenerator.startElement(self, name, attrs)
+
+    def endElement(self, name):
+        """Ends and XML element of the given name."""
+        XMLGenerator.endElement(self, name)
+        self._write('\n')
+
+    def startParent(self, name, attrs={}):
+        """Starts an XML element which has children.
+
+        Arguments:
+        name -- String of element name.
+        attrs -- Dictionary of element attributes.
+
+        """
+        self.startElement(name, attrs, children=True)
+        self._level += self._increment
+        self._write('\n')
+        # append the element name, so we can end it later
+        self._parent_stack.append(name)
+
+    def endParent(self):
+        """Ends an XML element with children."""
+        # the element to end is the one on top of the stack
+        name = self._parent_stack.pop()
+        self._level -= self._increment
+        self.ignorableWhitespace(self._indent * self._level)
+        self.endElement(name)
+
+    def startParents(self, *names):
+        """Starts XML elements without children."""
+        for name in names:
+            self.startParent(name)
+
+    def endParents(self, num):
+        """Ends XML elements, according to the given number."""
+        for i in range(num):
+            self.endParent()
+
+    def simpleElement(self, name, content=None):
+        """Creates an XML element without children with the given content."""
+        self.startElement(name, attrs={})
+        if content:
+            self.characters(content)
+        self.endElement(name)
+
+
 class BlastXmlWriter(object):
 
-    """Writer for blast-xml output format."""
+    """Stream-based BLAST+ XML Writer."""
 
     def __init__(self, handle):
-        self.handle = handle
+        self.xml = _BlastXmlGenerator(handle, 'utf-8')
 
     def write_file(self, qresults):
-        pass
+        """Writes the XML contents to the output handle."""
+        xml = self.xml
+        self.qresult_counter, self.hit_counter, self.hsp_counter = 0, 0, 0
 
-    def build_preamble(self):
-        pass
+        # get the first qresult, since the preamble requires its attr values
+        first_qresult = qresults.next()
+        # start the XML document, set the root element, and create the preamble
+        xml.startDocument()
+        xml.startParent('BlastOutput')
+        self.write_preamble(first_qresult)
+        # and write the qresults
+        xml.startParent('BlastOutput_iterations')
+        self.write_qresults(chain([first_qresult], qresults))
+        xml.endParents(2)
+        xml.endDocument()
 
-    def build_qresults(self):
-        pass
+        return self.qresult_counter, self.hit_counter, self.hsp_counter
+
+    def write_elem_block(self, block_name, map_name, obj):
+        """Writes sibling XML elements.
+
+        Arguments:
+        block_name -- String of common element name prefix.
+        map_name -- Dictionary name to for mapping element and attribute names.
+        obj -- Object whose attribute values will be used.
+
+        """
+        for elem, attr in _WRITE_MAPS[map_name]:
+            elem = block_name + elem
+            try:
+                content = str(getattr(obj, attr))
+            except AttributeError:
+                # ensure attrs that is not present is optional
+                assert elem in _DTD_OPT, "%s" % elem
+            else:
+                self.xml.simpleElement(elem, content)
+
+    def write_preamble(self, qresult):
+        """Writes the XML file preamble."""
+        xml = self.xml
+
+        for elem, attr in _WRITE_MAPS['preamble']:
+            elem = 'BlastOutput_' + elem
+            if elem == 'BlastOutput_param':
+                xml.startParent(elem)
+                self.write_param(qresult)
+                xml.endParent()
+                continue
+            try:
+                content = str(getattr(qresult, attr))
+            except AttributeError:
+                assert elem in _DTD_OPT
+            else:
+                if elem == 'BlastOutput_version':
+                    content = '%s %s' % (qresult.program.upper(), \
+                            qresult.version)
+                xml.simpleElement(elem, content)
+
+    def write_param(self, qresult):
+        """Writes the parameter block of the preamble."""
+        xml = self.xml
+        xml.startParent('Parameters')
+        self.write_elem_block('Parameters_', 'param', qresult)
+        xml.endParent()
+
+    def write_qresults(self, qresults):
+        """Writes QueryResult objects into iteration elements."""
+        xml = self.xml
+
+        for num, qresult in enumerate(qresults):
+            xml.startParent('Iteration')
+            xml.simpleElement('Iteration_iter-num', str(num+1))
+            self.write_elem_block('Iteration_', 'qresult', qresult)
+            # the Iteration_hits tag only has children if there are hits
+            if qresult:
+                xml.startParent('Iteration_hits')
+                self.write_hits(qresult.hits)
+                xml.endParent()
+            # otherwise it's a simple element without any contents
+            else:
+                xml.simpleElement('Iteration_hits', '')
+
+            xml.startParents('Iteration_stat', 'Statistics')
+            self.write_elem_block('Statistics_', 'stat', qresult)
+            xml.endParents(2)
+            # there's a message if no hits is present
+            if not qresult:
+                xml.simpleElement('Iteration_message', 'No hits found')
+            self.qresult_counter += 1
+            xml.endParent()
+
+    def write_hits(self, hits):
+        """Writes Hit objects."""
+        xml = self.xml
+        for num, hit in enumerate(hits):
+            xml.startParent('Hit')
+            xml.simpleElement('Hit_num', str(num+1))
+            self.write_elem_block('Hit_', 'hit', hit)
+            xml.startParent('Hit_hsps')
+            self.write_hsps(hit.hsps)
+            self.hit_counter += 1
+            xml.endParents(2)
+
+    def write_hsps(self, hsps):
+        """Writes HSP objects."""
+        xml = self.xml
+        for num, hsp in enumerate(hsps):
+            xml.startParent('Hsp')
+            xml.simpleElement('Hsp_num', str(num+1))
+            for elem, attr in _WRITE_MAPS['hsp']:
+                elem = 'Hsp_' + elem
+                try:
+                    # adjust values to mimic native BLAST+ XML output
+                    # adjust coordinates, from 0-based to 1-based
+                    if attr in ['query_from' ,'query_to' ,'hit_from', 'hit_to', \
+                            'pattern_from', 'pattern_to']:
+                        if hasattr(hsp, attr):
+                            content = getattr(hsp, attr)
+                        else:
+                            continue
+                        content = content + 1
+
+                    # for seqrecord objects, we only need the sequence string
+                    elif elem in ['Hsp_hseq', 'Hsp_qseq']:
+                        content = getattr(hsp, attr).seq.tostring()
+                    elif elem == 'Hsp_midline':
+                        content = hsp.alignment_annotation['homology']
+                    elif elem == 'Hsp_align-len':
+                        content = len(hsp)
+                    else:
+                        content = getattr(hsp, attr)
+                # make sure any elements that is not present is optional
+                # in the DTD
+                except AttributeError:
+                    assert elem in _DTD_OPT
+                else:
+                    xml.simpleElement(elem, str(content))
+            self.hsp_counter += 1
+            xml.endParent()
+
 
 def _test():
     """Run the Bio.SearchIO.BlastIO module's doctests.
