@@ -567,7 +567,7 @@ class HSPWithAlignmentCases(unittest.TestCase):
 
     def test_query_strand_set_ok(self):
         # only 1, 0, -1, and None is allowed as strands
-        for value in [-1, 0, 1, None]:
+        for value in [-1, 0, 1]:
             self.hsp.query_strand = value
             self.assertEqual(value, self.hsp.query_strand)
 
@@ -582,10 +582,6 @@ class HSPWithAlignmentCases(unittest.TestCase):
     def test_query_strand_from_frame_minus(self):
         self.hsp.query_frame = -2
         self.assertEqual(-1, self.hsp.query_strand)
-
-    def test_query_strand_from_frame_none(self):
-        self.hsp.query_frame = None
-        self.assertEqual(None, self.hsp.query_strand)
 
     def test_query_strand_error(self):
         self.assertRaises(AttributeError, self.hsp._query_strand_get, )
@@ -618,7 +614,7 @@ class HSPWithAlignmentCases(unittest.TestCase):
 
     def test_hit_strand_set_ok(self):
         # only 1, 0, -1, and None is allowed as strands
-        for value in [-1, 0, 1, None]:
+        for value in [-1, 0, 1]:
             self.hsp.hit_strand = value
             self.assertEqual(value, self.hsp.hit_strand)
 
@@ -633,10 +629,6 @@ class HSPWithAlignmentCases(unittest.TestCase):
     def test_hit_strand_from_frame_minus(self):
         self.hsp.hit_frame = -2
         self.assertEqual(-1, self.hsp.hit_strand)
-
-    def test_hit_strand_from_frame_none(self):
-        self.hsp.hit_frame = None
-        self.assertEqual(None, self.hsp.hit_strand)
 
     def test_hit_strand_error(self):
         self.assertRaises(AttributeError, self.hsp._hit_strand_get, )

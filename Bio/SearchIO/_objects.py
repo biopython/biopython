@@ -999,17 +999,14 @@ class HSP(BaseSearchObject):
             # handle if query frame is 0
             except ZeroDivisionError:
                 self._query_strand = 0
-            # handle if query frame is None
-            except TypeError:
-                self._query_strand = None
-            # and handle cases if query_frame is not set
-            except AttributeError:
+            # and handle cases if query_frame is not set or if it's None
+            except (AttributeError, TypeError):
                 raise AttributeError("Not enough is known to compute query strand")
         return self._query_strand
 
     def _query_strand_set(self, value):
         # follow SeqFeature's convention
-        if not value in [-1, 0, 1, None]:
+        if not value in [-1, 0, 1]:
             raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
                     value)
         self._query_strand = value
@@ -1054,17 +1051,14 @@ class HSP(BaseSearchObject):
             # handle if hit frame is 0
             except ZeroDivisionError:
                 self._hit_strand = 0
-            # handle if hit frame is None
-            except TypeError:
-                self._hit_strand = None
-            # and handle if hit_frame doesn't exist
-            except AttributeError:
+            # and handle cases if hit_frame is not set or if it's None
+            except (AttributeError, TypeError):
                 raise AttributeError("Not enought is known to compute hit strand")
         return self._hit_strand
 
     def _hit_strand_set(self, value):
         # follow SeqFeature's convention
-        if not value in [-1, 0, 1, None]:
+        if not value in [-1, 0, 1]:
             raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
                     value)
         self._hit_strand = value
