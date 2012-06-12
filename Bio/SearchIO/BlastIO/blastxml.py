@@ -208,10 +208,26 @@ class BlastXmlIterator(object):
 
             # create empty hit object
             hit_id = hit_elem.findtext('Hit_id')
-            hit = Hit(hit_id, query_id)
+            hit_desc = hit_elem.findtext('Hit_def')
+            # handle blast searches against databases with Blast's IDs
+            if hit_id.startswith('gnl|BL_ORD_ID|'):
+                blast_id = hit_id
+                id_desc = hit_desc.split(' ', 1)
+                hit_id = id_desc[0]
+                try:
+                    hit_desc = id_desc[1]
+                except IndexError:
+                    hit_desc = ''
+            else:
+                blast_id = ''
 
+            hit = Hit(hit_id, query_id)
             for hit_tag in _ELEM_HIT:
                 setattr(hit, _ELEM_HIT[hit_tag], hit_elem.findtext(hit_tag))
+
+            # blast_id is only set if the hit ID is Blast-generated
+            hit._blast_id = blast_id
+            hit.desc = hit_desc
 
             for hsp in self.parse_hsp(hit_elem.find('Hit_hsps'), query_id, \
                     hit_id):
@@ -393,15 +409,14 @@ class BlastXmlIterator(object):
                         query_id):
                     # only append the Hit object if we have HSPs
                     if hit:
-
-                        # handle blast searches against databases with Blast's IDs
-                        if hit.id.startswith('gnl|BL_ORD_ID|'):
-                            real_id = hit.desc.split(' ')[0]
-                            # only change the ID if it's not yet present in qresult
-                            if real_id not in qresult:
-                                id_desc = hit.desc.split(' ', 1)
-                                hit.id = id_desc[0]
-                                hit.desc = id_desc[1]
+                        if hit.id in qresult:
+                            # fallback to Blast-generated IDs, if the ID is already present
+                            # and restore the desc, too
+                            hit.desc = '%s %s' % (hit.id, hit.desc)
+                            hit.id = hit._blast_id
+                            # and change the hit_id of the HSPs contained
+                            for hsp in hit:
+                                hsp.hit_id = hit._blast_id
 
                         qresult.append(hit)
 
