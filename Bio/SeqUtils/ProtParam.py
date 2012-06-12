@@ -27,7 +27,7 @@ from Bio.Data import IUPACData
 class ProteinAnalysis(object):
     """Class containing methods for protein analysis.
 
-    The class init method takes only one argument, the protein sequence as a
+    The constructor takes one argument: the protein sequence as a
     string and builds a sequence object using the Bio.Seq module. This is done
     just to make sure the sequence is a protein sequence and not anything else.
     
@@ -44,39 +44,42 @@ class ProteinAnalysis(object):
     def count_amino_acids(self):
         """Count standard amino acids, returns a dict.
             
-        Simply counts the number times an amino acid is repeated in the protein
-        sequence. Returns a dictionary {AminoAcid:Number} and also stores the
-        dictionary in self.amino_acids_content.
+        Counts the number times each amino acid is in the protein
+        sequence. Returns a dictionary {AminoAcid:Number}.
+        
+        The return value is cached in self.amino_acids_content.
+        It is not recalculated upon subsequent calls.
         """
-        prot_dic = dict([(k, 0) for k in IUPACData.protein_letters])
-        for aa in prot_dic:
-            prot_dic[aa] = self.sequence.count(aa)
+        if self.amino_acids_content is None:
+            prot_dic = dict([(k, 0) for k in IUPACData.protein_letters])
+            for aa in prot_dic:
+                prot_dic[aa] = self.sequence.count(aa)
             
-        self.amino_acids_content = prot_dic
-        return prot_dic
+            self.amino_acids_content = prot_dic
+            
+        return self.amino_acids_content
     
     def get_amino_acids_percent(self):
-        """Calculate the amino acid content in percents.
+        """Calculate the amino acid content in percentages.
 
         The same as count_amino_acids only returns the Number in percentage of
-        entire sequence. Returns a dictionary and stores the dictionary in
-        self.amino_acids_content_percent.
+        entire sequence. Returns a dictionary of {AminoAcid:percentage.
+        
+        The return value is cached in self.amino_acids_percent.
         
         input is the dictionary self.amino_acids_content.
-        output is a dictionary with AA as keys.
+        output is a dictionary with amino acids as keys.
         """
-        if not self.amino_acids_content:
-            self.count_amino_acids()
+        if self.amino_acids_percent is None:
+            aa_counts = self.count_amino_acids()
                 
-        percentages = {}
-        for aa in self.amino_acids_content:
-            if self.amino_acids_content[aa] > 0:
-                percentages[aa] = self.amino_acids_content[aa] / float(self.length)
-            else:
-                percentages[aa] = 0
+            percentages = {}
+            for aa in aa_counts:
+                percentages[aa] = aa_counts[aa] / float(self.length)
                 
-        self.amino_acids_percent = percentages
-        return percentages
+            self.amino_acids_percent = percentages
+
+        return self.amino_acids_percent
 
     def molecular_weight (self):
         """Calculate MW from Protein sequence"""
@@ -98,12 +101,11 @@ class ProteinAnalysis(object):
         Calculates the aromaticity value of a protein according to Lobry, 1994.
         It is simply the relative frequency of Phe+Trp+Tyr.
         """
-        if not self.amino_acids_percent:
-            self.get_amino_acids_percent()
-        
         aromatic_aas = 'YWF'
+        aa_percentages = self.get_amino_acids_percent()
         
-        aromaticity = sum([self.amino_acids_percent[aa] for aa in aromatic_aas])
+        aromaticity = sum([aa_percentages[aa] for aa in aromatic_aas])
+
         return aromaticity
 
     def instability_index(self):
@@ -248,10 +250,9 @@ class ProteinAnalysis(object):
         
         Uses the module IsoelectricPoint to calculate the pI of a protein.
         """
-        if not self.amino_acids_content:
-            self.count_amino_acids()
+        aa_content = self.count_amino_acids()
             
-        ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, self.amino_acids_content)
+        ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return ie_point.pi()
         
     def secondary_structure_fraction (self):
@@ -266,12 +267,11 @@ class ProteinAnalysis(object):
         
         Returns a tuple of three integers (Helix, Turn, Sheet).
         """
-        if not self.amino_acids_percent:
-            self.get_amino_acids_percent()
+        aa_percentages = self.get_amino_acids_percent()
             
-        helix = sum([self.amino_acids_percent[r] for r in 'VIYFWL'])
-        turn = sum([self.amino_acids_percent[r] for r in 'NPGS'])
-        sheet = sum([self.amino_acids_percent[r] for r in 'EMAL'])
+        helix = sum([aa_percentages[r] for r in 'VIYFWL'])
+        turn  = sum([aa_percentages[r] for r in 'NPGS'])
+        sheet = sum([aa_percentages[r] for r in 'EMAL'])
 
         return helix, turn, sheet
 
