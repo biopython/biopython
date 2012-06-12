@@ -192,10 +192,10 @@ class BlastXmlIterator(object):
             for hsp_tag in _ELEM_HSP:
                 value = hsp_elem.findtext(hsp_tag)
                 # adjust 'from' and 'to' coordinates to 0-based ones
-                if value is not None and ('-from' in hsp_tag or '-to' \
-                        in hsp_tag):
-                    value = int(value) - 1
-                setattr(hsp, _ELEM_HSP[hsp_tag], value)
+                if value is not None:
+                    if '-from' in hsp_tag or '-to' in hsp_tag:
+                        value = int(value) - 1
+                    setattr(hsp, _ELEM_HSP[hsp_tag], value)
 
             # set the homology characters into alignment_annotation dict
             hm_chars = hsp_elem.findtext('Hsp_midline')
