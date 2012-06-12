@@ -153,7 +153,7 @@ _DTD_OPT = (
     'Iteration_message', 'Parameters_matrix', 'Parameters_include',
     'Parameters_sc-match', 'Parameters_sc-mismatch', 'Parameters_filter',
     'Parameters_pattern', 'Parameters_entrez-query', 'Hit_hsps',
-    'Hsp_pattern-from', 'Hsp_patten-to', 'Hsp_query-frame', 'Hsp_hit-frame',
+    'Hsp_pattern-from', 'Hsp_pattern-to', 'Hsp_query-frame', 'Hsp_hit-frame',
     'Hsp_identity', 'Hsp_positive', 'Hsp_gaps', 'Hsp_align-len', 'Hsp_density',
     'Hsp_midline',
 )
@@ -727,33 +727,48 @@ class BlastXmlWriter(object):
             for elem, attr in _WRITE_MAPS['hsp']:
                 elem = 'Hsp_' + elem
                 try:
-                    # adjust values to mimic native BLAST+ XML output
-                    # adjust coordinates, from 0-based to 1-based
-                    if attr in ['query_from' ,'query_to' ,'hit_from', 'hit_to', \
-                            'pattern_from', 'pattern_to']:
-                        if hasattr(hsp, attr):
-                            content = getattr(hsp, attr)
-                        else:
-                            continue
-                        content = content + 1
-
-                    # for seqrecord objects, we only need the sequence string
-                    elif elem in ['Hsp_hseq', 'Hsp_qseq']:
-                        content = getattr(hsp, attr).seq.tostring()
-                    elif elem == 'Hsp_midline':
-                        content = hsp.alignment_annotation['homology']
-                    elif elem == 'Hsp_align-len':
-                        content = len(hsp)
-                    else:
-                        content = getattr(hsp, attr)
+                    content = self.adjust_output(hsp, elem, attr)
                 # make sure any elements that is not present is optional
                 # in the DTD
                 except AttributeError:
-                    assert elem in _DTD_OPT
+                    assert elem in _DTD_OPT, "%s" % elem
                 else:
                     xml.simpleElement(elem, str(content))
             self.hsp_counter += 1
             xml.endParent()
+
+    def adjust_output(self, hsp, elem, attr):
+        """Adjusts output to mimic native BLAST+ XML as much as possible."""
+
+        # adjust coordinates
+        if attr in ['query_from' ,'query_to' ,'hit_from', 'hit_to', \
+                'pattern_from', 'pattern_to']:
+            # change from 0-based to 1-based
+            content = getattr(hsp, attr) + 1
+
+            # adjust for 'from' <--> 'to' flip if it's not a translated search
+            # and frames are different
+            # adapted from /src/algo/blast/format/blastxml_format.cpp#L216
+            if hsp.query_frame != 0 and hsp.hit_frame < 0:
+                if attr == 'hit_from':
+                    content = getattr(hsp, 'hit_to') + 1
+                elif attr == 'hit_to':
+                    content = getattr(hsp, 'hit_from') + 1
+
+        # for seqrecord objects, we only need the sequence string
+        elif elem in ['Hsp_hseq', 'Hsp_qseq']:
+            content = getattr(hsp, attr).seq.tostring()
+        elif elem == 'Hsp_midline':
+            content = hsp.alignment_annotation['homology']
+        elif elem == 'Hsp_align-len':
+            content = len(hsp)
+        elif elem in ['Hsp_evalue', 'Hsp_bit-score']:
+            # adapted from src/algo/blast/format/blastxml_format.cpp#L138-140
+            content = '%.*g' % (6, getattr(hsp, attr))
+        else:
+            content = getattr(hsp, attr)
+
+        return content
 
 
 def _test():
