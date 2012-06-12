@@ -63,7 +63,7 @@ class ProteinAnalysis(object):
         """Calculate the amino acid content in percentages.
 
         The same as count_amino_acids only returns the Number in percentage of
-        entire sequence. Returns a dictionary of {AminoAcid:percentage.
+        entire sequence. Returns a dictionary of {AminoAcid:percentage}.
         
         The return value is cached in self.amino_acids_percent.
         
@@ -157,17 +157,17 @@ class ProteinAnalysis(object):
 
     def gravy(self):
         """Calculate the gravy according to Kyte and Doolittle."""
-        total_gravy = sum([ProtParamData.kd[aa] for aa in self.sequence])
+        total_gravy = sum(ProtParamData.kd[aa] for aa in self.sequence)
             
         return total_gravy / self.length
 
 
     def _weight_list(self, window, edge):
-        '''Makes a list of relative weight of the
+        """Makes a list of relative weight of the
         window edges compared to the window center. The weights are linear.
         it actually generates half a list. For a window of size 9 and edge 0.4
         you get a list of [0.4, 0.55, 0.7, 0.85]. 
-        '''
+        """
         unit = 2 * (1.0 - edge) / (window - 1)
         weights = [0.0] * (window // 2)
         
