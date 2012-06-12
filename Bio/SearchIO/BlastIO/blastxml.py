@@ -413,10 +413,10 @@ class BlastXmlIndexer(SearchIndexer):
                 qlen = len(qend_mark) + qlen
                 # move pointer to original position
                 handle.seek((counter + 1) * block_size)
-                if qstart_id.startswith('Query_'):
+                if qstart_id.startswith(_as_bytes('Query_')):
                     qstart_id = qstart_desc.split(' ', 1)[0]
                 # yield key, offset, length
-                yield qstart_id, qstart_idx, qlen
+                yield _bytes_to_string(qstart_id), qstart_idx, qlen
 
             counter += 1
 
