@@ -46,7 +46,7 @@ class AppTests(unittest.TestCase):
             self.assert_(len(out) > 0)
             self.assert_(len(err) == 0)
             # Check the output tree
-            tree = Phylo.read('RAxML_bestTree.test', 'newick')
+            tree = Phylo.read('RAxML_result.test', 'newick')
             self.assertEqual(tree.count_terminals(), 4)
         finally:
             # Remove RAxML-generated files, or RAxML will complain bitterly
@@ -54,8 +54,10 @@ class AppTests(unittest.TestCase):
             for fname in ['RAxML_info.test',
                           'RAxML_log.test',
                           'RAxML_parsimonyTree.test',
+                          'RAxML_result.test',
+                          # Present in 7.2.X+  but not 7.0.4:
                           'RAxML_bestTree.test',
-                          'RAxML_result.test']:
+                         ]:
                 if os.path.isfile(fname):
                     os.remove(fname)
 
