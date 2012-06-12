@@ -17,27 +17,22 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
 
 
-# compile RE patterns
-_RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
-
-
 # element - optional qresult attribute name mapping
 _ELEM_QRESULT_OPT = {
     'Statistics_db-num': 'stat_db_num',
     'Statistics_db-len': 'stat_db_len',
     'Statistics_eff-space': 'stat_eff_space',
+    'Statistics_hsp-len': 'stat_hsp_len',
     'Statistics_kappa': 'stat_kappa',
     'Statistics_lambda': 'stat_lambda',
     'Statistics_entropy': 'stat_entropy',
 }
-
 # element - hit attribute name mapping
 _ELEM_HIT = {
     'Hit_def': 'desc',
     'Hit_accession': 'acc',
     'Hit_len': 'seq_len',
 }
-
 # element - hsp attribute name mapping
 _ELEM_HSP = {
     'Hsp_bit-score': 'bitscore',

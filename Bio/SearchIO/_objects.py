@@ -25,18 +25,18 @@ _INTS = (
         'init_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
         'hit_frame', 'gapopen_num', 'env_from', 'env_to', 'domain_index',
-        'gapopen_num',
+        'gapopen_num', 'bitscore_raw',
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
 )
 _FLOATS = (
         # qresult-specific attributes
-        'param_evalue_threshold', 'stat_eff_space', 'stat_kappa',
+        'param_evalue_threshold', 'stat_kappa', 'stat_eff_space',
         'stat_lambda', 'stat_entropy',
         # hit-specific attributes
         'domain_exp_num',
         # hsp attributes
-        'bitscore', 'bitscore_raw', 'evalue', 'ident_pct', 'pos_pct', 'bias',
+        'bitscore', 'evalue', 'ident_pct', 'pos_pct', 'bias',
         'evalue_cond', 'acc_avg',
 )
 
