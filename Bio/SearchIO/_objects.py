@@ -453,17 +453,19 @@ class QueryResult(BaseSearchObject):
 
     def filter_hit(self, hit_filter_func):
         """Creates a new QueryResult object whose Hit objects pass the filter function."""
-        hits = [hit for hit in self.hits if hit_filter_func(hit)]
-        obj =  self.__class__(self.id, hits, self._hit_key_function)
-        self._transfer_attrs(obj)
-        return obj
+        hits = (hit for hit in self.hits if hit_filter_func(hit))
+        if hits:
+            obj =  self.__class__(self.id, hits, self._hit_key_function)
+            self._transfer_attrs(obj)
+            return obj
 
     def filter_hsp(self, hsp_filter_func):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
-        hits = [hit for hit in self.hits if hit.filter_hsp(hsp_filter_func)]
-        obj =  self.__class__(self.id, hits, self._hit_key_function)
-        self._transfer_attrs(obj)
-        return obj
+        hits = (hit.filter_hsp(hsp_filter_func) for hit in self.hits)
+        if hits:
+            obj =  self.__class__(self.id, hits, self._hit_key_function)
+            self._transfer_attrs(obj)
+            return obj
 
     # marker for default self.pop() return value
     # this method is adapted from Python's built in OrderedDict.pop
@@ -796,9 +798,10 @@ class Hit(BaseSearchObject):
     def filter_hsp(self, hsp_filter_func):
         """Creates a new Hit object whose HSP objects pass the filter function."""
         hsps = [hsp for hsp in self.hsps if hsp_filter_func(hsp)]
-        obj = self.__class__(self.id, self.query_id, hsps)
-        self._transfer_attrs(obj)
-        return obj
+        if hsps:
+            obj = self.__class__(self.id, self.query_id, hsps)
+            self._transfer_attrs(obj)
+            return obj
 
     def pop(self, index=-1):
         return self._hsps.pop(index)
