@@ -13,7 +13,7 @@ Specifically, this module supports the following HMMER output formats:
 
   - Plain text - 'hmmer-text'
 
-And the following HMMER programs: hmmersearch, hmmerscan
+And the following HMMER programs: hmmsearch, hmmscan, phmmer
 
 More information are available through these links:
   - Web page: http://hmmer.janelia.org/
@@ -299,7 +299,7 @@ class HmmerTextIterator(object):
                 hsp.bias = parsed[3]
                 hsp.evalue_cond = parsed[4]
                 hsp.evalue = parsed[5]
-                # depending on whether the program is hmmsearch or hmmscan,
+                # depending on whether the program is hmmsearch, hmmscan, or phmmer
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
                 if self._meta.get('program') == 'hmmscan':
@@ -310,7 +310,7 @@ class HmmerTextIterator(object):
                     hsp.query_to = int(parsed[10]) - 1
                     hsp.hit_endtype = parsed[8]
                     hsp.query_endtype = parsed[11]
-                else:
+                elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                     # adjust 'from' and 'to' coordinates to 0-based ones
                     hsp.hit_from = int(parsed[9]) - 1
                     hsp.hit_to = int(parsed[10]) - 1
@@ -380,7 +380,7 @@ class HmmerTextIterator(object):
                         hsp.hit.description = 'hit HMM model'
                         hsp.query = aliseq
                         hsp.query.description = 'query protein sequence'
-                    elif self._meta.get('program') == 'hmmsearch':
+                    elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                         hsp.hit = aliseq
                         hsp.hit.description = 'hit protein sequence'
                         hsp.query = hmmseq
