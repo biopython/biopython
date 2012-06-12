@@ -37,7 +37,7 @@ class RaxmlCommandline(AbstractCommandline):
     Thousands of Taxa and Mixed Models.
     Bioinformatics 2006, 22(21):2688-2690.
 
-    Homepage: http://wwwkramer.in.tum.de/exelixis/software.html 
+    Homepage: http://sco.h-its.org/exelixis/software.html
     """
 
     def __init__(self, cmd='raxmlHPC', **kwargs):
