@@ -663,7 +663,8 @@ class BlastXmlWriter(object):
                 content = str(getattr(obj, attr))
             except AttributeError:
                 # ensure attrs that is not present is optional
-                assert elem in _DTD_OPT, "%s" % elem
+                assert elem in _DTD_OPT, "Element %s (attribute %s) not found" \
+                        % (elem, attr)
             else:
                 self.xml.simpleElement(elem, content)
 
@@ -681,7 +682,8 @@ class BlastXmlWriter(object):
             try:
                 content = str(getattr(qresult, attr))
             except AttributeError:
-                assert elem in _DTD_OPT
+                assert elem in _DTD_OPT, "Element %s (attribute %s) not found" \
+                        % (elem, attr)
             else:
                 if elem == 'BlastOutput_version':
                     content = '%s %s' % (qresult.program.upper(), \
@@ -746,7 +748,8 @@ class BlastXmlWriter(object):
                 # make sure any elements that is not present is optional
                 # in the DTD
                 except AttributeError:
-                    assert elem in _DTD_OPT, "%s" % elem
+                    assert elem in _DTD_OPT, "Element %s (attribute %s) not found" \
+                            % (elem, attr)
                 else:
                     xml.simpleElement(elem, str(content))
             self.hsp_counter += 1
