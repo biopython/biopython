@@ -460,7 +460,8 @@ class QueryResult(BaseSearchObject):
 
     def hit_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its Hits."""
-        hits = map(func, self.hits)
+        hits = (hit[:] for hit in self.hits)
+        hits = map(func, hits)
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -474,7 +475,7 @@ class QueryResult(BaseSearchObject):
 
     def hsp_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its HSPs."""
-        hits = filter(None, (hit.map(func) for hit in self))
+        hits = filter(None, (hit.map(func) for hit in self.hits[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -817,7 +818,7 @@ class Hit(BaseSearchObject):
 
     def map(self, func=None):
         """Creates a new Hit object, mapping the given function to its HSPs."""
-        hsps = map(func, self.hsps)
+        hsps = map(func, self.hsps[:])
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
