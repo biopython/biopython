@@ -8,7 +8,7 @@
 
 import re
 from itertools import chain
-from xml.sax.saxutils import XMLGenerator
+from xml.sax.saxutils import XMLGenerator, escape
 try:
     from xml.etree import cElementTree as ET
 except ImportError:
@@ -620,6 +620,13 @@ class _BlastXmlGenerator(XMLGenerator):
         if content:
             self.characters(content)
         self.endElement(name)
+
+    def characters(self, content):
+        # apply sax's filter first, then ours
+        content = escape(content)
+        for a, b in (('"', '&quot;'), ("'", '&apos;')):
+            content = content.replace(a, b)
+        self._write(content)
 
 
 class BlastXmlWriter(object):
