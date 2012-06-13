@@ -451,21 +451,33 @@ class QueryResult(BaseSearchObject):
             raise ValueError("Hit '%s' already present in this QueryResult." % \
                     hit_key)
 
-    def filter_hit(self, hit_filter_func):
+    def hit_filter(self, func=None):
         """Creates a new QueryResult object whose Hit objects pass the filter function."""
-        hits = (hit for hit in self.hits if hit_filter_func(hit))
-        if hits:
-            obj =  self.__class__(self.id, hits, self._hit_key_function)
-            self._transfer_attrs(obj)
-            return obj
+        hits = filter(func, self.hits)
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
+        self._transfer_attrs(obj)
+        return obj
 
-    def filter_hsp(self, hsp_filter_func):
+    def hit_map(self, func=None):
+        """Creates a new QueryResult object, mapping the given function to its Hits."""
+        hits = map(func, self.hits)
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
+        self._transfer_attrs(obj)
+        return obj
+
+    def hsp_filter(self, func=None):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
-        hits = (hit.filter_hsp(hsp_filter_func) for hit in self.hits)
-        if hits:
-            obj =  self.__class__(self.id, hits, self._hit_key_function)
-            self._transfer_attrs(obj)
-            return obj
+        hits = filter(None, (hit.filter(func) for hit in self.hits))
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
+        self._transfer_attrs(obj)
+        return obj
+
+    def hsp_map(self, func=None):
+        """Creates a new QueryResult object, mapping the given function to its HSPs."""
+        hits = filter(None, (hit.map(func) for hit in self))
+        obj =  self.__class__(self.id, hits, self._hit_key_function)
+        self._transfer_attrs(obj)
+        return obj
 
     # marker for default self.pop() return value
     # this method is adapted from Python's built in OrderedDict.pop
@@ -795,9 +807,17 @@ class Hit(BaseSearchObject):
         self._validate_hsp(hsp)
         self._hsps.append(hsp)
 
-    def filter_hsp(self, hsp_filter_func):
+    def filter(self, func=None):
         """Creates a new Hit object whose HSP objects pass the filter function."""
-        hsps = [hsp for hsp in self.hsps if hsp_filter_func(hsp)]
+        hsps = filter(func, self.hsps)
+        if hsps:
+            obj = self.__class__(self.id, self.query_id, hsps)
+            self._transfer_attrs(obj)
+            return obj
+
+    def map(self, func=None):
+        """Creates a new Hit object, mapping the given function to its HSPs."""
+        hsps = map(func, self.hsps)
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
