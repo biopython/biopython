@@ -1036,14 +1036,9 @@ class HSP(BaseSearchObject):
 
     def _query_span_get(self):
         # query sequence range (sans gaps)
-        if not hasattr(self, '_query_span'):
-            self._query_span = self.query_to - self.query_from + 1
-        return self._query_span
+        return self.query_to - self.query_from + 1
 
-    def _query_span_set(self, value):
-        self._query_span = value
-
-    query_span = property(fget=_query_span_get, fset=_query_span_set)
+    query_span = property(fget=_query_span_get)
 
     def _hit_strand_get(self):
         if not hasattr(self, '_hit_strand'):
@@ -1088,14 +1083,9 @@ class HSP(BaseSearchObject):
 
     def _hit_span_get(self):
         # hit sequence range (sans gaps)
-        if not hasattr(self, '_hit_span'):
-            self._hit_span = self.hit_to - self.hit_from + 1
-        return self._hit_span
+        return self.hit_to - self.hit_from + 1
 
-    def _hit_span_set(self, value):
-        self._hit_span = value
-
-    hit_span = property(fget=_hit_span_get, fset=_hit_span_set)
+    hit_span = property(fget=_hit_span_get)
 
     # The properties init_len, gap_num, mismatch_num, and ident_num are all
     # interconnected ~ we can infer the value of one if the others are all
