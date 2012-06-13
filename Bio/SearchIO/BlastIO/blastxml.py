@@ -211,7 +211,7 @@ class BlastXmlIterator(object):
             hit_desc = hit_elem.findtext('Hit_def')
             # handle blast searches against databases with Blast's IDs
             if hit_id.startswith('gnl|BL_ORD_ID|'):
-                blast_id = hit_id
+                blast_hit_id = hit_id
                 id_desc = hit_desc.split(' ', 1)
                 hit_id = id_desc[0]
                 try:
@@ -219,14 +219,14 @@ class BlastXmlIterator(object):
                 except IndexError:
                     hit_desc = ''
             else:
-                blast_id = ''
+                blast_hit_id = ''
 
             hit = Hit(hit_id, query_id)
             for hit_tag in _ELEM_HIT:
                 setattr(hit, _ELEM_HIT[hit_tag], hit_elem.findtext(hit_tag))
 
-            # blast_id is only set if the hit ID is Blast-generated
-            hit._blast_id = blast_id
+            # blast_hit_id is only set if the hit ID is Blast-generated
+            hit._blast_id = blast_hit_id
             hit.desc = hit_desc
 
             for hsp in self.parse_hsp(hit_elem.find('Hit_hsps'), query_id, \
@@ -372,17 +372,22 @@ class BlastXmlIterator(object):
                 # handle blast searches against databases with Blast's IDs
                 # TODO: handle Blast IDs of legacy blast suite?
                 if query_id.startswith('Query_'):
+                    # store the Blast-generated query ID
+                    blast_query_id = query_id
                     id_desc = query_desc.split(' ', 1)
                     query_id = id_desc[0]
                     try:
                         query_desc = id_desc[1]
                     except IndexError:
                         query_desc = ''
+                else:
+                    blast_query_id = ''
 
                 # create qresult and assign its attributes
                 qresult = QueryResult(query_id)
                 qresult.desc = query_desc
                 qresult.seq_len = query_len
+                qresult._blast_id = blast_query_id
                 for meta_attr in self._meta:
                     setattr(qresult, meta_attr, self._meta[meta_attr])
 
@@ -655,7 +660,7 @@ class BlastXmlWriter(object):
 
         return self.qresult_counter, self.hit_counter, self.hsp_counter
 
-    def write_elem_block(self, block_name, map_name, obj):
+    def write_elem_block(self, block_name, map_name, obj, opt_dict={}):
         """Writes sibling XML elements.
 
         Arguments:
@@ -670,9 +675,12 @@ class BlastXmlWriter(object):
                 content = str(getattr(obj, attr))
             except AttributeError:
                 # ensure attrs that is not present is optional
-                assert elem in _DTD_OPT, "Element %s (attribute %s) not found" \
+                assert elem in _DTD_OPT, "Element %r (attribute %r) not found" \
                         % (elem, attr)
             else:
+                # custom element-attribute mapping, for fallback values
+                if elem in opt_dict:
+                    content = opt_dict[elem]
                 self.xml.simpleElement(elem, content)
 
     def write_preamble(self, qresult):
@@ -695,6 +703,11 @@ class BlastXmlWriter(object):
                 if elem == 'BlastOutput_version':
                     content = '%s %s' % (qresult.program.upper(), \
                             qresult.version)
+                elif qresult._blast_id:
+                    if elem == 'BlastOutput_query-ID':
+                        content = qresult._blast_id
+                    elif elem == 'BlastOutput_query-def':
+                        content = ' '.join([qresult.id, qresult.desc]).strip()
                 xml.simpleElement(elem, content)
 
     def write_param(self, qresult):
@@ -711,7 +724,16 @@ class BlastXmlWriter(object):
         for num, qresult in enumerate(qresults):
             xml.startParent('Iteration')
             xml.simpleElement('Iteration_iter-num', str(num+1))
-            self.write_elem_block('Iteration_', 'qresult', qresult)
+            opt_dict = {}
+            # use custom Iteration_query-ID and Iteration_query-def mapping
+            # if the query has a BLAST-generated ID
+            if qresult._blast_id:
+                opt_dict = {
+                    'Iteration_query-ID': qresult._blast_id,
+                    'Iteration_query-def': ' '.join([qresult.id, \
+                            qresult.desc]).strip(),
+                }
+            self.write_elem_block('Iteration_', 'qresult', qresult, opt_dict)
             # the Iteration_hits tag only has children if there are hits
             if qresult:
                 xml.startParent('Iteration_hits')
@@ -733,10 +755,19 @@ class BlastXmlWriter(object):
     def write_hits(self, hits):
         """Writes Hit objects."""
         xml = self.xml
+
         for num, hit in enumerate(hits):
             xml.startParent('Hit')
             xml.simpleElement('Hit_num', str(num+1))
-            self.write_elem_block('Hit_', 'hit', hit)
+            # use custom hit_id and hit_def mapping if the hit has a
+            # BLAST-generated ID
+            opt_dict = {}
+            if hit._blast_id:
+                opt_dict = {
+                    'Hit_id': hit._blast_id,
+                    'Hit_def': ' '.join([hit.id, hit.desc]).strip(),
+                }
+            self.write_elem_block('Hit_', 'hit', hit, opt_dict)
             xml.startParent('Hit_hsps')
             self.write_hsps(hit.hsps)
             self.hit_counter += 1
