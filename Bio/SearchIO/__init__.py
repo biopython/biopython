@@ -256,6 +256,10 @@ def write(qresults, handle, format=None):
         raise TypeError("Handle must either be a handle to a file or its "
                 "name as string")
 
+    # turn qresults into an iterator if it's a single QueryResult object
+    if isinstance(qresults, QueryResult):
+        qresults = iter([qresults])
+
     # get the writer object and do error checking
     writer_class = _get_handler(format, _WRITER_MAP)
 
