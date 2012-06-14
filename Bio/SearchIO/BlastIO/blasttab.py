@@ -66,7 +66,7 @@ _COLUMN_HIT = {
     'slen': 'seq_len',
 }
 _COLUMN_HSP = {
-    'length': 'init_len',
+    'length': 'ali_len',
     'bitscore': 'bitscore',
     'score': 'bitscore_raw',
     'evalue': 'evalue',
