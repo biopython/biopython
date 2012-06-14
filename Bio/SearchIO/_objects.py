@@ -201,7 +201,7 @@ class QueryResult(BaseSearchObject):
             raise ValueError("Query ID string is required for QueryResult "
                     "creation")
 
-        self.id = id
+        self._id = id
         self._hit_key_function = hit_key_function
         self._hits = OrderedDict()
         # default program, target, and version
@@ -425,6 +425,17 @@ class QueryResult(BaseSearchObject):
             for key in hit_keys:
                 del self._hits[key]
             return
+
+    def _id_get(self):
+        return self._id
+
+    def _id_set(self, value):
+        self._id = value
+        # set all Hit IDs contained to have the new Query ID
+        for hit in self.hits:
+            hit.query_id = value
+
+    id = property(fget=_id_get, fset=_id_set)
 
     def append(self, hit):
         """Adds a Hit object to the end of QueryResult.
@@ -734,8 +745,8 @@ class Hit(BaseSearchObject):
         if query_id is None:
             raise ValueError("Query ID string is required for Hit creation")
 
-        self.id = id
-        self.query_id= query_id
+        self._id = id
+        self._query_id= query_id
 
         self._hsps = []
         for hsp in hsps:
@@ -752,6 +763,29 @@ class Hit(BaseSearchObject):
         return self._hsps
 
     hsps = property(fget=_hsps_get)
+
+    def _id_get(self):
+        return self._id
+
+    def _id_set(self, value):
+        self._id = value
+        # set all HSP IDs contained to have the new Hit ID
+        for hsp in self.hsps:
+            hsp.hit_id = value
+
+    id = property(fget=_id_get, fset=_id_set)
+
+    def _query_id_get(self):
+        return self._query_id
+
+    def _query_id_set(self, value):
+        self._query_id = value
+        # set all HSP query IDs contained to have the new query ID
+        if self.hsps:
+            for hsp in self.hsps:
+                hsp.query_id = value
+
+    query_id = property(fget=_query_id_get, fset=_query_id_set)
 
     def __iter__(self):
         return iter(self._hsps)
