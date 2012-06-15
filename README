@@ -6,10 +6,10 @@ available Python tools for computational molecular biology.
 
 Our website http://www.biopython.org provides an online resource for modules,
 scripts, and web links for developers of Python-based software for life
-science research.  This is hosted by the Open Bioinformatics Foundation or
+science research. This is hosted by the Open Bioinformatics Foundation or
 O|B|F, http://www.open-bio.org, who also host BioPerl etc.
 
-This Biopython package is made available under generous terms.  Please
+This Biopython package is made available under generous terms. Please
 see the LICENSE file for further details.
 
 If you use Biopython in work contributing to a scientific publication, we ask
@@ -41,14 +41,14 @@ System Requirements
  
 - NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
   This package is only used in the computationally-oriented modules.
-  It is required for Bio.Cluster, Bio.PDB and a few other modules.  If you
+  It is required for Bio.Cluster, Bio.PDB and a few other modules. If you
   think you might need these modules, then please install NumPy first BEFORE
   installing Biopython. The older Numeric library is no longer supported in
   Biopython.
 
 - ReportLab, see http://www.reportlab.org/downloads.html (optional)
   This package is only used in Bio.Graphics, so if you do not need this
-  functionality, you will not need to install this package.  You can install
+  functionality, you will not need to install this package. You can install
   it later if needed.
 
 - psycopg2, see http://initd.org/software/psycopg/ (optional) or
@@ -94,7 +94,7 @@ Testing
 =======
 
 Biopython includes a suite of regression tests to check if everything is
-running correctly.  To do the tests, go to the biopython source code directory
+running correctly. To do the tests, go to the biopython source code directory
 and type:
 
     python setup.py test
@@ -103,9 +103,9 @@ Do not panic if you see messages warning of skipped tests:
 
     test_DocSQL ... skipping. Install MySQLdb if you want to use Bio.DocSQL.
 
-This most likely means that a package is not installed.  You can
+This most likely means that a package is not installed. You can
 ignore this if it occurs in the tests for a module that you were not
-planning on using.  If you did want to use that module, please install
+planning on using. If you did want to use that module, please install
 the required dependency and re-run the tests.
 
 
@@ -124,7 +124,7 @@ static backups of everything up to and including Biopython 1.52.
 Bugs
 ====
 
-While we try to ship a robust package, bugs inevitably pop up.  If you are
+While we try to ship a robust package, bugs inevitably pop up. If you are
 having problems that might be caused by a bug in Biopython, it is possible
 that it has already been identified. Update to the latest release if you are
 not using it already, and retry. If the problem persists, please search our
@@ -134,8 +134,8 @@ and if not please do report the bug. We can't fix problems we don't know
 about ;)
 
 If you suspect the problem lies within a parser, it is likely that the data
-format has changed and broken the parsing code.  (The text BLAST and GenBank
-formats seem to be particularly fragile.)  Thus, the parsing code in
+format has changed and broken the parsing code. (The text BLAST and GenBank
+formats seem to be particularly fragile.) Thus, the parsing code in
 Biopython is sometimes updated faster than we can build Biopython releases.
 You can get the most recent parser by pulling the relevant files (e.g. the
 ones in Bio.SeqIO or Bio.Blast) from our git repository. However, be careful
@@ -143,7 +143,7 @@ when doing this, because the code in github is not as well-tested as released
 code, and may contain new dependencies.
 
 Finally, you can send a bug report to the bug database or the mailing list at
-biopython@biopython.org.  In the bug report, please let us know:
+biopython@biopython.org. In the bug report, please let us know:
 
  1. Which operating system and hardware (32 bit or 64 bit) you are using
  2. Python version
