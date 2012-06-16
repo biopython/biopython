@@ -1,31 +1,76 @@
-# xpktools.py: A python module containing function definitions and classes
-#          useful for manipulating data from nmrview .xpk peaklist files.
-#
-# ********** INDEX of functions and classes **********
-#
-#    XpkEntry class: A class suited for handling single lines of
-#        non-header data from an nmrview .xpk file.  This class
-#        provides methods for extracting data by the field name
-#        which is listed in the last line of the peaklist header.
+# initial pass through, going to check out the other
+"""xpktools.py: A python module containing function definitions and classesuseful for manipulating data from nmrview .xpk peaklist files.
+
+Extended
+
+See also
+
+Notes
+
+references
+
+example
+
+"""
+
+__docformat__ = "restructuredtext en"
 
 import sys
 
-# * * * * * INITIALIZATIONS * * * * *
+
 HEADERLEN=6
-# * * * * * _______________ * * * * *
 
 class XpkEntry(object):
-    # Usage: XpkEntry(xpkentry,xpkheadline) where xpkentry is the line
-    #        from an nmrview .xpk file and xpkheadline is the line from
-    #        the header file that gives the names of the entries
-    #        which is typcially the sixth line of the header (counting fm 1)
-    # Variables are accessed by either their name in the header line as in
-    #   self.field["H1.P"] will return the H1.P entry for example.
-    #   self.field["entrynum"] returns the line number (1st field of line)
+    """Provide dictonary access to single entry from nmrview .xpk file.
+
+    This class is suited for handling single lines of
+    non-header data from an nmrview .xpk file.  This class
+    provides methods for extracting data by the field name
+    which is listed in the last line of the peaklist header.
+
+    Parameters
+    ----------
+
+    xpkentry : str
+        the line from an nmrview .xpk file
+    xpkheadline : str
+        the line from the header file that gives the names of the entries
+
+    Attributes
+    ----------
+    fields : {dictionary}
+        dictionary of fields where key is in header line, value is entry
+
+    Raises
+    ------
+    
+    Notes
+    -----
+
+    Variables are accessed by either their name in the header line as in
+
+    Notes
+    -----
+
+    References
+    ----------
+
+    Examples
+    --------
+
+    Variables are accessed by either their name in the header line as in
+    self.field["H1.P"] will return the H1.P entry for example.
+    self.field["entrynum"] returns the line number (1st field of line)
+    
+    """
 
     def __init__(self,entry,headline):
-       self.fields={}   # Holds all fields from input line in a dictionary
-                        # keys are data labels from the .xpk header 
+        """Holds all fields from input line in a dictionary
+        keys are data labels from the .xpk header 
+        ^^^
+
+        """
+       self.fields={}   
        datlist  = entry.split()
        headlist = headline.split()
 
@@ -40,9 +85,55 @@ class XpkEntry(object):
            pass
 
 class Peaklist(object):
+    """Read in an entire xpk file and return ??
+
     # This class reads in an entire xpk file and returns
     # Header file lines are available as attributes
     # The data lines are available as a list
+
+    Extended Summary : clarify functionality
+
+    Parameters
+    ----------
+
+    xpkentry : str
+        the line from an nmrview .xpk file
+    xpkheadline : str
+        the line from the header file that gives the names of the entries
+
+    Attributes
+    ----------
+    data : {list}
+        dictionary of ?? 
+    firstline : str
+        what
+    axislabels : str
+        what
+    dataset : str 
+        what
+    sw : str
+        what
+    sf :  str
+        what
+    datalabels :str
+        what
+
+    Raises
+    ------
+    
+    Notes
+    -----
+
+    References
+    ----------
+
+    Examples
+    --------
+    
+
+
+    """
+
     def __init__(self,infn):
     
         self.data=[]    # init the data line list
@@ -64,9 +155,38 @@ class Peaklist(object):
         line=infile.readline()
 
     def residue_dict(self,index):
-        # Generate a dictionary idexed by residue number or a nucleus
-        # The nucleus should be given as the input argument in the
-        # same form as it appears in the xpk label line (H1, 15N for example)
+        """Generate a dictionary idexed by residue number or a nucleus.
+
+        The nucleus should be given as the input argument in the same form as 
+        it appears in the xpk label line (H1, 15N for example)
+
+        Context
+
+        Parameters
+        ----------
+        index : str
+            what is
+
+        Returns
+        -------
+        dict : {dictionary}
+            the thing generated
+
+        Raises
+        ------
+
+        See Also
+        --------
+
+        Notes
+        -----
+        The nucleus should be given as the input argument in the same form as 
+        it appears in the xpk label line (H1, 15N for example)
+
+        Example
+        -------
+
+        """
 
         maxres=-1; minres=-1
 
@@ -113,15 +233,40 @@ class Peaklist(object):
         outfile.close() 
 
 def _try_open_read(fn):
-# Try to open a file for reading.  Exit on IOError
-  try:
-    infile=open(fn,'r')
-  except IOError, e:
-    print "file", fn, "could not be opened for reading - quitting."
-    sys.exit(0)
-  return infile
+    """Try to open a file for reading.
+
+    Raises
+    ------
+    SystemExit
+        If IOError encountered while opening.
+
+    Returns
+    -------
+    fn file : file
+        File opened in text mode for reading.
+
+    """
+    try:
+        infile=open(fn,'r')
+    except IOError, e:
+        print "file", fn, "could not be opened for reading - quitting."
+        sys.exit(0)
+    return infile
 
 def _try_open_write(fn):
+    """Try to open a file for writing.
+
+    Raises
+    ------
+    SystemExit
+        If IOError encountered while opening.
+
+    Returns
+    -------
+    fn file : file
+        File opened in text mode for writing.
+
+    """
 # Try to open a file for writing.  Exit on IOError
   try:
     infile=open(fn,'w')
@@ -132,103 +277,137 @@ def _try_open_write(fn):
 
 
 def replace_entry(line,fieldn,newentry):
-        # Replace an entry in a string by the field number
-        # No padding is implemented currently.  Spacing will change if
-        #  the original field entry and the new field entry are of
-        #  different lengths.
-        # This method depends on xpktools._find_start_entry
+    """Replace an entry in a string by the field number.
 
-        start=_find_start_entry(line,fieldn)
-        leng=len(line[start:].split()[0])
-        newline=line[:start]+str(newentry)+line[(start+leng):]
-        return newline
+    No padding is implemented currently.  Spacing will change if
+    the original field entry and the new field entry are of
+    different lengths.
 
-def _find_start_entry(line,n):
-        # find the starting point character for the n'th entry in
-        # a space delimited line.  n is counted starting with 1
-        # The n=1 field by definition begins at the first character
-        # This function is used by replace_entry
+    This method depends on xpktools._find_start_entry
 
-        infield=0       # A flag that indicates that the counter is in a field
+    """
 
-        if (n==1):
-                return 0        # Special case
+    start=_find_start_entry(line,fieldn)
+    leng=len(line[start:].split()[0])
+    newline=line[:start]+str(newentry)+line[(start+leng):]
+    return newline
 
-        # Count the number of fields by counting spaces
-        c=1
-        leng=len(line)
+def _find_start_entry(line, n):
+    """Find the starting character for entry `n` in a space delimited `line`.
 
-        # Initialize variables according to whether the first character
-        #  is a space or a character
-        if (line[0]==" "):
-                infield=0
-                field=0
-        else:
-                infield=1
-                field=1
+    n is counted starting with 1
+    The n=1 field by definition begins at the first character
+
+    Returns
+    -------
+    starting character : str
+        The starting character for entry `n`.
+
+    Notes
+    -----
+    This function is used by replace_entry
+
+    """
+
+    # A flag that indicates that the counter is in a field
+    infield=0       
+
+    # Special case
+    if (n==1):
+            return 0        
+
+    # Count the number of fields by counting spaces
+    c=1
+    leng=len(line)
+
+    # Initialize variables according to whether the first character
+    #  is a space or a character
+    if (line[0]==" "):
+            infield=0
+            field=0
+    else:
+            infield=1
+            field=1
 
 
-        while (c<leng and field<n):
-                if (infield):
-                        if (line[c]==" " and not (line[c-1]==" ")):
-                                infield=0
-                else:
-                        if (not line[c]==" "):
-                                infield=1
-                                field=field+1
+    while (c<leng and field<n):
+            if (infield):
+                    if (line[c]==" " and not (line[c-1]==" ")):
+                            infield=0
+            else:
+                    if (not line[c]==" "):
+                            infield=1
+                            field=field+1
 
-                c=c+1
+            c=c+1
 
-        return c-1
+    return c-1
 
 
 def data_table(fn_list, datalabel, keyatom):
-# Generate and generate a data table from a list of
-# input xpk files <fn_list>.  The data element reported is
-# <datalabel> and the index for the data table is by the 
-# nucleus indicated by <keyatom>.
+    """Generate a data table from a list of input xpk files. 
 
-  outlist=[]
+    Parameters
+    ----------
+    fn_list : list
+        List of xpk file names.
+    datalabel : str
+        <datalabel> and the index for the data table is by the 
+    keyatom : str , int?
+        nucleus used as index for the data table
+    """
 
-  [dict_list,label_line_list]=_read_dicts(fn_list,keyatom)
 
-  # Find global max and min residue numbers
-  minr=dict_list[0]["minres"]; maxr=dict_list[0]["maxres"]
+
+    """Generate a data table from a list of input xpk files <fn_list>.  The data element reported is
+    # <datalabel> and the index for the data table is by the 
+    # nucleus indicated by <keyatom>.
+    """
+
+    outlist=[]
+
+    [dict_list,label_line_list]=_read_dicts(fn_list,keyatom)
+
+    # Find global max and min residue numbers
+    minr=dict_list[0]["minres"]
+    maxr=dict_list[0]["maxres"]
  
-  for dictionary in dict_list:
+    for dictionary in dict_list:
     if (maxr < dictionary["maxres"]):
-      maxr = dictionary["maxres"]
+        maxr = dictionary["maxres"]
     if (minr > dictionary["minres"]):
-      minr = dictionary["minres"]
+         minr = dictionary["minres"]
 
-  res=minr
-  while res <= maxr:        # s.t. res numbers
-    count=0
-    line=str(res)
-    for dictionary in dict_list:      # s.t. dictionaries
-      label=label_line_list[count]
-      if str(res) in dictionary:
-        line=line+"\t"+XpkEntry(dictionary[str(res)][0],label).fields[datalabel]
-      else:
-        line=line+"\t"+"*"
-      count=count+1
+    res=minr
+    while res <= maxr:        # s.t. res numbers
+        count=0
+        line=str(res)
+        for dictionary in dict_list:      # s.t. dictionaries
+        label=label_line_list[count]
+        if str(res) in dictionary:
+            line=line+"\t"+XpkEntry(dictionary[str(res)][0],label).fields[datalabel]
+        else:
+            line=line+"\t"+"*"
+        count=count+1
     line=line+"\n"
     outlist.append(line)
     res=res+1
 
-  return outlist
+    return outlist
 
 def _sort_keys(dictionary):
-  keys=dictionary.keys()
-  sorted_keys=keys.sort()
-  return sorted_keys
+    keys=dictionary.keys()
+    sorted_keys=keys.sort()
+
+    return sorted_keys
 
 def _read_dicts(fn_list, keyatom):
-# Read multiple files into a list of residue dictionaries
-  dict_list=[]; datalabel_list=[]
-  for fn in fn_list:
-    peaklist=Peaklist(fn); dict=peaklist.residue_dict(keyatom)
-    dict_list.append(dict)
-    datalabel_list.append(peaklist.datalabels)
+    """Read multiple files into a list of residue dictionaries.
+    """
+    dict_list=[]; datalabel_list=[]
+    for fn in fn_list:
+        peaklist=Peaklist(fn); dict=peaklist.residue_dict(keyatom)
+        dict_list.append(dict)
+        datalabel_list.append(peaklist.datalabels)
 
-  return [dict_list, datalabel_list]
+    return [dict_list, datalabel_list]
