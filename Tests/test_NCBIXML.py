@@ -11,10 +11,10 @@ E_VALUE_THRESH = 1e-10
 
 class TestNCBIXML(unittest.TestCase):
 
-    def test_xbt001(self):
-        "Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xbt001)"
+    def test_xml_2212L_blastp_001(self):
+        "Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)"
 
-        filename = 'xbt001.xml'
+        filename = 'xml_2212L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
         records = NCBIXML.parse(handle)
@@ -1396,10 +1396,10 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt002(self):
-        "Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xbt002)"
+    def test_xml_2212L_blastn_001(self):
+        "Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)"
 
-        filename = 'xbt002.xml'
+        filename = 'xml_2212L_blastn_001.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
         records = NCBIXML.parse(handle)
@@ -1425,10 +1425,10 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt003(self):
-        "Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xbt003)"
+    def test_xml_2212L_blastx_001(self):
+        "Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)"
 
-        filename = 'xbt003.xml'
+        filename = 'xml_2212L_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1445,10 +1445,10 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt004(self):
-        "Parsing TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xbt004)"
+    def test_xml_2212L_tblastn_001(self):
+        "Parsing TBLASTN 2.2.12, gi|729325|sp|P39483|DHG2_BACME (xml_2212L_tblastn_001)"
 
-        filename = 'xbt004.xml'
+        filename = 'xml_2212L_tblastn_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1465,10 +1465,10 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt005(self):
-        "Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xbt005)"
+    def test_xml_2212L_tblastx_001(self):
+        "Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)"
 
-        filename = 'xbt005.xml'
+        filename = 'xml_2212L_tblastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1485,11 +1485,11 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt006(self):
-        "Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xbt006)"
+    def test_xml_2218_blastp_001(self):
+        "Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)"
         # NOTE - no date in version field, downloaded 2008/05/08
 
-        filename = 'xbt006.xml'
+        filename = 'xml_2218_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1552,10 +1552,10 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt007(self):
-        "Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xbt007)"
+    def test_xml_2218_blastp_002(self):
+        "Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)"
 
-        filename = 'xbt007.xml'
+        filename = 'xml_2218_blastp_002.xml'
         datafile = os.path.join("Blast", filename)
         handle = open(datafile)
         records = NCBIXML.parse(handle)
@@ -1569,10 +1569,10 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, records.next)
         handle.close()
 
-    def test_xbt008(self):
-        "Parsing BLASTP 2.2.18, Fake query (xbt008)"
+    def test_xml_2218L_blastp_001(self):
+        "Parsing BLASTP 2.2.18, Fake query (xml_2218L_blastp_001)"
 
-        filename = 'xbt008.xml'
+        filename = 'xml_2218L_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1588,11 +1588,11 @@ class TestNCBIXML(unittest.TestCase):
         record = NCBIXML.read(handle)
         handle.close()
 
-    def test_xbt009(self):
-        "Parsing BLASTX 2.2.22+, multiple queries against NR (xbt009)"
+    def test_xml_2222_blastx_001(self):
+        "Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)"
         #See also plain text file bt081.txt (matching output from blastx tool)
 
-        filename = 'xbt009.xml'
+        filename = 'xml_2222_blastx_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1712,11 +1712,11 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, records.next)
         handle.close()
 
-    def test_xbt010(self):
-        "Parsing BLASTP 2.2.22+, multiple queries against NR (xbt010)"
+    def test_xml_2222_blastp_001(self):
+        "Parsing BLASTP 2.2.22+, multiple queries against NR (xml_2222_blastp_001)"
         #This is from blastp NOT blastall
 
-        filename = 'xbt010.xml'
+        filename = 'xml_2222_blastp_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
@@ -1752,14 +1752,14 @@ class TestNCBIXML(unittest.TestCase):
         self.assertRaises(StopIteration, records.next)
         handle.close()
 
-    def test_xbt011(self):
-        "Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xbt011)"
+    def test_xml_2218L_rpsblast_001(self):
+        "Parsing PSI-BLASTP 2.2.18, single query which converges in 3 iterations (xml_2218L_rpsblast_001)"
         #This is from old pgpblast command line tool, NOT new psiblast
         #NOTE - The parser currently returns three BLAST record objects.
         #The old text parser would return a single PSI BLAST record object with three rounds.
         #This may change... although it may require a PSI BLAST specific XML parser.
 
-        filename = 'xbt011.xml'
+        filename = 'xml_2218L_rpsblast_001.xml'
         datafile = os.path.join("Blast", filename)
 
         handle = open(datafile)
