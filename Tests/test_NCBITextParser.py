@@ -14609,10 +14609,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt082(self):
+    def test_text_2226_blastn_001(self):
         """Test parsing BLASTN 2.2.26+ output with no results."""
 
-        path = os.path.join('Blast', 'bt082.txt')
+        path = os.path.join('Blast', 'text_2226_blastn_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14630,10 +14630,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt083(self):
+    def test_text_2226_blastn_002(self):
         """Test parsing BLASTN 2.2.26+ output with single hsp results."""
 
-        path = os.path.join('Blast', 'bt083.txt')
+        path = os.path.join('Blast', 'text_2226_blastn_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14653,10 +14653,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt084(self):
+    def test_text_2226_blastn_003(self):
         """Test parsing BLASTN 2.2.26+ output with multiple hsp results present."""
 
-        path = os.path.join('Blast', 'bt084.txt')
+        path = os.path.join('Blast', 'text_2226_blastn_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14679,10 +14679,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt085(self):
+    def test_text_2226_blastp_001(self):
         """Test parsing BLASTP 2.2.26+ with no results."""
 
-        path = os.path.join('Blast', 'bt085.txt')
+        path = os.path.join('Blast', 'text_2226_blastp_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14700,10 +14700,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt086(self):
+    def test_text_2226_blastp_002(self):
         """Test parsing BLASTP 2.2.26+ with single hsp results."""
 
-        path = os.path.join('Blast', 'bt086.txt')
+        path = os.path.join('Blast', 'text_2226_blastp_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14723,10 +14723,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt087(self):
+    def test_text_2226_blastp_003(self):
         """Test parsing BLASTP 2.2.26+ with multiple hsp results present."""
 
-        path = os.path.join('Blast', 'bt087.txt')
+        path = os.path.join('Blast', 'text_2226_blastp_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14749,10 +14749,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt088(self):
+    def test_text_2226_blastx_001(self):
         """Test parsing BLASTX 2.2.26+ with no results."""
 
-        path = os.path.join('Blast', 'bt088.txt')
+        path = os.path.join('Blast', 'text_2226_blastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14767,10 +14767,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
-    def test_bt089(self):
+    def test_text_2226_blastx_002(self):
         """Test parsing BLASTX 2.2.26+ with single hsp results."""
 
-        path = os.path.join('Blast', 'bt089.txt')
+        path = os.path.join('Blast', 'text_2226_blastx_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14790,10 +14790,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt090(self):
+    def test_text_2226_blastx_003(self):
         """Test parsing BLASTP 2.2.26+ with multiple hsp results present."""
 
-        path = os.path.join('Blast', 'bt090.txt')
+        path = os.path.join('Blast', 'text_2226_blastx_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14816,10 +14816,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt091(self):
+    def test_text_2226_tblastn_001(self):
         """Test parsing TBLASTN 2.2.26+ output with no results."""
 
-        path = os.path.join('Blast', 'bt091.txt')
+        path = os.path.join('Blast', 'text_2226_tblastn_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14837,10 +14837,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt092(self):
+    def test_text_2226_tblastn_002(self):
         """Test parsing TBLASTN 2.2.26+ output with single hsp results."""
 
-        path = os.path.join('Blast', 'bt092.txt')
+        path = os.path.join('Blast', 'text_2226_tblastn_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14860,10 +14860,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt093(self):
+    def test_text_2226_tblastn_003(self):
         """Test parsing TBLASTN 2.2.26+ output with multiple hsp results present."""
 
-        path = os.path.join('Blast', 'bt093.txt')
+        path = os.path.join('Blast', 'text_2226_tblastn_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14886,10 +14886,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt094(self):
+    def test_text_2226_tblastx_001(self):
         """Test parsing TBLASTX 2.2.26+ output with no results."""
 
-        path = os.path.join('Blast', 'bt094.txt')
+        path = os.path.join('Blast', 'text_2226_tblastx_001.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14907,10 +14907,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt095(self):
+    def test_text_2226_tblastx_002(self):
         """Test parsing TBLASTX 2.2.26+ output with single hsp results."""
 
-        path = os.path.join('Blast', 'bt095.txt')
+        path = os.path.join('Blast', 'text_2226_tblastx_002.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 
@@ -14930,10 +14930,10 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
-    def test_bt096(self):
+    def test_text_2226_tblastx_003(self):
         """Test parsing TBLASTX 2.2.26+ output with multiple hsp results present."""
 
-        path = os.path.join('Blast', 'bt096.txt')
+        path = os.path.join('Blast', 'text_2226_tblastx_003.txt')
         handle = open(path)
         records = NCBIStandalone.Iterator(handle, self.parser)
 

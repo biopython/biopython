@@ -6,6 +6,50 @@ BLAST-related code in Biopython. All files are grouped by BLAST
 release version, from the most recent first.
 
 
+BLAST 2.2.26+
+-------------
+text_2226_blastn_001         single query, no hits
+text_2226_blastn_002         single query, hits @ single hsp
+text_2226_blastn_003         single query, multiple hsps per hit present
+text_2226_blastp_001         single query, no hits
+text_2226_blastp_002         single query, hits @ single hsp
+text_2226_blastp_003         single query, multiple hsps per hit present
+text_2226_blastx_001         single query, no hits
+text_2226_blastx_002         single query, hits @ single hsp
+text_2226_blastx_003         single query, multiple hsps per hit present
+text_2226_tblastn_001        single query, no hits
+text_2226_tblastn_002        single query, hits @ single hsp
+text_2226_tblastn_003        single query, multiple hsps per hit present
+text_2226_tblastx_001        single query, no hits
+text_2226_tblastx_002        single query, hits @ single hsp
+text_2226_tblastx_003        single query, multiple hsps per hit present
+
+xml_2226_blastn_001.xml      multiple queries
+xml_2226_blastn_002.xml      single query, no hits
+xml_2226_blastn_003.xml      single query, hits @ single hsp
+xml_2226_blastn_004.xml      single query, multiple hsps per hit present
+xml_2226_blastn_005.xml      multiple queries, remote search on NCBI's database
+xml_2226_blastn_006.xml      single query, against a database with duplicate entries
+xml_2226_blastp_001.xml      multiple queries
+xml_2226_blastp_002.xml      single query, no hits
+xml_2226_blastp_003.xml      single query, hits @ single hsp
+xml_2226_blastp_004.xml      single query, multiple hsps per hit present
+xml_2226_blastp_005.xml      multiple queries, remote search on NCBI's database
+xml_2226_blastx_001.xml      multiple queries
+xml_2226_blastx_002.xml      single query, no hits
+xml_2226_blastx_003.xml      single query, multiple hsps per hit present
+xml_2226_blastx_004.xml      multiple queries, remote search on NCBI's database
+xml_2226_tblastn_001.xml     multiple queries
+xml_2226_tblastn_002.xml     single query, no hits
+xml_2226_tblastn_003.xml     single query, hits @ single hsp
+xml_2226_tblastn_004.xml     single query, multiple hsps per hit present
+xml_2226_tblastn_005.xml     multiple queries, remote search on NCBI's database
+xml_2226_tblastx_001.xml      multiple queries
+xml_2226_tblastx_002.xml      single query, no hits
+xml_2226_tblastx_003.xml      single query, multiple hsps per hit present
+xml_2226_tblastx_004.xml      multiple queries, remote search on NCBI's database
+
+
 BLAST 2.2.22+
 -------------
 text_2222_blastx_001.txt     multiple queries
