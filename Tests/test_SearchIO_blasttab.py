@@ -24,10 +24,10 @@ def get_file(filename):
 
 class BlastnTabCases(unittest.TestCase):
 
-    def test_tbt001(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output (tbt001)"
+    def test_tab_2226_tblastn_001(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_001)"
 
-        xml_file = get_file('tbt001.txt')
+        xml_file = get_file('tab_2226_tblastn_001.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -120,19 +120,19 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(2, counter)
 
-    def test_tbt002(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output (tbt002)"
+    def test_tab_2226_tblastn_002(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_002)"
 
-        xml_file = get_file('tbt002.txt')
+        xml_file = get_file('tab_2226_tblastn_002.txt')
         qresults = parse(xml_file, FMT)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
 
-    def test_tbt003(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output (tbt003)"
+    def test_tab_2226_tblastn_003(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_003)"
 
-        xml_file = get_file('tbt003.txt')
+        xml_file = get_file('tab_2226_tblastn_003.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -185,10 +185,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tbt004(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output (tbt004)"
+    def test_tab_2226_tblastn_004(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_004)"
 
-        xml_file = get_file('tbt004.txt')
+        xml_file = get_file('tab_2226_tblastn_004.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -235,10 +235,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tbt005(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt005)"
+    def test_tab_2226_tblastn_005(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_005)"
 
-        xml_file = get_file('tbt005.txt')
+        xml_file = get_file('tab_2226_tblastn_005.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -347,10 +347,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tbt006(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt006)"
+    def test_tab_2226_tblastn_006(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_006)"
 
-        xml_file = get_file('tbt006.txt')
+        xml_file = get_file('tab_2226_tblastn_006.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -367,10 +367,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tbt007(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt007)"
+    def test_tab_2226_tblastn_007(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_007)"
 
-        xml_file = get_file('tbt007.txt')
+        xml_file = get_file('tab_2226_tblastn_007.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -425,10 +425,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tbt008(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt008)"
+    def test_tab_2226_tblastn_008(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_008)"
 
-        xml_file = get_file('tbt008.txt')
+        xml_file = get_file('tab_2226_tblastn_008.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -478,19 +478,19 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
-    def test_tbt009(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output (tbt009)"
+    def test_tab_2226_tblastx_001(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastx_001)"
 
-        xml_file = get_file('tbt009.txt')
+        xml_file = get_file('tab_2226_tblastx_001.txt')
         qresults = parse(xml_file, FMT)
 
         # nonstandard, noncommented output should raise an error
         self.assertRaises(AssertionError, qresults.next, )
 
-    def test_tbt010(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt010)"
+    def test_tab_2226_tblastn_009(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_009)"
 
-        xml_file = get_file('tbt010.txt')
+        xml_file = get_file('tab_2226_tblastn_009.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -567,10 +567,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tbt011(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt011)"
+    def test_tab_2226_tblastn_010(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_010)"
 
-        xml_file = get_file('tbt011.txt')
+        xml_file = get_file('tab_2226_tblastn_010.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 
@@ -739,10 +739,10 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
-    def test_tbt012(self):
-        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tbt012)"
+    def test_tab_2226_tblastn_011(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_011)"
 
-        xml_file = get_file('tbt012.txt')
+        xml_file = get_file('tab_2226_tblastn_011.txt')
         qresults = parse(xml_file, FMT)
         counter = 0
 

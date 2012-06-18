@@ -46,27 +46,27 @@ class BlastXmlIndexCases(SearchIndexCases):
     fmt = 'blast-xml'
 
     def test_blastxml_blastp_2212(self):
-        filename = 'Blast/xbt001.xml'
+        filename = 'Blast/xml_2212L_blastp_001.xml'
         self.check_index(filename, self.fmt)
 
     def test_blastxml_blastp_2218p(self):
-        filename = 'Blast/xbt006.xml'
+        filename = 'Blast/xml_2218_blastp_001.xml'
         self.check_index(filename, self.fmt)
 
     def test_blastxml_blastx_2222p(self):
-        filename = 'Blast/xbt009.xml'
+        filename = 'Blast/xml_2222_blastx_001.xml'
         self.check_index(filename, self.fmt)
 
     def test_blastxml_tblastn_2224p_mult(self):
-        filename = 'Blast/xbt026.xml'
+        filename = 'Blast/xml_2226_tblastn_001.xml'
         self.check_index(filename, self.fmt)
 
     def test_blastxml_tblastn_2224p_none(self):
-        filename = 'Blast/xbt027.xml'
+        filename = 'Blast/xml_2226_tblastn_002.xml'
         self.check_index(filename, self.fmt)
 
     def test_blastxml_tblastn_2224p_sing(self):
-        filename = 'Blast/xbt029.xml'
+        filename = 'Blast/xml_2226_tblastn_004.xml'
         self.check_index(filename, self.fmt)
 
 
@@ -75,39 +75,39 @@ class BlastTabIndexCases(SearchIndexCases):
     fmt = 'blast-tab'
 
     def test_blasttab_mult(self):
-        filename = 'Blast/tbt001.txt'
+        filename = 'Blast/tab_2226_tblastn_001.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_none(self):
-        filename = 'Blast/tbt002.txt'
+        filename = 'Blast/tab_2226_tblastn_002.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_sing(self):
-        filename = 'Blast/tbt004.txt'
+        filename = 'Blast/tab_2226_tblastn_004.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_comment_mult(self):
-        filename = 'Blast/tbt005.txt'
+        filename = 'Blast/tab_2226_tblastn_005.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_comment_none(self):
-        filename = 'Blast/tbt006.txt'
+        filename = 'Blast/tab_2226_tblastn_006.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_comment_sing(self):
-        filename = 'Blast/tbt008.txt'
+        filename = 'Blast/tab_2226_tblastn_008.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_custom_cols(self):
-        filename = 'Blast/tbt009.txt'
+        filename = 'Blast/tab_2226_tblastx_001.txt'
         self.assertRaises(AssertionError, self.check_index, filename, self.fmt)
 
     def test_blasttab_comment_custom_cols(self):
-        filename = 'Blast/tbt010.txt'
+        filename = 'Blast/tab_2226_tblastn_009.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_comment_all_cols(self):
-        filename = 'Blast/tbt011.txt'
+        filename = 'Blast/tab_2226_tblastn_010.txt'
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
             self.check_index(filename, self.fmt)

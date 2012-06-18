@@ -8,6 +8,19 @@ release version, from the most recent first.
 
 BLAST 2.2.26+
 -------------
+tab_2226_tblastn_001         multiple queries
+tab_2226_tblastn_002         single query, no hits
+tab_2226_tblastn_003         single query, hits @ single hsp
+tab_2226_tblastn_004         single query, multiple hsps per hit present
+tab_2226_tblastn_005         multiple queries, commented
+tab_2226_tblastn_006         single query, no hits, commented
+tab_2226_tblastn_007         single query, hits @ single hsp, commented
+tab_2226_tblastn_008         single query, multiple hsps per hit present, commented
+tab_2226_tblastn_009         multiple queries with custom columns, commented
+tab_2226_tblastn_010         multiple queries with all columns, commented
+tab_2226_tblastn_011         multiple quries, remote search, standard columns, commented
+tab_2226_tblastx_001         multiple queries with custom columns
+
 text_2226_blastn_001         single query, no hits
 text_2226_blastn_002         single query, hits @ single hsp
 text_2226_blastn_003         single query, multiple hsps per hit present
@@ -44,10 +57,10 @@ xml_2226_tblastn_002.xml     single query, no hits
 xml_2226_tblastn_003.xml     single query, hits @ single hsp
 xml_2226_tblastn_004.xml     single query, multiple hsps per hit present
 xml_2226_tblastn_005.xml     multiple queries, remote search on NCBI's database
-xml_2226_tblastx_001.xml      multiple queries
-xml_2226_tblastx_002.xml      single query, no hits
-xml_2226_tblastx_003.xml      single query, multiple hsps per hit present
-xml_2226_tblastx_004.xml      multiple queries, remote search on NCBI's database
+xml_2226_tblastx_001.xml     multiple queries
+xml_2226_tblastx_002.xml     single query, no hits
+xml_2226_tblastx_003.xml     single query, multiple hsps per hit present
+xml_2226_tblastx_004.xml     multiple queries, remote search on NCBI's database
 
 
 BLAST 2.2.22+
