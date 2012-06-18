@@ -23,8 +23,8 @@ class BlastXmlRawCases(unittest.TestCase):
 
     fmt = 'blast-xml'
 
-    def test_blastxml_multiple_first(self):
-        """Raw string retrieval, BLAST 2.2.26+ multiple - first (xml_2226_blastp_001.xml)"""
+    def test_blastxml_2226_multiple_first(self):
+        """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, first (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
         idx = SearchIO.index(filename, self.fmt)
         raw = """<Iteration>
@@ -48,8 +48,8 @@ class BlastXmlRawCases(unittest.TestCase):
     </Iteration>"""
         self.assertEqual(raw, idx.get_raw('random_s00'))
 
-    def test_blastxml_multiple_middle(self):
-        """Raw string retrieval, BLAST 2.2.26+ multiple - mid (xml_2226_blastp_001.xml)"""
+    def test_blastxml_2226_multiple_middle(self):
+        """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, middle (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
         idx = SearchIO.index(filename, self.fmt)
         raw = """<Iteration>
@@ -213,8 +213,8 @@ class BlastXmlRawCases(unittest.TestCase):
     </Iteration>"""
         self.assertEqual(raw, idx.get_raw('gi|16080617|ref|NP_391444.1|'))
 
-    def test_blastxml_multiple_last(self):
-        """Raw string retrieval, BLAST 2.2.26+ multiple - last (xml_2226_blastp_001.xml)"""
+    def test_blastxml_2226_multiple_last(self):
+        """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, last (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
         idx = SearchIO.index(filename, self.fmt)
         raw = """<Iteration>
@@ -473,8 +473,8 @@ class BlastXmlRawCases(unittest.TestCase):
     </Iteration>"""
         self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
 
-    def test_blastxml_single(self):
-        """Raw string retrieval, BLAST 2.2.26+ single (xml_2226_blastp_004.xml)"""
+    def test_blastxml_2226_single(self):
+        """Test blast-xml raw string retrieval, BLAST 2.2.26+, single query (xml_2226_blastp_004.xml)"""
         filename = 'Blast/xml_2226_blastp_004.xml'
         idx = SearchIO.index(filename, self.fmt)
         raw = """<Iteration>
@@ -738,8 +738,8 @@ class BlastTabRawCases(unittest.TestCase):
 
     fmt = 'blast-tab'
 
-    def test_blasttab_multiple_first(self):
-        """Raw string retrieval, BLAST 2.2.26+ multiple - first (tab_2226_tblastn_001.txt)"""
+    def test_blasttab_2226_multiple_first(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, first (tab_2226_tblastn_001.txt)"""
         filename = 'Blast/tab_2226_tblastn_001.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|	34.88	43	28	0	31	73	1744	1872	1e-05	34.7
@@ -748,8 +748,8 @@ gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	9
 """
         self.assertEqual(raw, idx.get_raw('gi|16080617|ref|NP_391444.1|'))
 
-    def test_blasttab_multiple_last(self):
-        """Raw string retrieval, BLAST 2.2.26+ multiple - last (tab_2226_tblastn_001.txt)"""
+    def test_blasttab_2226_multiple_last(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last (tab_2226_tblastn_001.txt)"""
         filename = 'Blast/tab_2226_tblastn_001.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	95.92	98	4	0	1	98	95	388	2e-67	 199
@@ -764,8 +764,8 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 """
         self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
 
-    def test_blasttab_single(self):
-        """Raw string retrieval, BLAST 2.2.26+ single (tab_2226_tblastn_004.txt)"""
+    def test_blasttab_2226_single(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query (tab_2226_tblastn_004.txt)"""
         filename = 'Blast/tab_2226_tblastn_004.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	95.92	98	4	0	1	98	95	388	2e-67	 199
@@ -780,8 +780,8 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 """
         self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
 
-    def test_blasttab_multiple_first_commented(self):
-        """Raw string retrieval, BLAST 2.2.26+ single (tab_2226_tblastn_005.txt)"""
+    def test_blasttab_2226_multiple_first_commented(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, first, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# TBLASTN 2.2.26+
@@ -791,8 +791,8 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 """
         self.assertEqual(raw, idx.get_raw('random_s00'))
 
-    def test_blasttab_multiple_middle_commented(self):
-        """Raw string retrieval, BLAST 2.2.26+ single (tab_2226_tblastn_005.txt)"""
+    def test_blasttab_2226_multiple_middle_commented(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, middle, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# TBLASTN 2.2.26+
@@ -806,8 +806,8 @@ gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	9
 """
         self.assertEqual(raw, idx.get_raw('gi|16080617|ref|NP_391444.1|'))
 
-    def test_blasttab_multiple_last_commented(self):
-        """Raw string retrieval, BLAST 2.2.26+ single (tab_2226_tblastn_005.txt)"""
+    def test_blasttab_2226_multiple_last_commented(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# TBLASTN 2.2.26+
@@ -828,8 +828,8 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 """
         self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
 
-    def test_blasttab_single_commented(self):
-        """Raw string retrieval, BLAST 2.2.26+ single (tab_2226_tblastn_008.txt)"""
+    def test_blasttab_2226_single_commented(self):
+        """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query, commented (tab_2226_tblastn_008.txt)"""
         filename = 'Blast/tab_2226_tblastn_008.txt'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# TBLASTN 2.2.26+
@@ -855,8 +855,8 @@ class HmmerTextRawCases(unittest.TestCase):
 
     fmt = 'hmmer-text'
 
-    def test_hmmertext_multiple_first(self):
-        """Raw string retrieval, HMMER 3.0 multiple - first (text_hmm001.out)"""
+    def test_hmmertext_30_multiple_first(self):
+        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, first (text_hmm001.out)"""
         filename = 'Hmmer/text_hmm001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -901,8 +901,8 @@ Domain search space  (domZ):               0  [number of targets reported over t
 """
         self.assertEqual(raw, idx.get_raw('random_s00'))
 
-    def test_hmmertext_multiple_middle(self):
-        """Raw string retrieval, HMMER 3.0 multiple - middle (text_hmm001.out)"""
+    def test_hmmertext_30_multiple_middle(self):
+        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_hmm001.out)"""
         filename = 'Hmmer/text_hmm001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -964,8 +964,8 @@ Domain search space  (domZ):               1  [number of targets reported over t
 """
         self.assertEqual(raw, idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
-    def test_hmmertext_multiple_last(self):
-        """Raw string retrieval, HMMER 3.0 multiple - last (text_hmm001.out)"""
+    def test_hmmertext_30_multiple_last(self):
+        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, last (text_hmm001.out)"""
         filename = 'Hmmer/text_hmm001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -1081,8 +1081,8 @@ Domain search space  (domZ):               5  [number of targets reported over t
 """
         self.assertEqual(raw, idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
-    def test_hmmertext_single(self):
-        """Raw string retrieval, HMMER 3.0 single (text_hmm003.out)"""
+    def test_hmmertext_30_single(self):
+        """Test hmmer-text raw string retrieval, HMMER 3.0, single query (text_hmm003.out)"""
         filename = 'Hmmer/text_hmm003.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -1171,27 +1171,33 @@ class BlastXmlIndexCases(SearchIndexCases):
 
     fmt = 'blast-xml'
 
-    def test_blastxml_blastp_2212(self):
+    def test_blastxml_2212L_blastp_001(self):
+        """Test blast-xml indexing, BLAST 2.2.12"""
         filename = 'Blast/xml_2212L_blastp_001.xml'
         self.check_index(filename, self.fmt)
 
-    def test_blastxml_blastp_2218p(self):
+    def test_blastxml_2218_blastp_001(self):
+        """Test blast-xml indexing, BLAST 2.2.18+"""
         filename = 'Blast/xml_2218_blastp_001.xml'
         self.check_index(filename, self.fmt)
 
-    def test_blastxml_blastx_2222p(self):
+    def test_blastxml_2222_blastx_001(self):
+        """Test blast-xml indexing, BLAST 2.2.22+"""
         filename = 'Blast/xml_2222_blastx_001.xml'
         self.check_index(filename, self.fmt)
 
-    def test_blastxml_tblastn_2224p_mult(self):
+    def test_blastxml_2226_tblastn_001(self):
+        """Test blast-xml indexing, BLAST 2.2.26+, multiple queries"""
         filename = 'Blast/xml_2226_tblastn_001.xml'
         self.check_index(filename, self.fmt)
 
-    def test_blastxml_tblastn_2224p_none(self):
+    def test_blastxml_2226_tblastn_002(self):
+        """Test blast-xml indexing, BlAST 2.2.26+, single query, no hits"""
         filename = 'Blast/xml_2226_tblastn_002.xml'
         self.check_index(filename, self.fmt)
 
-    def test_blastxml_tblastn_2224p_sing(self):
+    def test_blastxml_2226_tblastn_004(self):
+        """Test blast-xml indexing, BLAST 2.2.26+, single query, multiple hits"""
         filename = 'Blast/xml_2226_tblastn_004.xml'
         self.check_index(filename, self.fmt)
 
@@ -1200,39 +1206,48 @@ class BlastTabIndexCases(SearchIndexCases):
 
     fmt = 'blast-tab'
 
-    def test_blasttab_mult(self):
+    def test_blasttab_2226_tblastn_001(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, multiple queries"""
         filename = 'Blast/tab_2226_tblastn_001.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_none(self):
+    def test_blasttab_2226_tblastn_002(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, single query, no hits"""
         filename = 'Blast/tab_2226_tblastn_002.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_sing(self):
+    def test_blasttab_2226_tblastn_004(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, single query, multiple hits"""
         filename = 'Blast/tab_2226_tblastn_004.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_comment_mult(self):
+    def test_blasttab_2226_tblastn_005(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, multiple queries, commented"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_comment_none(self):
+    def test_blasttab_2226_tblastn_006(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, single query, no hits, commented"""
         filename = 'Blast/tab_2226_tblastn_006.txt'
         self.check_index(filename, self.fmt)
 
     def test_blasttab_comment_sing(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, single query, multiple hits, commented"""
         filename = 'Blast/tab_2226_tblastn_008.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_custom_cols(self):
+    def test_blasttab_2226_tblastx_001(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, custom columns"""
         filename = 'Blast/tab_2226_tblastx_001.txt'
         self.assertRaises(AssertionError, self.check_index, filename, self.fmt)
 
-    def test_blasttab_comment_custom_cols(self):
+    def test_blasttab_2226_tblastn_009(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, custom columns, commented"""
         filename = 'Blast/tab_2226_tblastn_009.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_comment_all_cols(self):
+    def test_blasttab_2226_tblastn_010(self):
+        """Test blast-tab indexing, BLAST 2.2.26+, all columns, commented"""
         filename = 'Blast/tab_2226_tblastn_010.txt'
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
@@ -1244,27 +1259,33 @@ class HmmerTextIndexCases(SearchIndexCases):
 
     fmt = 'hmmer-text'
 
-    def test_hmmertext_hmmscan_mult(self):
+    def test_hmmertext_text_hmm001(self):
+        """Test hmmer-text indexing, HMMER 3.0, multiple queries"""
         filename = 'Hmmer/text_hmm001.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_hmmscan_none(self):
+    def test_hmmertext_text_hmm002(self):
+        """Test hmmer-text indexing, HMMER 3.0, single query, no hits"""
         filename = 'Hmmer/text_hmm002.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_hmmscan_sing(self):
+    def test_hmmertext_text_hmm006(self):
+        """Test hmmer-text indexing, HMMER 3.0, single query, multiple hits"""
         filename = 'Hmmer/text_hmm006.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_hmmscan_sing_noali(self):
+    def test_hmmertext_text_hmm007(self):
+        """Test hmmer-text indexing, HMMER 3.0, single query, no alignments"""
         filename = 'Hmmer/text_hmm007.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_hmmscan_sing_notextw(self):
+    def test_hmmertext_text_hmm008(self):
+        """Test hmmer-text indexing, HMMER 3.0, single query, no alignment width"""
         filename = 'Hmmer/text_hmm008.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_hmmsearch_mult(self):
+    def test_hmmertext_text_hmm013(self):
+        """Test hmmer-text indexing, HMMER 3.0, multiple queries"""
         filename = 'Hmmer/text_hmm013.out'
         self.check_index(filename, self.fmt)
 
