@@ -320,42 +320,11 @@ class QueryResult(BaseSearchObject):
         """Custom Search object item retrieval.
 
         Allows value retrieval by its key, location index, or a slice of
-        location index. Also allows direct HSP retrieval if hit key is a tuple
-        or list of hit ID and HSP index.
+        location index.
 
         """
-        # allow for direct HSP retrieval if key is list / tuple
-        # of two items (hit index / id, hsp rank)
-        # retrieve Hit object first, then get the HSP according
-        # to the given index
-        if isinstance(hit_key, (tuple, list)):
-            # ensure the tuple / list has at least 2 items
-            try:
-                hit_id = hit_key[0]
-                # note that this allows the second item to be a slice as well
-                hsp_rank = hit_key[1]
-            except IndexError:
-                raise ValueError("Expected tuple or list with 2 items, found: "
-                        "%i item(s)." % len(hit_key))
-
-            # allow for hit retrieval by string ID or integer index
-            if isinstance(hit_id, basestring):
-                # if key is string, we can retrieve directly from the dict
-                hit = self._hits[hit_id]
-            elif isinstance(hit_id, int):
-                # if not, retrieve from the list
-                hit = list(self.hits)[hit_id]
-            else:
-                raise TypeError("Hit index must be a string or an integer if "
-                        "double-index slicing is performed.")
-
-            # return a list of hsps if hsp_rank is a slice object, instead
-            # of simply slicing the hit object (which would return another hit
-            # object)
-            return hit.hsps[hsp_rank]
-
         # retrieval using slice objects returns another QueryResult object
-        elif isinstance(hit_key, slice):
+        if isinstance(hit_key, slice):
             # should we return just a list of Hits instead of a full blown
             # QueryResult object if it's a slice?
             hits = list(self.hits)[hit_key]
@@ -377,54 +346,21 @@ class QueryResult(BaseSearchObject):
         ID matches the string. If key is an integer or a slice object, then
         the Hit objects within that range will be deleted.
 
-        The method can also delete HSP objects within a given Hit object if
-        hit_key is given as a tuple or list of two items: the Hit index and
-        the HSP index.
-
         """
-        if isinstance(hit_key, (list, tuple)):
-            # if hit_key is a list or tuple, deletion is done at the hsp level
-            try:
-                hit_id = hit_key[0]
-                # note that this allows the second item to be a slice as well
-                hsp_rank = hit_key[1]
-            except IndexError:
-                raise ValueError("Expected tuple or list with 2 items, found: "
-                        "%i item(s)." % len(hit_key))
-
-            # allow for hit retrieval by string ID or integer index
-            if isinstance(hit_id, basestring):
-                # if key is string, we can retrieve directly from the dict
-                hit = self._hits[hit_id]
-            elif isinstance(hit_id, int):
-                # if not, retrieve from the list
-                hit = list(self.hits)[hit_id]
-            else:
-                raise TypeError("Hit index must be a string or an integer if "
-                        "double-index slicing is performed.")
-
-            # delete the HSPs from the hit and assign it to replace the old hit
-            # TODO: this allows cases where a Hit object can have 0 HSPs ~ is
-            # it ok to allow this? should we delete the hit object instead?
-            del hit[hsp_rank]
-            self._hits[self._hit_key_function(hit)] = hit
-            return
-
+        # if hit_key an integer or slice, get the corresponding key first
+        # and put it into a list
+        if isinstance(hit_key, int):
+            hit_keys = [list(self.hit_keys)[hit_key]]
+        # the same, if it's a slice
+        elif isinstance(hit_key, slice):
+            hit_keys = list(self.hit_keys)[hit_key]
+        # otherwise put it in a list
         else:
-            # if hit_key an integer or slice, get the corresponding key first
-            # and put it into a list
-            if isinstance(hit_key, int):
-                hit_keys = [list(self.hit_keys)[hit_key]]
-            # the same, if it's a slice
-            elif isinstance(hit_key, slice):
-                hit_keys = list(self.hit_keys)[hit_key]
-            # otherwise put it in a list
-            else:
-                hit_keys = [hit_key]
+            hit_keys = [hit_key]
 
-            for key in hit_keys:
-                del self._hits[key]
-            return
+        for key in hit_keys:
+            del self._hits[key]
+        return
 
     def _id_get(self):
         return self._id

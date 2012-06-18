@@ -66,10 +66,6 @@ class QueryResultCases(unittest.TestCase):
     def setUp(self):
         self.qresult = QueryResult('query1', [hit11, hit21, hit31])
 
-    def test_init_wrong_meta(self):
-        # if meta argument is not a dictionary, an exception should be raised
-        self.assertRaises(TypeError, QueryResult, 'query_id', meta='test')
-
     def test_repr(self):
         self.assertEqual("QueryResult(id='query1', 3 hits)", \
                 repr(self.qresult))
@@ -165,28 +161,6 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual([hit21, hit31], new_qresult.hits)
         self.assertEqual('3hrs', new_qresult.runtime)
 
-    def test_getitem_tuple_ok(self):
-        # hsps should be retrievable if the index is a tuple / list
-        self.assertEqual(hsp113, self.qresult['hit1', 2])
-        self.assertEqual([hsp111, hsp112], self.qresult['hit1', :2])
-        self.assertEqual([hsp111, hsp112], self.qresult['hit1', :-2])
-        self.assertEqual([hsp111, hsp113], self.qresult['hit1', ::2])
-        self.assertEqual(hsp113, self.qresult[0, 2])
-        self.assertEqual([hsp111, hsp112], self.qresult[0, :2])
-        self.assertEqual([hsp111, hsp112], self.qresult[0, :-2])
-        self.assertEqual([hsp111, hsp113], self.qresult[0, ::2])
-
-    def test_getitem_tuple_wrong_length(self):
-        # if the tuple index has length < 2, an error should be raised
-        self.assertRaises(ValueError, self.qresult.__getitem__, ('hit1', ))
-
-    def test_getitem_tuple_wrong_type(self):
-        # if the tuple's first item is not a string or int, an error
-        # should be raised
-        self.assertRaises(TypeError, self.qresult.__getitem__, (slice(2), 0))
-        self.assertRaises(TypeError, self.qresult.__getitem__, (slice(1), \
-                slice(2)))
-
     def test_delitem_string_ok(self):
         # delitem should work with string index
         del self.qresult['hit1']
@@ -207,33 +181,6 @@ class QueryResultCases(unittest.TestCase):
         del self.qresult[:-1]
         self.assertEqual(1, len(self.qresult))
         self.assertTrue([hit31], self.qresult.hits)
-
-    def test_delitem_tuple_ok(self):
-        # create local mock objects to avoid conflict with other tests
-        hit11 = Hit('hit1', 'query1', [hsp111, hsp112, hsp113, hsp114])
-        hit21 = Hit('hit2', 'query1', [hsp211])
-        hit31 = Hit('hit3', 'query1', [hsp311])
-        qresult = QueryResult('query1', [hit11, hit21, hit31])
-        # delitem should work on hsp objects if index is a tuple
-        self.assertEqual(3, len(qresult))
-        self.assertEqual(4, len(qresult[0]))
-        del qresult[0, 1]
-        self.assertEqual(3, len(qresult))
-        self.assertEqual([hsp111, hsp113, hsp114], qresult[0].hsps)
-        del qresult[0, :-1]
-        self.assertEqual(3, len(qresult))
-        self.assertEqual([hsp114], qresult[0].hsps)
-
-    def test_delitem_tuple_wrong_length(self):
-        # if the tuple index has length < 2, an error should be raised
-        self.assertRaises(ValueError, self.qresult.__delitem__, ('hit1', ))
-
-    def test_delitem_tuple_wrong_type(self):
-        # if the tuple's first item is not a string or int, an error
-        # should be raised
-        self.assertRaises(TypeError, self.qresult.__delitem__, (slice(2), 0))
-        self.assertRaises(TypeError, self.qresult.__delitem__, (slice(1), \
-                slice(2)))
 
     def test_append_ok(self):
         # append should work with Hit objects
