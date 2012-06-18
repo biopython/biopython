@@ -888,8 +888,8 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('/Users/pjcock/Downloads/Software/blast-2.2.18/data/nr', qresult.target)
 
         # test parsed values of the first qresult
-        self.assertEqual('lcl|1_0', qresult.id)
-        self.assertEqual('Fake', qresult.desc)
+        self.assertEqual('Fake', qresult.id)
+        self.assertEqual('', qresult.desc)
         self.assertEqual(9, qresult.seq_len)
         self.assertEqual(6589360, qresult.stat_db_num)
         self.assertEqual(2253133281, qresult.stat_db_len)

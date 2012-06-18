@@ -370,8 +370,9 @@ class BlastXmlIterator(object):
                     query_len = self._fallback['len']
 
                 # handle blast searches against databases with Blast's IDs
-                # TODO: handle Blast IDs of legacy blast suite?
-                if query_id.startswith('Query_'):
+                # 'Query_' marks the beginning of a BLAST+-generated ID,
+                # 'lcl|' marks the beginning of a BLAST legacy-generated ID
+                if query_id.startswith('Query_') or query_id.startswith('lcl|'):
                     # store the Blast-generated query ID
                     blast_query_id = query_id
                     id_desc = query_desc.split(' ', 1)
