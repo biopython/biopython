@@ -49,12 +49,13 @@ class HmmerTabIterator(object):
             raise StopIteration
         # if line starts with '#', it's a header line
         # and we want to read through that
-        elif self.line.startswith('#'):
-            while True:
-                self.line = read_forward(self.handle)
-                # break out of loop when it's not the header lines anymore
-                if not self.line.startswith('#'):
-                    break
+        else:
+            if self.line.startswith('#'):
+                while True:
+                    self.line = read_forward(self.handle)
+                    # break out of loop when it's not the header lines anymore
+                    if not self.line.startswith('#'):
+                        break
             # stop iterating if we only have headers
             if not self.line:
                 raise StopIteration
@@ -154,13 +155,58 @@ class HmmerTabIndexer(SearchIndexer):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
-        start_offset = handle.tell()
+        split_char = _as_bytes(' ')
+        qresult_key = None
+
+        # read through header
+        while True:
+            start_offset = handle.tell()
+            line = read_forward(handle, strip=False)
+            if not line.startswith('#'):
+                break
+
+        # and index the qresults
+        while True:
+            end_offset = handle.tell()
+
+            if not line:
+                break
+            if qresult_key is None:
+                qresult_key = filter(None, line.strip().split(split_char))[2]
+            else:
+                curr_key = filter(None, line.strip().split(split_char))[2]
+
+                if curr_key != qresult_key:
+                    yield _bytes_to_string(qresult_key), start_offset, \
+                            end_offset - start_offset
+                    qresult_key = curr_key
+                    start_offset = end_offset - len(line)
+
+            line = read_forward(handle, strip=False)
+            if not line:
+                yield _bytes_to_string(qresult_key), start_offset, \
+                        end_offset - start_offset
+                break
 
     def get_raw(self, offset):
         """Returns the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
+        split_char = _as_bytes(' ')
+        qresult_key = None
         qresult_raw = ''
+
+        while True:
+            line = read_forward(handle, strip=False)
+            if not line:
+                break
+            if qresult_key is None:
+                qresult_key = filter(None, line.strip().split(split_char))[2]
+            else:
+                curr_key = filter(None, line.strip().split(split_char))[2]
+                if curr_key != qresult_key:
+                    break
+            qresult_raw += line
 
         return qresult_raw
 
