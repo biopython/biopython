@@ -3,23 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO parser for HMMER output formats.
-
-This module adds support for parsing HMMER outputs, from version 3.0 onwards.
-HMMER is a suite of programs implementing the profile hidden Markov models
-to find homology across protein sequences.
-
-Specifically, this module supports the following HMMER output formats:
-
-  - Plain text - 'hmmer-text'
-
-And the following HMMER programs: hmmsearch, hmmscan, phmmer
-
-More information are available through these links:
-  - Web page: http://hmmer.janelia.org/
-  - User guide: ftp://selab.janelia.org/pub/software/hmmer3/3.0/Userguide.pdf
-
-"""
+"""Bio.SearchIO parser for HMMER plain text output format."""
 
 import re
 
@@ -467,7 +451,7 @@ class HmmerTextIndexer(SearchIndexer):
 
 
 def _test():
-    """Run the Bio.SearchIO.HmmerIO module's doctests.
+    """Run the Bio.SearchIO.HmmerIO.hmmertext module's doctests.
 
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.
