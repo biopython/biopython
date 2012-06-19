@@ -856,8 +856,8 @@ class HmmerTextRawCases(unittest.TestCase):
     fmt = 'hmmer-text'
 
     def test_hmmertext_30_multiple_first(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, first (text_hmm001.out)"""
-        filename = 'Hmmer/text_hmm001.out'
+        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, first (text_30_hmmscan_001.out)"""
+        filename = 'Hmmer/text_30_hmmscan_001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
@@ -902,8 +902,8 @@ Domain search space  (domZ):               0  [number of targets reported over t
         self.assertEqual(raw, idx.get_raw('random_s00'))
 
     def test_hmmertext_30_multiple_middle(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_hmm001.out)"""
-        filename = 'Hmmer/text_hmm001.out'
+        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_30_hmmscan_001.out)"""
+        filename = 'Hmmer/text_30_hmmscan_001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
@@ -965,8 +965,8 @@ Domain search space  (domZ):               1  [number of targets reported over t
         self.assertEqual(raw, idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
     def test_hmmertext_30_multiple_last(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, last (text_hmm001.out)"""
-        filename = 'Hmmer/text_hmm001.out'
+        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, last (text_30_hmmscan_001.out)"""
+        filename = 'Hmmer/text_30_hmmscan_001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
@@ -1082,8 +1082,8 @@ Domain search space  (domZ):               5  [number of targets reported over t
         self.assertEqual(raw, idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
     def test_hmmertext_30_single(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, single query (text_hmm003.out)"""
-        filename = 'Hmmer/text_hmm003.out'
+        """Test hmmer-text raw string retrieval, HMMER 3.0, single query (text_30_hmmscan_003.out)"""
+        filename = 'Hmmer/text_30_hmmscan_003.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
@@ -1259,34 +1259,34 @@ class HmmerTextIndexCases(SearchIndexCases):
 
     fmt = 'hmmer-text'
 
-    def test_hmmertext_text_hmm001(self):
+    def test_hmmertext_text_30_hmmscan_001(self):
         """Test hmmer-text indexing, HMMER 3.0, multiple queries"""
-        filename = 'Hmmer/text_hmm001.out'
+        filename = 'Hmmer/text_30_hmmscan_001.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_text_hmm002(self):
+    def test_hmmertext_text_30_hmmscan_002(self):
         """Test hmmer-text indexing, HMMER 3.0, single query, no hits"""
-        filename = 'Hmmer/text_hmm002.out'
+        filename = 'Hmmer/text_30_hmmscan_002.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_text_hmm006(self):
+    def test_hmmertext_text_30_hmmscan_006(self):
         """Test hmmer-text indexing, HMMER 3.0, single query, multiple hits"""
-        filename = 'Hmmer/text_hmm006.out'
+        filename = 'Hmmer/text_30_hmmscan_006.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_text_hmm007(self):
+    def test_hmmertext_text_30_hmmscan_007(self):
         """Test hmmer-text indexing, HMMER 3.0, single query, no alignments"""
-        filename = 'Hmmer/text_hmm007.out'
+        filename = 'Hmmer/text_30_hmmscan_007.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_text_hmm008(self):
+    def test_hmmertext_text_30_hmmscan_008(self):
         """Test hmmer-text indexing, HMMER 3.0, single query, no alignment width"""
-        filename = 'Hmmer/text_hmm008.out'
+        filename = 'Hmmer/text_30_hmmscan_008.out'
         self.check_index(filename, self.fmt)
 
-    def test_hmmertext_text_hmm013(self):
+    def test_hmmertext_text_30_hmmsearch_005(self):
         """Test hmmer-text indexing, HMMER 3.0, multiple queries"""
-        filename = 'Hmmer/text_hmm013.out'
+        filename = 'Hmmer/text_30_hmmsearch_005.out'
         self.check_index(filename, self.fmt)
 
 
