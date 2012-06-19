@@ -259,6 +259,8 @@ def write(qresults, handle, format=None):
     # turn qresults into an iterator if it's a single QueryResult object
     if isinstance(qresults, QueryResult):
         qresults = iter([qresults])
+    else:
+        qresults = iter(qresults)
 
     # get the writer object and do error checking
     writer_class = _get_handler(format, _WRITER_MAP)
