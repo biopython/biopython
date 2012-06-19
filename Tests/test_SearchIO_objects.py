@@ -14,7 +14,7 @@ to all formats.
 import unittest
 from copy import deepcopy
 
-from search_tests_common import compare_qresult
+from search_tests_common import compare_qresult, compare_hit
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.SearchIO._objects import BaseSearchObject, QueryResult, Hit, HSP
@@ -494,6 +494,8 @@ class HitCases(unittest.TestCase):
 
     def setUp(self):
         self.hit = Hit('hit1', 'query1', [hsp111, hsp112, hsp113])
+        self.hit.evalue = 5e-10
+        self.hit.name = 'test'
 
     def test_repr(self):
         """Test Hit.__repr__"""
@@ -530,11 +532,6 @@ class HitCases(unittest.TestCase):
         """Test Hit.__reversed__"""
         rev_hit = reversed(self.hit)
         self.assertEqual(self.hit.hsps[::-1], rev_hit.hsps[:])
-
-    def test_reversed_attrs(self):
-        """Test Hit.___reversed__, with attributes"""
-        setattr(self.hit, 'evalue', 5e-10)
-        setattr(self.hit, 'name', 'test')
         rev_hit = reversed(self.hit)
         self.assertEqual(5e-10, rev_hit.evalue)
         self.assertEqual('test', rev_hit.name)
@@ -568,14 +565,7 @@ class HitCases(unittest.TestCase):
         self.assertEqual([hsp111, hsp112], new_hit.hsps)
         self.assertEqual(self.hit.id, new_hit.id)
         self.assertEqual(self.hit.query_id, new_hit.query_id)
-
-    def test_getitem_attrs_multiple(self):
-        """Test Hit.__getitem__, multiple items, with attributes"""
-        # check if attributes are carried over
-        setattr(self.hit, 'evalue', 1e-5)
-        setattr(self.hit, 'name', 'test')
-        new_hit = self.hit[:2]
-        self.assertEqual(1e-5, new_hit.evalue)
+        self.assertEqual(5e-10, new_hit.evalue)
         self.assertEqual('test', new_hit.name)
 
     def test_delitem(self):
@@ -608,12 +598,91 @@ class HitCases(unittest.TestCase):
         # validation should vail if hit id does not match
         self.assertRaises(ValueError, self.hit._validate_hsp, hsp121)
 
+    def test_id_set(self):
+        """Test Hit.id setter"""
+        # setting an ID should change the query IDs of all contained HSPs
+        hit = deepcopy(self.hit)
+        self.assertEqual('hit1', hit.id)
+        for hsp in hit:
+            self.assertEqual('hit1', hsp.hit_id)
+        hit.id = 'new_id'
+        self.assertEqual('new_id', hit.id)
+        for hsp in hit:
+            self.assertEqual('new_id', hsp.hit_id)
+
     def test_append(self):
         """Test Hit.append"""
         # append should add hits to the last position
         self.hit.append(hsp114)
         self.assertEqual(4, len(self.hit))
         self.assertEqual(hsp114, self.hit[-1])
+
+    def test_filter(self):
+        """Test Hit.filter"""
+        # filter should return a new QueryResult object (shallow copy),
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        # filter func: min hsp length == 4
+        filter_func = lambda hsp: len(hsp) >= 4
+        filtered = self.hit.filter(filter_func)
+        self.assertEqual([hsp111, hsp113], filtered.hsps)
+        # make sure all remaining hits return True for the filter function
+        self.assertTrue(all([filter_func(hit) for hit in filtered]))
+        self.assertEqual(5e-10, filtered.evalue)
+        self.assertEqual('test', filtered.name)
+
+    def test_filter_no_func(self):
+        """Test Hit.filter, without arguments"""
+        # when given no arguments, filter should create a new object with
+        # the same contents
+        filtered = self.hit.filter()
+        self.assertTrue(compare_hit(filtered, self.hit, 'mock'))
+        self.assertNotEqual(id(filtered), id(self.hit))
+        self.assertEqual(5e-10, filtered.evalue)
+        self.assertEqual('test', filtered.name)
+
+    def test_filter_no_filtered(self):
+        """Test Hit.hit_filter, all hits filtered out"""
+        # when the filter filters out all hits, it should return None
+        filter_func = lambda hsp: len(hsp) > 50
+        filtered = self.hit.filter(filter_func)
+        self.assertTrue(filtered is None)
+
+    def test_map(self):
+        """Test Hit.hsp_map"""
+        # map should apply the given function to all contained HSPs
+        # deepcopy hit since we'll change the objects within
+        hit = deepcopy(self.hit)
+        # apply mock attributes to hsp, for testing mapped hsp attributes
+        for hsp in hit:
+            setattr(hsp, 'mock', 13)
+        # map func: remove first letter of all HSP.alignment
+        def map_func(hsp):
+            hsp = hsp[1:]
+            return hsp
+        mapped = hit.map(map_func)
+        # make sure old hsp attributes is not transferred to mapped hsps
+        for hsp in mapped:
+            self.assertFalse(hasattr(hsp, 'mock'))
+        # check hsps in hit1
+        self.assertEqual('TGCGCAT', str(mapped[0].hit.seq))
+        self.assertEqual('TGCGCAT', str(mapped[0].query.seq))
+        self.assertEqual('TG', str(mapped[1].hit.seq))
+        self.assertEqual('AT', str(mapped[1].query.seq))
+        self.assertEqual('TTCG', str(mapped[2].hit.seq))
+        self.assertEqual('T-CG', str(mapped[2].query.seq))
+        # and make sure the attributes are transferred
+        self.assertEqual(5e-10, mapped.evalue)
+        self.assertEqual('test', mapped.name)
+
+    def test_hsp_map_no_func(self):
+        """Test Hit.map, without arguments"""
+        # when given no arguments, map should create a new object with
+        # the same contents
+        mapped = self.hit.map()
+        self.assertTrue(compare_hit(mapped, self.hit, 'mock'))
+        self.assertNotEqual(id(mapped), id(self.hit))
+        self.assertEqual(5e-10, mapped.evalue)
+        self.assertEqual('test', mapped.name)
 
     def test_pop(self):
         """Test Hit.pop"""
@@ -635,6 +704,8 @@ class HitCases(unittest.TestCase):
         sorted_hit = self.hit.sort(key=key)
         self.assertEqual([hsp112, hsp113, hsp111], sorted_hit.hsps)
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        self.assertEqual(5e-10, sorted_hit.evalue)
+        self.assertEqual('test', sorted_hit.name)
 
     def test_sort_in_place(self):
         """Test Hit.sort, in place"""
