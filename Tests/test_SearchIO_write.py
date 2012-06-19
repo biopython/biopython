@@ -69,7 +69,20 @@ class BlastTabWriteCases(WriteCases):
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
 
 
-        source = os.path.join('Blast', 'tab_2226_tblastn_001.txt')
+class HmmerTabWriteCases(WriteCases):
+
+    fmt = 'hmmer-tab'
+    out = os.path.join('Hmmer', 'test_write.txt')
+
+    def test_write_single_from_hmmertab(self):
+        """Test hmmer-tab writing from hmmer-tab, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
+        source = os.path.join('Hmmer', 'tab_30_hmmscan_004.out')
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
+
+    def test_write_multiple_from_hmmertab(self):
+        """Test hmmer-tab writing from hmmer-tab, HMMER 3.0, multiple queries (tab_30_hmmscan_001.out)"""
+        source = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
 
 

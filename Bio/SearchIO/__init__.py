@@ -92,8 +92,7 @@ _INDEXER_MAP = {
 _WRITER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabWriter'),
         'blast-xml': ('BlastIO', 'BlastXmlWriter'),
-        'blat-psl': ('BlatIO', 'BlatPslIndexer'),
-        'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
+        'hmmer-tab': ('HmmerIO', 'HmmerTabWriter'),
 }
 
 # dictionary of supported conversions for convert()
@@ -101,8 +100,7 @@ _CONVERSIONS = (
         ('blast-tab', 'blast-tab'),
         ('blast-xml', 'blast-xml'),
         ('blast-xml', 'blast-tab'),
-        ('blast-xml', 'blast-text'),
-        # ...
+        ('hmmer-tab', 'hmmer-tab'),
 )
 
 
