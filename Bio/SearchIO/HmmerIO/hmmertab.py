@@ -44,13 +44,100 @@ class HmmerTabIterator(object):
         self.line = read_forward(self.handle)
 
     def __iter__(self):
-        pass
+        # stop iterating if it's an empty file
+        if not self.line:
+            raise StopIteration
+        # if line starts with '#', it's a header line
+        # and we want to read through that
+        elif self.line.startswith('#'):
+            while True:
+                self.line = read_forward(self.handle)
+                # break out of loop when it's not the header lines anymore
+                if not self.line.startswith('#'):
+                    break
+            # stop iterating if we only have headers
+            if not self.line:
+                raise StopIteration
+            for qresult in self.parse_qresult():
+                yield qresult
 
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""
+        assert self.line
+        cols = filter(None, self.line.strip().split(' '))
+        # if len(cols) > 18, we have extra description columns
+        # combine them all into one string in the 19th column
+        if len(cols) > 18:
+            cols[18] = ' '.join(cols[18:])
+        else:
+            cols[18] = ''
+
+        # assign parsed column data into qresult, hit, and hsp dicts
+        qresult = {}
+        qresult['id'] = cols[2]                  # query name
+        qresult['acc'] = cols[3]                 # query accession
+        hit = {}
+        hit['id'] = cols[0]                      # target name
+        hit['acc'] = cols[1]                     # target accession
+        hit['evalue'] = cols[4]                  # evalue (full sequence)
+        hit['bitscore'] = cols[5]                # score (full sequence)
+        hit['bias'] = cols[6]                    # bias (full sequence)
+        hit['domain_exp_num'] = cols[10]         # exp
+        hit['reg_num'] = cols[11]                # reg
+        hit['multidomain_num'] = cols[12]        # clu
+        hit['env_overlap_num'] = cols[13]        # ov
+        hit['env_num'] = cols[14]                # env
+        hit['domain_obs_num'] = cols[15]         # dom
+        hit['domain_report_num'] = cols[16]      # rep
+        hit['domain_inclusion_num'] = cols[17]   # inc
+        hit['desc'] = cols[18]                   # description of target
+        hsp = {}
+        hsp['evalue'] = cols[7]                  # evalue (best 1 domain)
+        hsp['bitscore'] = cols[8]                # score (best 1 domain)
+        hsp['bias'] = cols[9]                    # bias (best 1 domain)
+
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
+        qid_cache = ''
+        while True:
+            # only parse the result row if it's not EOF
+            if self.line:
+                parsed = self.parse_result_row()
+                qresult_id = parsed['qresult']['id']
+
+            # a new qresult is created whenever qid_cache != qresult_id
+            if qid_cache != qresult_id:
+                # yield qresult if qid_cache is filled
+                if qid_cache:
+                    yield qresult
+                qid_cache = qresult_id
+                qresult = QueryResult(qresult_id)
+                for attr, value in parsed['qresult'].items():
+                    setattr(qresult, attr, value)
+            # when we've reached EOF, try yield any remaining qresult and break
+            elif not self.line:
+                yield qresult
+                break
+
+            # create Hit and set its attributes
+            hit_id = parsed['hit']['id']
+            hit = Hit(hit_id, qresult_id)
+            for attr, value in parsed['hit'].items():
+                setattr(hit, attr, value)
+
+            # create HSP and set its attributes
+            hsp = HSP(hit_id, qresult_id)
+            for attr, value in parsed['hsp'].items():
+                setattr(hsp, attr, value)
+
+            # since domain tab formats only have 1 HSP per line
+            # we don't have to worry about appending other HSPs to the Hit
+            hit.append(hsp)
+            qresult.append(hit)
+
+            self.line = read_forward(self.handle)
 
 
 class HmmerTabIndexer(SearchIndexer):
