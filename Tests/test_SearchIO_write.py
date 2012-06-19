@@ -52,7 +52,7 @@ class BlastXmlWriteCases(WriteCases):
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
 
 
-class BlastTablWriteCases(WriteCases):
+class BlastTabWriteCases(WriteCases):
 
     fmt = 'blast-tab'
     out = os.path.join('Blast', 'test_write.txt')
@@ -64,7 +64,11 @@ class BlastTablWriteCases(WriteCases):
         self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
 
     def test_write_multiple_from_blasttab(self):
-        """Test blast-tab writing from blast-tab, BLAST 2.2.26+, single query (tab_2226_tblastn_001.txt)"""
+        """Test blast-tab writing from blast-tab, BLAST 2.2.26+, multiple queries (tab_2226_tblastn_001.txt)"""
+        source = os.path.join('Blast', 'tab_2226_tblastn_001.txt')
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
+
+
         source = os.path.join('Blast', 'tab_2226_tblastn_001.txt')
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
 
