@@ -20,8 +20,8 @@ _INTS = (
         'param_gap_open', 'param_gap_extend', 'param_score_match',
         'param_score_mismatch', 'stat_db_num', 'stat_db_len',
         # hit-specific attributes
-        'domain_obs_num', 'reg_num', 'multidomain_num', 'env_overlap_num',
-        'env_num', 'domain_report_num', 'domain_inclusion_num',
+        'domain_obs_num', 'region_num', 'cluster_num', 'overlap_num',
+        'env_num', 'domain_reported_num', 'domain_included_num',
         # hsp-specific attributes
         'ali_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
