@@ -46,21 +46,21 @@ class BaseSearchObjectCases(unittest.TestCase):
         self.base = BaseSearchObject()
 
     def test_setattr_string(self):
-        """Test BaseSearchObject __setattr__ with string"""
+        """Test BaseSearchObject.__setattr__ with string"""
         # string should stay as string if the attribute name is not listed in
         # _objects._{INTS,FLOATS}
         setattr(self.base, 'test', 'attribute')
         self.assertEqual('attribute', self.base.test)
 
     def test_setattr_int(self):
-        """Test BaseSearchObject __setattr__ with integer"""
+        """Test BaseSearchObject.__setattr__ with integer"""
         # string should be cast into int if the attribute name is listed in
         # _objects._INTS
         setattr(self.base, 'seq_len', '29312')
         self.assertEqual(29312, self.base.seq_len)
 
     def test_setattr_float(self):
-        """Test BaseSearchObject __setattr__ with float"""
+        """Test BaseSearchObject.__setattr__ with float"""
         # string should be cast into float if the attribute name is listed in
         # _objects._FLOATS
         setattr(self.base, 'evalue', '22.23')
