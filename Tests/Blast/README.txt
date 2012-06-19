@@ -16,10 +16,10 @@ tab_2226_tblastn_005         multiple queries, commented
 tab_2226_tblastn_006         single query, no hits, commented
 tab_2226_tblastn_007         single query, hits @ single hsp, commented
 tab_2226_tblastn_008         single query, multiple hsps per hit present, commented
-tab_2226_tblastn_009         multiple queries with custom columns, commented
-tab_2226_tblastn_010         multiple queries with all columns, commented
-tab_2226_tblastn_011         multiple quries, remote search, standard columns, commented
-tab_2226_tblastx_001         multiple queries with custom columns
+tab_2226_tblastn_009         multiple queries with custom columns
+tab_2226_tblastn_010         multiple queries with custom columns, commented
+tab_2226_tblastn_011         multiple queries with all columns, commented
+tab_2226_tblastn_012         multiple quries, remote search, standard columns, commented
 
 text_2226_blastn_001         single query, no hits
 text_2226_blastn_002         single query, hits @ single hsp

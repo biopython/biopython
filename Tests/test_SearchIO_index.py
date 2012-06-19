@@ -1236,19 +1236,19 @@ class BlastTabIndexCases(SearchIndexCases):
         filename = 'Blast/tab_2226_tblastn_008.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_2226_tblastx_001(self):
+    def test_blasttab_2226_tblastn_009(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns"""
-        filename = 'Blast/tab_2226_tblastx_001.txt'
+        filename = 'Blast/tab_2226_tblastn_009.txt'
         self.assertRaises(AssertionError, self.check_index, filename, self.fmt)
 
-    def test_blasttab_2226_tblastn_009(self):
+    def test_blasttab_2226_tblastn_010(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns, commented"""
-        filename = 'Blast/tab_2226_tblastn_009.txt'
+        filename = 'Blast/tab_2226_tblastn_010.txt'
         self.check_index(filename, self.fmt)
 
-    def test_blasttab_2226_tblastn_010(self):
+    def test_blasttab_2226_tblastn_011(self):
         """Test blast-tab indexing, BLAST 2.2.26+, all columns, commented"""
-        filename = 'Blast/tab_2226_tblastn_010.txt'
+        filename = 'Blast/tab_2226_tblastn_011.txt'
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
             self.check_index(filename, self.fmt)

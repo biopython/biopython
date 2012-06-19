@@ -1,0 +1,30 @@
+# TBLASTN 2.2.26+
+# Query: random_s00
+# RID: X76FDCG9016
+# Database: refseq_rna
+# 0 hits found
+# TBLASTN 2.2.26+
+# Query: gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
+# RID: X76FDCG9016
+# Database: refseq_rna
+# Fields: query id, subject id, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+# 3 hits found
+gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|	34.88	43	28	0	31	73	1744	1872	0.76	34.7
+gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	94	1057	1233	7.2	31.6
+gi|16080617|ref|NP_391444.1|	gi|390342090|ref|XM_777959.2|	33.90	59	31	1	44	94	1267	1443	7.6	31.6
+# TBLASTN 2.2.26+
+# Query: gi|11464971:4-101 pleckstrin [Mus musculus]
+# RID: X76FDCG9016
+# Database: refseq_rna
+# Fields: query id, subject id, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+# 10 hits found
+gi|11464971:4-101	gi|354480463|ref|XM_003502378.1|	100.00	98	0	0	1	98	76	369	1e-63	 205
+gi|11464971:4-101	gi|354480463|ref|XM_003502378.1|	30.00	100	64	3	3	96	802	1101	5e-04	43.9
+gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	95.92	98	4	0	1	98	95	388	1e-62	 199
+gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	29.58	71	46	2	30	96	542	754	2.8	32.7
+gi|11464971:4-101	gi|301779869|ref|XM_002925302.1|	97.96	98	2	0	1	98	78	371	2e-62	 202
+gi|11464971:4-101	gi|301779869|ref|XM_002925302.1|	30.00	100	64	2	3	96	804	1103	2e-04	45.1
+gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	97.96	98	2	0	1	98	173	466	1e-61	 202
+gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	9e-05	46.6
+gi|11464971:4-101	gi|390474391|ref|XM_002757683.2|	97.96	98	2	0	1	98	161	454	1e-61	 202
+# BLAST processed 3 queries
