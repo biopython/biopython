@@ -74,6 +74,7 @@ _ITERATOR_MAP = {
         'blat-psl': ('BlatIO', 'blast_psl_iterator'),
         'fasta-m10': ('FastaIO', 'fasta_m10_iterator'),
         'hmmer-text': ('HmmerIO', 'hmmer_text_iterator'),
+        'hmmer-tab': ('HmmerIO', 'hmmer_tab_iterator'),
 }
 
 # dictionary of supported formats for index()
@@ -84,6 +85,7 @@ _INDEXER_MAP = {
         'blat-psl': ('BlatIO', 'BlatPslIndexer'),
         'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
         'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
+        'hmmer-tab': ('HmmerIO', 'HmmerTabIndexer'),
 }
 
 # dictionary of supported formats for write()

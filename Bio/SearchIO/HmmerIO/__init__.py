@@ -12,6 +12,7 @@ to find homology across protein sequences.
 Specifically, this module supports the following HMMER output formats:
 
   - Plain text - 'hmmer-text'
+  - Table output - 'hmmer-tab'
 
 And the following HMMER programs: hmmersearch, hmmerscan
 
@@ -22,6 +23,7 @@ More information are available through these links:
 """
 
 from hmmertext import *
+from hmmertab import *
 
 
 def _test():
