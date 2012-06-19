@@ -12,6 +12,9 @@ to all formats.
 """
 
 import unittest
+from copy import deepcopy
+
+from search_tests_common import compare_qresult
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.SearchIO._objects import BaseSearchObject, QueryResult, Hit, HSP
@@ -22,7 +25,7 @@ from Bio.SeqRecord import SeqRecord
 # create mock objects
 hsp111 = HSP('hit1', 'query1', 'ATGCGCAT', 'ATGCGCAT')
 hsp112 = HSP('hit1', 'query1', 'ATG', 'GAT')
-hsp113 = HSP('hit1', 'query1', 'ATCG', 'CGAT')
+hsp113 = HSP('hit1', 'query1', 'ATTCG', 'AT-CG')
 hsp114 = HSP('hit1', 'query1', 'AT', 'AT')
 hsp211 = HSP('hit2', 'query1', 'GGGCCC', 'GGGCC-')
 hsp311 = HSP('hit3', 'query1', 'GATG', 'GTTG')
@@ -68,6 +71,9 @@ class QueryResultCases(unittest.TestCase):
 
     def setUp(self):
         self.qresult = QueryResult('query1', [hit11, hit21, hit31])
+        # set mock attributes
+        self.qresult.seq_len = 1102
+        self.qresult.target = 'refseq_rna'
 
     def test_repr(self):
         """Test QueryResult.__repr__"""
@@ -175,10 +181,12 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.__getitem__, with slice"""
         # if the index is a slice object, a new qresult object with the same
         # instance attributes should be returned
-        setattr(self.qresult, 'runtime', '3hrs')
+        self.assertEqual(1102, self.qresult.seq_len)
+        self.assertEqual('refseq_rna', self.qresult.target)
         new_qresult = self.qresult[1:]
         self.assertEqual([hit21, hit31], new_qresult.hits)
-        self.assertEqual('3hrs', new_qresult.runtime)
+        self.assertEqual(1102, new_qresult.seq_len)
+        self.assertEqual('refseq_rna', new_qresult.target)
 
     def test_delitem_string_ok(self):
         """Test QueryResult.__getitem__, with string"""
@@ -204,6 +212,22 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(1, len(self.qresult))
         self.assertTrue([hit31], self.qresult.hits)
 
+    def test_id_set(self):
+        """Test QueryResult.id setter"""
+        # setting an ID should change the query IDs of all contained Hit and HSPs
+        qresult = deepcopy(self.qresult)
+        self.assertEqual('query1', qresult.id)
+        for hit in qresult:
+            self.assertEqual('query1', hit.query_id)
+            for hsp in hit:
+                self.assertEqual('query1', hsp.query_id)
+        qresult.id = 'new_id'
+        self.assertEqual('new_id', qresult.id)
+        for hit in qresult:
+            self.assertEqual('new_id', hit.query_id)
+            for hsp in hit:
+                self.assertEqual('new_id', hsp.query_id)
+
     def test_append_ok(self):
         """Test QueryResult.append"""
         # append should work with Hit objects
@@ -225,6 +249,161 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.append, when ID exists"""
         # append should raise an error if hit_key already exist
         self.assertRaises(ValueError, self.qresult.append, hit11)
+
+    def test_hit_filter(self):
+        """Test QueryResult.hit_filter"""
+        # hit_filter should return a new QueryResult object (shallow copy),
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        # filter func: min hit length == 2
+        # this would filter out hit21, since it only has 1 HSP
+        filter_func = lambda hit: len(hit) >= 2
+        filtered = self.qresult.hit_filter(filter_func)
+        self.assertEqual([hit11, hit31], filtered.hits)
+        # make sure all remaining hits return True for the filter function
+        self.assertTrue(all([filter_func(hit) for hit in filtered]))
+        self.assertEqual(1102, filtered.seq_len)
+        self.assertEqual('refseq_rna', filtered.target)
+
+    def test_hit_filter_no_func(self):
+        """Test QueryResult.hit_filter, without arguments"""
+        # when given no arguments, hit_filter should create a new object with
+        # the same contents
+        filtered = self.qresult.hit_filter()
+        self.assertTrue(compare_qresult(filtered, self.qresult, 'mock'))
+        self.assertNotEqual(id(filtered), id(self.qresult))
+        self.assertEqual(1102, filtered.seq_len)
+        self.assertEqual('refseq_rna', filtered.target)
+
+    def test_hit_filter_no_filtered(self):
+        """Test QueryResult.hit_filter, all hits filtered out"""
+        # when the filter filters out all hits, hit_filter should return an
+        # empty QueryResult object
+        filter_func = lambda hit: len(hit) > 50
+        filtered = self.qresult.hit_filter(filter_func)
+        self.assertEqual(0, len(filtered))
+        self.assertTrue(isinstance(filtered, QueryResult))
+        self.assertEqual(1102, filtered.seq_len)
+        self.assertEqual('refseq_rna', filtered.target)
+
+    def test_hit_map(self):
+        """Test QueryResult.hit_map"""
+        # hit_map should apply the given function to all contained Hits
+        # deepcopy the qresult since we'll change the objects within
+        qresult = deepcopy(self.qresult)
+        # map func: capitalize hit IDs
+        def map_func(hit):
+            hit.id = hit.id.upper()
+            return hit
+        # test before mapping
+        self.assertEqual('hit1', qresult[0].id)
+        self.assertEqual('hit2', qresult[1].id)
+        self.assertEqual('hit3', qresult[2].id)
+        mapped = qresult.hit_map(map_func)
+        self.assertEqual('HIT1', mapped[0].id)
+        self.assertEqual('HIT2', mapped[1].id)
+        self.assertEqual('HIT3', mapped[2].id)
+        # and make sure the attributes are transferred
+        self.assertEqual(1102, mapped.seq_len)
+        self.assertEqual('refseq_rna', mapped.target)
+
+    def test_hit_map_no_func(self):
+        """Test QueryResult.hit_map, without arguments"""
+        # when given no arguments, hit_map should create a new object with
+        # the same contents
+        mapped = self.qresult.hit_map()
+        self.assertTrue(compare_qresult(mapped, self.qresult, 'mock'))
+        self.assertNotEqual(id(mapped), id(self.qresult))
+        self.assertEqual(1102, mapped.seq_len)
+        self.assertEqual('refseq_rna', mapped.target)
+
+    def test_hsp_filter(self):
+        """Test QueryResult.hsp_filter"""
+        # hsp_filter should return a new QueryResult object (shallow copy)
+        # and any empty hits should be discarded
+        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        # filter func: no '-' in hsp query sequence
+        # this would filter out hsp113 and hsp211, effectively removing hit21
+        filter_func = lambda hsp: '-' not in str(hsp.query)
+        filtered = self.qresult.hsp_filter(filter_func)
+        self.assertTrue('hit1' in filtered)
+        self.assertTrue('hit2' not in filtered)
+        self.assertTrue('hit3' in filtered)
+        # test hsps in hit11
+        self.assertTrue(all([hsp in filtered['hit1'] for hsp in \
+                [hsp111, hsp112, hsp114]]))
+        # test hsps in in hit31
+        self.assertTrue(all([hsp in filtered['hit3'] for hsp in \
+                [hsp311, hsp312]]))
+
+    def test_hsp_filter_no_func(self):
+        """Test QueryResult.hsp_filter, no arguments"""
+        # when given no arguments, hsp_filter should create a new object with
+        # the same contents
+        filtered = self.qresult.hsp_filter()
+        self.assertTrue(compare_qresult(filtered, self.qresult, 'mock'))
+        self.assertNotEqual(id(filtered), id(self.qresult))
+        self.assertEqual(1102, filtered.seq_len)
+        self.assertEqual('refseq_rna', filtered.target)
+
+    def test_hsp_filter_no_filtered(self):
+        """Test QueryResult.hsp_filter, all hits filtered out"""
+        # when the filter filters out all hits, hsp_filter should return an
+        # empty QueryResult object
+        filter_func = lambda hsp: len(hsp) > 50
+        filtered = self.qresult.hsp_filter(filter_func)
+        self.assertEqual(0, len(filtered))
+        self.assertTrue(isinstance(filtered, QueryResult))
+        self.assertEqual(1102, filtered.seq_len)
+        self.assertEqual('refseq_rna', filtered.target)
+
+    def test_hsp_map(self):
+        """Test QueryResult.hsp_map"""
+        # hsp_map should apply the given function to all contained HSPs
+        # deepcopy the qresult since we'll change the objects within
+        qresult = deepcopy(self.qresult)
+        # apply mock attributes to hsp, for testing mapped hsp attributes
+        for hit in qresult:
+            for hsp in hit:
+                setattr(hsp, 'mock', 13)
+        # map func: remove first letter of all HSP.alignment
+        def map_func(hsp):
+            hsp = hsp[1:]
+            return hsp
+        mapped = qresult.hsp_map(map_func)
+        # make sure old hsp attributes is not transferred to mapped hsps
+        for hit in mapped:
+            for hsp in hit:
+                self.assertFalse(hasattr(hsp, 'mock'))
+        # check hsps in hit1
+        self.assertEqual('TGCGCAT', str(mapped['hit1'][0].hit.seq))
+        self.assertEqual('TGCGCAT', str(mapped['hit1'][0].query.seq))
+        self.assertEqual('TG', str(mapped['hit1'][1].hit.seq))
+        self.assertEqual('AT', str(mapped['hit1'][1].query.seq))
+        self.assertEqual('TTCG', str(mapped['hit1'][2].hit.seq))
+        self.assertEqual('T-CG', str(mapped['hit1'][2].query.seq))
+        self.assertEqual('T', str(mapped['hit1'][3].hit.seq))
+        self.assertEqual('T', str(mapped['hit1'][3].query.seq))
+        # check hsps in hit2
+        self.assertEqual('GGCCC', str(mapped['hit2'][0].hit.seq))
+        self.assertEqual('GGCC-', str(mapped['hit2'][0].query.seq))
+        # check hsps in hit3
+        self.assertEqual('ATG', str(mapped['hit3'][0].hit.seq))
+        self.assertEqual('TTG', str(mapped['hit3'][0].query.seq))
+        self.assertEqual('TATAT', str(mapped['hit3'][1].hit.seq))
+        self.assertEqual('TATAT', str(mapped['hit3'][1].query.seq))
+        # and make sure the attributes are transferred
+        self.assertEqual(1102, mapped.seq_len)
+        self.assertEqual('refseq_rna', mapped.target)
+
+    def test_hsp_map_no_func(self):
+        """Test QueryResult.hsp_map, without arguments"""
+        # when given no arguments, hit_map should create a new object with
+        # the same contents
+        mapped = self.qresult.hsp_map()
+        self.assertTrue(compare_qresult(mapped, self.qresult, 'mock'))
+        self.assertNotEqual(id(mapped), id(self.qresult))
+        self.assertEqual(1102, mapped.seq_len)
+        self.assertEqual('refseq_rna', mapped.target)
 
     def test_pop_ok(self):
         """Test QueryResult.pop"""

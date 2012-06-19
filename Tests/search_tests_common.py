@@ -6,7 +6,7 @@
 from Bio.SearchIO import _ITERATOR_MAP
 
 
-SUPPORTED = _ITERATOR_MAP.keys()
+SUPPORTED = _ITERATOR_MAP.keys() + ['mock'] # mock format for other tests
 
 
 def compare_qresult(qres_a, qres_b, fmt=None):
