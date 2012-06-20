@@ -516,7 +516,7 @@ class QueryResult(BaseSearchObject):
         except ValueError:
             return -1
 
-    def sort(self, key=None, reverse=False, in_place=False):
+    def sort(self, key=None, reverse=False, in_place=True):
         # no cmp argument to make sort more Python 3-like
         """Sorts the Hit objects.
 
@@ -801,7 +801,7 @@ class Hit(BaseSearchObject):
     def reverse(self):
         self._hsps.reverse()
 
-    def sort(self, key=None, reverse=False, in_place=False):
+    def sort(self, key=None, reverse=False, in_place=True):
         if in_place:
             self._hsps.sort(key=key, reverse=reverse)
         else:
