@@ -76,6 +76,11 @@ _ITERATOR_MAP = {
         'fasta-m10': ('FastaIO', 'fasta_m10_iterator'),
         'hmmer-text': ('HmmerIO', 'hmmer_text_iterator'),
         'hmmer-tab': ('HmmerIO', 'hmmer_tab_iterator'),
+        # for hmmer-domtab, the specific program is part of the format name
+        # as we need it distinguish hit / target coordinates
+        'hmmscan-domtab': ('HmmerIO', 'hmmer_domtab_hmmhit_iterator'),
+        'hmmsearch-domtab': ('HmmerIO', 'hmmer_domtab_hmmquery_iterator'),
+        'phmmer-domtab': ('HmmerIO', 'hmmer_domtab_hmmquery_iterator'),
 }
 
 # dictionary of supported formats for index()
@@ -88,6 +93,9 @@ _INDEXER_MAP = {
         'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
         'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabIndexer'),
+        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitIndexer'),
+        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIndexer'),
+        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIndexer'),
 }
 
 # dictionary of supported formats for write()
@@ -96,6 +104,9 @@ _WRITER_MAP = {
         'blast-tabc': ('BlastIO', 'BlastTabcWriter'),
         'blast-xml': ('BlastIO', 'BlastXmlWriter'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabWriter'),
+        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitWriter'),
+        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryWriter'),
+        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryWriter'),
 }
 
 

@@ -12,9 +12,10 @@ to find homology across protein sequences.
 Specifically, this module supports the following HMMER output formats:
 
   - Plain text - 'hmmer-text'
-  - Table output - 'hmmer-tab'
+  - Table - 'hmmer-tab'
+  - Domain table - 'hmmscan-domtab', 'hmmsearch-domtab', or 'phmmer-domtab'
 
-And the following HMMER programs: hmmersearch, hmmerscan
+And the following HMMER programs: hmmersearch, hmmerscan, phmmer
 
 More information are available through these links:
   - Web page: http://hmmer.janelia.org/
@@ -22,6 +23,7 @@ More information are available through these links:
 
 """
 
+from hmmerdomtab import *
 from hmmertext import *
 from hmmertab import *
 
