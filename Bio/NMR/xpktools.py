@@ -2,16 +2,12 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""A python module containing functions and classes for manipulating data from nmrview peaklist files.
-
-Simple note, like these tools are used by NOEtools..?
+"""A module containing tools to manipulate data from nmrview peaklist files.
 
 """
-
 __docformat__ = "restructuredtext en"
 
 import sys
-
 
 HEADERLEN=6
 
@@ -19,28 +15,28 @@ class XpkEntry(object):
     """Provide dictonary access to single entry from nmrview .xpk file.
 
     This class is suited for handling single lines of non-header data 
-    from an nmrview .xpk file.  This class provides methods for extracting
+    from an nmrview .xpk file. This class provides methods for extracting
     data by the field name which is listed in the last line of the 
     peaklist header.
 
     Parameters
     ----------
     xpkentry : str
-        the line from an nmrview .xpk file
+        The line from an nmrview .xpk file
     xpkheadline : str
-        the line from the header file that gives the names of the entries
+        The line from the header file that gives the names of the entries
 
     Attributes
     ----------
     fields : dict
-        dictionary of fields where key is in header line, value is entry
+        Dictionary of fields where key is in header line, value is an entry.
         Variables are accessed by either their name in the header line as in
         self.field["H1.P"] will return the H1.P entry for example.
         self.field["entrynum"] returns the line number (1st field of line)
 
     """
 
-    def __init__(self,entry,headline):
+    def __init__(self, entry, headline):
        self.fields={}   
        datlist  = entry.split()
        headlist = headline.split()
@@ -59,7 +55,6 @@ class Peaklist(object):
     """Provide access to header lines and data from a nmrview xpk file.
 
     Header file lines and file data are available as attributes.
-    residue_dict returns a
 
     Parameters
     ----------
@@ -69,39 +64,44 @@ class Peaklist(object):
     Attributes
     ----------
     firstline  : str
+        The first line in the header.
     axislabels : str
+        The axis labels. 
     dataset    : str
+        The label of the dataset.
     sw         : str
+        The sw label.
     sf         : str
+        The sf label.
     datalabels : str
-        These attributes are parts of the header lines of the file.
+        The labels of the entries.
+
     data : list
         File data after header lines.
 
     """
 
-    def __init__(self,infn):
-
+    def __init__(self, infn):
         # init the data line list
-        self.data=[]    
+        self.data = []    
 
-        infile=open(infn,'r')
+        infile = open(infn,'r')
 
         # Read in the header lines
-        self.firstline=infile.readline().split("\012")[0]
-        self.axislabels=infile.readline().split("\012")[0]
-        self.dataset=infile.readline().split("\012")[0]
-        self.sw=infile.readline().split("\012")[0]
-        self.sf=infile.readline().split("\012")[0]
-        self.datalabels=infile.readline().split("\012")[0]
+        self.firstline  = infile.readline().split("\012")[0]
+        self.axislabels = infile.readline().split("\012")[0]
+        self.dataset    = infile.readline().split("\012")[0]
+        self.sw         = infile.readline().split("\012")[0]
+        self.sf         = infile.readline().split("\012")[0]
+        self.datalabels = infile.readline().split("\012")[0]
 
         # Read in the data lines to a list 
-        line=infile.readline()
+        line = infile.readline()
         while line:
             self.data.append(line.split("\012")[0])
-        line=infile.readline()
+        line = infile.readline()
 
-    def residue_dict(self,index):
+    def residue_dict(self, index):
         """Return a dict of lines in `data` indexed by residue number or a nucleus.
 
         The nucleus should be given as the input argument in the same form as 
@@ -115,7 +115,7 @@ class Peaklist(object):
         Returns
         -------
         dict : dict
-            Mapping of index nucleus to data lines.
+            Mappings of index nucleus to data line.
 
         """
 
@@ -154,7 +154,7 @@ class Peaklist(object):
         return self.resdict
 
     def write_header(self,outfn):
-        """Write header lines from input file."""
+        """Write header lines from input file to `outfn`."""
         outfile = _try_open_write(outfn)
         outfile.write(self.firstline); outfile.write("\012")
         outfile.write(self.axislabels); outfile.write("\012")
@@ -165,50 +165,25 @@ class Peaklist(object):
         outfile.close() 
 
 def _try_open_read(fn):
-    """Try to open a file for reading.
-
-    Raises
-    ------
-    SystemExit
-        If IOError encountered while opening.
-
-    Returns
-    -------
-    fn : file
-        File opened in text mode for reading.
-
-    """
+    """Try to open a file for reading, raising SystemExit if IOError."""
     try:
-        infile=open(fn,'r')
+        infile = open(fn,'r')
     except IOError, e:
         print "file", fn, "could not be opened for reading - quitting."
         sys.exit(0)
     return infile
 
 def _try_open_write(fn):
-    """Try to open a file for writing.
-
-    Raises
-    ------
-    SystemExit
-        If IOError encountered while opening.
-
-    Returns
-    -------
-    fn : file
-        File opened in text mode for writing.
-
-    """
-# Try to open a file for writing.  Exit on IOError
+    """Try to open a file for writing, raising SystemExit if IOError."""
     try:
-        infile=open(fn,'w')
+        infile = open(fn,'w')
     except IOError, e:
         print "file", fn, "could not be opened for writing - quitting."
         sys.exit(0)
     return infile
 
 
-def replace_entry(line,fieldn,newentry):
+def replace_entry(line, fieldn, newentry):
     """Replace an entry in a string by the field number.
 
     No padding is implemented currently.  Spacing will change if the 
@@ -224,8 +199,8 @@ def replace_entry(line,fieldn,newentry):
 def _find_start_entry(line, n):
     """Find the starting character for entry `n` in a space delimited `line`.
 
-    n is counted starting with 1
-    The n=1 field by definition begins at the first character
+    n is counted starting with 1.
+    The n=1 field by definition begins at the first character.
 
     Returns
     -------
@@ -246,7 +221,7 @@ def _find_start_entry(line, n):
     leng = len(line)
 
     # Initialize variables according to whether the first character
-    #  is a space or a character
+    # is a space or a character
     if (line[0] == " "):
             infield = 0
             field = 0
@@ -257,7 +232,7 @@ def _find_start_entry(line, n):
     while (c<leng and field<n):
             if (infield):
                     if (line[c] == " " and not (line[c-1] == " ")):
-                            infield=0
+                            infield = 0
             else:
                     if (not line[c] == " "):
                             infield = 1
@@ -268,12 +243,12 @@ def _find_start_entry(line, n):
     return c-1
 
 def data_table(fn_list, datalabel, keyatom):
-    """Generate a data table from a list of input xpk files. 
+    """Generate a data table from a list of input .xpk files. 
 
     Parameters
     ----------
     fn_list : list
-        List of xpk file names.
+        List of .xpk file names.
     datalabel : str
         The data element reported.
     keyatom : str
@@ -295,10 +270,10 @@ def data_table(fn_list, datalabel, keyatom):
     maxr = dict_list[0]["maxres"]
  
     for dictionary in dict_list:
-    if (maxr < dictionary["maxres"]):
-        maxr = dictionary["maxres"]
-    if (minr > dictionary["minres"]):
-         minr = dictionary["minres"]
+        if (maxr < dictionary["maxres"]):
+            maxr = dictionary["maxres"]
+        if (minr > dictionary["minres"]):
+             minr = dictionary["minres"]
 
     res = minr
     while res <= maxr:        # s.t. res numbers
@@ -318,9 +293,12 @@ def data_table(fn_list, datalabel, keyatom):
     return outlist
 
 def _sort_keys(dictionary):
+    """Sort keys in dictionary and return sorted_keys."""
     keys=dictionary.keys()
     sorted_keys=keys.sort()
 
+    """ ..warning:: This returns None, since sort() is in-place.
+    """
     return sorted_keys
 
 def _read_dicts(fn_list, keyatom):
