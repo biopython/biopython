@@ -20,6 +20,11 @@ before_script:
 script:
   - python run_tests.py --offline
 
+# whitelist branches
+branches:
+  only:
+    - master
+
 #The email defaults are too talkative while we're getting Travis working nicely.
 notifications:
   email: false
