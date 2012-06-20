@@ -485,15 +485,9 @@ class BlastTabWriter(object):
 
     """Writer for blast-tab output format."""
 
-    def __init__(self, handle, fields=_DEFAULT_FIELDS, commented=False):
+    def __init__(self, handle, fields=_DEFAULT_FIELDS):
         self.handle = handle
         self.fields = fields
-        self.commented = commented
-        if commented:
-            # inverse mapping of the long-short name map, required
-            # for writing comments
-            self.inv_field_map = dict((value, key) for key, value in \
-                    _LONG_SHORT_MAP.items())
 
     def write_file(self, qresults):
         """Writes to the handle, returns how many QueryResult objects are written."""
@@ -501,53 +495,13 @@ class BlastTabWriter(object):
         qresult_counter, hit_counter, hsp_counter = 0, 0, 0
 
         for qresult in qresults:
-            if self.commented:
-                handle.write(self.build_comments(qresult))
             if qresult:
                 handle.write(self.build_rows(qresult))
                 qresult_counter += 1
                 hit_counter += len(qresult)
                 hsp_counter += sum([len(hit) for hit in qresult])
-            # if it's commented and there are no hits in the qresult, we still
-            # print the comments
-            elif not qresult and self.commented:
-                qresult_counter += 1
-
-        # commented files have a line saying how many queries were processed
-        if self.commented:
-            handle.write('# BLAST processed %i queries' % qresult_counter)
 
         return qresult_counter, hit_counter, hsp_counter
-
-    def build_comments(self, qresult):
-        """Returns a string of a QueryResult tabular comment."""
-        inv_field_map = self.inv_field_map
-        comments = []
-
-        # try to anticipate qresults without version
-        if not hasattr(qresult, 'version'):
-            program_line = '# %s' % qresult.program.upper()
-        else:
-            program_line = '# %s %s' % (qresult.program.upper(), qresult.version)
-        comments.append(program_line)
-        # description may or may not be present, so we'll do a try here
-        try:
-            comments.append('# Query: %s %s' % (qresult.id, qresult.desc))
-        except AttributeError:
-            comments.append('# Query: %s' % qresult.id)
-        # try appending RID line, if present
-        try:
-            comments.append('# RID: %s' % qresult.rid)
-        except AttributeError:
-            pass
-        comments.append('# Database: %s' % qresult.target)
-        # qresults without hits don't show the Fields comment
-        if qresult:
-            comments.append('# Fields: %s' % \
-                    ', '.join([inv_field_map[field] for field in self.fields]))
-        comments.append('# %i hits found' % len(qresult))
-
-        return '\n'.join(comments) + '\n'
 
     def build_rows(self, qresult):
         """Returns a string containing tabular rows of the QueryResult object."""
@@ -663,6 +617,71 @@ class BlastTabWriter(object):
             value = str(value)
 
         return value
+
+
+class BlastTabcWriter(BlastTabWriter):
+
+    """Writer for blast-tabc output format."""
+
+    def __init__(self, handle, fields=_DEFAULT_FIELDS):
+        self.handle = handle
+        self.fields = fields
+        # inverse mapping of the long-short name map, required
+        # for writing comments
+        self.inv_field_map = dict((value, key) for key, value in \
+                _LONG_SHORT_MAP.items())
+
+    def write_file(self, qresults):
+        """Writes to the handle, returns how many QueryResult objects are written."""
+        handle = self.handle
+        qresult_counter, hit_counter, hsp_counter = 0, 0, 0
+
+        for qresult in qresults:
+            handle.write(self.build_comments(qresult))
+            if qresult:
+                handle.write(self.build_rows(qresult))
+                qresult_counter += 1
+                hit_counter += len(qresult)
+                hsp_counter += sum([len(hit) for hit in qresult])
+            # if it's commented and there are no hits in the qresult, we still
+            # print the comments
+            elif not qresult:
+                qresult_counter += 1
+
+        # commented files have a line saying how many queries were processed
+        handle.write('# BLAST processed %i queries' % qresult_counter)
+
+        return qresult_counter, hit_counter, hsp_counter
+
+    def build_comments(self, qresult):
+        """Returns a string of a QueryResult tabular comment."""
+        inv_field_map = self.inv_field_map
+        comments = []
+
+        # try to anticipate qresults without version
+        if not hasattr(qresult, 'version'):
+            program_line = '# %s' % qresult.program.upper()
+        else:
+            program_line = '# %s %s' % (qresult.program.upper(), qresult.version)
+        comments.append(program_line)
+        # description may or may not be present, so we'll do a try here
+        try:
+            comments.append('# Query: %s %s' % (qresult.id, qresult.desc))
+        except AttributeError:
+            comments.append('# Query: %s' % qresult.id)
+        # try appending RID line, if present
+        try:
+            comments.append('# RID: %s' % qresult.rid)
+        except AttributeError:
+            pass
+        comments.append('# Database: %s' % qresult.target)
+        # qresults without hits don't show the Fields comment
+        if qresult:
+            comments.append('# Fields: %s' % \
+                    ', '.join([inv_field_map[field] for field in self.fields]))
+        comments.append('# %i hits found' % len(qresult))
+
+        return '\n'.join(comments) + '\n'
 
 
 def _test():

@@ -69,6 +69,7 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
         'blast-tab': ('BlastIO', 'blast_tab_iterator'),
+        'blast-tabc': ('BlastIO', 'blast_tab_iterator'),
         'blast-text': ('BlastIO', 'blast_text_iterator'),
         'blast-xml': ('BlastIO', 'blast_xml_iterator'),
         'blat-psl': ('BlatIO', 'blast_psl_iterator'),
@@ -80,6 +81,7 @@ _ITERATOR_MAP = {
 # dictionary of supported formats for index()
 _INDEXER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabIndexer'),
+        'blast-tabc': ('BlastIO', 'BlastTabIndexer'),
         'blast-text': ('BlastIO', 'BlastTextIndexer'),
         'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
         'blat-psl': ('BlatIO', 'BlatPslIndexer'),
@@ -91,6 +93,7 @@ _INDEXER_MAP = {
 # dictionary of supported formats for write()
 _WRITER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabWriter'),
+        'blast-tabc': ('BlastIO', 'BlastTabcWriter'),
         'blast-xml': ('BlastIO', 'BlastXmlWriter'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabWriter'),
 }
@@ -98,8 +101,11 @@ _WRITER_MAP = {
 # dictionary of supported conversions for convert()
 _CONVERSIONS = (
         ('blast-tab', 'blast-tab'),
+        ('blast-tabc', 'blast-tabc'),
+        ('blast-tabc', 'blast-tab'),
         ('blast-xml', 'blast-xml'),
         ('blast-xml', 'blast-tab'),
+        ('blast-xml', 'blast-tabc'),
         ('hmmer-tab', 'hmmer-tab'),
 )
 
