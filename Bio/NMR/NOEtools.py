@@ -43,6 +43,7 @@ def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
     Examples
     --------
     
+    
     Notes
     -----
     Calling example predictNOE(peaklist,"N15","H1",10,12)

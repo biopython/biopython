@@ -22,9 +22,10 @@ class XpkEntry(object):
     Parameters
     ----------
     xpkentry : str
-        The line from an nmrview .xpk file
+        The line from an nmrview .xpk file.
     xpkheadline : str
-        The line from the header file that gives the names of the entries
+        The line from the header file that gives the names of the entries.
+        This is typically the sixth line of the header, 1-origin.
 
     Attributes
     ----------
@@ -70,14 +71,28 @@ class Peaklist(object):
     dataset    : str
         The label of the dataset.
     sw         : str
-        The sw label.
+        The sw coordinates.
     sf         : str
-        The sf label.
+        The sf coordinates.
     datalabels : str
         The labels of the entries.
 
     data : list
         File data after header lines.
+
+    Examples
+    --------
+    >>> import Bio.NMR.xpktools
+    >>> peaklist = xpktools.Peaklist('../../Doc/examples/noed.xpk')
+    >>> peaklist.firstline
+    'label dataset sw sf '
+    >>> peaklist.dataset
+    'test.nv'
+    >>> peaklist.sf
+    '{599.8230 } { 60.7860 } { 60.7860 }'
+    >>> peaklist.datalabels
+    ' H1.L  H1.P  H1.W  H1.B  H1.E  H1.J  15N2.L  15N2.P  15N2.W  15N2.B  15N2.E  15N2.J  N15.L  N15.P  N15.W  N15.B  N15.E  N15.J  vol  int  stat '
+
 
     """
 
@@ -99,7 +114,7 @@ class Peaklist(object):
         line = infile.readline()
         while line:
             self.data.append(line.split("\012")[0])
-        line = infile.readline()
+            line = infile.readline()
 
     def residue_dict(self, index):
         """Return a dict of lines in `data` indexed by residue number or a nucleus.
@@ -114,8 +129,18 @@ class Peaklist(object):
 
         Returns
         -------
-        dict : dict
+        resdict : dict
             Mappings of index nucleus to data line.
+
+        Examples
+        --------
+        >>> import Bio.NMR.xpktools
+        >>> peaklist = xpktools.Peaklist('../../Doc/examples/noed.xpk')
+        >>> residue_d = peaklist.residue_dict('H1')
+        >>> residue_d.keys()
+        ['10', 'maxres', 'minres', '3', '5', '4', '7', '6', '9', '8']
+        >>> residue_d['10']
+        ['8  10.hn   7.663   0.021   0.010   ++   0.000   10.n   118.341   0.324   0.010   +E   0.000   10.n   118.476   0.324   0.010   +E   0.000  0.49840 0.49840 0']
 
         """
 
