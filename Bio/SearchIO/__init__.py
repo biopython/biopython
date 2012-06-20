@@ -98,17 +98,6 @@ _WRITER_MAP = {
         'hmmer-tab': ('HmmerIO', 'HmmerTabWriter'),
 }
 
-# dictionary of supported conversions for convert()
-_CONVERSIONS = (
-        ('blast-tab', 'blast-tab'),
-        ('blast-tabc', 'blast-tabc'),
-        ('blast-tabc', 'blast-tab'),
-        ('blast-xml', 'blast-xml'),
-        ('blast-xml', 'blast-tab'),
-        ('blast-xml', 'blast-tabc'),
-        ('hmmer-tab', 'hmmer-tab'),
-)
-
 
 def _get_handler(format, mapping):
     """Returns the object to handle the given format according to the mapping.
@@ -288,10 +277,6 @@ def convert(in_file, in_format, out_file, out_format):
     out_file -- Handle to the output file, or the filename as string.
     out_format -- Lower case string denoting the format of the output file.
 
-    Conversion is currently limited to operations between search output files
-    from one homology search program. An error will be raised if the attempted
-    conversion is not supported yet.
-
     Note that some conversion are lossy, so it can only go one way. For
     example conversion from blast-xml to blast-tab is possible as blast-xml
     has richer information than blast-tab. However the reverse is not possible,
@@ -299,12 +284,6 @@ def convert(in_file, in_format, out_file, out_format):
     blast-xml (e.g. the HSP alignment is not always present in blast-tab). 
 
     """
-    convert_pair = (in_format, out_format)
-
-    if convert_pair not in _CONVERSIONS:
-        raise ValueError("Conversion from '%s' to '%s' is not supported" % \
-                (in_format, out_format))
-
     qresults = parse(in_file, in_format)
     return write(qresults, out_file, out_format)
 
