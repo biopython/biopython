@@ -1111,9 +1111,10 @@ class SffWriter(SequenceWriter):
         if self._index is not None:
             offset = self.handle.tell()
             #Check the position of the final record (before sort by name)
-            #See comments earlier about how base 255 seems to be used.
-            #This means the limit is 255**4 + 255**3 +255**2 + 255**1
-            if offset > 4244897280:
+            #Using a four-digit base 255 number, so the upper bound is
+            #254*(1)+254*(255)+254*(255**2)+254*(255**3) = 4228250624
+            #or equivalently it overflows at 255**4 = 4228250625
+            if offset > 4228250624:
                 import warnings
                 warnings.warn("Read %s has file offset %i, which is too large "
                               "to store in the Roche SFF index structure. No "
