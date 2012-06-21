@@ -10,8 +10,11 @@ indexing, here we are only testing the format-specific parsers and not
 the SearchIO indexing core itself.
 
 """
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
 
 import os
+import sys
 import unittest
 import warnings
 
@@ -1337,10 +1340,14 @@ class BlastTabIndexCases(SearchIndexCases):
     def test_blasttab_2226_tblastn_011(self):
         """Test blast-tab indexing, BLAST 2.2.26+, all columns, commented"""
         filename = 'Blast/tab_2226_tblastn_011.txt'
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        # TODO: remove after py2.5 deprecation
+        if sys.version_info[:2] > (2, 5):
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter('always')
+                self.check_index(filename, self.fmt)
+                self.assertTrue(issubclass(w[-1].category, UserWarning))
+        else:
             self.check_index(filename, self.fmt)
-            self.assertTrue(issubclass(w[-1].category, UserWarning))
 
 
 class HmmerTextIndexCases(SearchIndexCases):

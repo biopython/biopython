@@ -5,8 +5,11 @@
 
 """Tests for SearchIO BlastIO parsers."""
 
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
 
 import os
+import sys
 import unittest
 import warnings
 
@@ -585,13 +588,18 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        # TODO: remove after py2.5 deprecation
+        if sys.version_info[:2] > (2, 5):
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter('always')
+                qresult = qresults.next()
+                counter += 1
+                # 5 warnings for 5 incompatible columns
+                self.assertEqual(len(w), 5)
+                self.assertTrue(issubclass(w[-1].category, UserWarning))
+        else:
             qresult = qresults.next()
             counter += 1
-            # 5 warnings for 5 incompatible columns
-            self.assertEqual(len(w), 5)
-            self.assertTrue(issubclass(w[-1].category, UserWarning))
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_mrna', qresult.target)
@@ -664,13 +672,18 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, hsp.hit_frame)
 
         # test last qresult
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        # TODO: remove after py2.5 deprecation
+        if sys.version_info[:2] > (2, 5):
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter('always')
+                qresult = qresults.next()
+                counter += 1
+                # 5 warnings for 5 incompatible columns
+                self.assertEqual(len(w), 5)
+                self.assertTrue(issubclass(w[-1].category, UserWarning))
+        else:
             qresult = qresults.next()
             counter += 1
-            # 5 warnings for 5 incompatible columns
-            self.assertEqual(len(w), 5)
-            self.assertTrue(issubclass(w[-1].category, UserWarning))
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_mrna', qresult.target)

@@ -227,8 +227,8 @@ class BlastTabIterator(object):
                         warnings.warn(message)
                 # if set(fields) has a null intersection with minimum required
                 # fields for hit and query, raise an exception
-                if set(fields).isdisjoint(_MIN_QUERY_FIELDS) or \
-                        set(fields).isdisjoint(_MIN_HIT_FIELDS):
+                if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
+                        not set(fields).intersection(_MIN_HIT_FIELDS):
                     raise ValueError("Required field is not found.")
                 comments['fields'] = fields
                 self.line = read_forward(self.handle)
