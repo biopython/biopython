@@ -373,10 +373,8 @@ def _load_bgzf_block(handle, text_mode=False):
         raise ValueError(r"A BGZF (e.g. a BAM file) block should start with "
                          r"%r, not %r; handle.tell() now says %r"
                          % (_bgzf_magic, magic, handle.tell()))
-    gzip_mod_time = handle.read(4) #uint32_t
-    gzip_extra_flags = handle.read(1) #uint8_t
-    gzip_os = handle.read(1) #uint8_t
-    extra_len = struct.unpack("<H", handle.read(2))[0] #uint16_t
+    gzip_mod_time, gzip_extra_flags, gzip_os, extra_len = \
+        struct.unpack("<LBBH", handle.read(8))
         
     block_size = None
     x_len = 0
