@@ -175,7 +175,7 @@ def blast_xml_iterator(handle):
 class BlastXmlIterator(object):
 
     def __init__(self, handle):
-        self.xmlhandle = ET.iterparse(handle, events=('start', 'end'))
+        self.xmlhandle = iter(ET.iterparse(handle, events=('start', 'end')))
         self._meta, self._fallback = self.parse_preamble()
 
     def __iter__(self):
