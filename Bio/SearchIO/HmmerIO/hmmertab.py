@@ -152,12 +152,15 @@ class HmmerTabIndexer(SearchIndexer):
         # set parser for on-the-fly parsing
         self._parser = hmmer_tab_iterator
         self._handle.seek(0)
+        # denotes column location for query identifier
+        self._query_id_idx = 2
 
     def __iter__(self):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
         split_char = _as_bytes(' ')
+        query_id_idx = self._query_id_idx
         qresult_key = None
 
         # read through header
@@ -174,9 +177,11 @@ class HmmerTabIndexer(SearchIndexer):
             if not line:
                 break
             if qresult_key is None:
-                qresult_key = filter(None, line.strip().split(split_char))[2]
+                qresult_key = filter(None, \
+                        line.strip().split(split_char))[query_id_idx]
             else:
-                curr_key = filter(None, line.strip().split(split_char))[2]
+                curr_key = filter(None, \
+                        line.strip().split(split_char))[query_id_idx]
 
                 if curr_key != qresult_key:
                     yield _bytes_to_string(qresult_key), start_offset, \
@@ -195,6 +200,7 @@ class HmmerTabIndexer(SearchIndexer):
         handle = self._handle
         handle.seek(offset)
         split_char = _as_bytes(' ')
+        query_id_idx = self._query_id_idx
         qresult_key = None
         qresult_raw = ''
 
@@ -203,9 +209,11 @@ class HmmerTabIndexer(SearchIndexer):
             if not line:
                 break
             if qresult_key is None:
-                qresult_key = filter(None, line.strip().split(split_char))[2]
+                qresult_key = filter(None, \
+                        line.strip().split(split_char))[query_id_idx]
             else:
-                curr_key = filter(None, line.strip().split(split_char))[2]
+                curr_key = filter(None, \
+                        line.strip().split(split_char))[query_id_idx]
                 if curr_key != qresult_key:
                     break
             qresult_raw += line

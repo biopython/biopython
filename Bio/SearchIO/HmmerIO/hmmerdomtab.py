@@ -10,6 +10,7 @@ from itertools import chain
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
+from hmmertab import HmmerTabIndexer
 
 
 def hmmer_domtab_hmmhit_iterator(handle):
@@ -183,48 +184,28 @@ class HmmerDomtabIterator(object):
             self.line = read_forward(self.handle)
 
 
-class HmmerDomtabHmmhitIndexer(SearchIndexer):
+class HmmerDomtabHmmhitIndexer(HmmerTabIndexer):
 
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are hit coordinates."""
 
     def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
+        HmmerTabIndexer.__init__(self, *args, **kwargs)
         # set parser for on-the-fly parsing
-        self._parser = hmmer_domtab_iterator
-        self._handle.seek(0)
+        self._parser = hmmer_domtab_hmmhit_iterator
+        self._query_id_idx = 3
 
-    def __iter__(self):
-        """Iterates over the file handle; yields key, start offset, and length."""
-        handle = self._handle
-        handle.seek(0)
-        split_char = _as_bytes(' ')
-        qresult_key = None
 
-        # read through header
-        while True:
-            start_offset = handle.tell()
-            line = read_forward(handle, strip=False)
-            if not line.startswith('#'):
-                break
+class HmmerDomtabHmmqueryIndexer(HmmerTabIndexer):
 
-        # and index the qresults
-        #while True:
-        #    end_offset = handle.tell()
+    """Indexer class for HMMER domain table output that assumes HMM profile
+    coordinates are query coordinates."""
 
-        #    if not line:
-        #        break
-        #    if qresult_key is None:
-
-    def get_raw(self, offset):
-        """Returns the raw string of a QueryResult object from the given offset."""
-        handle = self._handle
-        handle.seek(offset)
-        split_char = _as_bytes(' ')
-        qresult_key = None
-        qresult_raw = ''
-
-        return qresult_raw
+    def __init__(self, *args, **kwargs):
+        HmmerTabIndexer.__init__(self, *args, **kwargs)
+        # set parser for on-the-fly parsing
+        self._parser = hmmer_domtab_hmmquery_iterator
+        self._query_id_idx = 3
 
 
 class HmmerDomtabHmmhitWriter(object):
