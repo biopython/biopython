@@ -248,12 +248,15 @@ class HmmerDomtabHmmhitWriter(object):
 
         # calculate whitespace required
         # adapted from HMMER's source: src/p7_tophits.c#L1157
-        if first_qresult is not None:
+        if first_qresult:
             #qnamew = max(20, len(first_qresult.id))
             qnamew = 20
             tnamew = max(20, len(first_qresult[0].id))
-            qaccw = max(10, len(first_qresult.acc))
-            taccw = max(10, len(first_qresult[0].acc))
+            try:
+                qaccw = max(10, len(first_qresult.acc))
+                taccw = max(10, len(first_qresult[0].acc))
+            except AttributeError:
+                qaccw, taccw = 10, 10
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
@@ -288,13 +291,12 @@ class HmmerDomtabHmmhitWriter(object):
         # adapted from HMMER's source: src/p7_tophits.c#L1083
         qnamew = max(20, len(qresult.id))
         tnamew = max(20, len(qresult[0].id))
-        qaccw = max(10, len(qresult.acc))
-        taccw = max(10, len(qresult[0].acc))
-
-        # try to get qresult accession
         try:
+            qaccw = max(10, len(qresult.acc))
+            taccw = max(10, len(qresult[0].acc))
             qresult_acc = qresult.acc
         except AttributeError:
+            qaccw, taccw = 10, 10
             qresult_acc = '-'
 
         for hit in qresult:
