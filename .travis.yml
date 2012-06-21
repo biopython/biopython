@@ -1,0 +1,30 @@
+#Special configuration file to run tests on Travis-CI via GitHub notifications
+#See http://travis-ci.org/ for details
+
+#Note when testing Python 3, the 'python' command will invoke Python 3
+
+language: python
+python:
+  - "2.5"
+  - "2.6"
+  - "2.7"
+  - "3.2"
+
+install:
+  - sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail
+  - /usr/bin/yes | python setup.py install 2>&1 | tail
+
+before_script:
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd build/py3.2/Tests; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION != '3.2' ]]; then cd Tests; fi"
+script:
+  - python run_tests.py --offline
+
+# whitelist branches
+branches:
+  only:
+    - master
+
+#The email defaults are too talkative while we're getting Travis working nicely.
+notifications:
+  email: false
