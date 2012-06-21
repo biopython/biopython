@@ -103,6 +103,30 @@ class HmmerTabWriteCases(WriteCases):
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
 
 
+class HmmerDomtabWriteCases(WriteCases):
+
+    out = os.path.join('Hmmer', 'test_write.txt')
+
+    def test_write_single_from_hmmscandomtab(self):
+        """Test hmmscan-domtab writing from hmmscan-domtab, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
+        source = os.path.join('Hmmer', 'domtab_30_hmmscan_004.out')
+        fmt = 'hmmscan-domtab'
+        self.parse_write_and_compare(source, fmt, self.out, fmt)
+        self.read_write_and_compare(source, fmt, self.out, fmt)
+
+    def test_write_multiple_from_hmmscandomtab(self):
+        """Test hmmscan-domtab writing from hmmscan-domtab, HMMER 3.0, multiple queries (tab_30_hmmscan_001.out)"""
+        source = os.path.join('Hmmer', 'domtab_30_hmmscan_001.out')
+        fmt = 'hmmscan-domtab'
+        self.parse_write_and_compare(source, fmt, self.out, fmt)
+
+    def test_write_single_from_hmmsearchdomtab(self):
+        """Test hmmsearch-domtab writing from hmmsearch-domtab, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
+        source = os.path.join('Hmmer', 'domtab_30_hmmsearch_001.out')
+        fmt = 'hmmsearch-domtab'
+        self.parse_write_and_compare(source, fmt, self.out, fmt)
+        self.read_write_and_compare(source, fmt, self.out, fmt)
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

@@ -215,6 +215,7 @@ class HmmerDomtabHmmhitWriter(object):
 
     def __init__(self, handle):
         self.handle = handle
+        self.hmm_as_hit = True
 
     def write_file(self, qresults):
         """Writes to the handle.
@@ -243,14 +244,98 @@ class HmmerDomtabHmmhitWriter(object):
         return qresult_counter, hit_counter, hsp_counter
 
     def build_header(self, first_qresult=None):
-        """Returns the header string of a HMMER table output."""
+        """Returns the header string of a domain HMMER table output."""
+
+        # calculate whitespace required
+        # adapted from HMMER's source: src/p7_tophits.c#L1157
+        if first_qresult is not None:
+            #qnamew = max(20, len(first_qresult.id))
+            qnamew = 20
+            tnamew = max(20, len(first_qresult[0].id))
+            qaccw = max(10, len(first_qresult.acc))
+            taccw = max(10, len(first_qresult[0].acc))
+        else:
+            qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
+
+        header = ''
+        header += "#%*s %22s %40s %11s %11s %11s\n" % \
+                (tnamew+qnamew-1+15+taccw+qaccw, "", "--- full sequence ---", \
+                "-------------- this domain -------------", "hmm coord", \
+                "ali coord", "env coord")
+        header += "#%-*s %-*s %5s %-*s %-*s %5s %9s %6s %5s %3s %3s %9s " \
+                "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1, \
+                " target name", taccw, "accession", "tlen", qnamew, \
+                "query name", qaccw, "accession", "qlen", "E-value", "score", \
+                "bias", "#", "of", "c-Evalue", "i-Evalue", "score", "bias", \
+                "from", "to", "from", "to", "from", "to", "acc", \
+                "description of target")
+        header += "#%*s %*s %5s %*s %*s %5s %9s %6s %5s %3s %3s %9s %9s " \
+                "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1, \
+                "-------------------", taccw, "----------", "-----", \
+                qnamew, "--------------------", qaccw, "----------", \
+                "-----", "---------", "------", "-----", "---", "---", \
+                "---------", "---------", "------", "-----", "-----", "-----", \
+                "-----", "-----", "-----", "-----", "----", \
+                "---------------------")
 
         return header
 
     def build_row(self, qresult):
         """Returns a string or one row or more of the QueryResult object."""
+        rows = ''
+
+        # calculate whitespace required
+        # adapted from HMMER's source: src/p7_tophits.c#L1083
+        qnamew = max(20, len(qresult.id))
+        tnamew = max(20, len(qresult[0].id))
+        qaccw = max(10, len(qresult.acc))
+        taccw = max(10, len(qresult[0].acc))
+
+        # try to get qresult accession
+        try:
+            qresult_acc = qresult.acc
+        except AttributeError:
+            qresult_acc = '-'
+
+        for hit in qresult:
+            
+            # try to get hit accession
+            try:
+                hit_acc = hit.acc
+            except AttributeError:
+                hit_acc = '-'
+
+            for hsp in hit:
+                if self.hmm_as_hit:
+                    hmm_to = hsp.hit_to + 1
+                    hmm_from = hsp.hit_from + 1
+                    ali_to = hsp.query_to + 1
+                    ali_from = hsp.query_from + 1
+                else:
+                    hmm_to = hsp.query_to + 1
+                    hmm_from = hsp.query_from + 1
+                    ali_to = hsp.hit_to + 1
+                    ali_from = hsp.hit_from + 1
+
+                rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d %3d" \
+                " %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld %5d %5d %4.2f %s\n" % \
+                (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew, qresult.id, \
+                qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore, \
+                hit.bias, hsp.domain_index, len(hit), hsp.evalue_cond, hsp.evalue, \
+                hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to, \
+                hsp.env_from + 1, hsp.env_to + 1, hsp.acc_avg, hit.desc)
 
         return rows
+
+
+class HmmerDomtabHmmqueryWriter(HmmerDomtabHmmhitWriter):
+
+    """Writer for hmmer-domtab output format which writes query coordinates
+    as HMM profile coordinates."""
+
+    def __init__(self, handle):
+        self.handle = handle
+        self.hmm_as_hit = False
 
 
 def _test():
