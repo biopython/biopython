@@ -145,6 +145,9 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
             alignment._annotations[key] = value
         for key, value in align_tags.iteritems():
             alignment._annotations[key] = value
+
+        alignment.annotations = {}
+        alignment.annotations["sw_expect"] = float(alignment._annotations["sw_expect"])
         
         #Query
         #=====
@@ -156,6 +159,8 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
         #TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(query_tags["al_start"])
         record._al_stop = int(query_tags["al_stop"])
+        record.annotations["start"] = int(query_tags["al_start"])
+        record.annotations["end"] = int(query_tags["al_stop"])
         alignment.append(record)
 
         #TODO - What if a specific alphabet has been requested?
@@ -180,6 +185,8 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
         #TODO - handle start/end coordinates properly. Short term hack for now:
         record._al_start = int(match_tags["al_start"])
         record._al_stop = int(match_tags["al_stop"])
+        record.annotations["start"] = int(match_tags["al_start"])
+        record.annotations["end"] = int(match_tags["al_stop"])
         alignment.append(record)
 
         #This is still a very crude way of dealing with the alphabet:
