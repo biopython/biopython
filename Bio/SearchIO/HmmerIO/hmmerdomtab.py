@@ -128,7 +128,7 @@ class HmmerDomtabIterator(object):
             hsp['hit_from'], hsp['query_from'] = \
                     hsp['query_from'], hsp['hit_from']
 
-        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
+        return qresult, hit, hsp
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
@@ -140,8 +140,8 @@ class HmmerDomtabIterator(object):
         while True:
             # only parse the result row if it's not EOF
             if self.line:
-                parsed = self.parse_result_row()
-                qresult_id = parsed['qresult']['id']
+                qres_parsed, hit_parsed, hsp_parsed = self.parse_result_row()
+                qresult_id = qres_parsed['id']
 
             # a new qresult is created whenever qid_cache != qresult_id
             if qid_cache != qresult_id:
@@ -152,7 +152,7 @@ class HmmerDomtabIterator(object):
                     same_query = False
                 qid_cache = qresult_id
                 qresult = QueryResult(qresult_id)
-                for attr, value in parsed['qresult'].items():
+                for attr, value in qres_parsed.items():
                     setattr(qresult, attr, value)
             # when we've reached EOF, try yield any remaining qresult and break
             elif not self.line:
@@ -163,7 +163,7 @@ class HmmerDomtabIterator(object):
             elif not same_query:
                 same_query = True
 
-            hit_id = parsed['hit']['id']
+            hit_id = hit_parsed['id']
             # a new hit is created whenever hid_cache != hit_id
             if hid_cache != hit_id:
                 # if we're in the same query, append the previous line's hit
@@ -171,13 +171,13 @@ class HmmerDomtabIterator(object):
                     qresult.append(hit)
                 hid_cache = hit_id
                 hit = Hit(hit_id, qresult_id)
-                for attr, value in parsed['hit'].items():
+                for attr, value in hit_parsed.items():
                     setattr(hit, attr, value)
 
             # each line is basically a different HSP, so we always add it to
             # any hit object we have
             hsp = HSP(hit_id, qresult_id)
-            for attr, value in parsed['hsp'].items():
+            for attr, value in hsp_parsed.items():
                 setattr(hsp, attr, value)
             hit.append(hsp)
 
