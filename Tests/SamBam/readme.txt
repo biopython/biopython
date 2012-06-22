@@ -13,3 +13,11 @@ contains MAQ alignments extracted with:
 and processed with `samtools fixmate' to make it self-consistent as a
 standalone alignment, and then converted to ex1.bam using `samtools
 import'.
+
+Files ex1_header.* were derived from ex1.* by adding a SAM header
+(@HD and @SQ lines). The contents of File ex1_refresh.bam are the
+same as ex1_header.bam but it was generated with a newer version
+of samtools, and uses a different BGZF block strategy. The older
+file ex1_header.bam has all its blocks the same size (64KB), the
+newer file ex1_refresh.bam gives the header its own block and also
+avoids splitting reads between blocks.
