@@ -98,8 +98,8 @@ _SUPPORTED_FIELDS = _COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
-_DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch', \
-        'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore']
+_DEFAULT_FIELDS = ('qseqid', 'sseqid', 'pident', 'length', 'mismatch', \
+        'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore')
 # one field from each of the following sets must exist in order for the
 # parser to work
 _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
@@ -124,7 +124,7 @@ def read_forward(handle, strip=True):
 def blast_tab_iterator(handle):
     """Generator function to parse BLAST+ tabular output as QueryResult objects.
 
-    handle -- Handle to the file, or the filename as string.
+    handle -- Handle to the file.
 
     This method accepts the tabular output variants with or without headers.
     If the handle points to the tabular variant file with headers, it can
