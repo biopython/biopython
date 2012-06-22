@@ -2623,7 +2623,7 @@ record GenBank file using a generator expression:
 Here we use a file handle instead, using the \verb|with| statement
 (Python 2.5 or later) to close the handle automatically:
 
-%doctest examples
+%This doctest won't work on Python 2.5, even with the __future__ import. Odd.
 \begin{verbatim}
 >>> from __future__ import with_statement #Needed on Python 2.5
 >>> from Bio import SeqIO
@@ -2648,11 +2648,11 @@ Now, suppose we have a gzip compressed file instead? These are very
 commonly used on Linux. We can use Python's \verb|gzip| module to open
 the compressed file for reading - which gives us a handle object:
 
-%doctest examples
+%This doctest fails on Python 3, http://bugs.python.org/issue13989
 \begin{verbatim}
 >>> import gzip
 >>> from Bio import SeqIO
->>> handle = gzip.open("ls_orchid.gbk.gz")
+>>> handle = gzip.open("ls_orchid.gbk.gz", "r")
 >>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
 67518
 >>> handle.close()
@@ -2661,11 +2661,11 @@ the compressed file for reading - which gives us a handle object:
 Similarly if we had a bzip2 compressed file (sadly the function name isn't
 quite as consistent):
 
-%doctest examples
+%This doctest fails on Python 3
 \begin{verbatim}
 >>> import bz2
 >>> from Bio import SeqIO
->>> handle = bz2.BZ2File("ls_orchid.gbk.bz2")
+>>> handle = bz2.BZ2File("ls_orchid.gbk.bz2", "r")
 >>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
 67518
 >>> handle.close()
