@@ -1,7 +1,11 @@
 #Special configuration file to run tests on Travis-CI via GitHub notifications
-#See http://travis-ci.org/ for details
-
+#See http://travis-ci.org/ for details.
+#
+#Since Jython isn't officially available yet under Travis, we install it based
+#on the recipe from http://dev.hong.me/blog/2012/05/27/use-travis-ci-with-jython/
+#
 #Note when testing Python 3, the 'python' command will invoke Python 3
+#(which we now do via $PYTHON_EXE).
 
 language: python
 python:
@@ -9,16 +13,20 @@ python:
   - "2.6"
   - "2.7"
   - "3.2"
+  - "jython2.5"
 
 install:
+  - export PYTHON_EXE=python
+  - export JYTHON_URL='http://downloads.sourceforge.net/project/jython/jython/2.5.2/jython_installer-2.5.2.jar?r=http%3A%2F%2Fwww.jython.org%2Fdownloads.html&ts=1338089844&use_mirror=iweb'
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi
+  - /usr/bin/yes | $PYTHON_EXE setup.py install 2>&1 | tail
   - sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail
-  - /usr/bin/yes | python setup.py install 2>&1 | tail
 
 before_script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd build/py3.2/Tests; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION != '3.2' ]]; then cd Tests; fi"
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd build/py3.2/Tests; fi
+  - if [[ $TRAVIS_PYTHON_VERSION != '3.2' ]]; then cd Tests; fi
 script:
-  - python run_tests.py --offline
+  - $PYTHON_EXE run_tests.py --offline
 
 # whitelist branches
 branches:
