@@ -972,6 +972,13 @@ class HSP(BaseSearchObject):
         if hasattr(self, 'alignment'):
             obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
                     self.query[idx], self._alphabet)
+            # alignment annotation should be transferred, since we can compute
+            # the resulting annotation
+            if hasattr(self, 'alignment_annotation'):
+                obj.alignment_annotation = {}
+                for key, value in self.alignment_annotation.items():
+                    assert len(value[idx]) == len(obj)
+                    obj.alignment_annotation[key] = value[idx]
             return obj
         else:
             raise TypeError("Slicing for HSP objects without alignment is not supported.")

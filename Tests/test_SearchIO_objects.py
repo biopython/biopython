@@ -817,6 +817,14 @@ class HSPWithAlignmentCases(unittest.TestCase):
         new_hsp = self.hsp[:5]
         self.assertFalse(hasattr(new_hsp, 'attr_original'))
 
+    def test_getitem_alignment_annot(self):
+        """Test HSP.__getitem__, with alignment annotation"""
+        # the alignment is annotated, it should be sliced accordingly
+        # and transferred to the new object
+        setattr(self.hsp, 'alignment_annotation', {'test': '182718738172'})
+        new_hsp = self.hsp[:5]
+        self.assertEqual('18271', new_hsp.alignment_annotation['test'])
+
     def test_setitem(self):
         """Test HSP.__setitem__"""
         # setitem not supported
