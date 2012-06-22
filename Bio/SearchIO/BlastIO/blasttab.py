@@ -246,13 +246,13 @@ class BlastTabIterator(object):
 
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""
-        # returns a dict of assigned var names to level names
         fields = self.fields
+
         columns = self.line.strip().split('\t')
         assert len(fields) == len(columns), "Expected %i columns, found: " \
             "%i" % (len(fields), len(columns))
-        qresult, hit, hsp = {}, {}, {}
 
+        qresult, hit, hsp = {}, {}, {}
         for idx, value in enumerate(columns):
             attr_name = fields[idx]
 
@@ -271,7 +271,7 @@ class BlastTabIterator(object):
             else:
                 assert attr_name not in _SUPPORTED_FIELDS
 
-        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
+        return qresult, hit, hsp
 
     def get_id(self, parsed):
         """Returns the value used for a QueryResult or Hit ID from a parsed row."""
@@ -287,86 +287,63 @@ class BlastTabIterator(object):
         return id_cache
 
     def parse_qresult(self):
-        """Generator function that returns QueryResult objects.
-
-        Argument:
-        fields -- List of field short names or the result lines.
-
-        """
+        """Generator function that returns QueryResult objects."""
+        qid_cache = ''
+        hid_cache = ''
+        same_query = False
         while True:
-            parsed = self.parse_result_row()
-            # create qresult object, setattr with parsed values
-            qid_cache = self.get_id(parsed['qresult'])
+            # only parse the line if it's not EOF or not a comment line
+            if self.line and not self.line.startswith('#' ):
+                qres_parsed, hit_parsed, hsp_parsed = self.parse_result_row()
+                qresult_id = self.get_id(qres_parsed)
 
-            qresult = QueryResult(qid_cache)
-            for qresult_attr in parsed['qresult']:
-                setattr(qresult, qresult_attr, parsed['qresult'][qresult_attr])
-
-            # read over the next lines and add the parsed values into qresult
-            # as long as the id is the same
-            for hit in self.parse_hit_hsp(parsed, qid_cache):
+            # create new qresult whenever parsed qresult id != cached qresult id
+            if qid_cache != qresult_id:
+                # if cache is filled (qresult # >1), we can append the latest
+                # hit and yield
+                if qid_cache:
+                    qresult.append(hit)
+                    yield qresult
+                    same_query = False
+                qid_cache = qresult_id
+                qresult = QueryResult(qid_cache)
+                for attr, value in qres_parsed.items():
+                    setattr(qresult, attr, value)
+            # append remaining hit and yield if it's EOF or a comment line
+            elif not self.line or self.line.startswith('#' ):
                 qresult.append(hit)
-
-            yield qresult
-
-            if not self.line or self.line.startswith('# '):
+                yield qresult
                 break
+            # otherwise, we're still in the same qresult, so set the flag
+            elif not same_query:
+                same_query = True
 
-    def parse_hit_hsp(self, parsed, qid_cache):
-        """Generator function that returns Hit objects.
+            hit_id = self.get_id(hit_parsed)
+            # create new hit whenever parsed hit id != cached hit id
+            if hid_cache != hit_id:
+                # if the qresult id is the same as the previous line,
+                # append the previous line's hit before creating this one's
+                if same_query:
+                    qresult.append(hit)
+                hid_cache = hit_id
+                hit = Hit(hit_id, qresult_id)
+                for attr, value in hit_parsed.items():
+                    setattr(hit, attr, value)
 
-        Argument:
-        parsed -- Dictionary of parsed result line.
-        qid_cache -- String of QueryResult ID for the iteration.
-        fields -- List of field short names or the result lines.
+            # every line is essentially an HSP, so we create a new one
+            # for every line
+            hsp = HSP(hid_cache, qid_cache)
+            for attr, value in hsp_parsed.items():
+                setattr(hsp, attr, value)
+            # try to set hit_frame and/or query_frame if frames
+            # attribute is set
+            if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):
+                setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
+            if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
+                setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
+            hit.append(hsp)
 
-        """
-        # return hits while qresult.id is the same as the previous row
-        while True:
-
-            # create hit object, setattr with parsed values
-            hid_cache = self.get_id(parsed['hit'])
-
-            hit = Hit(hid_cache, qid_cache)
-            for hit_attr in parsed['hit']:
-                setattr(hit, hit_attr, parsed['hit'][hit_attr])
-
-            # append hsp to hit while hit.id and qresult.id are the same
-            # as the previous row
-            while True:
-
-                # create hsp object, setattr with parsed values, append to hit
-                hsp = HSP(hid_cache, qid_cache)
-                for hsp_attr in parsed['hsp']:
-                    setattr(hsp, hsp_attr, parsed['hsp'][hsp_attr])
-                # try to set hit_frame and/or query_frame if frames
-                # attribute is set
-                if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):
-                    setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
-                if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
-                    setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
-                hit.append(hsp)
-
-                # read next line and parse it if it exists
-                self.line = read_forward(self.handle)
-                # if line doesn't exist (file end), break out of loop
-                if not self.line or self.line.startswith('#'):
-                    break
-                else:
-                    parsed = self.parse_result_row()
-                # if hit.id or qresult.id is different, break out of loop
-                if hid_cache != self.get_id(parsed['hit']) or \
-                        qid_cache != self.get_id(parsed['qresult']):
-                    break
-
-            # append hsp-filled hit into qresult
-            yield hit
-
-            # if qresult.id is different compared to the previous line
-            # break out of loop
-            if not self.line or qid_cache != self.get_id(parsed['qresult']) or \
-                    self.line.startswith('#'):
-                break
+            self.line = read_forward(self.handle)
 
 
 class BlastTabIndexer(SearchIndexer):
