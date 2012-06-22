@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 3 May 2012 (Biopython 1.59+)}
+\date{Last Update -- 23 June 2012 (Biopython 1.59+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -2600,12 +2600,89 @@ In general, extracting information from the FASTA description line is not very n
 If you can get your sequences in a well annotated file format like GenBank or EMBL,
 then this sort of annotation information is much easier to deal with.
 
-\section{Parsing sequences from the net}
-\label{sec:SeqIO_Online}
+\section{Parsing sequences from compressed files}
+\label{sec:SeqIO_compressed}
 In the previous section, we looked at parsing sequence data from a file.
 Instead of using a filename, you can give \verb|Bio.SeqIO| a handle
 (see Section~\ref{sec:appendix-handles}), and in this section
-we'll use handles to internet connections to download sequences.
+we'll use handles to parse sequence from compressed files.
+
+As you'll have seen above, we can use \verb|Bio.SeqIO.read()| or
+\verb|Bio.SeqIO.parse()| with a filename - for instance this quick
+example calculates the total length of the sequences in a multiple
+record GenBank file using a generator expression:
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> print sum(len(r) for r in SeqIO.parse("ls_orchid.gbk", "gb"))
+67518
+\end{verbatim}
+
+\noindent
+Here we use a file handle instead, using the \verb|with| statement
+to close the handle automatically:
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> with open("ls_orchid.gbk") as handle:
+...     print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+67518
+\end{verbatim}
+
+\noindent
+Or, the old fashioned way where you manually close the handle:
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> handle = open("ls_orchid.gbk")
+>>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+67518
+>>> handle.close()
+\end{verbatim}
+
+Now, suppose we have a gzip compressed file instead? These are very
+commonly used on Linux. We can use Python's \verb|gzip| module to open
+the compressed file for reading - which gives us a handle object:
+
+%doctest examples
+\begin{verbatim}
+>>> import gzip
+>>> from Bio import SeqIO
+>>> handle = gzip.open("ls_orchid.gbk.gz")
+>>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+67518
+>>> handle.close()
+\end{verbatim}
+
+\noindent
+Similarly if we had a bzip2 compressed file (sadly the function name isn't
+quite as consistent):
+
+%doctest examples
+\begin{verbatim}
+>>> import bz2
+>>> from Bio import SeqIO
+>>> handle = bz2.BZ2File("ls_orchid.gbk.bz2")
+>>> print sum(len(r) for r in SeqIO.parse(handle, "gb"))
+67518
+>>> handle.close()
+\end{verbatim}
+
+\noindent
+If you are using Python 2.7 or later, the \verb|with|-version works for
+gzip and bz2 as well. Unfortunately this is broken on older versions of
+Python (\href{http://bugs.python.org/issue3860}{Issue 3860}) and you'd
+get an \verb|AttributeError| about \verb|__exit__| being missing.
+
+\section{Parsing sequences from the net}
+\label{sec:SeqIO_Online}
+In the previous sections, we looked at parsing sequence data from a file
+(using a filename or handle), and from compressed files (using a handle).
+Here we'll use \verb|Bio.SeqIO| with a another type of handle, a network
+connection, to download and parse sequences from the internet.
 
 Note that just because you \emph{can} download sequence data and parse it into
 a \verb|SeqRecord| object in one go doesn't mean this is a good idea.
@@ -13853,6 +13930,9 @@ for record in SeqIO.parse(handle, "fasta"):
     print record.id, len(record)
 handle.close()
 \end{verbatim}
+
+See Section~\ref{sec:SeqIO_compressed} for more examples like this,
+including reading bzip2 compressed files.
 
 \subsection{Creating a handle from a string}
 
