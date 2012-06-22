@@ -2657,7 +2657,6 @@ the compressed file for reading - which gives us a handle object:
 >>> handle.close()
 \end{verbatim}
 
-\noindent
 Similarly if we had a bzip2 compressed file (sadly the function name isn't
 quite as consistent):
 
@@ -2676,6 +2675,11 @@ If you are using Python 2.7 or later, the \verb|with|-version works for
 gzip and bz2 as well. Unfortunately this is broken on older versions of
 Python (\href{http://bugs.python.org/issue3860}{Issue 3860}) and you'd
 get an \verb|AttributeError| about \verb|__exit__| being missing.
+
+There is a gzip (GNU Zip) variant called BGZF (Blocked GNU Zip Format),
+which can be treated like an ordinary gzip file for reading, but has
+advantages for random access later which we'll talk about later in
+Section~\ref{sec:SeqIO-index-bgzf}.
 
 \section{Parsing sequences from the net}
 \label{sec:SeqIO_Online}
@@ -3160,6 +3164,67 @@ ACCESSION   GQ333173
 ...
 //
 \end{verbatim}
+
+\subsection{Indexing compressed files}
+\label{sec:SeqIO-index-bgzf}
+
+Very often when you are indexing a sequence file it can be quite large -- so
+you may want to compress it on disk. Unfortunately efficient random access
+is difficult with the more common file formats like gzip and bzip2. In this
+setting, BGZF (Blocked GNU Zip Format) can be very helpful. This is a variant
+of gzip (and can be decompressed using standard gzip tools) popularised by
+the BAM file format, \href{http://samtools.sourceforge.net/}{samtools}, and
+\href{http://samtools.sourceforge.net/tabix.shtml}{tabix}.
+
+To create a BGZF compressed file you can use the command line tool \verb|bgzip|
+which comes with samtools. In our examples we use a filename extension
+\verb|*.bgz|, so they can be distinguished from normal gzipped files (named
+\verb|*.gz|). You can also use the \verb|Bio.bgzf| module to read and write
+BGZF files from within Python.
+
+The \verb|Bio.SeqIO.index()| and \verb|Bio.SeqIO.index_db()| can both be
+used with BGZF compressed files. For example, if you started with an
+uncompressed GenBank file:
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.index("ls_orchid.gbk", "genbank")
+>>> len(orchid_dict)
+94
+\end{verbatim}
+
+You could compress this (while keeping the original file) at the command
+line using the following command -- but don't worry, the compressed file
+is already included with the other example files:
+
+\begin{verbatim}
+$ bgzip -c ls_orchid.gbk > ls_orchid.gbk.bgz
+\end{verbatim}
+
+You can use the compressed file in exactly the same way:
+
+%doctest examples
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.index("ls_orchid.gbk.bgz", "genbank")
+>>> len(orchid_dict)
+94
+\end{verbatim}
+
+\noindent
+or:
+
+%Don't use doctest as would have to clean up the *.idx file
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> orchid_dict = SeqIO.index_db("ls_orchid.gbk.bgz.idx", "ls_orchid.gbk.bgz", "genbank")
+>>> len(orchid_dict)
+94
+\end{verbatim}
+
+The \verb|SeqIO| indexing automatically detects the BGZF compression. Note
+that you can't use the same index file for the uncompressed and compressed files.
 
 \subsection{Discussion}
 \label{sec:SeqIO-indexing-discussion}
