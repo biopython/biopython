@@ -496,7 +496,7 @@ class MultipleSeqAlignment(_Alignment):
             return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
                                         self._alphabet)
 
-    def sort(self, key=None):
+    def sort(self, key=None, reverse=False):
         """Sort the rows (SeqRecord objects) of the alignment in place.
 
         This sorts the rows alphabetically using the SeqRecord object id by
@@ -558,11 +558,21 @@ class MultipleSeqAlignment(_Alignment):
         ACGC Chicken
         ACGG Mouse
 
+        There is also a reverse argument, so if you wanted to sort by ID
+        but backwards:
+
+        >>> align1.sort(reverse=True)
+        >>> print align1
+        DNAAlphabet() alignment with 3 rows and 4 columns
+        ACGG Mouse
+        ACGT Human
+        ACGC Chicken
+
         """
         if key is None:
-            self._records.sort(key = lambda r: r.id)
+            self._records.sort(key = lambda r: r.id, reverse = reverse)
         else:
-            self._records.sort(key = key)
+            self._records.sort(key = key, reverse = reverse)
 
     def get_column(self, col):
         """Returns a string containing a given column (DEPRECATED).
