@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO parser for BLAST+ tab output format."""
+"""Bio.SearchIO parser for BLAST+ tab output format, with and without comments."""
 
 import warnings
 
@@ -87,8 +87,8 @@ _COLUMN_HSP = {
     'sseq': 'hit',
     'gapopen': 'gapopen_num',
 }
-_SUPPORTED_FIELDS = _COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
-        _COLUMN_HSP.keys()
+_SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
+        _COLUMN_HSP.keys())
 # ignored columns (for now) are:
 # query gi -- qgi
 # subject ids --  sallseqid
@@ -178,7 +178,6 @@ class BlastTabIterator(object):
                 program_line = self.line[len(' #'):].split(' ')
                 comments['program'] = program_line[0].lower()
                 comments['version'] = program_line[1]
-                self.line = read_forward(self.handle)
             # parse query id and description (if available)
             # example: # Query: gi|356995852 Mus musculus POU domain
             elif 'Query' in self.line:
@@ -186,16 +185,13 @@ class BlastTabIterator(object):
                 comments['id'] = query_line[0]
                 if len(query_line) > 1:
                     comments['desc'] = ' '.join(query_line[1:])
-                self.line = read_forward(self.handle)
             # parse target database
             # example: # Database: db/minirefseq_protein
             elif 'Database' in self.line:
                 comments['target'] = self.line[len('# Database: '):]
-                self.line = read_forward(self.handle)
             # parse RID (from remote searches)
             elif 'RID' in self.line:
                 comments['rid'] = self.line[len('# RID: '):]
-                self.line = read_forward(self.handle)
             # parse column order, required for parsing the result lines
             # example: # Fields: query id, query gi, query acc., query length
             elif 'Fields' in self.line:
@@ -215,15 +211,13 @@ class BlastTabIterator(object):
                         not set(fields).intersection(_MIN_HIT_FIELDS):
                     raise ValueError("Required field is not found.")
                 comments['fields'] = fields
-                self.line = read_forward(self.handle)
             # if the line has these strings, it's either the end of a comment
             # or the end of a file, so we return all the comments we've parsed
             elif ' hits found' in self.line or 'processed' in self.line:
                 self.line = read_forward(self.handle)
                 return comments
-            # otherwise, keep on reading the lines
-            else:
-                self.line = read_forward(self.handle)
+
+            self.line = read_forward(self.handle)
 
             if not self.line:
                 return
@@ -466,7 +460,8 @@ class BlastTabWriter(object):
 
     def build_rows(self, qresult):
         """Returns a string containing tabular rows of the QueryResult object."""
-        qresult_lines = []
+        coordinates = set(['qstart', 'qend', 'sstart', 'send'])
+        qresult_lines = ''
         for hit in qresult:
             for hsp in hit:
 
@@ -488,25 +483,26 @@ class BlastTabWriter(object):
                         assert field not in _SUPPORTED_FIELDS
                         continue
 
-                    value = self.adjust_output(field, value)
                     # adjust from and to according to strand, if from and to
                     # is included in the output field
-                    if field in ['qstart', 'qend', 'sstart', 'send']:
+                    if field in coordinates:
                         value = self.adjust_fromto(field, value, hsp)
+                    # adjust output formatting
+                    value = self.adjust_output(field, value)
 
                     line.append(value)
 
                 hsp_line = '\t'.join(line)
-                qresult_lines.append(hsp_line)
+                qresult_lines += hsp_line + '\n'
 
-        return '\n'.join(qresult_lines) + '\n'
+        return qresult_lines
 
     def adjust_fromto(self, field, value, hsp):
         """Adjusts 'from' and 'to' properties according to strand."""
         # try to determine whether strand is minus or not
         # TODO: is there a better way to do this without accessing the private
         # attributes?
-        if field in ['qstart', 'qend']:
+        if field in ('qstart', 'qend'):
             try:
                 qstrand_is_minus = hsp.query_strand < 0
             except AttributeError:
@@ -536,7 +532,7 @@ class BlastTabWriter(object):
                    raise ValueError("Unexpected column name: %r" % field)
 
         # adjust from 0-based index to 1-based
-        return str(int(value) + 1)
+        return value + 1
 
     def adjust_output(self, field, value):
         """Adjusts formatting of the given field and value to mimic native tab output."""
@@ -560,7 +556,7 @@ class BlastTabWriter(object):
                 value = '%5.0f' % value
 
         # pident and ppos formatting
-        elif field in ['pident', 'ppos']:
+        elif field in ('pident', 'ppos'):
             value = '%.2f' % value
 
         # evalue formatting, adapted from BLAST+ source:
@@ -584,14 +580,6 @@ class BlastTabcWriter(BlastTabWriter):
 
     """Writer for blast-tabc output format."""
 
-    def __init__(self, handle, fields=_DEFAULT_FIELDS):
-        self.handle = handle
-        self.fields = fields
-        # inverse mapping of the long-short name map, required
-        # for writing comments
-        self.inv_field_map = dict((value, key) for key, value in \
-                _LONG_SHORT_MAP.items())
-
     def write_file(self, qresults):
         """Writes to the handle, returns how many QueryResult objects are written."""
         handle = self.handle
@@ -601,13 +589,11 @@ class BlastTabcWriter(BlastTabWriter):
             handle.write(self.build_comments(qresult))
             if qresult:
                 handle.write(self.build_rows(qresult))
-                qresult_counter += 1
                 hit_counter += len(qresult)
                 hsp_counter += sum([len(hit) for hit in qresult])
             # if it's commented and there are no hits in the qresult, we still
-            # print the comments
-            elif not qresult:
-                qresult_counter += 1
+            # increment the counter
+            qresult_counter += 1
 
         # commented files have a line saying how many queries were processed
         handle.write('# BLAST processed %i queries' % qresult_counter)
@@ -616,33 +602,36 @@ class BlastTabcWriter(BlastTabWriter):
 
     def build_comments(self, qresult):
         """Returns a string of a QueryResult tabular comment."""
-        inv_field_map = self.inv_field_map
-        comments = []
+        comments = ''
+        # inverse mapping of the long-short name map, required
+        # for writing comments
+        inv_field_map = dict((value, key) for key, value in \
+                _LONG_SHORT_MAP.items())
 
         # try to anticipate qresults without version
         if not hasattr(qresult, 'version'):
-            program_line = '# %s' % qresult.program.upper()
+            program_line = '# %s\n' % qresult.program.upper()
         else:
-            program_line = '# %s %s' % (qresult.program.upper(), qresult.version)
-        comments.append(program_line)
+            program_line = '# %s %s\n' % (qresult.program.upper(), qresult.version)
+        comments += program_line
         # description may or may not be present, so we'll do a try here
         try:
-            comments.append('# Query: %s %s' % (qresult.id, qresult.desc))
+            comments += '# Query: %s %s\n' % (qresult.id, qresult.desc)
         except AttributeError:
-            comments.append('# Query: %s' % qresult.id)
+            comments += '# Query: %s\n' % qresult.id
         # try appending RID line, if present
         try:
-            comments.append('# RID: %s' % qresult.rid)
+            comments += '# RID: %s\n' % qresult.rid
         except AttributeError:
             pass
-        comments.append('# Database: %s' % qresult.target)
+        comments += '# Database: %s\n' % qresult.target
         # qresults without hits don't show the Fields comment
         if qresult:
-            comments.append('# Fields: %s' % \
-                    ', '.join([inv_field_map[field] for field in self.fields]))
-        comments.append('# %i hits found' % len(qresult))
+            comments += '# Fields: %s\n' % \
+                    ', '.join([inv_field_map[field] for field in self.fields])
+        comments += '# %i hits found\n' % len(qresult)
 
-        return '\n'.join(comments) + '\n'
+        return comments
 
 
 def _test():
