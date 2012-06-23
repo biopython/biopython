@@ -56,18 +56,6 @@ class HmmerTextIterator(object):
             qresult.target = self._meta.get('target')
             yield qresult
 
-    def read_forward(self):
-        """Reads through whitespaces, returns the first non-whitespace line."""
-        while True:
-            line = self.handle.readline()
-            # if line has characters and stripping does not remove them,
-            # return the line
-            if line and line.strip():
-                return line
-            # if line ends, return None
-            elif not line:
-                return line
-
     def read_until(self, bool_func):
         """Reads the file handle until the given function returns True."""
         while True:
@@ -99,7 +87,6 @@ class HmmerTextIterator(object):
                     # so we can break out of the function
                     break
             elif not has_opts:
-                # XXX: is there a better way to do the regex check?
                 # try parsing program
                 regx = re.search(_RE_PROGRAM, self.line)
                 if regx:
@@ -125,9 +112,7 @@ class HmmerTextIterator(object):
 
         self.read_until(lambda line: line.startswith('Query:'))
 
-        while True:
-
-            assert self.line.startswith('Query:')
+        while self.line:
 
             # get query id and length
             regx = re.search(_QRE_ID_LEN, self.line)
@@ -136,13 +121,12 @@ class HmmerTextIterator(object):
             # create qresult object
             self.qresult = QueryResult(id)
             self.qresult.seq_len = seq_len
-
             self.qresult.program = self._meta.get('program')
             self.qresult.version = self._meta.get('version')
             self.qresult.target = self._meta.get('target')
             
             # get description and accession, if they exist
-            while True:
+            while not self.line.startswith('Scores for '):
                 self.line = read_forward(self.handle)
 
                 if self.line.startswith('Accession:'):
@@ -151,26 +135,18 @@ class HmmerTextIterator(object):
                 elif self.line.startswith('Description:'):
                     desc = self.line.strip().split(' ', 1)[1]
                     self.qresult.desc = desc.strip()
-                elif self.line.startswith('Scores for '):
-                    break
 
             # parse the query hits
-            while True:
+            while self.line and '//' not in self.line:
                 self.parse_hit()
-                if not self.line:
-                    break
+                # read through the statistics summary
+                # TODO: parse and store this information?
                 if self.line.startswith('Internal pipeline'):
-                    while True:
+                    while self.line and '//' not in self.line:
                         self.line = read_forward(self.handle)
-                        if '//' in self.line or not self.line:
-                            break
-                if '//' in self.line or not self.line:
-                    break
 
             yield self.qresult
             self.line = read_forward(self.handle)
-            if not self.line:
-                break
 
     def parse_hit(self):
         """Parses a HMMER3 hit block, beginning with the hit table."""
@@ -181,14 +157,14 @@ class HmmerTextIterator(object):
 
         # assume every hit is in inclusion threshold until the inclusion
         # threshold line is encountered
-        is_in_inclusion = True
+        is_included = True
 
         # parse the hit table
         while True:
             if not self.line:
                 break
             elif self.line.startswith('  ------ inclusion'):
-                is_in_inclusion = False
+                is_included = False
                 self.line = read_forward(self.handle)
             # if there are no hits, then there are no hsps
             # so we forward-read until 'Internal pipeline..'
@@ -223,8 +199,8 @@ class HmmerTextIterator(object):
             hit.domain_exp_num = row[6]
             hit.domain_obs_num = row[7]
             hit.desc = row[9]
-            # don't forget to attach the boolean is_in_inclusion
-            hit.is_in_inclusion = is_in_inclusion
+            # don't forget to attach the boolean is_included
+            hit.is_included = is_included
 
             self.qresult.append(hit)
 
@@ -263,12 +239,12 @@ class HmmerTextIterator(object):
                 parsed = filter(None, self.line.strip().split(' '))
                 assert len(parsed) == 16
                 # parsed column order:
-                # index, is_in_inclusion, bitscore, bias, evalue_cond, evalue
+                # index, is_included, bitscore, bias, evalue_cond, evalue
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
                 hsp = HSP(hid, self.qresult.id)
                 hsp.domain_index = parsed[0]
-                hsp.is_in_inclusion = parsed[1] == '!'
+                hsp.is_included = parsed[1] == '!'
                 hsp.bitscore = parsed[2]
                 hsp.bias = parsed[3]
                 hsp.evalue_cond = parsed[4]

@@ -56,7 +56,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Globin', hit.id)
         self.assertEqual('Globin', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(6e-21, hit.evalue)
         self.assertEqual(74.6, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
@@ -66,7 +66,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(74.0, hsp.bitscore)
         self.assertEqual(0.2, hsp.bias)
         self.assertEqual(6.7e-25, hsp.evalue_cond)
@@ -105,7 +105,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Ig_3', hit.id)
         self.assertEqual('Immunoglobulin domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(1.4e-09, hit.evalue)
         self.assertEqual(38.2, hit.bitscore)
         self.assertEqual(0.4, hit.bias)
@@ -115,7 +115,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(37.6, hsp.bitscore)
         self.assertEqual(0.3, hsp.bias)
         self.assertEqual(3e-13, hsp.evalue_cond)
@@ -149,7 +149,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(23.4, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(6.2e-09, hsp.evalue_cond)
@@ -186,7 +186,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Xpo1', hit.id)
         self.assertEqual('Exportin 1-like protein', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
         self.assertEqual(7.8, hit.bias)
@@ -196,7 +196,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(116.1, hsp.bitscore)
         self.assertEqual(3.4, hsp.bias)
         self.assertEqual(1.6e-37, hsp.evalue_cond)
@@ -222,7 +222,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(-1.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.35, hsp.evalue_cond)
@@ -249,7 +249,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
         self.assertEqual('Importin-beta N-terminal domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -259,7 +259,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(14.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.8e-06, hsp.evalue_cond)
@@ -285,7 +285,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(-3.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.2, hsp.evalue_cond)
@@ -324,7 +324,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Pou', hit.id)
         self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
         self.assertEqual(0.5, hit.bias)
@@ -334,7 +334,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(123.9, hsp.bitscore)
         self.assertEqual(0.3, hsp.bias)
         self.assertEqual(5e-40, hsp.evalue_cond)
@@ -359,7 +359,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
         self.assertEqual('Homeobox domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
         self.assertEqual(1.1, hit.bias)
@@ -369,7 +369,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(64.6, hsp.bitscore)
         self.assertEqual(0.7, hsp.bias)
         self.assertEqual(1.5e-21, hsp.evalue_cond)
@@ -396,7 +396,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
         self.assertEqual('Helix-turn-helix domain', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -406,7 +406,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(12.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.7e-05, hsp.evalue_cond)
@@ -430,7 +430,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(0.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.19, hsp.evalue_cond)
@@ -455,7 +455,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
         self.assertEqual('Homeobox KN domain', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -465,7 +465,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(12.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(3.5e-05, hsp.evalue_cond)
@@ -490,7 +490,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
         self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -500,7 +500,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(9.6, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(9.4e-05, hsp.evalue_cond)
@@ -570,7 +570,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Globin', hit.id)
         self.assertEqual('Globin', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(6e-21, hit.evalue)
         self.assertEqual(74.6, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
@@ -580,7 +580,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(74.0, hsp.bitscore)
         self.assertEqual(0.2, hsp.bias)
         self.assertEqual(6.7e-25, hsp.evalue_cond)
@@ -630,7 +630,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Ig_3', hit.id)
         self.assertEqual('Immunoglobulin domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(1.4e-09, hit.evalue)
         self.assertEqual(38.2, hit.bitscore)
         self.assertEqual(0.4, hit.bias)
@@ -640,7 +640,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(37.6, hsp.bitscore)
         self.assertEqual(0.3, hsp.bias)
         self.assertEqual(3e-13, hsp.evalue_cond)
@@ -674,7 +674,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(23.4, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(6.2e-09, hsp.evalue_cond)
@@ -722,7 +722,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Xpo1', hit.id)
         self.assertEqual('Exportin 1-like protein', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
         self.assertEqual(7.8, hit.bias)
@@ -732,7 +732,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(116.1, hsp.bitscore)
         self.assertEqual(3.4, hsp.bias)
         self.assertEqual(1.6e-37, hsp.evalue_cond)
@@ -758,7 +758,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(-1.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.35, hsp.evalue_cond)
@@ -785,7 +785,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
         self.assertEqual('Importin-beta N-terminal domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -795,7 +795,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(14.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.8e-06, hsp.evalue_cond)
@@ -821,7 +821,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(-3.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.2, hsp.evalue_cond)
@@ -871,7 +871,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Pou', hit.id)
         self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
         self.assertEqual(0.5, hit.bias)
@@ -881,7 +881,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(123.9, hsp.bitscore)
         self.assertEqual(0.3, hsp.bias)
         self.assertEqual(5e-40, hsp.evalue_cond)
@@ -906,7 +906,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
         self.assertEqual('Homeobox domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
         self.assertEqual(1.1, hit.bias)
@@ -916,7 +916,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(64.6, hsp.bitscore)
         self.assertEqual(0.7, hsp.bias)
         self.assertEqual(1.5e-21, hsp.evalue_cond)
@@ -943,7 +943,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
         self.assertEqual('Helix-turn-helix domain', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -953,7 +953,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(12.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.7e-05, hsp.evalue_cond)
@@ -977,7 +977,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(0.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.19, hsp.evalue_cond)
@@ -1002,7 +1002,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
         self.assertEqual('Homeobox KN domain', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1012,7 +1012,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(12.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(3.5e-05, hsp.evalue_cond)
@@ -1037,7 +1037,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
         self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -1047,7 +1047,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(9.6, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(9.4e-05, hsp.evalue_cond)
@@ -1095,7 +1095,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Pou', hit.id)
         self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
         self.assertEqual(0.5, hit.bias)
@@ -1105,7 +1105,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(123.9, hsp.bitscore)
         self.assertEqual(0.3, hsp.bias)
         self.assertEqual(5e-40, hsp.evalue_cond)
@@ -1124,7 +1124,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
         self.assertEqual('Homeobox domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
         self.assertEqual(1.1, hit.bias)
@@ -1134,7 +1134,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(64.6, hsp.bitscore)
         self.assertEqual(0.7, hsp.bias)
         self.assertEqual(1.5e-21, hsp.evalue_cond)
@@ -1153,7 +1153,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
         self.assertEqual('Helix-turn-helix domain', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1163,7 +1163,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(12.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.7e-05, hsp.evalue_cond)
@@ -1181,7 +1181,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(0.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.19, hsp.evalue_cond)
@@ -1200,7 +1200,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
         self.assertEqual('Homeobox KN domain', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1210,7 +1210,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(12.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(3.5e-05, hsp.evalue_cond)
@@ -1229,7 +1229,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
         self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
-        self.assertFalse(hit.is_in_inclusion)
+        self.assertFalse(hit.is_included)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -1239,7 +1239,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(9.6, hsp.bitscore)
         self.assertEqual(0.1, hsp.bias)
         self.assertEqual(9.4e-05, hsp.evalue_cond)
@@ -1281,7 +1281,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('Xpo1', hit.id)
         self.assertEqual('Exportin 1-like protein', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
         self.assertEqual(7.8, hit.bias)
@@ -1291,7 +1291,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(116.1, hsp.bitscore)
         self.assertEqual(3.4, hsp.bias)
         self.assertEqual(1.6e-37, hsp.evalue_cond)
@@ -1317,7 +1317,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(-1.8, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(0.35, hsp.evalue_cond)
@@ -1344,7 +1344,7 @@ class HmmerscanCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
         self.assertEqual('Importin-beta N-terminal domain', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1354,7 +1354,7 @@ class HmmerscanCases(unittest.TestCase):
         
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(14.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.8e-06, hsp.evalue_cond)
@@ -1380,7 +1380,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertFalse(hsp.is_in_inclusion)
+        self.assertFalse(hsp.is_included)
         self.assertEqual(-3.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.2, hsp.evalue_cond)
@@ -1453,7 +1453,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1463,7 +1463,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.6e-75, hsp.evalue_cond)
@@ -1489,7 +1489,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.5e-77, hsp.evalue_cond)
@@ -1516,7 +1516,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1526,7 +1526,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(8.7e-75, hsp.evalue_cond)
@@ -1552,7 +1552,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.1e-75, hsp.evalue_cond)
@@ -1602,7 +1602,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1612,7 +1612,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.6e-75, hsp.evalue_cond)
@@ -1630,7 +1630,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.5e-77, hsp.evalue_cond)
@@ -1649,7 +1649,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1659,7 +1659,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(8.7e-75, hsp.evalue_cond)
@@ -1677,7 +1677,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.1e-75, hsp.evalue_cond)
@@ -1719,7 +1719,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1729,7 +1729,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.6e-75, hsp.evalue_cond)
@@ -1755,7 +1755,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.5e-77, hsp.evalue_cond)
@@ -1782,7 +1782,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1792,7 +1792,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(8.7e-75, hsp.evalue_cond)
@@ -1818,7 +1818,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.1e-75, hsp.evalue_cond)
@@ -1880,7 +1880,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1890,7 +1890,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(4.6e-75, hsp.evalue_cond)
@@ -1916,7 +1916,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(1.5e-77, hsp.evalue_cond)
@@ -1943,7 +1943,7 @@ class HmmersearchCases(unittest.TestCase):
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
         self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.desc)
-        self.assertTrue(hit.is_in_inclusion)
+        self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
@@ -1953,7 +1953,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(8.7e-75, hsp.evalue_cond)
@@ -1979,7 +1979,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hsp = hit[1]
         self.assertEqual(2, hsp.domain_index)
-        self.assertTrue(hsp.is_in_inclusion)
+        self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
         self.assertEqual(0.0, hsp.bias)
         self.assertEqual(5.1e-75, hsp.evalue_cond)
