@@ -121,22 +121,6 @@ def read_forward(handle, strip=True):
             return line
 
 
-def blast_tab_iterator(handle):
-    """Generator function to parse BLAST+ tabular output as QueryResult objects.
-
-    handle -- Handle to the file.
-
-    This method accepts the tabular output variants with or without headers.
-    If the handle points to the tabular variant file with headers, it can
-    parse arbitrary tabs. However, is the tabular file does not have any
-    headers, then it will raise an Exception if the tab columns are not
-    the default ones.
-
-    """
-    for qresult in BlastTabIterator(handle):
-        yield qresult
-
-
 class BlastTabIterator(object):
 
     """Parser for the Blast tabular format."""
@@ -353,7 +337,7 @@ class BlastTabIndexer(SearchIndexer):
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
         # set parser for on-the-fly parsing
-        self._parser = blast_tab_iterator
+        self._parser = BlastTabIterator
         # find out if file is commented or not first
         line = read_forward(self._handle)
         if line.startswith('# '):

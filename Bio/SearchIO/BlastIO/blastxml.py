@@ -162,16 +162,6 @@ _DTD_OPT = (
 _RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
 
 
-def blast_xml_iterator(handle):
-    """Generator function to parse BLAST+ XML output as QueryResult objects.
-
-    handle -- Handle to the file.
-
-    """
-    for qresult in BlastXmlIterator(handle):
-        yield qresult
-
-
 class BlastXmlIterator(object):
 
     def __init__(self, handle):
@@ -437,7 +427,7 @@ class BlastXmlIndexer(SearchIndexer):
 
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
-        self._parser = blast_xml_iterator
+        self._parser = BlastXmlIterator
         self.qstart_mark = _as_bytes('<Iteration>')
         self.qend_mark = _as_bytes('</Iteration>')
         self.block_size = 16384

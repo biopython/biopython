@@ -28,16 +28,6 @@ _HRE_ANNOT_LINE = re.compile(r'^(\s+)(.+)\s(\w+)')
 _HRE_ID_LINE = re.compile(r'^(\s+\S+\s+\d+ )(.+) (\d+)')
 
 
-def hmmer_text_iterator(handle):
-    """Generator function to parse HMMER plain text output as QueryResult objects.
-
-    handle -- Handle to the file.
-
-    """
-    for qresult in HmmerTextIterator(handle):
-        yield qresult
-
-
 def read_forward(handle):
     """Reads through whitespaces, returns the first non-whitespace line."""
     while True:
@@ -397,7 +387,7 @@ class HmmerTextIndexer(SearchIndexer):
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
         # set parser
-        self._parser = hmmer_text_iterator
+        self._parser = HmmerTextIterator
         # set query start and end marks
         self.qresult_start = _as_bytes('Query: ')
         self.qresult_end = _as_bytes('//')

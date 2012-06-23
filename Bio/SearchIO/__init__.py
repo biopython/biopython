@@ -68,14 +68,14 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP
 
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
-        'blast-tab': ('BlastIO', 'blast_tab_iterator'),
-        'blast-tabc': ('BlastIO', 'blast_tab_iterator'),
+        'blast-tab': ('BlastIO', 'BlastTabIterator'),
+        'blast-tabc': ('BlastIO', 'BlastTabIterator'),
         'blast-text': ('BlastIO', 'blast_text_iterator'),
-        'blast-xml': ('BlastIO', 'blast_xml_iterator'),
+        'blast-xml': ('BlastIO', 'BlastXmlIterator'),
         'blat-psl': ('BlatIO', 'blast_psl_iterator'),
         'fasta-m10': ('FastaIO', 'fasta_m10_iterator'),
-        'hmmer-text': ('HmmerIO', 'hmmer_text_iterator'),
-        'hmmer-tab': ('HmmerIO', 'hmmer_tab_iterator'),
+        'hmmer-text': ('HmmerIO', 'HmmerTextIterator'),
+        'hmmer-tab': ('HmmerIO', 'HmmerTabIterator'),
         # for hmmer-domtab, the specific program is part of the format name
         # as we need it distinguish hit / target coordinates
         'hmmscan-domtab': ('HmmerIO', 'hmmer_domtab_hmmhit_iterator'),

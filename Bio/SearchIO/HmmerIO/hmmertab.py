@@ -12,16 +12,6 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
 
 
-def hmmer_tab_iterator(handle):
-    """Generator function to parse HMMER table output as QueryResult objects.
-
-    handle -- Handle to the file.
-
-    """
-    for qresult in HmmerTabIterator(handle):
-        yield qresult
-
-
 def read_forward(handle, strip=True):
     """Reads through whitespaces, returns the first non-whitespace line."""
     while True:
@@ -150,7 +140,7 @@ class HmmerTabIndexer(SearchIndexer):
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
         # set parser for on-the-fly parsing
-        self._parser = hmmer_tab_iterator
+        self._parser = HmmerTabIterator
         self._handle.seek(0)
         # denotes column location for query identifier
         self._query_id_idx = 2

@@ -34,7 +34,7 @@ class SearchIndexer(object):
         self._handle = open(filename, 'rb')
 
     def _parse(self, handle):
-        return self._parser(handle).next()
+        return iter(self._parser(handle)).next()
 
     def get(self, offset):
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))

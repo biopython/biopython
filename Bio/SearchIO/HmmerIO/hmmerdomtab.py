@@ -9,7 +9,6 @@ from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
-from Bio.SearchIO._index import SearchIndexer
 from hmmertab import HmmerTabIndexer
 
 
