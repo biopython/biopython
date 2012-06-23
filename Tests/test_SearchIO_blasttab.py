@@ -594,8 +594,8 @@ class BlastnTabCases(unittest.TestCase):
                 warnings.simplefilter('always')
                 qresult = qresults.next()
                 counter += 1
-                # 5 warnings for 5 incompatible columns
-                self.assertEqual(len(w), 5)
+                # 1 warning for 1 unsupported column
+                self.assertEqual(len(w), 1)
                 self.assertTrue(issubclass(w[-1].category, UserWarning))
         else:
             qresult = qresults.next()
@@ -607,13 +607,17 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.acc_ver)
+        self.assertEqual('0', qresult.gi)
         self.assertEqual(102, qresult.seq_len)
         self.assertEqual(3, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id_all)
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.acc)
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.acc_ver)
+        self.assertEqual('0', hit.gi)
+        self.assertEqual('0', hit.gi_all)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
@@ -678,8 +682,8 @@ class BlastnTabCases(unittest.TestCase):
                 warnings.simplefilter('always')
                 qresult = qresults.next()
                 counter += 1
-                # 5 warnings for 5 incompatible columns
-                self.assertEqual(len(w), 5)
+                # 1 warning for 1 unsupported column
+                self.assertEqual(len(w), 1)
                 self.assertTrue(issubclass(w[-1].category, UserWarning))
         else:
             qresult = qresults.next()
@@ -691,13 +695,17 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual('gi|11464971:4-101', qresult.acc)
         self.assertEqual('gi|11464971:4-101', qresult.acc_ver)
+        self.assertEqual('0', qresult.gi)
         self.assertEqual(98, qresult.seq_len)
         self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
+        self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id_all)
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.acc)
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.acc_ver)
+        self.assertEqual('0', hit.gi)
+        self.assertEqual('0', hit.gi_all)
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(772, hit.seq_len)
         self.assertEqual(2, len(hit))

@@ -44,11 +44,11 @@ _LONG_SHORT_MAP = {
     'query seq': 'qseq',
     'subject seq': 'sseq',
     'gap opens': 'gapopen',
-    # unsupported columns
     'query gi': 'qgi',
     'subject ids': 'sallseqid',
     'subject gi': 'sgi',
     'subject gis': 'sallgi',
+    # unsupported columns
     'BTOP': 'btop',
 }
 
@@ -58,11 +58,15 @@ _COLUMN_QRESULT = {
     'qacc': 'acc',
     'qaccver': 'acc_ver',
     'qlen': 'seq_len',
+    'qgi': 'gi',
 }
 _COLUMN_HIT = {
     'sseqid': 'id',
+    'sallseqid': 'id_all',
     'sacc': 'acc',
     'saccver': 'acc_ver',
+    'sgi': 'gi',
+    'sallgi': 'gi_all',
     'slen': 'seq_len',
 }
 _COLUMN_HSP = {
@@ -90,10 +94,6 @@ _COLUMN_HSP = {
 _SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
         _COLUMN_HSP.keys())
 # ignored columns (for now) are:
-# query gi -- qgi
-# subject ids --  sallseqid
-# subject gi -- sgi
-# subject gis -- sallgi
 # BTOP -- btop
 
 # column order in the non-commented tabular output variant
