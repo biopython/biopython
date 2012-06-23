@@ -15,7 +15,7 @@ from Bio._py3k import OrderedDict
 
 
 # attributes that should be converted from text
-_INTS = (
+_INTS = set([
         # qresult-specific attributes
         'param_gap_open', 'param_gap_extend', 'param_score_match',
         'param_score_mismatch', 'stat_db_num', 'stat_db_len',
@@ -29,8 +29,8 @@ _INTS = (
         'gapopen_num', 'bitscore_raw',
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
-)
-_FLOATS = (
+])
+_FLOATS = set([
         # qresult-specific attributes
         'param_evalue_threshold', 'stat_kappa', 'stat_eff_space',
         'stat_lambda', 'stat_entropy',
@@ -39,7 +39,7 @@ _FLOATS = (
         # hsp attributes
         'bitscore', 'evalue', 'ident_pct', 'pos_pct', 'bias',
         'evalue_cond', 'acc_avg',
-)
+])
 
 # precompile regex patterns
 _RE_GAPOPEN = re.compile(r'\w-')
@@ -80,8 +80,6 @@ class BaseSearchObject(object):
 
 
 class QueryResult(BaseSearchObject):
-
-    # TODO: Check for self.filter()? Or implement this in SearchIO.parse?
 
     """Class representing search results from a single query.
 
@@ -215,9 +213,6 @@ class QueryResult(BaseSearchObject):
             # validation is handled by __setitem__
             self.append(hit)
 
-    def __repr__(self):
-        return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
-
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
 
@@ -291,6 +286,9 @@ class QueryResult(BaseSearchObject):
 
     def __nonzero__(self):
         return bool(self._hits)
+
+    def __repr__(self):
+        return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
 
     def __reversed__(self):
         hits = reversed(list(self.hits))
@@ -692,38 +690,6 @@ class Hit(BaseSearchObject):
             # and store it them as an instance attribute
             self._hsps.append(hsp)
 
-    def __repr__(self):
-        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
-                len(self))
-
-    def _hsps_get(self):
-        return self._hsps
-
-    hsps = property(fget=_hsps_get)
-
-    def _id_get(self):
-        return self._id
-
-    def _id_set(self, value):
-        self._id = value
-        # set all HSP IDs contained to have the new Hit ID
-        for hsp in self.hsps:
-            hsp.hit_id = value
-
-    id = property(fget=_id_get, fset=_id_set)
-
-    def _query_id_get(self):
-        return self._query_id
-
-    def _query_id_set(self, value):
-        self._query_id = value
-        # set all HSP query IDs contained to have the new query ID
-        if self.hsps:
-            for hsp in self.hsps:
-                hsp.query_id = value
-
-    query_id = property(fget=_query_id_get, fset=_query_id_set)
-
     def __iter__(self):
         return iter(self._hsps)
 
@@ -732,6 +698,10 @@ class Hit(BaseSearchObject):
 
     def __nonzero__(self):
         return bool(self._hsps)
+
+    def __repr__(self):
+        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
+                len(self))
 
     def __reversed__(self):
         obj = self.__class__(self.id, self.query_id, reversed(self._hsps))
@@ -774,6 +744,34 @@ class Hit(BaseSearchObject):
         if hsp.query_id != self.query_id:
             raise ValueError("Expected HSP with query ID '%s', found '%s' "
                     "instead." % (self.query_id, hsp.query_id))
+
+    def _hsps_get(self):
+        return self._hsps
+
+    hsps = property(fget=_hsps_get)
+
+    def _id_get(self):
+        return self._id
+
+    def _id_set(self, value):
+        self._id = value
+        # set all HSP IDs contained to have the new Hit ID
+        for hsp in self.hsps:
+            hsp.hit_id = value
+
+    id = property(fget=_id_get, fset=_id_set)
+
+    def _query_id_get(self):
+        return self._query_id
+
+    def _query_id_set(self, value):
+        self._query_id = value
+        # set all HSP query IDs contained to have the new query ID
+        if self.hsps:
+            for hsp in self.hsps:
+                hsp.query_id = value
+
+    query_id = property(fget=_query_id_get, fset=_query_id_set)
 
     def append(self, hsp):
         self._validate_hsp(hsp)
@@ -902,29 +900,47 @@ class HSP(BaseSearchObject):
         if hit_seq:
             self.hit = hit_seq
 
-    def _query_get(self):
-        return self._query
+    def __iter__(self):
+        raise TypeError("HSP objects do not support iteration.")
 
-    def _query_set(self, value):
-        # only accept query_seq as string or SeqRecord objects
-        if not isinstance(value, (SeqRecord, basestring)):
-            raise TypeError("HSP sequence must be a string or a "
-                    "SeqRecord object.")
-        # if query_seq is a string, create a new SeqRecord object
-        if isinstance(value, basestring):
-            self._query = SeqRecord(Seq(value, self._alphabet), \
-                    id=self.query_id, name='query', \
-                    description='aligned query sequence')
-        # otherwise query is the query_seq
+    def __len__(self):
+        # len should return alignment length if alignment is not None
+        try:
+            assert len(self.query) == len(self.hit)
+            return len(self.query)
+        except AttributeError:
+            raise TypeError("HSP objects without alignment does not have any length.")
+
+    def __repr__(self):
+        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
+
+        try:
+            info += ", %i-column alignment" % len(self)
+        except TypeError:
+            pass
+
+        return "HSP(%s)" % (info)
+
+    def __getitem__(self, idx):
+        if hasattr(self, 'alignment'):
+            obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
+                    self.query[idx], self._alphabet)
+            # alignment annotation should be transferred, since we can compute
+            # the resulting annotation
+            if hasattr(self, 'alignment_annotation'):
+                obj.alignment_annotation = {}
+                for key, value in self.alignment_annotation.items():
+                    assert len(value[idx]) == len(obj)
+                    obj.alignment_annotation[key] = value[idx]
+            return obj
         else:
-            self._query = value
+            raise TypeError("Slicing for HSP objects without alignment is not supported.")
 
-        # if alignment is not set and hsp.hit is present, set alignment
-        if not hasattr(self, 'alignment') and hasattr(self, '_hit'):
-            self.alignment = MultipleSeqAlignment([self.query, self.hit], \
-                    self._alphabet)
+    def __delitem__(self, idx):
+        raise TypeError("HSP objects are read-only.")
 
-    query = property(fget=_query_get, fset=_query_set)
+    def __setitem__(self, idx, value):
+        raise TypeError("HSP objects are read-only.")
 
     def _hit_get(self):
         return self._hit
@@ -949,95 +965,6 @@ class HSP(BaseSearchObject):
                     self._alphabet)
 
     hit = property(fget=_hit_get, fset=_hit_set)
-
-    def __repr__(self):
-        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
-
-        try:
-            info += ", %i-column alignment" % len(self)
-        except TypeError:
-            pass
-
-        return "HSP(%s)" % (info)
-
-    def __len__(self):
-        # len should return alignment length if alignment is not None
-        try:
-            assert len(self.query) == len(self.hit)
-            return len(self.query)
-        except AttributeError:
-            raise TypeError("HSP objects without alignment does not have any length.")
-
-    def __getitem__(self, idx):
-        if hasattr(self, 'alignment'):
-            obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
-                    self.query[idx], self._alphabet)
-            # alignment annotation should be transferred, since we can compute
-            # the resulting annotation
-            if hasattr(self, 'alignment_annotation'):
-                obj.alignment_annotation = {}
-                for key, value in self.alignment_annotation.items():
-                    assert len(value[idx]) == len(obj)
-                    obj.alignment_annotation[key] = value[idx]
-            return obj
-        else:
-            raise TypeError("Slicing for HSP objects without alignment is not supported.")
-
-    def __delitem__(self, idx):
-        raise TypeError("HSP objects are read-only.")
-
-    def __setitem__(self, idx, value):
-        raise TypeError("HSP objects are read-only.")
-
-    def __iter__(self):
-        raise TypeError("HSP objects do not support iteration.")
-
-    def _query_strand_get(self):
-        if not hasattr(self, '_query_strand'):
-            # attempt to get strand from frame
-            try:
-                self._query_strand = self.query_frame / \
-                        abs(self.query_frame)
-            # handle if query frame is 0
-            except ZeroDivisionError:
-                self._query_strand = 0
-            # and handle cases if query_frame is not set or if it's None
-            except (AttributeError, TypeError):
-                raise AttributeError("Not enough is known to compute query strand")
-        return self._query_strand
-
-    def _query_strand_set(self, value):
-        # follow SeqFeature's convention
-        if not value in [-1, 0, 1]:
-            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
-                    value)
-        self._query_strand = value
-
-    query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
-
-    def _query_from_get(self):
-        # from is always less than to, regardless of strand
-        return min(self._query_from, self._query_to)
-
-    def _query_from_set(self, value):
-        self._query_from = value
-
-    query_from = property(fget=_query_from_get, fset=_query_from_set)
-
-    def _query_to_get(self):
-        # to is always greater than from, regardless of strand
-        return max(self._query_from, self._query_to)
-
-    def _query_to_set(self, value):
-        self._query_to = value
-
-    query_to = property(fget=_query_to_get, fset=_query_to_set)
-
-    def _query_span_get(self):
-        # query sequence range (sans gaps)
-        return self.query_to - self.query_from + 1
-
-    query_span = property(fget=_query_span_get)
 
     def _hit_strand_get(self):
         if not hasattr(self, '_hit_strand'):
@@ -1085,6 +1012,77 @@ class HSP(BaseSearchObject):
         return self.hit_to - self.hit_from + 1
 
     hit_span = property(fget=_hit_span_get)
+
+    def _query_get(self):
+        return self._query
+
+    def _query_set(self, value):
+        # only accept query_seq as string or SeqRecord objects
+        if not isinstance(value, (SeqRecord, basestring)):
+            raise TypeError("HSP sequence must be a string or a "
+                    "SeqRecord object.")
+        # if query_seq is a string, create a new SeqRecord object
+        if isinstance(value, basestring):
+            self._query = SeqRecord(Seq(value, self._alphabet), \
+                    id=self.query_id, name='query', \
+                    description='aligned query sequence')
+        # otherwise query is the query_seq
+        else:
+            self._query = value
+
+        # if alignment is not set and hsp.hit is present, set alignment
+        if not hasattr(self, 'alignment') and hasattr(self, '_hit'):
+            self.alignment = MultipleSeqAlignment([self.query, self.hit], \
+                    self._alphabet)
+
+    query = property(fget=_query_get, fset=_query_set)
+
+    def _query_strand_get(self):
+        if not hasattr(self, '_query_strand'):
+            # attempt to get strand from frame
+            try:
+                self._query_strand = self.query_frame / \
+                        abs(self.query_frame)
+            # handle if query frame is 0
+            except ZeroDivisionError:
+                self._query_strand = 0
+            # and handle cases if query_frame is not set or if it's None
+            except (AttributeError, TypeError):
+                raise AttributeError("Not enough is known to compute query strand")
+        return self._query_strand
+
+    def _query_strand_set(self, value):
+        # follow SeqFeature's convention
+        if not value in [-1, 0, 1]:
+            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
+                    value)
+        self._query_strand = value
+
+    query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
+
+    def _query_from_get(self):
+        # from is always less than to, regardless of strand
+        return min(self._query_from, self._query_to)
+
+    def _query_from_set(self, value):
+        self._query_from = value
+
+    query_from = property(fget=_query_from_get, fset=_query_from_set)
+
+    def _query_to_get(self):
+        # to is always greater than from, regardless of strand
+        return max(self._query_from, self._query_to)
+
+    def _query_to_set(self, value):
+        self._query_to = value
+
+    query_to = property(fget=_query_to_get, fset=_query_to_set)
+
+    def _query_span_get(self):
+        # query sequence range (sans gaps)
+        return self.query_to - self.query_from + 1
+
+    query_span = property(fget=_query_span_get)
 
     # The properties ali_len, gap_num, mismatch_num, and ident_num are all
     # interconnected ~ we can infer the value of one if the others are all
@@ -1213,7 +1211,7 @@ class HSP(BaseSearchObject):
 
 
 def _test():
-    """Run the Bio.SearchIO module's doctests.
+    """Run the Bio.SearchIO._object module's doctests.
 
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.
