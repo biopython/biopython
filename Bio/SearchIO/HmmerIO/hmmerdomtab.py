@@ -7,9 +7,8 @@
 
 from itertools import chain
 
-from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
-from hmmertab import HmmerTabIndexer
+from hmmertab import HmmerTabIterator, HmmerTabIndexer
 
 
 def hmmer_domtab_hmmhit_iterator(handle):
@@ -52,34 +51,14 @@ def read_forward(handle, strip=True):
             return line
 
 
-class HmmerDomtabIterator(object):
+class HmmerDomtabIterator(HmmerTabIterator):
 
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are hit coordinates."""
 
     def __init__(self, handle, hmm_as_hit):
-        self.handle = handle
-        self.line = read_forward(self.handle)
+        HmmerTabIterator.__init__(self, handle)
         self.hmm_as_hit = hmm_as_hit
-
-    def __iter__(self):
-        # stop iterating if it's an empty file
-        if not self.line:
-            raise StopIteration
-        # if line starts with '#', it's a header line
-        # and we want to read through that
-        else:
-            if self.line.startswith('#'):
-                while True:
-                    self.line = read_forward(self.handle)
-                    # break out of loop when it's not the header lines anymore
-                    if not self.line.startswith('#'):
-                        break
-            # stop iterating if we only have headers
-            if not self.line:
-                raise StopIteration
-            for qresult in self.parse_qresult():
-                yield qresult
 
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""

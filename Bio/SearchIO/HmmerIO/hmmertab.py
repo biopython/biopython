@@ -36,27 +36,16 @@ class HmmerTabIterator(object):
         self.line = read_forward(self.handle)
 
     def __iter__(self):
-        # stop iterating if it's an empty file
-        if not self.line:
-            raise StopIteration
-        # if line starts with '#', it's a header line
-        # and we want to read through that
-        else:
-            if self.line.startswith('#'):
-                while True:
-                    self.line = read_forward(self.handle)
-                    # break out of loop when it's not the header lines anymore
-                    if not self.line.startswith('#'):
-                        break
-            # stop iterating if we only have headers
-            if not self.line:
-                raise StopIteration
+        # read through the header if it exists
+        while self.line.startswith('#'):
+            self.line = read_forward(self.handle)
+        # if we have result rows, parse it
+        if self.line:
             for qresult in self.parse_qresult():
                 yield qresult
 
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""
-        assert self.line
         cols = filter(None, self.line.strip().split(' '))
         # if len(cols) > 18, we have extra description columns
         # combine them all into one string in the 19th column
@@ -152,13 +141,13 @@ class HmmerTabIndexer(SearchIndexer):
         split_char = _as_bytes(' ')
         query_id_idx = self._query_id_idx
         qresult_key = None
+        # set line with initial mock value, to emulate header
+        line = '#'
 
         # read through header
-        while True:
+        while line.startswith('#'):
             start_offset = handle.tell()
             line = read_forward(handle, strip=False)
-            if not line.startswith('#'):
-                break
 
         # and index the qresults
         while True:
