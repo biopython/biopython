@@ -8589,7 +8589,7 @@ like $F_{st}$, or allele counts.
 \label{sec:Phylo}
 
 The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of SeqIO and AlignIO,
-it aims to provide a common way to work with phylogenetic data independently of the source data
+it aims to provide a common way to work with phylogenetic trees independently of the source data
 format, as well as a consistent API for I/O operations.
 
 \section{Demo: What's in a Tree?}
@@ -8902,7 +8902,7 @@ attribute...', name='example from Prof. Joe Felsenstein's book "Inferring Phyl..
 \end{verbatim}
 
 This is essentially an outline of the object hierarchy Biopython uses to represent a tree. But
-more likely, you'd want to see a drawing of the tree. There are two functions to do this.
+more likely, you'd want to see a drawing of the tree. There are three functions to do this.
 
 As we saw in the demo, \verb|draw_ascii| prints an ascii-art drawing of the tree (a
 rooted phylogram) to standard output, or an open file handle if given. Not all of the
@@ -8920,7 +8920,31 @@ _|          |___________________________________________ B
 
 \end{verbatim}
 
-\verb|draw_graphviz| draws a more attractive cladogram, but requires that you have Graphviz,
+The \verb|draw| function draws a more attractive image using the matplotlib
+library. See the API documentation for details on the arguments it accepts to
+customize the output.
+
+\begin{verbatim}
+>>> tree = Phylo.read("example.xml", "phyloxml")
+>>> Phylo.draw(tree, branch_labels=lambda c: c.branch_length)
+\end{verbatim}
+
+\begin{htmlonly}
+\imgsrc[width=701, height=465]{images/phylo-draw-example.png}
+\label{fig:phylo-draw-example}
+\end{htmlonly}
+
+\begin{latexonly}
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.7\textwidth]{images/phylo-draw-example.png}
+\caption{A simple rooted tree plotted with the {\tt draw} function.}
+\label{fig:phylo-dot}
+\end{figure}
+\end{latexonly}
+
+
+\verb|draw_graphviz| draws an unrooted cladogram, but requires that you have Graphviz,
 PyDot or PyGraphviz, NetworkX, and matplotlib (or pylab) installed. Using the same example as
 above, and the \verb|dot| program included with Graphviz, let's draw a rooted tree (see
 Fig.~\ref{fig:phylo-dot}):
@@ -8941,7 +8965,7 @@ Fig.~\ref{fig:phylo-dot}):
 \begin{latexonly}
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.4\textwidth]{images/phylo-dot.png}
+\includegraphics[width=0.5\textwidth]{images/phylo-dot.png}
 \caption{A simple rooted tree drawn with {\tt draw\_graphviz}, using {\tt dot} for node
 layout.}
 \label{fig:phylo-dot}
@@ -9347,7 +9371,7 @@ programs available that do. These are supported through the module
 \texttt{Bio.Phylo.Applications}, using the same general framework as
 \texttt{Bio.Emboss.Applications}, \texttt{Bio.Align.Applications} and others.
 
-Biopython 1.58 introduces a wrapper for PhyML
+Biopython 1.58 introduced a wrapper for PhyML
 (\url{http://www.atgc-montpellier.fr/phyml/}). The program accepts an input alignment in
 \texttt{phylip-relaxed} format (that's Phylip format, but without the 10-character limit
 on taxon names) and a variety of options. A quick example:
@@ -9367,6 +9391,9 @@ This generates a tree file and a stats file with the names
 >>> tree = Phylo.read('Tests/Phylip/random.phy_phyml_tree.txt', 'newick')
 >>> Phylo.draw_ascii(tree)
 \end{verbatim}
+
+A similar wrapper for RAxML (\url{http://sco.h-its.org/exelixis/software.html})
+was added in Biopython 1.60.
 
 Note that some popular Phylip programs, including \texttt{dnaml} and \texttt{protml},
 are already available through the EMBOSS wrappers in \texttt{Bio.Emboss.Applications} if
