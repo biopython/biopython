@@ -299,15 +299,19 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
                     "Install matplotlib or pylab if you want to use draw.")
 
     # Options for displaying branch labels / confidence
-
+    def conf2str(conf):
+        if int(conf) == conf:
+            return str(int(conf))
+        return str(conf)
     if not branch_labels:
         if show_confidence:
             def format_branch_label(clade):
                 if hasattr(clade, 'confidences'):
                     # phyloXML supports multiple confidences
-                    return '/'.join(str(cnf.value) for cnf in clade.confidences)
+                    return '/'.join(conf2str(cnf.value)
+                                    for cnf in clade.confidences)
                 if clade.confidence:
-                    return str(clade.confidence)
+                    return conf2str(clade.confidence)
                 return None
         else:
             def format_branch_label(clade):
