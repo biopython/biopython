@@ -20,7 +20,7 @@ def to_networkx(tree):
     plotting with pylab, matplotlib or pygraphviz, though the resulting diagram
     is usually not ideal for displaying a phylogeny.
 
-    Requires NetworkX version 0.99 or 1.0.
+    Requires NetworkX version 0.99 or later.
     """
     try:
         import networkx
