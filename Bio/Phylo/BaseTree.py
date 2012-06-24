@@ -776,7 +776,7 @@ class Tree(TreeElement, TreeMixin):
             # Outgroup is the current root -- no change
             return
 
-        prev_blen = outgroup.branch_length
+        prev_blen = outgroup.branch_length or 0.0
         # Hideous kludge because Py2.x doesn't allow keyword args after *args
         outgroup_branch_length = kwargs.get('outgroup_branch_length')
         if outgroup_branch_length is not None:
