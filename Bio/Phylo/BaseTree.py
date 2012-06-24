@@ -440,7 +440,7 @@ class TreeMixin(object):
             for child in node.clades:
                 new_depth = curr_depth + depth_of(child)
                 update_depths(child, new_depth)
-        update_depths(self.root, 0)
+        update_depths(self.root, self.root.branch_length or 0)
         return depths
 
     def distance(self, target1, target2=None):
@@ -843,35 +843,31 @@ class Tree(TreeElement, TreeMixin):
         self.rooted = True
         return
 
-    def root_at_midpoint(tree):
+    def root_at_midpoint(self):
         """Root the tree at the midpoint of the two most distant taxa.
 
         This operates in-place, leaving a bifurcating root. The topology of the
         tree is otherwise retained, though no guarantees are made about the
         stability of clade/node/taxon ordering.
         """
-        # XXX This implementation is slow/inefficient; we could avoid looking
-        # at all pairwise distances by doing a binary search of the tree.
-        # Also, all this rerooting causes floating-point inaccuracies to
-        # accumulate, I think. (See unit test.)
-
         # Identify the largest pairwise distance
         max_distance = 0.0
-        tips = tree.get_terminals()
+        tips = self.get_terminals()
         for tip in tips:
-            tree.root_with_outgroup(tip)
-            new_max = max(tree.depths().iteritems(), key=lambda nd: nd[1])
+            self.root_with_outgroup(tip)
+            new_max = max(self.depths().iteritems(), key=lambda nd: nd[1])
             if new_max[1] > max_distance:
                 tip1 = tip
                 tip2 = new_max[0]
                 max_distance = new_max[1]
-        tree.root_with_outgroup(tip1)
+        self.root_with_outgroup(tip1)
+        # Depth to go from the ingroup tip toward the outgroup tip
+        root_remainder = 0.5 * (max_distance - (self.root.branch_length or 0))
+        assert root_remainder >= 0
         # Identify the midpoint and reroot there.
         # Trace the path to the outgroup tip until all of the root depth has
         # been traveled/accounted for.
-        root_remainder = 0.5 * (max_distance)  # depth to go toward tip2
-        assert root_remainder >= 0
-        for node in tree.get_path(tip2):
+        for node in self.get_path(tip2):
             root_remainder -= node.branch_length
             if root_remainder < 0:
                 outgroup_node = node
@@ -879,7 +875,7 @@ class Tree(TreeElement, TreeMixin):
                 break
         else:
             raise ValueError("Somehow, failed to find the midpoint!")
-        tree.root_with_outgroup(outgroup_node,
+        self.root_with_outgroup(outgroup_node,
                                 outgroup_branch_length=outgroup_branch_length)
 
     # Method assumed by TreeMixin
