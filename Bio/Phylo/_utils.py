@@ -408,9 +408,8 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     axes.set_xlabel('branch length')
     axes.set_ylabel('taxa')
     # Add margins around the tree to prevent overlapping the axes
-    xmin, xmax = axes.get_xlim()
-    pad = 0.05 * xmax
-    axes.set_xlim(-pad, xmax + pad)
+    xmax = max(x_posns.itervalues())
+    axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
     axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
