@@ -1,13 +1,13 @@
-# Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
+# Copyright 2009-2011 by Peter Cock.
+# Copyright 2012 by Wibowo Arindrarto.
+# All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
 #TODO: factor out this module with SeqIO's _index to stay DRY
 
-"""Custom indexing for Bio.SearchIO objects (PRIVATE).
-
-"""
+"""Custom indexing for Bio.SearchIO objects (PRIVATE)."""
 
 import itertools
 import os
@@ -26,9 +26,7 @@ from Bio._py3k import _bytes_to_string
 
 class SearchIndexer(object):
 
-    """Iterator that returns file positions of results in a Search output file.
-
-    """
+    """Iterator returning file positions of results in a search output file."""
 
     def __init__(self, filename):
         self._handle = open(filename, 'rb')
@@ -42,9 +40,8 @@ class SearchIndexer(object):
 
 class IndexedSearch(_dict_base):
 
-    """Dictionary-like object for implementing Search indexing.
+    """Dictionary-like object for implementing Search indexing."""
 
-    """
     def __init__(self, filename, format, key_function=None):
         """Initializes IndexedSearch instance.
 
@@ -73,19 +70,19 @@ class IndexedSearch(_dict_base):
         for key, offset, length in offset_iter:
             if key in index:
                 self._indexer._handle.close()
-                raise ValueError("Duplicate key '%s'" % key)
+                raise ValueError("Duplicate key %r" % key)
             else:
                 index[key] = offset
 
         self._index = index
 
     def __repr__(self):
-        return "IndexedSearch('%s', '%s', key_function=%r)" % \
+        return "IndexedSearch(%r, %r, key_function=%r)" % \
                 (self._filename, self._format, self._key_function)
 
     def __str__(self):
         if self:
-            return "{%s: Result(...), ...}" % repr(self.keys()[0])
+            return "{%r: QueryResult(...), ...}" % repr(self.keys()[0])
         else:
             return "{}"
 
@@ -148,7 +145,7 @@ class IndexedSearch(_dict_base):
             key2 = result.id
 
         if key != key2:
-            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+            raise ValueError("Key did not match (%r vs %r)" % (key, key2))
 
         return result
 
@@ -196,9 +193,7 @@ class IndexedSearch(_dict_base):
 
 class DbIndexedSearch(IndexedSearch):
 
-    """Dictionary-like object for implementing storable Search indexing.
-
-    """
+    """Dictionary-like object for implementing storable Search indexing."""
 
     def __init__(self, index_filename, filenames, format, key_function, \
             max_open=10, overwrite=False):
@@ -352,7 +347,7 @@ class DbIndexedSearch(IndexedSearch):
         self._key_function = key_function
 
     def __repr__(self):
-        return "DbIndexedSearch('%s', '%s', sources=%r, key_function=%r)" % \
+        return "DbIndexedSearch(%r, %r, sources=%r, key_function=%r)" % \
                 (self._index_filename, self._format, self._filenames, \
                 self._key_function)
 
@@ -396,7 +391,7 @@ class DbIndexedSearch(IndexedSearch):
         else:
             key2 = result.id
         if key != key2:
-            raise ValueError("Key does not match (%s vs %s)" % (key, key2))
+            raise ValueError("Key does not match (%r vs %r)" % (key, key2))
 
         return result
 
@@ -411,7 +406,7 @@ class DbIndexedSearch(IndexedSearch):
                 "offset_data WHERE key=?;", (key,)).fetchone()
 
         if not row:
-            raise KeyError("Key '%s' does not point to any result in "
+            raise KeyError("Key %r does not point to any result in "
                     "index." % key)
 
         file_number, offset, length = row
