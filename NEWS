@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.60
+25 June 2012: Biopython 1.60
 
 New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
 Zip Format), a variant of GZIP with efficient random access, most commonly
