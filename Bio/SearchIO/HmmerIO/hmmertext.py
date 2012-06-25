@@ -179,15 +179,13 @@ class HmmerTextIterator(object):
             # entering hit results row
             # parse the columns into a list
             row = filter(None, self.line.strip().split(' '))
-            try:
+            # join the description words if it's >1 word
+            if len(row) > 10:
+                row[9] = ' '.join(row[9:])
+            # if there's no description, set it to an empty string
+            elif len(row) < 10:
+                row.append('')
                 assert len(row) == 10
-            except AssertionError:
-                # If length is not 10, then there are >1 words in the
-                # description column ~ which should be concatenated with
-                # the first description word
-                extra_desc = ' '.join(row[10:])
-                row = row[:11]
-                row[9] = '%s %s' % (row[9], extra_desc)
             # create the hit object
             hit_id = row[8]
             hit = Hit(hit_id, self.qresult.id)

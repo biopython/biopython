@@ -47,12 +47,15 @@ class HmmerTabIterator(object):
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""
         cols = filter(None, self.line.strip().split(' '))
-        # if len(cols) > 18, we have extra description columns
+        # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
-        if len(cols) > 18:
+        if len(cols) > 19:
             cols[18] = ' '.join(cols[18:])
-        else:
-            cols[18] = ''
+        # if it's < 19, we have no description columns, so use an empty string
+        # instead
+        elif len(cols) < 19:
+            cols.append('')
+            assert len(cols) == 19
 
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}

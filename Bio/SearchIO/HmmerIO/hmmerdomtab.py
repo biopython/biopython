@@ -64,12 +64,13 @@ class HmmerDomtabIterator(HmmerTabIterator):
         """Returns a dictionary of parsed row values."""
         assert self.line
         cols = filter(None, self.line.strip().split(' '))
-        # if len(cols) > 22, we have extra description columns
+        # if len(cols) > 23, we have extra description columns
         # combine them all into one string in the 19th column
-        if len(cols) > 22:
+        if len(cols) > 23:
             cols[22] = ' '.join(cols[22:])
-        else:
-            cols[22] = ''
+        elif len(cols) < 23:
+            cols.append('')
+            assert len(cols) == 23
 
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
