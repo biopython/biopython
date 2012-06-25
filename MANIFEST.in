@@ -25,6 +25,7 @@ recursive-include Doc/examples *.aln
 recursive-include Doc/examples *.xpk
 recursive-include Doc/examples *.gbk
 recursive-include Doc/examples *.sth
+recursive-include Doc/examples *.bgz
 recursive-include Doc/images *.png
 recursive-include Doc/images *.jpg # e.g. the logo for the Tutorial
 
