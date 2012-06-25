@@ -27,6 +27,9 @@ dist
 
 #Ignore all Jython class files (present if using Jython)
 *.class
+
+#Ingore the MANIFEST file created automatically from MANIFEST.in
+MANIFEST
  
 #The graphics unit tests produce output files for human inspection
 #(at the time of writing, only PDF files are created but I expect
