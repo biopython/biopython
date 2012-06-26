@@ -1,0 +1,113 @@
+# fasta36 -E 0.5 -F 0.3 -m 10 prot_s01.fasta protlib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: prot_s01.fasta
+  1>>>sp|Q9Y2H6|68-133 - 66 aa
+Library: protlib.fasta
+  1375680 residues in   250 sequences
+
+Statistics: (shuffled [500]) MLE statistics: Lambda= 0.1373;  K=0.00213
+ statistics sampled from 219 (219) to 500 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.976), E-opt: 0.2 (0.876), width:  16
+ Scan time:  0.170
+
+The best scores are:                                      opt bits E(250)
+gi|194762369|ref|XP_001963317.1| GF14002 [Drosophi (1761)   85 26.0    0.42
+gi|77812697|ref|NP_035782.3| titin isoform N2-A [M (33467)  106 30.2    0.45
+
+>>>sp|Q9Y2H6|68-133, 66 aa vs protlib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 0.5 -F 0.3 -m 10 prot_s01.fasta protlib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.976)
+; pg_optcut_E(): 0.2 (0.876)
+; mp_extrap: 60000 500
+; mp_stats: (shuffled [500]) MLE statistics: Lambda= 0.1373;  K=0.00213
+; mp_KS: -0.0000 (N=0) at  20
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.976), E-opt: 0.2 (0.876), width:  16
+>>gi|194762369|ref|XP_001963317.1| GF14002 [Drosophila ananassae]
+; fa_frame: f
+; fa_initn:  88
+; fa_init1:  68
+; fa_opt:  85
+; fa_z-score: 95.3
+; fa_bits: 26.0
+; fa_expect:   0.42
+; sw_score: 85
+; sw_ident: 0.310
+; sw_sim: 0.493
+; sw_overlap: 71
+>sp|Q9Y2H6|68 ..
+; sq_len: 66
+; sq_offset: 1
+; sq_type: p
+; al_start: 6
+; al_stop: 66
+; al_display_start: 1
+-------------------------PNGSVPPIY----VPPGYA---PQV
+IEDNGVRRVVVVPQAPEFH---PGSHTVLHRSPHPPLPGFIPVPTMMPPP
+P
+>gi|194762369|ref|XP_001963317.1| ..
+; sq_len: 1761
+; sq_offset: 1
+; sq_type: p
+; al_start: 129
+; al_stop: 195
+; al_display_start: 99
+QMQHIQQQQQQQQQHSPSDGGSSNCSLPASPPLLQQTATPPQGAQIVPPV
+CALHHPQQQLALMAAMQHHHPLPPPHA-LHHAPLPPPP---PLPLNPGPP
+PHENGHGGVSPNGGGGGSSASSVSSLSSGSGGGGSQGNNNSSNGTNGIGP
+PPAAVPLQPGQLYIQYQGEFYPPEYYIAPH
+>>gi|77812697|ref|NP_035782.3| titin isoform N2-A [Mus musculus]
+; fa_frame: f
+; fa_initn: 104
+; fa_init1:  92
+; fa_opt: 106
+; fa_z-score: 94.9
+; fa_bits: 30.2
+; fa_expect:   0.45
+; sw_score: 106
+; sw_ident: 0.294
+; sw_sim: 0.574
+; sw_overlap: 68
+>sp|Q9Y2H6|68 ..
+; sq_len: 66
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 66
+; al_display_start: 1
+------------------------------PNGSVPPIY--VPPGYAPQV
+IEDNGVRRVVVVPQAPEFHPGSHTVLHRSPHPPLPGFIPVPTMMPPPP
+>gi|77812697|ref|NP_035782.3| ..
+; sq_len: 33467
+; sq_offset: 1
+; sq_type: p
+; al_start: 10781
+; al_stop: 10848
+; al_display_start: 10751
+PVPEKKAPPAVVKKPEPPPAKVPEVPKEAPPEKKVPPKKPEAPPAKVPEV
+PKEVVTEKKVAVPKKPEVPPAKVPEVPKKPVIEEKPAIPVVEKVASPPAE
+VYEEPEEVTAEEEEPAPAVEEEEYEAPPPPAPVPEEPKKVVPEKKFPVIK
+KPEAPPPKEPEPEKKVIEKPKLKPRPPARP
+
+>>><<<
+>>>///
+
+66 residues in 1 query   sequences
+1375680 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:59 2012 done: Tue May  8 01:06:59 2012
+ Total Scan time:  0.170 Total Display time:  0.010
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

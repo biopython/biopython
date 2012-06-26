@@ -1,0 +1,254 @@
+# fasta36 -E 0.5 -F 0.3 -m 10 prot_mult.fasta protlib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: prot_mult.fasta
+  1>>>random_s00 - 16 aa
+Library: protlib.fasta
+  1375680 residues in   250 sequences
+
+Statistics: (shuffled [500]) MLE statistics: Lambda= 0.2698;  K=0.06486
+ statistics sampled from 200 (200) to 500 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 1, E-join: 1 (0.996), E-opt: 0.2 (0.8), width:  16
+ Scan time:  0.200
+!! No sequences with E() < 0.5
+>>><<<
+  2>>>sp|Q9Y2H6|68-133 - 66 aa
+Library: protlib.fasta
+  1375680 residues in   250 sequences
+
+Statistics: (shuffled [499]) MLE statistics: Lambda= 0.1336;  K=0.001973
+ statistics sampled from 219 (219) to 499 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.986), E-opt: 0.2 (0.838), width:  16
+ Scan time:  0.180
+
+The best scores are:                                      opt bits E(250)
+gi|291391832|ref|XP_002712264.1| PREDICTED: titin  (33406)  109 30.2    0.43
+
+>>>sp|Q9Y2H6|68-133, 66 aa vs protlib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 0.5 -F 0.3 -m 10 prot_mult.fasta protlib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.986)
+; pg_optcut_E(): 0.2 (0.838)
+; mp_extrap: 60000 499
+; mp_stats: (shuffled [499]) MLE statistics: Lambda= 0.1336;  K=0.001973
+; mp_KS: -0.0000 (N=0) at  20
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.986), E-opt: 0.2 (0.838), width:  16
+>>gi|291391832|ref|XP_002712264.1| PREDICTED: titin [Oryctolagus cuniculus]
+; fa_frame: f
+; fa_initn:  98
+; fa_init1:  98
+; fa_opt: 109
+; fa_z-score: 95.1
+; fa_bits: 30.2
+; fa_expect:   0.43
+; sw_score: 109
+; sw_ident: 0.268
+; sw_sim: 0.549
+; sw_overlap: 71
+>sp|Q9Y2H6|68 ..
+; sq_len: 66
+; sq_offset: 1
+; sq_type: p
+; al_start: 1
+; al_stop: 66
+; al_display_start: 1
+------------------------------PNGSVPPIY-----VPPGYA
+PQVIEDNGVRRVVVVPQAPEFHPGSHTVLHRSPHPPLPGFIPVPTMMPPP
+P
+>gi|291391832|ref|XP_002712264.1| ..
+; sq_len: 33406
+; sq_offset: 1
+; sq_type: p
+; al_start: 10705
+; al_stop: 10775
+; al_display_start: 10675
+PVPEKKVPAVIAKKPEPPAVKVPEVPKEVVPEKKVPPAVPKKPEAPPAKV
+PEAPKEVVPEKKIAVPKKPEVPPAKVPEVPKKPVIEEKPVIPVPKKVESP
+PPEVYEEPEEVVPEEEPEEVVPEEEPIPVAEEEEPEAPPPAVPEEPKKIV
+PEKKVPVIKKPEAPPPKEPEPEKKVVEKPK
+
+>>><<<
+  3>>>sp|Q9Y2H6|265-345 - 81 aa
+Library: protlib.fasta
+  1375680 residues in   250 sequences
+
+Statistics: (shuffled [493]) MLE statistics: Lambda= 0.1643;  K=0.002885
+ statistics sampled from 237 (237) to 493 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.989), E-opt: 0.2 (0.875), width:  16
+ Scan time:  0.200
+
+The best scores are:                                      opt bits E(250)
+gi|260806189|ref|XP_002597967.1| hypothetical prot (23830)   91 30.5    0.32
+gi|348553521|ref|XP_003462575.1| PREDICTED: recept (1899)   75 26.7    0.36
+gi|348553523|ref|XP_003462576.1| PREDICTED: recept (1908)   75 26.7    0.36
+gi|221124183|ref|XP_002154464.1| PREDICTED: simila ( 860)   69 25.3    0.43
+
+>>>sp|Q9Y2H6|265-345, 81 aa vs protlib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 0.5 -F 0.3 -m 10 prot_mult.fasta protlib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.989)
+; pg_optcut_E(): 0.2 (0.875)
+; mp_extrap: 60000 493
+; mp_stats: (shuffled [493]) MLE statistics: Lambda= 0.1643;  K=0.002885
+; mp_KS: -0.0000 (N=0) at  20
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.989), E-opt: 0.2 (0.875), width:  16
+>>gi|260806189|ref|XP_002597967.1| hypothetical protein BRAFLDRAFT_79792 [Branchiostoma floridae]
+; fa_frame: f
+; fa_initn: 220
+; fa_init1:  62
+; fa_opt:  92
+; fa_z-score: 97.4
+; fa_bits: 30.5
+; fa_expect:   0.32
+; sw_score: 92
+; sw_ident: 0.316
+; sw_sim: 0.608
+; sw_overlap: 79
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 2
+; al_stop: 79
+; al_display_start: 1
+-----------------------------LLSNIVKPVASDIQARTVVLT
+WSPPSSLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVG-EETNITL
+NDLKPAMDYHA
+>gi|260806189|ref|XP_002597967.1| ..
+; sq_len: 23830
+; sq_offset: 1
+; sq_type: p
+; al_start: 22431
+; al_stop: 22499
+; al_display_start: 22401
+KDDAGTYKVKVENENGYDECAITLHVIGKPVSNI-RPAASDISPHTLTLT
+WDTP------EDDGGSLITSYVVEMFDVS---DGKWQTLTTTCRRPPYPV
+KGLNPSATYRFRIRAENAYGLSDAGPLSDPILTKEPEQGRNDRSSDGKKT
+DSSSSDSVAWRSTSMDSSSDADRVDRKIQA
+>>gi|348553521|ref|XP_003462575.1| PREDICTED: receptor-type tyrosine-protein phosphatase F isoform 1 [Cavia porcellus]
+; fa_frame: f
+; fa_initn: 104
+; fa_init1:  75
+; fa_opt:  75
+; fa_z-score: 96.6
+; fa_bits: 26.7
+; fa_expect:   0.36
+; sw_score: 75
+; sw_ident: 0.324
+; sw_sim: 0.649
+; sw_overlap: 37
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 44
+; al_stop: 80
+; al_display_start: 14
+QARTVVLTWSPPSSLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVG
+EETNITLNDLKPAMDYHA
+>gi|348553521|ref|XP_003462575.1| ..
+; sq_len: 1899
+; sq_offset: 1
+; sq_type: p
+; al_start: 543
+; al_stop: 579
+; al_display_start: 513
+AQPADFQAEAESDTRIQLSWLLPPQERIIKYELVYWAAEEEGQQRKVTFD
+PTSSYTLEDLKPDTLYHFQLAARSDMGVGVFTPTIEARTAQSTPSAPPQK
+VTCVSTGSTTVRVSWVPPPA
+>>gi|348553523|ref|XP_003462576.1| PREDICTED: receptor-type tyrosine-protein phosphatase F isoform 2 [Cavia porcellus]
+; fa_frame: f
+; fa_initn: 104
+; fa_init1:  75
+; fa_opt:  75
+; fa_z-score: 96.6
+; fa_bits: 26.7
+; fa_expect:   0.36
+; sw_score: 75
+; sw_ident: 0.324
+; sw_sim: 0.649
+; sw_overlap: 37
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 44
+; al_stop: 80
+; al_display_start: 14
+QARTVVLTWSPPSSLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVG
+EETNITLNDLKPAMDYHA
+>gi|348553523|ref|XP_003462576.1| ..
+; sq_len: 1908
+; sq_offset: 1
+; sq_type: p
+; al_start: 543
+; al_stop: 579
+; al_display_start: 513
+AQPADFQAEAESDTRIQLSWLLPPQERIIKYELVYWAAEEEGQQRKVTFD
+PTSSYTLEDLKPDTLYHFQLAARSDMGVGVFTPTIEARTAQSTPSAPPQK
+VTCVSTGSTTVRVSWVPPPA
+>>gi|221124183|ref|XP_002154464.1| PREDICTED: similar to FAD104 [Hydra magnipapillata]
+; fa_frame: f
+; fa_initn:  85
+; fa_init1:  66
+; fa_opt:  70
+; fa_z-score: 95.1
+; fa_bits: 25.3
+; fa_expect:   0.43
+; sw_score: 70
+; sw_ident: 0.271
+; sw_sim: 0.586
+; sw_overlap: 70
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 79
+; al_display_start: 1
+---------------------LLSNIVKPVASDIQARTVVLTWSPPSSLI
+NGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDY
+HA
+>gi|221124183|ref|XP_002154464.1| ..
+; sq_len: 860
+; sq_offset: 1
+; sq_type: p
+; al_start: 616
+; al_stop: 673
+; al_display_start: 586
+QAVSEVGIGAFSQYVQFYTKELPPLAPTLSASSISYHSIKLKWGHQSS--
+-----KKSI-----LNHTLQMQNKSGSFNTVYSGMDTSFTLSKLKELTPY
+CFRIQSSNEAGEGQFSMPKVFYTKAQPPSHVKELKCQHVDISSIKLIWTP
+VESIRPDDITKYTLQMQNVELGNNFNQVYN
+
+>>><<<
+>>>///
+
+163 residues in 3 query   sequences
+1375680 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:58 2012 done: Tue May  8 01:06:58 2012
+ Total Scan time:  0.580 Total Display time:  0.000
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]
