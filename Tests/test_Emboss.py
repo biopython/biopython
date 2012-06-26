@@ -459,7 +459,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
                         stderr)
         if cline.outfile:
             self.assertEqual(stdout.strip(), "")
-            self.assertTrue(os.path.isfile(cline.outfile))
+            self.assertTrue(os.path.isfile(cline.outfile),
+                            "Missing output file %r from:\n%s" % (cline.outfile, cline))
         else :
             #Don't use this yet... could return stdout handle instead?
             return stdout
@@ -535,7 +536,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         self.assertTrue(stderr.strip().startswith("Needleman-Wunsch global alignment"), stderr)
         self.assertEqual(stdout.strip(), "")
         filename = cline.outfile
-        self.assertTrue(os.path.isfile(filename))
+        self.assertTrue(os.path.isfile(filename),
+                        "Missing output file %r from:\n%s" % (filename, cline))
         #Check we can parse the output...
         align = AlignIO.read(filename,"emboss")
         self.assertEqual(len(align), 2)
