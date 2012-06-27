@@ -17,6 +17,7 @@ from copy import deepcopy
 from search_tests_common import compare_qresult, compare_hit
 
 from Bio.Align import MultipleSeqAlignment
+from Bio.Alphabet import single_letter_alphabet
 from Bio.SearchIO._objects import BaseSearchObject, QueryResult, Hit, HSP
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -782,11 +783,20 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.assertRaises(TypeError, HSP, 'hit_id', 'query_id', wrong_hit, wrong_query)
 
     def test_seq_objects(self):
-        """Test HSP sequence attributes"""
-        # test for query, hit, and alignment types
-        self.assertTrue(isinstance(self.hsp.query, SeqRecord))
+        """Test HSP sequence attribute types and default values"""
+        # check hit
         self.assertTrue(isinstance(self.hsp.hit, SeqRecord))
+        self.assertEqual('aligned hit sequence', self.hsp.hit.description)
+        self.assertEqual('hit', self.hsp.hit.name)
+        self.assertEqual(single_letter_alphabet, self.hsp.hit.seq.alphabet)
+        # check query
+        self.assertTrue(isinstance(self.hsp.query, SeqRecord))
+        self.assertEqual('aligned query sequence', self.hsp.query.description)
+        self.assertEqual('query', self.hsp.query.name)
+        self.assertEqual(single_letter_alphabet, self.hsp.query.seq.alphabet)
+        # check alignment
         self.assertTrue(isinstance(self.hsp.alignment, MultipleSeqAlignment))
+        self.assertEqual(single_letter_alphabet, self.hsp.alignment._alphabet)
 
     def test_len(self):
         """Test HSP.__len__"""
