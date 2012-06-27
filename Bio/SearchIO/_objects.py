@@ -26,7 +26,8 @@ _INTS = set([
         'ali_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
         'hit_frame', 'gapopen_num', 'env_from', 'env_to', 'domain_index',
-        'gapopen_num', 'bitscore_raw',
+        'gapopen_num', 'bitscore_raw', 'initn_score', 'init1_score',
+        'opt_score', 'sw_score',
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
 ])
@@ -38,7 +39,7 @@ _FLOATS = set([
         'domain_exp_num',
         # hsp attributes
         'bitscore', 'evalue', 'ident_pct', 'pos_pct', 'bias',
-        'evalue_cond', 'acc_avg',
+        'evalue_cond', 'acc_avg', 'z_score',
 ])
 
 # precompile regex patterns

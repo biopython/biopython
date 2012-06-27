@@ -73,7 +73,7 @@ _ITERATOR_MAP = {
         'blast-text': ('BlastIO', 'blast_text_iterator'),
         'blast-xml': ('BlastIO', 'BlastXmlIterator'),
         'blat-psl': ('BlatIO', 'blast_psl_iterator'),
-        'fasta-m10': ('FastaIO', 'fasta_m10_iterator'),
+        'fasta-m10': ('FastaIO', 'FastaM10Iterator'),
         'hmmer-text': ('HmmerIO', 'HmmerTextIterator'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabIterator'),
         # for hmmer-domtab, the specific program is part of the format name
