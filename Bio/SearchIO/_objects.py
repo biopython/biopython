@@ -361,6 +361,21 @@ class QueryResult(BaseSearchObject):
             del self._hits[key]
         return
 
+    def _desc_get(self):
+        return self._desc
+
+    def _desc_set(self, value):
+        self._desc = value
+        # try to set descriptions of hsp.query.seq within
+        for hit in self.hits:
+            for hsp in hit:
+                try:
+                    hsp.query.description = value
+                except AttributeError:
+                    pass
+
+    desc = property(fget=_desc_get, fset=_desc_set)
+
     def _id_get(self):
         return self._id
 
@@ -744,6 +759,20 @@ class Hit(BaseSearchObject):
         if hsp.query_id != self.query_id:
             raise ValueError("Expected HSP with query ID '%s', found '%s' "
                     "instead." % (self.query_id, hsp.query_id))
+
+    def _desc_get(self):
+        return self._desc
+
+    def _desc_set(self, value):
+        self._desc = value
+        # try to set descriptions of hsp.hit.seq within
+        for hsp in self.hsps:
+            try:
+                hsp.hit.description = value
+            except AttributeError:
+                pass
+
+    desc = property(fget=_desc_get, fset=_desc_set)
 
     def _hsps_get(self):
         return self._hsps

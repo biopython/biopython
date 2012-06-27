@@ -213,6 +213,41 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(1, len(self.qresult))
         self.assertTrue([hit31], self.qresult.hits)
 
+    def test_desc_set(self):
+        """Test QueryResult.desc setter"""
+        # setting the description should change the query seqrecord description
+        # of the contained hsps, if they have an alignment
+        # test for default value
+        qresult = deepcopy(self.qresult)
+        new_desc = 'unicorn hox homolog'
+        # test initial condition
+        for hit in qresult:
+            for hsp in hit:
+                self.assertNotEqual(new_desc, hsp.query.description)
+        qresult.desc = new_desc
+        # test after setting
+        for hit in qresult:
+            for hsp in hit:
+                self.assertEqual(new_desc, hsp.query.description)
+
+    def test_desc_set_no_seqrecord(self):
+        """Test QueryResult.desc setter, without HSP SeqRecords"""
+        hsp1 = HSP('hit1', 'query')
+        hsp2 = HSP('hit1', 'query')
+        hsp3 = HSP('hit2', 'query')
+        hit1 = Hit('hit1', 'query', [hsp1, hsp2])
+        hit2 = Hit('hit2', 'query', [hsp3])
+        qresult = QueryResult('query', [hit1, hit2])
+        # test initial condition
+        for hit in qresult:
+            for hsp in hit:
+                self.assertTrue(not hasattr(hsp, 'query'))
+        qresult.desc = 'unicorn hox homolog'
+        # test after setting
+        for hit in qresult:
+            for hsp in hit:
+                self.assertTrue(not hasattr(hsp, 'query'))
+
     def test_id_set(self):
         """Test QueryResult.id setter"""
         # setting an ID should change the query IDs of all contained Hit and HSPs
@@ -596,6 +631,34 @@ class HitCases(unittest.TestCase):
         """Test Hit._validate_hsp, wrong hit ID"""
         # validation should vail if hit id does not match
         self.assertRaises(ValueError, self.hit._validate_hsp, hsp121)
+
+    def test_desc_set(self):
+        """Test Hit.desc setter"""
+        # setting the description should change the hit seqrecord description
+        # of the contained hsps, if they have an alignment
+        # test for default value
+        hit = deepcopy(self.hit)
+        new_desc = 'unicorn hox homolog'
+        # test initial condition
+        for hsp in hit:
+            self.assertNotEqual(new_desc, hsp.hit.description)
+        hit.desc = new_desc
+        # test after setting
+        for hsp in hit:
+            self.assertEqual(new_desc, hsp.hit.description)
+
+    def test_desc_set_no_seqrecord(self):
+        """Test Hit.desc setter, without HSP SeqRecords"""
+        hsp1 = HSP('hit1', 'query')
+        hsp2 = HSP('hit1', 'query')
+        hit = Hit('hit1', 'query', [hsp1, hsp2])
+        # test initial condition
+        for hsp in hit:
+            self.assertTrue(not hasattr(hsp, 'hit'))
+        hit.desc = 'unicorn hox homolog'
+        # test after setting
+        for hsp in hit:
+            self.assertTrue(not hasattr(hsp, 'hit'))
 
     def test_id_set(self):
         """Test Hit.id setter"""
