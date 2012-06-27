@@ -27,6 +27,7 @@ from Bio.Alphabet import generic_dna, generic_protein, Gapped
 from Bio.File import UndoHandle
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
+from Bio._py3k import _bytes_to_string
 
 # precompile regex patterns
 # regex for program name
@@ -409,9 +410,67 @@ class FastaM10Indexer(SearchIndexer):
 
     """Indexer class for FASTA m10 output."""
 
-    def __init__(self, handle):
-        pass
+    def __init__(self, *args, **kwargs):
+        SearchIndexer.__init__(self, *args, **kwargs)
+        # set parser
+        self._parser = FastaM10Iterator
+        # set handle as undohandle
+        self._handle = UndoHandle(self._handle)
 
+    def __iter__(self):
+        handle = self._handle
+        handle.seek(0)
+        start_offset = handle.tell()
+        qresult_key = None
+
+        while True:
+            line = handle.readline()
+            peekline = handle.peekline()
+            end_offset = handle.tell()
+
+            if not line.startswith('>>>') and '>>>' in line:
+                regx = re.search(_RE_ID_DESC_SEQLEN, line)
+                qresult_key = regx.group(1)
+                start_offset = end_offset - len(line)
+            # yield whenever we encounter a new query
+            elif not peekline.startswith('>>>') and '>>>' in peekline and qresult_key is not None:
+                yield _bytes_to_string(qresult_key), start_offset, \
+                        end_offset - start_offset
+                start_offset = end_offset
+            # or we arrive at the end of the search
+            elif not line:
+                yield _bytes_to_string(qresult_key), start_offset, \
+                        end_offset - start_offset
+                break
+
+    def get_raw(self, offset):
+        handle = self._handle
+        qresult_raw = ''
+
+        # read header first
+        handle.seek(0)
+        while True:
+            line = handle.readline()
+            peekline = handle.peekline()
+            qresult_raw += line
+            if not peekline.startswith('>>>') and '>>>' in peekline:
+                break
+
+        # and read the qresult raw string
+        handle.seek(offset)
+        while True:
+            # preserve whitespace, don't use read_forward
+            line = handle.readline()
+            peekline = handle.peekline()
+            qresult_raw += line
+
+            # break when we've reached qresult end
+            if (not peekline.startswith('>>>') and '>>>' in peekline) or \
+                    not line:
+                break
+
+        # append mock end marker to qresult_raw, since it's not always present
+        return qresult_raw + '>>><<<\n'
 
 
 def _test():
