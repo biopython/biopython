@@ -204,10 +204,11 @@ class QueryResult(BaseSearchObject):
         self._id = id
         self._hit_key_function = hit_key_function
         self._hits = OrderedDict()
-        # default program, target, and version
+        # default program, target, version, and description
         self.program = '<unknown>'
         self.target = '<unknown>'
         self.version = '<unknown>'
+        self._desc = ''
 
         # validate Hit objects and fill up self._hits
         for hit in hits:
@@ -290,6 +291,50 @@ class QueryResult(BaseSearchObject):
 
     def __repr__(self):
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
+
+    def __str__(self):
+        lines = []
+
+        # set program and version line
+        lines.append('Program: %s (%s)' % (self.program, self.version))
+
+        # set query id line
+        qid_line = '  Query: %s' % self.id
+        if hasattr(self, 'seq_len'):
+            qid_line += ' (%i)' % self.seq_len
+        if self.desc:
+            desc_line = '\n         %s' % self.desc
+            if len(desc_line) > 81:
+                desc_line = desc_line[:78] + '...'
+            qid_line += desc_line
+        lines.append(qid_line)
+
+        # set target line
+        lines.append(' Target: %s' % self.target)
+
+        # set hit lines
+        if not self.hits:
+            lines.append('   Hits: 0')
+        else:
+            lines.append('   Hits: %s  %s  %s' % ('-'*5, '-'*5, '-'*57))
+            pattern = '%14s  %5s  %55s'
+            lines.append(pattern % ('Index', '# HSP', 'ID + description'.ljust(57)))
+            lines.append(pattern % ('-'*5, '-'*5, '-'*57))
+            for idx, hit in enumerate(self.hits):
+                if idx < 30:
+                    hid_line = '%s  %s' % (hit.id, hit.desc)
+                    if len(hid_line) > 57:
+                        hid_line = hid_line[:54] + '...'
+                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(57)))
+                elif idx > len(self.hits) - 4:
+                    hid_line = '%s  %s' % (hit.id, hit.desc)
+                    if len(hid_line) > 57:
+                        hid_line = hid_line[:54] + '...'
+                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(57)))
+                elif idx == 30:
+                    lines.append('%14s' % '~~~')
+
+        return '\n'.join(lines)
 
     def __reversed__(self):
         hits = reversed(list(self.hits))
@@ -698,6 +743,7 @@ class Hit(BaseSearchObject):
 
         self._id = id
         self._query_id= query_id
+        self._desc = ''
 
         self._hsps = []
         for hsp in hsps:
@@ -718,6 +764,76 @@ class Hit(BaseSearchObject):
     def __repr__(self):
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
                 len(self))
+
+    def __str__(self):
+        lines = []
+
+        # set query id line
+        lines.append('Query: %s' % self.query_id)
+
+        # set hit id line
+        hid_line = '  Hit: %s' % self.id
+        if hasattr(self, 'seq_len'):
+            hid_line += ' (%i)' % self.seq_len
+        if hasattr(self, 'desc'):
+            desc_line = '\n       %s' % self.desc
+            if len(desc_line) > 81:
+                desc_line = desc_line[:78] + '...'
+            hid_line += desc_line
+        lines.append(hid_line)
+
+        # set hsp line and table
+        if not self.hsps:
+            lines.append(' HSPs: n/a')
+        else:
+            lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
+                    ('-'*5, '-'*8, '-'*9, '-'*6, '-'*14, '-'*14))
+            pattern = '%12s  %8s  %9s  %6s  %14s  %14s'
+            lines.append(pattern % ('Index', 'E-value', 'Bit score', 'Length', \
+                    'Query region', 'Hit region'))
+            lines.append(pattern % ('-'*5, '-'*8, '-'*9, '-'*6, '-'*14, '-'*14))
+            for idx, hsp in enumerate(self.hsps):
+                # evalue
+                if hasattr(hsp, 'evalue'):
+                    evalue = '%.2g' % hsp.evalue
+                else:
+                    evalue = 'n/a'
+                # bitscore
+                if hasattr(hsp, 'bitscore'):
+                    bitscore = '%.2f' % hsp.bitscore
+                else:
+                    bitscore = 'n/a'
+                # alignment length
+                if hasattr(hsp, 'ali_len'):
+                    ali_len = str(hsp.ali_len)
+                elif hasattr(hsp, 'query'):
+                    ali_len = str(len(hsp.query))
+                elif hasattr(hsp, 'hit'):
+                    ali_len = str(len(hsp.hit))
+                else:
+                    ali_len = 'n/a'
+                # query region
+                if hasattr(hsp, 'query_from'):
+                    query_from = hsp.query_from
+                else:
+                    query_from = 'n/a'
+                if hasattr(hsp, 'query_to'):
+                    query_to = hsp.query_to
+                else:
+                    query_to = 'n/a'
+                # hit region
+                if hasattr(hsp, 'hit_from'):
+                    hit_from = hsp.hit_from
+                else:
+                    hit_from = 'n/a'
+                if hasattr(hsp, 'hit_to'):
+                    hit_to = hsp.hit_to
+                else:
+                    hit_to = 'n/a'
+                lines.append(pattern % (str(idx), evalue, bitscore, ali_len, \
+                        '%i-%i' % (query_from, query_to), '%i-%i' % (hit_from, hit_to)))
+
+        return '\n'.join(lines)
 
     def __reversed__(self):
         obj = self.__class__(self.id, self.query_id, reversed(self._hsps))
@@ -924,6 +1040,7 @@ class HSP(BaseSearchObject):
         self.hit_id = hit_id
         self.query_id = query_id
         self._alphabet = alphabet
+        self.alignment_annotation = {}
 
         if query_seq:
             self.query = query_seq
@@ -950,6 +1067,101 @@ class HSP(BaseSearchObject):
             pass
 
         return "HSP(%s)" % (info)
+
+    def __str__(self):
+        # adapted from Bio.Blast.Record's __str__
+        lines = []
+
+        # set query id line
+        qid_line = '  Query: %s' % self.query_id
+        try:
+            qid_line += ' %s' % self.query.description
+        except AttributeError:
+            pass
+        if len(qid_line) > 80:
+            qid_line = qid_line[:77] + '...'
+
+        # set hit id line
+        hid_line = '    Hit: %s' % self.hit_id
+        try:
+            hid_line += ' %s' % self.hit.description
+        except AttributeError:
+            pass
+        if len(hid_line) > 80:
+            hid_line = hid_line[:77] + '...'
+
+        # set hsp info line
+        hsp_info = []
+        if hasattr(self, 'evalue'):
+            hsp_info.append('E-value: %.2g' % self.evalue)
+        else:
+            hsp_info.append('E-value: n/a')
+        if hasattr(self, 'bitscore'):
+            hsp_info.append('Bit score: %.2f' % self.bitscore)
+        else:
+            hsp_info.append('Bit score: n/a')
+        # alignment length can be obtained from ali_len, query, or hit
+        ali_len = 'n/a'
+        if hasattr(self, 'ali_len'):
+            ali_len = self.ali_len
+        elif hasattr(self, 'query'):
+            ali_len = len(self.query)
+        elif hasattr(self, 'hit'):
+            ali_len = len(self.hit)
+        hsp_info.append('Alignment length: %s' % str(ali_len))
+
+        lines.append(qid_line)
+        lines.append(hid_line)
+        lines.append('' + ', '.join(hsp_info))
+        lines.append('--')
+
+        # get attributes for alignment block display
+        # set default values and try to obtain hsp values
+        # coordinates
+        query_to, query_from, hit_to, hit_from = ['n/a'] * 4
+        # get from private values because we may need to switch (?)
+        if hasattr(self, 'query_to'):
+            query_to = self._query_to
+        if hasattr(self, 'query_from'):
+            query_from = self._query_from
+        if hasattr(self, 'hit_to'):
+            hit_to = self._hit_to
+        if hasattr(self, 'hit_from'):
+            hit_from = self._hit_from
+
+        # homology line
+        homol = ''
+        if 'homology' in self.alignment_annotation:
+            homol = self.alignment_annotation['homology']
+        # sequences
+        if hasattr(self, 'query') and hasattr(self, 'hit'):
+            qseq = str(self.query.seq)
+            hseq = str(self.hit.seq)
+
+        if hasattr(self, 'query') and hasattr(self, 'hit'):
+            if ali_len < 56:
+                lines.append("Query:%s %s %s" % (str(query_from).rjust(8), \
+                        qseq, str(query_to)))
+                if homol:
+                    lines.append("               %s" % homol)
+                lines.append("  Hit:%s %s %s" % (str(hit_from).rjust(8), \
+                        hseq, str(hit_to)))
+            else:
+                # adjust continuation character length, so we don't display
+                # the same residues twice
+                if ali_len - 56 > 3:
+                    cont = '~' * 3
+                else:
+                    cont = '~' * (ali_len - 56)
+                lines.append("Query:%s %s%s%s %s" % (str(query_from).rjust(8), \
+                                qseq[:49], cont, qseq[-5:], str(query_to)))
+                if homol:
+                    lines.append("               %s%s%s" % \
+                            (homol[:49], cont, homol[-5:]))
+                lines.append("  Hit:%s %s%s%s %s" % (str(hit_from).rjust(8), \
+                                hseq[:49], cont, hseq[-5:], str(hit_to)))
+
+        return '\n'.join(lines)
 
     def __getitem__(self, idx):
         if hasattr(self, 'alignment'):
