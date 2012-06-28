@@ -126,6 +126,7 @@ class HmmerTextIterator(object):
             self.qresult.target = self._meta.get('target')
             
             # get description and accession, if they exist
+            desc = '' # placeholder
             while not self.line.startswith('Scores for '):
                 self.line = read_forward(self.handle)
 
@@ -134,7 +135,6 @@ class HmmerTextIterator(object):
                     self.qresult.acc = acc.strip()
                 elif self.line.startswith('Description:'):
                     desc = self.line.strip().split(' ', 1)[1]
-                    self.qresult.desc = desc.strip()
 
             # parse the query hits
             while self.line and '//' not in self.line:
@@ -145,6 +145,8 @@ class HmmerTextIterator(object):
                     while self.line and '//' not in self.line:
                         self.line = read_forward(self.handle)
 
+            # append desc here, so hsp attributes are also set
+            self.qresult.desc = desc.strip()
             yield self.qresult
             self.line = read_forward(self.handle)
 
@@ -325,14 +327,12 @@ class HmmerTextIterator(object):
                     hsp.alignment_annotation = annot
                     if self._meta.get('program') == 'hmmscan':
                         hsp.hit = hmmseq
-                        hsp.hit.description = 'hit HMM model'
                         hsp.query = aliseq
-                        hsp.query.description = 'query protein sequence'
                     elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                         hsp.hit = aliseq
-                        hsp.hit.description = 'hit protein sequence'
                         hsp.query = hmmseq
-                        hsp.query.description = 'query HMM model'
+                    hsp.hit.description = self.qresult[hid].desc
+                    hsp.query.description = self.qresult.desc
                     dom_counter += 1
                     hmmseq = ''
                     aliseq = ''

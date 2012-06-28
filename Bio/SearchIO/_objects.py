@@ -1195,8 +1195,8 @@ class HSP(BaseSearchObject):
         # if hit_seq is a string, create a new SeqRecord object
         if isinstance(value, basestring):
             self._hit = SeqRecord(Seq(value, self._alphabet), \
-                    id=self.hit_id, name='hit', \
-                    description='aligned hit sequence')
+                    id=self.hit_id, name='aligned hit sequence', \
+                    description='')
         # otherwise hit is the hit_seq
         else:
             self._hit = value
@@ -1266,8 +1266,8 @@ class HSP(BaseSearchObject):
         # if query_seq is a string, create a new SeqRecord object
         if isinstance(value, basestring):
             self._query = SeqRecord(Seq(value, self._alphabet), \
-                    id=self.query_id, name='query', \
-                    description='aligned query sequence')
+                    id=self.query_id, name='aligned query sequence', \
+                    description='')
         # otherwise query is the query_seq
         else:
             self._query = value

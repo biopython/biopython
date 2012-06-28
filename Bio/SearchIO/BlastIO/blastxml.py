@@ -263,7 +263,6 @@ class BlastXmlIterator(object):
 
                 # create qresult and assign its attributes
                 qresult = QueryResult(query_id)
-                qresult.desc = query_desc
                 qresult.seq_len = query_len
                 qresult._blast_id = blast_query_id
                 for meta_attr in self._meta:
@@ -305,6 +304,8 @@ class BlastXmlIterator(object):
 
                 # delete element after we finish parsing it
                 qresult_elem.clear()
+                # set desc here so hsp.query.description is set as well
+                qresult.desc = query_desc
                 yield qresult
 
     def parse_hit(self, root_hit_elem, query_id):
@@ -353,7 +354,6 @@ class BlastXmlIterator(object):
 
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id
-            hit.desc = hit_desc
 
             for hsp in self.parse_hsp(hit_elem.find('Hit_hsps'), query_id, \
                     hit_id):
@@ -361,6 +361,8 @@ class BlastXmlIterator(object):
 
             # delete element after we finish parsing it
             hit_elem.clear()
+            # set desc here so hsp.hit.description is set as well
+            hit.desc = hit_desc
             yield hit
 
     def parse_hsp(self, root_hsp_elem, query_id, hit_id):

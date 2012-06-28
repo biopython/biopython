@@ -183,6 +183,8 @@ class FastaM10Iterator(object):
 
     def __iter__(self):
         for qresult in self.parse_qresult():
+            # re-set desc, for hsp query description
+            qresult.desc = qresult.desc
             yield qresult
 
     def parse_preamble(self):
@@ -252,8 +254,6 @@ class FastaM10Iterator(object):
                         self.handle.peekline().split(' '))[1].strip()
                 if desc is not None:
                     qresult.desc = desc
-                else:
-                    qresult.desc = ''
                 # set values from preamble
                 for key, value in self._preamble.items():
                     setattr(qresult, key, value)
@@ -263,6 +263,8 @@ class FastaM10Iterator(object):
                     self.line.strip() == '>>><<<':
                 assert self.line[3:].startswith(qresult.id), self.line
                 for hit, strand in self.parse_hit(query_id):
+                    # re-set desc, for hsp hit description
+                    hit.desc = hit.desc
                     # if hit is not in qresult, append it
                     try:
                         qresult.append(hit)

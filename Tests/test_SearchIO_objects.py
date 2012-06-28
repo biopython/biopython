@@ -849,13 +849,13 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP sequence attribute types and default values"""
         # check hit
         self.assertTrue(isinstance(self.hsp.hit, SeqRecord))
-        self.assertEqual('aligned hit sequence', self.hsp.hit.description)
-        self.assertEqual('hit', self.hsp.hit.name)
+        self.assertEqual('', self.hsp.hit.description)
+        self.assertEqual('aligned hit sequence', self.hsp.hit.name)
         self.assertEqual(single_letter_alphabet, self.hsp.hit.seq.alphabet)
         # check query
         self.assertTrue(isinstance(self.hsp.query, SeqRecord))
-        self.assertEqual('aligned query sequence', self.hsp.query.description)
-        self.assertEqual('query', self.hsp.query.name)
+        self.assertEqual('', self.hsp.query.description)
+        self.assertEqual('aligned query sequence', self.hsp.query.name)
         self.assertEqual(single_letter_alphabet, self.hsp.query.seq.alphabet)
         # check alignment
         self.assertTrue(isinstance(self.hsp.alignment, MultipleSeqAlignment))
