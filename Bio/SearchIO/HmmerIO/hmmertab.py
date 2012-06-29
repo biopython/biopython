@@ -81,7 +81,7 @@ class HmmerTabIterator(object):
         hsp['bitscore'] = cols[8]                # score (best 1 domain)
         hsp['bias'] = cols[9]                    # bias (best 1 domain)
 
-        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
+        return qresult, hit, hsp
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
@@ -89,8 +89,8 @@ class HmmerTabIterator(object):
         while True:
             # only parse the result row if it's not EOF
             if self.line:
-                parsed = self.parse_result_row()
-                qresult_id = parsed['qresult']['id']
+                qres_attrs, hit_attrs, hsp_attrs = self.parse_result_row()
+                qresult_id = qres_attrs['id']
 
             # a new qresult is created whenever qid_cache != qresult_id
             if qid_cache != qresult_id:
@@ -99,7 +99,7 @@ class HmmerTabIterator(object):
                     yield qresult
                 qid_cache = qresult_id
                 qresult = QueryResult(qresult_id)
-                for attr, value in parsed['qresult'].items():
+                for attr, value in qres_attrs.items():
                     setattr(qresult, attr, value)
             # when we've reached EOF, try yield any remaining qresult and break
             elif not self.line:
@@ -107,14 +107,14 @@ class HmmerTabIterator(object):
                 break
 
             # create Hit and set its attributes
-            hit_id = parsed['hit']['id']
+            hit_id = hit_attrs['id']
             hit = Hit(hit_id, qresult_id)
-            for attr, value in parsed['hit'].items():
+            for attr, value in hit_attrs.items():
                 setattr(hit, attr, value)
 
             # create HSP and set its attributes
             hsp = HSP(hit_id, qresult_id)
-            for attr, value in parsed['hsp'].items():
+            for attr, value in hsp_attrs.items():
                 setattr(hsp, attr, value)
 
             # since domain tab formats only have 1 HSP per line
