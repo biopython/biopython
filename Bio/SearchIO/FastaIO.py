@@ -412,11 +412,10 @@ class FastaM10Indexer(SearchIndexer):
 
     """Indexer class for FASTA m10 output."""
 
+    _parser = FastaM10Iterator
+
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
-        # set parser
-        self._parser = FastaM10Iterator
-        # set handle as undohandle
         self._handle = UndoHandle(self._handle)
 
     def __iter__(self):

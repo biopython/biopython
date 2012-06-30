@@ -81,9 +81,9 @@ _ITERATOR_MAP = {
         'hmmer-tab': ('HmmerIO', 'HmmerTabIterator'),
         # for hmmer-domtab, the specific program is part of the format name
         # as we need it distinguish hit / target coordinates
-        'hmmscan-domtab': ('HmmerIO', 'hmmer_domtab_hmmhit_iterator'),
-        'hmmsearch-domtab': ('HmmerIO', 'hmmer_domtab_hmmquery_iterator'),
-        'phmmer-domtab': ('HmmerIO', 'hmmer_domtab_hmmquery_iterator'),
+        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitIterator'),
+        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIterator'),
+        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIterator'),
 }
 
 # dictionary of supported formats for index()

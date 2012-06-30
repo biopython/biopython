@@ -358,13 +358,9 @@ class HmmerTextIndexer(SearchIndexer):
 
     """Indexer class for HMMER plain text output."""
 
-    def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
-        # set parser
-        self._parser = HmmerTextIterator
-        # set query start and end marks
-        self.qresult_start = _as_bytes('Query: ')
-        self.qresult_end = _as_bytes('//')
+    _parser = HmmerTextIterator
+    qresult_start = _as_bytes('Query: ')
+    qresult_end = _as_bytes('//')
 
     def __iter__(self):
         handle = self._handle

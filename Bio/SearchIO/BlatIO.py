@@ -290,11 +290,6 @@ class BlatPslIndexer(SearchIndexer):
 
     _parser = BlatPslIterator
 
-    def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
-        # set parser for on-the-fly parsing
-        self._handle.seek(0)
-
     def __iter__(self):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle

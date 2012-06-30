@@ -30,6 +30,7 @@ class SearchIndexer(object):
 
     def __init__(self, filename):
         self._handle = open(filename, 'rb')
+        self._handle.seek(0) 
 
     def _parse(self, handle):
         return iter(self._parser(handle)).next()

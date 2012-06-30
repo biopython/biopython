@@ -328,10 +328,11 @@ class BlastTabIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ tab output."""
 
+    _parser = BlastTabIterator
+
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
         # set parser for on-the-fly parsing
-        self._parser = BlastTabIterator
         # find out if file is commented or not first
         line = read_forward(self._handle)
         if line.startswith('# '):

@@ -11,31 +11,6 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from hmmertab import HmmerTabIterator, HmmerTabIndexer
 
 
-def hmmer_domtab_hmmhit_iterator(handle):
-    """Generator function to parse HMMER domain table output as QueryResults.
-
-    handle -- Handle to the file.
-
-    This iterator assumes that the HMM coordinates are search hit coordinates.
-
-    """
-    for qresult in HmmerDomtabIterator(handle, hmm_as_hit=True):
-        yield qresult
-
-
-def hmmer_domtab_hmmquery_iterator(handle):
-    """Generator function to parse HMMER domain table output as QueryResults.
-
-    handle -- Handle to the file.
-
-    This iterator assumes that the HMM coordinates are search query
-    coordinates.
-
-    """
-    for qresult in HmmerDomtabIterator(handle, hmm_as_hit=False):
-        yield qresult
-
-
 def read_forward(handle, strip=True):
     """Reads through whitespaces, returns the first non-whitespace line."""
     while True:
@@ -53,12 +28,7 @@ def read_forward(handle, strip=True):
 
 class HmmerDomtabIterator(HmmerTabIterator):
 
-    """Parser for the HMMER domain table format that assumes HMM profile
-    coordinates are hit coordinates."""
-
-    def __init__(self, handle, hmm_as_hit):
-        HmmerTabIterator.__init__(self, handle)
-        self.hmm_as_hit = hmm_as_hit
+    """Base hmmer-domtab iterator."""
 
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""
@@ -163,16 +133,29 @@ class HmmerDomtabIterator(HmmerTabIterator):
             self.line = read_forward(self.handle)
 
 
+class HmmerDomtabHmmhitIterator(HmmerDomtabIterator):
+
+    """Parser for the HMMER domain table format that assumes HMM profile
+    coordinates are hit coordinates."""
+
+    hmm_as_hit = True
+
+
+class HmmerDomtabHmmqueryIterator(HmmerDomtabIterator):
+
+    """Parser for the HMMER domain table format that assumes HMM profile
+    coordinates are query coordinates."""
+
+    hmm_as_hit = False
+
+
 class HmmerDomtabHmmhitIndexer(HmmerTabIndexer):
 
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are hit coordinates."""
 
-    def __init__(self, *args, **kwargs):
-        HmmerTabIndexer.__init__(self, *args, **kwargs)
-        # set parser for on-the-fly parsing
-        self._parser = hmmer_domtab_hmmhit_iterator
-        self._query_id_idx = 3
+    _parser = HmmerDomtabHmmhitIterator
+    _query_id_idx = 3
 
 
 class HmmerDomtabHmmqueryIndexer(HmmerTabIndexer):
@@ -180,11 +163,8 @@ class HmmerDomtabHmmqueryIndexer(HmmerTabIndexer):
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are query coordinates."""
 
-    def __init__(self, *args, **kwargs):
-        HmmerTabIndexer.__init__(self, *args, **kwargs)
-        # set parser for on-the-fly parsing
-        self._parser = hmmer_domtab_hmmquery_iterator
-        self._query_id_idx = 3
+    _parser = HmmerDomtabHmmqueryIterator
+    _query_id_idx = 3
 
 
 class HmmerDomtabHmmhitWriter(object):
@@ -192,9 +172,10 @@ class HmmerDomtabHmmhitWriter(object):
     """Writer for hmmer-domtab output format which writes hit coordinates
     as HMM profile coordinates."""
 
+    hmm_as_hit = True
+
     def __init__(self, handle):
         self.handle = handle
-        self.hmm_as_hit = True
 
     def write_file(self, qresults):
         """Writes to the handle.
@@ -314,9 +295,7 @@ class HmmerDomtabHmmqueryWriter(HmmerDomtabHmmhitWriter):
     """Writer for hmmer-domtab output format which writes query coordinates
     as HMM profile coordinates."""
 
-    def __init__(self, handle):
-        self.handle = handle
-        self.hmm_as_hit = False
+    hmm_as_hit = False
 
 
 def _test():

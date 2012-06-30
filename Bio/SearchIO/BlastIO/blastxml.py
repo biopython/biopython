@@ -429,12 +429,13 @@ class BlastXmlIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ XML output."""
 
+    _parser = BlastXmlIterator
+    qstart_mark = _as_bytes('<Iteration>')
+    qend_mark = _as_bytes('</Iteration>')
+    block_size = 16384
+
     def __init__(self, *args, **kwargs):
         SearchIndexer.__init__(self, *args, **kwargs)
-        self._parser = BlastXmlIterator
-        self.qstart_mark = _as_bytes('<Iteration>')
-        self.qend_mark = _as_bytes('</Iteration>')
-        self.block_size = 16384
         # TODO: better way to do this?
         iter_obj = self._parser(self._handle)
         self._meta, self._fallback = iter_obj._meta, iter_obj._fallback

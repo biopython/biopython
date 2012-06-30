@@ -129,13 +129,9 @@ class HmmerTabIndexer(SearchIndexer):
 
     """Indexer class for HMMER table output."""
 
-    def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
-        # set parser for on-the-fly parsing
-        self._parser = HmmerTabIterator
-        self._handle.seek(0)
-        # denotes column location for query identifier
-        self._query_id_idx = 2
+    _parser = HmmerTabIterator
+    # denotes column location for query identifier
+    _query_id_idx = 2
 
     def __iter__(self):
         """Iterates over the file handle; yields key, start offset, and length."""
