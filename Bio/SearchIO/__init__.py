@@ -50,6 +50,8 @@ specified as well (not all output formats from a given program is supported).
  - blast-text   - BLAST+ plain text output.
  - blat-psl     - The default output of BLAT (PSL format). Variants with or
                   without header are both supported.
+ - blat-pslx    - PSL format with hit and query sequences. Variants with or
+                  without header are both supported.
  - fasta-m10    - Bill Pearson's FASTA -m 10 output.
  - hmmer-text   - HMMER regular text output format. Supported HMMER
                   subprograms are hmmerscan and hmmersearch.
@@ -72,7 +74,8 @@ _ITERATOR_MAP = {
         'blast-tabc': ('BlastIO', 'BlastTabIterator'),
         'blast-text': ('BlastIO', 'blast_text_iterator'),
         'blast-xml': ('BlastIO', 'BlastXmlIterator'),
-        'blat-psl': ('BlatIO', 'blast_psl_iterator'),
+        'blat-psl': ('BlatIO', 'BlatPslIterator'),
+        'blat-pslx': ('BlatIO', 'BlatPslxIterator'),
         'fasta-m10': ('FastaIO', 'FastaM10Iterator'),
         'hmmer-text': ('HmmerIO', 'HmmerTextIterator'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabIterator'),
@@ -90,6 +93,7 @@ _INDEXER_MAP = {
         'blast-text': ('BlastIO', 'BlastTextIndexer'),
         'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
         'blat-psl': ('BlatIO', 'BlatPslIndexer'),
+        'blat-pslx': ('BlatIO', 'BlatPslxIndexer'),
         'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
         'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabIndexer'),
@@ -103,6 +107,8 @@ _WRITER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabWriter'),
         'blast-tabc': ('BlastIO', 'BlastTabcWriter'),
         'blast-xml': ('BlastIO', 'BlastXmlWriter'),
+        'blat-psl': ('BlatIO', 'BlatPslWriter'),
+        'blat-pslx': ('BlatIO', 'BlatPslxWriter'),
         'hmmer-tab': ('HmmerIO', 'HmmerTabWriter'),
         'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitWriter'),
         'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryWriter'),
@@ -278,6 +284,7 @@ def write(qresults, handle, format=None):
         qresult_count, hit_count, hsp_count = writer.write_file(qresults)
 
     return qresult_count, hit_count, hsp_count
+
 
 def convert(in_file, in_format, out_file, out_format):
     """Convert between two search output formats, return number of records.

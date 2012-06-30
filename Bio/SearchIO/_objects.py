@@ -27,7 +27,9 @@ _INTS = set([
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
         'hit_frame', 'gapopen_num', 'env_from', 'env_to', 'domain_index',
         'gapopen_num', 'bitscore_raw', 'initn_score', 'init1_score',
-        'opt_score', 'sw_score',
+        'opt_score', 'sw_score', 'ident_rep_num', 'match_num', 'match_rep_num',
+        'n_num', 'query_gap_num', 'query_gapopen_num', 'hit_gap_num',
+        'hit_gapopen_num', 'block_num', 
         # attributes used in qresult, hit, and/or hsp
         'seq_len',
 ])
