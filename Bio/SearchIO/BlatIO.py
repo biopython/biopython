@@ -25,14 +25,13 @@ More information are available through these links:
 """
 
 import re
+from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
 
 
-# char-strand map
-_CHAR_STRAND_MAP = {'+': 1, '-': -1}
 # precompile regex patterns
 _RE_ROW_CHECK = re.compile(r'^\d+\s+\d+\s+\d+\s+\d+')
 
@@ -85,6 +84,51 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
                 start, blksize in zip(starts, blksizes)]
 
 
+def _is_protein(psl):
+    # check if query is protein or not
+    # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
+    if len(psl['strand']) == 2:
+        if psl['strand'][1] == '+':
+            return psl['tend'] == psl['tstarts'][-1] + \
+                    3 * psl['blocksizes'][-1]
+        elif psl['strand'][1] == '-':
+            return psl['tstart'] == psl['tsize'] - \
+                    (psl['tstarts'][-1] + 3 * psl['blocksizes'][-1])
+
+    return False
+
+
+def _calc_millibad(psl, is_protein):
+    # calculates millibad
+    # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
+    size_mul = 3 if is_protein else 1
+    millibad = 0
+
+    qali_size = size_mul * (psl['qend'] - psl['qstart'])
+    tali_size = psl['tend'] - psl['tstart']
+    ali_size = min(qali_size, tali_size)
+    if ali_size <= 0:
+        return 0
+
+    size_dif = qali_size - tali_size
+    size_dif = 0 if size_dif < 0 else size_dif
+
+    total = size_mul * (psl['matches'] + psl['repmatches'] + psl['mismatches'])
+    if total != 0:
+        millibad = (1000 * (psl['mismatches'] * size_mul + psl['qnuminsert'] + \
+                round(3 * log(1 + size_dif)))) / total
+
+    return millibad
+
+
+def _calc_score(psl, is_protein):
+    # calculates score
+    # adapted from http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
+    size_mul = 3 if is_protein else 1
+    return size_mul * (psl['matches'] + (psl['repmatches'] >> 1)) - \
+            size_mul * psl['mismatches'] - psl['qnuminsert'] - psl['tnuminsert']
+
+
 class BlatPslIterator(object):
 
     """Parser for the BLAT PSL format."""
@@ -122,8 +166,8 @@ class BlatPslIterator(object):
             if self.line:
                 cols = filter(None, self.line.strip().split('\t'))
                 self._validate_cols(cols)
-                qres_parsed, hit_parsed, hsp_parsed = self._parse_cols(cols)
-                qresult_id = qres_parsed['id']
+                psl =  self._parse_cols(cols)
+                qresult_id = psl['qname']
 
             # a new qresult is created whenever qid_cache != qresult_id
             if qid_cache != qresult_id:
@@ -134,8 +178,7 @@ class BlatPslIterator(object):
                     same_query = False
                 qid_cache = qresult_id
                 qresult = QueryResult(qresult_id)
-                for attr, value in qres_parsed.items():
-                    setattr(qresult, attr, value)
+                qresult.seq_len = psl['qsize']
             # when we've reached EOF, try yield any remaining qresult and break
             elif not self.line:
                 _append_hit(qresult, hit)
@@ -145,7 +188,7 @@ class BlatPslIterator(object):
             elif not same_query:
                 same_query = True
 
-            hit_id = hit_parsed['id']
+            hit_id = psl['tname']
             # a new hit is created whenever hid_cache != hit_id
             if hid_cache != hit_id:
                 # if we're in the same query, append the previous line's hit
@@ -153,14 +196,12 @@ class BlatPslIterator(object):
                     _append_hit(qresult, hit)
                 hid_cache = hit_id
                 hit = Hit(hit_id, qresult_id)
-                for attr, value in hit_parsed.items():
-                    setattr(hit, attr, value)
+                hit.seq_len = psl['tsize']
 
             # each line is basically a different HSP, so we always add it to
             # any hit object we have
             hsp = HSP(hit_id, qresult_id)
-            hsp = self._set_hsp_attr(hsp, hsp_parsed, hit.seq_len, \
-                    qresult.seq_len)
+            hsp = self._set_hsp_attr(hsp, psl)
 
             hit.append(hsp)
 
@@ -168,93 +209,91 @@ class BlatPslIterator(object):
 
     def _parse_cols(self, cols):
         """Returns a dictionary of parsed column values."""
-        # assign parsed column data into qresult, hit, and hsp dicts
-        qresult, hit, hsp = {}, {}, {}
+        psl = {}
 
-        qresult['id'] = cols[9]                           # qName
-        qresult['seq_len'] = int(cols[10])                # qSize
-        hit['id'] = cols[13]                              # tName
-        hit['seq_len'] = int(cols[14])                    # tSize
-        hsp['matches'] = cols[0]                          # matches
-        hsp['mismatches'] = int(cols[1])                  # misMatches
-        hsp['repmatches'] = int(cols[2])                  # repMatches
-        hsp['ncount'] = int(cols[3])                      # nCount
-        hsp['qnuminsert'] = int(cols[4])                  # qNumInsert
-        hsp['qbaseinsert'] = int(cols[5])                 # qBaseInsert
-        hsp['tnuminsert'] = int(cols[6])                  # tNumInsert
-        hsp['tbaseinsert'] = int(cols[7])                 # tBaseInsert
-        hsp['strand'] = cols[8]                           # strand
-        hsp['qstart'] = int(cols[11])                     # qStart
-        hsp['qend'] = int(cols[12])                       # qEnd
-        hsp['tstart'] = int(cols[15])                     # tStart
-        hsp['tend'] = int(cols[16])                       # tEnd
-        hsp['blockcount'] = int(cols[17])                 # blockCount
-        hsp['blocksizes'] = _list_from_csv(cols[18], int) # blockSizes
-        hsp['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
-        hsp['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
+        psl['qname'] = cols[9]                            # qName
+        psl['qsize'] = int(cols[10])                      # qSize
+        psl['tname'] = cols[13]                           # tName
+        psl['tsize'] = int(cols[14])                      # tSize
+        psl['matches'] = int(cols[0])                     # matches
+        psl['mismatches'] = int(cols[1])                  # misMatches
+        psl['repmatches'] = int(cols[2])                  # repMatches
+        psl['ncount'] = int(cols[3])                      # nCount
+        psl['qnuminsert'] = int(cols[4])                  # qNumInsert
+        psl['qbaseinsert'] = int(cols[5])                 # qBaseInsert
+        psl['tnuminsert'] = int(cols[6])                  # tNumInsert
+        psl['tbaseinsert'] = int(cols[7])                 # tBaseInsert
+        psl['strand'] = cols[8]                           # strand
+        psl['qstart'] = int(cols[11])                     # qStart
+        psl['qend'] = int(cols[12])                       # qEnd
+        psl['tstart'] = int(cols[15])                     # tStart
+        psl['tend'] = int(cols[16])                       # tEnd
+        psl['blockcount'] = int(cols[17])                 # blockCount
+        psl['blocksizes'] = _list_from_csv(cols[18], int) # blockSizes
+        psl['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
+        psl['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
 
-        return qresult, hit, hsp
+        return psl
 
     def _validate_cols(self, cols):
         assert len(cols) == 21, "Invalid PSL line: %r. " \
         "Expected 21 tab-separated columns, found %i" % (self.line, len(cols))
 
-    def _set_hsp_attr(self, hsp, parsed, hlen, qlen):
+    def _set_hsp_attr(self, hsp, psl):
         """Set HSP attributes from parsed row values.
 
         Arguments:
         hsp -- HSP object whose attributes we want to set.
-        parsed -- Dictionary of parsed HSP values.
-        qlen -- Query sequence length.
-        hlen -- Hit sequence length.
+        psl -- Dictionary of parsed row values.
 
         """
         # residue-related counts
-        hsp.match_num = parsed['matches']
-        hsp.mismatch_num = parsed['mismatches']
-        hsp.match_rep_num = parsed['repmatches']
-        hsp.n_num = parsed['ncount']
-        hsp.query_gapopen_num = parsed['qnuminsert']
-        hsp.query_gap_num = parsed['qbaseinsert']
-        hsp.hit_gapopen_num = parsed['tnuminsert']
-        hsp.hit_gap_num = parsed['tbaseinsert']
+        hsp.match_num = psl['matches']
+        hsp.mismatch_num = psl['mismatches']
+        hsp.match_rep_num = psl['repmatches']
+        hsp.n_num = psl['ncount']
+        hsp.query_gapopen_num = psl['qnuminsert']
+        hsp.query_gap_num = psl['qbaseinsert']
+        hsp.hit_gapopen_num = psl['tnuminsert']
+        hsp.hit_gap_num = psl['tbaseinsert']
 
-        hsp.ident_num = hsp.match_num + hsp.match_rep_num
+        hsp.ident_num = psl['matches'] + psl['repmatches']
         hsp.pos_num = hsp.ident_num
-        hsp.gapopen_num = hsp.query_gapopen_num + hsp.hit_gapopen_num
-        hsp.gap_num = hsp.query_gap_num + hsp.hit_gap_num
+        hsp.gapopen_num = psl['qnuminsert'] + psl['tnuminsert']
+        hsp.gap_num = psl['qbaseinsert'] + psl['tbaseinsert']
+
+        is_protein = _is_protein(psl)
+        hsp.query_is_protein = is_protein
+        hsp.ident_pct = 100.0 - _calc_millibad(psl, is_protein) * 0.1
+        hsp.score = _calc_score(psl, is_protein)
 
         # strand
-        hsp.query_strand = _CHAR_STRAND_MAP[parsed['strand'][0]]
+        hsp.query_strand = 1 if psl['strand'][0] == '+' else -1
         # try to get hit strand, if it exists
         try:
-            hsp.hit_strand = _CHAR_STRAND_MAP[parsed['strand'][1]]
+            hsp.hit_strand = 1 if psl['strand'][1] == '+' else -1
         except IndexError:
             pass
 
         # coordinates
-        hsp.query_from = parsed['qstart']
-        hsp.query_to = parsed['qend'] - 1
-        hsp.hit_from = parsed['tstart']
-        hsp.hit_to = parsed['tend'] - 1
-
-        # check if query is protein or not
-        is_protein = hsp.query_span == 3 * hsp.hit_span
-        hsp.query_is_protein = is_protein
+        hsp.query_from = psl['qstart']
+        hsp.query_to = psl['qend'] - 1
+        hsp.hit_from = psl['tstart']
+        hsp.hit_to = psl['tend'] - 1
 
         # block-related attributes
-        hsp.block_sizes = parsed['blocksizes']
-        hsp.block_num = parsed['blockcount']
+        hsp.block_sizes = psl['blocksizes']
+        hsp.block_num = psl['blockcount']
 
         # query block starts
-        hsp.query_starts = _reorient_starts(parsed['qstarts'], \
-                hsp.block_sizes, qlen, hsp.query_strand)
+        hsp.query_starts = _reorient_starts(psl['qstarts'], \
+                hsp.block_sizes, psl['qsize'], hsp.query_strand)
         # hit block starts
-        if len(parsed['strand']) == 2:
-            hsp.hit_starts = _reorient_starts(parsed['tstarts'], \
-                    hsp.block_sizes, hlen, hsp.hit_strand)
+        if len(psl['strand']) == 2:
+            hsp.hit_starts = _reorient_starts(psl['tstarts'], \
+                    hsp.block_sizes, psl['tsize'], hsp.hit_strand)
         else:
-            hsp.hit_starts = parsed['tstarts']
+            hsp.hit_starts = psl['tstarts']
 
         return hsp
 
@@ -268,18 +307,18 @@ class BlatPslxIterator(BlatPslIterator):
         "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
 
     def _parse_cols(self, cols):
-        qresult, hit, hsp = BlatPslIterator._parse_cols(self, cols)
+        psl = BlatPslIterator._parse_cols(self, cols)
         # append seqs to hsp dict
-        hsp['qseqs'] = _list_from_csv(cols[21])    # query sequence
-        hsp['tseqs'] = _list_from_csv(cols[22])    # hit sequence
+        psl['qseqs'] = _list_from_csv(cols[21])    # query sequence
+        psl['tseqs'] = _list_from_csv(cols[22])    # hit sequence
 
-        return qresult, hit, hsp
+        return psl
 
-    def _set_hsp_attr(self, hsp, parsed, hlen, qlen):
-        hsp = BlatPslIterator._set_hsp_attr(self, hsp, parsed, hlen, qlen)
+    def _set_hsp_attr(self, hsp, psl):
+        hsp = BlatPslIterator._set_hsp_attr(self, hsp, psl)
 
-        hsp.query_blocks = parsed['qseqs']
-        hsp.hit_blocks = parsed['tseqs']
+        hsp.query_blocks = psl['qseqs']
+        hsp.hit_blocks = psl['tseqs']
 
         return hsp
 
