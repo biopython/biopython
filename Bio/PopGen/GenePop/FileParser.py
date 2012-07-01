@@ -21,7 +21,6 @@ Functions:
 
 
 """
-from copy import deepcopy
 from Bio.PopGen.GenePop import get_indiv
 
 def read(fname):
@@ -173,7 +172,6 @@ class FileRecord(object):
            be of the following pop.
            Returns False if at end of file.
         """
-        marker_len = None
         for line in self._handle:
             line = line.rstrip()
             if line.upper()=='POP':
@@ -280,10 +278,10 @@ class FileRecord(object):
         loci_list = old_rec.loci_list
         positions.sort()
         positions.reverse()
-        posMap = {}
+        posSet = set()
         for pos in positions:
             del loci_list[pos]
-            posMap[pos] = 1
+            posSet.add(pos)
         for locus in loci_list:
             f.write(locus + "\n")
         l_parser = old_rec.get_individual()
@@ -296,7 +294,7 @@ class FileRecord(object):
                 f.write(name + ",")
                 marker_pos = 0
                 for marker in markers:
-                    if marker_pos in posMap:
+                    if marker_pos in posSet:
                         marker_pos += 1
                         continue
                     marker_pos += 1
