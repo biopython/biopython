@@ -53,6 +53,8 @@ _ELEM_HSP = {
     'Hsp_pattern-from': 'pattern_from',
     'Hsp_pattern-to': 'pattern_to',
     'Hsp_density': 'density',
+    'Hsp_hseq': 'hit',
+    'Hsp_qseq': 'query',
 }
 # dictionary for mapping tag name and meta key name
 _ELEM_META = {
@@ -396,16 +398,12 @@ class BlastXmlIterator(object):
         #        Hsp_hseq,
         #        Hsp_midline?)>
 
-        # if value is None, feed the loop below and empty list
+        # if value is None, feed the loop below an empty list
         if root_hsp_elem is None:
             root_hsp_elem = []
 
         for hsp_elem in root_hsp_elem:
-            # get the hit, and query tags first as they are required
-            # to initialize the HSP object
-            hit_seq = hsp_elem.findtext('Hsp_hseq')
-            query_seq = hsp_elem.findtext('Hsp_qseq')
-            hsp = HSP(hit_id, query_id, hit_seq, query_seq)
+            hsp = HSP(hit_id, query_id)
 
             for hsp_tag in _ELEM_HSP:
                 value = hsp_elem.findtext(hsp_tag)
@@ -416,7 +414,6 @@ class BlastXmlIterator(object):
                     setattr(hsp, _ELEM_HSP[hsp_tag], value)
 
             # set the homology characters into alignment_annotation dict
-            hsp.alignment_annotation = {}
             hsp.alignment_annotation['homology'] = \
                     hsp_elem.findtext('Hsp_midline')
 
