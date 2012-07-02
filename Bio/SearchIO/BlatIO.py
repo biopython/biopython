@@ -338,6 +338,7 @@ class BlatPslIndexer(SearchIndexer):
         query_id_idx = 9
         qresult_key = None
 
+        start_offset = handle.tell()
         line = handle.readline()
         # read through header
         # this assumes that the result row match the regex
