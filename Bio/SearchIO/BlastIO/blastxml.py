@@ -266,7 +266,7 @@ class BlastXmlIterator(object):
 
                 # create qresult and assign its attributes
                 qresult = QueryResult(query_id)
-                qresult.seq_len = query_len
+                qresult.seq_len = int(query_len)
                 qresult._blast_id = blast_query_id
                 for key, value in self._meta.items():
                     setattr(qresult, key, value)
