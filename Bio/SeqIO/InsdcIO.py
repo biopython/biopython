@@ -237,6 +237,10 @@ class _InsdcWriter(SequentialSequenceWriter):
     QUALIFIER_INDENT = 21
     QUALIFIER_INDENT_STR = " "*QUALIFIER_INDENT
     QUALIFIER_INDENT_TMP = "     %s                " # 21 if %s is empty
+    FTQUAL_NO_QUOTE = ("anticodon", "citation", "codon_start", "compare",
+                       "direction", "estimated_length", "mod_base", "number",
+                       "rpt_type", "rpt_unit_range", "tag_peptide",
+                       "transl_except", "transl_table")
 
     def _write_feature_qualifier(self, key, value=None, quote=None):
         if not value:
@@ -246,7 +250,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         #self.handle.write('%s/%s="%s"\n' % (self.QUALIFIER_INDENT_STR, key, value))
         if quote is None:
             #Try to mimic unwritten rules about when quotes can be left out:
-            if _is_int_or_long(value):
+            if _is_int_or_long(value) or key in self.FTQUAL_NO_QUOTE:
                 quote = False
             else:
                 quote = True
