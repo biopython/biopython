@@ -14,24 +14,6 @@ from Bio.SeqRecord import SeqRecord
 from Bio._py3k import OrderedDict
 
 
-# attributes that should be converted from text
-_INTS = set([
-        # hsp-specific attributes
-        'ali_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
-        'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
-        'hit_frame', 'gapopen_num',
-        'gapopen_num', 'bitscore_raw', 'initn_score', 'init1_score',
-        'opt_score', 'sw_score', 'ident_rep_num', 'match_num', 'match_rep_num',
-        'n_num', 'query_gap_num', 'query_gapopen_num', 'hit_gap_num',
-        'hit_gapopen_num', 'block_num', 
-        # attributes used in qresult, hit, and/or hsp
-        'seq_len',
-])
-_FLOATS = set([
-        # hsp attributes
-        'bitscore', 'evalue', 'ident_pct', 'pos_pct', 'z_score',
-])
-
 # precompile regex patterns
 _RE_GAPOPEN = re.compile(r'\w-')
 
@@ -41,14 +23,6 @@ class BaseSearchObject(object):
     """Abstract class for SearchIO objects."""
 
     _NON_STICKY_ATTRS = ()
-
-    def __setattr__(self, name, value):
-        if isinstance(value, basestring):
-            if name in _INTS:
-                value = int(value)
-            elif name in _FLOATS:
-                value = float(value)
-        object.__setattr__(self, name, value)
 
     def _transfer_attrs(self, obj):
         """Transfer instance attributes to the given object.
