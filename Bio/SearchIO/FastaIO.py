@@ -94,19 +94,24 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
 
     for seq, seq_type in zip([hseq, qseq], ['hit', 'query']):
         # get and setfrom and to coordinates
-        from_coord, to_coord = _adjust_coordinates(seq, annot[seq_type])
+        from_coord = int(annot[seq_type]['_start']) - 1
+        to_coord =  from_coord + len(seq.replace('-', '')) - 1
+
         setattr(hsp, seq_type + '_from', from_coord)
         setattr(hsp, seq_type + '_to', to_coord)
         # set seq and alphabet
         setattr(hsp, seq_type, seq)
-        setattr(hsp.hit.seq, 'alphabet', annot[seq_type])
+
+        if seq_type == 'query':
+            setattr(hsp.query.seq, 'alphabet', _get_alphabet(seq, \
+                    annot[seq_type]))
 
     # set hsp strand properties
-    if hsp.hit.seq.alphabet is not generic_protein:
+    if hsp.query.seq.alphabet is not generic_protein:
         if strand == 'f':
-            hsp.hit_strand = 1
+            hsp.query_strand = 1
         else:
-            hsp.hit_strand = -1
+            hsp.query_strand = -1
     else:
         hsp.query_strand = 0
         hsp.hit_strand = 0
@@ -128,19 +133,6 @@ def _get_alphabet(seq, annot):
     #    alphabet = Gapped(alphabet)
 
     return alphabet
-
-
-def _adjust_coordinates(seq, annot):
-    """Helper function to compute start and stop coordinates.
-
-    Since HSP start and stop coordinates are coordinates for an ungapped
-    sequence, we need to adjust Fasta's coordinates which are for gapped
-    sequence. Also, we are adjusting the coordinates from one-based value
-    into zero-based (Python's default).
-    """
-    start = int(annot['_start']) - 1
-    stop =  start + len(seq.replace('-', '')) - 1
-    return start, stop
 
 
 def _extract_alignment_region(seq, annot):
@@ -274,7 +266,7 @@ class FastaM10Iterator(object):
                         # make sure strand is different and then append hsp to
                         # existing hit
                         for hsp in hit:
-                            assert strand != hsp.hit_strand
+                            assert strand != hsp.query_strand
                             qresult[hit.id].append(hsp)
 
             self.line = self.handle.readline()

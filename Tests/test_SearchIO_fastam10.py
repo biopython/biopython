@@ -69,7 +69,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(15, hsp.hit_from)
         self.assertEqual(102, hsp.hit_to)
         self.assertEqual('SQRSTRRKPENQPTRVILFNKPYDVLPQFTDEAGRKTLKEFIPVQGVYAAGRLDRDSEGLLVLTNNGALQARLTQPGKRTGKIYYVQV', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|15831859|ref|NP_310632.1|', hit.id)
@@ -94,7 +94,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(166, hsp.hit_from)
         self.assertEqual(218, hsp.hit_to)
         self.assertEqual('EIKPRGTSKGEAIAAFMQEAPFIGRTPVFLGDDLTDESGFAVVNRLGGMSVKI', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test second qresult
         qresult = qresults[1]
@@ -129,7 +129,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(295, hsp.hit_from)
         self.assertEqual(383, hsp.hit_to)
         self.assertEqual('TELNSELAKAMKVDAQRG-AFVSQVLPNSSAAKAGIKAGDVITSLNGKPISSFAALRA-QVGTMPVGSKLTLGLLRDG-KQVNVNLELQQSS', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|15832592|ref|NP_311365.1|', hit.id)
@@ -154,7 +154,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(116, hsp.hit_from)
         self.assertEqual(184, hsp.hit_to)
         self.assertEqual('LFDLFLKNDAMHDPMVNESYC-ETFGWVSKENLARMKE---LTYKANDVLKKLFDDAGLILVDFKLEFGLYKG', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -189,7 +189,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(13, hsp.hit_from)
         self.assertEqual(75, hsp.hit_to)
         self.assertEqual('IDPKKIEQIARQVHESMPKGIREFGEDVEKKIRQTLQAQLTRLDLVSREEFDVQTQVLLRTRE', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|15833861|ref|NP_312634.1|', hit.id)
@@ -214,7 +214,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(9, hsp.hit_from)
         self.assertEqual(154, hsp.hit_to)
         self.assertEqual('EFIRLLSDHDQFEKDQISELTVAANALKLEVAK--NNY-----NMKYSFDTQTERRMIELIREQKDLIPEKYLHQSGIKKL-KLHED---EFSSLLVDAERQVLEGSSFVLCCGEKINSTISELLSKKITDLTHPTESFTLSEYFSYDVYEEIFKKV', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
     def test_output003(self):
         """Test parsing fasta34 output (output003.m10)"""
@@ -263,7 +263,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(17, hsp.hit_from)
         self.assertEqual(68, hsp.hit_to)
         self.assertEqual('VRLTAEEDQ--EIRKRAAECG-KTVSGFLRAAALGKKVNSLTDDRVLKEVMRLGA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test second qresult
         qresult = qresults[1]
@@ -318,7 +318,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(101, hsp.hit_from)
         self.assertEqual(122, hsp.hit_to)
         self.assertEqual('DDRANLFEFLSEEGITITEDNN', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test fifth qresult
         qresult = qresults[4]
@@ -353,7 +353,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(65, hsp.hit_from)
         self.assertEqual(123, hsp.hit_to)
         self.assertEqual('VYTSFN---GEKFSSYTLNKVTKTDEYNDLSELSASFFKKNFDKINVNLLSKATSF-ALKKGI', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
 
 class Fasta35Cases(unittest.TestCase):
@@ -405,7 +405,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(95, hsp.hit_from)
         self.assertEqual(194, hsp.hit_to)
         self.assertEqual('AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFGRS------EVDTEHLLLALADSDVVKTILGQFKIKVDDLKRQIESEAKR-GDKPF-EGEIGVSPRVKDALSR', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973588|ref|YP_001338639.1|', hit.id)
@@ -430,7 +430,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(190, hsp.hit_from)
         self.assertEqual(247, hsp.hit_to)
         self.assertEqual('ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIMWNALSKNRLFDG----NKELKEFIMTLT', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test second qresult
         qresult = qresults[1]
@@ -465,7 +465,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(43, hsp.hit_from)
         self.assertEqual(80, hsp.hit_to)
         self.assertEqual('IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -500,7 +500,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(51, hsp.hit_from)
         self.assertEqual(93, hsp.hit_to)
         self.assertEqual('SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
     def test_output004(self):
         """Test parsing fasta35 output (output004.m10)"""
@@ -558,7 +558,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(312, hsp.hit_from)
         self.assertEqual(413, hsp.hit_to)
         self.assertEqual('AGAGAAAATAAAACAAGTAATAAAATATTAATGGAAAAAATAAATTCTTGTTTATTTAGACCTGATTCTAATCACTTTTCTTGCCCGGAGTCATTTTTGACA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -625,7 +625,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(38, hsp.hit_from)
         self.assertEqual(147, hsp.hit_to)
         self.assertEqual('IKDELPVAFCSWASLDLECEVKYINDVTSLYAKDWMSGERKWFIDWIAPFGHNMELYKYMRKKYPYELFRAIRLDESSKTGKIAEFHGGGIDKKLASKIFRQYHHELMSE', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -683,7 +683,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(359, hsp.hit_from)
         self.assertEqual(489, hsp.hit_to)
         self.assertEqual('GCAACGCTTCAAGAACTGGAATTAGGAACCGTGACAACGATTAATGAGGAGATTTATGAAGAGGGTTCTTCGATTTTAGGCCAATCGGAAGGAATTATGTAGCAAGTCCATCAGAAAATGGAAGTAGTCAT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
 
 
 class Fasta36Cases(unittest.TestCase):
@@ -735,7 +735,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(95, hsp.hit_from)
         self.assertEqual(194, hsp.hit_to)
         self.assertEqual('AGSGAPRRRGSGLASRISEQSEALLQEAAKHAAEFGRS------EVDTEHLLLALADSDVVKTILGQFKIKVDDLKRQIESEAKR-GDKPF-EGEIGVSPRVKDALSR', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973588|ref|YP_001338639.1|', hit.id)
@@ -760,7 +760,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(190, hsp.hit_from)
         self.assertEqual(247, hsp.hit_to)
         self.assertEqual('ASRQGCTVGG--KMDSVQDKASDKDKERVMKNINIMWNALSKNRLFDG----NKELKEFIMTLT', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|152973480|ref|YP_001338531.1|', hit.id)
@@ -785,7 +785,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(42, hsp.hit_from)
         self.assertEqual(86, hsp.hit_to)
         self.assertEqual('ELVKLIADMGISVRALLRKNVEPYEELGLEEDKFTDDQLIDFMLQ', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test second qresult
         qresult = qresults[1]
@@ -820,7 +820,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(43, hsp.hit_from)
         self.assertEqual(80, hsp.hit_to)
         self.assertEqual('IKKDLGVSFLKLKNREKTLIVDALKKKYPVAELLSVLQ', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973509|ref|YP_001338560.1|', hit.id)
@@ -845,7 +845,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(407, hsp.hit_from)
         self.assertEqual(417, hsp.hit_to)
         self.assertEqual('FFDLVIENPGK', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # second qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|152973581|ref|YP_001338632.1|', hit.id)
@@ -870,7 +870,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(44, hsp.hit_from)
         self.assertEqual(83, hsp.hit_to)
         self.assertEqual('ESVVFILMAGFAMSVCYLFFSVLEKVINARKSKDESIYHD', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|152973536|ref|YP_001338587.1|', hit.id)
@@ -895,7 +895,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(6, hsp.hit_from)
         self.assertEqual(35, hsp.hit_to)
         self.assertEqual('ASFSKEEQDKVAVDKVAADVAWQERMNKPV', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -930,7 +930,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(51, hsp.hit_from)
         self.assertEqual(93, hsp.hit_to)
         self.assertEqual('SRINSDVARRIPGIHRDPKDRLSSLKQVEEALDMLISSHGEYC', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973505|ref|YP_001338556.1|', hit.id)
@@ -955,7 +955,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(221, hsp.hit_from)
         self.assertEqual(280, hsp.hit_to)
         self.assertEqual('IDGVITAFD-LRTGMNISKDKVVAQIQGMDPVW---ISAAVPESIAYLLKDTSQFEISVPAYPD', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
     def test_output008(self):
         """Test parsing tfastx36 output (output008.m10)"""
@@ -1014,7 +1014,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(122, hsp.hit_from)
         self.assertEqual(186, hsp.hit_to)
         self.assertEqual('IPHQLPHALRHRPAQEAAHASQLHPAQPGCGQPLHGLWRLHHHPVYLYAWILRLRGHGMQSGGLL', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|57163782|ref|NM_001009242.1|', hit.id)
@@ -1039,7 +1039,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(14, hsp.hit_from)
         self.assertEqual(208, hsp.hit_to)
         self.assertEqual('GPELLRALLQQNGCGTQPLRVPTVLPG*AMAVLHAGRLHVPAHRAWLPHQLPHALRHGPAQEAAHASQLHPAQPGRG*PLHGLRWLHHHPLH/PLCMDTLSLGPQDAIWRASLPHWAVKLPCGLWWSWPLSGTWWCVSP*ATSA------LGRTMP*WASLSPGSWHWPALHPPSLVGPGTSLKACSVHAGSTTTHSSQKS', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -1084,7 +1084,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(0, hsp.hit_from)
         self.assertEqual(347, hsp.hit_to)
         self.assertEqual('MNGTEGPNFYVPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTLPAFFAKSSSIYNPVIYIMMNKQFRNCMLTTLCCGKNPLGDDEASTTGSKTETSQVAPA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|18148870|dbj|AB062417.1|', hit.id)
@@ -1109,7 +1109,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(0, hsp.hit_from)
         self.assertEqual(347, hsp.hit_to)
         self.assertEqual('MNGTEGPNFYVPFSNKTGVVRSPFEAPQYYLAEPWQFSMLAAYMFLLIMLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFVFGPTGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLVGWSRYIPEGMQCSCGIDYYTPHEETNNESFVIYMFVVHFIIPLIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIAFLICWLPYAGVAFYIFTHQGSDFGPIFMTIPAFFAKTSAVYNPVIYIMMNKQFRNCMVTTLCCGKNPLGDDEASTTVSKTETSQVAPA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|283855822|gb|GQ290312.1|', hit.id)
@@ -1134,7 +1134,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(0, hsp.hit_from)
         self.assertEqual(325, hsp.hit_to)
         self.assertEqual('VPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVANLFMVFGGFTTTLYTSMHGYFVFGATGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLAFTWVMALACAAPPLAGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVVAFLICWLPYASVAFYIFTHQGSNFGPVFMTIPAFFAKSSSIYNPVIYIMMNKQFRNCMLTTLCCGKNPLGDDEASTT', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, third hit, second hsp
         hsp = qresult[2][1]
         self.assertEqual(74, hsp.initn_score)
@@ -1153,7 +1153,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(766, hsp.hit_from)
         self.assertEqual(796, hsp.hit_to)
         self.assertEqual('SQQIRNATTMMMTMRVTSFSAFWVVADSCCW', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|2734705|gb|U59921.1|BBU59921', hit.id)
@@ -1178,7 +1178,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(41, hsp.hit_from)
         self.assertEqual(394, hsp.hit_to)
         self.assertEqual('MNGTEGPNFYIPMSNKTGVVRSPFEYPQYYLAEPWQYSILCAYMFLLILLGFPINFMTLYVTIQHKKLRTPLNYILLNLAFANHFMVLCGFTVTMYSSMNGYFILGATGCYVEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFSENHAVMGVAFTWIMALSCAVPPLLGWSRYIPEGMQCSCGVDYYTLKPEVNNESFVIYMFVVHFTIPLIIIFFCYGRLVCTVKEAAAQQQESATTQKAEKEVTRMVIIMVVFFLICWVPYASVAFFIFSNQGSEFGPIFMTVPAFFAKSSSIYNPVIYIMLNKQFRNCMITTLCCGKNPFGEDDASSAATSKTEASSVSSSQVSPA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|12583664|dbj|AB043817.1|', hit.id)
@@ -1203,7 +1203,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(22, hsp.hit_from)
         self.assertEqual(368, hsp.hit_to)
         self.assertEqual('MNGTEGPNFYIPMSNATGVVRSPFEYPQYYLAEPWAFSALSAYMFFLIIAGFPINFLTLYVTIEHKKLRTPLNYILLNLAVADLFMVFGGFTTTMYTSMHGYFVFGPTGCNIEGFFATLGGEIALWCLVVLAIERWMVVCKPVTNFRFGESHAIMGVMVTWTMALACALPPLFGWSRYIPEGLQCSCGIDYYTRAPGINNESFVIYMFTCHFSIPLAVISFCYGRLVCTVKEAAAQQQESETTQRAEREVTRMVVIMVISFLVCWVPYASVAWYIFTHQGSTFGPIFMTIPSFFAKSSALYNPMIYICMNKQFRHCMITTLCCGKNPFEEEDGASATSSKTEASSVS', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit
         hit = qresult[5]
         self.assertEqual('gi|283855845|gb|GQ290303.1|', hit.id)
@@ -1228,7 +1228,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(0, hsp.hit_from)
         self.assertEqual(110, hsp.hit_to)
         self.assertEqual('VPFSNKTGVVRSPFEHPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFVFGPTGCNLEGFFATLGG', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit, second hsp
         hsp = qresult[5][1]
         self.assertEqual(1411, hsp.initn_score)
@@ -1247,7 +1247,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2854, hsp.hit_from)
         self.assertEqual(3025, hsp.hit_to)
         self.assertEqual('RYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEVRSCVGHWGHAH*VNGAQLHSQSCHSLDT*PCVPA\AAAQQQESATTQKAEKEVTRMVIIMVIAFLICWLPYAGVAFYIFTHQGSNFGPIFMTLPAFFAKSSSIYNPVIYIMMNKQ', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit, third hsp
         hsp = qresult[5][2]
         self.assertEqual(431, hsp.initn_score)
@@ -1266,7 +1266,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1403, hsp.hit_from)
         self.assertEqual(1474, hsp.hit_to)
         self.assertEqual('LAGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLALTWVMALACAAPPLVGWSR*WH*TEG-KCL*GL', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit, fourth hsp
         hsp = qresult[5][3]
         self.assertEqual(213, hsp.initn_score)
@@ -1285,7 +1285,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(4206, hsp.hit_from)
         self.assertEqual(4235, hsp.hit_to)
         self.assertEqual('MLLAFQFRNCMLTTLCCGKNPLGDDEASTT', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
     def test_output009(self):
         """Test parsing fasta36 output (output009.m10)"""
@@ -1343,7 +1343,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(3483, hsp.hit_from)
         self.assertEqual(3504, hsp.hit_to)
         self.assertEqual('TGATTTTTTTTGTCTAAAACAG', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -1377,7 +1377,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(572, hsp.hit_from)
         self.assertEqual(585, hsp.hit_to)
         self.assertEqual('AGAACTAAAAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|332859474|ref|XM_001156938.2|', hit.id)
@@ -1401,7 +1401,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(84, hsp.hit_from)
         self.assertEqual(97, hsp.hit_to)
         self.assertEqual('AGAAGGTATAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # third qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|332211534|ref|XM_003254825.1|', hit.id)
@@ -1425,7 +1425,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(633, hsp.hit_from)
         self.assertEqual(646, hsp.hit_to)
         self.assertEqual('TTTTTTTACATCTT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
         # third qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|23308614|ref|NM_152952.1|', hit.id)
@@ -1449,7 +1449,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(3547, hsp.hit_from)
         self.assertEqual(3560, hsp.hit_to)
         self.assertEqual('AATAAGTAAAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # third qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|297689475|ref|XM_002822130.1|', hit.id)
@@ -1473,7 +1473,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(983, hsp.hit_from)
         self.assertEqual(996, hsp.hit_to)
         self.assertEqual('TTTTTTTACATCTT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
         # third qresult, fifth hit, second hsp
         hsp = qresult[4][1]
         self.assertEqual(52, hsp.initn_score)
@@ -1491,7 +1491,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(19, hsp.hit_from)
         self.assertEqual(32, hsp.hit_to)
         self.assertEqual('AAGAAGGTAAAAGA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
 
     def test_output010(self):
         """Test parsing fasta36 output (output010.m10)"""
@@ -1563,7 +1563,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(11, hsp.hit_from)
         self.assertEqual(51, hsp.hit_to)
         self.assertEqual('CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|284005386|ref|NM_001171415.1|', hit.id)
@@ -1587,7 +1587,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(11, hsp.hit_from)
         self.assertEqual(51, hsp.hit_to)
         self.assertEqual('CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|284005381|ref|NM_001171414.1|', hit.id)
@@ -1611,7 +1611,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(11, hsp.hit_from)
         self.assertEqual(51, hsp.hit_to)
         self.assertEqual('CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|23308614|ref|NM_152952.1|', hit.id)
@@ -1635,7 +1635,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(415, hsp.hit_from)
         self.assertEqual(439, hsp.hit_to)
         self.assertEqual('TGACAAACTCAACACCATCTTCAAC', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|291415427|ref|XM_002723908.1|', hit.id)
@@ -1659,7 +1659,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(11, hsp.hit_from)
         self.assertEqual(51, hsp.hit_to)
         self.assertEqual('CAAGAGCGAGAGGACCATCAT-CATGTCCCTCTGGGACAAGG', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
 
     def test_output012(self):
         """Test parsing fasta36 output (output012.m10)"""
@@ -1707,7 +1707,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(529, hsp.hit_from)
         self.assertEqual(543, hsp.hit_to)
         self.assertEqual('AAGAATAAAAAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|53749657|ref|NM_182940.2|', hit.id)
@@ -1731,7 +1731,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(531, hsp.hit_from)
         self.assertEqual(545, hsp.hit_to)
         self.assertEqual('AAGAAAAAAAAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|158508631|ref|NM_030206.4|', hit.id)
@@ -1755,7 +1755,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1781, hsp.hit_from)
         self.assertEqual(1796, hsp.hit_to)
         self.assertEqual('GAAGAAAAAAAAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|296217287|ref|XM_002754912.1|', hit.id)
@@ -1779,7 +1779,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(131, hsp.hit_from)
         self.assertEqual(145, hsp.hit_to)
         self.assertEqual('GAAGAAGGTAAAACA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|332211540|ref|XM_003254828.1|', hit.id)
@@ -1803,7 +1803,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(589, hsp.hit_from)
         self.assertEqual(603, hsp.hit_to)
         self.assertEqual('TTTTTTTTACATCTT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
         # first qresult, sixth hit
         hit = qresult[5]
         self.assertEqual('gi|147903656|ref|NM_001086277.1|', hit.id)
@@ -1827,7 +1827,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(642, hsp.hit_from)
         self.assertEqual(656, hsp.hit_to)
         self.assertEqual('AAAAAAGAAAAAAAA', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp.query_strand)
         # first qresult, seventh hit
         hit = qresult[6]
         self.assertEqual('gi|380013536|ref|XM_003690762.1|', hit.id)
@@ -1851,7 +1851,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(6, hsp.hit_from)
         self.assertEqual(20, hsp.hit_to)
         self.assertEqual('TTTTTTTTTTTTCTT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
         # first qresult, seventh hit, second hsp
         hsp = qresult[6][1]
         self.assertEqual(57, hsp.initn_score)
@@ -1869,7 +1869,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(45, hsp.hit_from)
         self.assertEqual(59, hsp.hit_to)
         self.assertEqual('TTTTTTTTTTTTCTT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
         # first qresult, seventh hit, third hsp
         hsp = qresult[6][2]
         self.assertEqual(57, hsp.initn_score)
@@ -1887,7 +1887,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(644, hsp.hit_from)
         self.assertEqual(658, hsp.hit_to)
         self.assertEqual('TTTTTTTCCTCCTCC', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
         # first qresult, eigth hit
         hit = qresult[7]
         self.assertEqual('gi|332211538|ref|XM_003254827.1|', hit.id)
@@ -1911,7 +1911,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(662, hsp.hit_from)
         self.assertEqual(676, hsp.hit_to)
         self.assertEqual('TTTTTTTTACATCTT', str(hsp.hit.seq))
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp.query_strand)
 
     def test_output013(self):
         """Test parsing fasta36 output (output013.m10)"""
@@ -1970,7 +1970,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(10704, hsp.hit_from)
         self.assertEqual(10774, hsp.hit_to)
         self.assertEqual('PEKKVPPAVPKKPEAPPAKVPEAPKEVVPEKKIAVPKKPEVPPAKVPEVPKKPVIEEKPVIPVPKKVESPP', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
         # test third qresult
         qresult = qresults[2]
@@ -2005,7 +2005,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(22430, hsp.hit_from)
         self.assertEqual(22498, hsp.hit_to)
         self.assertEqual('VSNI-RPAASDISPHTLTLTWDTP------EDDGGSLITSYVVEMFDVS---DGKWQTLTTTCRRPPYPVKGLNPSATY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|348553521|ref|XP_003462575.1|', hit.id)
@@ -2030,7 +2030,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(542, hsp.hit_from)
         self.assertEqual(578, hsp.hit_to)
         self.assertEqual('YELVYWAAEEEGQQRKVTFDPTSSYTLEDLKPDTLYH', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # third qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|348553523|ref|XP_003462576.1|', hit.id)
@@ -2055,7 +2055,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(542, hsp.hit_from)
         self.assertEqual(578, hsp.hit_to)
         self.assertEqual('YELVYWAAEEEGQQRKVTFDPTSSYTLEDLKPDTLYH', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # third qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|221124183|ref|XP_002154464.1|', hit.id)
@@ -2080,7 +2080,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(615, hsp.hit_from)
         self.assertEqual(672, hsp.hit_to)
         self.assertEqual('ASSISYHSIKLKWGHQSS-------KKSI-----LNHTLQMQNKSGSFNTVYSGMDTSFTLSKLKELTPY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
     def test_output014(self):
         """Test parsing fasta36 output (output014.m10)"""
@@ -2153,7 +2153,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(128, hsp.hit_from)
         self.assertEqual(194, hsp.hit_to)
         self.assertEqual('PPLLQQTATPPQGAQIVPPVCALHHPQQQLALMAAMQHHHPLPPPHA-LHHAPLPPPP---PLPLNPGPPP', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|77812697|ref|NP_035782.3|', hit.id)
@@ -2178,7 +2178,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(10780, hsp.hit_from)
         self.assertEqual(10847, hsp.hit_to)
         self.assertEqual('PEKKVPPKKPEAPPAKVPEVPKEVVTEKKVAVPKKPEVPPAKVPEVPKKPVIEEKPAIPVVEKVASPP', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
     def test_output016(self):
         """Test parsing fasta36 output (output016.m10)"""
@@ -2228,7 +2228,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(424, hsp.hit_from)
         self.assertEqual(446, hsp.hit_to)
         self.assertEqual('FRPVYTGIDTNYKVVDLTPNCDY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|9507013|ref|NP_062122.1|', hit.id)
@@ -2253,7 +2253,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(325, hsp.hit_from)
         self.assertEqual(384, hsp.hit_to)
         self.assertEqual('VVTETTATSVTLTWD------SGNTEPVS---FYG--IQYRAAGTDGPFQEVDGVASTRYSIGGLSPFSEY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit, second hsp
         hsp = qresult[1][1]
         self.assertEqual(98, hsp.initn_score)
@@ -2272,7 +2272,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(542, hsp.hit_from)
         self.assertEqual(578, hsp.hit_to)
         self.assertEqual('YELVYWAAEDEGQQHKVTFDPTSSYTLEDLKPDTLYH', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|115648048|ref|NP_035343.2|', hit.id)
@@ -2297,7 +2297,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(497, hsp.hit_from)
         self.assertEqual(578, hsp.hit_to)
         self.assertEqual('PPSPTIQVKTQQGVPAQPADFQANAESDTRIQLSWLLPPQERIVKYELVYWAAEDEGQQHKVTFDPTSSYTLEDLKPDTLYH', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, third hit, second hsp
         hsp = qresult[2][1]
         self.assertEqual(76, hsp.initn_score)
@@ -2316,7 +2316,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(325, hsp.hit_from)
         self.assertEqual(384, hsp.hit_to)
         self.assertEqual('VVTETTATSVTLTWD------SGNTEPVS---FYG--IQYRAAGTDGPFQEVDGVASTRYSIGGLSPFSEY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|354481005|ref|XP_003502693.1|', hit.id)
@@ -2341,7 +2341,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(542, hsp.hit_from)
         self.assertEqual(578, hsp.hit_to)
         self.assertEqual('YELVYWAAEDEGQQHKVTFDPTSSYTLEDLKPDTVYH', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|328789682|ref|XP_003251305.1|', hit.id)
@@ -2366,7 +2366,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(4760, hsp.hit_from)
         self.assertEqual(4822, hsp.hit_to)
         self.assertEqual('ASDVHAEGCTLTWKPP------EDDGGQPIDKYVVEKMDEATGRWVPAGETD-GPQTSLQVEGLTPGHKY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit
         hit = qresult[5]
         self.assertEqual('gi|260828627|ref|XP_002609264.1|', hit.id)
@@ -2391,7 +2391,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2241, hsp.hit_from)
         self.assertEqual(2301, hsp.hit_to)
         self.assertEqual('ANAVDSQSIRINWQPPTE-PNGN--------VLGYNIFYTTEGESGNNQQTVGPDDTTYVIEGLRPATQY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, second hsp
         hsp = qresult[5][1]
         self.assertEqual(177, hsp.initn_score)
@@ -2410,7 +2410,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2818, hsp.hit_from)
         self.assertEqual(2880, hsp.hit_to)
         self.assertEqual('VTADGQAPDTVVVTWQSPAET-NGD--------LLGYYIYYQVVGSTETSQAETGPDETTYSISGLRPATEY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, third hsp
         hsp = qresult[5][2]
         self.assertEqual(196, hsp.initn_score)
@@ -2429,7 +2429,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(3300, hsp.hit_from)
         self.assertEqual(3362, hsp.hit_to)
         self.assertEqual('VTAEGQAPDTITVTWQSPAET-NGD--------LLGYYIYYQVVGSTEDVRAEAGPEETTYSISGLRPATEY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, fourth hsp
         hsp = qresult[5][3]
         self.assertEqual(79, hsp.initn_score)
@@ -2448,7 +2448,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(3686, hsp.hit_from)
         self.assertEqual(3746, hsp.hit_to)
         self.assertEqual('IDSTTIELQWMPPSP------DEQN-GVIKGYKILYKKVGEEGENEEDAGLLDLMYTLSDLEKWTEYN', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, fifth hsp
         hsp = qresult[5][4]
         self.assertEqual(100, hsp.initn_score)
@@ -2467,7 +2467,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(3398, hsp.hit_from)
         self.assertEqual(3458, hsp.hit_to)
         self.assertEqual('ASSLGSEAIEVSWQPPPQS-NGE--------ILGYRLHYQIVGEESASTQEVEGYETFYLLRGLRPVTEY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, sixth hsp
         hsp = qresult[5][5]
         self.assertEqual(178, hsp.initn_score)
@@ -2486,7 +2486,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2145, hsp.hit_from)
         self.assertEqual(2205, hsp.hit_to)
         self.assertEqual('ATPVDPRTVRVEWQPPQQ-PNGE--------IQGYNIYYRTTESDEDALQQAGAQDIFLTLTGLSPFTEY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, seventh hsp
         hsp = qresult[5][6]
         self.assertEqual(102, hsp.initn_score)
@@ -2505,7 +2505,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(3497, hsp.hit_from)
         self.assertEqual(3554, hsp.hit_to)
         self.assertEqual('VEPTTITVDWQPPLE-INGV--------LLGYKVIYMPENA-AEFSTVELGPAELSTMLLDLEPATTY', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, seventh hit
         hit = qresult[6]
         self.assertEqual('gi|119220552|ref|NP_689957.3|', hit.id)
@@ -2530,7 +2530,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(775, hsp.hit_from)
         self.assertEqual(834, hsp.hit_to)
         self.assertEqual('VASGRTNQSIMVQWQPPP-----ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVTDL', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, eigth hit
         hit = qresult[7]
         self.assertEqual('gi|332864595|ref|XP_518946.3|', hit.id)
@@ -2555,7 +2555,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(674, hsp.hit_from)
         self.assertEqual(739, hsp.hit_to)
         self.assertEqual('LASPNSS--HSHAVVLSWVRP---FDGNS-----PILY-YIVELSENNSPWKVHLSNVGPEMTGITVSGLTPARTYQ', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
         # first qresult, eigth hit, second hsp
         hsp = qresult[7][1]
         self.assertEqual(87, hsp.initn_score)
@@ -2574,7 +2574,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(775, hsp.hit_from)
         self.assertEqual(834, hsp.hit_to)
         self.assertEqual('VASGRTNQSIMVQWQPPP-----ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVTDL', str(hsp.hit.seq))
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(0, hsp.query_strand)
 
 
 if __name__ == "__main__":
