@@ -16,9 +16,6 @@ from Bio._py3k import OrderedDict
 
 # attributes that should be converted from text
 _INTS = set([
-        # qresult-specific attributes
-        'param_gap_open', 'param_gap_extend', 'param_score_match',
-        'param_score_mismatch', 'stat_db_num', 'stat_db_len',
         # hit-specific attributes
         'domain_obs_num', 'region_num', 'cluster_num', 'overlap_num',
         'env_num', 'domain_reported_num', 'domain_included_num',
@@ -34,9 +31,6 @@ _INTS = set([
         'seq_len',
 ])
 _FLOATS = set([
-        # qresult-specific attributes
-        'param_evalue_threshold', 'stat_kappa', 'stat_eff_space',
-        'stat_lambda', 'stat_entropy',
         # hit-specific attributes
         'domain_exp_num',
         # hsp attributes

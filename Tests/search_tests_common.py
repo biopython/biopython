@@ -23,8 +23,8 @@ def compare_qresult(qres_a, qres_b, fmt=None):
     # and add format-specific attributes
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_QRESULT_OPT, _ELEM_META
-        attrs += _ELEM_QRESULT_OPT.values() + _ELEM_META.values() + ['desc', \
-                'seq_len']
+        attrs += [x[0] for x in _ELEM_QRESULT_OPT.values()] + \
+                [x[0] for x in _ELEM_META.values()] + ['desc', 'seq_len']
     elif fmt == 'blast-tab':
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_QRESULT
         attrs += _COLUMN_QRESULT.values() + ['desc', 'rid', 'fields']
@@ -52,7 +52,7 @@ def compare_hit(hit_a, hit_b, fmt=None):
     # and add format-specific attributes
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_HIT
-        attrs += _ELEM_HIT.values()
+        attrs += [x[0] for x in _ELEM_HIT.values()]
     elif fmt == 'blast-tab':
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_HIT
         attrs += _COLUMN_HIT.values()
@@ -82,7 +82,7 @@ def compare_hsp(hsp_a, hsp_b, fmt=None):
 
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_HSP
-        attrs += _ELEM_HSP.values()
+        attrs += [x[0] for x in _ELEM_HSP.values()]
     elif fmt == 'blast-tab':
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_HSP
         attrs += _COLUMN_HSP.values()

@@ -21,66 +21,66 @@ from Bio.SearchIO._index import SearchIndexer
 
 # element - optional qresult attribute name mapping
 _ELEM_QRESULT_OPT = {
-    'Statistics_db-num': 'stat_db_num',
-    'Statistics_db-len': 'stat_db_len',
-    'Statistics_eff-space': 'stat_eff_space',
-    'Statistics_hsp-len': 'stat_hsp_len',
-    'Statistics_kappa': 'stat_kappa',
-    'Statistics_lambda': 'stat_lambda',
-    'Statistics_entropy': 'stat_entropy',
+    'Statistics_db-num': ('stat_db_num', int),
+    'Statistics_db-len': ('stat_db_len', int),
+    'Statistics_eff-space': ('stat_eff_space', float),
+    'Statistics_hsp-len': ('stat_hsp_len', int),
+    'Statistics_kappa': ('stat_kappa', float),
+    'Statistics_lambda': ('stat_lambda', float),
+    'Statistics_entropy': ('stat_entropy', float),
 }
 # element - hit attribute name mapping
 _ELEM_HIT = {
-    'Hit_def': 'desc',
-    'Hit_accession': 'acc',
-    'Hit_len': 'seq_len',
+    'Hit_def': ('desc', str),
+    'Hit_accession': ('acc', str),
+    'Hit_len': ('seq_len', int),
 }
 # element - hsp attribute name mapping
 _ELEM_HSP = {
-    'Hsp_bit-score': 'bitscore',
-    'Hsp_score': 'bitscore_raw',
-    'Hsp_evalue': 'evalue',
-    'Hsp_query-from': 'query_from',
-    'Hsp_query-to': 'query_to',
-    'Hsp_hit-from': 'hit_from',
-    'Hsp_hit-to': 'hit_to',
-    'Hsp_query-frame': 'query_frame',
-    'Hsp_hit-frame': 'hit_frame',
-    'Hsp_identity': 'ident_num',
-    'Hsp_positive': 'pos_num',
-    'Hsp_gaps': 'gap_num',
-    'Hsp_align-len': 'ali_len',
-    'Hsp_pattern-from': 'pattern_from',
-    'Hsp_pattern-to': 'pattern_to',
-    'Hsp_density': 'density',
-    'Hsp_hseq': 'hit',
-    'Hsp_qseq': 'query',
+    'Hsp_bit-score': ('bitscore', float),
+    'Hsp_score': ('bitscore_raw', int),
+    'Hsp_evalue': ('evalue', float),
+    'Hsp_query-from': ('query_from', int),
+    'Hsp_query-to': ('query_to', int),
+    'Hsp_hit-from': ('hit_from', int),
+    'Hsp_hit-to': ('hit_to', int),
+    'Hsp_query-frame': ('query_frame', int),
+    'Hsp_hit-frame': ('hit_frame', int),
+    'Hsp_identity': ('ident_num', int),
+    'Hsp_positive': ('pos_num', int),
+    'Hsp_gaps': ('gap_num', int),
+    'Hsp_align-len': ('ali_len', int),
+    'Hsp_pattern-from': ('pattern_from', int),
+    'Hsp_pattern-to': ('pattern_to', int),
+    'Hsp_density': ('density', float),
+    'Hsp_hseq': ('hit', str),
+    'Hsp_qseq': ('query', str),
 }
 # dictionary for mapping tag name and meta key name
 _ELEM_META = {
-    'BlastOutput_db': 'target',
-    'BlastOutput_program': 'program',
-    'BlastOutput_version': 'version',
-    'BlastOutput_reference': 'reference',
-    'Parameters_expect': 'param_evalue_threshold',
-    'Parameters_entrez-query': 'param_entrez_query',
-    'Parameters_filter': 'param_filter',
-    'Parameters_gap-extend': 'param_gap_extend',
-    'Parameters_gap-open': 'param_gap_open',
-    'Parameters_include': 'param_include',
-    'Parameters_matrix': 'param_matrix',
-    'Parameters_pattern': 'param_pattern',
-    'Parameters_sc-match': 'param_score_match',
-    'Parameters_sc-mismatch': 'param_score_mismatch',
+    'BlastOutput_db': ('target', str),
+    'BlastOutput_program': ('program', str),
+    'BlastOutput_version': ('version', str),
+    'BlastOutput_reference': ('reference', str),
+    'Parameters_expect': ('param_evalue_threshold', float),
+    'Parameters_entrez-query': ('param_entrez_query', str),
+    'Parameters_filter': ('param_filter', str),
+    'Parameters_gap-extend': ('param_gap_extend', int),
+    'Parameters_gap-open': ('param_gap_open', int),
+    'Parameters_include': ('param_include', str),
+    'Parameters_matrix': ('param_matrix', str),
+    'Parameters_pattern': ('param_pattern', str),
+    'Parameters_sc-match': ('param_score_match', int),
+    'Parameters_sc-mismatch': ('param_score_mismatch', int),
 }
 # these are fallback tags that store information on the first query
 # outside the <Iteration> tag
 # only used if query_{ID,def,len} is not found in <Iteration>
 # (seen in legacy Blast <2.2.14)
 _ELEM_QRESULT_FALLBACK = {
-    'BlastOutput_query-ID': 'id',
-    'BlastOutput_query-def': 'desc',
-    'BlastOutput_query-len': 'len',
+    'BlastOutput_query-ID': ('id', str),
+    'BlastOutput_query-def': ('desc', str),
+    'BlastOutput_query-len': ('len', str),
 }
 # element-attribute maps, for writing
 _WRITE_MAPS = {
@@ -179,22 +179,18 @@ class BlastXmlIterator(object):
         meta = {}
         # dictionary for fallback information
         fallback = {}
-        # int meta element names
-        int_elems = set(['param_gap_open', 'param_gap_extend', \
-                'param_score_match', 'param_score_mismatch'])
 
         # parse the preamble part (anything prior to the first result)
         for event, elem in self.xml_iter:
             # get the tag values, cast appropriately, store into meta
             if event == 'end' and elem.tag in _ELEM_META:
-                meta_key = _ELEM_META[elem.tag]
+                attr_name, caster = _ELEM_META[elem.tag]
 
-                if meta_key  == 'param_evalue_threshold':
-                    meta[meta_key] = float(elem.text)
-                elif meta_key in int_elems:
-                    meta[meta_key] = int(elem.text)
+                if caster is not str:
+                    meta[attr_name] = caster(elem.text)
                 else:
-                    meta[meta_key] = elem.text
+                    meta[attr_name] = elem.text
+
                 # delete element after we finish parsing it
                 elem.clear()
                 continue
@@ -202,8 +198,13 @@ class BlastXmlIterator(object):
             # these are used only if the first <Iteration> does not have any
             # ID, ref, or len.
             elif event == 'end' and elem.tag in _ELEM_QRESULT_FALLBACK:
-                fallback_key = _ELEM_QRESULT_FALLBACK[elem.tag]
-                fallback[fallback_key] = elem.text
+                attr_name, caster = _ELEM_QRESULT_FALLBACK[elem.tag]
+
+                if caster is not str:
+                    fallback[attr_name] = caster(elem.text)
+                else:
+                    fallback[attr_name] = elem.text
+
                 elem.clear()
                 continue
 
@@ -267,8 +268,8 @@ class BlastXmlIterator(object):
                 qresult = QueryResult(query_id)
                 qresult.seq_len = query_len
                 qresult._blast_id = blast_query_id
-                for meta_attr in self._meta:
-                    setattr(qresult, meta_attr, self._meta[meta_attr])
+                for key, value in self._meta.items():
+                    setattr(qresult, key, value)
 
                 # statistics are stored in Iteration_stat's 'grandchildren' with the
                 # following DTD
@@ -285,9 +286,14 @@ class BlastXmlIterator(object):
                 if stat_iter_elem is not None:
                     stat_elem = stat_iter_elem.find('Statistics')
 
-                    for stat_tag in _ELEM_QRESULT_OPT:
-                        setattr(qresult, _ELEM_QRESULT_OPT[stat_tag], \
-                                stat_elem.findtext(stat_tag))
+                    for key, val_info in _ELEM_QRESULT_OPT.items():
+                        value = stat_elem.findtext(key)
+                        if value is not None:
+                            caster = val_info[1]
+                            # recast only if value is not intended to be str
+                            if value is not None and caster is not str:
+                                value = caster(value)
+                            setattr(qresult, val_info[0], value)
 
                 for hit in self.parse_hit(qresult_elem.find('Iteration_hits'), \
                         query_id):
@@ -351,8 +357,14 @@ class BlastXmlIterator(object):
                 blast_hit_id = ''
 
             hit = Hit(hit_id, query_id)
-            for hit_tag in _ELEM_HIT:
-                setattr(hit, _ELEM_HIT[hit_tag], hit_elem.findtext(hit_tag))
+            for key, val_info in _ELEM_HIT.items():
+                value = hit_elem.findtext(key)
+                if value is not None:
+                    caster = val_info[1]
+                    # recast only if value is not intended to be str
+                    if value is not None and caster is not str:
+                        value = caster(value)
+                    setattr(hit, val_info[0], value)
 
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id
@@ -405,13 +417,18 @@ class BlastXmlIterator(object):
         for hsp_elem in root_hsp_elem:
             hsp = HSP(hit_id, query_id)
 
-            for hsp_tag in _ELEM_HSP:
-                value = hsp_elem.findtext(hsp_tag)
+            for key, val_info in _ELEM_HSP.items():
+                value = hsp_elem.findtext(key)
+                caster = val_info[1]
+
                 # adjust 'from' and 'to' coordinates to 0-based ones
                 if value is not None:
-                    if hsp_tag.endswith('-from') or hsp_tag.endswith('-to'):
+                    if key.endswith('-from') or key.endswith('-to'):
                         value = int(value) - 1
-                    setattr(hsp, _ELEM_HSP[hsp_tag], value)
+                    # recast only if value is not intended to be str
+                    elif caster is not str:
+                        value = caster(value)
+                    setattr(hsp, val_info[0], value)
 
             # set the homology characters into alignment_annotation dict
             hsp.alignment_annotation['homology'] = \
