@@ -54,42 +54,42 @@ _LONG_SHORT_MAP = {
 
 # column to class attribute map
 _COLUMN_QRESULT = {
-    'qseqid': 'id',
-    'qacc': 'acc',
-    'qaccver': 'acc_ver',
-    'qlen': 'seq_len',
-    'qgi': 'gi',
+    'qseqid': ('id', str),
+    'qacc': ('acc', str),
+    'qaccver': ('acc_ver', str),
+    'qlen': ('seq_len', int),
+    'qgi': ('gi', str),
 }
 _COLUMN_HIT = {
-    'sseqid': 'id',
-    'sallseqid': 'id_all',
-    'sacc': 'acc',
-    'saccver': 'acc_ver',
-    'sgi': 'gi',
-    'sallgi': 'gi_all',
-    'slen': 'seq_len',
+    'sseqid': ('id', str),
+    'sallseqid': ('id_all', str),
+    'sacc': ('acc', str),
+    'saccver': ('acc_ver', str),
+    'sgi': ('gi', str),
+    'sallgi': ('gi_all', str),
+    'slen': ('seq_len', int),
 }
 _COLUMN_HSP = {
-    'length': 'ali_len',
-    'bitscore': 'bitscore',
-    'score': 'bitscore_raw',
-    'evalue': 'evalue',
-    'nident': 'ident_num',
-    'pident': 'ident_pct',
-    'positive': 'pos_num',
-    'ppos': 'pos_pct',
-    'mismatch': 'mismatch_num',
-    'gaps': 'gap_num',
-    'qstart': 'query_from',
-    'qend': 'query_to',
-    'sstart': 'hit_from',
-    'send': 'hit_to',
-    'qframe': 'query_frame',
-    'sframe': 'hit_frame',
-    'frames': 'frames',
-    'qseq': 'query',
-    'sseq': 'hit',
-    'gapopen': 'gapopen_num',
+    'length': ('ali_len', int),
+    'bitscore': ('bitscore', float),
+    'score': ('bitscore_raw', int),
+    'evalue': ('evalue', float),
+    'nident': ('ident_num', int),
+    'pident': ('ident_pct', float),
+    'positive': ('pos_num', int),
+    'ppos': ('pos_pct', float),
+    'mismatch': ('mismatch_num', int),
+    'gaps': ('gap_num', int),
+    'qstart': ('query_from', int),
+    'qend': ('query_to', int),
+    'sstart': ('hit_from', int),
+    'send': ('hit_to', int),
+    'qframe': ('query_frame', int),
+    'sframe': ('hit_frame', int),
+    'frames': ('frames', str),
+    'qseq': ('query', str),
+    'sseq': ('hit', str),
+    'gapopen': ('gapopen_num', int),
 }
 _SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
         _COLUMN_HSP.keys())
@@ -232,22 +232,31 @@ class BlastTabIterator(object):
 
         qresult, hit, hsp = {}, {}, {}
         for idx, value in enumerate(columns):
-            attr_name = fields[idx]
+            sname = fields[idx]
 
-            if attr_name in _COLUMN_QRESULT:
-                qresult[_COLUMN_QRESULT[attr_name]] = value
+            if sname in _COLUMN_QRESULT:
+                attr_name, caster = _COLUMN_QRESULT[sname]
+                if caster is not str:
+                    value = caster(value)
+                qresult[attr_name] = value
 
-            elif attr_name in _COLUMN_HIT:
-                hit[_COLUMN_HIT[attr_name]] = value
+            elif sname in _COLUMN_HIT:
+                attr_name, caster = _COLUMN_HIT[sname]
+                if caster is not str:
+                    value = caster(value)
+                hit[attr_name] = value
 
-            elif attr_name in _COLUMN_HSP:
+            elif sname in _COLUMN_HSP:
+                attr_name, caster = _COLUMN_HSP[sname]
+                if caster is not str:
+                    value = caster(value)
                 # adjust 'from' and 'to' coordinates to 0-based ones
-                if attr_name in ['qstart', 'qend', 'sstart', 'send']:
-                    value = int(value) - 1
-                hsp[_COLUMN_HSP[attr_name]] = value
+                if sname in ['qstart', 'qend', 'sstart', 'send']:
+                    value -= 1
+                hsp[attr_name] = value
             # make sure that any unhandled field is not supported
             else:
-                assert attr_name not in _SUPPORTED_FIELDS
+                assert sname not in _SUPPORTED_FIELDS
 
         return qresult, hit, hsp
 
@@ -471,15 +480,15 @@ class BlastTabWriter(object):
                     # get the column value ~ could either be an attribute
                     # of qresult, hit, or hsp
                     if field in _COLUMN_QRESULT:
-                        value = getattr(qresult, _COLUMN_QRESULT[field])
+                        value = getattr(qresult, _COLUMN_QRESULT[field][0])
                     elif field in _COLUMN_HIT:
-                        value = getattr(hit, _COLUMN_HIT[field])
+                        value = getattr(hit, _COLUMN_HIT[field][0])
                     # special case, since 'frames' can be determined from
                     # query frame and hit frame
                     elif field == 'frames':
                         value = '%i/%i' % (hsp.query_frame, hsp.hit_frame)
                     elif field in _COLUMN_HSP:
-                        value = getattr(hsp, _COLUMN_HSP[field])
+                        value = getattr(hsp, _COLUMN_HSP[field][0])
                     else:
                         assert field not in _SUPPORTED_FIELDS
                         continue

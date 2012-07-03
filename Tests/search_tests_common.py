@@ -27,7 +27,7 @@ def compare_qresult(qres_a, qres_b, fmt=None):
                 [x[0] for x in _ELEM_META.values()] + ['desc', 'seq_len']
     elif fmt == 'blast-tab':
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_QRESULT
-        attrs += _COLUMN_QRESULT.values() + ['desc', 'rid', 'fields']
+        attrs += [x[0] for x in _COLUMN_QRESULT.values()] + ['desc', 'rid', 'fields']
     elif fmt == 'hmmer-text':
         attrs += ['acc', 'desc', 'seq_len']
 
@@ -55,7 +55,7 @@ def compare_hit(hit_a, hit_b, fmt=None):
         attrs += [x[0] for x in _ELEM_HIT.values()]
     elif fmt == 'blast-tab':
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_HIT
-        attrs += _COLUMN_HIT.values()
+        attrs += [x[0] for x in _COLUMN_HIT.values()]
     elif fmt == 'hmmer-text':
         attrs += ['evalue', 'bitscore', 'bias', 'domain_exp_num', \
                 'domain_obs_num', 'desc', 'is_in_inclusion', ]
@@ -85,7 +85,7 @@ def compare_hsp(hsp_a, hsp_b, fmt=None):
         attrs += [x[0] for x in _ELEM_HSP.values()]
     elif fmt == 'blast-tab':
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_HSP
-        attrs += _COLUMN_HSP.values()
+        attrs += [x[0] for x in _COLUMN_HSP.values()]
     elif fmt == 'hmmer-text':
         attrs += ['domain_index', 'is_in_inclusion', 'bitscore', 'bias', \
                 'evalue', 'evalue_cond', 'hit_endtype', 'query_endtype', \
