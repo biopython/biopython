@@ -412,7 +412,7 @@ class BlatPslWriter(object):
 
     fmt = 'psl'
 
-    def __init__(self, handle, header=True):
+    def __init__(self, handle, header=False):
         self.handle = handle
         # flag for writing header or not
         self.header = header
