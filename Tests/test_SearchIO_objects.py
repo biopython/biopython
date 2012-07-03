@@ -878,8 +878,8 @@ class HSPWithAlignmentCases(unittest.TestCase):
         sliced_hsp = self.hsp[:5]
         self.assertTrue(isinstance(sliced_hsp, HSP))
         self.assertEqual(5, len(sliced_hsp))
-        self.assertEqual('ATGCT', sliced_hsp.hit.seq.tostring())
-        self.assertEqual('ATG--', sliced_hsp.query.seq.tostring())
+        self.assertEqual('ATGCT', str(sliced_hsp.hit.seq))
+        self.assertEqual('ATG--', str(sliced_hsp.query.seq))
 
     def test_getitem_attrs(self):
         """Test HSP.__getitem__, with attributes"""

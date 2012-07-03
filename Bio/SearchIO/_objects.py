@@ -1397,9 +1397,9 @@ class HSP(BaseSearchObject):
         if not hasattr(self, '_gapopen_num'):
             try:
                 query_gapopen = len(re.findall(_RE_GAPOPEN, \
-                        self.query.seq.tostring()))
+                        str(self.query.seq)))
                 hit_gapopen = len(re.findall(_RE_GAPOPEN, \
-                        self.hit.seq.tostring()))
+                        str(self.hit.seq)))
                 self._gapopen_num = query_gapopen + hit_gapopen
             except AttributeError:
                 raise AttributeError("Not enough is known to compute gap openings")

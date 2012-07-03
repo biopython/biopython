@@ -809,7 +809,7 @@ class BlastXmlWriter(object):
 
         # for seqrecord objects, we only need the sequence string
         elif elem in ('Hsp_hseq', 'Hsp_qseq'):
-            content = getattr(hsp, attr).seq.tostring()
+            content = str(getattr(hsp, attr).seq)
         elif elem == 'Hsp_midline':
             content = hsp.alignment_annotation['homology']
         elif elem == 'Hsp_align-len':
