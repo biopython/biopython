@@ -23,7 +23,7 @@ More information are available through these links:
 
 import re
 
-from Bio.Alphabet import generic_dna, generic_protein, Gapped
+from Bio.Alphabet import generic_dna, generic_protein
 from Bio.File import UndoHandle
 from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.SearchIO._index import SearchIndexer
@@ -65,6 +65,7 @@ def _set_qresult_hits(qresult, hit_rows):
         #   - possible [f] or [r] presence (for frame info)
         #   - possible presence of E2() column
         #   - possible incomplete hit_id due to column length limit
+        # The current method only looks at the Hit ID, none of the things above
         if hit_id not in qresult:
             hit = Hit(hit_id, qresult.id)
             hsp = HSP(hit_id, qresult.id)
