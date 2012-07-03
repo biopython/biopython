@@ -39,14 +39,16 @@ _RE_ATTR = re.compile(r'^; [a-z]+(_[ \w-]+):\s+(.*)$')
 
 # attribute name mappings
 _HSP_ATTR_MAP = {
-    '_initn': 'initn_score',
-    '_init1': 'init1_score',
-    '_opt': 'opt_score',
-    '_s-w opt': 'opt_score',
-    '_z-score': 'z_score',
-    '_bits': 'bitscore',
-    '_expect': 'evalue',
-    '_score': 'sw_score',
+    '_initn': ('initn_score', int),
+    '_init1': ('init1_score', int),
+    '_opt': ('opt_score', int),
+    '_s-w opt': ('opt_score', int),
+    '_z-score': ('z_score', float),
+    '_bits': ('bitscore', float),
+    '_expect': ('evalue', float),
+    '_score': ('sw_score', int),
+    '_ident': ('ident_pct', float),
+    '_sim': ('pos_pct', float),
 }
 
 # state flags
@@ -241,7 +243,7 @@ class FastaM10Iterator(object):
                 seq_len = regx.group(3)
                 desc = regx.group(2)
                 qresult = QueryResult(query_id)
-                qresult.seq_len = seq_len
+                qresult.seq_len = int(seq_len)
                 # get target from the next line
                 qresult.target = filter(None, \
                         self.handle.peekline().split(' '))[1].strip()
@@ -364,12 +366,12 @@ class FastaM10Iterator(object):
                     # for values before the '>...' query block
                     if state == STATE_NONE:
                         if name in _HSP_ATTR_MAP:
-                            setattr(hit[-1], _HSP_ATTR_MAP[name], value)
-                        # attr names that require preprocessing
-                        elif name == '_ident':
-                            hit[-1].ident_pct = float(value) * 100
-                        elif name == '_sim':
-                            hit[-1].pos_pct = float(value) * 100
+                            attr_name, caster = _HSP_ATTR_MAP[name]
+                            if caster is not str:
+                                value = caster(value)
+                            if name in ['_ident', '_sim']:
+                                value *= 100
+                            setattr(hit[-1], attr_name, value)
                         # store strand
                         elif name == '_frame':
                             strand = value
