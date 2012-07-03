@@ -120,7 +120,7 @@ class HmmerTextIterator(object):
             seq_len = regx.group(2)
             # create qresult object
             self.qresult = QueryResult(id)
-            self.qresult.seq_len = seq_len
+            self.qresult.seq_len = int(seq_len)
             self.qresult.program = self._meta.get('program')
             self.qresult.version = self._meta.get('version')
             self.qresult.target = self._meta.get('target')
@@ -192,12 +192,12 @@ class HmmerTextIterator(object):
             hit_id = row[8]
             hit = Hit(hit_id, self.qresult.id)
             # store the parsed results appropriately
-            hit.evalue = row[0]
-            hit.bitscore = row[1]
-            hit.bias = row[2]
+            hit.evalue = float(row[0])
+            hit.bitscore = float(row[1])
+            hit.bias = float(row[2])
             # row[3:6] is not parsed, since the info is available the the HSP level
-            hit.domain_exp_num = row[6]
-            hit.domain_obs_num = row[7]
+            hit.domain_exp_num = float(row[6])
+            hit.domain_obs_num = int(row[7])
             hit.desc = row[9]
             # don't forget to attach the boolean is_included
             hit.is_included = is_included
@@ -243,12 +243,12 @@ class HmmerTextIterator(object):
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
                 hsp = HSP(hid, self.qresult.id)
-                hsp.domain_index = parsed[0]
+                hsp.domain_index = int(parsed[0])
                 hsp.is_included = parsed[1] == '!'
-                hsp.bitscore = parsed[2]
-                hsp.bias = parsed[3]
-                hsp.evalue_cond = parsed[4]
-                hsp.evalue = parsed[5]
+                hsp.bitscore = float(parsed[2])
+                hsp.bias = float(parsed[3])
+                hsp.evalue_cond = float(parsed[4])
+                hsp.evalue = float(parsed[5])
                 # depending on whether the program is hmmsearch, hmmscan, or phmmer
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
@@ -272,7 +272,7 @@ class HmmerTextIterator(object):
                 hsp.env_from = int(parsed[12]) - 1
                 hsp.env_to = int(parsed[13]) - 1
                 hsp.env_endtype = parsed[14]
-                hsp.acc_avg = parsed[15]
+                hsp.acc_avg = float(parsed[15])
 
                 self.qresult[hid].append(hsp)
                 self.line = read_forward(self.handle)

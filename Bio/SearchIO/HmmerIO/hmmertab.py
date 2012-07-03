@@ -59,27 +59,27 @@ class HmmerTabIterator(object):
 
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
-        qresult['id'] = cols[2]                  # query name
-        qresult['acc'] = cols[3]                 # query accession
+        qresult['id'] = cols[2]                     # query name
+        qresult['acc'] = cols[3]                    # query accession
         hit = {}
-        hit['id'] = cols[0]                      # target name
-        hit['acc'] = cols[1]                     # target accession
-        hit['evalue'] = cols[4]                  # evalue (full sequence)
-        hit['bitscore'] = cols[5]                # score (full sequence)
-        hit['bias'] = cols[6]                    # bias (full sequence)
-        hit['domain_exp_num'] = cols[10]         # exp
-        hit['region_num'] = cols[11]             # reg
-        hit['cluster_num'] = cols[12]            # clu
-        hit['overlap_num'] = cols[13]            # ov
-        hit['env_num'] = cols[14]                # env
-        hit['domain_obs_num'] = cols[15]         # dom
-        hit['domain_reported_num'] = cols[16]    # rep
-        hit['domain_included_num'] = cols[17]    # inc
-        hit['desc'] = cols[18]                   # description of target
+        hit['id'] = cols[0]                         # target name
+        hit['acc'] = cols[1]                        # target accession
+        hit['evalue'] = float(cols[4])              # evalue (full sequence)
+        hit['bitscore'] = float(cols[5])            # score (full sequence)
+        hit['bias'] = float(cols[6])                # bias (full sequence)
+        hit['domain_exp_num'] = float(cols[10])     # exp
+        hit['region_num'] = int(cols[11])           # reg
+        hit['cluster_num'] = int(cols[12])          # clu
+        hit['overlap_num'] = int(cols[13])          # ov
+        hit['env_num'] = int(cols[14])              # env
+        hit['domain_obs_num'] = int(cols[15])       # dom
+        hit['domain_reported_num'] = int(cols[16])  # rep
+        hit['domain_included_num'] = int(cols[17])  # inc
+        hit['desc'] = cols[18]                      # description of target
         hsp = {}
-        hsp['evalue'] = cols[7]                  # evalue (best 1 domain)
-        hsp['bitscore'] = cols[8]                # score (best 1 domain)
-        hsp['bias'] = cols[9]                    # bias (best 1 domain)
+        hsp['evalue'] = float(cols[7])              # evalue (best 1 domain)
+        hsp['bitscore'] = float(cols[8])            # score (best 1 domain)
+        hsp['bias'] = float(cols[9])                # bias (best 1 domain)
 
         return qresult, hit, hsp
 

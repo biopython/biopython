@@ -46,29 +46,29 @@ class HmmerDomtabIterator(HmmerTabIterator):
         qresult = {}
         qresult['id'] = cols[3]                 # query name
         qresult['acc'] = cols[4]                # query accession
-        qresult['seq_len'] = cols[5]            # qlen
+        qresult['seq_len'] = int(cols[5])       # qlen
         hit = {}
         hit['id'] = cols[0]                     # target name
         hit['acc'] = cols[1]                    # target accession
-        hit['seq_len'] = cols[2]                # tlen
-        hit['evalue'] = cols[6]                 # evalue
-        hit['bitscore'] = cols[7]               # score
-        hit['bias'] = cols[8]                   # bias
+        hit['seq_len'] = int(cols[2])           # tlen
+        hit['evalue'] = float(cols[6])          # evalue
+        hit['bitscore'] = float(cols[7])        # score
+        hit['bias'] = float(cols[8])            # bias
         hit['desc'] = cols[22]                  # description of target
         hsp = {}
-        hsp['domain_index'] = cols[9]           # # (domain number)
+        hsp['domain_index'] = int(cols[9])      # # (domain number)
         # not parsing cols[10] since it's basically len(hit)
-        hsp['evalue_cond'] = cols[11]           # c-evalue
-        hsp['evalue'] = cols[12]                # i-evalue
-        hsp['bitscore'] = cols[13]              # score
-        hsp['bias'] = cols[14]                  # bias
+        hsp['evalue_cond'] = float(cols[11])    # c-evalue
+        hsp['evalue'] = float(cols[12])         # i-evalue
+        hsp['bitscore'] = float(cols[13])       # score
+        hsp['bias'] = float(cols[14])           # bias
         hsp['hit_from'] = int(cols[15]) - 1     # hmm from
         hsp['hit_to'] = int(cols[16]) - 1       # hmm to
         hsp['query_from'] = int(cols[17]) - 1   # ali from
         hsp['query_to'] = int(cols[18]) - 1     # ali to
         hsp['env_from'] = int(cols[19]) - 1     # env from
         hsp['env_to'] = int(cols[20]) - 1       # env to
-        hsp['acc_avg'] = cols[21]               # acc
+        hsp['acc_avg'] = float(cols[21])        # acc
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:

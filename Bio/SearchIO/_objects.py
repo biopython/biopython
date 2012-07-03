@@ -16,13 +16,10 @@ from Bio._py3k import OrderedDict
 
 # attributes that should be converted from text
 _INTS = set([
-        # hit-specific attributes
-        'domain_obs_num', 'region_num', 'cluster_num', 'overlap_num',
-        'env_num', 'domain_reported_num', 'domain_included_num',
         # hsp-specific attributes
         'ali_len', 'ident_num', 'pos_num', 'mismatch_num', 'gap_num',
         'query_from', 'query_to', 'hit_from', 'hit_to', 'query_frame',
-        'hit_frame', 'gapopen_num', 'env_from', 'env_to', 'domain_index',
+        'hit_frame', 'gapopen_num',
         'gapopen_num', 'bitscore_raw', 'initn_score', 'init1_score',
         'opt_score', 'sw_score', 'ident_rep_num', 'match_num', 'match_rep_num',
         'n_num', 'query_gap_num', 'query_gapopen_num', 'hit_gap_num',
@@ -31,11 +28,8 @@ _INTS = set([
         'seq_len',
 ])
 _FLOATS = set([
-        # hit-specific attributes
-        'domain_exp_num',
         # hsp attributes
-        'bitscore', 'evalue', 'ident_pct', 'pos_pct', 'bias',
-        'evalue_cond', 'acc_avg', 'z_score',
+        'bitscore', 'evalue', 'ident_pct', 'pos_pct', 'z_score',
 ])
 
 # precompile regex patterns
