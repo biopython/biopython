@@ -280,10 +280,10 @@ class QueryResult(BaseSearchObject):
         if not self.hits:
             lines.append('   Hits: 0')
         else:
-            lines.append('   Hits: %s  %s  %s' % ('-'*5, '-'*5, '-'*57))
-            pattern = '%14s  %5s  %55s'
-            lines.append(pattern % ('Index', '# HSP', 'ID + description'.ljust(57)))
-            lines.append(pattern % ('-'*5, '-'*5, '-'*57))
+            lines.append('   Hits: %s  %s  %s' % ('-'*4, '-'*5, '-'*58))
+            pattern = '%13s  %5s  %56s'
+            lines.append(pattern % ('#', '# HSP', 'ID + description'.ljust(58)))
+            lines.append(pattern % ('-'*4, '-'*5, '-'*57))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
                     hid_line = '%s  %s' % (hit.id, hit.desc)
@@ -739,7 +739,7 @@ class Hit(BaseSearchObject):
         hid_line = '  Hit: %s' % self.id
         if hasattr(self, 'seq_len'):
             hid_line += ' (%i)' % self.seq_len
-        if hasattr(self, 'desc'):
+        if self.desc:
             desc_line = '\n       %s' % self.desc
             if len(desc_line) > 81:
                 desc_line = desc_line[:78] + '...'
@@ -751,11 +751,11 @@ class Hit(BaseSearchObject):
             lines.append(' HSPs: n/a')
         else:
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
-                    ('-'*5, '-'*8, '-'*9, '-'*6, '-'*14, '-'*14))
-            pattern = '%12s  %8s  %9s  %6s  %14s  %14s'
-            lines.append(pattern % ('Index', 'E-value', 'Bit score', 'Length', \
+                    ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
+            pattern = '%11s  %8s  %9s  %6s  %18s  %18s'
+            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Length', \
                     'Query region', 'Hit region'))
-            lines.append(pattern % ('-'*5, '-'*8, '-'*9, '-'*6, '-'*14, '-'*14))
+            lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
                 if hasattr(hsp, 'evalue'):
