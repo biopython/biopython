@@ -10,6 +10,21 @@ The latest news is at the top of this file.
 
 ===================================================================
 
+(In progress, not released yet) Biopython 1.61
+
+Not much to talk about yet...
+
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Kai Blin (first contribution)
+Peter Cock
+Tiago Antao
+
+===================================================================
+
 25 June 2012: Biopython 1.60
 
 New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
