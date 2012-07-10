@@ -18,7 +18,7 @@ from search_tests_common import compare_qresult, compare_hit
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
-from Bio.SearchIO._objects import BaseSearchObject, QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
