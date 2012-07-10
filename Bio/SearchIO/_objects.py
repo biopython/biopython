@@ -1003,7 +1003,7 @@ class HSP(BaseSearchObject):
 
         self.hit_id = hit_id
         self.query_id = query_id
-        self._alphabet = alphabet
+        self.alphabet = alphabet
         self.alignment_annotation = {}
 
         if query_seq:
@@ -1130,7 +1130,7 @@ class HSP(BaseSearchObject):
     def __getitem__(self, idx):
         if hasattr(self, 'alignment'):
             obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
-                    self.query[idx], self._alphabet)
+                    self.query[idx], self.alphabet)
             # alignment annotation should be transferred, since we can compute
             # the resulting annotation
             if hasattr(self, 'alignment_annotation'):
@@ -1148,29 +1148,52 @@ class HSP(BaseSearchObject):
     def __setitem__(self, idx, value):
         raise TypeError("HSP objects are read-only.")
 
+    def _prep_seq(self, seq, seq_id, seq_type, desc=''):
+        """Transforms a sequence into a SeqRecord object).
+
+        Argument:
+        seq -- String of sequence.
+        seq_id -- String of the sequence ID.
+        seq_type -- String of sequence type, must be 'hit' or 'query'
+        desc -- String of sequence description.
+
+        """
+        assert seq_type in ['hit', 'query']
+        seq_name = 'aligned %s sequence' % seq_type
+        if isinstance(seq, SeqRecord):
+            seq.id = seq_id
+            seq.name = seq_name
+            seq.description = desc
+            return seq
+        elif isinstance(seq, basestring):
+            return SeqRecord(Seq(seq, self.alphabet), id=seq_id, \
+                    name=seq_name, description=desc)
+        else:
+            raise TypeError("%s sequence must be a string or a "
+                    "SeqRecord object." % seq_type.capitalize())
+
     def _hit_get(self):
         return self._hit
 
     def _hit_set(self, value):
-        # only accept hit_seq as string or SeqRecord objects
-        if not isinstance(value, (SeqRecord, basestring)):
-            raise TypeError("HSP sequence must be a string or a "
-                    "SeqRecord object.")
-        # if hit_seq is a string, create a new SeqRecord object
-        if isinstance(value, basestring):
-            self._hit = SeqRecord(Seq(value, self._alphabet), \
-                    id=self.hit_id, name='aligned hit sequence', \
-                    description='')
-        # otherwise hit is the hit_seq
-        else:
-            self._hit = value
-
-        # if alignment is not set and hsp.hit is present, set alignment
-        if not hasattr(self, 'alignment') and hasattr(self, '_hit'):
-            self.alignment = MultipleSeqAlignment([self.hit, self.hit], \
-                    self._alphabet)
+        self._hit = self._prep_seq(value, self.hit_id, 'hit')
 
     hit = property(fget=_hit_get, fset=_hit_set)
+
+    def _query_get(self):
+        return self._query
+
+    def _query_set(self, value):
+        self._query = self._prep_seq(value, self.query_id, 'query')
+
+    query = property(fget=_query_get, fset=_query_set)
+
+    def _alignment_get(self):
+        if not hasattr(self, '_alignment'):
+            self._alignment = MultipleSeqAlignment([self.query, self.hit], self.alphabet)
+        return self._alignment
+
+    alignment = property(fget=_alignment_get)
 
     def _hit_strand_get(self):
         if not hasattr(self, '_hit_strand'):
@@ -1195,54 +1218,6 @@ class HSP(BaseSearchObject):
 
     hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set)
 
-    def _hit_from_get(self):
-        # from is always less than to, regardless of strand
-        return min(self._hit_from, self._hit_to)
-
-    def _hit_from_set(self, value):
-        self._hit_from = value
-
-    hit_from = property(fget=_hit_from_get, fset=_hit_from_set)
-
-    def _hit_to_get(self):
-        # to is always greater than from, regardless of strand
-        return max(self._hit_from, self._hit_to)
-
-    def _hit_to_set(self, value):
-        self._hit_to = value
-
-    hit_to = property(fget=_hit_to_get, fset=_hit_to_set)
-
-    def _hit_span_get(self):
-        # hit sequence range (sans gaps)
-        return self.hit_to - self.hit_from + 1
-
-    hit_span = property(fget=_hit_span_get)
-
-    def _query_get(self):
-        return self._query
-
-    def _query_set(self, value):
-        # only accept query_seq as string or SeqRecord objects
-        if not isinstance(value, (SeqRecord, basestring)):
-            raise TypeError("HSP sequence must be a string or a "
-                    "SeqRecord object.")
-        # if query_seq is a string, create a new SeqRecord object
-        if isinstance(value, basestring):
-            self._query = SeqRecord(Seq(value, self._alphabet), \
-                    id=self.query_id, name='aligned query sequence', \
-                    description='')
-        # otherwise query is the query_seq
-        else:
-            self._query = value
-
-        # if alignment is not set and hsp.hit is present, set alignment
-        if not hasattr(self, 'alignment') and hasattr(self, '_hit'):
-            self.alignment = MultipleSeqAlignment([self.query, self.hit], \
-                    self._alphabet)
-
-    query = property(fget=_query_get, fset=_query_set)
-
     def _query_strand_get(self):
         if not hasattr(self, '_query_strand'):
             # attempt to get strand from frame
@@ -1266,6 +1241,15 @@ class HSP(BaseSearchObject):
 
     query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
 
+    def _hit_from_get(self):
+        # from is always less than to, regardless of strand
+        return min(self._hit_from, self._hit_to)
+
+    def _hit_from_set(self, value):
+        self._hit_from = value
+
+    hit_from = property(fget=_hit_from_get, fset=_hit_from_set)
+
     def _query_from_get(self):
         # from is always less than to, regardless of strand
         return min(self._query_from, self._query_to)
@@ -1275,6 +1259,15 @@ class HSP(BaseSearchObject):
 
     query_from = property(fget=_query_from_get, fset=_query_from_set)
 
+    def _hit_to_get(self):
+        # to is always greater than from, regardless of strand
+        return max(self._hit_from, self._hit_to)
+
+    def _hit_to_set(self, value):
+        self._hit_to = value
+
+    hit_to = property(fget=_hit_to_get, fset=_hit_to_set)
+
     def _query_to_get(self):
         # to is always greater than from, regardless of strand
         return max(self._query_from, self._query_to)
@@ -1283,6 +1276,12 @@ class HSP(BaseSearchObject):
         self._query_to = value
 
     query_to = property(fget=_query_to_get, fset=_query_to_set)
+
+    def _hit_span_get(self):
+        # hit sequence range (sans gaps)
+        return self.hit_to - self.hit_from + 1
+
+    hit_span = property(fget=_hit_span_get)
 
     def _query_span_get(self):
         # query sequence range (sans gaps)
