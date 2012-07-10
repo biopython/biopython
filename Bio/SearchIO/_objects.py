@@ -777,25 +777,25 @@ class Hit(BaseSearchObject):
                 else:
                     ali_len = 'n/a'
                 # query region
-                if hasattr(hsp, 'query_from'):
-                    query_from = hsp.query_from
+                if hasattr(hsp, 'query_start'):
+                    query_start = hsp.query_start
                 else:
-                    query_from = 'n/a'
-                if hasattr(hsp, 'query_to'):
-                    query_to = hsp.query_to
+                    query_start = 'n/a'
+                if hasattr(hsp, 'query_end'):
+                    query_end = hsp.query_end
                 else:
-                    query_to = 'n/a'
+                    query_end = 'n/a'
                 # hit region
-                if hasattr(hsp, 'hit_from'):
-                    hit_from = hsp.hit_from
+                if hasattr(hsp, 'hit_start'):
+                    hit_start = hsp.hit_start
                 else:
-                    hit_from = 'n/a'
-                if hasattr(hsp, 'hit_to'):
-                    hit_to = hsp.hit_to
+                    hit_start = 'n/a'
+                if hasattr(hsp, 'hit_end'):
+                    hit_end = hsp.hit_end
                 else:
-                    hit_to = 'n/a'
+                    hit_end = 'n/a'
                 lines.append(pattern % (str(idx), evalue, bitscore, ali_len, \
-                        '%i-%i' % (query_from, query_to), '%i-%i' % (hit_from, hit_to)))
+                        '%i-%i' % (query_start, query_end), '%i-%i' % (hit_start, hit_end)))
 
         return '\n'.join(lines)
 
@@ -1082,16 +1082,16 @@ class HSP(BaseSearchObject):
         # get attributes for alignment block display
         # set default values and try to obtain hsp values
         # coordinates
-        query_to, query_from, hit_to, hit_from = ['n/a'] * 4
+        query_end, query_start, hit_end, hit_start = ['n/a'] * 4
         # get from private values because we may need to switch (?)
-        if hasattr(self, 'query_to'):
-            query_to = self._query_to
-        if hasattr(self, 'query_from'):
-            query_from = self._query_from
-        if hasattr(self, 'hit_to'):
-            hit_to = self._hit_to
-        if hasattr(self, 'hit_from'):
-            hit_from = self._hit_from
+        if hasattr(self, 'query_end'):
+            query_end = self._query_end
+        if hasattr(self, 'query_start'):
+            query_start = self._query_start
+        if hasattr(self, 'hit_end'):
+            hit_end = self._hit_end
+        if hasattr(self, 'hit_start'):
+            hit_start = self._hit_start
 
         # homology line
         homol = ''
@@ -1104,12 +1104,12 @@ class HSP(BaseSearchObject):
 
         if hasattr(self, 'query') and hasattr(self, 'hit'):
             if ali_len < 56:
-                lines.append("Query:%s %s %s" % (str(query_from).rjust(8), \
-                        qseq, str(query_to)))
+                lines.append("Query:%s %s %s" % (str(query_start).rjust(8), \
+                        qseq, str(query_end)))
                 if homol:
                     lines.append("               %s" % homol)
-                lines.append("  Hit:%s %s %s" % (str(hit_from).rjust(8), \
-                        hseq, str(hit_to)))
+                lines.append("  Hit:%s %s %s" % (str(hit_start).rjust(8), \
+                        hseq, str(hit_end)))
             else:
                 # adjust continuation character length, so we don't display
                 # the same residues twice
@@ -1117,13 +1117,13 @@ class HSP(BaseSearchObject):
                     cont = '~' * 3
                 else:
                     cont = '~' * (ali_len - 56)
-                lines.append("Query:%s %s%s%s %s" % (str(query_from).rjust(8), \
-                                qseq[:49], cont, qseq[-5:], str(query_to)))
+                lines.append("Query:%s %s%s%s %s" % (str(query_start).rjust(8), \
+                                qseq[:49], cont, qseq[-5:], str(query_end)))
                 if homol:
                     lines.append("               %s%s%s" % \
                             (homol[:49], cont, homol[-5:]))
-                lines.append("  Hit:%s %s%s%s %s" % (str(hit_from).rjust(8), \
-                                hseq[:49], cont, hseq[-5:], str(hit_to)))
+                lines.append("  Hit:%s %s%s%s %s" % (str(hit_start).rjust(8), \
+                                hseq[:49], cont, hseq[-5:], str(hit_end)))
 
         return '\n'.join(lines)
 
@@ -1241,51 +1241,51 @@ class HSP(BaseSearchObject):
 
     query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
 
-    def _hit_from_get(self):
-        # from is always less than to, regardless of strand
-        return min(self._hit_from, self._hit_to)
+    def _hit_start_get(self):
+        # start is always less than to, regardless of strand
+        return min(self._hit_start, self._hit_end)
 
-    def _hit_from_set(self, value):
-        self._hit_from = value
+    def _hit_start_set(self, value):
+        self._hit_start = value
 
-    hit_from = property(fget=_hit_from_get, fset=_hit_from_set)
+    hit_start = property(fget=_hit_start_get, fset=_hit_start_set)
 
-    def _query_from_get(self):
-        # from is always less than to, regardless of strand
-        return min(self._query_from, self._query_to)
+    def _query_start_get(self):
+        # start is always less than to, regardless of strand
+        return min(self._query_start, self._query_end)
 
-    def _query_from_set(self, value):
-        self._query_from = value
+    def _query_start_set(self, value):
+        self._query_start = value
 
-    query_from = property(fget=_query_from_get, fset=_query_from_set)
+    query_start = property(fget=_query_start_get, fset=_query_start_set)
 
-    def _hit_to_get(self):
-        # to is always greater than from, regardless of strand
-        return max(self._hit_from, self._hit_to)
+    def _hit_end_get(self):
+        # end is always greater than start, regardless of strand
+        return max(self._hit_start, self._hit_end)
 
-    def _hit_to_set(self, value):
-        self._hit_to = value
+    def _hit_end_set(self, value):
+        self._hit_end = value
 
-    hit_to = property(fget=_hit_to_get, fset=_hit_to_set)
+    hit_end = property(fget=_hit_end_get, fset=_hit_end_set)
 
-    def _query_to_get(self):
-        # to is always greater than from, regardless of strand
-        return max(self._query_from, self._query_to)
+    def _query_end_get(self):
+        # end is always greater than start, regardless of strand
+        return max(self._query_start, self._query_end)
 
-    def _query_to_set(self, value):
-        self._query_to = value
+    def _query_end_set(self, value):
+        self._query_end = value
 
-    query_to = property(fget=_query_to_get, fset=_query_to_set)
+    query_end = property(fget=_query_end_get, fset=_query_end_set)
 
     def _hit_span_get(self):
         # hit sequence range (sans gaps)
-        return self.hit_to - self.hit_from + 1
+        return self.hit_end - self.hit_start + 1
 
     hit_span = property(fget=_hit_span_get)
 
     def _query_span_get(self):
         # query sequence range (sans gaps)
-        return self.query_to - self.query_from + 1
+        return self.query_end - self.query_start + 1
 
     query_span = property(fget=_query_span_get)
 

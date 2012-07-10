@@ -40,18 +40,18 @@ _ELEM_HSP = {
     'Hsp_bit-score': ('bitscore', float),
     'Hsp_score': ('bitscore_raw', int),
     'Hsp_evalue': ('evalue', float),
-    'Hsp_query-from': ('query_from', int),
-    'Hsp_query-to': ('query_to', int),
-    'Hsp_hit-from': ('hit_from', int),
-    'Hsp_hit-to': ('hit_to', int),
+    'Hsp_query-from': ('query_start', int),
+    'Hsp_query-to': ('query_end', int),
+    'Hsp_hit-from': ('hit_start', int),
+    'Hsp_hit-to': ('hit_end', int),
     'Hsp_query-frame': ('query_frame', int),
     'Hsp_hit-frame': ('hit_frame', int),
     'Hsp_identity': ('ident_num', int),
     'Hsp_positive': ('pos_num', int),
     'Hsp_gaps': ('gap_num', int),
     'Hsp_align-len': ('ali_len', int),
-    'Hsp_pattern-from': ('pattern_from', int),
-    'Hsp_pattern-to': ('pattern_to', int),
+    'Hsp_pattern-from': ('pattern_start', int),
+    'Hsp_pattern-to': ('pattern_end', int),
     'Hsp_density': ('density', float),
     'Hsp_hseq': ('hit', str),
     'Hsp_qseq': ('query', str),
@@ -129,12 +129,12 @@ _WRITE_MAPS = {
         ('bit-score', 'bitscore'),
         ('score', 'bitscore_raw'),
         ('evalue', 'evalue'),
-        ('query-from', 'query_from'),
-        ('query-to', 'query_to'),
-        ('hit-from', 'hit_from'),
-        ('hit-to', 'hit_to'),
-        ('pattern-from', 'pattern_from'),
-        ('pattern-to', 'pattern_to'),
+        ('query-from', 'query_start'),
+        ('query-to', 'query_end'),
+        ('hit-from', 'hit_start'),
+        ('hit-to', 'hit_end'),
+        ('pattern-from', 'pattern_start'),
+        ('pattern-to', 'pattern_end'),
         ('query-frame', 'query_frame'),
         ('hit-frame', 'hit_frame'),
         ('identity', 'ident_num'),
@@ -810,19 +810,18 @@ class BlastXmlWriter(object):
         """Adjusts output to mimic native BLAST+ XML as much as possible."""
 
         # adjust coordinates
-        if attr in ('query_from' ,'query_to' ,'hit_from', 'hit_to', \
-                'pattern_from', 'pattern_to'):
-            # change from 0-based to 1-based
+        if attr in ('query_start' ,'query_end' ,'hit_start', 'hit_end', \
+                'pattern_start', 'pattern_end'):
             content = getattr(hsp, attr) + 1
 
             # adjust for 'from' <--> 'to' flip if it's not a translated search
             # and frames are different
             # adapted from /src/algo/blast/format/blastxml_format.cpp#L216
             if hsp.query_frame != 0 and hsp.hit_frame < 0:
-                if attr == 'hit_from':
-                    content = getattr(hsp, 'hit_to') + 1
-                elif attr == 'hit_to':
-                    content = getattr(hsp, 'hit_from') + 1
+                if attr == 'hit_start':
+                    content = getattr(hsp, 'hit_end') + 1
+                elif attr == 'hit_end':
+                    content = getattr(hsp, 'hit_start') + 1
 
         # for seqrecord objects, we only need the sequence string
         elif elem in ('Hsp_hseq', 'Hsp_qseq'):

@@ -80,10 +80,10 @@ _COLUMN_HSP = {
     'ppos': ('pos_pct', float),
     'mismatch': ('mismatch_num', int),
     'gaps': ('gap_num', int),
-    'qstart': ('query_from', int),
-    'qend': ('query_to', int),
-    'sstart': ('hit_from', int),
-    'send': ('hit_to', int),
+    'qstart': ('query_start', int),
+    'qend': ('query_end', int),
+    'sstart': ('hit_start', int),
+    'send': ('hit_end', int),
     'qframe': ('query_frame', int),
     'sframe': ('hit_frame', int),
     'frames': ('frames', str),
@@ -516,13 +516,13 @@ class BlastTabWriter(object):
             try:
                 qstrand_is_minus = hsp.query_strand < 0
             except AttributeError:
-                qstrand_is_minus = hsp._query_to < hsp._query_from
+                qstrand_is_minus = hsp._query_end < hsp._query_start
             # switch from <--> to if strand is -1
             if qstrand_is_minus:
                 if field == 'qstart':
-                    value = hsp.query_to
+                    value = hsp.query_end
                 elif field == 'qend':
-                    value = hsp.query_from
+                    value = hsp.query_start
                 else:
                    # we should not get here!
                    raise ValueError("Unexpected column name: %r" % field)
@@ -530,13 +530,13 @@ class BlastTabWriter(object):
             try:
                 hstrand_is_minus = hsp.hit_strand < 0
             except AttributeError:
-                hstrand_is_minus = hsp._hit_to < hsp._hit_from
+                hstrand_is_minus = hsp._hit_end < hsp._hit_start
             # switch from <--> to if strand is -1
             if hstrand_is_minus:
                 if field == 'sstart':
-                    value = hsp.hit_to
+                    value = hsp.hit_end
                 elif field == 'send':
-                   value = hsp.hit_from
+                   value = hsp.hit_start
                 else:
                    # we should not get here!
                    raise ValueError("Unexpected column name: %r" % field)

@@ -254,23 +254,23 @@ class HmmerTextIterator(object):
                 # for hmmscan, hit is the hmm profile, query is the sequence
                 if self._meta.get('program') == 'hmmscan':
                     # adjust 'from' and 'to' coordinates to 0-based ones
-                    hsp.hit_from = int(parsed[6]) - 1
-                    hsp.hit_to = int(parsed[7]) - 1
-                    hsp.query_from = int(parsed[9]) - 1
-                    hsp.query_to = int(parsed[10]) - 1
+                    hsp.hit_start = int(parsed[6]) - 1
+                    hsp.hit_end = int(parsed[7]) - 1
+                    hsp.query_start = int(parsed[9]) - 1
+                    hsp.query_end = int(parsed[10]) - 1
                     hsp.hit_endtype = parsed[8]
                     hsp.query_endtype = parsed[11]
                 elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                     # adjust 'from' and 'to' coordinates to 0-based ones
-                    hsp.hit_from = int(parsed[9]) - 1
-                    hsp.hit_to = int(parsed[10]) - 1
-                    hsp.query_from = int(parsed[6]) - 1
-                    hsp.query_to = int(parsed[7]) - 1
+                    hsp.hit_start = int(parsed[9]) - 1
+                    hsp.hit_end = int(parsed[10]) - 1
+                    hsp.query_start = int(parsed[6]) - 1
+                    hsp.query_end = int(parsed[7]) - 1
                     hsp.hit_endtype = parsed[11]
                     hsp.query_endtype = parsed[8]
                 # adjust 'from' and 'to' coordinates to 0-based ones
-                hsp.env_from = int(parsed[12]) - 1
-                hsp.env_to = int(parsed[13]) - 1
+                hsp.env_start = int(parsed[12]) - 1
+                hsp.env_end = int(parsed[13]) - 1
                 hsp.env_endtype = parsed[14]
                 hsp.acc_avg = float(parsed[15])
 

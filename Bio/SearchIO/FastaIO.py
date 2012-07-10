@@ -99,8 +99,8 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
         from_coord = int(annot[seq_type]['_start']) - 1
         to_coord =  from_coord + len(seq.replace('-', '')) - 1
 
-        setattr(hsp, seq_type + '_from', from_coord)
-        setattr(hsp, seq_type + '_to', to_coord)
+        setattr(hsp, seq_type + '_start', from_coord)
+        setattr(hsp, seq_type + '_end', to_coord)
         # set seq and alphabet
         setattr(hsp, seq_type, seq)
 

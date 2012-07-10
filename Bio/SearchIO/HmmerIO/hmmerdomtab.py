@@ -62,20 +62,20 @@ class HmmerDomtabIterator(HmmerTabIterator):
         hsp['evalue'] = float(cols[12])         # i-evalue
         hsp['bitscore'] = float(cols[13])       # score
         hsp['bias'] = float(cols[14])           # bias
-        hsp['hit_from'] = int(cols[15]) - 1     # hmm from
-        hsp['hit_to'] = int(cols[16]) - 1       # hmm to
-        hsp['query_from'] = int(cols[17]) - 1   # ali from
-        hsp['query_to'] = int(cols[18]) - 1     # ali to
-        hsp['env_from'] = int(cols[19]) - 1     # env from
-        hsp['env_to'] = int(cols[20]) - 1       # env to
+        hsp['hit_start'] = int(cols[15]) - 1    # hmm from
+        hsp['hit_end'] = int(cols[16]) - 1      # hmm to
+        hsp['query_start'] = int(cols[17]) - 1  # ali from
+        hsp['query_end'] = int(cols[18]) - 1    # ali to
+        hsp['env_start'] = int(cols[19]) - 1     # env from
+        hsp['env_end'] = int(cols[20]) - 1       # env to
         hsp['acc_avg'] = float(cols[21])        # acc
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:
-            hsp['hit_to'], hsp['query_to'] = \
-                    hsp['query_to'], hsp['hit_to']
-            hsp['hit_from'], hsp['query_from'] = \
-                    hsp['query_from'], hsp['hit_from']
+            hsp['hit_end'], hsp['query_end'] = \
+                    hsp['query_end'], hsp['hit_end']
+            hsp['hit_start'], hsp['query_start'] = \
+                    hsp['query_start'], hsp['hit_start']
 
         return qresult, hit, hsp
 
@@ -269,15 +269,15 @@ class HmmerDomtabHmmhitWriter(object):
 
             for hsp in hit:
                 if self.hmm_as_hit:
-                    hmm_to = hsp.hit_to + 1
-                    hmm_from = hsp.hit_from + 1
-                    ali_to = hsp.query_to + 1
-                    ali_from = hsp.query_from + 1
+                    hmm_to = hsp.hit_end + 1
+                    hmm_from = hsp.hit_start + 1
+                    ali_to = hsp.query_end + 1
+                    ali_from = hsp.query_start + 1
                 else:
-                    hmm_to = hsp.query_to + 1
-                    hmm_from = hsp.query_from + 1
-                    ali_to = hsp.hit_to + 1
-                    ali_from = hsp.hit_from + 1
+                    hmm_to = hsp.query_end + 1
+                    hmm_from = hsp.query_start + 1
+                    ali_to = hsp.hit_end + 1
+                    ali_from = hsp.hit_start + 1
 
                 rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d %3d" \
                 " %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld %5d %5d %4.2f %s\n" % \
@@ -285,7 +285,7 @@ class HmmerDomtabHmmhitWriter(object):
                 qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore, \
                 hit.bias, hsp.domain_index, len(hit), hsp.evalue_cond, hsp.evalue, \
                 hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to, \
-                hsp.env_from + 1, hsp.env_to + 1, hsp.acc_avg, hit.desc)
+                hsp.env_start + 1, hsp.env_end + 1, hsp.acc_avg, hit.desc)
 
         return rows
 
