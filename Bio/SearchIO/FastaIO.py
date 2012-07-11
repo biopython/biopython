@@ -95,12 +95,12 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
     assert len(hseq) == len(qseq), annot
 
     for seq, seq_type in zip([hseq, qseq], ['hit', 'query']):
-        # get and setfrom and to coordinates
-        from_coord = int(annot[seq_type]['_start']) - 1
-        to_coord =  from_coord + len(seq.replace('-', '')) - 1
+        # get and set start and end coordinates
+        start = int(annot[seq_type]['_start'])
+        end = int(annot[seq_type]['_stop'])
 
-        setattr(hsp, seq_type + '_start', from_coord)
-        setattr(hsp, seq_type + '_end', to_coord)
+        setattr(hsp, seq_type + '_start', min(start, end) - 1)
+        setattr(hsp, seq_type + '_end', max(start, end))
         # set seq and alphabet
         setattr(hsp, seq_type, seq)
 

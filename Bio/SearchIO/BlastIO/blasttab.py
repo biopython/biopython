@@ -250,9 +250,6 @@ class BlastTabIterator(object):
                 attr_name, caster = _COLUMN_HSP[sname]
                 if caster is not str:
                     value = caster(value)
-                # adjust 'from' and 'to' coordinates to 0-based ones
-                if sname in ['qstart', 'qend', 'sstart', 'send']:
-                    value -= 1
                 hsp[attr_name] = value
             # make sure that any unhandled field is not supported
             else:
@@ -321,6 +318,12 @@ class BlastTabIterator(object):
             # for every line
             hsp = HSP(hid_cache, qid_cache)
             for attr, value in hsp_parsed.items():
+                # adjust coordinates to Python range
+                for coord_type in ('query', 'hit'):
+                    if attr == coord_type + '_start':
+                        value = min(value, hsp_parsed[coord_type + '_end']) - 1
+                    elif attr == coord_type + '_end':
+                        value = max(value, hsp_parsed[coord_type + '_start'])
                 setattr(hsp, attr, value)
             # try to set hit_frame and/or query_frame if frames
             # attribute is set
@@ -496,7 +499,7 @@ class BlastTabWriter(object):
                     # adjust from and to according to strand, if from and to
                     # is included in the output field
                     if field in coordinates:
-                        value = self.adjust_fromto(field, value, hsp)
+                        value = self.adjust_coords(field, value, hsp)
                     # adjust output formatting
                     value = self.adjust_output(field, value)
 
@@ -507,8 +510,8 @@ class BlastTabWriter(object):
 
         return qresult_lines
 
-    def adjust_fromto(self, field, value, hsp):
-        """Adjusts 'from' and 'to' properties according to strand."""
+    def adjust_coords(self, field, value, hsp):
+        """Adjusts start and end coordinates according to strand."""
         # try to determine whether strand is minus or not
         # TODO: is there a better way to do this without accessing the private
         # attributes?
@@ -522,10 +525,13 @@ class BlastTabWriter(object):
                 if field == 'qstart':
                     value = hsp.query_end
                 elif field == 'qend':
-                    value = hsp.query_start
+                    value = hsp.query_start + 1
                 else:
                    # we should not get here!
                    raise ValueError("Unexpected column name: %r" % field)
+            # adjust start coordinate for positive strand
+            elif 'start' in field:
+                value += 1
         else:
             try:
                 hstrand_is_minus = hsp.hit_strand < 0
@@ -536,13 +542,15 @@ class BlastTabWriter(object):
                 if field == 'sstart':
                     value = hsp.hit_end
                 elif field == 'send':
-                   value = hsp.hit_start
+                   value = hsp.hit_start + 1
                 else:
                    # we should not get here!
                    raise ValueError("Unexpected column name: %r" % field)
+            # adjust start coordinate for positive strand
+            elif 'start' in field:
+                value += 1
 
-        # adjust from 0-based index to 1-based
-        return value + 1
+        return value
 
     def adjust_output(self, field, value):
         """Adjusts formatting of the given field and value to mimic native tab output."""

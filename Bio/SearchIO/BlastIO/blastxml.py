@@ -416,6 +416,8 @@ class BlastXmlIterator(object):
 
         for hsp_elem in root_hsp_elem:
             hsp = HSP(hit_id, query_id)
+            # temporary container for coordinates
+            coords = {}
 
             for key, val_info in _ELEM_HSP.items():
                 value = hsp_elem.findtext(key)
@@ -424,7 +426,9 @@ class BlastXmlIterator(object):
                 # adjust 'from' and 'to' coordinates to 0-based ones
                 if value is not None:
                     if key.endswith('-from') or key.endswith('-to'):
-                        value = int(value) - 1
+                        # store coordinates for further processing
+                        coords[val_info[0]] = caster(value)
+                        continue
                     # recast only if value is not intended to be str
                     elif caster is not str:
                         value = caster(value)
@@ -433,6 +437,23 @@ class BlastXmlIterator(object):
             # set the homology characters into alignment_annotation dict
             hsp.alignment_annotation['homology'] = \
                     hsp_elem.findtext('Hsp_midline')
+
+            # process coordinates
+            # since 'x-from' could be bigger than 'x-to', we need to figure
+            # out which one is smaller/bigger since 'x_start' is always smaller
+            # than 'x_end'
+            for coord_type in ('query', 'hit', 'pattern'):
+                start_type = coord_type + '_start'
+                end_type = coord_type + '_end'
+                try:
+                    start = coords[start_type]
+                    end = coords[end_type]
+                except KeyError:
+                    continue
+                else:
+                    # convert to python range and setattr
+                    setattr(hsp, start_type, min(start, end) - 1)
+                    setattr(hsp, end_type, max(start, end))
 
             # delete element after we finish parsing it
             hsp_elem.clear()
@@ -813,13 +834,17 @@ class BlastXmlWriter(object):
         if attr in ('query_start' ,'query_end' ,'hit_start', 'hit_end', \
                 'pattern_start', 'pattern_end'):
             content = getattr(hsp, attr) + 1
+            if '_start' in attr:
+                content = getattr(hsp, attr) + 1
+            else:
+                content = getattr(hsp, attr)
 
             # adjust for 'from' <--> 'to' flip if it's not a translated search
             # and frames are different
             # adapted from /src/algo/blast/format/blastxml_format.cpp#L216
             if hsp.query_frame != 0 and hsp.hit_frame < 0:
                 if attr == 'hit_start':
-                    content = getattr(hsp, 'hit_end') + 1
+                    content = getattr(hsp, 'hit_end')
                 elif attr == 'hit_end':
                     content = getattr(hsp, 'hit_start') + 1
 

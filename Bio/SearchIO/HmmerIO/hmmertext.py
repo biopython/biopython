@@ -255,22 +255,22 @@ class HmmerTextIterator(object):
                 if self._meta.get('program') == 'hmmscan':
                     # adjust 'from' and 'to' coordinates to 0-based ones
                     hsp.hit_start = int(parsed[6]) - 1
-                    hsp.hit_end = int(parsed[7]) - 1
+                    hsp.hit_end = int(parsed[7])
                     hsp.query_start = int(parsed[9]) - 1
-                    hsp.query_end = int(parsed[10]) - 1
+                    hsp.query_end = int(parsed[10])
                     hsp.hit_endtype = parsed[8]
                     hsp.query_endtype = parsed[11]
                 elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                     # adjust 'from' and 'to' coordinates to 0-based ones
                     hsp.hit_start = int(parsed[9]) - 1
-                    hsp.hit_end = int(parsed[10]) - 1
+                    hsp.hit_end = int(parsed[10])
                     hsp.query_start = int(parsed[6]) - 1
-                    hsp.query_end = int(parsed[7]) - 1
+                    hsp.query_end = int(parsed[7])
                     hsp.hit_endtype = parsed[11]
                     hsp.query_endtype = parsed[8]
                 # adjust 'from' and 'to' coordinates to 0-based ones
                 hsp.env_start = int(parsed[12]) - 1
-                hsp.env_end = int(parsed[13]) - 1
+                hsp.env_end = int(parsed[13])
                 hsp.env_endtype = parsed[14]
                 hsp.acc_avg = float(parsed[15])
 

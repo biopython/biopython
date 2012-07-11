@@ -63,11 +63,11 @@ class HmmerDomtabIterator(HmmerTabIterator):
         hsp['bitscore'] = float(cols[13])       # score
         hsp['bias'] = float(cols[14])           # bias
         hsp['hit_start'] = int(cols[15]) - 1    # hmm from
-        hsp['hit_end'] = int(cols[16]) - 1      # hmm to
+        hsp['hit_end'] = int(cols[16])          # hmm to
         hsp['query_start'] = int(cols[17]) - 1  # ali from
-        hsp['query_end'] = int(cols[18]) - 1    # ali to
-        hsp['env_start'] = int(cols[19]) - 1     # env from
-        hsp['env_end'] = int(cols[20]) - 1       # env to
+        hsp['query_end'] = int(cols[18])        # ali to
+        hsp['env_start'] = int(cols[19]) - 1    # env from
+        hsp['env_end'] = int(cols[20])          # env to
         hsp['acc_avg'] = float(cols[21])        # acc
 
         # switch hmm<-->ali coordinates if hmm is not hit
@@ -269,14 +269,14 @@ class HmmerDomtabHmmhitWriter(object):
 
             for hsp in hit:
                 if self.hmm_as_hit:
-                    hmm_to = hsp.hit_end + 1
+                    hmm_to = hsp.hit_end
                     hmm_from = hsp.hit_start + 1
-                    ali_to = hsp.query_end + 1
+                    ali_to = hsp.query_end
                     ali_from = hsp.query_start + 1
                 else:
-                    hmm_to = hsp.query_end + 1
+                    hmm_to = hsp.query_end
                     hmm_from = hsp.query_start + 1
-                    ali_to = hsp.hit_end + 1
+                    ali_to = hsp.hit_end
                     ali_from = hsp.hit_start + 1
 
                 rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d %3d" \
@@ -285,7 +285,7 @@ class HmmerDomtabHmmhitWriter(object):
                 qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore, \
                 hit.bias, hsp.domain_index, len(hit), hsp.evalue_cond, hsp.evalue, \
                 hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to, \
-                hsp.env_start + 1, hsp.env_end + 1, hsp.acc_avg, hit.desc)
+                hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.desc)
 
         return rows
 

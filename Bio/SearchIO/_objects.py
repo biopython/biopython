@@ -1243,7 +1243,7 @@ class HSP(BaseSearchObject):
 
     def _hit_start_get(self):
         # start is always less than to, regardless of strand
-        return min(self._hit_start, self._hit_end)
+        return self._hit_start
 
     def _hit_start_set(self, value):
         self._hit_start = value
@@ -1252,7 +1252,7 @@ class HSP(BaseSearchObject):
 
     def _query_start_get(self):
         # start is always less than to, regardless of strand
-        return min(self._query_start, self._query_end)
+        return self._query_start
 
     def _query_start_set(self, value):
         self._query_start = value
@@ -1261,7 +1261,7 @@ class HSP(BaseSearchObject):
 
     def _hit_end_get(self):
         # end is always greater than start, regardless of strand
-        return max(self._hit_start, self._hit_end)
+        return self._hit_end
 
     def _hit_end_set(self, value):
         self._hit_end = value
@@ -1270,7 +1270,7 @@ class HSP(BaseSearchObject):
 
     def _query_end_get(self):
         # end is always greater than start, regardless of strand
-        return max(self._query_start, self._query_end)
+        return self._query_end
 
     def _query_end_set(self, value):
         self._query_end = value
@@ -1279,13 +1279,13 @@ class HSP(BaseSearchObject):
 
     def _hit_span_get(self):
         # hit sequence range (sans gaps)
-        return self.hit_end - self.hit_start + 1
+        return self.hit_end - self.hit_start
 
     hit_span = property(fget=_hit_span_get)
 
     def _query_span_get(self):
         # query sequence range (sans gaps)
-        return self.query_end - self.query_start + 1
+        return self.query_end - self.query_start
 
     query_span = property(fget=_query_span_get)
 

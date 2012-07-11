@@ -914,34 +914,11 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP.query_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._query_strand_get, )
 
-    def test_query_start_smaller(self):
-        """Test HSP.query_start getter, smaller from"""
-        # start is always smaller
-        self.hsp.query_start = 1
-        self.hsp.query_end = 10
-        self.assertEqual(1, self.hsp.query_start)
-        self.assertEqual(10, self.hsp.query_end)
-
-    def test_query_start_bigger(self):
-        """Test HSP.query_start getter, bigger from"""
-        # start is always smaller
-        self.hsp.query_start = 10
-        self.hsp.query_end = 1
-        self.assertEqual(1, self.hsp.query_start)
-        self.assertEqual(10, self.hsp.query_end)
-
     def test_query_span_ok(self):
         """Test HSP.query_span getter, smaller from"""
-        # span is to - from + 1
-        self.hsp.query_start = 10
+        # span is to - from
+        self.hsp.query_start = 9
         self.hsp.query_end = 99
-        self.assertEqual(90, self.hsp.query_span)
-
-    def test_query_span_ok_2(self):
-        """Test HSP.query_span getter, bigger from"""
-        # span is to - from + 1
-        self.hsp.query_start = 99
-        self.hsp.query_end = 10
         self.assertEqual(90, self.hsp.query_span)
 
     def test_hit_strand_set_ok(self):
@@ -970,34 +947,11 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP.hit_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._hit_strand_get, )
 
-    def test_hit_start_smaller(self):
-        """Test HSP.hit_strand getter, smaller from"""
-        # start is always smaller
-        self.hsp.hit_start = 1
-        self.hsp.hit_end = 10
-        self.assertEqual(1, self.hsp.hit_start)
-        self.assertEqual(10, self.hsp.hit_end)
-
-    def test_hit_start_bigger(self):
-        """Test HSP.hit_strand getter, bigger from"""
-        # start is always smaller
-        self.hsp.hit_start = 10
-        self.hsp.hit_end = 1
-        self.assertEqual(1, self.hsp.hit_start)
-        self.assertEqual(10, self.hsp.hit_end)
-
     def test_hit_span_ok(self):
         """Test HSP.hit_span getter, smaller from"""
-        # span is to - from + 1
-        self.hsp.hit_start = 10
+        # span is to - from
+        self.hsp.hit_start = 9
         self.hsp.hit_end = 99
-        self.assertEqual(90, self.hsp.hit_span)
-
-    def test_hit_span_ok_2(self):
-        """Test HSP.hit_span getter, bigger from"""
-        # span is to - from + 1
-        self.hsp.hit_start = 99
-        self.hsp.hit_end = 10
         self.assertEqual(90, self.hsp.hit_span)
 
 

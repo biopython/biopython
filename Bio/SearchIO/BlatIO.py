@@ -277,9 +277,9 @@ class BlatPslIterator(object):
 
         # coordinates
         hsp.query_start = psl['qstart']
-        hsp.query_end = psl['qend'] - 1
+        hsp.query_end = psl['qend']
         hsp.hit_start = psl['tstart']
-        hsp.hit_end = psl['tend'] - 1
+        hsp.hit_end = psl['tend']
 
         # block-related attributes
         hsp.block_sizes = psl['blocksizes']
@@ -493,11 +493,11 @@ class BlatPslWriter(object):
                 line.append(qresult.id)
                 line.append(qresult.seq_len)
                 line.append(hsp.query_start)
-                line.append(hsp.query_end + 1)
+                line.append(hsp.query_end)
                 line.append(hit.id)
                 line.append(hit.seq_len)
                 line.append(hsp.hit_start)
-                line.append(hsp.hit_end + 1)
+                line.append(hsp.hit_end)
                 line.append(hsp.block_num)
                 line.append(','.join((str(x) for x in hsp.block_sizes)) + ',')
                 line.append(','.join((str(x) for x in qstarts)) + ',')
