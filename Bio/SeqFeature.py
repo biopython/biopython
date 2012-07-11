@@ -586,7 +586,7 @@ class FeatureLocation(object):
         (zero based counting) which GenBank would call 123..150 (one based
         counting).
         """
-        answer = "[%s:%s]" % (self._start, self._end)
+        answer = "[%s,%s)" % (self._start, self._end)
         if self.ref and self.ref_db:
             answer = "%s:%s%s" % (self.ref_db, self.ref, answer)
         elif self.ref:
