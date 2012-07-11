@@ -25,7 +25,7 @@ import re
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.File import UndoHandle
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from Bio.SearchIO._index import SearchIndexer
 from Bio._py3k import _bytes_to_string
 
@@ -70,7 +70,7 @@ def _set_qresult_hits(qresult, hit_rows):
         # The current method only looks at the Hit ID, none of the things above
         if hit_id not in qresult:
             hit = Hit(hit_id, qresult.id)
-            hsp = HSP(hit_id, qresult.id)
+            hsp = ContiguousHSP(hit_id, qresult.id)
             hit.append(hsp)
             qresult.append(hit)
 
@@ -317,7 +317,7 @@ class FastaM10Iterator(object):
                     hit = Hit(hit_id, query_id)
                     hit.desc = hit_desc
                     # create the HSP object for Hit
-                    hsp = HSP(hit_id, query_id)
+                    hsp = ContiguousHSP(hit_id, query_id)
                     hit.append(hsp)
                     # set or reset the state to none
                     state = STATE_NONE
@@ -328,7 +328,7 @@ class FastaM10Iterator(object):
                     hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
                             self._preamble['program'], strand)
                     # and create a new one
-                    hsp = HSP(hit_id, query_id)
+                    hsp = ContiguousHSP(hit_id, query_id)
                     hit.append(hsp)
                     # set the state ~ none yet
                     state = STATE_NONE

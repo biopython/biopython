@@ -4,6 +4,7 @@
 # as part of this package.
 
 from Bio.SearchIO import _ITERATOR_MAP
+from Bio.SeqRecord import SeqRecord
 
 
 SUPPORTED = _ITERATOR_MAP.keys() + ['mock'] # mock format for other tests
@@ -118,8 +119,14 @@ def compare_attrs(obj_a, obj_b, attrs):
         # comparing using compare_record is too slow
         if attr in ['hit', 'query'] and (val_a is not None and val_b is \
                 not None):
-            assert val_a.seq.tostring() == val_b.seq.tostring(), \
-                    "%s: %r vs %r" % (attr, val_a, val_b)
+            # compare seq directly if it's a contiguous hsp
+            if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
+                assert str(val_a.seq) == str(val_b.seq), \
+                        "%s: %r vs %r" % (attr, val_a, val_b)
+            elif isinstance(val_a, list) and isinstance(val_b, list):
+                for seq_a, seq_b in zip(val_a, val_b):
+                    assert str(seq_a.seq) == str(seq_b.seq), \
+                            "%s: %r vs %r" % (attr, seq_a, seq_b)
         # if it's a dictionary, compare values and keys
         elif isinstance(val_a, dict):
             assert isinstance(val_b, dict)

@@ -6,6 +6,7 @@
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
 import re
+from itertools import izip
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
@@ -922,68 +923,7 @@ class Hit(BaseSearchObject):
 
 class HSP(BaseSearchObject):
 
-    """Class representing high-scoring alignment regions of the query and hit.
-
-    Although HSP objects represent a pairwise alignment of the query and hit
-    sequences, in reality some file formats such as BLAST+'s standard tabular
-    format do not output any alignments at all. This is why, depending on
-    the search output file format, an HSP object may or may not contain a real
-    sequence alignment.
-
-    If the parsed search output file contains alignments, the HSP object will
-    have an alignment attribute which is Biopython's MultipleSeqAlignment
-    object. The HSP object will have a query and a hit attribute, each being
-    Biopython's SeqRecord object. Without any alignments, these attributes are
-    set to None.
-
-    >>> from Bio import SearchIO
-    >>> qresult = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
-    >>> hsp = qresult[0][0]
-    >>> hsp
-    HSP(hit_id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', evalue=0.0, 340-column alignment)
-
-    >>> print hsp.alignment
-    SingleLetterAlphabet() alignment with 2 rows and 340 columns
-    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749:301-1383
-    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749|ref|NM_003391.2|
-    >>> print hsp.query
-    ID: gi|195230749:301-1383
-    Name: query
-    Description: aligned query sequence
-    Number of features: 0
-    Seq('EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAISQGVAEWTAE...AT*', SingleLetterAlphabet())
-    >>> print hsp.hit
-    ID: gi|195230749|ref|NM_003391.2|
-    Name: hit
-    Description: aligned hit sequence
-    Number of features: 0
-    Seq('EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAISQGVAEWTAE...AT*', SingleLetterAlphabet())
-
-    For the most part, an HSP object is read-only. It does not support item
-    assignment, item deletion, or even iteration. It does, however, support item
-    slicing. Slicing on an HSP object will return another HSP object with
-    an alignment consisting of sliced SeqRecords.
-
-    >>> print hsp.alignment
-    SingleLetterAlphabet() alignment with 2 rows and 340 columns
-    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749:301-1383
-    EVNSSWWYMRATGGSSRVMCDNVPGLVSSQRQLCHRHPDVMRAI...AT* gi|195230749|ref|NM_003391.2|
-    >>> print hsp[10:20].alignment
-    SingleLetterAlphabet() alignment with 2 rows and 10 columns
-    ATGGSSRVMC gi|195230749:301-1383
-    ATGGSSRVMC gi|195230749|ref|NM_003391.2|
-
-    Finally, doing a len() on an HSP object will return the column length of
-    the contained pairwise alignment. Note that this is different from a
-    MultipleSeqAlignment object where doing a len() would return how many
-    SeqRecords make up the MultipleSeqAlignment object.
-
-    >>> len(hsp)
-    340
-    >>> len(hsp[:50])
-    50
-
-    """
+    """Abstract class representing high-scoring region between query and hit."""
 
     def __init__(self, hit_id=None, query_id=None, hit_seq='', query_seq='', \
             alphabet=single_letter_alphabet):
@@ -1005,148 +945,6 @@ class HSP(BaseSearchObject):
         self.query_id = query_id
         self.alphabet = alphabet
         self.alignment_annotation = {}
-
-        if query_seq:
-            self.query = query_seq
-        if hit_seq:
-            self.hit = hit_seq
-
-    def __iter__(self):
-        raise TypeError("HSP objects do not support iteration.")
-
-    def __len__(self):
-        # len should return alignment length if alignment is not None
-        try:
-            assert len(self.query) == len(self.hit)
-            return len(self.query)
-        except AttributeError:
-            raise TypeError("HSP objects without alignment does not have any length.")
-
-    def __repr__(self):
-        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
-
-        try:
-            info += ", %i-column alignment" % len(self)
-        except TypeError:
-            pass
-
-        return "HSP(%s)" % (info)
-
-    def __str__(self):
-        # adapted from Bio.Blast.Record's __str__
-        lines = []
-
-        # set query id line
-        qid_line = '  Query: %s' % self.query_id
-        try:
-            qid_line += ' %s' % self.query.description
-        except AttributeError:
-            pass
-        if len(qid_line) > 80:
-            qid_line = qid_line[:77] + '...'
-
-        # set hit id line
-        hid_line = '    Hit: %s' % self.hit_id
-        try:
-            hid_line += ' %s' % self.hit.description
-        except AttributeError:
-            pass
-        if len(hid_line) > 80:
-            hid_line = hid_line[:77] + '...'
-
-        # set hsp info line
-        hsp_info = []
-        if hasattr(self, 'evalue'):
-            hsp_info.append('E-value: %.2g' % self.evalue)
-        else:
-            hsp_info.append('E-value: n/a')
-        if hasattr(self, 'bitscore'):
-            hsp_info.append('Bit score: %.2f' % self.bitscore)
-        else:
-            hsp_info.append('Bit score: n/a')
-        # alignment length can be obtained from ali_len, query, or hit
-        ali_len = 'n/a'
-        if hasattr(self, 'ali_len'):
-            ali_len = self.ali_len
-        elif hasattr(self, 'query'):
-            ali_len = len(self.query)
-        elif hasattr(self, 'hit'):
-            ali_len = len(self.hit)
-        hsp_info.append('Alignment length: %s' % str(ali_len))
-
-        lines.append(qid_line)
-        lines.append(hid_line)
-        lines.append('' + ', '.join(hsp_info))
-        lines.append('--')
-
-        # get attributes for alignment block display
-        # set default values and try to obtain hsp values
-        # coordinates
-        query_end, query_start, hit_end, hit_start = ['n/a'] * 4
-        # get from private values because we may need to switch (?)
-        if hasattr(self, 'query_end'):
-            query_end = self._query_end
-        if hasattr(self, 'query_start'):
-            query_start = self._query_start
-        if hasattr(self, 'hit_end'):
-            hit_end = self._hit_end
-        if hasattr(self, 'hit_start'):
-            hit_start = self._hit_start
-
-        # homology line
-        homol = ''
-        if 'homology' in self.alignment_annotation:
-            homol = self.alignment_annotation['homology']
-        # sequences
-        if hasattr(self, 'query') and hasattr(self, 'hit'):
-            qseq = str(self.query.seq)
-            hseq = str(self.hit.seq)
-
-        if hasattr(self, 'query') and hasattr(self, 'hit'):
-            if ali_len < 56:
-                lines.append("Query:%s %s %s" % (str(query_start).rjust(8), \
-                        qseq, str(query_end)))
-                if homol:
-                    lines.append("               %s" % homol)
-                lines.append("  Hit:%s %s %s" % (str(hit_start).rjust(8), \
-                        hseq, str(hit_end)))
-            else:
-                # adjust continuation character length, so we don't display
-                # the same residues twice
-                if ali_len - 56 > 3:
-                    cont = '~' * 3
-                else:
-                    cont = '~' * (ali_len - 56)
-                lines.append("Query:%s %s%s%s %s" % (str(query_start).rjust(8), \
-                                qseq[:49], cont, qseq[-5:], str(query_end)))
-                if homol:
-                    lines.append("               %s%s%s" % \
-                            (homol[:49], cont, homol[-5:]))
-                lines.append("  Hit:%s %s%s%s %s" % (str(hit_start).rjust(8), \
-                                hseq[:49], cont, hseq[-5:], str(hit_end)))
-
-        return '\n'.join(lines)
-
-    def __getitem__(self, idx):
-        if hasattr(self, 'alignment'):
-            obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
-                    self.query[idx], self.alphabet)
-            # alignment annotation should be transferred, since we can compute
-            # the resulting annotation
-            if hasattr(self, 'alignment_annotation'):
-                obj.alignment_annotation = {}
-                for key, value in self.alignment_annotation.items():
-                    assert len(value[idx]) == len(obj)
-                    obj.alignment_annotation[key] = value[idx]
-            return obj
-        else:
-            raise TypeError("Slicing for HSP objects without alignment is not supported.")
-
-    def __delitem__(self, idx):
-        raise TypeError("HSP objects are read-only.")
-
-    def __setitem__(self, idx, value):
-        raise TypeError("HSP objects are read-only.")
 
     def _prep_seq(self, seq, seq_id, seq_type, desc=''):
         """Transforms a sequence into a SeqRecord object).
@@ -1171,29 +969,6 @@ class HSP(BaseSearchObject):
         else:
             raise TypeError("%s sequence must be a string or a "
                     "SeqRecord object." % seq_type.capitalize())
-
-    def _hit_get(self):
-        return self._hit
-
-    def _hit_set(self, value):
-        self._hit = self._prep_seq(value, self.hit_id, 'hit')
-
-    hit = property(fget=_hit_get, fset=_hit_set)
-
-    def _query_get(self):
-        return self._query
-
-    def _query_set(self, value):
-        self._query = self._prep_seq(value, self.query_id, 'query')
-
-    query = property(fget=_query_get, fset=_query_set)
-
-    def _alignment_get(self):
-        if not hasattr(self, '_alignment'):
-            self._alignment = MultipleSeqAlignment([self.query, self.hit], self.alphabet)
-        return self._alignment
-
-    alignment = property(fget=_alignment_get)
 
     def _hit_strand_get(self):
         if not hasattr(self, '_hit_strand'):
@@ -1413,6 +1188,259 @@ class HSP(BaseSearchObject):
         self._gap_pct = value
 
     gap_pct = property(fget=_gap_pct_get, fset=_gap_pct_set)
+
+
+class ContiguousHSP(HSP):
+
+    """Class representing a single, contiguous HSP."""
+
+    def __init__(self, hit_id=None, query_id=None, hit_seq='', query_seq='', \
+             alphabet=single_letter_alphabet):
+
+        """Initializes an HSP object.
+
+        Arguments:
+        hit_id    -- String, Hit ID of the HSP object.
+        query_id  -- String of the search query ID.
+        hit_seq   -- String or SeqRecord object of the aligned Hit sequence.
+        query_seq -- String or SeqRecord object of the aligned query sequence.
+
+        """
+        HSP.__init__(self, hit_id, query_id, alphabet)
+        
+        if query_seq:
+            self.query = query_seq
+        if hit_seq:
+            self.hit = hit_seq
+
+    def __iter__(self):
+        raise TypeError("ContiguousHSP objects do not support iteration.")
+
+    def __len__(self):
+        # len should return alignment length if alignment is not None
+        try:
+            assert len(self.query) == len(self.hit)
+            return len(self.query)
+        except AttributeError:
+            raise TypeError("ContiguousHSP objects without alignment does "
+                    "not have any length.")
+
+    def __repr__(self):
+        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
+
+        try:
+            info += ", %i-column alignment" % len(self)
+        except TypeError:
+            pass
+
+        return "%s(%s)" % (self.__class__.__name__, info)
+
+    def __str__(self):
+        # adapted from Bio.Blast.Record's __str__
+        lines = []
+
+        # set query id line
+        qid_line = '  Query: %s' % self.query_id
+        try:
+            qid_line += ' %s' % self.query.description
+        except AttributeError:
+            pass
+        if len(qid_line) > 80:
+            qid_line = qid_line[:77] + '...'
+
+        # set hit id line
+        hid_line = '    Hit: %s' % self.hit_id
+        try:
+            hid_line += ' %s' % self.hit.description
+        except AttributeError:
+            pass
+        if len(hid_line) > 80:
+            hid_line = hid_line[:77] + '...'
+
+        # set hsp info line
+        hsp_info = []
+        if hasattr(self, 'evalue'):
+            hsp_info.append('E-value: %.2g' % self.evalue)
+        else:
+            hsp_info.append('E-value: n/a')
+        if hasattr(self, 'bitscore'):
+            hsp_info.append('Bit score: %.2f' % self.bitscore)
+        else:
+            hsp_info.append('Bit score: n/a')
+        # alignment length can be obtained from ali_len, query, or hit
+        ali_len = 'n/a'
+        if hasattr(self, 'ali_len'):
+            ali_len = self.ali_len
+        elif hasattr(self, 'query'):
+            ali_len = len(self.query)
+        elif hasattr(self, 'hit'):
+            ali_len = len(self.hit)
+        hsp_info.append('Alignment length: %s' % str(ali_len))
+
+        lines.append(qid_line)
+        lines.append(hid_line)
+        lines.append('' + ', '.join(hsp_info))
+        lines.append('--')
+
+        # get attributes for alignment block display
+        # set default values and try to obtain hsp values
+        # coordinates
+        query_end, query_start, hit_end, hit_start = ['n/a'] * 4
+        if hasattr(self, 'query_end'):
+            query_end = self.query_end
+        if hasattr(self, 'query_start'):
+            query_start = self.query_start
+        if hasattr(self, 'hit_end'):
+            hit_end = self.hit_end
+        if hasattr(self, 'hit_start'):
+            hit_start = self.hit_start
+
+        # homology line
+        homol = ''
+        if 'homology' in self.alignment_annotation:
+            homol = self.alignment_annotation['homology']
+        # sequences
+        if hasattr(self, 'query') and hasattr(self, 'hit'):
+            qseq = str(self.query.seq)
+            hseq = str(self.hit.seq)
+
+        if hasattr(self, 'query') and hasattr(self, 'hit'):
+            if ali_len < 56:
+                lines.append("Query:%s %s %s" % (str(query_start).rjust(8), \
+                        qseq, str(query_end)))
+                if homol:
+                    lines.append("               %s" % homol)
+                lines.append("  Hit:%s %s %s" % (str(hit_start).rjust(8), \
+                        hseq, str(hit_end)))
+            else:
+                # adjust continuation character length, so we don't display
+                # the same residues twice
+                if ali_len - 56 > 3:
+                    cont = '~' * 3
+                else:
+                    cont = '~' * (ali_len - 56)
+                lines.append("Query:%s %s%s%s %s" % (str(query_start).rjust(8), \
+                                qseq[:49], cont, qseq[-5:], str(query_end)))
+                if homol:
+                    lines.append("               %s%s%s" % \
+                            (homol[:49], cont, homol[-5:]))
+                lines.append("  Hit:%s %s%s%s %s" % (str(hit_start).rjust(8), \
+                                hseq[:49], cont, hseq[-5:], str(hit_end)))
+
+        return '\n'.join(lines)
+
+    def __getitem__(self, idx):
+        if hasattr(self, 'alignment'):
+            obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
+                    self.query[idx], self.alphabet)
+            # alignment annotation should be transferred, since we can compute
+            # the resulting annotation
+            if hasattr(self, 'alignment_annotation'):
+                obj.alignment_annotation = {}
+                for key, value in self.alignment_annotation.items():
+                    assert len(value[idx]) == len(obj)
+                    obj.alignment_annotation[key] = value[idx]
+            return obj
+        else:
+            raise TypeError("Slicing for ContiguousHSP objects without "
+                    "alignment is not supported.")
+
+    def __delitem__(self, idx):
+        raise TypeError("ContiguousHSP objects are read-only.")
+
+    def __setitem__(self, idx, value):
+        raise TypeError("ContiguousHSP objects are read-only.")
+
+    def _hit_get(self):
+        return self._hit
+
+    def _hit_set(self, value):
+        self._hit = self._prep_seq(value, self.hit_id, 'hit')
+
+    hit = property(fget=_hit_get, fset=_hit_set)
+
+    def _query_get(self):
+        return self._query
+
+    def _query_set(self, value):
+        self._query = self._prep_seq(value, self.query_id, 'query')
+
+    query = property(fget=_query_get, fset=_query_set)
+
+    def _alignment_get(self):
+        if not hasattr(self, '_alignment'):
+            self._alignment = MultipleSeqAlignment([self.query, self.hit], self.alphabet)
+        return self._alignment
+
+    alignment = property(fget=_alignment_get)
+
+
+class SegmentedHSP(HSP):
+
+    """Class representing a segmented HSP."""
+
+    def __init__(self, hit_id=None, query_id=None, blocks=[], \
+            alphabet=single_letter_alphabet):
+        """Initializes an HSP object.
+
+        Arguments:
+        hit_id -- String, Hit ID of the HSP object.
+        query_id -- String of the search query ID.
+        blocks -- List of two-element tuples, each containing a query and
+                  a hit sequence pair.
+
+        """
+        HSP.__init__(self, hit_id, query_id, alphabet)
+
+        if blocks:
+            self.query = [x[0] for x in blocks]
+            self.hit = [x[1] for x in blocks]
+
+    def __len__(self):
+        try:
+            return len(self.alignment)
+        except AttributeError:
+            return []
+
+    def __repr__(self):
+        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
+
+        try:
+            info += ", %i blocks" % len(self.alignment)
+        except TypeError:
+            pass
+
+        return "%s(%s)" % (self.__class__.__name__, info)
+
+    def _hit_get(self):
+        return self._hit
+
+    def _hit_set(self, value):
+        seq_type = 'hit'
+        self._hit = [self._prep_seq(seq, self.hit_id, seq_type) for \
+                seq in value]
+
+    hit = property(fget=_hit_get, fset=_hit_set)
+
+    def _query_get(self):
+        return self._query
+
+    def _query_set(self, value):
+        seq_type = 'query'
+        self._query = [self._prep_seq(seq, self.query_id, seq_type) for \
+                seq in value]
+
+    query = property(fget=_query_get, fset=_query_set)
+
+    def _alignment_get(self):
+        if not hasattr(self, '_alignment'):
+            # use izip instead of zip so this still works even if the number
+            # of blocks are not the same
+            self._alignment = [MultipleSeqAlignment([query, hit], self.alphabet) \
+                    for query, hit in izip(self.query, self.hit)]
+        return self._alignment
+
+    alignment = property(fget=_alignment_get)
 
 
 def _test():

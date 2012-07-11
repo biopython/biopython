@@ -7,7 +7,7 @@
 
 from itertools import chain
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from hmmertab import HmmerTabIterator, HmmerTabIndexer
 
 
@@ -125,7 +125,7 @@ class HmmerDomtabIterator(HmmerTabIterator):
 
             # each line is basically a different HSP, so we always add it to
             # any hit object we have
-            hsp = HSP(hit_id, qresult_id)
+            hsp = ContiguousHSP(hit_id, qresult_id)
             for attr, value in hsp_parsed.items():
                 setattr(hsp, attr, value)
             hit.append(hsp)

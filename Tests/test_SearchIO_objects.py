@@ -5,7 +5,7 @@
 
 """Tests for SearchIO objects.
 
-Tests the methods and behaviors of QueryResult, Hit, and HSP objects. All tests
+Tests the methods and behaviors of QueryResult, Hit, and ContiguousHSP objects. All tests
 are format-independent and are meant to check the fundamental behavior common
 to all formats.
 
@@ -18,21 +18,21 @@ from search_tests_common import compare_qresult, compare_hit
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
 # create mock objects
-hsp111 = HSP('hit1', 'query1', 'ATGCGCAT', 'ATGCGCAT')
-hsp112 = HSP('hit1', 'query1', 'ATG', 'GAT')
-hsp113 = HSP('hit1', 'query1', 'ATTCG', 'AT-CG')
-hsp114 = HSP('hit1', 'query1', 'AT', 'AT')
-hsp211 = HSP('hit2', 'query1', 'GGGCCC', 'GGGCC-')
-hsp311 = HSP('hit3', 'query1', 'GATG', 'GTTG')
-hsp312 = HSP('hit3', 'query1', 'ATATAT', 'ATATAT')
-hsp411 = HSP('hit4', 'query1', 'CC-ATG', 'CCCATG')
-hsp121 = HSP('hit1', 'query2', 'GCGAG', 'GCGAC')
+hsp111 = ContiguousHSP('hit1', 'query1', 'ATGCGCAT', 'ATGCGCAT')
+hsp112 = ContiguousHSP('hit1', 'query1', 'ATG', 'GAT')
+hsp113 = ContiguousHSP('hit1', 'query1', 'ATTCG', 'AT-CG')
+hsp114 = ContiguousHSP('hit1', 'query1', 'AT', 'AT')
+hsp211 = ContiguousHSP('hit2', 'query1', 'GGGCCC', 'GGGCC-')
+hsp311 = ContiguousHSP('hit3', 'query1', 'GATG', 'GTTG')
+hsp312 = ContiguousHSP('hit3', 'query1', 'ATATAT', 'ATATAT')
+hsp411 = ContiguousHSP('hit4', 'query1', 'CC-ATG', 'CCCATG')
+hsp121 = ContiguousHSP('hit1', 'query2', 'GCGAG', 'GCGAC')
 
 hit11 = Hit('hit1', 'query1', [hsp111, hsp112, hsp113, hsp114])
 hit21 = Hit('hit2', 'query1', [hsp211])
@@ -204,10 +204,10 @@ class QueryResultCases(unittest.TestCase):
                 self.assertEqual(new_desc, hsp.query.description)
 
     def test_desc_set_no_seqrecord(self):
-        """Test QueryResult.desc setter, without HSP SeqRecords"""
-        hsp1 = HSP('hit1', 'query')
-        hsp2 = HSP('hit1', 'query')
-        hsp3 = HSP('hit2', 'query')
+        """Test QueryResult.desc setter, without ContiguousHSP SeqRecords"""
+        hsp1 = ContiguousHSP('hit1', 'query')
+        hsp2 = ContiguousHSP('hit1', 'query')
+        hsp3 = ContiguousHSP('hit2', 'query')
         hit1 = Hit('hit1', 'query', [hsp1, hsp2])
         hit2 = Hit('hit2', 'query', [hsp3])
         qresult = QueryResult('query', [hit1, hit2])
@@ -223,7 +223,7 @@ class QueryResultCases(unittest.TestCase):
 
     def test_id_set(self):
         """Test QueryResult.id setter"""
-        # setting an ID should change the query IDs of all contained Hit and HSPs
+        # setting an ID should change the query IDs of all contained Hit and ContiguousHSPs
         qresult = deepcopy(self.qresult)
         self.assertEqual('query1', qresult.id)
         for hit in qresult:
@@ -264,7 +264,7 @@ class QueryResultCases(unittest.TestCase):
         # hit_filter should return a new QueryResult object (shallow copy),
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
         # filter func: min hit length == 2
-        # this would filter out hit21, since it only has 1 HSP
+        # this would filter out hit21, since it only has 1 ContiguousHSP
         filter_func = lambda hit: len(hit) >= 2
         filtered = self.qresult.hit_filter(filter_func)
         self.assertEqual([hit11, hit31], filtered.hits)
@@ -367,14 +367,14 @@ class QueryResultCases(unittest.TestCase):
 
     def test_hsp_map(self):
         """Test QueryResult.hsp_map"""
-        # hsp_map should apply the given function to all contained HSPs
+        # hsp_map should apply the given function to all contained ContiguousHSPs
         # deepcopy the qresult since we'll change the objects within
         qresult = deepcopy(self.qresult)
         # apply mock attributes to hsp, for testing mapped hsp attributes
         for hit in qresult:
             for hsp in hit:
                 setattr(hsp, 'mock', 13)
-        # map func: remove first letter of all HSP.alignment
+        # map func: remove first letter of all ContiguousHSP.alignment
         def map_func(hsp):
             hsp = hsp[1:]
             return hsp
@@ -621,9 +621,9 @@ class HitCases(unittest.TestCase):
             self.assertEqual(new_desc, hsp.hit.description)
 
     def test_desc_set_no_seqrecord(self):
-        """Test Hit.desc setter, without HSP SeqRecords"""
-        hsp1 = HSP('hit1', 'query')
-        hsp2 = HSP('hit1', 'query')
+        """Test Hit.desc setter, without ContiguousHSP SeqRecords"""
+        hsp1 = ContiguousHSP('hit1', 'query')
+        hsp2 = ContiguousHSP('hit1', 'query')
         hit = Hit('hit1', 'query', [hsp1, hsp2])
         # test initial condition
         for hsp in hit:
@@ -635,7 +635,7 @@ class HitCases(unittest.TestCase):
 
     def test_id_set(self):
         """Test Hit.id setter"""
-        # setting an ID should change the query IDs of all contained HSPs
+        # setting an ID should change the query IDs of all contained ContiguousHSPs
         hit = deepcopy(self.hit)
         self.assertEqual('hit1', hit.id)
         for hsp in hit:
@@ -684,13 +684,13 @@ class HitCases(unittest.TestCase):
 
     def test_map(self):
         """Test Hit.hsp_map"""
-        # map should apply the given function to all contained HSPs
+        # map should apply the given function to all contained ContiguousHSPs
         # deepcopy hit since we'll change the objects within
         hit = deepcopy(self.hit)
         # apply mock attributes to hsp, for testing mapped hsp attributes
         for hsp in hit:
             setattr(hsp, 'mock', 13)
-        # map func: remove first letter of all HSP.alignment
+        # map func: remove first letter of all ContiguousHSP.alignment
         def map_func(hsp):
             hsp = hsp[1:]
             return hsp
@@ -751,75 +751,75 @@ class HitCases(unittest.TestCase):
         self.assertEqual('test', sorted_hit.name)
 
 
-class HSPCases(unittest.TestCase):
+class ContiguousHSPCases(unittest.TestCase):
 
     def setUp(self):
-        self.hsp = HSP('hit_id', 'query_id')
+        self.hsp = ContiguousHSP('hit_id', 'query_id')
 
     def test_seq_objects(self):
-        """Test HSP sequence attributes, no alignments"""
+        """Test ContiguousHSP sequence attributes, no alignments"""
         # hsp should have no query, hit, and alignment objects
         self.assertFalse(hasattr(self.hsp, 'query'))
         self.assertFalse(hasattr(self.hsp, 'hit'))
         self.assertFalse(hasattr(self.hsp, 'alignment'))
 
     def test_len(self):
-        """Test HSP.__len__, no alignments"""
+        """Test ContiguousHSP.__len__, no alignments"""
         self.assertRaises(TypeError, len, self.hsp)
 
     def test_repr(self):
-        """Test HSP.__repr__, no alignments"""
+        """Test ContiguousHSP.__repr__, no alignments"""
         # test for minimum repr
-        self.assertEqual("HSP(hit_id='hit_id', query_id='query_id')", repr(self.hsp))
+        self.assertEqual("ContiguousHSP(hit_id='hit_id', query_id='query_id')", repr(self.hsp))
 
     def test_getitem(self):
-        """Test HSP.__getitem__, no alignments"""
+        """Test ContiguousHSP.__getitem__, no alignments"""
         # getitem not supported without alignment
         self.assertRaises(TypeError, self.hsp.__getitem__, 0)
         self.assertRaises(TypeError, self.hsp.__getitem__, slice(0, 2))
 
     def test_setitem(self):
-        """Test HSP.__setitem__, no alignments"""
+        """Test ContiguousHSP.__setitem__, no alignments"""
         # setitem not supported
         self.assertRaises(TypeError, self.hsp.__setitem__, 0, 'a')
         self.assertRaises(TypeError, self.hsp.__setitem__, slice(0, 2), [1, 2])
 
     def test_delitem(self):
-        """Test HSP.__delitem__, no alignments"""
+        """Test ContiguousHSP.__delitem__, no alignments"""
         # delitem not supported
         self.assertRaises(TypeError, self.hsp.__delitem__, 0)
         self.assertRaises(TypeError, self.hsp.__delitem__, slice(0, 2))
 
     def test_iter(self):
-        """Test HSP.__iter__, no alignments"""
+        """Test ContiguousHSP.__iter__, no alignments"""
         # iteration not supported
         self.assertRaises(TypeError, iter, self.hsp)
 
 
-class HSPWithAlignmentCases(unittest.TestCase):
+class ContiguousHSPWithAlignmentCases(unittest.TestCase):
 
     def setUp(self):
-        self.hsp = HSP('hit_id', 'query_id', 'ATGCTAGCTACA', 'ATG--AGCTAGG')
+        self.hsp = ContiguousHSP('hit_id', 'query_id', 'ATGCTAGCTACA', 'ATG--AGCTAGG')
 
     def test_init_with_seqrecord(self):
-        """Test HSP.__init__, with SeqRecord"""
+        """Test ContiguousHSP.__init__, with SeqRecord"""
         # init should work with seqrecords
         hit_seq = SeqRecord(Seq('ATGCTAGCTACA'))
         query_seq = SeqRecord(Seq('ATG--AGCTAGG'))
-        hsp = HSP('hit_id', 'query_id', hit_seq, query_seq)
+        hsp = ContiguousHSP('hit_id', 'query_id', hit_seq, query_seq)
         self.assertTrue(isinstance(hsp.query, SeqRecord))
         self.assertTrue(isinstance(hsp.hit, SeqRecord))
         self.assertTrue(isinstance(hsp.alignment, MultipleSeqAlignment))
 
     def test_init_wrong_seqtypes(self):
-        """Test HSP.__init__, wrong sequence argument types"""
+        """Test ContiguousHSP.__init__, wrong sequence argument types"""
         # init should only work with string or seqrecords
         wrong_query = Seq('ATGC')
         wrong_hit = Seq('ATGC')
-        self.assertRaises(TypeError, HSP, 'hit_id', 'query_id', wrong_hit, wrong_query)
+        self.assertRaises(TypeError, ContiguousHSP, 'hit_id', 'query_id', wrong_hit, wrong_query)
 
     def test_seq_objects(self):
-        """Test HSP sequence attribute types and default values"""
+        """Test ContiguousHSP sequence attribute types and default values"""
         # check hit
         self.assertTrue(isinstance(self.hsp.hit, SeqRecord))
         self.assertEqual('', self.hsp.hit.description)
@@ -835,27 +835,27 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.assertEqual(single_letter_alphabet, self.hsp.alignment._alphabet)
 
     def test_len(self):
-        """Test HSP.__len__"""
+        """Test ContiguousHSP.__len__"""
         # len should equal alignment column length
         self.assertEqual(12, len(self.hsp))
 
     def test_repr(self):
-        """Test HSP.__repr__"""
+        """Test ContiguousHSP.__repr__"""
         # test for minimum repr
-        self.assertEqual("HSP(hit_id='hit_id', query_id='query_id', 12-column "
+        self.assertEqual("ContiguousHSP(hit_id='hit_id', query_id='query_id', 12-column "
                 "alignment)", repr(self.hsp))
 
     def test_getitem(self):
-        """Test HSP.__getitem__"""
+        """Test ContiguousHSP.__getitem__"""
         # getitem is supported when alignment is present
         sliced_hsp = self.hsp[:5]
-        self.assertTrue(isinstance(sliced_hsp, HSP))
+        self.assertTrue(isinstance(sliced_hsp, ContiguousHSP))
         self.assertEqual(5, len(sliced_hsp))
         self.assertEqual('ATGCT', str(sliced_hsp.hit.seq))
         self.assertEqual('ATG--', str(sliced_hsp.query.seq))
 
     def test_getitem_attrs(self):
-        """Test HSP.__getitem__, with attributes"""
+        """Test ContiguousHSP.__getitem__, with attributes"""
         # attributes from the original instance should not be present in the new
         # objects, except for query, hit, and alignment
         setattr(self.hsp, 'attr_original', 1000)
@@ -864,7 +864,7 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.assertFalse(hasattr(new_hsp, 'attr_original'))
 
     def test_getitem_alignment_annot(self):
-        """Test HSP.__getitem__, with alignment annotation"""
+        """Test ContiguousHSP.__getitem__, with alignment annotation"""
         # the alignment is annotated, it should be sliced accordingly
         # and transferred to the new object
         setattr(self.hsp, 'alignment_annotation', {'test': '182718738172'})
@@ -872,83 +872,83 @@ class HSPWithAlignmentCases(unittest.TestCase):
         self.assertEqual('18271', new_hsp.alignment_annotation['test'])
 
     def test_setitem(self):
-        """Test HSP.__setitem__"""
+        """Test ContiguousHSP.__setitem__"""
         # setitem not supported
         self.assertRaises(TypeError, self.hsp.__setitem__, 0, 'a')
         self.assertRaises(TypeError, self.hsp.__setitem__, slice(0, 2), [1, 2])
 
     def test_delitem(self):
-        """Test HSP.__delitem__"""
+        """Test ContiguousHSP.__delitem__"""
         # delitem not supported
         self.assertRaises(TypeError, self.hsp.__delitem__, 0)
         self.assertRaises(TypeError, self.hsp.__delitem__, slice(0, 2))
 
     def test_iter(self):
-        """Test HSP.__iter__"""
+        """Test ContiguousHSP.__iter__"""
         # iteration not supported
         self.assertRaises(TypeError, iter, self.hsp)
 
     def test_query_strand_set_ok(self):
-        """Test HSP.query_strand setter"""
+        """Test ContiguousHSP.query_strand setter"""
         # only 1, 0, -1, and None is allowed as strands
         for value in [-1, 0, 1]:
             self.hsp.query_strand = value
             self.assertEqual(value, self.hsp.query_strand)
 
     def test_query_strand_set_error(self):
-        """Test HSP.query_strand setter, wrong values"""
+        """Test ContiguousHSP.query_strand setter, wrong values"""
         for value in [3, 'plus', 'minus', '-', '+']:
             self.assertRaises(ValueError, self.hsp._query_strand_set, value)
 
     def test_query_strand_from_frame_plus(self):
-        """Test HSP.query_strand getter, plus from frame"""
+        """Test ContiguousHSP.query_strand getter, plus from frame"""
         self.hsp.query_frame = 3
         self.assertEqual(1, self.hsp.query_strand)
 
     def test_query_strand_from_frame_minus(self):
-        """Test HSP.query_strand getter, minus from frame"""
+        """Test ContiguousHSP.query_strand getter, minus from frame"""
         self.hsp.query_frame = -2
         self.assertEqual(-1, self.hsp.query_strand)
 
     def test_query_strand_error(self):
-        """Test HSP.query_strand getter, error"""
+        """Test ContiguousHSP.query_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._query_strand_get, )
 
     def test_query_span_ok(self):
-        """Test HSP.query_span getter, smaller from"""
+        """Test ContiguousHSP.query_span getter, smaller from"""
         # span is to - from
         self.hsp.query_start = 9
         self.hsp.query_end = 99
         self.assertEqual(90, self.hsp.query_span)
 
     def test_hit_strand_set_ok(self):
-        """Test HSP.hit_strand setter"""
+        """Test ContiguousHSP.hit_strand setter"""
         # only 1, 0, -1, and None is allowed as strands
         for value in [-1, 0, 1]:
             self.hsp.hit_strand = value
             self.assertEqual(value, self.hsp.hit_strand)
 
     def test_hit_strand_set_error(self):
-        """Test HSP.hit_strand setter, wrong values"""
+        """Test ContiguousHSP.hit_strand setter, wrong values"""
         for value in [3, 'plus', 'minus', '-', '+']:
             self.assertRaises(ValueError, self.hsp._hit_strand_set, value)
 
     def test_hit_strand_from_frame_plus(self):
-        """Test HSP.hit_strand getter, plus from frame"""
+        """Test ContiguousHSP.hit_strand getter, plus from frame"""
         self.hsp.hit_frame = 3
         self.assertEqual(1, self.hsp.hit_strand)
 
     def test_hit_strand_from_frame_minus(self):
-        """Test HSP.hit_strand getter, minus from frame"""
+        """Test ContiguousHSP.hit_strand getter, minus from frame"""
         self.hsp.hit_frame = -2
         self.assertEqual(-1, self.hsp.hit_strand)
 
     def test_hit_strand_error(self):
-        """Test HSP.hit_strand getter, error"""
+        """Test ContiguousHSP.hit_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._hit_strand_get, )
 
     def test_hit_span_ok(self):
-        """Test HSP.hit_span getter, smaller from"""
+        """Test ContiguousHSP.hit_span getter, smaller from"""
         # span is to - from
         self.hsp.hit_start = 9
         self.hsp.hit_end = 99

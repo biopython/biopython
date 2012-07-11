@@ -8,7 +8,7 @@
 from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -113,7 +113,7 @@ class HmmerTabIterator(object):
                 setattr(hit, attr, value)
 
             # create HSP and set its attributes
-            hsp = HSP(hit_id, qresult_id)
+            hsp = ContiguousHSP(hit_id, qresult_id)
             for attr, value in hsp_attrs.items():
                 setattr(hsp, attr, value)
 

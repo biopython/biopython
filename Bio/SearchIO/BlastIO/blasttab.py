@@ -8,7 +8,7 @@
 import warnings
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -316,7 +316,7 @@ class BlastTabIterator(object):
 
             # every line is essentially an HSP, so we create a new one
             # for every line
-            hsp = HSP(hid_cache, qid_cache)
+            hsp = ContiguousHSP(hid_cache, qid_cache)
             for attr, value in hsp_parsed.items():
                 # adjust coordinates to Python range
                 for coord_type in ('query', 'hit'):

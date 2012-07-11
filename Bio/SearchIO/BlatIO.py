@@ -28,7 +28,7 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, SegmentedHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -200,7 +200,7 @@ class BlatPslIterator(object):
 
             # each line is basically a different HSP, so we always add it to
             # any hit object we have
-            hsp = HSP(hit_id, qresult_id)
+            hsp = SegmentedHSP(hit_id, qresult_id)
             hsp = self._set_hsp_attr(hsp, psl)
 
             hit.append(hsp)
@@ -317,8 +317,8 @@ class BlatPslxIterator(BlatPslIterator):
     def _set_hsp_attr(self, hsp, psl):
         hsp = BlatPslIterator._set_hsp_attr(self, hsp, psl)
 
-        hsp.query_blocks = psl['qseqs']
-        hsp.hit_blocks = psl['tseqs']
+        hsp.query = psl['qseqs']
+        hsp.hit = psl['tseqs']
 
         return hsp
 
@@ -504,8 +504,8 @@ class BlatPslWriter(object):
                 line.append(','.join((str(x) for x in hstarts)) + ',')
 
                 if self.fmt == 'pslx':
-                    line.append(','.join(hsp.query_blocks) + ',')
-                    line.append(','.join(hsp.hit_blocks) + ',')
+                    line.append(','.join((str(x.seq) for x in hsp.query)) + ',')
+                    line.append(','.join((str(x.seq) for x in hsp.hit)) + ',')
 
                 qresult_lines.append('\t'.join((str(x) for x in line)))
 

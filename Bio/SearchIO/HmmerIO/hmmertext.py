@@ -8,7 +8,7 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -242,7 +242,7 @@ class HmmerTextIterator(object):
                 # index, is_included, bitscore, bias, evalue_cond, evalue
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
-                hsp = HSP(hid, self.qresult.id)
+                hsp = ContiguousHSP(hid, self.qresult.id)
                 hsp.domain_index = int(parsed[0])
                 hsp.is_included = parsed[1] == '!'
                 hsp.bitscore = float(parsed[2])

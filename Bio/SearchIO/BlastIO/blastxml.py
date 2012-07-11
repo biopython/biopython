@@ -15,7 +15,7 @@ except ImportError:
     from xml.etree import ElementTree as ET
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, ContiguousHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -415,7 +415,7 @@ class BlastXmlIterator(object):
             root_hsp_elem = []
 
         for hsp_elem in root_hsp_elem:
-            hsp = HSP(hit_id, query_id)
+            hsp = ContiguousHSP(hit_id, query_id)
             # temporary container for coordinates
             coords = {}
 
