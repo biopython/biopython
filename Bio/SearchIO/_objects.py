@@ -1406,7 +1406,7 @@ class SegmentedHSP(HSP):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
 
         try:
-            info += ", %i blocks" % len(self.alignment)
+            info += ", %i blocks" % len(self)
         except TypeError:
             pass
 
