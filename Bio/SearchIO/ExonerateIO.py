@@ -5,6 +5,13 @@
 
 """Bio.SearchIO parser for Exonerate standard output format."""
 
+# Known issues & gotchas:
+# - The cigar parser does not use the extended cigar string; only supports MID
+# - Cigar and vulgar parsing results will most likely be different, due to the
+#   different type of data stored by both formats
+# - In vulgar parsing, split codons and splice sites will not be put into any
+#   blocks. They are stored in a separate instance attribute.
+
 import re
 
 from Bio.SearchIO._objects import QueryResult, Hit, SegmentedHSP
