@@ -64,7 +64,7 @@ class BaseExonerateIterator(object):
                     self.line.startswith('vulgar:') or \
                     self.line.startswith('cigar:'):
                 break
-            elif not self.line:
+            elif not self.line or self.line.startswith('-- completed '):
                 raise StopIteration
 
         for qresult in self.parse_qresult():
@@ -181,7 +181,7 @@ class BaseExonerateIterator(object):
                 for attr, value in qres_parsed.items():
                     setattr(qresult, attr, value)
             # when we've reached EOF, try yield any remaining qresult and break
-            elif not self.line:
+            elif not self.line or self.line.startswith('-- completed '):
                 yield _absorb_hit(qresult, hit)
                 break
             # otherwise, we must still be in the same query, so set the flag
