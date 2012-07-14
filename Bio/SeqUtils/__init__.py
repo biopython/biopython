@@ -201,8 +201,16 @@ def nt_search(seq, subseq):
 ######################
 # {{{ 
 
+_THREECODE = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
+             'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
+             'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
+             'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
+             'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
+             'Y':'Tyr', 'Z':'Glx', 'X':'Xaa',
+             'U':'Sel', 'O':'Pyl', 'J':'Xle',
+             }
 
-def seq3(seq):
+def seq3(seq, term_map={'*': 'Ter'}, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
     The single input argument 'seq' should be a protein sequence using single
@@ -220,19 +228,28 @@ def seq3(seq):
     >>> seq3("MAIVMGRWKGAR*")
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
+    You can set a custom translation of the codon termination code using the
+    "term_map" argument, e.g.
+    >>> seq3("MAIVMGRWKGAR*", term_map={"*": "***"})
+    'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'
+
+    You can also set a custom translation for non-amino acid characters, such
+    as '-', using the "undef_code" argument, e.g.
+    >>> seq3("MAIVMGRWKGA--R*", undef_code='---')
+    'MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer'
+
+    If not given, "undef_code" defaults to "Xaa", e.g.
+    >>> seq3("MAIVMGRWKGA--R*")
+    'MetAlaIleValMetGlyArgTrpLysGlyAlaXaaXaaArgTer'
+
     This function was inspired by BioPerl's seq3.
     """
-    threecode = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
-                 'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
-                 'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
-                 'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
-                 'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
-                 'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
-                 'U':'Sel', 'O':'Pyl', 'J':'Xle',
-                 }
+    threecode = _THREECODE
+    # add the given termination codon code
+    threecode.update(term_map)
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
-    return ''.join([threecode.get(aa,'Xaa') for aa in seq])
+    return ''.join([threecode.get(aa, undef_code) for aa in seq])
 
 
 # }}}
