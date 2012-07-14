@@ -252,6 +252,47 @@ def seq3(seq, term_map={'*': 'Ter'}, undef_code='Xaa'):
     return ''.join([threecode.get(aa, undef_code) for aa in seq])
 
 
+def seq1(seq, term_map={'Ter': '*'}, undef_code='X'):
+    """Turns a three-letter code protein sequence into one with single letter codes.
+
+    The single input argument 'seq' should be a protein sequence using three-
+    letter codes, either as a python string or as a Seq or MutableSeq object.
+
+    This function returns the amino acid sequence as a string using the three
+    letter amino acid codes. Output follows the IUPAC standard (including
+    ambiguous characters "Asx" for "B", "Xle" for "J", "Xaa" for "X", "Sel" for
+    "U", and "Pyl" for "O") plus "*" for a terminator given the "Ter" code.
+    Any unknown character (including possible gap characters), is changed into
+    '-'.
+
+    e.g.
+    >>> from Bio.SeqUtils import seq3
+    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer")
+    'MAIVMGRWKGAR*'
+
+    You can set a custom translation of the codon termination code using the
+    "term_map" argument, e.g.
+    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", term_map={"***": "*"})
+    'MAIVMGRWKGAR*'
+
+    You can also set a custom translation for non-amino acid characters, such
+    as '-', using the "undef_code" argument, e.g.
+    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer", undef_code='?')
+    'MAIVMGRWKGA??R*'
+
+    If not given, "undef_code" defaults to "X", e.g.
+    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer")
+    'MAIVMGRWKGAXXR*'
+
+    """
+    # reverse map of threecode
+    onecode = dict([(x[1], x[0]) for x in _THREECODE.items()])
+    # add the given termination codon code and custom maps
+    onecode.update(term_map)
+    seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) / 3)]
+    return ''.join([onecode.get(aa, undef_code) for aa in seqlist])
+
+
 # }}}
 
 ######################################
