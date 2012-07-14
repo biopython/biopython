@@ -18,19 +18,26 @@ from Bio.SearchIO._objects import QueryResult, Hit, SegmentedHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
-# precompile regex for parsing vulgar lines
-_RE_VLINE = re.compile(r"""^vulgar:\s+
+# precompile regex for parsing vulgar and cigar lines
+_RE_VULGAR = re.compile(r"""^vulgar:\s+
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand
         (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand
         (\d+)(\s+.*)$                         # score, vulgar components
         """, re.VERBOSE)
 
-_RE_VLINE_COMP = re.compile(r"""
-        \s+(\S+) # vulgar label (C/M: codon, G: gap, N: ner, 5/3: splice site,
-                 #               I: intron, S: split codon, F: frameshift)
+_RE_VCOMP = re.compile(r"""
+        \s+(\S+) # vulgar label (C/M: codon/match, G: gap, N: ner, 5/3: splice
+                 #               site, I: intron, S: split codon, F: frameshift)
         \s+(\d+) # how many residues to advance in query sequence
         \s+(\d+) # how many residues to advance in hit sequence
         """, re.VERBOSE)
+
+_RE_CIGAR = re.compile(r"""^cigar:\s+
+        (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # query: ID, start, end, strand
+        (\S+)\s+(\d+)\s+(\d+)\s+([\+-\.])\s+  # hit: ID, start, end, strand
+        (\d+)(\s+.*)$                         # score, vulgar components
+        """, re.VERBOSE)
+
 
 # strand char-value mapping
 _STRAND_MAP = {'+': 1, '-': -1, '.': 0}
@@ -225,7 +232,7 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
 
     def parse_alignment_block(self, qresult, hit, hsp):
         self.read_until(lambda line: line.startswith('vulgar'))
-        vulgars = re.search(_RE_VLINE, self.line)
+        vulgars = re.search(_RE_VULGAR, self.line)
         # if the file has c4 alignments
         # check if vulgar values match our previously parsed header values
         if self.has_c4_alignment:
@@ -287,7 +294,7 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         qmove = 1 if hsp['query_strand'] >= 0 else -1
         hmove = 1 if hsp['hit_strand'] >= 0 else -1
 
-        vcomps = re.findall(_RE_VLINE_COMP, hsp['vulgar'])
+        vcomps = re.findall(_RE_VCOMP, hsp['vulgar'])
         for idx, match in enumerate(vcomps):
             label, qstep, hstep = match[0], int(match[1]), int(match[2])
             # check for label, must be recognized
@@ -374,6 +381,66 @@ class ExonerateVulgarIndexer(SearchIndexer):
 
     def __init__(self, *args, **kwargs):
         pass
+
+
+class ExonerateCigarIterator(BaseExonerateIterator):
+
+    """Iterator for exonerate cigar strings."""
+
+    _ALN_MARK = 'cigar'
+
+    def parse_alignment_block(self, qresult, hit, hsp):
+        self.read_until(lambda line: line.startswith('cigar'))
+        cigars = re.search(_RE_CIGAR, self.line)
+        # if the file has c4 alignments
+        # check if cigar values match our previously parsed header values
+        if self.has_c4_alignment:
+            assert qresult['id'] == cigars.group(1)
+            assert hsp['query_start'] == cigars.group(2)
+            assert hsp['query_end'] == cigars.group(3)
+            assert hsp['query_strand'] == cigars.group(4)
+            assert hit['id'] == cigars.group(5)
+            assert hsp['hit_start'] == cigars.group(6)
+            assert hsp['hit_end'] == cigars.group(7)
+            assert hsp['hit_strand'] == cigars.group(8)
+            assert hsp['score'] == cigars.group(9)
+        else:
+            qresult['id'] = cigars.group(1)
+            hsp['query_start'] = cigars.group(2)
+            hsp['query_end'] = cigars.group(3)
+            hsp['query_strand'] = cigars.group(4)
+            hit['id'] = cigars.group(5)
+            hsp['hit_start'] = cigars.group(6)
+            hsp['hit_end'] = cigars.group(7)
+            hsp['hit_strand'] = cigars.group(8)
+            hsp['score'] = cigars.group(9)
+
+        # cast coords into ints
+        hsp['query_start'] = int(hsp['query_start'])
+        hsp['query_end'] = int(hsp['query_end'])
+        hsp['hit_start'] = int(hsp['hit_start'])
+        hsp['hit_end'] = int(hsp['hit_end'])
+        # adjust strands
+        hsp['query_strand'] = _STRAND_MAP[hsp['query_strand']]
+        hsp['hit_strand'] = _STRAND_MAP[hsp['hit_strand']]
+        if hsp['query_strand'] < 0:
+            hsp['query_start'], hsp['query_end'] = hsp['query_end'], \
+                    hsp['query_start']
+        if hsp['hit_strand'] < 0:
+            hsp['hit_start'], hsp['hit_end'] = hsp['hit_end'], \
+                    hsp['hit_start']
+        # cast score into int
+        hsp['score'] = int(hsp['score'])
+        # store cigar line and parse it
+        hsp['cigar'] = cigars.group(10)
+        # container for block coordinates
+        # should be present for SegmentedHSPs
+        hsp['query_starts'] = [hsp['query_start']]
+        hsp['query_ends'] = [hsp['query_end']]
+        hsp['hit_starts'] = [hsp['hit_start']]
+        hsp['hit_ends'] = [hsp['hit_end']]
+
+        return qresult, hit, hsp
 
 
 def _test():
