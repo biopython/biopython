@@ -9,8 +9,6 @@
 # - The cigar parser does not use the extended cigar string; only supports MID
 # - Cigar and vulgar parsing results will most likely be different, due to the
 #   different type of data stored by both formats
-# - In vulgar parsing, split codons and splice sites will not be put into any
-#   blocks. They are stored in a separate instance attribute.
 
 import re
 
@@ -297,10 +295,10 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
             assert label in 'MCGF53INS', "Unexpected vulgar label: %r" % label
             # match, codon, gaps, or frameshift
             # for now, consider frameshift as gaps
-            if label in 'MCGF':
-                # if the previous comp is not an MCGF block, it's the
+            if label in 'MCGFS':
+                # if the previous comp is not an MCGFS block, it's the
                 # start of a new block
-                if vcomps[idx-1][0] not in 'MCGF':
+                if vcomps[idx-1][0] not in 'MCGFS':
                     hsp['query_starts'].append(qpos)
                     hsp['hit_starts'].append(hpos)
             # other labels
@@ -339,10 +337,10 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
             qpos += qstep * qmove
             hpos += hstep * hmove
 
-            # append to ends if the next comp is not an MCGF block or
+            # append to ends if the next comp is not an MCGFS block or
             # if it's the last comp
             if idx == len(vcomps)-1 or \
-                    (label in 'MCGF' and vcomps[idx+1][0] not in 'MCGF'):
+                    (label in 'MCGFS' and vcomps[idx+1][0] not in 'MCGFS'):
                     hsp['query_ends'].append(qpos)
                     hsp['hit_ends'].append(hpos)
 
