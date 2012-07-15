@@ -348,13 +348,10 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
 
         # adjust coordinates
         for seq_type in ('query_', 'hit_'):
+            strand = hsp[seq_type + 'strand']
             # switch coordinates if strand is < 0
-            if hsp[seq_type + 'strand'] < 0:
-                # sort the other coordinate containers
-                for name in ('starts', 'ends', 'introns', 'ners', 'split_codons'):
-                    container = hsp[seq_type + name]
-                    container.sort()
-                # and switch the starts and ends
+            if strand < 0:
+                # switch the starts and ends
                 hsp[seq_type + 'start'], hsp[seq_type + 'end'] = \
                         hsp[seq_type + 'end'], hsp[seq_type + 'start']
                 hsp[seq_type + 'starts'], hsp[seq_type + 'ends'] = \
@@ -363,12 +360,19 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
             # merge adjacent 5', 3', and introns into single intron blocks
             introns = []
             for start, end in hsp[seq_type + 'introns']:
-                if not introns or introns[-1][1] != start:
-                    introns.append((start, end))
-                # merge if the end coord of the previous intron is the same
-                # as the current intron
-                elif introns[-1][1] == start:
-                    introns[-1] = (introns[-1][0], end)
+                if strand >= 0:
+                    if not introns or introns[-1][1] != start:
+                        introns.append((start, end))
+                    # merge if the end coord of the previous intron is the same
+                    # as the current intron
+                    elif introns[-1][1] == start:
+                        introns[-1] = (introns[-1][0], end)
+                else:
+                    # merging is slightly different if the strand is -
+                    if not introns or introns[-1][0] != end:
+                        introns.append((start, end))
+                    elif introns[-1][0] == end:
+                        introns[-1] = (start, introns[-1][1])
             # set the merged coords back to hsp dict
             hsp[seq_type + 'introns'] = introns
 
