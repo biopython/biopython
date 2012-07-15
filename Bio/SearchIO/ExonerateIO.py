@@ -278,16 +278,12 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         hsp['query_starts'], hsp['query_ends'], \
                 hsp['hit_starts'], hsp['hit_ends'] = \
                 [hsp['query_start']], [], [hsp['hit_start']], []
-        # containers for splice sites
-        hsp['query_5splice'], hsp['query_3splice'], \
-                hsp['hit_5splice'], hsp['hit_3splice'] = [], [], [], []
         # containers for split codons
         hsp['query_split_codons'], hsp['hit_split_codons'] = [], []
         # containers for introns
         hsp['query_introns'], hsp['hit_introns'] = [], []
         # containers for ner blocks
         hsp['query_ners'], hsp['hit_ners'] = [], []
-        # container for ner blocks
         # sentinels for tracking query and hit positions
         qpos, hpos = hsp['query_start'], hsp['hit_start']
         # multiplier for determining sentinel movement
@@ -315,19 +311,14 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
                 qend = qstart + qstep * qmove
                 hend = hstart + hstep * hmove
                 # adjust the start-stop coords
-                sqstart, sqend = min(qstart, qend), min(qstart, qend)
-                shstart, shend = min(hstart, hend), min(hstart, hend)
+                sqstart, sqend = min(qstart, qend), max(qstart, qend)
+                shstart, shend = min(hstart, hend), max(hstart, hend)
                 # then decide which list to store these values into
-                # 5' splice sites
-                if label == '5':
-                    qlist = hsp['query_5splice']
-                    hlist = hsp['hit_5splice']
-                # 3' splice sites
-                elif label == '3':
-                    qlist = hsp['query_3splice']
-                    hlist = hsp['hit_3splice']
-                # introns
-                elif label == 'I':
+                # splice sites (5' and 3') are grouped into introns
+                # note that here, the 5', 3', and intron coordinates live
+                # in separate tuples even though they're part of the same
+                # intron. we'll merge them later on after sorting
+                if label in '53I':
                     qlist = hsp['query_introns']
                     hlist = hsp['hit_introns']
                 # ner blocks
@@ -360,8 +351,7 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
             # switch coordinates if strand is < 0
             if hsp[seq_type + 'strand'] < 0:
                 # sort the other coordinate containers
-                for name in ('starts', 'ends', '5splice', '3splice', 'introns', \
-                        'ners', 'split_codons'):
+                for name in ('starts', 'ends', 'introns', 'ners', 'split_codons'):
                     container = hsp[seq_type + name]
                     container.sort()
                 # and switch the starts and ends
@@ -369,6 +359,18 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
                         hsp[seq_type + 'end'], hsp[seq_type + 'start']
                 hsp[seq_type + 'starts'], hsp[seq_type + 'ends'] = \
                         hsp[seq_type + 'ends'], hsp[seq_type + 'starts']
+
+            # merge adjacent 5', 3', and introns into single intron blocks
+            introns = []
+            for start, end in hsp[seq_type + 'introns']:
+                if not introns or introns[-1][1] != start:
+                    introns.append((start, end))
+                # merge if the end coord of the previous intron is the same
+                # as the current intron
+                elif introns[-1][1] == start:
+                    introns[-1] = (introns[-1][0], end)
+            # set the merged coords back to hsp dict
+            hsp[seq_type + 'introns'] = introns
 
         return hsp
 
