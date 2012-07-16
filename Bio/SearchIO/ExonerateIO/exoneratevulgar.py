@@ -70,13 +70,13 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         # cast score into int
         hsp['score'] = int(hsp['score'])
         # store vulgar line and parse it
-        hsp['vulgar'] = vulgars.group(10)
-        hsp = ExonerateVulgarIterator.parse_vulgar(hsp)
+        hsp['vulgar_comp'] = vulgars.group(10)
+        hsp = ExonerateVulgarIterator.parse_vulgar(hsp, hsp['vulgar_comp'])
 
         return qresult, hit, hsp
 
-    def parse_vulgar(hsp):
-        """Parses the vulgar line present in the hsp dictionary."""
+    def parse_vulgar(hsp, vulgar_comp):
+        """Parses the vulgar components present in the hsp dictionary."""
         # containers for block coordinates
         hsp['query_starts'], hsp['query_ends'], \
                 hsp['hit_starts'], hsp['hit_ends'] = \
@@ -93,7 +93,7 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         qmove = 1 if hsp['query_strand'] >= 0 else -1
         hmove = 1 if hsp['hit_strand'] >= 0 else -1
 
-        vcomps = re.findall(_RE_VCOMP, hsp['vulgar'])
+        vcomps = re.findall(_RE_VCOMP, vulgar_comp)
         for idx, match in enumerate(vcomps):
             label, qstep, hstep = match[0], int(match[1]), int(match[2])
             # check for label, must be recognized

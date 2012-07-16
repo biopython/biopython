@@ -68,8 +68,8 @@ class ExonerateCigarIterator(BaseExonerateIterator):
                     hsp['hit_start']
         # cast score into int
         hsp['score'] = int(hsp['score'])
-        # store cigar line and parse it
-        hsp['cigar'] = cigars.group(10)
+        # store cigar components
+        hsp['cigar_comp'] = cigars.group(10)
         # container for block coordinates
         # should be present for SegmentedHSPs
         hsp['query_starts'] = [hsp['query_start']]
