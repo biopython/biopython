@@ -282,18 +282,26 @@ class BlatPslIterator(object):
         hsp.hit_end = psl['tend']
 
         # block-related attributes
-        hsp.block_sizes = psl['blocksizes']
+        hsp.query_block_spans = hsp.hit_block_spans = psl['blocksizes']
         hsp.block_num = psl['blockcount']
 
         # query block starts
-        hsp.query_starts = _reorient_starts(psl['qstarts'], \
-                hsp.block_sizes, psl['qsize'], hsp.query_strand)
+        qstarts = _reorient_starts(psl['qstarts'], \
+                hsp.query_block_spans, psl['qsize'], hsp.query_strand)
         # hit block starts
         if len(psl['strand']) == 2:
-            hsp.hit_starts = _reorient_starts(psl['tstarts'], \
-                    hsp.block_sizes, psl['tsize'], hsp.hit_strand)
+            hstarts = _reorient_starts(psl['tstarts'], \
+                    hsp.hit_spans, psl['tsize'], hsp.hit_strand)
         else:
-            hsp.hit_starts = psl['tstarts']
+            hstarts = psl['tstarts']
+
+        # set query and hit coords
+        # this assumes each block has no gaps (which seems to be the case)
+        assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
+        hsp.query_coords = zip(qstarts, [x + y for x, y in \
+                zip(qstarts, psl['blocksizes'])])
+        hsp.hit_coords = zip(hstarts, [x + y for x, y in \
+                zip(hstarts, psl['blocksizes'])])
 
         return hsp
 
@@ -469,13 +477,17 @@ class BlatPslWriter(object):
                 line.append(hsp.hit_gapopen_num)
                 line.append(hsp.hit_gap_num)
 
+                # check spans
+                assert hsp.query_block_spans == hsp.hit_block_spans
+                block_sizes = hsp.query_block_spans
+
                 # set strand and starts
                 if hsp.query_strand == 1:
                     strand = '+'
                 else:
                     strand = '-'
-                qstarts = _reorient_starts(hsp.query_starts, \
-                        hsp.block_sizes, qresult.seq_len, hsp.query_strand)
+                qstarts = _reorient_starts([x[0] for x in hsp.query_coords], \
+                        hsp.query_block_spans, qresult.seq_len, hsp.query_strand)
 
                 if hasattr(hsp, 'hit_strand'):
                     if hsp.hit_strand == 1:
@@ -486,8 +498,8 @@ class BlatPslWriter(object):
                         strand += '-'
                 else:
                     hstrand = 1
-                hstarts = _reorient_starts(hsp.hit_starts, \
-                        hsp.block_sizes, hit.seq_len, hstrand)
+                hstarts = _reorient_starts([x[0] for x in hsp.hit_coords], \
+                        hsp.hit_block_spans, hit.seq_len, hstrand)
 
                 line.append(strand)
                 line.append(qresult.id)
@@ -499,7 +511,7 @@ class BlatPslWriter(object):
                 line.append(hsp.hit_start)
                 line.append(hsp.hit_end)
                 line.append(hsp.block_num)
-                line.append(','.join((str(x) for x in hsp.block_sizes)) + ',')
+                line.append(','.join((str(x) for x in block_sizes)) + ',')
                 line.append(','.join((str(x) for x in qstarts)) + ',')
                 line.append(','.join((str(x) for x in hstarts)) + ',')
 
