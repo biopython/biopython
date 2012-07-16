@@ -27,6 +27,113 @@ _RE_VCOMP = re.compile(r"""
         """, re.VERBOSE)
 
 
+def parse_vulgar_comp(hsp, vulgar_comp):
+    """Parses the vulgar components present in the hsp dictionary."""
+    # containers for block coordinates
+    hsp['query_starts'], hsp['query_ends'], \
+            hsp['hit_starts'], hsp['hit_ends'] = \
+            [hsp['query_start']], [], [hsp['hit_start']], []
+    # containers for split codons
+    hsp['query_scodon_coords'], hsp['hit_scodon_coords'] = [], []
+    # containers for introns
+    hsp['query_intron_coords'], hsp['hit_intron_coords'] = [], []
+    # containers for ner blocks
+    hsp['query_ner_coords'], hsp['hit_ner_coords'] = [], []
+    # sentinels for tracking query and hit positions
+    qpos, hpos = hsp['query_start'], hsp['hit_start']
+    # multiplier for determining sentinel movement
+    qmove = 1 if hsp['query_strand'] >= 0 else -1
+    hmove = 1 if hsp['hit_strand'] >= 0 else -1
+
+    vcomps = re.findall(_RE_VCOMP, vulgar_comp)
+    for idx, match in enumerate(vcomps):
+        label, qstep, hstep = match[0], int(match[1]), int(match[2])
+        # check for label, must be recognized
+        assert label in 'MCGF53INS', "Unexpected vulgar label: %r" % label
+        # match, codon, gaps, or frameshift
+        # for now, consider frameshift as gaps
+        if label in 'MCGFS':
+            # if the previous comp is not an MCGFS block, it's the
+            # start of a new block
+            if vcomps[idx-1][0] not in 'MCGFS':
+                hsp['query_starts'].append(qpos)
+                hsp['hit_starts'].append(hpos)
+        # other labels
+        # store the values in the hsp dict as a tuple of (start, stop)
+        if label in '53INS':
+            # get start and stop from parsed values
+            qstart, hstart = qpos, hpos
+            qend = qstart + qstep * qmove
+            hend = hstart + hstep * hmove
+            # adjust the start-stop coords
+            sqstart, sqend = min(qstart, qend), max(qstart, qend)
+            shstart, shend = min(hstart, hend), max(hstart, hend)
+            # then decide which list to store these values into
+            # splice sites (5' and 3') are grouped into introns
+            # note that here, the 5', 3', and intron coordinates live
+            # in separate tuples even though they're part of the same
+            # intron. we'll merge them later on after sorting
+            if label in '53I':
+                qlist = hsp['query_intron_coords']
+                hlist = hsp['hit_intron_coords']
+            # ner blocks
+            elif label == 'N':
+                qlist = hsp['query_ner_coords']
+                hlist = hsp['hit_ner_coords']
+            # split codons
+            # XXX: is it possible to have a frameshift that introduces
+            # a codon split? If so, this may need a different treatment..
+            elif label == 'S':
+                qlist = hsp['query_scodon_coords']
+                hlist = hsp['hit_scodon_coords']
+            # and store the values
+            qlist.append((sqstart, sqend))
+            hlist.append((shstart, shend))
+
+        # move sentinels accordingly
+        qpos += qstep * qmove
+        hpos += hstep * hmove
+
+        # append to ends if the next comp is not an MCGFS block or
+        # if it's the last comp
+        if idx == len(vcomps)-1 or \
+                (label in 'MCGFS' and vcomps[idx+1][0] not in 'MCGFS'):
+                hsp['query_ends'].append(qpos)
+                hsp['hit_ends'].append(hpos)
+
+    # adjust coordinates
+    for seq_type in ('query_', 'hit_'):
+        strand = hsp[seq_type + 'strand']
+        # switch coordinates if strand is < 0
+        if strand < 0:
+            # switch the starts and ends
+            hsp[seq_type + 'start'], hsp[seq_type + 'end'] = \
+                    hsp[seq_type + 'end'], hsp[seq_type + 'start']
+            hsp[seq_type + 'starts'], hsp[seq_type + 'ends'] = \
+                    hsp[seq_type + 'ends'], hsp[seq_type + 'starts']
+
+        # merge adjacent 5', 3', and introns into single intron blocks
+        introns = []
+        for start, end in hsp[seq_type + 'intron_coords']:
+            if strand >= 0:
+                if not introns or introns[-1][1] != start:
+                    introns.append((start, end))
+                # merge if the end coord of the previous intron is the same
+                # as the current intron
+                elif introns[-1][1] == start:
+                    introns[-1] = (introns[-1][0], end)
+            else:
+                # merging is slightly different if the strand is -
+                if not introns or introns[-1][0] != end:
+                    introns.append((start, end))
+                elif introns[-1][0] == end:
+                    introns[-1] = (start, introns[-1][1])
+        # set the merged coords back to hsp dict
+        hsp[seq_type + 'intron_coords'] = introns
+
+    return hsp
+
+
 class ExonerateVulgarIterator(BaseExonerateIterator):
 
     """Iterator for Exonerate vulgar strings."""
@@ -71,117 +178,9 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         hsp['score'] = int(hsp['score'])
         # store vulgar line and parse it
         hsp['vulgar_comp'] = vulgars.group(10)
-        hsp = ExonerateVulgarIterator.parse_vulgar(hsp, hsp['vulgar_comp'])
+        hsp = parse_vulgar_comp(hsp, hsp['vulgar_comp'])
 
         return qresult, hit, hsp
-
-    def parse_vulgar(hsp, vulgar_comp):
-        """Parses the vulgar components present in the hsp dictionary."""
-        # containers for block coordinates
-        hsp['query_starts'], hsp['query_ends'], \
-                hsp['hit_starts'], hsp['hit_ends'] = \
-                [hsp['query_start']], [], [hsp['hit_start']], []
-        # containers for split codons
-        hsp['query_scodon_coords'], hsp['hit_scodon_coords'] = [], []
-        # containers for introns
-        hsp['query_intron_coords'], hsp['hit_intron_coords'] = [], []
-        # containers for ner blocks
-        hsp['query_ner_coords'], hsp['hit_ner_coords'] = [], []
-        # sentinels for tracking query and hit positions
-        qpos, hpos = hsp['query_start'], hsp['hit_start']
-        # multiplier for determining sentinel movement
-        qmove = 1 if hsp['query_strand'] >= 0 else -1
-        hmove = 1 if hsp['hit_strand'] >= 0 else -1
-
-        vcomps = re.findall(_RE_VCOMP, vulgar_comp)
-        for idx, match in enumerate(vcomps):
-            label, qstep, hstep = match[0], int(match[1]), int(match[2])
-            # check for label, must be recognized
-            assert label in 'MCGF53INS', "Unexpected vulgar label: %r" % label
-            # match, codon, gaps, or frameshift
-            # for now, consider frameshift as gaps
-            if label in 'MCGFS':
-                # if the previous comp is not an MCGFS block, it's the
-                # start of a new block
-                if vcomps[idx-1][0] not in 'MCGFS':
-                    hsp['query_starts'].append(qpos)
-                    hsp['hit_starts'].append(hpos)
-            # other labels
-            # store the values in the hsp dict as a tuple of (start, stop)
-            if label in '53INS':
-                # get start and stop from parsed values
-                qstart, hstart = qpos, hpos
-                qend = qstart + qstep * qmove
-                hend = hstart + hstep * hmove
-                # adjust the start-stop coords
-                sqstart, sqend = min(qstart, qend), max(qstart, qend)
-                shstart, shend = min(hstart, hend), max(hstart, hend)
-                # then decide which list to store these values into
-                # splice sites (5' and 3') are grouped into introns
-                # note that here, the 5', 3', and intron coordinates live
-                # in separate tuples even though they're part of the same
-                # intron. we'll merge them later on after sorting
-                if label in '53I':
-                    qlist = hsp['query_intron_coords']
-                    hlist = hsp['hit_intron_coords']
-                # ner blocks
-                elif label == 'N':
-                    qlist = hsp['query_ner_coords']
-                    hlist = hsp['hit_ner_coords']
-                # split codons
-                # XXX: is it possible to have a frameshift that introduces
-                # a codon split? If so, this may need a different treatment..
-                elif label == 'S':
-                    qlist = hsp['query_scodon_coords']
-                    hlist = hsp['hit_scodon_coords']
-                # and store the values
-                qlist.append((sqstart, sqend))
-                hlist.append((shstart, shend))
-
-            # move sentinels accordingly
-            qpos += qstep * qmove
-            hpos += hstep * hmove
-
-            # append to ends if the next comp is not an MCGFS block or
-            # if it's the last comp
-            if idx == len(vcomps)-1 or \
-                    (label in 'MCGFS' and vcomps[idx+1][0] not in 'MCGFS'):
-                    hsp['query_ends'].append(qpos)
-                    hsp['hit_ends'].append(hpos)
-
-        # adjust coordinates
-        for seq_type in ('query_', 'hit_'):
-            strand = hsp[seq_type + 'strand']
-            # switch coordinates if strand is < 0
-            if strand < 0:
-                # switch the starts and ends
-                hsp[seq_type + 'start'], hsp[seq_type + 'end'] = \
-                        hsp[seq_type + 'end'], hsp[seq_type + 'start']
-                hsp[seq_type + 'starts'], hsp[seq_type + 'ends'] = \
-                        hsp[seq_type + 'ends'], hsp[seq_type + 'starts']
-
-            # merge adjacent 5', 3', and introns into single intron blocks
-            introns = []
-            for start, end in hsp[seq_type + 'intron_coords']:
-                if strand >= 0:
-                    if not introns or introns[-1][1] != start:
-                        introns.append((start, end))
-                    # merge if the end coord of the previous intron is the same
-                    # as the current intron
-                    elif introns[-1][1] == start:
-                        introns[-1] = (introns[-1][0], end)
-                else:
-                    # merging is slightly different if the strand is -
-                    if not introns or introns[-1][0] != end:
-                        introns.append((start, end))
-                    elif introns[-1][0] == end:
-                        introns[-1] = (start, introns[-1][1])
-            # set the merged coords back to hsp dict
-            hsp[seq_type + 'introns'] = introns
-
-        return hsp
-
-    parse_vulgar = staticmethod(parse_vulgar)
 
 
 class ExonerateVulgarIndexer(SearchIndexer):
