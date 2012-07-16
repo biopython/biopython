@@ -914,6 +914,12 @@ class ContiguousHSPWithAlignmentCases(unittest.TestCase):
         """Test ContiguousHSP.query_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._query_strand_get, )
 
+    def test_query_coord_ok(self):
+        """Test ContiguousHSP.query_coord getter"""
+        self.hsp.query_start = 9
+        self.hsp.query_end = 99
+        self.assertEqual((9, 99), self.hsp.query_coord)
+
     def test_query_span_ok(self):
         """Test ContiguousHSP.query_span getter, smaller from"""
         # span is to - from
@@ -946,6 +952,12 @@ class ContiguousHSPWithAlignmentCases(unittest.TestCase):
     def test_hit_strand_error(self):
         """Test ContiguousHSP.hit_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._hit_strand_get, )
+
+    def test_hit_coord_ok(self):
+        """Test ContiguousHSP.hit_coord getter"""
+        self.hsp.hit_start = 9
+        self.hsp.hit_end = 99
+        self.assertEqual((9, 99), self.hsp.hit_coord)
 
     def test_hit_span_ok(self):
         """Test ContiguousHSP.hit_span getter, smaller from"""
