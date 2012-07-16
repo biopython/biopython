@@ -70,12 +70,6 @@ class ExonerateCigarIterator(BaseExonerateIterator):
         hsp['score'] = int(hsp['score'])
         # store cigar components
         hsp['cigar_comp'] = cigars.group(10)
-        # container for block coordinates
-        # should be present for SegmentedHSPs
-        hsp['query_starts'] = [hsp['query_start']]
-        hsp['query_ends'] = [hsp['query_end']]
-        hsp['hit_starts'] = [hsp['hit_start']]
-        hsp['hit_ends'] = [hsp['hit_end']]
 
         return qresult, hit, hsp
 

@@ -30,8 +30,7 @@ _RE_VCOMP = re.compile(r"""
 def parse_vulgar_comp(hsp, vulgar_comp):
     """Parses the vulgar components present in the hsp dictionary."""
     # containers for block coordinates
-    hsp['query_starts'], hsp['query_ends'], \
-            hsp['hit_starts'], hsp['hit_ends'] = \
+    qstarts, qends, hstarts, hends = \
             [hsp['query_start']], [], [hsp['hit_start']], []
     # containers for split codons
     hsp['query_scodon_coords'], hsp['hit_scodon_coords'] = [], []
@@ -56,8 +55,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             # if the previous comp is not an MCGFS block, it's the
             # start of a new block
             if vcomps[idx-1][0] not in 'MCGFS':
-                hsp['query_starts'].append(qpos)
-                hsp['hit_starts'].append(hpos)
+                qstarts.append(qpos)
+                hstarts.append(hpos)
         # other labels
         # store the values in the hsp dict as a tuple of (start, stop)
         if label in '53INS':
@@ -98,8 +97,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # if it's the last comp
         if idx == len(vcomps)-1 or \
                 (label in 'MCGFS' and vcomps[idx+1][0] not in 'MCGFS'):
-                hsp['query_ends'].append(qpos)
-                hsp['hit_ends'].append(hpos)
+                qends.append(qpos)
+                hends.append(hpos)
 
     # adjust coordinates
     for seq_type in ('query_', 'hit_'):
@@ -109,8 +108,10 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             # switch the starts and ends
             hsp[seq_type + 'start'], hsp[seq_type + 'end'] = \
                     hsp[seq_type + 'end'], hsp[seq_type + 'start']
-            hsp[seq_type + 'starts'], hsp[seq_type + 'ends'] = \
-                    hsp[seq_type + 'ends'], hsp[seq_type + 'starts']
+            if seq_type == 'query_':
+                qstarts, qends = qends, qstarts
+            else:
+                hstarts, hends = hends, hstarts
 
         # merge adjacent 5', 3', and introns into single intron blocks
         introns = []
@@ -131,6 +132,9 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         # set the merged coords back to hsp dict
         hsp[seq_type + 'intron_coords'] = introns
 
+    # set start and end coords
+    hsp['query_coords'] = zip(qstarts, qends)
+    hsp['hit_coords'] = zip(hstarts, hends)
     return hsp
 
 
