@@ -127,12 +127,11 @@ class BaseExonerateIterator(object):
         qid_cache = None
         hid_cache = None
         same_query = False # flag for tracking active query
+        # if the file has c4 alignments, use that as the alignment mark
+        if self.has_c4_alignment:
+            self._ALN_MARK = 'C4 Alignment:'
 
         while True:
-            # if the file has c4 alignments, use that as the alignment mark
-            if self.has_c4_alignment:
-                self._ALN_MARK = 'C4 Alignment:'
-
             self.read_until(lambda line: line.startswith(self._ALN_MARK))
             # only parse the result row if it's not EOF
             if self.line:
@@ -193,7 +192,8 @@ class BaseExonerateIterator(object):
                 setattr(hsp, attr, value)
             hit.append(hsp)
 
-            self.line = self.handle.readline()
+            if not self.has_c4_alignment:
+                self.line = self.handle.readline()
 
 
 def _test():
