@@ -5,7 +5,7 @@
 
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
-from Bio.SearchIO._objects import QueryResult, Hit, SegmentedHSP
+from Bio.SearchIO._objects import QueryResult, Hit, GappedHSP
 
 
 # strand char-value mapping
@@ -187,7 +187,7 @@ class BaseExonerateIterator(object):
 
             # each block is basically a different HSP, so we always add it to
             # any hit object we have
-            hsp = SegmentedHSP(hit_id, qresult_id)
+            hsp = GappedHSP(hit_id, qresult_id)
             for attr, value in hsp_parsed.items():
                 setattr(hsp, attr, value)
             hit.append(hsp)

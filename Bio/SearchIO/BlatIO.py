@@ -28,7 +28,7 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, SegmentedHSP
+from Bio.SearchIO._objects import QueryResult, Hit, GappedHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -200,7 +200,7 @@ class BlatPslIterator(object):
 
             # each line is basically a different HSP, so we always add it to
             # any hit object we have
-            hsp = SegmentedHSP(hit_id, qresult_id)
+            hsp = GappedHSP(hit_id, qresult_id)
             hsp = self._set_hsp_attr(hsp, psl)
 
             hit.append(hsp)
