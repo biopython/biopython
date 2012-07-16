@@ -82,11 +82,11 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
                 hsp['hit_starts'], hsp['hit_ends'] = \
                 [hsp['query_start']], [], [hsp['hit_start']], []
         # containers for split codons
-        hsp['query_split_codons'], hsp['hit_split_codons'] = [], []
+        hsp['query_scodon_coords'], hsp['hit_scodon_coords'] = [], []
         # containers for introns
-        hsp['query_introns'], hsp['hit_introns'] = [], []
+        hsp['query_intron_coords'], hsp['hit_intron_coords'] = [], []
         # containers for ner blocks
-        hsp['query_ners'], hsp['hit_ners'] = [], []
+        hsp['query_ner_coords'], hsp['hit_ner_coords'] = [], []
         # sentinels for tracking query and hit positions
         qpos, hpos = hsp['query_start'], hsp['hit_start']
         # multiplier for determining sentinel movement
@@ -122,18 +122,18 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
                 # in separate tuples even though they're part of the same
                 # intron. we'll merge them later on after sorting
                 if label in '53I':
-                    qlist = hsp['query_introns']
-                    hlist = hsp['hit_introns']
+                    qlist = hsp['query_intron_coords']
+                    hlist = hsp['hit_intron_coords']
                 # ner blocks
                 elif label == 'N':
-                    qlist = hsp['query_ners']
-                    hlist = hsp['hit_ners']
+                    qlist = hsp['query_ner_coords']
+                    hlist = hsp['hit_ner_coords']
                 # split codons
                 # XXX: is it possible to have a frameshift that introduces
                 # a codon split? If so, this may need a different treatment..
                 elif label == 'S':
-                    qlist = hsp['query_split_codons']
-                    hlist = hsp['hit_split_codons']
+                    qlist = hsp['query_scodon_coords']
+                    hlist = hsp['hit_scodon_coords']
                 # and store the values
                 qlist.append((sqstart, sqend))
                 hlist.append((shstart, shend))
@@ -162,7 +162,7 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
 
             # merge adjacent 5', 3', and introns into single intron blocks
             introns = []
-            for start, end in hsp[seq_type + 'introns']:
+            for start, end in hsp[seq_type + 'intron_coords']:
                 if strand >= 0:
                     if not introns or introns[-1][1] != start:
                         introns.append((start, end))
