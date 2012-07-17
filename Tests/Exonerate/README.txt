@@ -23,3 +23,4 @@ exn_22_m_ungapped_trans.exn     ungapped:translated model alignment
 exn_22_o_vulgar_cigar.exn       genome2genome alignment with vulgar and cigar lines only
 exn_22_o_vulgar.exn             genome2genome alignment with vulgar lines only
 
+exn_22_q_multiple.exn           est2genome, multiple queries, multiple hits and hsps
