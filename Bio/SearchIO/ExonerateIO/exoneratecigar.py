@@ -52,20 +52,19 @@ class ExonerateCigarIterator(BaseExonerateIterator):
             hsp['hit_strand'] = cigars.group(8)
             hsp['score'] = cigars.group(9)
 
-        # cast coords into ints
-        hsp['query_start'] = int(hsp['query_start'])
-        hsp['query_end'] = int(hsp['query_end'])
-        hsp['hit_start'] = int(hsp['hit_start'])
-        hsp['hit_end'] = int(hsp['hit_end'])
         # adjust strands
         hsp['query_strand'] = _STRAND_MAP[hsp['query_strand']]
         hsp['hit_strand'] = _STRAND_MAP[hsp['hit_strand']]
-        if hsp['query_strand'] < 0:
-            hsp['query_start'], hsp['query_end'] = hsp['query_end'], \
-                    hsp['query_start']
-        if hsp['hit_strand'] < 0:
-            hsp['hit_start'], hsp['hit_end'] = hsp['hit_end'], \
-                    hsp['hit_start']
+        # cast coords into ints
+        qstart = int(hsp['query_start'])
+        qend = int(hsp['query_end'])
+        hstart = int(hsp['hit_start'])
+        hend = int(hsp['hit_end'])
+        # set coords (start <= end)
+        hsp['query_start'] = min(qstart, qend)
+        hsp['query_end'] = max(qstart, qend)
+        hsp['hit_start'] = min(hstart, hend)
+        hsp['hit_end'] = max(hstart, hend)
         # cast score into int
         hsp['score'] = int(hsp['score'])
         # store cigar components

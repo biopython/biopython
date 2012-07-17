@@ -54,13 +54,18 @@ def get_block_coords(parsed_seq, has_ner=False):
     return coords
 
 
-def get_inter_coords(coords):
+def get_inter_coords(coords, strand=1):
     """From the given pairs of coordinates, returns a list of pairs
     covering the intervening ranges."""
     # adapted from Python's itertools guide
-    inter_coords = list(chain.from_iterable(coords))[1:-1]
-    args = [iter(inter_coords)] * 2
-    return list(izip_longest(*args))
+    # if strand is -1, adjust coords to the ends and starts are chained
+    if strand == -1:
+        sorted_coords = [(max(a, b), min(a, b)) for a, b in coords]
+        inter_coords = list(chain.from_iterable(sorted_coords))[1:-1]
+        return zip(inter_coords[1::2], inter_coords[::2])
+    else:
+        inter_coords = list(chain.from_iterable(coords))[1:-1]
+        return zip(inter_coords[::2], inter_coords[1::2])
 
 
 def stitch_rows(raw_rows):
@@ -219,7 +224,7 @@ class ExonerateTextIterator(BaseExonerateIterator):
                 else:
                     scoords.append((0, 0))
             # discard first element, assuming that we never start alns with codons
-            scodon_coords[seq_type] = scoords[1:]
+            scodon_coords[seq_type] = scoords
 
         # remove the split codon markers
         seq_blocks = []
@@ -314,14 +319,14 @@ class ExonerateTextIterator(BaseExonerateIterator):
 
             # fill the hsp query and hit coordinates
             hsp = fill_coords(hsp, opp_type, inter_lens)
+            strand = 1 if hsp[opp_type + 'strand'] >= 0 else -1
             # and fill the intervening coords' values
             if not has_ner:
                 hsp[opp_type + 'intron_coords'] = \
-                        get_inter_coords(hsp[opp_type + 'coords'])
+                        get_inter_coords(hsp[opp_type + 'coords'], strand)
                 hsp[seq_type + 'ner_coords'] = []
                 # set split codon coordinates
                 scodons = []
-                strand = 1 if hsp[opp_type + 'strand'] >= 0 else -1
                 for idx in range(len(scodon_coords[seq_type[:-1]])):
                     pair = scodon_coords[opp_type[:-1]][idx]
                     if not any(pair):
@@ -329,7 +334,7 @@ class ExonerateTextIterator(BaseExonerateIterator):
                     else:
                         assert not all(pair)
                     a, b = pair
-                    anchor_pair = hsp[opp_type + 'intron_coords'][idx // 2]
+                    anchor_pair = hsp[opp_type + 'coords'][idx // 2]
                     if a:
                         func = max if strand == 1 else min
                         anchor = func(anchor_pair)
@@ -342,8 +347,16 @@ class ExonerateTextIterator(BaseExonerateIterator):
                 hsp[opp_type + 'scodon_coords'] = scodons
             else:
                 hsp[seq_type + 'ner_coords'] = \
-                        get_inter_coords(hsp[seq_type + 'coords'])
+                        get_inter_coords(hsp[seq_type + 'coords'], strand)
                 hsp[seq_type + 'intron_coords'] = []
+
+        # now that we've finished parsing coords, we can set the hit and start
+        # coord according to Biopython's convention (start <= end)
+        for seq_type in ('query_', 'hit_'):
+            if hsp[seq_type + 'strand'] == -1:
+                n_start = seq_type + 'start'
+                n_end = seq_type + 'end'
+                hsp[n_start], hsp[n_end] = hsp[n_end], hsp[n_start]
 
         return qresult, hit, hsp
 

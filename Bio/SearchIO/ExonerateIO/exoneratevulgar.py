@@ -170,14 +170,14 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
             hsp['hit_strand'] = vulgars.group(8)
             hsp['score'] = vulgars.group(9)
 
+        # adjust strands
+        hsp['hit_strand'] = _STRAND_MAP[hsp['hit_strand']]
+        hsp['query_strand'] = _STRAND_MAP[hsp['query_strand']]
         # cast coords into ints
         hsp['query_start'] = int(hsp['query_start'])
         hsp['query_end'] = int(hsp['query_end'])
         hsp['hit_start'] = int(hsp['hit_start'])
         hsp['hit_end'] = int(hsp['hit_end'])
-        # adjust strands
-        hsp['hit_strand'] = _STRAND_MAP[hsp['hit_strand']]
-        hsp['query_strand'] = _STRAND_MAP[hsp['query_strand']]
         # cast score into int
         hsp['score'] = int(hsp['score'])
         # store vulgar line and parse it
