@@ -6,7 +6,7 @@
 """Bio.SearchIO parser for Exonerate plain text output format."""
 
 import re
-from itertools import chain, izip_longest
+from itertools import chain
 
 from Bio.SearchIO._index import SearchIndexer
 
