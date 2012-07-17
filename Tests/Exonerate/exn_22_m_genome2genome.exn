@@ -1,0 +1,207 @@
+Command line: [exonerate -m genome2genome ../intron.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: sacCer3_dna range=chrIV:1319469-1319997 5'pad=0 3'pad=0 strand=+ repeatMasking=none:[revcomp]
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]
+         Model: genome2genome
+     Raw score: 2641
+   Query range: 529 -> 0
+  Target range: 1319997 -> 1319468
+
+     529 :                           TGG                            :     474
+           ATCCCTTATCTCTTTATCTTGTTGCCTrpTTCTCTTTTCCCTTTAAATGGAGATTA
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ATCCCTTATCTCTTTATCTTGTTGCCTrpTTCTCTTTTCCCTTTAAATGGAGATTA
+ 1319997 :                           TGG                            : 1319942
+
+     473 : CAAACTAGCGAAACTGCAGAAAAGGAAAGCCTCCAAAACTACTGCCAGGGTAAAAA :     418
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319941 : CAAACTAGCGAAACTGCAGAAAAGGAAAGCCTCCAAAACTACTGCCAGGGTAAAAA : 1319886
+
+     417 : GTGAAACTGGGAAACGACATAAAGAAGAGCAAATTAAAACCAAAATGAGCGATGAA :     362
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319885 : GTGAAACTGGGAAACGACATAAAGAAGAGCAAATTAAAACCAAAATGAGCGATGAA : 1319830
+
+     361 : AATAAGAGTACGCGTATGTCAGTTAATCTCAGTCACAATTTTGTGACTTTCAATAC :     306
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319829 : AATAAGAGTACGCGTATGTCAGTTAATCTCAGTCACAATTTTGTGACTTTCAATAC : 1319774
+
+     305 : AATTTTTCTTTACTAACTCGAGGAAGAGTGAGGTTTTCTTCCATGAATTGCAGCTA :     250
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319773 : AATTTTTCTTTACTAACTCGAGGAAGAGTGAGGTTTTCTTCCATGAATTGCAGCTA : 1319718
+
+     249 : TTGTTAAGGCGTCTGACATAGTATGTAATTGTGCCATGATATACATGTTTTGTGTG :     194
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319717 : TTGTTAAGGCGTCTGACATAGTATGTAATTGTGCCATGATATACATGTTTTGTGTG : 1319662
+
+     193 : TGTACATTTGAATATATATATTTACTAACAAGGAGAAAACTTAGACCGACAAGCTG :     138
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319661 : TGTACATTTGAATATATATATTTACTAACAAGGAGAAAACTTAGACCGACAAGCTG : 1319606
+
+     137 : AAAGAGGATATTTTAACCATCAGTAAAGATGCTCTGGACAAGTACCAGTTGGAAAG :      82
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319605 : AAAGAGGATATTTTAACCATCAGTAAAGATGCTCTGGACAAGTACCAGTTGGAAAG : 1319550
+
+      81 : AGACATTGCTGGGACGGTAAAGAAGCAATTGGATGTCAAATACGGCAATACCTGGC :      26
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319549 : AGACATTGCTGGGACGGTAAAGAAGCAATTGGATGTCAAATACGGCAATACCTGGC : 1319494
+
+      25 : ATGTGATTGTCGGAAAGAACTTTGG :       1
+           |||||||||||||||||||||||||
+ 1319493 : ATGTGATTGTCGGAAAGAACTTTGG : 1319469
+
+
+C4 Alignment:
+------------
+         Query: sacCer3_dna range=chrIV:1319469-1319997 5'pad=0 3'pad=0 strand=+ repeatMasking=none
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence
+         Model: genome2genome
+     Raw score: 2641
+   Query range: 0 -> 529
+  Target range: 1319468 -> 1319997
+
+       1 : CCAAAGTTCTTTCCGACAATCACATGCCAGGTATTGCCGTATTTGACATCCAATTG :      56
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319469 : CCAAAGTTCTTTCCGACAATCACATGCCAGGTATTGCCGTATTTGACATCCAATTG : 1319524
+
+      57 :                                   TGG                    :     112
+           CTTCTTTACCGTCCCAGCAATGTCTCTTTCCAACTrpTACTTGTCCAGAGCATCTT
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           CTTCTTTACCGTCCCAGCAATGTCTCTTTCCAACTrpTACTTGTCCAGAGCATCTT
+ 1319525 :                                   TGG                    : 1319580
+
+     113 : TACTGATGGTTAAAATATCCTCTTTCAGCTTGTCGGTCTAAGTTTTCTCCTTGTTA :     168
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319581 : TACTGATGGTTAAAATATCCTCTTTCAGCTTGTCGGTCTAAGTTTTCTCCTTGTTA : 1319636
+
+     169 : GTAAATATATATATTCAAATGTACACACACAAAACATGTATATCATGGCACAATTA :     224
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319637 : GTAAATATATATATTCAAATGTACACACACAAAACATGTATATCATGGCACAATTA : 1319692
+
+     225 : CATACTATGTCAGACGCCTTAACAATAGCTGCAATTCATGGAAGAAAACCTCACTC :     280
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319693 : CATACTATGTCAGACGCCTTAACAATAGCTGCAATTCATGGAAGAAAACCTCACTC : 1319748
+
+     281 : TTCCTCGAGTTAGTAAAGAAAAATTGTATTGAAAGTCACAAAATTGTGACTGAGAT :     336
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319749 : TTCCTCGAGTTAGTAAAGAAAAATTGTATTGAAAGTCACAAAATTGTGACTGAGAT : 1319804
+
+     337 : TAACTGACATACGCGTACTCTTATTTTCATCGCTCATTTTGGTTTTAATTTGCTCT :     392
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319805 : TAACTGACATACGCGTACTCTTATTTTCATCGCTCATTTTGGTTTTAATTTGCTCT : 1319860
+
+     393 : TCTTTATGTCGTTTCCCAGTTTCACTTTTTACCCTGGCAGTAGTTTTGGAGGCTTT :     448
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319861 : TCTTTATGTCGTTTCCCAGTTTCACTTTTTACCCTGGCAGTAGTTTTGGAGGCTTT : 1319916
+
+     449 : CCTTTTCTGCAGTTTCGCTAGTTTGTAATCTCCATTTAAAGGGAAAAGAGAACCAG :     504
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319917 : CCTTTTCTGCAGTTTCGCTAGTTTGTAATCTCCATTTAAAGGGAAAAGAGAACCAG : 1319972
+
+     505 : GCAACAAGATAAAGAGATAAGGGAT :     529
+           |||||||||||||||||||||||||
+ 1319973 : GCAACAAGATAAAGAGATAAGGGAT : 1319997
+
+
+C4 Alignment:
+------------
+         Query: sacCer3_dna range=chrIV:1319469-1319997 5'pad=0 3'pad=0 strand=+ repeatMasking=none:[revcomp]
+        Target: gi|330443489|ref|NC_001135.5| Saccharomyces cerevisiae S288c chromosome III, complete sequence
+         Model: genome2genome
+     Raw score: 267
+   Query range: 491 -> 162
+  Target range: 23668 -> 115569
+
+    491 : CCCTTTAAATGGAGATTACAAACTAGCGA  >>>> Target Intron 1 >>>>   :    462
+          ||  | ||| | |||  ||||| |  | |++         8983 bp         +-
+  23669 : CCGCTGAAAGGAAGAGAACAAAGTTACAAgt.........................aa :  32679
+
+    461 : AACTGCAGAAAAGGAAAGCCTCCAAAACTACT--GC-CAGGGTAAAAAGTGA  >>>> :    413
+          |||||||||||||    |  ||   ||| |||  ||  ||||||| ||  ||-+    
+  32680 : AACTGCAGAAAAGACTGGTATCTTGAACGACTTGGCGAAGGGTAAGAAAAGAat.... :  32735
+
+    412 :  Target Intron 2 >>>>  AACTGGGAA--ACG-ACAT-AAAGAAGAGCAAATT :    383
+               9555 bp         +-||| || ||   || || | |||||||||||||| 
+  32736 : .....................atAAC-GGTAATCTCGAACTTCAAAGAAGAGCAAATG :  42321
+
+    382 :    {A}                             {CC}AAA                 :    358
+          AAA{T}  >>>> Target Intron 3 >>>>  {hr}LysATGAGCGATGAAAATA
+          || { }++         55423 bp        ++{  } !  |||  ||||||||||
+          AAC{L}gt.........................ag{eu}AspTTGAATGATGAAAATA
+  42322 :    {C}                             {TG}GAT                 :  97769
+
+    357 : AGAGTACGCGTATGTCAGTTAATCTCAGTCACAATTTTGTGACTTTCAATACAAT  > :    302
+          |||| |    | | | ||| |   ||||| |  || | ||     |||||| | |+- 
+  97770 : AGAGAA---ATTTATTAGTCATATTCAGTGATTATGTGGTTTTCATCAATATACTgg. :  97824
+
+    301 : >>> Target Intron 4 >>>>  TTTTCTTTACTAAC-TCGAGGAAGAGTGAGGT :    272
+                  17598 bp        ++| ||    || | | |  |||||| |||| | 
+  97825 : ........................agTCTTGAAGACCAGCATGTAGGAAG-GTGATGA : 115450
+
+    271 : TTTCTTCC---ATGAATTGCAGCTATTG---T-TAAGGCGTCTGAC-ATAGTATGTAA :    222
+          | |  |||   |  ||||| |  |||||   | |||      |||| ||| ||   ||
+ 115451 : TATGCTCCGTAAATAATTGGAAATATTGAGATATAATAACGATGACAATACTA-ACAA : 115507
+
+    221 : TTGTGCCA--TGATATACATGTTTTGTGTGTGTACATTTGAATATATATATTTAC-TA :    167
+            ||   |  |||  | |     |||  ||| |   |||||||||||||   | | ||
+ 115508 : AAGTAATAGGTGAGCTCCGCCAATTGATTGTTTTGTTTTGAATATATATTGATGCTTA : 115565
+
+    166 : ACAA :    163
+          ||||
+ 115566 : ACAA : 115569
+
+
+C4 Alignment:
+------------
+         Query: sacCer3_dna range=chrIV:1319469-1319997 5'pad=0 3'pad=0 strand=+ repeatMasking=none:[revcomp]
+        Target: gi|330443667|ref|NC_001143.9| Saccharomyces cerevisiae S288c chromosome XI, complete sequence:[revcomp]
+         Model: genome2genome
+     Raw score: 267
+   Query range: 529 -> 78
+  Target range: 641760 -> 71883
+
+    529 : ATCCCTTATCTCTTTATCTTGTTGCCTGGTTCTCTTTTCCCTTTAAATGGAGATTACA :    472
+          ||||||||||||||       |||  |||||   ||||  || |  ||     || ||
+ 641760 : ATCCCTTATCTCTTCTAAAGATTGTGTGGTT---TTTT--CTATGCATATTTTTTCCA : 641708
+
+    471 :                           ga                        ag     :    385
+          A---ACTAGCGAA-ACTGCAGAAAAG+->>>> Joint Intron 1 >>>>++CAAA
+          |    || || ||  || || | |||     61 bp // 154295 bp     ||| 
+          ACCTTCTTGCCAATTCTTCA-ACAAG-+>>>> Joint Intron 1 >>>>++CAAT
+ 641707 :                           tt                        ag     : 487384
+
+    384 : TTAAAACCAAAATGAGCGATGAAAATAAGAGTACGCGTATGTCAGTTAATC-TCAGTC :    328
+          |||| ||||| ||||||||||     |||| | |   |||| | ||||| | ||| | 
+ 487383 : TTAACACCAAGATGAGCGATG-----AAGA-TTC---TATG-CTGTTAAACTTCACTA : 487336
+
+    327 :         gt                        ga                       :    263
+          ACAATTTT++>>>> Joint Intron 2 >>>>--GGAAGAGTGAGGTTTTCTTCCA
+           ||||        35 bp // 101120 bp     |||| |   |  || | | | |
+          CCAATGAG+->>>> Joint Intron 2 >>>>++GGAACATAAAAATTCTGTCCTA
+ 487335 :         ga                        ag                       : 386186
+
+    262 :                                              TGCCATGATATAC :    206
+          T-GAATTGCAGCTATTGTTAAGGCGTCTGACATAGTATGTAATTGCysHisAspIleH
+          |  || | ||   |||| ||  || ||  | || || |||| |||  ! ! .!.||+ 
+          TCAAAATTCAATAATTG-TACAGCTTC-CA-ATTGTGTGTACTTGValLysGlnIleG
+ 386185 :                                              GTCAAACAAATCG : 386131
+
+    205 : ATGTT{TT}  >>>> Target Intron 1 >>>>  {G}TGTGTGTACATT      :    182
+          isVal{Le}                             {u}CysValTyrIleTG-AA
+               {::}          177446 bp          {:}   !  !::   || ||
+          lyHis{Il}++                         ++{e}LysGlyPhe***TGAAA
+ 386130 : GACAC{AT}gt.........................ag{C}AAAGGATTTTGA      : 208660
+
+    181 :                     ga                        ag           :    105
+          TATATATATTTACTAACAAG+->>>> Joint Intron 3 >>>>++TAAAGATGCT
+          |||||||||||||| | |       47 bp // 136722 bp      ||||||  |
+          TATATATATTTACTTAGAGT++>>>> Joint Intron 3 >>>>++AAAAGATTTT
+ 208659 :                     gt                        ag           :  71908
+
+    104 : CTGGACAAGTACCAGTTGGAAAGAGA :     79
+          ||  || | |  ||||||||||||||
+  71907 : CT--ACGACTTGCAGTTGGAAAGAGA :  71884
+
+-- completed exonerate analysis
