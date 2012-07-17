@@ -1,0 +1,3 @@
+Command line: [exonerate -m est2genome none.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar yes --showvulgar yes]
+Hostname: [blackbriar]
+-- completed exonerate analysis

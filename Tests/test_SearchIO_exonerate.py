@@ -1247,6 +1247,12 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('|  | | || |  | || ||  ||||||||  ||  ||||', hsp.alignment_annotation['homology'][-1][-40:])
         self.assertEqual('CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA', str(hsp.hit[-1].seq)[-40:])
 
+    def test_exn_22_q_none(self):
+        """Test parsing exonerate output (exn_22_q_none.exn)"""
+        exn_file = get_file('exn_22_q_none.exn')
+        qresults = parse(exn_file, 'exonerate-text')
+        self.assertRaises(StopIteration, qresults.next, )
+
 
 class ExonerateVulgarCases(unittest.TestCase):
 

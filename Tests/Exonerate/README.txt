@@ -24,3 +24,4 @@ exn_22_o_vulgar_cigar.exn       genome2genome alignment with vulgar and cigar li
 exn_22_o_vulgar.exn             genome2genome alignment with vulgar lines only
 
 exn_22_q_multiple.exn           est2genome, multiple queries, multiple hits and hsps
+exn_22_q_empty.exn              est2genome, single query, no results
