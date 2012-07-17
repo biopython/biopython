@@ -162,6 +162,7 @@ class BaseExonerateIterator(object):
                     yield _absorb_hit(qresult, hit)
                     same_query = False
                 qid_cache = qresult_id
+                hid_cache = None
                 qresult = QueryResult(qresult_id)
                 for attr, value in qres_parsed.items():
                     setattr(qresult, attr, value)

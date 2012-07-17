@@ -177,6 +177,7 @@ class BlatPslIterator(object):
                     yield qresult
                     same_query = False
                 qid_cache = qresult_id
+                hid_cache = None
                 qresult = QueryResult(qresult_id)
                 qresult.seq_len = psl['qsize']
             # when we've reached EOF, try yield any remaining qresult and break
