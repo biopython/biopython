@@ -7,9 +7,9 @@
 
 This module supports the following Exonerate output formats:
 
-  - Plain text alignment - 'exon-text'
-  - Vulgar line          - 'exon-vulgar'
-  - Cigar line           - 'exon-cigar'
+  - Plain text alignment - 'exonerate-text'
+  - Vulgar line          - 'exonerate-vulgar'
+  - Cigar line           - 'exonerate-cigar'
 
 And the following BLAST+ programs: blastn, blastp, blastx, tblastn, tblastx
 
