@@ -24,6 +24,17 @@ def _absorb_hit(qresult, hit):
     return qresult
 
 
+def _parse_hit_or_query_line(line):
+    """Parse the 'Query:' line of exonerate alignment outputs."""
+    try:
+        mark, id, desc = line.split(' ', 2)
+    except ValueError: # no desc
+        mark, id = line.split(' ', 1)
+        desc = ''
+
+    return id, desc
+
+
 class BaseExonerateIterator(object):
 
     """Abstract iterator for exonerate format."""
@@ -62,18 +73,6 @@ class BaseExonerateIterator(object):
             else:
                 self.line = self.handle.readline()
 
-    def _parse_hit_or_query_line(line):
-        # get id and desc
-        try:
-            mark, id, desc = line.split(' ', 2)
-        except ValueError: # no desc
-            mark, id = line.split(' ', 1)
-            desc = ''
-
-        return id, desc
-
-    _parse_hit_or_query_line = staticmethod(_parse_hit_or_query_line)
-
     def parse_alignment_block(self, qres_dict, hit_dict, hsp_dict):
         raise NotImplementedError("Subclass must implement this")
 
@@ -82,11 +81,11 @@ class BaseExonerateIterator(object):
             # query line
             if line.startswith('Query:'):
                 qresult['id'], qresult['desc']  = \
-                        BaseExonerateIterator._parse_hit_or_query_line(line)
+                        _parse_hit_or_query_line(line)
             # target line
             elif line.startswith('Target:'):
                 hit['id'], hit['desc'] = \
-                        BaseExonerateIterator._parse_hit_or_query_line(line)
+                        _parse_hit_or_query_line(line)
             # model line
             elif line.startswith('Model:'):
                 qresult['model'] = line.split(' ', 1)[1]
