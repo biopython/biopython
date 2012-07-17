@@ -15,7 +15,7 @@ from exoneratevulgar import parse_vulgar_comp, _RE_VULGAR
 
 
 _RE_ALN_ROW = re.compile(r'\s*\d+\s+: (.*) :\s+\d+')
-_RE_EXON = re.compile(r'[atgc ]{2,}?>+ \w+ Intron \d+ >+[atgc ]{2,}?')
+_RE_EXON = re.compile(r'[atgc ]{2,}?[<>]+ \w+ Intron \d+ [<>]+[atgc ]{2,}?')
 _RE_EXON_LEN = re.compile(r'(?:(\d+) bp // (\d+) bp)|(?:(\d+) bp)')
 _RE_NER = re.compile(r'--<\s+\d+\s+>--')
 _RE_NER_LEN = re.compile(r'--<\s+(\d+)\s+>--')
