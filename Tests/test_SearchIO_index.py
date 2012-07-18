@@ -1545,6 +1545,36 @@ class BlatPslxIndexCases(SearchIndexCases):
         self.check_index(filename, self.fmt)
 
 
+class ExonerateTextIndexCases(SearchIndexCases):
+
+    fmt = 'exonerate-text'
+
+    def test_exn_22_m_est2genome(self):
+        """Test exonerate-text indexing, single"""
+        filename = os.path.join('Exonerate', 'exn_22_m_est2genome.exn')
+        self.check_index(filename, self.fmt)
+
+    def test_exn_22_q_multiple(self):
+        """Test exonerate-text indexing, single"""
+        filename = os.path.join('Exonerate', 'exn_22_q_multiple.exn')
+        self.check_index(filename, self.fmt)
+
+
+class ExonerateVulgarIndexCases(SearchIndexCases):
+
+    fmt = 'exonerate-vulgar'
+
+    def test_exn_22_m_est2genome(self):
+        """Test exonerate-vulgar indexing, single"""
+        filename = os.path.join('Exonerate', 'exn_22_o_vulgar.exn')
+        self.check_index(filename, self.fmt)
+
+    def test_exn_22_q_multiple(self):
+        """Test exonerate-vulgar indexing, single"""
+        filename = os.path.join('Exonerate', 'exn_22_q_multiple_vulgar.exn')
+        self.check_index(filename, self.fmt)
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
