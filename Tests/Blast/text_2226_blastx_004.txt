@@ -1,0 +1,224 @@
+BLASTX 2.2.26+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: minirefseq_prot
+           20 sequences; 6,406 total letters
+
+
+
+Query= random_s00
+
+Length=128
+
+
+***** No hits found *****
+
+
+
+
+
+Effective search space used: 0
+
+
+Query= hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+
+repeatMasking=none
+
+Length=485
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein C16...   121    3e-38
+  gi|374093214|ref|NP_001243358.1| PDZ and LIM domain protein 5 i...   114    2e-35
+  gi|297669362|ref|XP_002812869.1| PREDICTED: histone demethylase...  98.2    2e-29
+  gi|57113895|ref|NP_001009002.1| histone demethylase UTY [Pan tr...   104    5e-29
+  gi|33188429|ref|NP_872601.1| histone demethylase UTY isoform 1 ...   104    6e-29
+  gi|42560248|ref|NP_002692.2| POU domain, class 5, transcription...  17.3    5.0  
+  gi|149754664|ref|XP_001490158.1| PREDICTED: POU domain, class 5...  17.3    5.0  
+  gi|354487500|ref|XP_003505911.1| PREDICTED: POU domain, class 5...  16.9    6.6  
+
+
+> gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein C16orf89-like 
+[Nomascus leucogenys]
+Length=132
+
+ Score =  121 bits (304),  Expect = 3e-38
+ Identities = 69/95 (73%), Positives = 74/95 (78%), Gaps = 0/95 (0%)
+ Frame = -3
+
+Query  300  LRRSFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGF  121
+            LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF
+Sbjct  25   LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGF  84
+
+Query  120  YHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP  16
+             HVGQAGLE   SG+ P   SQS GI GVSH AQP
+Sbjct  85   LHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP  119
+
+
+ Score = 51.6 bits (122),  Expect = 3e-12
+ Identities = 34/72 (47%), Positives = 41/72 (57%), Gaps = 5/72 (7%)
+ Frame = -3
+
+Query  459  VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSFAL  280
+            V   RVQ ++L S QPP P FK FS LSL SSW+ R  PPH AN     F F +   F  
+Sbjct  32   VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLAN-----FLFLVEMGFLH  86
+
+Query  279  VAQAGVQWLDLG  244
+            V QAG++ +  G
+Sbjct  87   VGQAGLELVTSG  98
+
+
+> gi|374093214|ref|NP_001243358.1| PDZ and LIM domain protein 5 
+isoform i [Homo sapiens]
+Length=136
+
+ Score =  114 bits (286),  Expect = 2e-35
+ Identities = 63/88 (72%), Positives = 69/88 (78%), Gaps = 0/88 (0%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAG  100
+            ++ AGVQW +LG PQPP P FK FSCLS PSSWDYRH+PP L NFVFLVET F +VGQAG
+Sbjct  30   ISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPPRLANFVFLVETKFPYVGQAG  89
+
+Query  99   LEPPISGNLPAWASQSVGITGVSHHAQP  16
+            LE P SG+LP  ASQS  ITGVSH A P
+Sbjct  90   LELPTSGDLPTSASQSAKITGVSHRAWP  117
+
+
+ Score = 52.4 bits (124),  Expect = 2e-12
+ Identities = 33/69 (48%), Positives = 41/69 (59%), Gaps = 5/69 (7%)
+ Frame = -3
+
+Query  465  VSVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPANffffffffFLRRSF  286
+            +++  A VQ  +L S QPP+PEFK FS LSL SSWD R  PP  AN     F F +   F
+Sbjct  28   LTISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPPRLAN-----FVFLVETKF  82
+
+Query  285  ALVAQAGVQ  259
+              V QAG++
+Sbjct  83   PYVGQAGLE  91
+
+
+> gi|297669362|ref|XP_002812869.1| PREDICTED: histone demethylase 
+UTY-like [Pongo abelii]
+Length=110
+
+ Score = 98.2 bits (243),  Expect = 2e-29
+ Identities = 57/91 (63%), Positives = 64/91 (70%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  279  VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHVGQAG  100
+            V  AGVQW +L   QPPP GFK FS LS  SSWD R  PP L+ FVFL+ETGF+HVGQAG
+Sbjct  19   VPHAGVQWHNLSSLQPPPSGFKPFSYLSLLSSWDQRRPPPRLVIFVFLIETGFHHVGQAG  78
+
+Query  99   LEPPISGNLPAWASQSVGITGVSHHAQPLCE  7
+            L+    G+ PA ASQS GI GVSH A P C+
+Sbjct  79   LKLLTLGDPPASASQSAGIRGVSHCAWPECQ  109
+
+
+> gi|57113895|ref|NP_001009002.1| histone demethylase UTY [Pan 
+troglodytes]
+Length=1079
+
+ Score =  104 bits (260),  Expect = 5e-29
+ Identities = 59/91 (65%), Positives = 66/91 (73%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  291   SFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHV  112
+             SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HV
+Sbjct  989   SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHV  1048
+
+Query  111   GQAGLEPPISGNLPAWASQSVGITGVSHHAQ  19
+             GQA LE   SG L A ASQS GITGVSHHA+
+Sbjct  1049  GQAHLELLTSGGLLASASQSAGITGVSHHAR  1079
+
+
+ Score = 47.8 bits (112),  Expect = 4e-10
+ Identities = 25/41 (61%), Positives = 28/41 (68%), Gaps = 0/41 (0%)
+ Frame = -3
+
+Query  450   ARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPPHPAN  328
+             A +Q  DLSSLQPP P FK FSHLSL +SW+ R  P  P N
+Sbjct  996   AGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTN  1036
+
+
+ Score = 20.0 bits (40),  Expect = 0.72
+ Identities = 7/11 (64%), Positives = 7/11 (64%), Gaps = 0/11 (0%)
+ Frame = -1
+
+Query  365   AGIAGAHHHTR  333
+             AGI G  HH R
+Sbjct  1069  AGITGVSHHAR  1079
+
+
+ Score = 19.6 bits (39),  Expect = 0.96
+ Identities = 5/7 (71%), Positives = 6/7 (86%), Gaps = 0/7 (0%)
+ Frame = -3
+
+Query  354  RCPPPHP  334
+            +CPPP P
+Sbjct  864  KCPPPRP  870
+
+
+ Score = 18.5 bits (36),  Expect = 2.2
+ Identities = 5/7 (71%), Positives = 6/7 (86%), Gaps = 0/7 (0%)
+ Frame = -2
+
+Query  40   RCEPPRP  20
+            +C PPRP
+Sbjct  864  KCPPPRP  870
+
+
+ Score = 16.9 bits (32),  Expect = 7.0
+ Identities = 6/12 (50%), Positives = 8/12 (67%), Gaps = 0/12 (0%)
+ Frame = +3
+
+Query  114  HGKTPSLLKIQN  149
+            HG +P+LL   N
+Sbjct  713  HGDSPNLLIADN  724
+
+
+> gi|33188429|ref|NP_872601.1| histone demethylase UTY isoform 
+1 [Homo sapiens]
+Length=1079
+
+ Score =  104 bits (259),  Expect = 6e-29
+ Identities = 59/91 (65%), Positives = 66/91 (73%), Gaps = 0/91 (0%)
+ Frame = -3
+
+Query  291   SFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVFLVETGFYHV  112
+             SF    +AG+QW DL   QPPPPGFK FS LS P+SW+YRH+P C  NF   VETGF+HV
+Sbjct  989   SFQESLRAGMQWCDLSSLQPPPPGFKRFSHLSLPNSWNYRHLPSCPTNFCIFVETGFHHV  1048
+
+Query  111   GQAGLEPPISGNLPAWASQSVGITGVSHHAQ  19
+             GQA LE   SG L A ASQS GITGVSHHA+
+Sbjct  1049  GQACLELLTSGGLLASASQSAGITGVSHHAR  1079
+
+
+
+Lambda     K      H
+   0.318    0.134    0.401 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 662354
+
+
+  Database: minirefseq_prot
+    Posted date:  Jun 9, 2012  2:05 PM
+  Number of letters in database: 6,406
+  Number of sequences in database:  20
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Neighboring words threshold: 12
+Window for multiple hits: 40

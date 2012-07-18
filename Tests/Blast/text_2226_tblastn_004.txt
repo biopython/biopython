@@ -1,0 +1,262 @@
+TBLASTN 2.2.26+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: minirefseq_mrna
+           23 sequences; 67,750 total letters
+
+
+
+Query= random_s00
+
+Length=32
+
+
+***** No hits found *****
+
+
+
+
+
+Effective search space used: 0
+
+
+Query= gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+subtilis subsp. subtilis str. 168]
+
+Length=102
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  gi|145479850|ref|XM_001425911.1| Paramecium tetraurelia hypothe...  34.7    1e-05
+  gi|72012412|ref|XM_777959.1| PREDICTED: Strongylocentrotus purp...  31.6    1e-04
+  gi|115975252|ref|XM_001180111.1| PREDICTED: Strongylocentrotus ...  31.6    1e-04
+
+
+> gi|145479850|ref|XM_001425911.1| Paramecium tetraurelia hypothetical 
+protein (GSPATT00004923001) partial mRNA
+Length=4632
+
+ Score = 34.7 bits (78),  Expect = 1e-05, Method: Composition-based stats.
+ Identities = 15/43 (35%), Positives = 26/43 (60%), Gaps = 0/43 (0%)
+ Frame = +1
+
+Query  31    PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD  73
+             P +   TK+GT +GL   HTI   + +  +SL++ E++  D+D
+Sbjct  1744  PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID  1872
+
+
+> gi|72012412|ref|XM_777959.1| PREDICTED: Strongylocentrotus purpuratus 
+hypothetical LOC577746 (LOC577746), mRNA
+Length=1593
+
+ Score = 31.6 bits (70),  Expect = 1e-04, Method: Composition-based stats.
+ Identities = 20/59 (34%), Positives = 29/59 (49%), Gaps = 8/59 (14%)
+ Frame = +1
+
+Query  44    GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL  94
+             GL   HT+ + V +    LD+TEE  ++LD+F S          K  + YE+N   Q L
+Sbjct  1057  GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL  1233
+
+
+> gi|115975252|ref|XM_001180111.1| PREDICTED: Strongylocentrotus 
+purpuratus hypothetical LOC577746 (LOC577746), mRNA
+Length=1593
+
+ Score = 31.6 bits (70),  Expect = 1e-04, Method: Composition-based stats.
+ Identities = 20/59 (34%), Positives = 29/59 (49%), Gaps = 8/59 (14%)
+ Frame = +1
+
+Query  44    GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL  94
+             GL   HT+ + V +    LD+TEE  ++LD+F S          K  + YE+N   Q L
+Sbjct  1057  GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL  1233
+
+
+
+Lambda     K      H
+   0.302    0.125    0.332 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 1205400
+
+
+Query= gi|11464971:4-101 pleckstrin [Mus musculus]
+
+Length=98
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  gi|350596019|ref|XM_003360601.2| PREDICTED: Sus scrofa pleckstr...   199    2e-67
+  gi|301779869|ref|XM_002925302.1| PREDICTED: Ailuropoda melanole...   202    2e-67
+  gi|296223671|ref|XM_002757683.1| PREDICTED: Callithrix jacchus ...   202    4e-67
+  gi|338714227|ref|XM_001492113.3| PREDICTED: Equus caballus plec...   202    2e-66
+  gi|365982352|ref|XM_003667962.1| Naumovozyma dairenensis CBS 42...  19.6    1.7  
+  gi|94721341|ref|NM_001040441.1| Homo sapiens zinc finger and BT...  17.7    6.3  
+  gi|332865370|ref|XM_527768.3| PREDICTED: Pan troglodytes zinc f...  17.3    8.7  
+  gi|332865372|ref|XM_003318468.1| PREDICTED: Pan troglodytes zin...  17.3    8.7  
+
+
+> gi|350596019|ref|XM_003360601.2| PREDICTED: Sus scrofa pleckstrin-like 
+(LOC100626968), mRNA
+Length=772
+
+ Score =  199 bits (506),  Expect = 2e-67, Method: Compositional matrix adjust.
+ Identities = 94/98 (96%), Positives = 96/98 (98%), Gaps = 0/98 (0%)
+ Frame = +2
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  95   KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  274
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK
+Sbjct  275  KRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK  388
+
+
+ Score = 32.7 bits (73),  Expect = 4e-05, Method: Compositional matrix adjust.
+ Identities = 21/71 (30%), Positives = 33/71 (46%), Gaps = 4/71 (6%)
+ Frame = +2
+
+Query  30   IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK---ITTTKQQDHFFQAAFLEE  85
+            + +Y       P G I L+G  +TS      GK  F+ +     T  +  +F QAA  +E
+Sbjct  542  LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWERAXXITADEVHYFLQAANPKE  721
+
+Query  86   RDAWVRDIKKA  96
+            R  W++ I+ A
+Sbjct  722  RTEWIKAIQVA  754
+
+
+> gi|301779869|ref|XM_002925302.1| PREDICTED: Ailuropoda melanoleuca 
+pleckstrin-like (LOC100466932), mRNA
+Length=1144
+
+ Score =  202 bits (515),  Expect = 2e-67, Method: Compositional matrix adjust.
+ Identities = 96/98 (98%), Positives = 97/98 (99%), Gaps = 0/98 (0%)
+ Frame = +3
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  78   KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  257
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  258  KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  371
+
+
+ Score = 45.1 bits (105),  Expect = 3e-09, Method: Compositional matrix adjust.
+ Identities = 30/100 (30%), Positives = 48/100 (48%), Gaps = 6/100 (6%)
+ Frame = +3
+
+Query  3     IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS----PC  56
+             I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS    P 
+Sbjct  804   IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNPD  983
+
+Query  57    QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+                 +   + +I T  +  +F QAA  +ER  W++ I+ A
+Sbjct  984   VRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA  1103
+
+
+> gi|296223671|ref|XM_002757683.1| PREDICTED: Callithrix jacchus 
+pleckstrin (PLEK), mRNA
+Length=1183
+
+ Score =  202 bits (515),  Expect = 4e-67, Method: Compositional matrix adjust.
+ Identities = 96/98 (98%), Positives = 97/98 (99%), Gaps = 0/98 (0%)
+ Frame = +2
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGS+FNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  161  KRIREGYLVKKGSMFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  340
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  341  KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  454
+
+
+ Score = 45.1 bits (105),  Expect = 3e-09, Method: Compositional matrix adjust.
+ Identities = 30/100 (30%), Positives = 48/100 (48%), Gaps = 6/100 (6%)
+ Frame = +2
+
+Query  3     IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+             I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  
+Sbjct  866   IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNSD  1045
+
+Query  61    KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+              R      + +I T  +  +F QAA  +ER  W++ I+ A
+Sbjct  1046  GRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA  1165
+
+
+> gi|338714227|ref|XM_001492113.3| PREDICTED: Equus caballus pleckstrin-like 
+(LOC100051039), mRNA
+Length=1390
+
+ Score =  202 bits (515),  Expect = 2e-66, Method: Compositional matrix adjust.
+ Identities = 96/98 (98%), Positives = 97/98 (99%), Gaps = 0/98 (0%)
+ Frame = +2
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  173  KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  352
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  353  KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  466
+
+
+ Score = 46.6 bits (109),  Expect = 1e-09, Method: Compositional matrix adjust.
+ Identities = 31/100 (31%), Positives = 48/100 (48%), Gaps = 6/100 (6%)
+ Frame = +2
+
+Query  3     IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS----PC  56
+             I++G L+K+G     WK    VL ED   + +Y       P G I L+G  +TS    P 
+Sbjct  899   IKQGCLLKQGHRRKNWKVRKFVLREDPAYVHYYDPAGGEEPLGAIHLRGCVVTSVEGNPD  1078
+
+Query  57    QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+                 +   + +I T  +  +F QAA  +ER  W++ I+ A
+Sbjct  1079  GKKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA  1198
+
+
+> gi|365982352|ref|XM_003667962.1| Naumovozyma dairenensis CBS 
+421 hypothetical protein (NDAI0A06120), mRNA
+Length=4932
+
+ Score = 19.6 bits (39),  Expect = 1.7, Method: Compositional matrix adjust.
+ Identities = 16/52 (31%), Positives = 23/52 (44%), Gaps = 9/52 (17%)
+ Frame = +1
+
+Query  12    GSVFNTWKPMWVVLL---------EDGIEFYKKKSDNSPKGMIPLKGSTLTS  54
+             GS F TW  +++ +L         E   E   K  D + KG++ L  S  TS
+Sbjct  3181  GSCFPTWDLIFIEVLNPFLKEKLWEADNEEISKFVDLTLKGLVDLYPSHFTS  3336
+
+
+
+Lambda     K      H
+   0.321    0.137    0.422 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 1119300
+
+
+  Database: minirefseq_mrna
+    Posted date:  Jun 9, 2012  2:05 PM
+  Number of letters in database: 67,750
+  Number of sequences in database:  23
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Neighboring words threshold: 13
+Window for multiple hits: 40

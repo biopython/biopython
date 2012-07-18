@@ -24,18 +24,23 @@ tab_2226_tblastn_012         multiple quries, remote search, standard columns, c
 text_2226_blastn_001         single query, no hits
 text_2226_blastn_002         single query, hits @ single hsp
 text_2226_blastn_003         single query, multiple hsps per hit present
+text_2226_blastn_004         multiple queries
 text_2226_blastp_001         single query, no hits
 text_2226_blastp_002         single query, hits @ single hsp
 text_2226_blastp_003         single query, multiple hsps per hit present
+text_2226_blastp_004         multiple queries
 text_2226_blastx_001         single query, no hits
 text_2226_blastx_002         single query, hits @ single hsp
 text_2226_blastx_003         single query, multiple hsps per hit present
+text_2226_blastx_004         multiple queries
 text_2226_tblastn_001        single query, no hits
 text_2226_tblastn_002        single query, hits @ single hsp
 text_2226_tblastn_003        single query, multiple hsps per hit present
+text_2226_tblastn_004        multiple queries
 text_2226_tblastx_001        single query, no hits
 text_2226_tblastx_002        single query, hits @ single hsp
 text_2226_tblastx_003        single query, multiple hsps per hit present
+text_2226_tblastx_004        multiple queries
 
 xml_2226_blastn_001.xml      multiple queries
 xml_2226_blastn_002.xml      single query, no hits

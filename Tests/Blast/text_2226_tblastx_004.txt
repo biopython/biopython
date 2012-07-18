@@ -1,0 +1,430 @@
+TBLASTX 2.2.26+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Database: minirefseq_mrna
+           23 sequences; 67,750 total letters
+
+
+
+Query= random_s00
+
+Length=128
+
+
+***** No hits found *****
+
+
+
+
+
+Effective search space used: 0
+
+
+Query= gi|296147483:1-350 Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA,
+complete cds
+
+Length=350
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value  N
+
+  gi|296147483|ref|NM_001183135.1| Saccharomyces cerevisiae S288c...   289    2e-81  1
+  gi|365982352|ref|XM_003667962.1| Naumovozyma dairenensis CBS 42...   152    5e-42  2
+  gi|366988334|ref|XM_003673886.1| Naumovozyma castellii CBS 4309...   143    3e-37  1
+  gi|255710474|ref|XM_002551475.1| Lachancea thermotolerans CBS 6...   141    8e-37  1
+  gi|254579534|ref|XM_002495708.1| Zygosaccharomyces rouxii hypot...   141    1e-36  1
+  gi|350596019|ref|XM_003360601.2| PREDICTED: Sus scrofa pleckstr...  25.4    0.091  1
+  gi|332865372|ref|XM_003318468.1| PREDICTED: Pan troglodytes zin...  23.5    0.33   1
+  gi|145479850|ref|XM_001425911.1| Paramecium tetraurelia hypothe...  21.7    1.2    1
+  gi|94721341|ref|NM_001040441.1| Homo sapiens zinc finger and BT...  21.2    1.3    2
+  gi|332237160|ref|XM_003267724.1| PREDICTED: Nomascus leucogenys...  19.9    4.1    1
+
+
+> gi|296147483|ref|NM_001183135.1| Saccharomyces cerevisiae S288c 
+Mon2p (MON2) mRNA, complete cds
+Length=4911
+
+ Score =  289 bits (626),  Expect = 2e-81
+ Identities = 116/116 (100%), Positives = 116/116 (100%), Gaps = 0/116 (0%)
+ Frame = +2/+2
+
+Query  2    WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISH  181
+            WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISH
+Sbjct  2    WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISH  181
+
+Query  182  SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K  349
+            SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K
+Sbjct  182  SLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K  349
+
+
+ Score =  278 bits (602),  Expect = 5e-78
+ Identities = 116/116 (100%), Positives = 116/116 (100%), Gaps = 0/116 (0%)
+ Frame = -2/-3
+
+Query  349  LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNP  170
+            LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNP
+Sbjct  349  LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALPGSSF*HSLIGKPTRKGVRNP  170
+
+Query  169  DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP  2
+            DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP
+Sbjct  169  DVFLAPQNYVLFSISQWIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP  2
+
+
+ Score =  274 bits (593),  Expect = 8e-77
+ Identities = 116/116 (100%), Positives = 116/116 (100%), Gaps = 0/116 (0%)
+ Frame = -3/-1
+
+Query  348  F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR  169
+            F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR
+Sbjct  348  F*LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIR  169
+
+Query  168  MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH  1
+            MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH
+Sbjct  168  MSF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH  1
+
+
+ Score =  270 bits (583),  Expect = 2e-75
+ Identities = 116/116 (100%), Positives = 116/116 (100%), Gaps = 0/116 (0%)
+ Frame = +3/+3
+
+Query  3    GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRT  182
+            GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRT
+Sbjct  3    GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIEKST*F*GARKTSGFRT  182
+
+Query  183  PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS  350
+            PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS
+Sbjct  183  PFRVGLPIKEC*NDDPGNAMPTGTVNRSIYSSKPAV*NFGCLH*GYSSRDGDSIKS  350
+
+
+ Score =  229 bits (495),  Expect = 3e-63
+ Identities = 116/116 (100%), Positives = 116/116 (100%), Gaps = 0/116 (0%)
+ Frame = -1/-2
+
+Query  350  TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKgsaks  171
+            TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKS
+Sbjct  350  TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTKGSAKS  171
+
+Query  170  gclssssklCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA  3
+            GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA
+Sbjct  170  GCLSSSSKLCTLFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESNPPVFMA  3
+
+
+ Score =  197 bits (425),  Expect(2) = 2e-58
+ Identities = 85/85 (100%), Positives = 85/85 (100%), Gaps = 0/85 (0%)
+ Frame = +1/+1
+
+Query  94   TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI  273
+            TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI
+Sbjct  94   TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI  273
+
+Query  274  PRSRLSEILDAFIEATHLAMEIQLK  348
+            PRSRLSEILDAFIEATHLAMEIQLK
+Sbjct  274  PRSRLSEILDAFIEATHLAMEIQLK  348
+
+
+ Score = 36.3 bits (73),  Expect(2) = 2e-58
+ Identities = 14/14 (100%), Positives = 14/14 (100%), Gaps = 0/14 (0%)
+ Frame = +1/+1
+
+Query  1   MAMNTGGFDSMQRQ  42
+           MAMNTGGFDSMQRQ
+Sbjct  1   MAMNTGGFDSMQRQ  42
+
+
+ Score = 18.9 bits (35),  Expect = 7.8
+ Identities = 6/11 (55%), Positives = 9/11 (82%), Gaps = 0/11 (0%)
+ Frame = +2/-3
+
+Query  293  KFWMPSLRLLI  325
+            K W+P ++LLI
+Sbjct  373  KKWVPPVKLLI  341
+
+
+> gi|365982352|ref|XM_003667962.1| Naumovozyma dairenensis CBS 
+421 hypothetical protein (NDAI0A06120), mRNA
+Length=4932
+
+ Score =  152 bits (327),  Expect(2) = 5e-42
+ Identities = 62/85 (73%), Positives = 73/85 (86%), Gaps = 0/85 (0%)
+ Frame = +1/+1
+
+Query  94   TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI  273
+            TI+HASDKSI+ILK + + EEL RHPDF  P VLAC SRNAK+T++AMQCLQGL++VPSI
+Sbjct  88   TIKHASDKSIDILKTIQNIEELVRHPDFVTPLVLACSSRNAKLTSIAMQCLQGLASVPSI  267
+
+Query  274  PRSRLSEILDAFIEATHLAMEIQLK  348
+            P SR+ E+LD FIEAT LAMEIQLK
+Sbjct  268  PESRIPEVLDGFIEATQLAMEIQLK  342
+
+
+ Score = 26.3 bits (51),  Expect(2) = 5e-42
+ Identities = 11/14 (79%), Positives = 11/14 (79%), Gaps = 0/14 (0%)
+ Frame = +3/+3
+
+Query  69   FRIEKKKFNHSPC*  110
+            FRI KKKFNH  C*
+Sbjct  63   FRI*KKKFNH*TC*  104
+
+
+ Score = 68.0 bits (142),  Expect(2) = 1e-24
+ Identities = 34/55 (62%), Positives = 38/55 (69%), Gaps = 0/55 (0%)
+ Frame = -1/-2
+
+Query  350  TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK  186
+            TFN ISIA *VASM  S+ S     GI+GT  +PCRHC+A  V LAFLD QA TK
+Sbjct  344  TFNCISIAS*VASMNPSRTSGILDSGIEGTDANPCRHCMAIEVNLAFLDEQARTK  180
+
+
+ Score = 52.8 bits (109),  Expect(2) = 1e-24
+ Identities = 24/39 (62%), Positives = 29/39 (74%), Gaps = 0/39 (0%)
+ Frame = -1/-2
+
+Query  137  LFNISMDLSLAWRMVEFLLFDSEDKERNSASSCLCMESN  21
+            +F IS+DLSLA  MVEFLL DSE++E NS S+C   E N
+Sbjct  131  VFRISIDLSLACLMVEFLLLDSEERECNSWSNCFRKEVN  15
+
+
+ Score = 61.1 bits (127),  Expect = 2e-12
+ Identities = 36/103 (35%), Positives = 52/103 (50%), Gaps = 0/103 (0%)
+ Frame = +2/+2
+
+Query  41   NLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK  220
+            N  +N   +L N KEEIQP  ML  N   +*+ + + ++     I   L  W  ++ M  
+Sbjct  35   NWTRNYTPFLQNLKEEIQPLNMLATNQSIF*RLFKI*KNL*GTLILLHLWSWPVHREMPN  214
+
+Query  221  *RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K  349
+            *    CNAY+D +P+  +      KF   SL+ L  RWR+N*K
+Sbjct  215  *LQLPCNAYKDWRPYLQYQSQESQKF*TDSLKPLS*RWRYN*K  343
+
+
+ Score = 42.8 bits (87),  Expect = 5e-07
+ Identities = 28/65 (43%), Positives = 36/65 (55%), Gaps = 0/65 (0%)
+ Frame = -3/-1
+
+Query  261  G*QSL*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISS  82
+            G QSL*ALH     F I     Q +R  +IR+ +     + S   ++ F+ SM NG*ISS
+Sbjct  255  GRQSL*ALHGN*S*FGISR*TGQDQRCNKIRVPYKFFYILNSL*NID*FVASMFNG*ISS  76
+
+Query  81   FRFGR  67
+            FRF R
+Sbjct  75   FRF*R  61
+
+
+ Score = 24.0 bits (46),  Expect(2) = 0.028
+ Identities = 11/17 (65%), Positives = 11/17 (65%), Gaps = 0/17 (0%)
+ Frame = -2/-3
+
+Query  118  IYH*HGEWLNFFFSIRK  68
+            I  *H  WLNFFF I K
+Sbjct  112  ICR*HV*WLNFFF*ILK  62
+
+
+ Score = 23.5 bits (45),  Expect(2) = 0.028
+ Identities = 9/17 (53%), Positives = 11/17 (65%), Gaps = 0/17 (0%)
+ Frame = -3/-2
+
+Query  153   LKTMYSFQYLNGFITSM  103
+             L   +SF + NGF TSM
+Sbjct  3263  LSASHSFSFKNGFNTSM  3213
+
+
+ Score = 21.7 bits (41),  Expect = 1.2
+ Identities = 9/30 (30%), Positives = 16/30 (53%), Gaps = 0/30 (0%)
+ Frame = +2/-2
+
+Query  167  IRISHSLSCWLANQGMLK*RPWQCNAYRDC  256
+            I I  SL+C +    +L     +CN++ +C
+Sbjct  122  ISIDLSLACLMVEFLLLDSEERECNSWSNC  33
+
+
+ Score = 18.9 bits (35),  Expect = 7.8
+ Identities = 6/11 (55%), Positives = 9/11 (82%), Gaps = 0/11 (0%)
+ Frame = +3/+3
+
+Query  306  LH*GYSSRDGD  338
+            +H* +S+ DGD
+Sbjct  300  IH*SHSASDGD  332
+
+
+> gi|366988334|ref|XM_003673886.1| Naumovozyma castellii CBS 4309 
+hypothetical protein (NCAS0A09950) mRNA, complete cds
+Length=4938
+
+ Score =  143 bits (306),  Expect = 3e-37
+ Identities = 58/85 (68%), Positives = 71/85 (84%), Gaps = 0/85 (0%)
+ Frame = +1/+1
+
+Query  94   TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSI  273
+            +I+HASDKSIEILK + + E+L  HPDF  P V +C SRNAK+T++AMQCLQGL++ PSI
+Sbjct  94   SIKHASDKSIEILKTIQNIEDLASHPDFVTPLVESCLSRNAKLTSIAMQCLQGLASAPSI  273
+
+Query  274  PRSRLSEILDAFIEATHLAMEIQLK  348
+            P SRLS +LD FIEATHLA+EIQLK
+Sbjct  274  PESRLSGVLDGFIEATHLAIEIQLK  348
+
+
+ Score = 62.5 bits (130),  Expect(2) = 1e-20
+ Identities = 30/54 (56%), Positives = 36/54 (67%), Gaps = 0/54 (0%)
+ Frame = -1/-2
+
+Query  350  TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANT  189
+            TF+ ISIAR VAS+  S+  DS L G+DG    PC+HCIA  V LAFLD   +T
+Sbjct  350  TFSCISIARCVASINPSRTPDSLLSGMDGADAKPCKHCIAIEVNLAFLDRHDST  189
+
+
+ Score = 44.6 bits (91),  Expect(2) = 1e-20
+ Identities = 20/33 (61%), Positives = 24/33 (73%), Gaps = 0/33 (0%)
+ Frame = -1/-2
+
+Query  137  LFNISMDLSLAWRMVEFLLFDSEDKERNSASSC  39
+            +F IS+DLSLA  +  FLL DSED E NS S+C
+Sbjct  137  VFKISIDLSLACLIEVFLLLDSEDNECNSRSNC  39
+
+
+ Score = 54.2 bits (112),  Expect = 2e-10
+ Identities = 38/115 (33%), Positives = 58/115 (50%), Gaps = 0/115 (0%)
+ Frame = -3/-1
+
+Query  345  *LNLHREMSSLNEGIQNFRQPASRNRWNG*QSL*ALHCQGRHFSIP*LASQHERECEIRM  166
+            *L  + +M    + I+N R  A R  W    +L* LH      S+P*    ++   +IRM
+Sbjct  345  *LYFNCKMCRFYKSIENSR*SAFRYGWCRC*AL*TLHSNRGQLSVP**T*FYQWSDKIRM  166
+
+Query  165  SF*LLKTMYSFQYLNGFITSMANG*ISSFRFGR*RTQFCFKLPLHGVKPSSVHGH  1
+            +  +   + SF  L+  +T M +  + SFRFGR   QF  +L L G+K  S++ H
+Sbjct  165  ACQIFNVLDSF*DLDRLVTCMLDRSVPSFRFGRQ*MQF*VQLFLKGLKTCSLNSH  1
+
+
+ Score = 29.5 bits (58),  Expect = 0.005
+ Identities = 18/45 (40%), Positives = 22/45 (49%), Gaps = 0/45 (0%)
+ Frame = +2/+2
+
+Query  2    WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*K  136
+            W   L+ L P K N   NC+  LPN KE     +M V +  R *K
+Sbjct  2    WLFKLQVLRPFKNNWT*NCIHCLPNLKEGTLLSSMQVTSLSRS*K  136
+
+
+ Score = 29.0 bits (57),  Expect = 0.007
+ Identities = 16/44 (36%), Positives = 26/44 (59%), Gaps = 0/44 (0%)
+ Frame = +3/+3
+
+Query  3    GHEHWRV*LHAKAT*SRIAFFIFRIEKKKFNHSPC***IH*DIE  134
+            G  ++R *  +K    RIAF +FRI KK+  +  C * ++ D++
+Sbjct  3    GCSNYRF*DLSKTIGPRIAFIVFRI*KKEHFYQACK*QVYRDLK  134
+
+
+ Score = 22.1 bits (42),  Expect = 0.84
+ Identities = 10/17 (59%), Positives = 11/17 (65%), Gaps = 0/17 (0%)
+ Frame = -2/-3
+
+Query  85  FFSIRKIKNAILLQVAF  35
+           FF IRK  NAIL  + F
+Sbjct  85  FF*IRKTMNAILGPIVF  35
+
+
+ Score = 20.3 bits (38),  Expect = 3.0
+ Identities = 6/13 (46%), Positives = 8/13 (62%), Gaps = 0/13 (0%)
+ Frame = +2/-2
+
+Query  278   EAGCLKFWMPSLR  316
+             +  CL FW+ S R
+Sbjct  4217  QTSCLNFWVMSSR  4179
+
+
+> gi|255710474|ref|XM_002551475.1| Lachancea thermotolerans CBS 
+6340 KLTH0A01342p (KLTH0A01342g) mRNA, complete cds
+Length=4845
+
+ Score =  141 bits (303),  Expect = 8e-37
+ Identities = 55/84 (65%), Positives = 71/84 (85%), Gaps = 0/84 (0%)
+ Frame = +1/+1
+
+Query  97   IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP  276
+            +RHASDKSIEILK VH FE+L RHPDF  PFVL+C S+NAK+T++++QCLQ +S+V  IP
+Sbjct  94   VRHASDKSIEILKTVHEFEDLPRHPDFVTPFVLSCASKNAKLTSVSVQCLQKMSSVNCIP  273
+
+Query  277  RSRLSEILDAFIEATHLAMEIQLK  348
+              R+ ++LDAFI++THLA EIQLK
+Sbjct  274  EDRIEDVLDAFIDSTHLAAEIQLK  345
+
+
+ Score = 45.1 bits (92),  Expect = 1e-07
+ Identities = 25/55 (45%), Positives = 29/55 (53%), Gaps = 0/55 (0%)
+ Frame = -1/-2
+
+Query  350  TFN*ISIAR*VASMKASKISDSRLRGIDGTVDSPCRHCIARVVILAFLDWQANTK  186
+            T + IS AR V SM AS  S     G+  T D  CRHC   +V LAFL+    TK
+Sbjct  347  TLSCISAARWVESMNASSTSSILSSGMQLTDDIFCRHCTETLVSLAFLEAHERTK  183
+
+
+ Score = 29.0 bits (57),  Expect = 0.007
+ Identities = 22/70 (31%), Positives = 33/70 (47%), Gaps = 0/70 (0%)
+ Frame = -3/-1
+
+Query  249  L*ALHCQGRHFSIP*LASQHERECEIRMSF*LLKTMYSFQYLNGFITSMANG*ISSFRFG  70
+            L*ALH      S+     + ER  ++ M + + + M SFQ L   +T M +   +  R  
+Sbjct  246  L*ALH*DACELSVFGGTRKDERRYKVWMPWKVFEFMNSFQDLY*LVTCMPHLRAAPLRLR  67
+
+Query  69   R*RTQFCFKL  40
+            R   QFC +L
+Sbjct  66   RKCVQFCEEL  37
+
+
+ Score = 21.2 bits (40),  Expect = 1.6
+ Identities = 6/8 (75%), Positives = 7/8 (88%), Gaps = 0/8 (0%)
+ Frame = +2/+2
+
+Query  233  QCNAYRDC  256
+            QCNAY+ C
+Sbjct  230  QCNAYKRC  253
+
+
+ Score = 18.9 bits (35),  Expect = 7.8
+ Identities = 5/10 (50%), Positives = 6/10 (60%), Gaps = 0/10 (0%)
+ Frame = -2/-2
+
+Query  31    WSQTLQCSWP  2
+             WS  +  SWP
+Sbjct  2951  WSDIMLISWP  2922
+
+
+> gi|254579534|ref|XM_002495708.1| Zygosaccharomyces rouxii hypothetical 
+protein (ZYRO0C02266g) mRNA, complete cds
+Length=4866
+
+ Score =  141 bits (302),  Expect = 1e-36
+ Identities = 57/84 (68%), Positives = 72/84 (86%), Gaps = 0/84 (0%)
+ Frame = +1/+1
+
+Query  97   IRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRNAKMTTLAMQCLQGLSTVPSIP  276
+            IR+ASDKSIEILK VHS+EEL RHPDF +P V++C S+NAK+TT++MQC Q L+TVP IP
+Sbjct  97   IRNASDKSIEILKVVHSYEELSRHPDFIVPLVMSCASKNAKLTTISMQCFQKLATVPCIP  276
+
+Query  277  RSRLSEILDAFIEATHLAMEIQLK  348
+              +LS++LDAFIEA  LAM+I+LK
+Sbjct  277  VDKLSDVLDAFIEANQLAMDIKLK  348
+
+
+
+Lambda     K      H
+   0.318    0.134    0.401 
+
+
+Effective search space used: 1954618
+
+
+  Database: minirefseq_mrna
+    Posted date:  Jun 9, 2012  2:05 PM
+  Number of letters in database: 67,750
+  Number of sequences in database:  23
+
+
+
+Matrix: BLOSUM62
+Neighboring words threshold: 13
+Window for multiple hits: 40
