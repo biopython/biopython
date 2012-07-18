@@ -1,0 +1,559 @@
+hmmpfam - search one or more sequences against HMM database
+HMMER 2.3.2 (Oct 2003)
+Copyright (C) 1992-2003 HHMI/Washington University School of Medicine
+Freely distributed under the GNU General Public License (GPL)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+HMM file:                 ../Shared/Pfam_fs
+Sequence file:            single_porphyra_AA.fa
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query sequence: gi|90819130|dbj|BAE92499.1|
+Accession:      [none]
+Description:    glutamate synthase [Porphyra yezoensis]
+
+Scores for sequence family classification (score includes all domains):
+Model           Description                             Score    E-value  N 
+--------        -----------                             -----    ------- ---
+Glu_synthase    Conserved region in glutamate synthas   858.6   3.6e-255   2
+GATase_2        Glutamine amidotransferases class-II    731.8   3.9e-226   1
+Glu_syn_central Glutamate synthase central domain       649.1   7.9e-213   1
+GXGXG           GXGXG motif                             367.3   2.7e-107   1
+HdeA            hns-dependent expression protein A (H     9.6      0.015   1
+GDC-P           Glycine cleavage system P-protein         7.1      0.086   1
+Cache_1         Cache domain                              7.0       0.14   1
+IBN_N           Importin-beta N-terminal domain           8.2       0.17   1
+DUF1200         Protein of unknown function (DUF1200)     6.7       0.42   1
+cobW            CobW/HypB/UreG, nucleotide-binding do     5.1       0.45   1
+PUF             Pumilio-family RNA binding repeat         6.5       0.47   1
+Arch_flagellin  Archaebacterial flagellin                 4.1       0.66   1
+FMN_dh          FMN-dependent dehydrogenase               3.2       0.89   1
+RNA_pol_Rpb2_4  RNA polymerase Rpb2, domain 4             4.6        1.4   1
+DUF477          Domain of unknown function (DUF477)       3.8        1.7   1
+FRG1            FRG1-like family                          0.2        1.7   1
+DUF1393         Protein of unknown function (DUF1393)     3.1          2   1
+tRNA_anti       OB-fold nucleic acid binding domain       4.9          2   1
+SelT            Selenoprotein T                           3.1        2.2   1
+RNase_PH_C      3' exoribonuclease family, domain 2       4.2        2.3   1
+Pencillinase_R  Penicillinase repressor                   3.9        2.5   1
+Hormone_4       Neurohypophysial hormones, N-terminal     4.4        2.5   1
+DSRB            Dextransucrase DSRB                       2.7        2.7   1
+FtsK_SpoIIIE    FtsK/SpoIIIE family                       2.6        3.1   1
+UBA             UBA/TS-N domain                           4.2        3.1   1
+DUF1981         Domain of unknown function (DUF1981)      3.6        3.3   1
+Gla             Vitamin K-dependent carboxylation/gam     4.0        3.5   1
+Scm3            Centromere protein Scm3                   2.2        3.5   1
+Ribosomal_S6    Ribosomal protein S6                      3.3        3.7   1
+Cystatin        Cystatin domain                           2.4        3.9   1
+Phage_prot_Gp6  Phage portal protein, SPP1 Gp6-like       1.0          4   1
+DUF1976         Domain of unknown function (DUF1976)     -1.5        4.3   1
+DUF37           Domain of unknown function DUF37          3.0        4.5   1
+Flavodoxin_NdrI NrdI Flavodoxin like                      2.1        4.6   1
+Bac_rhodopsin   Bacteriorhodopsin                         0.9        4.9   1
+Nitro_FeMo-Co   Dinitrogenase iron-molybdenum cofacto     2.1        5.3   1
+MoCF_biosynth   Probable molybdopterin binding domain     1.3        5.6   1
+PaaA_PaaC       Phenylacetic acid catabolic protein       0.4        5.6   1
+Albicidin_res   Albicidin resistance domain               1.7        5.7   1
+DUF1514         Protein of unknown function (DUF1514)     3.5        5.7   1
+T5orf172        T5orf172 domain                           2.0        6.1   1
+Nup133_N        Nup133 N terminal like                   -0.6        6.5   1
+BicD            Microtubule-associated protein Bicaud    -1.6        6.8   1
+Sel1            Sel1 repeat                               2.5          7   1
+CAP_C           DE   Adenylate cyclase associated (CA     1.3        7.4   1
+Colicin         Colicin pore forming domain               1.4        7.5   1
+MADF_DNA_bdg    Alcohol dehydrogenase transcription f     1.8        8.2   1
+DUF258          Protein of unknown function, DUF258       0.3        8.3   1
+PspB            Phage shock protein B                     0.4        8.4   1
+GspM            General secretion pathway, M protein      1.0        8.6   1
+Coq4            Coenzyme Q (ubiquinone) biosynthesis     -0.3        9.1   1
+P22_AR_N        P22_AR N-terminal domain                 -0.2        9.5   1
+C1_2            C1 domain                                 1.1        9.6   1
+Phage_Mu_P      Bacteriophage Mu P protein               -0.4         10   1
+
+Parsed for domains:
+Model           Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------        ------- ----- -----    ----- -----      -----  -------
+GATase_2          1/1      34   404 ..     1   385 []   731.8 3.9e-226
+FRG1              1/1      88   107 ..   151   173 ..     0.2      1.7
+C1_2              1/1     191   210 ..     9    27 ..     1.1      9.6
+MADF_DNA_bdg      1/1     235   261 ..    57    95 .]     1.8      8.2
+PaaA_PaaC         1/1     258   269 ..     1    13 [.     0.4      5.6
+Albicidin_res     1/1     274   289 ..    50    65 ..     1.7      5.7
+UBA               1/1     311   331 ..    18    38 .]     4.2      3.1
+Gla               1/1     342   357 ..    27    42 .]     4.0      3.5
+RNA_pol_Rpb2_4    1/1     369   381 ..     1    13 [.     4.6      1.4
+MoCF_biosynth     1/1     371   396 ..    23    49 ..     1.3      5.6
+DUF1200           1/1     389   401 ..     1    13 [.     6.7     0.42
+Nup133_N          1/1     397   419 ..   475   498 .]    -0.6      6.5
+DUF1976           1/1     428   448 ..  1296  1319 .]    -1.5      4.3
+Bac_rhodopsin     1/1     445   472 ..   219   250 .]     0.9      4.9
+Coq4              1/1     459   481 ..    60    82 ..    -0.3      9.1
+Glu_syn_central   1/1     478   773 ..     1   301 []   649.1 7.9e-213
+Flavodoxin_NdrI   1/1     488   497 ..   122   131 .]     2.1      4.6
+P22_AR_N          1/1     524   541 ..   110   126 .]    -0.2      9.5
+Cache_1           1/1     537   557 ..     1    23 [.     7.0     0.14
+Glu_synthase      1/2     650   676 ..   297   323 ..     1.3        3
+HdeA              1/1     727   749 ..    58    79 .]     9.6    0.015
+Sel1              1/1     729   745 ..    32    49 .]     2.5        7
+DUF1981           1/1     765   787 ..    62    88 .]     3.6      3.3
+tRNA_anti         1/1     818   839 ..    54    85 .]     4.9        2
+Cystatin          1/1     826   859 ..     1    38 [.     2.4      3.9
+RNase_PH_C        1/1     827   846 ..    64    84 .]     4.2      2.3
+Glu_synthase      2/2     830  1216 ..     1   412 []   857.3   9e-255
+DUF258            1/1     839   860 ..   282   305 .]     0.3      8.3
+Pencillinase_R    1/1     856   894 ..    84   118 .]     3.9      2.5
+SelT              1/1     872   885 ..    96   111 .]     3.1      2.2
+Nitro_FeMo-Co     1/1     879   897 ..    87   105 .]     2.1      5.3
+DUF37             1/1     927   934 ..    61    68 .]     3.0      4.5
+Scm3              1/1     953   963 ..   103   113 .]     2.2      3.5
+cobW              1/1    1038  1058 ..   202   222 .]     5.1     0.45
+Arch_flagellin    1/1    1050  1072 ..   197   219 .]     4.1     0.66
+DUF1393           1/1    1055  1068 ..     1    14 [.     3.1        2
+FtsK_SpoIIIE      1/1    1107  1143 ..   163   198 ..     2.6      3.1
+FMN_dh            1/1    1109  1148 ..   291   330 ..     3.2     0.89
+DSRB              1/1    1120  1134 ..     1    16 [.     2.7      2.7
+Phage_Mu_P        1/1    1122  1131 ..     1    10 [.    -0.4       10
+Hormone_4         1/1    1168  1176 ..     1     9 []     4.4      2.5
+GDC-P             1/1    1205  1225 ..    10    30 ..     7.1    0.086
+PspB              1/1    1268  1276 ..     1     9 [.     0.4      8.4
+T5orf172          1/1    1271  1293 ..    35    58 ..     2.0      6.1
+CAP_C             1/1    1283  1292 ..   161   170 .]     1.3      7.4
+GXGXG             1/1    1290  1485 ..     1   228 []   367.3 2.7e-107
+DUF1514           1/1    1453  1469 ..    50    66 .]     3.5      5.7
+Colicin           1/1    1456  1467 ..   192   203 .]     1.4      7.5
+Ribosomal_S6      1/1    1461  1481 ..    16    36 ..     3.3      3.7
+BicD              1/1    1465  1481 ..     1    17 [.    -1.6      6.8
+PUF               1/1    1470  1486 ..    19    35 .]     6.5     0.47
+DUF477            1/1    1472  1495 ..     1    24 [.     3.8      1.7
+Phage_prot_Gp6    1/1    1479  1492 ..     1    14 [.     1.0        4
+IBN_N             1/1    1498  1516 ..     1    20 [.     8.2     0.17
+GspM              1/1    1506  1520 ..     1    15 [.     1.0      8.6
+
+Alignments of top-scoring domains:
+GATase_2: domain 1 of 1, from 34 to 404: score 731.8, E = 3.9e-226
+                CS    EEEEEEEEETSSHSBHHHHHHHHHHHHHGGGGSSCSTTSSCECEEEE
+                   *->CGvlGfiAhikgkpshkivedaleaLerLeHRGavgADgktGDGAGI
+                      CGv GfiA+ ++ ++hkiv +aleaL+++eHRGa++AD ++GDGAGI
+  gi|9081913    34    CGV-GFIADVNNVANHKIVVQALEALTCMEHRGACSADRDSGDGAGI 79   
+
+                CS EEECTCCCHHHHHHHCT----S GC-EEEEEEE-SSHHHHHHHHHHHHHH
+                   ltqiPdgFFrevakelGieLpe.gqYAVGmvFLPqdelaraearkifEki
+                    t+iP+++F++  ++++i++ ++   +VGm+FLP   l+    + i+E +
+  gi|9081913    80 TTAIPWNLFQKSLQNQNIKFEQnDSVGVGMLFLPAHKLKES--KLIIETV 127  
+
+                CS HHHTT-EEEEEEE--B-GGGS-HHHHHC--EEEEEEEE-TT--HHHHHHC
+                   aeeeGLeVLGWReVPvnnsvLGetAlatePvIeQvFvgapsgdgedfErr
+                   ++ee+Le++GWR VP+  +vLG++A  + P++eQvF+ +++ +++ +E++
+  gi|9081913   128 LKEENLEIIGWRLVPTVQEVLGKQAYLNKPHVEQVFCKSSNLSKDRLEQQ 177  
+
+                CS EEEEECHSCHHHHTHHH.    BEEEEEESSEEEEEECC-GGGHHHHBHG
+                   LyviRkrieksivaenvn....fYiCSLSsrTIVYKGMLtseQLgqFYpD
+                   L+++Rk+iek+i+  + +  ++fYiCSLS++TIVYKGM++s++LgqFY+D
+  gi|9081913   178 LFLVRKKIEKYIGINGKDwaheFYICSLSCYTIVYKGMMRSAVLGQFYQD 227  
+
+                CS GGSTTEEBSEEEEEECESSSSSCTGGGSSCEEECCCTTCEEEEEEEEETT
+                   LqderfeSalAivHsRFSTNTfPsWplAQPfRVnslwgggivlAHNGEIN
+                   L++++++S++Ai+H+RFSTNT+P+WplAQP+R         ++ HNGEIN
+  gi|9081913   228 LYHSEYTSSFAIYHRRFSTNTMPKWPLAQPMR---------FVSHNGEIN 268  
+
+                CS THHHHHHHHHHTSCCCSSTTCGHHHHCC-SSS-TTSCHHHHHHHHHHHHH
+                   TlrgNrnwMraRegvlksplFgddldkLkPIvneggSDSaalDnvlEllv
+                   Tl gN nwM++Re +l+s++++d++++LkPI n+++SDSa+lD ++Ell+
+  gi|9081913   269 TLLGNLNWMQSREPLLQSKVWKDRIHELKPITNKDNSDSANLDAAVELLI 318  
+
+                CS HTT--HHHHHHHHS----TT-GGGTST-HHHHHHHHHHHHHHCCHCCEEE
+                   raGRslpeAlMMlIPEAWqnnpdmdkdrpekraFYeylsglmEPWDGPAa
+                   ++GRs++eAlM+l+PEA+qn+pd   +++e+ +FYey+sgl+EPWDGPA+
+  gi|9081913   319 ASGRSPEEALMILVPEAFQNQPDFA-NNTEISDFYEYYSGLQEPWDGPAL 367  
+
+                CS EEEETSSEEEEEEETTTSCESEEEEEEEEEE.TTEEEEEESSC   
+                   lvftDGryavgAtLDRNGLTRPaRygiTrdldkDglvvvaSEa<-*
+                   +vft+G++ +gAtLDRNGL RPaRy+iT    kD+lv+v+SE+   
+  gi|9081913   368 VVFTNGKV-IGATLDRNGL-RPARYVIT----KDNLVIVSSES    404  
+
+FRG1: domain 1 of 1, from 88 to 107: score 0.2, E = 1.7
+                   *->FQkfKvDLqdrklrinekDkkel<-*
+                      FQk+   Lq+  +  +++D+ ++   
+  gi|9081913    88    FQKS---LQNQNIKFEQNDSVGV    107  
+
+C1_2: domain 1 of 1, from 191 to 210: score 1.1, E = 9.6
+                   *->idgfyg...fYsCkkccddftl<-*
+                      i+g+++ ++fY C+  c  +t+   
+  gi|9081913   191    INGKDWaheFYICSLSC--YTI    210  
+
+MADF_DNA_bdg: domain 1 of 1, from 235 to 261: score 1.8, E = 8.2
+                   *->drYrrelrkirqgnsegsstgsgesykskWryyeelsFL<-*
+                      +++  ++r+               ++ +kW+++  ++F    
+  gi|9081913   235    SSFAIYHRRFS------------TNTMPKWPLAQPMRFV    261  
+
+PaaA_PaaC: domain 1 of 1, from 258 to 269: score 0.4, E = 5.6
+                CS    X............   
+                   *->MYnFvEHGGvint<-*
+                      M  Fv H G int   
+  gi|9081913   258    M-RFVSHNGEINT    269  
+
+Albicidin_res: domain 1 of 1, from 274 to 289: score 1.7, E = 5.7
+                   *->LrlmharEPsLrkgtG<-*
+                      L+ m+ rEP L+ +++   
+  gi|9081913   274    LNWMQSREPLLQSKVW    289  
+
+UBA: domain 1 of 1, from 311 to 331: score 4.2, E = 3.1
+                CS    HHHHHHHHHTTT-HHHHHHHH   
+                   *->eeakkALeatngnverAvewL<-*
+                      ++a++ L a++ ++e+A+++L   
+  gi|9081913   311    DAAVELLIASGRSPEEALMIL    331  
+
+Gla: domain 1 of 1, from 342 to 357: score 4.0, E = 3.5
+                CS    CSSHHHHHHHHHHCTC   
+                   *->fednegtkefwrkYfg<-*
+                      f++n+++  f++ Y g   
+  gi|9081913   342    FANNTEISDFYEYYSG    357  
+
+RNA_pol_Rpb2_4: domain 1 of 1, from 369 to 381: score 4.6, E = 1.4
+                CS    EEETTEEEEEESS   
+                   *->VYvNGklvGthrn<-*
+                      V+ NGk++G + +   
+  gi|9081913   369    VFTNGKVIGATLD    381  
+
+MoCF_biosynth: domain 1 of 1, from 371 to 396: score 1.3, E = 5.6
+                CS    CHHHHHHHHHHHTTTCEEEEEEEE-SS   
+                   *->tNgpmLaalLresaGaevirygiVpDd<-*
+                      tNg+ + a L +  G  ++ry+i +D+   
+  gi|9081913   371    TNGKVIGATLDR-NGLRPARYVITKDN    396  
+
+DUF1200: domain 1 of 1, from 389 to 401: score 6.7, E = 0.42
+                   *->kYvltedtLlIks<-*
+                      +Yv+t+d L+I+s   
+  gi|9081913   389    RYVITKDNLVIVS    401  
+
+Nup133_N: domain 1 of 1, from 397 to 419: score -0.6, E = 6.5
+                   *->lylltrnsGvvrIeHaleedstne<-*
+                      l++ + +sGvv++e +  + s  +   
+  gi|9081913   397    LVIVSSESGVVQVE-PGNVKSKGR    419  
+
+DUF1976: domain 1 of 1, from 428 to 448: score -1.5, E = 4.3
+                   *->VsvYiyFkevtdnksLsEysVtyk<-*
+                      V++++   ++++nk ++  sVt k   
+  gi|9081913   428    VDIFS--HKILNNKEIK-TSVTTK    448  
+
+Bac_rhodopsin: domain 1 of 1, from 445 to 472: score 0.9, E = 4.9
+                CS    HHHHHHHHHHHHHHHHHCHHHTC---------   
+                   *->vvAKVgFgfilLrsravlertvavgsalaage<-*
+                      v++K+++g +l ++r++le  +   + l+++    
+  gi|9081913   445    VTTKIPYGELLTDARQILE--HK--PFLSDQQ    472  
+
+Coq4: domain 1 of 1, from 459 to 481: score -0.3, E = 9.1
+                   *->rrILkEkPRissetldlkkLrkL<-*
+                      r+IL  kP  s  ++d kkL +L   
+  gi|9081913   459    RQILEHKPFLSDQQVDIKKLMQL    481  
+
+Glu_syn_central: domain 1 of 1, from 478 to 773: score 649.1, E = 7.9e-213
+                CS    HHHHHHCTT--HHHHHCTCHHHHHHSS--EE-S---S--CCC-SS--
+                   *->llrrQkAFGYTyEdvelvllPMAetGkEalGSMGdDtPLAVLSekpr
+                      l+++Q+AFGYT+Edvelv+++MA+++kE++++MGdD+PL +LSek++
+  gi|9081913   478    LMQLQTAFGYTNEDVELVIEHMASQAKEPTFCMGDDIPLSILSEKSH 524  
+
+                CS -GGGCEEE----SSS----TTTTGGG-B--EEES--S-TTS-SGGGC-CE
+                   lLYdYFKQlFAQVTNPPIDPIREelVMSLetylGpegNlLeptpeqarrl
+                   +LYdYFKQ+FAQVTNP+IDP+RE+lVMSL+ ++G+++NlL+  p+ a+++
+  gi|9081913   525 ILYDYFKQRFAQVTNPAIDPLRESLVMSLAIQIGHKSNLLDDQPTLAKHI 574  
+
+                CS EESSSB--HHHHHH.HHHH....CCCCEEEEESEEESTTSTTCHHHHHHH
+                   kLesPILsnselekmlknidairegfkaatIditFdveeGvdgLeaaLdr
+                   kLesP+++++el++ + +     +++++  I+++F  e+G++ ++  + +
+  gi|9081913   575 KLESPVINEGELNA-IFE-----SKLSCIRINTLFQLEDGPKNFKQQIQQ 618  
+
+                CS HHHHHHHHHHCT-SEEEEESTCG--CTTEEE--HHHHHHHHHHHHHCTT-
+                   lceeAeeAirsGaniivLSDRndildeervaIPaLLAvGAVHhHLIrkgL
+                   lce A++Ai +G ni+vLSD+n+ ld+e+v+IP+LLAvGAVHhHLI kgL
+  gi|9081913   619 LCENASQAILDGNNILVLSDKNNSLDSEKVSIPPLLAVGAVHHHLINKGL 668  
+
+                CS CCC-EEEEEESS--SHHHHHHHHCTT-SEEEEHCCHHHHHHHHCCCCCCC
+                   RtkvslvVETGEaREvHHFAvLiGYGAsAInPYLAyETirdWWlirrGll
+                   R+ +s+ VET++++++HHFA+LiGYGAsAI+PYLA+ET r+WW + ++++
+  gi|9081913   669 RQEASILVETAQCWSTHHFACLIGYGASAICPYLAFETARHWWSNPKTKM 718  
+
+                CS CHTTTS- T--HHHHHHHHHHHHHHHHHHHHHCTT--BHHHHCCS--EEE
+                   lmskGkl.elsleeavkNYrkAiekGlLKIMSKMGISTlqSYrGAQIFEA
+                   lmskG+l++++++ea++NY+kA+e+GlLKI+SKMGIS+l+SY+GAQIFE+
+  gi|9081913   719 LMSKGRLpACNIQEAQANYKKAVEAGLLKILSKMGISLLSSYHGAQIFEI 768  
+
+                CS SSB-H   
+                   vGLsk<-*
+                   +GL++   
+  gi|9081913   769 LGLGS    773  
+
+Flavodoxin_NdrI: domain 1 of 1, from 488 to 497: score 2.1, E = 4.6
+                CS    -HHHHHHHHH   
+                   *->TneDVerVrk<-*
+                      TneDVe V +   
+  gi|9081913   488    TNEDVELVIE    497  
+
+P22_AR_N: domain 1 of 1, from 524 to 541: score -0.2, E = 9.5
+                   *->dVLydYWtrkGkAv..NPR<-*
+                      ++LydY+  + +A  +NP+   
+  gi|9081913   524    HILYDYFK-QRFAQvtNPA    541  
+
+Cache_1: domain 1 of 1, from 537 to 557: score 7.0, E = 0.14
+                   *->wTePYvdaalktgdlViTiaqPv<-*
+                      +T+P++d +  +++lV ++a+++   
+  gi|9081913   537    VTNPAIDPL--RESLVMSLAIQI    557  
+
+Glu_synthase: domain 1 of 2, from 650 to 676: score 1.3, E = 3
+                CS    --HHHHHHHHHHHHHCTT-CCCSEEEE   
+                   *->lPwelgLaevhqtLvengLRdrVsLia<-*
+                      +P  l++ +vh  L++ gLR + s+ +   
+  gi|9081913   650    IPPLLAVGAVHHHLINKGLRQEASILV    676  
+
+HdeA: domain 1 of 1, from 727 to 749: score 9.6, E = 0.015
+                   *->ACk.QdkkAsFkdKvkaEldKvk<-*
+                      AC  Q+ +A++k+ v+a l K+    
+  gi|9081913   727    ACNiQEAQANYKKAVEAGLLKIL    749  
+
+Sel1: domain 1 of 1, from 729 to 745: score 2.5, E = 7
+                CS    .HHH.HHHHHHHHHHTT-   
+                   *->DyekeAlkwyekAAeqGn<-*
+                      ++++ A + y+kA e+G    
+  gi|9081913   729    NIQE-AQANYKKAVEAGL    745  
+
+DUF1981: domain 1 of 1, from 765 to 787: score 3.6, E = 3.3
+                   *->iFgvltlaakeesesivklAfqiid.qi<-*
+                      iF++l+l++       v+lAf+ +++qi   
+  gi|9081913   765    IFEILGLGSEV-----VNLAFKGTTsQI    787  
+
+tRNA_anti: domain 1 of 1, from 818 to 839: score 4.9, E = 2
+                CS    EEEEEEETTSSTSTCTCTT..EEEEEEEEEEE   
+                   *->tGkvkkrpggeqNnlkTGeKAlelvveeievl<-*
+                      +G v+ rpgge          ++++ +e+      
+  gi|9081913   818    YGFVQYRPGGE----------YHINNPEMSKA    839  
+
+Cystatin: domain 1 of 1, from 826 to 859: score 2.4, E = 3.9
+                CS    ECEEEEET.STSHHHHHHHHHHHHHHHHHSSSSEEEEE   
+                   *->GglspvdpNendpevqealdfAlakyNeksndnylfel<-*
+                      Gg   +++    pe  +al+ A+  yN +  +ny++ l   
+  gi|9081913   826    GGEYHINN----PEMSKALHQAVRGYNPEYYNNYQSLL    859  
+
+RNase_PH_C: domain 1 of 1, from 827 to 846: score 4.2, E = 2.3
+                CS    SSSS.B.HHHHHHHHHHHHHH   
+                   *->GkgnglteelleealelAkeg<-*
+                      G +++++ +++ +al++A+ g   
+  gi|9081913   827    G-EYHINNPEMSKALHQAVRG    846  
+
+Glu_synthase: domain 2 of 2, from 830 to 1216: score 857.3, E = 9e-255
+                CS    -SS-HHHHHHHHHHHHC--T-HHHHHHHHHHHHTS.-S-SGGGGEEE
+                   *->hrnepeviktlqkavqvpveskpsydkYreplnertpigalrdlLef
+                      h n+pe++k l++av+    +   y +Y+ +l +r p++alrdlL++
+  gi|9081913   830    HINNPEMSKALHQAVRG--YNPEYYNNYQSLLQNR-PPTALRDLLKL 873  
+
+                CS --SS--......--GGGS--HHHHHTTEEEEEB-CTTC-HHHHHHHHHHH
+                   kyaeepldtdkiipieevepaleikkrfctgaMSyGALSeeAheALAiAm
+                    ++++p      i+i+eve+++ i + fctg+MS+GALS+e+he+LAiAm
+  gi|9081913   874 QSNRAP------ISIDEVESIEDILQKFCTGGMSLGALSRETHETLAIAM 917  
+
+                CS HHCT-EEEETTT---GGGCSB-TTS-T S BTTSTT--S--TT-B---SE
+                   nriGtksNtGEGGedperlkpaadlds.G.SpTlpHLkGLqnednarSAI
+                   nriG+ksN+GEGGedp r+k + d++s+G+Sp lpHLkGL+n+d+a+SAI
+  gi|9081913   918 NRIGGKSNSGEGGEDPVRFKILNDVNSsGtSPLLPHLKGLKNGDTASSAI 967  
+
+                CS EEE-TT-TT--............HHHHCC-SEEEEE---TTSTTT--EE-
+                   kQvASGRFGVtkRnGefWeefkRseYLvnAdalEIKiAQGAKPGeGGhLP
+                   kQ+ASGRFGVt            +eYL+nA++lEIKiAQGAKPGeGG+LP
+  gi|9081913   968 KQIASGRFGVT------------PEYLMNAKQLEIKIAQGAKPGEGGQLP 1005 
+
+                CS GGG--HHHHHHHTS-TT--EE--SS-TT-SSHHHHHHHHHHHHHH-.TTS
+                   GeKVspeIAriRnstPGvgliSPpPHHDIysiEDLaqLIydLkeindpkA
+                   G+K+sp+IA +R ++PGv liSPpPHHDIysiEDL+qLI+dL++in pkA
+  gi|9081913  1006 GKKISPYIATLRKCKPGVPLISPPPHHDIYSIEDLSQLIFDLHQIN-PKA 1054 
+
+                CS EEEEEEE-STTHHHHHHH...HHHTT-SEEEEE-TT---SSEECCHHHHC
+                   pisVKLVsehgvgtiaaGhmqvakAnADiIlIdGhdGGTGASpktsikha
+                   +isVKLVse g+gtiaaG   vak+nADiI+I+GhdGGTGASp++sikha
+  gi|9081913  1055 KISVKLVSEIGIGTIAAG---VAKGNADIIQISGHDGGTGASPLSSIKHA 1101 
+
+                CS ---HHHHHHHHHHHHHCTT-CCCSEEEEESS--SHHHHHHHHHCT-SEEE
+                   GlPwelgLaevhqtLvengLRdrVsLiadGGLrTGaDVakAaaLGAdavg
+                   G PwelgL+evhq+L en+LRdrV+L++dGGLrTG D+++Aa++GA+++g
+  gi|9081913  1102 GSPWELGLSEVHQLLAENQLRDRVTLRVDGGLRTGSDIVLAAIMGAEEFG 1151 
+
+                CS -SHHHHHHCT--S---CCCT--TTSSS---CCHH..CT----HHHHHHHH
+                   iGTaaLiAlGCimaRvCHtntCPvGvATQDPeLrKrlkfegaperVvNyf
+                   +GT+a+iA+GCimaR+CHtn+CPvGvATQ++eLr   +f g+pe +vN+f
+  gi|9081913  1152 FGTVAMIATGCIMARICHTNKCPVGVATQREELR--ARFSGVPEALVNFF 1199 
+
+                CS HHHHHHHHHHHHHHT-S   
+                   iflaeEvrellaqlGfr<-*
+                   +f+  Evre+la+lG++   
+  gi|9081913  1200 LFIGNEVREILASLGYK    1216 
+
+DUF258: domain 1 of 1, from 839 to 860: score 0.3, E = 8.3
+                CS    HHHHHHHCTSS-HHHHHHHHHHHH   
+                   *->AVkaAveeGeIseeRYesYlklle<-*
+                      A+ +Av    +++e Y++Y+ ll+   
+  gi|9081913   839    ALHQAVR--GYNPEYYNNYQSLLQ    860  
+
+Pencillinase_R: domain 1 of 1, from 856 to 894: score 3.9, E = 2.5
+                CS    XXXXXXXXXXXXXXXXXXX    XXXXXXXXXXXXXXXX   
+                   *->drlfggsvgalvanfleee....klSeddieeLrelLde<-*
+                      + l++++++ ++ ++l+ ++++ ++S d++e ++++L++   
+  gi|9081913   856    QSLLQNRPPTALRDLLKLQsnraPISIDEVESIEDILQK    894  
+
+SelT: domain 1 of 1, from 872 to 885: score 3.1, E = 2.2
+                   *->KLqtGrvYAPPtpqEL<-*
+                      KLq++r   P++++E+   
+  gi|9081913   872    KLQSNRA--PISIDEV    885  
+
+Nitro_FeMo-Co: domain 1 of 1, from 879 to 897: score 2.1, E = 5.3
+                CS    EEE-TTSSBHHHHHHHHHC   
+                   *->pikagegetieeaiealqe<-*
+                      pi   e e+ie+ + ++ +   
+  gi|9081913   879    PISIDEVESIEDILQKFCT    897  
+
+DUF37: domain 1 of 1, from 927 to 934: score 3.0, E = 4.5
+                   *->hpGGyDPV<-*
+                      ++GG DPV   
+  gi|9081913   927    GEGGEDPV    934  
+
+Scm3: domain 1 of 1, from 953 to 963: score 2.2, E = 3.5
+                   *->HLraLeteddi<-*
+                      HL++L+++d++   
+  gi|9081913   953    HLKGLKNGDTA    963  
+
+cobW: domain 1 of 1, from 1038 to 1058: score 5.1, E = 0.45
+                CS    ...HHHHHHHHHH-SSS-EEE   
+                   *->adlekleadlrrlnpeapiip<-*
+                      +dl++l+ dl+++np+a+i     
+  gi|9081913  1038    EDLSQLIFDLHQINPKAKISV    1058 
+
+Arch_flagellin: domain 1 of 1, from 1050 to 1072: score 4.1, E = 0.66
+                   *->inpstkvrgeVvpenGapgtief<-*
+                      inp  k+++++v+e+G+ ++      
+  gi|9081913  1050    INPKAKISVKLVSEIGIGTIAAG    1072 
+
+DUF1393: domain 1 of 1, from 1055 to 1068: score 3.1, E = 2
+                   *->klSvKtVVAiGIGA<-*
+                      k+SvK V  iGIG+   
+  gi|9081913  1055    KISVKLVSEIGIGT    1068 
+
+FtsK_SpoIIIE: domain 1 of 1, from 1107 to 1143: score 2.6, E = 3.1
+                   *->lviDnydeLaeenlL.ervtsLknqGlsygvhvmata<-*
+                      l++ + ++L +en+L++rvt+ + +Gl +g +++++a   
+  gi|9081913  1107    LGLSEVHQLLAENQLrDRVTLRVDGGLRTGSDIVLAA    1143 
+
+FMN_dh: domain 1 of 1, from 1109 to 1148: score 3.2, E = 0.89
+                CS    HHHHHHHHHCHHTTTSSEEEEESS-SSHHHHHHHHHHTSS   
+                   *->LpeVvPIlkeaAvkgdieVllDgGvRRGtDVlKALALGAr<-*
+                      L eV  +l e  + +++   +DgG R+G+D++ A  +GA+   
+  gi|9081913  1109    LSEVHQLLAENQLRDRVTLRVDGGLRTGSDIVLAAIMGAE    1148 
+
+DSRB: domain 1 of 1, from 1120 to 1134: score 2.7, E = 2.7
+                   *->mKvndrvtvKtDGgpR<-*
+                       ++ drvt + DGg R   
+  gi|9081913  1120    -QLRDRVTLRVDGGLR    1134 
+
+Phage_Mu_P: domain 1 of 1, from 1122 to 1131: score -0.4, E = 10
+                   *->sntVtLrvgG<-*
+                       ++VtLrv+G   
+  gi|9081913  1122    RDRVTLRVDG    1131 
+
+Hormone_4: domain 1 of 1, from 1168 to 1176: score 4.4, E = 2.5
+                CS    X-TT--TT-   
+                   *->CyirnCPrG<-*
+                      C  + CP+G   
+  gi|9081913  1168    CHTNKCPVG    1176 
+
+GDC-P: domain 1 of 1, from 1205 to 1225: score 7.1, E = 0.086
+                   *->eqqeMLstiGlssLddLidat<-*
+                      e++e+L+++G++sLdd ++++   
+  gi|9081913  1205    EVREILASLGYKSLDDITGQN    1225 
+
+PspB: domain 1 of 1, from 1268 to 1276: score 0.4, E = 8.4
+                   *->MsaffLagP<-*
+                      M+ ++La+P   
+  gi|9081913  1268    MDDDILAIP    1276 
+
+T5orf172: domain 1 of 1, from 1271 to 1293: score 2.0, E = 6.1
+                   *->dvvalievedaraklEklLHkrFk<-*
+                      d+ a+ ev++a  klE+++ k+Fk   
+  gi|9081913  1271    DILAIPEVSNAI-KLETEITKHFK    1293 
+
+CAP_C: domain 1 of 1, from 1283 to 1292: score 1.3, E = 7.4
+                CS    EEEEEE----   
+                   *->KLvTevveha<-*
+                      KL+Te++ h    
+  gi|9081913  1283    KLETEITKHF    1292 
+
+GXGXG: domain 1 of 1, from 1290 to 1485: score 367.3, E = 2.7e-107
+                CS    EEEEE-TT--STTHHHHHHHHHHCTTTS.S-TTCEEEEEEEEE-TTT
+                   *->keeaiiNtdrlvgtrlsgeiakkygeegalpkdtgkivfnGsAGqsf
+                      k+++i Nt+r+vgtrlsg iak yg+ g + k+ +k++f+GsAGqsf
+  gi|9081913  1290    KHFKIANTNRTVGTRLSGIIAKNYGNTG-F-KGLIKLNFYGSAGQSF 1334 
+
+                CS TTT-BTTEEEEEEEEE-S.TTTTT-ECCEEEEE--TT-.......SS-GG
+                   GafmagGvtLeleGdAnddyvGkgmsGGeIvikgnagdpvGnnMdageyv
+                   Gaf+a+G++L l+G+And yvGkgm+GG+Ivi+++ag         +e +
+  gi|9081913  1335 GAFLASGINLKLMGEAND-YVGKGMNGGSIVIVPPAGT-------IYEDN 1376 
+
+                CS GSEEC-SSTTTT--CEEEEESSEE-TTTTTT-.....CCEEEEESEB.-S
+                   gnviaGNtclyGatGGkifiaGdAGerfgvrnkayKdsgatiVveGvaGd
+                   ++vi+GNtclyGatGG++f++G+AGerf+vrn     s a+ VveGv Gd
+  gi|9081913  1377 NQVIIGNTCLYGATGGYLFAQGQAGERFAVRN-----SLAESVVEGV-GD 1420 
+
+                CS STTTT-EEEEEEESS-B-SSBTTT--CCEEEEE-TTS.......THHHHB
+                   hggEYMtGGtivVlGdaGrnvGagMtGGiaYvlgeiedfsyMiatlpgkv
+                   h++EYMtGG+ivVlG+aGrnvGagMtGG+aY+l+e+e        + ++v
+  gi|9081913  1421 HACEYMTGGVIVVLGKAGRNVGAGMTGGLAYFLDEDE-------NFIDRV 1463 
+
+                CS -CCCEEEE...ES-S......CCHHHHHHHH   
+                   nleiVeledlkrievkrkklLpegekqlkel<-*
+                   n+eiV+ +   r+ +      ++ge+qlk+l   
+  gi|9081913  1464 NSEIVKIQ---RVIT------KAGEEQLKNL    1485 
+
+DUF1514: domain 1 of 1, from 1453 to 1469: score 3.5, E = 5.7
+                   *->LeeyrieveRikkevkk<-*
+                      L e+++ ++R++ e+ k   
+  gi|9081913  1453    LDEDENFIDRVNSEIVK    1469 
+
+Colicin: domain 1 of 1, from 1456 to 1467: score 1.4, E = 7.5
+                CS    SHHHHHHHHHCH   
+                   *->DdkfveklNkli<-*
+                      D++f++ +N +i   
+  gi|9081913  1456    DENFIDRVNSEI    1467 
+
+Ribosomal_S6: domain 1 of 1, from 1461 to 1481: score 3.3, E = 3.7
+                CS    CCHHHHHHHHHHHHHCTT-EE   
+                   *->EqvkqeiekYqkvLtnngAei<-*
+                      ++v++ei k+q+v+t++g+e+   
+  gi|9081913  1461    DRVNSEIVKIQRVITKAGEEQ    1481 
+
+BicD: domain 1 of 1, from 1465 to 1481: score -1.6, E = 6.8
+                   *->gqaysnqrkvAkdGeer<-*
+                       + +++qr+ +k Gee+   
+  gi|9081913  1465    SEIVKIQRVITKAGEEQ    1481 
+
+PUF: domain 1 of 1, from 1470 to 1486: score 6.5, E = 0.47
+                   *->lQkllevateeqkqlil<-*
+                      +Q+++++a+eeq ++++   
+  gi|9081913  1470    IQRVITKAGEEQLKNLI    1486 
+
+DUF477: domain 1 of 1, from 1472 to 1495: score 3.8, E = 1.7
+                   *->gtLspserarLeqalaalEqktga<-*
+                      ++++++  ++L   ++  ++ktg+   
+  gi|9081913  1472    RVITKAGEEQLKNLIENHAAKTGS    1495 
+
+Phage_prot_Gp6: domain 1 of 1, from 1479 to 1492: score 1.0, E = 4
+                   *->eEmikkFidkHklr<-*
+                      eE +k++i+ H+++   
+  gi|9081913  1479    EEQLKNLIENHAAK    1492 
+
+IBN_N: domain 1 of 1, from 1498 to 1516: score 8.2, E = 0.17
+                CS    HHHHHHHHHCCTHHCHHHHH   
+                   *->AEkqLeqlekqklPgfllaL<-*
+                      A++ Le+++++ lP+f++ +   
+  gi|9081913  1498    AHTILEKWNSY-LPQFWQVV    1516 
+
+GspM: domain 1 of 1, from 1506 to 1520: score 1.0, E = 8.6
+                CS    XXXXXXXXXXXXXXX   
+                   *->mneLqawWqgrspRE<-*
+                      ++ L ++Wq ++p+E   
+  gi|9081913  1506    NSYLPQFWQVVPPSE    1520 
+
+//

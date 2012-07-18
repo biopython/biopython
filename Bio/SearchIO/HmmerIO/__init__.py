@@ -281,6 +281,7 @@ The following SearchIO objects attributes are provided:
 
 """
 
+from hmmer2_text import *
 from hmmer3_domtab import *
 from hmmer3_text import *
 from hmmer3_tab import *
