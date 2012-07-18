@@ -20,17 +20,19 @@ def compare_qresult(qres_a, qres_b, fmt=None):
             len(qres_b))
 
     # set common attributes
-    attrs = ['id', 'program', 'target', 'version', 'hit_keys', ]
+    attrs = ['id', 'desc', 'program', 'target', 'version', 'hit_keys', ]
     # and add format-specific attributes
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_QRESULT_OPT, _ELEM_META
         attrs += [x[0] for x in _ELEM_QRESULT_OPT.values()] + \
-                [x[0] for x in _ELEM_META.values()] + ['desc', 'seq_len']
-    elif fmt == 'blast-tab':
+                [x[0] for x in _ELEM_META.values()] + ['seq_len']
+    elif 'blast-tab' in fmt:
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_QRESULT
-        attrs += [x[0] for x in _COLUMN_QRESULT.values()] + ['desc', 'rid', 'fields']
-    elif fmt == 'hmmer-text':
-        attrs += ['acc', 'desc', 'seq_len']
+        attrs += [x[0] for x in _COLUMN_QRESULT.values()] + ['rid', 'fields']
+    elif 'hmmer-' in fmt:
+        attrs += ['acc', 'seq_len']
+    elif fmt == 'exonerate-text':
+        attrs += ['model']
 
     # compare qresult attributes
     compare_attrs(qres_a, qres_b, attrs)
@@ -49,17 +51,26 @@ def compare_hit(hit_a, hit_b, fmt=None):
             len(hit_b))
 
     # set common attributes
-    attrs = ['id', 'query_id', ]
+    attrs = ['id', 'desc', 'query_id', ]
     # and add format-specific attributes
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_HIT
         attrs += [x[0] for x in _ELEM_HIT.values()]
-    elif fmt == 'blast-tab':
+    elif 'blast-tab' in fmt:
         from Bio.SearchIO.BlastIO.blasttab import _COLUMN_HIT
         attrs += [x[0] for x in _COLUMN_HIT.values()]
     elif fmt == 'hmmer-text':
         attrs += ['evalue', 'bitscore', 'bias', 'domain_exp_num', \
-                'domain_obs_num', 'desc', 'is_in_inclusion', ]
+            'domain_obs_num', 'is_in_inclusion', ]
+    elif fmt == 'hmmer-tab':
+        attrs += ['acc', 'evalue', 'bitscore', 'bias', 'domain_exp_num', \
+                'region_num', 'cluster_num', 'overlap_num', 'env_num', \
+                'domain_obs_num', 'domain_reported_num', \
+                'domain_included_num',]
+    elif '-domtab' in fmt:
+        attrs += ['id', 'acc', 'seq_len', 'evalue', 'bitscore' ,'bias', ]
+    elif 'blat-' in fmt:
+        attrs += ['seq_len']
 
     # compare hit attributes
     compare_attrs(hit_a, hit_b, attrs)
@@ -78,8 +89,8 @@ def compare_hsp(hsp_a, hsp_b, fmt=None):
     # not comparing alignment attribute, since it's basically comparing
     # hit and query seqs
     attrs = ['hit_id', 'query_id', 'hit', 'query', 'hit_strand', \
-            'hit_from', 'hit_to', 'hit_span', 'query_strand', 'query_from', \
-            'query_to', 'query_span', 'alignment_annotation', ]
+            'hit_start', 'hit_end', 'hit_span', 'query_strand', 'query_start', \
+            'query_end', 'query_span', 'alignment_annotation', ]
 
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_HSP
@@ -91,6 +102,25 @@ def compare_hsp(hsp_a, hsp_b, fmt=None):
         attrs += ['domain_index', 'is_in_inclusion', 'bitscore', 'bias', \
                 'evalue', 'evalue_cond', 'hit_endtype', 'query_endtype', \
                 'env_from', 'env_to', 'env_endtype', 'acc_avg']
+    elif fmt == 'hmmer-tab':
+        attrs += ['evalue', 'bitscore', 'bias']
+    elif '-domtab' in fmt:
+        attrs += ['evalue_cond', 'evalue', 'bitscore', 'bias', 'env_start', \
+                'env_end', 'acc_avg']
+    elif fmt == 'fasta-m10':
+        attrs += ['initn_score', 'init1_score', 'opt_score', 'z_score', \
+                'bitscore', 'evalue', 'sw_score', 'ident_pct', 'pos_pct', ]
+    elif 'blat-' in fmt:
+        attrs += ['match_num', 'mismatch_num', 'match_rep_num', 'n_num', \
+                'query_gapopen_num', 'query_gap_num', 'hit_gapopen_num', \
+                'hit_gap_num', 'query_is_protein', 'ident_pct', 'score', \
+                'query_strand', 'hit_strand', 'query_block_spans', \
+                'hit_block_spans', 'block_num', 'query_coords', 'hit_coords']
+    elif fmt in 'exonerate-':
+        attrs += ['query_coords', 'hit_coords', 'query_intron_coords', \
+                'hit_intron_coords', 'query_scodon_coords', \
+                'hit_scodon_coords', 'query_ner_coords', 'hit_ner_coords']
+
 
     # compare hit attributes
     compare_attrs(hsp_a, hsp_b, attrs)
@@ -108,6 +138,10 @@ def compare_attrs(obj_a, obj_b, attrs):
         except AttributeError:
             # make sure if the attribute doesn't exist, it doesn't exist
             # in both objects
+            # Note that this could cause the test to pass if we pass arbitrary
+            # attr names ~ This is OK since we're not checking for attr
+            # presence here (it's the job of the individual parser test) ~ we
+            # are just checking for attr equality
             assert not hasattr(obj_a, attr)
             assert not hasattr(obj_b, attr)
             # set proxy values for comparison below, which will
