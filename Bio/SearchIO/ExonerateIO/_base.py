@@ -5,7 +5,9 @@
 
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
+from Bio._py3k import _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, GappedHSP
+from Bio.SearchIO._index import SearchIndexer
 
 
 # strand char-value mapping
@@ -43,7 +45,6 @@ class BaseExonerateIterator(object):
 
     def __init__(self, handle):
         self.handle = handle
-        self.line = handle.readline()
         self.has_c4_alignment = False
 
     def __iter__(self):
@@ -194,6 +195,43 @@ class BaseExonerateIterator(object):
 
             if not self.has_c4_alignment:
                 self.line = self.handle.readline()
+
+
+class BaseExonerateIndexer(SearchIndexer):
+
+    """Indexer class for Exonerate plain text."""
+
+    _parser = None # should be defined by subclass
+    _query_mark = None # this one too
+
+    def get_qresult_id(self, pos):
+        raise NotImplementedError("Should be defined by subclass")
+
+    def __iter__(self):
+        """Iterates over the file handle; yields key, start offset, and length."""
+        handle = self._handle
+        handle.seek(0)
+        qresult_key = None
+
+        while True:
+            start_offset = handle.tell()
+            line = handle.readline()
+            if line.startswith(self._query_mark):
+                if qresult_key is None:
+                    qresult_key = self.get_qresult_id(start_offset)
+                    qresult_offset = start_offset
+                else:
+                    curr_key = self.get_qresult_id(start_offset)
+                    if curr_key != qresult_key:
+                        yield _bytes_to_string(qresult_key), qresult_offset, \
+                                start_offset - qresult_offset
+                        qresult_key = curr_key
+                        qresult_offset = start_offset
+                        handle.seek(qresult_offset)
+            elif not line:
+                yield _bytes_to_string(qresult_key), qresult_offset, \
+                        start_offset - qresult_offset
+                break
 
 
 def _test():

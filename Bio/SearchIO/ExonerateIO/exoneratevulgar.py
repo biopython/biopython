@@ -7,9 +7,9 @@
 
 import re
 
-from Bio.SearchIO._index import SearchIndexer
+from Bio._py3k import _bytes_to_string
 
-from _base import BaseExonerateIterator, _STRAND_MAP
+from _base import BaseExonerateIterator, BaseExonerateIndexer, _STRAND_MAP
 
 
 # precompile regex
@@ -187,12 +187,45 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         return qresult, hit, hsp
 
 
-class ExonerateVulgarIndexer(SearchIndexer):
+class ExonerateVulgarIndexer(BaseExonerateIndexer):
 
     """Indexer class for exonerate vulgar lines."""
 
-    def __init__(self, *args, **kwargs):
-        pass
+    _parser = ExonerateVulgarIterator
+    _query_mark = 'vulgar'
+
+    def get_qresult_id(self, pos):
+        """Returns the query ID of the nearest vulgar line."""
+        handle = self._handle
+        handle.seek(pos)
+        # get line, check if it's a vulgar line, and get query ID
+        line = handle.readline()
+        assert line.startswith(self._query_mark), line
+        id = re.search(_RE_VULGAR, line)
+        return id.group(1)
+
+    def get_raw(self, offset):
+        """Returns the raw string of a QueryResult object from the given offset."""
+        handle = self._handle
+        handle.seek(offset)
+        qresult_key = None
+        qresult_raw = ''
+
+        while True:
+            line = handle.readline()
+            if not line:
+                break
+            elif line.startswith(self._query_mark):
+                cur_pos = handle.tell() - len(line)
+                if qresult_key is None:
+                    qresult_key = self.get_qresult_id(cur_pos)
+                else:
+                    curr_key = self.get_qresult_id(cur_pos)
+                    if curr_key != qresult_key:
+                        break
+            qresult_raw += line
+
+        return qresult_raw
 
 
 def _test():

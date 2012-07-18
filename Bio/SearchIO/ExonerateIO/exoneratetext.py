@@ -8,9 +8,8 @@
 import re
 from itertools import chain
 
-from Bio.SearchIO._index import SearchIndexer
-
-from _base import BaseExonerateIterator, _STRAND_MAP
+from _base import BaseExonerateIterator, BaseExonerateIndexer, _STRAND_MAP, \
+        _parse_hit_or_query_line
 from exoneratevulgar import parse_vulgar_comp, _RE_VULGAR
 
 
@@ -405,12 +404,52 @@ class ExonerateTextIterator(BaseExonerateIterator):
         return raw_aln_blocks, vulgar_comp
 
 
-class ExonerateTextIndexer(SearchIndexer):
+class ExonerateTextIndexer(BaseExonerateIndexer):
 
     """Indexer class for Exonerate plain text."""
 
-    def __init__(self, *args, **kwargs):
-        pass
+    _parser = ExonerateTextIterator
+    _query_mark = 'C4 Alignment'
+
+    def get_qresult_id(self, pos):
+        """Returns the query ID from the nearest "Query:" line."""
+        handle = self._handle
+        handle.seek(pos)
+
+        while True:
+            line = handle.readline().strip()
+            if line.startswith('Query:'):
+                break
+            if not line:
+                raise StopIteration
+        qid, desc = _parse_hit_or_query_line(line)
+
+        return qid
+
+    def get_raw(self, offset):
+        """Returns the raw string of a QueryResult object from the given offset."""
+        handle = self._handle
+        handle.seek(offset)
+        qresult_key = None
+        qresult_raw = ''
+
+        while True:
+            line = handle.readline()
+            if not line:
+                break
+            elif line.startswith(self._query_mark):
+                cur_pos = handle.tell()
+                if qresult_key is None:
+                    qresult_key = self.get_qresult_id(cur_pos)
+                else:
+                    curr_key = self.get_qresult_id(cur_pos)
+                    if curr_key != qresult_key:
+                        break
+                handle.seek(cur_pos)
+            qresult_raw += line
+
+        return qresult_raw
+
 
 
 def _test():

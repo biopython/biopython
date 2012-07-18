@@ -7,9 +7,8 @@
 
 import re
 
-from Bio.SearchIO._index import SearchIndexer
-
 from _base import BaseExonerateIterator, _STRAND_MAP
+from exoneratevulgar import ExonerateVulgarIndexer
 
 
 # precompile regex
@@ -73,12 +72,12 @@ class ExonerateCigarIterator(BaseExonerateIterator):
         return qresult, hit, hsp
 
 
-class ExonerateCigarIndexer(SearchIndexer):
+class ExonerateCigarIndexer(ExonerateVulgarIndexer):
 
     """Indexer class for exonerate cigar lines."""
 
-    def __init__(self, *args, **kwargs):
-        pass
+    _parser = ExonerateCigarIterator
+    _query_mark = 'cigar'
 
 
 def _test():
