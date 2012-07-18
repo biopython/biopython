@@ -1,0 +1,177 @@
+hmmsearch - search a sequence database with a profile HMM
+HMMER 2.2g (August 2001)
+Copyright (C) 1992-2001 HHMI/Washington University School of Medicine
+Freely distributed under the GNU General Public License (GPL)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+HMM file:                   Peptidase_C1.hmm [Peptidase_C1]
+Sequence database:          cysprot1b.fa
+per-sequence score cutoff:  [none]
+per-domain score cutoff:    [none]
+per-sequence Eval cutoff:   <= 10        
+per-domain Eval cutoff:     [none]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query HMM:   Peptidase_C1
+Accession:   PF00112
+Description: Papain family cysteine protease
+  [HMM has been calibrated; E-values are empirical estimates]
+
+Scores for complete sequences (score includes all domains):
+Sequence   Description                                  Score    E-value  N 
+--------   -----------                                  -----    ------- ---
+CATL_RAT                                                449.4     2e-135   1
+CATL_HUMAN                                              444.5   6.1e-134   1
+CATH_RAT                                                381.8   4.8e-115   1
+PAPA_CARPA                                              337.7     9e-102   1
+
+Parsed for domains:
+Sequence   Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------   ------- ----- -----    ----- -----      -----  -------
+CATL_RAT     1/1     114   332 ..     1   337 []   449.4   2e-135
+CATL_HUMAN   1/1     114   332 ..     1   337 []   444.5 6.1e-134
+CATH_RAT     1/1     114   330 ..     1   337 []   381.8 4.8e-115
+PAPA_CARPA   1/1     134   343 ..     1   337 []   337.7   9e-102
+
+Alignments of top-scoring domains:
+CATL_RAT: domain 1 of 1, from 114 to 332: score 449.4, E = 2e-135
+                   *->lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgryciktgt
+                      +P+++DWRe kg  VtpVK+QG qCGSCWAFSa g lEg+ ++kt  
+    CATL_RAT   114    IPKTVDWRE-KG-CVTPVKNQG-QCGSCWAFSASGCLEGQMFLKT-- 155  
+
+                   kawggklvsLSEQqLvDCdgedygnngesCGyGCnGGGlmdnAfeYikke
+                       gkl+sLSEQ+LvDC++ d gn+      GCnG Glmd Af+Yik+ 
+    CATL_RAT   156 ----GKLISLSEQNLVDCSH-DQGNQ------GCNG-GLMDFAFQYIKE- 192  
+
+                   qIsnNgGlvtEsdYekgCkPYtdfPCgkdggndtyypCpgkaydpndTgt
+                       NgGl++E++Y     PY+    +kd                   g+
+    CATL_RAT   193 ----NGGLDSEESY-----PYE----AKD-------------------GS 210  
+
+                   CkynckknskypktyakikgygdvpynvsTydEealqkalaknGPvsVai
+                   Cky+  + ++     a+++g++d+p++     E+al+ka+a++GP+sVa+
+    CATL_RAT   211 CKYR-AEYAV-----ANDTGFVDIPQQ-----EKALMKAVATVGPISVAM 249  
+
+                   dasedskgDFqlYksGendvgyGvYkhtsageCggtpfteLdHAVliVGY
+                   das+ s    q+Y+sG       +Y+++    C+++   +LdH+Vl+VGY
+    CATL_RAT   250 DASHPS---LQFYSSG-------IYYEP---NCSSK---DLDHGVLVVGY 283  
+
+                   GteneggtfdetssskksesgiqvssgsngssgSSgssgapiedkgkdYW
+                   G e+                                      ++++ +YW
+    CATL_RAT   284 GYEG-T------------------------------------DSNKDKYW 296  
+
+                   IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi<-*
+                   +VKNSWG++WG++GY++ia+++n    n+CG+a+ asypi   
+    CATL_RAT   297 LVKNSWGKEWGMDGYIKIAKDRN----NHCGLATAASYPI    332  
+
+CATL_HUMAN: domain 1 of 1, from 114 to 332: score 444.5, E = 6.1e-134
+                   *->lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgryciktgt
+                      +P s+DWRe kg +VtpVK+QG qCGSCWAFSa+galEg+ ++kt  
+  CATL_HUMAN   114    APRSVDWRE-KG-YVTPVKNQG-QCGSCWAFSATGALEGQMFRKT-- 155  
+
+                   kawggklvsLSEQqLvDCdgedygnngesCGyGCnGGGlmdnAfeYikke
+                       g l+sLSEQ+LvDC+g + gn+      GCnG Glmd+Af+Y+++ 
+  CATL_HUMAN   156 ----GRLISLSEQNLVDCSG-PQGNE------GCNG-GLMDYAFQYVQD- 192  
+
+                   qIsnNgGlvtEsdYekgCkPYtdfPCgkdggndtyypCpgkaydpndTgt
+                       NgGl++E++Y     PY+    +++                    +
+  CATL_HUMAN   193 ----NGGLDSEESY-----PYE----ATE-------------------ES 210  
+
+                   CkynckknskypktyakikgygdvpynvsTydEealqkalaknGPvsVai
+                   Ckyn +k s+     a+++g++d+p +     E+al+ka+a++GP+sVai
+  CATL_HUMAN   211 CKYN-PKYSV-----ANDTGFVDIPKQ-----EKALMKAVATVGPISVAI 249  
+
+                   dasedskgDFqlYksGendvgyGvYkhtsageCggtpfteLdHAVliVGY
+                   da++ s   F +Yk G       +Y ++   +C+++   + dH+Vl+VGY
+  CATL_HUMAN   250 DAGHES---FLFYKEG-------IYFEP---DCSSE---DMDHGVLVVGY 283  
+
+                   GteneggtfdetssskksesgiqvssgsngssgSSgssgapiedkgkdYW
+                   G e+                                      e+++ +YW
+  CATL_HUMAN   284 GFES-T------------------------------------ESDNNKYW 296  
+
+                   IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi<-*
+                   +VKNSWG++WG+ GY+++a+++     n+CGIas asyp+   
+  CATL_HUMAN   297 LVKNSWGEEWGMGGYVKMAKDRR----NHCGIASAASYPT    332  
+
+CATH_RAT: domain 1 of 1, from 114 to 330: score 381.8, E = 4.8e-115
+                   *->lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgryciktgt
+                       P s+DWR+ kg  V+pVK+QG  CGSCW FS++galE++ +i++  
+    CATH_RAT   114    YPSSMDWRK-KGNVVSPVKNQG-ACGSCWTFSTTGALESAVAIAS-- 156  
+
+                   kawggklvsLSEQqLvDCdgedygnngesCGyGCnGGGlmdnAfeYikke
+                       gk   L EQqLvDC   +++n+      GC+G Gl+++AfeYi++ 
+    CATH_RAT   157 ----GKMMTLAEQQLVDCAQ-NFNNH------GCQG-GLPSQAFEYILY- 193  
+
+                   qIsnNgGlvtEsdYekgCkPYtdfPCgkdggndtyypCpgkaydpndTgt
+                       N+G++ E++Y     PY     gk+                   g+
+    CATH_RAT   194 ----NKGIMGEDSY-----PYI----GKN-------------------GQ 211  
+
+                   CkynckknskypktyakikgygdvpynvsTydEealqkalaknGPvsVai
+                   Ck+n +++++     a++k+ ++++ n    dE+a+ +a+a + Pvs a+
+    CATH_RAT   212 CKFN-PEKAV-----AFVKNVVNITLN----DEAAMVEAVALYNPVSFAF 251  
+
+                   dasedskgDFqlYksGendvgyGvYkhtsageCggtpfteLdHAVliVGY
+                   +++e    DF++YksG       vY++    +C +tp + ++HAVl+VGY
+    CATH_RAT   252 EVTE----DFMMYKSG-------VYSSN---SCHKTP-DKVNHAVLAVGY 286  
+
+                   GteneggtfdetssskksesgiqvssgsngssgSSgssgapiedkgkdYW
+                   G +n g                                          YW
+    CATH_RAT   287 GEQN-GLL----------------------------------------YW 295  
+
+                   IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi<-*
+                   IVKNSWG++WG nGYf i+Rgkn     +CG+a +asypi   
+    CATH_RAT   296 IVKNSWGSNWGNNGYFLIERGKN-----MCGLAACASYPI    330  
+
+PAPA_CARPA: domain 1 of 1, from 134 to 343: score 337.7, E = 9e-102
+                   *->lPesfDWReWkggaVtpVKdQGiqCGSCWAFSavgalEgryciktgt
+                      +Pe +DWR+ kg aVtpVK+QG +CGSCWAFSav ++Eg+++i+t  
+  PAPA_CARPA   134    IPEYVDWRQ-KG-AVTPVKNQG-SCGSCWAFSAVVTIEGIIKIRT-- 175  
+
+                   kawggklvsLSEQqLvDCdgedygnngesCGyGCnGGGlmdnAfeYikke
+                       g+l  +SEQ+L+DCd+    ++      GCnG G+++ A++ + + 
+  PAPA_CARPA   176 ----GNLNEYSEQELLDCDR---RSY------GCNG-GYPWSALQLVAQ- 210  
+
+                   qIsnNgGlvtEsdYekgCkPYtdfPCgkdggndtyypCpgkaydpndTgt
+                         G++    Y     PY+    g++                     
+  PAPA_CARPA   211 -----YGIHYRNTY-----PYE----GVQ-------------------RY 227  
+
+                   CkynckknskypktyakikgygdvpynvsTydEealqkalaknGPvsVai
+                   C+++ +k+ +    +ak +g ++v+++    +E al + +a+ +PvsV  
+  PAPA_CARPA   228 CRSR-EKGPY----AAKTDGVRQVQPY----NEGALLYSIAN-QPVSVVL 267  
+
+                   dasedskgDFqlYksGendvgyGvYkhtsageCggtpfteLdHAVliVGY
+                   +a +    DFqlY++G       ++++    +Cg+     +dHAV++VGY
+  PAPA_CARPA   268 EAAGK---DFQLYRGG-------IFVG----PCGN----KVDHAVAAVGY 299  
+
+                   GteneggtfdetssskksesgiqvssgsngssgSSgssgapiedkgkdYW
+                   G                                              +Y 
+  PAPA_CARPA   300 G---------------------------------------------PNYI 304  
+
+                   IVKNSWGtdWGEnGYfriaRgknksgkneCGIaseasypi<-*
+                   ++KNSWGt WGEnGY+ri+Rg+++s ++ CG+ ++  yp+   
+  PAPA_CARPA   305 LIKNSWGTGWGENGYIRIKRGTGNS-YGVCGLYTSSFYPV    343  
+
+
+Histogram of all scores:
+score    obs    exp  (one = represents 1 sequences)
+-----    ---    ---
+> 337      4      -|====                                                       
+
+
+% Statistical details of theoretical EVD fit:
+              mu =  -195.8384
+          lambda =     0.1423
+chi-sq statistic =     0.0000
+  P(chi-square)  =          0
+
+Total sequences searched: 4
+
+Whole sequence top hits:
+tophits_s report:
+     Total hits:           4
+     Satisfying E cutoff:  4
+     Total memory:         16K
+
+Domain top hits:
+tophits_s report:
+     Total hits:           4
+     Satisfying E cutoff:  4
+     Total memory:         20K
