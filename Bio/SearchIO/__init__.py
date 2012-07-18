@@ -72,7 +72,7 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP
 _ITERATOR_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabIterator'),
         'blast-tabc': ('BlastIO', 'BlastTabIterator'),
-        'blast-text': ('BlastIO', 'blast_text_iterator'),
+        'blast-text': ('BlastIO', 'BlastTextIterator'),
         'blast-xml': ('BlastIO', 'BlastXmlIterator'),
         'blat-psl': ('BlatIO', 'BlatPslIterator'),
         'blat-pslx': ('BlatIO', 'BlatPslxIterator'),
@@ -90,7 +90,6 @@ _ITERATOR_MAP = {
 _INDEXER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabIndexer'),
         'blast-tabc': ('BlastIO', 'BlastTabIndexer'),
-        'blast-text': ('BlastIO', 'BlastTextIndexer'),
         'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
         'blat-psl': ('BlatIO', 'BlatPslIndexer'),
         'blat-pslx': ('BlatIO', 'BlatPslxIndexer'),
