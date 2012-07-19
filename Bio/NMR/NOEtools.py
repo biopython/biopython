@@ -1,73 +1,103 @@
-# NOEtools.py: A python module for predicting NOE coordinates from
-#                assignment data.  
-#
-#    The input and output are modelled on nmrview peaklists.
-#    This modules is suitable for directly generating an nmrview
-#    peaklist with predicted crosspeaks directly from the
-#    input assignment peaklist. 
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
+"""A module for predicting NOE coordinates from assignment data. 
+
+The input and output are modelled on nmrview peaklists.
+
+This module is suitable for directly generating an nmrview peaklist with 
+predicted crosspeaks directly from the input assignment peaklist. 
+
+"""
+__docformat__ = "restructuredtext en"
 
 import xpktools
 
-def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
-# Predict the i->j NOE position based on self peak (diagonal) assignments
-# 
-# example predictNOE(peaklist,"N15","H1",10,12)
-#    where peaklist is of the type xpktools.peaklist
-#    would generate a .xpk file entry for a crosspeak
-#    that originated on N15 of residue 10 and ended up
-#    as magnetization detected on the H1 nucleus of
-#    residue 12.
-# CAVEAT: The initial peaklist is assumed to be diagonal (self peaks only)
-#       and currently there is not checking done to insure that this
-#       assumption holds true.  Check your peaklist for errors and
-#       off diagonal peaks before attempting to use predictNOE.
+def predictNOE(peaklist, originNuc, detectedNuc, originResNum, toResNum):
+    """Predict the i->j NOE position based on self peak (diagonal) assignments.
 
-  returnLine = "" # The modified line to be returned to the caller
+    The initial peaklist is assumed to be diagonal (self peaks only)
+    and currently there is not checking done to insure that this
+    assumption holds true.  Check your peaklist for errors and
+    off diagonal peaks before attempting to use predictNOE.
 
-  datamap = _data_map(peaklist.datalabels)
+    Parameters
+    ----------
+    peaklist : xprtools.Peaklist
+        List of peaks from which to derive predictions
+    originNuc : str 
+        Name of originating nucleus.
+    originResNum : int
+        Index of originating residue.
+    detectedNuc : str 
+        Name of detected nucleus.
+    toResNum : int
+        Index of detected residue.
 
-  # Construct labels for keying into dictionary
-  originAssCol = datamap[originNuc+".L"]+1
-  originPPMCol = datamap[originNuc+".P"]+1
-  detectedPPMCol = datamap[detectedNuc+".P"]+1
+    Returns
+    -------
+    returnLine : str
+        The .xpk file entry for the predicted crosspeak.
 
-  # Make a list of the data lines involving the detected
-  if str(toResNum) in peaklist.residue_dict(detectedNuc) \
-  and str(originResNum) in peaklist.residue_dict(detectedNuc):
-    detectedList=peaklist.residue_dict(detectedNuc)[str(toResNum)]
-    originList=peaklist.residue_dict(detectedNuc)[str(originResNum)]
-    returnLine=detectedList[0]
+    Examples
+    --------
+    
+    
+    Notes
+    -----
+    Calling example predictNOE(peaklist,"N15","H1",10,12)
+    where peaklist is of the type xpktools.peaklist would generate a .xpk 
+    file entry for a crosspeak that originated on N15 of residue 10 and 
+    ended up as magnetization detected on the H1 nucleus of residue 12.
+
+    """
+
+    # The modified line to be returned to the caller
+    returnLine = "" 
+
+    datamap = _data_map(peaklist.datalabels)
+
+    # Construct labels for keying into dictionary
+    originAssCol = datamap[originNuc+".L"]+1
+    originPPMCol = datamap[originNuc+".P"]+1
+    detectedPPMCol = datamap[detectedNuc+".P"]+1
+
+    # Make a list of the data lines involving the detected
+    if str(toResNum) in peaklist.residue_dict(detectedNuc) and \
+       str(originResNum) in peaklist.residue_dict(detectedNuc):
+        detectedList = peaklist.residue_dict(detectedNuc)[str(toResNum)]
+        originList = peaklist.residue_dict(detectedNuc)[str(originResNum)]
+        returnLine = detectedList[0]
 
     for line in detectedList:
+        aveDetectedPPM = _col_ave(detectedList, detectedPPMCol)
+        aveOriginPPM = _col_ave(originList, originPPMCol)
+        originAss = originList[0].split()[originAssCol]
 
-      aveDetectedPPM = _col_ave(detectedList,detectedPPMCol)
-      aveOriginPPM = _col_ave(originList,originPPMCol)
-      originAss = originList[0].split()[originAssCol]
+    returnLine=xpktools.replace_entry(returnLine, originAssCol+1, originAss)
+    returnLine=xpktools.replace_entry(returnLine, originPPMCol+1, aveOriginPPM)
 
-    returnLine=xpktools.replace_entry(returnLine,originAssCol+1,originAss)
-    returnLine=xpktools.replace_entry(returnLine,originPPMCol+1,aveOriginPPM)
-
-  return returnLine
+    return returnLine
 
 
 def _data_map(labelline):
-# Generate a map between datalabels and column number
-#   based on a labelline
-  i=0 # A counter
-  datamap={} # The data map dictionary
-  labelList=labelline.split() # Get the label line
+    """Generate a dict between datalabels and column number and return dict."""
+    i = 0 # A counter
+    datamap = {} # The data map dictionary
+    labelList = labelline.split() # Get the label line
 
-  # Get the column number for each label
-  for i in range(len(labelList)):
-    datamap[labelList[i]] = i
+    # Get the column number for each label
+    for i in range(len(labelList)):
+        datamap[labelList[i]] = i
 
-  return datamap
+    return datamap
 
 def _col_ave(list,col):
-# Compute average values from a particular column in a string list
-  total=0
-  n=0
-  for element in list:
-    total += float(element.split()[col])
-    n += 1
-  return total/n
+    """Compute average values from a particular column in a string list."""
+    total = 0
+    n = 0
+    for element in list:
+        total += float(element.split()[col])
+        n += 1
+    return total / n
