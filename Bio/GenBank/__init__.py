@@ -86,7 +86,7 @@ assert _re_oneof_position.match("one-of(3,6,9)")
 
 
 _simple_location = r"\d+\.\.\d+"
-_re_simple_location = re.compile(_simple_location)
+_re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
                                  % (_simple_location, _simple_location))
 _complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
@@ -100,6 +100,7 @@ _re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
                                     _possibly_complemented_complex_location))
 
 assert _re_simple_location.match("104..160")
+assert not _re_simple_location.match("68451760..68452073^68452074")
 assert not _re_simple_location.match("<104..>160")
 assert not _re_simple_location.match("104")
 assert not _re_simple_location.match("<1")
