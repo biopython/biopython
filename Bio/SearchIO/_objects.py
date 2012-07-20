@@ -754,21 +754,15 @@ class Hit(BaseSearchObject):
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
                     ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
             pattern = '%11s  %8s  %9s  %6s  %18s  %18s'
-            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Length', \
-                    'Query region', 'Hit region'))
+            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span', \
+                    'Query range', 'Hit range'))
             lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
-                if hasattr(hsp, 'evalue'):
-                    evalue = '%.2g' % hsp.evalue
-                else:
-                    evalue = 'n/a'
+                evalue = '%.2g' % getattr(hsp, 'evalue', 'n/a')
                 # bitscore
-                if hasattr(hsp, 'bitscore'):
-                    bitscore = '%.2f' % hsp.bitscore
-                else:
-                    bitscore = 'n/a'
-                # alignment length
+                bitscore = '%.2f' % getattr(hsp, 'bitscore', 'n/a')
+                # alignment span
                 if hasattr(hsp, 'aln_span'):
                     aln_span = str(hsp.aln_span)
                 elif hasattr(hsp, 'query'):
@@ -778,25 +772,21 @@ class Hit(BaseSearchObject):
                 else:
                     aln_span = 'n/a'
                 # query region
-                if hasattr(hsp, 'query_start'):
-                    query_start = hsp.query_start
-                else:
-                    query_start = 'n/a'
-                if hasattr(hsp, 'query_end'):
-                    query_end = hsp.query_end
-                else:
-                    query_end = 'n/a'
+                query_start = getattr(hsp, 'query_start', '?')
+                query_end = getattr(hsp, 'query_end', '?')
+                query_range = '%i:%i' % (query_start, query_end)
+                # max column length is 18
+                if len(query_range) > 18:
+                    query_range = query_range[:17] + '~'
                 # hit region
-                if hasattr(hsp, 'hit_start'):
-                    hit_start = hsp.hit_start
-                else:
-                    hit_start = 'n/a'
-                if hasattr(hsp, 'hit_end'):
-                    hit_end = hsp.hit_end
-                else:
-                    hit_end = 'n/a'
+                hit_start = getattr(hsp, 'hit_start', '?')
+                hit_end = getattr(hsp, 'hit_end', '?')
+                hit_range = '%i:%i' % (hit_start, hit_end)
+                if len(hit_range) > 18:
+                    hit_range = hit_range[:17] + '~'
+                # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
-                        '%i-%i' % (query_start, query_end), '%i-%i' % (hit_start, hit_end)))
+                        query_range, hit_range))
 
         return '\n'.join(lines)
 
