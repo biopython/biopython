@@ -1052,15 +1052,15 @@ class BaseHSP(BaseSearchObject):
 
     query_end = property(fget=_query_end_get, fset=_query_end_set)
 
-    def _hit_coord_get(self):
+    def _hit_range_get(self):
         return (self.hit_start, self.hit_end)
 
-    hit_coord = property(fget=_hit_coord_get)
+    hit_range = property(fget=_hit_range_get)
 
-    def _query_coord_get(self):
+    def _query_range_get(self):
         return (self.query_start, self.query_end)
 
-    query_coord = property(fget=_query_coord_get)
+    query_range = property(fget=_query_range_get)
 
     def _hit_span_get(self):
         # hit sequence range (sans gaps)

@@ -299,9 +299,9 @@ class BlatPslIterator(object):
         # set query and hit coords
         # this assumes each block has no gaps (which seems to be the case)
         assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-        hsp.query_coords = zip(qstarts, [x + y for x, y in \
+        hsp.query_ranges = zip(qstarts, [x + y for x, y in \
                 zip(qstarts, psl['blocksizes'])])
-        hsp.hit_coords = zip(hstarts, [x + y for x, y in \
+        hsp.hit_ranges = zip(hstarts, [x + y for x, y in \
                 zip(hstarts, psl['blocksizes'])])
 
         return hsp
@@ -487,7 +487,7 @@ class BlatPslWriter(object):
                     strand = '+'
                 else:
                     strand = '-'
-                qstarts = _reorient_starts([x[0] for x in hsp.query_coords], \
+                qstarts = _reorient_starts([x[0] for x in hsp.query_ranges], \
                         hsp.query_block_spans, qresult.seq_len, hsp.query_strand)
 
                 if hasattr(hsp, 'hit_strand'):
@@ -499,7 +499,7 @@ class BlatPslWriter(object):
                         strand += '-'
                 else:
                     hstrand = 1
-                hstarts = _reorient_starts([x[0] for x in hsp.hit_coords], \
+                hstarts = _reorient_starts([x[0] for x in hsp.hit_ranges], \
                         hsp.hit_block_spans, hit.seq_len, hstrand)
 
                 line.append(strand)

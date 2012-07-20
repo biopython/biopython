@@ -63,8 +63,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([16], hsp.query_block_spans)
         self.assertEqual([16], hsp.hit_block_spans)
-        self.assertEqual([(11, 27)], hsp.query_coords)
-        self.assertEqual([(61646095, 61646111)], hsp.hit_coords)
+        self.assertEqual([(11, 27)], hsp.query_ranges)
+        self.assertEqual([(61646095, 61646111)], hsp.hit_ranges)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('chr1', hit.id)
@@ -88,8 +88,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([33], hsp.query_block_spans)
         self.assertEqual([33], hsp.hit_block_spans)
-        self.assertEqual([(0, 33)], hsp.query_coords)
-        self.assertEqual([(10271783, 10271816)], hsp.hit_coords)
+        self.assertEqual([(0, 33)], hsp.query_ranges)
+        self.assertEqual([(10271783, 10271816)], hsp.hit_ranges)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('chr2', hit.id)
@@ -113,8 +113,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([17], hsp.query_block_spans)
         self.assertEqual([17], hsp.hit_block_spans)
-        self.assertEqual([(9, 26)], hsp.query_coords)
-        self.assertEqual([(53575980, 53575997)], hsp.hit_coords)
+        self.assertEqual([(9, 26)], hsp.query_ranges)
+        self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
         # test second qresult
         qresult = self.qresults[1]
@@ -145,8 +145,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([41], hsp.query_block_spans)
         self.assertEqual([41], hsp.hit_block_spans)
-        self.assertEqual([(9, 50)], hsp.query_coords)
-        self.assertEqual([(85737865, 85737906)], hsp.hit_coords)
+        self.assertEqual([(9, 50)], hsp.query_ranges)
+        self.assertEqual([(85737865, 85737906)], hsp.hit_ranges)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('chr8', hit.id)
@@ -170,8 +170,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([41], hsp.query_block_spans)
         self.assertEqual([41], hsp.hit_block_spans)
-        self.assertEqual([(8, 49)], hsp.query_coords)
-        self.assertEqual([(95160479, 95160520)], hsp.hit_coords)
+        self.assertEqual([(8, 49)], hsp.query_ranges)
+        self.assertEqual([(95160479, 95160520)], hsp.hit_ranges)
         # second qresult, third hit
         hit = qresult[2]
         self.assertEqual('chr22', hit.id)
@@ -195,8 +195,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([36], hsp.query_block_spans)
         self.assertEqual([36], hsp.hit_block_spans)
-        self.assertEqual([(11, 47)], hsp.query_coords)
-        self.assertEqual([(42144400, 42144436)], hsp.hit_coords)
+        self.assertEqual([(11, 47)], hsp.query_ranges)
+        self.assertEqual([(42144400, 42144436)], hsp.hit_ranges)
         # second qresult, third hit, second hsp
         hsp = qresult[2][1]
         self.assertEqual(35, hsp.match_num)
@@ -215,8 +215,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([37], hsp.query_block_spans)
         self.assertEqual([37], hsp.hit_block_spans)
-        self.assertEqual([(13, 50)], hsp.query_coords)
-        self.assertEqual([(48997405, 48997442)], hsp.hit_coords)
+        self.assertEqual([(13, 50)], hsp.query_ranges)
+        self.assertEqual([(48997405, 48997442)], hsp.hit_ranges)
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('chr2', hit.id)
@@ -240,8 +240,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(2, hsp.block_num)
         self.assertEqual([6, 38], hsp.query_block_spans)
         self.assertEqual([6, 38], hsp.hit_block_spans)
-        self.assertEqual([(1, 7), (11, 49)], hsp.query_coords)
-        self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_coords)
+        self.assertEqual([(1, 7), (11, 49)], hsp.query_ranges)
+        self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_ranges)
         # second qresult, fourth hit, second hsp
         hsp = qresult[3][1]
         self.assertEqual(35, hsp.match_num)
@@ -260,8 +260,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([36], hsp.query_block_spans)
         self.assertEqual([36], hsp.hit_block_spans)
-        self.assertEqual([(14, 50)], hsp.query_coords)
-        self.assertEqual([(120641740, 120641776)], hsp.hit_coords)
+        self.assertEqual([(14, 50)], hsp.query_ranges)
+        self.assertEqual([(120641740, 120641776)], hsp.hit_ranges)
         # second qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('chr19', hit.id)
@@ -285,8 +285,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(2, hsp.block_num)
         self.assertEqual([25, 11], hsp.query_block_spans)
         self.assertEqual([25, 11], hsp.hit_block_spans)
-        self.assertEqual([(10, 35), (35, 46)], hsp.query_coords)
-        self.assertEqual([(35483340, 35483365), (35483499, 35483510)], hsp.hit_coords)
+        self.assertEqual([(10, 35), (35, 46)], hsp.query_ranges)
+        self.assertEqual([(35483340, 35483365), (35483499, 35483510)], hsp.hit_ranges)
         # second qresult, fifth hit, second hsp
         hsp = qresult[4][1]
         self.assertEqual(39, hsp.match_num)
@@ -305,8 +305,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([39], hsp.query_block_spans)
         self.assertEqual([39], hsp.hit_block_spans)
-        self.assertEqual([(11, 50)], hsp.query_coords)
-        self.assertEqual([(54017130, 54017169)], hsp.hit_coords)
+        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(54017130, 54017169)], hsp.hit_ranges)
         # second qresult, fifth hit, third hsp
         hsp = qresult[4][2]
         self.assertEqual(36, hsp.match_num)
@@ -325,8 +325,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([39], hsp.query_block_spans)
         self.assertEqual([39], hsp.hit_block_spans)
-        self.assertEqual([(11, 50)], hsp.query_coords)
-        self.assertEqual([(553742, 553781)], hsp.hit_coords)
+        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
     def test_psl_34_002(self, testf='psl_34_002.psl', fmt='blat-psl'):
         """Test parsing blat output (psl_34_001.psl)"""
@@ -376,8 +376,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([16], hsp.query_block_spans)
         self.assertEqual([16], hsp.hit_block_spans)
-        self.assertEqual([(11, 27)], hsp.query_coords)
-        self.assertEqual([(61646095, 61646111)], hsp.hit_coords)
+        self.assertEqual([(11, 27)], hsp.query_ranges)
+        self.assertEqual([(61646095, 61646111)], hsp.hit_ranges)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('chr1', hit.id)
@@ -401,8 +401,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([33], hsp.query_block_spans)
         self.assertEqual([33], hsp.hit_block_spans)
-        self.assertEqual([(0, 33)], hsp.query_coords)
-        self.assertEqual([(10271783, 10271816)], hsp.hit_coords)
+        self.assertEqual([(0, 33)], hsp.query_ranges)
+        self.assertEqual([(10271783, 10271816)], hsp.hit_ranges)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('chr2', hit.id)
@@ -426,8 +426,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([17], hsp.query_block_spans)
         self.assertEqual([17], hsp.hit_block_spans)
-        self.assertEqual([(9, 26)], hsp.query_coords)
-        self.assertEqual([(53575980, 53575997)], hsp.hit_coords)
+        self.assertEqual([(9, 26)], hsp.query_ranges)
+        self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
     def test_psl_34_004(self, testf='psl_34_004.psl', fmt='blat-psl'):
         """Test parsing blat output (psl_34_004.psl)"""
@@ -471,8 +471,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([41], hsp.query_block_spans)
         self.assertEqual([41], hsp.hit_block_spans)
-        self.assertEqual([(9, 50)], hsp.query_coords)
-        self.assertEqual([(85737865, 85737906)], hsp.hit_coords)
+        self.assertEqual([(9, 50)], hsp.query_ranges)
+        self.assertEqual([(85737865, 85737906)], hsp.hit_ranges)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('chr8', hit.id)
@@ -496,8 +496,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([41], hsp.query_block_spans)
         self.assertEqual([41], hsp.hit_block_spans)
-        self.assertEqual([(8, 49)], hsp.query_coords)
-        self.assertEqual([(95160479, 95160520)], hsp.hit_coords)
+        self.assertEqual([(8, 49)], hsp.query_ranges)
+        self.assertEqual([(95160479, 95160520)], hsp.hit_ranges)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('chr22', hit.id)
@@ -521,8 +521,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([36], hsp.query_block_spans)
         self.assertEqual([36], hsp.hit_block_spans)
-        self.assertEqual([(11, 47)], hsp.query_coords)
-        self.assertEqual([(42144400, 42144436)], hsp.hit_coords)
+        self.assertEqual([(11, 47)], hsp.query_ranges)
+        self.assertEqual([(42144400, 42144436)], hsp.hit_ranges)
         # first qresult, third hit, second hsp
         hsp = qresult[2][1]
         self.assertEqual(35, hsp.match_num)
@@ -541,8 +541,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([37], hsp.query_block_spans)
         self.assertEqual([37], hsp.hit_block_spans)
-        self.assertEqual([(13, 50)], hsp.query_coords)
-        self.assertEqual([(48997405, 48997442)], hsp.hit_coords)
+        self.assertEqual([(13, 50)], hsp.query_ranges)
+        self.assertEqual([(48997405, 48997442)], hsp.hit_ranges)
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('chr2', hit.id)
@@ -566,8 +566,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(2, hsp.block_num)
         self.assertEqual([6, 38], hsp.query_block_spans)
         self.assertEqual([6, 38], hsp.hit_block_spans)
-        self.assertEqual([(1, 7), (11, 49)], hsp.query_coords)
-        self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_coords)
+        self.assertEqual([(1, 7), (11, 49)], hsp.query_ranges)
+        self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_ranges)
         # first qresult, fourth hit, second hsp
         hsp = qresult[3][1]
         self.assertEqual(35, hsp.match_num)
@@ -586,8 +586,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([36], hsp.query_block_spans)
         self.assertEqual([36], hsp.hit_block_spans)
-        self.assertEqual([(14, 50)], hsp.query_coords)
-        self.assertEqual([(120641740, 120641776)], hsp.hit_coords)
+        self.assertEqual([(14, 50)], hsp.query_ranges)
+        self.assertEqual([(120641740, 120641776)], hsp.hit_ranges)
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('chr19', hit.id)
@@ -611,8 +611,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(2, hsp.block_num)
         self.assertEqual([25, 11], hsp.query_block_spans)
         self.assertEqual([25, 11], hsp.hit_block_spans)
-        self.assertEqual([(10, 35), (35, 46)], hsp.query_coords)
-        self.assertEqual([(35483340, 35483365), (35483499, 35483510)], hsp.hit_coords)
+        self.assertEqual([(10, 35), (35, 46)], hsp.query_ranges)
+        self.assertEqual([(35483340, 35483365), (35483499, 35483510)], hsp.hit_ranges)
         # first qresult, fifth hit, second hsp
         hsp = qresult[4][1]
         self.assertEqual(39, hsp.match_num)
@@ -631,8 +631,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([39], hsp.query_block_spans)
         self.assertEqual([39], hsp.hit_block_spans)
-        self.assertEqual([(11, 50)], hsp.query_coords)
-        self.assertEqual([(54017130, 54017169)], hsp.hit_coords)
+        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(54017130, 54017169)], hsp.hit_ranges)
         # first qresult, fifth hit, third hsp
         hsp = qresult[4][2]
         self.assertEqual(36, hsp.match_num)
@@ -651,8 +651,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([39], hsp.query_block_spans)
         self.assertEqual([39], hsp.hit_block_spans)
-        self.assertEqual([(11, 50)], hsp.query_coords)
-        self.assertEqual([(553742, 553781)], hsp.hit_coords)
+        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
     def test_psl_34_005(self, testf='psl_34_005.psl', fmt='blat-psl'):
         """Test parsing blat output (psl_34_005.psl)"""
@@ -696,8 +696,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([16], hsp.query_block_spans)
         self.assertEqual([16], hsp.hit_block_spans)
-        self.assertEqual([(11, 27)], hsp.query_coords)
-        self.assertEqual([(61646095, 61646111)], hsp.hit_coords)
+        self.assertEqual([(11, 27)], hsp.query_ranges)
+        self.assertEqual([(61646095, 61646111)], hsp.hit_ranges)
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('chr1', hit.id)
@@ -721,8 +721,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([33], hsp.query_block_spans)
         self.assertEqual([33], hsp.hit_block_spans)
-        self.assertEqual([(0, 33)], hsp.query_coords)
-        self.assertEqual([(10271783, 10271816)], hsp.hit_coords)
+        self.assertEqual([(0, 33)], hsp.query_ranges)
+        self.assertEqual([(10271783, 10271816)], hsp.hit_ranges)
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('chr2', hit.id)
@@ -746,8 +746,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([17], hsp.query_block_spans)
         self.assertEqual([17], hsp.hit_block_spans)
-        self.assertEqual([(9, 26)], hsp.query_coords)
-        self.assertEqual([(53575980, 53575997)], hsp.hit_coords)
+        self.assertEqual([(9, 26)], hsp.query_ranges)
+        self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
         # test second qresult
         qresult = self.qresults[1]
@@ -778,8 +778,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([41], hsp.query_block_spans)
         self.assertEqual([41], hsp.hit_block_spans)
-        self.assertEqual([(9, 50)], hsp.query_coords)
-        self.assertEqual([(85737865, 85737906)], hsp.hit_coords)
+        self.assertEqual([(9, 50)], hsp.query_ranges)
+        self.assertEqual([(85737865, 85737906)], hsp.hit_ranges)
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('chr8', hit.id)
@@ -803,8 +803,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([41], hsp.query_block_spans)
         self.assertEqual([41], hsp.hit_block_spans)
-        self.assertEqual([(8, 49)], hsp.query_coords)
-        self.assertEqual([(95160479, 95160520)], hsp.hit_coords)
+        self.assertEqual([(8, 49)], hsp.query_ranges)
+        self.assertEqual([(95160479, 95160520)], hsp.hit_ranges)
         # second qresult, third hit
         hit = qresult[2]
         self.assertEqual('chr22', hit.id)
@@ -828,8 +828,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([36], hsp.query_block_spans)
         self.assertEqual([36], hsp.hit_block_spans)
-        self.assertEqual([(11, 47)], hsp.query_coords)
-        self.assertEqual([(42144400, 42144436)], hsp.hit_coords)
+        self.assertEqual([(11, 47)], hsp.query_ranges)
+        self.assertEqual([(42144400, 42144436)], hsp.hit_ranges)
         # second qresult, third hit, second hsp
         hsp = qresult[2][1]
         self.assertEqual(35, hsp.match_num)
@@ -848,8 +848,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([37], hsp.query_block_spans)
         self.assertEqual([37], hsp.hit_block_spans)
-        self.assertEqual([(13, 50)], hsp.query_coords)
-        self.assertEqual([(48997405, 48997442)], hsp.hit_coords)
+        self.assertEqual([(13, 50)], hsp.query_ranges)
+        self.assertEqual([(48997405, 48997442)], hsp.hit_ranges)
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('chr2', hit.id)
@@ -873,8 +873,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(2, hsp.block_num)
         self.assertEqual([6, 38], hsp.query_block_spans)
         self.assertEqual([6, 38], hsp.hit_block_spans)
-        self.assertEqual([(1, 7), (11, 49)], hsp.query_coords)
-        self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_coords)
+        self.assertEqual([(1, 7), (11, 49)], hsp.query_ranges)
+        self.assertEqual([(183925984, 183925990), (183925990, 183926028)], hsp.hit_ranges)
         # second qresult, fourth hit, second hsp
         hsp = qresult[3][1]
         self.assertEqual(35, hsp.match_num)
@@ -893,8 +893,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([36], hsp.query_block_spans)
         self.assertEqual([36], hsp.hit_block_spans)
-        self.assertEqual([(14, 50)], hsp.query_coords)
-        self.assertEqual([(120641740, 120641776)], hsp.hit_coords)
+        self.assertEqual([(14, 50)], hsp.query_ranges)
+        self.assertEqual([(120641740, 120641776)], hsp.hit_ranges)
         # second qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('chr19', hit.id)
@@ -918,8 +918,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(2, hsp.block_num)
         self.assertEqual([25, 11], hsp.query_block_spans)
         self.assertEqual([25, 11], hsp.hit_block_spans)
-        self.assertEqual([(10, 35), (35, 46)], hsp.query_coords)
-        self.assertEqual([(35483340, 35483365), (35483499, 35483510)], hsp.hit_coords)
+        self.assertEqual([(10, 35), (35, 46)], hsp.query_ranges)
+        self.assertEqual([(35483340, 35483365), (35483499, 35483510)], hsp.hit_ranges)
         # second qresult, fifth hit, second hsp
         hsp = qresult[4][1]
         self.assertEqual(39, hsp.match_num)
@@ -938,8 +938,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([39], hsp.query_block_spans)
         self.assertEqual([39], hsp.hit_block_spans)
-        self.assertEqual([(11, 50)], hsp.query_coords)
-        self.assertEqual([(54017130, 54017169)], hsp.hit_coords)
+        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(54017130, 54017169)], hsp.hit_ranges)
         # second qresult, fifth hit, third hsp
         hsp = qresult[4][2]
         self.assertEqual(36, hsp.match_num)
@@ -958,8 +958,8 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, hsp.block_num)
         self.assertEqual([39], hsp.query_block_spans)
         self.assertEqual([39], hsp.hit_block_spans)
-        self.assertEqual([(11, 50)], hsp.query_coords)
-        self.assertEqual([(553742, 553781)], hsp.hit_coords)
+        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
 
 class BlatPslxCases(BlatPslCases):

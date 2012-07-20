@@ -33,11 +33,11 @@ def parse_vulgar_comp(hsp, vulgar_comp):
     qstarts, qends, hstarts, hends = \
             [hsp['query_start']], [], [hsp['hit_start']], []
     # containers for split codons
-    hsp['query_scodon_coords'], hsp['hit_scodon_coords'] = [], []
+    hsp['query_scodon_ranges'], hsp['hit_scodon_ranges'] = [], []
     # containers for introns
-    hsp['query_intron_coords'], hsp['hit_intron_coords'] = [], []
+    hsp['query_intron_ranges'], hsp['hit_intron_ranges'] = [], []
     # containers for ner blocks
-    hsp['query_ner_coords'], hsp['hit_ner_coords'] = [], []
+    hsp['query_ner_ranges'], hsp['hit_ner_ranges'] = [], []
     # sentinels for tracking query and hit positions
     qpos, hpos = hsp['query_start'], hsp['hit_start']
     # multiplier for determining sentinel movement
@@ -64,7 +64,7 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             qstart, hstart = qpos, hpos
             qend = qstart + qstep * qmove
             hend = hstart + hstep * hmove
-            # adjust the start-stop coords
+            # adjust the start-stop ranges
             sqstart, sqend = min(qstart, qend), max(qstart, qend)
             shstart, shend = min(hstart, hend), max(hstart, hend)
             # then decide which list to store these values into
@@ -73,18 +73,18 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             # in separate tuples even though they're part of the same
             # intron. we'll merge them later on after sorting
             if label in '53I':
-                qlist = hsp['query_intron_coords']
-                hlist = hsp['hit_intron_coords']
+                qlist = hsp['query_intron_ranges']
+                hlist = hsp['hit_intron_ranges']
             # ner blocks
             elif label == 'N':
-                qlist = hsp['query_ner_coords']
-                hlist = hsp['hit_ner_coords']
+                qlist = hsp['query_ner_ranges']
+                hlist = hsp['hit_ner_ranges']
             # split codons
             # XXX: is it possible to have a frameshift that introduces
             # a codon split? If so, this may need a different treatment..
             elif label == 'S':
-                qlist = hsp['query_scodon_coords']
-                hlist = hsp['hit_scodon_coords']
+                qlist = hsp['query_scodon_ranges']
+                hlist = hsp['hit_scodon_ranges']
             # and store the values
             qlist.append((sqstart, sqend))
             hlist.append((shstart, shend))
@@ -115,7 +115,7 @@ def parse_vulgar_comp(hsp, vulgar_comp):
 
         # merge adjacent 5', 3', and introns into single intron blocks
         introns = []
-        for start, end in hsp[seq_type + 'intron_coords']:
+        for start, end in hsp[seq_type + 'intron_ranges']:
             if strand >= 0:
                 if not introns or introns[-1][1] != start:
                     introns.append((start, end))
@@ -129,12 +129,12 @@ def parse_vulgar_comp(hsp, vulgar_comp):
                     introns.append((start, end))
                 elif introns[-1][0] == end:
                     introns[-1] = (start, introns[-1][1])
-        # set the merged coords back to hsp dict
-        hsp[seq_type + 'intron_coords'] = introns
+        # set the merged ranges back to hsp dict
+        hsp[seq_type + 'intron_ranges'] = introns
 
-    # set start and end coords
-    hsp['query_coords'] = zip(qstarts, qends)
-    hsp['hit_coords'] = zip(hstarts, hends)
+    # set start and end ranges
+    hsp['query_ranges'] = zip(qstarts, qends)
+    hsp['hit_ranges'] = zip(hstarts, hends)
     return hsp
 
 

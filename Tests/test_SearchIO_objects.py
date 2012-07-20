@@ -914,11 +914,11 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP.query_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._query_strand_get, )
 
-    def test_query_coord_ok(self):
-        """Test HSP.query_coord getter"""
+    def test_query_range_ok(self):
+        """Test HSP.query_range getter"""
         self.hsp.query_start = 9
         self.hsp.query_end = 99
-        self.assertEqual((9, 99), self.hsp.query_coord)
+        self.assertEqual((9, 99), self.hsp.query_range)
 
     def test_query_span_ok(self):
         """Test HSP.query_span getter, smaller from"""
@@ -953,11 +953,11 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP.hit_strand getter, error"""
         self.assertRaises(AttributeError, self.hsp._hit_strand_get, )
 
-    def test_hit_coord_ok(self):
-        """Test HSP.hit_coord getter"""
+    def test_hit_range_ok(self):
+        """Test HSP.hit_range getter"""
         self.hsp.hit_start = 9
         self.hsp.hit_end = 99
-        self.assertEqual((9, 99), self.hsp.hit_coord)
+        self.assertEqual((9, 99), self.hsp.hit_range)
 
     def test_hit_span_ok(self):
         """Test HSP.hit_span getter, smaller from"""

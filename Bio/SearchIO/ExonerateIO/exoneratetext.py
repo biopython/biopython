@@ -163,7 +163,7 @@ def fill_coords(hsp, seq_type, inter_lens):
     if seq_step != 1:
         for i in range(len(coords)):
             coords[i] = coords[i][1], coords[i][0]
-    hsp[seq_type + 'coords'] = coords
+    hsp[seq_type + 'ranges'] = coords
 
     return hsp
 
@@ -319,11 +319,11 @@ class ExonerateTextIterator(BaseExonerateIterator):
             # fill the hsp query and hit coordinates
             hsp = fill_coords(hsp, opp_type, inter_lens)
             strand = 1 if hsp[opp_type + 'strand'] >= 0 else -1
-            # and fill the intervening coords' values
+            # and fill the intervening ranges' values
             if not has_ner:
-                hsp[opp_type + 'intron_coords'] = \
-                        get_inter_coords(hsp[opp_type + 'coords'], strand)
-                hsp[seq_type + 'ner_coords'] = []
+                hsp[opp_type + 'intron_ranges'] = \
+                        get_inter_coords(hsp[opp_type + 'ranges'], strand)
+                hsp[seq_type + 'ner_ranges'] = []
                 # set split codon coordinates
                 scodons = []
                 for idx in range(len(scodon_coords[seq_type[:-1]])):
@@ -333,7 +333,7 @@ class ExonerateTextIterator(BaseExonerateIterator):
                     else:
                         assert not all(pair)
                     a, b = pair
-                    anchor_pair = hsp[opp_type + 'coords'][idx // 2]
+                    anchor_pair = hsp[opp_type + 'ranges'][idx // 2]
                     if a:
                         func = max if strand == 1 else min
                         anchor = func(anchor_pair)
@@ -343,11 +343,11 @@ class ExonerateTextIterator(BaseExonerateIterator):
                         anchor = func(anchor_pair)
                         start_c, end_c = anchor + b * strand, anchor
                     scodons.append((min(start_c, end_c), max(start_c, end_c)))
-                hsp[opp_type + 'scodon_coords'] = scodons
+                hsp[opp_type + 'scodon_ranges'] = scodons
             else:
-                hsp[seq_type + 'ner_coords'] = \
-                        get_inter_coords(hsp[seq_type + 'coords'], strand)
-                hsp[seq_type + 'intron_coords'] = []
+                hsp[seq_type + 'ner_ranges'] = \
+                        get_inter_coords(hsp[seq_type + 'ranges'], strand)
+                hsp[seq_type + 'intron_ranges'] = []
 
         # now that we've finished parsing coords, we can set the hit and start
         # coord according to Biopython's convention (start <= end)
