@@ -270,7 +270,7 @@ class QueryResult(BaseSearchObject):
         if self.desc:
             desc_line = '\n         %s' % self.desc
             if len(desc_line) > 81:
-                desc_line = desc_line[:78] + '...'
+                desc_line = desc_line[:77] + '...'
             qid_line += desc_line
         lines.append(qid_line)
 
@@ -284,18 +284,18 @@ class QueryResult(BaseSearchObject):
             lines.append('   Hits: %s  %s  %s' % ('-'*4, '-'*5, '-'*58))
             pattern = '%13s  %5s  %56s'
             lines.append(pattern % ('#', '# HSP', 'ID + description'.ljust(58)))
-            lines.append(pattern % ('-'*4, '-'*5, '-'*57))
+            lines.append(pattern % ('-'*4, '-'*5, '-'*58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
                     hid_line = '%s  %s' % (hit.id, hit.desc)
-                    if len(hid_line) > 57:
-                        hid_line = hid_line[:54] + '...'
-                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(57)))
+                    if len(hid_line) > 58:
+                        hid_line = hid_line[:55] + '...'
+                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(58)))
                 elif idx > len(self.hits) - 4:
                     hid_line = '%s  %s' % (hit.id, hit.desc)
-                    if len(hid_line) > 57:
-                        hid_line = hid_line[:54] + '...'
-                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(57)))
+                    if len(hid_line) > 58:
+                        hid_line = hid_line[:55] + '...'
+                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(58)))
                 elif idx == 30:
                     lines.append('%14s' % '~~~')
 
