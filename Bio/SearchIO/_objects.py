@@ -44,6 +44,14 @@ class BaseSearchObject(object):
             if attr not in self._NON_STICKY_ATTRS:
                 setattr(obj, attr, self.__dict__[attr])
 
+    def _concat_display(string, max_len, concat_char):
+        """Concatenates the given string for display."""
+        if len(string) > max_len:
+            return string[:max_len - len(concat_char)] + concat_char
+        return string
+
+    _concat_display = staticmethod(_concat_display)
+
 
 class QueryResult(BaseSearchObject):
 
@@ -268,10 +276,8 @@ class QueryResult(BaseSearchObject):
         if hasattr(self, 'seq_len'):
             qid_line += ' (%i)' % self.seq_len
         if self.desc:
-            desc_line = '\n         %s' % self.desc
-            if len(desc_line) > 81:
-                desc_line = desc_line[:77] + '...'
-            qid_line += desc_line
+            qid_line += QueryResult._concat_display('\n         %s' % \
+                    self.desc, 80, '...')
         lines.append(qid_line)
 
         # set target line
@@ -741,10 +747,8 @@ class Hit(BaseSearchObject):
         if hasattr(self, 'seq_len'):
             hid_line += ' (%i)' % self.seq_len
         if self.desc:
-            desc_line = '\n       %s' % self.desc
-            if len(desc_line) > 81:
-                desc_line = desc_line[:78] + '...'
-            hid_line += desc_line
+            hid_line += Hit._concat_display('\n       %s' % self.desc, \
+                    80, '...')
         lines.append(hid_line)
 
         # set hsp line and table
@@ -776,14 +780,12 @@ class Hit(BaseSearchObject):
                 query_end = getattr(hsp, 'query_end', '?')
                 query_range = '%i:%i' % (query_start, query_end)
                 # max column length is 18
-                if len(query_range) > 18:
-                    query_range = query_range[:17] + '~'
+                query_range = Hit._concat_display(query_range, 18, '~')
                 # hit region
                 hit_start = getattr(hsp, 'hit_start', '?')
                 hit_end = getattr(hsp, 'hit_end', '?')
                 hit_range = '%i:%i' % (hit_start, hit_end)
-                if len(hit_range) > 18:
-                    hit_range = hit_range[:17] + '~'
+                hit_range = Hit._concat_display(hit_range, 18, '~')
                 # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
                         query_range, hit_range))
