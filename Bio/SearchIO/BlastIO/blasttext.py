@@ -70,7 +70,7 @@ class BlastTextIterator(object):
                     hsp.bitscore = bhsp.bits
                     hsp.bitscore_raw = bhsp.score
                     # set alignment length
-                    hsp.ali_len = bhsp.identities[1]
+                    hsp.aln_span = bhsp.identities[1]
                     # set frames
                     try:
                         hsp.query_frame = int(bhsp.frame[0])
@@ -95,7 +95,7 @@ class BlastTextIterator(object):
                     hsp.ident_num = bhsp.identities[0]
                     hsp.pos_num = bhsp.positives[0]
                     if hsp.pos_num is None:
-                        hsp.pos_num = hsp.ali_len
+                        hsp.pos_num = hsp.aln_span
                     # set query coordinates
                     startfunc = min if hsp.query_strand >= 0 else max
                     endfunc = max if hsp.query_strand >= 0 else min

@@ -119,7 +119,7 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
         hsp.hit_strand = 0
 
     # set hsp alignment length
-    hsp.ali_len = len(hsp.query)
+    hsp.aln_span = len(hsp.query)
 
     return hsp
 

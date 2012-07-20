@@ -49,7 +49,7 @@ _ELEM_HSP = {
     'Hsp_identity': ('ident_num', int),
     'Hsp_positive': ('pos_num', int),
     'Hsp_gaps': ('gap_num', int),
-    'Hsp_align-len': ('ali_len', int),
+    'Hsp_align-len': ('aln_span', int),
     'Hsp_pattern-from': ('pattern_start', int),
     'Hsp_pattern-to': ('pattern_end', int),
     'Hsp_density': ('density', float),

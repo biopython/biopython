@@ -769,14 +769,14 @@ class Hit(BaseSearchObject):
                 else:
                     bitscore = 'n/a'
                 # alignment length
-                if hasattr(hsp, 'ali_len'):
-                    ali_len = str(hsp.ali_len)
+                if hasattr(hsp, 'aln_span'):
+                    aln_span = str(hsp.aln_span)
                 elif hasattr(hsp, 'query'):
-                    ali_len = str(len(hsp.query))
+                    aln_span = str(len(hsp.query))
                 elif hasattr(hsp, 'hit'):
-                    ali_len = str(len(hsp.hit))
+                    aln_span = str(len(hsp.hit))
                 else:
-                    ali_len = 'n/a'
+                    aln_span = 'n/a'
                 # query region
                 if hasattr(hsp, 'query_start'):
                     query_start = hsp.query_start
@@ -795,7 +795,7 @@ class Hit(BaseSearchObject):
                     hit_end = hsp.hit_end
                 else:
                     hit_end = 'n/a'
-                lines.append(pattern % (str(idx), evalue, bitscore, ali_len, \
+                lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
                         '%i-%i' % (query_start, query_end), '%i-%i' % (hit_start, hit_end)))
 
         return '\n'.join(lines)
@@ -1074,7 +1074,7 @@ class BaseHSP(BaseSearchObject):
 
     query_span = property(fget=_query_span_get)
 
-    # The properties ali_len, gap_num, mismatch_num, and ident_num are all
+    # The properties aln_span, gap_num, mismatch_num, and ident_num are all
     # interconnected ~ we can infer the value of one if the others are all
     # known. So the idea here is to enable the HSP object to compute these
     # values if enough is known.
@@ -1082,24 +1082,24 @@ class BaseHSP(BaseSearchObject):
     # over computed values*. So if the parsed information is available,
     # computation is never done as the parsed values are used instead.
 
-    def _ali_len_get(self):
-        if not hasattr(self, '_ali_len'):
+    def _aln_span_get(self):
+        if not hasattr(self, '_aln_span'):
             try:
-                self._ali_len = self._ident_num + self._mismatch_num + \
+                self._aln_span = self._ident_num + self._mismatch_num + \
                         self._gap_num
             except AttributeError:
                 raise AttributeError("Not enough is known to compute initial length")
-        return self._ali_len
+        return self._aln_span
 
-    def _ali_len_set(self, value):
-        self._ali_len = value
+    def _aln_span_set(self, value):
+        self._aln_span = value
 
-    ali_len = property(fget=_ali_len_get, fset=_ali_len_set)
+    aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
 
     def _ident_num_get(self):
         if not hasattr(self, '_ident_num'):
             try:
-                self._ident_num = self._ali_len - self._mismatch_num - \
+                self._ident_num = self._aln_span - self._mismatch_num - \
                         self._gap_num
             except AttributeError:
                 raise AttributeError("Not enough is known to compute identities")
@@ -1113,7 +1113,7 @@ class BaseHSP(BaseSearchObject):
     def _mismatch_num_get(self):
         if not hasattr(self, '_mismatch_num'):
             try:
-                self._mismatch_num = self._ali_len - self._ident_num - \
+                self._mismatch_num = self._aln_span - self._ident_num - \
                         self._gap_num
             except AttributeError:
                 raise AttributeError("Not enough is known to compute mismatches")
@@ -1127,7 +1127,7 @@ class BaseHSP(BaseSearchObject):
     def _gap_num_get(self):
         if not hasattr(self, '_gap_num'):
             try:
-                self._gap_num = self._ali_len - self._ident_num - \
+                self._gap_num = self._aln_span - self._ident_num - \
                         self._mismatch_num
             except AttributeError:
                 raise AttributeError("Not enough is known to compute gaps")
@@ -1163,7 +1163,7 @@ class BaseHSP(BaseSearchObject):
     def _ident_pct_get(self):
         if not hasattr(self, '_ident_pct'):
             try:
-                self._ident_pct = self.ident_num / float(self.ali_len) * 100
+                self._ident_pct = self.ident_num / float(self.aln_span) * 100
             except AttributeError:
                 raise AttributeError("Not enough is known to compute identity percentage")
         return self._ident_pct
@@ -1176,7 +1176,7 @@ class BaseHSP(BaseSearchObject):
     def _pos_pct_get(self):
         if not hasattr(self, '_pos_pct'):
             try:
-                self._pos_pct = self.pos_num / float(self.ali_len) * 100
+                self._pos_pct = self.pos_num / float(self.aln_span) * 100
             except AttributeError:
                 raise AttributeError("Not enough is known to compute positive percentage")
         return self._pos_pct
@@ -1189,7 +1189,7 @@ class BaseHSP(BaseSearchObject):
     def _gap_pct_get(self):
         if not hasattr(self, '_gap_pct'):
             try:
-                self._gap_pct = self.gap_num / float(self.ali_len) * 100
+                self._gap_pct = self.gap_num / float(self.aln_span) * 100
             except AttributeError:
                 raise AttributeError("Not enough is known to compute gap percentage")
         return self._gap_pct
@@ -1277,15 +1277,15 @@ class HSP(BaseHSP):
             hsp_info.append('Bit score: %.2f' % self.bitscore)
         else:
             hsp_info.append('Bit score: n/a')
-        # alignment length can be obtained from ali_len, query, or hit
-        ali_len = 'n/a'
-        if hasattr(self, 'ali_len'):
-            ali_len = self.ali_len
+        # alignment length can be obtained from aln_span, query, or hit
+        aln_span = 'n/a'
+        if hasattr(self, 'aln_span'):
+            aln_span = self.aln_span
         elif hasattr(self, 'query'):
-            ali_len = len(self.query)
+            aln_span = len(self.query)
         elif hasattr(self, 'hit'):
-            ali_len = len(self.hit)
-        hsp_info.append('Alignment length: %s' % str(ali_len))
+            aln_span = len(self.hit)
+        hsp_info.append('Alignment length: %s' % str(aln_span))
 
         lines.append(qid_line)
         lines.append(hid_line)
@@ -1315,7 +1315,7 @@ class HSP(BaseHSP):
             hseq = str(self.hit.seq)
 
         if hasattr(self, 'query') and hasattr(self, 'hit'):
-            if ali_len < 56:
+            if aln_span < 56:
                 lines.append("Query:%s %s %s" % (str(query_start).rjust(8), \
                         qseq, str(query_end)))
                 if homol:
@@ -1325,10 +1325,10 @@ class HSP(BaseHSP):
             else:
                 # adjust continuation character length, so we don't display
                 # the same residues twice
-                if ali_len - 56 > 3:
+                if aln_span - 56 > 3:
                     cont = '~' * 3
                 else:
-                    cont = '~' * (ali_len - 56)
+                    cont = '~' * (aln_span - 56)
                 lines.append("Query:%s %s%s%s %s" % (str(query_start).rjust(8), \
                                 qseq[:49], cont, qseq[-5:], str(query_end)))
                 if homol:
