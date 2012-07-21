@@ -292,7 +292,7 @@ class BlatPslIterator(object):
         # hit block starts
         if len(psl['strand']) == 2:
             hstarts = _reorient_starts(psl['tstarts'], \
-                    hsp.hit_spans, psl['tsize'], hsp.hit_strand)
+                    hsp.hit_block_spans, psl['tsize'], hsp.hit_strand)
         else:
             hstarts = psl['tstarts']
 
