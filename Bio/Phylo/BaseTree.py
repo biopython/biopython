@@ -717,7 +717,8 @@ class Tree(TreeElement, TreeMixin):
         terminals = [rtree.root]
         while len(terminals) < len(taxa):
             newsplit = random.choice(terminals)
-            newterms = newsplit.split(branch_length=branch_length)
+            newsplit.split(branch_length=branch_length)
+            newterms = newsplit.clades
             if branch_stdev:
                 # Add some noise to the branch lengths
                 for nt in newterms:
