@@ -168,21 +168,19 @@ class Feature(object):
         """
         self.locations = []
         bounds = []
-        if self._feature.sub_features == []:
-            start = self._feature.location.nofuzzy_start
-            end = self._feature.location.nofuzzy_end
+        try:
+            #Compound location?
+            parts = self._feature.location.parts
+        except AttributeError:
+            #No, simple location
+            parts = [self._feature.location]
+        for location in parts:
+            start = location.nofuzzy_start
+            end = location.nofuzzy_end
             #if start > end and self.strand == -1:
             #    start, end = end, start
             self.locations.append((start, end))
             bounds += [start, end]
-        else:
-            for subfeature in self._feature.sub_features:
-                start = subfeature.location.nofuzzy_start
-                end = subfeature.location.nofuzzy_end
-                #if start > end and self.strand == -1:
-                #    start, end = end, start
-                self.locations.append((start, end))
-                bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
         #TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
         if self._feature.strand is None:
