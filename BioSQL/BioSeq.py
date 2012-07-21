@@ -307,6 +307,8 @@ def _retrieve_features(adaptor, primary_id):
             strands = set(sf.strand for sf in feature.sub_features)
             if len(strands)==1 and -1 in strands:
                 #Evil hack time for backwards compatibility
+                #TODO - Check if BioPerl and (old) Biopython did the same,
+                #we may have an existing incompatibility lurking here...
                 locs = [f.location for f in feature.sub_features[::-1]]
             else:
                 #All forward, or mixed strands
