@@ -269,12 +269,18 @@ class BlatPslIterator(object):
         hsp.score = _calc_score(psl, is_protein)
 
         # strand
-        hsp.query_strand = 1 if psl['strand'][0] == '+' else -1
+        #if query is protein, strand is 0
+        if is_protein:
+            hsp.query_strand = 0
+        else:
+            hsp.query_strand = 1 if psl['strand'][0] == '+' else -1
         # try to get hit strand, if it exists
         try:
             hsp.hit_strand = 1 if psl['strand'][1] == '+' else -1
+            hsp._has_hit_strand = True
         except IndexError:
-            pass
+            hsp.hit_strand = 1  # hit strand defaults to plus
+            hsp._has_hit_strand = False
 
         # coordinates
         hsp.query_start = psl['qstart']
@@ -483,22 +489,21 @@ class BlatPslWriter(object):
                 block_sizes = hsp.query_block_spans
 
                 # set strand and starts
-                if hsp.query_strand == 1:
+                if hsp.query_strand >= 0: # since it may be a protein seq
                     strand = '+'
                 else:
                     strand = '-'
                 qstarts = _reorient_starts([x[0] for x in hsp.query_ranges], \
                         hsp.query_block_spans, qresult.seq_len, hsp.query_strand)
 
-                if hasattr(hsp, 'hit_strand'):
-                    if hsp.hit_strand == 1:
-                        hstrand = 1
-                        strand += '+'
-                    else:
-                        hstrand = -1
-                        strand += '-'
-                else:
+                if hsp.hit_strand == 1:
                     hstrand = 1
+                    # only write hit strand if it was present in the source file
+                    if hsp._has_hit_strand:
+                        strand += '+'
+                else:
+                    hstrand = -1
+                    strand += '-'
                 hstarts = _reorient_starts([x[0] for x in hsp.hit_ranges], \
                         hsp.hit_block_spans, hit.seq_len, hstrand)
 
