@@ -267,9 +267,10 @@ class SeqFeature(object):
         for qual_key in sorted(self.qualifiers):
             out += "    Key: %s, Value: %s\n" % (qual_key,
                                                self.qualifiers[qual_key])
-        if len(self.sub_features) != 0:
+        #TODO - Remove this from __str__ since deprecated
+        if len(self._sub_features) != 0:
             out += "Sub-Features\n"
-            for sub_feature in self.sub_features:
+            for sub_feature in self._sub_features:
                 out +="%s\n" % sub_feature
         return out
 
@@ -282,7 +283,7 @@ class SeqFeature(object):
             location_operator = self.location_operator,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
-            sub_features = [f._shift(offset) for f in self.sub_features])
+            sub_features = [f._shift(offset) for f in self._sub_features])
 
     def _flip(self, length):
         """Returns a copy of the feature with its location flipped (PRIVATE).
@@ -299,7 +300,7 @@ class SeqFeature(object):
             location_operator = self.location_operator,
             id = self.id,
             qualifiers = dict(self.qualifiers.iteritems()),
-            sub_features = [f._flip(length) for f in self.sub_features[::-1]])
+            sub_features = [f._flip(length) for f in self._sub_features[::-1]])
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence.
@@ -354,17 +355,19 @@ class SeqFeature(object):
         >>> len(f.extract(seq))
         7
 
-        For simple features without subfeatures this is the same as the region
-        spanned (end position minus start position). However, for a feature
-        defined by combining several subfeatures (e.g. a CDS as the join of
-        several exons) the gaps are not counted (e.g. introns). This ensures
-        that len(f) == len(f.extract(parent_seq)), and also makes sure things
-        work properly with features wrapping the origin etc.
+        This is a proxy for taking the length of the feature's location:
+
+        >>> len(f.location)
+        7
+
+        For simple features this is the same as the region spanned (end
+        position minus start position using Pythonic counting). However, for
+        a compound location (e.g. a CDS as the join of several exons) the
+        gaps are not counted (e.g. introns). This ensures that len(f) matches
+        len(f.extract(parent_seq)), and also makes sure things work properly
+        with features wrapping the origin etc.
         """
-        if self.sub_features:
-            return sum(len(f) for f in self.sub_features)
-        else:
-            return len(self.location)
+        return len(self.location)
 
     def __iter__(self):
         """Iterate over the parent positions within the feature.
@@ -384,19 +387,13 @@ class SeqFeature(object):
         5
         >>> list(f)
         [9, 8, 7, 6, 5]
+
+        This is a proxy for iterating over the location,
+
+        >>> list(f.location)
+        [9, 8, 7, 6, 5]
         """
-        if self.sub_features:
-            if self.strand == -1:
-                for f in self.sub_features[::-1]:
-                    for i in f.location:
-                        yield i
-            else:
-                for f in self.sub_features:
-                    for i in f.location:
-                        yield i
-        else:
-            for i in self.location:
-                yield i
+        return iter(self.location)
 
     def __contains__(self, value):
         """Check if an integer position is within the feature.
@@ -442,17 +439,14 @@ class SeqFeature(object):
         5
         >>> [i for i in range(10) if i in f]
         [3, 4, 5, 6, 7]
+
+        Note that is is a proxy for testing membership on the location.
+
+        >>> [i for i in range(10) if i in f.location]
+        [3, 4, 5, 6, 7]
         """
-        if not isinstance(value, int):
-            raise ValueError("Currently we only support checking for integer "
-                             "positions being within a SeqFeature.")
-        if self.sub_features:
-            for f in self.sub_features:
-                if value in f:
-                    return True
-            return False
-        else:
-            return value in self.location
+        return value in self.location
+
 
 # --- References
 
