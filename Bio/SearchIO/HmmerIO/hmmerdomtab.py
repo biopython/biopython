@@ -69,6 +69,8 @@ class HmmerDomtabIterator(HmmerTabIterator):
         hsp['env_start'] = int(cols[19]) - 1    # env from
         hsp['env_end'] = int(cols[20])          # env to
         hsp['acc_avg'] = float(cols[21])        # acc
+        # strand is always 0, since HMMER now only handles protein
+        hsp['hit_strand'] = hsp['query_strand'] = 0
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:

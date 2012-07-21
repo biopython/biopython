@@ -80,6 +80,8 @@ class HmmerTabIterator(object):
         hsp['evalue'] = float(cols[7])              # evalue (best 1 domain)
         hsp['bitscore'] = float(cols[8])            # score (best 1 domain)
         hsp['bias'] = float(cols[9])                # bias (best 1 domain)
+        # strand is always 0, since HMMER now only handles protein
+        hsp['hit_strand'] = hsp['query_strand'] = 0
 
         return qresult, hit, hsp
 

@@ -273,6 +273,8 @@ class HmmerTextIterator(object):
                 hsp.env_end = int(parsed[13])
                 hsp.env_endtype = parsed[14]
                 hsp.acc_avg = float(parsed[15])
+                # strand is always 0, since HMMER now only handles protein
+                hsp.hit_strand = hsp.query_strand = 0
 
                 self.qresult[hid].append(hsp)
                 self.line = read_forward(self.handle)
