@@ -798,31 +798,34 @@ class DatabaseLoader:
             from Bio import BiopythonWarning
             warnings.warn("%s location operators are not fully supported"
                           % feature.location_operator, BiopythonWarning)
+        try:
+            #Is is a compound location?
+            parts = feature.location.parts
+        except AttributeError:
+            #Simple location
+            parts = [feature.location]
+        if parts and set(loc.strand for loc in parts)==set([-1]):
+            #To mimic prior behaviour of Biopython+BioSQL, reverse order
+            parts = parts[::-1]
+            #TODO - Check what BioPerl does; see also BioSeq.py code
+        for rank, loc in enumerate(parts):
+            self._insert_location(loc, rank + 1, seqfeature_id)
 
-        # two cases, a simple location or a split location
-        if not feature.sub_features:    # simple location
-            self._insert_seqfeature_location(feature, 1, seqfeature_id)
-        else:  # split location
-            for rank, cur_feature in enumerate(feature.sub_features):
-                self._insert_seqfeature_location(cur_feature,
-                                                 rank + 1,
-                                                 seqfeature_id)
-
-    def _insert_seqfeature_location(self, feature, rank, seqfeature_id):
+    def _insert_location(self, location, rank, seqfeature_id):
         """Add a location of a SeqFeature to the seqfeature_location table (PRIVATE).
 
-        TODO - Add location_operators to location_qualifier_value.
+        TODO - Add location operator to location_qualifier_value?
         """
         # convert biopython locations to the 1-based location system
         # used in bioSQL
         # XXX This could also handle fuzzies
-        start = int(feature.location.start) + 1
-        end = int(feature.location.end)
+        start = int(location.start) + 1
+        end = int(location.end)
 
         # Biopython uses None when we don't know strand information but
         # BioSQL requires something (non null) and sets this as zero
         # So we'll use the strand or 0 if Biopython spits out None
-        strand = feature.strand or 0
+        strand = location.strand or 0
 
         # TODO - Record an ontology term for the location (location.term_id)
         # which for now like BioPerl we'll leave as NULL.
@@ -830,11 +833,11 @@ class DatabaseLoader:
         # doesn't really see how it could work for before/after fuzzy positions
         loc_term_id = None
 
-        if feature.ref:
+        if location.ref:
             # sub_feature remote locations when they are in the same db as the current
             # record do not have a value for ref_db, which the SeqFeature object
-            # stores as None. BioSQL schema requires a varchar and is not NULL
-            dbxref_id = self._get_dbxref_id(feature.ref_db or "", feature.ref)
+            # stores as None. BioSQL schema requires a varchar and is not NULL 
+            dbxref_id = self._get_dbxref_id(location.ref_db or "", location.ref)
         else:
             dbxref_id = None
 
