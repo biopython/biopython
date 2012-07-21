@@ -352,7 +352,7 @@ class SeqInterfaceTest(unittest.TestCase):
         cds_feature = test_features[6]
         self.assertEqual(cds_feature.type, "CDS")
         self.assertEqual(str(cds_feature.location), "join{[103:160](+), [319:390](+), [503:579](+)}")
-        for sub_feature in cds_feature.sub_features:
+        for sub_feature in cds_feature._sub_features:
             self.assertEqual(sub_feature.type, "CDS")
             #self.assertEqual(sub_feature.location_operator, "join")
 
@@ -719,13 +719,13 @@ class InDepthLoadTest(unittest.TestCase):
         test_feature = features[4]
         self.assertEqual(test_feature.type, "CDS")
         self.assertEqual(str(test_feature.location), "join{[0:48](+), [142:206](+)}")
-        self.assertEqual(len(test_feature.sub_features), 2)
-        self.assertEqual(str(test_feature.sub_features[0].location), "[0:48](+)")
-        self.assertEqual(test_feature.sub_features[0].type, "CDS")
-        #self.assertEqual(test_feature.sub_features[0].location_operator, "join")
-        self.assertEqual(str(test_feature.sub_features[1].location), "[142:206](+)")
-        self.assertEqual(test_feature.sub_features[1].type, "CDS")
-        #self.assertEqual(test_feature.sub_features[1].location_operator, "join")
+        self.assertEqual(len(test_feature._sub_features), 2)
+        self.assertEqual(str(test_feature._sub_features[0].location), "[0:48](+)")
+        self.assertEqual(test_feature._sub_features[0].type, "CDS")
+        #self.assertEqual(test_feature._sub_features[0].location_operator, "join")
+        self.assertEqual(str(test_feature._sub_features[1].location), "[142:206](+)")
+        self.assertEqual(test_feature._sub_features[1].type, "CDS")
+        #self.assertEqual(test_feature._sub_features[1].location_operator, "join")
         self.assertEqual(len(test_feature.qualifiers.keys()), 6)
         self.assertEqual(test_feature.qualifiers["gene"], ["csp14"])
         self.assertEqual(test_feature.qualifiers["codon_start"], ["2"])
@@ -741,7 +741,7 @@ class InDepthLoadTest(unittest.TestCase):
         test_record = self.db.lookup(accession = "AJ237582")
         test_feature = test_record.features[4]  # DNA, no complement
         self.assertEqual(test_feature.strand, 1)
-        for sub_feature in test_feature.sub_features:
+        for sub_feature in test_feature._sub_features:
             self.assertEqual(sub_feature.strand, 1)
 
         test_record = self.db.lookup(accession = "X55053")
