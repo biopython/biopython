@@ -289,7 +289,8 @@ def _retrieve_features(adaptor, primary_id):
             feature.ref_db = dbname
             feature.ref = version
         else:
-            assert feature.sub_features == []
+            sub_features = feature.sub_features
+            assert sub_features == []
             for location in locations:
                 location_id, start, end, strand = location
                 dbname, version = lookup.get(location_id, (None, None))
@@ -301,18 +302,18 @@ def _retrieve_features(adaptor, primary_id):
                 subfeature.strand = strand
                 subfeature.ref_db = dbname
                 subfeature.ref = version
-                feature.sub_features.append(subfeature)
+                sub_features.append(subfeature)
             # Locations are in order, but because of remote locations for
             # sub-features they are not necessarily in numerical order:
-            strands = set(sf.strand for sf in feature.sub_features)
+            strands = set(sf.strand for sf in sub_features)
             if len(strands)==1 and -1 in strands:
                 #Evil hack time for backwards compatibility
                 #TODO - Check if BioPerl and (old) Biopython did the same,
                 #we may have an existing incompatibility lurking here...
-                locs = [f.location for f in feature.sub_features[::-1]]
+                locs = [f.location for f in sub_features[::-1]]
             else:
                 #All forward, or mixed strands
-                locs = [f.location for f in feature.sub_features]
+                locs = [f.location for f in sub_features]
             feature.location = SeqFeature.CompoundLocation(locs, seqfeature_type)
             #TODO - See Bug 2677 - we don't yet record location_operator,
             #so for consistency with older versions of Biopython default
