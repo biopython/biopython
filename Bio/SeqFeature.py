@@ -161,12 +161,17 @@ class SeqFeature(object):
             self.ref_db = ref_db
 
     def _get_sub_features(self):
+        if self._sub_features:
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Rather using f.sub_features, f.location should be a CompoundFeatureLocation",
+                          BiopythonDeprecationWarning)
         return self._sub_features
     def _set_sub_features(self, value):
         if value:
             import warnings
             from Bio import BiopythonDeprecationWarning
-            warnings.warn("Rather than sub_features, use a CompoundFeatureLocation",
+            warnings.warn("Rather than f.sub_features, use a CompoundFeatureLocation for f.location",
                           BiopythonDeprecationWarning)
         self._sub_features = value
     sub_features = property(fget = _get_sub_features, fset = _set_sub_features,
