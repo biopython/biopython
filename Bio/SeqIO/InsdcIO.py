@@ -237,8 +237,8 @@ def _insdc_feature_location_string(feature, rec_length):
     no strand (either 0 or None) while the child features should have either
     strand +1 or -1 as appropriate, and be listed in the order given here.
     """
-
-    if not feature.sub_features:
+    #Using private variable to avoid deprecation warning
+    if not feature._sub_features:
         #Non-recursive.
         #assert feature.location_operator == "", \
         #       "%s has no subfeatures but location_operator %s" \
@@ -250,14 +250,14 @@ def _insdc_feature_location_string(feature, rec_length):
         return location
     # As noted above, treat reverse complement strand features carefully:
     if feature.strand == -1:
-        for f in feature.sub_features:
+        for f in feature._sub_features:
             if f.strand != -1:
                 raise ValueError("Inconsistent strands: %r for parent, %r for child"
                                  % (feature.strand, f.strand))
         return "complement(%s(%s))" \
                % (feature.location_operator,
                   ",".join(_insdc_location_string_ignoring_strand_and_subfeatures(f.location, rec_length)
-                           for f in feature.sub_features))
+                           for f in feature._sub_features))
     #if feature.strand == +1:
     #    for f in feature.sub_features:
     #        assert f.strand == +1
@@ -265,7 +265,7 @@ def _insdc_feature_location_string(feature, rec_length):
     assert feature.location_operator != ""
     return  "%s(%s)" % (feature.location_operator,
                         ",".join([_insdc_feature_location_string(f, rec_length)
-                                  for f in feature.sub_features]))
+                                  for f in feature._sub_features]))
 
 
 class _InsdcWriter(SequentialSequenceWriter):

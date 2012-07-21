@@ -985,6 +985,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             i = location_line.find("(")
             #cur_feature.location_operator = location_line[:i]
             #we can split on the comma because these are simple locations
+            sub_features = cur_feature.sub_features
             for part in location_line[i+1:-1].split(","):
                 s, e = part.split("..")
                 f = SeqFeature.SeqFeature(SeqFeature.FeatureLocation(int(s)-1,
@@ -992,16 +993,16 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                                                                      strand),
                         location_operator=cur_feature.location_operator,
                         type=cur_feature.type)
-                cur_feature.sub_features.append(f)
+                sub_features.append(f)
             #s = cur_feature.sub_features[0].location.start
             #e = cur_feature.sub_features[-1].location.end
             #cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
             #TODO - Remove use of sub_features
             if strand == -1:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features[::-1]],
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
                                                                    operator=location_line[:i])
             else:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features],
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features],
                                                                    operator=location_line[:i])
             return
 
@@ -1020,6 +1021,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             i = location_line.find("(")
             #cur_feature.location_operator = location_line[:i]
             #Can't split on the comma because of positions like one-of(1,2,3)
+            sub_features = cur_feature.sub_features
             for part in _split_compound_loc(location_line[i+1:-1]):
                 if part.startswith("complement("):
                     assert part[-1]==")"
@@ -1041,7 +1043,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 f = SeqFeature.SeqFeature(location=loc, ref=ref,
                         location_operator=cur_feature.location_operator,
                         type=cur_feature.type)
-                cur_feature.sub_features.append(f)
+                sub_features.append(f)
             # Historically a join on the reverse strand has been represented
             # in Biopython with both the parent SeqFeature and its children
             # (the exons for a CDS) all given a strand of -1.  Likewise, for
@@ -1050,17 +1052,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             # this, join(complement(69611..69724),139856..140087,140625..140650)
             #
             # TODO - Remove use of sub_features
-            strands = set(sf.strand for sf in cur_feature.sub_features)
+            strands = set(sf.strand for sf in sub_features)
             if len(strands)==1:
-                strand = cur_feature.sub_features[0].strand
+                strand = sub_features[0].strand
             else:
                 strand = None # i.e. mixed strands
             if strand == -1:
                 #Reverse the backwards order used in GenBank files
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features[::-1]],
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features[::-1]],
                                                                    operator=location_line[:i])
             else:
-                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in cur_feature.sub_features],
+                cur_feature.location = SeqFeature.CompoundLocation([f.location for f in sub_features],
                                                                    operator=location_line[:i])
             return
         #Not recognised
