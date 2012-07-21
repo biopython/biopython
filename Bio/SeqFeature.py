@@ -78,21 +78,9 @@ class SeqFeature(object):
     analogous to the qualifiers from a GenBank feature table. The keys of
     the dictionary are qualifier names, the values are the qualifier
     values.
-    o sub_features - Additional SeqFeatures which fall under this 'parent'
-    feature. For instance, if we having something like:
-
-    CDS    join(1..10,30..40,50..60)
-
-    Then the top level feature would be of type 'CDS' from 1 to 60 (actually 0
-    to 60 in Python counting) with location_operator='join', and the three sub-
-    features would also be of type 'CDS', and would be from 1 to 10, 30 to
-    40 and 50 to 60, respectively (although actually using Python counting).
-
-    To get the nucleotide sequence for this CDS, you would need to take the
-    parent sequence and do seq[0:10]+seq[29:40]+seq[49:60] (Python counting).
-    Things are more complicated with strands and fuzzy positions. To save you
-    dealing with all these special cases, the SeqFeature provides an extract
-    method to do this for you.
+    o sub_features - Obsolete list of additional SeqFeatures which was
+    used for holding compound locations (e.g. joins in GenBank/EMBL).
+    This is now superceded by a CompoundFeatureLocation as the location.
     """
     def __init__(self, location = None, type = '', location_operator = '',
                  strand = None, id = "<unknown id>",
@@ -159,13 +147,30 @@ class SeqFeature(object):
         self.qualifiers = qualifiers
         if sub_features is None:
             sub_features = []
-        self.sub_features = sub_features
+        else:
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Rather than sub_features, use a CompoundFeatureLocation",
+                          BiopythonDeprecationWarning)
+        self._sub_features = sub_features
         if ref is not None:
             #TODO - Deprecation warning
             self.ref = ref
         if ref_db is not None:
             #TODO - Deprecation warning
             self.ref_db = ref_db
+
+    def _get_sub_features(self):
+        return self._sub_features
+    def _set_sub_features(self, value):
+        if value:
+            import warnings
+            from Bio import BiopythonDeprecationWarning
+            warnings.warn("Rather than sub_features, use a CompoundFeatureLocation",
+                          BiopythonDeprecationWarning)
+        self._sub_features = value
+    sub_features = property(fget = _get_sub_features, fset = _set_sub_features,
+                            doc = "Obsolete representation of compound locations (DEPRECATED).")
 
     def _get_strand(self):
         return self.location.strand
