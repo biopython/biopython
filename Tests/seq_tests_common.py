@@ -114,12 +114,12 @@ def compare_feature(old_f, new_f):
              assert old_l.ref == new_l.ref
              assert old_l.ref_db == new_l.ref_db
 
-    assert len(old_f.sub_features) == len(new_f.sub_features), \
+    #Using private variable to avoid deprecation warnings
+    assert len(old_f._sub_features) == len(new_f._sub_features), \
         "number of sub_features: %s -> %s" % \
-        (len(old_f.sub_features), len(new_f.sub_features))
-
-    for old_sub, new_sub in zip(old_f.sub_features, new_f.sub_features):
-
+        (len(old_f._sub_features), len(new_f._sub_features))
+    
+    for old_sub, new_sub in zip(old_f._sub_features, new_f._sub_features):
         assert old_sub.type == new_sub.type, \
             "%s -> %s" % (old_sub.type, new_sub.type)
 

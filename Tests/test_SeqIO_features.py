@@ -137,9 +137,10 @@ def compare_feature(old, new, ignore_sub_features=False):
         raise ValueError("End %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.end, new.location.end, repr(old), repr(new)))
     if not ignore_sub_features:
-        if len(old.sub_features) != len(new.sub_features):
+        #Using private variable to avoid deprecation warnings,
+        if len(old._sub_features) != len(new._sub_features):
             raise ValueError("Different sub features")
-        for a,b in zip(old.sub_features, new.sub_features):
+        for a,b in zip(old._sub_features, new._sub_features):
             if not compare_feature(a,b):
                 return False
     #This only checks key shared qualifiers
@@ -215,7 +216,8 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertTrue(isinstance(new, Seq))
         self.assertEqual(str(new), answer_str)
 
-        if not feature.sub_features:
+        #Using private variable to avoid deprecation warning
+        if not feature._sub_features:
             new = parent_seq[feature.location.start:feature.location.end]
             if feature.strand == -1:
                 new = reverse_complement(new)
@@ -251,9 +253,9 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         #Checking the strand is tricky - on parsing a GenBank file
         #strand +1 is assumed, but our constructed features for the
         #unit test have mostly defaulted to strand None.
-        self.assertEqual(len(feature.sub_features), len(new_f.sub_features))
-        for f1, f2 in zip(feature.sub_features, new_f.sub_features):
-            f1.type = "misc_feature"  # hack as may not be misc_feature
+        self.assertEqual(len(feature._sub_features), len(new_f._sub_features))
+        for f1, f2 in zip(feature._sub_features, new_f._sub_features):
+            f1.type = "misc_feature" #hack as may not be misc_feature
             if f1.strand is None:
                 f1.strand = f2.strand  # hack as described above
             self.assertEqual(f1.strand, f2.strand)
@@ -560,7 +562,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(join(21..35,41..50))")
         self.assertEqual(_insdc_feature_location_string(f._flip(100),100),
                          "complement(join(61..75,81..90))")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, -1)
         self.assertEqual(f._flip(100).strand, -1)
         f1 = SeqFeature(FeatureLocation(110,120), strand=+1)
@@ -571,7 +573,7 @@ class FeatureWriting(unittest.TestCase):
                          "join(111..120,126..140,146..150)")
         self.assertEqual(_insdc_feature_location_string(f._flip(150),150),
                          "complement(join(1..5,11..25,31..40))")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand,-1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
@@ -582,7 +584,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(join(211..220,226..240))")
         self.assertEqual(_insdc_feature_location_string(f._flip(300),300),
                          "join(61..75,81..90)")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
@@ -594,7 +596,7 @@ class FeatureWriting(unittest.TestCase):
                          "complement(join(311..320,326..340,346..350))")
         self.assertEqual(_insdc_feature_location_string(f._flip(350),350),
                          "join(1..5,11..25,31..40)")
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
@@ -612,7 +614,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(100),100),
                          "complement(join(<61..75,81..>90))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, -1)
         self.assertEqual(f._flip(100).strand, -1)
 
@@ -629,7 +631,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(200),200),
                          "complement(join((41.51)..55,61..75,81..one-of(90,93)))")
         self.assertEqual(f.strand, +1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand,-1)
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
@@ -643,7 +645,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(300),300),
                          "join((57.61)..75,81..>90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
@@ -661,7 +663,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(_insdc_feature_location_string(f._flip(400),400),
                          "join((46.51)..55,one-of(64,61)..75,81..<90)")
         self.assertEqual(f.strand, -1)
-        for sub_f in f._flip(100).sub_features :
+        for sub_f in f._flip(100)._sub_features :
             self.assertEqual(sub_f.strand, +1)
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
