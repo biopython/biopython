@@ -77,7 +77,7 @@ def _set_qresult_hits(qresult, hit_rows):
     return qresult
 
 
-def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
+def _set_hsp_seqs(hsp, hseq, qseq, annot, program):
     """Helper function for the main parsing code (PRIVATE).
 
     Arguments:
@@ -86,7 +86,6 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
     qseq -- String of raw Query sequence.
     annot -- Dictionary containing HSP annotation.
     program -- String of program name.
-    strand -- String of frame, 'f' or 'r', from Fasta frame.
 
     """
     if 'tfast' not in program:
@@ -104,19 +103,20 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program, strand):
         # set seq and alphabet
         setattr(hsp, seq_type, seq)
 
-        if seq_type == 'query':
-            setattr(hsp.query.seq, 'alphabet', _get_alphabet(seq, \
-                    annot[seq_type]))
+        # alphabet of the sequence, not of the actual query that
+        # produces the sequence
+        alphabet = _get_alphabet(seq, annot[seq_type])
+        setattr(getattr(hsp, seq_type).seq, 'alphabet', alphabet)
 
-    # set hsp strand properties
-    if hsp.query.seq.alphabet is not generic_protein:
-        if strand == 'f':
-            hsp.query_strand = 1
+        if alphabet is not generic_protein:
+            # get strand from coordinate; start <= end is plus
+            # start > end is minus
+            if start <= end:
+                setattr(hsp, seq_type + '_strand', 1)
+            else:
+                setattr(hsp, seq_type + '_strand', -1)
         else:
-            hsp.query_strand = -1
-    else:
-        hsp.query_strand = 0
-        hsp.hit_strand = 0
+            setattr(hsp, seq_type + '_strand', 0)
 
     # set hsp alignment length
     hsp.aln_span = len(hsp.query)
@@ -295,7 +295,7 @@ class FastaM10Iterator(object):
                     hit[-1].alignment_annotation['homology'] += self.line.strip('\n')
                 # process HSP alignment and coordinates
                 hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
-                        self._preamble['program'], strand)
+                        self._preamble['program'])
                 yield hit, strand
                 break
             elif self.line.startswith('>'):
@@ -304,7 +304,7 @@ class FastaM10Iterator(object):
                     # try yielding,  if hit is not None
                     try:
                         hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
-                                self._preamble['program'], strand)
+                                self._preamble['program'])
                         yield hit, strand
                     except TypeError:
                         assert hit is None
@@ -326,7 +326,7 @@ class FastaM10Iterator(object):
                 elif self.line.startswith('>--'):
                     # set seq attributes of previous hsp
                     hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
-                            self._preamble['program'], strand)
+                            self._preamble['program'])
                     # and create a new one
                     hsp = HSP(hit_id, query_id)
                     hit.append(hsp)
@@ -372,9 +372,6 @@ class FastaM10Iterator(object):
                             if name in ['_ident', '_sim']:
                                 value *= 100
                             setattr(hit[-1], attr_name, value)
-                        # store strand
-                        elif name == '_frame':
-                            strand = value
                     # otherwise, pool the values for processing later
                     elif state == STATE_QUERY_BLOCK:
                         hsp_annot['query'][name] = value
