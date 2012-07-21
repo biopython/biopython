@@ -652,12 +652,14 @@ class TreeMixin(object):
         New clades have the given branch_length and the same name as this
         clade's root plus an integer suffix (counting from 0). For example,
         splitting a clade named "A" produces sub-clades named "A0" and "A1".
+        If the clade has no name, the prefix "n" is used for child nodes, e.g.
+        "n0" and "n1".
         """
         clade_cls = type(self.root)
-        base_name = self.root.name or ''
+        base_name = self.root.name or 'n'
         for i in range(n):
             clade = clade_cls(name=base_name+str(i),
-                                branch_length=branch_length)
+                              branch_length=branch_length)
             self.root.clades.append(clade)
 
 
