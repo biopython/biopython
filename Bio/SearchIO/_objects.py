@@ -52,6 +52,16 @@ class BaseSearchObject(object):
 
     _concat_display = staticmethod(_concat_display)
 
+    def _attr_display(obj, attr, fmt=None, fallback='?'):
+        """Returns a string of the given object's attribute."""
+        if hasattr(obj, attr):
+            if fmt is not None:
+                return fmt % getattr(obj, attr)
+            return str(getattr(obj, attr))
+        return fallback
+
+    _attr_display = staticmethod(_attr_display)
+
 
 class QueryResult(BaseSearchObject):
 
@@ -753,7 +763,7 @@ class Hit(BaseSearchObject):
 
         # set hsp line and table
         if not self.hsps:
-            lines.append(' HSPs: n/a')
+            lines.append(' HSPs: ?')
         else:
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
                     ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
@@ -763,28 +773,21 @@ class Hit(BaseSearchObject):
             lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
-                evalue = '%.2g' % getattr(hsp, 'evalue', 'n/a')
+                evalue = Hit._attr_display(hsp, 'evalue', fmt='%.2g')
                 # bitscore
-                bitscore = '%.2f' % getattr(hsp, 'bitscore', 'n/a')
+                bitscore = Hit._attr_display(hsp, 'bitscore', fmt='%.2f')
                 # alignment span
-                if hasattr(hsp, 'aln_span'):
-                    aln_span = str(hsp.aln_span)
-                elif hasattr(hsp, 'query'):
-                    aln_span = str(len(hsp.query))
-                elif hasattr(hsp, 'hit'):
-                    aln_span = str(len(hsp.hit))
-                else:
-                    aln_span = 'n/a'
+                aln_span = Hit._attr_display(hsp, 'aln_span')
                 # query region
-                query_start = getattr(hsp, 'query_start', '?')
-                query_end = getattr(hsp, 'query_end', '?')
-                query_range = '%i:%i' % (query_start, query_end)
+                query_start = Hit._attr_display(hsp, 'query_start')
+                query_end = Hit._attr_display(hsp, 'query_end')
+                query_range = '%s:%s' % (query_start, query_end)
                 # max column length is 18
                 query_range = Hit._concat_display(query_range, 18, '~')
                 # hit region
-                hit_start = getattr(hsp, 'hit_start', '?')
-                hit_end = getattr(hsp, 'hit_end', '?')
-                hit_range = '%i:%i' % (hit_start, hit_end)
+                hit_start = Hit._attr_display(hsp, 'hit_start')
+                hit_end = Hit._attr_display(hsp, 'hit_end')
+                hit_range = '%s:%s' % (hit_start, hit_end)
                 hit_range = Hit._concat_display(hit_range, 18, '~')
                 # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
@@ -1196,6 +1199,43 @@ class BaseHSP(BaseSearchObject):
 
     gap_pct = property(fget=_gap_pct_get, fset=_gap_pct_set)
 
+    def _display_aln_header(self):
+        """Prints the alignment header info."""
+        lines = []
+        # set query id line
+        qid_line = self._concat_display('      Query: %s %s' % \
+                (self.query_id, self.query.description), 80, '...')
+        # set hit id line
+        hid_line = self._concat_display('        Hit: %s %s' % \
+                (self.hit_id, self.hit.description), 80, '...')
+
+        # set hsp info line
+        statline = []
+        # evalue
+        evalue = HSP._attr_display(self, 'evalue', fmt='%.2g')
+        statline.append('evalue ' +  evalue)
+        # bitscore
+        bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
+        statline.append('bitscore ' +  bitscore)
+        # alignment span
+        aln_span = HSP._attr_display(self, 'aln_span')
+        statline.append('alignment span %s' % aln_span)
+        # coordinates
+        query_start = HSP._attr_display(self, 'query_start')
+        query_end = HSP._attr_display(self, 'query_end')
+        hit_start = HSP._attr_display(self, 'hit_start')
+        hit_end = HSP._attr_display(self, 'hit_end')
+
+        lines.append(qid_line)
+        lines.append(hid_line)
+        lines.append('      Stats: ' + '; '.join(statline))
+        lines.append('Query range: %s:%s (%r)' % (query_start, query_end, \
+                self.query_strand))
+        lines.append('  Hit range: %s:%s (%r)' % (hit_start, hit_end, \
+                self.hit_strand))
+
+        return '\n'.join(lines)
+
 
 class HSP(BaseHSP):
 
@@ -1243,98 +1283,42 @@ class HSP(BaseHSP):
         return "%s(%s)" % (self.__class__.__name__, info)
 
     def __str__(self):
-        # adapted from Bio.Blast.Record's __str__
         lines = []
 
-        # set query id line
-        qid_line = '  Query: %s' % self.query_id
-        try:
-            qid_line += ' %s' % self.query.description
-        except AttributeError:
-            pass
-        if len(qid_line) > 80:
-            qid_line = qid_line[:77] + '...'
-
-        # set hit id line
-        hid_line = '    Hit: %s' % self.hit_id
-        try:
-            hid_line += ' %s' % self.hit.description
-        except AttributeError:
-            pass
-        if len(hid_line) > 80:
-            hid_line = hid_line[:77] + '...'
-
-        # set hsp info line
-        hsp_info = []
-        if hasattr(self, 'evalue'):
-            hsp_info.append('E-value: %.2g' % self.evalue)
-        else:
-            hsp_info.append('E-value: n/a')
-        if hasattr(self, 'bitscore'):
-            hsp_info.append('Bit score: %.2f' % self.bitscore)
-        else:
-            hsp_info.append('Bit score: n/a')
-        # alignment length can be obtained from aln_span, query, or hit
-        aln_span = 'n/a'
-        if hasattr(self, 'aln_span'):
-            aln_span = self.aln_span
-        elif hasattr(self, 'query'):
-            aln_span = len(self.query)
-        elif hasattr(self, 'hit'):
-            aln_span = len(self.hit)
-        hsp_info.append('Alignment length: %s' % str(aln_span))
-
-        lines.append(qid_line)
-        lines.append(hid_line)
-        lines.append('' + ', '.join(hsp_info))
-        lines.append('--')
-
-        # get attributes for alignment block display
-        # set default values and try to obtain hsp values
-        # coordinates
-        query_end, query_start, hit_end, hit_start = ['n/a'] * 4
-        if hasattr(self, 'query_end'):
-            query_end = self.query_end
-        if hasattr(self, 'query_start'):
-            query_start = self.query_start
-        if hasattr(self, 'hit_end'):
-            hit_end = self.hit_end
-        if hasattr(self, 'hit_start'):
-            hit_start = self.hit_start
-
-        # homology line
-        homol = ''
-        if 'homology' in self.alignment_annotation:
-            homol = self.alignment_annotation['homology']
         # sequences
         if hasattr(self, 'query') and hasattr(self, 'hit'):
+            lines.append('  Alignment:')
             qseq = str(self.query.seq)
             hseq = str(self.hit.seq)
 
-        if hasattr(self, 'query') and hasattr(self, 'hit'):
-            if aln_span < 56:
-                lines.append("Query:%s %s %s" % (str(query_start).rjust(8), \
-                        qseq, str(query_end)))
+            # homology line
+            homol = ''
+            if 'homology' in self.alignment_annotation:
+                homol = self.alignment_annotation['homology']
+
+            if self.aln_span <= 67:
+                lines.append("%10s - %s" % ('Query', qseq))
                 if homol:
-                    lines.append("               %s" % homol)
-                lines.append("  Hit:%s %s %s" % (str(hit_start).rjust(8), \
-                        hseq, str(hit_end)))
+                    lines.append("             %s" % homol)
+                lines.append("%10s - %s" % ('Hit', hseq))
             else:
                 # adjust continuation character length, so we don't display
                 # the same residues twice
-                if aln_span - 56 > 3:
+                if self.aln_span - 66 > 3:
                     cont = '~' * 3
                 else:
-                    cont = '~' * (aln_span - 56)
-                lines.append("Query:%s %s%s%s %s" % (str(query_start).rjust(8), \
-                                qseq[:49], cont, qseq[-5:], str(query_end)))
+                    cont = '~' * (self.aln_span - 66)
+                lines.append("%10s - %s%s%s" % ('Query', \
+                                qseq[:59], cont, qseq[-5:]))
                 if homol:
-                    lines.append("               %s%s%s" % \
-                            (homol[:49], cont, homol[-5:]))
-                lines.append("  Hit:%s %s%s%s %s" % (str(hit_start).rjust(8), \
-                                hseq[:49], cont, hseq[-5:], str(hit_end)))
+                    lines.append("             %s%s%s" % \
+                            (homol[:59], cont, homol[-5:]))
+                lines.append("%10s - %s%s%s" % ('Hit', \
+                                hseq[:59], cont, hseq[-5:]))
+        else:
+            lines.append('  Alignment: ?')
 
-        return '\n'.join(lines)
+        return self._display_aln_header() + '\n' + '\n'.join(lines)
 
     def __getitem__(self, idx):
         if hasattr(self, 'alignment'):
