@@ -937,6 +937,9 @@ class BaseHSP(BaseSearchObject):
         self.query_id = query_id
         self.alphabet = alphabet
         self.alignment_annotation = {}
+        # set default values
+        self.query_strand, self.hit_strand = None, None
+        self.query_frame, self.hit_frame = None, None
 
     def _prep_seq(self, seq, seq_id, seq_type, desc=''):
         """Transforms a sequence into a SeqRecord object).
@@ -963,7 +966,7 @@ class BaseHSP(BaseSearchObject):
                     "SeqRecord object." % seq_type.capitalize())
 
     def _hit_strand_get(self):
-        if not hasattr(self, '_hit_strand'):
+        if self.hit_frame is not None:
             # attempt to get strand from frame
             try:
                 self._hit_strand = self.hit_frame / \
@@ -971,14 +974,12 @@ class BaseHSP(BaseSearchObject):
             # handle if hit frame is 0
             except ZeroDivisionError:
                 self._hit_strand = 0
-            # and handle cases if hit_frame is not set or if it's None
-            except (AttributeError, TypeError):
-                raise AttributeError("Not enought is known to compute hit strand")
+
         return self._hit_strand
 
     def _hit_strand_set(self, value):
         # follow SeqFeature's convention
-        if not value in [-1, 0, 1]:
+        if not value in (-1, 0, 1, None):
             raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
                     value)
         self._hit_strand = value
@@ -986,22 +987,19 @@ class BaseHSP(BaseSearchObject):
     hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set)
 
     def _query_strand_get(self):
-        if not hasattr(self, '_query_strand'):
-            # attempt to get strand from frame
+        if self.query_frame is not None:
             try:
                 self._query_strand = self.query_frame / \
                         abs(self.query_frame)
             # handle if query frame is 0
             except ZeroDivisionError:
                 self._query_strand = 0
-            # and handle cases if query_frame is not set or if it's None
-            except (AttributeError, TypeError):
-                raise AttributeError("Not enough is known to compute query strand")
+
         return self._query_strand
 
     def _query_strand_set(self, value):
         # follow SeqFeature's convention
-        if not value in [-1, 0, 1]:
+        if not value in (-1, 0, 1, None):
             raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
                     value)
         self._query_strand = value

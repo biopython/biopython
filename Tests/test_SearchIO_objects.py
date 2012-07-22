@@ -888,6 +888,13 @@ class HSPWithAlignmentCases(unittest.TestCase):
         # iteration not supported
         self.assertRaises(TypeError, iter, self.hsp)
 
+    def test_default_attrs(self):
+        """Test HSP attributes default values"""
+        self.assertEqual(None, self.hsp.hit_strand)
+        self.assertEqual(None, self.hsp.query_strand)
+        self.assertEqual(None, self.hsp.hit_frame)
+        self.assertEqual(None, self.hsp.query_frame)
+
     def test_query_strand_set_ok(self):
         """Test HSP.query_strand setter"""
         # only 1, 0, -1, and None is allowed as strands
@@ -909,10 +916,6 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP.query_strand getter, minus from frame"""
         self.hsp.query_frame = -2
         self.assertEqual(-1, self.hsp.query_strand)
-
-    def test_query_strand_error(self):
-        """Test HSP.query_strand getter, error"""
-        self.assertRaises(AttributeError, self.hsp._query_strand_get, )
 
     def test_query_range_ok(self):
         """Test HSP.query_range getter"""
@@ -948,10 +951,6 @@ class HSPWithAlignmentCases(unittest.TestCase):
         """Test HSP.hit_strand getter, minus from frame"""
         self.hsp.hit_frame = -2
         self.assertEqual(-1, self.hsp.hit_strand)
-
-    def test_hit_strand_error(self):
-        """Test HSP.hit_strand getter, error"""
-        self.assertRaises(AttributeError, self.hsp._hit_strand_get, )
 
     def test_hit_range_ok(self):
         """Test HSP.hit_range getter"""
