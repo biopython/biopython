@@ -64,6 +64,10 @@ class BaseExonerateIterator(object):
 
         for qresult in self.parse_qresult():
             qresult.program = 'exonerate'
+            # HACK: so that all descriptions are set
+            qresult.description = qresult.description
+            for hit in qresult:
+                hit.description = hit.description
             yield qresult
 
     def read_until(self, bool_func):
