@@ -941,7 +941,7 @@ class BaseHSP(BaseSearchObject):
         self.alphabet = alphabet
         self.alignment_annotation = {}
         # set default values
-        self.query_strand, self.hit_strand = None, None
+        self._query_strand, self._hit_strand = None, None
         self.query_frame, self.hit_frame = None, None
 
     def _prep_seq(self, seq, seq_id, seq_type, desc=''):
