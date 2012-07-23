@@ -1074,11 +1074,18 @@ class BaseHSP(BaseSearchObject):
 
     def _aln_span_get(self):
         if not hasattr(self, '_aln_span'):
-            try:
-                self._aln_span = self._ident_num + self._mismatch_num + \
-                        self._gap_num
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute initial length")
+            if hasattr(self, 'query'):
+                self._aln_span = len(self.query)
+            elif hasattr(self, 'hit'):
+                self._aln_span = len(self.hit)
+            else:
+                try:
+                    self._aln_span = self._ident_num + self._mismatch_num + \
+                            self._gap_num
+                except AttributeError:
+                    raise AttributeError("Not enough is known to compute "
+                            "alignment span")
+
         return self._aln_span
 
     def _aln_span_set(self, value):
