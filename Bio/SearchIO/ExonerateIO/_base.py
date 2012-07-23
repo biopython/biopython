@@ -188,9 +188,12 @@ class BaseExonerateIterator(object):
 
             # each block is basically a different HSP, so we always add it to
             # any hit object we have
-            hsp = GappedHSP(hit_id, qresult_id)
+            hsp = GappedHSP(hit_id, qresult_id, hsp_parsed['hit'], \
+                    hsp_parsed['query'])
             for attr, value in hsp_parsed.items():
-                setattr(hsp, attr, value)
+                # hit and query have been used for initialization
+                if attr not in ('hit', 'query'):
+                    setattr(hsp, attr, value)
             hit.append(hsp)
 
             if not self.has_c4_alignment:

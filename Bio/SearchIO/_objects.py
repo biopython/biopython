@@ -6,7 +6,6 @@
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
 import re
-from itertools import izip
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
@@ -829,13 +828,14 @@ class Hit(BaseSearchObject):
 
         """
         if not isinstance(hsp, BaseHSP):
-            raise TypeError("Hit objects can only contain HSP objects.")
+            raise TypeError("Hit objects can only contain HSP or GappedHSP " \
+                    "objects.")
         if hsp.hit_id != self.id:
-            raise ValueError("Expected HSP with hit ID '%s', found '%s' "
-                    "instead." % (self.id, hsp.hit_id))
+            raise ValueError("Expected HSP or GappedHSP with hit ID '%s', " \
+                    "found '%s' instead." % (self.id, hsp.hit_id))
         if hsp.query_id != self.query_id:
-            raise ValueError("Expected HSP with query ID '%s', found '%s' "
-                    "instead." % (self.query_id, hsp.query_id))
+            raise ValueError("Expected HSP or GappedHSP with query ID '%s', " \
+                    "found '%s' instead." % (self.query_id, hsp.query_id))
 
     def _desc_get(self):
         return self._desc
@@ -1360,7 +1360,8 @@ class HSP(BaseHSP):
 
     def _alignment_get(self):
         if not hasattr(self, '_alignment'):
-            self._alignment = MultipleSeqAlignment([self.query, self.hit], self.alphabet)
+            self._alignment = MultipleSeqAlignment([self.query, self.hit], \
+                    self.alphabet)
         return self._alignment
 
     alignment = property(fget=_alignment_get)
@@ -1370,28 +1371,37 @@ class GappedHSP(BaseHSP):
 
     """Class representing a HSP separated by gaps into blocks."""
 
-    def __init__(self, hit_id=None, query_id=None, blocks=[], \
+    def __init__(self, hit_id=None, query_id=None, hit_seqs=[], query_seqs=[], \
             alphabet=single_letter_alphabet):
         """Initializes a GappedHSP object.
 
         Arguments:
         hit_id -- String, Hit ID of the HSP object.
         query_id -- String of the search query ID.
-        blocks -- List of two-element tuples, each containing a query and
-                  a hit sequence pair.
+        query_seqs -- List of query sequences.
+        hit_seqs -- List of hit sequences.
 
         """
+        assert len(query_seqs) == len(hit_seqs), "GappedHSP objects must be " \
+                "initialized with the same number query and hit sequence " \
+                "blocks."
         BaseHSP.__init__(self, hit_id, query_id, alphabet)
 
-        if blocks:
-            self.query = [x[0] for x in blocks]
-            self.hit = [x[1] for x in blocks]
+        if query_seqs and hit_seqs:
+            # create HSPs, hit, and query objects
+            self._blocks = [HSP(hit_id, query_id, hseq, qseq) for hseq, qseq \
+                    in zip(hit_seqs, query_seqs)]
+        else:
+            self._blocks = []
+
+    def __iter__(self):
+        return iter(self._blocks)
 
     def __len__(self):
-        try:
-            return len(self.alignment)
-        except AttributeError:
-            return []
+        return len(self.blocks)
+
+    def __nonzero__(self):
+        return bool(self._blocks)
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
@@ -1403,35 +1413,112 @@ class GappedHSP(BaseHSP):
 
         return "%s(%s)" % (self.__class__.__name__, info)
 
+    def __getitem__(self, idx):
+        # if key is slice, return a new Hit instance
+        if isinstance(idx, slice):
+            obj = self.__class__(self.id, self.query_id, self.query, self.hit)
+            self._transfer_attrs(obj)
+            return obj
+        return self._blocks[idx]
+
+    def _validate_block(self, block):
+        """Validates an HSP block.
+
+        Valid HSP objects have the same hit_id as the Hit object ID and the
+        same query_id as the Hit object's query_id.
+
+        """
+        if not isinstance(block, HSP):
+            raise TypeError("GappedHSP objects can only contain HSP " \
+                    "objects.")
+        if block.hit_id != self.hit_id:
+            raise ValueError("Expected HSP with hit ID '%s', " \
+                    "found '%s' instead." % (self.hit_id, block.hit_id))
+        if block.query_id != self.query_id:
+            raise ValueError("Expected HSP with query ID '%s', " \
+                    "found '%s' instead." % (self.query_id, block.query_id))
+
+    def _blocks_get(self):
+        return self._blocks
+
+    blocks = property(fget=_blocks_get)
+
     def _hit_get(self):
-        return self._hit
+        return [block.hit for block in self.blocks]
 
-    def _hit_set(self, value):
-        seq_type = 'hit'
-        self._hit = [self._prep_seq(seq, self.hit_id, seq_type) for \
-                seq in value]
-
-    hit = property(fget=_hit_get, fset=_hit_set)
+    hit = property(fget=_hit_get)
 
     def _query_get(self):
-        return self._query
+        return [block.query for block in self.blocks]
 
-    def _query_set(self, value):
-        seq_type = 'query'
-        self._query = [self._prep_seq(seq, self.query_id, seq_type) for \
-                seq in value]
+    query = property(fget=_query_get)
 
-    query = property(fget=_query_get, fset=_query_set)
+    def _alignments_get(self):
+        return [block.alignment for block in self.blocks]
 
-    def _alignment_get(self):
-        if not hasattr(self, '_alignment'):
-            # use izip instead of zip so this still works even if the number
-            # of blocks are not the same
-            self._alignment = [MultipleSeqAlignment([query, hit], self.alphabet) \
-                    for query, hit in izip(self.query, self.hit)]
-        return self._alignment
+    alignments = property(fget=_alignments_get)
 
-    alignment = property(fget=_alignment_get)
+    def _hit_ranges_set(self, value):
+        self._hit_ranges = value
+        # if the object has blocks, len(value) must be == len(blocks)
+        if self.blocks:
+            assert len(value) == len(self.blocks)
+            for block, coords in zip(self.blocks, value):
+                assert coords[0] <= coords[1], \
+                        "Invalid start and end coordinates: %r and %r" % \
+                        (coords[0], coords[1])
+                block.hit_start = coords[0]
+                block.hit_end = coords[1]
+
+    def _hit_ranges_get(self):
+        return self._hit_ranges
+
+    hit_ranges = property(fget=_hit_ranges_get, fset=_hit_ranges_set)
+
+    def _query_ranges_set(self, value):
+        self._query_ranges = value
+        # if the object has blocks, len(value) must be == len(blocks)
+        if self.blocks:
+            assert len(value) == len(self.blocks)
+            for block, coords in zip(self.blocks, value):
+                assert coords[0] <= coords[1], \
+                        "Invalid start and end coordinates: %r and %r" % \
+                        (coords[0], coords[1])
+                block.query_start = coords[0]
+                block.query_end = coords[1]
+
+    def _query_ranges_get(self):
+        return self._query_ranges
+
+    query_ranges = property(fget=_query_ranges_get, fset=_query_ranges_set)
+
+    def _hit_spans_get(self):
+        return [block.hit_span for block in self.blocks]
+
+    hit_spans = property(fget=_hit_spans_get)
+
+    def _query_spans_get(self):
+        return [block.query_span for block in self.blocks]
+
+    query_spans = property(fget=_query_spans_get)
+
+    def _hit_strand_set(self, value):
+        BaseHSP._hit_strand_set(self, value)
+        for block in self.blocks:
+            block.hit_strand = value
+
+    hit_strand = property(fget=BaseHSP._hit_strand_get, fset=_hit_strand_set)
+
+    def _query_strand_set(self, value):
+        BaseHSP._query_strand_set(self, value)
+        for block in self.blocks:
+            block.query_strand = value
+
+    query_strand = property(fget=BaseHSP._query_strand_get, fset=_query_strand_set)
+
+    def append(self, block):
+        self._validate_block(block)
+        self._blocks.append(block)
 
 
 def _test():

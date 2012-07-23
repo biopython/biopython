@@ -180,6 +180,8 @@ class ExonerateVulgarIterator(BaseExonerateIterator):
         hsp['hit_end'] = int(hsp['hit_end'])
         # cast score into int
         hsp['score'] = int(hsp['score'])
+        # placeholder for gapped HSP init
+        hsp['query'], hsp['hit'] = [], []
         # store vulgar line and parse it
         hsp['vulgar_comp'] = vulgars.group(10)
         hsp = parse_vulgar_comp(hsp, hsp['vulgar_comp'])
