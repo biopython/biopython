@@ -394,11 +394,7 @@ class QueryResult(BaseSearchObject):
         self._description = value
         # try to set descriptions of hsp.query.seq within
         for hit in self.hits:
-            for hsp in hit:
-                try:
-                    hsp.query.description = value
-                except AttributeError:
-                    pass
+            hit.query_description = value
 
     description = property(fget=_description_get, fset=_description_set)
 
@@ -844,12 +840,20 @@ class Hit(BaseSearchObject):
         self._description = value
         # try to set descriptions of hsp.hit.seq within
         for hsp in self.hsps:
-            try:
-                hsp.hit.description = value
-            except AttributeError:
-                pass
+            hsp.hit_description = value
 
     description = property(fget=_description_get, fset=_description_set)
+
+    def _query_description_get(self):
+        return self._query_description
+
+    def _query_description_set(self, value):
+        self._query_description = value
+        for hsp in self.hsps:
+            hsp.query_description = value
+
+    query_description = property(fget=_query_description_get, \
+            fset=_query_description_set)
 
     def _hsps_get(self):
         return self._hsps
@@ -967,6 +971,24 @@ class BaseHSP(BaseSearchObject):
         else:
             raise TypeError("%s sequence must be a string or a "
                     "SeqRecord object." % seq_type.capitalize())
+
+    def _hit_description_get(self):
+        return self._hit_description
+
+    def _hit_description_set(self, value):
+        self._hit_description = value
+
+    hit_description = property(fget=_hit_description_get, \
+            fset=_hit_description_set)
+
+    def _query_description_get(self):
+        return self._query_description
+
+    def _query_description_set(self, value):
+        self._query_description = value
+
+    query_description = property(fget=_query_description_get, \
+            fset=_query_description_set)
 
     def _hit_strand_get(self):
         if self.hit_frame is not None:
@@ -1204,10 +1226,12 @@ class BaseHSP(BaseSearchObject):
         lines = []
         # set query id line
         qid_line = self._concat_display('      Query: %s %s' % \
-                (self.query_id, self.query.description), 80, '...')
+                (self.query_id, self.query_description), 80, '...')
         # set hit id line
         hid_line = self._concat_display('        Hit: %s %s' % \
-                (self.hit_id, self.hit.description), 80, '...')
+                (self.hit_id, self.hit_description), 80, '...')
+        lines.append(qid_line)
+        lines.append(hid_line)
 
         # set hsp info line
         statline = []
@@ -1217,18 +1241,13 @@ class BaseHSP(BaseSearchObject):
         # bitscore
         bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
         statline.append('bitscore ' +  bitscore)
-        # alignment span
-        aln_span = HSP._attr_display(self, 'aln_span')
-        statline.append('alignment span %s' % aln_span)
         # coordinates
         query_start = HSP._attr_display(self, 'query_start')
         query_end = HSP._attr_display(self, 'query_end')
         hit_start = HSP._attr_display(self, 'hit_start')
         hit_end = HSP._attr_display(self, 'hit_end')
-
-        lines.append(qid_line)
-        lines.append(hid_line)
         lines.append('      Stats: ' + '; '.join(statline))
+
         lines.append('Query range: %s:%s (%r)' % (query_start, query_end, \
                 self.query_strand))
         lines.append('  Hit range: %s:%s (%r)' % (hit_start, hit_end, \
@@ -1285,9 +1304,11 @@ class HSP(BaseHSP):
     def __str__(self):
         lines = []
 
+        # alignment span
+        aln_span = HSP._attr_display(self, 'aln_span')
+        lines.append('  Alignment: %s column' % aln_span)
         # sequences
         if hasattr(self, 'query') and hasattr(self, 'hit'):
-            lines.append('  Alignment:')
             qseq = str(self.query.seq)
             hseq = str(self.hit.seq)
 
@@ -1315,8 +1336,6 @@ class HSP(BaseHSP):
                             (homol[:59], cont, homol[-5:]))
                 lines.append("%10s - %s%s%s" % ('Hit', \
                                 hseq[:59], cont, hseq[-5:]))
-        else:
-            lines.append('  Alignment: ?')
 
         return self._display_aln_header() + '\n' + '\n'.join(lines)
 
@@ -1366,6 +1385,22 @@ class HSP(BaseHSP):
 
     alignment = property(fget=_alignment_get)
 
+    def _hit_description_set(self, value):
+        BaseHSP._hit_description_set(self, value)
+        if hasattr(self, 'hit'):
+            self.hit.description = value
+
+    hit_description = property(fget=BaseHSP._hit_description_get, \
+            fset=_hit_description_set)
+
+    def _query_description_set(self, value):
+        BaseHSP._query_description_set(self, value)
+        if hasattr(self, 'query'):
+            self.query.description = value
+
+    query_description = property(fget=BaseHSP._query_description_get, \
+            fset=_query_description_set)
+
 
 class GappedHSP(BaseHSP):
 
@@ -1414,7 +1449,36 @@ class GappedHSP(BaseHSP):
         return "%s(%s)" % (self.__class__.__name__, info)
 
     def __str__(self):
-        return self._display_aln_header()
+        lines = []
+
+        # set hsp line and table
+        if not self.blocks:
+            lines.append('     Blocks: ?')
+        else:
+            lines.append('     Blocks: %s  %s  %s  %s' % \
+                    ('-'*3, '-'*18, '-'*18, '-'*18))
+            pattern = '%16s  %18s  %18s  %18s'
+            lines.append(pattern % ('#', 'Alignment span', 'Query range', 'Hit range'))
+            lines.append(pattern % ('-'*3, '-'*18, '-'*18, '-'*18))
+            for idx, block in enumerate(self.blocks):
+                # alignment span
+                aln_span = GappedHSP._attr_display(block, 'aln_span')
+                # query region
+                query_start = GappedHSP._attr_display(block, 'query_start')
+                query_end = GappedHSP._attr_display(block, 'query_end')
+                query_range = '%s:%s' % (query_start, query_end)
+                # max column length is 18
+                query_range = GappedHSP._concat_display(query_range, 18, '~')
+                # hit region
+                hit_start = GappedHSP._attr_display(block, 'hit_start')
+                hit_end = GappedHSP._attr_display(block, 'hit_end')
+                hit_range = '%s:%s' % (hit_start, hit_end)
+                hit_range = GappedHSP._concat_display(hit_range, 18, '~')
+                # append the hsp row
+                lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
+
+        return self._display_aln_header() + '\n' + '\n'.join(lines)
+
 
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
@@ -1460,6 +1524,22 @@ class GappedHSP(BaseHSP):
         return [block.alignment for block in self.blocks]
 
     alignments = property(fget=_alignments_get)
+
+    def _hit_description_set(self, value):
+        BaseHSP._hit_description_set(self, value)
+        for block in self.blocks:
+            block.hit_description = value
+
+    hit_description = property(fget=BaseHSP._hit_description_get, \
+            fset=_hit_description_set)
+
+    def _query_description_set(self, value):
+        BaseHSP._query_description_set(self, value)
+        for block in self.blocks:
+            block.query_description = value
+
+    query_description = property(fget=BaseHSP._query_description_get, \
+            fset=_query_description_set)
 
     def _hit_ranges_set(self, value):
         self._hit_ranges = value
