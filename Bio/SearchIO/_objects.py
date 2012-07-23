@@ -1306,7 +1306,7 @@ class HSP(BaseHSP):
 
         # alignment span
         aln_span = HSP._attr_display(self, 'aln_span')
-        lines.append('  Alignment: %s column' % aln_span)
+        lines.append('  Alignment: %s columns' % aln_span)
         # sequences
         if hasattr(self, 'query') and hasattr(self, 'hit'):
             qseq = str(self.query.seq)
