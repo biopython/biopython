@@ -51,7 +51,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Globin', hit.desc)
+        self.assertEqual('Globin', hit.description)
         hsp = hit[0]
         self.assertEqual(9.2e-21, hsp.evalue)
         self.assertEqual(74.0, hsp.bitscore)
@@ -78,7 +78,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         hsp = hit[0]
         self.assertEqual(2.1e-09, hsp.evalue)
         self.assertEqual(37.6, hsp.bitscore)
@@ -98,7 +98,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         hsp = hit[0]
         self.assertEqual(4.3e-05, hsp.evalue)
         self.assertEqual(23.4, hsp.bitscore)
@@ -125,7 +125,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Exportin 1-like protein', hit.desc)
+        self.assertEqual('Exportin 1-like protein', hit.description)
         hsp = hit[0]
         self.assertEqual(1.1e-33, hsp.evalue)
         self.assertEqual(116.1, hsp.bitscore)
@@ -145,7 +145,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Importin-beta N-terminal domain', hit.desc)
+        self.assertEqual('Importin-beta N-terminal domain', hit.description)
         hsp = hit[0]
         self.assertEqual(0.033, hsp.evalue)
         self.assertEqual(14.0, hsp.bitscore)
@@ -173,7 +173,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
+        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.description)
         hsp = hit[0]
         self.assertEqual(1.4e-36, hsp.evalue)
         self.assertEqual(123.9, hsp.bitscore)
@@ -194,7 +194,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Homeobox domain', hit.desc)
+        self.assertEqual('Homeobox domain', hit.description)
         hsp = hit[0]
         self.assertEqual(4.1e-18, hsp.evalue)
         self.assertEqual(64.6, hsp.bitscore)
@@ -215,7 +215,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, hit.domain_reported_num)
         self.assertEqual(0, hit.domain_included_num)
-        self.assertEqual('Helix-turn-helix domain', hit.desc)
+        self.assertEqual('Helix-turn-helix domain', hit.description)
         hsp = hit[0]
         self.assertEqual(0.16, hsp.evalue)
         self.assertEqual(12.0, hsp.bitscore)
@@ -236,7 +236,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(0, hit.domain_included_num)
-        self.assertEqual('Homeobox KN domain', hit.desc)
+        self.assertEqual('Homeobox KN domain', hit.description)
         hsp = hit[0]
         self.assertEqual(0.095, hsp.evalue)
         self.assertEqual(12.3, hsp.bitscore)
@@ -257,7 +257,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(0, hit.domain_included_num)
-        self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
         hsp = hit[0]
         self.assertEqual(0.26, hsp.evalue)
         self.assertEqual(9.6, hsp.bitscore)
@@ -302,7 +302,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Globin', hit.desc)
+        self.assertEqual('Globin', hit.description)
         hsp = hit[0]
         self.assertEqual(9.2e-21, hsp.evalue)
         self.assertEqual(74.0, hsp.bitscore)
@@ -339,7 +339,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         hsp = hit[0]
         self.assertEqual(2.1e-09, hsp.evalue)
         self.assertEqual(37.6, hsp.bitscore)
@@ -359,7 +359,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, hit.domain_reported_num)
         self.assertEqual(1, hit.domain_included_num)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         hsp = hit[0]
         self.assertEqual(4.3e-05, hsp.evalue)
         self.assertEqual(23.4, hsp.bitscore)

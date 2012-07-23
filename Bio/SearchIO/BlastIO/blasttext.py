@@ -126,10 +126,10 @@ class BlastTextIterator(object):
 
                     hit.append(hsp)
 
-                hit.desc = hdesc
+                hit.description = hdesc
                 qresult.append(hit)
 
-            qresult.desc = qdesc
+            qresult.description = qdesc
             yield qresult
 
 

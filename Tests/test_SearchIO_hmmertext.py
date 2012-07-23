@@ -49,13 +49,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
-        self.assertEqual('myoglobin [Homo sapiens]', qresult.desc)
+        self.assertEqual('myoglobin [Homo sapiens]', qresult.description)
         self.assertEqual(154, qresult.seq_len)
         self.assertEqual(1, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Globin', hit.id)
-        self.assertEqual('Globin', hit.desc)
+        self.assertEqual('Globin', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(6e-21, hit.evalue)
         self.assertEqual(74.6, hit.bitscore)
@@ -98,13 +98,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|126362951:116-221', qresult.id)
-        self.assertEqual('leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]', qresult.desc)
+        self.assertEqual('leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]', qresult.description)
         self.assertEqual(106, qresult.seq_len)
         self.assertEqual(2, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Ig_3', hit.id)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(1.4e-09, hit.evalue)
         self.assertEqual(38.2, hit.bitscore)
@@ -139,7 +139,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('Ig_2', hit.id)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         self.assertEqual(3.5e-05, hit.evalue)
         self.assertEqual(23.7, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -179,13 +179,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
-        self.assertEqual('exportin-5 [Homo sapiens]', qresult.desc)
+        self.assertEqual('exportin-5 [Homo sapiens]', qresult.description)
         self.assertEqual(1204, qresult.seq_len)
         self.assertEqual(2, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Xpo1', hit.id)
-        self.assertEqual('Exportin 1-like protein', hit.desc)
+        self.assertEqual('Exportin 1-like protein', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
@@ -248,7 +248,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
-        self.assertEqual('Importin-beta N-terminal domain', hit.desc)
+        self.assertEqual('Importin-beta N-terminal domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
@@ -317,13 +317,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
-        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.desc)
+        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.description)
         self.assertEqual(352, qresult.seq_len)
         self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Pou', hit.id)
-        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
+        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
@@ -358,7 +358,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
-        self.assertEqual('Homeobox domain', hit.desc)
+        self.assertEqual('Homeobox domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
@@ -395,7 +395,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
-        self.assertEqual('Helix-turn-helix domain', hit.desc)
+        self.assertEqual('Helix-turn-helix domain', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
@@ -454,7 +454,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
-        self.assertEqual('Homeobox KN domain', hit.desc)
+        self.assertEqual('Homeobox KN domain', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
@@ -489,7 +489,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
-        self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
@@ -563,13 +563,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|4885477|ref|NP_005359.1|', qresult.id)
-        self.assertEqual('myoglobin [Homo sapiens]', qresult.desc)
+        self.assertEqual('myoglobin [Homo sapiens]', qresult.description)
         self.assertEqual(154, qresult.seq_len)
         self.assertEqual(1, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Globin', hit.id)
-        self.assertEqual('Globin', hit.desc)
+        self.assertEqual('Globin', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(6e-21, hit.evalue)
         self.assertEqual(74.6, hit.bitscore)
@@ -623,13 +623,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|126362951:116-221', qresult.id)
-        self.assertEqual('leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]', qresult.desc)
+        self.assertEqual('leukocyte immunoglobulin-like receptor subfamily B member 1 isoform 2 precursor [Homo sapiens]', qresult.description)
         self.assertEqual(106, qresult.seq_len)
         self.assertEqual(2, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Ig_3', hit.id)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(1.4e-09, hit.evalue)
         self.assertEqual(38.2, hit.bitscore)
@@ -664,7 +664,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('Ig_2', hit.id)
-        self.assertEqual('Immunoglobulin domain', hit.desc)
+        self.assertEqual('Immunoglobulin domain', hit.description)
         self.assertEqual(3.5e-05, hit.evalue)
         self.assertEqual(23.7, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
@@ -715,13 +715,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
-        self.assertEqual('exportin-5 [Homo sapiens]', qresult.desc)
+        self.assertEqual('exportin-5 [Homo sapiens]', qresult.description)
         self.assertEqual(1204, qresult.seq_len)
         self.assertEqual(2, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Xpo1', hit.id)
-        self.assertEqual('Exportin 1-like protein', hit.desc)
+        self.assertEqual('Exportin 1-like protein', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
@@ -784,7 +784,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
-        self.assertEqual('Importin-beta N-terminal domain', hit.desc)
+        self.assertEqual('Importin-beta N-terminal domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
@@ -864,13 +864,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
-        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.desc)
+        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.description)
         self.assertEqual(352, qresult.seq_len)
         self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Pou', hit.id)
-        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
+        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
@@ -905,7 +905,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
-        self.assertEqual('Homeobox domain', hit.desc)
+        self.assertEqual('Homeobox domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
@@ -942,7 +942,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
-        self.assertEqual('Helix-turn-helix domain', hit.desc)
+        self.assertEqual('Helix-turn-helix domain', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
@@ -1001,7 +1001,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
-        self.assertEqual('Homeobox KN domain', hit.desc)
+        self.assertEqual('Homeobox KN domain', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
@@ -1036,7 +1036,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
-        self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
@@ -1088,13 +1088,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', qresult.id)
-        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.desc)
+        self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', qresult.description)
         self.assertEqual(352, qresult.seq_len)
         self.assertEqual(5, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Pou', hit.id)
-        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.desc)
+        self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(7e-37, hit.evalue)
         self.assertEqual(124.8, hit.bitscore)
@@ -1123,7 +1123,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[1]
         self.assertEqual('Homeobox', hit.id)
-        self.assertEqual('Homeobox domain', hit.desc)
+        self.assertEqual('Homeobox domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(2.1e-18, hit.evalue)
         self.assertEqual(65.5, hit.bitscore)
@@ -1152,7 +1152,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[2]
         self.assertEqual('HTH_31', hit.id)
-        self.assertEqual('Helix-turn-helix domain', hit.desc)
+        self.assertEqual('Helix-turn-helix domain', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.012, hit.evalue)
         self.assertEqual(15.6, hit.bitscore)
@@ -1199,7 +1199,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[3]
         self.assertEqual('Homeobox_KN', hit.id)
-        self.assertEqual('Homeobox KN domain', hit.desc)
+        self.assertEqual('Homeobox KN domain', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.039, hit.evalue)
         self.assertEqual(13.5, hit.bitscore)
@@ -1228,7 +1228,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[4]
         self.assertEqual('DUF521', hit.id)
-        self.assertEqual('Protein of unknown function (DUF521)', hit.desc)
+        self.assertEqual('Protein of unknown function (DUF521)', hit.description)
         self.assertFalse(hit.is_included)
         self.assertEqual(0.14, hit.evalue)
         self.assertEqual(10.5, hit.bitscore)
@@ -1274,13 +1274,13 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam-A.hmm', qresult.target)
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', qresult.id)
-        self.assertEqual('exportin-5 [Homo sapiens]', qresult.desc)
+        self.assertEqual('exportin-5 [Homo sapiens]', qresult.description)
         self.assertEqual(1204, qresult.seq_len)
         self.assertEqual(2, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('Xpo1', hit.id)
-        self.assertEqual('Exportin 1-like protein', hit.desc)
+        self.assertEqual('Exportin 1-like protein', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(7.8e-34, hit.evalue)
         self.assertEqual(116.6, hit.bitscore)
@@ -1343,7 +1343,7 @@ class HmmerscanCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('IBN_N', hit.id)
-        self.assertEqual('Importin-beta N-terminal domain', hit.desc)
+        self.assertEqual('Importin-beta N-terminal domain', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(0.0039, hit.evalue)
         self.assertEqual(16.9, hit.bitscore)
@@ -1446,13 +1446,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
-        self.assertEqual('Protein kinase domain', qresult.desc)
+        self.assertEqual('Protein kinase domain', qresult.description)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1515,7 +1515,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
@@ -1595,13 +1595,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
-        self.assertEqual('Protein kinase domain', qresult.desc)
+        self.assertEqual('Protein kinase domain', qresult.description)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1648,7 +1648,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
@@ -1712,13 +1712,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
-        self.assertEqual('Protein kinase domain', qresult.desc)
+        self.assertEqual('Protein kinase domain', qresult.description)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1781,7 +1781,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)
@@ -1873,13 +1873,13 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('3.0', qresult.version)
         self.assertEqual('Pkinase', qresult.id)
         self.assertEqual('PF00069.17', qresult.acc)
-        self.assertEqual('Protein kinase domain', qresult.desc)
+        self.assertEqual('Protein kinase domain', qresult.description)
         self.assertEqual(260, qresult.seq_len)
         self.assertEqual(7, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(8.4e-147, hit.evalue)
         self.assertEqual(492.3, hit.bitscore)
@@ -1942,7 +1942,7 @@ class HmmersearchCases(unittest.TestCase):
 
         hit = qresult[-1]
         self.assertEqual('sp|P18654|KS6A3_MOUSE', hit.id)
-        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.desc)
+        self.assertEqual('Ribosomal protein S6 kinase alpha-3 OS', hit.description)
         self.assertTrue(hit.is_included)
         self.assertEqual(5e-144, hit.evalue)
         self.assertEqual(483.2, hit.bitscore)

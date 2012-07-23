@@ -146,7 +146,7 @@ class HmmerTextIterator(object):
                         self.line = read_forward(self.handle)
 
             # append desc here, so hsp attributes are also set
-            self.qresult.desc = desc.strip()
+            self.qresult.description = desc.strip()
             yield self.qresult
             self.line = read_forward(self.handle)
 
@@ -198,7 +198,7 @@ class HmmerTextIterator(object):
             # row[3:6] is not parsed, since the info is available the the HSP level
             hit.domain_exp_num = float(row[6])
             hit.domain_obs_num = int(row[7])
-            hit.desc = row[9]
+            hit.description = row[9]
             # don't forget to attach the boolean is_included
             hit.is_included = is_included
 
@@ -333,8 +333,8 @@ class HmmerTextIterator(object):
                     elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                         hsp.hit = aliseq
                         hsp.query = hmmseq
-                    hsp.hit.description = self.qresult[hid].desc
-                    hsp.query.description = self.qresult.desc
+                    hsp.hit.description = self.qresult[hid].description
+                    hsp.query.description = self.qresult.description
                     dom_counter += 1
                     hmmseq = ''
                     aliseq = ''

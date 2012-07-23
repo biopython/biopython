@@ -67,14 +67,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('affine:local:dna2dna', qresult.model)
         self.assertEqual(3, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -104,7 +104,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -134,7 +134,7 @@ class ExonerateTextCases(unittest.TestCase):
         # third hit
         hit = qresult[2]
         self.assertEqual('gi|330443715|ref|NC_001146.8|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIV, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # third hit, first hsp
         hsp = qresult[2][0]
@@ -175,14 +175,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('cdna2genome', qresult.model)
         self.assertEqual(2, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -237,7 +237,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -286,14 +286,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('coding2coding', qresult.model)
         self.assertEqual(2, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -348,7 +348,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -389,14 +389,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('coding2genome', qresult.model)
         self.assertEqual(2, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -451,7 +451,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -492,14 +492,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('est2genome', qresult.model)
         self.assertEqual(2, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -529,7 +529,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -608,14 +608,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('sacCer3_dna', qresult.id)
-        self.assertEqual('range=chrIV:1319469-1319997 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.desc)
+        self.assertEqual('range=chrIV:1319469-1319997 5\'pad=0 3\'pad=0 strand=+ repeatMasking=none', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('genome2genome', qresult.model)
         self.assertEqual(3, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -670,7 +670,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome III, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome III, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -705,7 +705,7 @@ class ExonerateTextCases(unittest.TestCase):
         # third hit
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XI, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XI, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # third hit, first hsp
         hsp = qresult[2][0]
@@ -751,14 +751,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('ungapped:dna2dna', qresult.model)
         self.assertEqual(2, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -788,7 +788,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -854,14 +854,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('ungapped:codon', qresult.model)
         self.assertEqual(1, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(3, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -952,14 +952,14 @@ class ExonerateTextCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual('NER:affine:local:dna2dna', qresult.model)
         self.assertEqual(2, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -1012,7 +1012,7 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443681|ref|NC_001144.5|', hit.id)
-        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XII, complete sequence', hit.desc)
+        self.assertEqual('Saccharomyces cerevisiae S288c chromosome XII, complete sequence', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -1272,13 +1272,13 @@ class ExonerateVulgarCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('sacCer3_dna', qresult.id)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual(3, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -1311,7 +1311,7 @@ class ExonerateVulgarCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -1330,7 +1330,7 @@ class ExonerateVulgarCases(unittest.TestCase):
         # third hit
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(1, len(hit))
         # third hit, first hsp
         hsp = qresult[2][0]
@@ -1366,13 +1366,13 @@ class ExonerateCigarCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('sacCer3_dna', qresult.id)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual(3, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(2, len(hit))
         # first hit, first hsp
         hsp = qresult[0][0]
@@ -1397,7 +1397,7 @@ class ExonerateCigarCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(1, len(hit))
         # second hit, first hsp
         hsp = qresult[1][0]
@@ -1412,7 +1412,7 @@ class ExonerateCigarCases(unittest.TestCase):
         # third hit
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(1, len(hit))
         # third hit, first hsp
         hsp = qresult[2][0]

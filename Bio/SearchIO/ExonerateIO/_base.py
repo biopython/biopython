@@ -81,11 +81,11 @@ class BaseExonerateIterator(object):
         for line in aln_header:
             # query line
             if line.startswith('Query:'):
-                qresult['id'], qresult['desc']  = \
+                qresult['id'], qresult['description']  = \
                         _parse_hit_or_query_line(line)
             # target line
             elif line.startswith('Target:'):
-                hit['id'], hit['desc'] = \
+                hit['id'], hit['description'] = \
                         _parse_hit_or_query_line(line)
             # model line
             elif line.startswith('Model:'):
@@ -104,16 +104,16 @@ class BaseExonerateIterator(object):
                 hsp['hit_start'], hsp['hit_end'] = line.split(' ', 4)[2:5:2]
 
         # determine strand
-        if qresult['desc'].endswith(':[revcomp]'):
+        if qresult['description'].endswith(':[revcomp]'):
             hsp['query_strand'] = '-'
-            qresult['desc'] = qresult['desc'].replace(':[revcomp]', '')
+            qresult['description'] = qresult['description'].replace(':[revcomp]', '')
         elif qresult['model'].startswith('protein2'):
             hsp['query_strand'] = '.'
         else:
             hsp['query_strand'] = '+'
-        if hit['desc'].endswith(':[revcomp]'):
+        if hit['description'].endswith(':[revcomp]'):
             hsp['hit_strand'] = '-'
-            hit['desc'] = hit['desc'].replace(':[revcomp]', '')
+            hit['description'] = hit['description'].replace(':[revcomp]', '')
         else:
             hsp['hit_strand'] = '+'
 

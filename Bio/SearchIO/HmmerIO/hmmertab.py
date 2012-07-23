@@ -75,7 +75,7 @@ class HmmerTabIterator(object):
         hit['domain_obs_num'] = int(cols[15])       # dom
         hit['domain_reported_num'] = int(cols[16])  # rep
         hit['domain_included_num'] = int(cols[17])  # inc
-        hit['desc'] = cols[18]                      # description of target
+        hit['description'] = cols[18]               # description of target
         hsp = {}
         hsp['evalue'] = float(cols[7])              # evalue (best 1 domain)
         hsp['bitscore'] = float(cols[8])            # score (best 1 domain)
@@ -287,7 +287,7 @@ class HmmerTabWriter(object):
             hit.bitscore, hit.bias, hit[0].evalue, hit[0].bitscore, \
             hit[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num, \
             hit.overlap_num, hit.env_num, hit.domain_obs_num, \
-            hit.domain_reported_num, hit.domain_included_num, hit.desc)
+            hit.domain_reported_num, hit.domain_included_num, hit.description)
 
         return rows
 

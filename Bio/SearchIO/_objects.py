@@ -190,7 +190,7 @@ class QueryResult(BaseSearchObject):
         self.program = '<unknown>'
         self.target = '<unknown>'
         self.version = '<unknown>'
-        self._desc = ''
+        self._description = ''
 
         # validate Hit objects and fill up self._hits
         for hit in hits:
@@ -284,9 +284,9 @@ class QueryResult(BaseSearchObject):
         qid_line = '  Query: %s' % self.id
         if hasattr(self, 'seq_len'):
             qid_line += ' (%i)' % self.seq_len
-        if self.desc:
+        if self.description:
             qid_line += QueryResult._concat_display('\n         %s' % \
-                    self.desc, 80, '...')
+                    self.description, 80, '...')
         lines.append(qid_line)
 
         # set target line
@@ -302,12 +302,12 @@ class QueryResult(BaseSearchObject):
             lines.append(pattern % ('-'*4, '-'*5, '-'*58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
-                    hid_line = '%s  %s' % (hit.id, hit.desc)
+                    hid_line = '%s  %s' % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + '...'
                     lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(58)))
                 elif idx > len(self.hits) - 4:
-                    hid_line = '%s  %s' % (hit.id, hit.desc)
+                    hid_line = '%s  %s' % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + '...'
                     lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(58)))
@@ -387,11 +387,11 @@ class QueryResult(BaseSearchObject):
             del self._hits[key]
         return
 
-    def _desc_get(self):
-        return self._desc
+    def _description_get(self):
+        return self._description
 
-    def _desc_set(self, value):
-        self._desc = value
+    def _description_set(self, value):
+        self._description = value
         # try to set descriptions of hsp.query.seq within
         for hit in self.hits:
             for hsp in hit:
@@ -400,7 +400,7 @@ class QueryResult(BaseSearchObject):
                 except AttributeError:
                     pass
 
-    desc = property(fget=_desc_get, fset=_desc_set)
+    description = property(fget=_description_get, fset=_description_set)
 
     def _id_get(self):
         return self._id
@@ -723,7 +723,7 @@ class Hit(BaseSearchObject):
 
         self._id = id
         self._query_id= query_id
-        self._desc = ''
+        self._description = ''
 
         self._hsps = []
         for hsp in hsps:
@@ -755,8 +755,8 @@ class Hit(BaseSearchObject):
         hid_line = '  Hit: %s' % self.id
         if hasattr(self, 'seq_len'):
             hid_line += ' (%i)' % self.seq_len
-        if self.desc:
-            hid_line += Hit._concat_display('\n       %s' % self.desc, \
+        if self.description:
+            hid_line += Hit._concat_display('\n       %s' % self.description, \
                     80, '...')
         lines.append(hid_line)
 
@@ -837,11 +837,11 @@ class Hit(BaseSearchObject):
             raise ValueError("Expected HSP or GappedHSP with query ID '%s', " \
                     "found '%s' instead." % (self.query_id, hsp.query_id))
 
-    def _desc_get(self):
-        return self._desc
+    def _description_get(self):
+        return self._description
 
-    def _desc_set(self, value):
-        self._desc = value
+    def _description_set(self, value):
+        self._description = value
         # try to set descriptions of hsp.hit.seq within
         for hsp in self.hsps:
             try:
@@ -849,7 +849,7 @@ class Hit(BaseSearchObject):
             except AttributeError:
                 pass
 
-    desc = property(fget=_desc_get, fset=_desc_set)
+    description = property(fget=_description_get, fset=_description_set)
 
     def _hsps_get(self):
         return self._hsps
@@ -1412,6 +1412,9 @@ class GappedHSP(BaseHSP):
             pass
 
         return "%s(%s)" % (self.__class__.__name__, info)
+
+    def __str__(self):
+        return self._display_aln_header()
 
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance

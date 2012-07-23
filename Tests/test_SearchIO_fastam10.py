@@ -43,12 +43,12 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002695.faa', qresult.target)
         self.assertEqual(107, qresult.seq_len)
-        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s 107 aa', qresult.desc)
+        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s 107 aa', qresult.description)
         self.assertEqual(2, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|162139799|ref|NP_309634.2|', hit.id)
-        self.assertEqual('23S rRNA pseudouridine synthase E [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('23S rRNA pseudouridine synthase E [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(207, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -73,7 +73,7 @@ class Fasta34Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|15831859|ref|NP_310632.1|', hit.id)
-        self.assertEqual('trehalose-6-phosphate phosphatase [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('trehalose-6-phosphate phosphatase [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(266, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
@@ -103,12 +103,12 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002695.faa', qresult.target)
         self.assertEqual(126, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa', qresult.description)
         self.assertEqual(2, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|15829419|ref|NP_308192.1|', hit.id)
-        self.assertEqual('serine endoprotease [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('serine endoprotease [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(474, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -133,7 +133,7 @@ class Fasta34Cases(unittest.TestCase):
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|15832592|ref|NP_311365.1|', hit.id)
-        self.assertEqual('phosphoribosylaminoimidazole-succinocarboxamide synthase [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('phosphoribosylaminoimidazole-succinocarboxamide synthase [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(237, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
@@ -163,12 +163,12 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002695.faa', qresult.target)
         self.assertEqual(346, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa', qresult.description)
         self.assertEqual(2, len(qresult))
         # third qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|38704138|ref|NP_311957.2|', hit.id)
-        self.assertEqual('hypothetical protein ECs3930 [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('hypothetical protein ECs3930 [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(111, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
@@ -193,7 +193,7 @@ class Fasta34Cases(unittest.TestCase):
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|15833861|ref|NP_312634.1|', hit.id)
-        self.assertEqual('hypothetical protein ECs4607 [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('hypothetical protein ECs4607 [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(330, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
@@ -237,12 +237,12 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002127.faa', qresult.target)
         self.assertEqual(183, qresult.seq_len)
-        self.assertEqual('hypothetical protein KPN_pKPN7p10262 [Klebsiella pneumoniae subsp. pneumonia 183 aa', qresult.desc)
+        self.assertEqual('hypothetical protein KPN_pKPN7p10262 [Klebsiella pneumoniae subsp. pneumonia 183 aa', qresult.description)
         self.assertEqual(1, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|10955263|ref|NP_052604.1|', hit.id)
-        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(107, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -272,7 +272,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002127.faa', qresult.target)
         self.assertEqual(76, qresult.seq_len)
-        self.assertEqual('hypothetical protein KPN_pKPN7p10263 [Klebsiella pneumoniae subsp. pneumonia 76 aa', qresult.desc)
+        self.assertEqual('hypothetical protein KPN_pKPN7p10263 [Klebsiella pneumoniae subsp. pneumonia 76 aa', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test third qresult
@@ -282,7 +282,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002127.faa', qresult.target)
         self.assertEqual(112, qresult.seq_len)
-        self.assertEqual('hypothetical protein KPN_pKPN7p10264 [Klebsiella pneumoniae subsp. pneumonia 112 aa', qresult.desc)
+        self.assertEqual('hypothetical protein KPN_pKPN7p10264 [Klebsiella pneumoniae subsp. pneumonia 112 aa', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test fourth qresult
@@ -292,12 +292,12 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002127.faa', qresult.target)
         self.assertEqual(63, qresult.seq_len)
-        self.assertEqual('RNA one modulator-like protein [Klebsiella pneumoniae subsp. pneumoniae  63 aa', qresult.desc)
+        self.assertEqual('RNA one modulator-like protein [Klebsiella pneumoniae subsp. pneumoniae  63 aa', qresult.description)
         self.assertEqual(1, len(qresult))
         # fourth qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|10955265|ref|NP_052606.1|', hit.id)
-        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(346, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, first hit, first hsp
@@ -327,12 +327,12 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual('34.26', qresult.version)
         self.assertEqual('NC_002127.faa', qresult.target)
         self.assertEqual(133, qresult.seq_len)
-        self.assertEqual('Excl1 protein [Klebsiella pneumoniae subsp. pneumoniae  133 aa', qresult.desc)
+        self.assertEqual('Excl1 protein [Klebsiella pneumoniae subsp. pneumoniae  133 aa', qresult.description)
         self.assertEqual(1, len(qresult))
         # fifth qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|10955264|ref|NP_052605.1|', hit.id)
-        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(126, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fifth qresult, first hit, first hsp
@@ -379,12 +379,12 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.03', qresult.version)
         self.assertEqual('NC_009649.faa', qresult.target)
         self.assertEqual(107, qresult.seq_len)
-        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s 107 aa', qresult.desc)
+        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s 107 aa', qresult.description)
         self.assertEqual(2, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|152973457|ref|YP_001338508.1|', hit.id)
-        self.assertEqual('ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(931, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -409,7 +409,7 @@ class Fasta35Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973588|ref|YP_001338639.1|', hit.id)
-        self.assertEqual('F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(459, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
@@ -439,12 +439,12 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.03', qresult.version)
         self.assertEqual('NC_009649.faa', qresult.target)
         self.assertEqual(126, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa', qresult.description)
         self.assertEqual(1, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|152973462|ref|YP_001338513.1|', hit.id)
-        self.assertEqual('hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(101, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -474,12 +474,12 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.03', qresult.version)
         self.assertEqual('NC_009649.faa', qresult.target)
         self.assertEqual(346, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa', qresult.description)
         self.assertEqual(1, len(qresult))
         # third qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|152973545|ref|YP_001338596.1|', hit.id)
-        self.assertEqual('putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(242, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
@@ -523,7 +523,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.04', qresult.version)
         self.assertEqual('NC_002695.ffn', qresult.target)
         self.assertEqual(324, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test second qresult
@@ -533,12 +533,12 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.04', qresult.version)
         self.assertEqual('NC_002695.ffn', qresult.target)
         self.assertEqual(381, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(1, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('ref|NC_002695.1|:1970775-1971404', hit.id)
-        self.assertEqual('', hit.desc)
+        self.assertEqual('', hit.description)
         self.assertEqual(630, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -567,7 +567,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.04', qresult.version)
         self.assertEqual('NC_002695.ffn', qresult.target)
         self.assertEqual(1041, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(0, len(qresult))
 
     def test_output005(self):
@@ -591,7 +591,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.03', qresult.version)
         self.assertEqual('NC_002128.faa', qresult.target)
         self.assertEqual(107, qresult.seq_len)
-        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s 107 aa', qresult.desc)
+        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s 107 aa', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test second qresult
@@ -601,12 +601,12 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.03', qresult.version)
         self.assertEqual('NC_002128.faa', qresult.target)
         self.assertEqual(126, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s 126 aa', qresult.description)
         self.assertEqual(1, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|10955282|ref|NP_052623.1|', hit.id)
-        self.assertEqual('hemolysin C [Escherichia coli O157:H7 str. Sakai]', hit.desc)
+        self.assertEqual('hemolysin C [Escherichia coli O157:H7 str. Sakai]', hit.description)
         self.assertEqual(163, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -634,7 +634,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.03', qresult.version)
         self.assertEqual('NC_002128.faa', qresult.target)
         self.assertEqual(346, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s 346 aa', qresult.description)
         self.assertEqual(0, len(qresult))
 
     def test_output006(self):
@@ -658,12 +658,12 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual('35.04', qresult.version)
         self.assertEqual('orchid_cds.txt', qresult.target)
         self.assertEqual(131, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(1, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|116660610|gb|EG558221.1|EG558221', hit.id)
-        self.assertEqual('CR03001A07 Root CR03 cDNA library Catharanthus roseus cDNA clone CR03001A07 5\', mRNA sequence', hit.desc)
+        self.assertEqual('CR03001A07 Root CR03 cDNA library Catharanthus roseus cDNA clone CR03001A07 5\', mRNA sequence', hit.description)
         self.assertEqual(573, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -709,12 +709,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('NC_009649.faa', qresult.target)
         self.assertEqual(107, qresult.seq_len)
-        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s', qresult.desc)
+        self.assertEqual('plasmid mobilization [Escherichia coli O157:H7 s', qresult.description)
         self.assertEqual(3, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|152973457|ref|YP_001338508.1|', hit.id)
-        self.assertEqual('ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('ATPase with chaperone activity, ATP-binding subunit [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(931, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -739,7 +739,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973588|ref|YP_001338639.1|', hit.id)
-        self.assertEqual('F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('F pilus assembly protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(459, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
@@ -764,7 +764,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|152973480|ref|YP_001338531.1|', hit.id)
-        self.assertEqual('Arsenate reductase (Arsenical pump modifier) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('Arsenate reductase (Arsenical pump modifier) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(141, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, third hit, first hsp
@@ -794,12 +794,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('NC_009649.faa', qresult.target)
         self.assertEqual(126, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_02 [Escherichia coli O157:H7 s', qresult.description)
         self.assertEqual(4, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|152973462|ref|YP_001338513.1|', hit.id)
-        self.assertEqual('hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('hypothetical protein KPN_pKPN3p05904 [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(101, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -824,7 +824,7 @@ class Fasta36Cases(unittest.TestCase):
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973509|ref|YP_001338560.1|', hit.id)
-        self.assertEqual('probable sensor kinase (silver resistance) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('probable sensor kinase (silver resistance) [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(448, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
@@ -849,7 +849,7 @@ class Fasta36Cases(unittest.TestCase):
         # second qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|152973581|ref|YP_001338632.1|', hit.id)
-        self.assertEqual('inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(84, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, third hit, first hsp
@@ -874,7 +874,7 @@ class Fasta36Cases(unittest.TestCase):
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|152973536|ref|YP_001338587.1|', hit.id)
-        self.assertEqual('putative inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('putative inner membrane protein [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(84, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, fourth hit, first hsp
@@ -904,12 +904,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('NC_009649.faa', qresult.target)
         self.assertEqual(346, qresult.seq_len)
-        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s', qresult.desc)
+        self.assertEqual('hypothetical protein pOSAK1_03 [Escherichia coli O157:H7 s', qresult.description)
         self.assertEqual(2, len(qresult))
         # third qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|152973545|ref|YP_001338596.1|', hit.id)
-        self.assertEqual('putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('putative plasmid SOS inhibition protein A [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(242, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
@@ -934,7 +934,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|152973505|ref|YP_001338556.1|', hit.id)
-        self.assertEqual('putative membrane fusion protein SilB [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.desc)
+        self.assertEqual('putative membrane fusion protein SilB [Klebsiella pneumoniae subsp. pneumoniae MGH 78578]', hit.description)
         self.assertEqual(430, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
@@ -978,7 +978,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('rhodopsin_nucs.fasta', qresult.target)
         self.assertEqual(406, qresult.seq_len)
-        self.assertEqual('Endoplasmic reticulum resident protein 44 OS=Homo sapiens GN=ERP44', qresult.desc)
+        self.assertEqual('Endoplasmic reticulum resident protein 44 OS=Homo sapiens GN=ERP44', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test second qresult
@@ -988,12 +988,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('rhodopsin_nucs.fasta', qresult.target)
         self.assertEqual(1161, qresult.seq_len)
-        self.assertEqual('BMP-2-inducible protein kinase OS=Homo sapiens GN=BMP2K', qresult.desc)
+        self.assertEqual('BMP-2-inducible protein kinase OS=Homo sapiens GN=BMP2K', qresult.description)
         self.assertEqual(2, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|283855822|gb|GQ290312.1|', hit.id)
-        self.assertEqual('Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds', hit.desc)
+        self.assertEqual('Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds', hit.description)
         self.assertEqual(983, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -1018,7 +1018,7 @@ class Fasta36Cases(unittest.TestCase):
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|57163782|ref|NM_001009242.1|', hit.id)
-        self.assertEqual('Felis catus rhodopsin (RHO), mRNA', hit.desc)
+        self.assertEqual('Felis catus rhodopsin (RHO), mRNA', hit.description)
         self.assertEqual(1047, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
@@ -1048,7 +1048,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('rhodopsin_nucs.fasta', qresult.target)
         self.assertEqual(1382, qresult.seq_len)
-        self.assertEqual('Insulin receptor OS=Homo sapiens GN=INSR', qresult.desc)
+        self.assertEqual('Insulin receptor OS=Homo sapiens GN=INSR', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test fourth qresult
@@ -1058,12 +1058,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.4', qresult.version)
         self.assertEqual('rhodopsin_nucs.fasta', qresult.target)
         self.assertEqual(348, qresult.seq_len)
-        self.assertEqual('Rhodopsin OS=Homo sapiens GN=RHO', qresult.desc)
+        self.assertEqual('Rhodopsin OS=Homo sapiens GN=RHO', qresult.description)
         self.assertEqual(6, len(qresult))
         # fourth qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|57163782|ref|NM_001009242.1|', hit.id)
-        self.assertEqual('Felis catus rhodopsin (RHO), mRNA', hit.desc)
+        self.assertEqual('Felis catus rhodopsin (RHO), mRNA', hit.description)
         self.assertEqual(1047, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, first hit, first hsp
@@ -1088,7 +1088,7 @@ class Fasta36Cases(unittest.TestCase):
         # fourth qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|18148870|dbj|AB062417.1|', hit.id)
-        self.assertEqual('Synthetic construct Bos taurus gene for rhodopsin, complete cds', hit.desc)
+        self.assertEqual('Synthetic construct Bos taurus gene for rhodopsin, complete cds', hit.description)
         self.assertEqual(1047, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, second hit, first hsp
@@ -1113,7 +1113,7 @@ class Fasta36Cases(unittest.TestCase):
         # fourth qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|283855822|gb|GQ290312.1|', hit.id)
-        self.assertEqual('Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds', hit.desc)
+        self.assertEqual('Myotis ricketti voucher GQX10 rhodopsin (RHO) mRNA, partial cds', hit.description)
         self.assertEqual(983, hit.seq_len)
         self.assertEqual(2, len(hit))
         # fourth qresult, third hit, first hsp
@@ -1157,7 +1157,7 @@ class Fasta36Cases(unittest.TestCase):
         # fourth qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|2734705|gb|U59921.1|BBU59921', hit.id)
-        self.assertEqual('Bufo bufo rhodopsin mRNA, complete cds', hit.desc)
+        self.assertEqual('Bufo bufo rhodopsin mRNA, complete cds', hit.description)
         self.assertEqual(1574, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, fourth hit, first hsp
@@ -1182,7 +1182,7 @@ class Fasta36Cases(unittest.TestCase):
         # fourth qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|12583664|dbj|AB043817.1|', hit.id)
-        self.assertEqual('Conger myriaster conf gene for fresh water form rod opsin, complete cds', hit.desc)
+        self.assertEqual('Conger myriaster conf gene for fresh water form rod opsin, complete cds', hit.description)
         self.assertEqual(1344, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, fifth hit, first hsp
@@ -1207,7 +1207,7 @@ class Fasta36Cases(unittest.TestCase):
         # fourth qresult, sixth hit
         hit = qresult[5]
         self.assertEqual('gi|283855845|gb|GQ290303.1|', hit.id)
-        self.assertEqual('Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds', hit.desc)
+        self.assertEqual('Cynopterus brachyotis voucher 20020434 rhodopsin (RHO) gene, exons 1 through 5 and partial cds', hit.description)
         self.assertEqual(4301, hit.seq_len)
         self.assertEqual(4, len(hit))
         # fourth qresult, sixth hit, first hsp
@@ -1308,7 +1308,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('mrnalib.fasta', qresult.target)
         self.assertEqual(15, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test second qresult
@@ -1318,12 +1318,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('mrnalib.fasta', qresult.target)
         self.assertEqual(99, qresult.seq_len)
-        self.assertEqual('Mus musculus myoglobin (Mb), transcript varia', qresult.desc)
+        self.assertEqual('Mus musculus myoglobin (Mb), transcript varia', qresult.description)
         self.assertEqual(1, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|23308614|ref|NM_152952.1|', hit.id)
-        self.assertEqual('Danio rerio cytoglobin 1 (cygb1), mRNA', hit.desc)
+        self.assertEqual('Danio rerio cytoglobin 1 (cygb1), mRNA', hit.description)
         self.assertEqual(5188, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -1352,12 +1352,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('mrnalib.fasta', qresult.target)
         self.assertEqual(16, qresult.seq_len)
-        self.assertEqual('Bos taurus nucleoporin 43kDa (NU', qresult.desc)
+        self.assertEqual('Bos taurus nucleoporin 43kDa (NU', qresult.description)
         self.assertEqual(5, len(qresult))
         # third qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|47271416|ref|NM_131257.2|', hit.id)
-        self.assertEqual('Danio rerio hemoglobin alpha adult-1 (hbaa1), mRNA', hit.desc)
+        self.assertEqual('Danio rerio hemoglobin alpha adult-1 (hbaa1), mRNA', hit.description)
         self.assertEqual(597, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
@@ -1381,7 +1381,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|332859474|ref|XM_001156938.2|', hit.id)
-        self.assertEqual('PREDICTED: Pan troglodytes myoglobin, transcript variant 11 (MB), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Pan troglodytes myoglobin, transcript variant 11 (MB), mRNA', hit.description)
         self.assertEqual(762, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
@@ -1405,7 +1405,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|332211534|ref|XM_003254825.1|', hit.id)
-        self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-2-like (LOC100581638), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-2-like (LOC100581638), mRNA', hit.description)
         self.assertEqual(805, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, third hit, first hsp
@@ -1429,7 +1429,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|23308614|ref|NM_152952.1|', hit.id)
-        self.assertEqual('Danio rerio cytoglobin 1 (cygb1), mRNA', hit.desc)
+        self.assertEqual('Danio rerio cytoglobin 1 (cygb1), mRNA', hit.description)
         self.assertEqual(5188, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, fourth hit, first hsp
@@ -1453,7 +1453,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|297689475|ref|XM_002822130.1|', hit.id)
-        self.assertEqual('PREDICTED: Pongo abelii hemoglobin subunit gamma-like (LOC100439631), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Pongo abelii hemoglobin subunit gamma-like (LOC100439631), mRNA', hit.description)
         self.assertEqual(1158, hit.seq_len)
         self.assertEqual(2, len(hit))
         # third qresult, fifth hit, first hsp
@@ -1514,7 +1514,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('mrnalib.fasta', qresult.target)
         self.assertEqual(15, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(0, len(qresult))
 
     def test_output011(self):
@@ -1538,12 +1538,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('mrnalib.fasta', qresult.target)
         self.assertEqual(99, qresult.seq_len)
-        self.assertEqual('Mus musculus myoglobin (Mb), transcript varia', qresult.desc)
+        self.assertEqual('Mus musculus myoglobin (Mb), transcript varia', qresult.description)
         self.assertEqual(5, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|284005422|ref|NM_001171502.1|', hit.id)
-        self.assertEqual('Oryctolagus cuniculus hemoglobin, zeta (HBZ_2), mRNA', hit.desc)
+        self.assertEqual('Oryctolagus cuniculus hemoglobin, zeta (HBZ_2), mRNA', hit.description)
         self.assertEqual(429, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -1567,7 +1567,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|284005386|ref|NM_001171415.1|', hit.id)
-        self.assertEqual('Oryctolagus cuniculus zeta globin (HBZ0), mRNA', hit.desc)
+        self.assertEqual('Oryctolagus cuniculus zeta globin (HBZ0), mRNA', hit.description)
         self.assertEqual(429, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
@@ -1591,7 +1591,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|284005381|ref|NM_001171414.1|', hit.id)
-        self.assertEqual('Oryctolagus cuniculus hemoglobin subunit zeta (RA_M008_JSM295ECF), mRNA', hit.desc)
+        self.assertEqual('Oryctolagus cuniculus hemoglobin subunit zeta (RA_M008_JSM295ECF), mRNA', hit.description)
         self.assertEqual(429, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, third hit, first hsp
@@ -1615,7 +1615,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|23308614|ref|NM_152952.1|', hit.id)
-        self.assertEqual('Danio rerio cytoglobin 1 (cygb1), mRNA', hit.desc)
+        self.assertEqual('Danio rerio cytoglobin 1 (cygb1), mRNA', hit.description)
         self.assertEqual(5188, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fourth hit, first hsp
@@ -1639,7 +1639,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|291415427|ref|XM_002723908.1|', hit.id)
-        self.assertEqual('PREDICTED: Oryctolagus cuniculus zeta globin-like (LOC100357627), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Oryctolagus cuniculus zeta globin-like (LOC100357627), mRNA', hit.description)
         self.assertEqual(423, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fifth hit, first hsp
@@ -1682,12 +1682,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('mrnalib.fasta', qresult.target)
         self.assertEqual(16, qresult.seq_len)
-        self.assertEqual('Bos taurus nucleoporin 43kDa (NU', qresult.desc)
+        self.assertEqual('Bos taurus nucleoporin 43kDa (NU', qresult.description)
         self.assertEqual(8, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|77681427|ref|NM_001016495.2|', hit.id)
-        self.assertEqual('Xenopus (Silurana) tropicalis hemoglobin, epsilon 1 (hbe1), mRNA', hit.desc)
+        self.assertEqual('Xenopus (Silurana) tropicalis hemoglobin, epsilon 1 (hbe1), mRNA', hit.description)
         self.assertEqual(554, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -1711,7 +1711,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|53749657|ref|NM_182940.2|', hit.id)
-        self.assertEqual('Danio rerio hemoglobin alpha embryonic-1 (hbae1), mRNA', hit.desc)
+        self.assertEqual('Danio rerio hemoglobin alpha embryonic-1 (hbae1), mRNA', hit.description)
         self.assertEqual(564, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
@@ -1735,7 +1735,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|158508631|ref|NM_030206.4|', hit.id)
-        self.assertEqual('Mus musculus cytoglobin (Cygb), mRNA', hit.desc)
+        self.assertEqual('Mus musculus cytoglobin (Cygb), mRNA', hit.description)
         self.assertEqual(2331, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, third hit, first hsp
@@ -1759,7 +1759,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|296217287|ref|XM_002754912.1|', hit.id)
-        self.assertEqual('PREDICTED: Callithrix jacchus hemoglobin subunit gamma-like (LOC100389093), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Callithrix jacchus hemoglobin subunit gamma-like (LOC100389093), mRNA', hit.description)
         self.assertEqual(627, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fourth hit, first hsp
@@ -1783,7 +1783,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|332211540|ref|XM_003254828.1|', hit.id)
-        self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 2 (LOC100582529), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 2 (LOC100582529), mRNA', hit.description)
         self.assertEqual(640, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fifth hit, first hsp
@@ -1807,7 +1807,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, sixth hit
         hit = qresult[5]
         self.assertEqual('gi|147903656|ref|NM_001086277.1|', hit.id)
-        self.assertEqual('Xenopus laevis hemoglobin, alpha 2 (hba2), mRNA', hit.desc)
+        self.assertEqual('Xenopus laevis hemoglobin, alpha 2 (hba2), mRNA', hit.description)
         self.assertEqual(677, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, sixth hit, first hsp
@@ -1831,7 +1831,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, seventh hit
         hit = qresult[6]
         self.assertEqual('gi|380013536|ref|XM_003690762.1|', hit.id)
-        self.assertEqual('PREDICTED: Apis florea globin-like (LOC100870092), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Apis florea globin-like (LOC100870092), mRNA', hit.description)
         self.assertEqual(707, hit.seq_len)
         self.assertEqual(3, len(hit))
         # first qresult, seventh hit, first hsp
@@ -1891,7 +1891,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, eigth hit
         hit = qresult[7]
         self.assertEqual('gi|332211538|ref|XM_003254827.1|', hit.id)
-        self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 1 (LOC100582529), mRNA', hit.desc)
+        self.assertEqual('PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-1-like, transcript variant 1 (LOC100582529), mRNA', hit.description)
         self.assertEqual(713, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, eigth hit, first hsp
@@ -1934,7 +1934,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('protlib.fasta', qresult.target)
         self.assertEqual(16, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(0, len(qresult))
 
         # test second qresult
@@ -1944,12 +1944,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('protlib.fasta', qresult.target)
         self.assertEqual(66, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(1, len(qresult))
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|291391832|ref|XP_002712264.1|', hit.id)
-        self.assertEqual('PREDICTED: titin [Oryctolagus cuniculus]', hit.desc)
+        self.assertEqual('PREDICTED: titin [Oryctolagus cuniculus]', hit.description)
         self.assertEqual(33406, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
@@ -1979,12 +1979,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('protlib.fasta', qresult.target)
         self.assertEqual(81, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(4, len(qresult))
         # third qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|260806189|ref|XP_002597967.1|', hit.id)
-        self.assertEqual('hypothetical protein BRAFLDRAFT_79792 [Branchiostoma floridae]', hit.desc)
+        self.assertEqual('hypothetical protein BRAFLDRAFT_79792 [Branchiostoma floridae]', hit.description)
         self.assertEqual(23830, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
@@ -2009,7 +2009,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|348553521|ref|XP_003462575.1|', hit.id)
-        self.assertEqual('PREDICTED: receptor-type tyrosine-protein phosphatase F isoform 1 [Cavia porcellus]', hit.desc)
+        self.assertEqual('PREDICTED: receptor-type tyrosine-protein phosphatase F isoform 1 [Cavia porcellus]', hit.description)
         self.assertEqual(1899, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
@@ -2034,7 +2034,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|348553523|ref|XP_003462576.1|', hit.id)
-        self.assertEqual('PREDICTED: receptor-type tyrosine-protein phosphatase F isoform 2 [Cavia porcellus]', hit.desc)
+        self.assertEqual('PREDICTED: receptor-type tyrosine-protein phosphatase F isoform 2 [Cavia porcellus]', hit.description)
         self.assertEqual(1908, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, third hit, first hsp
@@ -2059,7 +2059,7 @@ class Fasta36Cases(unittest.TestCase):
         # third qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|221124183|ref|XP_002154464.1|', hit.id)
-        self.assertEqual('PREDICTED: similar to FAD104 [Hydra magnipapillata]', hit.desc)
+        self.assertEqual('PREDICTED: similar to FAD104 [Hydra magnipapillata]', hit.description)
         self.assertEqual(860, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, fourth hit, first hsp
@@ -2103,7 +2103,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('protlib.fasta', qresult.target)
         self.assertEqual(16, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(0, len(qresult))
 
     def test_output015(self):
@@ -2127,12 +2127,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('protlib.fasta', qresult.target)
         self.assertEqual(66, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(2, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|194762369|ref|XP_001963317.1|', hit.id)
-        self.assertEqual('GF14002 [Drosophila ananassae]', hit.desc)
+        self.assertEqual('GF14002 [Drosophila ananassae]', hit.description)
         self.assertEqual(1761, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -2157,7 +2157,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|77812697|ref|NP_035782.3|', hit.id)
-        self.assertEqual('titin isoform N2-A [Mus musculus]', hit.desc)
+        self.assertEqual('titin isoform N2-A [Mus musculus]', hit.description)
         self.assertEqual(33467, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
@@ -2202,12 +2202,12 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('36.3.5c', qresult.version)
         self.assertEqual('protlib.fasta', qresult.target)
         self.assertEqual(81, qresult.seq_len)
-        self.assertEqual('', qresult.desc)
+        self.assertEqual('', qresult.description)
         self.assertEqual(17, len(qresult))
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|167518632|ref|XP_001743656.1|', hit.id)
-        self.assertEqual('hypothetical protein [Monosiga brevicollis MX1]', hit.desc)
+        self.assertEqual('hypothetical protein [Monosiga brevicollis MX1]', hit.description)
         self.assertEqual(1145, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
@@ -2232,7 +2232,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|9507013|ref|NP_062122.1|', hit.id)
-        self.assertEqual('receptor-type tyrosine-protein phosphatase F precursor [Rattus norvegicus]', hit.desc)
+        self.assertEqual('receptor-type tyrosine-protein phosphatase F precursor [Rattus norvegicus]', hit.description)
         self.assertEqual(1898, hit.seq_len)
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
@@ -2276,7 +2276,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|115648048|ref|NP_035343.2|', hit.id)
-        self.assertEqual('receptor-type tyrosine-protein phosphatase F precursor [Mus musculus]', hit.desc)
+        self.assertEqual('receptor-type tyrosine-protein phosphatase F precursor [Mus musculus]', hit.description)
         self.assertEqual(1898, hit.seq_len)
         self.assertEqual(2, len(hit))
         # first qresult, third hit, first hsp
@@ -2320,7 +2320,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('gi|354481005|ref|XP_003502693.1|', hit.id)
-        self.assertEqual('PREDICTED: LOW QUALITY PROTEIN: receptor-type tyrosine-protein phosphatase F-like [Cricetulus griseus]', hit.desc)
+        self.assertEqual('PREDICTED: LOW QUALITY PROTEIN: receptor-type tyrosine-protein phosphatase F-like [Cricetulus griseus]', hit.description)
         self.assertEqual(1898, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fourth hit, first hsp
@@ -2345,7 +2345,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('gi|328789682|ref|XP_003251305.1|', hit.id)
-        self.assertEqual('PREDICTED: LOW QUALITY PROTEIN: twitchin [Apis mellifera]', hit.desc)
+        self.assertEqual('PREDICTED: LOW QUALITY PROTEIN: twitchin [Apis mellifera]', hit.description)
         self.assertEqual(8619, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fifth hit, first hsp
@@ -2370,7 +2370,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, sixth hit
         hit = qresult[5]
         self.assertEqual('gi|260828627|ref|XP_002609264.1|', hit.id)
-        self.assertEqual('hypothetical protein BRAFLDRAFT_124749 [Branchiostoma floridae]', hit.desc)
+        self.assertEqual('hypothetical protein BRAFLDRAFT_124749 [Branchiostoma floridae]', hit.description)
         self.assertEqual(4389, hit.seq_len)
         self.assertEqual(7, len(hit))
         # first qresult, sixth hit, first hsp
@@ -2509,7 +2509,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, seventh hit
         hit = qresult[6]
         self.assertEqual('gi|119220552|ref|NP_689957.3|', hit.id)
-        self.assertEqual('protein sidekick-1 isoform 1 [Homo sapiens]', hit.desc)
+        self.assertEqual('protein sidekick-1 isoform 1 [Homo sapiens]', hit.description)
         self.assertEqual(2213, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, seventh hit, first hsp
@@ -2534,7 +2534,7 @@ class Fasta36Cases(unittest.TestCase):
         # first qresult, eigth hit
         hit = qresult[7]
         self.assertEqual('gi|332864595|ref|XP_518946.3|', hit.id)
-        self.assertEqual('PREDICTED: protein sidekick-1 [Pan troglodytes]', hit.desc)
+        self.assertEqual('PREDICTED: protein sidekick-1 [Pan troglodytes]', hit.description)
         self.assertEqual(2213, hit.seq_len)
         self.assertEqual(2, len(hit))
         # first qresult, eigth hit, first hsp

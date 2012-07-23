@@ -187,7 +187,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertTrue([hit31], self.qresult.hits)
 
     def test_desc_set(self):
-        """Test QueryResult.desc setter"""
+        """Test QueryResult.description setter"""
         # setting the description should change the query seqrecord description
         # of the contained hsps, if they have an alignment
         # test for default value
@@ -197,14 +197,14 @@ class QueryResultCases(unittest.TestCase):
         for hit in qresult:
             for hsp in hit:
                 self.assertNotEqual(new_desc, hsp.query.description)
-        qresult.desc = new_desc
+        qresult.description = new_desc
         # test after setting
         for hit in qresult:
             for hsp in hit:
                 self.assertEqual(new_desc, hsp.query.description)
 
     def test_desc_set_no_seqrecord(self):
-        """Test QueryResult.desc setter, without HSP SeqRecords"""
+        """Test QueryResult.description setter, without HSP SeqRecords"""
         hsp1 = HSP('hit1', 'query')
         hsp2 = HSP('hit1', 'query')
         hsp3 = HSP('hit2', 'query')
@@ -215,7 +215,7 @@ class QueryResultCases(unittest.TestCase):
         for hit in qresult:
             for hsp in hit:
                 self.assertTrue(not hasattr(hsp, 'query'))
-        qresult.desc = 'unicorn hox homolog'
+        qresult.description = 'unicorn hox homolog'
         # test after setting
         for hit in qresult:
             for hsp in hit:
@@ -606,7 +606,7 @@ class HitCases(unittest.TestCase):
         self.assertRaises(ValueError, self.hit._validate_hsp, hsp121)
 
     def test_desc_set(self):
-        """Test Hit.desc setter"""
+        """Test Hit.description setter"""
         # setting the description should change the hit seqrecord description
         # of the contained hsps, if they have an alignment
         # test for default value
@@ -615,20 +615,20 @@ class HitCases(unittest.TestCase):
         # test initial condition
         for hsp in hit:
             self.assertNotEqual(new_desc, hsp.hit.description)
-        hit.desc = new_desc
+        hit.description = new_desc
         # test after setting
         for hsp in hit:
             self.assertEqual(new_desc, hsp.hit.description)
 
     def test_desc_set_no_seqrecord(self):
-        """Test Hit.desc setter, without HSP SeqRecords"""
+        """Test Hit.description setter, without HSP SeqRecords"""
         hsp1 = HSP('hit1', 'query')
         hsp2 = HSP('hit1', 'query')
         hit = Hit('hit1', 'query', [hsp1, hsp2])
         # test initial condition
         for hsp in hit:
             self.assertTrue(not hasattr(hsp, 'hit'))
-        hit.desc = 'unicorn hox homolog'
+        hit.description = 'unicorn hox homolog'
         # test after setting
         for hsp in hit:
             self.assertTrue(not hasattr(hsp, 'hit'))

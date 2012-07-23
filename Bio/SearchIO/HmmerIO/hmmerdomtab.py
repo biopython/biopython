@@ -54,7 +54,7 @@ class HmmerDomtabIterator(HmmerTabIterator):
         hit['evalue'] = float(cols[6])          # evalue
         hit['bitscore'] = float(cols[7])        # score
         hit['bias'] = float(cols[8])            # bias
-        hit['desc'] = cols[22]                  # description of target
+        hit['description'] = cols[22]           # description of target
         hsp = {}
         hsp['domain_index'] = int(cols[9])      # # (domain number)
         # not parsing cols[10] since it's basically len(hit)
@@ -287,7 +287,7 @@ class HmmerDomtabHmmhitWriter(object):
                 qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore, \
                 hit.bias, hsp.domain_index, len(hit), hsp.evalue_cond, hsp.evalue, \
                 hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to, \
-                hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.desc)
+                hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
 
         return rows
 

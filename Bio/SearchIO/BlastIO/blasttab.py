@@ -184,7 +184,7 @@ class BlastTabIterator(object):
                 query_line = self.line[len('# Query: '):].split(' ')
                 comments['id'] = query_line[0]
                 if len(query_line) > 1:
-                    comments['desc'] = ' '.join(query_line[1:])
+                    comments['description'] = ' '.join(query_line[1:])
             # parse target database
             # example: # Database: db/minirefseq_protein
             elif 'Database' in self.line:
@@ -634,7 +634,7 @@ class BlastTabcWriter(BlastTabWriter):
         comments += program_line
         # description may or may not be present, so we'll do a try here
         try:
-            comments += '# Query: %s %s\n' % (qresult.id, qresult.desc)
+            comments += '# Query: %s %s\n' % (qresult.id, qresult.description)
         except AttributeError:
             comments += '# Query: %s\n' % qresult.id
         # try appending RID line, if present
