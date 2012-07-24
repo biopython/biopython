@@ -384,7 +384,7 @@ _FormatToWriter = {"fasta" : FastaIO.FastaWriter,
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 
-def write(sequences, handle, format):
+def write(sequences, handle, format, **kwargs):
     """Write complete set of sequences to a file.
 
      - sequences - A list (or iterator) of SeqRecord objects, or (if using
@@ -408,7 +408,7 @@ def write(sequences, handle, format):
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(sequences, SeqRecord):
-        #This raised an exception in order version of Biopython
+        #This raised an exception in older version of Biopython
         sequences = [sequences]
 
     if format in _BinaryFormats:
@@ -420,7 +420,10 @@ def write(sequences, handle, format):
         #Map the file format to a writer class
         if format in _FormatToWriter:
             writer_class = _FormatToWriter[format]
-            count = writer_class(fp).write_file(sequences)
+            if 'wrap' in kwargs:
+                count = writer_class(fp, wrap=kwargs['wrap']).write_file(sequences)
+            else:
+                count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
             #Try and turn all the records into a single alignment,
             #and write that using Bio.AlignIO
