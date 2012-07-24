@@ -25,8 +25,8 @@ def uniqueify(items):
 
 def get_unique_parents(entity_list):
     """Translate a list of entities to a list of their (unique) parents."""
-    parents = [entity.get_parent() for entity in entity_list]
-    return uniqueify(parents)
+    unique_parents = {entity.get_parent() for entity in entity_list}
+    return list(unique_parents)
 
 
 def unfold_entities(entity_list, target_level):
