@@ -5,6 +5,8 @@
 
 """Selection of atoms, residues, etc."""
 
+import itertools
+
 from Bio.PDB.Atom import Atom
 from Bio.PDB.Entity import Entity
 from Bio.PDB.PDBExceptions import PDBException
@@ -53,10 +55,10 @@ def unfold_entities(entity_list, target_level):
     if isinstance(entity_list, Entity) or isinstance(entity_list, Atom):
         entity_list = [entity_list]
 
-    level = entity_list[0].get_level()  # level of entity list
-    for entity in entity_list:
-        if not (entity.get_level() == level):
-            raise PDBException("Entity list is not homogeneous.")
+    level = entity_list[0].get_level()
+    if not all(entity.get_level() == level for entity in entity_list):
+        raise PDBException("Entity list is not homogeneous.")
+
     target_index = entity_levels.index(target_level)
     level_index = entity_levels.index(level)
 
@@ -65,19 +67,12 @@ def unfold_entities(entity_list, target_level):
 
     if level_index > target_index:  # we're going down, e.g. S->A
         for i in range(target_index, level_index):
-            new_entity_list = []
-            for entity in entity_list:
-                new_entity_list = new_entity_list + entity.get_list()
-            entity_list = new_entity_list
+            entity_list = itertools.chain.from_iterable(entity_list)
     else:  # we're going up, e.g. A->S
         for i in range(level_index, target_index):
-            new_entity_list = []
-            for entity in entity_list:
-                parent = entity.get_parent()
-                new_entity_list.append(parent)
             # find unique parents
-            entity_list = uniqueify(new_entity_list)
-    return entity_list
+            entity_list = {entity.get_parent() for entity in entity_list}
+    return list(entity_list)
 
 
 def _test():
