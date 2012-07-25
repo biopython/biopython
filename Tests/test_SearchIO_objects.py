@@ -725,12 +725,6 @@ class HitCases(unittest.TestCase):
         self.assertEqual(hsp113, self.hit.pop())
         self.assertEqual(hsp111, self.hit.pop(0))
 
-    def test_reverse(self):
-        """Test Hit.reverse"""
-        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
-        self.hit.reverse()
-        self.assertEqual([hsp113, hsp112, hsp111], self.hit.hsps)
-
     def test_sort(self):
         """Test Hit.sort"""
         self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
