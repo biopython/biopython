@@ -168,13 +168,8 @@ class Feature(object):
         """
         self.locations = []
         bounds = []
-        try:
-            #Compound location?
-            parts = self._feature.location.parts
-        except AttributeError:
-            #No, simple location
-            parts = [self._feature.location]
-        for location in parts:
+        #This will be a list of length one for simple FeatureLocation:
+        for location in self._feature.location.parts:
             start = location.nofuzzy_start
             end = location.nofuzzy_end
             #if start > end and self.strand == -1:

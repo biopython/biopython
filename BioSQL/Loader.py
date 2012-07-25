@@ -798,12 +798,8 @@ class DatabaseLoader:
             from Bio import BiopythonWarning
             warnings.warn("%s location operators are not fully supported"
                           % feature.location_operator, BiopythonWarning)
-        try:
-            #Is is a compound location?
-            parts = feature.location.parts
-        except AttributeError:
-            #Simple location
-            parts = [feature.location]
+        #This will be a list of length one for simple FeatureLocation:
+        parts = feature.location.parts
         if parts and set(loc.strand for loc in parts)==set([-1]):
             #To mimic prior behaviour of Biopython+BioSQL, reverse order
             parts = parts[::-1]

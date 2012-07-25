@@ -823,6 +823,16 @@ class FeatureLocation(object):
                                strand = flip_strand)
 
     @property
+    def parts(self):
+        """Read only list of parts (always one, the Feature Location).
+
+        This is a convience property allowing you to write code handling
+        both simple FeatureLocation objects (with one part) and more complex
+        CompoundLocation objects (with multiple parts) interchangably.
+        """
+        return [self]
+
+    @property
     def start(self):
         """Start location (integer like, possibly a fuzzy position, read only)."""
         return self._start
