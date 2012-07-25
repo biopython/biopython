@@ -1515,7 +1515,6 @@ class QualPhredWriter(SequentialSequenceWriter):
                 title = id
         handle.write(">%s\n" % title)
 
-        print 'is this thing on?'
         qualities = _get_phred_quality(record)
         try:
             #This rounds to the nearest integer.
@@ -1816,11 +1815,6 @@ def _test():
         del cur_dir
         print "Done"
 
-
-def _quality_strs_iter(record):
-        qualities = _get_phred_quality(record)
-        for q in qualities:
-            yield "%i" % round(q, 0)
 
 if __name__ == "__main__":
     _test()
