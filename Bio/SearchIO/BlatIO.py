@@ -484,7 +484,7 @@ class BlatPslWriter(object):
         qresult_lines = []
 
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.gapped_hsps:
 
                 line = []
                 line.append(hsp.match_num)
@@ -534,8 +534,8 @@ class BlatPslWriter(object):
                 line.append(','.join((str(x) for x in hstarts)) + ',')
 
                 if self.fmt == 'pslx':
-                    line.append(','.join((str(x.seq) for x in hsp.query)) + ',')
-                    line.append(','.join((str(x.seq) for x in hsp.hit)) + ',')
+                    line.append(','.join((str(x.seq) for x in hsp.queries)) + ',')
+                    line.append(','.join((str(x.seq) for x in hsp.hits)) + ',')
 
                 qresult_lines.append('\t'.join((str(x) for x in line)))
 
