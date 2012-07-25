@@ -80,8 +80,8 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
         return starts
     else:
         # the plus-oriented coordinate is calculated by this:
-        # plus_coord = length - minus_coord - block_size + 1
-        return [seqlen - start - blksize + 1 for \
+        # plus_coord = length - minus_coord - block_size
+        return [seqlen - start - blksize for \
                 start, blksize in zip(starts, blksizes)]
 
 
@@ -188,6 +188,13 @@ def _create_gapped_hsp(hid, qid, psl):
 
     # create gapped hsp object
     ghsp = GappedHSP(hid, qid, hsps)
+    # check if start and end are set correctly
+    assert ghsp.query_start == psl['qstart']
+    assert ghsp.query_end == psl['qend']
+    assert ghsp.hit_start == psl['tstart']
+    assert ghsp.hit_end == psl['tend']
+    # and check block spans as well
+    assert ghsp.query_spans == ghsp.hit_spans == psl['blocksizes']
     # set its attributes
     ghsp.match_num = psl['matches']
     ghsp.mismatch_num = psl['mismatches']

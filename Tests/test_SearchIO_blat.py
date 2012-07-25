@@ -44,7 +44,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('chr4', hit.id)
         self.assertEqual(191154276, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
         self.assertEqual(16, hsp.match_num)
@@ -69,7 +69,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('chr1', hit.id)
         self.assertEqual(249250621, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
         self.assertEqual(33, hsp.match_num)
@@ -94,7 +94,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('chr2', hit.id)
         self.assertEqual(243199373, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
         self.assertEqual(17, hsp.match_num)
@@ -113,7 +113,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([17], hsp.query_spans)
         self.assertEqual([17], hsp.hit_spans)
-        self.assertEqual([(9, 26)], hsp.query_ranges)
+        self.assertEqual([(8, 25)], hsp.query_ranges)
         self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
         # test second qresult
@@ -126,7 +126,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('chr9', hit.id)
         self.assertEqual(141213431, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # second qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
         self.assertEqual(38, hsp.match_num)
@@ -151,7 +151,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('chr8', hit.id)
         self.assertEqual(146364022, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # second qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
         self.assertEqual(41, hsp.match_num)
@@ -176,7 +176,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('chr22', hit.id)
         self.assertEqual(51304566, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual(2, len(hit.gapped_hsps))
         # second qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
         self.assertEqual(33, hsp.match_num)
@@ -215,13 +215,13 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([37], hsp.query_spans)
         self.assertEqual([37], hsp.hit_spans)
-        self.assertEqual([(13, 50)], hsp.query_ranges)
+        self.assertEqual([(12, 49)], hsp.query_ranges)
         self.assertEqual([(48997405, 48997442)], hsp.hit_ranges)
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('chr2', hit.id)
         self.assertEqual(243199373, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual(2, len(hit.gapped_hsps))
         # second qresult, fourth hit, first hsp
         hsp = qresult[3].gapped_hsps[0]
         self.assertEqual(43, hsp.match_num)
@@ -260,13 +260,13 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([36], hsp.query_spans)
         self.assertEqual([36], hsp.hit_spans)
-        self.assertEqual([(14, 50)], hsp.query_ranges)
+        self.assertEqual([(13, 49)], hsp.query_ranges)
         self.assertEqual([(120641740, 120641776)], hsp.hit_ranges)
         # second qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('chr19', hit.id)
         self.assertEqual(59128983, hit.seq_len)
-        self.assertEqual(3, len(hit))
+        self.assertEqual(3, len(hit.gapped_hsps))
         # second qresult, fifth hit, first hsp
         hsp = qresult[4].gapped_hsps[0]
         self.assertEqual(34, hsp.match_num)
@@ -305,7 +305,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([39], hsp.query_spans)
         self.assertEqual([39], hsp.hit_spans)
-        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(54017130, 54017169)], hsp.hit_ranges)
         # second qresult, fifth hit, third hsp
         hsp = qresult[4].gapped_hsps[2]
@@ -325,7 +325,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([39], hsp.query_spans)
         self.assertEqual([39], hsp.hit_spans)
-        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
     def test_psl_34_002(self, testf='psl_34_002.psl', fmt='blat-psl'):
@@ -357,7 +357,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('chr4', hit.id)
         self.assertEqual(191154276, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
         self.assertEqual(16, hsp.match_num)
@@ -382,7 +382,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('chr1', hit.id)
         self.assertEqual(249250621, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
         self.assertEqual(33, hsp.match_num)
@@ -407,7 +407,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('chr2', hit.id)
         self.assertEqual(243199373, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
         self.assertEqual(17, hsp.match_num)
@@ -426,7 +426,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([17], hsp.query_spans)
         self.assertEqual([17], hsp.hit_spans)
-        self.assertEqual([(9, 26)], hsp.query_ranges)
+        self.assertEqual([(8, 25)], hsp.query_ranges)
         self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
     def test_psl_34_004(self, testf='psl_34_004.psl', fmt='blat-psl'):
@@ -452,7 +452,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('chr9', hit.id)
         self.assertEqual(141213431, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
         self.assertEqual(38, hsp.match_num)
@@ -477,7 +477,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('chr8', hit.id)
         self.assertEqual(146364022, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
         self.assertEqual(41, hsp.match_num)
@@ -502,7 +502,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('chr22', hit.id)
         self.assertEqual(51304566, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual(2, len(hit.gapped_hsps))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
         self.assertEqual(33, hsp.match_num)
@@ -541,13 +541,13 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([37], hsp.query_spans)
         self.assertEqual([37], hsp.hit_spans)
-        self.assertEqual([(13, 50)], hsp.query_ranges)
+        self.assertEqual([(12, 49)], hsp.query_ranges)
         self.assertEqual([(48997405, 48997442)], hsp.hit_ranges)
         # first qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('chr2', hit.id)
         self.assertEqual(243199373, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual(2, len(hit.gapped_hsps))
         # first qresult, fourth hit, first hsp
         hsp = qresult[3].gapped_hsps[0]
         self.assertEqual(43, hsp.match_num)
@@ -586,13 +586,13 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([36], hsp.query_spans)
         self.assertEqual([36], hsp.hit_spans)
-        self.assertEqual([(14, 50)], hsp.query_ranges)
+        self.assertEqual([(13, 49)], hsp.query_ranges)
         self.assertEqual([(120641740, 120641776)], hsp.hit_ranges)
         # first qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('chr19', hit.id)
         self.assertEqual(59128983, hit.seq_len)
-        self.assertEqual(3, len(hit))
+        self.assertEqual(3, len(hit.gapped_hsps))
         # first qresult, fifth hit, first hsp
         hsp = qresult[4].gapped_hsps[0]
         self.assertEqual(34, hsp.match_num)
@@ -631,7 +631,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([39], hsp.query_spans)
         self.assertEqual([39], hsp.hit_spans)
-        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(54017130, 54017169)], hsp.hit_ranges)
         # first qresult, fifth hit, third hsp
         hsp = qresult[4].gapped_hsps[2]
@@ -651,7 +651,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([39], hsp.query_spans)
         self.assertEqual([39], hsp.hit_spans)
-        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
     def test_psl_34_005(self, testf='psl_34_005.psl', fmt='blat-psl'):
@@ -677,7 +677,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('chr4', hit.id)
         self.assertEqual(191154276, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
         self.assertEqual(16, hsp.match_num)
@@ -702,7 +702,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('chr1', hit.id)
         self.assertEqual(249250621, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
         self.assertEqual(33, hsp.match_num)
@@ -727,7 +727,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('chr2', hit.id)
         self.assertEqual(243199373, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
         self.assertEqual(17, hsp.match_num)
@@ -746,7 +746,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([17], hsp.query_spans)
         self.assertEqual([17], hsp.hit_spans)
-        self.assertEqual([(9, 26)], hsp.query_ranges)
+        self.assertEqual([(8, 25)], hsp.query_ranges)
         self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
         # test second qresult
@@ -759,7 +759,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('chr9', hit.id)
         self.assertEqual(141213431, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # second qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
         self.assertEqual(38, hsp.match_num)
@@ -784,7 +784,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('chr8', hit.id)
         self.assertEqual(146364022, hit.seq_len)
-        self.assertEqual(1, len(hit))
+        self.assertEqual(1, len(hit.gapped_hsps))
         # second qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
         self.assertEqual(41, hsp.match_num)
@@ -809,7 +809,7 @@ class BlatPslCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('chr22', hit.id)
         self.assertEqual(51304566, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual(2, len(hit.gapped_hsps))
         # second qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
         self.assertEqual(33, hsp.match_num)
@@ -848,13 +848,13 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([37], hsp.query_spans)
         self.assertEqual([37], hsp.hit_spans)
-        self.assertEqual([(13, 50)], hsp.query_ranges)
+        self.assertEqual([(12, 49)], hsp.query_ranges)
         self.assertEqual([(48997405, 48997442)], hsp.hit_ranges)
         # second qresult, fourth hit
         hit = qresult[3]
         self.assertEqual('chr2', hit.id)
         self.assertEqual(243199373, hit.seq_len)
-        self.assertEqual(2, len(hit))
+        self.assertEqual(2, len(hit.gapped_hsps))
         # second qresult, fourth hit, first hsp
         hsp = qresult[3].gapped_hsps[0]
         self.assertEqual(43, hsp.match_num)
@@ -893,13 +893,13 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([36], hsp.query_spans)
         self.assertEqual([36], hsp.hit_spans)
-        self.assertEqual([(14, 50)], hsp.query_ranges)
+        self.assertEqual([(13, 49)], hsp.query_ranges)
         self.assertEqual([(120641740, 120641776)], hsp.hit_ranges)
         # second qresult, fifth hit
         hit = qresult[4]
         self.assertEqual('chr19', hit.id)
         self.assertEqual(59128983, hit.seq_len)
-        self.assertEqual(3, len(hit))
+        self.assertEqual(3, len(hit.gapped_hsps))
         # second qresult, fifth hit, first hsp
         hsp = qresult[4].gapped_hsps[0]
         self.assertEqual(34, hsp.match_num)
@@ -938,7 +938,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([39], hsp.query_spans)
         self.assertEqual([39], hsp.hit_spans)
-        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(54017130, 54017169)], hsp.hit_ranges)
         # second qresult, fifth hit, third hsp
         hsp = qresult[4].gapped_hsps[2]
@@ -958,7 +958,7 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual(1, len(hsp))
         self.assertEqual([39], hsp.query_spans)
         self.assertEqual([39], hsp.hit_spans)
-        self.assertEqual([(11, 50)], hsp.query_ranges)
+        self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
 
@@ -972,59 +972,59 @@ class BlatPslxCases(BlatPslCases):
         qresult = self.qresults[0]
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
-        self.assertEqual('aggtaaactgccttca', str(hsp.query[0].seq))
-        self.assertEqual('aggtaaactgccttca', str(hsp.hit[0].seq))
+        self.assertEqual('aggtaaactgccttca', str(hsp.queries[0].seq))
+        self.assertEqual('aggtaaactgccttca', str(hsp.hits[0].seq))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
-        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.query[0].seq))
-        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.hit[0].seq))
+        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.queries[0].seq))
+        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.hits[0].seq))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
-        self.assertEqual('aaggcagtttaccttgg', str(hsp.query[0].seq))
-        self.assertEqual('aaggcagtttaccttgg', str(hsp.hit[0].seq))
+        self.assertEqual('aaggcagtttaccttgg', str(hsp.queries[0].seq))
+        self.assertEqual('aaggcagtttaccttgg', str(hsp.hits[0].seq))
 
         # test second qresult
         qresult = self.qresults[1]
         # second qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
-        self.assertEqual('acaaaggggctgggcgtggtggctcacacctgtaatcccaa', str(hsp.query[0].seq))
-        self.assertEqual('acaaaggggctgggcgcagtggctcacgcctgtaatcccaa', str(hsp.hit[0].seq))
+        self.assertEqual('acaaaggggctgggcgtggtggctcacacctgtaatcccaa', str(hsp.queries[0].seq))
+        self.assertEqual('acaaaggggctgggcgcagtggctcacgcctgtaatcccaa', str(hsp.hits[0].seq))
         # second qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
-        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.query[0].seq))
-        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.hit[0].seq))
+        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.queries[0].seq))
+        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.hits[0].seq))
         # second qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
-        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatcc', str(hsp.query[0].seq))
-        self.assertEqual('aaaggggctgggcgtggtagctcatgcctgtaatcc', str(hsp.hit[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatcc', str(hsp.queries[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtagctcatgcctgtaatcc', str(hsp.hits[0].seq))
         # second qresult, third hit, second hsp
         hsp = qresult[2].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctt', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggcgggagccaccacgcccagcccctt', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctt', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggcgggagccaccacgcccagcccctt', str(hsp.hits[0].seq))
         # second qresult, fourth hit, first hsp
         hsp = qresult[3].gapped_hsps[0]
-        self.assertEqual('aaaaat', str(hsp.query[0].seq))
-        self.assertEqual('aaaaat', str(hsp.hit[0].seq))
-        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.query[1].seq))
-        self.assertEqual('aaaggggctgggcgtggtggctcacgcctgtaatccca', str(hsp.hit[1].seq))
+        self.assertEqual('aaaaat', str(hsp.queries[0].seq))
+        self.assertEqual('aaaaat', str(hsp.hits[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.queries[1].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacgcctgtaatccca', str(hsp.hits[1].seq))
         # second qresult, fourth hit, second hsp
         hsp = qresult[3].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccct', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggcgtgagccaccacgcccagcccct', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccct', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggcgtgagccaccacgcccagcccct', str(hsp.hits[0].seq))
         # second qresult, fifth hit, first hsp
         hsp = qresult[4].gapped_hsps[0]
-        self.assertEqual('caaaggggctgggcgtggtggctca', str(hsp.query[0].seq))
-        self.assertEqual('caaaggggctgggcgtagtggctga', str(hsp.hit[0].seq))
-        self.assertEqual('cacctgtaatc', str(hsp.query[1].seq))
-        self.assertEqual('cacctgtaatc', str(hsp.hit[1].seq))
+        self.assertEqual('caaaggggctgggcgtggtggctca', str(hsp.queries[0].seq))
+        self.assertEqual('caaaggggctgggcgtagtggctga', str(hsp.hits[0].seq))
+        self.assertEqual('cacctgtaatc', str(hsp.queries[1].seq))
+        self.assertEqual('cacctgtaatc', str(hsp.hits[1].seq))
         # second qresult, fifth hit, second hsp
         hsp = qresult[4].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.hits[0].seq))
         # second qresult, fifth hit, third hsp
         hsp = qresult[4].gapped_hsps[2]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query[0].seq))
-        self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
+        self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hits[0].seq))
 
     def test_pslx_34_002(self, testf='pslx_34_002.pslx', fmt='blat-pslx'):
         """Test parsing blat output (pslx_34_002.pslx)"""
@@ -1038,16 +1038,16 @@ class BlatPslxCases(BlatPslCases):
         qresult = self.qresults[0]
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
-        self.assertEqual('aggtaaactgccttca', str(hsp.query[0].seq))
-        self.assertEqual('aggtaaactgccttca', str(hsp.hit[0].seq))
+        self.assertEqual('aggtaaactgccttca', str(hsp.queries[0].seq))
+        self.assertEqual('aggtaaactgccttca', str(hsp.hits[0].seq))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
-        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.query[0].seq))
-        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.hit[0].seq))
+        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.queries[0].seq))
+        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.hits[0].seq))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
-        self.assertEqual('aaggcagtttaccttgg', str(hsp.query[0].seq))
-        self.assertEqual('aaggcagtttaccttgg', str(hsp.hit[0].seq))
+        self.assertEqual('aaggcagtttaccttgg', str(hsp.queries[0].seq))
+        self.assertEqual('aaggcagtttaccttgg', str(hsp.hits[0].seq))
 
     def test_pslx_34_004(self, testf='pslx_34_004.pslx', fmt='blat-pslx'):
         """Test parsing blat output (pslx_34_004.pslx)"""
@@ -1057,44 +1057,44 @@ class BlatPslxCases(BlatPslCases):
         qresult = self.qresults[0]
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
-        self.assertEqual('acaaaggggctgggcgtggtggctcacacctgtaatcccaa', str(hsp.query[0].seq))
-        self.assertEqual('acaaaggggctgggcgcagtggctcacgcctgtaatcccaa', str(hsp.hit[0].seq))
+        self.assertEqual('acaaaggggctgggcgtggtggctcacacctgtaatcccaa', str(hsp.queries[0].seq))
+        self.assertEqual('acaaaggggctgggcgcagtggctcacgcctgtaatcccaa', str(hsp.hits[0].seq))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
-        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.query[0].seq))
-        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.hit[0].seq))
+        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.queries[0].seq))
+        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.hits[0].seq))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
-        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatcc', str(hsp.query[0].seq))
-        self.assertEqual('aaaggggctgggcgtggtagctcatgcctgtaatcc', str(hsp.hit[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatcc', str(hsp.queries[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtagctcatgcctgtaatcc', str(hsp.hits[0].seq))
         # first qresult, third hit, second hsp
         hsp = qresult[2].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctt', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggcgggagccaccacgcccagcccctt', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctt', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggcgggagccaccacgcccagcccctt', str(hsp.hits[0].seq))
         # first qresult, fourth hit, first hsp
         hsp = qresult[3].gapped_hsps[0]
-        self.assertEqual('aaaaat', str(hsp.query[0].seq))
-        self.assertEqual('aaaaat', str(hsp.hit[0].seq))
-        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.query[1].seq))
-        self.assertEqual('aaaggggctgggcgtggtggctcacgcctgtaatccca', str(hsp.hit[1].seq))
+        self.assertEqual('aaaaat', str(hsp.queries[0].seq))
+        self.assertEqual('aaaaat', str(hsp.hits[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.queries[1].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacgcctgtaatccca', str(hsp.hits[1].seq))
         # first qresult, fourth hit, second hsp
         hsp = qresult[3].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccct', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggcgtgagccaccacgcccagcccct', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccct', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggcgtgagccaccacgcccagcccct', str(hsp.hits[0].seq))
         # first qresult, fifth hit, first hsp
         hsp = qresult[4].gapped_hsps[0]
-        self.assertEqual('caaaggggctgggcgtggtggctca', str(hsp.query[0].seq))
-        self.assertEqual('caaaggggctgggcgtagtggctga', str(hsp.hit[0].seq))
-        self.assertEqual('cacctgtaatc', str(hsp.query[1].seq))
-        self.assertEqual('cacctgtaatc', str(hsp.hit[1].seq))
+        self.assertEqual('caaaggggctgggcgtggtggctca', str(hsp.queries[0].seq))
+        self.assertEqual('caaaggggctgggcgtagtggctga', str(hsp.hits[0].seq))
+        self.assertEqual('cacctgtaatc', str(hsp.queries[1].seq))
+        self.assertEqual('cacctgtaatc', str(hsp.hits[1].seq))
         # first qresult, fifth hit, second hsp
         hsp = qresult[4].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.hits[0].seq))
         # first qresult, fifth hit, third hsp
         hsp = qresult[4].gapped_hsps[2]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query[0].seq))
-        self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
+        self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hits[0].seq))
 
     def test_pslx_34_005(self, testf='pslx_34_005.pslx', fmt='blat-pslx'):
         """Test parsing blat output (pslx_34_005.pslx)"""
@@ -1104,59 +1104,59 @@ class BlatPslxCases(BlatPslCases):
         qresult = self.qresults[0]
         # first qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
-        self.assertEqual('aggtaaactgccttca', str(hsp.query[0].seq))
-        self.assertEqual('aggtaaactgccttca', str(hsp.hit[0].seq))
+        self.assertEqual('aggtaaactgccttca', str(hsp.queries[0].seq))
+        self.assertEqual('aggtaaactgccttca', str(hsp.hits[0].seq))
         # first qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
-        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.query[0].seq))
-        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.hit[0].seq))
+        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.queries[0].seq))
+        self.assertEqual('atgagcttccaaggtaaactgccttcaagattc', str(hsp.hits[0].seq))
         # first qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
-        self.assertEqual('aaggcagtttaccttgg', str(hsp.query[0].seq))
-        self.assertEqual('aaggcagtttaccttgg', str(hsp.hit[0].seq))
+        self.assertEqual('aaggcagtttaccttgg', str(hsp.queries[0].seq))
+        self.assertEqual('aaggcagtttaccttgg', str(hsp.hits[0].seq))
 
         # test second qresult
         qresult = self.qresults[1]
         # second qresult, first hit, first hsp
         hsp = qresult[0].gapped_hsps[0]
-        self.assertEqual('acaaaggggctgggcgtggtggctcacacctgtaatcccaa', str(hsp.query[0].seq))
-        self.assertEqual('acaaaggggctgggcgcagtggctcacgcctgtaatcccaa', str(hsp.hit[0].seq))
+        self.assertEqual('acaaaggggctgggcgtggtggctcacacctgtaatcccaa', str(hsp.queries[0].seq))
+        self.assertEqual('acaaaggggctgggcgcagtggctcacgcctgtaatcccaa', str(hsp.hits[0].seq))
         # second qresult, second hit, first hsp
         hsp = qresult[1].gapped_hsps[0]
-        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.query[0].seq))
-        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.hit[0].seq))
+        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.queries[0].seq))
+        self.assertEqual('cacaaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.hits[0].seq))
         # second qresult, third hit, first hsp
         hsp = qresult[2].gapped_hsps[0]
-        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatcc', str(hsp.query[0].seq))
-        self.assertEqual('aaaggggctgggcgtggtagctcatgcctgtaatcc', str(hsp.hit[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatcc', str(hsp.queries[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtagctcatgcctgtaatcc', str(hsp.hits[0].seq))
         # second qresult, third hit, second hsp
         hsp = qresult[2].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctt', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggcgggagccaccacgcccagcccctt', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctt', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggcgggagccaccacgcccagcccctt', str(hsp.hits[0].seq))
         # second qresult, fourth hit, first hsp
         hsp = qresult[3].gapped_hsps[0]
-        self.assertEqual('aaaaat', str(hsp.query[0].seq))
-        self.assertEqual('aaaaat', str(hsp.hit[0].seq))
-        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.query[1].seq))
-        self.assertEqual('aaaggggctgggcgtggtggctcacgcctgtaatccca', str(hsp.hit[1].seq))
+        self.assertEqual('aaaaat', str(hsp.queries[0].seq))
+        self.assertEqual('aaaaat', str(hsp.hits[0].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacacctgtaatccca', str(hsp.queries[1].seq))
+        self.assertEqual('aaaggggctgggcgtggtggctcacgcctgtaatccca', str(hsp.hits[1].seq))
         # second qresult, fourth hit, second hsp
         hsp = qresult[3].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccct', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggcgtgagccaccacgcccagcccct', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccct', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggcgtgagccaccacgcccagcccct', str(hsp.hits[0].seq))
         # second qresult, fifth hit, first hsp
         hsp = qresult[4].gapped_hsps[0]
-        self.assertEqual('caaaggggctgggcgtggtggctca', str(hsp.query[0].seq))
-        self.assertEqual('caaaggggctgggcgtagtggctga', str(hsp.hit[0].seq))
-        self.assertEqual('cacctgtaatc', str(hsp.query[1].seq))
-        self.assertEqual('cacctgtaatc', str(hsp.hit[1].seq))
+        self.assertEqual('caaaggggctgggcgtggtggctca', str(hsp.queries[0].seq))
+        self.assertEqual('caaaggggctgggcgtagtggctga', str(hsp.hits[0].seq))
+        self.assertEqual('cacctgtaatc', str(hsp.queries[1].seq))
+        self.assertEqual('cacctgtaatc', str(hsp.hits[1].seq))
         # second qresult, fifth hit, second hsp
         hsp = qresult[4].gapped_hsps[1]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query[0].seq))
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.hits[0].seq))
         # second qresult, fifth hit, third hsp
         hsp = qresult[4].gapped_hsps[2]
-        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.query[0].seq))
-        self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hit[0].seq))
+        self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
+        self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hits[0].seq))
 
 
 if __name__ == "__main__":
