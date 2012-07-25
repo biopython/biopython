@@ -1529,6 +1529,8 @@ class QualPhredWriter(SequentialSequenceWriter):
         if wrap > 5:
             #Fast wrapping
             data = " ".join(qualities_strs)
+            # cache a local copy of the writer
+            local_writer = handle.write
             """
             while True:
                 if len(data) <= wrap:
@@ -1542,10 +1544,10 @@ class QualPhredWriter(SequentialSequenceWriter):
                     data = data[i+1:]
             """
             if len(data) <= wrap:
-                handle.write(data + "\n")
+                local_writer(data + "\n")
             else:
                 for i in xrange((len(data)/wrap)+1):
-                    handle.write(data[i*wrap:wrap*(i+1)] + "\n")
+                    local_writer(data[i*wrap:wrap*(i+1)] + "\n")
         elif wrap:
             #Safe wrapping
             while qualities_strs:
