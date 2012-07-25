@@ -1491,7 +1491,6 @@ class QualPhredWriter(SequentialSequenceWriter):
         self.record2title = record2title
 
 
-
     def write_record(self, record):
         """Write a single QUAL record to the file."""
         assert self._header_written
@@ -1529,25 +1528,11 @@ class QualPhredWriter(SequentialSequenceWriter):
         if wrap > 5:
             #Fast wrapping
             data = " ".join(qualities_strs)
-            # cache a local copy of the writer
-            local_writer = handle.write
-            """
-            while True:
-                if len(data) <= wrap:
-                    self.handle.write(data + "\n")
-                    break
-                else:
-                    #By construction there must be spaces in the first X chars
-                    #(unless we have X digit or higher quality scores!)
-                    i = data.rfind(" ", 0, wrap)
-                    handle.write(data[:i] + "\n")
-                    data = data[i+1:]
-            """
             if len(data) <= wrap:
-                local_writer(data + "\n")
+                handle.write(data + "\n")
             else:
-                for i in xrange((len(data)/wrap)+1):
-                    local_writer(data[i*wrap:wrap*(i+1)] + "\n")
+                for i in xrange((len(data) / wrap) + 1):
+                    handle.write(data[(i * wrap):(wrap * (i + 1))] + "\n")
         elif wrap:
             #Safe wrapping
             while qualities_strs:
@@ -1560,7 +1545,6 @@ class QualPhredWriter(SequentialSequenceWriter):
             #No wrapping
             data = " ".join(qualities_strs)
             handle.write(data + "\n")
-
 
 
 class FastqSolexaWriter(SequentialSequenceWriter):
