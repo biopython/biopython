@@ -6,7 +6,7 @@
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
 from Bio._py3k import _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, GappedHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, GappedHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -20,10 +20,52 @@ def _absorb_hit(qresult, hit):
         qresult.append(hit)
     except ValueError:
         assert hit.id in qresult
-        for hsp_item in hit:
+        for hsp_item in hit.gapped_hsps:
             qresult[hit.id].append(hsp_item)
 
     return qresult
+
+
+def _create_gapped_hsp(hid, qid, hspd):
+    """Returns a list of HSP objects from the given parsed HSP values."""
+    hsps = []
+
+    # we are iterating over query_ranges, but hit_ranges works just as well
+    for idx, qcoords in enumerate(hspd['query_ranges']):
+        # get sequences, create object
+        hseqlist = hspd.get('hit')
+        hseq = '' if hseqlist is None else hseqlist[idx]
+        qseqlist = hspd.get('query')
+        qseq = '' if qseqlist is None else qseqlist[idx]
+        hsp = HSP(hid, qid, hseq, qseq)
+        # coordinates
+        hsp.query_start = qcoords[0]
+        hsp.query_end = qcoords[1]
+        hsp.hit_start = hspd['hit_ranges'][idx][0]
+        hsp.hit_end = hspd['hit_ranges'][idx][1]
+        # alignment annotation
+        try:
+            aln_annot = hspd.get('alignment_annotation', {})
+            for key, value in aln_annot.items():
+                hsp.alignment_annotation[key] = value[idx]
+        except IndexError:
+            pass
+        # strands
+        hsp.query_strand = hspd['query_strand']
+        hsp.hit_strand = hspd['hit_strand']
+        # and append the hsp object to the list
+        hsps.append(hsp)
+
+    ghsp = GappedHSP(hid, qid, hsps)
+    # set gappedhsp-specific attributes
+    for attr in ('score', 'hit_scodon_ranges', 'query_scodon_ranges', \
+            'hit_intron_ranges', 'query_intron_ranges', 'hit_ner_ranges', \
+            'query_ner_ranges', 'query_strand', 'hit_strand', 'model', \
+            'vulgar_comp', 'cigar_comp'):
+        if attr in hspd:
+            setattr(ghsp, attr, hspd[attr])
+
+    return ghsp
 
 
 def _parse_hit_or_query_line(line):
@@ -190,15 +232,10 @@ class BaseExonerateIterator(object):
                 for attr, value in hit_parsed.items():
                     setattr(hit, attr, value)
 
-            # each block is basically a different HSP, so we always add it to
-            # any hit object we have
-            hsp = GappedHSP(hit_id, qresult_id, hsp_parsed['hit'], \
-                    hsp_parsed['query'])
-            for attr, value in hsp_parsed.items():
-                # hit and query have been used for initialization
-                if attr not in ('hit', 'query'):
-                    setattr(hsp, attr, value)
-            hit.append(hsp)
+            # create the HSP objects from a single parsed HSP results,
+            # group them in one GappedHSP object, and append to Hit
+            gapped_hsp = _create_gapped_hsp(hit_id, qresult_id, hsp_parsed)
+            hit.append(gapped_hsp)
 
             if not self.has_c4_alignment:
                 self.line = self.handle.readline()

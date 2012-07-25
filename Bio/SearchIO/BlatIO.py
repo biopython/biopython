@@ -41,7 +41,7 @@ def _append_hit(qresult, hit):
     if hit not in qresult:
         qresult.append(hit)
     else:
-        for hsp in hit:
+        for hsp in hit.gapped_hsps:
             qresult[hit.id].append(hsp)
 
 
@@ -65,6 +65,7 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
 
     Arguments:
     starts -- List of integers, start coordinates.
+    start -- Integer, 'Q start' or 'T start' column
     blksizes -- List of integers, block sizes.
     seqlen -- Integer of total sequence length.
     strand -- Integer denoting sequence strand.
@@ -79,7 +80,7 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
         return starts
     else:
         # the plus-oriented coordinate is calculated by this:
-        # plus_coord = query_length - minus_coord - block_size + 1
+        # plus_coord = length - minus_coord - block_size + 1
         return [seqlen - start - blksize + 1 for \
                 start, blksize in zip(starts, blksizes)]
 
@@ -127,6 +128,88 @@ def _calc_score(psl, is_protein):
     size_mul = 3 if is_protein else 1
     return size_mul * (psl['matches'] + (psl['repmatches'] >> 1)) - \
             size_mul * psl['mismatches'] - psl['qnuminsert'] - psl['tnuminsert']
+
+
+def _create_gapped_hsp(hid, qid, psl):
+    # protein flag
+    is_protein = _is_protein(psl)
+    # strand
+    #if query is protein, strand is 0
+    if is_protein:
+        qstrand = 0
+    else:
+        qstrand = 1 if psl['strand'][0] == '+' else -1
+    # try to get hit strand, if it exists
+    try:
+        hstrand = 1 if psl['strand'][1] == '+' else -1
+    except IndexError:
+        hstrand = 1  # hit strand defaults to plus
+
+    # query block starts
+    qstarts = _reorient_starts(psl['qstarts'], \
+            psl['blocksizes'], psl['qsize'], qstrand)
+    # hit block starts
+    if len(psl['strand']) == 2:
+        hstarts = _reorient_starts(psl['tstarts'], \
+                psl['blocksizes'], psl['tsize'], hstrand)
+    else:
+        hstarts = psl['tstarts']
+    # set query and hit coords
+    # this assumes each block has no gaps (which seems to be the case)
+    assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
+    query_ranges = zip(qstarts, [x + y for x, y in \
+            zip(qstarts, psl['blocksizes'])])
+    hit_ranges = zip(hstarts, [x + y for x, y in \
+            zip(hstarts, psl['blocksizes'])])
+    # check length of sequences and coordinates, all must match
+    if psl['tseqs'] and psl['qseqs']:
+        assert len(psl['tseqs']) == len(psl['qseqs']) == \
+                len(query_ranges) == len(hit_ranges)
+    else:
+        assert len(query_ranges) == len(hit_ranges)
+
+    hsps = []
+    # iterating over query_ranges, but hit_ranges works just as well
+    for idx, qcoords in enumerate(query_ranges):
+        hseqlist = psl.get('tseqs')
+        hseq = '' if not hseqlist else hseqlist[idx]
+        qseqlist = psl.get('qseqs')
+        qseq = '' if not qseqlist else qseqlist[idx]
+        hsp = HSP(hid, qid, hseq, qseq)
+        # set coordinates
+        hsp.query_start = qcoords[0]
+        hsp.query_end = qcoords[1]
+        hsp.hit_start = hit_ranges[idx][0]
+        hsp.hit_end = hit_ranges[idx][1]
+        # and strands
+        hsp.query_strand = qstrand
+        hsp.hit_strand = hstrand
+        hsps.append(hsp)
+
+    # create gapped hsp object
+    ghsp = GappedHSP(hid, qid, hsps)
+    # set its attributes
+    ghsp.match_num = psl['matches']
+    ghsp.mismatch_num = psl['mismatches']
+    ghsp.match_rep_num = psl['repmatches']
+    ghsp.n_num = psl['ncount']
+    ghsp.query_gapopen_num = psl['qnuminsert']
+    ghsp.query_gap_num = psl['qbaseinsert']
+    ghsp.hit_gapopen_num = psl['tnuminsert']
+    ghsp.hit_gap_num = psl['tbaseinsert']
+
+    ghsp.query_strand = qstrand
+    ghsp.hit_strand = hstrand
+    ghsp.ident_num = psl['matches'] + psl['repmatches']
+    ghsp.gapopen_num = psl['qnuminsert'] + psl['tnuminsert']
+    ghsp.gap_num = psl['qbaseinsert'] + psl['tbaseinsert']
+    ghsp.query_is_protein = is_protein
+    ghsp.ident_pct = 100.0 - _calc_millibad(psl, is_protein) * 0.1
+    ghsp.score = _calc_score(psl, is_protein)
+    # helper flag, for writing
+    ghsp._has_hit_strand = len(psl['strand']) == 2
+
+    return ghsp
 
 
 class BlatPslIterator(object):
@@ -199,18 +282,10 @@ class BlatPslIterator(object):
                 hit = Hit(hit_id, qresult_id)
                 hit.seq_len = psl['tsize']
 
-            # each line is basically a different HSP, so we always add it to
-            # any hit object we have
-            if psl['tseqs'] and psl['qseqs']:
-                hsp = GappedHSP(hit_id, qresult_id, psl['tseqs'], psl['qseqs'])
-            else:
-                hsp = GappedHSP(hit_id, qresult_id)
-                # append HSP for @coordinate start (doesn't matter hit or query)
-                for i in psl['qstarts']:
-                    hsp.append(HSP(hit_id, qresult_id))
-            hsp = self._set_hsp_attr(hsp, psl)
-
-            hit.append(hsp)
+            # create the HSP objects from a single parsed HSP results,
+            # group them in one GappedHSP object, and append to Hit
+            gapped_hsp = _create_gapped_hsp(hit_id, qresult_id, psl)
+            hit.append(gapped_hsp)
 
             self.line = self.handle.readline()
 
@@ -249,78 +324,6 @@ class BlatPslIterator(object):
     def _validate_cols(self, cols):
         assert len(cols) == 21, "Invalid PSL line: %r. " \
         "Expected 21 tab-separated columns, found %i" % (self.line, len(cols))
-
-    def _set_hsp_attr(self, hsp, psl):
-        """Set HSP attributes from parsed row values.
-
-        Arguments:
-        hsp -- HSP object whose attributes we want to set.
-        psl -- Dictionary of parsed row values.
-
-        """
-        # residue-related counts
-        hsp.match_num = psl['matches']
-        hsp.mismatch_num = psl['mismatches']
-        hsp.match_rep_num = psl['repmatches']
-        hsp.n_num = psl['ncount']
-        hsp.query_gapopen_num = psl['qnuminsert']
-        hsp.query_gap_num = psl['qbaseinsert']
-        hsp.hit_gapopen_num = psl['tnuminsert']
-        hsp.hit_gap_num = psl['tbaseinsert']
-
-        hsp.ident_num = psl['matches'] + psl['repmatches']
-        hsp.pos_num = hsp.ident_num
-        hsp.gapopen_num = psl['qnuminsert'] + psl['tnuminsert']
-        hsp.gap_num = psl['qbaseinsert'] + psl['tbaseinsert']
-
-        is_protein = _is_protein(psl)
-        hsp.query_is_protein = is_protein
-        hsp.ident_pct = 100.0 - _calc_millibad(psl, is_protein) * 0.1
-        hsp.score = _calc_score(psl, is_protein)
-
-        # strand
-        #if query is protein, strand is 0
-        if is_protein:
-            hsp.query_strand = 0
-        else:
-            hsp.query_strand = 1 if psl['strand'][0] == '+' else -1
-        # try to get hit strand, if it exists
-        try:
-            hsp.hit_strand = 1 if psl['strand'][1] == '+' else -1
-            hsp._has_hit_strand = True
-        except IndexError:
-            hsp.hit_strand = 1  # hit strand defaults to plus
-            hsp._has_hit_strand = False
-
-        # coordinates
-        hsp.query_start = psl['qstart']
-        hsp.query_end = psl['qend']
-        hsp.hit_start = psl['tstart']
-        hsp.hit_end = psl['tend']
-
-        # block-related attributes
-        #hsp.query_spans = hsp.hit_spans = psl['blocksizes']
-        #len(hsp) = psl['blockcount']
-
-        # query block starts
-        qstarts = _reorient_starts(psl['qstarts'], \
-                psl['blocksizes'], psl['qsize'], hsp.query_strand)
-        # hit block starts
-        if len(psl['strand']) == 2:
-            hstarts = _reorient_starts(psl['tstarts'], \
-                    psl['blocksizes'], psl['tsize'], hsp.hit_strand)
-        else:
-            hstarts = psl['tstarts']
-
-        # set query and hit coords
-        # this assumes each block has no gaps (which seems to be the case)
-        assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-        hsp.query_ranges = zip(qstarts, [x + y for x, y in \
-                zip(qstarts, psl['blocksizes'])])
-        hsp.hit_ranges = zip(hstarts, [x + y for x, y in \
-                zip(hstarts, psl['blocksizes'])])
-
-        return hsp
 
 
 class BlatPslxIterator(BlatPslIterator):

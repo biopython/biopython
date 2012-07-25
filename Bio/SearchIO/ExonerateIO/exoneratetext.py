@@ -148,8 +148,9 @@ def fill_coords(hsp, seq_type, inter_lens):
     # manually fill the first coord
     seq_step = 1 if hsp[seq_type + 'strand'] >= 0 else -1
     fstart = hsp[seq_type + 'start']
-    fend = fstart + len(hsp[seq_type[:-1]][0].replace('-','')) * \
-            seq_step
+    fend = fstart + len(\
+            hsp[seq_type[:-1]][0].replace('-','').replace('>', \
+            '').replace('<', '')) * seq_step
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
     for idx, block in enumerate(hsp[seq_type[:-1]][1:]):

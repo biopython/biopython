@@ -6,6 +6,7 @@
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
 import re
+from itertools import chain
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
@@ -449,16 +450,16 @@ class QueryResult(BaseSearchObject):
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_filter(self, func=None):
+    def hsp_filter(self, func=None, on_gapped=False):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
-        hits = filter(None, (hit.filter(func) for hit in self.hits))
+        hits = filter(None, (hit.filter(func, on_gapped) for hit in self.hits))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_map(self, func=None):
+    def hsp_map(self, func=None, on_gapped=False):
         """Creates a new QueryResult object, mapping the given function to its HSPs."""
-        hits = filter(None, (hit.map(func) for hit in self.hits[:]))
+        hits = filter(None, (hit.map(func, on_gapped) for hit in self.hits[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -722,11 +723,12 @@ class Hit(BaseSearchObject):
         self._description = ''
 
         self._hsps = []
+        self._gapped_hsps = []
         for hsp in hsps:
             # validate each HSP
             self._validate_hsp(hsp)
             # and store it them as an instance attribute
-            self._hsps.append(hsp)
+            self.append(hsp)
 
     def __iter__(self):
         return iter(self._hsps)
@@ -839,7 +841,7 @@ class Hit(BaseSearchObject):
     def _description_set(self, value):
         self._description = value
         # try to set descriptions of hsp.hit.seq within
-        for hsp in self.hsps:
+        for hsp in self.gapped_hsps:
             hsp.hit_description = value
 
     description = property(fget=_description_get, fset=_description_set)
@@ -849,7 +851,7 @@ class Hit(BaseSearchObject):
 
     def _query_description_set(self, value):
         self._query_description = value
-        for hsp in self.hsps:
+        for hsp in self.gapped_hsps:
             hsp.query_description = value
 
     query_description = property(fget=_query_description_get, \
@@ -859,6 +861,11 @@ class Hit(BaseSearchObject):
         return self._hsps
 
     hsps = property(fget=_hsps_get)
+
+    def _gapped_hsps_get(self):
+        return self._gapped_hsps
+
+    gapped_hsps = property(fget=_gapped_hsps_get)
 
     def _id_get(self):
         return self._id
@@ -885,35 +892,83 @@ class Hit(BaseSearchObject):
 
     def append(self, hsp):
         self._validate_hsp(hsp)
-        self._hsps.append(hsp)
 
-    def filter(self, func=None):
-        """Creates a new Hit object whose HSP objects pass the filter function."""
-        hsps = filter(func, self.hsps)
-        if hsps:
-            obj = self.__class__(self.id, self.query_id, hsps)
-            self._transfer_attrs(obj)
-            return obj
-
-    def map(self, func=None):
-        """Creates a new Hit object, mapping the given function to its HSPs."""
-        hsps = map(func, self.hsps[:])
-        if hsps:
-            obj = self.__class__(self.id, self.query_id, hsps)
-            self._transfer_attrs(obj)
-            return obj
-
-    def pop(self, index=-1):
-        return self._hsps.pop(index)
-
-    def reverse(self):
-        self._hsps.reverse()
-
-    def sort(self, key=None, reverse=False, in_place=True):
-        if in_place:
-            self._hsps.sort(key=key, reverse=reverse)
+        # HSP and GappedHSP are treated differently
+        if isinstance(hsp, HSP):
+            # if it's an HSP, append it to the HSP list
+            # and create a GappedHSP object containing it in the GappedHSP list
+            # the idea is to have synchronized HSP items between the two lists
+            self._hsps.append(hsp)
+            self._gapped_hsps.append(GappedHSP(hsp.hit_id, hsp.query_id, [hsp]))
         else:
-            hsps = self.hsps[:]
+            # if it's a GappedHSP object, append it to the GappedHSP list
+            # and append the HSPs inside it to the HSP list
+            self._gapped_hsps.append(hsp)
+            for block in hsp:
+                self._hsps.append(block)
+
+    def filter(self, func=None, on_gapped=False):
+        """Creates a new Hit object whose HSP objects pass the filter function."""
+        if not on_gapped:
+            hsps = filter(func, self.hsps)
+        else:
+            hsps = filter(func, self.gapped_hsps)
+        if hsps:
+            obj = self.__class__(self.id, self.query_id, hsps)
+            self._transfer_attrs(obj)
+            return obj
+
+    def map(self, func=None, on_gapped=False):
+        """Creates a new Hit object, mapping the given function to its HSPs."""
+        if not on_gapped:
+            hsps = map(func, self.hsps[:])
+        else:
+            hsps = map(func, self.gapped_hsps[:])
+        if hsps:
+            obj = self.__class__(self.id, self.query_id, hsps)
+            self._transfer_attrs(obj)
+            return obj
+
+    def pop(self, index=-1, on_gapped=False):
+        if not on_gapped:
+            hsp = self._hsps.pop(index)
+            # iterate over the gapped hsps to find which one
+            # contains the HSP object
+            for ghsp_idx, ghsp in enumerate(self._gapped_hsps):
+                if hsp in ghsp:
+                    break
+            else:
+                raise ValueError("HSP object not present in a GappedHSP "\
+                        "container.")
+            # and pop it out of the gapped hsp object
+            hsp_idx = ghsp.find(hsp)
+            ghsp._blocks.pop(hsp_idx)
+            # if that leaves the gapped hsp empty, remove the gapped hsp
+            # object as well
+            if not ghsp:
+                self._gapped_hsps.pop(ghsp_idx)
+            return hsp
+        else:
+            # if pop is set on gapped hsps, pop the entire gapped hsp
+            # self._hsps must then contain hsps in the remaining gapped hsps
+            hsp = self._gapped_hsps.pop(index)
+            self._hsps = list(chain(self._gapped_hsps))
+            return hsp
+
+    def sort(self, key=None, reverse=False, in_place=True, on_gapped=False):
+        if in_place:
+            if not on_gapped:
+                self._hsps.sort(key=key, reverse=reverse)
+            else:
+                self._gapped_hsps.sort(key=key, reverse=reverse)
+                # the order of hsps in self._hsps is the same as the
+                # gapped_hsps ordering
+                self._hsps = list(chain(self._gapped_hsps))
+        else:
+            if not on_gapped:
+                hsps = self.hsps[:]
+            else:
+                hsps = self.gapped_hsps[:]
             hsps.sort(key=key, reverse=reverse)
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
@@ -945,6 +1000,7 @@ class BaseHSP(BaseSearchObject):
         self.alphabet = alphabet
         self.alignment_annotation = {}
         # set default values
+        self._query_description, self._hit_description = '', ''
         self._query_strand, self._hit_strand = None, None
         self.query_frame, self.hit_frame = None, None
 
@@ -1406,28 +1462,26 @@ class GappedHSP(BaseHSP):
 
     """Class representing a HSP separated by gaps into blocks."""
 
-    def __init__(self, hit_id=None, query_id=None, hit_seqs=[], query_seqs=[], \
+    def __init__(self, hit_id=None, query_id=None, blocks=[], \
             alphabet=single_letter_alphabet):
         """Initializes a GappedHSP object.
 
         Arguments:
         hit_id -- String, Hit ID of the HSP object.
         query_id -- String of the search query ID.
-        query_seqs -- List of query sequences.
-        hit_seqs -- List of hit sequences.
+        blocks -- List of HSP objects.
 
         """
-        assert len(query_seqs) == len(hit_seqs), "GappedHSP objects must be " \
-                "initialized with the same number query and hit sequence " \
-                "blocks."
         BaseHSP.__init__(self, hit_id, query_id, alphabet)
 
-        if query_seqs and hit_seqs:
-            # create HSPs, hit, and query objects
-            self._blocks = [HSP(hit_id, query_id, hseq, qseq) for hseq, qseq \
-                    in zip(hit_seqs, query_seqs)]
-        else:
-            self._blocks = []
+        self._blocks = []
+        for block in blocks:
+            self._validate_block(block)
+            self._blocks.append(block)
+
+    def __contains__(self, hsp):
+        """Checks whether an HSP object is present in the GappedHSP object."""
+        return hsp in self._blocks
 
     def __iter__(self):
         return iter(self._blocks)
@@ -1479,7 +1533,6 @@ class GappedHSP(BaseHSP):
 
         return self._display_aln_header() + '\n' + '\n'.join(lines)
 
-
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
@@ -1510,15 +1563,15 @@ class GappedHSP(BaseHSP):
 
     blocks = property(fget=_blocks_get)
 
-    def _hit_get(self):
+    def _hits_get(self):
         return [block.hit for block in self.blocks]
 
-    hit = property(fget=_hit_get)
+    hits = property(fget=_hits_get)
 
-    def _query_get(self):
+    def _queries_get(self):
         return [block.query for block in self.blocks]
 
-    query = property(fget=_query_get)
+    queries = property(fget=_queries_get)
 
     def _alignments_get(self):
         return [block.alignment for block in self.blocks]
@@ -1541,39 +1594,15 @@ class GappedHSP(BaseHSP):
     query_description = property(fget=BaseHSP._query_description_get, \
             fset=_query_description_set)
 
-    def _hit_ranges_set(self, value):
-        self._hit_ranges = value
-        # if the object has blocks, len(value) must be == len(blocks)
-        if self.blocks:
-            assert len(value) == len(self.blocks)
-            for block, coords in zip(self.blocks, value):
-                assert coords[0] <= coords[1], \
-                        "Invalid start and end coordinates: %r and %r" % \
-                        (coords[0], coords[1])
-                block.hit_start = coords[0]
-                block.hit_end = coords[1]
-
     def _hit_ranges_get(self):
-        return self._hit_ranges
+        return [block.hit_range for block in self.blocks]
 
-    hit_ranges = property(fget=_hit_ranges_get, fset=_hit_ranges_set)
-
-    def _query_ranges_set(self, value):
-        self._query_ranges = value
-        # if the object has blocks, len(value) must be == len(blocks)
-        if self.blocks:
-            assert len(value) == len(self.blocks)
-            for block, coords in zip(self.blocks, value):
-                assert coords[0] <= coords[1], \
-                        "Invalid start and end coordinates: %r and %r" % \
-                        (coords[0], coords[1])
-                block.query_start = coords[0]
-                block.query_end = coords[1]
+    hit_ranges = property(fget=_hit_ranges_get)
 
     def _query_ranges_get(self):
-        return self._query_ranges
+        return [block.query_range for block in self.blocks]
 
-    query_ranges = property(fget=_query_ranges_get, fset=_query_ranges_set)
+    query_ranges = property(fget=_query_ranges_get)
 
     def _hit_spans_get(self):
         return [block.hit_span for block in self.blocks]
@@ -1585,23 +1614,32 @@ class GappedHSP(BaseHSP):
 
     query_spans = property(fget=_query_spans_get)
 
-    def _hit_strand_set(self, value):
-        BaseHSP._hit_strand_set(self, value)
-        for block in self.blocks:
-            block.hit_strand = value
+    def _hit_start_get(self):
+        return min((block.hit_start for block in self.blocks))
 
-    hit_strand = property(fget=BaseHSP._hit_strand_get, fset=_hit_strand_set)
+    hit_start = property(fget=_hit_start_get)
 
-    def _query_strand_set(self, value):
-        BaseHSP._query_strand_set(self, value)
-        for block in self.blocks:
-            block.query_strand = value
+    def _query_start_get(self):
+        return min((block.query_start for block in self.blocks))
 
-    query_strand = property(fget=BaseHSP._query_strand_get, fset=_query_strand_set)
+    query_start = property(fget=_query_start_get)
 
-    def append(self, block):
-        self._validate_block(block)
-        self._blocks.append(block)
+    def _hit_end_get(self):
+        return max((block.hit_end for block in self.blocks))
+
+    hit_end = property(fget=_hit_end_get)
+
+    def _query_end_get(self):
+        return max((block.query_end for block in self.blocks))
+
+    query_end = property(fget=_query_end_get)
+
+    def find(self, hsp):
+        """Returns the index of a given HSP object, zero-based."""
+        try:
+            return self._blocks.index(hsp)
+        except ValueError:
+            return -1
 
 
 def _test():

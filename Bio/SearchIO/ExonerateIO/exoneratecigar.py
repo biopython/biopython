@@ -68,8 +68,10 @@ class ExonerateCigarIterator(BaseExonerateIterator):
         hsp['score'] = int(hsp['score'])
         # store cigar components
         hsp['cigar_comp'] = cigars.group(10)
-        # placeholder for gapped HSP init
-        hsp['query'], hsp['hit'] = [], []
+        # HACK: since we can't really figure out exactly when a
+        # HSP starts or ends, we set the entire alignment as one HSP
+        hsp['query_ranges'] = [(hsp['query_start'], hsp['query_end'])]
+        hsp['hit_ranges'] = [(hsp['hit_start'], hsp['hit_end'])]
 
         return qresult, hit, hsp
 
