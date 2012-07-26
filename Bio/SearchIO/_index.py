@@ -301,7 +301,7 @@ class DbIndexedSearch(IndexedSearch):
                 # fill the file_data
                 con.execute("INSERT INTO file_data(file_number, name) VALUES "
                         "(?,?);", (idx, filename))
-                indexed_obj = indexer_class(filename)
+                indexed_obj = indexer_class(filename, **self._kwargs)
 
                 if key_function:
                     offset_iter = ((key_function(key), idx, offset, length) for \

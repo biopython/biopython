@@ -1238,10 +1238,10 @@ Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.
 
 class SearchIndexCases(unittest.TestCase):
 
-    def check_index(self, filename, format):
-        parsed = list(SearchIO.parse(filename, format))
-        indexed = SearchIO.index(filename, format)
-        db_indexed = SearchIO.index_db(':memory:', [filename], format)
+    def check_index(self, filename, format, **kwargs):
+        parsed = list(SearchIO.parse(filename, format, **kwargs))
+        indexed = SearchIO.index(filename, format, **kwargs)
+        db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
 
         # check length of parsed and indexed
         self.assertEqual(len(parsed), len(indexed.keys()))
@@ -1330,7 +1330,8 @@ class BlastTabIndexCases(SearchIndexCases):
     def test_blasttab_2226_tblastn_009(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns"""
         filename = 'Blast/tab_2226_tblastn_009.txt'
-        self.assertRaises(AssertionError, self.check_index, filename, self.fmt)
+        self.check_index(filename, self.fmt, fields=('evalue', 'bitscore', 'qseqid', \
+                'sseqid'))
 
     def test_blasttab_2226_tblastn_010(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns, commented"""

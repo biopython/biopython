@@ -409,8 +409,8 @@ class BlastTabIndexer(SearchIndexer):
 
     _parser = BlastTabIterator
 
-    def __init__(self, filename, **kwargs):
-        SearchIndexer.__init__(self, filename, **kwargs)
+    def __init__(self, filename, fields=_DEFAULT_FIELDS):
+        SearchIndexer.__init__(self, filename, fields=fields)
         # set parser for on-the-fly parsing
         # find out if file is commented or not first
         line = self._handle.readline()
@@ -421,6 +421,19 @@ class BlastTabIndexer(SearchIndexer):
         # and reset handle
         self._handle.seek(0)
 
+        # if the file doesn't have comments,
+        # get index of column used as the key (qseqid / qacc / qaccver)
+        if not self.is_commented:
+            if 'qseqid' in fields:
+                self._key_idx = fields.index('qseqid')
+            elif 'qacc' in fields:
+                self._key_idx = fields.index('qacc')
+            elif 'qaccver' in fields:
+                self._key_idx = fields.index('qaccver')
+            else:
+                raise ValueError("Custom fields is missing an ID column. "
+                        "One of these must be present: 'qseqid', 'qacc', or 'qaccver'.")
+
     def __iter__(self):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle
@@ -430,6 +443,7 @@ class BlastTabIndexer(SearchIndexer):
         if not self.is_commented:
             tab_char = _as_bytes('\t')
             qresult_key = None
+            key_idx = self._key_idx
             while True:
                 # get end offset here since we only know a qresult ends after
                 # encountering the next one
@@ -438,9 +452,12 @@ class BlastTabIndexer(SearchIndexer):
                 line = handle.readline()
 
                 if qresult_key is None:
-                    qresult_key = line.split(tab_char)[0]
+                    qresult_key = line.split(tab_char)[key_idx]
                 else:
-                    curr_key = line.split(tab_char)[0]
+                    try:
+                        curr_key = line.split(tab_char)[key_idx]
+                    except IndexError:
+                        curr_key = ''
 
                     if curr_key != qresult_key:
                         yield _bytes_to_string(qresult_key), start_offset, \
@@ -480,15 +497,19 @@ class BlastTabIndexer(SearchIndexer):
         qresult_raw = ''
 
         if not self.is_commented:
+            key_idx = self._key_idx
             tab_char = _as_bytes('\t')
             qresult_key = None
             while True:
                 line = handle.readline()
                 # get the key if the first line (qresult key)
                 if qresult_key is None:
-                    qresult_key = line.split(tab_char)[0]
+                    qresult_key = line.split(tab_char)[key_idx]
                 else:
-                    curr_key = line.split(tab_char)[0]
+                    try:
+                        curr_key = line.split(tab_char)[key_idx]
+                    except IndexError:
+                        curr_key = ''
                     # only break when qresult is finished (key is different)
                     if curr_key != qresult_key:
                         break
