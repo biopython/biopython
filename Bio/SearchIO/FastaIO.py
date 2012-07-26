@@ -403,8 +403,8 @@ class FastaM10Indexer(SearchIndexer):
 
     _parser = FastaM10Iterator
 
-    def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
+    def __init__(self, filename):
+        SearchIndexer.__init__(self, filename)
         self._handle = UndoHandle(self._handle)
 
     def __iter__(self):

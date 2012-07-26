@@ -409,8 +409,8 @@ class BlastTabIndexer(SearchIndexer):
 
     _parser = BlastTabIterator
 
-    def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
+    def __init__(self, filename, **kwargs):
+        SearchIndexer.__init__(self, filename, **kwargs)
         # set parser for on-the-fly parsing
         # find out if file is commented or not first
         line = self._handle.readline()

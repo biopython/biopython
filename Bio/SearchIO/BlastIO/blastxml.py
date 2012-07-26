@@ -478,8 +478,8 @@ class BlastXmlIndexer(SearchIndexer):
     qend_mark = _as_bytes('</Iteration>')
     block_size = 16384
 
-    def __init__(self, *args, **kwargs):
-        SearchIndexer.__init__(self, *args, **kwargs)
+    def __init__(self, filename):
+        SearchIndexer.__init__(self, filename)
         # TODO: better way to do this?
         iter_obj = self._parser(self._handle)
         self._meta, self._fallback = iter_obj._meta, iter_obj._fallback
