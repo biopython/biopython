@@ -28,12 +28,13 @@ class SearchIndexer(object):
 
     """Iterator returning file positions of results in a search output file."""
 
-    def __init__(self, filename):
+    def __init__(self, filename, **kwargs):
         self._handle = open(filename, 'rb')
         self._handle.seek(0) 
+        self._kwargs = kwargs
 
     def _parse(self, handle):
-        return iter(self._parser(handle)).next()
+        return iter(self._parser(handle, **self._kwargs)).next()
 
     def get(self, offset):
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
@@ -43,7 +44,7 @@ class IndexedSearch(_dict_base):
 
     """Dictionary-like object for implementing Search indexing."""
 
-    def __init__(self, filename, format, key_function=None):
+    def __init__(self, filename, format, key_function=None, **kwargs):
         """Initializes IndexedSearch instance.
 
         filename -- The source filename as string.
@@ -57,7 +58,7 @@ class IndexedSearch(_dict_base):
         self._key_function = key_function
 
         indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
-        indexed_obj = indexer_class(filename)
+        indexed_obj = indexer_class(filename, **kwargs)
         self._indexer = indexed_obj
 
         # default key function is lambda rec: rec.id
@@ -197,7 +198,7 @@ class DbIndexedSearch(IndexedSearch):
     """Dictionary-like object for implementing storable Search indexing."""
 
     def __init__(self, index_filename, filenames, format, key_function, \
-            max_open=10, overwrite=False):
+            max_open=10, overwrite=False, **kwargs):
         """Initializes a DbIndexedSearch instance.
 
         index_filename -- The SQLite filename.
@@ -218,6 +219,7 @@ class DbIndexedSearch(IndexedSearch):
         indexer_proxies = {}
         indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
         self._indexer_class = indexer_class
+        self._kwargs = kwargs
 
         # remove index_filename if overwrite is True and the file exists
         if overwrite and os.path.isfile(index_filename):
@@ -383,7 +385,8 @@ class DbIndexedSearch(IndexedSearch):
             if len(proxies) >= self._max_open:
                 proxies.popitem()[1]._handle.close()
             # open a new handle
-            proxy = self._indexer_class(self._filenames[file_number])
+            proxy = self._indexer_class(self._filenames[file_number], \
+                    **self._kwargs)
             result = proxy.get(offset)
             proxies[file_number] = proxy
 
@@ -423,7 +426,8 @@ class DbIndexedSearch(IndexedSearch):
             if len(proxies) >= self._max_open:
                 proxies.popitem()[1]._handle.close()
             # open a new handle
-            proxy = self._indexer_class(self._filenames[file_number])
+            proxy = self._indexer_class(self._filenames[file_number], \
+                    **self._kwargs)
             proxies[file_number] = proxy
             if length:
                 handle = proxy._handle

@@ -154,7 +154,7 @@ def _get_handler(format, mapping):
     return getattr(mod, obj_name)
 
 
-def parse(handle, format=None):
+def parse(handle, format=None, **kwargs):
     """Turns a search output file into an iterator returning QueryResult objects.
 
     Arguments:
@@ -167,13 +167,13 @@ def parse(handle, format=None):
 
     # and start iterating
     with as_handle(handle) as source_file:
-        generator = iterator(source_file)
+        generator = iterator(source_file, **kwargs)
 
         for qresult in generator:
             yield qresult
 
 
-def read(handle, format=None):
+def read(handle, format=None, **kwargs):
     """Turns a search output file into a single QueryResult.
 
     Arguments:
@@ -181,7 +181,7 @@ def read(handle, format=None):
     format -- Lower case string denoting one of the supported formats.
 
     """
-    generator = parse(handle, format)
+    generator = parse(handle, format, **kwargs)
 
     try:
         return generator.next()
@@ -215,7 +215,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     return qdict
 
 
-def index(handle, format=None, key_function=None):
+def index(handle, format=None, key_function=None, **kwargs):
     """Indexes a search output file and returns a dictionary-like object.
 
     Arguments:
@@ -230,11 +230,11 @@ def index(handle, format=None, key_function=None):
         raise TypeError("Handle must be a string of filename")
 
     from Bio.SearchIO._index import IndexedSearch
-    return IndexedSearch(handle, format, key_function)
+    return IndexedSearch(handle, format, key_function, **kwargs)
 
 
 def index_db(index_filename, filenames=None, format=None, \
-        key_function=None):
+        key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
     Arguments:
@@ -255,10 +255,11 @@ def index_db(index_filename, filenames=None, format=None, \
         filenames = [filenames]
 
     from Bio.SearchIO._index import DbIndexedSearch
-    return DbIndexedSearch(index_filename, filenames, format, key_function)
+    return DbIndexedSearch(index_filename, filenames, format, key_function, \
+            **kwargs)
 
 
-def write(qresults, handle, format=None):
+def write(qresults, handle, format=None, **kwargs):
     """Writes QueryResult objects to a file in the given format.
 
     Arguments:
@@ -284,7 +285,7 @@ def write(qresults, handle, format=None):
 
     # write to the handle
     with as_handle(handle, 'w') as target_file:
-        writer = writer_class(target_file)
+        writer = writer_class(target_file, **kwargs)
         # count how many qresults, hits, and hsps
         qresult_count, hit_count, hsp_count = writer.write_file(qresults)
 
