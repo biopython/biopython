@@ -112,8 +112,9 @@ class BlastTabIterator(object):
 
     """Parser for the Blast tabular format."""
 
-    def __init__(self, handle, fields=_DEFAULT_FIELDS):
+    def __init__(self, handle, has_comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle
+        self.has_comments = has_comments
         self.fields = fields
         self.line = self.handle.readline().strip()
 
@@ -121,12 +122,9 @@ class BlastTabIterator(object):
         # stop iteration if file has no lines
         if not self.line:
             raise StopIteration
-        # if line starts with '#', it's a commented file
-        # so we'll parse the comments
-        elif self.line.startswith('#'):
+        # determine which iterator to use
+        elif self.has_comments:
             iterfunc = self.parse_qresult_with_comments
-        # otherwise it's a noncommented file
-        # and we can parse the result lines directly
         else:
             iterfunc = self.parse_qresult
 
@@ -409,21 +407,15 @@ class BlastTabIndexer(SearchIndexer):
 
     _parser = BlastTabIterator
 
-    def __init__(self, filename, fields=_DEFAULT_FIELDS):
-        SearchIndexer.__init__(self, filename, fields=fields)
-        # set parser for on-the-fly parsing
-        # find out if file is commented or not first
-        line = self._handle.readline()
-        if line.startswith('# '):
-            self.is_commented = True
-        else:
-            self.is_commented = False
-        # and reset handle
+    def __init__(self, filename, has_comments=False, fields=_DEFAULT_FIELDS):
+        SearchIndexer.__init__(self, filename, has_comments=has_comments, \
+                fields=fields)
+        self._has_comments = has_comments
         self._handle.seek(0)
 
         # if the file doesn't have comments,
         # get index of column used as the key (qseqid / qacc / qaccver)
-        if not self.is_commented:
+        if not self._has_comments:
             if 'qseqid' in fields:
                 self._key_idx = fields.index('qseqid')
             elif 'qacc' in fields:
@@ -440,7 +432,7 @@ class BlastTabIndexer(SearchIndexer):
         handle.seek(0)
         start_offset = handle.tell()
 
-        if not self.is_commented:
+        if not self._has_comments:
             tab_char = _as_bytes('\t')
             qresult_key = None
             key_idx = self._key_idx
@@ -496,7 +488,7 @@ class BlastTabIndexer(SearchIndexer):
         handle.seek(offset)
         qresult_raw = ''
 
-        if not self.is_commented:
+        if not self._has_comments:
             key_idx = self._key_idx
             tab_char = _as_bytes('\t')
             qresult_key = None
@@ -541,8 +533,9 @@ class BlastTabWriter(object):
 
     """Writer for blast-tab output format."""
 
-    def __init__(self, handle, fields=_DEFAULT_FIELDS):
+    def __init__(self, handle, has_comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle
+        self.has_comments = has_comments
         self.fields = fields
 
     def write_file(self, qresults):
@@ -551,11 +544,22 @@ class BlastTabWriter(object):
         qresult_counter, hit_counter, hsp_counter = 0, 0, 0
 
         for qresult in qresults:
+            if self.has_comments:
+                handle.write(self.build_comments(qresult))
             if qresult:
                 handle.write(self.build_rows(qresult))
-                qresult_counter += 1
+                if not self.has_comments:
+                    qresult_counter += 1
                 hit_counter += len(qresult)
                 hsp_counter += sum([len(hit) for hit in qresult])
+            # if it's commented and there are no hits in the qresult, we still
+            # increment the counter
+            if self.has_comments:
+                qresult_counter += 1
+
+        # commented files have a line saying how many queries were processed
+        if self.has_comments:
+            handle.write('# BLAST processed %i queries' % qresult_counter)
 
         return qresult_counter, hit_counter, hsp_counter
 
@@ -661,31 +665,6 @@ class BlastTabWriter(object):
             value = str(value)
 
         return value
-
-
-class BlastTabcWriter(BlastTabWriter):
-
-    """Writer for blast-tabc output format."""
-
-    def write_file(self, qresults):
-        """Writes to the handle, returns how many QueryResult objects are written."""
-        handle = self.handle
-        qresult_counter, hit_counter, hsp_counter = 0, 0, 0
-
-        for qresult in qresults:
-            handle.write(self.build_comments(qresult))
-            if qresult:
-                handle.write(self.build_rows(qresult))
-                hit_counter += len(qresult)
-                hsp_counter += sum([len(hit) for hit in qresult])
-            # if it's commented and there are no hits in the qresult, we still
-            # increment the counter
-            qresult_counter += 1
-
-        # commented files have a line saying how many queries were processed
-        handle.write('# BLAST processed %i queries' % qresult_counter)
-
-        return qresult_counter, hit_counter, hsp_counter
 
     def build_comments(self, qres):
         """Returns a string of a QueryResult tabular comment."""

@@ -19,19 +19,22 @@ class WriteCases(unittest.TestCase):
         if os.path.exists(self.out):
             os.remove(self.out)
 
-    def parse_write_and_compare(self, source_file, source_format, out_file, out_format):
+    def parse_write_and_compare(self, source_file, source_format, out_file, \
+            out_format, **kwargs):
         """Compares parsed QueryResults after they have been written to a file."""
-        source_qresults = list(SearchIO.parse(source_file, source_format))
-        SearchIO.write(source_qresults, out_file, out_format)
-        out_qresults = list(SearchIO.parse(out_file, out_format))
+        source_qresults = list(SearchIO.parse(source_file, source_format, \
+                **kwargs))
+        SearchIO.write(source_qresults, out_file, out_format, **kwargs)
+        out_qresults = list(SearchIO.parse(out_file, out_format, **kwargs))
         for source, out in zip(source_qresults, out_qresults):
             self.assertTrue(compare_qresult(source, out, out_format))
 
-    def read_write_and_compare(self, source_file, source_format, out_file, out_format):
+    def read_write_and_compare(self, source_file, source_format, out_file, \
+            out_format, **kwargs):
         """Compares read QueryResults after it has been written to a file."""
-        source_qresult = SearchIO.read(source_file, source_format)
-        SearchIO.write(source_qresult, out_file, out_format)
-        out_qresult = SearchIO.read(out_file, out_format)
+        source_qresult = SearchIO.read(source_file, source_format, **kwargs)
+        SearchIO.write(source_qresult, out_file, out_format, **kwargs)
+        out_qresult = SearchIO.read(out_file, out_format, **kwargs)
         self.assertTrue(compare_qresult(source_qresult, out_qresult, out_format))
 
 
@@ -68,22 +71,16 @@ class BlastTabWriteCases(WriteCases):
         source = os.path.join('Blast', 'tab_2226_tblastn_001.txt')
         self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
 
-
-class BlastTabcWriteCases(WriteCases):
-
-    fmt = 'blast-tabc'
-    out = os.path.join('Blast', 'test_write.txt')
-
     def test_write_single_from_blasttabc(self):
         """Test blast-tabc writing from blast-tabc, BLAST 2.2.26+, single query (tab_2226_tblastn_008.txt)"""
         source = os.path.join('Blast', 'tab_2226_tblastn_008.txt')
-        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
-        self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, has_comments=True)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt, has_comments=True)
 
     def test_write_multiple_from_blasttabc(self):
         """Test blast-tabc writing from blast-tabc, BLAST 2.2.26+, multiple queries (tab_2226_tblastn_005.txt)"""
         source = os.path.join('Blast', 'tab_2226_tblastn_005.txt')
-        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, has_comments=True)
 
 
 class HmmerTabWriteCases(WriteCases):

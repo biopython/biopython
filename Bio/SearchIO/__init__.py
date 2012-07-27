@@ -71,7 +71,6 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabIterator'),
-        'blast-tabc': ('BlastIO', 'BlastTabIterator'),
         'blast-text': ('BlastIO', 'BlastTextIterator'),
         'blast-xml': ('BlastIO', 'BlastXmlIterator'),
         'blat-psl': ('BlatIO', 'BlatPslIterator'),
@@ -92,7 +91,6 @@ _ITERATOR_MAP = {
 # dictionary of supported formats for index()
 _INDEXER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabIndexer'),
-        'blast-tabc': ('BlastIO', 'BlastTabIndexer'),
         'blast-xml': ('BlastIO', 'BlastXmlIndexer'),
         'blat-psl': ('BlatIO', 'BlatPslIndexer'),
         'blat-pslx': ('BlatIO', 'BlatPslxIndexer'),
@@ -110,7 +108,6 @@ _INDEXER_MAP = {
 # dictionary of supported formats for write()
 _WRITER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabWriter'),
-        'blast-tabc': ('BlastIO', 'BlastTabcWriter'),
         'blast-xml': ('BlastIO', 'BlastXmlWriter'),
         'blat-psl': ('BlatIO', 'BlatPslWriter'),
         'blat-pslx': ('BlatIO', 'BlatPslxWriter'),

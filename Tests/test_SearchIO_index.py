@@ -787,7 +787,7 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
     def test_blasttab_2226_multiple_first_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, first, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        idx = SearchIO.index(filename, self.fmt)
+        idx = SearchIO.index(filename, self.fmt, has_comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: random_s00
 # Database: db/minirefseq_mrna
@@ -798,7 +798,7 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
     def test_blasttab_2226_multiple_middle_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, middle, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        idx = SearchIO.index(filename, self.fmt)
+        idx = SearchIO.index(filename, self.fmt, has_comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
 # Database: db/minirefseq_mrna
@@ -813,7 +813,7 @@ gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	9
     def test_blasttab_2226_multiple_last_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        idx = SearchIO.index(filename, self.fmt)
+        idx = SearchIO.index(filename, self.fmt, has_comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: gi|11464971:4-101 pleckstrin [Mus musculus]
 # Database: db/minirefseq_mrna
@@ -835,7 +835,7 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
     def test_blasttab_2226_single_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query, commented (tab_2226_tblastn_008.txt)"""
         filename = 'Blast/tab_2226_tblastn_008.txt'
-        idx = SearchIO.index(filename, self.fmt)
+        idx = SearchIO.index(filename, self.fmt, has_comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: gi|11464971:4-101 pleckstrin [Mus musculus]
 # Database: db/minirefseq_mrna
@@ -1315,17 +1315,17 @@ class BlastTabIndexCases(SearchIndexCases):
     def test_blasttab_2226_tblastn_005(self):
         """Test blast-tab indexing, BLAST 2.2.26+, multiple queries, commented"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        self.check_index(filename, self.fmt)
+        self.check_index(filename, self.fmt, has_comments=True)
 
     def test_blasttab_2226_tblastn_006(self):
         """Test blast-tab indexing, BLAST 2.2.26+, single query, no hits, commented"""
         filename = 'Blast/tab_2226_tblastn_006.txt'
-        self.check_index(filename, self.fmt)
+        self.check_index(filename, self.fmt, has_comments=True)
 
     def test_blasttab_comment_sing(self):
         """Test blast-tab indexing, BLAST 2.2.26+, single query, multiple hits, commented"""
         filename = 'Blast/tab_2226_tblastn_008.txt'
-        self.check_index(filename, self.fmt)
+        self.check_index(filename, self.fmt, has_comments=True)
 
     def test_blasttab_2226_tblastn_009(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns"""
@@ -1336,7 +1336,7 @@ class BlastTabIndexCases(SearchIndexCases):
     def test_blasttab_2226_tblastn_010(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns, commented"""
         filename = 'Blast/tab_2226_tblastn_010.txt'
-        self.check_index(filename, self.fmt)
+        self.check_index(filename, self.fmt, has_comments=True)
 
     def test_blasttab_2226_tblastn_011(self):
         """Test blast-tab indexing, BLAST 2.2.26+, all columns, commented"""
@@ -1345,10 +1345,10 @@ class BlastTabIndexCases(SearchIndexCases):
         if sys.version_info[:2] > (2, 5):
             with warnings.catch_warnings(record=True) as w:
                 warnings.simplefilter('always')
-                self.check_index(filename, self.fmt)
+                self.check_index(filename, self.fmt, has_comments=True)
                 self.assertTrue(issubclass(w[-1].category, UserWarning))
         else:
-            self.check_index(filename, self.fmt)
+            self.check_index(filename, self.fmt, has_comments=True)
 
 
 class HmmerTextIndexCases(SearchIndexCases):
