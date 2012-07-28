@@ -187,7 +187,7 @@ def _create_batch_hsp(hid, qid, psl):
         hsps.append(hsp)
 
     # create batch hsp object
-    ghsp = BatchHSP(hid, qid, hsps)
+    ghsp = BatchHSP(hsps)
     # check if start and end are set correctly
     assert ghsp.query_start == psl['qstart']
     assert ghsp.query_end == psl['qend']

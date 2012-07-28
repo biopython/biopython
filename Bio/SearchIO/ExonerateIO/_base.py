@@ -56,7 +56,7 @@ def _create_batch_hsp(hid, qid, hspd):
         # and append the hsp object to the list
         hsps.append(hsp)
 
-    ghsp = BatchHSP(hid, qid, hsps)
+    ghsp = BatchHSP(hsps)
     # set batchhsp-specific attributes
     for attr in ('score', 'hit_scodon_ranges', 'query_scodon_ranges', \
             'hit_intron_ranges', 'query_intron_ranges', 'hit_ner_ranges', \

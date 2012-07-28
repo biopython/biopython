@@ -899,7 +899,7 @@ class Hit(BaseSearchObject):
             # and create a BatchHSP object containing it in the BatchHSP list
             # the idea is to have synchronized HSP items between the two lists
             self._hsps.append(hsp)
-            self._batch_hsps.append(BatchHSP(hsp.hit_id, hsp.query_id, [hsp]))
+            self._batch_hsps.append(BatchHSP([hsp]))
         else:
             # if it's a BatchHSP object, append it to the BatchHSP list
             # and append the HSPs inside it to the HSP list
@@ -1462,17 +1462,20 @@ class BatchHSP(BaseHSP):
 
     """Class representing a HSP separated by gaps into blocks."""
 
-    def __init__(self, hit_id=None, query_id=None, blocks=[], \
-            alphabet=single_letter_alphabet):
+    def __init__(self, blocks):
         """Initializes a BatchHSP object.
 
         Arguments:
-        hit_id -- String, Hit ID of the HSP object.
-        query_id -- String of the search query ID.
-        blocks -- List of HSP objects.
+        blocks -- List of HSP objects, must contain at least 1 HSP object.
 
         """
-        BaseHSP.__init__(self, hit_id, query_id, alphabet)
+        # check that all hsps contain the same hit id, query id, and alphabet
+        assert len(set([block.hit_id for block in blocks])) == 1
+        assert len(set([block.query_id for block in blocks])) == 1
+        assert len(set([block.alphabet for block in blocks])) == 1
+
+        BaseHSP.__init__(self, blocks[0].hit_id, blocks[0].query_id, \
+                blocks[0].alphabet)
 
         self._blocks = []
         for block in blocks:
