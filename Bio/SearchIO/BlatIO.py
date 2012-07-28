@@ -28,7 +28,7 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, GappedHSP, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, BatchHSP, HSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -41,7 +41,7 @@ def _append_hit(qresult, hit):
     if hit not in qresult:
         qresult.append(hit)
     else:
-        for hsp in hit.gapped_hsps:
+        for hsp in hit.batch_hsps:
             qresult[hit.id].append(hsp)
 
 
@@ -130,7 +130,7 @@ def _calc_score(psl, is_protein):
             size_mul * psl['mismatches'] - psl['qnuminsert'] - psl['tnuminsert']
 
 
-def _create_gapped_hsp(hid, qid, psl):
+def _create_batch_hsp(hid, qid, psl):
     # protein flag
     is_protein = _is_protein(psl)
     # strand
@@ -186,8 +186,8 @@ def _create_gapped_hsp(hid, qid, psl):
         hsp.hit_strand = hstrand
         hsps.append(hsp)
 
-    # create gapped hsp object
-    ghsp = GappedHSP(hid, qid, hsps)
+    # create batch hsp object
+    ghsp = BatchHSP(hid, qid, hsps)
     # check if start and end are set correctly
     assert ghsp.query_start == psl['qstart']
     assert ghsp.query_end == psl['qend']
@@ -290,9 +290,9 @@ class BlatPslIterator(object):
                 hit.seq_len = psl['tsize']
 
             # create the HSP objects from a single parsed HSP results,
-            # group them in one GappedHSP object, and append to Hit
-            gapped_hsp = _create_gapped_hsp(hit_id, qresult_id, psl)
-            hit.append(gapped_hsp)
+            # group them in one BatchHSP object, and append to Hit
+            batch_hsp = _create_batch_hsp(hit_id, qresult_id, psl)
+            hit.append(batch_hsp)
 
             self.line = self.handle.readline()
 
@@ -322,7 +322,7 @@ class BlatPslIterator(object):
         psl['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
         psl['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
         # PSL doesn't have any sequences; these are needed for instantiating
-        # GappedHSP objects
+        # BatchHSP objects
         psl['qseqs'] = []
         psl['tseqs'] = []
 
@@ -484,7 +484,7 @@ class BlatPslWriter(object):
         qresult_lines = []
 
         for hit in qresult:
-            for hsp in hit.gapped_hsps:
+            for hsp in hit.batch_hsps:
 
                 line = []
                 line.append(hsp.match_num)

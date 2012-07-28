@@ -6,7 +6,7 @@
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
 from Bio._py3k import _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, GappedHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -20,13 +20,13 @@ def _absorb_hit(qresult, hit):
         qresult.append(hit)
     except ValueError:
         assert hit.id in qresult
-        for hsp_item in hit.gapped_hsps:
+        for hsp_item in hit.batch_hsps:
             qresult[hit.id].append(hsp_item)
 
     return qresult
 
 
-def _create_gapped_hsp(hid, qid, hspd):
+def _create_batch_hsp(hid, qid, hspd):
     """Returns a list of HSP objects from the given parsed HSP values."""
     hsps = []
 
@@ -56,8 +56,8 @@ def _create_gapped_hsp(hid, qid, hspd):
         # and append the hsp object to the list
         hsps.append(hsp)
 
-    ghsp = GappedHSP(hid, qid, hsps)
-    # set gappedhsp-specific attributes
+    ghsp = BatchHSP(hid, qid, hsps)
+    # set batchhsp-specific attributes
     for attr in ('score', 'hit_scodon_ranges', 'query_scodon_ranges', \
             'hit_intron_ranges', 'query_intron_ranges', 'hit_ner_ranges', \
             'query_ner_ranges', 'query_strand', 'hit_strand', 'model', \
@@ -233,9 +233,9 @@ class BaseExonerateIterator(object):
                     setattr(hit, attr, value)
 
             # create the HSP objects from a single parsed HSP results,
-            # group them in one GappedHSP object, and append to Hit
-            gapped_hsp = _create_gapped_hsp(hit_id, qresult_id, hsp_parsed)
-            hit.append(gapped_hsp)
+            # group them in one BatchHSP object, and append to Hit
+            batch_hsp = _create_batch_hsp(hit_id, qresult_id, hsp_parsed)
+            hit.append(batch_hsp)
 
             if not self.has_c4_alignment:
                 self.line = self.handle.readline()

@@ -450,16 +450,16 @@ class QueryResult(BaseSearchObject):
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_filter(self, func=None, on_gapped=False):
+    def hsp_filter(self, func=None, batch=False):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
-        hits = filter(None, (hit.filter(func, on_gapped) for hit in self.hits))
+        hits = filter(None, (hit.filter(func, batch) for hit in self.hits))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_map(self, func=None, on_gapped=False):
+    def hsp_map(self, func=None, batch=False):
         """Creates a new QueryResult object, mapping the given function to its HSPs."""
-        hits = filter(None, (hit.map(func, on_gapped) for hit in self.hits[:]))
+        hits = filter(None, (hit.map(func, batch) for hit in self.hits[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -723,7 +723,7 @@ class Hit(BaseSearchObject):
         self._description = ''
 
         self._hsps = []
-        self._gapped_hsps = []
+        self._batch_hsps = []
         for hsp in hsps:
             # validate each HSP
             self._validate_hsp(hsp)
@@ -826,13 +826,13 @@ class Hit(BaseSearchObject):
 
         """
         if not isinstance(hsp, BaseHSP):
-            raise TypeError("Hit objects can only contain HSP or GappedHSP " \
+            raise TypeError("Hit objects can only contain HSP or BatchHSP " \
                     "objects.")
         if hsp.hit_id != self.id:
-            raise ValueError("Expected HSP or GappedHSP with hit ID '%s', " \
+            raise ValueError("Expected HSP or BatchHSP with hit ID '%s', " \
                     "found '%s' instead." % (self.id, hsp.hit_id))
         if hsp.query_id != self.query_id:
-            raise ValueError("Expected HSP or GappedHSP with query ID '%s', " \
+            raise ValueError("Expected HSP or BatchHSP with query ID '%s', " \
                     "found '%s' instead." % (self.query_id, hsp.query_id))
 
     def _description_get(self):
@@ -841,7 +841,7 @@ class Hit(BaseSearchObject):
     def _description_set(self, value):
         self._description = value
         # try to set descriptions of hsp.hit.seq within
-        for hsp in self.gapped_hsps:
+        for hsp in self.batch_hsps:
             hsp.hit_description = value
 
     description = property(fget=_description_get, fset=_description_set)
@@ -851,7 +851,7 @@ class Hit(BaseSearchObject):
 
     def _query_description_set(self, value):
         self._query_description = value
-        for hsp in self.gapped_hsps:
+        for hsp in self.batch_hsps:
             hsp.query_description = value
 
     query_description = property(fget=_query_description_get, \
@@ -862,10 +862,10 @@ class Hit(BaseSearchObject):
 
     hsps = property(fget=_hsps_get)
 
-    def _gapped_hsps_get(self):
-        return self._gapped_hsps
+    def _batch_hsps_get(self):
+        return self._batch_hsps
 
-    gapped_hsps = property(fget=_gapped_hsps_get)
+    batch_hsps = property(fget=_batch_hsps_get)
 
     def _id_get(self):
         return self._id
@@ -893,82 +893,82 @@ class Hit(BaseSearchObject):
     def append(self, hsp):
         self._validate_hsp(hsp)
 
-        # HSP and GappedHSP are treated differently
+        # HSP and BatchHSP are treated differently
         if isinstance(hsp, HSP):
             # if it's an HSP, append it to the HSP list
-            # and create a GappedHSP object containing it in the GappedHSP list
+            # and create a BatchHSP object containing it in the BatchHSP list
             # the idea is to have synchronized HSP items between the two lists
             self._hsps.append(hsp)
-            self._gapped_hsps.append(GappedHSP(hsp.hit_id, hsp.query_id, [hsp]))
+            self._batch_hsps.append(BatchHSP(hsp.hit_id, hsp.query_id, [hsp]))
         else:
-            # if it's a GappedHSP object, append it to the GappedHSP list
+            # if it's a BatchHSP object, append it to the BatchHSP list
             # and append the HSPs inside it to the HSP list
-            self._gapped_hsps.append(hsp)
+            self._batch_hsps.append(hsp)
             for block in hsp:
                 self._hsps.append(block)
 
-    def filter(self, func=None, on_gapped=False):
+    def filter(self, func=None, batch=False):
         """Creates a new Hit object whose HSP objects pass the filter function."""
-        if not on_gapped:
+        if not batch:
             hsps = filter(func, self.hsps)
         else:
-            hsps = filter(func, self.gapped_hsps)
+            hsps = filter(func, self.batch_hsps)
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
             return obj
 
-    def map(self, func=None, on_gapped=False):
+    def map(self, func=None, batch=False):
         """Creates a new Hit object, mapping the given function to its HSPs."""
-        if not on_gapped:
+        if not batch:
             hsps = map(func, self.hsps[:])
         else:
-            hsps = map(func, self.gapped_hsps[:])
+            hsps = map(func, self.batch_hsps[:])
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
             return obj
 
-    def pop(self, index=-1, on_gapped=False):
-        if not on_gapped:
+    def pop(self, index=-1, batch=False):
+        if not batch:
             hsp = self._hsps.pop(index)
-            # iterate over the gapped hsps to find which one
+            # iterate over the batch hsps to find which one
             # contains the HSP object
-            for ghsp_idx, ghsp in enumerate(self._gapped_hsps):
+            for ghsp_idx, ghsp in enumerate(self._batch_hsps):
                 if hsp in ghsp:
                     break
             else:
-                raise ValueError("HSP object not present in a GappedHSP "\
+                raise ValueError("HSP object not present in a BatchHSP "\
                         "container.")
-            # and pop it out of the gapped hsp object
+            # and pop it out of the batch hsp object
             hsp_idx = ghsp.find(hsp)
             ghsp._blocks.pop(hsp_idx)
-            # if that leaves the gapped hsp empty, remove the gapped hsp
+            # if that leaves the batch hsp empty, remove the batch hsp
             # object as well
             if not ghsp:
-                self._gapped_hsps.pop(ghsp_idx)
+                self._batch_hsps.pop(ghsp_idx)
             return hsp
         else:
-            # if pop is set on gapped hsps, pop the entire gapped hsp
-            # self._hsps must then contain hsps in the remaining gapped hsps
-            hsp = self._gapped_hsps.pop(index)
-            self._hsps = list(chain(self._gapped_hsps))
+            # if pop is set on batch hsps, pop the entire batch hsp
+            # self._hsps must then contain hsps in the remaining batch hsps
+            hsp = self._batch_hsps.pop(index)
+            self._hsps = list(chain(self._batch_hsps))
             return hsp
 
-    def sort(self, key=None, reverse=False, in_place=True, on_gapped=False):
+    def sort(self, key=None, reverse=False, in_place=True, batch=False):
         if in_place:
-            if not on_gapped:
+            if not batch:
                 self._hsps.sort(key=key, reverse=reverse)
             else:
-                self._gapped_hsps.sort(key=key, reverse=reverse)
+                self._batch_hsps.sort(key=key, reverse=reverse)
                 # the order of hsps in self._hsps is the same as the
-                # gapped_hsps ordering
-                self._hsps = list(chain(self._gapped_hsps))
+                # batch_hsps ordering
+                self._hsps = list(chain(self._batch_hsps))
         else:
-            if not on_gapped:
+            if not batch:
                 hsps = self.hsps[:]
             else:
-                hsps = self.gapped_hsps[:]
+                hsps = self.batch_hsps[:]
             hsps.sort(key=key, reverse=reverse)
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
@@ -1458,13 +1458,13 @@ class HSP(BaseHSP):
         return '\n'.join(lines)
 
 
-class GappedHSP(BaseHSP):
+class BatchHSP(BaseHSP):
 
     """Class representing a HSP separated by gaps into blocks."""
 
     def __init__(self, hit_id=None, query_id=None, blocks=[], \
             alphabet=single_letter_alphabet):
-        """Initializes a GappedHSP object.
+        """Initializes a BatchHSP object.
 
         Arguments:
         hit_id -- String, Hit ID of the HSP object.
@@ -1480,7 +1480,7 @@ class GappedHSP(BaseHSP):
             self._blocks.append(block)
 
     def __contains__(self, hsp):
-        """Checks whether an HSP object is present in the GappedHSP object."""
+        """Checks whether an HSP object is present in the BatchHSP object."""
         return hsp in self._blocks
 
     def __iter__(self):
@@ -1516,18 +1516,18 @@ class GappedHSP(BaseHSP):
             lines.append(pattern % ('-'*3, '-'*18, '-'*18, '-'*18))
             for idx, block in enumerate(self.blocks):
                 # alignment span
-                aln_span = GappedHSP._attr_display(block, 'aln_span')
+                aln_span = BatchHSP._attr_display(block, 'aln_span')
                 # query region
-                query_start = GappedHSP._attr_display(block, 'query_start')
-                query_end = GappedHSP._attr_display(block, 'query_end')
+                query_start = BatchHSP._attr_display(block, 'query_start')
+                query_end = BatchHSP._attr_display(block, 'query_end')
                 query_range = '%s:%s' % (query_start, query_end)
                 # max column length is 18
-                query_range = GappedHSP._concat_display(query_range, 18, '~')
+                query_range = BatchHSP._concat_display(query_range, 18, '~')
                 # hit region
-                hit_start = GappedHSP._attr_display(block, 'hit_start')
-                hit_end = GappedHSP._attr_display(block, 'hit_end')
+                hit_start = BatchHSP._attr_display(block, 'hit_start')
+                hit_end = BatchHSP._attr_display(block, 'hit_end')
                 hit_range = '%s:%s' % (hit_start, hit_end)
-                hit_range = GappedHSP._concat_display(hit_range, 18, '~')
+                hit_range = BatchHSP._concat_display(hit_range, 18, '~')
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
@@ -1549,7 +1549,7 @@ class GappedHSP(BaseHSP):
 
         """
         if not isinstance(block, HSP):
-            raise TypeError("GappedHSP objects can only contain HSP " \
+            raise TypeError("BatchHSP objects can only contain HSP " \
                     "objects.")
         if block.hit_id != self.hit_id:
             raise ValueError("Expected HSP with hit ID '%s', " \

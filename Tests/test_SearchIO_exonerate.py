@@ -37,7 +37,7 @@ class ExonerateSpcCases(unittest.TestCase):
         # should be the same since the files are results of the same query
         # vs db search
         for vhit, thit in zip(vqres, tqres):
-            for vhsp, thsp in zip(vhit.gapped_hsps, thit.gapped_hsps):
+            for vhsp, thsp in zip(vhit.batch_hsps, thit.batch_hsps):
                 self.assertEqual(vhsp.query_start, thsp.query_start)
                 self.assertEqual(vhsp.hit_start, thsp.hit_start)
                 self.assertEqual(vhsp.query_end, thsp.query_end)
@@ -75,9 +75,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(6150, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -104,9 +104,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(359, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -133,9 +133,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('gi|330443715|ref|NC_001146.8|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIV, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # third hit, first hsp
-        hsp = qresult[2].gapped_hsps[0]
+        hsp = qresult[2].batch_hsps[0]
         self.assertEqual(219, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -180,9 +180,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(6146, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -206,7 +206,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(6146, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -233,9 +233,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(518, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -288,9 +288,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(2151, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -314,7 +314,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(2106, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -341,9 +341,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(116, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -388,9 +388,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(2151, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -414,7 +414,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(2106, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -441,9 +441,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(116, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -488,9 +488,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(6150, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -517,9 +517,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(439, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -548,7 +548,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('ATGGAAGAATTCTGATAATGCTGTAAAAGAA', str(hsp.hits[-1].seq))
 
         # second hit, second hsp
-        hsp = qresult[1].gapped_hsps[1]
+        hsp = qresult[1].batch_hsps[1]
         self.assertEqual(263, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -601,9 +601,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(2641, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -627,7 +627,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('ACGGCAATACCTGGCATGTGATTGTCGGAAAGAACTTTGG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(2641, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -654,9 +654,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome III, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(267, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -688,9 +688,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XI, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # third hit, first hsp
-        hsp = qresult[2].gapped_hsps[0]
+        hsp = qresult[2].batch_hsps[0]
         self.assertEqual(267, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -740,9 +740,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(6150, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -769,9 +769,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XIII, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(233, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -795,7 +795,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('GGAAGATGAAGGAATTGGAGAAGAAGGTACAAAGTTTAGA', str(hsp.hits[0].seq)[-40:])
 
         # second hit, second hsp
-        hsp = qresult[1].gapped_hsps[1]
+        hsp = qresult[1].batch_hsps[1]
         self.assertEqual(151, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -840,9 +840,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(3, len(hit.gapped_hsps))
+        self.assertEqual(3, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(2151, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -866,7 +866,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(2106, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -890,7 +890,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, third hsp
-        hsp = qresult[0].gapped_hsps[2]
+        hsp = qresult[0].batch_hsps[2]
         self.assertEqual(2072, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -935,9 +935,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome IV, complete sequence', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(6150, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -959,7 +959,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(440, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -986,9 +986,9 @@ class ExonerateTextCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443681|ref|NC_001144.5|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c chromosome XII, complete sequence', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(502, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1034,10 +1034,10 @@ class ExonerateTextCases(unittest.TestCase):
         # first qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|330443482|ref|NC_001134.8|', hit.id)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # first qresult, first hit, first hsp
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(4485, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1061,10 +1061,10 @@ class ExonerateTextCases(unittest.TestCase):
         # first qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|330443753|ref|NC_001148.4|', hit.id)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # first qresult, second hit, first hsp
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(941, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -1088,10 +1088,10 @@ class ExonerateTextCases(unittest.TestCase):
         # first qresult, third hit
         hit = qresult[2]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # first qresult, third hit, first hsp
         # third hit, first hsp
-        hsp = qresult[2].gapped_hsps[0]
+        hsp = qresult[2].batch_hsps[0]
         self.assertEqual(651, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1126,10 +1126,10 @@ class ExonerateTextCases(unittest.TestCase):
         # second qresult, first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second qresult, first hit, first hsp
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(6150, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -1153,10 +1153,10 @@ class ExonerateTextCases(unittest.TestCase):
         # second qresult, second hit
         hit = qresult[1]
         self.assertEqual('gi|330443688|ref|NC_001145.3|', hit.id)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # second qresult, second hit, first hsp
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(439, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1184,7 +1184,7 @@ class ExonerateTextCases(unittest.TestCase):
 
         # second qresult, second hit, second hsp
         # second hit, second hsp
-        hsp = qresult[1].gapped_hsps[1]
+        hsp = qresult[1].batch_hsps[1]
         self.assertEqual(263, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -1245,9 +1245,9 @@ class ExonerateVulgarCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(2641, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -1261,7 +1261,7 @@ class ExonerateVulgarCases(unittest.TestCase):
         self.assertEqual([], hsp.hit_scodon_ranges)
         self.assertEqual(' M 26 26 C 3 3 M 500 500', hsp.vulgar_comp)
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(2641, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1278,9 +1278,9 @@ class ExonerateVulgarCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
         self.assertEqual('', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(267, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1297,9 +1297,9 @@ class ExonerateVulgarCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
         self.assertEqual('', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # third hit, first hsp
-        hsp = qresult[2].gapped_hsps[0]
+        hsp = qresult[2].batch_hsps[0]
         self.assertEqual(267, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -1339,9 +1339,9 @@ class ExonerateCigarCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
         self.assertEqual('', hit.description)
-        self.assertEqual(2, len(hit.gapped_hsps))
+        self.assertEqual(2, len(hit.batch_hsps))
         # first hit, first hsp
-        hsp = qresult[0].gapped_hsps[0]
+        hsp = qresult[0].batch_hsps[0]
         self.assertEqual(2641, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
@@ -1351,7 +1351,7 @@ class ExonerateCigarCases(unittest.TestCase):
         self.assertEqual(1319997, hsp.hit_end)
         self.assertEqual('  M 26 M 3 M 500', hsp.cigar_comp)
         # first hit, second hsp
-        hsp = qresult[0].gapped_hsps[1]
+        hsp = qresult[0].batch_hsps[1]
         self.assertEqual(2641, hsp.score)
         self.assertEqual(1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1364,9 +1364,9 @@ class ExonerateCigarCases(unittest.TestCase):
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
         self.assertEqual('', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # second hit, first hsp
-        hsp = qresult[1].gapped_hsps[0]
+        hsp = qresult[1].batch_hsps[0]
         self.assertEqual(267, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(1, hsp.hit_strand)
@@ -1379,9 +1379,9 @@ class ExonerateCigarCases(unittest.TestCase):
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
         self.assertEqual('', hit.description)
-        self.assertEqual(1, len(hit.gapped_hsps))
+        self.assertEqual(1, len(hit.batch_hsps))
         # third hit, first hsp
-        hsp = qresult[2].gapped_hsps[0]
+        hsp = qresult[2].batch_hsps[0]
         self.assertEqual(267, hsp.score)
         self.assertEqual(-1, hsp.query_strand)
         self.assertEqual(-1, hsp.hit_strand)
