@@ -46,7 +46,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(34.88, hsp.ident_pct)
@@ -65,7 +65,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(33.90, hsp.ident_pct)
@@ -91,7 +91,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(95.92, hsp.ident_pct)
@@ -105,7 +105,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199, hsp.bitscore)
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(29.58, hsp.ident_pct)
@@ -151,7 +151,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(34.88, hsp.ident_pct)
@@ -170,7 +170,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(33.90, hsp.ident_pct)
@@ -206,7 +206,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(95.92, hsp.ident_pct)
@@ -220,7 +220,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199, hsp.bitscore)
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(29.58, hsp.ident_pct)
@@ -270,7 +270,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(34.88, hsp.ident_pct)
@@ -289,7 +289,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(33.90, hsp.ident_pct)
@@ -318,7 +318,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(95.92, hsp.ident_pct)
@@ -332,7 +332,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199, hsp.bitscore)
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(29.58, hsp.ident_pct)
@@ -391,7 +391,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(34.88, hsp.ident_pct)
@@ -410,7 +410,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(33.90, hsp.ident_pct)
@@ -449,7 +449,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(95.92, hsp.ident_pct)
@@ -463,7 +463,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199, hsp.bitscore)
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(29.58, hsp.ident_pct)
@@ -522,7 +522,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(1e-05, hsp.evalue)
@@ -533,7 +533,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(1e-04, hsp.evalue)
@@ -554,13 +554,13 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|11464971:4-101', hit.query_id)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199, hsp.bitscore)
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(4e-05, hsp.evalue)
@@ -622,7 +622,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(34.88, hsp.ident_pct)
@@ -652,7 +652,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
         self.assertEqual(33.90, hsp.ident_pct)
@@ -710,7 +710,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(772, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(95.92, hsp.ident_pct)
@@ -733,7 +733,7 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, hsp.query_frame)
         self.assertEqual(2, hsp.hit_frame)
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
         self.assertEqual(29.58, hsp.ident_pct)

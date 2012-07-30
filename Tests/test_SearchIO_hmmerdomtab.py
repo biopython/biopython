@@ -48,7 +48,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(74.6, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
         self.assertEqual('Globin', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Globin', hsp.hit_id)
         self.assertEqual('gi|4885477|ref|NP_005359.1|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -81,7 +81,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(38.2, hit.bitscore)
         self.assertEqual(0.4, hit.bias)
         self.assertEqual('Immunoglobulin domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Ig_3', hsp.hit_id)
         self.assertEqual('gi|126362951:116-221', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -106,7 +106,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(23.7, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
         self.assertEqual('Immunoglobulin domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Ig_2', hsp.hit_id)
         self.assertEqual('gi|126362951:116-221', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -139,7 +139,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(116.6, hit.bitscore)
         self.assertEqual(7.8, hit.bias)
         self.assertEqual('Exportin 1-like protein', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Xpo1', hsp.hit_id)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -154,7 +154,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(108, hsp.env_start)
         self.assertEqual(271, hsp.env_end)
         self.assertEqual(0.98, hsp.acc_avg)
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual('Xpo1', hsp.hit_id)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', hsp.query_id)
         self.assertEqual(2, hsp.domain_index)
@@ -180,7 +180,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(16.9, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
         self.assertEqual('Importin-beta N-terminal domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('IBN_N', hsp.hit_id)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -195,7 +195,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(32, hsp.env_start)
         self.assertEqual(100, hsp.env_end)
         self.assertEqual(0.87, hsp.acc_avg)
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual('IBN_N', hsp.hit_id)
         self.assertEqual('gi|22748937|ref|NP_065801.1|', hsp.query_id)
         self.assertEqual(2, hsp.domain_index)
@@ -229,7 +229,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(124.8, hit.bitscore)
         self.assertEqual(0.5, hit.bias)
         self.assertEqual('Pou domain - N-terminal to homeobox domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Pou', hsp.hit_id)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -255,7 +255,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(65.5, hit.bitscore)
         self.assertEqual(1.1, hit.bias)
         self.assertEqual('Homeobox domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Homeobox', hsp.hit_id)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -281,7 +281,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(15.6, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
         self.assertEqual('Helix-turn-helix domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('HTH_31', hsp.hit_id)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -296,7 +296,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(140, hsp.env_start)
         self.assertEqual(184, hsp.env_end)
         self.assertEqual(0.96, hsp.acc_avg)
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual('HTH_31', hsp.hit_id)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
         self.assertEqual(2, hsp.domain_index)
@@ -322,7 +322,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(13.5, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
         self.assertEqual('Homeobox KN domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Homeobox_KN', hsp.hit_id)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -348,7 +348,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(10.5, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
         self.assertEqual('Protein of unknown function (DUF521)', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('DUF521', hsp.hit_id)
         self.assertEqual('gi|125490392|ref|NP_038661.2|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -399,7 +399,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(74.6, hit.bitscore)
         self.assertEqual(0.3, hit.bias)
         self.assertEqual('Globin', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Globin', hsp.hit_id)
         self.assertEqual('gi|4885477|ref|NP_005359.1|', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -442,7 +442,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(38.2, hit.bitscore)
         self.assertEqual(0.4, hit.bias)
         self.assertEqual('Immunoglobulin domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Ig_3', hsp.hit_id)
         self.assertEqual('gi|126362951:116-221', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -467,7 +467,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(23.7, hit.bitscore)
         self.assertEqual(0.1, hit.bias)
         self.assertEqual('Immunoglobulin domain', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('Ig_2', hsp.hit_id)
         self.assertEqual('gi|126362951:116-221', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)
@@ -516,7 +516,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(492.3, hit.bitscore)
         self.assertEqual(0.0, hit.bias)
         self.assertEqual('Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1', hit.description)
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual('sp|Q9WUT3|KS6A2_MOUSE', hsp.hit_id)
         self.assertEqual('Pkinase', hsp.query_id)
         self.assertEqual(1, hsp.domain_index)

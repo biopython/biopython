@@ -64,7 +64,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(74.0, hsp.bitscore)
@@ -113,7 +113,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(37.6, hsp.bitscore)
@@ -147,7 +147,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(23.4, hsp.bitscore)
@@ -194,7 +194,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(116.1, hsp.bitscore)
@@ -220,7 +220,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(-1.8, hsp.bitscore)
@@ -257,7 +257,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(14.0, hsp.bitscore)
@@ -283,7 +283,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('56788886699*********.6555899******************........999999****99999887', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(-3.3, hsp.bitscore)
@@ -332,7 +332,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(123.9, hsp.bitscore)
@@ -367,7 +367,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(64.6, hsp.bitscore)
@@ -404,7 +404,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(12.0, hsp.bitscore)
@@ -428,7 +428,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('6999***********************************99', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(0.8, hsp.bitscore)
@@ -463,7 +463,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(12.3, hsp.bitscore)
@@ -498,7 +498,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(9.6, hsp.bitscore)
@@ -578,7 +578,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(74.0, hsp.bitscore)
@@ -638,7 +638,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(37.6, hsp.bitscore)
@@ -672,7 +672,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(23.4, hsp.bitscore)
@@ -730,7 +730,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(116.1, hsp.bitscore)
@@ -756,7 +756,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(-1.8, hsp.bitscore)
@@ -793,7 +793,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(14.0, hsp.bitscore)
@@ -819,7 +819,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('56788886699*********.6555899******************........999999****99999887', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(-3.3, hsp.bitscore)
@@ -879,7 +879,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(123.9, hsp.bitscore)
@@ -914,7 +914,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(64.6, hsp.bitscore)
@@ -951,7 +951,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(12.0, hsp.bitscore)
@@ -975,7 +975,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('6999***********************************99', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(0.8, hsp.bitscore)
@@ -1010,7 +1010,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(12.3, hsp.bitscore)
@@ -1045,7 +1045,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(9.6, hsp.bitscore)
@@ -1103,7 +1103,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(123.9, hsp.bitscore)
@@ -1132,7 +1132,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(64.6, hsp.bitscore)
@@ -1161,7 +1161,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(12.0, hsp.bitscore)
@@ -1179,7 +1179,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.96, hsp.acc_avg)
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(0.8, hsp.bitscore)
@@ -1208,7 +1208,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(12.3, hsp.bitscore)
@@ -1237,7 +1237,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(9.6, hsp.bitscore)
@@ -1289,7 +1289,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(116.1, hsp.bitscore)
@@ -1315,7 +1315,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('89******************************************************99..79*********************************99*****************************************8889*********************8', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(-1.8, hsp.bitscore)
@@ -1352,7 +1352,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
         
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(14.0, hsp.bitscore)
@@ -1378,7 +1378,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('56788886699*********.6555899******************........999999****99999887', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertFalse(hsp.is_included)
         self.assertEqual(-3.3, hsp.bitscore)
@@ -1461,7 +1461,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
@@ -1487,7 +1487,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
@@ -1524,7 +1524,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
@@ -1550,7 +1550,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
@@ -1610,7 +1610,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
@@ -1628,7 +1628,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
@@ -1657,7 +1657,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
@@ -1675,7 +1675,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('..', hsp.env_endtype)
         self.assertEqual(0.95, hsp.acc_avg)
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
@@ -1727,7 +1727,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
@@ -1753,7 +1753,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
@@ -1790,7 +1790,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
@@ -1816,7 +1816,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)
@@ -1888,7 +1888,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.2, hsp.bitscore)
@@ -1914,7 +1914,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(249.3, hsp.bitscore)
@@ -1951,7 +1951,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(240.3, hsp.bitscore)
@@ -1977,7 +1977,7 @@ class HmmersearchCases(unittest.TestCase):
         self.assertEqual('67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886', \
                 hsp.alignment_annotation['PP'])
 
-        hsp = hit[1]
+        hsp = hit.hsps[1]
         self.assertEqual(2, hsp.domain_index)
         self.assertTrue(hsp.is_included)
         self.assertEqual(241.0, hsp.bitscore)

@@ -60,7 +60,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(38.1576, hsp.bitscore)
         self.assertEqual(19, hsp.bitscore_raw)
         self.assertEqual(1.0598, hsp.evalue)
@@ -88,7 +88,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(36.1753, hsp.bitscore)
         self.assertEqual(18, hsp.bitscore_raw)
         self.assertEqual(4.18768, hsp.evalue)
@@ -171,7 +171,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(905.979, hsp.bitscore)
         self.assertEqual(490, hsp.bitscore_raw)
         self.assertEqual(0, hsp.evalue)
@@ -213,7 +213,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(7333, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(115.613, hsp.bitscore)
         self.assertEqual(62, hsp.bitscore_raw)
         self.assertEqual(5.52066e-29, hsp.evalue)
@@ -232,7 +232,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq))
         self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(98.9927, hsp.bitscore)
         self.assertEqual(53, hsp.bitscore_raw)
         self.assertEqual(5.55986e-24, hsp.evalue)
@@ -259,7 +259,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(4430, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(111.919, hsp.bitscore)
         self.assertEqual(60, hsp.bitscore_raw)
         self.assertEqual(7.14143e-28, hsp.evalue)
@@ -365,7 +365,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(905.979, hsp.bitscore)
         self.assertEqual(490, hsp.bitscore_raw)
         self.assertEqual(0, hsp.evalue)
@@ -417,7 +417,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(7333, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(115.613, hsp.bitscore)
         self.assertEqual(62, hsp.bitscore_raw)
         self.assertEqual(5.52066e-29, hsp.evalue)
@@ -436,7 +436,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq))
         self.assertEqual('||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(98.9927, hsp.bitscore)
         self.assertEqual(53, hsp.bitscore_raw)
         self.assertEqual(5.55986e-24, hsp.evalue)
@@ -463,7 +463,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(4430, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(111.919, hsp.bitscore)
         self.assertEqual(60, hsp.bitscore_raw)
         self.assertEqual(7.14143e-28, hsp.evalue)
@@ -547,7 +547,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(905.979, hsp.bitscore)
         self.assertEqual(490, hsp.bitscore_raw)
         self.assertEqual(0, hsp.evalue)
@@ -589,7 +589,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(4771, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(115.613, hsp.bitscore)
         self.assertEqual(62, hsp.bitscore_raw)
         self.assertEqual(3.35972e-23, hsp.evalue)
@@ -615,7 +615,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(4345, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(111.919, hsp.bitscore)
         self.assertEqual(60, hsp.bitscore_raw)
         self.assertEqual(4.34607e-22, hsp.evalue)
@@ -678,7 +678,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(185.267, hsp.bitscore)
         self.assertEqual(469, hsp.bitscore_raw)
         self.assertEqual(4.20576e-46, hsp.evalue)
@@ -706,7 +706,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(31.5722, hsp.bitscore)
         self.assertEqual(70, hsp.bitscore_raw)
         self.assertEqual(7.7721, hsp.evalue)
@@ -765,7 +765,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(33.113, hsp.bitscore)
         self.assertEqual(74, hsp.bitscore_raw)
         self.assertEqual(0.0185319, hsp.evalue)
@@ -792,7 +792,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(297, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(30.8018, hsp.bitscore)
         self.assertEqual(68, hsp.bitscore_raw)
         self.assertEqual(0.0919731, hsp.evalue)
@@ -938,7 +938,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(107, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(204.912011757068, hsp.bitscore)
         self.assertEqual(520, hsp.bitscore_raw)
         self.assertEqual(1.77242652875017e-51, hsp.evalue)
@@ -966,7 +966,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(177.948041442853, hsp.bitscore)
         self.assertEqual(450, hsp.bitscore_raw)
         self.assertEqual(2.0302699895292e-43, hsp.evalue)
@@ -1050,7 +1050,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(139.428, hsp.bitscore)
         self.assertEqual(350, hsp.bitscore_raw)
         self.assertEqual(1.99275e-46, hsp.evalue)
@@ -1090,7 +1090,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(350, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(205.682, hsp.bitscore)
         self.assertEqual(522, hsp.bitscore_raw)
         self.assertEqual(2.24956e-69, hsp.evalue)
@@ -1109,7 +1109,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(43.5134, hsp.bitscore)
         self.assertEqual(101, hsp.bitscore_raw)
         self.assertEqual(2.90061e-09, hsp.evalue)
@@ -1134,7 +1134,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(228, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
         self.assertEqual(1.97058e-68, hsp.evalue)
@@ -1241,7 +1241,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(139.428, hsp.bitscore)
         self.assertEqual(350, hsp.bitscore_raw)
         self.assertEqual(1.99275e-46, hsp.evalue)
@@ -1306,7 +1306,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(350, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(205.682, hsp.bitscore)
         self.assertEqual(522, hsp.bitscore_raw)
         self.assertEqual(2.24956e-69, hsp.evalue)
@@ -1325,7 +1325,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(43.5134, hsp.bitscore)
         self.assertEqual(101, hsp.bitscore_raw)
         self.assertEqual(2.90061e-09, hsp.evalue)
@@ -1350,7 +1350,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(228, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
         self.assertEqual(1.97058e-68, hsp.evalue)
@@ -1431,7 +1431,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(205.297, hsp.bitscore)
         self.assertEqual(521, hsp.bitscore_raw)
         self.assertEqual(1.45285e-66, hsp.evalue)
@@ -1471,7 +1471,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(350, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(205.682, hsp.bitscore)
         self.assertEqual(522, hsp.bitscore_raw)
         self.assertEqual(1.54412e-63, hsp.evalue)
@@ -1490,7 +1490,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(43.5134, hsp.bitscore)
         self.assertEqual(101, hsp.bitscore_raw)
         self.assertEqual(0.00199101, hsp.evalue)
@@ -1515,7 +1515,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(228, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
         self.assertEqual(1.35263e-62, hsp.evalue)
@@ -1577,7 +1577,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(319, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(247.284, hsp.bitscore)
         self.assertEqual(630, hsp.bitscore_raw)
         self.assertEqual(1.69599e-64, hsp.evalue)
@@ -1602,7 +1602,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('PREDICTED: hypothetical protein XP_795526 [Strongylocentrotus purpuratus]', hit.description)
         self.assertEqual(337, hit.seq_len)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(32.3426, hsp.bitscore)
         self.assertEqual(72, hsp.bitscore_raw)
         self.assertEqual(8.57476, hsp.evalue)
@@ -1659,7 +1659,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(26, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(54.2989775733826, hsp.bitscore)
         self.assertEqual(129, hsp.bitscore_raw)
         self.assertEqual(1.83262460293058e-05, hsp.evalue)
@@ -1736,7 +1736,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(121.709, hsp.bitscore)
         self.assertEqual(304, hsp.bitscore_raw)
         self.assertEqual(2.9522e-38, hsp.evalue)
@@ -1755,7 +1755,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq))
         self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(51.6026, hsp.bitscore)
         self.assertEqual(122, hsp.bitscore_raw)
         self.assertEqual(2.73605e-12, hsp.evalue)
@@ -1780,7 +1780,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(1079, hit.seq_len)
         self.assertEqual(6, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(104.375, hsp.bitscore)
         self.assertEqual(259, hsp.bitscore_raw)
         self.assertEqual(6.31914e-29, hsp.evalue)
@@ -1881,7 +1881,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(121.709, hsp.bitscore)
         self.assertEqual(304, hsp.bitscore_raw)
         self.assertEqual(2.9522e-38, hsp.evalue)
@@ -1900,7 +1900,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq))
         self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(51.6026, hsp.bitscore)
         self.assertEqual(122, hsp.bitscore_raw)
         self.assertEqual(2.73605e-12, hsp.evalue)
@@ -1925,7 +1925,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(1079, hit.seq_len)
         self.assertEqual(6, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(104.375, hsp.bitscore)
         self.assertEqual(259, hsp.bitscore_raw)
         self.assertEqual(6.31914e-29, hsp.evalue)
@@ -2007,7 +2007,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(132, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(121.709, hsp.bitscore)
         self.assertEqual(304, hsp.bitscore_raw)
         self.assertEqual(2.02642e-32, hsp.evalue)
@@ -2026,7 +2026,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPPHLANFLFLVEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq))
         self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW+YRH+PP L NF+FLVE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(51.6026, hsp.bitscore)
         self.assertEqual(122, hsp.bitscore_raw)
         self.assertEqual(1.87805e-06, hsp.evalue)
@@ -2051,7 +2051,7 @@ class BlastxXmlCases(unittest.TestCase):
         self.assertEqual(101, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(97.0561, hsp.bitscore)
         self.assertEqual(240, hsp.bitscore_raw)
         self.assertEqual(2.76414e-23, hsp.evalue)
@@ -2114,7 +2114,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1, len(hit))
         self.assertRaises(IndexError, hit.__getitem__, 1)
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(148.288, hsp.bitscore)
         self.assertEqual(373, hsp.bitscore_raw)
         self.assertEqual(1.46834e-35, hsp.evalue)
@@ -2140,7 +2140,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(4310, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(91.2781, hsp.bitscore)
         self.assertEqual(225, hsp.bitscore_raw)
         self.assertEqual(1.31998e-20, hsp.evalue)
@@ -2220,7 +2220,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(34.6538, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
         self.assertEqual(1.08241e-05, hsp.evalue)
@@ -2260,7 +2260,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(772, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
         self.assertEqual(1.57249e-67, hsp.evalue)
@@ -2279,7 +2279,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq))
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(32.7278, hsp.bitscore)
         self.assertEqual(73, hsp.bitscore_raw)
         self.assertEqual(4.07518e-05, hsp.evalue)
@@ -2304,7 +2304,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(4932, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(19.631, hsp.bitscore)
         self.assertEqual(39, hsp.bitscore_raw)
         self.assertEqual(1.65923, hsp.evalue)
@@ -2402,7 +2402,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(34.6538, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
         self.assertEqual(1.08241e-05, hsp.evalue)
@@ -2465,7 +2465,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(772, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(199.519, hsp.bitscore)
         self.assertEqual(506, hsp.bitscore_raw)
         self.assertEqual(1.57249e-67, hsp.evalue)
@@ -2484,7 +2484,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq))
         self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(32.7278, hsp.bitscore)
         self.assertEqual(73, hsp.bitscore_raw)
         self.assertEqual(4.07518e-05, hsp.evalue)
@@ -2509,7 +2509,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(4932, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(19.631, hsp.bitscore)
         self.assertEqual(39, hsp.bitscore_raw)
         self.assertEqual(1.65923, hsp.evalue)
@@ -2587,7 +2587,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(4632, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(34.6538, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
         self.assertEqual(0.755176, hsp.evalue)
@@ -2627,7 +2627,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1119, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(205.297, hsp.bitscore)
         self.assertEqual(521, hsp.bitscore_raw)
         self.assertEqual(1.46172e-63, hsp.evalue)
@@ -2646,7 +2646,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq))
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(43.8986, hsp.bitscore)
         self.assertEqual(102, hsp.bitscore_raw)
         self.assertEqual(0.00054161, hsp.evalue)
@@ -2671,7 +2671,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual(1402, hit.seq_len)
         self.assertEqual(2, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(202.986, hsp.bitscore)
         self.assertEqual(515, hsp.bitscore_raw)
         self.assertEqual(1.27031e-61, hsp.evalue)
@@ -2736,7 +2736,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(159870, hit.seq_len)
         self.assertEqual(13, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(329.561, hsp.bitscore)
         self.assertEqual(661.0, hsp.bitscore_raw)
         self.assertEqual(5.29552e-90, hsp.evalue)
@@ -2761,7 +2761,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(143943, hit.seq_len)
         self.assertEqual(1, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(41.0922, hsp.bitscore)
         self.assertEqual(78, hsp.bitscore_raw)
         self.assertEqual(0.716571, hsp.evalue)
@@ -2840,7 +2840,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(4911, hit.seq_len)
         self.assertEqual(8, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(289.739, hsp.bitscore)
         self.assertEqual(626, hsp.bitscore_raw)
         self.assertEqual(2.35531e-81, hsp.evalue)
@@ -2859,7 +2859,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', str(hsp.query.seq))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(18.9375, hsp.bitscore)
         self.assertEqual(35, hsp.bitscore_raw)
         self.assertEqual(7.78658, hsp.evalue)
@@ -2884,7 +2884,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(4866, hit.seq_len)
         self.assertEqual(6, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(141.279, hsp.bitscore)
         self.assertEqual(302, hsp.bitscore_raw)
         self.assertEqual(1.15566e-36, hsp.evalue)
@@ -2982,7 +2982,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(4911, hit.seq_len)
         self.assertEqual(8, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(289.739, hsp.bitscore)
         self.assertEqual(626, hsp.bitscore_raw)
         self.assertEqual(2.35531e-81, hsp.evalue)
@@ -3001,7 +3001,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', str(hsp.query.seq))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(18.9375, hsp.bitscore)
         self.assertEqual(35, hsp.bitscore_raw)
         self.assertEqual(7.78658, hsp.evalue)
@@ -3026,7 +3026,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(4866, hit.seq_len)
         self.assertEqual(6, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(141.279, hsp.bitscore)
         self.assertEqual(302, hsp.bitscore_raw)
         self.assertEqual(1.15566e-36, hsp.evalue)
@@ -3108,7 +3108,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(4911, hit.seq_len)
         self.assertEqual(7, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(289.739, hsp.bitscore)
         self.assertEqual(626, hsp.bitscore_raw)
         self.assertEqual(1.05874e-76, hsp.evalue)
@@ -3127,7 +3127,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', str(hsp.query.seq))
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINPLRY*KEYIVLRS*KDIRISHSLSCWLANQGMLK*RPWQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.alignment_annotation['homology'])
 
-        hsp = hit[-1]
+        hsp = hit.hsps[-1]
         self.assertEqual(36.3494, hsp.bitscore)
         self.assertEqual(73, hsp.bitscore_raw)
         self.assertEqual(9.12288e-54, hsp.evalue)
@@ -3153,7 +3153,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(4866, hit.seq_len)
         self.assertEqual(4, len(hit))
 
-        hsp = hit[0]
+        hsp = hit.hsps[0]
         self.assertEqual(141.279, hsp.bitscore)
         self.assertEqual(302, hsp.bitscore_raw)
         self.assertEqual(5.19486e-32, hsp.evalue)

@@ -52,7 +52,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(207, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(55, hsp.initn_score)
         self.assertEqual(55, hsp.init1_score)
         self.assertEqual(77, hsp.opt_score)
@@ -77,7 +77,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(266, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(43, hsp.initn_score)
         self.assertEqual(43, hsp.init1_score)
         self.assertEqual(69, hsp.opt_score)
@@ -112,7 +112,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(474, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(64, hsp.initn_score)
         self.assertEqual(40, hsp.init1_score)
         self.assertEqual(77, hsp.opt_score)
@@ -137,7 +137,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(237, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(73, hsp.initn_score)
         self.assertEqual(45, hsp.init1_score)
         self.assertEqual(74, hsp.opt_score)
@@ -172,7 +172,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(111, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(50, hsp.initn_score)
         self.assertEqual(50, hsp.init1_score)
         self.assertEqual(86, hsp.opt_score)
@@ -197,7 +197,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(330, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(32, hsp.initn_score)
         self.assertEqual(32, hsp.init1_score)
         self.assertEqual(87, hsp.opt_score)
@@ -246,7 +246,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(107, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(43, hsp.initn_score)
         self.assertEqual(43, hsp.init1_score)
         self.assertEqual(45, hsp.opt_score)
@@ -301,7 +301,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(346, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(35, hsp.initn_score)
         self.assertEqual(35, hsp.init1_score)
         self.assertEqual(38, hsp.opt_score)
@@ -336,7 +336,7 @@ class Fasta34Cases(unittest.TestCase):
         self.assertEqual(126, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fifth qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(37, hsp.initn_score)
         self.assertEqual(37, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -388,7 +388,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(931, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(65, hsp.initn_score)
         self.assertEqual(43, hsp.init1_score)
         self.assertEqual(71, hsp.opt_score)
@@ -413,7 +413,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(459, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(33, hsp.initn_score)
         self.assertEqual(33, hsp.init1_score)
         self.assertEqual(63, hsp.opt_score)
@@ -448,7 +448,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(101, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(50, hsp.initn_score)
         self.assertEqual(50, hsp.init1_score)
         self.assertEqual(58, hsp.opt_score)
@@ -483,7 +483,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(242, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -542,7 +542,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(630, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(54, hsp.initn_score)
         self.assertEqual(54, hsp.init1_score)
         self.assertEqual(91, hsp.opt_score)
@@ -610,7 +610,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(163, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(69, hsp.opt_score)
         self.assertEqual(108.8, hsp.z_score)
         self.assertEqual(26.0, hsp.bitscore)
@@ -667,7 +667,7 @@ class Fasta35Cases(unittest.TestCase):
         self.assertEqual(573, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(646, hsp.initn_score)
         self.assertEqual(646, hsp.init1_score)
         self.assertEqual(646, hsp.opt_score)
@@ -718,7 +718,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(931, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(97, hsp.initn_score)
         self.assertEqual(43, hsp.init1_score)
         self.assertEqual(71, hsp.opt_score)
@@ -743,7 +743,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(459, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(66, hsp.initn_score)
         self.assertEqual(33, hsp.init1_score)
         self.assertEqual(63, hsp.opt_score)
@@ -768,7 +768,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(141, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(45, hsp.initn_score)
         self.assertEqual(37, hsp.init1_score)
         self.assertEqual(51, hsp.opt_score)
@@ -803,7 +803,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(101, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(78, hsp.initn_score)
         self.assertEqual(50, hsp.init1_score)
         self.assertEqual(58, hsp.opt_score)
@@ -828,7 +828,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(448, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(73, hsp.initn_score)
         self.assertEqual(56, hsp.init1_score)
         self.assertEqual(56, hsp.opt_score)
@@ -853,7 +853,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(84, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(61, hsp.initn_score)
         self.assertEqual(46, hsp.init1_score)
         self.assertEqual(48, hsp.opt_score)
@@ -878,7 +878,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(84, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(63, hsp.initn_score)
         self.assertEqual(42, hsp.init1_score)
         self.assertEqual(48, hsp.opt_score)
@@ -913,7 +913,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(242, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(72, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -938,7 +938,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(430, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(95, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -997,7 +997,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(983, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(106, hsp.initn_score)
         self.assertEqual(53, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -1022,7 +1022,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1047, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(105, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(68, hsp.opt_score)
@@ -1067,7 +1067,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1047, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(2298, hsp.initn_score)
         self.assertEqual(2298, hsp.init1_score)
         self.assertEqual(2298, hsp.opt_score)
@@ -1092,7 +1092,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1047, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(2237, hsp.initn_score)
         self.assertEqual(2237, hsp.init1_score)
         self.assertEqual(2237, hsp.opt_score)
@@ -1117,7 +1117,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(983, hit.seq_len)
         self.assertEqual(2, len(hit))
         # fourth qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(2138, hsp.initn_score)
         self.assertEqual(2138, hsp.init1_score)
         self.assertEqual(2143, hsp.opt_score)
@@ -1136,7 +1136,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('VPFSNKTGVVRSPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVANLFMVFGGFTTTLYTSMHGYFVFGATGCNLEGFFATLGGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLAFTWVMALACAAPPLAGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVVAFLICWLPYASVAFYIFTHQGSNFGPVFMTIPAFFAKSSSIYNPVIYIMMNKQFRNCMLTTLCCGKNPLGDDEASTT', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # fourth qresult, third hit, second hsp
-        hsp = qresult[2][1]
+        hsp = qresult[2].hsps[1]
         self.assertEqual(74, hsp.initn_score)
         self.assertEqual(58, hsp.init1_score)
         self.assertEqual(59, hsp.opt_score)
@@ -1161,7 +1161,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1574, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(2080, hsp.initn_score)
         self.assertEqual(2031, hsp.init1_score)
         self.assertEqual(2057, hsp.opt_score)
@@ -1186,7 +1186,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1344, hit.seq_len)
         self.assertEqual(1, len(hit))
         # fourth qresult, fifth hit, first hsp
-        hsp = qresult[4][0]
+        hsp = qresult[4].hsps[0]
         self.assertEqual(1975, hsp.initn_score)
         self.assertEqual(1951, hsp.init1_score)
         self.assertEqual(1993, hsp.opt_score)
@@ -1211,7 +1211,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(4301, hit.seq_len)
         self.assertEqual(4, len(hit))
         # fourth qresult, sixth hit, first hsp
-        hsp = qresult[5][0]
+        hsp = qresult[5].hsps[0]
         self.assertEqual(2094, hsp.initn_score)
         self.assertEqual(723, hsp.init1_score)
         self.assertEqual(723, hsp.opt_score)
@@ -1230,7 +1230,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('VPFSNKTGVVRSPFEHPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYFVFGPTGCNLEGFFATLGG', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit, second hsp
-        hsp = qresult[5][1]
+        hsp = qresult[5].hsps[1]
         self.assertEqual(1411, hsp.initn_score)
         self.assertEqual(499, hsp.init1_score)
         self.assertEqual(501, hsp.opt_score)
@@ -1249,7 +1249,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('RYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFFCYGQLVFTVKEVRSCVGHWGHAH*VNGAQLHSQSCHSLDT*PCVPA\AAAQQQESATTQKAEKEVTRMVIIMVIAFLICWLPYAGVAFYIFTHQGSNFGPIFMTLPAFFAKSSSIYNPVIYIMMNKQ', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit, third hsp
-        hsp = qresult[5][2]
+        hsp = qresult[5].hsps[2]
         self.assertEqual(431, hsp.initn_score)
         self.assertEqual(379, hsp.init1_score)
         self.assertEqual(388, hsp.opt_score)
@@ -1268,7 +1268,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('LAGEIALWSLVVLAIERYVVVCKPMSNFRFGENHAIMGLALTWVMALACAAPPLVGWSR*WH*TEG-KCL*GL', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # fourth qresult, sixth hit, fourth hsp
-        hsp = qresult[5][3]
+        hsp = qresult[5].hsps[3]
         self.assertEqual(213, hsp.initn_score)
         self.assertEqual(171, hsp.init1_score)
         self.assertEqual(176, hsp.opt_score)
@@ -1327,7 +1327,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(5188, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(124, hsp.initn_score)
         self.assertEqual(74, hsp.init1_score)
         self.assertEqual(74, hsp.opt_score)
@@ -1361,7 +1361,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(597, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(52, hsp.opt_score)
@@ -1385,7 +1385,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(762, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(52, hsp.opt_score)
@@ -1409,7 +1409,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(805, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(52, hsp.opt_score)
@@ -1433,7 +1433,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(5188, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(52, hsp.opt_score)
@@ -1457,7 +1457,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1158, hit.seq_len)
         self.assertEqual(2, len(hit))
         # third qresult, fifth hit, first hsp
-        hsp = qresult[4][0]
+        hsp = qresult[4].hsps[0]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(52, hsp.opt_score)
@@ -1475,7 +1475,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('TTTTTTTACATCTT', str(hsp.hit.seq))
         self.assertEqual(-1, hsp.query_strand)
         # third qresult, fifth hit, second hsp
-        hsp = qresult[4][1]
+        hsp = qresult[4].hsps[1]
         self.assertEqual(52, hsp.initn_score)
         self.assertEqual(52, hsp.init1_score)
         self.assertEqual(52, hsp.opt_score)
@@ -1547,7 +1547,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(429, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(79, hsp.initn_score)
         self.assertEqual(66, hsp.init1_score)
         self.assertEqual(99, hsp.opt_score)
@@ -1571,7 +1571,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(429, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(73, hsp.initn_score)
         self.assertEqual(66, hsp.init1_score)
         self.assertEqual(99, hsp.opt_score)
@@ -1595,7 +1595,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(429, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(90, hsp.initn_score)
         self.assertEqual(66, hsp.init1_score)
         self.assertEqual(99, hsp.opt_score)
@@ -1619,7 +1619,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(5188, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(115, hsp.initn_score)
         self.assertEqual(78, hsp.init1_score)
         self.assertEqual(80, hsp.opt_score)
@@ -1643,7 +1643,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(423, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fifth hit, first hsp
-        hsp = qresult[4][0]
+        hsp = qresult[4].hsps[0]
         self.assertEqual(91, hsp.initn_score)
         self.assertEqual(66, hsp.init1_score)
         self.assertEqual(99, hsp.opt_score)
@@ -1691,7 +1691,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(554, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1715,7 +1715,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(564, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1739,7 +1739,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2331, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(62, hsp.initn_score)
         self.assertEqual(62, hsp.init1_score)
         self.assertEqual(62, hsp.opt_score)
@@ -1763,7 +1763,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(627, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1787,7 +1787,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(640, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fifth hit, first hsp
-        hsp = qresult[4][0]
+        hsp = qresult[4].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1811,7 +1811,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(677, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, sixth hit, first hsp
-        hsp = qresult[5][0]
+        hsp = qresult[5].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1835,7 +1835,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(707, hit.seq_len)
         self.assertEqual(3, len(hit))
         # first qresult, seventh hit, first hsp
-        hsp = qresult[6][0]
+        hsp = qresult[6].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1853,7 +1853,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('TTTTTTTTTTTTCTT', str(hsp.hit.seq))
         self.assertEqual(-1, hsp.query_strand)
         # first qresult, seventh hit, second hsp
-        hsp = qresult[6][1]
+        hsp = qresult[6].hsps[1]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1871,7 +1871,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('TTTTTTTTTTTTCTT', str(hsp.hit.seq))
         self.assertEqual(-1, hsp.query_strand)
         # first qresult, seventh hit, third hsp
-        hsp = qresult[6][2]
+        hsp = qresult[6].hsps[2]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1895,7 +1895,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(713, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, eigth hit, first hsp
-        hsp = qresult[7][0]
+        hsp = qresult[7].hsps[0]
         self.assertEqual(57, hsp.initn_score)
         self.assertEqual(57, hsp.init1_score)
         self.assertEqual(57, hsp.opt_score)
@@ -1953,7 +1953,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(33406, hit.seq_len)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(98, hsp.initn_score)
         self.assertEqual(98, hsp.init1_score)
         self.assertEqual(109, hsp.opt_score)
@@ -1988,7 +1988,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(23830, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(220, hsp.initn_score)
         self.assertEqual(62, hsp.init1_score)
         self.assertEqual(92, hsp.opt_score)
@@ -2013,7 +2013,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1899, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(104, hsp.initn_score)
         self.assertEqual(75, hsp.init1_score)
         self.assertEqual(75, hsp.opt_score)
@@ -2038,7 +2038,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1908, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(104, hsp.initn_score)
         self.assertEqual(75, hsp.init1_score)
         self.assertEqual(75, hsp.opt_score)
@@ -2063,7 +2063,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(860, hit.seq_len)
         self.assertEqual(1, len(hit))
         # third qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(85, hsp.initn_score)
         self.assertEqual(66, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -2136,7 +2136,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1761, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(88, hsp.initn_score)
         self.assertEqual(68, hsp.init1_score)
         self.assertEqual(85, hsp.opt_score)
@@ -2161,7 +2161,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(33467, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(104, hsp.initn_score)
         self.assertEqual(92, hsp.init1_score)
         self.assertEqual(106, hsp.opt_score)
@@ -2211,7 +2211,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1145, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
-        hsp = qresult[0][0]
+        hsp = qresult[0].hsps[0]
         self.assertEqual(88, hsp.initn_score)
         self.assertEqual(68, hsp.init1_score)
         self.assertEqual(68, hsp.opt_score)
@@ -2236,7 +2236,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1898, hit.seq_len)
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
-        hsp = qresult[1][0]
+        hsp = qresult[1].hsps[0]
         self.assertEqual(83, hsp.initn_score)
         self.assertEqual(43, hsp.init1_score)
         self.assertEqual(72, hsp.opt_score)
@@ -2255,7 +2255,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('VVTETTATSVTLTWD------SGNTEPVS---FYG--IQYRAAGTDGPFQEVDGVASTRYSIGGLSPFSEY', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, second hit, second hsp
-        hsp = qresult[1][1]
+        hsp = qresult[1].hsps[1]
         self.assertEqual(98, hsp.initn_score)
         self.assertEqual(70, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -2280,7 +2280,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1898, hit.seq_len)
         self.assertEqual(2, len(hit))
         # first qresult, third hit, first hsp
-        hsp = qresult[2][0]
+        hsp = qresult[2].hsps[0]
         self.assertEqual(98, hsp.initn_score)
         self.assertEqual(70, hsp.init1_score)
         self.assertEqual(73, hsp.opt_score)
@@ -2299,7 +2299,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('PPSPTIQVKTQQGVPAQPADFQANAESDTRIQLSWLLPPQERIVKYELVYWAAEDEGQQHKVTFDPTSSYTLEDLKPDTLYH', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, third hit, second hsp
-        hsp = qresult[2][1]
+        hsp = qresult[2].hsps[1]
         self.assertEqual(76, hsp.initn_score)
         self.assertEqual(43, hsp.init1_score)
         self.assertEqual(72, hsp.opt_score)
@@ -2324,7 +2324,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(1898, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fourth hit, first hsp
-        hsp = qresult[3][0]
+        hsp = qresult[3].hsps[0]
         self.assertEqual(98, hsp.initn_score)
         self.assertEqual(70, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -2349,7 +2349,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(8619, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, fifth hit, first hsp
-        hsp = qresult[4][0]
+        hsp = qresult[4].hsps[0]
         self.assertEqual(70, hsp.initn_score)
         self.assertEqual(70, hsp.init1_score)
         self.assertEqual(78, hsp.opt_score)
@@ -2374,7 +2374,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(4389, hit.seq_len)
         self.assertEqual(7, len(hit))
         # first qresult, sixth hit, first hsp
-        hsp = qresult[5][0]
+        hsp = qresult[5].hsps[0]
         self.assertEqual(81, hsp.initn_score)
         self.assertEqual(73, hsp.init1_score)
         self.assertEqual(97, hsp.opt_score)
@@ -2393,7 +2393,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('ANAVDSQSIRINWQPPTE-PNGN--------VLGYNIFYTTEGESGNNQQTVGPDDTTYVIEGLRPATQY', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, second hsp
-        hsp = qresult[5][1]
+        hsp = qresult[5].hsps[1]
         self.assertEqual(177, hsp.initn_score)
         self.assertEqual(55, hsp.init1_score)
         self.assertEqual(90, hsp.opt_score)
@@ -2412,7 +2412,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('VTADGQAPDTVVVTWQSPAET-NGD--------LLGYYIYYQVVGSTETSQAETGPDETTYSISGLRPATEY', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, third hsp
-        hsp = qresult[5][2]
+        hsp = qresult[5].hsps[2]
         self.assertEqual(196, hsp.initn_score)
         self.assertEqual(61, hsp.init1_score)
         self.assertEqual(84, hsp.opt_score)
@@ -2431,7 +2431,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('VTAEGQAPDTITVTWQSPAET-NGD--------LLGYYIYYQVVGSTEDVRAEAGPEETTYSISGLRPATEY', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, fourth hsp
-        hsp = qresult[5][3]
+        hsp = qresult[5].hsps[3]
         self.assertEqual(79, hsp.initn_score)
         self.assertEqual(49, hsp.init1_score)
         self.assertEqual(83, hsp.opt_score)
@@ -2450,7 +2450,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('IDSTTIELQWMPPSP------DEQN-GVIKGYKILYKKVGEEGENEEDAGLLDLMYTLSDLEKWTEYN', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, fifth hsp
-        hsp = qresult[5][4]
+        hsp = qresult[5].hsps[4]
         self.assertEqual(100, hsp.initn_score)
         self.assertEqual(50, hsp.init1_score)
         self.assertEqual(81, hsp.opt_score)
@@ -2469,7 +2469,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('ASSLGSEAIEVSWQPPPQS-NGE--------ILGYRLHYQIVGEESASTQEVEGYETFYLLRGLRPVTEY', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, sixth hsp
-        hsp = qresult[5][5]
+        hsp = qresult[5].hsps[5]
         self.assertEqual(178, hsp.initn_score)
         self.assertEqual(58, hsp.init1_score)
         self.assertEqual(81, hsp.opt_score)
@@ -2488,7 +2488,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('ATPVDPRTVRVEWQPPQQ-PNGE--------IQGYNIYYRTTESDEDALQQAGAQDIFLTLTGLSPFTEY', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, sixth hit, seventh hsp
-        hsp = qresult[5][6]
+        hsp = qresult[5].hsps[6]
         self.assertEqual(102, hsp.initn_score)
         self.assertEqual(48, hsp.init1_score)
         self.assertEqual(79, hsp.opt_score)
@@ -2513,7 +2513,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2213, hit.seq_len)
         self.assertEqual(1, len(hit))
         # first qresult, seventh hit, first hsp
-        hsp = qresult[6][0]
+        hsp = qresult[6].hsps[0]
         self.assertEqual(87, hsp.initn_score)
         self.assertEqual(51, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)
@@ -2538,7 +2538,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual(2213, hit.seq_len)
         self.assertEqual(2, len(hit))
         # first qresult, eigth hit, first hsp
-        hsp = qresult[7][0]
+        hsp = qresult[7].hsps[0]
         self.assertEqual(68, hsp.initn_score)
         self.assertEqual(45, hsp.init1_score)
         self.assertEqual(76, hsp.opt_score)
@@ -2557,7 +2557,7 @@ class Fasta36Cases(unittest.TestCase):
         self.assertEqual('LASPNSS--HSHAVVLSWVRP---FDGNS-----PILY-YIVELSENNSPWKVHLSNVGPEMTGITVSGLTPARTYQ', str(hsp.hit.seq))
         self.assertEqual(0, hsp.query_strand)
         # first qresult, eigth hit, second hsp
-        hsp = qresult[7][1]
+        hsp = qresult[7].hsps[1]
         self.assertEqual(87, hsp.initn_score)
         self.assertEqual(51, hsp.init1_score)
         self.assertEqual(70, hsp.opt_score)

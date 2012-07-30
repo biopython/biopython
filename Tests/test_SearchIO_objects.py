@@ -195,12 +195,12 @@ class QueryResultCases(unittest.TestCase):
         new_desc = 'unicorn hox homolog'
         # test initial condition
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertNotEqual(new_desc, hsp.query.description)
         qresult.description = new_desc
         # test after setting
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertEqual(new_desc, hsp.query.description)
 
     def test_desc_set_no_seqrecord(self):
@@ -213,12 +213,12 @@ class QueryResultCases(unittest.TestCase):
         qresult = QueryResult('query', [hit1, hit2])
         # test initial condition
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertTrue(not hasattr(hsp, 'query'))
         qresult.description = 'unicorn hox homolog'
         # test after setting
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertTrue(not hasattr(hsp, 'query'))
 
     def test_id_set(self):
@@ -228,13 +228,13 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual('query1', qresult.id)
         for hit in qresult:
             self.assertEqual('query1', hit.query_id)
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertEqual('query1', hsp.query_id)
         qresult.id = 'new_id'
         self.assertEqual('new_id', qresult.id)
         for hit in qresult:
             self.assertEqual('new_id', hit.query_id)
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertEqual('new_id', hsp.query_id)
 
     def test_append_ok(self):
@@ -372,7 +372,7 @@ class QueryResultCases(unittest.TestCase):
         qresult = deepcopy(self.qresult)
         # apply mock attributes to hsp, for testing mapped hsp attributes
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.hsps:
                 setattr(hsp, 'mock', 13)
         # map func: remove first letter of all HSP.alignment
         def map_func(hsp):
@@ -381,7 +381,7 @@ class QueryResultCases(unittest.TestCase):
         mapped = qresult.hsp_map(map_func)
         # make sure old hsp attributes is not transferred to mapped hsps
         for hit in mapped:
-            for hsp in hit:
+            for hsp in hit.hsps:
                 self.assertFalse(hasattr(hsp, 'mock'))
         # check hsps in hit1
         self.assertEqual('TGCGCAT', str(mapped['hit1'][0].hit.seq))
@@ -613,11 +613,11 @@ class HitCases(unittest.TestCase):
         hit = deepcopy(self.hit)
         new_desc = 'unicorn hox homolog'
         # test initial condition
-        for hsp in hit:
+        for hsp in hit.hsps:
             self.assertNotEqual(new_desc, hsp.hit.description)
         hit.description = new_desc
         # test after setting
-        for hsp in hit:
+        for hsp in hit.hsps:
             self.assertEqual(new_desc, hsp.hit.description)
 
     def test_desc_set_no_seqrecord(self):
@@ -626,11 +626,11 @@ class HitCases(unittest.TestCase):
         hsp2 = HSP('hit1', 'query')
         hit = Hit('hit1', 'query', [hsp1, hsp2])
         # test initial condition
-        for hsp in hit:
+        for hsp in hit.hsps:
             self.assertTrue(not hasattr(hsp, 'hit'))
         hit.description = 'unicorn hox homolog'
         # test after setting
-        for hsp in hit:
+        for hsp in hit.hsps:
             self.assertTrue(not hasattr(hsp, 'hit'))
 
     def test_id_set(self):
@@ -638,11 +638,11 @@ class HitCases(unittest.TestCase):
         # setting an ID should change the query IDs of all contained HSPs
         hit = deepcopy(self.hit)
         self.assertEqual('hit1', hit.id)
-        for hsp in hit:
+        for hsp in hit.hsps:
             self.assertEqual('hit1', hsp.hit_id)
         hit.id = 'new_id'
         self.assertEqual('new_id', hit.id)
-        for hsp in hit:
+        for hsp in hit.hsps:
             self.assertEqual('new_id', hsp.hit_id)
 
     def test_append(self):
@@ -688,7 +688,7 @@ class HitCases(unittest.TestCase):
         # deepcopy hit since we'll change the objects within
         hit = deepcopy(self.hit)
         # apply mock attributes to hsp, for testing mapped hsp attributes
-        for hsp in hit:
+        for hsp in hit.hsps:
             setattr(hsp, 'mock', 13)
         # map func: remove first letter of all HSP.alignment
         def map_func(hsp):
