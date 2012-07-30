@@ -8,7 +8,7 @@
 import warnings
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -331,7 +331,7 @@ class BlastTabIterator(object):
                 setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
             if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
                 setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
-            hit.append(hsp)
+            hit.append(BatchHSP([hsp]))
 
             self.line = read_forward(self.handle)
 
@@ -476,7 +476,7 @@ class BlastTabWriter(object):
         coordinates = set(['qstart', 'qend', 'sstart', 'send'])
         qresult_lines = ''
         for hit in qresult:
-            for hsp in hit:
+            for hsp in hit.hsps:
 
                 line = []
                 for field in self.fields:

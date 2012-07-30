@@ -25,7 +25,7 @@ import re
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.File import UndoHandle
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.SearchIO._index import SearchIndexer
 from Bio._py3k import _bytes_to_string
 
@@ -71,7 +71,7 @@ def _set_qresult_hits(qresult, hit_rows):
         if hit_id not in qresult:
             hit = Hit(hit_id, qresult.id)
             hsp = HSP(hit_id, qresult.id)
-            hit.append(hsp)
+            hit.append(BatchHSP([hsp]))
             qresult.append(hit)
 
     return qresult
@@ -120,8 +120,6 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program):
 
     # set hsp alignment length
     hsp.aln_span = len(hsp.query)
-
-    return hsp
 
 
 def _get_alphabet(seq, annot):
@@ -267,9 +265,9 @@ class FastaM10Iterator(object):
                     except ValueError:
                         # make sure strand is different and then append hsp to
                         # existing hit
-                        for hsp in hit:
+                        for hsp in hit.hsps:
                             assert strand != hsp.query_strand
-                            qresult[hit.id].append(hsp)
+                            qresult[hit.id].append(BatchHSP([hsp]))
 
             self.line = self.handle.readline()
 
@@ -292,9 +290,9 @@ class FastaM10Iterator(object):
                 if state == STATE_HIT_BLOCK:
                     hseq += self.line.strip()
                 elif state == STATE_CONS_BLOCK:
-                    hit[-1].alignment_annotation['homology'] += self.line.strip('\n')
+                    hit.hsps[-1].alignment_annotation['homology'] += self.line.strip('\n')
                 # process HSP alignment and coordinates
-                hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
+                _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
                         self._preamble['program'])
                 yield hit, strand
                 break
@@ -303,10 +301,10 @@ class FastaM10Iterator(object):
                 if self.line.startswith('>>'):
                     # try yielding,  if hit is not None
                     try:
-                        hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
+                        _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
                                 self._preamble['program'])
                         yield hit, strand
-                    except TypeError:
+                    except (TypeError, AttributeError):
                         assert hit is None
                     # try to get the hit id and desc, and handle cases without descs
                     try:
@@ -318,18 +316,18 @@ class FastaM10Iterator(object):
                     hit.description = hit_desc
                     # create the HSP object for Hit
                     hsp = HSP(hit_id, query_id)
-                    hit.append(hsp)
+                    hit.append(BatchHSP([hsp]))
                     # set or reset the state to none
                     state = STATE_NONE
                     hsp_annot = {'query':{}, 'hit': {}}
                 # create and append a new HSP if line starts with '>--'
                 elif self.line.startswith('>--'):
                     # set seq attributes of previous hsp
-                    hit[-1] = _set_hsp_seqs(hit[-1], hseq, qseq, hsp_annot, \
+                    _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
                             self._preamble['program'])
                     # and create a new one
                     hsp = HSP(hit_id, query_id)
-                    hit.append(hsp)
+                    hit.append(BatchHSP([hsp]))
                     # set the state ~ none yet
                     state = STATE_NONE
                     hsp_annot = {'query':{}, 'hit': {}}
@@ -371,7 +369,7 @@ class FastaM10Iterator(object):
                                 value = caster(value)
                             if name in ['_ident', '_sim']:
                                 value *= 100
-                            setattr(hit[-1], attr_name, value)
+                            setattr(hit[-1][0], attr_name, value)
                     # otherwise, pool the values for processing later
                     elif state == STATE_QUERY_BLOCK:
                         hsp_annot['query'][name] = value
@@ -392,7 +390,7 @@ class FastaM10Iterator(object):
                 elif state == STATE_QUERY_BLOCK:
                     qseq += self.line.strip()
                 elif state == STATE_CONS_BLOCK:
-                    hit[-1].alignment_annotation['homology'] += self.line.strip('\n')
+                    hit[-1][0].alignment_annotation['homology'] += self.line.strip('\n')
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)

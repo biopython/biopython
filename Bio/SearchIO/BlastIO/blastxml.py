@@ -15,7 +15,7 @@ except ImportError:
     from xml.etree import ElementTree as ET
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -371,7 +371,7 @@ class BlastXmlIterator(object):
 
             for hsp in self.parse_hsp(hit_elem.find('Hit_hsps'), query_id, \
                     hit_id):
-                hit.append(hsp)
+                hit.append(BatchHSP([hsp]))
 
             # delete element after we finish parsing it
             hit_elem.clear()

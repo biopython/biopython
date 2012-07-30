@@ -8,7 +8,7 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -276,7 +276,7 @@ class HmmerTextIterator(object):
                 # strand is always 0, since HMMER now only handles protein
                 hsp.hit_strand = hsp.query_strand = 0
 
-                self.qresult[hid].append(hsp)
+                self.qresult[hid].append(BatchHSP([hsp]))
                 self.line = read_forward(self.handle)
 
             # parse the hsp alignments
@@ -295,7 +295,7 @@ class HmmerTextIterator(object):
             # alias hsp to local var
             # but note that we're still changing the attrs of the actual
             # hsp inside the qresult as we're not creating a copy
-            hsp = self.qresult[hid][dom_counter]
+            hsp = self.qresult[hid].hsps[dom_counter]
             # XXX: should we validate again here? regex is expensive..
             #regx = re.search(_HRE_VALIDATE, self.line)
             #assert hsp.bitscore == float(regx.group(1))

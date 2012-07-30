@@ -11,7 +11,7 @@ parser.
 """
 
 from Bio.Blast import NCBIStandalone
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 
 
 class BlastTextIterator(object):
@@ -124,7 +124,7 @@ class BlastTextIterator(object):
                     hsp.query, hsp.hit = qseq, hseq
                     hsp.alignment_annotation['homology'] = midline
 
-                    hit.append(hsp)
+                    hit.append(BatchHSP([hsp]))
 
                 hit.description = hdesc
                 qresult.append(hit)

@@ -450,14 +450,14 @@ class QueryResult(BaseSearchObject):
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_filter(self, func=None, batch=False):
+    def hsp_filter(self, func=None, batch=True):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
         hits = filter(None, (hit.filter(func, batch) for hit in self.hits))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_map(self, func=None, batch=False):
+    def hsp_map(self, func=None, batch=True):
         """Creates a new QueryResult object, mapping the given function to its HSPs."""
         hits = filter(None, (hit.map(func, batch) for hit in self.hits[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
@@ -702,7 +702,7 @@ class Hit(BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_hsps',)
+    _NON_STICKY_ATTRS = ('_batch_hsps',)
 
     def __init__(self, id=None, query_id=None, hsps=[]):
         """Initializes a Hit object.
@@ -722,7 +722,6 @@ class Hit(BaseSearchObject):
         self._query_id= query_id
         self._description = ''
 
-        self._hsps = []
         self._batch_hsps = []
         for hsp in hsps:
             # validate each HSP
@@ -731,13 +730,13 @@ class Hit(BaseSearchObject):
             self.append(hsp)
 
     def __iter__(self):
-        return iter(self._hsps)
+        return iter(self.batch_hsps)
 
     def __len__(self):
-        return len(self._hsps)
+        return len(self.batch_hsps)
 
     def __nonzero__(self):
-        return bool(self._hsps)
+        return bool(self.batch_hsps)
 
     def __repr__(self):
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
@@ -793,7 +792,7 @@ class Hit(BaseSearchObject):
         return '\n'.join(lines)
 
     def __reversed__(self):
-        obj = self.__class__(self.id, self.query_id, reversed(self._hsps))
+        obj = self.__class__(self.id, self.query_id, reversed(self._batch_hsps))
         self._transfer_attrs(obj)
         return obj
 
@@ -805,18 +804,19 @@ class Hit(BaseSearchObject):
         else:
             self._validate_hsp(hsps)
 
-        self._hsps[idx] = hsps
+        self._batch_hsps[idx] = hsps
 
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
-            obj = self.__class__(self.id, self.query_id, self._hsps[idx])
+            print idx
+            obj = self.__class__(self.id, self.query_id, self.batch_hsps[idx])
             self._transfer_attrs(obj)
             return obj
-        return self._hsps[idx]
+        return self._batch_hsps[idx]
 
     def __delitem__(self, idx):
-        del self._hsps[idx]
+        del self._batch_hsps[idx]
 
     def _validate_hsp(self, hsp):
         """Validates an HSP object.
@@ -825,8 +825,8 @@ class Hit(BaseSearchObject):
         same query_id as the Hit object's query_id.
 
         """
-        if not isinstance(hsp, BaseHSP):
-            raise TypeError("Hit objects can only contain HSP or BatchHSP " \
+        if not isinstance(hsp, BatchHSP):
+            raise TypeError("Hit objects can only contain BatchHSP " \
                     "objects.")
         if hsp.hit_id != self.id:
             raise ValueError("Expected HSP or BatchHSP with hit ID '%s', " \
@@ -858,7 +858,7 @@ class Hit(BaseSearchObject):
             fset=_query_description_set)
 
     def _hsps_get(self):
-        return self._hsps
+        return list(chain.from_iterable(self.batch_hsps))
 
     hsps = property(fget=_hsps_get)
 
@@ -884,33 +884,19 @@ class Hit(BaseSearchObject):
     def _query_id_set(self, value):
         self._query_id = value
         # set all HSP query IDs contained to have the new query ID
-        if self.hsps:
-            for hsp in self.hsps:
-                hsp.query_id = value
+        for hsp in self.hsps:
+            hsp.query_id = value
 
     query_id = property(fget=_query_id_get, fset=_query_id_set)
 
     def append(self, hsp):
         self._validate_hsp(hsp)
+        self._batch_hsps.append(hsp)
 
-        # HSP and BatchHSP are treated differently
-        if isinstance(hsp, HSP):
-            # if it's an HSP, append it to the HSP list
-            # and create a BatchHSP object containing it in the BatchHSP list
-            # the idea is to have synchronized HSP items between the two lists
-            self._hsps.append(hsp)
-            self._batch_hsps.append(BatchHSP([hsp]))
-        else:
-            # if it's a BatchHSP object, append it to the BatchHSP list
-            # and append the HSPs inside it to the HSP list
-            self._batch_hsps.append(hsp)
-            for block in hsp:
-                self._hsps.append(block)
-
-    def filter(self, func=None, batch=False):
+    def filter(self, func=None, batch=True):
         """Creates a new Hit object whose HSP objects pass the filter function."""
         if not batch:
-            hsps = filter(func, self.hsps)
+            hsps = [BatchHSP([x]) for x in filter(func, self.hsps)]
         else:
             hsps = filter(func, self.batch_hsps)
         if hsps:
@@ -918,10 +904,10 @@ class Hit(BaseSearchObject):
             self._transfer_attrs(obj)
             return obj
 
-    def map(self, func=None, batch=False):
+    def map(self, func=None, batch=True):
         """Creates a new Hit object, mapping the given function to its HSPs."""
         if not batch:
-            hsps = map(func, self.hsps[:])
+            hsps = [BatchHSP([x]) for x in map(func, self.hsps[:])]
         else:
             hsps = map(func, self.batch_hsps[:])
         if hsps:
@@ -929,46 +915,15 @@ class Hit(BaseSearchObject):
             self._transfer_attrs(obj)
             return obj
 
-    def pop(self, index=-1, batch=False):
-        if not batch:
-            hsp = self._hsps.pop(index)
-            # iterate over the batch hsps to find which one
-            # contains the HSP object
-            for ghsp_idx, ghsp in enumerate(self._batch_hsps):
-                if hsp in ghsp:
-                    break
-            else:
-                raise ValueError("HSP object not present in a BatchHSP "\
-                        "container.")
-            # and pop it out of the batch hsp object
-            hsp_idx = ghsp.find(hsp)
-            ghsp._blocks.pop(hsp_idx)
-            # if that leaves the batch hsp empty, remove the batch hsp
-            # object as well
-            if not ghsp:
-                self._batch_hsps.pop(ghsp_idx)
-            return hsp
-        else:
-            # if pop is set on batch hsps, pop the entire batch hsp
-            # self._hsps must then contain hsps in the remaining batch hsps
-            hsp = self._batch_hsps.pop(index)
-            self._hsps = list(chain(self._batch_hsps))
-            return hsp
+    def pop(self, index=-1):
+        hsp = self._batch_hsps.pop(index)
+        return hsp
 
-    def sort(self, key=None, reverse=False, in_place=True, batch=False):
+    def sort(self, key=None, reverse=False, in_place=True):
         if in_place:
-            if not batch:
-                self._hsps.sort(key=key, reverse=reverse)
-            else:
-                self._batch_hsps.sort(key=key, reverse=reverse)
-                # the order of hsps in self._hsps is the same as the
-                # batch_hsps ordering
-                self._hsps = list(chain(self._batch_hsps))
+            self._batch_hsps.sort(key=key, reverse=reverse)
         else:
-            if not batch:
-                hsps = self.hsps[:]
-            else:
-                hsps = self.batch_hsps[:]
+            hsps = self.batch_hsps[:]
             hsps.sort(key=key, reverse=reverse)
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
@@ -1539,7 +1494,7 @@ class BatchHSP(BaseHSP):
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
-            obj = self.__class__(self.id, self.query_id, self.query, self.hit)
+            obj = self.__class__(self._blocks[idx])
             self._transfer_attrs(obj)
             return obj
         return self._blocks[idx]

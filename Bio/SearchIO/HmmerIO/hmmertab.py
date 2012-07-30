@@ -8,7 +8,7 @@
 from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -121,7 +121,7 @@ class HmmerTabIterator(object):
 
             # since domain tab formats only have 1 HSP per line
             # we don't have to worry about appending other HSPs to the Hit
-            hit.append(hsp)
+            hit.append(BatchHSP([hsp]))
             qresult.append(hit)
 
             self.line = read_forward(self.handle)
@@ -284,8 +284,8 @@ class HmmerTabWriter(object):
             rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f %5.1f " \
             "%5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % (tnamew, hit.id, taccw, \
             hit.acc, qnamew, qresult.id, qaccw, qresult.acc, hit.evalue, \
-            hit.bitscore, hit.bias, hit[0].evalue, hit[0].bitscore, \
-            hit[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num, \
+            hit.bitscore, hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore, \
+            hit.hsps[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num, \
             hit.overlap_num, hit.env_num, hit.domain_obs_num, \
             hit.domain_reported_num, hit.domain_included_num, hit.description)
 

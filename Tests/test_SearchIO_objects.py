@@ -18,21 +18,21 @@ from search_tests_common import compare_qresult, compare_hit
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 
 # create mock objects
-hsp111 = HSP('hit1', 'query1', 'ATGCGCAT', 'ATGCGCAT')
-hsp112 = HSP('hit1', 'query1', 'ATG', 'GAT')
-hsp113 = HSP('hit1', 'query1', 'ATTCG', 'AT-CG')
-hsp114 = HSP('hit1', 'query1', 'AT', 'AT')
-hsp211 = HSP('hit2', 'query1', 'GGGCCC', 'GGGCC-')
-hsp311 = HSP('hit3', 'query1', 'GATG', 'GTTG')
-hsp312 = HSP('hit3', 'query1', 'ATATAT', 'ATATAT')
-hsp411 = HSP('hit4', 'query1', 'CC-ATG', 'CCCATG')
-hsp121 = HSP('hit1', 'query2', 'GCGAG', 'GCGAC')
+hsp111 = BatchHSP([HSP('hit1', 'query1', 'ATGCGCAT', 'ATGCGCAT')])
+hsp112 = BatchHSP([HSP('hit1', 'query1', 'ATG', 'GAT')])
+hsp113 = BatchHSP([HSP('hit1', 'query1', 'ATTCG', 'AT-CG')])
+hsp114 = BatchHSP([HSP('hit1', 'query1', 'AT', 'AT')])
+hsp211 = BatchHSP([HSP('hit2', 'query1', 'GGGCCC', 'GGGCC-')])
+hsp311 = BatchHSP([HSP('hit3', 'query1', 'GATG', 'GTTG')])
+hsp312 = BatchHSP([HSP('hit3', 'query1', 'ATATAT', 'ATATAT')])
+hsp411 = BatchHSP([HSP('hit4', 'query1', 'CC-ATG', 'CCCATG')])
+hsp121 = BatchHSP([HSP('hit1', 'query2', 'GCGAG', 'GCGAC')])
 
 hit11 = Hit('hit1', 'query1', [hsp111, hsp112, hsp113, hsp114])
 hit21 = Hit('hit2', 'query1', [hsp211])
@@ -208,8 +208,8 @@ class QueryResultCases(unittest.TestCase):
         hsp1 = HSP('hit1', 'query')
         hsp2 = HSP('hit1', 'query')
         hsp3 = HSP('hit2', 'query')
-        hit1 = Hit('hit1', 'query', [hsp1, hsp2])
-        hit2 = Hit('hit2', 'query', [hsp3])
+        hit1 = Hit('hit1', 'query', [BatchHSP([x]) for x in [hsp1, hsp2]])
+        hit2 = Hit('hit2', 'query', [BatchHSP([hsp3])])
         qresult = QueryResult('query', [hit1, hit2])
         # test initial condition
         for hit in qresult:
@@ -332,7 +332,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
         # filter func: no '-' in hsp query sequence
         # this would filter out hsp113 and hsp211, effectively removing hit21
-        filter_func = lambda hsp: '-' not in str(hsp.query)
+        filter_func = lambda batch_hsp: '-' not in str(batch_hsp[0].query)
         filtered = self.qresult.hsp_filter(filter_func)
         self.assertTrue('hit1' in filtered)
         self.assertTrue('hit2' not in filtered)
@@ -375,31 +375,30 @@ class QueryResultCases(unittest.TestCase):
             for hsp in hit.hsps:
                 setattr(hsp, 'mock', 13)
         # map func: remove first letter of all HSP.alignment
-        def map_func(hsp):
-            hsp = hsp[1:]
-            return hsp
+        def map_func(batch_hsp):
+            return BatchHSP([batch_hsp[0][1:]])
         mapped = qresult.hsp_map(map_func)
         # make sure old hsp attributes is not transferred to mapped hsps
         for hit in mapped:
             for hsp in hit.hsps:
                 self.assertFalse(hasattr(hsp, 'mock'))
         # check hsps in hit1
-        self.assertEqual('TGCGCAT', str(mapped['hit1'][0].hit.seq))
-        self.assertEqual('TGCGCAT', str(mapped['hit1'][0].query.seq))
-        self.assertEqual('TG', str(mapped['hit1'][1].hit.seq))
-        self.assertEqual('AT', str(mapped['hit1'][1].query.seq))
-        self.assertEqual('TTCG', str(mapped['hit1'][2].hit.seq))
-        self.assertEqual('T-CG', str(mapped['hit1'][2].query.seq))
-        self.assertEqual('T', str(mapped['hit1'][3].hit.seq))
-        self.assertEqual('T', str(mapped['hit1'][3].query.seq))
+        self.assertEqual('TGCGCAT', str(mapped['hit1'].hsps[0].hit.seq))
+        self.assertEqual('TGCGCAT', str(mapped['hit1'].hsps[0].query.seq))
+        self.assertEqual('TG', str(mapped['hit1'].hsps[1].hit.seq))
+        self.assertEqual('AT', str(mapped['hit1'].hsps[1].query.seq))
+        self.assertEqual('TTCG', str(mapped['hit1'].hsps[2].hit.seq))
+        self.assertEqual('T-CG', str(mapped['hit1'].hsps[2].query.seq))
+        self.assertEqual('T', str(mapped['hit1'].hsps[3].hit.seq))
+        self.assertEqual('T', str(mapped['hit1'].hsps[3].query.seq))
         # check hsps in hit2
-        self.assertEqual('GGCCC', str(mapped['hit2'][0].hit.seq))
-        self.assertEqual('GGCC-', str(mapped['hit2'][0].query.seq))
+        self.assertEqual('GGCCC', str(mapped['hit2'].hsps[0].hit.seq))
+        self.assertEqual('GGCC-', str(mapped['hit2'].hsps[0].query.seq))
         # check hsps in hit3
-        self.assertEqual('ATG', str(mapped['hit3'][0].hit.seq))
-        self.assertEqual('TTG', str(mapped['hit3'][0].query.seq))
-        self.assertEqual('TATAT', str(mapped['hit3'][1].hit.seq))
-        self.assertEqual('TATAT', str(mapped['hit3'][1].query.seq))
+        self.assertEqual('ATG', str(mapped['hit3'].hsps[0].hit.seq))
+        self.assertEqual('TTG', str(mapped['hit3'].hsps[0].query.seq))
+        self.assertEqual('TATAT', str(mapped['hit3'].hsps[1].hit.seq))
+        self.assertEqual('TATAT', str(mapped['hit3'].hsps[1].query.seq))
         # and make sure the attributes are transferred
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual('refseq_rna', mapped.target)
@@ -513,7 +512,7 @@ class HitCases(unittest.TestCase):
     def test_hsps(self):
         """Test Hit.hsps"""
         # hsps should return the list of hsps contained
-        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        self.assertEqual([hsp111[0], hsp112[0], hsp113[0]], self.hit.hsps)
 
     def test_iter(self):
         """Test Hit.__iter__"""
@@ -546,21 +545,23 @@ class HitCases(unittest.TestCase):
     def test_setitem_single(self):
         """Test Hit.__setitem__, single item"""
         # test regular setitem overwrite
-        self.hit[1] = hsp114
-        self.assertEqual(self.hit.hsps, [hsp111, hsp114, hsp113])
+        new_hsp = hsp114
+        old_list = self.hit.batch_hsps
+        self.hit[1] = new_hsp
+        self.assertEqual(self.hit.batch_hsps, [old_list[0], new_hsp, old_list[2]])
 
     def test_item_multiple(self):
         """Test Hit.__setitem__, multiple items"""
         # test iterable setitem
         self.hit[:] = [hsp113, hsp112, hsp111]
-        self.assertEqual(self.hit.hsps, [hsp113, hsp112, hsp111])
+        self.assertEqual(self.hit.batch_hsps, [hsp113, hsp112, hsp111])
 
     def test_getitem_single(self):
         """Test Hit.__getitem__, single item"""
         # getitem using integer index should return a hsp object
-        hsp1 = self.hit[0]
+        hsp1 = self.hit.batch_hsps[0]
         self.assertEqual(hsp111, hsp1)
-        hsp3 = self.hit[-1]
+        hsp3 = self.hit.batch_hsps[-1]
         self.assertEqual(hsp113, hsp3)
 
     def test_getitem_multiple(self):
@@ -569,7 +570,7 @@ class HitCases(unittest.TestCase):
         # with the hsps sliced accordingly, but other attributes preserved
         new_hit = self.hit[:2]
         self.assertEqual(2, len(new_hit))
-        self.assertEqual([hsp111, hsp112], new_hit.hsps)
+        self.assertEqual([hsp111, hsp112], new_hit.batch_hsps)
         self.assertEqual(self.hit.id, new_hit.id)
         self.assertEqual(self.hit.query_id, new_hit.query_id)
         self.assertEqual(5e-10, new_hit.evalue)
@@ -580,7 +581,7 @@ class HitCases(unittest.TestCase):
         # test delitem
         del self.hit[0]
         self.assertEqual(2, len(self.hit))
-        self.assertEqual([hsp112, hsp113], self.hit.hsps)
+        self.assertEqual([hsp112, hsp113], self.hit.batch_hsps)
 
     def test_validate_hsp_ok(self):
         """Test Hit._validate_hsp"""
@@ -624,7 +625,7 @@ class HitCases(unittest.TestCase):
         """Test Hit.description setter, without HSP SeqRecords"""
         hsp1 = HSP('hit1', 'query')
         hsp2 = HSP('hit1', 'query')
-        hit = Hit('hit1', 'query', [hsp1, hsp2])
+        hit = Hit('hit1', 'query', [BatchHSP([x]) for x in [hsp1, hsp2]])
         # test initial condition
         for hsp in hit.hsps:
             self.assertTrue(not hasattr(hsp, 'hit'))
@@ -650,16 +651,16 @@ class HitCases(unittest.TestCase):
         # append should add hits to the last position
         self.hit.append(hsp114)
         self.assertEqual(4, len(self.hit))
-        self.assertEqual(hsp114, self.hit[-1])
+        self.assertEqual(hsp114, self.hit.batch_hsps[-1])
 
     def test_filter(self):
         """Test Hit.filter"""
         # filter should return a new QueryResult object (shallow copy),
-        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.batch_hsps)
         # filter func: min hsp length == 4
-        filter_func = lambda hsp: len(hsp) >= 4
+        filter_func = lambda batch_hsp: len(batch_hsp[0]) >= 4
         filtered = self.hit.filter(filter_func)
-        self.assertEqual([hsp111, hsp113], filtered.hsps)
+        self.assertEqual([hsp111, hsp113], filtered.batch_hsps)
         # make sure all remaining hits return True for the filter function
         self.assertTrue(all([filter_func(hit) for hit in filtered]))
         self.assertEqual(5e-10, filtered.evalue)
@@ -688,23 +689,22 @@ class HitCases(unittest.TestCase):
         # deepcopy hit since we'll change the objects within
         hit = deepcopy(self.hit)
         # apply mock attributes to hsp, for testing mapped hsp attributes
-        for hsp in hit.hsps:
+        for hsp in hit:
             setattr(hsp, 'mock', 13)
         # map func: remove first letter of all HSP.alignment
         def map_func(hsp):
-            hsp = hsp[1:]
-            return hsp
+            return BatchHSP([hsp[0][1:]])
         mapped = hit.map(map_func)
         # make sure old hsp attributes is not transferred to mapped hsps
         for hsp in mapped:
             self.assertFalse(hasattr(hsp, 'mock'))
         # check hsps in hit1
-        self.assertEqual('TGCGCAT', str(mapped[0].hit.seq))
-        self.assertEqual('TGCGCAT', str(mapped[0].query.seq))
-        self.assertEqual('TG', str(mapped[1].hit.seq))
-        self.assertEqual('AT', str(mapped[1].query.seq))
-        self.assertEqual('TTCG', str(mapped[2].hit.seq))
-        self.assertEqual('T-CG', str(mapped[2].query.seq))
+        self.assertEqual('TGCGCAT', str(mapped[0][0].hit.seq))
+        self.assertEqual('TGCGCAT', str(mapped[0][0].query.seq))
+        self.assertEqual('TG', str(mapped[1][0].hit.seq))
+        self.assertEqual('AT', str(mapped[1][0].query.seq))
+        self.assertEqual('TTCG', str(mapped[2][0].hit.seq))
+        self.assertEqual('T-CG', str(mapped[2][0].query.seq))
         # and make sure the attributes are transferred
         self.assertEqual(5e-10, mapped.evalue)
         self.assertEqual('test', mapped.name)
@@ -727,20 +727,20 @@ class HitCases(unittest.TestCase):
 
     def test_sort(self):
         """Test Hit.sort"""
-        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.batch_hsps)
         # sort by hsp length
-        key = lambda hsp: len(hsp)
+        key = lambda batch_hsp: len(batch_hsp[0])
         self.hit.sort(key=key)
-        self.assertEqual([hsp112, hsp113, hsp111], self.hit.hsps)
+        self.assertEqual([hsp112, hsp113, hsp111], self.hit.batch_hsps)
 
     def test_sort_not_in_place(self):
         """Test Hit.sort, not in place"""
-        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.batch_hsps)
         # sort by hsp length
-        key = lambda hsp: len(hsp)
+        key = lambda batch_hsp: len(batch_hsp[0])
         sorted_hit = self.hit.sort(key=key, in_place=False)
-        self.assertEqual([hsp112, hsp113, hsp111], sorted_hit.hsps)
-        self.assertEqual([hsp111, hsp112, hsp113], self.hit.hsps)
+        self.assertEqual([hsp112, hsp113, hsp111], sorted_hit.batch_hsps)
+        self.assertEqual([hsp111, hsp112, hsp113], self.hit.batch_hsps)
         self.assertEqual(5e-10, sorted_hit.evalue)
         self.assertEqual('test', sorted_hit.name)
 

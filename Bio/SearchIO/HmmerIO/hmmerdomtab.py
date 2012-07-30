@@ -7,7 +7,7 @@
 
 from itertools import chain
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
 from hmmertab import HmmerTabIterator, HmmerTabIndexer
 
 
@@ -130,7 +130,7 @@ class HmmerDomtabIterator(HmmerTabIterator):
             hsp = HSP(hit_id, qresult_id)
             for attr, value in hsp_parsed.items():
                 setattr(hsp, attr, value)
-            hit.append(hsp)
+            hit.append(BatchHSP([hsp]))
 
             self.line = read_forward(self.handle)
 
@@ -269,7 +269,7 @@ class HmmerDomtabHmmhitWriter(object):
             except AttributeError:
                 hit_acc = '-'
 
-            for hsp in hit:
+            for hsp in hit.hsps:
                 if self.hmm_as_hit:
                     hmm_to = hsp.hit_end
                     hmm_from = hsp.hit_start + 1
@@ -285,7 +285,7 @@ class HmmerDomtabHmmhitWriter(object):
                 " %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld %5d %5d %4.2f %s\n" % \
                 (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew, qresult.id, \
                 qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore, \
-                hit.bias, hsp.domain_index, len(hit), hsp.evalue_cond, hsp.evalue, \
+                hit.bias, hsp.domain_index, len(hit.hsps), hsp.evalue_cond, hsp.evalue, \
                 hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to, \
                 hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
 
