@@ -192,7 +192,7 @@ or to remove a primer sequence), try slicing the SeqRecord objects.  e.g.
     +
     ;;;;;;9;7;
     <BLANKLINE>
-    
+
 If you wanted to, you could read in this FASTQ file, and save it as a QUAL file:
 
     >>> from Bio import SeqIO
@@ -389,13 +389,13 @@ def solexa_quality_from_phred(phred_quality):
 
     How does this work exactly? Well the PHRED quality is minus ten times the
     base ten logarithm of the probability of error::
-    
+
      phred_quality = -10*log(error,10)
 
     Therefore, turning this round::
 
      error = 10 ** (- phred_quality / 10)
-    
+
     Now, Solexa qualities use a different log transformation::
 
      solexa_quality = -10*log(error/(1-error),10)
@@ -481,7 +481,7 @@ def phred_quality_from_solexa(solexa_quality):
 
     The underlying formulas are given in the documentation for the sister
     function solexa_quality_from_phred, in this case the operation is::
-    
+
      phred_quality = 10*log(10**(solexa_quality/10.0) + 1, 10)
 
     This will return a floating point number, it is up to you to round this to
@@ -879,7 +879,7 @@ def FastqGeneralIterator(handle):
     #We need to call handle.readline() at least four times per record,
     #so we'll save a property look up each time:
     handle_readline = handle.readline
-    
+
     #Skip any text before the first record (e.g. blank lines, comments?)
     while True:
         line = handle_readline()
@@ -933,7 +933,7 @@ def FastqGeneralIterator(handle):
                     break
                 #Continue - its just some (more) quality data.
             quality_string += line.rstrip()
-        
+
         if seq_len != len(quality_string):
             raise ValueError("Lengths of sequence and quality values differs "
                              " for %s (%i and %i)." \
@@ -943,7 +943,7 @@ def FastqGeneralIterator(handle):
         yield (title_line, seq_string, quality_string)
     raise StopIteration
 
-        
+
 #This is a generator function!
 def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
     """Generator function to iterate over FASTQ records (as SeqRecord objects).
@@ -1055,7 +1055,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     pipeline. See also the FastqIlluminaIterator function for the NEW version.
 
     For example, consider a file containing these five records::
-        
+
         @SLXA-B3_649_FC8437_R1_1_1_610_79
         GATGTGCAATACCTTTGTAGAGGAA
         +SLXA-B3_649_FC8437_R1_1_1_610_79
@@ -1076,7 +1076,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
         GTATTATTTAATGGCATACACTCAA
         +SLXA-B3_649_FC8437_R1_1_1_183_714
         YYYYYYYYYYWYYYYWYWWUWWWQQ
-        
+
     Using this module directly you might run:
 
     >>> handle = open("Quality/solexa_example.fastq", "rU")
@@ -1155,7 +1155,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     +
     hgfedcba`_^]\[ZYXWVUTSRQPONMLKJIHGFEDCBA@?>=<;
     <BLANKLINE>
-    
+
     Note this output is slightly different from the input file as Biopython
     has left out the optional repetition of the sequence identifier on the "+"
     line.  If you want the to use PHRED scores, use "fastq" or "qual" as the
@@ -1167,7 +1167,7 @@ def FastqSolexaIterator(handle, alphabet = single_letter_alphabet, title2ids = N
     +
     IHGFEDCBA@?>=<;:9876543210/.-,++*)('&&%%$$##""
     <BLANKLINE>
-    
+
     >>> print record.format("qual")
     >slxa_0001_1_0001_01
     40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21
@@ -1250,7 +1250,7 @@ def FastqIlluminaIterator(handle, alphabet = single_letter_alphabet, title2ids =
         dict.__setitem__(record._per_letter_annotations,
                          "phred_quality", qualities)
         yield record
-    
+
 def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
     """For QUAL files which include PHRED quality scores, but no sequence.
 
@@ -1265,7 +1265,7 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
         >EAS54_6_R1_2_1_443_348
         26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
         24 18 18 18 18
-    
+
     Using this module directly you might run:
 
     >>> handle = open("Quality/example.qual", "rU")
@@ -1351,7 +1351,7 @@ def QualPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = Non
                            "substituting PHRED zero instead.") \
                            % min(qualities), BiopythonParserWarning)
             qualities = [max(0,q) for q in qualities]
-        
+
         #Return the record and then continue...
         record = SeqRecord(UnknownSeq(len(qualities), alphabet),
                            id = id, name = name, description = descr)
@@ -1437,7 +1437,7 @@ class FastqPhredWriter(SequentialSequenceWriter):
             title = "%s %s" % (id, description)
         else:
             title = id
-        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
 
 class QualPhredWriter(SequentialSequenceWriter):
@@ -1490,6 +1490,7 @@ class QualPhredWriter(SequentialSequenceWriter):
         self.wrap = wrap
         self.record2title = record2title
 
+
     def write_record(self, record):
         """Write a single QUAL record to the file."""
         assert self._header_written
@@ -1513,6 +1514,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                 title = id
         handle.write(">%s\n" % title)
 
+        print 'is this thing on?'
         qualities = _get_phred_quality(record)
         try:
             #This rounds to the nearest integer.
@@ -1527,16 +1529,13 @@ class QualPhredWriter(SequentialSequenceWriter):
         if wrap > 5:
             #Fast wrapping
             data = " ".join(qualities_strs)
-            while True:
-                if len(data) <= wrap:
-                    self.handle.write(data + "\n")
-                    break
-                else:
-                    #By construction there must be spaces in the first X chars
-                    #(unless we have X digit or higher quality scores!)
-                    i = data.rfind(" ", 0, wrap)
-                    handle.write(data[:i] + "\n")
-                    data = data[i+1:]
+
+            if len(data) <= wrap:
+                handle.write(data + "\n")
+            else:
+                for i in xrange((len(data) / wrap) + 1):
+                    handle.write(data[(i * wrap):(wrap * (i + 1))] + "\n")
+
         elif wrap:
             #Safe wrapping
             while qualities_strs:
@@ -1550,6 +1549,7 @@ class QualPhredWriter(SequentialSequenceWriter):
             data = " ".join(qualities_strs)
             handle.write(data + "\n")
 
+
 class FastqSolexaWriter(SequentialSequenceWriter):
     r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
 
@@ -1561,7 +1561,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     this is used, otherwise any "phred_quality" entry will be used after
     conversion using the solexa_quality_from_phred function. If neither style
     of quality scores are present, an exception is raised.
-    
+
     Although you can use this class directly, you are strongly encouraged
     to use the Bio.SeqIO.write() function instead.  For example, this code
     reads in a FASTQ file and re-saves it as another FASTQ file:
@@ -1589,11 +1589,11 @@ class FastqSolexaWriter(SequentialSequenceWriter):
     +
     hgfedcba`_^]\[ZYXWVUTSRQPONMLKJHGFECB@>;;
     <BLANKLINE>
-    
+
     Note that Solexa FASTQ files have an upper limit of Solexa quality 62, which is
     encoded as ASCII 126, the tilde.  If your quality scores must be truncated to fit,
     a warning is issued.
-    
+
     P.S. Don't forget to delete the temp file if you don't need it anymore:
 
     >>> import os
@@ -1625,7 +1625,7 @@ class FastqSolexaWriter(SequentialSequenceWriter):
             title = "%s %s" % (id, description)
         else:
             title = id
-        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
 
 class FastqIlluminaWriter(SequentialSequenceWriter):
@@ -1680,9 +1680,9 @@ class FastqIlluminaWriter(SequentialSequenceWriter):
             title = "%s %s" % (id, description)
         else:
             title = id
-        
+
         self.handle.write("@%s\n%s\n+\n%s\n" % (title, seq_str, qualities_str))
-        
+
 def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_alphabet, title2ids = None):
     """Iterate over matched FASTA and QUAL files as SeqRecord objects.
 
@@ -1697,7 +1697,7 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
         >EAS54_6_R1_2_1_443_348
         26 26 26 26 26 26 26 26 26 26 26 24 26 22 26 26 13 22 26 18
         24 18 18 18 18
-    
+
     And a matching FASTA file::
 
         >EAS54_6_R1_2_1_413_324
@@ -1713,7 +1713,7 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
     qualities.  Because it only deals with one input file handle, Bio.SeqIO
     can't be used to read the two files together - but this function can!
     For example,
-    
+
     >>> rec_iter = PairedFastaQualIterator(open("Quality/example.fasta", "rU"),
     ...                                    open("Quality/example.qual", "rU"))
     >>> for record in rec_iter:
@@ -1744,9 +1744,9 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
     And don't forget to clean up the temp file if you don't need it anymore:
 
     >>> import os
-    >>> os.remove("Quality/temp.fastq")    
+    >>> os.remove("Quality/temp.fastq")
     """
-    from Bio.SeqIO.FastaIO import FastaIterator    
+    from Bio.SeqIO.FastaIO import FastaIterator
     fasta_iter = FastaIterator(fasta_handle, alphabet=alphabet, \
                                title2ids=title2ids)
     qual_iter = QualPhredIterator(qual_handle, alphabet=alphabet, \
@@ -1780,7 +1780,7 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet = single_letter_
         f_rec.letter_annotations["phred_quality"] = q_rec.letter_annotations["phred_quality"]
         yield f_rec
     #Done
-    
+
 
 def _test():
     """Run the Bio.SeqIO module's doctests.
@@ -1803,7 +1803,16 @@ def _test():
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
-        
+
+
+<<<<<<< HEAD
+=======
+def _quality_strs_iter(record):
+        qualities = _get_phred_quality(record)
+        for q in qualities:
+            yield "%i" % round(q, 0)
+
+>>>>>>> master
 if __name__ == "__main__":
     _test()
 
