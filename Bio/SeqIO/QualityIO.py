@@ -1514,6 +1514,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                 title = id
         handle.write(">%s\n" % title)
 
+        print 'is this thing on?'
         qualities = _get_phred_quality(record)
         try:
             #This rounds to the nearest integer.
@@ -1528,11 +1529,13 @@ class QualPhredWriter(SequentialSequenceWriter):
         if wrap > 5:
             #Fast wrapping
             data = " ".join(qualities_strs)
+
             if len(data) <= wrap:
                 handle.write(data + "\n")
             else:
                 for i in xrange((len(data) / wrap) + 1):
                     handle.write(data[(i * wrap):(wrap * (i + 1))] + "\n")
+
         elif wrap:
             #Safe wrapping
             while qualities_strs:
@@ -1802,6 +1805,14 @@ def _test():
         print "Done"
 
 
+<<<<<<< HEAD
+=======
+def _quality_strs_iter(record):
+        qualities = _get_phred_quality(record)
+        for q in qualities:
+            yield "%i" % round(q, 0)
+
+>>>>>>> master
 if __name__ == "__main__":
     _test()
 
