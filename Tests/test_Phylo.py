@@ -85,6 +85,17 @@ class IOTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
+    def test_randomized(self):
+        """Tree.randomized: generate a new randomized tree."""
+        for N in (2, 5, 20):
+            tree = Phylo.BaseTree.Tree.randomized(N)
+            self.assertEqual(tree.count_terminals(), N)
+            self.assertEqual(tree.total_branch_length(), (N-1)*2)
+            tree = Phylo.BaseTree.Tree.randomized(N, branch_length=2.0)
+            self.assertEqual(tree.total_branch_length(), (N-1)*4)
+        tree = Phylo.BaseTree.Tree.randomized(5, branch_stdev=.5)
+        self.assertEqual(tree.count_terminals(), 5)
+
     def test_root_with_outgroup(self):
         """Tree.root_with_outgroup: reroot at a given clade."""
         # On a large realistic tree, at a deep internal node
