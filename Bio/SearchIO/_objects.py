@@ -1145,6 +1145,40 @@ class BaseHSP(BaseSearchObject):
 
     query_span = property(fget=_query_span_get)
 
+    def _display_aln_header(self):
+        """Prints the alignment header info."""
+        lines = []
+        # set query id line
+        qid_line = self._concat_display('      Query: %s %s' % \
+                (self.query_id, self.query_description), 80, '...')
+        # set hit id line
+        hid_line = self._concat_display('        Hit: %s %s' % \
+                (self.hit_id, self.hit_description), 80, '...')
+        lines.append(qid_line)
+        lines.append(hid_line)
+
+        # set hsp info line
+        statline = []
+        # evalue
+        evalue = HSP._attr_display(self, 'evalue', fmt='%.2g')
+        statline.append('evalue ' +  evalue)
+        # bitscore
+        bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
+        statline.append('bitscore ' +  bitscore)
+        # coordinates
+        query_start = HSP._attr_display(self, 'query_start')
+        query_end = HSP._attr_display(self, 'query_end')
+        hit_start = HSP._attr_display(self, 'hit_start')
+        hit_end = HSP._attr_display(self, 'hit_end')
+        lines.append('      Stats: ' + '; '.join(statline))
+
+        lines.append('Query range: %s:%s (%r)' % (query_start, query_end, \
+                self.query_strand))
+        lines.append('  Hit range: %s:%s (%r)' % (hit_start, hit_end, \
+                self.hit_strand))
+
+        return '\n'.join(lines)
+
 
 class HSP(BaseHSP):
 
@@ -1422,40 +1456,6 @@ class HSP(BaseHSP):
         self._gap_pct = value
 
     gap_pct = property(fget=_gap_pct_get, fset=_gap_pct_set)
-
-    def _display_aln_header(self):
-        """Prints the alignment header info."""
-        lines = []
-        # set query id line
-        qid_line = self._concat_display('      Query: %s %s' % \
-                (self.query_id, self.query_description), 80, '...')
-        # set hit id line
-        hid_line = self._concat_display('        Hit: %s %s' % \
-                (self.hit_id, self.hit_description), 80, '...')
-        lines.append(qid_line)
-        lines.append(hid_line)
-
-        # set hsp info line
-        statline = []
-        # evalue
-        evalue = HSP._attr_display(self, 'evalue', fmt='%.2g')
-        statline.append('evalue ' +  evalue)
-        # bitscore
-        bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
-        statline.append('bitscore ' +  bitscore)
-        # coordinates
-        query_start = HSP._attr_display(self, 'query_start')
-        query_end = HSP._attr_display(self, 'query_end')
-        hit_start = HSP._attr_display(self, 'hit_start')
-        hit_end = HSP._attr_display(self, 'hit_end')
-        lines.append('      Stats: ' + '; '.join(statline))
-
-        lines.append('Query range: %s:%s (%r)' % (query_start, query_end, \
-                self.query_strand))
-        lines.append('  Hit range: %s:%s (%r)' % (hit_start, hit_end, \
-                self.hit_strand))
-
-        return '\n'.join(lines)
 
 
 class BatchHSP(BaseHSP):
