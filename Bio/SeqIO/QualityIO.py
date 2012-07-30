@@ -1527,16 +1527,11 @@ class QualPhredWriter(SequentialSequenceWriter):
         if wrap > 5:
             #Fast wrapping
             data = " ".join(qualities_strs)
-            while True:
-                if len(data) <= wrap:
-                    self.handle.write(data + "\n")
-                    break
-                else:
-                    #By construction there must be spaces in the first X chars
-                    #(unless we have X digit or higher quality scores!)
-                    i = data.rfind(" ", 0, wrap)
-                    handle.write(data[:i] + "\n")
-                    data = data[i+1:]
+            if len(data) <= wrap:
+                handle.write(data + "\n")
+            else:
+                for i in xrange((len(data) / wrap) + 1):
+                    handle.write(data[(i * wrap):(wrap * (i + 1))] + "\n")
         elif wrap:
             #Safe wrapping
             while qualities_strs:
