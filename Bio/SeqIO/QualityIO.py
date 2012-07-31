@@ -1527,13 +1527,17 @@ class QualPhredWriter(SequentialSequenceWriter):
         if wrap > 5:
             #Fast wrapping
             data = " ".join(qualities_strs)
-            #If all double digit scores
-            if (10 <= min(qualities) and 99 >= max(qualities)):
+            # Corner case of writing an empty line
+            if (0 == len(qualities)):
+                handle.write("\n")
+            # If all double digit scores
+            elif (10 <= min(qualities) and 99 >= max(qualities)):
                 if len(data) <= wrap:
                     handle.write(data + "\n")
                 else:
                     for i in xrange(int((len(data) / wrap)) + 1):
                         handle.write(data[(i * wrap):(wrap * (i + 1))].strip(" ") + "\n")
+            # Speed up when single or tripe digit qualiy scores are present
             else:
                 pointer = 0;
                 while True:
