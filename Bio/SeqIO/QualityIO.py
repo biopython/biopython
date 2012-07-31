@@ -1537,7 +1537,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                 else:
                     for i in xrange(int((len(data) / wrap)) + 1):
                         handle.write(data[(i * wrap):(wrap * (i + 1))].strip(" ") + "\n")
-            # Speed up when single or tripe digit qualiy scores are present
+            # Speed up when single or triple digit quality scores are present
             else:
                 pointer = 0;
                 while True:
