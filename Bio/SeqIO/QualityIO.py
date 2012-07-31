@@ -1533,7 +1533,7 @@ class QualPhredWriter(SequentialSequenceWriter):
                     handle.write(data + "\n")
                 else:
                     for i in xrange((len(data) / wrap) + 1):
-                        handle.write(data[(i * wrap):(wrap * (i + 1))].strip(' ') + "\n")
+                        handle.write(data[(i * wrap):(wrap * (i + 1))].strip(" ") + "\n")
             else:
                 pointer = 0;
                 while True:
