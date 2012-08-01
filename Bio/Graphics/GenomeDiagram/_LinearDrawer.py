@@ -1010,11 +1010,10 @@ class LinearDrawer(AbstractDrawer):
             1/0
 
         # Distribution dictionary for various ways of drawing the feature
-        # Each method takes the corners of a containing box and a color
-        # as argument
-        draw_methods = {'BOX': draw_box,
-                        'ARROW': draw_arrow,
+        draw_methods = {'BOX': self._draw_sigil_box,
+                        'ARROW': self._draw_sigil_arrow,
                         }
+
         method = draw_methods[feature.sigil]
         kwargs['head_length_ratio'] = feature.arrowhead_length
         kwargs['shaft_height_ratio'] = feature.arrowshaft_height
@@ -1025,21 +1024,11 @@ class LinearDrawer(AbstractDrawer):
             kwargs["hrefURL"] = feature.url
             kwargs["hrefTitle"] = feature.name
 
-        strand = feature.strand
-        
-        # Get sigil for the feature, location dependent on the feature strand
-        if strand == 1:
-            sigil = method((x0, ctr), (x1, top), color=feature.color,
-                           border=feature.border,
-                           orientation='right', **kwargs)
-        elif strand == -1:
-            sigil = method((x1, btm), (x0, ctr), color=feature.color,
-                           border=feature.border,
-                           orientation='left', **kwargs)
-        else:
-            sigil = method((x0, btm), (x1, top), color=feature.color,
-                           border=feature.border,
-                           **kwargs)
+        # Get sigil for the feature, give it the bounding box straddling
+        # the axis (it decides strand specific placement)
+        sigil = method(btm, ctr, top, x0, x1, strand=feature.strand,
+                       color=feature.color, border=feature.border,
+                       **kwargs)
         if feature.label:   # Feature requires a label
             label = String(0, 0, feature.name,
                            fontName=feature.label_font,
@@ -1351,3 +1340,31 @@ class LinearDrawer(AbstractDrawer):
         x_offset = 1. * self.pagewidth * base_offset / self.fragment_bases
         return fragment, x_offset
         
+    def _draw_sigil_box(self, bottom, center, top, x1, x2, strand, **kwargs):
+        """Draw BOX sigil."""
+        if strand == 1:
+            y1 = center
+            y2 = top
+        elif strand == -1:
+            y1 = bottom
+            y2 = center
+        else:
+            y1 = bottom
+            y2 = top
+        return draw_box((x1,y1), (x2,y2), **kwargs)
+
+    def _draw_sigil_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
+        "Draw ARROW sigil."""
+        if strand == 1:
+            y1 = center
+            y2 = top
+            orientation = "right"
+        elif strand== -1:
+            y1 = bottom
+            y2 = center
+            orientation = "left"
+        else:
+            y1 = bottom
+            y2 = top
+            orientation = "right" #backward compatibility
+        return draw_arrow((x1,y1), (x2,y2), orientation=orientation, **kwargs)

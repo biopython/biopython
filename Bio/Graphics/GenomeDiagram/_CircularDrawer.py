@@ -431,8 +431,8 @@ class CircularDrawer(AbstractDrawer):
         # Distribution dictionary for various ways of drawing the feature
         # Each method takes the inner and outer radii, the start and end angle
         # subtended at the diagram center, and the color as arguments
-        draw_methods = {'BOX': self._draw_arc,
-                        'ARROW': self._draw_arc_arrow,
+        draw_methods = {'BOX': self._draw_sigil_box,
+                        'ARROW': self._draw_sigil_arrow,
                         }
 
         # Get sigil for the feature, location dependent on the feature strand        
@@ -446,17 +446,8 @@ class CircularDrawer(AbstractDrawer):
             kwargs["hrefURL"] = feature.url
             kwargs["hrefTitle"] = feature.name
 
-        border = feature.border
-
-        if feature.strand == 1:
-            sigil = method(ctr, top, startangle, endangle, feature.color,
-                           border, orientation='right', **kwargs)
-        elif feature.strand == -1:
-            sigil = method(btm, ctr, startangle, endangle, feature.color,
-                           border, orientation='left', **kwargs)
-        else:
-            sigil = method(btm, top, startangle, endangle, feature.color,
-                           border, **kwargs)
+        sigil = method(btm, ctr, top, startangle, endangle, feature.strand,
+                       color=feature.color, border=feature.border, **kwargs)
 
         if feature.label:   # Feature needs a label
             label = String(0, 0, feature.name.strip(),
@@ -1053,6 +1044,20 @@ class CircularDrawer(AbstractDrawer):
         angle = self.sweep*2*pi*(base-self.start)/self.length
         return (angle, cos(angle), sin(angle))
 
+    def _draw_sigil_box(self, bottom, center, top,
+                        startangle, endangle, strand,
+                        **kwargs):
+        """Draw BOX sigil."""
+        if strand == 1:
+            inner_radius = center
+            outer_radius = top
+        elif strand == -1:
+            inner_radius = bottom
+            outer_radius = center
+        else:
+            inner_radius = bottom
+            outer_radius = top
+        return self._draw_arc(inner_radius, outer_radius, startangle, endangle, **kwargs)
 
     def _draw_arc(self, inner_radius, outer_radius, startangle, endangle,
                  color, border=None, colour=None, **kwargs):
@@ -1210,6 +1215,25 @@ class CircularDrawer(AbstractDrawer):
                                 #default is mitre/miter which can stick out too much:
                                 strokeLineJoin=1, #1=round
                                 )
+
+    def _draw_sigil_arrow(self, bottom, center, top,
+                          startangle, endangle, strand,
+                          **kwargs):
+        """Draw ARROW sigil."""
+        if strand == 1:
+            inner_radius = center
+            outer_radius = top
+            orientation = "right"
+        elif strand == -1:
+            inner_radius = bottom
+            outer_radius = center
+            orientation = "left"
+        else:
+            inner_radius = bottom
+            outer_radius = top
+            orientation = "right" #backwards compatibility
+        return self._draw_arc_arrow(inner_radius, outer_radius, startangle, endangle,
+                                    orientation=orientation, **kwargs)
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
                   color, border=None,
