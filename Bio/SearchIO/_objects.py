@@ -1416,17 +1416,19 @@ class HSPFragment(BaseHSP):
 
         """
         assert seq_type in ('hit', 'query')
+        if seq is None: return seq # return immediately if seq is None
         # check length if the opposite sequence is not None
         opp_type = 'query' if seq_type == 'query' else 'query'
         opp_seq = getattr(self, opp_type, None)
         if opp_seq is not None:
             if len(seq) != len(opp_seq):
-                raise ValueError("Sequence lengths do not match; %r vs %r: " \
-                        "%r vs %r." % (seq_type, opp_type, len(seq), \
-                        len(opp_seq)))
+                raise ValueError("Sequence lengths do not match. Expected: " \
+                        "%r (%s); found: %r (%s)." % (len(opp_seq), opp_type, \
+                        len(seq), seq_type))
 
         seq_name = 'aligned %s sequence' % seq_type
-        if isinstance(seq, SeqRecord) or seq is None:
+        if isinstance(seq, SeqRecord):
+            seq.name = seq_name
             return seq
         elif isinstance(seq, basestring):
             return SeqRecord(Seq(seq, self.alphabet), name=seq_name)
