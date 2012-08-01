@@ -731,18 +731,21 @@ class Hit(BaseSearchObject):
             # and store it them as an instance attribute
             self.append(hsp)
 
-    def __iter__(self):
-        return iter(self.batch_hsps)
-
-    def __len__(self):
-        return len(self.batch_hsps)
-
-    def __nonzero__(self):
-        return bool(self.batch_hsps)
-
     def __repr__(self):
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
                 len(self))
+
+    def __iter__(self):
+        return iter(self.hsps)
+
+    def __len__(self):
+        return len(self.hsps)
+
+    def __nonzero__(self):
+        return bool(self.hsps)
+
+    def __contains__(self, hsp):
+        return hsp in self._items
 
     def __str__(self):
         lines = []
@@ -774,8 +777,8 @@ class Hit(BaseSearchObject):
                 evalue = Hit._attr_display(hsp, 'evalue', fmt='%.2g')
                 # bitscore
                 bitscore = Hit._attr_display(hsp, 'bitscore', fmt='%.2f')
-                # alignment span
-                aln_span = Hit._attr_display(hsp, 'aln_span')
+                # alignment length
+                aln_span = Hit._attr_display(hsp, 'aln_len')
                 # query region
                 query_start = Hit._attr_display(hsp, 'query_start')
                 query_end = Hit._attr_display(hsp, 'query_end')
@@ -798,6 +801,15 @@ class Hit(BaseSearchObject):
         self._transfer_attrs(obj)
         return obj
 
+    def __getitem__(self, idx):
+        # if key is slice, return a new Hit instance
+        if isinstance(idx, slice):
+            print idx
+            obj = self.__class__(self.id, self.query_id, self.hsps[idx])
+            self._transfer_attrs(obj)
+            return obj
+        return self._items[idx]
+
     def __setitem__(self, idx, hsps):
         # handle case if hsps is a list of hsp
         if isinstance(hsps, (list, tuple)):
@@ -808,18 +820,10 @@ class Hit(BaseSearchObject):
 
         self._items[idx] = hsps
 
-    def __getitem__(self, idx):
-        # if key is slice, return a new Hit instance
-        if isinstance(idx, slice):
-            print idx
-            obj = self.__class__(self.id, self.query_id, self.batch_hsps[idx])
-            self._transfer_attrs(obj)
-            return obj
-        return self._items[idx]
-
     def __delitem__(self, idx):
         del self._items[idx]
 
+    ## hsp properties ##
     def _validate_hsp(self, hsp):
         """Validates an HSP object.
 
@@ -827,55 +831,33 @@ class Hit(BaseSearchObject):
         same query_id as the Hit object's query_id.
 
         """
-        if not isinstance(hsp, BatchHSP):
-            raise TypeError("Hit objects can only contain BatchHSP " \
-                    "objects.")
+        if not isinstance(hsp, HSP):
+            raise TypeError("Hit objects can only contain HSP objects.")
         if hsp.hit_id != self.id:
-            raise ValueError("Expected HSP or BatchHSP with hit ID '%s', " \
-                    "found '%s' instead." % (self.id, hsp.hit_id))
+            raise ValueError("Expected HSP with hit ID %r, " \
+                    "found %r instead." % (self.id, hsp.hit_id))
         if hsp.query_id != self.query_id:
-            raise ValueError("Expected HSP or BatchHSP with query ID '%s', " \
-                    "found '%s' instead." % (self.query_id, hsp.query_id))
-
-    def _description_get(self):
-        return self._description
-
-    def _description_set(self, value):
-        self._description = value
-        # try to set descriptions of hsp.hit.seq within
-        for hsp in self.batch_hsps:
-            hsp.hit_description = value
-
-    description = property(fget=_description_get, fset=_description_set)
-
-    def _query_description_get(self):
-        return self._query_description
-
-    def _query_description_set(self, value):
-        self._query_description = value
-        for hsp in self.batch_hsps:
-            hsp.query_description = value
-
-    query_description = property(fget=_query_description_get, \
-            fset=_query_description_set)
+            raise ValueError("Expected HSP with query ID %r, " \
+                    "found %r instead." % (self.query_id, hsp.query_id))
 
     def _hsps_get(self):
-        return list(chain.from_iterable(self.batch_hsps))
+        return self._items
 
     hsps = property(fget=_hsps_get)
 
-    def _batch_hsps_get(self):
-        return self._items
+    def _fragments_get(self):
+        return list(chain.from_iterable(self._items))
 
-    batch_hsps = property(fget=_batch_hsps_get)
+    fragments = property(fget=_fragments_get)
 
+    ## id and description properties ##
     def _id_get(self):
         return self._id
 
     def _id_set(self, value):
         self._id = value
         # set all HSP IDs contained to have the new Hit ID
-        for hsp in self.hsps:
+        for hsp in self._items:
             hsp.hit_id = value
 
     id = property(fget=_id_get, fset=_id_set)
@@ -886,46 +868,65 @@ class Hit(BaseSearchObject):
     def _query_id_set(self, value):
         self._query_id = value
         # set all HSP query IDs contained to have the new query ID
-        for hsp in self.hsps:
+        for hsp in self._items:
             hsp.query_id = value
 
     query_id = property(fget=_query_id_get, fset=_query_id_set)
 
+    def _description_get(self):
+        return self._description
+
+    def _description_set(self, value):
+        self._description = value
+        # cascade through contained HSP hit descriptions
+        for hsp in self._items:
+            hsp.hit_description = value
+
+    description = property(fget=_description_get, fset=_description_set)
+
+    def _query_description_get(self):
+        return self._query_description
+
+    def _query_description_set(self, value):
+        self._query_description = value
+        for hsp in self._items:
+            hsp.query_description = value
+
+    query_description = property(fget=_query_description_get, \
+            fset=_query_description_set)
+
+    ## public methods ##
     def append(self, hsp):
         self._validate_hsp(hsp)
         self._items.append(hsp)
 
-    def filter(self, func=None, batch=True):
+    def filter(self, func=None):
         """Creates a new Hit object whose HSP objects pass the filter function."""
-        if not batch:
-            hsps = [BatchHSP([x]) for x in filter(func, self.hsps)]
-        else:
-            hsps = filter(func, self.batch_hsps)
+        hsps = filter(func, self.hsps)
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
             return obj
 
-    def map(self, func=None, batch=True):
+    def index(self, hsp):
+        return self._items.index(hsp)
+
+    def map(self, func=None):
         """Creates a new Hit object, mapping the given function to its HSPs."""
-        if not batch:
-            hsps = [BatchHSP([x]) for x in map(func, self.hsps[:])]
-        else:
-            hsps = map(func, self.batch_hsps[:])
+        hsps = map(func, self.hsps[:])  # this creates a shallow copy
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
             return obj
 
     def pop(self, index=-1):
-        hsp = self._items.pop(index)
-        return hsp
+        return self._items.pop(index)
 
     def sort(self, key=None, reverse=False, in_place=True):
         if in_place:
             self._items.sort(key=key, reverse=reverse)
         else:
-            hsps = self.batch_hsps[:]
+            hsps = self.hsps[:]
             hsps.sort(key=key, reverse=reverse)
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)
