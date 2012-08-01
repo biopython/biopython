@@ -1143,11 +1143,10 @@ class HSP(BaseHSP):
     def _set_id_or_desc(self, value, seq_type, attr):
         assert seq_type in ('query', 'hit')
         assert attr in ('id', 'description')
+        attr_name = '%s_%s' % (seq_type, attr)
         # set attr for fragments
         for fragment in self.fragments:
-            if getattr(fragment, seq_type) is not None:
-                seq = getattr(fragment, seq_type)
-                setattr(seq, attr, value)
+            setattr(fragment, attr_name, value)
 
     def _hit_description_get(self):
         return self._items[0].hit_description
