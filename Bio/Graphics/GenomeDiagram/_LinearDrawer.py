@@ -1012,6 +1012,7 @@ class LinearDrawer(AbstractDrawer):
         # Distribution dictionary for various ways of drawing the feature
         draw_methods = {'BOX': self._draw_sigil_box,
                         'ARROW': self._draw_sigil_arrow,
+                        'BIGARROW': self._draw_sigil_big_arrow,
                         }
 
         method = draw_methods[feature.sigil]
@@ -1368,3 +1369,11 @@ class LinearDrawer(AbstractDrawer):
             y2 = top
             orientation = "right" #backward compatibility
         return draw_arrow((x1,y1), (x2,y2), orientation=orientation, **kwargs)
+
+    def _draw_sigil_big_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
+        "Draw BIGARROW sigil, like ARROW but straddles the axis."""
+        if strand == -1:
+            orientation = "left"
+        else:
+            orientation = "right"
+        return draw_arrow((x1,bottom), (x2,top), orientation=orientation, **kwargs)

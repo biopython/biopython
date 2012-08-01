@@ -433,6 +433,7 @@ class CircularDrawer(AbstractDrawer):
         # subtended at the diagram center, and the color as arguments
         draw_methods = {'BOX': self._draw_sigil_box,
                         'ARROW': self._draw_sigil_arrow,
+                        'BIGARROW': self._draw_sigil_big_arrow,
                         }
 
         # Get sigil for the feature, location dependent on the feature strand        
@@ -1233,6 +1234,17 @@ class CircularDrawer(AbstractDrawer):
             outer_radius = top
             orientation = "right" #backwards compatibility
         return self._draw_arc_arrow(inner_radius, outer_radius, startangle, endangle,
+                                    orientation=orientation, **kwargs)
+
+    def _draw_sigil_big_arrow(self, bottom, center, top,
+                              startangle, endangle, strand,
+                              **kwargs):
+        "Draw BIGARROW sigil, like ARROW but straddles the axis."""
+        if strand == -1:
+            orientation = "left"
+        else:
+            orientation = "right"
+        return self._draw_arc_arrow(bottom, top, startangle, endangle,
                                     orientation=orientation, **kwargs)
 
     def _draw_arc_arrow(self, inner_radius, outer_radius, startangle, endangle,
