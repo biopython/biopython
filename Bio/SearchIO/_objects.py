@@ -987,22 +987,22 @@ class HSP(BaseHSP):
                 raise ValueError("HSP object can not contain fragments with " \
                         "more than one %s." % attr)
 
-        self._fragments = []
+        self._items = []
         for fragment in fragments:
             self._validate_fragment(fragment)
-            self._fragments.append(fragment)
+            self._items.append(fragment)
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, self._fragments)
+        return "%s(%r)" % (self.__class__.__name__, self._items)
 
     def __iter__(self):
-        return iter(self._fragments)
+        return iter(self._items)
 
     def __len__(self):
-        return len(self._fragments)
+        return len(self._items)
 
     def __nonzero__(self):
-        return bool(self._fragments)
+        return bool(self._items)
 
     def __str__(self):
 
@@ -1049,10 +1049,10 @@ class HSP(BaseHSP):
     def __getitem__(self, idx):
         # if key is slice, return a new HSP instance
         if isinstance(idx, slice):
-            obj = self.__class__(self._fragments[idx])
+            obj = self.__class__(self._items[idx])
             self._transfer_attrs(obj)
             return obj
-        return self._fragments[idx]
+        return self._items[idx]
 
     def __setitem__(self, idx, fragments):
         # handle case if hsps is a list of hsp
@@ -1067,10 +1067,10 @@ class HSP(BaseHSP):
     def __delitem__(self, idx):
         # note that this may result in an empty HSP object, which should be
         # invalid
-        del self._fragments[idx]
+        del self._items[idx]
 
     def __contains__(self, fragment):
-        return fragment in self._fragments
+        return fragment in self._items
 
     def _validate_fragment(self, fragment):
         if not isinstance(fragment, HSPFragment):
@@ -1079,12 +1079,12 @@ class HSP(BaseHSP):
 
     ## sequence / fragment properties ##
     def _fragments_get(self):
-        return self._fragments
+        return self._items
 
     fragments = property(fget=_fragments_get)
 
     def _fragment_get(self):
-        return self._fragments[0]
+        return self._items[0]
 
     fragment = property(fget=_fragment_get)
 
@@ -1099,7 +1099,7 @@ class HSP(BaseHSP):
     hits = property(fget=_hits_get)
 
     def _hit_get(self):
-        return self._fragments[0].hit
+        return self._items[0].hit
 
     hit = property(fget=_hit_get)
 
@@ -1109,7 +1109,7 @@ class HSP(BaseHSP):
     queries = property(fget=_queries_get)
 
     def _query_get(self):
-        return self._fragments[0].query
+        return self._items[0].query
 
     query = property(fget=_query_get)
 
@@ -1119,7 +1119,7 @@ class HSP(BaseHSP):
     alignments = property(fget=_alignments_get)
 
     def _alignment_get(self):
-        return self._fragments[0].alignment
+        return self._items[0].alignment
 
     alignment = property(fget=_alignment_get)
 
@@ -1153,7 +1153,7 @@ class HSP(BaseHSP):
                 setattr(seq, attr, value)
 
     def _hit_description_get(self):
-        return self._fragments[0].hit_description
+        return self._items[0].hit_description
 
     def _hit_description_set(self, value):
         self._set_id_or_desc(value, 'hit', 'description')
@@ -1162,7 +1162,7 @@ class HSP(BaseHSP):
             fset=_hit_description_set)
 
     def _query_description_get(self):
-        return self._fragments[0].query_description
+        return self._items[0].query_description
 
     def _query_description_set(self, value):
         self._set_id_or_desc(value, 'query', 'description')
@@ -1171,7 +1171,7 @@ class HSP(BaseHSP):
             fset=_query_description_set)
 
     def _hit_id_get(self):
-        return self._fragments[0].hit_id
+        return self._items[0].hit_id
 
     def _hit_id_set(self, value):
         self._set_id_or_desc(value, 'hit', 'id')
@@ -1180,7 +1180,7 @@ class HSP(BaseHSP):
             fset=_hit_id_set)
 
     def _query_id_get(self):
-        return self._fragments[0].query_id
+        return self._items[0].query_id
 
     def _query_id_set(self, value):
         self._set_id_or_desc(value, 'query', 'id')
@@ -1195,7 +1195,7 @@ class HSP(BaseHSP):
     hit_strands = property(fget=_hit_strands_get)
 
     def _hit_strand_get(self):
-        return self._fragments[0].hit_strand
+        return self._items[0].hit_strand
 
     hit_strand = property(fget=_hit_strand_get)
 
@@ -1205,7 +1205,7 @@ class HSP(BaseHSP):
     query_strands = property(fget=_query_strands_get)
 
     def _query_strand_get(self):
-        return self._fragments[0].query_strand
+        return self._items[0].query_strand
 
     query_strand = property(fget=_query_strand_get)
 
@@ -1216,7 +1216,7 @@ class HSP(BaseHSP):
     hit_frames = property(fget=_hit_frames_get)
 
     def _hit_frame_get(self):
-        return self._fragments[0].hit_frame
+        return self._items[0].hit_frame
 
     hit_frame = property(fget=_hit_frame_get)
 
@@ -1226,7 +1226,7 @@ class HSP(BaseHSP):
     query_frames = property(fget=_query_frames_get)
 
     def _query_frame_get(self):
-        return self._fragments[0].query_frame
+        return self._items[0].query_frame
 
     query_frame = property(fget=_query_frame_get)
 
