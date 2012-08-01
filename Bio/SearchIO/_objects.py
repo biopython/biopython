@@ -1055,7 +1055,7 @@ class HSP(BaseHSP):
         # handle case if hsps is a list of hsp
         if isinstance(fragments, (list, tuple)):
             for fragment in fragments:
-                self._validate_hsp(fragment)
+                self._validate_fragment(fragment)
         else:
             self._validate_fragment(fragments)
 
