@@ -1299,8 +1299,7 @@ class HSPFragment(BaseHSP):
 
     """Class representing a fragment of matching hit-query sequence."""
 
-    def __init__(self, hit_id=None, query_id=None, hit_description='', \
-            query_description='', hit='', query='', \
+    def __init__(self, hit_id=None, query_id=None, hit='', query='', \
             alphabet=single_letter_alphabet, aln_annotation={}):
 
         if hit_id is None:
@@ -1318,10 +1317,11 @@ class HSPFragment(BaseHSP):
             # query or hit attributes
             for attr in ('strand', 'frame', 'start', 'end'):
                 setattr(self, '%s_%s' % (seq_type, attr), None)
-            for attr in ('id', 'description'):
-                attr_name = '%s_%s' % (seq_type, attr)
-                setattr(self, attr_name, eval(attr_name))
+            attr_name = '%s_id' % seq_type
+            setattr(self, attr_name, eval(attr_name))
         self.alignment_annotation = aln_annotation
+        self.hit_description = ''
+        self.query_description = ''
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
@@ -1341,14 +1341,16 @@ class HSPFragment(BaseHSP):
         if self.alignment is not None:
             obj = self.__class__(
                     hit_id=self.hit_id, query_id=self.query_id, \
-                    hit_description=self.hit_description, \
-                    query_description=self.query_description, \
                     alphabet=self.alphabet)
-            # transfer query and hit if not None
+            # transfer query and hit attributes
             if self.query is not None:
                 obj.query = self.query[idx]
             if self.hit is not None:
                 obj.hit = self.hit[idx]
+            if self.query_description:
+                obj.query_description = self.query_description
+            if self.hit_description:
+                obj.hit_description = self.hit_description
             # alignment annotation should be transferred, since we can compute
             # the resulting annotation
             if hasattr(self, 'alignment_annotation'):
