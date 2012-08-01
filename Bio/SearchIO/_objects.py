@@ -1425,7 +1425,7 @@ class HSPFragment(BaseHSP):
                         len(opp_seq)))
 
         seq_name = 'aligned %s sequence' % seq_type
-        if isinstance(seq, SeqRecord):
+        if isinstance(seq, SeqRecord) or seq is None:
             return seq
         elif isinstance(seq, basestring):
             return SeqRecord(Seq(seq, self.alphabet), name=seq_name)
