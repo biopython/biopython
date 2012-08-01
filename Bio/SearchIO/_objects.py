@@ -6,8 +6,10 @@
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
 import re
+import warnings
 from itertools import chain
 
+from Bio import BiopythonWarning
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
@@ -932,175 +934,9 @@ class Hit(BaseSearchObject):
 
 class BaseHSP(BaseSearchObject):
 
-    """Abstract class representing high-scoring region between query and hit."""
+    """Abstract base class for HSP objects."""
 
-    def __init__(self, hit_id=None, query_id=None, hit_seq='', query_seq='', \
-            alphabet=single_letter_alphabet):
-        """Initializes an HSP object.
-
-        Arguments:
-        hit_id    -- String, Hit ID of the HSP object.
-        query_id  -- String of the search query ID.
-        hit_seq   -- String or SeqRecord object of the aligned Hit sequence.
-        query_seq -- String or SeqRecord object of the aligned query sequence.
-
-        """
-        if hit_id is None:
-            raise ValueError("Hit ID string is required for HSP creation")
-        if query_id is None:
-            raise ValueError("Query ID string is required for HSP creation")
-
-        self.hit_id = hit_id
-        self.query_id = query_id
-        self.alphabet = alphabet
-        self.alignment_annotation = {}
-        # set default values
-        self._query_description, self._hit_description = '', ''
-        self._query_strand, self._hit_strand = None, None
-        self.query_frame, self.hit_frame = None, None
-
-    def _prep_seq(self, seq, seq_id, seq_type, desc=''):
-        """Transforms a sequence into a SeqRecord object).
-
-        Argument:
-        seq -- String of sequence.
-        seq_id -- String of the sequence ID.
-        seq_type -- String of sequence type, must be 'hit' or 'query'
-        desc -- String of sequence description.
-
-        """
-        assert seq_type in ['hit', 'query']
-        seq_name = 'aligned %s sequence' % seq_type
-        if isinstance(seq, SeqRecord):
-            seq.id = seq_id
-            seq.name = seq_name
-            seq.description = desc
-            return seq
-        elif isinstance(seq, basestring):
-            return SeqRecord(Seq(seq, self.alphabet), id=seq_id, \
-                    name=seq_name, description=desc)
-        else:
-            raise TypeError("%s sequence must be a string or a "
-                    "SeqRecord object." % seq_type.capitalize())
-
-    def _hit_description_get(self):
-        return self._hit_description
-
-    def _hit_description_set(self, value):
-        self._hit_description = value
-
-    hit_description = property(fget=_hit_description_get, \
-            fset=_hit_description_set)
-
-    def _query_description_get(self):
-        return self._query_description
-
-    def _query_description_set(self, value):
-        self._query_description = value
-
-    query_description = property(fget=_query_description_get, \
-            fset=_query_description_set)
-
-    def _hit_strand_get(self):
-        if self.hit_frame is not None:
-            # attempt to get strand from frame
-            try:
-                self._hit_strand = self.hit_frame / \
-                        abs(self.hit_frame)
-            # handle if hit frame is 0
-            except ZeroDivisionError:
-                self._hit_strand = 0
-
-        return self._hit_strand
-
-    def _hit_strand_set(self, value):
-        # follow SeqFeature's convention
-        if not value in (-1, 0, 1, None):
-            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
-                    value)
-        self._hit_strand = value
-
-    hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set)
-
-    def _query_strand_get(self):
-        if self.query_frame is not None:
-            try:
-                self._query_strand = self.query_frame / \
-                        abs(self.query_frame)
-            # handle if query frame is 0
-            except ZeroDivisionError:
-                self._query_strand = 0
-
-        return self._query_strand
-
-    def _query_strand_set(self, value):
-        # follow SeqFeature's convention
-        if not value in (-1, 0, 1, None):
-            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
-                    value)
-        self._query_strand = value
-
-    query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
-
-    def _hit_start_get(self):
-        # start is always less than to, regardless of strand
-        return self._hit_start
-
-    def _hit_start_set(self, value):
-        self._hit_start = value
-
-    hit_start = property(fget=_hit_start_get, fset=_hit_start_set)
-
-    def _query_start_get(self):
-        # start is always less than to, regardless of strand
-        return self._query_start
-
-    def _query_start_set(self, value):
-        self._query_start = value
-
-    query_start = property(fget=_query_start_get, fset=_query_start_set)
-
-    def _hit_end_get(self):
-        # end is always greater than start, regardless of strand
-        return self._hit_end
-
-    def _hit_end_set(self, value):
-        self._hit_end = value
-
-    hit_end = property(fget=_hit_end_get, fset=_hit_end_set)
-
-    def _query_end_get(self):
-        # end is always greater than start, regardless of strand
-        return self._query_end
-
-    def _query_end_set(self, value):
-        self._query_end = value
-
-    query_end = property(fget=_query_end_get, fset=_query_end_set)
-
-    def _hit_range_get(self):
-        return (self.hit_start, self.hit_end)
-
-    hit_range = property(fget=_hit_range_get)
-
-    def _query_range_get(self):
-        return (self.query_start, self.query_end)
-
-    query_range = property(fget=_query_range_get)
-
-    def _hit_span_get(self):
-        # hit sequence range (sans gaps)
-        return self.hit_end - self.hit_start
-
-    hit_span = property(fget=_hit_span_get)
-
-    def _query_span_get(self):
-        # query sequence range (sans gaps)
-        return self.query_end - self.query_start
-
-    query_span = property(fget=_query_span_get)
-
-    def _display_aln_header(self):
+    def _display_hsp_header(self):
         """Prints the alignment header info."""
         lines = []
         # set query id line
@@ -1112,20 +948,11 @@ class BaseHSP(BaseSearchObject):
         lines.append(qid_line)
         lines.append(hid_line)
 
-        # set hsp info line
-        statline = []
-        # evalue
-        evalue = HSP._attr_display(self, 'evalue', fmt='%.2g')
-        statline.append('evalue ' +  evalue)
-        # bitscore
-        bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
-        statline.append('bitscore ' +  bitscore)
         # coordinates
-        query_start = HSP._attr_display(self, 'query_start')
-        query_end = HSP._attr_display(self, 'query_end')
-        hit_start = HSP._attr_display(self, 'hit_start')
-        hit_end = HSP._attr_display(self, 'hit_end')
-        lines.append('      Stats: ' + '; '.join(statline))
+        query_start = BaseHSP._attr_display(self, 'query_start')
+        query_end = BaseHSP._attr_display(self, 'query_end')
+        hit_start = BaseHSP._attr_display(self, 'hit_start')
+        hit_end = BaseHSP._attr_display(self, 'hit_end')
 
         lines.append('Query range: %s:%s (%r)' % (query_start, query_end, \
                 self.query_strand))
@@ -1137,91 +964,395 @@ class BaseHSP(BaseSearchObject):
 
 class HSP(BaseHSP):
 
-    """Class representing a single, contiguous HSP."""
+    """Class representing high-scoring region between query and hit."""
 
-    def __init__(self, hit_id=None, query_id=None, hit_seq='', query_seq='', \
-             alphabet=single_letter_alphabet):
+    # attributes we don't want to transfer when creating a new Hit class
+    # from this one
+    _NON_STICKY_ATTRS = ('_fragments', '_aln_len')
 
+    def __init__(self, fragments):
         """Initializes an HSP object.
 
         Arguments:
-        hit_id    -- String, Hit ID of the HSP object.
-        query_id  -- String of the search query ID.
-        hit_seq   -- String or SeqRecord object of the aligned Hit sequence.
-        query_seq -- String or SeqRecord object of the aligned query sequence.
+        fragments -- List of HSPFragment objects.
 
         """
-        BaseHSP.__init__(self, hit_id, query_id, alphabet)
-        
-        if query_seq:
-            self.query = query_seq
-        if hit_seq:
-            self.hit = hit_seq
+        if not fragments:
+            raise ValueError("HSP objects must have at least one HSPFragment " \
+                    "object.")
+        # check that all fragments contain the same IDs, descriptions, and alphabet
+        for attr in ('query_id', 'query_description', 'hit_id', \
+                'hit_description', 'alphabet'):
+            if len(set([getattr(fragment, attr) for fragment in fragments])) != 1:
+                raise ValueError("HSP object can not contain fragments with " \
+                        "more than one %s." % attr)
+
+        self._fragments = []
+        for fragment in fragments:
+            self._validate_fragment(fragment)
+            self._fragments.append(fragment)
+
+    def __repr__(self):
+        return "%s(%r)" % (self.__class__.__name__, self._fragments)
 
     def __iter__(self):
-        raise TypeError("HSP objects do not support iteration.")
+        return iter(self._fragments)
 
     def __len__(self):
-        # len should return alignment length if alignment is not None
+        return len(self._fragments)
+
+    def __nonzero__(self):
+        return bool(self._fragments)
+
+    def __str__(self):
+
+        lines = []
+        # set hsp info line
+        statline = []
+        # evalue
+        evalue = HSP._attr_display(self, 'evalue', fmt='%.2g')
+        statline.append('evalue ' +  evalue)
+        # bitscore
+        bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
+        statline.append('bitscore ' +  bitscore)
+        lines.append('Quick stats: ' + '; '.join(statline))
+
+        if len(self.fragments) == 1:
+            return '\n'.join([self._display_hsp_header(), '\n'.join(lines), \
+                    self.fragments[0]._display_aln()])
+        else:
+            lines.append('  Fragments: %s  %s  %s  %s' % \
+                    ('-'*3, '-'*18, '-'*18, '-'*18))
+            pattern = '%16s  %18s  %18s  %18s'
+            lines.append(pattern % ('#', 'Length', 'Query range', 'Hit range'))
+            lines.append(pattern % ('-'*3, '-'*18, '-'*18, '-'*18))
+            for idx, block in enumerate(self.fragments):
+                # set hsp line and table
+                # alignment span
+                aln_span = HSP._attr_display(block, 'aln_len')
+                # query region
+                query_start = HSP._attr_display(block, 'query_start')
+                query_end = HSP._attr_display(block, 'query_end')
+                query_range = '%s:%s' % (query_start, query_end)
+                # max column length is 18
+                query_range = HSP._concat_display(query_range, 18, '~')
+                # hit region
+                hit_start = HSP._attr_display(block, 'hit_start')
+                hit_end = HSP._attr_display(block, 'hit_end')
+                hit_range = '%s:%s' % (hit_start, hit_end)
+                hit_range = HSP._concat_display(hit_range, 18, '~')
+                # append the hsp row
+                lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
+
+            return self._display_hsp_header() + '\n' + '\n'.join(lines)
+
+    def __getitem__(self, idx):
+        # if key is slice, return a new HSP instance
+        if isinstance(idx, slice):
+            obj = self.__class__(self._fragments[idx])
+            self._transfer_attrs(obj)
+            return obj
+        return self._fragments[idx]
+
+    def __setitem__(self, idx, fragments):
+        # handle case if hsps is a list of hsp
+        if isinstance(fragments, (list, tuple)):
+            for fragment in fragments:
+                self._validate_hsp(fragment)
+        else:
+            self._validate_fragment(fragments)
+
+        self._items[idx] = fragments
+
+    def __delitem__(self, idx):
+        # note that this may result in an empty HSP object, which should be
+        # invalid
+        del self._fragments[idx]
+
+    def __contains__(self, fragment):
+        return fragment in self._fragments
+
+    def _validate_fragment(self, fragment):
+        if not isinstance(fragment, HSPFragment):
+            raise TypeError("HSP objects can only contain HSPFragment " \
+                    "objects.")
+
+    ## sequence / fragment properties ##
+    def _fragments_get(self):
+        return self._fragments
+
+    fragments = property(fget=_fragments_get)
+
+    def _fragment_get(self):
+        return self._fragments[0]
+
+    fragment = property(fget=_fragment_get)
+
+    def _is_fragmented_get(self):
+        return len(self) > 1
+
+    is_fragmented = property(fget=_is_fragmented_get)
+
+    def _hits_get(self):
+        return [fragment.hit for fragment in self.fragments]
+
+    hits = property(fget=_hits_get)
+
+    def _hit_get(self):
+        return self._fragments[0].hit
+
+    hit = property(fget=_hit_get)
+
+    def _queries_get(self):
+        return [fragment.query for fragment in self.fragments]
+
+    queries = property(fget=_queries_get)
+
+    def _query_get(self):
+        return self._fragments[0].query
+
+    query = property(fget=_query_get)
+
+    def _alignments_get(self):
+        return [fragment.alignment for fragment in self.fragments]
+
+    alignments = property(fget=_alignments_get)
+
+    def _alignment_get(self):
+        return self._fragments[0].alignment
+
+    alignment = property(fget=_alignment_get)
+
+    def _aln_len_get(self):
+        # length of all alignments
+        # alignment span can be its own attribute, or computed from
+        # query / hit length
+        if not hasattr(self, '_aln_len'):
+            if all([query.seq for query in self.queries]):
+                self._aln_len = sum([len(query.seq) for query in self.queries])
+            elif all([hit.seq for hit in self.hits]):
+                self._aln_len = sum([len(hit.seq) for hit in self.hits])
+            else:
+                self._aln_len = None
+
+        return self._aln_len
+
+    def _aln_len_set(self, value):
+        self._aln_len = value
+
+    aln_len = property(fget=_aln_len_get, fset=_aln_len_set)
+
+    ## id and description properties ##
+    def _set_id_or_desc(self, value, seq_type, attr):
+        assert seq_type in ('query', 'hit')
+        assert attr in ('id', 'description')
+        # set attr for fragments
+        for fragment in self.fragments:
+            if getattr(fragment, seq_type) is not None:
+                seq = getattr(fragment, seq_type)
+                setattr(seq, attr, value)
+
+    def _hit_description_get(self):
+        return self._fragments[0].hit_description
+
+    def _hit_description_set(self, value):
+        self._set_id_or_desc(value, 'hit', 'description')
+
+    hit_description = property(fget=_hit_description_get, \
+            fset=_hit_description_set)
+
+    def _query_description_get(self):
+        return self._fragments[0].query_description
+
+    def _query_description_set(self, value):
+        self._set_id_or_desc(value, 'query', 'description')
+
+    query_description = property(fget=_query_description_get, \
+            fset=_query_description_set)
+
+    def _hit_id_get(self):
+        return self._fragments[0].hit_id
+
+    def _hit_id_set(self, value):
+        self._set_id_or_desc(value, 'hit', 'id')
+
+    hit_id = property(fget=_hit_id_get, \
+            fset=_hit_id_set)
+
+    def _query_id_get(self):
+        return self._fragments[0].query_id
+
+    def _query_id_set(self, value):
+        self._set_id_or_desc(value, 'query', 'id')
+
+    query_id = property(fget=_query_id_get, \
+            fset=_query_id_set)
+
+    ## strand properties ##
+    def _hit_strands_get(self):
+        return [fragment.hit_strand for fragment in self.fragments]
+
+    hit_strands = property(fget=_hit_strands_get)
+
+    def _hit_strand_get(self):
+        return self._fragments[0].hit_strand
+
+    hit_strand = property(fget=_hit_strand_get)
+
+    def _query_strands_get(self):
+        return [fragment.query_strand for fragment in self.fragments]
+
+    query_strands = property(fget=_query_strands_get)
+
+    def _query_strand_get(self):
+        return self._fragments[0].query_strand
+
+    query_strand = property(fget=_query_strand_get)
+
+    ## frame properties ##
+    def _hit_frames_get(self):
+        return [fragment.hit_frame for fragment in self.fragments]
+
+    hit_frames = property(fget=_hit_frames_get)
+
+    def _hit_frame_get(self):
+        return self._fragments[0].hit_frame
+
+    hit_frame = property(fget=_hit_frame_get)
+
+    def _query_frames_get(self):
+        return [fragment.query_frame for fragment in self.fragments]
+
+    query_frames = property(fget=_query_frames_get)
+
+    def _query_frame_get(self):
+        return self._fragments[0].query_frame
+
+    query_frame = property(fget=_query_frame_get)
+
+    ## coordinate properties ##
+    def _get_coords(self, seq_type, coord_type):
+        assert seq_type in ('hit', 'query')
+        assert coord_type in ('start', 'end')
+        coord_name = '%s_%s' % (seq_type, coord_type)
+        coords = [getattr(fragment, coord_name) for fragment in self.fragments]
+        if None in coords:
+            warnings.warn("'None' exist in %s coordinates; ignored" % \
+                    (coord_name), BiopythonWarning)
+        return coords
+
+    def _hit_start_get(self):
+        return min(self._get_coords('hit', 'start'))
+
+    hit_start = property(fget=_hit_start_get)
+
+    def _query_start_get(self):
+        return min(self._get_coords('query', 'start'))
+
+    query_start = property(fget=_query_start_get)
+
+    def _hit_end_get(self):
+        return max(self._get_coords('hit', 'end'))
+
+    hit_end = property(fget=_hit_end_get)
+
+    def _query_end_get(self):
+        return max(self._get_coords('query', 'end'))
+
+    query_end = property(fget=_query_end_get)
+
+    ## coordinate-dependent properties ##
+    def _hit_span_get(self):
         try:
-            assert len(self.query) == len(self.hit)
-            return len(self.query)
-        except AttributeError:
-            raise TypeError("HSP objects without alignment does "
-                    "not have any length.")
+            return self.hit_end - self.hit_start
+        except TypeError:  # triggered if any of the coordinates are None
+            return None
+
+    hit_span = property(fget=_hit_span_get)
+
+    def _query_span_get(self):
+        try:
+            return self.query_end - self.query_start
+        except TypeError:  # triggered if any of the coordinates are None
+            return None
+
+    query_span = property(fget=_query_span_get)
+
+    def _hit_ranges_get(self):
+        return [fragment.hit_range for fragment in self.fragments]
+
+    hit_ranges = property(fget=_hit_ranges_get)
+
+    def _hit_range_get(self):
+        return (self.hit_start, self.hit_end)
+
+    hit_range = property(fget=_hit_range_get)
+
+    def _query_ranges_get(self):
+        return [fragment.query_range for fragment in self.fragments]
+
+    query_ranges = property(fget=_query_ranges_get)
+
+    def _query_range_get(self):
+        return (self.query_start, self.query_end)
+
+    query_range = property(fget=_query_range_get)
+
+
+class HSPFragment(BaseHSP):
+
+    """Class representing a fragment of matching hit-query sequence."""
+
+    def __init__(self, hit_id=None, query_id=None, hit_description='', \
+            query_description='', hit='', query='', \
+            alphabet=single_letter_alphabet, aln_annotation={}):
+
+        if hit_id is None:
+            raise ValueError("Hit ID string is required for HSPFragment creation.")
+        if query_id is None:
+            raise ValueError("Query ID string is required for HSPFragment creation.")
+
+        self.alphabet = alphabet
+        for seq_type in ('query', 'hit'):
+            # self.query or self.hit
+            if eval(seq_type):
+                setattr(self, seq_type, eval(seq_type))
+            else:
+                setattr(self, seq_type, None)
+            # query or hit attributes
+            for attr in ('strand', 'frame', 'start', 'end'):
+                setattr(self, '%s_%s' % (seq_type, attr), None)
+            for attr in ('id', 'description'):
+                attr_name = '%s_%s' % (seq_type, attr)
+                setattr(self, attr_name, eval(attr_name))
+        self.alignment_annotation = aln_annotation
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
-
         try:
-            info += ", %i-column alignment" % len(self)
+            info += ", %i columns" % len(self)
         except TypeError:
             pass
-
         return "%s(%s)" % (self.__class__.__name__, info)
 
+    def __len__(self):
+        return self.aln_len
+
     def __str__(self):
-        lines = []
-
-        # alignment span
-        aln_span = HSP._attr_display(self, 'aln_span')
-        lines.append('  Alignment: %s columns' % aln_span)
-        # sequences
-        if hasattr(self, 'query') and hasattr(self, 'hit'):
-            qseq = str(self.query.seq)
-            hseq = str(self.hit.seq)
-
-            # homology line
-            homol = ''
-            if 'homology' in self.alignment_annotation:
-                homol = self.alignment_annotation['homology']
-
-            if self.aln_span <= 67:
-                lines.append("%10s - %s" % ('Query', qseq))
-                if homol:
-                    lines.append("             %s" % homol)
-                lines.append("%10s - %s" % ('Hit', hseq))
-            else:
-                # adjust continuation character length, so we don't display
-                # the same residues twice
-                if self.aln_span - 66 > 3:
-                    cont = '~' * 3
-                else:
-                    cont = '~' * (self.aln_span - 66)
-                lines.append("%10s - %s%s%s" % ('Query', \
-                                qseq[:59], cont, qseq[-5:]))
-                if homol:
-                    lines.append("             %s%s%s" % \
-                            (homol[:59], cont, homol[-5:]))
-                lines.append("%10s - %s%s%s" % ('Hit', \
-                                hseq[:59], cont, hseq[-5:]))
-
-        return self._display_aln_header() + '\n' + '\n'.join(lines)
+        return self._display_hsp_header() + '\n' + self._display_aln()
 
     def __getitem__(self, idx):
-        if hasattr(self, 'alignment'):
-            obj = self.__class__(self.hit_id, self.query_id, self.hit[idx], \
-                    self.query[idx], self.alphabet)
+        if self.alignment is not None:
+            obj = self.__class__(
+                    hit_id=self.hit_id, query_id=self.query_id, \
+                    hit_description=self.hit_description, \
+                    query_description=self.query_description, \
+                    alphabet=self.alphabet)
+            # transfer query and hit if not None
+            if self.query is not None:
+                obj.query = self.query[idx]
+            if self.hit is not None:
+                obj.hit = self.hit[idx]
             # alignment annotation should be transferred, since we can compute
             # the resulting annotation
             if hasattr(self, 'alignment_annotation'):
@@ -1234,17 +1365,82 @@ class HSP(BaseHSP):
             raise TypeError("Slicing for HSP objects without "
                     "alignment is not supported.")
 
-    def __delitem__(self, idx):
-        raise TypeError("HSP objects are read-only.")
+    def _display_aln(self):
+        lines = []
+        # alignment length
+        aln_len = HSPFragment._attr_display(self, 'aln_len')
+        lines.append('   Fragment: %s columns' % aln_len)
+        # sequences
+        if hasattr(self, 'query') and hasattr(self, 'hit'):
+            try:
+                qseq = str(self.query.seq)
+            except AttributeError:  # query is None
+                qseq = '?'
+            try:
+                hseq = str(self.hit.seq)
+            except AttributeError:  # hit is None
+                qseq = '?'
 
-    def __setitem__(self, idx, value):
-        raise TypeError("HSP objects are read-only.")
+            # homology line
+            homol = ''
+            if 'homology' in self.alignment_annotation:
+                homol = self.alignment_annotation['homology']
+
+            if self.aln_len <= 67:
+                lines.append("%10s - %s" % ('Query', qseq))
+                if homol:
+                    lines.append("             %s" % homol)
+                lines.append("%10s - %s" % ('Hit', hseq))
+            else:
+                # adjust continuation character length, so we don't display
+                # the same residues twice
+                if self.aln_len - 66 > 3:
+                    cont = '~' * 3
+                else:
+                    cont = '~' * (self.aln_span - 66)
+                lines.append("%10s - %s%s%s" % ('Query', \
+                                qseq[:59], cont, qseq[-5:]))
+                if homol:
+                    lines.append("             %s%s%s" % \
+                            (homol[:59], cont, homol[-5:]))
+                lines.append("%10s - %s%s%s" % ('Hit', \
+                                hseq[:59], cont, hseq[-5:]))
+
+        return '\n'.join(lines)
+
+    ## sequence properties ##
+    def _prep_seq(self, seq, seq_type):
+        """Transforms a sequence into a SeqRecord object).
+
+        Argument:
+        seq -- String of sequence.
+        seq_type -- String of sequence type, must be 'hit' or 'query'
+
+        """
+        assert seq_type in ('hit', 'query')
+        # check length if the opposite sequence is not None
+        opp_type = 'query' if seq_type == 'query' else 'query'
+        opp_seq = getattr(self, opp_type, None)
+        if opp_seq is not None:
+            if len(seq) != len(opp_seq):
+                raise ValueError("Sequence lengths do not match; %r vs %r: " \
+                        "%r vs %r." % (seq_type, opp_type, len(seq), \
+                        len(opp_seq)))
+
+        seq_name = 'aligned %s sequence' % seq_type
+        if isinstance(seq, SeqRecord):
+            return seq
+        elif isinstance(seq, basestring):
+            return SeqRecord(Seq(seq, self.alphabet), name=seq_name)
+        else:
+            raise TypeError("%s sequence must be a string or a "
+                    "SeqRecord object." % seq_type.capitalize())
 
     def _hit_get(self):
         return self._hit
 
     def _hit_set(self, value):
-        self._hit = self._prep_seq(value, self.hit_id, 'hit')
+        self._hit = self._prep_seq(value, 'hit')
 
     hit = property(fget=_hit_get, fset=_hit_set)
 
@@ -1252,352 +1448,216 @@ class HSP(BaseHSP):
         return self._query
 
     def _query_set(self, value):
-        self._query = self._prep_seq(value, self.query_id, 'query')
+        self._query = self._prep_seq(value, 'query')
 
     query = property(fget=_query_get, fset=_query_set)
 
     def _alignment_get(self):
-        if not hasattr(self, '_alignment'):
-            self._alignment = MultipleSeqAlignment([self.query, self.hit], \
-                    self.alphabet)
-        return self._alignment
+        if self.query is None and self.hit is None:
+            return None
+        elif self.hit is None:
+            return MultipleSeqAlignment([self.query], self.alphabet)
+        elif self.query is None:
+            return MultipleSeqAlignment([self.hit], self.alphabet)
+        else:
+            return MultipleSeqAlignment([self.query, self.hit], self.alphabet)
 
     alignment = property(fget=_alignment_get)
 
-    def _hit_description_set(self, value):
-        BaseHSP._hit_description_set(self, value)
-        if hasattr(self, 'hit'):
-            self.hit.description = value
-
-    hit_description = property(fget=BaseHSP._hit_description_get, \
-            fset=_hit_description_set)
-
-    def _query_description_set(self, value):
-        BaseHSP._query_description_set(self, value)
-        if hasattr(self, 'query'):
-            self.query.description = value
-
-    query_description = property(fget=BaseHSP._query_description_get, \
-            fset=_query_description_set)
-
-    # The properties aln_span, gap_num, mismatch_num, and ident_num are all
-    # interconnected ~ we can infer the value of one if the others are all
-    # known. So the idea here is to enable the HSP object to compute these
-    # values if enough is known.
-    # However, the golden rule here is that *parsed values takes precedent
-    # over computed values*. So if the parsed information is available,
-    # computation is never done as the parsed values are used instead.
-
-    def _aln_span_get(self):
-        if not hasattr(self, '_aln_span'):
+    def _aln_len_get(self):
+        # length of alignment (gaps included)
+        # alignment span can be its own attribute, or computed from
+        # query / hit length
+        if not hasattr(self, '_aln_len'):
             if hasattr(self, 'query'):
-                self._aln_span = len(self.query)
+                self._aln_len = len(self.query)
             elif hasattr(self, 'hit'):
-                self._aln_span = len(self.hit)
+                self._aln_len = len(self.hit)
             else:
-                try:
-                    self._aln_span = self._ident_num + self._mismatch_num + \
-                            self._gap_num
-                except AttributeError:
-                    raise AttributeError("Not enough is known to compute "
-                            "alignment span")
+                self._aln_len = None
 
-        return self._aln_span
+        return self._aln_len
 
-    def _aln_span_set(self, value):
-        self._aln_span = value
+    def _aln_len_set(self, value):
+        self._aln_len = value
 
-    aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
+    aln_len = property(fget=_aln_len_get, fset=_aln_len_set)
 
-    def _ident_num_get(self):
-        if not hasattr(self, '_ident_num'):
-            try:
-                self._ident_num = self._aln_span - self._mismatch_num - \
-                        self._gap_num
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute identities")
-        return self._ident_num
+    ## id and description properties ##
+    def _set_id_or_desc(self, value, seq_type, attr):
+        assert seq_type in ('query', 'hit')
+        assert attr in ('id', 'description')
+        # set own attribute
+        setattr(self, '_%s_%s' % (seq_type, attr), value)
+        # and the seqrecord object's, if it exists
+        if getattr(self, seq_type) is not None:
+            seq = getattr(self, seq_type)
+            setattr(seq, attr, value)
 
-    def _ident_num_set(self, value):
-        self._ident_num = value
-
-    ident_num = property(fget=_ident_num_get, fset=_ident_num_set)
-
-    def _mismatch_num_get(self):
-        if not hasattr(self, '_mismatch_num'):
-            try:
-                self._mismatch_num = self._aln_span - self._ident_num - \
-                        self._gap_num
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute mismatches")
-        return self._mismatch_num
-
-    def _mismatch_num_set(self, value):
-        self._mismatch_num = value
-
-    mismatch_num = property(fget=_mismatch_num_get, fset=_mismatch_num_set)
-
-    def _gap_num_get(self):
-        if not hasattr(self, '_gap_num'):
-            try:
-                self._gap_num = self._aln_span - self._ident_num - \
-                        self._mismatch_num
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute gaps")
-        return self._gap_num
-
-    def _gap_num_set(self, value):
-        self._gap_num = value
-
-    gap_num = property(fget=_gap_num_get, fset=_gap_num_set)
-
-    def _gapopen_num_get(self):
-        """Computes the number of gap openings in an HSP object."""
-        if not hasattr(self, '_gapopen_num'):
-            try:
-                query_gapopen = len(re.findall(_RE_GAPOPEN, \
-                        str(self.query.seq)))
-                hit_gapopen = len(re.findall(_RE_GAPOPEN, \
-                        str(self.hit.seq)))
-                self._gapopen_num = query_gapopen + hit_gapopen
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute gap openings")
-
-        return self._gapopen_num
-
-    def _gapopen_num_set(self, value):
-        self._gapopen_num = value
-
-    gapopen_num = property(fget=_gapopen_num_get, fset=_gapopen_num_set)
-
-    # for percent values (ident_pct, pos_pct, and gap_pct), the same golden
-    # rule follows: parsed values takes precedent over computed values
-
-    def _ident_pct_get(self):
-        if not hasattr(self, '_ident_pct'):
-            try:
-                self._ident_pct = self.ident_num / float(self.aln_span) * 100
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute identity percentage")
-        return self._ident_pct
-
-    def _ident_pct_set(self, value):
-        self._ident_pct = value
-
-    ident_pct = property(fget=_ident_pct_get, fset=_ident_pct_set)
-
-    def _pos_pct_get(self):
-        if not hasattr(self, '_pos_pct'):
-            try:
-                self._pos_pct = self.pos_num / float(self.aln_span) * 100
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute positive percentage")
-        return self._pos_pct
-
-    def _pos_pct_set(self, value):
-        self._pos_pct = value
-
-    pos_pct = property(fget=_pos_pct_get, fset=_pos_pct_set)
-
-    def _gap_pct_get(self):
-        if not hasattr(self, '_gap_pct'):
-            try:
-                self._gap_pct = self.gap_num / float(self.aln_span) * 100
-            except AttributeError:
-                raise AttributeError("Not enough is known to compute gap percentage")
-        return self._gap_pct
-
-    def _gap_pct_set(self, value):
-        self._gap_pct = value
-
-    gap_pct = property(fget=_gap_pct_get, fset=_gap_pct_set)
-
-
-class BatchHSP(BaseHSP):
-
-    """Class representing a HSP separated by gaps into blocks."""
-
-    def __init__(self, blocks):
-        """Initializes a BatchHSP object.
-
-        Arguments:
-        blocks -- List of HSP objects, must contain at least 1 HSP object.
-
-        """
-        # check that all hsps contain the same hit id, query id, and alphabet
-        assert len(set([block.hit_id for block in blocks])) == 1
-        assert len(set([block.query_id for block in blocks])) == 1
-        assert len(set([block.alphabet for block in blocks])) == 1
-
-        BaseHSP.__init__(self, blocks[0].hit_id, blocks[0].query_id, \
-                blocks[0].alphabet)
-
-        self._blocks = []
-        for block in blocks:
-            self._validate_block(block)
-            self._blocks.append(block)
-
-    def __contains__(self, hsp):
-        """Checks whether an HSP object is present in the BatchHSP object."""
-        return hsp in self._blocks
-
-    def __iter__(self):
-        return iter(self._blocks)
-
-    def __len__(self):
-        return len(self.blocks)
-
-    def __nonzero__(self):
-        return bool(self._blocks)
-
-    def __repr__(self):
-        info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
-
-        try:
-            info += ", %i blocks" % len(self)
-        except TypeError:
-            pass
-
-        return "%s(%s)" % (self.__class__.__name__, info)
-
-    def __str__(self):
-        lines = []
-
-        # set hsp line and table
-        if not self.blocks:
-            lines.append('     Blocks: ?')
-        else:
-            lines.append('     Blocks: %s  %s  %s  %s' % \
-                    ('-'*3, '-'*18, '-'*18, '-'*18))
-            pattern = '%16s  %18s  %18s  %18s'
-            lines.append(pattern % ('#', 'Alignment span', 'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*3, '-'*18, '-'*18, '-'*18))
-            for idx, block in enumerate(self.blocks):
-                # alignment span
-                aln_span = BatchHSP._attr_display(block, 'aln_span')
-                # query region
-                query_start = BatchHSP._attr_display(block, 'query_start')
-                query_end = BatchHSP._attr_display(block, 'query_end')
-                query_range = '%s:%s' % (query_start, query_end)
-                # max column length is 18
-                query_range = BatchHSP._concat_display(query_range, 18, '~')
-                # hit region
-                hit_start = BatchHSP._attr_display(block, 'hit_start')
-                hit_end = BatchHSP._attr_display(block, 'hit_end')
-                hit_range = '%s:%s' % (hit_start, hit_end)
-                hit_range = BatchHSP._concat_display(hit_range, 18, '~')
-                # append the hsp row
-                lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
-
-        return self._display_aln_header() + '\n' + '\n'.join(lines)
-
-    def __getitem__(self, idx):
-        # if key is slice, return a new Hit instance
-        if isinstance(idx, slice):
-            obj = self.__class__(self._blocks[idx])
-            self._transfer_attrs(obj)
-            return obj
-        return self._blocks[idx]
-
-    def _validate_block(self, block):
-        """Validates an HSP block.
-
-        Valid HSP objects have the same hit_id as the Hit object ID and the
-        same query_id as the Hit object's query_id.
-
-        """
-        if not isinstance(block, HSP):
-            raise TypeError("BatchHSP objects can only contain HSP " \
-                    "objects.")
-        if block.hit_id != self.hit_id:
-            raise ValueError("Expected HSP with hit ID '%s', " \
-                    "found '%s' instead." % (self.hit_id, block.hit_id))
-        if block.query_id != self.query_id:
-            raise ValueError("Expected HSP with query ID '%s', " \
-                    "found '%s' instead." % (self.query_id, block.query_id))
-
-    def _blocks_get(self):
-        return self._blocks
-
-    blocks = property(fget=_blocks_get)
-
-    def _hits_get(self):
-        return [block.hit for block in self.blocks]
-
-    hits = property(fget=_hits_get)
-
-    def _queries_get(self):
-        return [block.query for block in self.blocks]
-
-    queries = property(fget=_queries_get)
-
-    def _alignments_get(self):
-        return [block.alignment for block in self.blocks]
-
-    alignments = property(fget=_alignments_get)
+    def _hit_description_get(self):
+        return self._hit_description
 
     def _hit_description_set(self, value):
-        BaseHSP._hit_description_set(self, value)
-        for block in self.blocks:
-            block.hit_description = value
+        self._set_id_or_desc(value, 'hit', 'description')
 
-    hit_description = property(fget=BaseHSP._hit_description_get, \
+    hit_description = property(fget=_hit_description_get, \
             fset=_hit_description_set)
 
-    def _query_description_set(self, value):
-        BaseHSP._query_description_set(self, value)
-        for block in self.blocks:
-            block.query_description = value
+    def _query_description_get(self):
+        return self._query_description
 
-    query_description = property(fget=BaseHSP._query_description_get, \
+    def _query_description_set(self, value):
+        self._set_id_or_desc(value, 'query', 'description')
+
+    query_description = property(fget=_query_description_get, \
             fset=_query_description_set)
 
-    def _hit_ranges_get(self):
-        return [block.hit_range for block in self.blocks]
+    def _hit_id_get(self):
+        return self._hit_id
 
-    hit_ranges = property(fget=_hit_ranges_get)
+    def _hit_id_set(self, value):
+        self._set_id_or_desc(value, 'hit', 'id')
 
-    def _query_ranges_get(self):
-        return [block.query_range for block in self.blocks]
+    hit_id = property(fget=_hit_id_get, \
+            fset=_hit_id_set)
 
-    query_ranges = property(fget=_query_ranges_get)
+    def _query_id_get(self):
+        return self._query_id
 
-    def _hit_spans_get(self):
-        return [block.hit_span for block in self.blocks]
+    def _query_id_set(self, value):
+        self._set_id_or_desc(value, 'query', 'id')
 
-    hit_spans = property(fget=_hit_spans_get)
+    query_id = property(fget=_query_id_get, \
+            fset=_query_id_set)
 
-    def _query_spans_get(self):
-        return [block.query_span for block in self.blocks]
+    ## strand properties ##
+    def _prep_strand(self, strand):
+        # follow SeqFeature's convention
+        if not strand in (-1, 0, 1, None):
+            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
+                    strand)
+        return strand
 
-    query_spans = property(fget=_query_spans_get)
+    def _get_strand(self, seq_type):
+        assert seq_type in ('hit', 'query')
+        strand = getattr(self, '_%s_strand' % seq_type)
+
+        if strand is None:
+            # try to compute strand from frame
+            frame = getattr(self, '%s_frame' % seq_type)
+            if frame is not None:
+                try:
+                    strand = frame / abs(frame)
+                except ZeroDivisionError:
+                    strand = 0
+                setattr(self, '%s_strand' % seq_type, strand)
+
+        return strand
+
+    def _hit_strand_get(self):
+        return self._get_strand('hit')
+
+    def _hit_strand_set(self, value):
+        self._hit_strand = self._prep_strand(value)
+
+    hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set)
+
+    def _query_strand_get(self):
+        return self._get_strand('query')
+
+    def _query_strand_set(self, value):
+        self._query_strand = self._prep_strand(value)
+
+    query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
+
+    ## frame properties ##
+    def _prep_frame(self, frame):
+        if not frame in (-3, -2, -1, 0, 1, 2, 3, None):
+            raise ValueError("Strand should be an integer between -3 and 3, "
+                    "or None; not %r" % frame)
+        return frame
+
+    def _hit_frame_get(self):
+        return self._hit_frame
+
+    def _hit_frame_set(self, value):
+        self._hit_frame = self._prep_frame(value)
+
+    hit_frame = property(fget=_hit_frame_get, fset=_hit_frame_set)
+
+    def _query_frame_get(self):
+        return self._query_frame
+
+    def _query_frame_set(self, value):
+        self._query_frame = self._prep_frame(value)
+
+    query_frame = property(fget=_query_frame_get, fset=_query_frame_set)
+
+    ## coordinate properties ##
+    def _prep_coord(self, coord):
+        if not isinstance(coord, int):
+            if coord is not None:
+                raise ValueError("Coordinate must be an integer or None.")
+        return coord
 
     def _hit_start_get(self):
-        return min((block.hit_start for block in self.blocks))
+        return self._hit_start
 
-    hit_start = property(fget=_hit_start_get)
+    def _hit_start_set(self, value):
+        self._hit_start = self._prep_coord(value)
+
+    hit_start = property(fget=_hit_start_get, fset=_hit_start_set)
 
     def _query_start_get(self):
-        return min((block.query_start for block in self.blocks))
+        return self._query_start
 
-    query_start = property(fget=_query_start_get)
+    def _query_start_set(self, value):
+        self._query_start = self._prep_coord(value)
+
+    query_start = property(fget=_query_start_get, fset=_query_start_set)
 
     def _hit_end_get(self):
-        return max((block.hit_end for block in self.blocks))
+        return self._hit_end
 
-    hit_end = property(fget=_hit_end_get)
+    def _hit_end_set(self, value):
+        self._hit_end = self._prep_coord(value)
+
+    hit_end = property(fget=_hit_end_get, fset=_hit_end_set)
 
     def _query_end_get(self):
-        return max((block.query_end for block in self.blocks))
+        return self._query_end
 
-    query_end = property(fget=_query_end_get)
+    def _query_end_set(self, value):
+        self._query_end = self._prep_coord(value)
 
-    def find(self, hsp):
-        """Returns the index of a given HSP object, zero-based."""
+    query_end = property(fget=_query_end_get, fset=_query_end_set)
+
+    ## coordinate-dependent properties ##
+    def _hit_span_get(self):
         try:
-            return self._blocks.index(hsp)
-        except ValueError:
-            return -1
+            return self.hit_end - self.hit_start
+        except TypeError:  # triggered if any of the coordinates are None
+            return None
+
+    hit_span = property(fget=_hit_span_get)
+
+    def _query_span_get(self):
+        try:
+            return self.query_end - self.query_start
+        except TypeError:  # triggered if any of the coordinates are None
+            return None
+
+    query_span = property(fget=_query_span_get)
+
+    def _hit_range_get(self):
+        return (self.hit_start, self.hit_end)
+
+    hit_range = property(fget=_hit_range_get)
+
+    def _query_range_get(self):
+        return (self.query_start, self.query_end)
+
+    query_range = property(fget=_query_range_get)
 
 
 def _test():
