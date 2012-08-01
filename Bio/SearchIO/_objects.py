@@ -452,16 +452,16 @@ class QueryResult(BaseSearchObject):
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_filter(self, func=None, batch=True):
+    def hsp_filter(self, func=None):
         """Creates a new QueryResult object whose HSP objects pass the filter function."""
-        hits = filter(None, (hit.filter(func, batch) for hit in self.hits))
+        hits = filter(None, (hit.filter(func) for hit in self.hits))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
-    def hsp_map(self, func=None, batch=True):
+    def hsp_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its HSPs."""
-        hits = filter(None, (hit.map(func, batch) for hit in self.hits[:]))
+        hits = filter(None, (hit.map(func) for hit in self.hits[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
