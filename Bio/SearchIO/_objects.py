@@ -718,6 +718,7 @@ class Hit(BaseSearchObject):
         self._id = id
         self._query_id= query_id
         self._description = ''
+        self._query_description = ''
 
         self._items = []
         for hsp in hsps:
