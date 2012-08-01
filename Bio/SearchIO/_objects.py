@@ -1377,7 +1377,7 @@ class HSPFragment(BaseHSP):
             try:
                 hseq = str(self.hit.seq)
             except AttributeError:  # hit is None
-                qseq = '?'
+                hseq = '?'
 
             # homology line
             homol = ''
@@ -1469,9 +1469,9 @@ class HSPFragment(BaseHSP):
         # alignment span can be its own attribute, or computed from
         # query / hit length
         if not hasattr(self, '_aln_len'):
-            if hasattr(self, 'query'):
+            if self.query is not None:
                 self._aln_len = len(self.query)
-            elif hasattr(self, 'hit'):
+            elif self.hit is not None:
                 self._aln_len = len(self.hit)
             else:
                 self._aln_len = None
