@@ -11207,7 +11207,7 @@ we don't have any problems with overlapping cross-links. One way to tackle that
 is to use transparency in ReportLab, by using colors with their alpha channel set.
 However, this kind of shaded color scheme combined with overlap transparency
 would be difficult to interpret.
-
+%Again, HTML and PDF versions for the figure
 \begin{htmlonly}
 \noindent The result:
 
@@ -11233,21 +11233,24 @@ between proteins which are drawn in a strand specific manor. It can
 help to add a background region (a feature using the `BOX' sigil) on the
 feature track to extend the cross link. Also, we could reduce the vertical
 height of the feature tracks to allocate more to the links instead -- one
-way to do that is to allocate space for empty tracks. These improvements
+way to do that is to allocate space for empty tracks. Furthermore,
+in cases like this where there are no large gene overlaps, we can use
+the axis-straddling \verb|BIGARROW| sigil, which allows use to further
+reduce the vertical space needed for the track. These improvements
 are demonstrated in the example script \texttt{Proux\_et\_al\_2002\_Figure\_6.py}
 included in the \texttt{Doc/examples} folder of the Biopython source code.
 %TODO - Add a link get the file directly (for Windows users etc).
 \begin{htmlonly}
 \noindent The result:
 
-\imgsrc[width=565, height=400]{images/three_track_cl2.png}
+\imgsrc[width=565, height=400]{images/three_track_cl2a.png}
 
 \end{htmlonly}
 \begin{latexonly}
 \noindent The expected output is shown in Figure~\ref{fig:three_track_cl2}.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/three_track_cl2.png}
+\includegraphics[width=\textwidth]{images/three_track_cl2a.png}
 \caption{Linear diagram with three tracks for Lactococcus phage Tuc2009
 (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
 \textit{Listeria innocua} Clip11262 (NC\_003212) plus cross-links
