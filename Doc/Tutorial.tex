@@ -9779,11 +9779,17 @@ It's just as easy to look for positions, giving rise to high log-odds scores aga
 ...     print pos,score
 ... 
 10 8.44065060871
--12 7.06213898545
+-14 7.06213898545
 15 8.44065060871
--20 8.44065060871
+-6 8.44065060871
 21 8.44065060871
 \end{verbatim}
+The negative positions refer to instances of the motif found on the
+reverse strand of the test sequence, and follow the Python convention
+on negative indices. Therefore, the instance of the motif at \verb|pos|
+is located at \verb|test_seq[pos:pos+len(m)]| both for positive and for
+negative values of \verb|pos|.
+
 You may notice the threshold parameter, here set arbitrarily to
 $5.0$. This is in $log_2$, so we are now looking only for words, which
 are 32 times more likely to occur under the motif model than in the

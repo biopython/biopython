@@ -204,15 +204,16 @@ class Motif(object):
         if both:
             rc = self.reverse_complement()
             
-        sequence=sequence.tostring().upper()
-        for pos in xrange(0,len(sequence)-self.length+1):
+        sequence=sequence.upper()
+        n = len(sequence)
+        for pos in xrange(0,n-self.length+1):
             score = self.score_hit(sequence,pos,normalized,masked)
             if score > threshold:
                 yield (pos,score)
             if both:
                 rev_score = rc.score_hit(sequence,pos,normalized,masked)
                 if rev_score > threshold:
-                    yield (-pos,rev_score)
+                    yield (pos-n,rev_score)
 
     def dist_pearson(self, motif, masked = 0):
         """
