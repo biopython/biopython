@@ -10795,7 +10795,9 @@ the next two images.
 \begin{latexonly}
 Figures~\ref{fig:gd_sigil_arrow_shafts} and~\ref{fig:gd_sigil_arrow_heads}.
 \end{latexonly}
-The arrows fit into a bounding box (as given by the default BOX sigil).
+The arrows fit into a bounding box (as given by the default BOX sigil),
+either above or below the axis for the forward or reverse strand, or
+straddling it (double the height) for strand-less features.
 
 There are two additional options to adjust the shapes of the arrows, firstly
 the thickness of the arrow shaft, given as a proportion of the height of the
@@ -10861,6 +10863,17 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
 \label{fig:gd_sigil_arrow_heads}
 \end{figure}
 \end{latexonly}
+
+Biopython 1.61 adds a new \verb|BIGARROW| sigil which always stradles
+the axis, pointing left for the reverse strand or right otherwise:
+
+\begin{verbatim}
+#A large arrow straddling the axis:
+gd_feature_set.add_feature(feature, sigil="BIGARROW")
+\end{verbatim}
+
+\noindent All the shaft and arrow head options shown above for the
+\verb|ARROW| sigil can be used for the \verb|BIGARROW| sigil too.
 
 \subsection{A nice example}
 \label{sec:gd_nice_example}
