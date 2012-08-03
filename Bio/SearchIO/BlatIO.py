@@ -482,7 +482,7 @@ class BlatPslWriter(object):
         qresult_lines = []
 
         for hit in qresult:
-            for hsp in hit.batch_hsps:
+            for hsp in hit.hsps:
 
                 line = []
                 line.append(hsp.match_num)
