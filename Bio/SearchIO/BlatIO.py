@@ -28,7 +28,7 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, BatchHSP, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -41,7 +41,7 @@ def _append_hit(qresult, hit):
     if hit not in qresult:
         qresult.append(hit)
     else:
-        for hsp in hit.batch_hsps:
+        for hsp in hit:
             qresult[hit.id].append(hsp)
 
 
@@ -168,55 +168,53 @@ def _create_batch_hsp(hid, qid, psl):
     else:
         assert len(query_ranges) == len(hit_ranges)
 
-    hsps = []
+    frags = []
     # iterating over query_ranges, but hit_ranges works just as well
     for idx, qcoords in enumerate(query_ranges):
         hseqlist = psl.get('tseqs')
         hseq = '' if not hseqlist else hseqlist[idx]
         qseqlist = psl.get('qseqs')
         qseq = '' if not qseqlist else qseqlist[idx]
-        hsp = HSP(hid, qid, hseq, qseq)
+        frag = HSPFragment(hid, qid, hit=hseq, query=qseq)
         # set coordinates
-        hsp.query_start = qcoords[0]
-        hsp.query_end = qcoords[1]
-        hsp.hit_start = hit_ranges[idx][0]
-        hsp.hit_end = hit_ranges[idx][1]
+        frag.query_start = qcoords[0]
+        frag.query_end = qcoords[1]
+        frag.hit_start = hit_ranges[idx][0]
+        frag.hit_end = hit_ranges[idx][1]
         # and strands
-        hsp.query_strand = qstrand
-        hsp.hit_strand = hstrand
-        hsps.append(hsp)
+        frag.query_strand = qstrand
+        frag.hit_strand = hstrand
+        frags.append(frag)
 
     # create batch hsp object
-    ghsp = BatchHSP(hsps)
+    hsp = HSP(frags)
     # check if start and end are set correctly
-    assert ghsp.query_start == psl['qstart']
-    assert ghsp.query_end == psl['qend']
-    assert ghsp.hit_start == psl['tstart']
-    assert ghsp.hit_end == psl['tend']
+    assert hsp.query_start == psl['qstart']
+    assert hsp.query_end == psl['qend']
+    assert hsp.hit_start == psl['tstart']
+    assert hsp.hit_end == psl['tend']
     # and check block spans as well
-    assert ghsp.query_spans == ghsp.hit_spans == psl['blocksizes']
+    assert hsp.query_spans == hsp.hit_spans == psl['blocksizes']
     # set its attributes
-    ghsp.match_num = psl['matches']
-    ghsp.mismatch_num = psl['mismatches']
-    ghsp.match_rep_num = psl['repmatches']
-    ghsp.n_num = psl['ncount']
-    ghsp.query_gapopen_num = psl['qnuminsert']
-    ghsp.query_gap_num = psl['qbaseinsert']
-    ghsp.hit_gapopen_num = psl['tnuminsert']
-    ghsp.hit_gap_num = psl['tbaseinsert']
+    hsp.match_num = psl['matches']
+    hsp.mismatch_num = psl['mismatches']
+    hsp.match_rep_num = psl['repmatches']
+    hsp.n_num = psl['ncount']
+    hsp.query_gapopen_num = psl['qnuminsert']
+    hsp.query_gap_num = psl['qbaseinsert']
+    hsp.hit_gapopen_num = psl['tnuminsert']
+    hsp.hit_gap_num = psl['tbaseinsert']
 
-    ghsp.query_strand = qstrand
-    ghsp.hit_strand = hstrand
-    ghsp.ident_num = psl['matches'] + psl['repmatches']
-    ghsp.gapopen_num = psl['qnuminsert'] + psl['tnuminsert']
-    ghsp.gap_num = psl['qbaseinsert'] + psl['tbaseinsert']
-    ghsp.query_is_protein = is_protein
-    ghsp.ident_pct = 100.0 - _calc_millibad(psl, is_protein) * 0.1
-    ghsp.score = _calc_score(psl, is_protein)
+    hsp.ident_num = psl['matches'] + psl['repmatches']
+    hsp.gapopen_num = psl['qnuminsert'] + psl['tnuminsert']
+    hsp.gap_num = psl['qbaseinsert'] + psl['tbaseinsert']
+    hsp.query_is_protein = is_protein
+    hsp.ident_pct = 100.0 - _calc_millibad(psl, is_protein) * 0.1
+    hsp.score = _calc_score(psl, is_protein)
     # helper flag, for writing
-    ghsp._has_hit_strand = len(psl['strand']) == 2
+    hsp._has_hit_strand = len(psl['strand']) == 2
 
-    return ghsp
+    return hsp
 
 
 class BlatPslIterator(object):
