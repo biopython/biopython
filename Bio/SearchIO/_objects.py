@@ -1361,11 +1361,10 @@ class HSPFragment(BaseHSP):
                 obj.hit_description = self.hit_description
             # alignment annotation should be transferred, since we can compute
             # the resulting annotation
-            if hasattr(self, 'alignment_annotation'):
-                obj.alignment_annotation = {}
-                for key, value in self.alignment_annotation.items():
-                    assert len(value[idx]) == len(obj)
-                    obj.alignment_annotation[key] = value[idx]
+            obj.alignment_annotation = {}
+            for key, value in self.alignment_annotation.items():
+                assert len(value[idx]) == len(obj)
+                obj.alignment_annotation[key] = value[idx]
             return obj
         else:
             raise TypeError("Slicing for HSP objects without "
