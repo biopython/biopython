@@ -1425,7 +1425,7 @@ class HSPFragment(BaseHSP):
         assert seq_type in ('hit', 'query')
         if seq is None: return seq # return immediately if seq is None
         # check length if the opposite sequence is not None
-        opp_type = 'query' if seq_type == 'query' else 'query'
+        opp_type = 'hit' if seq_type == 'query' else 'query'
         opp_seq = getattr(self, opp_type, None)
         if opp_seq is not None:
             if len(seq) != len(opp_seq):
