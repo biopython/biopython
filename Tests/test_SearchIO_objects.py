@@ -733,6 +733,15 @@ class HitCases(unittest.TestCase):
         filtered = self.hit.filter(filter_func)
         self.assertTrue(filtered is None)
 
+    def test_index(self):
+        """Test Hit.index"""
+        # index should accept hsp objects
+        self.assertEqual(1, self.hit.index(hsp112))
+
+    def test_index_not_present(self):
+        """Test Hit.index, when index is not present"""
+        self.assertRaises(ValueError, self.hit.index, hsp114)
+
     def test_map(self):
         """Test Hit.hsp_map"""
         # map should apply the given function to all contained HSPs
