@@ -6,7 +6,7 @@
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
 from Bio._py3k import _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -20,7 +20,7 @@ def _absorb_hit(qresult, hit):
         qresult.append(hit)
     except ValueError:
         assert hit.id in qresult
-        for hsp_item in hit.batch_hsps:
+        for hsp_item in hit.hsps:
             qresult[hit.id].append(hsp_item)
 
     return qresult
@@ -28,8 +28,7 @@ def _absorb_hit(qresult, hit):
 
 def _create_batch_hsp(hid, qid, hspd):
     """Returns a list of HSP objects from the given parsed HSP values."""
-    hsps = []
-
+    frags = []
     # we are iterating over query_ranges, but hit_ranges works just as well
     for idx, qcoords in enumerate(hspd['query_ranges']):
         # get sequences, create object
@@ -37,35 +36,34 @@ def _create_batch_hsp(hid, qid, hspd):
         hseq = '' if hseqlist is None else hseqlist[idx]
         qseqlist = hspd.get('query')
         qseq = '' if qseqlist is None else qseqlist[idx]
-        hsp = HSP(hid, qid, hseq, qseq)
+        frag = HSPFragment(hid, qid, hit=hseq, query=qseq)
         # coordinates
-        hsp.query_start = qcoords[0]
-        hsp.query_end = qcoords[1]
-        hsp.hit_start = hspd['hit_ranges'][idx][0]
-        hsp.hit_end = hspd['hit_ranges'][idx][1]
+        frag.query_start = qcoords[0]
+        frag.query_end = qcoords[1]
+        frag.hit_start = hspd['hit_ranges'][idx][0]
+        frag.hit_end = hspd['hit_ranges'][idx][1]
         # alignment annotation
         try:
             aln_annot = hspd.get('alignment_annotation', {})
             for key, value in aln_annot.items():
-                hsp.alignment_annotation[key] = value[idx]
+                frag.alignment_annotation[key] = value[idx]
         except IndexError:
             pass
         # strands
-        hsp.query_strand = hspd['query_strand']
-        hsp.hit_strand = hspd['hit_strand']
+        frag.query_strand = hspd['query_strand']
+        frag.hit_strand = hspd['hit_strand']
         # and append the hsp object to the list
-        hsps.append(hsp)
+        frags.append(frag)
 
-    ghsp = BatchHSP(hsps)
+    hsp = HSP(frags)
     # set batchhsp-specific attributes
     for attr in ('score', 'hit_scodon_ranges', 'query_scodon_ranges', \
             'hit_intron_ranges', 'query_intron_ranges', 'hit_ner_ranges', \
-            'query_ner_ranges', 'query_strand', 'hit_strand', 'model', \
-            'vulgar_comp', 'cigar_comp'):
+            'query_ner_ranges', 'model', 'vulgar_comp', 'cigar_comp'):
         if attr in hspd:
-            setattr(ghsp, attr, hspd[attr])
+            setattr(hsp, attr, hspd[attr])
 
-    return ghsp
+    return hsp
 
 
 def _parse_hit_or_query_line(line):
