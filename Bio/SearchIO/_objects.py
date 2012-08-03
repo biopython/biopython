@@ -1303,12 +1303,18 @@ class HSPFragment(BaseHSP):
     """Class representing a fragment of matching hit-query sequence."""
 
     def __init__(self, hit_id=None, query_id=None, hit='', query='', \
-            alphabet=single_letter_alphabet, aln_annotation={}):
+            aln_annotation=None, alphabet=single_letter_alphabet):
 
         if hit_id is None:
             raise ValueError("Hit ID string is required for HSPFragment creation.")
         if query_id is None:
             raise ValueError("Query ID string is required for HSPFragment creation.")
+
+        # no callables in default args!
+        if aln_annotation is None:
+            self.alignment_annotation = {}
+        else:
+            self.alignment_annotation = aln_annotation
 
         self.alphabet = alphabet
         for seq_type in ('query', 'hit'):
@@ -1322,7 +1328,6 @@ class HSPFragment(BaseHSP):
                 setattr(self, '%s_%s' % (seq_type, attr), None)
             attr_name = '%s_id' % seq_type
             setattr(self, attr_name, eval(attr_name))
-        self.alignment_annotation = aln_annotation
         self.hit_description = ''
         self.query_description = ''
 
