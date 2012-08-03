@@ -505,6 +505,8 @@ class BlastTabWriter(object):
                         value = '%i/%i' % (hsp.query_frame, hsp.hit_frame)
                     elif field in _COLUMN_HSP:
                         value = getattr(hsp, _COLUMN_HSP[field][0])
+                    elif field in _COLUMN_FRAG:
+                        value = getattr(hsp, _COLUMN_FRAG[field][0])
                     else:
                         assert field not in _SUPPORTED_FIELDS
                         continue
