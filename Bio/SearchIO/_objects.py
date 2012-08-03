@@ -186,9 +186,9 @@ class QueryResult(BaseSearchObject):
         self._hit_key_function = hit_key_function
         self._hits = OrderedDict()
         # default program, target, version, and description
-        self.program = '<unknown>'
-        self.target = '<unknown>'
-        self.version = '<unknown>'
+        self.program = '<unknown program>'
+        self.target = '<unknown target>'
+        self.version = '<unknown version>'
         self._description = ''
 
         # validate Hit objects and fill up self._hits
