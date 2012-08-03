@@ -846,9 +846,9 @@ class HSPSingleFragmentCases(unittest.TestCase):
         self.assertTrue('ATCAGT', str(aln[0].seq))
         self.assertTrue('AT-ACT', str(aln[1].seq))
 
-    def test_aln_len(self):
-        """Test HSP.aln_len property"""
-        self.assertEqual(6, self.hsp.aln_len)
+    def test_aln_span(self):
+        """Test HSP.aln_span property"""
+        self.assertEqual(6, self.hsp.aln_span)
 
     def test_span(self):
         """Test HSP span properties"""
@@ -1030,8 +1030,8 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
     def test_len(self):
         """Test HSPFragment.__len__, no alignments"""
         self.assertRaises(TypeError, len, self)
-        # len is a shorthand for .aln_len, and it can be set manually
-        self.fragment.aln_len = 5
+        # len is a shorthand for .aln_span, and it can be set manually
+        self.fragment.aln_span = 5
         self.assertEqual(5,len(self.fragment))
 
     def test_repr(self):
@@ -1039,7 +1039,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         # test for minimum repr
         self.assertEqual("HSPFragment(hit_id='hit_id', query_id='query_id')", \
                 repr(self.fragment))
-        self.fragment.aln_len = 5
+        self.fragment.aln_span = 5
         self.assertEqual("HSPFragment(hit_id='hit_id', query_id='query_id', " \
                 "5 columns)", repr(self.fragment))
 

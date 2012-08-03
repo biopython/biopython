@@ -82,7 +82,7 @@ _COLUMN_HSP = {
     'gapopen': ('gapopen_num', int),
 }
 _COLUMN_FRAG = {
-    'length': ('aln_len', int),
+    'length': ('aln_span', int),
     'qstart': ('query_start', int),
     'qend': ('query_end', int),
     'sstart': ('hit_start', int),

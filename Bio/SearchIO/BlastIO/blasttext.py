@@ -67,7 +67,7 @@ class BlastTextIterator(object):
                 for bhsp in aln.hsps:
                     frag = HSPFragment(hid, qid)
                     # set alignment length
-                    frag.aln_len = bhsp.identities[1]
+                    frag.aln_span = bhsp.identities[1]
                     # set frames
                     try:
                         frag.query_frame = int(bhsp.frame[0])
@@ -124,7 +124,7 @@ class BlastTextIterator(object):
                     hsp.ident_num = bhsp.identities[0]
                     hsp.pos_num = bhsp.positives[0]
                     if hsp.pos_num is None:
-                        hsp.pos_num = hsp[0].aln_len
+                        hsp.pos_num = hsp[0].aln_span
 
                     hit.append(hsp)
 

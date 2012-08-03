@@ -82,7 +82,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(490, hsp.aln_len)
+        self.assertEqual(490, hsp.aln_span)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(905.0, hsp.bitscore)
         self.assertEqual(490.0, hsp.bitscore_raw)
@@ -113,7 +113,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(490, hsp.aln_len)
+        self.assertEqual(490, hsp.aln_span)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(900.0, hsp.bitscore)
         self.assertEqual(487.0, hsp.bitscore_raw)
@@ -162,7 +162,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(62, hsp.aln_len)
+        self.assertEqual(62, hsp.aln_span)
         self.assertEqual(3e-24, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -193,7 +193,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(62, hsp.aln_len)
+        self.assertEqual(62, hsp.aln_span)
         self.assertEqual(3e-24, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -216,7 +216,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(53, hsp.aln_len)
+        self.assertEqual(53, hsp.aln_span)
         self.assertEqual(3e-19, hsp.evalue)
         self.assertEqual(99.0, hsp.bitscore)
         self.assertEqual(53.0, hsp.bitscore_raw)
@@ -275,7 +275,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(490, hsp.aln_len)
+        self.assertEqual(490, hsp.aln_span)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(905.0, hsp.bitscore)
         self.assertEqual(490.0, hsp.bitscore_raw)
@@ -306,7 +306,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(490, hsp.aln_len)
+        self.assertEqual(490, hsp.aln_span)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(900.0, hsp.bitscore)
         self.assertEqual(487.0, hsp.bitscore_raw)
@@ -347,7 +347,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(62, hsp.aln_len)
+        self.assertEqual(62, hsp.aln_span)
         self.assertEqual(6e-29, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -370,7 +370,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq)[-40:])
         # third qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(53, hsp.aln_len)
+        self.assertEqual(53, hsp.aln_span)
         self.assertEqual(6e-24, hsp.evalue)
         self.assertEqual(99.0, hsp.bitscore)
         self.assertEqual(53.0, hsp.bitscore_raw)
@@ -401,7 +401,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(62, hsp.aln_len)
+        self.assertEqual(62, hsp.aln_span)
         self.assertEqual(6e-29, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -471,7 +471,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(102, hsp.aln_len)
+        self.assertEqual(102, hsp.aln_span)
         self.assertEqual(1e-66, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -502,7 +502,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(102, hsp.aln_len)
+        self.assertEqual(102, hsp.aln_span)
         self.assertEqual(1e-40, hsp.evalue)
         self.assertEqual(139.0, hsp.bitscore)
         self.assertEqual(350.0, hsp.bitscore_raw)
@@ -551,7 +551,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(1e-63, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(522.0, hsp.bitscore_raw)
@@ -574,7 +574,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(100, hsp.aln_len)
+        self.assertEqual(100, hsp.aln_span)
         self.assertEqual(0.002, hsp.evalue)
         self.assertEqual(43.5, hsp.bitscore)
         self.assertEqual(101.0, hsp.bitscore_raw)
@@ -605,7 +605,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(2e-63, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -628,7 +628,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(100, hsp.aln_len)
+        self.assertEqual(100, hsp.aln_span)
         self.assertEqual(0.001, hsp.evalue)
         self.assertEqual(43.9, hsp.bitscore)
         self.assertEqual(102.0, hsp.bitscore_raw)
@@ -687,7 +687,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(102, hsp.aln_len)
+        self.assertEqual(102, hsp.aln_span)
         self.assertEqual(2e-46, hsp.evalue)
         self.assertEqual(139.0, hsp.bitscore)
         self.assertEqual(350.0, hsp.bitscore_raw)
@@ -718,7 +718,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(105, hsp.aln_len)
+        self.assertEqual(105, hsp.aln_span)
         self.assertEqual(7e-27, hsp.evalue)
         self.assertEqual(89.0, hsp.bitscore)
         self.assertEqual(219.0, hsp.bitscore_raw)
@@ -759,7 +759,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(2e-69, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(522.0, hsp.bitscore_raw)
@@ -782,7 +782,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(100, hsp.aln_len)
+        self.assertEqual(100, hsp.aln_span)
         self.assertEqual(3e-09, hsp.evalue)
         self.assertEqual(43.5, hsp.bitscore)
         self.assertEqual(101.0, hsp.bitscore_raw)
@@ -813,7 +813,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(3e-69, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -836,7 +836,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(100, hsp.aln_len)
+        self.assertEqual(100, hsp.aln_span)
         self.assertEqual(2e-09, hsp.evalue)
         self.assertEqual(43.9, hsp.bitscore)
         self.assertEqual(102.0, hsp.bitscore_raw)
@@ -906,7 +906,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(140, hsp.aln_len)
+        self.assertEqual(140, hsp.aln_span)
         self.assertEqual(4e-57, hsp.evalue)
         self.assertEqual(192.0, hsp.bitscore)
         self.assertEqual(487.0, hsp.bitscore_raw)
@@ -937,7 +937,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(140, hsp.aln_len)
+        self.assertEqual(140, hsp.aln_span)
         self.assertEqual(3e-52, hsp.evalue)
         self.assertEqual(179.0, hsp.bitscore)
         self.assertEqual(454.0, hsp.bitscore_raw)
@@ -986,7 +986,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(95, hsp.aln_len)
+        self.assertEqual(95, hsp.aln_span)
         self.assertEqual(2e-32, hsp.evalue)
         self.assertEqual(121.0, hsp.bitscore)
         self.assertEqual(304.0, hsp.bitscore_raw)
@@ -1009,7 +1009,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('VEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(72, hsp.aln_len)
+        self.assertEqual(72, hsp.aln_span)
         self.assertEqual(2e-06, hsp.evalue)
         self.assertEqual(51.6, hsp.bitscore)
         self.assertEqual(122.0, hsp.bitscore_raw)
@@ -1040,7 +1040,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(88, hsp.aln_len)
+        self.assertEqual(88, hsp.aln_span)
         self.assertEqual(1e-29, hsp.evalue)
         self.assertEqual(114.0, hsp.bitscore)
         self.assertEqual(286.0, hsp.bitscore_raw)
@@ -1063,7 +1063,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('VETKFPYVGQAGLELPTSGDLPTSASQSAKITGVSHRAWP', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(69, hsp.aln_len)
+        self.assertEqual(69, hsp.aln_span)
         self.assertEqual(1e-06, hsp.evalue)
         self.assertEqual(52.4, hsp.bitscore)
         self.assertEqual(124.0, hsp.bitscore_raw)
@@ -1122,7 +1122,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(95, hsp.aln_len)
+        self.assertEqual(95, hsp.aln_span)
         self.assertEqual(3e-38, hsp.evalue)
         self.assertEqual(121.0, hsp.bitscore)
         self.assertEqual(304.0, hsp.bitscore_raw)
@@ -1145,7 +1145,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('VEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq)[-40:])
         # second qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(72, hsp.aln_len)
+        self.assertEqual(72, hsp.aln_span)
         self.assertEqual(3e-12, hsp.evalue)
         self.assertEqual(51.6, hsp.bitscore)
         self.assertEqual(122.0, hsp.bitscore_raw)
@@ -1176,7 +1176,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(88, hsp.aln_len)
+        self.assertEqual(88, hsp.aln_span)
         self.assertEqual(2e-35, hsp.evalue)
         self.assertEqual(114.0, hsp.bitscore)
         self.assertEqual(286.0, hsp.bitscore_raw)
@@ -1199,7 +1199,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('VETKFPYVGQAGLELPTSGDLPTSASQSAKITGVSHRAWP', str(hsp.hit.seq)[-40:])
         # second qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(69, hsp.aln_len)
+        self.assertEqual(69, hsp.aln_span)
         self.assertEqual(2e-12, hsp.evalue)
         self.assertEqual(52.4, hsp.bitscore)
         self.assertEqual(124.0, hsp.bitscore_raw)
@@ -1269,7 +1269,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(43, hsp.aln_len)
+        self.assertEqual(43, hsp.aln_span)
         self.assertEqual(0.74, hsp.evalue)
         self.assertEqual(34.7, hsp.bitscore)
         self.assertEqual(78.0, hsp.bitscore_raw)
@@ -1300,7 +1300,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(74, hsp.aln_len)
+        self.assertEqual(74, hsp.aln_span)
         self.assertEqual(6.4, hsp.evalue)
         self.assertEqual(32.0, hsp.bitscore)
         self.assertEqual(71.0, hsp.bitscore_raw)
@@ -1349,7 +1349,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(1e-63, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -1372,7 +1372,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(100, hsp.aln_len)
+        self.assertEqual(100, hsp.aln_span)
         self.assertEqual(0.0005, hsp.evalue)
         self.assertEqual(43.9, hsp.bitscore)
         self.assertEqual(102.0, hsp.bitscore_raw)
@@ -1403,7 +1403,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(1e-62, hsp.evalue)
         self.assertEqual(199.0, hsp.bitscore)
         self.assertEqual(506.0, hsp.bitscore_raw)
@@ -1426,7 +1426,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('FGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(71, hsp.aln_len)
+        self.assertEqual(71, hsp.aln_span)
         self.assertEqual(2.8, hsp.evalue)
         self.assertEqual(32.7, hsp.bitscore)
         self.assertEqual(73.0, hsp.bitscore_raw)
@@ -1485,7 +1485,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(43, hsp.aln_len)
+        self.assertEqual(43, hsp.aln_span)
         self.assertEqual(1e-05, hsp.evalue)
         self.assertEqual(34.7, hsp.bitscore)
         self.assertEqual(78.0, hsp.bitscore_raw)
@@ -1516,7 +1516,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(59, hsp.aln_len)
+        self.assertEqual(59, hsp.aln_span)
         self.assertEqual(0.0001, hsp.evalue)
         self.assertEqual(31.6, hsp.bitscore)
         self.assertEqual(70.0, hsp.bitscore_raw)
@@ -1557,7 +1557,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199.0, hsp.bitscore)
         self.assertEqual(506.0, hsp.bitscore_raw)
@@ -1580,7 +1580,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('FGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(71, hsp.aln_len)
+        self.assertEqual(71, hsp.aln_span)
         self.assertEqual(4e-05, hsp.evalue)
         self.assertEqual(32.7, hsp.bitscore)
         self.assertEqual(73.0, hsp.bitscore_raw)
@@ -1611,7 +1611,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_len)
+        self.assertEqual(98, hsp.aln_span)
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(202.0, hsp.bitscore)
         self.assertEqual(515.0, hsp.bitscore_raw)
@@ -1634,7 +1634,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('FGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(100, hsp.aln_len)
+        self.assertEqual(100, hsp.aln_span)
         self.assertEqual(3e-09, hsp.evalue)
         self.assertEqual(45.1, hsp.bitscore)
         self.assertEqual(105.0, hsp.bitscore_raw)
@@ -1704,7 +1704,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(163, hsp.aln_len)
+        self.assertEqual(163, hsp.aln_span)
         self.assertEqual(2e-115, hsp.evalue)
         self.assertEqual(418.0, hsp.bitscore)
         self.assertEqual(908.0, hsp.bitscore_raw)
@@ -1735,7 +1735,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(163, hsp.aln_len)
+        self.assertEqual(163, hsp.aln_span)
         self.assertEqual(3e-114, hsp.evalue)
         self.assertEqual(415.0, hsp.bitscore)
         self.assertEqual(900.0, hsp.bitscore_raw)
@@ -1784,7 +1784,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(3, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(107, hsp.aln_len)
+        self.assertEqual(107, hsp.aln_span)
         self.assertEqual(4e-49, hsp.evalue)
         self.assertEqual(118.0, hsp.bitscore)
         self.assertEqual(252.0, hsp.bitscore_raw)
@@ -1807,7 +1807,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('WRDLGSLQAPPPGFTPFSCLSLPSSWDYRRPLPRPANFLY', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(44, hsp.aln_len)
+        self.assertEqual(44, hsp.aln_span)
         self.assertEqual(4e-49, hsp.evalue)
         self.assertEqual(100.0, hsp.bitscore)
         self.assertEqual(214.0, hsp.bitscore_raw)
@@ -1838,7 +1838,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(3, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(94, hsp.aln_len)
+        self.assertEqual(94, hsp.aln_span)
         self.assertEqual(9e-49, hsp.evalue)
         self.assertEqual(197.0, hsp.bitscore)
         self.assertEqual(425.0, hsp.bitscore_raw)
@@ -1861,7 +1861,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('SRDGVSPCWSGWSRTPDLR*SACLGLPKCWDYRREPPCPA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(94, hsp.aln_len)
+        self.assertEqual(94, hsp.aln_span)
         self.assertEqual(4e-43, hsp.evalue)
         self.assertEqual(178.0, hsp.bitscore)
         self.assertEqual(384.0, hsp.bitscore_raw)
@@ -1920,7 +1920,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(8, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(116, hsp.aln_len)
+        self.assertEqual(116, hsp.aln_span)
         self.assertEqual(2e-81, hsp.evalue)
         self.assertEqual(289.0, hsp.bitscore)
         self.assertEqual(626.0, hsp.bitscore_raw)
@@ -1943,7 +1943,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', str(hsp.hit.seq)[-40:])
         # second qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(116, hsp.aln_len)
+        self.assertEqual(116, hsp.aln_span)
         self.assertEqual(5e-78, hsp.evalue)
         self.assertEqual(278.0, hsp.bitscore)
         self.assertEqual(602.0, hsp.bitscore_raw)
@@ -1974,7 +1974,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(10, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(85, hsp.aln_len)
+        self.assertEqual(85, hsp.aln_span)
         self.assertEqual(5e-42, hsp.evalue)
         self.assertEqual(152.0, hsp.bitscore)
         self.assertEqual(327.0, hsp.bitscore_raw)
@@ -1997,7 +1997,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('IAMQCLQGLASVPSIPESRIPEVLDGFIEATQLAMEIQLK', str(hsp.hit.seq)[-40:])
         # second qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(14, hsp.aln_len)
+        self.assertEqual(14, hsp.aln_span)
         self.assertEqual(5e-42, hsp.evalue)
         self.assertEqual(26.3, hsp.bitscore)
         self.assertEqual(51.0, hsp.bitscore_raw)

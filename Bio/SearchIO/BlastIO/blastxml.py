@@ -53,7 +53,7 @@ _ELEM_FRAG = {
     'Hsp_hit-to': ('hit_end', int),
     'Hsp_query-frame': ('query_frame', int),
     'Hsp_hit-frame': ('hit_frame', int),
-    'Hsp_align-len': ('aln_len', int),
+    'Hsp_align-len': ('aln_span', int),
     'Hsp_pattern-from': ('pattern_start', int),
     'Hsp_pattern-to': ('pattern_end', int),
     'Hsp_hseq': ('hit', str),

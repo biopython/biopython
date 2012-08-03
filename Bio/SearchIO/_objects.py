@@ -770,7 +770,7 @@ class Hit(BaseSearchObject):
                 # bitscore
                 bitscore = Hit._attr_display(hsp, 'bitscore', fmt='%.2f')
                 # alignment length
-                aln_span = Hit._attr_display(hsp, 'aln_len')
+                aln_span = Hit._attr_display(hsp, 'aln_span')
                 # query region
                 query_start = Hit._attr_display(hsp, 'query_start')
                 query_end = Hit._attr_display(hsp, 'query_end')
@@ -961,7 +961,7 @@ class HSP(BaseHSP):
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_fragments', '_aln_len')
+    _NON_STICKY_ATTRS = ('_fragments', '_aln_span')
 
     def __init__(self, fragments):
         """Initializes an HSP object.
@@ -1017,12 +1017,12 @@ class HSP(BaseHSP):
             lines.append('  Fragments: %s  %s  %s  %s' % \
                     ('-'*3, '-'*18, '-'*18, '-'*18))
             pattern = '%16s  %18s  %18s  %18s'
-            lines.append(pattern % ('#', 'Length', 'Query range', 'Hit range'))
+            lines.append(pattern % ('#', 'Span', 'Query range', 'Hit range'))
             lines.append(pattern % ('-'*3, '-'*18, '-'*18, '-'*18))
             for idx, block in enumerate(self.fragments):
                 # set hsp line and table
                 # alignment span
-                aln_span = HSP._attr_display(block, 'aln_len')
+                aln_span = HSP._attr_display(block, 'aln_span')
                 # query region
                 query_start = HSP._attr_display(block, 'query_start')
                 query_end = HSP._attr_display(block, 'query_end')
@@ -1107,27 +1107,27 @@ class HSP(BaseHSP):
     alignment_annotations = property(fget=partial(_multiple_frag_get, \
             attr='alignment_annotation'))
 
-    def _aln_len_get(self):
+    def _aln_span_get(self):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
         # query / hit length
         if len(self) == 1:
-            self._aln_len = self._items[0].aln_len
+            self._aln_span = self._items[0].aln_span
         else:
-            if not hasattr(self, '_aln_len'):
+            if not hasattr(self, '_aln_span'):
                 if all([query.seq for query in self.queries]):
-                    self._aln_len = sum([len(query.seq) for query in self.queries])
+                    self._aln_span = sum([len(query.seq) for query in self.queries])
                 elif all([hit.seq for hit in self.hits]):
-                    self._aln_len = sum([len(hit.seq) for hit in self.hits])
+                    self._aln_span = sum([len(hit.seq) for hit in self.hits])
                 else:
-                    self._aln_len = None
+                    self._aln_span = None
 
-        return self._aln_len
+        return self._aln_span
 
-    def _aln_len_set(self, value):
-        self._aln_len = value
+    def _aln_span_set(self, value):
+        self._aln_span = value
 
-    aln_len = property(fget=_aln_len_get, fset=_aln_len_set)
+    aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
 
     ## id and description properties ##
     def _set_id_or_desc(self, value, seq_type, attr):
@@ -1298,7 +1298,7 @@ class HSPFragment(BaseHSP):
         return "%s(%s)" % (self.__class__.__name__, info)
 
     def __len__(self):
-        return self.aln_len
+        return self.aln_span
 
     def __str__(self):
         return self._display_hsp_header() + '\n' + self._display_aln()
@@ -1331,8 +1331,8 @@ class HSPFragment(BaseHSP):
     def _display_aln(self):
         lines = []
         # alignment length
-        aln_len = HSPFragment._attr_display(self, 'aln_len')
-        lines.append('   Fragment: %s columns' % aln_len)
+        aln_span = HSPFragment._attr_display(self, 'aln_span')
+        lines.append('   Fragment: %s columns' % aln_span)
         # sequences
         if hasattr(self, 'query') and hasattr(self, 'hit'):
             try:
@@ -1349,7 +1349,7 @@ class HSPFragment(BaseHSP):
             if 'homology' in self.alignment_annotation:
                 homol = self.alignment_annotation['homology']
 
-            if self.aln_len <= 67:
+            if self.aln_span <= 67:
                 lines.append("%10s - %s" % ('Query', qseq))
                 if homol:
                     lines.append("             %s" % homol)
@@ -1357,7 +1357,7 @@ class HSPFragment(BaseHSP):
             else:
                 # adjust continuation character length, so we don't display
                 # the same residues twice
-                if self.aln_len - 66 > 3:
+                if self.aln_span - 66 > 3:
                     cont = '~' * 3
                 else:
                     cont = '~' * (self.aln_span - 66)
@@ -1429,24 +1429,24 @@ class HSPFragment(BaseHSP):
 
     alignment = property(fget=_alignment_get)
 
-    def _aln_len_get(self):
+    def _aln_span_get(self):
         # length of alignment (gaps included)
         # alignment span can be its own attribute, or computed from
         # query / hit length
-        if not hasattr(self, '_aln_len'):
+        if not hasattr(self, '_aln_span'):
             if self.query is not None:
-                self._aln_len = len(self.query)
+                self._aln_span = len(self.query)
             elif self.hit is not None:
-                self._aln_len = len(self.hit)
+                self._aln_span = len(self.hit)
             else:
-                self._aln_len = None
+                self._aln_span = None
 
-        return self._aln_len
+        return self._aln_span
 
-    def _aln_len_set(self, value):
-        self._aln_len = value
+    def _aln_span_set(self, value):
+        self._aln_span = value
 
-    aln_len = property(fget=_aln_len_get, fset=_aln_len_set)
+    aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
 
     ## id and description properties ##
     def _set_id_or_desc(self, value, seq_type, attr):
