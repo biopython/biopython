@@ -26,7 +26,7 @@ def _absorb_hit(qresult, hit):
     return qresult
 
 
-def _create_batch_hsp(hid, qid, hspd):
+def _create_hsp(hid, qid, hspd):
     """Returns a list of HSP objects from the given parsed HSP values."""
     frags = []
     # we are iterating over query_ranges, but hit_ranges works just as well
@@ -56,7 +56,7 @@ def _create_batch_hsp(hid, qid, hspd):
         frags.append(frag)
 
     hsp = HSP(frags)
-    # set batchhsp-specific attributes
+    # set hsp-specific attributes
     for attr in ('score', 'hit_scodon_ranges', 'query_scodon_ranges', \
             'hit_intron_ranges', 'query_intron_ranges', 'hit_ner_ranges', \
             'query_ner_ranges', 'model', 'vulgar_comp', 'cigar_comp'):
@@ -230,10 +230,10 @@ class BaseExonerateIterator(object):
                 for attr, value in hit_parsed.items():
                     setattr(hit, attr, value)
 
-            # create the HSP objects from a single parsed HSP results,
-            # group them in one BatchHSP object, and append to Hit
-            batch_hsp = _create_batch_hsp(hit_id, qresult_id, hsp_parsed)
-            hit.append(batch_hsp)
+            # create the HSPFragment objects
+            # group them in one HSP object, and append to Hit
+            hsp = _create_hsp(hit_id, qresult_id, hsp_parsed)
+            hit.append(hsp)
 
             if not self.has_c4_alignment:
                 self.line = self.handle.readline()

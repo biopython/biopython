@@ -130,7 +130,7 @@ def _calc_score(psl, is_protein):
             size_mul * psl['mismatches'] - psl['qnuminsert'] - psl['tnuminsert']
 
 
-def _create_batch_hsp(hid, qid, psl):
+def _create_hsp(hid, qid, psl):
     # protein flag
     is_protein = _is_protein(psl)
     # strand
@@ -186,7 +186,7 @@ def _create_batch_hsp(hid, qid, psl):
         frag.hit_strand = hstrand
         frags.append(frag)
 
-    # create batch hsp object
+    # create hsp object
     hsp = HSP(frags)
     # check if start and end are set correctly
     assert hsp.query_start == psl['qstart']
@@ -287,10 +287,10 @@ class BlatPslIterator(object):
                 hit = Hit(hit_id, qresult_id)
                 hit.seq_len = psl['tsize']
 
-            # create the HSP objects from a single parsed HSP results,
-            # group them in one BatchHSP object, and append to Hit
-            batch_hsp = _create_batch_hsp(hit_id, qresult_id, psl)
-            hit.append(batch_hsp)
+            # create the HSPFragment objects
+            # group them in one HSP object, and append to Hit
+            hsp = _create_hsp(hit_id, qresult_id, psl)
+            hit.append(hsp)
 
             self.line = self.handle.readline()
 
@@ -320,7 +320,7 @@ class BlatPslIterator(object):
         psl['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
         psl['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
         # PSL doesn't have any sequences; these are needed for instantiating
-        # BatchHSP objects
+        # HSP objects with sequences
         psl['qseqs'] = []
         psl['tseqs'] = []
 
