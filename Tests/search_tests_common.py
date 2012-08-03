@@ -85,13 +85,7 @@ def compare_hit(hit_a, hit_b, fmt=None):
 def compare_hsp(hsp_a, hsp_b, fmt=None):
     """Compares attribute values of two HSP objects."""
 
-    # set common attributes
-    # not comparing alignment attribute, since it's basically comparing
-    # hit and query seqs
-    attrs = ['hit_id', 'query_id', 'hit', 'query', 'hit_strand', \
-            'hit_start', 'hit_end', 'hit_span', 'query_strand', 'query_start', \
-            'query_end', 'query_span', 'alignment_annotation', ]
-
+    attrs = []
     if fmt == 'blast-xml':
         from Bio.SearchIO.BlastIO.blastxml import _ELEM_HSP
         attrs += [x[0] for x in _ELEM_HSP.values()]
@@ -121,9 +115,29 @@ def compare_hsp(hsp_a, hsp_b, fmt=None):
                 'hit_intron_coords', 'query_scodon_coords', \
                 'hit_scodon_coords', 'query_ner_coords', 'hit_ner_coords']
 
-
-    # compare hit attributes
+    # compare hsp attributes
     compare_attrs(hsp_a, hsp_b, attrs)
+
+    # compare fragment objects within
+    for frag_a, frag_b in zip(hsp_a, hsp_b):
+        assert compare_frag(frag_a, frag_b, fmt)
+
+    return True
+
+
+def compare_frag(frag_a, frag_b, fmt=None):
+    """Compares attribute values of two HSPFragment objects."""
+
+    # set common attributes
+    # not comparing alignment attribute, since it's basically comparing
+    # hit and query seqs
+    attrs = ['hit_id', 'query_id', 'hit', 'query', 'hit_strand', \
+            'hit_start', 'hit_end', 'hit_span', 'hit_range', 'query_strand',
+            'query_start', 'query_end', 'query_span', 'query_span', 
+            'alignment_annotation', ]
+
+    # compare fragment attributes
+    compare_attrs(frag_a, frag_b, attrs)
 
     return True
 
@@ -148,10 +162,10 @@ def compare_attrs(obj_a, obj_b, attrs):
             # always return True
             val_a, val_b = None, None
 
-        # special case for HSP.{hit,query}
+        # special case for HSP and HSPFragment {hit,query}
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
-        if attr in ['hit', 'query'] and (val_a is not None and val_b is \
+        if attr in ('hit', 'query') and (val_a is not None and val_b is \
                 not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
