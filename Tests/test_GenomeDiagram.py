@@ -362,6 +362,12 @@ class SigilsTest(unittest.TestCase):
                           start=0, end=400)
             self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
 
+    def test_all_sigils(self):
+        """All sigils."""
+        for glyph in ["BOX", "ARROW", "BIGARROW", "OCTO"]:
+             self.add_track_with_sigils(sigil=glyph)
+        self.finish("GD_sigils")
+
     def test_labels(self):
         """Feature labels."""
         self.add_track_with_sigils(label=True)

@@ -432,6 +432,7 @@ class CircularDrawer(AbstractDrawer):
         # Each method takes the inner and outer radii, the start and end angle
         # subtended at the diagram center, and the color as arguments
         draw_methods = {'BOX': self._draw_sigil_box,
+                        'OCTO': self._draw_sigil_cut_corner_box,
                         'ARROW': self._draw_sigil_arrow,
                         'BIGARROW': self._draw_sigil_big_arrow,
                         }
@@ -1216,6 +1217,76 @@ class CircularDrawer(AbstractDrawer):
                                 #default is mitre/miter which can stick out too much:
                                 strokeLineJoin=1, #1=round
                                 )
+
+    def _draw_sigil_cut_corner_box(self, bottom, center, top,
+                          startangle, endangle, strand,
+                          color, border=None, corner=0.5,
+                          **kwargs):
+        """Draw OCTO sigil, box with corners cut off."""
+        if strand == 1:
+            inner_radius = center
+            outer_radius = top
+        elif strand == -1:
+            inner_radius = bottom
+            outer_radius = center
+        else:
+            inner_radius = bottom
+            outer_radius = top
+
+        #TODO - Refactor to centralise this often repeated colour logic
+        if color == colors.white and border is None:
+            strokecolor = colors.black
+        elif border is None:
+            strokecolor = color
+        elif border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
+            strokecolor = border
+        else:
+            strokecolor = None
+
+        startangle, endangle = min(startangle, endangle), max(startangle, endangle)
+        angle = float(endangle - startangle)
+
+        middle_radius = 0.5*(inner_radius+outer_radius)
+        boxheight = outer_radius - inner_radius
+
+        corner_len = min(0.5*boxheight, 0.5*boxheight*corner)
+        shaft_inner_radius = inner_radius + corner_len
+        shaft_outer_radius = outer_radius - corner_len
+
+        cornerangle_delta = max(0.0,min(abs(boxheight)*0.5*corner/middle_radius, abs(angle*0.5)))
+        if angle < 0:
+            cornerangle_delta *= -1 #reverse it
+
+        # Calculate trig values for angle and coordinates
+        startcos, startsin = cos(startangle), sin(startangle)
+        endcos, endsin = cos(endangle), sin(endangle)
+        x0, y0 = self.xcenter, self.ycenter      # origin of the circle
+        p = ArcPath(strokeColor=strokecolor,
+                    fillColor=color,
+                    strokeLineJoin=1, #1=round
+                    strokewidth=0,
+                    **kwargs)
+        #Inner curved edge
+        p.addArc(self.xcenter, self.ycenter, inner_radius,
+                 90 - ((endangle-cornerangle_delta) * 180 / pi),
+                 90 - ((startangle+cornerangle_delta) * 180 / pi),
+                 moveTo=True)
+        #Corner edge - straight lines assumes small angle!
+        p.lineTo(x0+shaft_inner_radius*startsin, y0+shaft_inner_radius*startcos)
+        p.lineTo(x0+shaft_outer_radius*startsin, y0+shaft_outer_radius*startcos)
+        #Outer curved edge
+        p.addArc(self.xcenter, self.ycenter, outer_radius,
+                 90 - ((endangle-cornerangle_delta) * 180 / pi),
+                 90 - ((startangle+cornerangle_delta) * 180 / pi),
+                 reverse=True)
+        #Corner edges
+        p.lineTo(x0+shaft_outer_radius*endsin, y0+shaft_outer_radius*endcos)
+        p.lineTo(x0+shaft_inner_radius*endsin, y0+shaft_inner_radius*endcos)
+        p.closePath()
+        return p
+
 
     def _draw_sigil_arrow(self, bottom, center, top,
                           startangle, endangle, strand,

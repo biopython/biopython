@@ -128,6 +128,46 @@ def draw_box(point1, point2,
                    strokewidth=0,
                    **kwargs)
 
+def draw_cut_corner_box(point1, point2, corner=0.5,
+                        color=colors.lightgreen, border=None, **kwargs):
+    """Draw a box with the corners cut off."""
+    x1, y1 = point1
+    x2, y2 = point2
+
+    if not corner:
+        return draw_box(point1, point2, color, border)
+    elif corner < 0:
+        raise ValueError("Arrow head length ratio should be positive")
+
+    if color == colors.white and border is None:   # Force black border on
+        strokecolor = colors.black                 # white boxes with
+    elif border is None:                           # undefined border, else
+        strokecolor = color                        # use fill color
+    elif border:
+        if not isinstance(border, colors.Color):
+            raise ValueError("Invalid border color %s" % repr(border))
+        strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
+
+    boxheight = y2-y1
+    boxwidth = x2-x1
+    corner = min(boxheight*0.5, boxheight*0.5*corner)
+
+    return Polygon([x1, y1+corner,
+                    x1, y2-corner,
+                    x1+corner, y2,
+                    x2-corner, y2,
+                    x2, y2-corner,
+                    x2, y1+corner,
+                    x2-corner, y1,
+                    x1+corner, y1],
+                   strokeColor=strokecolor,
+                   strokeWidth=1,
+                   strokeLineJoin=1, #1=round
+                   fillColor=color,
+                   **kwargs)
 
 def draw_polygon(list_of_points,
                  color=colors.lightgreen, border=None, colour=None,
