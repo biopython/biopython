@@ -79,8 +79,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(6150, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -108,8 +108,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(359, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(83, hsp.query_start)
         self.assertEqual(253990, hsp.hit_start)
         self.assertEqual(552, hsp.query_end)
@@ -137,8 +137,8 @@ class ExonerateTextCases(unittest.TestCase):
         # third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual(219, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(60, hsp.query_start)
         self.assertEqual(454073, hsp.hit_start)
         self.assertEqual(517, hsp.query_end)
@@ -184,8 +184,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(6146, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -208,8 +208,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(6146, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -237,8 +237,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(518, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(85010, hsp.hit_start)
         self.assertEqual(516, hsp.query_end)
@@ -292,8 +292,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(2151, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(1, hsp.query_start)
         self.assertEqual(1318047, hsp.hit_start)
         self.assertEqual(1228, hsp.query_end)
@@ -316,8 +316,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(2106, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -345,8 +345,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(116, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(1065, hsp.query_start)
         self.assertEqual(255638, hsp.hit_start)
         self.assertEqual(1224, hsp.query_end)
@@ -392,8 +392,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(2151, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(1, hsp.query_start)
         self.assertEqual(1318047, hsp.hit_start)
         self.assertEqual(1228, hsp.query_end)
@@ -416,8 +416,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(2106, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -445,8 +445,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(116, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(1065, hsp.query_start)
         self.assertEqual(255638, hsp.hit_start)
         self.assertEqual(1224, hsp.query_end)
@@ -492,8 +492,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(6150, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -521,8 +521,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(439, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(85010, hsp.hit_start)
         self.assertEqual(346, hsp.query_end)
@@ -550,8 +550,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, second hsp
         hsp = qresult[1].hsps[1]
         self.assertEqual(263, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(25, hsp.query_start)
         self.assertEqual(11338, hsp.hit_start)
         self.assertEqual(406, hsp.query_end)
@@ -605,8 +605,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(2641, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1319468, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -629,8 +629,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(2641, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1319468, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -658,8 +658,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(267, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(162, hsp.query_start)
         self.assertEqual(23668, hsp.hit_start)
         self.assertEqual(491, hsp.query_end)
@@ -692,8 +692,8 @@ class ExonerateTextCases(unittest.TestCase):
         # third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual(267, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(78, hsp.query_start)
         self.assertEqual(71883, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -744,8 +744,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(6150, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -773,8 +773,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(233, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(121, hsp.query_start)
         self.assertEqual(254031, hsp.hit_start)
         self.assertEqual(236, hsp.query_end)
@@ -797,8 +797,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, second hsp
         hsp = qresult[1].hsps[1]
         self.assertEqual(151, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(1098, hsp.query_start)
         self.assertEqual(255671, hsp.hit_start)
         self.assertEqual(1166, hsp.query_end)
@@ -844,8 +844,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(2151, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(1, hsp.query_start)
         self.assertEqual(1318047, hsp.hit_start)
         self.assertEqual(1228, hsp.query_end)
@@ -868,8 +868,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(2106, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -892,8 +892,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, third hsp
         hsp = qresult[0].hsps[2]
         self.assertEqual(2072, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -939,8 +939,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(6150, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -961,8 +961,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(440, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(509, hsp.query_start)
         self.assertEqual(183946, hsp.hit_start)
         self.assertEqual(1192, hsp.query_end)
@@ -990,8 +990,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(502, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(110, hsp.query_start)
         self.assertEqual(297910, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -1039,8 +1039,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(4485, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(560077, hsp.hit_start)
         self.assertEqual(897, hsp.query_end)
@@ -1066,8 +1066,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(941, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(2, hsp.query_start)
         self.assertEqual(492033, hsp.hit_start)
         self.assertEqual(896, hsp.query_end)
@@ -1093,8 +1093,8 @@ class ExonerateTextCases(unittest.TestCase):
         # third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual(651, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(34, hsp.query_start)
         self.assertEqual(267809, hsp.hit_start)
         self.assertEqual(721, hsp.query_end)
@@ -1131,8 +1131,8 @@ class ExonerateTextCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(6150, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1318045, hsp.hit_start)
         self.assertEqual(1230, hsp.query_end)
@@ -1158,8 +1158,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(439, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(85010, hsp.hit_start)
         self.assertEqual(346, hsp.query_end)
@@ -1186,8 +1186,8 @@ class ExonerateTextCases(unittest.TestCase):
         # second hit, second hsp
         hsp = qresult[1].hsps[1]
         self.assertEqual(263, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(25, hsp.query_start)
         self.assertEqual(11338, hsp.hit_start)
         self.assertEqual(406, hsp.query_end)
@@ -1249,8 +1249,8 @@ class ExonerateVulgarCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(2641, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1319468, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -1263,8 +1263,8 @@ class ExonerateVulgarCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(2641, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1319468, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -1282,8 +1282,8 @@ class ExonerateVulgarCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(267, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(162, hsp.query_start)
         self.assertEqual(23668, hsp.hit_start)
         self.assertEqual(491, hsp.query_end)
@@ -1301,8 +1301,8 @@ class ExonerateVulgarCases(unittest.TestCase):
         # third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual(267, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(78, hsp.query_start)
         self.assertEqual(71883, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -1343,8 +1343,8 @@ class ExonerateCigarCases(unittest.TestCase):
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
         self.assertEqual(2641, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1319468, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -1353,8 +1353,8 @@ class ExonerateCigarCases(unittest.TestCase):
         # first hit, second hsp
         hsp = qresult[0].hsps[1]
         self.assertEqual(2641, hsp.score)
-        self.assertEqual(1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(0, hsp.query_start)
         self.assertEqual(1319468, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)
@@ -1368,8 +1368,8 @@ class ExonerateCigarCases(unittest.TestCase):
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
         self.assertEqual(267, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
         self.assertEqual(162, hsp.query_start)
         self.assertEqual(23668, hsp.hit_start)
         self.assertEqual(491, hsp.query_end)
@@ -1383,8 +1383,8 @@ class ExonerateCigarCases(unittest.TestCase):
         # third hit, first hsp
         hsp = qresult[2].hsps[0]
         self.assertEqual(267, hsp.score)
-        self.assertEqual(-1, hsp.query_strand)
-        self.assertEqual(-1, hsp.hit_strand)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
         self.assertEqual(78, hsp.query_start)
         self.assertEqual(71883, hsp.hit_start)
         self.assertEqual(529, hsp.query_end)

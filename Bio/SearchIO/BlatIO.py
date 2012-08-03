@@ -499,14 +499,14 @@ class BlatPslWriter(object):
                 block_sizes = hsp.query_spans
 
                 # set strand and starts
-                if hsp.query_strand >= 0: # since it may be a protein seq
+                if hsp[0].query_strand >= 0: # since it may be a protein seq
                     strand = '+'
                 else:
                     strand = '-'
                 qstarts = _reorient_starts([x[0] for x in hsp.query_ranges], \
-                        hsp.query_spans, qresult.seq_len, hsp.query_strand)
+                        hsp.query_spans, qresult.seq_len, hsp[0].query_strand)
 
-                if hsp.hit_strand == 1:
+                if hsp[0].hit_strand == 1:
                     hstrand = 1
                     # only write hit strand if it was present in the source file
                     if hsp._has_hit_strand:

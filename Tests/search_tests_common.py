@@ -108,8 +108,8 @@ def compare_hsp(hsp_a, hsp_b, fmt=None):
         attrs += ['match_num', 'mismatch_num', 'match_rep_num', 'n_num', \
                 'query_gapopen_num', 'query_gap_num', 'hit_gapopen_num', \
                 'hit_gap_num', 'query_is_protein', 'ident_pct', 'score', \
-                'query_strand', 'hit_strand', 'query_block_spans', \
-                'hit_block_spans', 'block_num', 'query_coords', 'hit_coords']
+                'query_block_spans', 'hit_block_spans', 'block_num', \
+                'query_coords', 'hit_coords']
     elif fmt in 'exonerate-':
         attrs += ['query_coords', 'hit_coords', 'query_intron_coords', \
                 'hit_intron_coords', 'query_scodon_coords', \

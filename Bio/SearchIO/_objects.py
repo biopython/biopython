@@ -1076,6 +1076,9 @@ class HSP(BaseHSP):
                     "objects.")
 
     def _single_frag_get(self, attr):
+        if len(self._items) > 1:
+            raise ValueError("More than one HSPFragment objects " \
+                    "found in HSP")
         return getattr(self.fragments[0], attr)
 
     def _multiple_frag_get(self, attr):
