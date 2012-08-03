@@ -774,13 +774,13 @@ class Hit(BaseSearchObject):
                 # query region
                 query_start = Hit._attr_display(hsp, 'query_start')
                 query_end = Hit._attr_display(hsp, 'query_end')
-                query_range = '%s:%s' % (query_start, query_end)
+                query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 18
                 query_range = Hit._concat_display(query_range, 18, '~')
                 # hit region
                 hit_start = Hit._attr_display(hsp, 'hit_start')
                 hit_end = Hit._attr_display(hsp, 'hit_end')
-                hit_range = '%s:%s' % (hit_start, hit_end)
+                hit_range = '[%s:%s]' % (hit_start, hit_end)
                 hit_range = Hit._concat_display(hit_range, 18, '~')
                 # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
@@ -947,9 +947,9 @@ class BaseHSP(BaseSearchObject):
         hit_start = BaseHSP._attr_display(self, 'hit_start')
         hit_end = BaseHSP._attr_display(self, 'hit_end')
 
-        lines.append('Query range: %s:%s (%r)' % (query_start, query_end, \
+        lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end, \
                 self.query_strand))
-        lines.append('  Hit range: %s:%s (%r)' % (hit_start, hit_end, \
+        lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end, \
                 self.hit_strand))
 
         return '\n'.join(lines)
@@ -1026,13 +1026,13 @@ class HSP(BaseHSP):
                 # query region
                 query_start = HSP._attr_display(block, 'query_start')
                 query_end = HSP._attr_display(block, 'query_end')
-                query_range = '%s:%s' % (query_start, query_end)
+                query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 18
                 query_range = HSP._concat_display(query_range, 18, '~')
                 # hit region
                 hit_start = HSP._attr_display(block, 'hit_start')
                 hit_end = HSP._attr_display(block, 'hit_end')
-                hit_range = '%s:%s' % (hit_start, hit_end)
+                hit_range = '[%s:%s]' % (hit_start, hit_end)
                 hit_range = HSP._concat_display(hit_range, 18, '~')
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
