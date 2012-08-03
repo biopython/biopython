@@ -1250,20 +1250,40 @@ class HSP(BaseHSP):
                     (coord_name), BiopythonWarning)
         return coords
 
+    def _hit_starts_get(self):
+        return [fragment.hit_start for fragment in self.fragments]
+
+    hit_starts = property(fget=_hit_starts_get)
+
     def _hit_start_get(self):
         return min(self._get_coords('hit', 'start'))
 
     hit_start = property(fget=_hit_start_get)
+
+    def _query_starts_get(self):
+        return [fragment.query_start for fragment in self.fragments]
+
+    query_starts = property(fget=_query_starts_get)
 
     def _query_start_get(self):
         return min(self._get_coords('query', 'start'))
 
     query_start = property(fget=_query_start_get)
 
+    def _hit_ends_get(self):
+        return [fragment.hit_end for fragment in self.fragments]
+
+    hit_ends = property(fget=_hit_ends_get)
+
     def _hit_end_get(self):
         return max(self._get_coords('hit', 'end'))
 
     hit_end = property(fget=_hit_end_get)
+
+    def _query_ends_get(self):
+        return [fragment.query_end for fragment in self.fragments]
+
+    query_ends = property(fget=_query_ends_get)
 
     def _query_end_get(self):
         return max(self._get_coords('query', 'end'))
@@ -1271,6 +1291,11 @@ class HSP(BaseHSP):
     query_end = property(fget=_query_end_get)
 
     ## coordinate-dependent properties ##
+    def _hit_spans_get(self):
+        return [fragment.hit_span for fragment in self.fragments]
+
+    hit_spans = property(fget=_hit_spans_get)
+
     def _hit_span_get(self):
         try:
             return self.hit_end - self.hit_start
@@ -1278,6 +1303,11 @@ class HSP(BaseHSP):
             return None
 
     hit_span = property(fget=_hit_span_get)
+
+    def _query_spans_get(self):
+        return [fragment.query_span for fragment in self.fragments]
+
+    query_spans = property(fget=_query_spans_get)
 
     def _query_span_get(self):
         try:
