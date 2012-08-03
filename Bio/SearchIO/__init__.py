@@ -65,7 +65,7 @@ __docformat__ = 'epytext en'
 
 
 from Bio.File import as_handle
-from Bio.SearchIO._objects import QueryResult, Hit, HSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
 # dictionary of supported formats for parse() and read()
