@@ -473,9 +473,8 @@ class QueryResultCases(unittest.TestCase):
 
     def test_index_not_present(self):
         """Test QueryResult.index, when index is not present"""
-        # rank should return -1 if the hit key or hit object is not present
-        self.assertEqual(-1, self.qresult.index('hit4'))
-        self.assertEqual(-1, self.qresult.index(hit41))
+        self.assertRaises(ValueError, self.qresult.index, 'hit4')
+        self.assertRaises(ValueError, self.qresult.index, hit41)
 
     def test_sort_ok(self):
         """Test QueryResult.sort"""

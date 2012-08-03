@@ -536,19 +536,14 @@ class QueryResult(BaseSearchObject):
         >>> hit = qresult['gi|209529663|ref|NM_001135848.1|']
         >>> qresult.index(hit)
         4
-        >>> qresult.index('my_key')
-        -1
 
         This method is useful for finding out the integer index (usually
         correlated with search rank) of a given hit key.
 
         """
-        try:
-            if isinstance(hit_key, Hit):
-                return list(self.hit_keys).index(hit_key.id)
-            return list(self.hit_keys).index(hit_key)
-        except ValueError:
-            return -1
+        if isinstance(hit_key, Hit):
+            return list(self.hit_keys).index(hit_key.id)
+        return list(self.hit_keys).index(hit_key)
 
     def sort(self, key=None, reverse=False, in_place=True):
         # no cmp argument to make sort more Python 3-like
