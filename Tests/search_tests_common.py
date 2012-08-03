@@ -137,7 +137,7 @@ def compare_frag(frag_a, frag_b, fmt=None):
             'alignment_annotation', ]
 
     # compare fragment attributes
-    compare_attrs(frag_a, frag_b, attrs)
+    assert compare_attrs(frag_a, frag_b, attrs)
 
     return True
 
