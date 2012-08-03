@@ -8,7 +8,7 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -242,30 +242,38 @@ class HmmerTextIterator(object):
                 # index, is_included, bitscore, bias, evalue_cond, evalue
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
-                hsp = HSP(hid, self.qresult.id)
+                frag = HSPFragment(hid, self.qresult.id)
+                # depending on whether the program is hmmsearch, hmmscan, or phmmer
+                # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
+                # for hmmscan, hit is the hmm profile, query is the sequence
+                if self._meta.get('program') == 'hmmscan':
+                    # adjust 'from' and 'to' coordinates to 0-based ones
+                    frag.hit_start = int(parsed[6]) - 1
+                    frag.hit_end = int(parsed[7])
+                    frag.query_start = int(parsed[9]) - 1
+                    frag.query_end = int(parsed[10])
+                elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
+                    # adjust 'from' and 'to' coordinates to 0-based ones
+                    frag.hit_start = int(parsed[9]) - 1
+                    frag.hit_end = int(parsed[10])
+                    frag.query_start = int(parsed[6]) - 1
+                    frag.query_end = int(parsed[7])
+                # strand is always 0, since HMMER now only handles protein
+                frag.hit_strand = frag.query_strand = 0
+
+                hsp = HSP([frag])
                 hsp.domain_index = int(parsed[0])
                 hsp.is_included = parsed[1] == '!'
                 hsp.bitscore = float(parsed[2])
                 hsp.bias = float(parsed[3])
                 hsp.evalue_cond = float(parsed[4])
                 hsp.evalue = float(parsed[5])
-                # depending on whether the program is hmmsearch, hmmscan, or phmmer
-                # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
-                # for hmmscan, hit is the hmm profile, query is the sequence
                 if self._meta.get('program') == 'hmmscan':
                     # adjust 'from' and 'to' coordinates to 0-based ones
-                    hsp.hit_start = int(parsed[6]) - 1
-                    hsp.hit_end = int(parsed[7])
-                    hsp.query_start = int(parsed[9]) - 1
-                    hsp.query_end = int(parsed[10])
                     hsp.hit_endtype = parsed[8]
                     hsp.query_endtype = parsed[11]
                 elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                     # adjust 'from' and 'to' coordinates to 0-based ones
-                    hsp.hit_start = int(parsed[9]) - 1
-                    hsp.hit_end = int(parsed[10])
-                    hsp.query_start = int(parsed[6]) - 1
-                    hsp.query_end = int(parsed[7])
                     hsp.hit_endtype = parsed[11]
                     hsp.query_endtype = parsed[8]
                 # adjust 'from' and 'to' coordinates to 0-based ones
@@ -273,10 +281,8 @@ class HmmerTextIterator(object):
                 hsp.env_end = int(parsed[13])
                 hsp.env_endtype = parsed[14]
                 hsp.acc_avg = float(parsed[15])
-                # strand is always 0, since HMMER now only handles protein
-                hsp.hit_strand = hsp.query_strand = 0
 
-                self.qresult[hid].append(BatchHSP([hsp]))
+                self.qresult[hid].append(hsp)
                 self.line = read_forward(self.handle)
 
             # parse the hsp alignments
@@ -295,7 +301,7 @@ class HmmerTextIterator(object):
             # alias hsp to local var
             # but note that we're still changing the attrs of the actual
             # hsp inside the qresult as we're not creating a copy
-            hsp = self.qresult[hid].hsps[dom_counter]
+            frag = self.qresult[hid].hsps[dom_counter][0]
             # XXX: should we validate again here? regex is expensive..
             #regx = re.search(_HRE_VALIDATE, self.line)
             #assert hsp.bitscore == float(regx.group(1))
@@ -326,15 +332,15 @@ class HmmerTextIterator(object):
                 elif self.line.startswith('  == domain') or \
                         self.line.startswith('>>') or \
                         self.line.startswith('Internal pipeline'):
-                    hsp.alignment_annotation = annot
+                    frag.alignment_annotation = annot
                     if self._meta.get('program') == 'hmmscan':
-                        hsp.hit = hmmseq
-                        hsp.query = aliseq
+                        frag.hit = hmmseq
+                        frag.query = aliseq
                     elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
-                        hsp.hit = aliseq
-                        hsp.query = hmmseq
-                    hsp.hit.description = self.qresult[hid].description
-                    hsp.query.description = self.qresult.description
+                        frag.hit = aliseq
+                        frag.query = hmmseq
+                    frag.hit_description = self.qresult[hid].description
+                    frag.query_description = self.qresult.description
                     dom_counter += 1
                     hmmseq = ''
                     aliseq = ''

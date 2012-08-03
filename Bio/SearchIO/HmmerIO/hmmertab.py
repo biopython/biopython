@@ -8,7 +8,7 @@
 from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -81,9 +81,10 @@ class HmmerTabIterator(object):
         hsp['bitscore'] = float(cols[8])            # score (best 1 domain)
         hsp['bias'] = float(cols[9])                # bias (best 1 domain)
         # strand is always 0, since HMMER now only handles protein
-        hsp['hit_strand'] = hsp['query_strand'] = 0
+        frag = {}
+        frag['hit_strand'] = frag['query_strand'] = 0
 
-        return qresult, hit, hsp
+        return qresult, hit, hsp, frag
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
@@ -91,7 +92,8 @@ class HmmerTabIterator(object):
         while True:
             # only parse the result row if it's not EOF
             if self.line:
-                qres_attrs, hit_attrs, hsp_attrs = self.parse_result_row()
+                qres_attrs, hit_attrs, hsp_attrs, frag_attrs = \
+                        self.parse_result_row()
                 qresult_id = qres_attrs['id']
 
             # a new qresult is created whenever qid_cache != qresult_id
@@ -114,14 +116,17 @@ class HmmerTabIterator(object):
             for attr, value in hit_attrs.items():
                 setattr(hit, attr, value)
 
-            # create HSP and set its attributes
-            hsp = HSP(hit_id, qresult_id)
+            # create fragment and HSP and set their attributes
+            frag = HSPFragment(hit_id, qresult_id)
+            for attr, value in frag_attrs.items():
+                setattr(frag, attr, value)
+            hsp = HSP([frag])
             for attr, value in hsp_attrs.items():
                 setattr(hsp, attr, value)
 
             # since domain tab formats only have 1 HSP per line
             # we don't have to worry about appending other HSPs to the Hit
-            hit.append(BatchHSP([hsp]))
+            hit.append(hsp)
             qresult.append(hit)
 
             self.line = read_forward(self.handle)

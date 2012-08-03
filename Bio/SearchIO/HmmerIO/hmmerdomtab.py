@@ -7,7 +7,7 @@
 
 from itertools import chain
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from hmmertab import HmmerTabIterator, HmmerTabIndexer
 
 
@@ -62,24 +62,25 @@ class HmmerDomtabIterator(HmmerTabIterator):
         hsp['evalue'] = float(cols[12])         # i-evalue
         hsp['bitscore'] = float(cols[13])       # score
         hsp['bias'] = float(cols[14])           # bias
-        hsp['hit_start'] = int(cols[15]) - 1    # hmm from
-        hsp['hit_end'] = int(cols[16])          # hmm to
-        hsp['query_start'] = int(cols[17]) - 1  # ali from
-        hsp['query_end'] = int(cols[18])        # ali to
         hsp['env_start'] = int(cols[19]) - 1    # env from
         hsp['env_end'] = int(cols[20])          # env to
         hsp['acc_avg'] = float(cols[21])        # acc
+        frag = {}
         # strand is always 0, since HMMER now only handles protein
-        hsp['hit_strand'] = hsp['query_strand'] = 0
+        frag['hit_strand'] = frag['query_strand'] = 0
+        frag['hit_start'] = int(cols[15]) - 1    # hmm from
+        frag['hit_end'] = int(cols[16])          # hmm to
+        frag['query_start'] = int(cols[17]) - 1  # ali from
+        frag['query_end'] = int(cols[18])        # ali to
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:
-            hsp['hit_end'], hsp['query_end'] = \
-                    hsp['query_end'], hsp['hit_end']
-            hsp['hit_start'], hsp['query_start'] = \
-                    hsp['query_start'], hsp['hit_start']
+            frag['hit_end'], frag['query_end'] = \
+                    frag['query_end'], frag['hit_end']
+            frag['hit_start'], frag['query_start'] = \
+                    frag['query_start'], frag['hit_start']
 
-        return qresult, hit, hsp
+        return qresult, hit, hsp, frag
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
@@ -91,7 +92,8 @@ class HmmerDomtabIterator(HmmerTabIterator):
         while True:
             # only parse the result row if it's not EOF
             if self.line:
-                qres_parsed, hit_parsed, hsp_parsed = self.parse_result_row()
+                qres_parsed, hit_parsed, hsp_parsed, frag_parsed = \
+                        self.parse_result_row()
                 qresult_id = qres_parsed['id']
 
             # a new qresult is created whenever qid_cache != qresult_id
@@ -125,12 +127,16 @@ class HmmerDomtabIterator(HmmerTabIterator):
                 for attr, value in hit_parsed.items():
                     setattr(hit, attr, value)
 
-            # each line is basically a different HSP, so we always add it to
-            # any hit object we have
-            hsp = HSP(hit_id, qresult_id)
+            # each line is basically a different HSP with one fragment
+            # so we always create them
+            frag = HSPFragment(hit_id, qresult_id)
+            for attr, value in frag_parsed.items():
+                setattr(frag, attr, value)
+            hsp = HSP([frag])
             for attr, value in hsp_parsed.items():
                 setattr(hsp, attr, value)
-            hit.append(BatchHSP([hsp]))
+
+            hit.append(hsp)
 
             self.line = read_forward(self.handle)
 
