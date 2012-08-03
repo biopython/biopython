@@ -1124,13 +1124,16 @@ class HSP(BaseHSP):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
         # query / hit length
-        if not hasattr(self, '_aln_len'):
-            if all([query.seq for query in self.queries]):
-                self._aln_len = sum([len(query.seq) for query in self.queries])
-            elif all([hit.seq for hit in self.hits]):
-                self._aln_len = sum([len(hit.seq) for hit in self.hits])
-            else:
-                self._aln_len = None
+        if len(self) == 1:
+            self._aln_len = self._items[0].aln_len
+        else:
+            if not hasattr(self, '_aln_len'):
+                if all([query.seq for query in self.queries]):
+                    self._aln_len = sum([len(query.seq) for query in self.queries])
+                elif all([hit.seq for hit in self.hits]):
+                    self._aln_len = sum([len(hit.seq) for hit in self.hits])
+                else:
+                    self._aln_len = None
 
         return self._aln_len
 
