@@ -463,19 +463,19 @@ class SigilsTest(unittest.TestCase):
                                       arrowhead_length=0.05)
         self.finish("GD_sigil_arrows_small")
 
-    def test_long_arrow_heads(self):
-        """Feature arrow sigil heads within bounding box."""
+    def long_sigils(self, glyph):
+        """Check feature sigils within bounding box."""
         #Add a track of features, bigger height to emphasise any sigil errors
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
         #We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
         feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
         self.gds_features.add_feature(feature, color="lightblue")
-        self.gds_features.add_feature(feature, name="Forward", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Forward", sigil=glyph,
                                       color="blue", arrowhead_length=2.0)
         feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
         self.gds_features.add_feature(feature, color="pink")
-        self.gds_features.add_feature(feature, name="Reverse", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Reverse", sigil=glyph,
                                       color="red", arrowhead_length=2.0)
         #Add another track of features, bigger height to emphasise any sigil errors
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
@@ -483,9 +483,17 @@ class SigilsTest(unittest.TestCase):
         self.gds_features = self.gdt_features.new_set()
         feature = SeqFeature(FeatureLocation(25, 375), strand=None)
         self.gds_features.add_feature(feature, color="lightgreen")
-        self.gds_features.add_feature(feature, name="Standless", sigil="ARROW",
+        self.gds_features.add_feature(feature, name="Standless", sigil=glyph,
                                       color="green", arrowhead_length=2.0)
-        self.finish("GD_sigil_arrows_long")
+        self.finish("GD_sigil_long_%s" % glyph)
+
+    def test_long_arrow_heads(self):
+        """Feature ARROW sigil heads within bounding box."""
+        self.long_sigils("ARROW")
+
+    def test_long_octo_heads(self):
+        """Feature OCTO sigil heads within bounding box."""
+        self.long_sigils("OCTO")
 
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
