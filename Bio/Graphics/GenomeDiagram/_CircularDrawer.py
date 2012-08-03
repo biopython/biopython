@@ -1239,7 +1239,7 @@ class CircularDrawer(AbstractDrawer):
     def _draw_sigil_big_arrow(self, bottom, center, top,
                               startangle, endangle, strand,
                               **kwargs):
-        "Draw BIGARROW sigil, like ARROW but straddles the axis."""
+        """Draw BIGARROW sigil, like ARROW but straddles the axis."""
         if strand == -1:
             orientation = "left"
         else:

@@ -1355,7 +1355,7 @@ class LinearDrawer(AbstractDrawer):
         return draw_box((x1,y1), (x2,y2), **kwargs)
 
     def _draw_sigil_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
-        "Draw ARROW sigil."""
+        """Draw ARROW sigil."""
         if strand == 1:
             y1 = center
             y2 = top
@@ -1371,7 +1371,7 @@ class LinearDrawer(AbstractDrawer):
         return draw_arrow((x1,y1), (x2,y2), orientation=orientation, **kwargs)
 
     def _draw_sigil_big_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
-        "Draw BIGARROW sigil, like ARROW but straddles the axis."""
+        """Draw BIGARROW sigil, like ARROW but straddles the axis."""
         if strand == -1:
             orientation = "left"
         else:
