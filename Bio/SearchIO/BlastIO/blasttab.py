@@ -8,7 +8,7 @@
 import warnings
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -70,7 +70,6 @@ _COLUMN_HIT = {
     'slen': ('seq_len', int),
 }
 _COLUMN_HSP = {
-    'length': ('aln_span', int),
     'bitscore': ('bitscore', float),
     'score': ('bitscore_raw', int),
     'evalue': ('evalue', float),
@@ -80,6 +79,10 @@ _COLUMN_HSP = {
     'ppos': ('pos_pct', float),
     'mismatch': ('mismatch_num', int),
     'gaps': ('gap_num', int),
+    'gapopen': ('gapopen_num', int),
+}
+_COLUMN_FRAG = {
+    'length': ('aln_len', int),
     'qstart': ('query_start', int),
     'qend': ('query_end', int),
     'sstart': ('hit_start', int),
@@ -89,10 +92,9 @@ _COLUMN_HSP = {
     'frames': ('frames', str),
     'qseq': ('query', str),
     'sseq': ('hit', str),
-    'gapopen': ('gapopen_num', int),
 }
 _SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
-        _COLUMN_HSP.keys())
+        _COLUMN_HSP.keys() + _COLUMN_FRAG.keys())
 # ignored columns (for now) are:
 # BTOP -- btop
 
@@ -230,7 +232,7 @@ class BlastTabIterator(object):
         assert len(fields) == len(columns), "Expected %i columns, found: " \
             "%i" % (len(fields), len(columns))
 
-        qresult, hit, hsp = {}, {}, {}
+        qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):
             sname = fields[idx]
 
@@ -251,11 +253,17 @@ class BlastTabIterator(object):
                 if caster is not str:
                     value = caster(value)
                 hsp[attr_name] = value
+
+            elif sname in _COLUMN_FRAG:
+                attr_name, caster = _COLUMN_FRAG[sname]
+                if caster is not str:
+                    value = caster(value)
+                frag[attr_name] = value
             # make sure that any unhandled field is not supported
             else:
                 assert sname not in _SUPPORTED_FIELDS
 
-        return qresult, hit, hsp
+        return qresult, hit, hsp, frag
 
     def get_id(self, parsed):
         """Returns the value used for a QueryResult or Hit ID from a parsed row."""
@@ -278,7 +286,8 @@ class BlastTabIterator(object):
         while True:
             # only parse the line if it's not EOF or not a comment line
             if self.line and not self.line.startswith('#' ):
-                qres_parsed, hit_parsed, hsp_parsed = self.parse_result_row()
+                qres_parsed, hit_parsed, hsp_parsed, frag_parsed = \
+                        self.parse_result_row()
                 qresult_id = self.get_id(qres_parsed)
 
             # create new qresult whenever parsed qresult id != cached qresult id
@@ -314,24 +323,28 @@ class BlastTabIterator(object):
                 for attr, value in hit_parsed.items():
                     setattr(hit, attr, value)
 
-            # every line is essentially an HSP, so we create a new one
-            # for every line
-            hsp = HSP(hid_cache, qid_cache)
-            for attr, value in hsp_parsed.items():
+            # every line is essentially an HSP with one fragment, so we
+            # create both of these for every line
+            frag = HSPFragment(hid_cache, qid_cache)
+            for attr, value in frag_parsed.items():
                 # adjust coordinates to Python range
                 for coord_type in ('query', 'hit'):
                     if attr == coord_type + '_start':
-                        value = min(value, hsp_parsed[coord_type + '_end']) - 1
+                        value = min(value, frag_parsed[coord_type + '_end']) - 1
                     elif attr == coord_type + '_end':
-                        value = max(value, hsp_parsed[coord_type + '_start'])
-                setattr(hsp, attr, value)
+                        value = max(value, frag_parsed[coord_type + '_start'])
+                setattr(frag, attr, value)
             # try to set hit_frame and/or query_frame if frames
             # attribute is set
-            if not hasattr(hsp, 'query_frame') and hasattr(hsp, 'frames'):
-                setattr(hsp, 'query_frame', hsp.frames.split('/')[0])
-            if not hasattr(hsp, 'hit_frame') and hasattr(hsp, 'frames'):
-                setattr(hsp, 'hit_frame', hsp.frames.split('/')[1])
-            hit.append(BatchHSP([hsp]))
+            if not hasattr(frag, 'query_frame') and hasattr(frag, 'frames'):
+                setattr(frag, 'query_frame', frag.frames.split('/')[0])
+            if not hasattr(frag, 'hit_frame') and hasattr(frag, 'frames'):
+                setattr(frag, 'hit_frame', frag.frames.split('/')[1])
+
+            hsp = HSP([frag])
+            for attr, value in hsp_parsed.items():
+                setattr(hsp, attr, value)
+            hit.append(hsp)
 
             self.line = read_forward(self.handle)
 

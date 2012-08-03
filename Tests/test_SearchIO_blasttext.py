@@ -82,7 +82,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(490, hsp.aln_span)
+        self.assertEqual(490, hsp.aln_len)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(905.0, hsp.bitscore)
         self.assertEqual(490.0, hsp.bitscore_raw)
@@ -98,10 +98,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(490, hsp.query_end)
         self.assertEqual(490, hsp.hit_end)
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.hit.seq)[:40])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -113,7 +113,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(490, hsp.aln_span)
+        self.assertEqual(490, hsp.aln_len)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(900.0, hsp.bitscore)
         self.assertEqual(487.0, hsp.bitscore_raw)
@@ -129,10 +129,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(490, hsp.query_end)
         self.assertEqual(570, hsp.hit_end)
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.hit.seq)[:40])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastn_003(self):
@@ -162,7 +162,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(62, hsp.aln_span)
+        self.assertEqual(62, hsp.aln_len)
         self.assertEqual(3e-24, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -178,10 +178,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(66, hsp.query_end)
         self.assertEqual(2926, hsp.hit_end)
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.hit.seq)[:40])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -193,7 +193,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(62, hsp.aln_span)
+        self.assertEqual(62, hsp.aln_len)
         self.assertEqual(3e-24, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -209,14 +209,14 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(66, hsp.query_end)
         self.assertEqual(3738, hsp.hit_end)
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.hit.seq)[:40])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(53, hsp.aln_span)
+        self.assertEqual(53, hsp.aln_len)
         self.assertEqual(3e-19, hsp.evalue)
         self.assertEqual(99.0, hsp.bitscore)
         self.assertEqual(53.0, hsp.bitscore_raw)
@@ -232,10 +232,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(58, hsp.query_end)
         self.assertEqual(2876, hsp.hit_end)
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGT', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGT', str(hsp.hit.seq)[:40])
         self.assertEqual('GCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastn_004(self):
@@ -275,7 +275,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(490, hsp.aln_span)
+        self.assertEqual(490, hsp.aln_len)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(905.0, hsp.bitscore)
         self.assertEqual(490.0, hsp.bitscore_raw)
@@ -291,10 +291,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(490, hsp.query_end)
         self.assertEqual(490, hsp.hit_end)
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.hit.seq)[:40])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.hit.seq)[-40:])
         # second qresult, second hit
         hit = qresult[1]
@@ -306,7 +306,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(490, hsp.aln_span)
+        self.assertEqual(490, hsp.aln_len)
         self.assertEqual(0.0, hsp.evalue)
         self.assertEqual(900.0, hsp.bitscore)
         self.assertEqual(487.0, hsp.bitscore_raw)
@@ -322,10 +322,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(490, hsp.query_end)
         self.assertEqual(570, hsp.hit_end)
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GAGGTGAAACCGTCCCTAGGTGAGCCGTCTTTCCACCAGG', str(hsp.hit.seq)[:40])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AGTCCCAGGACATGAAAGCCCTGCAGAAGGAGCTAGAACA', str(hsp.hit.seq)[-40:])
 
         # test third qresult
@@ -347,7 +347,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(62, hsp.aln_span)
+        self.assertEqual(62, hsp.aln_len)
         self.assertEqual(6e-29, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -363,14 +363,14 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(66, hsp.query_end)
         self.assertEqual(3738, hsp.hit_end)
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.hit.seq)[:40])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq)[-40:])
         # third qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(53, hsp.aln_span)
+        self.assertEqual(53, hsp.aln_len)
         self.assertEqual(6e-24, hsp.evalue)
         self.assertEqual(99.0, hsp.bitscore)
         self.assertEqual(53.0, hsp.bitscore_raw)
@@ -386,10 +386,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(58, hsp.query_end)
         self.assertEqual(2876, hsp.hit_end)
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGT', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGT', str(hsp.hit.seq)[:40])
         self.assertEqual('GCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA', str(hsp.hit.seq)[-40:])
         # third qresult, second hit
         hit = qresult[1]
@@ -401,7 +401,7 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(62, hsp.aln_span)
+        self.assertEqual(62, hsp.aln_len)
         self.assertEqual(6e-29, hsp.evalue)
         self.assertEqual(115.0, hsp.bitscore)
         self.assertEqual(62.0, hsp.bitscore_raw)
@@ -417,10 +417,10 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual(66, hsp.query_end)
         self.assertEqual(2926, hsp.hit_end)
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCG', str(hsp.hit.seq)[:40])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaaaa', str(hsp.query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('AACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAAAA', str(hsp.hit.seq)[-40:])
 
 
@@ -471,7 +471,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(102, hsp.aln_span)
+        self.assertEqual(102, hsp.aln_len)
         self.assertEqual(1e-66, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -487,10 +487,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(102, hsp.query_end)
         self.assertEqual(102, hsp.hit_end)
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG', str(hsp.query.seq)[:40])
-        self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG', str(hsp.hit.seq)[:40])
         self.assertEqual('DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', str(hsp.query.seq)[-40:])
-        self.assertEqual('DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -502,7 +502,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(102, hsp.aln_span)
+        self.assertEqual(102, hsp.aln_len)
         self.assertEqual(1e-40, hsp.evalue)
         self.assertEqual(139.0, hsp.bitscore)
         self.assertEqual(350.0, hsp.bitscore_raw)
@@ -518,10 +518,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(102, hsp.query_end)
         self.assertEqual(100, hsp.hit_end)
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG', str(hsp.query.seq)[:40])
-        self.assertEqual('MKK    LFFILLL+GCGV ++KSQGED      + TKEG', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('MKK    LFFILLL+GCGV ++KSQGED      + TKEG', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEG', str(hsp.hit.seq)[:40])
         self.assertEqual('DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', str(hsp.query.seq)[-40:])
-        self.assertEqual('DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('DITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastp_003(self):
@@ -551,7 +551,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(1e-63, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(522.0, hsp.bitscore_raw)
@@ -567,14 +567,14 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(101, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(100, hsp.aln_span)
+        self.assertEqual(100, hsp.aln_len)
         self.assertEqual(0.002, hsp.evalue)
         self.assertEqual(43.5, hsp.bitscore)
         self.assertEqual(101.0, hsp.bitscore_raw)
@@ -590,10 +590,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(345, hsp.hit_end)
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED', str(hsp.hit.seq)[:40])
         self.assertEqual('FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -605,7 +605,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(2e-63, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -621,14 +621,14 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(101, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(100, hsp.aln_span)
+        self.assertEqual(100, hsp.aln_len)
         self.assertEqual(0.001, hsp.evalue)
         self.assertEqual(43.9, hsp.bitscore)
         self.assertEqual(102.0, hsp.bitscore_raw)
@@ -644,10 +644,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(345, hsp.hit_end)
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED', str(hsp.hit.seq)[:40])
         self.assertEqual('GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastp_004(self):
@@ -687,7 +687,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(102, hsp.aln_span)
+        self.assertEqual(102, hsp.aln_len)
         self.assertEqual(2e-46, hsp.evalue)
         self.assertEqual(139.0, hsp.bitscore)
         self.assertEqual(350.0, hsp.bitscore_raw)
@@ -703,10 +703,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(102, hsp.query_end)
         self.assertEqual(100, hsp.hit_end)
         self.assertEqual('MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEG', str(hsp.query.seq)[:40])
-        self.assertEqual('MKK    LFFILLL+GCGV ++KSQGED      + TKEG', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('MKK    LFFILLL+GCGV ++KSQGED      + TKEG', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEG', str(hsp.hit.seq)[:40])
         self.assertEqual('DITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN', str(hsp.query.seq)[-40:])
-        self.assertEqual('DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('DITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN', str(hsp.hit.seq)[-40:])
         # second qresult, second hit
         hit = qresult[1]
@@ -718,7 +718,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(105, hsp.aln_span)
+        self.assertEqual(105, hsp.aln_len)
         self.assertEqual(7e-27, hsp.evalue)
         self.assertEqual(89.0, hsp.bitscore)
         self.assertEqual(219.0, hsp.bitscore_raw)
@@ -734,10 +734,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(101, hsp.query_end)
         self.assertEqual(104, hsp.hit_end)
         self.assertEqual('MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIE', str(hsp.query.seq)[:40])
-        self.assertEqual('MKK IA  F ILL    L+ CG   Q  +G   S ++  +', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('MKK IA  F ILL    L+ CG   Q  +G   S ++  +', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('MKKTIAASFLILLFSVVLAACGTAEQSKKGSG-SSENQAQ', str(hsp.hit.seq)[:40])
         self.assertEqual('LDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA', str(hsp.query.seq)[-40:])
-        self.assertEqual(' + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual(' + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FEFSDDFSDVLNKFSENDKVSITYFTNDKGQKEIKEIEKA', str(hsp.hit.seq)[-40:])
 
         # test third qresult
@@ -759,7 +759,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(2e-69, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(522.0, hsp.bitscore_raw)
@@ -775,14 +775,14 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(101, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(100, hsp.aln_span)
+        self.assertEqual(100, hsp.aln_len)
         self.assertEqual(3e-09, hsp.evalue)
         self.assertEqual(43.5, hsp.bitscore)
         self.assertEqual(101.0, hsp.bitscore_raw)
@@ -798,10 +798,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(345, hsp.hit_end)
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED', str(hsp.hit.seq)[:40])
         self.assertEqual('FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('  K     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
         # third qresult, second hit
         hit = qresult[1]
@@ -813,7 +813,7 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(3e-69, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -829,14 +829,14 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(101, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(100, hsp.aln_span)
+        self.assertEqual(100, hsp.aln_len)
         self.assertEqual(2e-09, hsp.evalue)
         self.assertEqual(43.9, hsp.bitscore)
         self.assertEqual(102.0, hsp.bitscore_raw)
@@ -852,10 +852,10 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(345, hsp.hit_end)
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED', str(hsp.hit.seq)[:40])
         self.assertEqual('GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
 
 
@@ -906,7 +906,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(140, hsp.aln_span)
+        self.assertEqual(140, hsp.aln_len)
         self.assertEqual(4e-57, hsp.evalue)
         self.assertEqual(192.0, hsp.bitscore)
         self.assertEqual(487.0, hsp.bitscore_raw)
@@ -922,10 +922,10 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(488, hsp.query_end)
         self.assertEqual(140, hsp.hit_end)
         self.assertEqual('MAGHLAsdfafspppgggdgsagLEPGWVDPRTWLSFQgp', str(hsp.query.seq)[:40])
-        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP', str(hsp.hit.seq)[:40])
         self.assertEqual('NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', str(hsp.query.seq)[-40:])
-        self.assertEqual('NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -937,7 +937,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(140, hsp.aln_span)
+        self.assertEqual(140, hsp.aln_len)
         self.assertEqual(3e-52, hsp.evalue)
         self.assertEqual(179.0, hsp.bitscore)
         self.assertEqual(454.0, hsp.bitscore_raw)
@@ -953,10 +953,10 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(488, hsp.query_end)
         self.assertEqual(140, hsp.hit_end)
         self.assertEqual('MAGHLAsdfafspppgggdgsagLEPGWVDPRTWLSFQgp', str(hsp.query.seq)[:40])
-        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('MAGHLASDFAFSPPPGGGDGSAGLEPGWVDPRTWLSFQGP', str(hsp.hit.seq)[:40])
         self.assertEqual('NSEGTSSEPCADRPNAVKLEKVEPTPEESQDMKALQKELE', str(hsp.query.seq)[-40:])
-        self.assertEqual('NSEG SS PC  RP+AVKLEKVEP+PEESQDMKALQKELE', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('NSEG SS PC  RP+AVKLEKVEP+PEESQDMKALQKELE', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('NSEGASSGPCTARPSAVKLEKVEPSPEESQDMKALQKELE', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastx_003(self):
@@ -986,7 +986,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(95, hsp.aln_span)
+        self.assertEqual(95, hsp.aln_len)
         self.assertEqual(2e-32, hsp.evalue)
         self.assertEqual(121.0, hsp.bitscore)
         self.assertEqual(304.0, hsp.bitscore_raw)
@@ -1002,14 +1002,14 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(16, hsp.query_end)
         self.assertEqual(119, hsp.hit_end)
         self.assertEqual('LRRSFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSW', str(hsp.query.seq)[:40])
-        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSW', str(hsp.hit.seq)[:40])
         self.assertEqual('VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', str(hsp.query.seq)[-40:])
-        self.assertEqual('VE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('VE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(72, hsp.aln_span)
+        self.assertEqual(72, hsp.aln_len)
         self.assertEqual(2e-06, hsp.evalue)
         self.assertEqual(51.6, hsp.bitscore)
         self.assertEqual(122.0, hsp.bitscore_raw)
@@ -1025,10 +1025,10 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(244, hsp.query_end)
         self.assertEqual(98, hsp.hit_end)
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPP', str(hsp.query.seq)[:40])
-        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPP', str(hsp.hit.seq)[:40])
         self.assertEqual('WDCRCPPPHPANffffffffFLRRSFALVAQAGVQWLDLG', str(hsp.query.seq)[-40:])
-        self.assertEqual('W+ R  PPH AN     F F +   F  V QAG++ +  G', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('W+ R  PPH AN     F F +   F  V QAG++ +  G', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('WEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -1040,7 +1040,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(88, hsp.aln_span)
+        self.assertEqual(88, hsp.aln_len)
         self.assertEqual(1e-29, hsp.evalue)
         self.assertEqual(114.0, hsp.bitscore)
         self.assertEqual(286.0, hsp.bitscore_raw)
@@ -1056,14 +1056,14 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(16, hsp.query_end)
         self.assertEqual(117, hsp.hit_end)
         self.assertEqual('VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPP', str(hsp.query.seq)[:40])
-        self.assertEqual('++ AGVQW +LG PQPP P FK FSCLS PSSWDYRH+PP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('++ AGVQW +LG PQPP P FK FSCLS PSSWDYRH+PP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('ISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPP', str(hsp.hit.seq)[:40])
         self.assertEqual('VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', str(hsp.query.seq)[-40:])
-        self.assertEqual('VET F +VGQAGLE P SG+LP  ASQS  ITGVSH A P', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('VET F +VGQAGLE P SG+LP  ASQS  ITGVSH A P', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VETKFPYVGQAGLELPTSGDLPTSASQSAKITGVSHRAWP', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(69, hsp.aln_span)
+        self.assertEqual(69, hsp.aln_len)
         self.assertEqual(1e-06, hsp.evalue)
         self.assertEqual(52.4, hsp.bitscore)
         self.assertEqual(124.0, hsp.bitscore_raw)
@@ -1079,10 +1079,10 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(259, hsp.query_end)
         self.assertEqual(91, hsp.hit_end)
         self.assertEqual('VSVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCP', str(hsp.query.seq)[:40])
-        self.assertEqual('+++  A VQ  +L S QPP+PEFK FS LSL SSWD R  ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('+++  A VQ  +L S QPP+PEFK FS LSL SSWD R  ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LTISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHV', str(hsp.hit.seq)[:40])
         self.assertEqual('SLQSSWDCRCPPPHPANffffffffFLRRSFALVAQAGVQ', str(hsp.query.seq)[-40:])
-        self.assertEqual('SL SSWD R  PP  AN     F F +   F  V QAG++', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('SL SSWD R  PP  AN     F F +   F  V QAG++', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('SLPSSWDYRHVPPRLAN-----FVFLVETKFPYVGQAGLE', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_blastx_004(self):
@@ -1122,7 +1122,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(95, hsp.aln_span)
+        self.assertEqual(95, hsp.aln_len)
         self.assertEqual(3e-38, hsp.evalue)
         self.assertEqual(121.0, hsp.bitscore)
         self.assertEqual(304.0, hsp.bitscore_raw)
@@ -1138,14 +1138,14 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(16, hsp.query_end)
         self.assertEqual(119, hsp.hit_end)
         self.assertEqual('LRRSFALVAQAGVQWLDLGppqpppPGFK*FSCLSHPSSW', str(hsp.query.seq)[:40])
-        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('LRRSFALVAQ  VQW +LG PQPPPPGFK FSCLS  SSW', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LRRSFALVAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSW', str(hsp.hit.seq)[:40])
         self.assertEqual('VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', str(hsp.query.seq)[-40:])
-        self.assertEqual('VE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('VE GF HVGQAGLE   SG+ P   SQS GI GVSH AQP', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VEMGFLHVGQAGLELVTSGDPPTLTSQSAGIIGVSHCAQP', str(hsp.hit.seq)[-40:])
         # second qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(72, hsp.aln_span)
+        self.assertEqual(72, hsp.aln_len)
         self.assertEqual(3e-12, hsp.evalue)
         self.assertEqual(51.6, hsp.bitscore)
         self.assertEqual(122.0, hsp.bitscore_raw)
@@ -1161,10 +1161,10 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(244, hsp.query_end)
         self.assertEqual(98, hsp.hit_end)
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPP', str(hsp.query.seq)[:40])
-        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('V   RVQ ++L S QPP P FK FS LSL SSW+ R  PP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('VAQTRVQWYNLGSPQPPPPGFKRFSCLSLLSSWEYRHVPP', str(hsp.hit.seq)[:40])
         self.assertEqual('WDCRCPPPHPANffffffffFLRRSFALVAQAGVQWLDLG', str(hsp.query.seq)[-40:])
-        self.assertEqual('W+ R  PPH AN     F F +   F  V QAG++ +  G', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('W+ R  PPH AN     F F +   F  V QAG++ +  G', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('WEYRHVPPHLAN-----FLFLVEMGFLHVGQAGLELVTSG', str(hsp.hit.seq)[-40:])
         # second qresult, second hit
         hit = qresult[1]
@@ -1176,7 +1176,7 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(88, hsp.aln_span)
+        self.assertEqual(88, hsp.aln_len)
         self.assertEqual(2e-35, hsp.evalue)
         self.assertEqual(114.0, hsp.bitscore)
         self.assertEqual(286.0, hsp.bitscore_raw)
@@ -1192,14 +1192,14 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(16, hsp.query_end)
         self.assertEqual(117, hsp.hit_end)
         self.assertEqual('VAQAGVQWLDLGppqpppPGFK*FSCLSHPSSWDYRHMPP', str(hsp.query.seq)[:40])
-        self.assertEqual('++ AGVQW +LG PQPP P FK FSCLS PSSWDYRH+PP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('++ AGVQW +LG PQPP P FK FSCLS PSSWDYRH+PP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('ISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHVPP', str(hsp.hit.seq)[:40])
         self.assertEqual('VETGFYHVGQAGLEPPISGNLPAWASQSVGITGVSHHAQP', str(hsp.query.seq)[-40:])
-        self.assertEqual('VET F +VGQAGLE P SG+LP  ASQS  ITGVSH A P', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('VET F +VGQAGLE P SG+LP  ASQS  ITGVSH A P', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VETKFPYVGQAGLELPTSGDLPTSASQSAKITGVSHRAWP', str(hsp.hit.seq)[-40:])
         # second qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(69, hsp.aln_span)
+        self.assertEqual(69, hsp.aln_len)
         self.assertEqual(2e-12, hsp.evalue)
         self.assertEqual(52.4, hsp.bitscore)
         self.assertEqual(124.0, hsp.bitscore_raw)
@@ -1215,10 +1215,10 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual(259, hsp.query_end)
         self.assertEqual(91, hsp.hit_end)
         self.assertEqual('VSVGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCP', str(hsp.query.seq)[:40])
-        self.assertEqual('+++  A VQ  +L S QPP+PEFK FS LSL SSWD R  ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('+++  A VQ  +L S QPP+PEFK FS LSL SSWD R  ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LTISSAGVQWRNLGSPQPPSPEFKRFSCLSLPSSWDYRHV', str(hsp.hit.seq)[:40])
         self.assertEqual('SLQSSWDCRCPPPHPANffffffffFLRRSFALVAQAGVQ', str(hsp.query.seq)[-40:])
-        self.assertEqual('SL SSWD R  PP  AN     F F +   F  V QAG++', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('SL SSWD R  PP  AN     F F +   F  V QAG++', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('SLPSSWDYRHVPPRLAN-----FVFLVETKFPYVGQAGLE', str(hsp.hit.seq)[-40:])
 
 
@@ -1269,7 +1269,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(43, hsp.aln_span)
+        self.assertEqual(43, hsp.aln_len)
         self.assertEqual(0.74, hsp.evalue)
         self.assertEqual(34.7, hsp.bitscore)
         self.assertEqual(78.0, hsp.bitscore_raw)
@@ -1285,10 +1285,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(73, hsp.query_end)
         self.assertEqual(1872, hsp.hit_end)
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTS', str(hsp.query.seq)[:40])
-        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*K', str(hsp.hit.seq)[:40])
         self.assertEqual('NIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', str(hsp.query.seq)[-40:])
-        self.assertEqual('   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('ATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -1300,7 +1300,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(74, hsp.aln_span)
+        self.assertEqual(74, hsp.aln_len)
         self.assertEqual(6.4, hsp.evalue)
         self.assertEqual(32.0, hsp.bitscore)
         self.assertEqual(71.0, hsp.bitscore_raw)
@@ -1316,10 +1316,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(94, hsp.query_end)
         self.assertEqual(1318, hsp.hit_end)
         self.assertEqual('VSPDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEES', str(hsp.query.seq)[:40])
-        self.assertEqual('+  DS +   +G   GL D H + + + + P S+D  +E ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('+  DS +   +G   GL D H + + + + P S+D  +E ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IGNDSYLALSKG---GLVDEHVLILPIGHYPSSIDAPQEV', str(hsp.hit.seq)[:40])
         self.assertEqual('DITEESTSDLDK--------FNSGDKVTITYEKNDEGQLL', str(hsp.query.seq)[-40:])
-        self.assertEqual('D  +E   ++DK        F+S ++  + +E+N   Q L', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('D  +E   ++DK        F+S ++  + +E+N   Q L', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('DAPQEVIEEIDKFKVALRKYFSSKNQTCVMFERNFRSQHL', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastn_003(self):
@@ -1349,7 +1349,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(1e-63, hsp.evalue)
         self.assertEqual(205.0, hsp.bitscore)
         self.assertEqual(521.0, hsp.bitscore_raw)
@@ -1365,14 +1365,14 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(369, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(100, hsp.aln_span)
+        self.assertEqual(100, hsp.aln_len)
         self.assertEqual(0.0005, hsp.evalue)
         self.assertEqual(43.9, hsp.bitscore)
         self.assertEqual(102.0, hsp.bitscore_raw)
@@ -1388,10 +1388,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(1101, hsp.hit_end)
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED', str(hsp.hit.seq)[:40])
         self.assertEqual('GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('GK+     + +I T  +  ++ QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -1403,7 +1403,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(1e-62, hsp.evalue)
         self.assertEqual(199.0, hsp.bitscore)
         self.assertEqual(506.0, hsp.bitscore_raw)
@@ -1419,14 +1419,14 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(388, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(71, hsp.aln_span)
+        self.assertEqual(71, hsp.aln_len)
         self.assertEqual(2.8, hsp.evalue)
         self.assertEqual(32.7, hsp.bitscore)
         self.assertEqual(73.0, hsp.bitscore_raw)
@@ -1442,10 +1442,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(754, hsp.hit_end)
         self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK-', str(hsp.query.seq)[:40])
-        self.assertEqual('+ +Y       P G I L+G  +TS      GK  F+ + ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('+ +Y       P G I L+G  +TS      GK  F+ + ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWER', str(hsp.hit.seq)[:40])
         self.assertEqual('GKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('GK  F+ +     T  +  +F QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('GK  F+ +     T  +  +F QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastn_004(self):
@@ -1485,7 +1485,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(43, hsp.aln_span)
+        self.assertEqual(43, hsp.aln_len)
         self.assertEqual(1e-05, hsp.evalue)
         self.assertEqual(34.7, hsp.bitscore)
         self.assertEqual(78.0, hsp.bitscore_raw)
@@ -1501,10 +1501,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(73, hsp.query_end)
         self.assertEqual(1872, hsp.hit_end)
         self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTS', str(hsp.query.seq)[:40])
-        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('P +   TK+GT +GL   HTI   + +  +SL++ E++  ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*K', str(hsp.hit.seq)[:40])
         self.assertEqual('NIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', str(hsp.query.seq)[-40:])
-        self.assertEqual('   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('   TK+GT +GL   HTI   + +  +SL++ E++  D+D', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('ATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', str(hsp.hit.seq)[-40:])
         # second qresult, second hit
         hit = qresult[1]
@@ -1516,7 +1516,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(59, hsp.aln_span)
+        self.assertEqual(59, hsp.aln_len)
         self.assertEqual(0.0001, hsp.evalue)
         self.assertEqual(31.6, hsp.bitscore)
         self.assertEqual(70.0, hsp.bitscore_raw)
@@ -1532,10 +1532,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(94, hsp.query_end)
         self.assertEqual(1233, hsp.hit_end)
         self.assertEqual('GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG-----', str(hsp.query.seq)[:40])
-        self.assertEqual('GL   HT+ + V +    LD+TEE  ++LD+F S      ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('GL   HT+ + V +    LD+TEE  ++LD+F S      ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYY', str(hsp.hit.seq)[:40])
         self.assertEqual('DITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL', str(hsp.query.seq)[-40:])
-        self.assertEqual('D+TEE  ++LD+F S          K  + YE+N   Q L', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('D+TEE  ++LD+F S          K  + YE+N   Q L', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('DLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL', str(hsp.hit.seq)[-40:])
 
         # test third qresult
@@ -1557,7 +1557,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(199.0, hsp.bitscore)
         self.assertEqual(506.0, hsp.bitscore_raw)
@@ -1573,14 +1573,14 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(388, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(71, hsp.aln_span)
+        self.assertEqual(71, hsp.aln_len)
         self.assertEqual(4e-05, hsp.evalue)
         self.assertEqual(32.7, hsp.bitscore)
         self.assertEqual(73.0, hsp.bitscore_raw)
@@ -1596,10 +1596,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(754, hsp.hit_end)
         self.assertEqual('IEFYKKKSDNSPKGMIPLKGSTLTS-PCQDFGKRMFVLK-', str(hsp.query.seq)[:40])
-        self.assertEqual('+ +Y       P G I L+G  +TS      GK  F+ + ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('+ +Y       P G I L+G  +TS      GK  F+ + ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LHYYDPAGGEDPLGAIHLRGCVVTSVESNTDGKNGFLWER', str(hsp.hit.seq)[:40])
         self.assertEqual('GKRMFVLK---ITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('GK  F+ +     T  +  +F QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('GK  F+ +     T  +  +F QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('GKNGFLWERAXXITADEVHYFLQAANPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
         # third qresult, second hit
         hit = qresult[1]
@@ -1611,7 +1611,7 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(2, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(98, hsp.aln_span)
+        self.assertEqual(98, hsp.aln_len)
         self.assertEqual(2e-67, hsp.evalue)
         self.assertEqual(202.0, hsp.bitscore)
         self.assertEqual(515.0, hsp.bitscore_raw)
@@ -1627,14 +1627,14 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(98, hsp.query_end)
         self.assertEqual(371, hsp.hit_end)
         self.assertEqual('KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('KRIREGYLVK+GSVFNTWKPMWVVLLEDGIEFYKKKSDNS', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('KRIREGYLVKRGSVFNTWKPMWVVLLEDGIEFYKKKSDNS', str(hsp.hit.seq)[:40])
         self.assertEqual('FGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.query.seq)[-40:])
-        self.assertEqual('FGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('FGKRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('FGKRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK', str(hsp.hit.seq)[-40:])
         # third qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(100, hsp.aln_span)
+        self.assertEqual(100, hsp.aln_len)
         self.assertEqual(3e-09, hsp.evalue)
         self.assertEqual(45.1, hsp.bitscore)
         self.assertEqual(105.0, hsp.bitscore_raw)
@@ -1650,10 +1650,10 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual(96, hsp.query_end)
         self.assertEqual(1103, hsp.hit_end)
         self.assertEqual('IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNS', str(hsp.query.seq)[:40])
-        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('I++G L+K+G     WK    +L ED   + +Y       ', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGED', str(hsp.hit.seq)[:40])
         self.assertEqual('QDFGKRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA', str(hsp.query.seq)[-40:])
-        self.assertEqual('    +   + +I T  +  +F QAA  +ER  W++ I+ A', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('    +   + +I T  +  +F QAA  +ER  W++ I+ A', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('VRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA', str(hsp.hit.seq)[-40:])
 
 
@@ -1704,7 +1704,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(163, hsp.aln_span)
+        self.assertEqual(163, hsp.aln_len)
         self.assertEqual(2e-115, hsp.evalue)
         self.assertEqual(418.0, hsp.bitscore)
         self.assertEqual(908.0, hsp.bitscore_raw)
@@ -1720,10 +1720,10 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(489, hsp.query_end)
         self.assertEqual(489, hsp.hit_end)
         self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', str(hsp.query.seq)[:40])
-        self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', str(hsp.hit.seq)[:40])
         self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N', str(hsp.query.seq)[-40:])
-        self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -1735,7 +1735,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(163, hsp.aln_span)
+        self.assertEqual(163, hsp.aln_len)
         self.assertEqual(3e-114, hsp.evalue)
         self.assertEqual(415.0, hsp.bitscore)
         self.assertEqual(900.0, hsp.bitscore_raw)
@@ -1751,10 +1751,10 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(489, hsp.query_end)
         self.assertEqual(82, hsp.hit_end)
         self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', str(hsp.query.seq)[:40])
-        self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('EVKPSLGEPSFHQAPGSGCPPSPWLDTWLQTSPSHPHQVG', str(hsp.hit.seq)[:40])
         self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLPRSPRT*KPCRRS*N', str(hsp.query.seq)[-40:])
-        self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQL RSPRT*KPCRRS*N', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQL RSPRT*KPCRRS*N', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('TQREPPLSPVPTAPMP*SWRRWNQLQRSPRT*KPCRRS*N', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastx_003(self):
@@ -1784,7 +1784,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(3, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(107, hsp.aln_span)
+        self.assertEqual(107, hsp.aln_len)
         self.assertEqual(4e-49, hsp.evalue)
         self.assertEqual(118.0, hsp.bitscore)
         self.assertEqual(252.0, hsp.bitscore_raw)
@@ -1800,14 +1800,14 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(139, hsp.query_end)
         self.assertEqual(623, hsp.hit_end)
         self.assertEqual('VGPARVQ*HDLSSLQPPAPEFK*FSHLSLQSSWDCRCPPP', str(hsp.query.seq)[:40])
-        self.assertEqual('V  A V+ H+LSSLQPP P FK FS LSL SSWD R  PP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('V  A V+ H+LSSLQPP P FK FS LSL SSWD R  PP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('VTQAGVKWHNLSSLQPPPPGFKQFSCLSLPSSWDYRRGPP', str(hsp.hit.seq)[:40])
         self.assertEqual('WLDLGppqpppPGFK*FSCLSHPSSWDYRHMPPCLINFVF', str(hsp.query.seq)[-40:])
-        self.assertEqual('W DLG  Q PPPGF  FSCLS PSSWDYR   P   NF++', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('W DLG  Q PPPGF  FSCLS PSSWDYR   P   NF++', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('WRDLGSLQAPPPGFTPFSCLSLPSSWDYRRPLPRPANFLY', str(hsp.hit.seq)[-40:])
         # first qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(44, hsp.aln_span)
+        self.assertEqual(44, hsp.aln_len)
         self.assertEqual(4e-49, hsp.evalue)
         self.assertEqual(100.0, hsp.bitscore)
         self.assertEqual(214.0, hsp.bitscore_raw)
@@ -1823,10 +1823,10 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(17, hsp.query_end)
         self.assertEqual(499, hsp.hit_end)
         self.assertEqual('FCIFSRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEP', str(hsp.query.seq)[:40])
-        self.assertEqual('FCIFSRDGV  CW GWSRTPDL+*S  LGLPKCWDYR EP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('FCIFSRDGV  CW GWSRTPDL+*S  LGLPKCWDYR EP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('FCIFSRDGVSSCWPGWSRTPDLK*STHLGLPKCWDYRREP', str(hsp.hit.seq)[:40])
         self.assertEqual('SRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEPPRPA', str(hsp.query.seq)[-40:])
-        self.assertEqual('SRDGV  CW GWSRTPDL+*S  LGLPKCWDYR EPPRPA', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('SRDGV  CW GWSRTPDL+*S  LGLPKCWDYR EPPRPA', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('SRDGVSSCWPGWSRTPDLK*STHLGLPKCWDYRREPPRPA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit
         hit = qresult[1]
@@ -1838,7 +1838,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(3, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(94, hsp.aln_span)
+        self.assertEqual(94, hsp.aln_len)
         self.assertEqual(9e-49, hsp.evalue)
         self.assertEqual(197.0, hsp.bitscore)
         self.assertEqual(425.0, hsp.bitscore_raw)
@@ -1854,14 +1854,14 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(17, hsp.query_end)
         self.assertEqual(2745, hsp.hit_end)
         self.assertEqual('ETEFRSCCPGWSAMA*SWPTTASTSWIQVILLPQSPE*LG', str(hsp.query.seq)[:40])
-        self.assertEqual('E EFRSCCPGWSAMA SW    S SW+QVIL PQ PE*LG', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('E EFRSCCPGWSAMA SW    S SW+QVIL PQ PE*LG', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('EMEFRSCCPGWSAMAQSWLIATSVSWVQVILWPQPPE*LG', str(hsp.hit.seq)[:40])
         self.assertEqual('SRDGVLPCWSGWSRTPDLR*SACLGLPKCWDYRCEPPRPA', str(hsp.query.seq)[-40:])
-        self.assertEqual('SRDGV PCWSGWSRTPDLR*SACLGLPKCWDYR EPP PA', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('SRDGV PCWSGWSRTPDLR*SACLGLPKCWDYR EPP PA', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('SRDGVSPCWSGWSRTPDLR*SACLGLPKCWDYRREPPCPA', str(hsp.hit.seq)[-40:])
         # first qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(94, hsp.aln_span)
+        self.assertEqual(94, hsp.aln_len)
         self.assertEqual(4e-43, hsp.evalue)
         self.assertEqual(178.0, hsp.bitscore)
         self.assertEqual(384.0, hsp.bitscore_raw)
@@ -1877,10 +1877,10 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(299, hsp.query_end)
         self.assertEqual(3027, hsp.hit_end)
         self.assertEqual('AGRGGSHL*SQHFGRPRQADYLRSGVRDQPDQHGKTPSLL', str(hsp.query.seq)[:40])
-        self.assertEqual('AG GGS L*SQHFGRPRQAD+LRSGVRDQPDQHG+TPSLL', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('AG GGS L*SQHFGRPRQAD+LRSGVRDQPDQHG+TPSLL', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('AGHGGSRL*SQHFGRPRQADHLRSGVRDQPDQHGETPSLL', str(hsp.hit.seq)[:40])
         self.assertEqual('PSYSGD*GRRIT*IQEVEAVVGQDQAIALQPGQQERNSVS', str(hsp.query.seq)[-40:])
-        self.assertEqual('PSYSG *G+RIT* QE E  + QD AIALQPGQQERNS+S', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('PSYSG *G+RIT* QE E  + QD AIALQPGQQERNS+S', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('PSYSGG*GQRIT*TQETEVAMSQDCAIALQPGQQERNSIS', str(hsp.hit.seq)[-40:])
 
     def test_text_2226_tblastx_004(self):
@@ -1920,7 +1920,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(8, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
-        self.assertEqual(116, hsp.aln_span)
+        self.assertEqual(116, hsp.aln_len)
         self.assertEqual(2e-81, hsp.evalue)
         self.assertEqual(289.0, hsp.bitscore)
         self.assertEqual(626.0, hsp.bitscore_raw)
@@ -1936,14 +1936,14 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(349, hsp.query_end)
         self.assertEqual(349, hsp.hit_end)
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINP', str(hsp.query.seq)[:40])
-        self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('WP*TLEGLTPCKGNLKQNCVLYLPNRKEEIQPFAMLVINP', str(hsp.hit.seq)[:40])
         self.assertEqual('WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', str(hsp.query.seq)[-40:])
-        self.assertEqual('WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('WQCNAYRDCQPFHLFLEAGCLKFWMPSLRLLISRWRFN*K', str(hsp.hit.seq)[-40:])
         # second qresult, first hit, second hsp
         hsp = qresult[0].hsps[1]
-        self.assertEqual(116, hsp.aln_span)
+        self.assertEqual(116, hsp.aln_len)
         self.assertEqual(5e-78, hsp.evalue)
         self.assertEqual(278.0, hsp.bitscore)
         self.assertEqual(602.0, hsp.bitscore_raw)
@@ -1959,10 +1959,10 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(2, hsp.query_end)
         self.assertEqual(2, hsp.hit_end)
         self.assertEqual('LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALP', str(hsp.query.seq)[:40])
-        self.assertEqual('LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALP', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALP', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('LLIESPSRDE*PQ*RHPKFQTAGFEE*MERLTVPVGIALP', str(hsp.hit.seq)[:40])
         self.assertEqual('WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP', str(hsp.query.seq)[-40:])
-        self.assertEqual('WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('WIYH*HGEWLNFFFSIRKIKNAILLQVAFAWSQTLQCSWP', str(hsp.hit.seq)[-40:])
         # second qresult, second hit
         hit = qresult[1]
@@ -1974,7 +1974,7 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(10, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
-        self.assertEqual(85, hsp.aln_span)
+        self.assertEqual(85, hsp.aln_len)
         self.assertEqual(5e-42, hsp.evalue)
         self.assertEqual(152.0, hsp.bitscore)
         self.assertEqual(327.0, hsp.bitscore_raw)
@@ -1990,14 +1990,14 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(348, hsp.query_end)
         self.assertEqual(342, hsp.hit_end)
         self.assertEqual('TIRHASDKSIEILKRVHSFEELERHPDFALPFVLACQSRN', str(hsp.query.seq)[:40])
-        self.assertEqual('TI+HASDKSI+ILK + + EEL RHPDF  P VLAC SRN', hsp.alignment_annotation['homology'][:40])
+        self.assertEqual('TI+HASDKSI+ILK + + EEL RHPDF  P VLAC SRN', hsp[0].alignment_annotation['homology'][:40])
         self.assertEqual('TIKHASDKSIDILKTIQNIEELVRHPDFVTPLVLACSSRN', str(hsp.hit.seq)[:40])
         self.assertEqual('LAMQCLQGLSTVPSIPRSRLSEILDAFIEATHLAMEIQLK', str(hsp.query.seq)[-40:])
-        self.assertEqual('+AMQCLQGL++VPSIP SR+ E+LD FIEAT LAMEIQLK', hsp.alignment_annotation['homology'][-40:])
+        self.assertEqual('+AMQCLQGL++VPSIP SR+ E+LD FIEAT LAMEIQLK', hsp[0].alignment_annotation['homology'][-40:])
         self.assertEqual('IAMQCLQGLASVPSIPESRIPEVLDGFIEATQLAMEIQLK', str(hsp.hit.seq)[-40:])
         # second qresult, second hit, second hsp
         hsp = qresult[1].hsps[1]
-        self.assertEqual(14, hsp.aln_span)
+        self.assertEqual(14, hsp.aln_len)
         self.assertEqual(5e-42, hsp.evalue)
         self.assertEqual(26.3, hsp.bitscore)
         self.assertEqual(51.0, hsp.bitscore_raw)
@@ -2013,6 +2013,10 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual(110, hsp.query_end)
         self.assertEqual(104, hsp.hit_end)
         self.assertEqual('FRIEKKKFNHSPC*', str(hsp.query.seq))
-        self.assertEqual('FRI KKKFNH  C*', hsp.alignment_annotation['homology'])
+        self.assertEqual('FRI KKKFNH  C*', hsp[0].alignment_annotation['homology'])
         self.assertEqual('FRI*KKKFNH*TC*', str(hsp.hit.seq))
 
+
+if __name__ == "__main__":
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)

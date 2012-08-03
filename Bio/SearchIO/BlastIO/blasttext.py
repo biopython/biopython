@@ -11,7 +11,7 @@ parser.
 """
 
 from Bio.Blast import NCBIStandalone
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
 class BlastTextIterator(object):
@@ -65,50 +65,36 @@ class BlastTextIterator(object):
 
                 # iterate over the hsps and group them in the current hit
                 for bhsp in aln.hsps:
-                    hsp = HSP(hid, qid)
-                    hsp.evalue = bhsp.expect
-                    hsp.bitscore = bhsp.bits
-                    hsp.bitscore_raw = bhsp.score
+                    frag = HSPFragment(hid, qid)
                     # set alignment length
-                    hsp.aln_span = bhsp.identities[1]
+                    frag.aln_len = bhsp.identities[1]
                     # set frames
                     try:
-                        hsp.query_frame = int(bhsp.frame[0])
+                        frag.query_frame = int(bhsp.frame[0])
                     except IndexError:
                         if qresult.program in ('blastp', 'tblastn'):
-                            hsp.query_frame = 0
+                            frag.query_frame = 0
                         else:
-                            hsp.query_frame = 1
+                            frag.query_frame = 1
                     try:
-                        hsp.hit_frame = int(bhsp.frame[1])
+                        frag.hit_frame = int(bhsp.frame[1])
                     except IndexError:
                         if qresult.program in ('blastp', 'tblastn'):
-                            hsp.hit_frame = 0
+                            frag.hit_frame = 0
                         else:
-                            hsp.hit_frame = 1
-                    # set gap
-                    try:
-                        hsp.gap_num = bhsp.gaps[0]
-                    except IndexError:
-                        hsp.gap_num = 0
-                    # set identity
-                    hsp.ident_num = bhsp.identities[0]
-                    hsp.pos_num = bhsp.positives[0]
-                    if hsp.pos_num is None:
-                        hsp.pos_num = hsp.aln_span
+                            frag.hit_frame = 1
                     # set query coordinates
-                    startfunc = min if hsp.query_strand >= 0 else max
-                    endfunc = max if hsp.query_strand >= 0 else min
-                    hsp.query_start = startfunc(bhsp.query_start, \
+                    startfunc = min if frag.query_strand >= 0 else max
+                    endfunc = max if frag.query_strand >= 0 else min
+                    frag.query_start = startfunc(bhsp.query_start, \
                             bhsp.query_end) - 1
-                    hsp.query_end = endfunc(bhsp.query_start, bhsp.query_end)
+                    frag.query_end = endfunc(bhsp.query_start, bhsp.query_end)
                     # set hit coordinates
-                    startfunc = min if hsp.hit_strand >= 0 else max
-                    endfunc = max if hsp.hit_strand >= 0 else min
-                    hsp.hit_start = startfunc(bhsp.sbjct_start, \
+                    startfunc = min if frag.hit_strand >= 0 else max
+                    endfunc = max if frag.hit_strand >= 0 else min
+                    frag.hit_start = startfunc(bhsp.sbjct_start, \
                             bhsp.sbjct_end) - 1
-                    hsp.hit_end = endfunc(bhsp.sbjct_start, bhsp.sbjct_end)
-
+                    frag.hit_end = endfunc(bhsp.sbjct_start, bhsp.sbjct_end)
                     # set query, hit sequences and its annotation
                     qseq = ''
                     hseq = ''
@@ -121,10 +107,26 @@ class BlastTextIterator(object):
                             qseq += qchar
                             hseq += hchar
                             midline += mchar
-                    hsp.query, hsp.hit = qseq, hseq
-                    hsp.alignment_annotation['homology'] = midline
+                    frag.query, frag.hit = qseq, hseq
+                    frag.alignment_annotation['homology'] = midline
 
-                    hit.append(BatchHSP([hsp]))
+                    # create HSP object with the fragment
+                    hsp = HSP([frag])
+                    hsp.evalue = bhsp.expect
+                    hsp.bitscore = bhsp.bits
+                    hsp.bitscore_raw = bhsp.score
+                    # set gap
+                    try:
+                        hsp.gap_num = bhsp.gaps[0]
+                    except IndexError:
+                        hsp.gap_num = 0
+                    # set identity
+                    hsp.ident_num = bhsp.identities[0]
+                    hsp.pos_num = bhsp.positives[0]
+                    if hsp.pos_num is None:
+                        hsp.pos_num = hsp[0].aln_len
+
+                    hit.append(hsp)
 
                 hit.description = hdesc
                 qresult.append(hit)

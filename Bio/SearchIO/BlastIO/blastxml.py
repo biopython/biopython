@@ -15,7 +15,7 @@ except ImportError:
     from xml.etree import ElementTree as ET
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
@@ -40,19 +40,22 @@ _ELEM_HSP = {
     'Hsp_bit-score': ('bitscore', float),
     'Hsp_score': ('bitscore_raw', int),
     'Hsp_evalue': ('evalue', float),
+    'Hsp_identity': ('ident_num', int),
+    'Hsp_positive': ('pos_num', int),
+    'Hsp_gaps': ('gap_num', int),
+    'Hsp_density': ('density', float),
+}
+# element - fragment attribute name mapping
+_ELEM_FRAG = {
     'Hsp_query-from': ('query_start', int),
     'Hsp_query-to': ('query_end', int),
     'Hsp_hit-from': ('hit_start', int),
     'Hsp_hit-to': ('hit_end', int),
     'Hsp_query-frame': ('query_frame', int),
     'Hsp_hit-frame': ('hit_frame', int),
-    'Hsp_identity': ('ident_num', int),
-    'Hsp_positive': ('pos_num', int),
-    'Hsp_gaps': ('gap_num', int),
-    'Hsp_align-len': ('aln_span', int),
+    'Hsp_align-len': ('aln_len', int),
     'Hsp_pattern-from': ('pattern_start', int),
     'Hsp_pattern-to': ('pattern_end', int),
-    'Hsp_density': ('density', float),
     'Hsp_hseq': ('hit', str),
     'Hsp_qseq': ('query', str),
 }
@@ -369,9 +372,9 @@ class BlastXmlIterator(object):
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id
 
-            for hsp in self.parse_hsp(hit_elem.find('Hit_hsps'), query_id, \
+            for hsp in self.parse_hsp_frag(hit_elem.find('Hit_hsps'), query_id, \
                     hit_id):
-                hit.append(BatchHSP([hsp]))
+                hit.append(hsp)
 
             # delete element after we finish parsing it
             hit_elem.clear()
@@ -379,11 +382,11 @@ class BlastXmlIterator(object):
             hit.description = hit_desc
             yield hit
 
-    def parse_hsp(self, root_hsp_elem, query_id, hit_id):
+    def parse_hsp_frag(self, root_hsp_frag_elem, query_id, hit_id):
         """Iterator that transforms Hit_hsps XML elements into HSP objects.
 
         Arguments:
-        root_hsp_elem -- Element object of the Hit_hsps tag.
+        root_hsp_frag_elem -- Element object of the Hit_hsps tag.
         hit_id -- String of hit ID to initialize all HSP objects.
 
         """
@@ -411,16 +414,14 @@ class BlastXmlIterator(object):
         #        Hsp_midline?)>
 
         # if value is None, feed the loop below an empty list
-        if root_hsp_elem is None:
-            root_hsp_elem = []
+        if root_hsp_frag_elem is None:
+            root_hsp_frag_elem = []
 
-        for hsp_elem in root_hsp_elem:
-            hsp = HSP(hit_id, query_id)
-            # temporary container for coordinates
-            coords = {}
-
-            for key, val_info in _ELEM_HSP.items():
-                value = hsp_elem.findtext(key)
+        for hsp_frag_elem in root_hsp_frag_elem:
+            coords = {}  # temporary container for coordinates
+            frag = HSPFragment(hit_id, query_id)
+            for key, val_info in _ELEM_FRAG.items():
+                value = hsp_frag_elem.findtext(key)
                 caster = val_info[1]
 
                 # adjust 'from' and 'to' coordinates to 0-based ones
@@ -432,11 +433,11 @@ class BlastXmlIterator(object):
                     # recast only if value is not intended to be str
                     elif caster is not str:
                         value = caster(value)
-                    setattr(hsp, val_info[0], value)
+                    setattr(frag, val_info[0], value)
 
             # set the homology characters into alignment_annotation dict
-            hsp.alignment_annotation['homology'] = \
-                    hsp_elem.findtext('Hsp_midline')
+            frag.alignment_annotation['homology'] = \
+                    hsp_frag_elem.findtext('Hsp_midline')
 
             # process coordinates
             # since 'x-from' could be bigger than 'x-to', we need to figure
@@ -452,11 +453,19 @@ class BlastXmlIterator(object):
                     continue
                 else:
                     # convert to python range and setattr
-                    setattr(hsp, start_type, min(start, end) - 1)
-                    setattr(hsp, end_type, max(start, end))
+                    setattr(frag, start_type, min(start, end) - 1)
+                    setattr(frag, end_type, max(start, end))
 
+            hsp = HSP([frag])
+            for key, val_info in _ELEM_HSP.items():
+                value = hsp_frag_elem.findtext(key)
+                caster = val_info[1]
+                if value is not None:
+                    if caster is not str:
+                        value = caster(value)
+                    setattr(hsp, val_info[0], value)
             # delete element after we finish parsing it
-            hsp_elem.clear()
+            hsp_frag_elem.clear()
             yield hsp
 
 
