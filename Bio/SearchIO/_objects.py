@@ -1120,6 +1120,16 @@ class HSP(BaseHSP):
 
     alignment = property(fget=_alignment_get)
 
+    def _alignment_annotations_get(self):
+        return [fragment.alignment_annotation for fragment in self.fragments]
+
+    alignment_annotations = property(fget=_alignment_annotations_get)
+
+    def _alignment_annotation_get(self):
+        return self._items[0].alignment_annotation
+
+    alignment_annotation = property(fget=_alignment_annotation_get)
+
     def _aln_len_get(self):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
