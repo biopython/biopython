@@ -25,7 +25,7 @@ import re
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.File import UndoHandle
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, BatchHSP
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 from Bio._py3k import _bytes_to_string
 
@@ -70,8 +70,9 @@ def _set_qresult_hits(qresult, hit_rows):
         # The current method only looks at the Hit ID, none of the things above
         if hit_id not in qresult:
             hit = Hit(hit_id, qresult.id)
-            hsp = HSP(hit_id, qresult.id)
-            hit.append(BatchHSP([hsp]))
+            frag = HSPFragment(hit_id, qresult.id)
+            hsp = HSP([frag])
+            hit.append(hsp)
             qresult.append(hit)
 
     return qresult
@@ -98,28 +99,25 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program):
         start = int(annot[seq_type]['_start'])
         end = int(annot[seq_type]['_stop'])
 
-        setattr(hsp, seq_type + '_start', min(start, end) - 1)
-        setattr(hsp, seq_type + '_end', max(start, end))
+        setattr(hsp.fragment, seq_type + '_start', min(start, end) - 1)
+        setattr(hsp.fragment, seq_type + '_end', max(start, end))
         # set seq and alphabet
-        setattr(hsp, seq_type, seq)
+        setattr(hsp.fragment, seq_type, seq)
 
         # alphabet of the sequence, not of the actual query that
         # produces the sequence
         alphabet = _get_alphabet(seq, annot[seq_type])
-        setattr(getattr(hsp, seq_type).seq, 'alphabet', alphabet)
+        setattr(getattr(hsp.fragment, seq_type).seq, 'alphabet', alphabet)
 
         if alphabet is not generic_protein:
             # get strand from coordinate; start <= end is plus
             # start > end is minus
             if start <= end:
-                setattr(hsp, seq_type + '_strand', 1)
+                setattr(hsp.fragment, seq_type + '_strand', 1)
             else:
-                setattr(hsp, seq_type + '_strand', -1)
+                setattr(hsp.fragment, seq_type + '_strand', -1)
         else:
-            setattr(hsp, seq_type + '_strand', 0)
-
-    # set hsp alignment length
-    hsp.aln_span = len(hsp.query)
+            setattr(hsp.fragment, seq_type + '_strand', 0)
 
 
 def _get_alphabet(seq, annot):
@@ -267,7 +265,7 @@ class FastaM10Iterator(object):
                         # existing hit
                         for hsp in hit.hsps:
                             assert strand != hsp.query_strand
-                            qresult[hit.id].append(BatchHSP([hsp]))
+                            qresult[hit.id].append(hsp)
 
             self.line = self.handle.readline()
 
@@ -315,8 +313,9 @@ class FastaM10Iterator(object):
                     hit = Hit(hit_id, query_id)
                     hit.description = hit_desc
                     # create the HSP object for Hit
-                    hsp = HSP(hit_id, query_id)
-                    hit.append(BatchHSP([hsp]))
+                    frag = HSPFragment(hit_id, query_id)
+                    hsp = HSP([frag])
+                    hit.append(hsp)
                     # set or reset the state to none
                     state = STATE_NONE
                     hsp_annot = {'query':{}, 'hit': {}}
@@ -326,8 +325,9 @@ class FastaM10Iterator(object):
                     _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
                             self._preamble['program'])
                     # and create a new one
-                    hsp = HSP(hit_id, query_id)
-                    hit.append(BatchHSP([hsp]))
+                    frag = HSPFragment(hit_id, query_id)
+                    hsp = HSP([frag])
+                    hit.append(hsp)
                     # set the state ~ none yet
                     state = STATE_NONE
                     hsp_annot = {'query':{}, 'hit': {}}
@@ -351,8 +351,7 @@ class FastaM10Iterator(object):
                 # check for conservation block
                 if self.line.startswith('; al_cons'):
                     state = STATE_CONS_BLOCK
-                    hsp.alignment_annotation = {}
-                    hsp.alignment_annotation['homology'] = ''
+                    hsp.fragment.alignment_annotation['homology'] = ''
                 else:
                     # Fasta outputs do not make a clear distinction between Hit
                     # and HSPs, so we check the attribute names to determine
@@ -369,7 +368,7 @@ class FastaM10Iterator(object):
                                 value = caster(value)
                             if name in ['_ident', '_sim']:
                                 value *= 100
-                            setattr(hit[-1][0], attr_name, value)
+                            setattr(hit[-1], attr_name, value)
                     # otherwise, pool the values for processing later
                     elif state == STATE_QUERY_BLOCK:
                         hsp_annot['query'][name] = value
@@ -390,7 +389,7 @@ class FastaM10Iterator(object):
                 elif state == STATE_QUERY_BLOCK:
                     qseq += self.line.strip()
                 elif state == STATE_CONS_BLOCK:
-                    hit[-1][0].alignment_annotation['homology'] += self.line.strip('\n')
+                    hit[-1].fragment.alignment_annotation['homology'] += self.line.strip('\n')
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)
