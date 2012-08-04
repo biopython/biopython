@@ -963,8 +963,8 @@ class HSP(BaseHSP):
     # from this one
     _NON_STICKY_ATTRS = ('_fragments', '_aln_span')
 
-    def __init__(self, fragments):
-        """Initializes an HSP object.
+    def __init__(self, fragments=[]):
+        """Initializes an `HSP` object.
 
         Arguments:
         fragments -- List of HSPFragment objects.
