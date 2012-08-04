@@ -54,16 +54,8 @@ class BlastTextIterator(object):
                     hid, hdesc = aln.title, ''
                 hdesc = hdesc.replace('\n', '').replace('\r', '')
 
-                hit = Hit(hid, qid)
-                hit.seq_len = aln.length
-                # get hit-level e-value and score, if available
-                try:
-                    hit.evalue = rec.descriptions[idx].e
-                    hit.score = rec.descriptions[idx].score
-                except IndexError:
-                    pass
-
-                # iterate over the hsps and group them in the current hit
+                # iterate over the hsps and group them in a list
+                hit_list = []
                 for bhsp in aln.hsps:
                     frag = HSPFragment(hid, qid)
                     # set alignment length
@@ -126,7 +118,16 @@ class BlastTextIterator(object):
                     if hsp.pos_num is None:
                         hsp.pos_num = hsp[0].aln_span
 
-                    hit.append(hsp)
+                    hit_list.append(hsp)
+
+                hit = Hit(hid, qid, hit_list)
+                hit.seq_len = aln.length
+                # get hit-level e-value and score, if available
+                try:
+                    hit.evalue = rec.descriptions[idx].e
+                    hit.score = rec.descriptions[idx].score
+                except IndexError:
+                    pass
 
                 hit.description = hdesc
                 qresult.append(hit)
