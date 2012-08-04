@@ -108,21 +108,6 @@ _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
 _MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
 
 
-def read_forward(handle, strip=True):
-    """Reads through whitespaces, returns the first non-whitespace line."""
-    while True:
-        line = handle.readline()
-        # return the line if it has characters
-        if line and line.strip():
-            if strip:
-                return line.strip()
-            else:
-                return line
-        # or if has no characters (EOF)
-        elif not line:
-            return line
-
-
 class BlastTabIterator(object):
 
     """Parser for the Blast tabular format."""
@@ -130,7 +115,7 @@ class BlastTabIterator(object):
     def __init__(self, handle, fields=_DEFAULT_FIELDS):
         self.handle = handle
         self.fields = fields
-        self.line = read_forward(self.handle)
+        self.line = self.handle.readline().strip()
 
     def __iter__(self):
         # stop iteration if file has no lines
@@ -138,40 +123,43 @@ class BlastTabIterator(object):
             raise StopIteration
         # if line starts with '#', it's a commented file
         # so we'll parse the comments
-        elif self.line.startswith('# '):
-            while True:
-                # parse comments
-                comments = self.parse_comments()
-                if not comments:
-                    break
-                # no fields means the query has no result, so we'll yield
-                # and empty query object with the parsed comments
-                elif 'fields' not in comments:
+        elif self.line.startswith('#'):
+            iterfunc = self.parse_qresult_with_comments
+        # otherwise it's a noncommented file
+        # and we can parse the result lines directly
+        else:
+            iterfunc = self.parse_qresult
+
+        for qresult in iterfunc():
+            yield qresult
+
+    def parse_qresult_with_comments(self):
+        """Iterator returning `QueryResult` objects from a commented file."""
+        while True:
+            comments = self.parse_comments()
+            if comments:
+                try:
+                    self.fields = comments['fields']
+                    empty_qres = False
+                except KeyError:
+                    # no fields means the query has no results
+                    assert 'fields' not in comments
+                    empty_qres = True
+
+                if empty_qres:
                     qresult = QueryResult('')
                     for key, value in comments.items():
                         setattr(qresult, key, value)
                     yield qresult
-                # otherwise, we'll use the plain qresult parser to parse
-                # the result lines
                 else:
-                    # set fields according to the parsed comments
-                    self.fields = comments['fields']
                     for qresult in self.parse_qresult():
                         for key, value in comments.items():
                             setattr(qresult, key, value)
                         yield qresult
-                # if there's no more lines, break
-                if not self.line:
-                    break
-        # otherwise it's a noncommented file
-        # and we can parse the result lines directly
-        else:
-            for qresult in self.parse_qresult():
-                yield qresult
+            else: break
 
     def parse_comments(self):
         """Returns a dictionary containing tab file comments."""
-
         comments = {}
         while True:
             # parse program and version
@@ -183,10 +171,10 @@ class BlastTabIterator(object):
             # parse query id and description (if available)
             # example: # Query: gi|356995852 Mus musculus POU domain
             elif 'Query' in self.line:
-                query_line = self.line[len('# Query: '):].split(' ')
+                query_line = self.line[len('# Query: '):].split(' ', 1)
                 comments['id'] = query_line[0]
-                if len(query_line) > 1:
-                    comments['description'] = ' '.join(query_line[1:])
+                if len(query_line) == 2:
+                    comments['description'] = query_line[1]
             # parse target database
             # example: # Database: db/minirefseq_protein
             elif 'Database' in self.line:
@@ -197,37 +185,44 @@ class BlastTabIterator(object):
             # parse column order, required for parsing the result lines
             # example: # Fields: query id, query gi, query acc., query length
             elif 'Fields' in self.line:
-                raw_field_str = self.line[len('# Fields: '):]
-                long_fields = raw_field_str.split(', ')
-                fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
-                # warn if there are unsupported columns
-                for field in fields:
-                    if field not in _SUPPORTED_FIELDS:
-                        message = "Warning: field '%s' is not yet " \
-                                "supported by SearchIO. The data in the " \
-                                "corresponding column will be ignored." % field
-                        warnings.warn(message)
-                # if set(fields) has a null intersection with minimum required
-                # fields for hit and query, raise an exception
-                if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
-                        not set(fields).intersection(_MIN_HIT_FIELDS):
-                    raise ValueError("Required field is not found.")
-                comments['fields'] = fields
+                comments['fields'] = self.parse_fields_line()
             # if the line has these strings, it's either the end of a comment
             # or the end of a file, so we return all the comments we've parsed
             elif ' hits found' in self.line or 'processed' in self.line:
-                self.line = read_forward(self.handle)
+                self.line = self.handle.readline().strip()
                 return comments
 
-            self.line = read_forward(self.handle)
+            self.line = self.handle.readline()
 
             if not self.line:
                 return
+            else:
+                self.line = self.line.strip()
+
+    def parse_fields_line(self):
+        """Returns a list of column short names from the 'Fields'
+        comment line."""
+        raw_field_str = self.line[len('# Fields: '):]
+        long_fields = raw_field_str.split(', ')
+        fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
+        # warn if there are unsupported columns
+        for field in fields:
+            if field not in _SUPPORTED_FIELDS:
+                message = "Warning: field '%s' is not yet " \
+                        "supported by SearchIO. The data in the " \
+                        "corresponding column will be ignored." % field
+                warnings.warn(message)
+        # if set(fields) has a null intersection with minimum required
+        # fields for hit and query, raise an exception
+        if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
+                not set(fields).intersection(_MIN_HIT_FIELDS):
+            raise ValueError("Required ID field is not found.")
+
+        return fields
 
     def parse_result_row(self):
         """Returns a dictionary of parsed row values."""
         fields = self.fields
-
         columns = self.line.strip().split('\t')
         assert len(fields) == len(columns), "Expected %i columns, found: " \
             "%i" % (len(fields), len(columns))
@@ -235,35 +230,27 @@ class BlastTabIterator(object):
         qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):
             sname = fields[idx]
-
-            if sname in _COLUMN_QRESULT:
-                attr_name, caster = _COLUMN_QRESULT[sname]
-                if caster is not str:
-                    value = caster(value)
-                qresult[attr_name] = value
-
-            elif sname in _COLUMN_HIT:
-                attr_name, caster = _COLUMN_HIT[sname]
-                if caster is not str:
-                    value = caster(value)
-                hit[attr_name] = value
-
-            elif sname in _COLUMN_HSP:
-                attr_name, caster = _COLUMN_HSP[sname]
-                if caster is not str:
-                    value = caster(value)
-                hsp[attr_name] = value
-
-            elif sname in _COLUMN_FRAG:
-                attr_name, caster = _COLUMN_FRAG[sname]
-                if caster is not str:
-                    value = caster(value)
-                frag[attr_name] = value
+            # flag to check if any of the _COLUMNs contain sname
+            in_mapping = False
+            # iterate over each dict, mapping pair to determine
+            # attribute name and value of each column
+            for parsed_dict, mapping in (
+                    (qresult, _COLUMN_QRESULT),
+                    (hit, _COLUMN_HIT),
+                    (hsp, _COLUMN_HSP),
+                    (frag, _COLUMN_FRAG)):
+                # process parsed value according to mapping
+                if sname in mapping:
+                    attr_name, caster = mapping[sname]
+                    if caster is not str:
+                        value = caster(value)
+                    parsed_dict[attr_name] = value
+                    in_mapping = True
             # make sure that any unhandled field is not supported
-            else:
+            if not in_mapping:
                 assert sname not in _SUPPORTED_FIELDS
 
-        return qresult, hit, hsp, frag
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
     def get_id(self, parsed):
         """Returns the value used for a QueryResult or Hit ID from a parsed row."""
@@ -280,73 +267,140 @@ class BlastTabIterator(object):
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
-        qid_cache = ''
-        hid_cache = ''
-        same_query = False
+        # state values, used to determine what to do with each line
+        state_EOF = 0
+        state_QRES_NEW = 1
+        state_QRES_SAME = 3
+        state_HIT_NEW = 2
+        state_HIT_SAME = 4
+        # dummies for initial states
+        qres_state = None
+        hit_state = None
+        file_state = None
+        # dummies for initial id caches
+        prev_qid = None
+        prev_hid = None
+        # dummies for initial parsed value containers
+        cur, prev = None, None
+        hit_list, hsp_list = [], []
+
         while True:
+            # store previous line's parsed values if we've past the first line
+            if cur is not None:
+                prev = cur
+                prev_qid = cur_qid
+                prev_hid = cur_hid
             # only parse the line if it's not EOF or not a comment line
-            if self.line and not self.line.startswith('#' ):
-                qres_parsed, hit_parsed, hsp_parsed, frag_parsed = \
-                        self.parse_result_row()
-                qresult_id = self.get_id(qres_parsed)
+            if self.line and not self.line.startswith('#'):
+                cur = self.parse_result_row()
+                cur_qid = self.get_id(cur['qresult'])
+                cur_hid = self.get_id(cur['hit'])
+            else:
+                file_state = state_EOF
+                # mock values for cur_qid and cur_hid since the line is empty
+                cur_qid, cur_hid = None, None
 
-            # create new qresult whenever parsed qresult id != cached qresult id
-            if qid_cache != qresult_id:
-                # if cache is filled (qresult # >1), we can append the latest
-                # hit and yield
-                if qid_cache:
-                    qresult.append(hit)
+            # get the state of hit and qresult
+            if prev_qid != cur_qid:
+                qres_state = state_QRES_NEW
+            else:
+                qres_state = state_QRES_SAME
+            # new hits are hits with different id or hits in a new qresult
+            if prev_hid != cur_hid or qres_state == state_QRES_NEW:
+                hit_state = state_HIT_NEW
+            else:
+                hit_state = state_HIT_SAME
+
+            # we're creating objects for the previously parsed line(s),
+            # so nothing is done in the first parsed line (prev == None)
+            if prev is not None:
+                # every line is essentially an HSP with one fragment, so we
+                # create both of these for every line
+                frag = HSPFragment(prev_hid, prev_qid)
+                for attr, value in prev['frag'].items():
+                    # adjust coordinates to Python range
+                    # NOTE: this requires both start and end coords to be
+                    # present, otherwise a KeyError will be raised.
+                    # Without this limitation, we might misleadingly set the
+                    # start / end coords
+                    for seq_type in ('query', 'hit'):
+                        if attr == seq_type + '_start':
+                            value = min(value,
+                                    prev['frag'][seq_type + '_end']) - 1
+                        elif attr == seq_type + '_end':
+                            value = max(value,
+                                    prev['frag'][seq_type + '_start'])
+                    setattr(frag, attr, value)
+                # strand and frame setattr require the full parsed values
+                # to be set first
+                for seq_type in ('hit', 'query'):
+                    # try to set hit and query frame
+                    frame = self.get_frag_frame(frag, seq_type,
+                            prev['frag'])
+                    setattr(frag, '%s_frame' % seq_type, frame)
+                    # try to set hit and query strand
+                    strand = self.get_frag_strand(frag, seq_type,
+                            prev['frag'])
+                    setattr(frag, '%s_strand' % seq_type, strand)
+
+                hsp = HSP([frag])
+                for attr, value in prev['hsp'].items():
+                    setattr(hsp, attr, value)
+                hsp_list.append(hsp)
+
+                # create hit and append to temp hit container if hit_state
+                # says we're not at the same hit or at a new query
+                if hit_state == state_HIT_NEW:
+                    hit = Hit(prev_hid, prev_qid, hsps=hsp_list)
+                    for attr, value in prev['hit'].items():
+                        setattr(hit, attr, value)
+                    hit_list.append(hit)
+                    hsp_list = []
+                # create qresult and yield if we're at a new qresult or EOF
+                if qres_state == state_QRES_NEW or file_state == state_EOF:
+                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    for attr, value in prev['qresult'].items():
+                        setattr(qresult, attr, value)
                     yield qresult
-                    same_query = False
-                qid_cache = qresult_id
-                qresult = QueryResult(qid_cache)
-                for attr, value in qres_parsed.items():
-                    setattr(qresult, attr, value)
-            # append remaining hit and yield if it's EOF or a comment line
-            elif not self.line or self.line.startswith('#' ):
-                qresult.append(hit)
-                yield qresult
-                break
-            # otherwise, we're still in the same qresult, so set the flag
-            elif not same_query:
-                same_query = True
+                    # if current line is EOF, break
+                    if file_state == state_EOF:
+                        break
+                    hit_list = []
 
-            hit_id = self.get_id(hit_parsed)
-            # create new hit whenever parsed hit id != cached hit id
-            if hid_cache != hit_id:
-                # if the qresult id is the same as the previous line,
-                # append the previous line's hit before creating this one's
-                if same_query:
-                    qresult.append(hit)
-                hid_cache = hit_id
-                hit = Hit(hit_id, qresult_id)
-                for attr, value in hit_parsed.items():
-                    setattr(hit, attr, value)
+            self.line = self.handle.readline().strip()
 
-            # every line is essentially an HSP with one fragment, so we
-            # create both of these for every line
-            frag = HSPFragment(hid_cache, qid_cache)
-            for attr, value in frag_parsed.items():
-                # adjust coordinates to Python range
-                for coord_type in ('query', 'hit'):
-                    if attr == coord_type + '_start':
-                        value = min(value, frag_parsed[coord_type + '_end']) - 1
-                    elif attr == coord_type + '_end':
-                        value = max(value, frag_parsed[coord_type + '_start'])
-                setattr(frag, attr, value)
-            # try to set hit_frame and/or query_frame if frames
-            # attribute is set
-            if not hasattr(frag, 'query_frame') and hasattr(frag, 'frames'):
-                setattr(frag, 'query_frame', frag.frames.split('/')[0])
-            if not hasattr(frag, 'hit_frame') and hasattr(frag, 'frames'):
-                setattr(frag, 'hit_frame', frag.frames.split('/')[1])
+    def get_frag_frame(self, frag, seq_type, parsedict):
+        """Returns `HSPFragment` frame given the object, its sequence type,
+        and its parsed dictionary values."""
+        assert seq_type in ('query', 'hit')
+        frame = getattr(frag, '%s_frame' % seq_type, None)
+        if frame is not None:
+            return frame
+        else:
+            if 'frames' in parsedict:
+                # frames is 'x1/x2' string, x1 is query frame, x2 is hit frame
+                idx = 0 if seq_type == 'query' else 1
+                return int(parsedict['frames'].split('/')[idx])
+            # else implicit None return
 
-            hsp = HSP([frag])
-            for attr, value in hsp_parsed.items():
-                setattr(hsp, attr, value)
-            hit.append(hsp)
-
-            self.line = read_forward(self.handle)
+    def get_frag_strand(self, frag, seq_type, parsedict):
+        """Returns `HSPFragment` strand given the object, its sequence type,
+        and its parsed dictionary values."""
+        # NOTE: this will never set the strands as 0 for protein
+        # queries / hits, since we can't detect the blast flavors
+        # from the columns alone.
+        assert seq_type in ('query', 'hit')
+        strand = getattr(frag, '%s_strand' % seq_type, None)
+        if strand is not None:
+            return strand
+        else:
+            # using parsedict instead of the fragment object since
+            # we need the unadjusted coordinated values
+            start = parsedict.get('%s_start' % seq_type)
+            end = parsedict.get('%s_end' % seq_type)
+            if start is not None and end is not None:
+                return 1 if start <= end else -1
+            # else implicit None return
 
 
 class BlastTabIndexer(SearchIndexer):
@@ -359,7 +413,7 @@ class BlastTabIndexer(SearchIndexer):
         SearchIndexer.__init__(self, *args, **kwargs)
         # set parser for on-the-fly parsing
         # find out if file is commented or not first
-        line = read_forward(self._handle)
+        line = self._handle.readline()
         if line.startswith('# '):
             self.is_commented = True
         else:
@@ -381,7 +435,7 @@ class BlastTabIndexer(SearchIndexer):
                 # encountering the next one
                 end_offset = handle.tell()
                 #line = handle.readline()
-                line = read_forward(handle)
+                line = handle.readline()
 
                 if qresult_key is None:
                     qresult_key = line.split(tab_char)[0]
@@ -405,7 +459,7 @@ class BlastTabIndexer(SearchIndexer):
 
             while True:
                 end_offset = handle.tell()
-                line = read_forward(handle)
+                line = handle.readline()
 
                 if query_mark is None:
                     query_mark = line
@@ -429,7 +483,7 @@ class BlastTabIndexer(SearchIndexer):
             tab_char = _as_bytes('\t')
             qresult_key = None
             while True:
-                line = read_forward(handle, strip=False)
+                line = handle.readline()
                 # get the key if the first line (qresult key)
                 if qresult_key is None:
                     qresult_key = line.split(tab_char)[0]
@@ -445,7 +499,7 @@ class BlastTabIndexer(SearchIndexer):
             # something like '# TBLASTN 2.2.25+'
             query_mark = None
             while True:
-                line = read_forward(handle, strip=False)
+                line = handle.readline()
                 if query_mark is None:
                     query_mark = line
                 # if we've encountered another query mark, it's the start of
@@ -489,8 +543,7 @@ class BlastTabWriter(object):
         coordinates = set(['qstart', 'qend', 'sstart', 'send'])
         qresult_lines = ''
         for hit in qresult:
-            for hsp in hit.hsps:
-
+            for hsp in hit:
                 line = []
                 for field in self.fields:
                     # get the column value ~ could either be an attribute
@@ -527,43 +580,23 @@ class BlastTabWriter(object):
 
     def adjust_coords(self, field, value, hsp):
         """Adjusts start and end coordinates according to strand."""
-        # try to determine whether strand is minus or not
-        # TODO: is there a better way to do this without accessing the private
-        # attributes?
-        if field in ('qstart', 'qend'):
-            try:
-                qstrand_is_minus = hsp.query_strand < 0
-            except AttributeError:
-                qstrand_is_minus = hsp._query_end < hsp._query_start
-            # switch from <--> to if strand is -1
-            if qstrand_is_minus:
-                if field == 'qstart':
-                    value = hsp.query_end
-                elif field == 'qend':
-                    value = hsp.query_start + 1
-                else:
-                   # we should not get here!
-                   raise ValueError("Unexpected column name: %r" % field)
+        assert field in ('qstart', 'qend', 'sstart', 'send')
+        # determine sequence type to operate on based on field's first letter
+        seq_type = 'query' if field.startswith('q') else 'hit'
+
+        strand = getattr(hsp, '%s_strand' % seq_type, None)
+        if strand is None:
+            raise ValueError("Required attribute %r not found." %
+                    ('%s_strand' % (seq_type)))
+        # switch start <--> end coordinates if strand is -1
+        if strand < 0:
+            if field.endswith('start'):
+                value = getattr(hsp, '%s_end' % seq_type)
+            elif field.endswith('end'):
+                value = getattr(hsp, '%s_start' % seq_type) + 1
+        elif field.endswith('start'):
             # adjust start coordinate for positive strand
-            elif 'start' in field:
-                value += 1
-        else:
-            try:
-                hstrand_is_minus = hsp.hit_strand < 0
-            except AttributeError:
-                hstrand_is_minus = hsp._hit_end < hsp._hit_start
-            # switch from <--> to if strand is -1
-            if hstrand_is_minus:
-                if field == 'sstart':
-                    value = hsp.hit_end
-                elif field == 'send':
-                   value = hsp.hit_start + 1
-                else:
-                   # we should not get here!
-                   raise ValueError("Unexpected column name: %r" % field)
-            # adjust start coordinate for positive strand
-            elif 'start' in field:
-                value += 1
+            value += 1
 
         return value
 
@@ -633,38 +666,38 @@ class BlastTabcWriter(BlastTabWriter):
 
         return qresult_counter, hit_counter, hsp_counter
 
-    def build_comments(self, qresult):
+    def build_comments(self, qres):
         """Returns a string of a QueryResult tabular comment."""
-        comments = ''
+        comments = []
         # inverse mapping of the long-short name map, required
         # for writing comments
         inv_field_map = dict((value, key) for key, value in \
                 _LONG_SHORT_MAP.items())
 
-        # try to anticipate qresults without version
-        if not hasattr(qresult, 'version'):
-            program_line = '# %s\n' % qresult.program.upper()
+        # try to anticipate qress without version
+        if not hasattr(qres, 'version'):
+            program_line = '# %s' % qres.program.upper()
         else:
-            program_line = '# %s %s\n' % (qresult.program.upper(), qresult.version)
-        comments += program_line
+            program_line = '# %s %s' % (qres.program.upper(), qres.version)
+        comments.append(program_line)
         # description may or may not be present, so we'll do a try here
         try:
-            comments += '# Query: %s %s\n' % (qresult.id, qresult.description)
+            comments.append('# Query: %s %s' % (qres.id, qres.description))
         except AttributeError:
-            comments += '# Query: %s\n' % qresult.id
+            comments.append('# Query: %s' % qres.id)
         # try appending RID line, if present
         try:
-            comments += '# RID: %s\n' % qresult.rid
+            comments.append('# RID: %s' % qres.rid)
         except AttributeError:
             pass
-        comments += '# Database: %s\n' % qresult.target
+        comments.append('# Database: %s' % qres.target)
         # qresults without hits don't show the Fields comment
-        if qresult:
-            comments += '# Fields: %s\n' % \
-                    ', '.join([inv_field_map[field] for field in self.fields])
-        comments += '# %i hits found\n' % len(qresult)
+        if qres:
+            comments.append('# Fields: %s' % \
+                    ', '.join([inv_field_map[field] for field in self.fields]))
+        comments.append('# %i hits found' % len(qres))
 
-        return comments
+        return '\n'.join(comments) + '\n'
 
 
 def _test():
