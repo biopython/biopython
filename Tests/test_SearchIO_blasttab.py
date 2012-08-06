@@ -858,6 +858,67 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(3, counter)
 
+    def test_tab_2226_tblastn_013(self):
+        "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_013)"
+
+        xml_file = get_file('tab_2226_tblastn_013.txt')
+        qresults = parse(xml_file, FMT, fields="qseq std sseq")
+        counter = 0
+
+        qresult = qresults.next()
+        counter += 1
+
+        self.assertEqual('<unknown program>', qresult.program)
+        self.assertEqual('<unknown target>', qresult.target)
+        self.assertEqual('<unknown version>', qresult.version)
+        self.assertEqual(3, len(qresult))
+
+        hit = qresult[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit.hsps[0]
+        self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(34.88, hsp.ident_pct)
+        self.assertEqual(43, hsp.aln_span)
+        self.assertEqual(28, hsp.mismatch_num)
+        self.assertEqual(0, hsp.gapopen_num)
+        self.assertEqual(30, hsp.query_start)
+        self.assertEqual(73, hsp.query_end)
+        self.assertEqual(1743, hsp.hit_start)
+        self.assertEqual(1872, hsp.hit_end)
+        self.assertEqual(1e-05, hsp.evalue)
+        self.assertEqual(34.7, hsp.bitscore)
+        self.assertEqual('PDSNIETKEGTYVGLADTHTIEVTVDNEPVSLDITEESTSDLD', str(hsp.query.seq))
+        self.assertEqual('PKTATGTKKGTIIGLLSIHTILFILTSHALSLEVKEQT*KDID', str(hsp.hit.seq))
+
+        hit = qresult[-1]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hit.query_id)
+        self.assertEqual(1, len(hit))
+
+        hsp = hit.hsps[0]
+        self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
+        self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
+        self.assertEqual(33.90, hsp.ident_pct)
+        self.assertEqual(59, hsp.aln_span)
+        self.assertEqual(31, hsp.mismatch_num)
+        self.assertEqual(1, hsp.gapopen_num)
+        self.assertEqual(43, hsp.query_start)
+        self.assertEqual(94, hsp.query_end)
+        self.assertEqual(1056, hsp.hit_start)
+        self.assertEqual(1233, hsp.hit_end)
+        self.assertEqual(1e-04, hsp.evalue)
+        self.assertEqual(31.6, hsp.bitscore)
+        self.assertEqual('GLADTHTIEVTVDNEPVSLDITEESTSDLDKFNSG--------DKVTITYEKNDEGQLL', str(hsp.query.seq))
+        self.assertEqual('GLVPDHTLILPVGHYQSMLDLTEEVQTELDQFKSALRKYYLSKGKTCVIYERNFRTQHL', str(hsp.hit.seq))
+
+        # check if we've finished iteration over qresults
+        self.assertRaises(StopIteration, qresults.next, )
+        self.assertEqual(1, counter)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

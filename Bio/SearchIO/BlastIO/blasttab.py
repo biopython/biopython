@@ -102,8 +102,8 @@ _SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
-_DEFAULT_FIELDS = ('qseqid', 'sseqid', 'pident', 'length', 'mismatch', \
-        'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore')
+_DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch', \
+        'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore']
 # one field from each of the following sets must exist in order for the
 # parser to work
 _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
@@ -117,7 +117,7 @@ class BlastTabIterator(object):
     def __init__(self, handle, has_comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle
         self.has_comments = has_comments
-        self.fields = fields
+        self.fields = self._prep_fields(fields)
         self.line = self.handle.readline().strip()
 
     def __iter__(self):
@@ -132,6 +132,31 @@ class BlastTabIterator(object):
 
         for qresult in iterfunc():
             yield qresult
+
+    def _prep_fields(self, fields):
+        """Validates and formats the given fields for use by the parser."""
+        # cast into list if fields is a space-separated string
+        if isinstance(fields, basestring):
+            fields = fields.strip().split(' ')
+        # blast allows 'std' as a proxy for the standard default lists
+        # we want to transform 'std' to its proper column names
+        if 'std' in fields:
+            idx = fields.index('std')
+            fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx+1:]
+        # warn if there are unsupported columns
+        for field in fields:
+            if field not in _SUPPORTED_FIELDS:
+                message = "Warning: field '%s' is not yet " \
+                        "supported by SearchIO. The data in the " \
+                        "corresponding column will be ignored." % field
+                warnings.warn(message)
+        # if set(fields) has a null intersection with minimum required
+        # fields for hit and query, raise an exception
+        if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
+                not set(fields).intersection(_MIN_HIT_FIELDS):
+            raise ValueError("Required query and/or hit ID field not found.")
+
+        return fields
 
     def _parse_qresult_with_comments(self):
         """Iterator returning `QueryResult` objects from a commented file."""
@@ -205,20 +230,7 @@ class BlastTabIterator(object):
         raw_field_str = self.line[len('# Fields: '):]
         long_fields = raw_field_str.split(', ')
         fields = [_LONG_SHORT_MAP[long_name] for long_name in long_fields]
-        # warn if there are unsupported columns
-        for field in fields:
-            if field not in _SUPPORTED_FIELDS:
-                message = "Warning: field '%s' is not yet " \
-                        "supported by SearchIO. The data in the " \
-                        "corresponding column will be ignored." % field
-                warnings.warn(message)
-        # if set(fields) has a null intersection with minimum required
-        # fields for hit and query, raise an exception
-        if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
-                not set(fields).intersection(_MIN_HIT_FIELDS):
-            raise ValueError("Required ID field is not found.")
-
-        return fields
+        return self._prep_fields(fields)
 
     def _parse_result_row(self):
         """Returns a dictionary of parsed row values."""

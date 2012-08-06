@@ -20,6 +20,7 @@ tab_2226_tblastn_009         multiple queries with custom columns
 tab_2226_tblastn_010         multiple queries with custom columns, commented
 tab_2226_tblastn_011         multiple queries with all columns, commented
 tab_2226_tblastn_012         multiple quries, remote search, standard columns, commented
+tab_2226_tblastn_013         single query, custom columns: qsseq std sseq
 
 text_2226_blastn_001         single query, no hits
 text_2226_blastn_002         single query, hits @ single hsp
