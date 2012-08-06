@@ -10,7 +10,7 @@ import unittest
 
 from Bio import SearchIO
 
-from search_tests_common import compare_qresult
+from search_tests_common import compare_search_obj
 
 
 class WriteCases(unittest.TestCase):
@@ -27,7 +27,7 @@ class WriteCases(unittest.TestCase):
         SearchIO.write(source_qresults, out_file, out_format, **kwargs)
         out_qresults = list(SearchIO.parse(out_file, out_format, **kwargs))
         for source, out in zip(source_qresults, out_qresults):
-            self.assertTrue(compare_qresult(source, out, out_format))
+            self.assertTrue(compare_search_obj(source, out))
 
     def read_write_and_compare(self, source_file, source_format, out_file, \
             out_format, **kwargs):
@@ -35,7 +35,7 @@ class WriteCases(unittest.TestCase):
         source_qresult = SearchIO.read(source_file, source_format, **kwargs)
         SearchIO.write(source_qresult, out_file, out_format, **kwargs)
         out_qresult = SearchIO.read(out_file, out_format, **kwargs)
-        self.assertTrue(compare_qresult(source_qresult, out_qresult, out_format))
+        self.assertTrue(compare_search_obj(source_qresult, out_qresult))
 
 
 class BlastXmlWriteCases(WriteCases):

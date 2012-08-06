@@ -14,7 +14,7 @@ to all formats.
 import unittest
 from copy import deepcopy
 
-from search_tests_common import compare_qresult, compare_hit
+from search_tests_common import compare_search_obj
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
@@ -302,7 +302,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hit_filter should create a new object with
         # the same contents
         filtered = self.qresult.hit_filter()
-        self.assertTrue(compare_qresult(filtered, self.qresult, 'mock'))
+        self.assertTrue(compare_search_obj(filtered, self.qresult))
         self.assertNotEqual(id(filtered), id(self.qresult))
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual('refseq_rna', filtered.target)
@@ -344,7 +344,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hit_map should create a new object with
         # the same contents
         mapped = self.qresult.hit_map()
-        self.assertTrue(compare_qresult(mapped, self.qresult, 'mock'))
+        self.assertTrue(compare_search_obj(mapped, self.qresult))
         self.assertNotEqual(id(mapped), id(self.qresult))
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual('refseq_rna', mapped.target)
@@ -373,7 +373,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hsp_filter should create a new object with
         # the same contents
         filtered = self.qresult.hsp_filter()
-        self.assertTrue(compare_qresult(filtered, self.qresult, 'mock'))
+        self.assertTrue(compare_search_obj(filtered, self.qresult))
         self.assertNotEqual(id(filtered), id(self.qresult))
         self.assertEqual(1102, filtered.seq_len)
         self.assertEqual('refseq_rna', filtered.target)
@@ -437,7 +437,7 @@ class QueryResultCases(unittest.TestCase):
         # when given no arguments, hit_map should create a new object with
         # the same contents
         mapped = self.qresult.hsp_map()
-        self.assertTrue(compare_qresult(mapped, self.qresult, 'mock'))
+        self.assertTrue(compare_search_obj(mapped, self.qresult))
         self.assertNotEqual(id(mapped), id(self.qresult))
         self.assertEqual(1102, mapped.seq_len)
         self.assertEqual('refseq_rna', mapped.target)
@@ -721,7 +721,7 @@ class HitCases(unittest.TestCase):
         # when given no arguments, filter should create a new object with
         # the same contents
         filtered = self.hit.filter()
-        self.assertTrue(compare_hit(filtered, self.hit, 'mock'))
+        self.assertTrue(compare_search_obj(filtered, self.hit))
         self.assertNotEqual(id(filtered), id(self.hit))
         self.assertEqual(5e-10, filtered.evalue)
         self.assertEqual('test', filtered.name)
@@ -776,7 +776,7 @@ class HitCases(unittest.TestCase):
         # when given no arguments, map should create a new object with
         # the same contents
         mapped = self.hit.map()
-        self.assertTrue(compare_hit(mapped, self.hit, 'mock'))
+        self.assertTrue(compare_search_obj(mapped, self.hit))
         self.assertNotEqual(id(mapped), id(self.hit))
         self.assertEqual(5e-10, mapped.evalue)
         self.assertEqual('test', mapped.name)

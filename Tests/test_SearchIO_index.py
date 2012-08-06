@@ -20,7 +20,7 @@ import warnings
 
 from Bio import SearchIO
 
-from search_tests_common import compare_qresult
+from search_tests_common import compare_search_obj
 
 
 class BlastXmlRawCases(unittest.TestCase):
@@ -1254,8 +1254,8 @@ class SearchIndexCases(unittest.TestCase):
             self.assertNotEqual(id(qres), id(idx_qres))
             self.assertNotEqual(id(qres), id(dbidx_qres))
             # but they should have the same attribute values
-            self.assertTrue(compare_qresult(qres, idx_qres, format))
-            self.assertTrue(compare_qresult(qres, dbidx_qres, format))
+            self.assertTrue(compare_search_obj(qres, idx_qres))
+            self.assertTrue(compare_search_obj(qres, dbidx_qres))
 
 
 class BlastXmlIndexCases(SearchIndexCases):
