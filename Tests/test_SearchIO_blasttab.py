@@ -485,17 +485,16 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output (tab_2226_tblastn_009)"
 
         xml_file = get_file('tab_2226_tblastn_009.txt')
-        qresults = parse(xml_file, FMT, fields=('evalue', 'bitscore', \
-                'qseqid', 'sseqid'))
+        qresults = parse(xml_file, FMT, fields=('qseqid', 'sseqid'))
         counter = 0
 
         # test first qresult
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('<unknown>', qresult.program)
-        self.assertEqual('<unknown>', qresult.target)
-        self.assertEqual('<unknown>', qresult.version)
+        self.assertEqual('<unknown program>', qresult.program)
+        self.assertEqual('<unknown target>', qresult.target)
+        self.assertEqual('<unknown version>', qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
 
@@ -507,8 +506,6 @@ class BlastnTabCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
-        self.assertEqual(1e-05, hsp.evalue)
-        self.assertEqual(34.7, hsp.bitscore)
 
         hit = qresult[-1]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hit.id)
@@ -518,16 +515,14 @@ class BlastnTabCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual('gi|115975252|ref|XM_001180111.1|', hsp.hit_id)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', hsp.query_id)
-        self.assertEqual(1e-04, hsp.evalue)
-        self.assertEqual(31.6, hsp.bitscore)
 
         # test last qresult
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('<unknown>', qresult.program)
-        self.assertEqual('<unknown>', qresult.target)
-        self.assertEqual('<unknown>', qresult.version)
+        self.assertEqual('<unknown program>', qresult.program)
+        self.assertEqual('<unknown target>', qresult.target)
+        self.assertEqual('<unknown version>', qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual(5, len(qresult))
 
@@ -539,14 +534,10 @@ class BlastnTabCases(unittest.TestCase):
         hsp = hit[0]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
-        self.assertEqual(2e-67, hsp.evalue)
-        self.assertEqual(199, hsp.bitscore)
 
         hsp = hit[-1]
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hsp.hit_id)
         self.assertEqual('gi|11464971:4-101', hsp.query_id)
-        self.assertEqual(4e-05, hsp.evalue)
-        self.assertEqual(32.7, hsp.bitscore)
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )

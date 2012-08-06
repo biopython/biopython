@@ -1330,8 +1330,7 @@ class BlastTabIndexCases(SearchIndexCases):
     def test_blasttab_2226_tblastn_009(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns"""
         filename = 'Blast/tab_2226_tblastn_009.txt'
-        self.check_index(filename, self.fmt, fields=('evalue', 'bitscore', 'qseqid', \
-                'sseqid'))
+        self.check_index(filename, self.fmt, fields=('qseqid', 'sseqid'))
 
     def test_blasttab_2226_tblastn_010(self):
         """Test blast-tab indexing, BLAST 2.2.26+, custom columns, commented"""
