@@ -166,7 +166,7 @@ class QueryResult(BaseSearchObject):
 
     # attributes we don't want to transfer when creating a new QueryResult class
     # from this one
-    _NON_STICKY_ATTRS = ('_hits',)
+    _NON_STICKY_ATTRS = ('_items',)
 
     def __init__(self, id=None, hits=[], hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
@@ -184,14 +184,14 @@ class QueryResult(BaseSearchObject):
 
         self._id = id
         self._hit_key_function = hit_key_function
-        self._hits = OrderedDict()
+        self._items = OrderedDict()
         # default program, target, version, and description
         self.program = '<unknown program>'
         self.target = '<unknown target>'
         self.version = '<unknown version>'
         self._description = ''
 
-        # validate Hit objects and fill up self._hits
+        # validate Hit objects and fill up self._items
         for hit in hits:
             # validation is handled by __setitem__
             self.append(hit)
@@ -203,36 +203,36 @@ class QueryResult(BaseSearchObject):
             return iter(self.iterhits())
 
         def _hits_get(self):
-            return self._hits.values()
+            return self._items.values()
 
         hits = property(fget=_hits_get, \
                 doc="""Returns a list of Hit objects contained by this object.""")
 
         def _hit_keys_get(self):
-            return self._hits.keys()
+            return self._items.keys()
 
         hit_keys = property(fget=_hit_keys_get, \
                 doc="""Returns a list of Hit IDs contained by this object.""")
 
         def _items_get(self):
-            return self._hits.items()
+            return self._items.items()
 
         items = property(fget=_items_get, \
             doc="""Returns a list of tuples of Hit ID and Hit object contained by this object.""")
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
-            for hit in self._hits.itervalues():
+            for hit in self._items.itervalues():
                 yield hit
 
         def iterhit_keys(self):
             """Returns an iterator over the ID of the Hit objects."""
-            for hit_id in self._hits.iterkeys():
+            for hit_id in self._items.iterkeys():
                 yield hit_id
 
         def iteritems(self):
             """Returns an iterator of tuples of Hit ID and Hit objects."""
-            for item in self._hits.iteritems():
+            for item in self._items.iteritems():
                 yield item
 
     else:
@@ -243,32 +243,32 @@ class QueryResult(BaseSearchObject):
         @property
         def hits(self):
             """Returns an iterator over the Hit objects contained by this object."""
-            for hit in self._hits.values():
+            for hit in self._items.values():
                 yield hit
 
         @property
         def hit_keys(self):
             """Returns an iterator over the Hit IDs contained by this object."""
-            for hit_id in  self._hits.keys():
+            for hit_id in  self._items.keys():
                 yield hit_id
 
         @property
         def items(self):
             """Returns an iterator over the Hit ID and Hit object contained by this object."""
-            for item in self._hits.items():
+            for item in self._items.items():
                 yield item
 
     def __contains__(self, hit_key):
         """Checks whether a Hit object or a Hit object with the given ID exists."""
         if isinstance(hit_key, Hit):
-            return self._hit_key_function(hit_key) in self._hits
-        return hit_key in self._hits
+            return self._hit_key_function(hit_key) in self._items
+        return hit_key in self._items
 
     def __len__(self):
-        return len(self._hits)
+        return len(self._items)
 
     def __nonzero__(self):
-        return bool(self._hits)
+        return bool(self._items)
 
     def __repr__(self):
         return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
@@ -338,7 +338,7 @@ class QueryResult(BaseSearchObject):
             raise ValueError("Expected Hit with query ID '%s', found '%s' "
                     "instead." % (self.id, hit.query_id))
 
-        self._hits[hit_key] = hit
+        self._items[hit_key] = hit
 
     def __getitem__(self, hit_key):
         """Custom Search object item retrieval.
@@ -361,7 +361,7 @@ class QueryResult(BaseSearchObject):
             return list(self.hits)[hit_key]
 
         # if key is a string, then do a regular dictionary retrieval
-        return self._hits[hit_key]
+        return self._items[hit_key]
 
     def __delitem__(self, hit_key):
         """Custom Search object item deletion.
@@ -383,7 +383,7 @@ class QueryResult(BaseSearchObject):
             hit_keys = [hit_key]
 
         for key in hit_keys:
-            del self._hits[key]
+            del self._items[key]
         return
 
     def _description_get(self):
@@ -515,7 +515,7 @@ class QueryResult(BaseSearchObject):
             hit_key = list(self.hit_keys)[hit_key]
 
         try:
-            return self._hits.pop(hit_key)
+            return self._items.pop(hit_key)
         except KeyError:
             # if key doesn't exist and no default is set, raise a KeyError
             if default is self.__marker:
@@ -607,7 +607,7 @@ class QueryResult(BaseSearchObject):
             new_hits = OrderedDict()
             for hit in sorted_hits:
                 new_hits[self._hit_key_function(hit)] = hit
-            self._hits = new_hits
+            self._items = new_hits
         # otherwise, return a new sorted QueryResult object
         else:
             obj =  self.__class__(self.id, sorted_hits, self._hit_key_function)
@@ -961,7 +961,7 @@ class HSP(BaseHSP):
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_fragments', '_aln_span')
+    _NON_STICKY_ATTRS = ('_items', '_aln_span')
 
     def __init__(self, fragments=[]):
         """Initializes an `HSP` object.
