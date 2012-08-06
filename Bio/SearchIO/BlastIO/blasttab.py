@@ -3,14 +3,16 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO parser for BLAST+ tab output format, with and without comments."""
+"""Bio.SearchIO parser for BLAST+ tab output format, with or without comments."""
 
 import warnings
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
+
+__all__ = ['BlastTabIndexer', 'BlastTabIterator', 'BlastTabWriter']
 
 # longname-shortname map
 # maps the column names shown in a commented output to its short name
@@ -110,7 +112,7 @@ _MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
 
 class BlastTabIterator(object):
 
-    """Parser for the Blast tabular format."""
+    """Main parser for the BLAST tabular format."""
 
     def __init__(self, handle, has_comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle
@@ -124,17 +126,17 @@ class BlastTabIterator(object):
             raise StopIteration
         # determine which iterator to use
         elif self.has_comments:
-            iterfunc = self.parse_qresult_with_comments
+            iterfunc = self._parse_qresult_with_comments
         else:
-            iterfunc = self.parse_qresult
+            iterfunc = self._parse_qresult
 
         for qresult in iterfunc():
             yield qresult
 
-    def parse_qresult_with_comments(self):
+    def _parse_qresult_with_comments(self):
         """Iterator returning `QueryResult` objects from a commented file."""
         while True:
-            comments = self.parse_comments()
+            comments = self._parse_comments()
             if comments:
                 try:
                     self.fields = comments['fields']
@@ -150,13 +152,13 @@ class BlastTabIterator(object):
                         setattr(qresult, key, value)
                     yield qresult
                 else:
-                    for qresult in self.parse_qresult():
+                    for qresult in self._parse_qresult():
                         for key, value in comments.items():
                             setattr(qresult, key, value)
                         yield qresult
             else: break
 
-    def parse_comments(self):
+    def _parse_comments(self):
         """Returns a dictionary containing tab file comments."""
         comments = {}
         while True:
@@ -183,7 +185,7 @@ class BlastTabIterator(object):
             # parse column order, required for parsing the result lines
             # example: # Fields: query id, query gi, query acc., query length
             elif 'Fields' in self.line:
-                comments['fields'] = self.parse_fields_line()
+                comments['fields'] = self._parse_fields_line()
             # if the line has these strings, it's either the end of a comment
             # or the end of a file, so we return all the comments we've parsed
             elif ' hits found' in self.line or 'processed' in self.line:
@@ -197,7 +199,7 @@ class BlastTabIterator(object):
             else:
                 self.line = self.line.strip()
 
-    def parse_fields_line(self):
+    def _parse_fields_line(self):
         """Returns a list of column short names from the 'Fields'
         comment line."""
         raw_field_str = self.line[len('# Fields: '):]
@@ -218,7 +220,7 @@ class BlastTabIterator(object):
 
         return fields
 
-    def parse_result_row(self):
+    def _parse_result_row(self):
         """Returns a dictionary of parsed row values."""
         fields = self.fields
         columns = self.line.strip().split('\t')
@@ -250,7 +252,7 @@ class BlastTabIterator(object):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
-    def get_id(self, parsed):
+    def _get_id(self, parsed):
         """Returns the value used for a QueryResult or Hit ID from a parsed row."""
         # use 'id', with 'acc' and 'acc_ver' fallbacks
         # one of these must have a value since we've checked whether
@@ -263,7 +265,7 @@ class BlastTabIterator(object):
 
         return id_cache
 
-    def parse_qresult(self):
+    def _parse_qresult(self):
         """Generator function that returns QueryResult objects."""
         # state values, used to determine what to do with each line
         state_EOF = 0
@@ -290,9 +292,9 @@ class BlastTabIterator(object):
                 prev_hid = cur_hid
             # only parse the line if it's not EOF or not a comment line
             if self.line and not self.line.startswith('#'):
-                cur = self.parse_result_row()
-                cur_qid = self.get_id(cur['qresult'])
-                cur_hid = self.get_id(cur['hit'])
+                cur = self._parse_result_row()
+                cur_qid = self._get_id(cur['qresult'])
+                cur_hid = self._get_id(cur['hit'])
             else:
                 file_state = state_EOF
                 # mock values for cur_qid and cur_hid since the line is empty
@@ -333,11 +335,11 @@ class BlastTabIterator(object):
                 # to be set first
                 for seq_type in ('hit', 'query'):
                     # try to set hit and query frame
-                    frame = self.get_frag_frame(frag, seq_type,
+                    frame = self._get_frag_frame(frag, seq_type,
                             prev['frag'])
                     setattr(frag, '%s_frame' % seq_type, frame)
                     # try to set hit and query strand
-                    strand = self.get_frag_strand(frag, seq_type,
+                    strand = self._get_frag_strand(frag, seq_type,
                             prev['frag'])
                     setattr(frag, '%s_strand' % seq_type, strand)
 
@@ -367,7 +369,7 @@ class BlastTabIterator(object):
 
             self.line = self.handle.readline().strip()
 
-    def get_frag_frame(self, frag, seq_type, parsedict):
+    def _get_frag_frame(self, frag, seq_type, parsedict):
         """Returns `HSPFragment` frame given the object, its sequence type,
         and its parsed dictionary values."""
         assert seq_type in ('query', 'hit')
@@ -381,7 +383,7 @@ class BlastTabIterator(object):
                 return int(parsedict['frames'].split('/')[idx])
             # else implicit None return
 
-    def get_frag_strand(self, frag, seq_type, parsedict):
+    def _get_frag_strand(self, frag, seq_type, parsedict):
         """Returns `HSPFragment` strand given the object, its sequence type,
         and its parsed dictionary values."""
         # NOTE: this will never set the strands as 0 for protein
@@ -701,7 +703,7 @@ class BlastTabWriter(object):
 
 
 def _test():
-    """Run the Bio.SearchIO.BlastIO module's doctests.
+    """Run the Bio.SearchIO.BlastIO.blasttab module's doctests.
 
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.
