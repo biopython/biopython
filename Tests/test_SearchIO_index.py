@@ -1239,23 +1239,32 @@ Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.
 class SearchIndexCases(unittest.TestCase):
 
     def check_index(self, filename, format, **kwargs):
-        parsed = list(SearchIO.parse(filename, format, **kwargs))
-        indexed = SearchIO.index(filename, format, **kwargs)
-        db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
+        # check if Python3 installation has sqlite3
+        try:
+            import sqlite3
+        except ImportError:
+            sqlite3 = None
 
-        # check length of parsed and indexed
+        parsed = list(SearchIO.parse(filename, format, **kwargs))
+        # compare values by index
+        indexed = SearchIO.index(filename, format, **kwargs)
         self.assertEqual(len(parsed), len(indexed.keys()))
-        self.assertEqual(len(parsed), len(db_indexed.keys()))
+        # compare values by index_db, only if sqlite3 is present
+        if sqlite3 is not None:
+            db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
+            self.assertEqual(len(parsed), len(db_indexed.keys()))
 
         for qres in parsed:
             idx_qres = indexed[qres.id]
-            dbidx_qres = db_indexed[qres.id]
             # parsed and indexed qresult are different objects!
             self.assertNotEqual(id(qres), id(idx_qres))
-            self.assertNotEqual(id(qres), id(dbidx_qres))
             # but they should have the same attribute values
             self.assertTrue(compare_search_obj(qres, idx_qres))
-            self.assertTrue(compare_search_obj(qres, dbidx_qres))
+            # sqlite3 comparison, only if it's present
+            if sqlite3 is not None:
+                dbidx_qres = db_indexed[qres.id]
+                self.assertNotEqual(id(qres), id(dbidx_qres))
+                self.assertTrue(compare_search_obj(qres, dbidx_qres))
 
 
 class BlastXmlIndexCases(SearchIndexCases):

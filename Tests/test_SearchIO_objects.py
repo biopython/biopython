@@ -117,8 +117,9 @@ class QueryResultCases(unittest.TestCase):
         # reversed should a return a new qresult with the same attributes
         # except the hits is reversed
         setattr(self.qresult, 'name', 'test')
-        rev_qresult = reversed(self.qresult)
-        self.assertEqual(self.qresult.hits[::-1], rev_qresult.hits[:])
+        rev_qresult = list(reversed(self.qresult))
+        self.assertEqual(list(self.qresult.hits)[::-1],
+                list(rev_qresult.hits)[:])
         self.assertEqual('test', rev_qresult.name)
 
     def test_setitem_ok(self):
@@ -569,7 +570,7 @@ class HitCases(unittest.TestCase):
 
     def test_reversed(self):
         """Test Hit.__reversed__"""
-        rev_hit = reversed(self.hit)
+        rev_hit = list(reversed(self.hit))
         self.assertEqual(self.hit.hsps[::-1], rev_hit.hsps[:])
         rev_hit = reversed(self.hit)
         self.assertEqual(5e-10, rev_hit.evalue)

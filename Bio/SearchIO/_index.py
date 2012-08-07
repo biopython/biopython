@@ -11,9 +11,13 @@
 
 import itertools
 import os
-from sqlite3 import dbapi2 as sqlite
-from sqlite3 import IntegrityError, OperationalError
 from StringIO import StringIO
+try:
+    from sqlite3 import dbapi2 as sqlite
+    from sqlite3 import IntegrityError, OperationalError
+except ImportError:
+    # apparently jython2.5 may not support sqlite
+    sqlite = None
 
 try:
     from collections import UserDict as _dict_base
@@ -216,6 +220,11 @@ class DbIndexedSearch(IndexedSearch):
                      (if it exists) or not.
 
         """
+        # COMPAT: for Jython, which may not have sqlite3 baked in
+        if not sqlite:
+            from Bio import MissingPythonDependencyError
+            raise MissingPythonDependencyError("Requires sqlite3, which is "
+                                               "included Python 2.5+")
         indexer_proxies = {}
         indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
         self._indexer_class = indexer_class
