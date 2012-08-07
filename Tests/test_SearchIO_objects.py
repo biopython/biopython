@@ -1115,12 +1115,7 @@ class HSPFragmentCases(unittest.TestCase):
             fragment = HSPFragment('hit_id', 'query_id')
             # and test it against the opposite
             setattr(fragment, seq_type, 'ATGCACAACAGGA')
-            # UGLY HACK: for some reason, doing a self.asserRaises here doesn't
-            # raise the exception, so we're manually capturing it
-            try:
-                setattr(fragment, opp_type, 'ATGCGA')
-            except Exception as e:
-                self.assertTrue(isinstance(e, ValueError))
+            self.assertRaises(ValueError, setattr, fragment, opp_type, 'ATGCGA')
 
     def test_len(self):
         """Test HSPFragment.__len__"""
