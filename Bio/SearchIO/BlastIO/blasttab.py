@@ -139,13 +139,6 @@ class BlastTabIterator(object):
         if 'std' in fields:
             idx = fields.index('std')
             fields = fields[:idx] + _DEFAULT_FIELDS + fields[idx+1:]
-        # warn if there are unsupported columns
-        for field in fields:
-            if field not in _SUPPORTED_FIELDS:
-                message = "Warning: field '%s' is not yet " \
-                        "supported by SearchIO. The data in the " \
-                        "corresponding column will be ignored." % field
-                warnings.warn(message, BiopythonWarning)
         # if set(fields) has a null intersection with minimum required
         # fields for hit and query, raise an exception
         if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
