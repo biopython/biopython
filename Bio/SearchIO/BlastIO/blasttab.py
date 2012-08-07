@@ -110,9 +110,9 @@ class BlastTabIterator(object):
 
     """Main parser for the BLAST tabular format."""
 
-    def __init__(self, handle, has_comments=False, fields=_DEFAULT_FIELDS):
+    def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle
-        self.has_comments = has_comments
+        self.has_comments = comments
         self.fields = self._prep_fields(fields)
         self.line = self.handle.readline().strip()
 
@@ -417,10 +417,9 @@ class BlastTabIndexer(SearchIndexer):
 
     _parser = BlastTabIterator
 
-    def __init__(self, filename, has_comments=False, fields=_DEFAULT_FIELDS):
-        SearchIndexer.__init__(self, filename, has_comments=has_comments, \
-                fields=fields)
-        self._has_comments = has_comments
+    def __init__(self, filename, comments=False, fields=_DEFAULT_FIELDS):
+        SearchIndexer.__init__(self, filename, comments=comments, fields=fields)
+        self._has_comments = comments
         self._handle.seek(0)
 
         # if the file doesn't have comments,
@@ -539,9 +538,9 @@ class BlastTabWriter(object):
 
     """Writer for blast-tab output format."""
 
-    def __init__(self, handle, has_comments=False, fields=_DEFAULT_FIELDS):
+    def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle
-        self.has_comments = has_comments
+        self.has_comments = comments
         self.fields = fields
 
     def write_file(self, qresults):

@@ -240,7 +240,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_005)"
 
         xml_file = get_file('tab_2226_tblastn_005.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         # test first qresult
@@ -352,7 +352,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_006)"
 
         xml_file = get_file('tab_2226_tblastn_006.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         qresult = qresults.next()
@@ -372,7 +372,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_007)"
 
         xml_file = get_file('tab_2226_tblastn_007.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         qresult = qresults.next()
@@ -430,7 +430,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_008)"
 
         xml_file = get_file('tab_2226_tblastn_008.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         qresult = qresults.next()
@@ -546,7 +546,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_010)"
 
         xml_file = get_file('tab_2226_tblastn_010.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         # test first qresult
@@ -626,7 +626,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_011)"
 
         xml_file = get_file('tab_2226_tblastn_011.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         # test first qresult
@@ -796,7 +796,7 @@ class BlastnTabCases(unittest.TestCase):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_012)"
 
         xml_file = get_file('tab_2226_tblastn_012.txt')
-        qresults = parse(xml_file, FMT, has_comments=True)
+        qresults = parse(xml_file, FMT, comments=True)
         counter = 0
 
         # test first qresult

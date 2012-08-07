@@ -74,13 +74,13 @@ class BlastTabWriteCases(WriteCases):
     def test_write_single_from_blasttabc(self):
         """Test blast-tabc writing from blast-tabc, BLAST 2.2.26+, single query (tab_2226_tblastn_008.txt)"""
         source = os.path.join('Blast', 'tab_2226_tblastn_008.txt')
-        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, has_comments=True)
-        self.read_write_and_compare(source, self.fmt, self.out, self.fmt, has_comments=True)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, comments=True)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt, comments=True)
 
     def test_write_multiple_from_blasttabc(self):
         """Test blast-tabc writing from blast-tabc, BLAST 2.2.26+, multiple queries (tab_2226_tblastn_005.txt)"""
         source = os.path.join('Blast', 'tab_2226_tblastn_005.txt')
-        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, has_comments=True)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, comments=True)
 
 
 class HmmerTabWriteCases(WriteCases):
