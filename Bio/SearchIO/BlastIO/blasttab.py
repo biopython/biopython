@@ -5,9 +5,6 @@
 
 """Bio.SearchIO parser for BLAST+ tab output format, with or without comments."""
 
-import warnings
-
-from Bio import BiopythonWarning
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
@@ -51,7 +48,6 @@ _LONG_SHORT_MAP = {
     'subject ids': 'sallseqid',
     'subject gi': 'sgi',
     'subject gis': 'sallgi',
-    # unsupported columns
     'BTOP': 'btop',
 }
 
@@ -83,6 +79,7 @@ _COLUMN_HSP = {
     'mismatch': ('mismatch_num', int),
     'gaps': ('gap_num', int),
     'gapopen': ('gapopen_num', int),
+    'btop': ('btop', str),
 }
 _COLUMN_FRAG = {
     'length': ('aln_span', int),
@@ -98,8 +95,6 @@ _COLUMN_FRAG = {
 }
 _SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
         _COLUMN_HSP.keys() + _COLUMN_FRAG.keys())
-# ignored columns (for now) are:
-# BTOP -- btop
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above

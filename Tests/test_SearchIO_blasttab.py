@@ -13,7 +13,6 @@ import sys
 import unittest
 import warnings
 
-from Bio import BiopythonWarning
 from Bio.SearchIO import parse, read
 
 # test case files are in the Blast directory
@@ -643,18 +642,8 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(0, len(qresult))
 
         # test second qresult
-        # TODO: remove after py2.5 deprecation
-        if sys.version_info[:2] > (2, 5):
-            with warnings.catch_warnings(record=True) as w:
-                warnings.simplefilter('always')
-                qresult = qresults.next()
-                counter += 1
-                # 1 warning for 1 unsupported column
-                self.assertEqual(len(w), 1)
-                self.assertTrue(issubclass(w[-1].category, BiopythonWarning))
-        else:
-            qresult = qresults.next()
-            counter += 1
+        qresult = qresults.next()
+        counter += 1
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_mrna', qresult.target)
@@ -731,18 +720,8 @@ class BlastnTabCases(unittest.TestCase):
         self.assertEqual(1, hsp.hit_frame)
 
         # test last qresult
-        # TODO: remove after py2.5 deprecation
-        if sys.version_info[:2] > (2, 5):
-            with warnings.catch_warnings(record=True) as w:
-                warnings.simplefilter('always')
-                qresult = qresults.next()
-                counter += 1
-                # 1 warning for 1 unsupported column
-                self.assertEqual(len(w), 1)
-                self.assertTrue(issubclass(w[-1].category, BiopythonWarning))
-        else:
-            qresult = qresults.next()
-            counter += 1
+        qresult = qresults.next()
+        counter += 1
 
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('db/minirefseq_mrna', qresult.target)

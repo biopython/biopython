@@ -14,11 +14,9 @@ the SearchIO indexing core itself.
 from __future__ import with_statement
 
 import os
-import sys
 import unittest
-import warnings
 
-from Bio import BiopythonWarning, SearchIO
+from Bio import SearchIO
 from Bio._py3k import _as_bytes
 
 from search_tests_common import compare_search_obj
@@ -1350,14 +1348,7 @@ class BlastTabIndexCases(SearchIndexCases):
     def test_blasttab_2226_tblastn_011(self):
         """Test blast-tab indexing, BLAST 2.2.26+, all columns, commented"""
         filename = 'Blast/tab_2226_tblastn_011.txt'
-        # TODO: remove after py2.5 deprecation
-        if sys.version_info[:2] > (2, 5):
-            with warnings.catch_warnings(record=True) as w:
-                warnings.simplefilter('always')
-                self.check_index(filename, self.fmt, has_comments=True)
-                self.assertTrue(issubclass(w[-1].category, BiopythonWarning))
-        else:
-            self.check_index(filename, self.fmt, has_comments=True)
+        self.check_index(filename, self.fmt, has_comments=True)
 
 
 class HmmerTextIndexCases(SearchIndexCases):
