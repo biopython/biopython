@@ -315,12 +315,6 @@ class QueryResult(BaseSearchObject):
 
         return '\n'.join(lines)
 
-    def __reversed__(self):
-        hits = reversed(list(self.hits))
-        obj =  self.__class__(self.id, hits, self._hit_key_function)
-        self._transfer_attrs(obj)
-        return obj
-
     def __setitem__(self, hit_key, hit):
         """Custom Search object item assignment.
 
@@ -358,7 +352,7 @@ class QueryResult(BaseSearchObject):
 
         # if key is an int, then retrieve the Hit at the int index
         elif isinstance(hit_key, int):
-            return list(self.hits)[hit_key]
+            return list(self._items.values())[hit_key]
 
         # if key is a string, then do a regular dictionary retrieval
         return self._items[hit_key]
@@ -443,7 +437,8 @@ class QueryResult(BaseSearchObject):
     def hit_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its Hits."""
         hits = (hit[:] for hit in self.hits)
-        hits = map(func, hits)
+        if func is not None:
+            hits = map(func, hits)
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -457,7 +452,7 @@ class QueryResult(BaseSearchObject):
 
     def hsp_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its HSPs."""
-        hits = filter(None, (hit.map(func) for hit in self.hits[:]))
+        hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
@@ -595,10 +590,10 @@ class QueryResult(BaseSearchObject):
         if key is None:
             # if reverse is True, reverse the hits
             if reverse:
-                sorted_hits = self.hits[::-1]
+                sorted_hits = list(self.hits)[::-1]
             # otherwise (default options) make a copy of the hits
             else:
-                sorted_hits = self.hits[:]
+                sorted_hits = list(self.hits)[:]
         else:
             sorted_hits = sorted(self.hits, key=key, reverse=reverse)
 
@@ -788,11 +783,6 @@ class Hit(BaseSearchObject):
 
         return '\n'.join(lines)
 
-    def __reversed__(self):
-        obj = self.__class__(self.id, self.query_id, reversed(self._items))
-        self._transfer_attrs(obj)
-        return obj
-
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
@@ -905,7 +895,10 @@ class Hit(BaseSearchObject):
 
     def map(self, func=None):
         """Creates a new Hit object, mapping the given function to its HSPs."""
-        hsps = map(func, self.hsps[:])  # this creates a shallow copy
+        if func is not None:
+            hsps = map(func, self.hsps[:])  # this creates a shallow copy
+        else:
+            hsps = self.hsps[:]
         if hsps:
             obj = self.__class__(self.id, self.query_id, hsps)
             self._transfer_attrs(obj)

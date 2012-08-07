@@ -112,24 +112,14 @@ class QueryResultCases(unittest.TestCase):
         blank_qresult = QueryResult('queryX')
         self.assertFalse(blank_qresult)
 
-    def test_reversed(self):
-        """Test QueryResult.__reversed__"""
-        # reversed should a return a new qresult with the same attributes
-        # except the hits is reversed
-        setattr(self.qresult, 'name', 'test')
-        rev_qresult = list(reversed(self.qresult))
-        self.assertEqual(list(self.qresult.hits)[::-1],
-                list(rev_qresult.hits)[:])
-        self.assertEqual('test', rev_qresult.name)
-
     def test_setitem_ok(self):
         """Test QueryResult.__setitem__"""
         # hit objects assignment should work with arbitrary string keys
         self.qresult['hit4'] = hit41
-        self.assertEqual([hit11, hit21, hit31, hit41], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31, hit41], list(self.qresult.hits))
         # and if the key already exist, the object should be overwritten
         self.qresult['hit4'] = hit11
-        self.assertEqual([hit11, hit21, hit31, hit11], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31, hit11], list(self.qresult.hits))
 
     def test_setitem_wrong_key_type(self):
         """Test QueryResult.__setitem__, wrong key type"""
@@ -169,7 +159,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(1102, self.qresult.seq_len)
         self.assertEqual('refseq_rna', self.qresult.target)
         new_qresult = self.qresult[1:]
-        self.assertEqual([hit21, hit31], new_qresult.hits)
+        self.assertEqual([hit21, hit31], list(new_qresult.hits))
         self.assertEqual(1102, new_qresult.seq_len)
         self.assertEqual('refseq_rna', new_qresult.target)
 
@@ -178,17 +168,17 @@ class QueryResultCases(unittest.TestCase):
         # delitem should work with string index
         del self.qresult['hit1']
         self.assertEqual(2, len(self.qresult))
-        self.assertTrue([hit21, hit31], self.qresult.hits)
+        self.assertTrue([hit21, hit31], list(self.qresult.hits))
 
     def test_delitem_int_ok(self):
         """Test QueryResult.__delitem__"""
         # delitem should work with int index
         del self.qresult[-1]
         self.assertEqual(2, len(self.qresult))
-        self.assertEqual([hit11, hit21], self.qresult.hits)
+        self.assertEqual([hit11, hit21], list(self.qresult.hits))
         del self.qresult[0]
         self.assertEqual(1, len(self.qresult))
-        self.assertTrue([hit21], self.qresult.hits)
+        self.assertTrue([hit21], list(self.qresult.hits))
 
     def test_delitem_slice_ok(self):
         """Test QueryResult.__delitem__, with slice"""
@@ -265,19 +255,20 @@ class QueryResultCases(unittest.TestCase):
     def test_append_ok(self):
         """Test QueryResult.append"""
         # append should work with Hit objects
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.qresult.append(hit41)
-        self.assertEqual([hit11, hit21, hit31, hit41], self.qresult.hits)
-        self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'], self.qresult.hit_keys)
+        self.assertEqual([hit11, hit21, hit31, hit41], list(self.qresult.hits))
+        self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'],
+                list(self.qresult.hit_keys))
 
     def test_append_custom_hit_key_function_ok(self):
         """Test QueryResult.append, with custom hit key function"""
         self.qresult._hit_key_function = lambda hit: hit.id + '_custom'
         # append should assign hit keys according to _hit_key_function
-        self.assertEqual(['hit1', 'hit2', 'hit3'], self.qresult.hit_keys)
+        self.assertEqual(['hit1', 'hit2', 'hit3'], list(self.qresult.hit_keys))
         self.qresult.append(hit41)
         self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4_custom'], \
-                self.qresult.hit_keys)
+                list(self.qresult.hit_keys))
 
     def test_append_id_exists(self):
         """Test QueryResult.append, when ID exists"""
@@ -287,12 +278,12 @@ class QueryResultCases(unittest.TestCase):
     def test_hit_filter(self):
         """Test QueryResult.hit_filter"""
         # hit_filter should return a new QueryResult object (shallow copy),
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         # filter func: min hit length == 2
         # this would filter out hit21, since it only has 1 HSP
         filter_func = lambda hit: len(hit) >= 2
         filtered = self.qresult.hit_filter(filter_func)
-        self.assertEqual([hit11, hit31], filtered.hits)
+        self.assertEqual([hit11, hit31], list(filtered.hits))
         # make sure all remaining hits return True for the filter function
         self.assertTrue(all([filter_func(hit) for hit in filtered]))
         self.assertEqual(1102, filtered.seq_len)
@@ -354,7 +345,7 @@ class QueryResultCases(unittest.TestCase):
         """Test QueryResult.hsp_filter"""
         # hsp_filter should return a new QueryResult object (shallow copy)
         # and any empty hits should be discarded
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         # filter func: no '-' in hsp query sequence
         # this would filter out hsp113 and hsp211, effectively removing hit21
         filter_func = lambda hsp: '-' not in str(hsp.fragments[0].query)
@@ -448,7 +439,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(3, len(self.qresult))
         hit = self.qresult.pop()
         self.assertEqual(hit, hit31)
-        self.assertEqual([hit11, hit21], self.qresult.hits)
+        self.assertEqual([hit11, hit21], list(self.qresult.hits))
 
     def test_pop_int_index_ok(self):
         """Test QueryResult.pop, with integer index"""
@@ -456,7 +447,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(3, len(self.qresult))
         hit = self.qresult.pop(1)
         self.assertEqual(hit, hit21)
-        self.assertEqual([hit11, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit31], list(self.qresult.hits))
 
     def test_pop_string_index_ok(self):
         """Test QueryResult.pop, with string index"""
@@ -464,7 +455,7 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual(3, len(self.qresult))
         hit = self.qresult.pop('hit2')
         self.assertEqual(hit, hit21)
-        self.assertEqual([hit11, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit31], list(self.qresult.hits))
 
     def test_index(self):
         """Test QueryResult.index"""
@@ -480,49 +471,49 @@ class QueryResultCases(unittest.TestCase):
     def test_sort_ok(self):
         """Test QueryResult.sort"""
         # sort without any arguments should keep the Hits in the same order
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.qresult.sort()
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
 
     def test_sort_not_in_place_ok(self):
         """Test QueryResult.sort, not in place"""
         # sort without any arguments should keep the Hits in the same order
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         sorted_qresult = self.qresult.sort(in_place=False)
-        self.assertEqual([hit11, hit21, hit31], sorted_qresult.hits)
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(sorted_qresult.hits))
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
 
     def test_sort_reverse_ok(self):
         """Test QueryResult.sort, reverse"""
         # sorting with reverse=True should return a QueryResult with Hits reversed
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.qresult.sort(reverse=True)
-        self.assertEqual([hit31, hit21, hit11], self.qresult.hits)
+        self.assertEqual([hit31, hit21, hit11], list(self.qresult.hits))
 
     def test_sort_reverse_not_in_place_ok(self):
         """Test QueryResult.sort, reverse, not in place"""
         # sorting with reverse=True should return a QueryResult with Hits reversed
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         sorted_qresult = self.qresult.sort(reverse=True, in_place=False)
-        self.assertEqual([hit31, hit21, hit11], sorted_qresult.hits)
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit31, hit21, hit11], list(sorted_qresult.hits))
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
 
     def test_sort_key_ok(self):
         """Test QueryResult.sort, with custom key"""
         # if custom key is given, sort using it
         key = lambda hit: len(hit)
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.qresult.sort(key=key)
-        self.assertEqual([hit21, hit31, hit11], self.qresult.hits)
+        self.assertEqual([hit21, hit31, hit11], list(self.qresult.hits))
 
     def test_sort_key_not_in_place_ok(self):
         """Test QueryResult.sort, with custom key, not in place"""
         # if custom key is given, sort using it
         key = lambda hit: len(hit)
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         sorted_qresult = self.qresult.sort(key=key, in_place=False)
-        self.assertEqual([hit21, hit31, hit11], sorted_qresult.hits)
-        self.assertEqual([hit11, hit21, hit31], self.qresult.hits)
+        self.assertEqual([hit21, hit31, hit11], list(sorted_qresult.hits))
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
 
 
 class HitCases(unittest.TestCase):
@@ -567,14 +558,6 @@ class HitCases(unittest.TestCase):
         # bool() on Hit objects should return True only if hsps is filled
         # which is always true
         self.assertTrue(self.hit)
-
-    def test_reversed(self):
-        """Test Hit.__reversed__"""
-        rev_hit = list(reversed(self.hit))
-        self.assertEqual(self.hit.hsps[::-1], rev_hit.hsps[:])
-        rev_hit = reversed(self.hit)
-        self.assertEqual(5e-10, rev_hit.evalue)
-        self.assertEqual('test', rev_hit.name)
 
     def test_setitem_single(self):
         """Test Hit.__setitem__, single item"""

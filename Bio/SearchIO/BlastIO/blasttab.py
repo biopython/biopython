@@ -7,6 +7,7 @@
 
 import warnings
 
+from Bio import BiopythonWarning
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
@@ -149,7 +150,7 @@ class BlastTabIterator(object):
                 message = "Warning: field '%s' is not yet " \
                         "supported by SearchIO. The data in the " \
                         "corresponding column will be ignored." % field
-                warnings.warn(message)
+                warnings.warn(message, BiopythonWarning)
         # if set(fields) has a null intersection with minimum required
         # fields for hit and query, raise an exception
         if not set(fields).intersection(_MIN_QUERY_FIELDS) or \
@@ -447,7 +448,6 @@ class BlastTabIndexer(SearchIndexer):
         start_offset = handle.tell()
 
         if not self._has_comments:
-            tab_char = _as_bytes('\t')
             qresult_key = None
             key_idx = self._key_idx
             while True:
@@ -455,19 +455,18 @@ class BlastTabIndexer(SearchIndexer):
                 # encountering the next one
                 end_offset = handle.tell()
                 #line = handle.readline()
-                line = handle.readline()
+                line = _bytes_to_string(handle.readline())
 
                 if qresult_key is None:
-                    qresult_key = line.split(tab_char)[key_idx]
+                    qresult_key = line.split('\t')[key_idx]
                 else:
                     try:
-                        curr_key = line.split(tab_char)[key_idx]
+                        curr_key = line.split('\t')[key_idx]
                     except IndexError:
                         curr_key = ''
 
                     if curr_key != qresult_key:
-                        yield _bytes_to_string(qresult_key), start_offset, \
-                                end_offset - start_offset
+                        yield qresult_key, start_offset, end_offset - start_offset
                         qresult_key = curr_key
                         start_offset = end_offset
 
@@ -482,7 +481,7 @@ class BlastTabIndexer(SearchIndexer):
 
             while True:
                 end_offset = handle.tell()
-                line = handle.readline()
+                line = _bytes_to_string(handle.readline())
 
                 if query_mark is None:
                     query_mark = line
@@ -490,8 +489,7 @@ class BlastTabIndexer(SearchIndexer):
                 elif line.startswith(qid_mark):
                     qresult_key = line[len(qid_mark):].split()[0]
                 elif line == query_mark or 'BLAST processed' in line:
-                    yield _bytes_to_string(qresult_key), start_offset, \
-                            end_offset - start_offset
+                    yield qresult_key, start_offset, end_offset - start_offset
                     start_offset = end_offset
                 elif not line:
                     break
@@ -504,16 +502,15 @@ class BlastTabIndexer(SearchIndexer):
 
         if not self._has_comments:
             key_idx = self._key_idx
-            tab_char = _as_bytes('\t')
             qresult_key = None
             while True:
-                line = handle.readline()
+                line = _bytes_to_string(handle.readline())
                 # get the key if the first line (qresult key)
                 if qresult_key is None:
-                    qresult_key = line.split(tab_char)[key_idx]
+                    qresult_key = line.split('\t')[key_idx]
                 else:
                     try:
-                        curr_key = line.split(tab_char)[key_idx]
+                        curr_key = line.split('\t')[key_idx]
                     except IndexError:
                         curr_key = ''
                     # only break when qresult is finished (key is different)
@@ -526,7 +523,7 @@ class BlastTabIndexer(SearchIndexer):
             # something like '# TBLASTN 2.2.25+'
             query_mark = None
             while True:
-                line = handle.readline()
+                line = _bytes_to_string(handle.readline())
                 if query_mark is None:
                     query_mark = line
                 # if we've encountered another query mark, it's the start of
@@ -540,7 +537,7 @@ class BlastTabIndexer(SearchIndexer):
                 if 'BLAST processed' in line:
                     break
 
-        return qresult_raw
+        return _as_bytes(qresult_raw)
 
 
 class BlastTabWriter(object):

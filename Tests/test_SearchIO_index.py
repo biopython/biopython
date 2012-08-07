@@ -18,7 +18,8 @@ import sys
 import unittest
 import warnings
 
-from Bio import SearchIO
+from Bio import BiopythonWarning, SearchIO
+from Bio._py3k import _as_bytes
 
 from search_tests_common import compare_search_obj
 
@@ -50,7 +51,7 @@ class BlastXmlRawCases(unittest.TestCase):
       </Iteration_stat>
       <Iteration_message>No hits found</Iteration_message>
     </Iteration>"""
-        self.assertEqual(raw, idx.get_raw('random_s00'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
 
     def test_blastxml_2226_multiple_middle(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, middle (xml_2226_blastp_001.xml)"""
@@ -215,7 +216,7 @@ class BlastXmlRawCases(unittest.TestCase):
         </Statistics>
       </Iteration_stat>
     </Iteration>"""
-        self.assertEqual(raw, idx.get_raw('gi|16080617|ref|NP_391444.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|16080617|ref|NP_391444.1|'))
 
     def test_blastxml_2226_multiple_last(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, last (xml_2226_blastp_001.xml)"""
@@ -475,7 +476,7 @@ class BlastXmlRawCases(unittest.TestCase):
         </Statistics>
       </Iteration_stat>
     </Iteration>"""
-        self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
 
     def test_blastxml_2226_single(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, single query (xml_2226_blastp_004.xml)"""
@@ -735,7 +736,7 @@ class BlastXmlRawCases(unittest.TestCase):
         </Statistics>
       </Iteration_stat>
     </Iteration>"""
-        self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
 
 
 class BlastTabRawCases(unittest.TestCase):
@@ -750,7 +751,7 @@ class BlastTabRawCases(unittest.TestCase):
 gi|16080617|ref|NP_391444.1|	gi|72012412|ref|XM_777959.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 """
-        self.assertEqual(raw, idx.get_raw('gi|16080617|ref|NP_391444.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|16080617|ref|NP_391444.1|'))
 
     def test_blasttab_2226_multiple_last(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last (tab_2226_tblastn_001.txt)"""
@@ -766,7 +767,7 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	97.96	98	2	0	1	98	173	466	2e-
 gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	1e-09	46.6
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 """
-        self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
 
     def test_blasttab_2226_single(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query (tab_2226_tblastn_004.txt)"""
@@ -782,7 +783,7 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	97.96	98	2	0	1	98	173	466	2e-
 gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	1e-09	46.6
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 """
-        self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
 
     def test_blasttab_2226_multiple_first_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, first, commented (tab_2226_tblastn_005.txt)"""
@@ -793,7 +794,7 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 # Database: db/minirefseq_mrna
 # 0 hits found
 """
-        self.assertEqual(raw, idx.get_raw('random_s00'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
 
     def test_blasttab_2226_multiple_middle_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, middle, commented (tab_2226_tblastn_005.txt)"""
@@ -808,7 +809,7 @@ gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|	34.88	43	28	0	31	7
 gi|16080617|ref|NP_391444.1|	gi|72012412|ref|XM_777959.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 """
-        self.assertEqual(raw, idx.get_raw('gi|16080617|ref|NP_391444.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|16080617|ref|NP_391444.1|'))
 
     def test_blasttab_2226_multiple_last_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last, commented (tab_2226_tblastn_005.txt)"""
@@ -830,7 +831,7 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 # BLAST processed 3 queries
 """
-        self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
 
     def test_blasttab_2226_single_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query, commented (tab_2226_tblastn_008.txt)"""
@@ -852,7 +853,7 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 # BLAST processed 1 queries
 """
-        self.assertEqual(raw, idx.get_raw('gi|11464971:4-101'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
 
 
 class HmmerTextRawCases(unittest.TestCase):
@@ -903,7 +904,7 @@ Domain search space  (domZ):               0  [number of targets reported over t
 # Mc/sec: 403.60
 //
 """
-        self.assertEqual(raw, idx.get_raw('random_s00'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
 
     def test_hmmertext_30_multiple_middle(self):
         """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_30_hmmscan_001.out)"""
@@ -966,7 +967,7 @@ Domain search space  (domZ):               1  [number of targets reported over t
 # Mc/sec: 1757.33
 //
 """
-        self.assertEqual(raw, idx.get_raw('gi|4885477|ref|NP_005359.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
     def test_hmmertext_30_multiple_last(self):
         """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, last (text_30_hmmscan_001.out)"""
@@ -1083,7 +1084,7 @@ Domain search space  (domZ):               5  [number of targets reported over t
 # Mc/sec: 3667.47
 //
 """
-        self.assertEqual(raw, idx.get_raw('gi|125490392|ref|NP_038661.2|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
     def test_hmmertext_30_single(self):
         """Test hmmer-text raw string retrieval, HMMER 3.0, single query (text_30_hmmscan_003.out)"""
@@ -1146,7 +1147,7 @@ Domain search space  (domZ):               1  [number of targets reported over t
 # Mc/sec: 1757.33
 //
 """
-        self.assertEqual(raw, idx.get_raw('gi|4885477|ref|NP_005359.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
 
 class HmmerTabRawCases(unittest.TestCase):
@@ -1159,7 +1160,7 @@ class HmmerTabRawCases(unittest.TestCase):
         idx = SearchIO.index(filename, self.fmt)
         raw = """Globin               PF00042.17 gi|4885477|ref|NP_005359.1| -              6e-21   74.6   0.3   9.2e-21   74.0   0.2   1.3   1   0   0   1   1   1   1 Globin
 """
-        self.assertEqual(raw, idx.get_raw('gi|4885477|ref|NP_005359.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
     def test_hmmertab_30_multiple_middle(self):
         """Test hmmer-tab raw string retrieval, HMMER 3.0, multiple queries, middle (tab_30_hmmscan_001.out)"""
@@ -1168,7 +1169,7 @@ class HmmerTabRawCases(unittest.TestCase):
         raw = """Ig_3                 PF13927.1  gi|126362951:116-221 -            1.4e-09   38.2   0.4   2.1e-09   37.6   0.3   1.3   1   0   0   1   1   1   1 Immunoglobulin domain
 Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7   0.1   4.3e-05   23.4   0.1   1.1   1   0   0   1   1   1   1 Immunoglobulin domain
 """
-        self.assertEqual(raw, idx.get_raw('gi|126362951:116-221'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
 
     def test_hmmertab_30_multiple_last(self):
         """Test hmmer-tab raw string retrieval, HMMER 3.0, multiple queries, last (tab_30_hmmscan_001.out)"""
@@ -1180,7 +1181,7 @@ HTH_31               PF13560.1  gi|125490392|ref|NP_038661.2| -              0.0
 Homeobox_KN          PF05920.6  gi|125490392|ref|NP_038661.2| -              0.039   13.5   0.0     0.095   12.3   0.0   1.6   1   0   0   1   1   1   0 Homeobox KN domain
 DUF521               PF04412.8  gi|125490392|ref|NP_038661.2| -               0.14   10.5   0.1      0.26    9.6   0.1   1.4   1   0   0   1   1   1   0 Protein of unknown function (DUF521)
 """
-        self.assertEqual(raw, idx.get_raw('gi|125490392|ref|NP_038661.2|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
     def test_hmmertab_30_single(self):
         """Test hmmer-tab raw string retrieval, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
@@ -1189,7 +1190,7 @@ DUF521               PF04412.8  gi|125490392|ref|NP_038661.2| -               0.
         raw = """Ig_3                 PF13927.1  gi|126362951:116-221 -            1.4e-09   38.2   0.4   2.1e-09   37.6   0.3   1.3   1   0   0   1   1   1   1 Immunoglobulin domain
 Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7   0.1   4.3e-05   23.4   0.1   1.1   1   0   0   1   1   1   1 Immunoglobulin domain
 """
-        self.assertEqual(raw, idx.get_raw('gi|126362951:116-221'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
 
 
 class HmmerDomtabRawCases(unittest.TestCase):
@@ -1202,7 +1203,7 @@ class HmmerDomtabRawCases(unittest.TestCase):
         idx = SearchIO.index(filename, self.fmt)
         raw = """Globin               PF00042.17   108 gi|4885477|ref|NP_005359.1| -            154     6e-21   74.6   0.3   1   1   6.7e-25   9.2e-21   74.0   0.2     1   107     7   112     7   113 0.97 Globin
 """
-        self.assertEqual(raw, idx.get_raw('gi|4885477|ref|NP_005359.1|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
     def test_hmmerdomtab_30_multiple_middle(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, multiple queries, middle (domtab_30_hmmscan_001.out)"""
@@ -1211,7 +1212,7 @@ class HmmerDomtabRawCases(unittest.TestCase):
         raw = """Ig_3                 PF13927.1     75 gi|126362951:116-221 -            106   1.4e-09   38.2   0.4   1   1     3e-13   2.1e-09   37.6   0.3     1    73     9    84     9    88 0.94 Immunoglobulin domain
 Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.5e-05   23.7   0.1   1   1   6.2e-09   4.3e-05   23.4   0.1     1    80     9   104     9   104 0.71 Immunoglobulin domain
 """
-        self.assertEqual(raw, idx.get_raw('gi|126362951:116-221'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
 
     def test_hmmerdomtab_30_multiple_last(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, multiple queries, last (domtab_30_hmmscan_001.out)"""
@@ -1224,7 +1225,7 @@ HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -           
 Homeobox_KN          PF05920.6     40 gi|125490392|ref|NP_038661.2| -            352     0.039   13.5   0.0   1   1   3.5e-05     0.095   12.3   0.0     7    39   244   276   241   277 0.91 Homeobox KN domain
 DUF521               PF04412.8    400 gi|125490392|ref|NP_038661.2| -            352      0.14   10.5   0.1   1   1   9.4e-05      0.26    9.6   0.1   273   334   221   280   197   294 0.77 Protein of unknown function (DUF521)
 """
-        self.assertEqual(raw, idx.get_raw('gi|125490392|ref|NP_038661.2|'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
     def test_hmmerdomtab_30_single(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, single query (domtab_30_hmmscan_004.out)"""
@@ -1233,7 +1234,7 @@ DUF521               PF04412.8    400 gi|125490392|ref|NP_038661.2| -           
         raw = """Ig_3                 PF13927.1     75 gi|126362951:116-221 -            106   1.4e-09   38.2   0.4   1   1     3e-13   2.1e-09   37.6   0.3     1    73     9    84     9    88 0.94 Immunoglobulin domain
 Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.5e-05   23.7   0.1   1   1   6.2e-09   4.3e-05   23.4   0.1     1    80     9   104     9   104 0.71 Immunoglobulin domain
 """
-        self.assertEqual(raw, idx.get_raw('gi|126362951:116-221'))
+        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
 
 
 class SearchIndexCases(unittest.TestCase):
@@ -1354,7 +1355,7 @@ class BlastTabIndexCases(SearchIndexCases):
             with warnings.catch_warnings(record=True) as w:
                 warnings.simplefilter('always')
                 self.check_index(filename, self.fmt, has_comments=True)
-                self.assertTrue(issubclass(w[-1].category, UserWarning))
+                self.assertTrue(issubclass(w[-1].category, BiopythonWarning))
         else:
             self.check_index(filename, self.fmt, has_comments=True)
 

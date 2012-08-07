@@ -308,7 +308,7 @@ class BlastnXmlCases(unittest.TestCase):
         self.assertEqual(1.28, qresult.stat_lambda)
         self.assertEqual(0.85, qresult.stat_entropy)
         self.assertEqual(0, len(qresult))
-        self.assertEqual([], qresult.hits)
+        self.assertEqual([], list(qresult.hits))
 
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )

@@ -367,8 +367,8 @@ class HmmerTextIndexer(SearchIndexer):
     """Indexer class for HMMER plain text output."""
 
     _parser = HmmerTextIterator
-    qresult_start = _as_bytes('Query: ')
-    qresult_end = _as_bytes('//')
+    qresult_start = 'Query: '
+    qresult_end = '//'
 
     def __iter__(self):
         handle = self._handle
@@ -376,7 +376,7 @@ class HmmerTextIndexer(SearchIndexer):
         start_offset = handle.tell()
 
         while True:
-            line = read_forward(handle)
+            line = _bytes_to_string(read_forward(handle))
             end_offset = handle.tell()
 
             if line.startswith(self.qresult_start):
@@ -386,8 +386,7 @@ class HmmerTextIndexer(SearchIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield qresult_key, start_offset, end_offset - start_offset
                 start_offset = end_offset
             elif not line:
                 break
@@ -399,7 +398,7 @@ class HmmerTextIndexer(SearchIndexer):
         # read header first
         handle.seek(0)
         while True:
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             if line.startswith(self.qresult_start):
                 break
             qresult_raw += line
@@ -408,14 +407,14 @@ class HmmerTextIndexer(SearchIndexer):
         handle.seek(offset)
         while True:
             # preserve whitespace, don't use read_forward
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             qresult_raw += line
 
             # break when we've reached qresult end
             if line.startswith(self.qresult_end):
                 break
 
-        return qresult_raw
+        return _as_bytes(qresult_raw)
 
 
 def _test():

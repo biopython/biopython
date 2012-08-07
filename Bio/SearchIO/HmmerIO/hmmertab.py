@@ -36,8 +36,9 @@ class HmmerTabIterator(object):
         self.line = read_forward(self.handle)
 
     def __iter__(self):
+        header_mark = '#'
         # read through the header if it exists
-        while self.line.startswith('#'):
+        while self.line.startswith(header_mark):
             self.line = read_forward(self.handle)
         # if we have result rows, parse it
         if self.line:
@@ -144,7 +145,6 @@ class HmmerTabIndexer(SearchIndexer):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
-        split_char = _as_bytes(' ')
         query_id_idx = self._query_id_idx
         qresult_key = None
         # set line with initial mock value, to emulate header
@@ -153,7 +153,7 @@ class HmmerTabIndexer(SearchIndexer):
         # read through header
         while line.startswith('#'):
             start_offset = handle.tell()
-            line = read_forward(handle, strip=False)
+            line = _bytes_to_string(read_forward(handle, strip=False))
 
         # and index the qresults
         while True:
@@ -161,49 +161,44 @@ class HmmerTabIndexer(SearchIndexer):
 
             if not line:
                 break
+            cols = line.strip().split(' ')
             if qresult_key is None:
-                qresult_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                qresult_key = list(filter(None, cols))[query_id_idx]
             else:
-                curr_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                curr_key = list(filter(None, cols))[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield _bytes_to_string(qresult_key), start_offset, \
-                            end_offset - start_offset
+                    yield qresult_key, start_offset, end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
-            line = read_forward(handle, strip=False)
+            line = _bytes_to_string(read_forward(handle, strip=False))
             if not line:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield qresult_key, start_offset, end_offset - start_offset
                 break
 
     def get_raw(self, offset):
         """Returns the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
-        split_char = _as_bytes(' ')
         query_id_idx = self._query_id_idx
         qresult_key = None
         qresult_raw = ''
 
         while True:
-            line = read_forward(handle, strip=False)
+            line = _bytes_to_string(read_forward(handle, strip=False))
             if not line:
                 break
+            cols = list(filter(None, line.strip().split(' ')))
             if qresult_key is None:
-                qresult_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                qresult_key = cols[query_id_idx]
             else:
-                curr_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                curr_key = cols[query_id_idx]
                 if curr_key != qresult_key:
                     break
             qresult_raw += line
 
-        return qresult_raw
+        return _as_bytes(qresult_raw)
 
 
 class HmmerTabWriter(object):

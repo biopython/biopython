@@ -510,7 +510,7 @@ class BlastXmlIndexer(SearchIndexer):
             # for each iteration start mark
             for qstart_idx in self.get_offsets(block, qstart_mark):
                 # get the id of the query (re.search gets the 1st result)
-                regx = re.search(re_desc, block[qstart_idx:])
+                regx = re.search(re_desc, _bytes_to_string(block[qstart_idx:]))
                 try:
                     qstart_desc = regx.group(2)
                     qstart_id = regx.group(1)
@@ -519,7 +519,7 @@ class BlastXmlIndexer(SearchIndexer):
                 except AttributeError:
                     # if we've found the end of the Iteration_query-def element
                     # use the fallback values
-                    if re.search(re_desc_end, block[qstart_idx:]):
+                    if re.search(re_desc_end, _bytes_to_string(block[qstart_idx:])):
                         qstart_desc = self._fallback['description']
                         qstart_id = self._fallback['id']
                     # otherwise, extend the read block and retrieve the ID and
@@ -527,7 +527,7 @@ class BlastXmlIndexer(SearchIndexer):
                     else:
                         # extend the cached read
                         block_ext = block + handle.read(block_size)
-                        regx = re.search(re_desc, block_ext[qstart_idx:])
+                        regx = re.search(re_desc, _bytes_to_string(block_ext[qstart_idx:]))
                         qstart_desc = regx.group(2)
                         qstart_id = regx.group(1)
                         # set file pointer to the position before block_ext
@@ -550,10 +550,10 @@ class BlastXmlIndexer(SearchIndexer):
                 qlen = len(qend_mark) + qlen
                 # move pointer to original position
                 handle.seek((counter + 1) * block_size)
-                if qstart_id.startswith(_as_bytes('Query_')):
+                if qstart_id.startswith('Query_'):
                     qstart_id = qstart_desc.split(' ', 1)[0]
                 # yield key, offset, length
-                yield _bytes_to_string(qstart_id), qstart_idx, qlen
+                yield qstart_id, qstart_idx, qlen
 
             counter += 1
 
@@ -566,7 +566,7 @@ class BlastXmlIndexer(SearchIndexer):
         handle = self._handle
         handle.seek(offset)
         counter = 0
-        qresult_raw = ''
+        qresult_raw = _as_bytes('')
 
         while True:
             block = handle.read(block_size)

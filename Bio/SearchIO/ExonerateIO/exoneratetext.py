@@ -8,6 +8,8 @@
 import re
 from itertools import chain
 
+from Bio._py3k import _as_bytes, _bytes_to_string
+
 from _base import BaseExonerateIterator, BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
 from exoneratevulgar import parse_vulgar_comp, _RE_VULGAR
@@ -416,10 +418,11 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
         """Returns the query ID from the nearest "Query:" line."""
         handle = self._handle
         handle.seek(pos)
+        sentinel = 'Query:'
 
         while True:
-            line = handle.readline().strip()
-            if line.startswith('Query:'):
+            line = _bytes_to_string(handle.readline()).strip()
+            if line.startswith(sentinel):
                 break
             if not line:
                 raise StopIteration
@@ -435,7 +438,7 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
         qresult_raw = ''
 
         while True:
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             if not line:
                 break
             elif line.startswith(self._query_mark):
@@ -449,8 +452,7 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
                 handle.seek(cur_pos)
             qresult_raw += line
 
-        return qresult_raw
-
+        return _as_bytes(qresult_raw)
 
 
 def _test():

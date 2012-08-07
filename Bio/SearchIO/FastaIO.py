@@ -27,7 +27,7 @@ from Bio.Alphabet import generic_dna, generic_protein
 from Bio.File import UndoHandle
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
-from Bio._py3k import _bytes_to_string
+from Bio._py3k import _as_bytes, _bytes_to_string
 
 # precompile regex patterns
 # regex for program name
@@ -241,8 +241,8 @@ class FastaM10Iterator(object):
                 qresult = QueryResult(query_id)
                 qresult.seq_len = int(seq_len)
                 # get target from the next line
-                qresult.target = filter(None, \
-                        self.handle.peekline().split(' '))[1].strip()
+                qresult.target = list(filter(None, \
+                        self.handle.peekline().split(' ')))[1].strip()
                 if desc is not None:
                     qresult.description = desc
                 # set values from preamble
@@ -412,25 +412,25 @@ class FastaM10Indexer(SearchIndexer):
         handle.seek(0)
         start_offset = handle.tell()
         qresult_key = None
+        query_mark = '>>>'
 
         while True:
-            line = handle.readline()
-            peekline = handle.peekline()
+            line = _bytes_to_string(handle.readline())
+            peekline = _bytes_to_string(handle.peekline())
             end_offset = handle.tell()
 
-            if not line.startswith('>>>') and '>>>' in line:
+            if not line.startswith(query_mark) and query_mark in line:
                 regx = re.search(_RE_ID_DESC_SEQLEN, line)
                 qresult_key = regx.group(1)
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query
-            elif not peekline.startswith('>>>') and '>>>' in peekline and qresult_key is not None:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+            elif not peekline.startswith(query_mark) and query_mark in peekline \
+                    and qresult_key is not None:
+                yield qresult_key, start_offset, end_offset - start_offset
                 start_offset = end_offset
             # or we arrive at the end of the search
             elif not line:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield qresult_key, start_offset, end_offset - start_offset
                 break
 
     def get_raw(self, offset):
@@ -440,8 +440,8 @@ class FastaM10Indexer(SearchIndexer):
         # read header first
         handle.seek(0)
         while True:
-            line = handle.readline()
-            peekline = handle.peekline()
+            line = _bytes_to_string(handle.readline())
+            peekline = _bytes_to_string(handle.peekline())
             qresult_raw += line
             if not peekline.startswith('>>>') and '>>>' in peekline:
                 break
@@ -450,8 +450,8 @@ class FastaM10Indexer(SearchIndexer):
         handle.seek(offset)
         while True:
             # preserve whitespace, don't use read_forward
-            line = handle.readline()
-            peekline = handle.peekline()
+            line = _bytes_to_string(handle.readline())
+            peekline = _bytes_to_string(handle.peekline())
             qresult_raw += line
 
             # break when we've reached qresult end
@@ -460,7 +460,7 @@ class FastaM10Indexer(SearchIndexer):
                 break
 
         # append mock end marker to qresult_raw, since it's not always present
-        return qresult_raw + '>>><<<\n'
+        return _as_bytes(qresult_raw + '>>><<<\n')
 
 
 def _test():

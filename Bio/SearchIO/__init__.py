@@ -163,7 +163,7 @@ def parse(handle, format=None, **kwargs):
     iterator = _get_handler(format, _ITERATOR_MAP)
 
     # and start iterating
-    with as_handle(handle) as source_file:
+    with as_handle(handle, 'rU') as source_file:
         generator = iterator(source_file, **kwargs)
 
         for qresult in generator:
@@ -266,11 +266,6 @@ def write(qresults, handle, format=None, **kwargs):
     format -- Lower case string denoting one of the supported formats.
 
     """
-    # check if handle type is correct
-    if not isinstance(handle, (basestring, file)):
-        raise TypeError("Handle must either be a handle to a file or its "
-                "name as string")
-
     # turn qresults into an iterator if it's a single QueryResult object
     if isinstance(qresults, QueryResult):
         qresults = iter([qresults])

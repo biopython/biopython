@@ -7,7 +7,7 @@
 
 import re
 
-from Bio._py3k import _bytes_to_string
+from Bio._py3k import _as_bytes, _bytes_to_string
 
 from _base import BaseExonerateIterator, BaseExonerateIndexer, _STRAND_MAP
 
@@ -199,7 +199,7 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
         handle = self._handle
         handle.seek(pos)
         # get line, check if it's a vulgar line, and get query ID
-        line = handle.readline()
+        line = _bytes_to_string(handle.readline())
         assert line.startswith(self._query_mark), line
         id = re.search(_RE_VULGAR, line)
         return id.group(1)
@@ -212,7 +212,7 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
         qresult_raw = ''
 
         while True:
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             if not line:
                 break
             elif line.startswith(self._query_mark):
@@ -225,7 +225,7 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
                         break
             qresult_raw += line
 
-        return qresult_raw
+        return _as_bytes(qresult_raw)
 
 
 def _test():

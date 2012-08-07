@@ -358,18 +358,17 @@ class BlatPslIndexer(SearchIndexer):
         """Iterates over the file handle; yields key, start offset, and length."""
         handle = self._handle
         handle.seek(0)
-        split_char = _as_bytes('\t')
         # denotes column location for query identifier
         query_id_idx = 9
         qresult_key = None
 
         start_offset = handle.tell()
-        line = handle.readline()
+        line = _bytes_to_string(handle.readline())
         # read through header
         # this assumes that the result row match the regex
         while not re.search(_RE_ROW_CHECK, line.strip()):
             start_offset = handle.tell()
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             if not line:
                 raise StopIteration
 
@@ -379,49 +378,44 @@ class BlatPslIndexer(SearchIndexer):
 
             if not line:
                 break
+            cols = line.strip().split('\t')
             if qresult_key is None:
-                qresult_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                qresult_key = list(filter(None, cols))[query_id_idx]
             else:
-                curr_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                curr_key = list(filter(None, cols))[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield _bytes_to_string(qresult_key), start_offset, \
-                            end_offset - start_offset
+                    yield qresult_key, start_offset, end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             if not line:
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield qresult_key, start_offset, end_offset - start_offset
                 break
 
     def get_raw(self, offset):
         """Returns the raw string of a QueryResult object from the given offset."""
         handle = self._handle
         handle.seek(offset)
-        split_char = _as_bytes('\t')
         query_id_idx = 9
         qresult_key = None
         qresult_raw = ''
 
         while True:
-            line = handle.readline()
+            line = _bytes_to_string(handle.readline())
             if not line:
                 break
+            cols = line.strip().split('\t')
             if qresult_key is None:
-                qresult_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                qresult_key = list(filter(None, cols))[query_id_idx]
             else:
-                curr_key = filter(None, \
-                        line.strip().split(split_char))[query_id_idx]
+                curr_key = list(filter(None, cols))[query_id_idx]
                 if curr_key != qresult_key:
                     break
             qresult_raw += line
 
-        return qresult_raw
+        return _as_bytes(qresult_raw)
 
 
 class BlatPslxIndexer(BlatPslIndexer):
