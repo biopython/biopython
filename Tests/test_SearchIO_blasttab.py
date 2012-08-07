@@ -9,9 +9,7 @@
 from __future__ import with_statement
 
 import os
-import sys
 import unittest
-import warnings
 
 from Bio.SearchIO import parse, read
 
