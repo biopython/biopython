@@ -60,10 +60,10 @@ def get_inter_coords(coords, strand=1):
     # if strand is -1, adjust coords to the ends and starts are chained
     if strand == -1:
         sorted_coords = [(max(a, b), min(a, b)) for a, b in coords]
-        inter_coords = list(chain.from_iterable(sorted_coords))[1:-1]
+        inter_coords = list(chain(*sorted_coords))[1:-1]
         return zip(inter_coords[1::2], inter_coords[::2])
     else:
-        inter_coords = list(chain.from_iterable(coords))[1:-1]
+        inter_coords = list(chain(*coords))[1:-1]
         return zip(inter_coords[::2], inter_coords[1::2])
 
 

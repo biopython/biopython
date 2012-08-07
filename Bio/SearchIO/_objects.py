@@ -838,7 +838,7 @@ class Hit(BaseSearchObject):
     hsps = property(fget=_hsps_get)
 
     def _fragments_get(self):
-        return list(chain.from_iterable(self._items))
+        return list(chain(*self._items))
 
     fragments = property(fget=_fragments_get)
 
