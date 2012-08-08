@@ -847,15 +847,10 @@ class Hit(BaseSearchObject):
             raise ValueError("Expected HSP with query ID %r, " \
                     "found %r instead." % (self.query_id, hsp.query_id))
 
-    def _hsps_get(self):
-        return self._items
-
-    hsps = property(fget=_hsps_get)
-
-    def _fragments_get(self):
-        return list(chain(*self._items))
-
-    fragments = property(fget=_fragments_get)
+    # returns all hsps
+    hsps = _allitemprop()
+    # returns all fragments
+    fragments = property(lambda self: list(chain(*self._items)))
 
     ## id and description properties ##
     def _id_get(self):
