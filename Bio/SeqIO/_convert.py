@@ -285,16 +285,26 @@ def _fastq_convert_qual(in_handle, out_handle, mapping):
         except KeyError:
             raise ValueError("Invalid character in quality string")
         data = " ".join(qualities_strs)
-        while True:
-            if len(data) <= 60:
-                out_handle.write(data + "\n")
-                break
+        while len(data) > 60:
+            if data[60] == " ":
+                out_handle.write(data[:60] + "\n")
+                data = data[61:]
+            elif data[59] == " ":
+                out_handle.write(data[:59] + "\n")
+                data = data[60:]
+            elif data[58] == " ":
+                out_handle.write(data[:58] + "\n")
+                data = data[59:]
+            elif data[57] == " ":
+                #This should only happen with a 3 digit score
+                out_handle.write(data[:57] + "\n")
+                data = data[58:]
             else:
-                #By construction there must be spaces in the first 60 chars
-                #(unless we have 60 digit or higher quality scores!)
+                #Must be a very large (invalid?) score!
                 i = data.rfind(" ", 0, 60)
                 out_handle.write(data[:i] + "\n")
                 data = data[i+1:]
+        out_handle.write(data + "\n")
     return count
 
     
