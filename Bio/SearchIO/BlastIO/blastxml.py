@@ -496,13 +496,14 @@ class BlastXmlIndexer(SearchIndexer):
     def __iter__(self):
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
+        blast_id_mark = _as_bytes('Query_')
         block_size = self.block_size
         handle = self._handle
         handle.seek(0)
-        re_desc = re.compile(r'<Iteration_query-ID>(.*?)'
+        re_desc = re.compile(_as_bytes(r'<Iteration_query-ID>(.*?)'
                 '</Iteration_query-ID>\s+?<Iteration_query-def>'
-                '(.*?)</Iteration_query-def>')
-        re_desc_end = re.compile(r'</Iteration_query-def>')
+                '(.*?)</Iteration_query-def>'))
+        re_desc_end = re.compile(_as_bytes(r'</Iteration_query-def>'))
         counter = 0
 
         while True:
@@ -511,7 +512,7 @@ class BlastXmlIndexer(SearchIndexer):
             # for each iteration start mark
             for qstart_idx in self.get_offsets(block, qstart_mark):
                 # get the id of the query (re.search gets the 1st result)
-                regx = re.search(re_desc, _bytes_to_string(block[qstart_idx:]))
+                regx = re.search(re_desc, block[qstart_idx:])
                 try:
                     qstart_desc = regx.group(2)
                     qstart_id = regx.group(1)
@@ -520,15 +521,15 @@ class BlastXmlIndexer(SearchIndexer):
                 except AttributeError:
                     # if we've found the end of the Iteration_query-def element
                     # use the fallback values
-                    if re.search(re_desc_end, _bytes_to_string(block[qstart_idx:])):
-                        qstart_desc = self._fallback['description']
-                        qstart_id = self._fallback['id']
+                    if re.search(re_desc_end, block[qstart_idx:]):
+                        qstart_desc = _as_bytes(self._fallback['description'])
+                        qstart_id = _as_bytes(self._fallback['id'])
                     # otherwise, extend the read block and retrieve the ID and
                     # desc from the extended read
                     else:
                         # extend the cached read
                         block_ext = block + handle.read(block_size)
-                        regx = re.search(re_desc, _bytes_to_string(block_ext[qstart_idx:]))
+                        regx = re.search(re_desc, block_ext[qstart_idx:])
                         qstart_desc = regx.group(2)
                         qstart_id = regx.group(1)
                         # set file pointer to the position before block_ext
@@ -551,10 +552,10 @@ class BlastXmlIndexer(SearchIndexer):
                 qlen = len(qend_mark) + qlen
                 # move pointer to original position
                 handle.seek((counter + 1) * block_size)
-                if qstart_id.startswith('Query_'):
-                    qstart_id = qstart_desc.split(' ', 1)[0]
+                if qstart_id.startswith(blast_id_mark):
+                    qstart_id = qstart_desc.split(_as_bytes(' '), 1)[0]
                 # yield key, offset, length
-                yield qstart_id, qstart_idx, qlen
+                yield _bytes_to_string(qstart_id), qstart_idx, qlen
 
             counter += 1
 
