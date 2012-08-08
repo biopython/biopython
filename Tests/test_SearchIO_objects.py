@@ -651,9 +651,9 @@ class HitCases(unittest.TestCase):
         # test initial condition
         self.assertEqual(hit.description, '')
         for hsp in hit:
-            self.assertEqual(hsp.hit_description, '')
+            self.assertEqual(hsp.hit_description, '<unknown description>')
             for fragment in hsp:
-                self.assertEqual(hsp.hit_description, '')
+                self.assertEqual(hsp.hit_description, '<unknown description>')
         hit.description = new_desc
         # test after setting
         self.assertEqual(hit.description, new_desc)
@@ -936,9 +936,9 @@ class HSPMultipleFragmentCases(unittest.TestCase):
                     for fragment in self.hsp:
                         self.assertEqual(getattr(fragment, attr_name), attr_name)
                 else:
-                    self.assertEqual(value, '')
+                    self.assertEqual(value, '<unknown description>')
                     for fragment in self.hsp:
-                        self.assertEqual(getattr(fragment, attr_name), '')
+                        self.assertEqual(getattr(fragment, attr_name), '<unknown description>')
                 new_value = 'new_' + value
                 setattr(self.hsp, attr_name, new_value)
                 self.assertEqual(getattr(self.hsp, attr_name), new_value)
@@ -996,13 +996,6 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         self.assertTrue(fragment.alignment is None)
         self.assertTrue(fragment.alphabet is single_letter_alphabet)
         self.assertEqual(fragment.alignment_annotation, {})
-
-    def test_init_no_ids(self):
-        """Test HSPFragmen.__init__ without hit or query IDs"""
-        self.assertRaises(ValueError, HSPFragment, \
-                {'query_id': 'query_id'})
-        self.assertRaises(ValueError, HSPFragment, \
-                {'hit_id': 'hit_id'})
 
     def test_seq_objects(self):
         """Test HSPFragment sequence attributes, no alignments"""
@@ -1079,12 +1072,12 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment sequence attribute types and default values"""
         # check hit
         self.assertTrue(isinstance(self.fragment.hit, SeqRecord))
-        self.assertEqual('', self.fragment.hit.description)
+        self.assertEqual('<unknown description>', self.fragment.hit.description)
         self.assertEqual('aligned hit sequence', self.fragment.hit.name)
         self.assertEqual(single_letter_alphabet, self.fragment.hit.seq.alphabet)
         # check query
         self.assertTrue(isinstance(self.fragment.query, SeqRecord))
-        self.assertEqual('', self.fragment.query.description)
+        self.assertEqual('<unknown description>', self.fragment.query.description)
         self.assertEqual('aligned query sequence', self.fragment.query.name)
         self.assertEqual(single_letter_alphabet, self.fragment.query.seq.alphabet)
         # check alignment
@@ -1156,7 +1149,7 @@ class HSPFragmentCases(unittest.TestCase):
                     # IDs and the actual attribute name
                     self.assertEqual(value, attr_name)
                 else:
-                    self.assertEqual(value, '')
+                    self.assertEqual(value, '<unknown description>')
                 new_value = 'new_' + value
                 setattr(self.fragment, attr_name, new_value)
                 self.assertEqual(getattr(self.fragment, attr_name), new_value)

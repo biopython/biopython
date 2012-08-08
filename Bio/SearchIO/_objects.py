@@ -1207,13 +1207,11 @@ class HSPFragment(BaseHSP):
 
     """Class representing a fragment of matching hit-query sequence."""
 
-    def __init__(self, hit_id=None, query_id=None, hit='', query='', \
+    def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
+            hit='', query='',
+            hit_description='<unknown description>',
+            query_description='<unknown description>',
             aln_annotation=None, alphabet=single_letter_alphabet):
-
-        if hit_id is None:
-            raise ValueError("Hit ID string is required for HSPFragment creation.")
-        if query_id is None:
-            raise ValueError("Query ID string is required for HSPFragment creation.")
 
         # no callables in default args!
         if aln_annotation is None:
@@ -1221,7 +1219,12 @@ class HSPFragment(BaseHSP):
         else:
             self.alignment_annotation = aln_annotation
 
+        self._hit_id = hit_id
+        self._query_id = query_id
+        self._hit_description = hit_description
+        self._query_description = query_description
         self.alphabet = alphabet
+
         for seq_type in ('query', 'hit'):
             # self.query or self.hit
             if eval(seq_type):
@@ -1231,10 +1234,6 @@ class HSPFragment(BaseHSP):
             # query or hit attributes
             for attr in ('strand', 'frame', 'start', 'end'):
                 setattr(self, '%s_%s' % (seq_type, attr), None)
-            attr_name = '%s_id' % seq_type
-            setattr(self, attr_name, eval(attr_name))
-        self.hit_description = ''
-        self.query_description = ''
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
@@ -1338,12 +1337,18 @@ class HSPFragment(BaseHSP):
                         "%r (%s); found: %r (%s)." % (len(opp_seq), opp_type, \
                         len(seq), seq_type))
 
+        seq_id = getattr(self, '%s_id' % seq_type)
+        seq_desc = getattr(self, '%s_description' % seq_type)
         seq_name = 'aligned %s sequence' % seq_type
+
         if isinstance(seq, SeqRecord):
+            seq.id = seq_id
+            seq.description = seq_desc
             seq.name = seq_name
             return seq
         elif isinstance(seq, basestring):
-            return SeqRecord(Seq(seq, self.alphabet), name=seq_name)
+            return SeqRecord(Seq(seq, self.alphabet), id=seq_id, name=seq_name,
+                    description=seq_desc)
         else:
             raise TypeError("%s sequence must be a string or a "
                     "SeqRecord object." % seq_type.capitalize())
