@@ -31,7 +31,7 @@ _ELEM_QRESULT_OPT = {
 }
 # element - hit attribute name mapping
 _ELEM_HIT = {
-    'Hit_def': ('description', str),
+    #'Hit_def': ('description', str),   # not set by this dict
     'Hit_accession': ('acc', str),
     'Hit_len': ('seq_len', int),
 }
@@ -267,8 +267,27 @@ class BlastXmlIterator(object):
                 else:
                     blast_query_id = ''
 
+                hit_list, key_list = [], []
+                for hit in self.parse_hit(qresult_elem.find('Iteration_hits'), \
+                        query_id):
+                    if hit:
+                        # need to keep track of hit IDs, since there could be duplicates,
+                        if hit.id in key_list:
+                            # fallback to Blast-generated IDs, if the ID is already present
+                            # and restore the desc, too
+                            hit.description = '%s %s' % (hit.id, hit.description)
+                            hit.id = hit._blast_id
+                            # and change the hit_id of the HSPs contained
+                            for hsp in hit:
+                                hsp.hit_id = hit._blast_id
+                        else:
+                            key_list.append(hit.id)
+
+                        hit_list.append(hit)
+
                 # create qresult and assign its attributes
-                qresult = QueryResult(query_id)
+                qresult = QueryResult(query_id, hits=hit_list)
+                qresult.description = query_desc
                 qresult.seq_len = int(query_len)
                 qresult._blast_id = blast_query_id
                 for key, value in self._meta.items():
@@ -298,25 +317,8 @@ class BlastXmlIterator(object):
                                 value = caster(value)
                             setattr(qresult, val_info[0], value)
 
-                for hit in self.parse_hit(qresult_elem.find('Iteration_hits'), \
-                        query_id):
-                    # only append the Hit object if we have HSPs
-                    if hit:
-                        if hit.id in qresult:
-                            # fallback to Blast-generated IDs, if the ID is already present
-                            # and restore the desc, too
-                            hit.description = '%s %s' % (hit.id, hit.description)
-                            hit.id = hit._blast_id
-                            # and change the hit_id of the HSPs contained
-                            for hsp in hit:
-                                hsp.hit_id = hit._blast_id
-
-                        qresult.append(hit)
-
                 # delete element after we finish parsing it
                 qresult_elem.clear()
-                # set desc here so hsp.query.description is set as well
-                qresult.description = query_desc
                 yield qresult
 
     def parse_hit(self, root_hit_elem, query_id):
@@ -359,7 +361,15 @@ class BlastXmlIterator(object):
             else:
                 blast_hit_id = ''
 
-            hit = Hit(hit_id, query_id)
+            hsps = [hsp for hsp in \
+                    self.parse_hsp_frag(hit_elem.find('Hit_hsps'),
+                        query_id, hit_id)]
+
+            hit = Hit(hit_id, query_id, hsps=hsps)
+            hit.description = hit_desc
+            # blast_hit_id is only set if the hit ID is Blast-generated
+            hit._blast_id = blast_hit_id
+
             for key, val_info in _ELEM_HIT.items():
                 value = hit_elem.findtext(key)
                 if value is not None:
@@ -369,17 +379,8 @@ class BlastXmlIterator(object):
                         value = caster(value)
                     setattr(hit, val_info[0], value)
 
-            # blast_hit_id is only set if the hit ID is Blast-generated
-            hit._blast_id = blast_hit_id
-
-            for hsp in self.parse_hsp_frag(hit_elem.find('Hit_hsps'), query_id, \
-                    hit_id):
-                hit.append(hsp)
-
             # delete element after we finish parsing it
             hit_elem.clear()
-            # set desc here so hsp.hit.description is set as well
-            hit.description = hit_desc
             yield hit
 
     def parse_hsp_frag(self, root_hsp_frag_elem, query_id, hit_id):
