@@ -42,6 +42,27 @@ def _allitemprop(attr=None):
     return getter
 
 
+def _cascadeprop(cont_attr, item_attr):
+    """Returns a getter property with a cascading setter.
+
+    This is used for the `id` and `description` properties of the container
+    objects. These items have their own private attributes that stores query
+    and/or hit ID and description. To keep the container items' query and/or
+    hit ID and description in-sync, the setter cascades any new value given
+    to the items' values as well.
+
+    """
+    def getter(self):
+        return getattr(self, cont_attr)
+
+    def setter(self, value):
+        setattr(self, cont_attr, value)
+        for item in self:
+            setattr(item, item_attr, value)
+
+    return property(fget=getter, fset=setter)
+
+
 class BaseSearchObject(object):
 
     """Abstract class for SearchIO objects."""
@@ -220,6 +241,9 @@ class QueryResult(BaseSearchObject):
         for hit in hits:
             # validation is handled by __setitem__
             self.append(hit)
+
+    id = _cascadeprop('_id', 'query_id')
+    description = _cascadeprop('_description', 'query_description')
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -404,28 +428,6 @@ class QueryResult(BaseSearchObject):
         for key in hit_keys:
             del self._items[key]
         return
-
-    def _description_get(self):
-        return self._description
-
-    def _description_set(self, value):
-        self._description = value
-        # try to set descriptions of hsp.query.seq within
-        for hit in self.hits:
-            hit.query_description = value
-
-    description = property(fget=_description_get, fset=_description_set)
-
-    def _id_get(self):
-        return self._id
-
-    def _id_set(self, value):
-        self._id = value
-        # set all Hit IDs contained to have the new Query ID
-        for hit in self.hits:
-            hit.query_id = value
-
-    id = property(fget=_id_get, fset=_id_set)
 
     def append(self, hit):
         """Adds a Hit object to the end of QueryResult.
@@ -743,6 +745,15 @@ class Hit(BaseSearchObject):
             # and store it them as an instance attribute
             self.append(hsp)
 
+    id = _cascadeprop('_id', 'hit_id')
+    query_id = _cascadeprop('_query_id', 'query_id')
+    description = _cascadeprop('_description', 'hit_description')
+    query_description = _cascadeprop('_query_description', 'query_description')
+    # returns all hsps
+    hsps = _allitemprop()
+    # returns all fragments
+    fragments = property(lambda self: list(chain(*self._items)))
+
     def __repr__(self):
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
                 len(self))
@@ -846,56 +857,6 @@ class Hit(BaseSearchObject):
         if hsp.query_id != self.query_id:
             raise ValueError("Expected HSP with query ID %r, " \
                     "found %r instead." % (self.query_id, hsp.query_id))
-
-    # returns all hsps
-    hsps = _allitemprop()
-    # returns all fragments
-    fragments = property(lambda self: list(chain(*self._items)))
-
-    ## id and description properties ##
-    def _id_get(self):
-        return self._id
-
-    def _id_set(self, value):
-        self._id = value
-        # set all HSP IDs contained to have the new Hit ID
-        for hsp in self._items:
-            hsp.hit_id = value
-
-    id = property(fget=_id_get, fset=_id_set)
-
-    def _query_id_get(self):
-        return self._query_id
-
-    def _query_id_set(self, value):
-        self._query_id = value
-        # set all HSP query IDs contained to have the new query ID
-        for hsp in self._items:
-            hsp.query_id = value
-
-    query_id = property(fget=_query_id_get, fset=_query_id_set)
-
-    def _description_get(self):
-        return self._description
-
-    def _description_set(self, value):
-        self._description = value
-        # cascade through contained HSP hit descriptions
-        for hsp in self._items:
-            hsp.hit_description = value
-
-    description = property(fget=_description_get, fset=_description_set)
-
-    def _query_description_get(self):
-        return self._query_description
-
-    def _query_description_set(self, value):
-        self._query_description = value
-        for hsp in self._items:
-            hsp.query_description = value
-
-    query_description = property(fget=_query_description_get, \
-            fset=_query_description_set)
 
     ## public methods ##
     def append(self, hsp):
