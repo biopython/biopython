@@ -6,7 +6,6 @@
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
 import warnings
-from functools import partial
 from itertools import chain
 
 from Bio import BiopythonWarning
@@ -15,6 +14,32 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio._py3k import OrderedDict
+
+
+# helper functions
+def _firstitemprop(attr=None):
+    """Returns a property that fetches the given attribute from
+    the first item in a SearchIO container object."""
+    @property
+    def getter(self):
+        if len(self._items) > 1:
+            raise ValueError("More than one HSPFragment objects " \
+                    "found in HSP")
+        if attr is None:
+            return self._items[0]
+        return getattr(self._items[0], attr)
+    return getter
+
+
+def _allitemprop(attr=None):
+    """Returns a property that fetches the given attributes from
+    all items in a SearchIO container object."""
+    @property
+    def getter(self):
+        if attr is None:
+            return self._items
+        return [getattr(frag, attr) for frag in self._items]
+    return getter
 
 
 class BaseSearchObject(object):
@@ -1063,43 +1088,6 @@ class HSP(BaseHSP):
             raise TypeError("HSP objects can only contain HSPFragment " \
                     "objects.")
 
-    def _single_frag_get(self, attr):
-        if len(self._items) > 1:
-            raise ValueError("More than one HSPFragment objects " \
-                    "found in HSP")
-        return getattr(self.fragments[0], attr)
-
-    def _multiple_frag_get(self, attr):
-        return [getattr(frag, attr) for frag in self.fragments]
-
-    ## sequence / fragment properties ##
-    def _fragments_get(self):
-        return self._items
-
-    fragments = property(fget=_fragments_get)
-
-    def _fragment_get(self):
-        return self._items[0]
-
-    fragment = property(fget=_fragment_get)
-
-    def _is_fragmented_get(self):
-        return len(self) > 1
-
-    is_fragmented = property(fget=_is_fragmented_get)
-
-    hit = property(fget=partial(_single_frag_get, attr='hit'))
-    query = property(fget=partial(_single_frag_get, attr='query'))
-    alignment = property(fget=partial(_single_frag_get, attr='alignment'))
-    alignment_annotation = property(fget=partial(_single_frag_get, \
-            attr='alignment_annotation'))
-
-    hits = property(fget=partial(_multiple_frag_get, attr='hit'))
-    queries = property(fget=partial(_multiple_frag_get, attr='query'))
-    alignments = property(fget=partial(_multiple_frag_get, attr='alignment'))
-    alignment_annotations = property(fget=partial(_multiple_frag_get, \
-            attr='alignment_annotation'))
-
     def _aln_span_get(self):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
@@ -1162,18 +1150,6 @@ class HSP(BaseHSP):
     query_id = property(fget=_query_id_get, \
             fset=_query_id_set)
 
-    ## strand properties ##
-    hit_strands = property(fget=partial(_multiple_frag_get, attr='hit_strand'))
-    hit_strand = property(fget=partial(_single_frag_get, attr='hit_strand'))
-    query_strands = property(fget=partial(_multiple_frag_get, attr='query_strand'))
-    query_strand = property(fget=partial(_single_frag_get, attr='query_strand'))
-
-    ## frame properties ##
-    hit_frames = property(fget=partial(_multiple_frag_get, attr='hit_frame'))
-    hit_frame = property(fget=partial(_single_frag_get, attr='hit_frame'))
-    query_frames = property(fget=partial(_multiple_frag_get, attr='query_frame'))
-    query_frame = property(fget=partial(_single_frag_get, attr='query_frame'))
-
     ## coordinate properties ##
     def _get_coords(self, seq_type, coord_type):
         assert seq_type in ('hit', 'query')
@@ -1232,16 +1208,43 @@ class HSP(BaseHSP):
 
     query_range = property(fget=_query_range_get)
 
-    ## other shorthands for fragments' properties ##
-    hit_starts = property(fget=partial(_multiple_frag_get, attr='hit_start'))
-    hit_ends = property(fget=partial(_multiple_frag_get, attr='hit_end'))
-    hit_spans = property(fget=partial(_multiple_frag_get, attr='hit_span'))
-    hit_ranges = property(fget=partial(_multiple_frag_get, attr='hit_range'))
+    ## shorthands for fragments' properties ##
+    # bool check if there's more than one fragments
+    is_fragmented = property(lambda self: len(self) > 1)
 
-    query_starts = property(fget=partial(_multiple_frag_get, attr='query_start'))
-    query_ends = property(fget=partial(_multiple_frag_get, attr='query_end'))
-    query_spans = property(fget=partial(_multiple_frag_get, attr='query_span'))
-    query_ranges = property(fget=partial(_multiple_frag_get, attr='query_range'))
+    # properties for single-fragment HSPs
+    fragment = _firstitemprop()
+    hit = _firstitemprop('hit')
+    query = _firstitemprop('query')
+    alignment = _firstitemprop('alignment')
+    alignment_annotation = _firstitemprop('alignment_annotation')
+
+    hit_strand = _firstitemprop('hit_strand')
+    query_strand = _firstitemprop('query_strand')
+    hit_frame = _firstitemprop('hit_frame')
+    query_frame = _firstitemprop('query_frame')
+
+    # properties for multi-fragment HSPs
+    fragments = _allitemprop()
+    hits = _allitemprop('hit')
+    queries = _allitemprop('query')
+    alignments = _allitemprop('alignment')
+    alignment_annotations = _allitemprop('alignment_annotation')
+
+    hit_strands = _allitemprop('hit_strand')
+    query_strands = _allitemprop('query_strand')
+    hit_frames = _allitemprop('hit_frame')
+    query_frames = _allitemprop('query_frame')
+
+    hit_starts = _allitemprop('hit_start')
+    query_starts = _allitemprop('query_starts')
+    hit_ends = _allitemprop('hit_ends')
+    query_ends = _allitemprop('query_ends')
+
+    hit_spans = _allitemprop('hit_span')
+    query_spans = _allitemprop('query_span')
+    hit_ranges = _allitemprop('hit_range')
+    query_ranges = _allitemprop('query_range')
 
 
 class HSPFragment(BaseHSP):
