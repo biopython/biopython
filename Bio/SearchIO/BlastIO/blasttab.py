@@ -122,7 +122,7 @@ class BlastTabIterator(object):
             raise StopIteration
         # determine which iterator to use
         elif self.has_comments:
-            iterfunc = self._parse_qresult_with_comments
+            iterfunc = self._parse_commented_qresult
         else:
             iterfunc = self._parse_qresult
 
@@ -147,29 +147,27 @@ class BlastTabIterator(object):
 
         return fields
 
-    def _parse_qresult_with_comments(self):
+    def _parse_commented_qresult(self):
         """Iterator returning `QueryResult` objects from a commented file."""
         while True:
             comments = self._parse_comments()
             if comments:
                 try:
                     self.fields = comments['fields']
-                    empty_qres = False
+                    # iterator for the query results
+                    qres_iter = self._parse_qresult()
                 except KeyError:
                     # no fields means the query has no results
                     assert 'fields' not in comments
-                    empty_qres = True
+                    # create an iterator returning one empty qresult
+                    # if the query has no results
+                    qres_iter = iter([QueryResult('')])
 
-                if empty_qres:
-                    qresult = QueryResult('')
+                for qresult in qres_iter:
                     for key, value in comments.items():
                         setattr(qresult, key, value)
                     yield qresult
-                else:
-                    for qresult in self._parse_qresult():
-                        for key, value in comments.items():
-                            setattr(qresult, key, value)
-                        yield qresult
+
             else: break
 
     def _parse_comments(self):
