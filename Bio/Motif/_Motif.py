@@ -14,10 +14,8 @@ class Motif(object):
     A class representing sequence motifs.
     """
     def __init__(self,alphabet=IUPAC.unambiguous_dna):
-        self.instances = []
-        self.has_instances=False
-        self.counts = {}
-        self.has_counts=False
+        self.instances = None
+        self.counts = None
         self.mask = []
         self._pwm_is_current = False
         self._pwm = []
@@ -50,14 +48,15 @@ class Motif(object):
         """
         self._check_alphabet(instance.alphabet)
         self._check_length(len(instance))
-        if self.has_counts:
+        if self.counts!=None:
             for i in range(self.length):
                 let=instance[i]
                 self.counts[let][i]+=1
 
-        if self.has_instances or not self.has_counts:
+        if self.instances!=None or self.counts==None:
+            if self.instances==None:
+                self.instances = []
             self.instances.append(instance)
-            self.has_instances=True
             
         self._pwm_is_current = False
         self._log_odds_is_current = False
@@ -98,11 +97,11 @@ class Motif(object):
                     dict[letter]=self.beta*self.background[letter]
                 else:
                     dict[letter]=0.0
-            if self.has_counts:
+            if self.counts!=None:
                 #taking the raw counts
                 for letter in self.alphabet.letters:
                     dict[letter]+=self.counts[letter][i]
-            elif self.has_instances:
+            elif self.instances!=None:
                 #counting the occurences of letters in instances
                 for seq in self.instances:
                     #dict[seq[i]]=dict[seq[i]]+1
@@ -169,7 +168,7 @@ class Motif(object):
         """
         a generator function, returning found positions of instances of the motif in a given sequence
         """
-        if not self.has_instances:
+        if self.instances==None:
             raise ValueError ("This motif has no instances")
         for pos in xrange(0,len(sequence)-self.length+1):
             for instance in self.instances:
@@ -363,8 +362,9 @@ class Motif(object):
         """ string representation of a motif.
         """
         str = ""
-        for inst in self.instances:
-            str = str + inst.tostring() + "\n"
+        if self.instances!=None:
+            for inst in self.instances:
+                str = str + inst.tostring() + "\n"
 
         if masked:
             for i in xrange(self.length):
@@ -398,7 +398,7 @@ class Motif(object):
         """
         FASTA representation of motif
         """
-        if not self.has_instances:
+        if self.instances==None:
             self.make_instances_from_counts()
         str = ""
         for i,inst in enumerate(self.instances):
@@ -411,11 +411,11 @@ class Motif(object):
         Gives the reverse complement of the motif
         """
         res = Motif()
-        if self.has_instances:
+        if self.instances!=None:
             for i in self.instances:
                 res.add_instance(i.reverse_complement())
         else: # has counts
-            res.has_counts=True
+            res.counts={}
             res.counts["A"]=self.counts["T"][:]
             res.counts["T"]=self.counts["A"][:]
             res.counts["G"]=self.counts["C"][:]
@@ -442,7 +442,6 @@ class Motif(object):
         """
 
         self.counts = {}
-        self.has_counts=True
         if letters==None:
             letters=self.alphabet.letters
         self.length=0
@@ -464,7 +463,6 @@ class Motif(object):
         if letters==None:
             letters=self.alphabet.letters
         self.counts = {}
-        self.has_counts=True
 
         for i in letters:
             ln = stream.readline().strip().split()
@@ -496,7 +494,6 @@ class Motif(object):
         alpha="".join(self.alphabet.letters)
         #col[i] is a column taken from aligned motif instances
         col=[]
-        self.has_instances=True
         self.instances=[]
         s = sum(map(lambda nuc: self.counts[nuc][0],self.alphabet.letters))
         for i in range(self.length):
@@ -526,7 +523,6 @@ class Motif(object):
         counts={}
         for a in self.alphabet.letters:
             counts[a]=[]
-        self.has_counts=True
         s = len(self.instances)
         for i in range(self.length):
             ci = dict((a,0) for a in self.alphabet.letters)
@@ -684,7 +680,7 @@ class Motif(object):
         for a in self.alphabet.letters:
             res+=" %s"%a
         res+="\n"
-        if not self.has_counts:
+        if self.counts==None:
             self.make_counts_from_instances()
         for i in range(self.length):
             if i<9:
@@ -725,7 +721,7 @@ class Motif(object):
                 res+="\t".join([str(mat[i][a]) for i in range(self.length)])
                 res+="\n"
         else: #output counts
-            if not self.has_counts:
+            if self.counts==None:
                 self.make_counts_from_instances()
             mat=self.counts
             for a in letters:
