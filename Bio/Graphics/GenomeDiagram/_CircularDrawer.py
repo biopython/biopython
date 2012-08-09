@@ -433,6 +433,7 @@ class CircularDrawer(AbstractDrawer):
         # subtended at the diagram center, and the color as arguments
         draw_methods = {'BOX': self._draw_sigil_box,
                         'OCTO': self._draw_sigil_cut_corner_box,
+                        'JAGGY': self._draw_sigil_jaggy,
                         'ARROW': self._draw_sigil_arrow,
                         'BIGARROW': self._draw_sigil_big_arrow,
                         }
@@ -1464,3 +1465,99 @@ class CircularDrawer(AbstractDrawer):
             p.closePath()
             return p
 
+    def _draw_sigil_jaggy(self, bottom, center, top,
+                          startangle, endangle, strand,
+                          color, border=None,
+                          **kwargs):
+        """Draw JAGGY sigil, like BIGARROW straddles the axis but jagged edged
+
+        For positive strand, only the right edge is jagged. For negative strand,
+        only the left edge is jagged. For strandless features, both the left and
+        right edges are jagged. In all cases, like BIGARROW, it strandles the
+        axis.
+        """
+        if strand == +1:
+            tail_length_ratio = 0.0
+            head_length_ratio = 1.0
+        elif strand == -1:
+            tail_length_ratio = 1.0
+            head_length_ratio = 0.0
+        else:
+            tail_length_ratio = 1.0
+            head_length_ratio = 1.0
+
+        teeth = 4
+
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill color
+        elif border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
+            strokecolor = border
+        else:
+            #e.g. False
+            strokecolor = None
+
+        startangle, endangle = min(startangle, endangle), max(startangle, endangle)
+        angle = float(endangle - startangle)    # angle subtended by arc
+        height = top - bottom
+        
+        assert startangle <= endangle and angle >= 0
+        if head_length_ratio and tail_length_ratio:
+            headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle*0.5), startangle)
+            tailangle = min(startangle + min(height*tail_length_ratio/(center*teeth), angle*0.5), endangle)
+        elif head_length_ratio:
+            headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle), startangle)
+            tailangle = startangle
+        else:
+            headangle = endangle
+            tailangle = min(startangle + min(height*tail_length_ratio/(center*teeth), angle), endangle)
+
+        assert startangle <= tailangle <= headangle <= endangle, \
+            (startangle, tailangle, headangle, endangle, angle)
+
+        # Calculate trig values for angle and coordinates
+        startcos, startsin = cos(startangle), sin(startangle)
+        headcos, headsin = cos(headangle), sin(headangle)
+        endcos, endsin = cos(endangle), sin(endangle)
+        x0,y0 = self.xcenter, self.ycenter      # origin of the circle
+
+        p = ArcPath(strokeColor=strokecolor,
+                    fillColor=color,
+                    #default is mitre/miter which can stick out too much:
+                    strokeLineJoin=1, #1=round
+                    strokewidth=0,
+                    **kwargs)
+        #Note reportlab counts angles anti-clockwise from the horizontal
+        #(as in mathematics, e.g. complex numbers and polar coordinates)
+        #but we use clockwise from the vertical.  Also reportlab uses
+        #degrees, but we use radians.
+        p.addArc(self.xcenter, self.ycenter, bottom,
+                 90 - (headangle * 180 / pi), 90 - (tailangle * 180 / pi),
+                 moveTo=True)
+        for i in range(0, teeth):
+            p.addArc(self.xcenter, self.ycenter, bottom+i*height/teeth,
+                     90 - (tailangle * 180 / pi), 90 - (startangle * 180 / pi))
+            #Curved line needed when drawing long jaggies
+            self._draw_arc_line(p,
+                                bottom+i*height/teeth,
+                                bottom+(i+1)*height/teeth,
+                                90 - (startangle * 180 / pi),
+                                90 - (tailangle * 180 / pi))
+        p.addArc(self.xcenter, self.ycenter, top,
+                 90 - (headangle * 180 / pi), 90 - (tailangle * 180 / pi),
+                 reverse=True)
+        for i in range(0, teeth):
+            p.addArc(self.xcenter, self.ycenter, top-i*height/teeth,
+                     90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
+                     reverse=True)
+            #Curved line needed when drawing long jaggies
+            self._draw_arc_line(p,
+                                top-i*height/teeth,
+                                top-(i+1)*height/teeth,
+                                90 - (endangle * 180 / pi),
+                                90 - (headangle * 180 / pi))
+        p.closePath()
+        return p

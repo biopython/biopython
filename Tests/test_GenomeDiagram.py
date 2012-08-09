@@ -364,7 +364,7 @@ class SigilsTest(unittest.TestCase):
 
     def test_all_sigils(self):
         """All sigils."""
-        for glyph in ["BOX", "ARROW", "BIGARROW", "OCTO"]:
+        for glyph in ["BOX", "OCTO", "ARROW", "BIGARROW", "JAGGY"]:
              self.add_track_with_sigils(sigil=glyph)
         self.finish("GD_sigils")
 
@@ -467,14 +467,29 @@ class SigilsTest(unittest.TestCase):
         """Check feature sigils within bounding box."""
         #Add a track of features, bigger height to emphasise any sigil errors
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
-        #We'll just use one feature set for these features,
+        #We'll just use one feature set for these features if strand specific
         self.gds_features = self.gdt_features.new_set()
-        feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
-        self.gds_features.add_feature(feature, color="lightblue")
+        if glyph in ["BIGARROW", "JAGGY"]:
+            #These straddle the axis, so don't want to draw them on top of each other
+            feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+            self.gds_features.add_feature(feature, color="lightblue")
+            feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
+        else:
+            feature = SeqFeature(FeatureLocation(25, 375), strand=+1)
+            self.gds_features.add_feature(feature, color="lightblue")
         self.gds_features.add_feature(feature, name="Forward", sigil=glyph,
                                       color="blue", arrowhead_length=2.0)
-        feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
-        self.gds_features.add_feature(feature, color="pink")
+
+        if glyph in ["BIGARROW", "JAGGY"]:
+            #These straddle the axis, so don't want to draw them on top of each other
+            self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
+            self.gds_features = self.gdt_features.new_set()
+            feature = SeqFeature(FeatureLocation(25, 375), strand=None)
+            self.gds_features.add_feature(feature, color="pink")
+            feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
+        else:
+            feature = SeqFeature(FeatureLocation(25, 375), strand=-1)
+            self.gds_features.add_feature(feature, color="pink")
         self.gds_features.add_feature(feature, name="Reverse", sigil=glyph,
                                       color="red", arrowhead_length=2.0)
         #Add another track of features, bigger height to emphasise any sigil errors
@@ -491,9 +506,17 @@ class SigilsTest(unittest.TestCase):
         """Feature ARROW sigil heads within bounding box."""
         self.long_sigils("ARROW")
 
+    def test_long_arrow_heads(self):
+        """Feature ARROW sigil heads within bounding box."""
+        self.long_sigils("BIGARROW")
+
     def test_long_octo_heads(self):
         """Feature OCTO sigil heads within bounding box."""
         self.long_sigils("OCTO")
+
+    def test_long_jaggy(self):
+        """Feature JAGGY sigil heads within bounding box."""
+        self.long_sigils("JAGGY")
 
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""

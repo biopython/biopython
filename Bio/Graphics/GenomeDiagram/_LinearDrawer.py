@@ -1015,6 +1015,7 @@ class LinearDrawer(AbstractDrawer):
                         'ARROW': self._draw_sigil_arrow,
                         'BIGARROW': self._draw_sigil_big_arrow,
                         'OCTO': self._draw_sigil_octo,
+                        'JAGGY': self._draw_sigil_jaggy,
                         }
 
         method = draw_methods[feature.sigil]
@@ -1368,6 +1369,60 @@ class LinearDrawer(AbstractDrawer):
             y1 = bottom
             y2 = top
         return draw_cut_corner_box((x1,y1), (x2,y2), **kwargs)
+
+    def _draw_sigil_jaggy(self, bottom, center, top, x1, x2, strand,
+                          color, border=None, **kwargs):
+        """Draw JAGGY sigil, spanning axis with one or both edges jagged.
+
+        For positive strand, only the right edge is jagged. For negative strand,
+        only the left edge is jagged. For strandless features, both the left and
+        right edges are jagged. In all cases, like BIGARROW, it strandles the
+        axis.
+        """
+        teeth = 4
+
+        xmin = min(x1, x2)
+        xmax = max(x1, x2)
+        height = top - bottom
+        boxwidth = x2 - x1
+        tooth_length = min(height/teeth, boxwidth*0.5)
+
+        if strand == +1:
+            taillength = 0.0
+            headlength = tooth_length
+        elif strand == -1:
+            taillength = tooth_length
+            headlength = 0.0
+        else:
+            headlength = tooth_length
+            taillength = tooth_length
+
+        if color == colors.white and border is None:   # Force black border on 
+            strokecolor = colors.black                 # white boxes with
+        elif border is None:                           # undefined border, else
+            strokecolor = color                        # use fill color
+        elif border:
+            if not isinstance(border, colors.Color):
+                raise ValueError("Invalid border color %s" % repr(border))
+            strokecolor = border
+        else:
+            #e.g. False
+            strokecolor = None
+
+        points = []
+        for i in range(teeth):
+            points.extend((xmin, bottom+i*height/teeth,
+                           xmin+taillength, bottom+(i+1)*height/teeth))
+        for i in range(teeth):
+            points.extend((xmax, bottom+(teeth-i)*height/teeth,
+                           xmax-headlength, bottom+(teeth-i-1)*height/teeth))
+
+        return Polygon(points,
+                       strokeColor=strokecolor,
+                       strokeWidth=1,
+                       strokeLineJoin=1, #1=round
+                       fillColor=color,
+                       **kwargs)
 
     def _draw_sigil_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):
         """Draw ARROW sigil."""
