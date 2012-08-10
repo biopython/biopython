@@ -152,13 +152,15 @@ class HmmerTabIndexer(SearchIndexer):
         handle.seek(0)
         query_id_idx = self._query_id_idx
         qresult_key = None
+        header_mark = _as_bytes('#')
+        split_mark = _as_bytes(' ')
         # set line with initial mock value, to emulate header
-        line = '#'
+        line = header_mark
 
         # read through header
-        while line.startswith('#'):
+        while line.startswith(header_mark):
             start_offset = handle.tell()
-            line = _bytes_to_string(read_forward(handle, strip=False))
+            line = handle.readline()
 
         # and index the qresults
         while True:
@@ -166,20 +168,23 @@ class HmmerTabIndexer(SearchIndexer):
 
             if not line:
                 break
-            cols = line.strip().split(' ')
+
+            cols = line.strip().split(split_mark)
             if qresult_key is None:
                 qresult_key = list(filter(None, cols))[query_id_idx]
             else:
                 curr_key = list(filter(None, cols))[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield qresult_key, start_offset, end_offset - start_offset
+                    yield _bytes_to_string(qresult_key), start_offset, \
+                            end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
-            line = _bytes_to_string(read_forward(handle, strip=False))
+            line = handle.readline()
             if not line:
-                yield qresult_key, start_offset, end_offset - start_offset
+                yield _bytes_to_string(qresult_key), start_offset, \
+                        end_offset - start_offset
                 break
 
     def get_raw(self, offset):
@@ -188,13 +193,14 @@ class HmmerTabIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = self._query_id_idx
         qresult_key = None
-        qresult_raw = ''
+        qresult_raw = _as_bytes('')
+        split_mark = _as_bytes(' ')
 
         while True:
-            line = _bytes_to_string(read_forward(handle, strip=False))
+            line = handle.readline()
             if not line:
                 break
-            cols = list(filter(None, line.strip().split(' ')))
+            cols = list(filter(None, line.strip().split(split_mark)))
             if qresult_key is None:
                 qresult_key = cols[query_id_idx]
             else:
@@ -203,7 +209,7 @@ class HmmerTabIndexer(SearchIndexer):
                     break
             qresult_raw += line
 
-        return _as_bytes(qresult_raw)
+        return qresult_raw
 
 
 class HmmerTabWriter(object):
