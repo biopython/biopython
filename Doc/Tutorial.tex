@@ -9779,11 +9779,17 @@ It's just as easy to look for positions, giving rise to high log-odds scores aga
 ...     print pos,score
 ... 
 10 8.44065060871
--12 7.06213898545
+-14 7.06213898545
 15 8.44065060871
--20 8.44065060871
+-6 8.44065060871
 21 8.44065060871
 \end{verbatim}
+The negative positions refer to instances of the motif found on the
+reverse strand of the test sequence, and follow the Python convention
+on negative indices. Therefore, the instance of the motif at \verb|pos|
+is located at \verb|test_seq[pos:pos+len(m)]| both for positive and for
+negative values of \verb|pos|.
+
 You may notice the threshold parameter, here set arbitrarily to
 $5.0$. This is in $log_2$, so we are now looking only for words, which
 are 32 times more likely to occur under the motif model than in the
@@ -10789,7 +10795,9 @@ the next two images.
 \begin{latexonly}
 Figures~\ref{fig:gd_sigil_arrow_shafts} and~\ref{fig:gd_sigil_arrow_heads}.
 \end{latexonly}
-The arrows fit into a bounding box (as given by the default BOX sigil).
+The arrows fit into a bounding box (as given by the default BOX sigil),
+either above or below the axis for the forward or reverse strand, or
+straddling it (double the height) for strand-less features.
 
 There are two additional options to adjust the shapes of the arrows, firstly
 the thickness of the arrow shaft, given as a proportion of the height of the
@@ -10855,6 +10863,17 @@ gd_feature_set.add_feature(feature, sigil="ARROW", color="red",
 \label{fig:gd_sigil_arrow_heads}
 \end{figure}
 \end{latexonly}
+
+Biopython 1.61 adds a new \verb|BIGARROW| sigil which always stradles
+the axis, pointing left for the reverse strand or right otherwise:
+
+\begin{verbatim}
+#A large arrow straddling the axis:
+gd_feature_set.add_feature(feature, sigil="BIGARROW")
+\end{verbatim}
+
+\noindent All the shaft and arrow head options shown above for the
+\verb|ARROW| sigil can be used for the \verb|BIGARROW| sigil too.
 
 \subsection{A nice example}
 \label{sec:gd_nice_example}
@@ -10955,7 +10974,7 @@ Section~\ref{sec:gd_nice_example}).}
 All the examples so far have used a single track, but you can have more than
 one track -- for example show the genes on one, and repeat regions on another.
 In this example we're going to show three phage genomes side by side to scale,
-inspired by Figure 6 in \href{http://dx.doi.org/10.1128/?JB.184.21.6026-6036.2002}
+inspired by Figure 6 in \href{http://dx.doi.org/10.1128/JB.184.21.6026-6036.2002}
 {Proux \textit{et al.} 2002}.
 We'll need the GenBank files for the following three phage:
 \begin{itemize}
@@ -11188,7 +11207,7 @@ we don't have any problems with overlapping cross-links. One way to tackle that
 is to use transparency in ReportLab, by using colors with their alpha channel set.
 However, this kind of shaded color scheme combined with overlap transparency
 would be difficult to interpret.
-
+%Again, HTML and PDF versions for the figure
 \begin{htmlonly}
 \noindent The result:
 
@@ -11214,21 +11233,24 @@ between proteins which are drawn in a strand specific manor. It can
 help to add a background region (a feature using the `BOX' sigil) on the
 feature track to extend the cross link. Also, we could reduce the vertical
 height of the feature tracks to allocate more to the links instead -- one
-way to do that is to allocate space for empty tracks. These improvements
+way to do that is to allocate space for empty tracks. Furthermore,
+in cases like this where there are no large gene overlaps, we can use
+the axis-straddling \verb|BIGARROW| sigil, which allows use to further
+reduce the vertical space needed for the track. These improvements
 are demonstrated in the example script \texttt{Proux\_et\_al\_2002\_Figure\_6.py}
 included in the \texttt{Doc/examples} folder of the Biopython source code.
 %TODO - Add a link get the file directly (for Windows users etc).
 \begin{htmlonly}
 \noindent The result:
 
-\imgsrc[width=565, height=400]{images/three_track_cl2.png}
+\imgsrc[width=565, height=400]{images/three_track_cl2a.png}
 
 \end{htmlonly}
 \begin{latexonly}
 \noindent The expected output is shown in Figure~\ref{fig:three_track_cl2}.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/three_track_cl2.png}
+\includegraphics[width=\textwidth]{images/three_track_cl2a.png}
 \caption{Linear diagram with three tracks for Lactococcus phage Tuc2009
 (NC\_002703), bacteriophage bIL285 (AF323668), and prophage 5 from
 \textit{Listeria innocua} Clip11262 (NC\_003212) plus cross-links

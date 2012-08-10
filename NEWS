@@ -14,6 +14,10 @@ The latest news is at the top of this file.
 
 Not much to talk about yet...
 
+GenomeDiagram has a new BIGARROW sigil, like the existing ARROW sigil but
+drawn straddling the axis. This is useful for drawing vertically compact
+figures where you do not have overlapping genes.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release

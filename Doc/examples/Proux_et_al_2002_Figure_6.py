@@ -116,7 +116,7 @@ for i, record in enumerate([A_rec, B_rec, C_rec]):
     #and also serve to make the tracks vertically more compressed)
     gd_track_for_features = gd_diagram.new_track(5-2*i,
                             name=record.name,
-                            greytrack=True,
+                            greytrack=True, height=0.5,
                             start=0, end=len(record))
     assert record.name not in feature_sets
     feature_sets[record.name] = gd_track_for_features.new_set()
@@ -149,7 +149,7 @@ for record, gene_colors in zip([A_rec, B_rec, C_rec], [A_colors, B_colors, C_col
         if feature.type != "gene":
             #Exclude this feature
             continue
-        gd_feature_set.add_feature(feature, sigil="ARROW",
+        gd_feature_set.add_feature(feature, sigil="BIGARROW",
                                    color=gene_colors[i], label=True,
                                    name = str(i+1),
                                    label_position="start",

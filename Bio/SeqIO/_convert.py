@@ -279,22 +279,26 @@ def _fastq_convert_qual(in_handle, out_handle, mapping):
     for title, seq, qual in FastqGeneralIterator(in_handle):
         count += 1
         out_handle.write(">%s\n" % title)
-        #map the qual...
+        #map the qual... note even with Sanger encoding max 2 digits
         try:
             qualities_strs = [mapping[ascii] for ascii in qual]
         except KeyError:
             raise ValueError("Invalid character in quality string")
         data = " ".join(qualities_strs)
-        while True:
-            if len(data) <= 60:
-                out_handle.write(data + "\n")
-                break
+        while len(data) > 60:
+            #Know quality scores are either 1 or 2 digits, so there
+            #must be a space in any three consecutive characters.
+            if data[60] == " ":
+                out_handle.write(data[:60] + "\n")
+                data = data[61:]
+            elif data[59] == " ":
+                out_handle.write(data[:59] + "\n")
+                data = data[60:]
             else:
-                #By construction there must be spaces in the first 60 chars
-                #(unless we have 60 digit or higher quality scores!)
-                i = data.rfind(" ", 0, 60)
-                out_handle.write(data[:i] + "\n")
-                data = data[i+1:]
+                assert data[58] == " ", "Internal logic failure in wrapping"
+                out_handle.write(data[:58] + "\n")
+                data = data[59:]
+        out_handle.write(data + "\n")
     return count
 
     

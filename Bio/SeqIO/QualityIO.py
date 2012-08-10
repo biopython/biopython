@@ -405,7 +405,7 @@ def solexa_quality_from_phred(phred_quality):
       solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
 
     However, real Solexa files use a minimum quality of -5. This does have a
-    good reason - a random a random base call would be correct 25% of the time,
+    good reason - a random base call would be correct 25% of the time,
     and thus have a probability of error of 0.75, which gives 1.25 as the PHRED
     quality, or -4.77 as the Solexa quality. Thus (after rounding), a random
     nucleotide read would have a PHRED quality of 1, or a Solexa quality of -5.
