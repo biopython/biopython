@@ -29,6 +29,24 @@ class Motif(object):
         self.info=None
         self.name=""
 
+    @property
+    def has_instances(self):
+        """Legacy property, check if m.instances is None instead (DEPRECATED)."""
+        import warnings
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("Instead of 'm.has_instances' use 'm.instances is not None'",
+                      BiopythonDeprecationWarning)
+        return self.instances is not None
+
+    @property
+    def has_counts(self):
+        """Legacy property, check if m.counts is None instead (DEPRECATED)."""
+        import warnings
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("Instead of 'm.has_counts' use 'm.counts is not None'",
+                      BiopythonDeprecationWarning)
+        return self.counts is not None
+
     def _check_length(self, len):
         if self.length==None:
             self.length = len
