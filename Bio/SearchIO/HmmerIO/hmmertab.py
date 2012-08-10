@@ -12,34 +12,19 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
-def read_forward(handle, strip=True):
-    """Reads through whitespaces, returns the first non-whitespace line."""
-    while True:
-        line = handle.readline()
-        # return the line if it has characters
-        if line and line.strip():
-            if strip:
-                return line.strip()
-            else:
-                return line
-        # or if has no characters (EOF)
-        elif not line:
-            return line
-
-
 class HmmerTabIterator(object):
 
     """Parser for the HMMER table format."""
 
     def __init__(self, handle):
         self.handle = handle
-        self.line = read_forward(self.handle)
+        self.line = self.handle.readline()
 
     def __iter__(self):
         header_mark = '#'
         # read through the header if it exists
         while self.line.startswith(header_mark):
-            self.line = read_forward(self.handle)
+            self.line = self.handle.readline()
         # if we have result rows, parse it
         if self.line:
             for qresult in self.parse_qresult():
@@ -85,52 +70,72 @@ class HmmerTabIterator(object):
         frag = {}
         frag['hit_strand'] = frag['query_strand'] = 0
 
-        return qresult, hit, hsp, frag
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
-        qid_cache = ''
+        # state values, determines what to do for each line
+        state_EOF = 0
+        state_QRES_NEW = 1
+        state_QRES_SAME = 3
+        # initial value dummies
+        qres_state = None
+        file_state = None
+        prev_qid = None
+        cur, prev = None, None
+        # container for Hit objects, used to create QueryResult
+        hit_list = []
+
         while True:
+            # store previous line's parsed values for all lines after the first
+            if cur is not None:
+                prev = cur
+                prev_qid = cur_qid
             # only parse the result row if it's not EOF
             if self.line:
-                qres_attrs, hit_attrs, hsp_attrs, frag_attrs = \
-                        self.parse_result_row()
-                qresult_id = qres_attrs['id']
+                cur = self.parse_result_row()
+                cur_qid = cur['qresult']['id']
+            else:
+                file_state = state_EOF
+                # mock value for cur_qid, since we have nothing to parse
+                cur_qid = None
 
-            # a new qresult is created whenever qid_cache != qresult_id
-            if qid_cache != qresult_id:
-                # yield qresult if qid_cache is filled
-                if qid_cache:
+            if prev_qid != cur_qid:
+                qres_state = state_QRES_NEW
+            else:
+                qres_state = state_QRES_SAME
+
+            if prev is not None:
+                # since domain tab formats only have 1 Hit per line
+                # we always create HSPFragment, HSP, and Hit per line
+                prev_hid = prev['hit']['id']
+
+                # create fragment and HSP and set their attributes
+                frag = HSPFragment(prev_hid, prev_qid)
+                for attr, value in prev['frag'].items():
+                    setattr(frag, attr, value)
+                hsp = HSP([frag])
+                for attr, value in prev['hsp'].items():
+                    setattr(hsp, attr, value)
+
+                # create Hit and set its attributes
+                hit = Hit(prev_hid, prev_qid, hsps=[hsp])
+                for attr, value in prev['hit'].items():
+                    setattr(hit, attr, value)
+                hit_list.append(hit)
+
+                # create qresult and yield if we're at a new qresult or at EOF
+                if qres_state == state_QRES_NEW or file_state == state_EOF:
+                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    for attr, value in prev['qresult'].items():
+                        setattr(qresult, attr, value)
                     yield qresult
-                qid_cache = qresult_id
-                qresult = QueryResult(qresult_id)
-                for attr, value in qres_attrs.items():
-                    setattr(qresult, attr, value)
-            # when we've reached EOF, try yield any remaining qresult and break
-            elif not self.line:
-                yield qresult
-                break
+                    # if we're at EOF, break
+                    if file_state == state_EOF:
+                        break
+                    hit_list = []
 
-            # create Hit and set its attributes
-            hit_id = hit_attrs['id']
-            hit = Hit(hit_id, qresult_id)
-            for attr, value in hit_attrs.items():
-                setattr(hit, attr, value)
-
-            # create fragment and HSP and set their attributes
-            frag = HSPFragment(hit_id, qresult_id)
-            for attr, value in frag_attrs.items():
-                setattr(frag, attr, value)
-            hsp = HSP([frag])
-            for attr, value in hsp_attrs.items():
-                setattr(hsp, attr, value)
-
-            # since domain tab formats only have 1 HSP per line
-            # we don't have to worry about appending other HSPs to the Hit
-            hit.append(hsp)
-            qresult.append(hit)
-
-            self.line = read_forward(self.handle)
+            self.line = self.handle.readline()
 
 
 class HmmerTabIndexer(SearchIndexer):
