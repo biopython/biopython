@@ -32,7 +32,7 @@ from reportlab.lib import colors
 
 # GenomeDiagram imports
 from _AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
-from _AbstractDrawer import draw_cut_corner_box
+from _AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
 from _AbstractDrawer import intermediate_points, angle2trig
 from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
@@ -817,17 +817,7 @@ class LinearDrawer(AbstractDrawer):
                 trackB = track_level
         if trackA == trackB: raise NotImplementedError()
 
-        if cross_link.color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif cross_link.border is None:                           # undefined border, else
-            strokecolor = cross_link.color                        # use fill color
-        if cross_link.border:
-            if not isinstance(cross_link.border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(cross_link.border))
-            strokecolor = cross_link.border
-        else:
-            #e.g. False
-            strokecolor = None
+        strokecolor, fillcolor = _stroke_and_fill_colors(cross_link.color, cross_link.border)
 
         allowed_fragments = self.fragment_limits.keys()
 
@@ -916,7 +906,7 @@ class LinearDrawer(AbstractDrawer):
                                  self.x0 , 0.7*yA + 0.3*yB]
                 answer.append(Polygon([xAs, yA, xAe, yA] + extra,
                                strokeColor=strokecolor,
-                               fillColor=cross_link.color,
+                               fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
@@ -936,7 +926,7 @@ class LinearDrawer(AbstractDrawer):
                                  self.x0 , 0.3*yA + 0.7*yB]
                 answer.append(Polygon([xBs, yB, xBe, yB] + extra,
                                strokeColor=strokecolor,
-                               fillColor=cross_link.color,
+                               fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
@@ -947,7 +937,7 @@ class LinearDrawer(AbstractDrawer):
                                        self.x0, 0.5 * (yA + yB),
                                        xBe, yB, xBs, yB],
                                strokeColor=strokecolor,
-                               fillColor=cross_link.color,
+                               fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
@@ -958,21 +948,21 @@ class LinearDrawer(AbstractDrawer):
                                        xBe, yB, xBs, yB,
                                        self.x0 + self.pagewidth, 0.5 * (yA + yB)],
                                strokeColor=strokecolor,
-                               fillColor=cross_link.color,
+                               fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
             elif cross_link.flip:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
                                strokeColor=strokecolor,
-                               fillColor=cross_link.color,
+                               fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
             else:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
                                strokeColor=strokecolor,
-                               fillColor=cross_link.color,
+                               fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
@@ -1397,17 +1387,7 @@ class LinearDrawer(AbstractDrawer):
             headlength = tooth_length
             taillength = tooth_length
 
-        if color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        elif border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            #e.g. False
-            strokecolor = None
+        strokecolor, color = _stroke_and_fill_colors(color, border)
 
         points = []
         for i in range(teeth):

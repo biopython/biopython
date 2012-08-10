@@ -34,6 +34,7 @@ from reportlab.graphics.shapes import ArcPath
 
 # GenomeDiagram imports
 from _AbstractDrawer import AbstractDrawer, draw_polygon, intermediate_points
+from _AbstractDrawer import _stroke_and_fill_colors
 from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
 
@@ -1088,17 +1089,7 @@ class CircularDrawer(AbstractDrawer):
         if colour is not None:
             color = colour
 
-        if color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        elif border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            #e.g. False
-            strokecolor = None
+        strokecolor, color = _stroke_and_fill_colors(color, border)
 
         if abs(float(endangle - startangle))>.01:
             # Wide arc, must use full curves
@@ -1163,17 +1154,7 @@ class CircularDrawer(AbstractDrawer):
                        color, border=None, flip=False,
                        **kwargs):
 
-        if color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        elif border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            #e.g. False
-            strokecolor = None
+        strokecolor, color = _stroke_and_fill_colors(color, border)
         
         x0, y0 = self.xcenter, self.ycenter      # origin of the circle
         if abs(inner_endangle - outer_startangle)>0.01 \
@@ -1240,17 +1221,7 @@ class CircularDrawer(AbstractDrawer):
             inner_radius = bottom
             outer_radius = top
 
-        #TODO - Refactor to centralise this often repeated colour logic
-        if color == colors.white and border is None:
-            strokecolor = colors.black
-        elif border is None:
-            strokecolor = color
-        elif border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            strokecolor = None
+        strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         angle = float(endangle - startangle)
@@ -1335,17 +1306,7 @@ class CircularDrawer(AbstractDrawer):
         if colour is not None:
             color = colour
 
-        if color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        elif border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            #e.g. False
-            strokecolor = None
+        strokecolor, color = _stroke_and_fill_colors(color, border)
 
         #if orientation == 'right':
         #    startangle, endangle = min(startangle, endangle), max(startangle, endangle)
@@ -1488,17 +1449,7 @@ class CircularDrawer(AbstractDrawer):
 
         teeth = 4
 
-        if color == colors.white and border is None:   # Force black border on 
-            strokecolor = colors.black                 # white boxes with
-        elif border is None:                           # undefined border, else
-            strokecolor = color                        # use fill color
-        elif border:
-            if not isinstance(border, colors.Color):
-                raise ValueError("Invalid border color %s" % repr(border))
-            strokecolor = border
-        else:
-            #e.g. False
-            strokecolor = None
+        strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         angle = float(endangle - startangle)    # angle subtended by arc

@@ -81,6 +81,25 @@ def page_sizes(size):
         raise ValueError, "%s not in list of page sizes" % size
 
 
+def _stroke_and_fill_colors(color, border):
+    """Helper function handle border and fill colors (PRIVATE)."""
+    if not isinstance(color, colors.Color):
+        raise ValueError("Invalid color %r" % color)
+
+    if color == colors.white and border is None:   # Force black border on
+        strokecolor = colors.black                 # white boxes with
+    elif border is None:                           # undefined border, else
+        strokecolor = color                        # use fill color
+    elif border:
+        if not isinstance(border, colors.Color):
+            raise ValueError("Invalid border color %r" % border)
+        strokecolor = border
+    else:
+        #e.g. False
+        strokecolor = None
+
+    return strokecolor, color
+
 def draw_box(point1, point2,
              color=colors.lightgreen, border=None, colour=None,
              **kwargs):
@@ -106,20 +125,7 @@ def draw_box(point1, point2,
         color = colour
         del colour
 
-    if not isinstance(color, colors.Color):
-        raise ValueError("Invalid color %s" % repr(color))
-    
-    if color == colors.white and border is None:   # Force black border on 
-        strokecolor = colors.black                 # white boxes with
-    elif border is None:                           # undefined border, else
-        strokecolor = color                        # use fill color
-    elif border:
-        if not isinstance(border, colors.Color):
-            raise ValueError("Invalid border color %s" % repr(border))
-        strokecolor = border
-    else:
-        #e.g. False
-        strokecolor = None
+    strokecolor, color = _stroke_and_fill_colors(color, border)
 
     x1, y1, x2, y2 = min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)
     return Polygon([x1, y1, x2, y1, x2, y2, x1, y2],
@@ -139,17 +145,7 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
     elif corner < 0:
         raise ValueError("Arrow head length ratio should be positive")
 
-    if color == colors.white and border is None:   # Force black border on
-        strokecolor = colors.black                 # white boxes with
-    elif border is None:                           # undefined border, else
-        strokecolor = color                        # use fill color
-    elif border:
-        if not isinstance(border, colors.Color):
-            raise ValueError("Invalid border color %s" % repr(border))
-        strokecolor = border
-    else:
-        #e.g. False
-        strokecolor = None
+    strokecolor, color = _stroke_and_fill_colors(color, border)
 
     boxheight = y2-y1
     boxwidth = x2-x1
@@ -187,15 +183,7 @@ def draw_polygon(list_of_points,
         color = colour
         del colour
 
-    if color == colors.white and border is None:   # Force black border on 
-        strokecolor = colors.black                 # white boxes with
-    elif border is None:                           # undefined border, else
-        strokecolor = color                        # use fill colour
-    elif border:
-        strokecolor = border
-    else:
-        #e.g. False
-        strokecolor = None
+    strokecolor, color = _stroke_and_fill_colors(color, border)
 
     xy_list = []
     for (x,y) in list_of_points:
@@ -231,15 +219,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
         color = colour
         del colour
 
-    if color == colors.white and border is None:   # Force black border on 
-        strokecolor = colors.black                 # white boxes with
-    elif border is None:                           # undefined border, else
-        strokecolor = color                        # use fill colour
-    elif border:
-        strokecolor = border
-    else:
-        #e.g. False
-        strokecolor = None
+    strokecolor, color = _stroke_and_fill_colors(color, border)
 
     # Depending on the orientation, we define the bottom left (x1, y1) and
     # top right (x2, y2) coordinates differently, but still draw the box
