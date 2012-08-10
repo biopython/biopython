@@ -11,21 +11,6 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from hmmertab import HmmerTabIterator, HmmerTabIndexer
 
 
-def read_forward(handle, strip=True):
-    """Reads through whitespaces, returns the first non-whitespace line."""
-    while True:
-        line = handle.readline()
-        # return the line if it has characters
-        if line and line.strip():
-            if strip:
-                return line.strip()
-            else:
-                return line
-        # or if has no characters (EOF)
-        elif not line:
-            return line
-
-
 class HmmerDomtabIterator(HmmerTabIterator):
 
     """Base hmmer-domtab iterator."""
@@ -80,65 +65,86 @@ class HmmerDomtabIterator(HmmerTabIterator):
             frag['hit_start'], frag['query_start'] = \
                     frag['query_start'], frag['hit_start']
 
-        return qresult, hit, hsp, frag
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
     def parse_qresult(self):
         """Generator function that returns QueryResult objects."""
-        qid_cache = None
-        hid_cache = None
-        # flag for denoting whether the query is the same as the previous line
-        # or not
-        same_query = False
+        # state values, determines what to do for each line
+        state_EOF = 0
+        state_QRES_NEW = 1
+        state_QRES_SAME = 3
+        state_HIT_NEW = 2
+        state_HIT_SAME = 4
+        # dummies for initial states
+        qres_state = None
+        hit_state = None
+        file_state = None
+        # dummies for initial id caches
+        prev_qid = None
+        prev_hid = None
+        # dummies for initial parsed value containers
+        cur, prev = None, None
+        hit_list, hsp_list = [], []
+
         while True:
-            # only parse the result row if it's not EOF
+            # store previous line's parsed values, for every line after the 1st
+            if cur is not None:
+                prev = cur
+                prev_qid = cur_qid
+                prev_hid = cur_hid
+            # only parse the line if it's not EOF
             if self.line:
-                qres_parsed, hit_parsed, hsp_parsed, frag_parsed = \
-                        self.parse_result_row()
-                qresult_id = qres_parsed['id']
+                cur = self.parse_result_row()
+                cur_qid = cur['qresult']['id']
+                cur_hid = cur['hit']['id']
+            else:
+                file_state = state_EOF
+                # mock ID values since the line is empty
+                cur_qid, cur_hid = None, None
 
-            # a new qresult is created whenever qid_cache != qresult_id
-            if qid_cache != qresult_id:
-                # append the last hit and yield qresult if qid_cache is filled
-                if qid_cache is not None:
-                    qresult.append(hit)
+            # get the state of hit and qresult
+            if prev_qid != cur_qid:
+                qres_state = state_QRES_NEW
+            else:
+                qres_state = state_QRES_SAME
+            # new hits are hits with different ids or hits in a new qresult
+            if prev_hid != cur_hid or qres_state == state_QRES_NEW:
+                hit_state = state_HIT_NEW
+            else:
+                hit_state = state_HIT_SAME
+
+            # start creating objects after the first line (i.e. prev is filled)
+            if prev is not None:
+                # each line is basically an HSP with one HSPFragment
+                frag = HSPFragment(prev_hid, prev_qid)
+                for attr, value in prev['frag'].items():
+                    setattr(frag, attr, value)
+                hsp = HSP([frag])
+                for attr, value in prev['hsp'].items():
+                    setattr(hsp, attr, value)
+                hsp_list.append(hsp)
+
+                # create hit object when we've finished parsing all its hsps
+                # i.e. when hit state is state_HIT_NEW
+                if hit_state == state_HIT_NEW:
+                    hit = Hit(prev_hid, prev_qid, hsps=hsp_list)
+                    for attr, value in prev['hit'].items():
+                        setattr(hit, attr, value)
+                    hit_list.append(hit)
+                    hsp_list = []
+
+                # create qresult and yield if we're at a new qresult or EOF
+                if qres_state == state_QRES_NEW or file_state == state_EOF:
+                    qresult = QueryResult(prev_qid, hits=hit_list)
+                    for attr, value in prev['qresult'].items():
+                        setattr(qresult, attr, value)
                     yield qresult
-                    same_query = False
-                qid_cache = qresult_id
-                qresult = QueryResult(qresult_id)
-                for attr, value in qres_parsed.items():
-                    setattr(qresult, attr, value)
-            # when we've reached EOF, try yield any remaining qresult and break
-            elif not self.line:
-                qresult.append(hit)
-                yield qresult
-                break
-            # otherwise, we must still be in the same query, so set the flag
-            elif not same_query:
-                same_query = True
+                    # if current line is EOF, break
+                    if file_state == state_EOF:
+                        break
+                    hit_list = []
 
-            hit_id = hit_parsed['id']
-            # a new hit is created whenever hid_cache != hit_id
-            if hid_cache != hit_id:
-                # if we're in the same query, append the previous line's hit
-                if same_query:
-                    qresult.append(hit)
-                hid_cache = hit_id
-                hit = Hit(hit_id, qresult_id)
-                for attr, value in hit_parsed.items():
-                    setattr(hit, attr, value)
-
-            # each line is basically a different HSP with one fragment
-            # so we always create them
-            frag = HSPFragment(hit_id, qresult_id)
-            for attr, value in frag_parsed.items():
-                setattr(frag, attr, value)
-            hsp = HSP([frag])
-            for attr, value in hsp_parsed.items():
-                setattr(hsp, attr, value)
-
-            hit.append(hsp)
-
-            self.line = read_forward(self.handle)
+            self.line = self.handle.readline()
 
 
 class HmmerDomtabHmmhitIterator(HmmerDomtabIterator):
