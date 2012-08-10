@@ -9667,15 +9667,17 @@ and from a count matrix:
 
 The \verb|arnt| and \verb|srf| motifs can both do the same things for
 us, but they use different internal representations of the motif. We
-can tell that by inspecting the \verb|has_counts| and
-\verb|has_instances| properties:
+can tell that by inspecting the \verb|counts| and \verb|instances|
+properties:
 %cont-doctest
 \begin{verbatim}
->>> arnt.has_instances
+>>> arnt.counts is None
 True
->>> srf.has_instances
+>>> arnt.instances is None
 False
->>> srf.has_counts
+>>> srf.counts is None
+False
+>>> srf.instances is None
 True
 \end{verbatim}
 %TODO - sort order and formatting for doctest?
