@@ -361,14 +361,15 @@ class BlatPslIndexer(SearchIndexer):
         # denotes column location for query identifier
         query_id_idx = 9
         qresult_key = None
+        tab_char = _as_bytes('\t')
 
         start_offset = handle.tell()
-        line = _bytes_to_string(handle.readline())
+        line = handle.readline()
         # read through header
         # this assumes that the result row match the regex
         while not re.search(_RE_ROW_CHECK, line.strip()):
             start_offset = handle.tell()
-            line = _bytes_to_string(handle.readline())
+            line = handle.readline()
             if not line:
                 raise StopIteration
 
@@ -376,22 +377,22 @@ class BlatPslIndexer(SearchIndexer):
         while True:
             end_offset = handle.tell()
 
-            if not line:
-                break
-            cols = line.strip().split('\t')
+            cols = line.strip().split(tab_char)
             if qresult_key is None:
                 qresult_key = list(filter(None, cols))[query_id_idx]
             else:
                 curr_key = list(filter(None, cols))[query_id_idx]
 
                 if curr_key != qresult_key:
-                    yield qresult_key, start_offset, end_offset - start_offset
+                    yield _bytes_to_string(qresult_key), start_offset, \
+                            end_offset - start_offset
                     qresult_key = curr_key
                     start_offset = end_offset - len(line)
 
-            line = _bytes_to_string(handle.readline())
+            line = handle.readline()
             if not line:
-                yield qresult_key, start_offset, end_offset - start_offset
+                yield _bytes_to_string(qresult_key), start_offset, \
+                        end_offset - start_offset
                 break
 
     def get_raw(self, offset):
@@ -400,13 +401,14 @@ class BlatPslIndexer(SearchIndexer):
         handle.seek(offset)
         query_id_idx = 9
         qresult_key = None
-        qresult_raw = ''
+        qresult_raw = _as_bytes('')
+        tab_char = _as_bytes('\t')
 
         while True:
-            line = _bytes_to_string(handle.readline())
+            line = handle.readline()
             if not line:
                 break
-            cols = line.strip().split('\t')
+            cols = line.strip().split(tab_char)
             if qresult_key is None:
                 qresult_key = list(filter(None, cols))[query_id_idx]
             else:
@@ -415,7 +417,7 @@ class BlatPslIndexer(SearchIndexer):
                     break
             qresult_raw += line
 
-        return _as_bytes(qresult_raw)
+        return qresult_raw
 
 
 class BlatPslWriter(object):
