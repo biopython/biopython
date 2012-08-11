@@ -16,7 +16,7 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 class BlastTextIterator(object):
 
-    """Parser for the Blast tabular format."""
+    """Parser for the BLAST text format."""
 
     def __init__(self, handle):
         self.handle = handle
