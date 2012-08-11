@@ -1078,7 +1078,7 @@ class HSP(BaseHSP):
             self._aln_span = self._items[0].aln_span
         else:
             if not hasattr(self, '_aln_span'):
-                self._aln_span = sum([frag.aln_span for frag in self.fragment])
+                self._aln_span = sum([frag.aln_span for frag in self.fragments])
 
         return self._aln_span
 
