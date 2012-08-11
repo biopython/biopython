@@ -58,7 +58,7 @@ STATE_HIT_BLOCK = 2
 STATE_CONS_BLOCK = 3
 
 
-def _set_qresult_hits(qresult, hit_rows):
+def _set_qresult_hits(qresult, hit_rows=[]):
     """Helper function for appending Hits without alignments into QueryResults."""
     for hit_row in hit_rows:
         hit_id, remainder = hit_row.split(' ', 1)
@@ -78,35 +78,35 @@ def _set_qresult_hits(qresult, hit_rows):
     return qresult
 
 
-def _set_hsp_seqs(hsp, hseq, qseq, annot, program):
+def _set_hsp_seqs(hsp, parsed, program):
     """Helper function for the main parsing code (PRIVATE).
 
     Arguments:
     hsp -- HSP object whose properties are to be set.
-    hseq -- String of raw Hit sequence.
-    qseq -- String of raw Query sequence.
-    annot -- Dictionary containing HSP annotation.
+    parsed -- Dictionary containing parsed values for HSP attributes.
     program -- String of program name.
 
     """
-    if 'tfast' not in program:
-        qseq = _extract_alignment_region(qseq, annot['query'])
-        hseq = _extract_alignment_region(hseq, annot['hit'])
-    assert len(hseq) == len(qseq), annot
+    # get aligned sequences and check if they have equal lengths
+    for seq_type in ('hit', 'query'):
+        if 'tfast' not in program:
+            parsed[seq_type]['seq'] = _extract_alignment(parsed[seq_type])
+    assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), parsed
 
-    for seq, seq_type in zip([hseq, qseq], ['hit', 'query']):
+    for seq_type in ('hit', 'query'):
         # get and set start and end coordinates
-        start = int(annot[seq_type]['_start'])
-        end = int(annot[seq_type]['_stop'])
+        start = int(parsed[seq_type]['_start'])
+        end = int(parsed[seq_type]['_stop'])
 
         setattr(hsp.fragment, seq_type + '_start', min(start, end) - 1)
         setattr(hsp.fragment, seq_type + '_end', max(start, end))
         # set seq and alphabet
-        setattr(hsp.fragment, seq_type, seq)
+        setattr(hsp.fragment, seq_type, parsed[seq_type]['seq'])
 
         # alphabet of the sequence, not of the actual query that
         # produces the sequence
-        alphabet = _get_alphabet(seq, annot[seq_type])
+        type_val = parsed[seq_type]['_type']
+        alphabet =  generic_dna if type_val == 'D' else generic_protein
         setattr(getattr(hsp.fragment, seq_type).seq, 'alphabet', alphabet)
 
         if alphabet is not generic_protein:
@@ -120,20 +120,7 @@ def _set_hsp_seqs(hsp, hseq, qseq, annot, program):
             setattr(hsp.fragment, seq_type + '_strand', 0)
 
 
-def _get_alphabet(seq, annot):
-    """Helper function to determine sequence alphabet."""
-    if annot['_type'] == 'D':
-        alphabet = generic_dna
-    elif annot['_type'] == 'p':
-        alphabet =  generic_protein
-    #TODO: should we implement this?
-    #if '-' in seq:
-    #    alphabet = Gapped(alphabet)
-
-    return alphabet
-
-
-def _extract_alignment_region(seq, annot):
+def _extract_alignment(parsed_hsp):
     """Helper function for the main parsing code (PRIVATE).
 
     To get the actual pairwise alignment sequences, we must first
@@ -146,10 +133,11 @@ def _extract_alignment_region(seq, annot):
     Note that this code seems to work fine even when the "sq_offset"
     entries are prsent as a result of using the -X command line option.
     """
+    seq = parsed_hsp['seq']
     seq_stripped = seq.strip('-')
-    disp_start = int(annot['_display_start'])
-    start = int(annot['_start'])
-    stop = int(annot['_stop'])
+    disp_start = int(parsed_hsp['_display_start'])
+    start = int(parsed_hsp['_start'])
+    stop = int(parsed_hsp['_stop'])
 
     if start <= stop:
         start = start - disp_start
@@ -160,7 +148,7 @@ def _extract_alignment_region(seq, annot):
     stop += seq_stripped.count('-')
     assert 0 <= start and start < stop and stop <= len(seq_stripped), \
            "Problem with sequence start/stop,\n%s[%i:%i]\n%s" \
-           % (seq, start, stop, annot)
+           % (seq, start, stop, parsed_hsp)
     return seq_stripped[start:stop]
 
 
@@ -181,7 +169,6 @@ class FastaM10Iterator(object):
     def parse_preamble(self):
         """Parses the Fasta preamble for Fasta flavor and version."""
         preamble = {}
-
         while True:
             self.line = self.handle.readline()
             # this should be the line just before the first qresult
@@ -200,6 +187,9 @@ class FastaM10Iterator(object):
 
     def parse_hit_table(self):
         """Parses hit table rows."""
+        # move to the first row
+        self.line = self.handle.readline()
+        # parse hit table until we see an empty line
         hit_rows = []
         while self.line and not self.line.strip():
             hit_rows.append(self.line.strip())
@@ -210,62 +200,75 @@ class FastaM10Iterator(object):
         # initial qresult value
         qresult = None
         hit_rows = []
+        # state values
+        state_QRES_NEW = 1
+        state_QRES_HITTAB = 3
+        state_QRES_CONTENT = 5
+        state_QRES_END = 7
+
         while True:
-            # parse hit table if flag is set
-            if self.parse_hit_table and \
-                    self.line.startswith('The best scores are:'):
-                # move to the first row
-                self.line = self.handle.readline()
-                hit_rows = self.parse_hit_table()
 
-            # this marks the end of a query or the file altogether
-            elif self.line.strip() in [">>>///"] or not self.line:
-                if self.parse_hit_table:
-                    yield _set_qresult_hits(qresult, hit_rows)
-                else:
-                    yield qresult
-                break
-
-            # this marks the beginning of a new query
+            # one line before the hit table
+            if self.line.startswith('The best scores are:'):
+                qres_state = state_QRES_HITTAB
+            # the end of a query or the file altogether
+            elif self.line.strip() == '>>>///' or not self.line:
+                qres_state = state_QRES_END
+            # the beginning of a new query
             elif not self.line.startswith('>>>') and '>>>' in self.line:
-                # if qresult is filled, yield it first before creating a new one
-                if qresult is not None:
-                    if self.parse_hit_table:
-                        yield _set_qresult_hits(qresult, hit_rows)
-                    else:
-                        yield qresult
-                regx = re.search(_RE_ID_DESC_SEQLEN, self.line)
-                query_id = regx.group(1)
-                seq_len = regx.group(3)
-                desc = regx.group(2)
-                qresult = QueryResult(query_id)
-                qresult.seq_len = int(seq_len)
-                # get target from the next line
-                qresult.target = list(filter(None, \
-                        self.handle.peekline().split(' ')))[1].strip()
-                if desc is not None:
-                    qresult.description = desc
-                # set values from preamble
-                for key, value in self._preamble.items():
-                    setattr(qresult, key, value)
-
-            # this marks the beginning of the query info and its hits + hsps
+                qres_state = state_QRES_NEW
+            # the beginning of the query info and its hits + hsps
             elif self.line.startswith('>>>') and not \
                     self.line.strip() == '>>><<<':
-                assert self.line[3:].startswith(qresult.id), self.line
-                for hit, strand in self.parse_hit(query_id):
-                    # re-set desc, for hsp hit description
-                    hit.description = hit.description
-                    # if hit is not in qresult, append it
-                    try:
-                        qresult.append(hit)
-                    # otherwise, it might be the same hit with a different strand
-                    except ValueError:
-                        # make sure strand is different and then append hsp to
-                        # existing hit
-                        for hsp in hit.hsps:
-                            assert strand != hsp.query_strand
-                            qresult[hit.id].append(hsp)
+                qres_state = state_QRES_CONTENT
+            # default qres mark
+            else:
+                qres_state = None
+
+            if qres_state is not None:
+                if qres_state == state_QRES_HITTAB:
+                    # parse hit table if flag is set
+                    hit_rows = self.parse_hit_table()
+
+                elif qres_state == state_QRES_END:
+                    yield _set_qresult_hits(qresult, hit_rows)
+                    break
+
+                elif qres_state == state_QRES_NEW:
+                    # if qresult is filled, yield it first
+                    if qresult is not None:
+                        yield _set_qresult_hits(qresult, hit_rows)
+                    regx = re.search(_RE_ID_DESC_SEQLEN, self.line)
+                    query_id = regx.group(1)
+                    seq_len = regx.group(3)
+                    desc = regx.group(2)
+                    qresult = QueryResult(query_id)
+                    qresult.seq_len = int(seq_len)
+                    # get target from the next line
+                    self.line = self.handle.readline()
+                    qresult.target = list(filter(None, \
+                            self.line.split(' ')))[1].strip()
+                    if desc is not None:
+                        qresult.description = desc
+                    # set values from preamble
+                    for key, value in self._preamble.items():
+                        setattr(qresult, key, value)
+
+                elif qres_state == state_QRES_CONTENT:
+                    assert self.line[3:].startswith(qresult.id), self.line
+                    for hit, strand in self.parse_hit(query_id):
+                        # re-set desc, for hsp hit description
+                        hit.description = hit.description
+                        # if hit is not in qresult, append it
+                        try:
+                            qresult.append(hit)
+                        # otherwise, it might be the same hit with a different strand
+                        except ValueError:
+                            # make sure strand is different and then append hsp to
+                            # existing hit
+                            for hsp in hit.hsps:
+                                assert strand != hsp.query_strand
+                                qresult[hit.id].append(hsp)
 
             self.line = self.handle.readline()
 
@@ -275,121 +278,117 @@ class FastaM10Iterator(object):
             if self.line.startswith('>>'):
                 break
 
-        hit = None
         strand = None
-        # parse the hits
+        hsp_list = []
         while True:
             peekline = self.handle.peekline()
             # yield hit if we've reached the start of a new query or
             # the end of the search
             if peekline.strip() in [">>><<<", ">>>///"] or \
                     (not peekline.startswith('>>>') and '>>>' in peekline):
-                # append last hseq line
+                # append last parsed_hsp['hit']['seq'] line
                 if state == STATE_HIT_BLOCK:
-                    hseq += self.line.strip()
+                    parsed_hsp['hit']['seq'] += self.line.strip()
                 elif state == STATE_CONS_BLOCK:
-                    hit.hsps[-1].alignment_annotation['homology'] += self.line.strip('\n')
+                    hsp.alignment_annotation['homology'] += self.line.strip('\n')
                 # process HSP alignment and coordinates
-                _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
-                        self._preamble['program'])
+                _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
+                print hit_id, [x.hit_id for x in hsp_list]
+                hit = Hit(hit_id, query_id, hsps=hsp_list)
+                hit.description = hit_desc
+                hit.seq_len = seq_len
                 yield hit, strand
+                hsp_list = []
                 break
-            elif self.line.startswith('>'):
-                # yield hit and create a new one if we're still in the same query
-                if self.line.startswith('>>'):
-                    # try yielding,  if hit is not None
-                    try:
-                        _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
-                                self._preamble['program'])
-                        yield hit, strand
-                    except (TypeError, AttributeError):
-                        assert hit is None
-                    # try to get the hit id and desc, and handle cases without descs
-                    try:
-                        hit_id, hit_desc = self.line[2:].strip().split(' ', 1)
-                    except ValueError:
-                        hit_id = self.line[2:].strip().split(' ', 1)[0]
-                        hit_desc = ''
-                    hit = Hit(hit_id, query_id)
+            # yield hit and create a new one if we're still in the same query
+            elif self.line.startswith('>>'):
+                # try yielding,  if we have hsps
+                if hsp_list:
+                    _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
+                    hit = Hit(hit_id, query_id, hsps=hsp_list)
                     hit.description = hit_desc
-                    # create the HSP object for Hit
-                    frag = HSPFragment(hit_id, query_id)
-                    hsp = HSP([frag])
-                    hit.append(hsp)
-                    # set or reset the state to none
-                    state = STATE_NONE
-                    hsp_annot = {'query':{}, 'hit': {}}
-                # create and append a new HSP if line starts with '>--'
-                elif self.line.startswith('>--'):
-                    # set seq attributes of previous hsp
-                    _set_hsp_seqs(hit.hsps[-1], hseq, qseq, hsp_annot, \
-                            self._preamble['program'])
-                    # and create a new one
-                    frag = HSPFragment(hit_id, query_id)
-                    hsp = HSP([frag])
-                    hit.append(hsp)
-                    # set the state ~ none yet
-                    state = STATE_NONE
-                    hsp_annot = {'query':{}, 'hit': {}}
-                # this is either query or hit data in the HSP, depending on the state
-                elif self.line.startswith('>'):
-                    if state == STATE_NONE:
-                        # make sure it's the correct query
-                        assert query_id.startswith(self.line[1:].split(' ')[0]), \
-                                "%r vs %r" % (query_id, self.line)
-                        state = STATE_QUERY_BLOCK
-                        qseq = ''
-                    elif state == STATE_QUERY_BLOCK:
-                        # make sure it's the correct hit
-                        assert hit_id.startswith(self.line[1:].split(' ')[0])
-                        state = STATE_HIT_BLOCK
-                        hseq = ''
+                    hit.seq_len = seq_len
+                    yield hit, strand
+                    hsp_list = []
+                # try to get the hit id and desc, and handle cases without descs
+                try:
+                    hit_id, hit_desc = self.line[2:].strip().split(' ', 1)
+                except ValueError:
+                    hit_id = self.line[2:].strip().split(' ', 1)[0]
+                    hit_desc = ''
+                # create the HSP object for Hit
+                frag = HSPFragment(hit_id, query_id)
+                hsp = HSP([frag])
+                hsp_list.append(hsp)
+                # set or reset the state to none
+                state = STATE_NONE
+                parsed_hsp = {'query':{}, 'hit': {}}
+            # create and append a new HSP if line starts with '>--'
+            elif self.line.startswith('>--'):
+                # set seq attributes of previous hsp
+                _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
+                # and create a new one
+                frag = HSPFragment(hit_id, query_id)
+                hsp = HSP([frag])
+                hsp_list.append(hsp)
+                # set the state ~ none yet
+                state = STATE_NONE
+                parsed_hsp = {'query':{}, 'hit': {}}
+            # this is either query or hit data in the HSP, depending on the state
+            elif self.line.startswith('>'):
+                if state == STATE_NONE:
+                    # make sure it's the correct query
+                    assert query_id.startswith(self.line[1:].split(' ')[0]), \
+                            "%r vs %r" % (query_id, self.line)
+                    state = STATE_QUERY_BLOCK
+                    parsed_hsp['query']['seq'] = ''
+                elif state == STATE_QUERY_BLOCK:
+                    # make sure it's the correct hit
+                    assert hit_id.startswith(self.line[1:].split(' ')[0])
+                    state = STATE_HIT_BLOCK
+                    parsed_hsp['hit']['seq'] = ''
+            # check for conservation block
+            elif self.line.startswith('; al_cons'):
+                state = STATE_CONS_BLOCK
+                hsp.fragment.alignment_annotation['homology'] = ''
+            elif self.line.startswith(';'):
+                # Fasta outputs do not make a clear distinction between Hit
+                # and HSPs, so we check the attribute names to determine
+                # whether it belongs to a Hit or HSP
+                regx = re.search(_RE_ATTR, self.line.strip())
+                name = regx.group(1)
+                value = regx.group(2)
+
+                # for values before the '>...' query block
+                if state == STATE_NONE:
+                    if name in _HSP_ATTR_MAP:
+                        attr_name, caster = _HSP_ATTR_MAP[name]
+                        if caster is not str:
+                            value = caster(value)
+                        if name in ['_ident', '_sim']:
+                            value *= 100
+                        setattr(hsp, attr_name, value)
+                # otherwise, pool the values for processing later
+                elif state == STATE_QUERY_BLOCK:
+                    parsed_hsp['query'][name] = value
+                elif state == STATE_HIT_BLOCK:
+                    if name == '_len':
+                        seq_len = int(value)
+                    else:
+                        parsed_hsp['hit'][name] = value
+                # for values in the hit block
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)
-            # set the Hit and HSP attribute values if line starts with ';'
-            elif self.line.startswith(';'):
-                # check for conservation block
-                if self.line.startswith('; al_cons'):
-                    state = STATE_CONS_BLOCK
-                    hsp.fragment.alignment_annotation['homology'] = ''
-                else:
-                    # Fasta outputs do not make a clear distinction between Hit
-                    # and HSPs, so we check the attribute names to determine
-                    # whether it belongs to a Hit or HSP
-                    regx = re.search(_RE_ATTR, self.line.strip())
-                    name = regx.group(1)
-                    value = regx.group(2)
-
-                    # for values before the '>...' query block
-                    if state == STATE_NONE:
-                        if name in _HSP_ATTR_MAP:
-                            attr_name, caster = _HSP_ATTR_MAP[name]
-                            if caster is not str:
-                                value = caster(value)
-                            if name in ['_ident', '_sim']:
-                                value *= 100
-                            setattr(hit[-1], attr_name, value)
-                    # otherwise, pool the values for processing later
-                    elif state == STATE_QUERY_BLOCK:
-                        hsp_annot['query'][name] = value
-                    elif state == STATE_HIT_BLOCK:
-                        if name == '_len':
-                            hit.seq_len = int(value)
-                        else:
-                            hsp_annot['hit'][name] = value
-                    # for values in the hit block
-                    else:
-                        raise ValueError("Unexpected line: %r" % self.line)
             # otherwise, it must be lines containing the sequences
             else:
                 assert '>' not in self.line
                 # if we're in hit, parse into hsp.hit
                 if state == STATE_HIT_BLOCK:
-                    hseq += self.line.strip()
+                    parsed_hsp['hit']['seq'] += self.line.strip()
                 elif state == STATE_QUERY_BLOCK:
-                    qseq += self.line.strip()
+                    parsed_hsp['query']['seq'] += self.line.strip()
                 elif state == STATE_CONS_BLOCK:
-                    hit[-1].fragment.alignment_annotation['homology'] += self.line.strip('\n')
+                    hsp.fragment.alignment_annotation['homology'] += self.line.strip('\n')
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)
