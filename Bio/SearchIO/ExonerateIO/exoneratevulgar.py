@@ -195,16 +195,16 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
     """Indexer class for exonerate vulgar lines."""
 
     _parser = ExonerateVulgarParser
-    _query_mark = 'vulgar'
+    _query_mark = _as_bytes('vulgar')
 
     def get_qresult_id(self, pos):
         """Returns the query ID of the nearest vulgar line."""
         handle = self._handle
         handle.seek(pos)
         # get line, check if it's a vulgar line, and get query ID
-        line = _bytes_to_string(handle.readline())
+        line = handle.readline()
         assert line.startswith(self._query_mark), line
-        id = re.search(_RE_VULGAR, line)
+        id = re.search(_RE_VULGAR, _bytes_to_string(line))
         return id.group(1)
 
     def get_raw(self, offset):
@@ -212,10 +212,10 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
-        qresult_raw = ''
+        qresult_raw = _as_bytes('')
 
         while True:
-            line = _bytes_to_string(handle.readline())
+            line = handle.readline()
             if not line:
                 break
             elif line.startswith(self._query_mark):
@@ -228,7 +228,7 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
                         break
             qresult_raw += line
 
-        return _as_bytes(qresult_raw)
+        return qresult_raw
 
 
 def _test():

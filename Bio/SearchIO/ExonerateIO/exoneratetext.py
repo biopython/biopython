@@ -415,21 +415,21 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
     """Indexer class for Exonerate plain text."""
 
     _parser = ExonerateTextParser
-    _query_mark = 'C4 Alignment'
+    _query_mark = _as_bytes('C4 Alignment')
 
     def get_qresult_id(self, pos):
         """Returns the query ID from the nearest "Query:" line."""
         handle = self._handle
         handle.seek(pos)
-        sentinel = 'Query:'
+        sentinel = _as_bytes('Query:')
 
         while True:
-            line = _bytes_to_string(handle.readline()).strip()
+            line = handle.readline().strip()
             if line.startswith(sentinel):
                 break
             if not line:
                 raise StopIteration
-        qid, desc = _parse_hit_or_query_line(line)
+        qid, desc = _parse_hit_or_query_line(_bytes_to_string(line))
 
         return qid
 
@@ -438,10 +438,10 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
         handle = self._handle
         handle.seek(offset)
         qresult_key = None
-        qresult_raw = ''
+        qresult_raw = _as_bytes('')
 
         while True:
-            line = _bytes_to_string(handle.readline())
+            line = handle.readline()
             if not line:
                 break
             elif line.startswith(self._query_mark):
@@ -455,7 +455,7 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
                 handle.seek(cur_pos)
             qresult_raw += line
 
-        return _as_bytes(qresult_raw)
+        return qresult_raw
 
 
 def _test():

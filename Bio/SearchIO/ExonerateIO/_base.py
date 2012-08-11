@@ -262,7 +262,7 @@ class BaseExonerateIndexer(SearchIndexer):
 
         while True:
             start_offset = handle.tell()
-            line = _bytes_to_string(handle.readline())
+            line = handle.readline()
             if line.startswith(self._query_mark):
                 if qresult_key is None:
                     qresult_key = self.get_qresult_id(start_offset)
@@ -270,12 +270,14 @@ class BaseExonerateIndexer(SearchIndexer):
                 else:
                     curr_key = self.get_qresult_id(start_offset)
                     if curr_key != qresult_key:
-                        yield qresult_key, qresult_offset, start_offset - qresult_offset
+                        yield _bytes_to_string(qresult_key), qresult_offset, \
+                                start_offset - qresult_offset
                         qresult_key = curr_key
                         qresult_offset = start_offset
                         handle.seek(qresult_offset)
             elif not line:
-                yield qresult_key, qresult_offset, start_offset - qresult_offset
+                yield _bytes_to_string(qresult_key), qresult_offset, \
+                        start_offset - qresult_offset
                 break
 
 

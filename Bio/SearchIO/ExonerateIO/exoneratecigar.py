@@ -7,6 +7,8 @@
 
 import re
 
+from Bio._py3k import _as_bytes, _bytes_to_string
+
 from _base import BaseExonerateParser, _STRAND_MAP
 from exoneratevulgar import ExonerateVulgarIndexer
 
@@ -84,7 +86,17 @@ class ExonerateCigarIndexer(ExonerateVulgarIndexer):
     """Indexer class for exonerate cigar lines."""
 
     _parser = ExonerateCigarParser
-    _query_mark = 'cigar'
+    _query_mark = _as_bytes('cigar')
+
+    def get_qresult_id(self, pos):
+        """Returns the query ID of the nearest cigar line."""
+        handle = self._handle
+        handle.seek(pos)
+        # get line, check if it's a vulgar line, and get query ID
+        line = handle.readline()
+        assert line.startswith(self._query_mark), line
+        id = re.search(_RE_CIGAR, _bytes_to_string(line))
+        return id.group(1)
 
 
 def _test():
