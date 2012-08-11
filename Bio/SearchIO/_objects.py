@@ -1336,7 +1336,7 @@ class HSPFragment(BaseHSP):
         aln_span = HSPFragment._attr_display(self, 'aln_span')
         lines.append('  Fragments: 1 (%s columns)' % aln_span)
         # sequences
-        if hasattr(self, 'query') and hasattr(self, 'hit'):
+        if self.query is not None and self.hit is not None:
             try:
                 qseq = str(self.query.seq)
             except AttributeError:  # query is None
