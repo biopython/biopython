@@ -153,7 +153,7 @@ def _create_hsp(hid, qid, psl):
     hit_ranges = zip(hstarts, [x + y for x, y in \
             zip(hstarts, psl['blocksizes'])])
     # check length of sequences and coordinates, all must match
-    if psl['tseqs'] and psl['qseqs']:
+    if 'tseqs' in psl and 'qseqs' in psl:
         assert len(psl['tseqs']) == len(psl['qseqs']) == \
                 len(query_ranges) == len(hit_ranges)
     else:
@@ -212,9 +212,10 @@ class BlatPslIterator(object):
 
     """Parser for the BLAT PSL format."""
 
-    def __init__(self, handle):
+    def __init__(self, handle, pslx=False):
         self.handle = handle
         self.line = self.handle.readline()
+        self.pslx = pslx
 
     def __iter__(self):
         # break out if it's an empty file
@@ -310,33 +311,19 @@ class BlatPslIterator(object):
         psl['blocksizes'] = _list_from_csv(cols[18], int) # blockSizes
         psl['qstarts'] = _list_from_csv(cols[19], int)    # qStarts
         psl['tstarts'] = _list_from_csv(cols[20], int)    # tStarts
-        # PSL doesn't have any sequences; these are needed for instantiating
-        # HSP objects with sequences
-        psl['qseqs'] = []
-        psl['tseqs'] = []
+        if self.pslx:
+            psl['qseqs'] = _list_from_csv(cols[21])       # query sequence
+            psl['tseqs'] = _list_from_csv(cols[22])       # hit sequence
 
         return psl
 
     def _validate_cols(self, cols):
-        assert len(cols) == 21, "Invalid PSL line: %r. " \
-        "Expected 21 tab-separated columns, found %i" % (self.line, len(cols))
-
-
-class BlatPslxIterator(BlatPslIterator):
-
-    """Parser for the BLAT PSLX format."""
-
-    def _validate_cols(self, cols):
-        assert len(cols) == 23, "Invalid PSLX line: %r. " \
-        "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
-
-    def _parse_cols(self, cols):
-        psl = BlatPslIterator._parse_cols(self, cols)
-        # append seqs to hsp dict
-        psl['qseqs'] = _list_from_csv(cols[21])    # query sequence
-        psl['tseqs'] = _list_from_csv(cols[22])    # hit sequence
-
-        return psl
+        if not self.pslx:
+            assert len(cols) == 21, "Invalid PSL line: %r. " \
+            "Expected 21 tab-separated columns, found %i" % (self.line, len(cols))
+        else:
+            assert len(cols) == 23, "Invalid PSLX line: %r. " \
+            "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
 
 
 class BlatPslIndexer(SearchIndexer):
@@ -344,6 +331,9 @@ class BlatPslIndexer(SearchIndexer):
     """Indexer class for BLAT PSL output."""
 
     _parser = BlatPslIterator
+
+    def __init__(self, filename, pslx=False):
+        SearchIndexer.__init__(self, filename, pslx=pslx)
 
     def __iter__(self):
         """Iterates over the file handle; yields key, start offset, and length."""
@@ -409,23 +399,15 @@ class BlatPslIndexer(SearchIndexer):
         return _as_bytes(qresult_raw)
 
 
-class BlatPslxIndexer(BlatPslIndexer):
-
-    """Indexer class for BLAT PSL output."""
-
-    _parser = BlatPslxIterator
-
-
 class BlatPslWriter(object):
 
     """Writer for the blat-psl format."""
 
-    fmt = 'psl'
-
-    def __init__(self, handle, header=False):
+    def __init__(self, handle, header=False, pslx=False):
         self.handle = handle
         # flag for writing header or not
         self.header = header
+        self.pslx = pslx
 
     def write_file(self, qresults):
         handle = self.handle
@@ -516,20 +498,13 @@ class BlatPslWriter(object):
                 line.append(','.join((str(x) for x in qstarts)) + ',')
                 line.append(','.join((str(x) for x in hstarts)) + ',')
 
-                if self.fmt == 'pslx':
+                if self.pslx:
                     line.append(','.join((str(x.seq) for x in hsp.queries)) + ',')
                     line.append(','.join((str(x.seq) for x in hsp.hits)) + ',')
 
                 qresult_lines.append('\t'.join((str(x) for x in line)))
 
         return '\n'.join(qresult_lines) + '\n'
-
-
-class BlatPslxWriter(BlatPslWriter):
-
-    """Writer for the blat-pslx format."""
-
-    fmt = 'pslx'
 
 
 def _test():

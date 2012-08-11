@@ -127,40 +127,32 @@ class HmmerDomtabWriteCases(WriteCases):
 
 class BlatPslWriteCases(WriteCases):
 
+    fmt = 'blat-psl'
     out = os.path.join('Blat', 'test_write.txt')
 
     def test_write_single_from_blatpsl(self):
         """Test blat-psl writing from blat-psl, single query (psl_34_004.psl)"""
         source = os.path.join('Blat', 'psl_34_004.psl')
-        fmt = 'blat-psl'
-        self.parse_write_and_compare(source, fmt, self.out, fmt)
-        self.read_write_and_compare(source, fmt, self.out, fmt)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
 
     def test_write_multiple_from_blatpsl(self):
         """Test blat-psl writing from blat-psl, multiple queries (psl_34_001.psl)"""
         source = os.path.join('Blat', 'psl_34_001.psl')
-        fmt = 'blat-psl'
-        self.parse_write_and_compare(source, fmt, self.out, fmt)
-        self.read_write_and_compare(source, fmt, self.out, fmt)
-
-
-class BlatPslxWriteCases(WriteCases):
-
-    out = os.path.join('Blat', 'test_write.txt')
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt)
 
     def test_write_single_from_blatpslx(self):
         """Test blat-pslx writing from blat-pslx, single query (pslx_34_004.pslx)"""
         source = os.path.join('Blat', 'pslx_34_004.pslx')
-        fmt = 'blat-pslx'
-        self.parse_write_and_compare(source, fmt, self.out, fmt)
-        self.read_write_and_compare(source, fmt, self.out, fmt)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
 
     def test_write_multiple_from_blatpslx(self):
         """Test blat-pslx writing from blat-pslx, multiple queries (pslx_34_001.pslx)"""
         source = os.path.join('Blat', 'pslx_34_001.pslx')
-        fmt = 'blat-pslx'
-        self.parse_write_and_compare(source, fmt, self.out, fmt)
-        self.read_write_and_compare(source, fmt, self.out, fmt)
+        self.parse_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
+        self.read_write_and_compare(source, self.fmt, self.out, self.fmt, pslx=True)
 
 
 if __name__ == "__main__":

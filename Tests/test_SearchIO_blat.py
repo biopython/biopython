@@ -12,6 +12,7 @@ from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blat'
+FMT = 'blat-psl'
 
 
 def get_file(filename):
@@ -21,10 +22,10 @@ def get_file(filename):
 
 class BlatPslCases(unittest.TestCase):
 
-    def test_psl_34_001(self, testf='psl_34_001.psl', fmt='blat-psl'):
+    def test_psl_34_001(self, testf='psl_34_001.psl', pslx=False):
         """Test parsing blat output (psl_34_001.psl)"""
         blat_file = get_file(testf)
-        self.qresults = list(parse(blat_file, fmt))
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
         self.assertEqual(2, len(self.qresults))
         # check common attributes
         for qresult in self.qresults:
@@ -328,16 +329,16 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
-    def test_psl_34_002(self, testf='psl_34_002.psl', fmt='blat-psl'):
+    def test_psl_34_002(self, testf='psl_34_002.psl', pslx=False):
         """Test parsing blat output (psl_34_001.psl)"""
         blat_file = get_file(testf)
-        self.qresults = list(parse(blat_file, fmt))
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
         self.assertEqual(0, len(self.qresults))
 
-    def test_psl_34_003(self, testf='psl_34_003.psl', fmt='blat-psl'):
+    def test_psl_34_003(self, testf='psl_34_003.psl', pslx=False):
         """Test parsing blat output (psl_34_003.psl)"""
         blat_file = get_file(testf)
-        self.qresults = list(parse(blat_file, fmt))
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
         self.assertEqual(1, len(self.qresults))
         # check common attributes
         for qresult in self.qresults:
@@ -429,10 +430,10 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual([(8, 25)], hsp.query_ranges)
         self.assertEqual([(53575980, 53575997)], hsp.hit_ranges)
 
-    def test_psl_34_004(self, testf='psl_34_004.psl', fmt='blat-psl'):
+    def test_psl_34_004(self, testf='psl_34_004.psl', pslx=False):
         """Test parsing blat output (psl_34_004.psl)"""
         blat_file = get_file(testf)
-        self.qresults = list(parse(blat_file, fmt))
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
         self.assertEqual(1, len(self.qresults))
         # check common attributes
         for qresult in self.qresults:
@@ -654,10 +655,10 @@ class BlatPslCases(unittest.TestCase):
         self.assertEqual([(10, 49)], hsp.query_ranges)
         self.assertEqual([(553742, 553781)], hsp.hit_ranges)
 
-    def test_psl_34_005(self, testf='psl_34_005.psl', fmt='blat-psl'):
+    def test_psl_34_005(self, testf='psl_34_005.psl', pslx=False):
         """Test parsing blat output (psl_34_005.psl)"""
         blat_file = get_file(testf)
-        self.qresults = list(parse(blat_file, fmt))
+        self.qresults = list(parse(blat_file, FMT, pslx=pslx))
         self.assertEqual(2, len(self.qresults))
         # check common attributes
         for qresult in self.qresults:
@@ -964,9 +965,9 @@ class BlatPslCases(unittest.TestCase):
 
 class BlatPslxCases(BlatPslCases):
 
-    def test_pslx_34_001(self, testf='pslx_34_001.pslx', fmt='blat-pslx'):
+    def test_pslx_34_001(self, testf='pslx_34_001.pslx'):
         """Test parsing blat output (pslx_34_001.pslx)"""
-        BlatPslCases.test_psl_34_001(self, 'pslx_34_001.pslx', 'blat-pslx')
+        BlatPslCases.test_psl_34_001(self, 'pslx_34_001.pslx', pslx=True)
 
         # test first qresult
         qresult = self.qresults[0]
@@ -1026,13 +1027,13 @@ class BlatPslxCases(BlatPslCases):
         self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
         self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hits[0].seq))
 
-    def test_pslx_34_002(self, testf='pslx_34_002.pslx', fmt='blat-pslx'):
+    def test_pslx_34_002(self, testf='pslx_34_002.pslx'):
         """Test parsing blat output (pslx_34_002.pslx)"""
-        BlatPslCases.test_psl_34_002(self, 'pslx_34_002.pslx', 'blat-pslx')
+        BlatPslCases.test_psl_34_002(self, 'pslx_34_002.pslx', pslx=True)
 
-    def test_pslx_34_003(self, testf='pslx_34_003.pslx', fmt='blat-pslx'):
+    def test_pslx_34_003(self, testf='pslx_34_003.pslx'):
         """Test parsing blat output (pslx_34_003.pslx)"""
-        BlatPslCases.test_psl_34_003(self, 'pslx_34_003.pslx', 'blat-pslx')
+        BlatPslCases.test_psl_34_003(self, 'pslx_34_003.pslx', pslx=True)
 
         # test first qresult
         qresult = self.qresults[0]
@@ -1049,9 +1050,9 @@ class BlatPslxCases(BlatPslCases):
         self.assertEqual('aaggcagtttaccttgg', str(hsp.queries[0].seq))
         self.assertEqual('aaggcagtttaccttgg', str(hsp.hits[0].seq))
 
-    def test_pslx_34_004(self, testf='pslx_34_004.pslx', fmt='blat-pslx'):
+    def test_pslx_34_004(self, testf='pslx_34_004.pslx'):
         """Test parsing blat output (pslx_34_004.pslx)"""
-        BlatPslCases.test_psl_34_004(self, 'pslx_34_004.pslx', 'blat-pslx')
+        BlatPslCases.test_psl_34_004(self, 'pslx_34_004.pslx', pslx=True)
 
         # test first qresult
         qresult = self.qresults[0]
@@ -1096,9 +1097,9 @@ class BlatPslxCases(BlatPslCases):
         self.assertEqual('tgggattacaggtgtgagccaccacgcccagcccctttg', str(hsp.queries[0].seq))
         self.assertEqual('tgggatgacaggggtgaggcaccacgcccagcccctttg', str(hsp.hits[0].seq))
 
-    def test_pslx_34_005(self, testf='pslx_34_005.pslx', fmt='blat-pslx'):
+    def test_pslx_34_005(self, testf='pslx_34_005.pslx'):
         """Test parsing blat output (pslx_34_005.pslx)"""
-        BlatPslCases.test_psl_34_005(self, 'pslx_34_005.pslx', 'blat-pslx')
+        BlatPslCases.test_psl_34_005(self, 'pslx_34_005.pslx', pslx=True)
 
         # test first qresult
         qresult = self.qresults[0]
