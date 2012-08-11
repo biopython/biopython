@@ -54,8 +54,6 @@ class HmmerTextParser(object):
 
     def __iter__(self):
         for qresult in self.parse_qresult():
-            qresult.program = self._meta.get('program')
-            qresult.target = self._meta.get('target')
             yield qresult
 
     def read_until(self, bool_func):
@@ -118,14 +116,14 @@ class HmmerTextParser(object):
 
             # get query id and length
             regx = re.search(_QRE_ID_LEN, self.line)
-            id = regx.group(1).strip()
-            seq_len = regx.group(2)
-            # create qresult object
-            self.qresult = QueryResult(id)
-            self.qresult.seq_len = int(seq_len)
-            self.qresult.program = self._meta.get('program')
-            self.qresult.version = self._meta.get('version')
-            self.qresult.target = self._meta.get('target')
+            qid = regx.group(1).strip()
+            # store qresult attributes
+            qresult_attrs = {
+                'seq_len': int(regx.group(2)),
+                'program': self._meta.get('program'),
+                'version': self._meta.get('version'),
+                'target': self._meta.get('target'),
+            }
             
             # get description and accession, if they exist
             desc = '' # placeholder
@@ -134,25 +132,28 @@ class HmmerTextParser(object):
 
                 if self.line.startswith('Accession:'):
                     acc = self.line.strip().split(' ', 1)[1]
-                    self.qresult.acc = acc.strip()
+                    qresult_attrs['acc'] = acc.strip()
                 elif self.line.startswith('Description:'):
                     desc = self.line.strip().split(' ', 1)[1]
+                    qresult_attrs['description'] = desc.strip()
 
             # parse the query hits
             while self.line and '//' not in self.line:
-                self.parse_hit()
+                hit_list = self.parse_hit(qid)
                 # read through the statistics summary
                 # TODO: parse and store this information?
                 if self.line.startswith('Internal pipeline'):
                     while self.line and '//' not in self.line:
                         self.line = read_forward(self.handle)
 
-            # append desc here, so hsp attributes are also set
-            self.qresult.description = desc.strip()
-            yield self.qresult
+            # create qresult, set its attributes and yield
+            qresult = QueryResult(qid, hits=hit_list)
+            for attr, value in qresult_attrs.items():
+                setattr(qresult, attr, value)
+            yield qresult
             self.line = read_forward(self.handle)
 
-    def parse_hit(self):
+    def parse_hit(self, qid):
         """Parses a HMMER3 hit block, beginning with the hit table."""
         # get to the end of the hit table delimiter and read one more line
         self.read_until(lambda line: \
@@ -164,9 +165,10 @@ class HmmerTextParser(object):
         is_included = True
 
         # parse the hit table
+        hit_list = []
         while True:
             if not self.line:
-                break
+                return hit_list
             elif self.line.startswith('  ------ inclusion'):
                 is_included = False
                 self.line = read_forward(self.handle)
@@ -176,10 +178,11 @@ class HmmerTextParser(object):
                 while True:
                     self.line = read_forward(self.handle)
                     if self.line.startswith('Internal pipeline'):
-                        return
+                        assert len(hit_list) == 0
+                        return hit_list
             elif self.line.startswith('Domain annotation for each '):
-                self.parse_hsp()
-                break
+                hit_list = self.build_hits(hit_list, qid)
+                return hit_list
             # entering hit results row
             # parse the columns into a list
             row = filter(None, self.line.strip().split(' '))
@@ -191,37 +194,38 @@ class HmmerTextParser(object):
                 row.append('')
                 assert len(row) == 10
             # create the hit object
-            hit_id = row[8]
-            hit = Hit(hit_id, self.qresult.id)
-            # store the parsed results appropriately
-            hit.evalue = float(row[0])
-            hit.bitscore = float(row[1])
-            hit.bias = float(row[2])
-            # row[3:6] is not parsed, since the info is available the the HSP level
-            hit.domain_exp_num = float(row[6])
-            hit.domain_obs_num = int(row[7])
-            hit.description = row[9]
-            # don't forget to attach the boolean is_included
-            hit.is_included = is_included
-
-            self.qresult.append(hit)
+            hit_attrs = {
+                'id': row[8],
+                'query_id': qid,
+                'evalue': float(row[0]),
+                'bitscore': float(row[1]),
+                'bias': float(row[2]),
+                # row[3:6] is not parsed, since the info is available
+                # at the the HSP level
+                'domain_exp_num': float(row[6]),
+                'domain_obs_num': int(row[7]),
+                'description': row[9],
+                'is_included': is_included,
+            }
+            hit_list.append(hit_attrs)
 
             self.line = read_forward(self.handle)
 
-    def parse_hsp(self):
+    def build_hits(self, hit_attrs, qid):
         """Parses a HMMER3 hsp block, beginning with the hsp table."""
         # read through until the beginning of the hsp block
         self.read_until(lambda line: line.startswith('Internal pipeline') \
                 or line.startswith('>>'))
 
         # start parsing the hsp block
+        hit_list = []
         while True:
             if self.line.startswith('Internal pipeline'):
-                break
+                # by this time we should've emptied the hit attr list
+                assert len(hit_attrs) == 0
+                return hit_list
             assert self.line.startswith('>>')
             hid, hdesc = self.line[len('>> '):].split('  ', 1)
-            # ensure that the parsed hit ID is in the qresult object
-            assert hid in self.qresult, "Unexpected hit ID: %s" % hid
 
             # read through the hsp table header and move one more line
             self.read_until(lambda line: \
@@ -229,6 +233,7 @@ class HmmerTextParser(object):
             self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit
+            hsp_list = []
             while True:
                 # break out of hsp parsing if there are no hits, it's the last hsp
                 # or it's the start of a new hit
@@ -236,6 +241,11 @@ class HmmerTextParser(object):
                         self.line.startswith('Internal pipeline statistics summary:') or \
                         self.line.startswith('  Alignments for each domain:') or \
                         self.line.startswith('>>'):
+                    hit_attr = hit_attrs.pop(0)
+                    hit = Hit(hid, qid, hsps=hsp_list)
+                    for attr, value in hit_attr.items():
+                        setattr(hit, attr, value)
+                    hit_list.append(hit)
                     break
 
                 parsed = filter(None, self.line.strip().split(' '))
@@ -244,7 +254,7 @@ class HmmerTextParser(object):
                 # index, is_included, bitscore, bias, evalue_cond, evalue
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
-                frag = HSPFragment(hid, self.qresult.id)
+                frag = HSPFragment(hid, qid)
                 # depending on whether the program is hmmsearch, hmmscan, or phmmer
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence
@@ -284,26 +294,26 @@ class HmmerTextParser(object):
                 hsp.env_endtype = parsed[14]
                 hsp.acc_avg = float(parsed[15])
 
-                self.qresult[hid].append(hsp)
+                hsp_list.append(hsp)
                 self.line = read_forward(self.handle)
 
             # parse the hsp alignments
             if self.line.startswith('  Alignments for each domain:'):
-                self.parse_hsp_alignment(hid)
+                self.parse_hsp_alignment(hid, hit.hsps)
 
-    def parse_hsp_alignment(self, hid):
+    def parse_hsp_alignment(self, hid, hsp_list):
         """Parses a HMMER3 HSP alignment block."""
         self.line = read_forward(self.handle)
         dom_counter = 0
         while True:
             if self.line.startswith('>>') or \
                     self.line.startswith('Internal pipeline'):
-                break
+                return hsp_list
             assert self.line.startswith('  == domain %i' % (dom_counter + 1))
             # alias hsp to local var
             # but note that we're still changing the attrs of the actual
             # hsp inside the qresult as we're not creating a copy
-            frag = self.qresult[hid].hsps[dom_counter][0]
+            frag = hsp_list[dom_counter][0]
             # XXX: should we validate again here? regex is expensive..
             #regx = re.search(_HRE_VALIDATE, self.line)
             #assert hsp.bitscore == float(regx.group(1))
@@ -341,8 +351,6 @@ class HmmerTextParser(object):
                     elif self._meta.get('program') in ['hmmsearch', 'phmmer']:
                         frag.hit = aliseq
                         frag.query = hmmseq
-                    frag.hit_description = self.qresult[hid].description
-                    frag.query_description = self.qresult.description
                     dom_counter += 1
                     hmmseq = ''
                     aliseq = ''
