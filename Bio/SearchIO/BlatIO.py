@@ -234,62 +234,13 @@ class BlatPslIterator(object):
             qresult.program = 'blat'
             yield qresult
 
-    def _parse_qresult(self):
-        """Generator function that returns QueryResult objects."""
-        qid_cache = None
-        hid_cache = None
-        # flag for denoting whether the query is the same as the previous line
-        # or not
-        same_query = False
-        while True:
-            # only parse the result row if it's not EOF
-            if self.line:
-                cols = filter(None, self.line.strip().split('\t'))
-                self._validate_cols(cols)
-                psl =  self._parse_cols(cols)
-                qresult_id = psl['qname']
-
-            # a new qresult is created whenever qid_cache != qresult_id
-            if qid_cache != qresult_id:
-                # append the last hit and yield qresult if qid_cache is filled
-                if qid_cache is not None:
-                    qresult.append(hit)
-                    yield qresult
-                    same_query = False
-                qid_cache = qresult_id
-                hid_cache = None
-                qresult = QueryResult(qresult_id)
-                qresult.seq_len = psl['qsize']
-            # when we've reached EOF, try yield any remaining qresult and break
-            elif not self.line:
-                qresult.absorb(hit)
-                yield qresult
-                break
-            # otherwise, we must still be in the same query, so set the flag
-            elif not same_query:
-                same_query = True
-
-            hit_id = psl['tname']
-            # a new hit is created whenever hid_cache != hit_id
-            if hid_cache != hit_id:
-                # if we're in the same query, append the previous line's hit
-                if same_query:
-                    qresult.absorb(hit)
-                hid_cache = hit_id
-                hit = Hit(hit_id, qresult_id)
-                hit.seq_len = psl['tsize']
-
-            # create the HSPFragment objects
-            # group them in one HSP object, and append to Hit
-            hsp = _create_hsp(hit_id, qresult_id, psl)
-            hit.append(hsp)
-
-            self.line = self.handle.readline()
-
-    def _parse_cols(self, cols):
+    def _parse_cols(self):
         """Returns a dictionary of parsed column values."""
-        psl = {}
+        assert self.line
+        cols = filter(None, self.line.strip().split('\t'))
+        self._validate_cols(cols)
 
+        psl = {}
         psl['qname'] = cols[9]                            # qName
         psl['qsize'] = int(cols[10])                      # qSize
         psl['tname'] = cols[13]                           # tName
@@ -324,6 +275,74 @@ class BlatPslIterator(object):
         else:
             assert len(cols) == 23, "Invalid PSLX line: %r. " \
             "Expected 23 tab-separated columns, found %i" % (self.line, len(cols))
+
+    def _parse_qresult(self):
+        """Generator function that returns QueryResult objects."""
+        # state values, determines what to do for each line
+        state_EOF = 0
+        state_QRES_NEW = 1
+        state_QRES_SAME = 3
+        state_HIT_NEW = 2
+        state_HIT_SAME = 4
+        # initial dummy values
+        qres_state = None
+        file_state = None
+        prev_qid, prev_hid = None, None
+        cur, prev = None, None
+        hit_list, hsp_list = [], []
+
+        while True:
+            # store previous line's parsed values for all lines after the first
+            if cur is not None:
+                prev = cur
+                prev_qid = cur_qid
+                prev_hid = cur_hid
+            # only parse the result row if it's not EOF
+            if self.line:
+                cur = self._parse_cols()
+                cur_qid = cur['qname']
+                cur_hid = cur['tname']
+            else:
+                file_state = state_EOF
+                # mock values, since we have nothing to parse
+                cur_qid, cur_hid = None, None
+
+            # get the state of hit and qresult
+            if prev_qid != cur_qid:
+                qres_state = state_QRES_NEW
+            else:
+                qres_state = state_QRES_SAME
+            # new hits are hits with different ids or hits in a new qresult
+            if prev_hid != cur_hid or qres_state == state_QRES_NEW:
+                hit_state = state_HIT_NEW
+            else:
+                hit_state = state_HIT_SAME
+
+            if prev is not None:
+                # create fragment and HSP and set their attributes
+                hsp = _create_hsp(prev_hid, prev_qid, prev)
+                hsp_list.append(hsp)
+
+                if hit_state == state_HIT_NEW:
+                    # create Hit and set its attributes
+                    hit = Hit(prev_hid, prev_qid, hsps=hsp_list)
+                    hit.seq_len = prev['tsize']
+                    hit_list.append(hit)
+                    hsp_list = []
+
+                # create qresult and yield if we're at a new qresult or at EOF
+                if qres_state == state_QRES_NEW or file_state == state_EOF:
+                    qresult = QueryResult(prev_qid)
+                    for hit in hit_list:
+                        qresult.absorb(hit)
+                    qresult.seq_len = prev['qsize']
+                    yield qresult
+                    # if we're at EOF, break
+                    if file_state == state_EOF:
+                        break
+                    hit_list = []
+
+            self.line = self.handle.readline()
 
 
 class BlatPslIndexer(SearchIndexer):
