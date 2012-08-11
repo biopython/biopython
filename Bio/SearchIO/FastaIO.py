@@ -33,7 +33,9 @@ from Bio._py3k import _as_bytes, _bytes_to_string
 # regex for program name
 _RE_FLAVS = re.compile(r't?fast[afmsxy]|pr[sf][sx]|lalign|[gs]?[glso]search')
 # regex for sequence ID and length
-_RE_ID_DESC_SEQLEN = re.compile(r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)$')
+_PTR_ID_DESC_SEQLEN = r'>>>(.+?)\s+(.*?) *- (\d+) (?:aa|nt)$'
+_RE_ID_DESC_SEQLEN = re.compile(_PTR_ID_DESC_SEQLEN)
+_RE_ID_DESC_SEQLEN_IDX = re.compile(_as_bytes(_PTR_ID_DESC_SEQLEN))
 # regex for qresult, hit, or hsp attribute value
 _RE_ATTR = re.compile(r'^; [a-z]+(_[ \w-]+):\s+(.*)$')
 
@@ -411,55 +413,55 @@ class FastaM10Indexer(SearchIndexer):
         handle.seek(0)
         start_offset = handle.tell()
         qresult_key = None
-        query_mark = '>>>'
+        query_mark = _as_bytes('>>>')
 
         while True:
-            line = _bytes_to_string(handle.readline())
-            peekline = _bytes_to_string(handle.peekline())
+            line = handle.readline()
+            peekline = handle.peekline()
             end_offset = handle.tell()
 
             if not line.startswith(query_mark) and query_mark in line:
-                regx = re.search(_RE_ID_DESC_SEQLEN, line)
-                qresult_key = regx.group(1)
+                regx = re.search(_RE_ID_DESC_SEQLEN_IDX, line)
+                qresult_key = _bytes_to_string(regx.group(1))
                 start_offset = end_offset - len(line)
-            # yield whenever we encounter a new query
-            elif not peekline.startswith(query_mark) and query_mark in peekline \
-                    and qresult_key is not None:
-                yield qresult_key, start_offset, end_offset - start_offset
-                start_offset = end_offset
-            # or we arrive at the end of the search
-            elif not line:
-                yield qresult_key, start_offset, end_offset - start_offset
-                break
+            # yield whenever we encounter a new query or at the end of the file
+            if qresult_key is not None:
+                if (not peekline.startswith(query_mark) \
+                        and query_mark in peekline) or not line:
+                    yield qresult_key, start_offset, end_offset - start_offset
+                    if not line:
+                        break
+                    start_offset = end_offset
 
     def get_raw(self, offset):
         handle = self._handle
-        qresult_raw = ''
+        qresult_raw = _as_bytes('')
+        query_mark = _as_bytes('>>>')
 
         # read header first
         handle.seek(0)
         while True:
-            line = _bytes_to_string(handle.readline())
-            peekline = _bytes_to_string(handle.peekline())
+            line = handle.readline()
+            peekline = handle.peekline()
             qresult_raw += line
-            if not peekline.startswith('>>>') and '>>>' in peekline:
+            if not peekline.startswith(query_mark) and query_mark in peekline:
                 break
 
         # and read the qresult raw string
         handle.seek(offset)
         while True:
             # preserve whitespace, don't use read_forward
-            line = _bytes_to_string(handle.readline())
-            peekline = _bytes_to_string(handle.peekline())
+            line = handle.readline()
+            peekline = handle.peekline()
             qresult_raw += line
 
             # break when we've reached qresult end
-            if (not peekline.startswith('>>>') and '>>>' in peekline) or \
+            if (not peekline.startswith(query_mark) and query_mark in peekline) or \
                     not line:
                 break
 
         # append mock end marker to qresult_raw, since it's not always present
-        return _as_bytes(qresult_raw + '>>><<<\n')
+        return qresult_raw + _as_bytes('>>><<<\n')
 
 
 def _test():
