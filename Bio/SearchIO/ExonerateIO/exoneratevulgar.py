@@ -34,8 +34,6 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             [hsp['query_start']], [], [hsp['hit_start']], []
     # containers for split codons
     hsp['query_scodon_ranges'], hsp['hit_scodon_ranges'] = [], []
-    # containers for introns
-    hsp['query_intron_ranges'], hsp['hit_intron_ranges'] = [], []
     # containers for ner blocks
     hsp['query_ner_ranges'], hsp['hit_ner_ranges'] = [], []
     # sentinels for tracking query and hit positions
@@ -59,7 +57,11 @@ def parse_vulgar_comp(hsp, vulgar_comp):
                 hstarts.append(hpos)
         # other labels
         # store the values in the hsp dict as a tuple of (start, stop)
-        if label in '53INS':
+        # we're not doing anything if the label is in '53IN', as these
+        # basically tell us what the inter-block coordinates are and
+        # inter-block coordinates are automatically calculated by
+        # and HSP property
+        if label == 'S':
             # get start and stop from parsed values
             qstart, hstart = qpos, hpos
             qend = qstart + qstep * qmove
@@ -67,27 +69,11 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             # adjust the start-stop ranges
             sqstart, sqend = min(qstart, qend), max(qstart, qend)
             shstart, shend = min(hstart, hend), max(hstart, hend)
-            # then decide which list to store these values into
-            # splice sites (5' and 3') are grouped into introns
-            # note that here, the 5', 3', and intron coordinates live
-            # in separate tuples even though they're part of the same
-            # intron. we'll merge them later on after sorting
-            if label in '53I':
-                qlist = hsp['query_intron_ranges']
-                hlist = hsp['hit_intron_ranges']
-            # ner blocks
-            elif label == 'N':
-                qlist = hsp['query_ner_ranges']
-                hlist = hsp['hit_ner_ranges']
             # split codons
             # XXX: is it possible to have a frameshift that introduces
             # a codon split? If so, this may need a different treatment..
-            elif label == 'S':
-                qlist = hsp['query_scodon_ranges']
-                hlist = hsp['hit_scodon_ranges']
-            # and store the values
-            qlist.append((sqstart, sqend))
-            hlist.append((shstart, shend))
+            hsp['query_scodon_ranges'].append((sqstart, sqend))
+            hsp['hit_scodon_ranges'].append((shstart, shend))
 
         # move sentinels accordingly
         qpos += qstep * qmove
@@ -112,25 +98,6 @@ def parse_vulgar_comp(hsp, vulgar_comp):
                 qstarts, qends = qends, qstarts
             else:
                 hstarts, hends = hends, hstarts
-
-        # merge adjacent 5', 3', and introns into single intron blocks
-        introns = []
-        for start, end in hsp[seq_type + 'intron_ranges']:
-            if strand >= 0:
-                if not introns or introns[-1][1] != start:
-                    introns.append((start, end))
-                # merge if the end coord of the previous intron is the same
-                # as the current intron
-                elif introns[-1][1] == start:
-                    introns[-1] = (introns[-1][0], end)
-            else:
-                # merging is slightly different if the strand is -
-                if not introns or introns[-1][0] != end:
-                    introns.append((start, end))
-                elif introns[-1][0] == end:
-                    introns[-1] = (start, introns[-1][1])
-        # set the merged ranges back to hsp dict
-        hsp[seq_type + 'intron_ranges'] = introns
 
     # set start and end ranges
     hsp['query_ranges'] = zip(qstarts, qends)

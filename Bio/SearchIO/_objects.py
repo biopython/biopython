@@ -1183,6 +1183,36 @@ class HSP(BaseHSP):
 
     query_range = property(fget=_query_range_get)
 
+    def _inter_ranges_get(self, seq_type):
+        # this property assumes that there are no mixed strands in a hit/query
+        assert seq_type in ('query', 'hit')
+        strand = getattr(self, '%s_strands' % seq_type)[0]
+        coords = getattr(self, '%s_ranges' % seq_type)
+        # determine function used to set inter range
+        # start and end coordinates, given two pairs
+        # of fragment start and end coordinates
+        if strand == -1:
+            startfunc, endfunc = min, max
+        else:
+            startfunc, endfunc = max, min
+        inter_coords = []
+        for idx, coord in enumerate(coords[:-1]):
+            start = startfunc(coords[idx])
+            end = endfunc(coords[idx+1])
+            inter_coords.append((min(start, end), max(start, end)))
+
+        return inter_coords
+
+    def _hit_inter_ranges_get(self):
+        return self._inter_ranges_get('hit')
+
+    hit_inter_ranges = property(fget=_hit_inter_ranges_get)
+
+    def _query_inter_ranges_get(self):
+        return self._inter_ranges_get('query')
+
+    query_inter_ranges = property(fget=_query_inter_ranges_get)
+
     ## shorthands for fragments' properties ##
     # bool check if there's more than one fragments
     is_fragmented = property(lambda self: len(self) > 1)
