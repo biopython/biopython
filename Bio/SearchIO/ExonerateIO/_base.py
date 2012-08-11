@@ -5,7 +5,6 @@
 
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
-from Bio._py3k import _bytes_to_string
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
