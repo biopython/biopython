@@ -809,11 +809,11 @@ class Hit(BaseSearchObject):
             lines.append(' HSPs: ?')
         else:
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
-                    ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
-            pattern = '%11s  %8s  %9s  %6s  %18s  %18s'
+                    ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
+            pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
             lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span', \
                     'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*18, '-'*18))
+            lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
                 evalue = Hit._attr_display(hsp, 'evalue', fmt='%.2g')
@@ -826,12 +826,12 @@ class Hit(BaseSearchObject):
                 query_end = Hit._attr_display(hsp, 'query_end')
                 query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 18
-                query_range = Hit._concat_display(query_range, 18, '~')
+                query_range = Hit._concat_display(query_range, 15, '~]')
                 # hit region
                 hit_start = Hit._attr_display(hsp, 'hit_start')
                 hit_end = Hit._attr_display(hsp, 'hit_end')
                 hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = Hit._concat_display(hit_range, 18, '~')
+                hit_range = Hit._concat_display(hit_range, 21, '~]')
                 # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
                         query_range, hit_range))
@@ -1015,10 +1015,10 @@ class HSP(BaseHSP):
                     self.fragments[0]._display_aln()])
         else:
             lines.append('  Fragments: %s  %s  %s  %s' % \
-                    ('-'*3, '-'*18, '-'*18, '-'*18))
-            pattern = '%16s  %18s  %18s  %18s'
+                    ('-'*3, '-'*14, '-'*22, '-'*22))
+            pattern = '%16s  %14s  %22s  %22s'
             lines.append(pattern % ('#', 'Span', 'Query range', 'Hit range'))
-            lines.append(pattern % ('-'*3, '-'*18, '-'*18, '-'*18))
+            lines.append(pattern % ('-'*3, '-'*14, '-'*22, '-'*22))
             for idx, block in enumerate(self.fragments):
                 # set hsp line and table
                 # alignment span
@@ -1027,13 +1027,13 @@ class HSP(BaseHSP):
                 query_start = HSP._attr_display(block, 'query_start')
                 query_end = HSP._attr_display(block, 'query_end')
                 query_range = '[%s:%s]' % (query_start, query_end)
-                # max column length is 18
-                query_range = HSP._concat_display(query_range, 18, '~')
+                # max column length is 20
+                query_range = HSP._concat_display(query_range, 22, '~]')
                 # hit region
                 hit_start = HSP._attr_display(block, 'hit_start')
                 hit_end = HSP._attr_display(block, 'hit_end')
                 hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = HSP._concat_display(hit_range, 18, '~')
+                hit_range = HSP._concat_display(hit_range, 22, '~]')
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
