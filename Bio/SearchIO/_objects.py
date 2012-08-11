@@ -235,7 +235,7 @@ class QueryResult(BaseSearchObject):
         self.program = '<unknown program>'
         self.target = '<unknown target>'
         self.version = '<unknown version>'
-        self._description = ''
+        self._description = '<unknown description>'
 
         # validate Hit objects and fill up self._items
         for hit in hits:
