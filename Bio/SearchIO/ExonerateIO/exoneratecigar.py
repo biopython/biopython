@@ -25,7 +25,10 @@ class ExonerateCigarParser(BaseExonerateParser):
 
     _ALN_MARK = 'cigar'
 
-    def parse_alignment_block(self, qresult, hit, hsp):
+    def parse_alignment_block(self, header):
+        qresult = header['qresult']
+        hit = header['hit']
+        hsp = header['hsp']
         self.read_until(lambda line: line.startswith('cigar'))
         cigars = re.search(_RE_CIGAR, self.line)
         # if the file has c4 alignments
@@ -73,7 +76,7 @@ class ExonerateCigarParser(BaseExonerateParser):
         hsp['query_ranges'] = [(hsp['query_start'], hsp['query_end'])]
         hsp['hit_ranges'] = [(hsp['hit_start'], hsp['hit_end'])]
 
-        return qresult, hit, hsp
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
 
 class ExonerateCigarIndexer(ExonerateVulgarIndexer):

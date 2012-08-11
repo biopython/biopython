@@ -144,7 +144,10 @@ class ExonerateVulgarParser(BaseExonerateParser):
 
     _ALN_MARK = 'vulgar'
 
-    def parse_alignment_block(self, qresult, hit, hsp):
+    def parse_alignment_block(self, header):
+        qresult = header['qresult']
+        hit = header['hit']
+        hsp = header['hsp']
         self.read_until(lambda line: line.startswith('vulgar'))
         vulgars = re.search(_RE_VULGAR, self.line)
         # if the file has c4 alignments
@@ -184,7 +187,7 @@ class ExonerateVulgarParser(BaseExonerateParser):
         hsp['vulgar_comp'] = vulgars.group(10)
         hsp = parse_vulgar_comp(hsp, hsp['vulgar_comp'])
 
-        return qresult, hit, hsp
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
 
 class ExonerateVulgarIndexer(BaseExonerateIndexer):

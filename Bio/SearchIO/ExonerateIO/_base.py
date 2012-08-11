@@ -106,10 +106,17 @@ class BaseExonerateParser(object):
             else:
                 self.line = self.handle.readline()
 
-    def parse_alignment_block(self, qres_dict, hit_dict, hsp_dict):
+    def parse_alignment_block(self, header):
         raise NotImplementedError("Subclass must implement this")
 
-    def parse_alignment_header(self, aln_header, qresult, hit, hsp):
+    def parse_alignment_header(self):
+        # read all header lines and store them
+        aln_header = []
+        while not self.line == '\n':
+            aln_header.append(self.line.strip())
+            self.line = self.handle.readline()
+        # then parse them
+        qresult, hit, hsp = {}, {}, {}
         for line in aln_header:
             # query line
             if line.startswith('Query:'):
@@ -153,78 +160,86 @@ class BaseExonerateParser(object):
         # and the strands are not yet Biopython's standard (1 / -1 / 0)
         # since it's easier if we do the conversion later
 
-        return qresult, hit, hsp
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
     def parse_qresult(self):
-        qid_cache = None
-        hid_cache = None
-        same_query = False # flag for tracking active query
+        # state values
+        state_EOF = 0
+        state_QRES_NEW = 1
+        state_QRES_SAME = 3
+        state_HIT_NEW = 2
+        state_HIT_SAME = 4
+        # initial dummies
+        qres_state, hit_state = None, None
+        file_state = None
+        prev_qid, prev_hid = None, None
+        cur, prev = None, None
+        hit_list, hsp_list = [], []
         # if the file has c4 alignments, use that as the alignment mark
         if self.has_c4_alignment:
             self._ALN_MARK = 'C4 Alignment:'
 
         while True:
             self.read_until(lambda line: line.startswith(self._ALN_MARK))
+            if cur is not None:
+                prev = cur
+                prev_qid = cur_qid
+                prev_hid = cur_hid
             # only parse the result row if it's not EOF
             if self.line:
                 assert self.line.startswith(self._ALN_MARK), self.line
                 # create temp dicts for storing parsed values
-                qres_dict, hit_dict, hsp_dict = {}, {}, {}
+                header = {'qresult': {}, 'hit': {}, 'hsp': {}}
                 # if the file has c4 alignments, try to parse the header
                 if self.has_c4_alignment:
                     self.read_until(lambda line: line.strip().startswith('Query:'))
-                    # collect header lines and parse them
-                    aln_header = []
-                    while not self.line == '\n':
-                        aln_header.append(self.line.strip())
-                        self.line = self.handle.readline()
-                    # parse header values into the temp dicts
-                    qres_dict, hit_dict, hsp_dict = \
-                            self.parse_alignment_header(aln_header,qres_dict, \
-                            hit_dict, hsp_dict)
-
-                qres_parsed, hit_parsed, hsp_parsed = \
-                        self.parse_alignment_block(qres_dict, hit_dict, hsp_dict)
-                qresult_id = qres_parsed['id']
-
-            # a new qresult is created whenever qid_cache != qresult_id
-            if qid_cache != qresult_id:
-                # append the last hit and yield qresult if qid_cache is filled
-                if qid_cache is not None:
-                    qresult.absorb(hit)
-                    yield qresult
-                    same_query = False
-                qid_cache = qresult_id
-                hid_cache = None
-                qresult = QueryResult(qresult_id)
-                for attr, value in qres_parsed.items():
-                    setattr(qresult, attr, value)
-            # when we've reached EOF, try yield any remaining qresult and break
+                    header = self.parse_alignment_header()
+                # parse the block contents
+                cur = self.parse_alignment_block(header)
+                cur_qid = cur['qresult']['id']
+                cur_hid = cur['hit']['id']
             elif not self.line or self.line.startswith('-- completed '):
-                qresult.absorb(hit)
-                yield qresult
-                break
-            # otherwise, we must still be in the same query, so set the flag
-            elif not same_query:
-                same_query = True
+                file_state = state_EOF
+                cur_qid, cur_hid = None, None
 
-            hit_id = hit_parsed['id']
-            # a new hit is created whenever hid_cache != hit_id
-            if hid_cache != hit_id:
-                # if hit is already in qresult, merge them
-                # for some reason, exonerate doesn't always group hits together (?)
-                if same_query:
-                    qresult.absorb(hit)
-                hid_cache = hit_id
-                hit = Hit(hit_id, qresult_id)
-                for attr, value in hit_parsed.items():
-                    setattr(hit, attr, value)
+            # get the state of hit and qresult
+            if prev_qid != cur_qid:
+                qres_state = state_QRES_NEW
+            else:
+                qres_state = state_QRES_SAME
+            # new hits are hits with different ids or hits in a new query
+            if prev_hid != cur_hid or qres_state == state_QRES_NEW:
+                hit_state = state_HIT_NEW
+            else:
+                hit_state = state_HIT_SAME
 
-            # create the HSPFragment objects
-            # group them in one HSP object, and append to Hit
-            hsp = _create_hsp(hit_id, qresult_id, hsp_parsed)
-            hit.append(hsp)
+            if prev is not None:
+                hsp = _create_hsp(prev_hid, prev_qid, prev['hsp'])
+                hsp_list.append(hsp)
 
+                if hit_state == state_HIT_NEW:
+                    hit = Hit(prev_hid, prev_qid, hsps=hsp_list)
+                    for attr, value in prev['hit'].items():
+                        setattr(hit, attr, value)
+                    hit_list.append(hit)
+                    hsp_list = []
+
+                if qres_state == state_QRES_NEW or file_state == state_EOF:
+                    qresult = QueryResult(prev_qid)
+                    for hit in hit_list:
+                        # not using append since Exonerate may separate the
+                        # same hit if it has different strands
+                        qresult.absorb(hit)
+                    for attr, value in prev['qresult'].items():
+                        setattr(qresult, attr, value)
+                    yield qresult
+                    if file_state == state_EOF:
+                        break
+                    hit_list = []
+
+            # only readline() here if we're not parsing C4 alignments
+            # C4 alignments readline() is handled by its parse_alignment_block
+            # function
             if not self.has_c4_alignment:
                 self.line = self.handle.readline()
 

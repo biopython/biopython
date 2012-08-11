@@ -177,11 +177,14 @@ class ExonerateTextParser(BaseExonerateParser):
 
     _ALN_MARK = 'C4 Alignment:'
 
-    def parse_alignment_block(self, qresult, hit, hsp):
+    def parse_alignment_block(self, header):
+        qresult = header['qresult']
+        hit = header['hit']
+        hsp = header['hsp']
         # check for values that must have been set by previous methods
         for val_name in ('query_start', 'query_end' ,'hit_start', 'hit_end', \
                 'query_strand', 'hit_strand'):
-            assert val_name in hsp
+            assert val_name in hsp, hsp
 
         # get the alignment rows
         raw_aln_blocks, vulgar_comp = self.read_alignment()
@@ -261,7 +264,7 @@ class ExonerateTextParser(BaseExonerateParser):
         # use vulgar coordinates if vulgar line is present and return
         if vulgar_comp is not None:
             hsp = parse_vulgar_comp(hsp, vulgar_comp)
-            return qresult, hit, hsp
+            return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
         # otherwise we need to get the coordinates from the alignment
         # get the intervening blocks first, so we can use them
@@ -360,7 +363,7 @@ class ExonerateTextParser(BaseExonerateParser):
                 n_end = seq_type + 'end'
                 hsp[n_start], hsp[n_end] = hsp[n_end], hsp[n_start]
 
-        return qresult, hit, hsp
+        return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
     def read_alignment(self):
         """Reads the raw alignment block strings, returns them in a list."""
