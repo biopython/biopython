@@ -365,7 +365,7 @@ class BlastXmlParser(object):
                     self.parse_hsp_frag(hit_elem.find('Hit_hsps'),
                         query_id, hit_id)]
 
-            hit = Hit(hit_id, query_id, hsps=hsps)
+            hit = Hit(hsps)
             hit.description = hit_desc
             # blast_hit_id is only set if the hit ID is Blast-generated
             hit._blast_id = blast_hit_id

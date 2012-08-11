@@ -55,7 +55,7 @@ class BlastTextParser(object):
                 hdesc = hdesc.replace('\n', '').replace('\r', '')
 
                 # iterate over the hsps and group them in a list
-                hit_list = []
+                hsp_list = []
                 for bhsp in aln.hsps:
                     frag = HSPFragment(hid, qid)
                     # set alignment length
@@ -118,9 +118,9 @@ class BlastTextParser(object):
                     if hsp.pos_num is None:
                         hsp.pos_num = hsp[0].aln_span
 
-                    hit_list.append(hsp)
+                    hsp_list.append(hsp)
 
-                hit = Hit(hid, qid, hit_list)
+                hit = Hit(hsp_list)
                 hit.seq_len = aln.length
                 # get hit-level e-value and score, if available
                 try:

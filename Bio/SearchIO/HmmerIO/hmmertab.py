@@ -119,7 +119,7 @@ class HmmerTabParser(object):
                     setattr(hsp, attr, value)
 
                 # create Hit and set its attributes
-                hit = Hit(prev_hid, prev_qid, hsps=[hsp])
+                hit = Hit([hsp])
                 for attr, value in prev['hit'].items():
                     setattr(hit, attr, value)
                 hit_list.append(hit)

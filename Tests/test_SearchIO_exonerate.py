@@ -1236,13 +1236,13 @@ class ExonerateVulgarCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('sacCer3_dna', qresult.id)
-        self.assertEqual('', qresult.description)
+        self.assertEqual('<unknown description>', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual(3, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('', hit.description)
+        self.assertEqual('<unknown description>', hit.description)
         self.assertEqual(2, len(hit.hsps))
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1275,7 +1275,7 @@ class ExonerateVulgarCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
-        self.assertEqual('', hit.description)
+        self.assertEqual('<unknown description>', hit.description)
         self.assertEqual(1, len(hit.hsps))
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1294,7 +1294,7 @@ class ExonerateVulgarCases(unittest.TestCase):
         # third hit
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
-        self.assertEqual('', hit.description)
+        self.assertEqual('<unknown description>', hit.description)
         self.assertEqual(1, len(hit.hsps))
         # third hit, first hsp
         hsp = qresult[2].hsps[0]
@@ -1330,13 +1330,13 @@ class ExonerateCigarCases(unittest.TestCase):
                 self.assertEqual(qresult.id, hsp.query_id)
 
         self.assertEqual('sacCer3_dna', qresult.id)
-        self.assertEqual('', qresult.description)
+        self.assertEqual('<unknown description>', qresult.description)
         self.assertEqual('exonerate', qresult.program)
         self.assertEqual(3, len(qresult))
         # first hit
         hit = qresult[0]
         self.assertEqual('gi|330443520|ref|NC_001136.10|', hit.id)
-        self.assertEqual('', hit.description)
+        self.assertEqual('<unknown description>', hit.description)
         self.assertEqual(2, len(hit.hsps))
         # first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1361,7 +1361,7 @@ class ExonerateCigarCases(unittest.TestCase):
         # second hit
         hit = qresult[1]
         self.assertEqual('gi|330443489|ref|NC_001135.5|', hit.id)
-        self.assertEqual('', hit.description)
+        self.assertEqual('<unknown description>', hit.description)
         self.assertEqual(1, len(hit.hsps))
         # second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1376,7 +1376,7 @@ class ExonerateCigarCases(unittest.TestCase):
         # third hit
         hit = qresult[2]
         self.assertEqual('gi|330443667|ref|NC_001143.9|', hit.id)
-        self.assertEqual('', hit.description)
+        self.assertEqual('<unknown description>', hit.description)
         self.assertEqual(1, len(hit.hsps))
         # third hit, first hsp
         hsp = qresult[2].hsps[0]

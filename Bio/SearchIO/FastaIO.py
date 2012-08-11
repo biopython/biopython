@@ -71,10 +71,9 @@ def _set_qresult_hits(qresult, hit_rows=[]):
         #   - possible incomplete hit_id due to column length limit
         # The current method only looks at the Hit ID, none of the things above
         if hit_id not in qresult:
-            hit = Hit(hit_id, qresult.id)
             frag = HSPFragment(hit_id, qresult.id)
             hsp = HSP([frag])
-            hit.append(hsp)
+            hit = Hit([hsp])
             qresult.append(hit)
 
     return qresult
@@ -296,7 +295,7 @@ class FastaM10Parser(object):
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
                 print hit_id, [x.hit_id for x in hsp_list]
-                hit = Hit(hit_id, query_id, hsps=hsp_list)
+                hit = Hit(hsp_list)
                 hit.description = hit_desc
                 hit.seq_len = seq_len
                 yield hit, strand
@@ -307,7 +306,7 @@ class FastaM10Parser(object):
                 # try yielding,  if we have hsps
                 if hsp_list:
                     _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
-                    hit = Hit(hit_id, query_id, hsps=hsp_list)
+                    hit = Hit(hsp_list)
                     hit.description = hit_desc
                     hit.seq_len = seq_len
                     yield hit, strand

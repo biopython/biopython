@@ -327,7 +327,7 @@ class BlatPslParser(object):
 
                 if hit_state == state_HIT_NEW:
                     # create Hit and set its attributes
-                    hit = Hit(prev_hid, prev_qid, hsps=hsp_list)
+                    hit = Hit(hsp_list)
                     hit.seq_len = prev['tsize']
                     hit_list.append(hit)
                     hsp_list = []

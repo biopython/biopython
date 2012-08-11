@@ -46,11 +46,11 @@ hsp312 = HSP([frag312])
 hsp411 = HSP([frag411])
 hsp121 = HSP([frag121])
 # mock Hits
-hit11 = Hit('hit1', 'query1', [hsp111, hsp112, hsp113, hsp114])
-hit21 = Hit('hit2', 'query1', [hsp211])
-hit31 = Hit('hit3', 'query1', [hsp311, hsp312])
-hit41 = Hit('hit4', 'query1', [hsp411])
-hit12 = Hit('hit1', 'query2', [hsp121])
+hit11 = Hit([hsp111, hsp112, hsp113, hsp114])
+hit21 = Hit([hsp211])
+hit31 = Hit([hsp311, hsp312])
+hit41 = Hit([hsp411])
+hit12 = Hit([hsp121])
 
 
 class QueryResultCases(unittest.TestCase):
@@ -217,8 +217,8 @@ class QueryResultCases(unittest.TestCase):
         frag1 = HSPFragment('hit1', 'query')
         frag2 = HSPFragment('hit1', 'query')
         frag3 = HSPFragment('hit2', 'query')
-        hit1 = Hit('hit1', 'query', [HSP([x]) for x in [frag1, frag2]])
-        hit2 = Hit('hit2', 'query', [HSP([frag3])])
+        hit1 = Hit([HSP([x]) for x in [frag1, frag2]])
+        hit2 = Hit([HSP([frag3])])
         qresult = QueryResult('query', [hit1, hit2])
         # test initial condition
         for hit in qresult:
@@ -266,8 +266,7 @@ class QueryResultCases(unittest.TestCase):
         # absorb should combine the hit's hsps if an existing one is present
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.assertEqual(2, len(self.qresult['hit3']))
-        hit = Hit('hit3', 'query1', \
-                hsps=[HSP([HSPFragment('hit3', 'query1')])])
+        hit = Hit([HSP([HSPFragment('hit3', 'query1')])])
         self.qresult.absorb(hit)
         self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
         self.assertEqual(['hit1', 'hit2', 'hit3'], list(self.qresult.hit_keys))
@@ -542,7 +541,7 @@ class QueryResultCases(unittest.TestCase):
 class HitCases(unittest.TestCase):
 
     def setUp(self):
-        self.hit = Hit('hit1', 'query1', [hsp111, hsp112, hsp113])
+        self.hit = Hit([hsp111, hsp112, hsp113])
         self.hit.evalue = 5e-10
         self.hit.name = 'test'
 
@@ -669,10 +668,10 @@ class HitCases(unittest.TestCase):
         """Test Hit.description setter, without HSP SeqRecords"""
         frag1 = HSPFragment('hit1', 'query')
         frag2 = HSPFragment('hit1', 'query')
-        hit = Hit('hit1', 'query', [HSP([x]) for x in [frag1, frag2]])
+        hit = Hit([HSP([x]) for x in [frag1, frag2]])
         new_desc = 'unicorn hox homolog'
         # test initial condition
-        self.assertEqual(hit.description, '')
+        self.assertEqual(hit.description, '<unknown description>')
         for hsp in hit:
             self.assertEqual(hsp.hit_description, '<unknown description>')
             for fragment in hsp:

@@ -242,7 +242,7 @@ class HmmerTextParser(object):
                         self.line.startswith('  Alignments for each domain:') or \
                         self.line.startswith('>>'):
                     hit_attr = hit_attrs.pop(0)
-                    hit = Hit(hid, qid, hsps=hsp_list)
+                    hit = Hit(hsp_list)
                     for attr, value in hit_attr.items():
                         setattr(hit, attr, value)
                     hit_list.append(hit)

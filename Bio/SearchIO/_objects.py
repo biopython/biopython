@@ -738,24 +738,21 @@ class Hit(BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items',)
 
-    def __init__(self, id=None, query_id=None, hsps=[]):
+    def __init__(self, hsps=[]):
         """Initializes a Hit object.
 
         Arguments:
-        query_id -- String of the query name used to obtain this hit.
-        hit_id   -- String of unique identifier for this hit.
         hsps     -- Iterable returning HSP objects.
 
         """
-        if id is None:
-            raise ValueError("Hit ID string is required for Hit creation")
-        if query_id is None:
-            raise ValueError("Query ID string is required for Hit creation")
-
-        self._id = id
-        self._query_id= query_id
-        self._description = ''
-        self._query_description = ''
+        if not hsps:
+            raise ValueError("Hit objects must have at least one HSP object.")
+        # check that all fragments contain the same IDs, descriptions
+        for attr in ('query_id', 'query_description', 'hit_id', \
+                'hit_description'):
+            if len(set([getattr(hsp, attr) for hsp in hsps])) != 1:
+                raise ValueError("Hit object can not contain HSPs with " \
+                        "more than one %s." % attr)
 
         self._items = []
         for hsp in hsps:
@@ -764,10 +761,6 @@ class Hit(BaseSearchObject):
             # and store it them as an instance attribute
             self.append(hsp)
 
-    id = _cascadeprop('_id', 'hit_id')
-    query_id = _cascadeprop('_query_id', 'query_id')
-    description = _cascadeprop('_description', 'hit_description')
-    query_description = _cascadeprop('_query_description', 'query_description')
     # returns all hsps
     hsps = _allitemprop()
     # returns all fragments
@@ -842,7 +835,7 @@ class Hit(BaseSearchObject):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
             print idx
-            obj = self.__class__(self.id, self.query_id, self.hsps[idx])
+            obj = self.__class__(self.hsps[idx])
             self._transfer_attrs(obj)
             return obj
         return self._items[idx]
@@ -870,12 +863,59 @@ class Hit(BaseSearchObject):
         """
         if not isinstance(hsp, HSP):
             raise TypeError("Hit objects can only contain HSP objects.")
-        if hsp.hit_id != self.id:
-            raise ValueError("Expected HSP with hit ID %r, " \
-                    "found %r instead." % (self.id, hsp.hit_id))
-        if hsp.query_id != self.query_id:
-            raise ValueError("Expected HSP with query ID %r, " \
-                    "found %r instead." % (self.query_id, hsp.query_id))
+        # HACK: to make validation during __init__ work
+        if self._items:
+            if hsp.hit_id != self.id:
+                raise ValueError("Expected HSP with hit ID %r, " \
+                        "found %r instead." % (self.id, hsp.hit_id))
+            if hsp.query_id != self.query_id:
+                raise ValueError("Expected HSP with query ID %r, " \
+                        "found %r instead." % (self.query_id, hsp.query_id))
+
+    ## id and description properties ##
+    def _set_id_or_desc(self, value, seq_type, attr):
+        assert seq_type in ('query', 'hit')
+        assert attr in ('id', 'description')
+        attr_name = '%s_%s' % (seq_type, attr)
+        # set attr for fragments
+        for hsp in self.hsps:
+            setattr(hsp, attr_name, value)
+
+    def _description_get(self):
+        return self._items[0].hit_description
+
+    def _description_set(self, value):
+        self._set_id_or_desc(value, 'hit', 'description')
+
+    description = property(fget=_description_get, \
+            fset=_description_set)
+
+    def _query_description_get(self):
+        return self._items[0].query_description
+
+    def _query_description_set(self, value):
+        self._set_id_or_desc(value, 'query', 'description')
+
+    query_description = property(fget=_query_description_get, \
+            fset=_query_description_set)
+
+    def _id_get(self):
+        return self._items[0].hit_id
+
+    def _id_set(self, value):
+        self._set_id_or_desc(value, 'hit', 'id')
+
+    id = property(fget=_id_get, \
+            fset=_id_set)
+
+    def _query_id_get(self):
+        return self._items[0].query_id
+
+    def _query_id_set(self, value):
+        self._set_id_or_desc(value, 'query', 'id')
+
+    query_id = property(fget=_query_id_get, \
+            fset=_query_id_set)
 
     ## public methods ##
     def append(self, hsp):
@@ -886,7 +926,7 @@ class Hit(BaseSearchObject):
         """Creates a new Hit object whose HSP objects pass the filter function."""
         hsps = filter(func, self.hsps)
         if hsps:
-            obj = self.__class__(self.id, self.query_id, hsps)
+            obj = self.__class__(hsps)
             self._transfer_attrs(obj)
             return obj
 
@@ -900,7 +940,7 @@ class Hit(BaseSearchObject):
         else:
             hsps = self.hsps[:]
         if hsps:
-            obj = self.__class__(self.id, self.query_id, hsps)
+            obj = self.__class__(hsps)
             self._transfer_attrs(obj)
             return obj
 
@@ -913,7 +953,7 @@ class Hit(BaseSearchObject):
         else:
             hsps = self.hsps[:]
             hsps.sort(key=key, reverse=reverse)
-            obj = self.__class__(self.id, self.query_id, hsps)
+            obj = self.__class__(hsps)
             self._transfer_attrs(obj)
             return obj
 

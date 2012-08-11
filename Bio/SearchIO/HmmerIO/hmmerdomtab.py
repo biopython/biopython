@@ -127,7 +127,7 @@ class HmmerDomtabParser(HmmerTabParser):
                 # create hit object when we've finished parsing all its hsps
                 # i.e. when hit state is state_HIT_NEW
                 if hit_state == state_HIT_NEW:
-                    hit = Hit(prev_hid, prev_qid, hsps=hsp_list)
+                    hit = Hit(hsp_list)
                     for attr, value in prev['hit'].items():
                         setattr(hit, attr, value)
                     hit_list.append(hit)
