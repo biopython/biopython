@@ -252,6 +252,29 @@ class QueryResultCases(unittest.TestCase):
                     self.assertEqual('new_id', fragment.query_id)
                     self.assertEqual('new_id', fragment.query.id)
 
+    def test_absorb_hit_does_not_exist(self):
+        """Test QueryResult.absorb, hit does not exist"""
+        # absorb should work like append when the hit does not exist
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
+        self.qresult.absorb(hit41)
+        self.assertEqual([hit11, hit21, hit31, hit41], list(self.qresult.hits))
+        self.assertEqual(['hit1', 'hit2', 'hit3', 'hit4'],
+                list(self.qresult.hit_keys))
+
+    def test_absorb_hit_exists(self):
+        """Test QueryResult.absorb, hit with the same ID exists"""
+        # absorb should combine the hit's hsps if an existing one is present
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
+        self.assertEqual(2, len(self.qresult['hit3']))
+        hit = Hit('hit3', 'query1', \
+                hsps=[HSP([HSPFragment('hit3', 'query1')])])
+        self.qresult.absorb(hit)
+        self.assertEqual([hit11, hit21, hit31], list(self.qresult.hits))
+        self.assertEqual(['hit1', 'hit2', 'hit3'], list(self.qresult.hit_keys))
+        self.assertEqual(3, len(self.qresult['hit3']))
+        # remove the mock hsp
+        del self.qresult['hit3'][-1]
+
     def test_append_ok(self):
         """Test QueryResult.append"""
         # append should work with Hit objects

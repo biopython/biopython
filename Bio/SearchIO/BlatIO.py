@@ -36,15 +36,6 @@ from Bio.SearchIO._index import SearchIndexer
 _RE_ROW_CHECK = re.compile(r'^\d+\s+\d+\s+\d+\s+\d+')
 
 
-def _append_hit(qresult, hit):
-    """Appends Hit to the given QueryResult objects; combines HSP if Hit exists."""
-    if hit not in qresult:
-        qresult.append(hit)
-    else:
-        for hsp in hit:
-            qresult[hit.id].append(hsp)
-
-
 def _list_from_csv(csv_string, caster=None):
     """Transforms the given comma-separated string into a list.
 
@@ -270,7 +261,7 @@ class BlatPslIterator(object):
                 qresult.seq_len = psl['qsize']
             # when we've reached EOF, try yield any remaining qresult and break
             elif not self.line:
-                _append_hit(qresult, hit)
+                qresult.absorb(hit)
                 yield qresult
                 break
             # otherwise, we must still be in the same query, so set the flag
@@ -282,7 +273,7 @@ class BlatPslIterator(object):
             if hid_cache != hit_id:
                 # if we're in the same query, append the previous line's hit
                 if same_query:
-                    _append_hit(qresult, hit)
+                    qresult.absorb(hit)
                 hid_cache = hit_id
                 hit = Hit(hit_id, qresult_id)
                 hit.seq_len = psl['tsize']

@@ -429,6 +429,25 @@ class QueryResult(BaseSearchObject):
             del self._items[key]
         return
 
+    def absorb(self, hit):
+        """Adds a Hit object to the end of QueryResult. If the QueryResult
+        already has a Hit with the same ID, append the new Hit's HSPs into
+        the existing Hit.
+
+        This method is used for file formats that may output the same Hit in
+        separate places, such as BLAT or Exonerate. In both formats, Hit
+        with different strands are put in different places. However, SearchIO
+        considers them to be the same as a Hit object should be all database
+        entries with the same ID, regardless of strand orientation.
+
+        """
+        try:
+            self.append(hit)
+        except ValueError:
+            assert hit.id in self
+            for hsp in hit:
+                self[hit.id].append(hsp)
+
     def append(self, hit):
         """Adds a Hit object to the end of QueryResult.
 

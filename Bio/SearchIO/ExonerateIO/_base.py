@@ -14,18 +14,6 @@ from Bio.SearchIO._index import SearchIndexer
 _STRAND_MAP = {'+': 1, '-': -1, '.': 0}
 
 
-def _absorb_hit(qresult, hit):
-    """Absorbs the given hit by merging it with an existing hit."""
-    try:
-        qresult.append(hit)
-    except ValueError:
-        assert hit.id in qresult
-        for hsp_item in hit.hsps:
-            qresult[hit.id].append(hsp_item)
-
-    return qresult
-
-
 def _create_hsp(hid, qid, hspd):
     """Returns a list of HSP objects from the given parsed HSP values."""
     frags = []
@@ -203,7 +191,8 @@ class BaseExonerateIterator(object):
             if qid_cache != qresult_id:
                 # append the last hit and yield qresult if qid_cache is filled
                 if qid_cache is not None:
-                    yield _absorb_hit(qresult, hit)
+                    qresult.absorb(hit)
+                    yield qresult
                     same_query = False
                 qid_cache = qresult_id
                 hid_cache = None
@@ -212,7 +201,8 @@ class BaseExonerateIterator(object):
                     setattr(qresult, attr, value)
             # when we've reached EOF, try yield any remaining qresult and break
             elif not self.line or self.line.startswith('-- completed '):
-                yield _absorb_hit(qresult, hit)
+                qresult.absorb(hit)
+                yield qresult
                 break
             # otherwise, we must still be in the same query, so set the flag
             elif not same_query:
@@ -224,7 +214,7 @@ class BaseExonerateIterator(object):
                 # if hit is already in qresult, merge them
                 # for some reason, exonerate doesn't always group hits together (?)
                 if same_query:
-                    qresult = _absorb_hit(qresult, hit)
+                    qresult.absorb(hit)
                 hid_cache = hit_id
                 hit = Hit(hit_id, qresult_id)
                 for attr, value in hit_parsed.items():
