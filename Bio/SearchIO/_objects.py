@@ -940,10 +940,17 @@ class BaseHSP(BaseSearchObject):
         hit_start = BaseHSP._attr_display(self, 'hit_start')
         hit_end = BaseHSP._attr_display(self, 'hit_end')
 
+        # strands
+        try:
+            qstrand = self.query_strand
+            hstrand = self.hit_strand
+        except ValueError:
+            qstrand = self.query_strands[0]
+            hstrand = self.hit_strands[0]
         lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end, \
-                self.query_strand))
+                qstrand))
         lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end, \
-                self.hit_strand))
+                hstrand))
 
         return '\n'.join(lines)
 
