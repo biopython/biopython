@@ -270,13 +270,13 @@ class BaseExonerateIndexer(SearchIndexer):
                 else:
                     curr_key = self.get_qresult_id(start_offset)
                     if curr_key != qresult_key:
-                        yield _bytes_to_string(qresult_key), qresult_offset, \
+                        yield qresult_key, qresult_offset, \
                                 start_offset - qresult_offset
                         qresult_key = curr_key
                         qresult_offset = start_offset
                         handle.seek(qresult_offset)
             elif not line:
-                yield _bytes_to_string(qresult_key), qresult_offset, \
+                yield qresult_key, qresult_offset, \
                         start_offset - qresult_offset
                 break
 

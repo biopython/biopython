@@ -33,7 +33,9 @@ from Bio.SearchIO._index import SearchIndexer
 
 
 # precompile regex patterns
-_RE_ROW_CHECK = re.compile(r'^\d+\s+\d+\s+\d+\s+\d+')
+_PTR_ROW_CHECK = r'^\d+\s+\d+\s+\d+\s+\d+'
+_RE_ROW_CHECK = re.compile(_PTR_ROW_CHECK)
+_RE_ROW_CHECK_IDX = re.compile(_as_bytes(_PTR_ROW_CHECK))
 
 
 def _list_from_csv(csv_string, caster=None):
@@ -367,7 +369,7 @@ class BlatPslIndexer(SearchIndexer):
         line = handle.readline()
         # read through header
         # this assumes that the result row match the regex
-        while not re.search(_RE_ROW_CHECK, line.strip()):
+        while not re.search(_RE_ROW_CHECK_IDX, line.strip()):
             start_offset = handle.tell()
             line = handle.readline()
             if not line:
