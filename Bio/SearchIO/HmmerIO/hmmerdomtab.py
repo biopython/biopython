@@ -8,10 +8,10 @@
 from itertools import chain
 
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
-from hmmertab import HmmerTabIterator, HmmerTabIndexer
+from hmmertab import HmmerTabParser, HmmerTabIndexer
 
 
-class HmmerDomtabIterator(HmmerTabIterator):
+class HmmerDomtabParser(HmmerTabParser):
 
     """Base hmmer-domtab iterator."""
 
@@ -147,7 +147,7 @@ class HmmerDomtabIterator(HmmerTabIterator):
             self.line = self.handle.readline()
 
 
-class HmmerDomtabHmmhitIterator(HmmerDomtabIterator):
+class HmmerDomtabHmmhitParser(HmmerDomtabParser):
 
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are hit coordinates."""
@@ -155,7 +155,7 @@ class HmmerDomtabHmmhitIterator(HmmerDomtabIterator):
     hmm_as_hit = True
 
 
-class HmmerDomtabHmmqueryIterator(HmmerDomtabIterator):
+class HmmerDomtabHmmqueryParser(HmmerDomtabParser):
 
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are query coordinates."""
@@ -168,7 +168,7 @@ class HmmerDomtabHmmhitIndexer(HmmerTabIndexer):
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are hit coordinates."""
 
-    _parser = HmmerDomtabHmmhitIterator
+    _parser = HmmerDomtabHmmhitParser
     _query_id_idx = 3
 
 
@@ -177,7 +177,7 @@ class HmmerDomtabHmmqueryIndexer(HmmerTabIndexer):
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are query coordinates."""
 
-    _parser = HmmerDomtabHmmqueryIterator
+    _parser = HmmerDomtabHmmqueryParser
     _query_id_idx = 3
 
 

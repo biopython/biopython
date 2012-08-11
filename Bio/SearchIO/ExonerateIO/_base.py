@@ -65,7 +65,7 @@ def _parse_hit_or_query_line(line):
     return id, desc
 
 
-class BaseExonerateIterator(object):
+class BaseExonerateParser(object):
 
     """Abstract iterator for exonerate format."""
 

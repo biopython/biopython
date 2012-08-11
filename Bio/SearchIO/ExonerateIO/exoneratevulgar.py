@@ -9,7 +9,7 @@ import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 
-from _base import BaseExonerateIterator, BaseExonerateIndexer, _STRAND_MAP
+from _base import BaseExonerateParser, BaseExonerateIndexer, _STRAND_MAP
 
 
 # precompile regex
@@ -138,9 +138,9 @@ def parse_vulgar_comp(hsp, vulgar_comp):
     return hsp
 
 
-class ExonerateVulgarIterator(BaseExonerateIterator):
+class ExonerateVulgarParser(BaseExonerateParser):
 
-    """Iterator for Exonerate vulgar strings."""
+    """Parser for Exonerate vulgar strings."""
 
     _ALN_MARK = 'vulgar'
 
@@ -191,7 +191,7 @@ class ExonerateVulgarIndexer(BaseExonerateIndexer):
 
     """Indexer class for exonerate vulgar lines."""
 
-    _parser = ExonerateVulgarIterator
+    _parser = ExonerateVulgarParser
     _query_mark = 'vulgar'
 
     def get_qresult_id(self, pos):

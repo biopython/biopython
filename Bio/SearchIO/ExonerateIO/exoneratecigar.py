@@ -7,7 +7,7 @@
 
 import re
 
-from _base import BaseExonerateIterator, _STRAND_MAP
+from _base import BaseExonerateParser, _STRAND_MAP
 from exoneratevulgar import ExonerateVulgarIndexer
 
 
@@ -19,9 +19,9 @@ _RE_CIGAR = re.compile(r"""^cigar:\s+
         """, re.VERBOSE)
 
 
-class ExonerateCigarIterator(BaseExonerateIterator):
+class ExonerateCigarParser(BaseExonerateParser):
 
-    """Iterator for Exonerate cigar strings."""
+    """Parser for Exonerate cigar strings."""
 
     _ALN_MARK = 'cigar'
 
@@ -80,7 +80,7 @@ class ExonerateCigarIndexer(ExonerateVulgarIndexer):
 
     """Indexer class for exonerate cigar lines."""
 
-    _parser = ExonerateCigarIterator
+    _parser = ExonerateCigarParser
     _query_mark = 'cigar'
 
 

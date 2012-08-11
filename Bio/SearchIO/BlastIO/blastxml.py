@@ -166,7 +166,7 @@ _DTD_OPT = (
 _RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
 
 
-class BlastXmlIterator(object):
+class BlastXmlParser(object):
 
     def __init__(self, handle):
         self.xml_iter = iter(ET.iterparse(handle, events=('start', 'end')))
@@ -474,7 +474,7 @@ class BlastXmlIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ XML output."""
 
-    _parser = BlastXmlIterator
+    _parser = BlastXmlParser
     qstart_mark = _as_bytes('<Iteration>')
     qend_mark = _as_bytes('</Iteration>')
     block_size = 16384

@@ -10,7 +10,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['BlastTabIndexer', 'BlastTabIterator', 'BlastTabWriter']
+__all__ = ['BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter']
 
 # longname-shortname map
 # maps the column names shown in a commented output to its short name
@@ -106,7 +106,7 @@ _MIN_QUERY_FIELDS = set(['qseqid', 'qacc', 'qaccver'])
 _MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
 
 
-class BlastTabIterator(object):
+class BlastTabParser(object):
 
     """Main parser for the BLAST tabular format."""
 
@@ -406,7 +406,7 @@ class BlastTabIndexer(SearchIndexer):
 
     """Indexer class for BLAST+ tab output."""
 
-    _parser = BlastTabIterator
+    _parser = BlastTabParser
 
     def __init__(self, filename, comments=False, fields=_DEFAULT_FIELDS):
         SearchIndexer.__init__(self, filename, comments=comments, fields=fields)

@@ -70,21 +70,21 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
-        'blast-tab': ('BlastIO', 'BlastTabIterator'),
-        'blast-text': ('BlastIO', 'BlastTextIterator'),
-        'blast-xml': ('BlastIO', 'BlastXmlIterator'),
-        'blat-psl': ('BlatIO', 'BlatPslIterator'),
-        'exonerate-cigar': ('ExonerateIO', 'ExonerateCigarIterator'),
-        'exonerate-text': ('ExonerateIO', 'ExonerateTextIterator'),
-        'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarIterator'),
-        'fasta-m10': ('FastaIO', 'FastaM10Iterator'),
-        'hmmer-text': ('HmmerIO', 'HmmerTextIterator'),
-        'hmmer-tab': ('HmmerIO', 'HmmerTabIterator'),
+        'blast-tab': ('BlastIO', 'BlastTabParser'),
+        'blast-text': ('BlastIO', 'BlastTextParser'),
+        'blast-xml': ('BlastIO', 'BlastXmlParser'),
+        'blat-psl': ('BlatIO', 'BlatPslParser'),
+        'exonerate-cigar': ('ExonerateIO', 'ExonerateCigarParser'),
+        'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
+        'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
+        'fasta-m10': ('FastaIO', 'FastaM10Parser'),
+        'hmmer-text': ('HmmerIO', 'HmmerTextParser'),
+        'hmmer-tab': ('HmmerIO', 'HmmerTabParser'),
         # for hmmer-domtab, the specific program is part of the format name
         # as we need it distinguish hit / target coordinates
-        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitIterator'),
-        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIterator'),
-        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIterator'),
+        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitParser'),
+        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryParser'),
+        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryParser'),
 }
 
 # dictionary of supported formats for index()
@@ -187,7 +187,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     """Turns a QueryResult iterator or list into a dictionary.
 
     Arguments:
-    qresults -- Iterator returning QueryResult objects or a list containing
+    qresults -- Parser returning QueryResult objects or a list containing
                 QueryResult objects.
     key_function -- Optional callback function which when given a
                     QUeryResult should return a unique key for the dictionary.

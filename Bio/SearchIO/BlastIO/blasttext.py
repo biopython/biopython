@@ -14,7 +14,7 @@ from Bio.Blast import NCBIStandalone
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
-class BlastTextIterator(object):
+class BlastTextParser(object):
 
     """Parser for the BLAST text format."""
 

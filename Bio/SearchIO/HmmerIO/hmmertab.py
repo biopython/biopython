@@ -12,7 +12,7 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
 
 
-class HmmerTabIterator(object):
+class HmmerTabParser(object):
 
     """Parser for the HMMER table format."""
 
@@ -142,7 +142,7 @@ class HmmerTabIndexer(SearchIndexer):
 
     """Indexer class for HMMER table output."""
 
-    _parser = HmmerTabIterator
+    _parser = HmmerTabParser
     # denotes column location for query identifier
     _query_id_idx = 2
 

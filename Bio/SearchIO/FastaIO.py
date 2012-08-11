@@ -154,9 +154,9 @@ def _extract_alignment(parsed_hsp):
     return seq_stripped[start:stop]
 
 
-class FastaM10Iterator(object):
+class FastaM10Parser(object):
 
-    """Iterator for the Fasta -m10 output."""
+    """Parser for the Fasta -m10 output."""
 
     def __init__(self, handle, parse_hit_table=False):
         self.handle = UndoHandle(handle)
@@ -402,7 +402,7 @@ class FastaM10Indexer(SearchIndexer):
 
     """Indexer class for FASTA m10 output."""
 
-    _parser = FastaM10Iterator
+    _parser = FastaM10Parser
 
     def __init__(self, filename):
         SearchIndexer.__init__(self, filename)

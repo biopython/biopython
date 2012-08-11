@@ -43,9 +43,9 @@ def read_forward(handle):
             return line
 
 
-class HmmerTextIterator(object):
+class HmmerTextParser(object):
 
-    """Iterator for the HMMER 3.0 text output."""
+    """Parser for the HMMER 3.0 text output."""
 
     def __init__(self, handle):
         self.handle = handle
@@ -368,7 +368,7 @@ class HmmerTextIndexer(SearchIndexer):
 
     """Indexer class for HMMER plain text output."""
 
-    _parser = HmmerTextIterator
+    _parser = HmmerTextParser
     qresult_start = _as_bytes('Query: ')
     qresult_end = _as_bytes('//')
 

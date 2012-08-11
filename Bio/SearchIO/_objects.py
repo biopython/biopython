@@ -219,7 +219,7 @@ class QueryResult(BaseSearchObject):
 
         Arguments:
         query_id -- String of query sequence ID.
-        hits     -- Iterator returning Hit objects.
+        hits     -- Parser returning Hit objects.
         hit_key_function -- Function to define hit keys, defaults to a function
                             that return Hit object IDs.
 

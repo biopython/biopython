@@ -10,7 +10,7 @@ from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 
-from _base import BaseExonerateIterator, BaseExonerateIndexer, _STRAND_MAP, \
+from _base import BaseExonerateParser, BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
 from exoneratevulgar import parse_vulgar_comp, _RE_VULGAR
 
@@ -171,9 +171,9 @@ def fill_coords(hsp, seq_type, inter_lens):
     return hsp
 
 
-class ExonerateTextIterator(BaseExonerateIterator):
+class ExonerateTextParser(BaseExonerateParser):
 
-    """Iterator for Exonerate plain text output."""
+    """Parser for Exonerate plain text output."""
 
     _ALN_MARK = 'C4 Alignment:'
 
@@ -411,7 +411,7 @@ class ExonerateTextIndexer(BaseExonerateIndexer):
 
     """Indexer class for Exonerate plain text."""
 
-    _parser = ExonerateTextIterator
+    _parser = ExonerateTextParser
     _query_mark = 'C4 Alignment'
 
     def get_qresult_id(self, pos):
