@@ -177,9 +177,19 @@ def read(handle, format=None, **kwargs):
     generator = parse(handle, format, **kwargs)
 
     try:
-        return generator.next()
+        first = generator.next()
     except StopIteration:
         raise ValueError("No query results found in handle")
+    else:
+        try:
+            second = generator.next()
+        except StopIteration:
+            second = None
+
+    if second is not None:
+        raise ValueError("More than one query results found in handle")
+
+    return first
 
 
 def to_dict(qresults, key_function=lambda rec: rec.id):
