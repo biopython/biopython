@@ -238,7 +238,8 @@ class QueryResult(BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items',)
 
-    def __init__(self, id=None, hits=[], hit_key_function=lambda hit: hit.id):
+    def __init__(self, id='<unknown id>', hits=[], \
+            hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
         Arguments:
