@@ -17,7 +17,7 @@ from Bio._py3k import OrderedDict
 
 
 # helper functions
-def _firstitemprop(attr=None):
+def _singleitem(attr=None):
     """Returns a property that fetches the given attribute from
     the first item in a SearchIO container object."""
     @property
@@ -31,7 +31,7 @@ def _firstitemprop(attr=None):
     return getter
 
 
-def _allitemprop(attr=None):
+def _allitems(attr=None):
     """Returns a property that fetches the given attributes from
     all items in a SearchIO container object."""
     @property
@@ -42,7 +42,7 @@ def _allitemprop(attr=None):
     return getter
 
 
-def _cascadeprop(cont_attr, item_attr):
+def _partialcascade(cont_attr, item_attr):
     """Returns a getter property with a cascading setter.
 
     This is used for the `id` and `description` properties of the container
@@ -63,14 +63,14 @@ def _cascadeprop(cont_attr, item_attr):
     return property(fget=getter, fset=setter)
 
 
-def _containerprop(attr):
+def _fullcascade(attr):
     """Returns a getter property with a cascading setter.
 
-    This is similar to `_cascadeprop`, but for SearchIO containers that have
+    This is similar to `_partialcascade`, but for SearchIO containers that have
     at least one item (`Hit` and `HSP`). The getter always retrieves the
     attribute value from the first item. If the items have more than one
     attribute values, an error will be raised. The setter behaves like
-    `_cascadeprop`.
+    `_partialcascade`.
 
     """
     def getter(self):
@@ -266,8 +266,8 @@ class QueryResult(BaseSearchObject):
             # validation is handled by __setitem__
             self.append(hit)
 
-    id = _cascadeprop('_id', 'query_id')
-    description = _cascadeprop('_description', 'query_description')
+    id = _partialcascade('_id', 'query_id')
+    description = _partialcascade('_description', 'query_description')
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -891,12 +891,12 @@ class Hit(BaseSearchObject):
                 raise ValueError("Expected HSP with query ID %r, " \
                         "found %r instead." % (self.query_id, hsp.query_id))
 
-    description = _containerprop('hit_description')
-    query_description = _containerprop('query_description')
-    id = _containerprop('hit_id')
-    query_id = _containerprop('query_id')
+    description = _fullcascade('hit_description')
+    query_description = _fullcascade('query_description')
+    id = _fullcascade('hit_id')
+    query_id = _fullcascade('query_id')
     # returns all hsps
-    hsps = _allitemprop()
+    hsps = _allitems()
     # returns all fragments
     fragments = property(lambda self: list(chain(*self._items)))
 
@@ -1201,47 +1201,47 @@ class HSP(BaseHSP):
     ## shorthands for fragments' properties ##
 
     # first item properties with setters
-    hit_description = _containerprop('hit_description')
-    query_description = _containerprop('query_description')
-    hit_id = _containerprop('hit_id')
-    query_id = _containerprop('query_id')
+    hit_description = _fullcascade('hit_description')
+    query_description = _fullcascade('query_description')
+    hit_id = _fullcascade('hit_id')
+    query_id = _fullcascade('query_id')
 
     # bool check if there's more than one fragments
     is_fragmented = property(lambda self: len(self) > 1)
 
     # properties for single-fragment HSPs
-    fragment = _firstitemprop()
-    hit = _firstitemprop('hit')
-    query = _firstitemprop('query')
-    alignment = _firstitemprop('alignment')
-    alignment_annotation = _firstitemprop('alignment_annotation')
+    fragment = _singleitem()
+    hit = _singleitem('hit')
+    query = _singleitem('query')
+    alignment = _singleitem('alignment')
+    alignment_annotation = _singleitem('alignment_annotation')
 
-    hit_strand = _firstitemprop('hit_strand')
-    query_strand = _firstitemprop('query_strand')
-    hit_frame = _firstitemprop('hit_frame')
-    query_frame = _firstitemprop('query_frame')
+    hit_strand = _singleitem('hit_strand')
+    query_strand = _singleitem('query_strand')
+    hit_frame = _singleitem('hit_frame')
+    query_frame = _singleitem('query_frame')
 
     # properties for multi-fragment HSPs
-    fragments = _allitemprop()
-    hits = _allitemprop('hit')
-    queries = _allitemprop('query')
-    alignments = _allitemprop('alignment')
-    alignment_annotations = _allitemprop('alignment_annotation')
+    fragments = _allitems()
+    hits = _allitems('hit')
+    queries = _allitems('query')
+    alignments = _allitems('alignment')
+    alignment_annotations = _allitems('alignment_annotation')
 
-    hit_strands = _allitemprop('hit_strand')
-    query_strands = _allitemprop('query_strand')
-    hit_frames = _allitemprop('hit_frame')
-    query_frames = _allitemprop('query_frame')
+    hit_strands = _allitems('hit_strand')
+    query_strands = _allitems('query_strand')
+    hit_frames = _allitems('hit_frame')
+    query_frames = _allitems('query_frame')
 
-    hit_starts = _allitemprop('hit_start')
-    query_starts = _allitemprop('query_starts')
-    hit_ends = _allitemprop('hit_ends')
-    query_ends = _allitemprop('query_ends')
+    hit_starts = _allitems('hit_start')
+    query_starts = _allitems('query_starts')
+    hit_ends = _allitems('hit_ends')
+    query_ends = _allitems('query_ends')
 
-    hit_spans = _allitemprop('hit_span')
-    query_spans = _allitemprop('query_span')
-    hit_ranges = _allitemprop('hit_range')
-    query_ranges = _allitemprop('query_range')
+    hit_spans = _allitems('hit_span')
+    query_spans = _allitems('query_span')
+    hit_ranges = _allitems('hit_range')
+    query_ranges = _allitems('query_range')
 
 
 class HSPFragment(BaseHSP):
