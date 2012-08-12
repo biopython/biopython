@@ -63,6 +63,30 @@ def _cascadeprop(cont_attr, item_attr):
     return property(fget=getter, fset=setter)
 
 
+def _containerprop(attr):
+    """Returns a getter property with a cascading setter.
+
+    This is similar to `_cascadeprop`, but for SearchIO containers that have
+    at least one item (`Hit` and `HSP`). The getter always retrieves the
+    attribute value from the first item. If the items have more than one
+    attribute values, an error will be raised. The setter behaves like
+    `_cascadeprop`.
+
+    """
+    def getter(self):
+        attrset = set([getattr(item, attr) for item in self._items])
+        if len(attrset) > 1:
+            raise ValueError("More than one value present in the contained "
+                    "items: %r" % list(attrset))
+        return getattr(self._items[0], attr)
+
+    def setter(self, value):
+        for item in self:
+            setattr(item, attr, value)
+
+    return property(fget=getter, fset=setter)
+
+
 class BaseSearchObject(object):
 
     """Abstract class for SearchIO objects."""
@@ -761,11 +785,6 @@ class Hit(BaseSearchObject):
             # and store it them as an instance attribute
             self.append(hsp)
 
-    # returns all hsps
-    hsps = _allitemprop()
-    # returns all fragments
-    fragments = property(lambda self: list(chain(*self._items)))
-
     def __repr__(self):
         return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
                 len(self))
@@ -872,50 +891,14 @@ class Hit(BaseSearchObject):
                 raise ValueError("Expected HSP with query ID %r, " \
                         "found %r instead." % (self.query_id, hsp.query_id))
 
-    ## id and description properties ##
-    def _set_id_or_desc(self, value, seq_type, attr):
-        assert seq_type in ('query', 'hit')
-        assert attr in ('id', 'description')
-        attr_name = '%s_%s' % (seq_type, attr)
-        # set attr for fragments
-        for hsp in self.hsps:
-            setattr(hsp, attr_name, value)
-
-    def _description_get(self):
-        return self._items[0].hit_description
-
-    def _description_set(self, value):
-        self._set_id_or_desc(value, 'hit', 'description')
-
-    description = property(fget=_description_get, \
-            fset=_description_set)
-
-    def _query_description_get(self):
-        return self._items[0].query_description
-
-    def _query_description_set(self, value):
-        self._set_id_or_desc(value, 'query', 'description')
-
-    query_description = property(fget=_query_description_get, \
-            fset=_query_description_set)
-
-    def _id_get(self):
-        return self._items[0].hit_id
-
-    def _id_set(self, value):
-        self._set_id_or_desc(value, 'hit', 'id')
-
-    id = property(fget=_id_get, \
-            fset=_id_set)
-
-    def _query_id_get(self):
-        return self._items[0].query_id
-
-    def _query_id_set(self, value):
-        self._set_id_or_desc(value, 'query', 'id')
-
-    query_id = property(fget=_query_id_get, \
-            fset=_query_id_set)
+    description = _containerprop('hit_description')
+    query_description = _containerprop('query_description')
+    id = _containerprop('hit_id')
+    query_id = _containerprop('query_id')
+    # returns all hsps
+    hsps = _allitemprop()
+    # returns all fragments
+    fragments = property(lambda self: list(chain(*self._items)))
 
     ## public methods ##
     def append(self, hsp):
@@ -1127,51 +1110,6 @@ class HSP(BaseHSP):
 
     aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
 
-    ## id and description properties ##
-    def _set_id_or_desc(self, value, seq_type, attr):
-        assert seq_type in ('query', 'hit')
-        assert attr in ('id', 'description')
-        attr_name = '%s_%s' % (seq_type, attr)
-        # set attr for fragments
-        for fragment in self.fragments:
-            setattr(fragment, attr_name, value)
-
-    def _hit_description_get(self):
-        return self._items[0].hit_description
-
-    def _hit_description_set(self, value):
-        self._set_id_or_desc(value, 'hit', 'description')
-
-    hit_description = property(fget=_hit_description_get, \
-            fset=_hit_description_set)
-
-    def _query_description_get(self):
-        return self._items[0].query_description
-
-    def _query_description_set(self, value):
-        self._set_id_or_desc(value, 'query', 'description')
-
-    query_description = property(fget=_query_description_get, \
-            fset=_query_description_set)
-
-    def _hit_id_get(self):
-        return self._items[0].hit_id
-
-    def _hit_id_set(self, value):
-        self._set_id_or_desc(value, 'hit', 'id')
-
-    hit_id = property(fget=_hit_id_get, \
-            fset=_hit_id_set)
-
-    def _query_id_get(self):
-        return self._items[0].query_id
-
-    def _query_id_set(self, value):
-        self._set_id_or_desc(value, 'query', 'id')
-
-    query_id = property(fget=_query_id_get, \
-            fset=_query_id_set)
-
     ## coordinate properties ##
     def _get_coords(self, seq_type, coord_type):
         assert seq_type in ('hit', 'query')
@@ -1261,6 +1199,13 @@ class HSP(BaseHSP):
     query_inter_ranges = property(fget=_query_inter_ranges_get)
 
     ## shorthands for fragments' properties ##
+
+    # first item properties with setters
+    hit_description = _containerprop('hit_description')
+    query_description = _containerprop('query_description')
+    hit_id = _containerprop('hit_id')
+    query_id = _containerprop('query_id')
+
     # bool check if there's more than one fragments
     is_fragmented = property(lambda self: len(self) > 1)
 
