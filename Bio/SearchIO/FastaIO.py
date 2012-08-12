@@ -23,11 +23,15 @@ More information are available through these links:
 
 import re
 
+from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.File import UndoHandle
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+
+
+__all__ = ['FastaM10Parser', 'FastaM10Indexer']
+
 
 # precompile regex patterns
 # regex for program name
@@ -54,10 +58,10 @@ _HSP_ATTR_MAP = {
 }
 
 # state flags
-STATE_NONE = 0
-STATE_QUERY_BLOCK = 1
-STATE_HIT_BLOCK = 2
-STATE_CONS_BLOCK = 3
+_STATE_NONE = 0
+_STATE_QUERY_BLOCK = 1
+_STATE_HIT_BLOCK = 2
+_STATE_CONS_BLOCK = 3
 
 
 def _set_qresult_hits(qresult, hit_rows=[]):
@@ -157,17 +161,17 @@ class FastaM10Parser(object):
 
     """Parser for the Fasta -m10 output."""
 
-    def __init__(self, handle, parse_hit_table=False):
+    def __init__(self, handle, __parse_hit_table=False):
         self.handle = UndoHandle(handle)
-        self._preamble = self.parse_preamble()
+        self._preamble = self._parse_preamble()
 
     def __iter__(self):
-        for qresult in self.parse_qresult():
+        for qresult in self._parse_qresult():
             # re-set desc, for hsp query description
             qresult.description = qresult.description
             yield qresult
 
-    def parse_preamble(self):
+    def _parse_preamble(self):
         """Parses the Fasta preamble for Fasta flavor and version."""
         preamble = {}
         while True:
@@ -186,7 +190,7 @@ class FastaM10Parser(object):
 
         return preamble
 
-    def parse_hit_table(self):
+    def __parse_hit_table(self):
         """Parses hit table rows."""
         # move to the first row
         self.line = self.handle.readline()
@@ -197,7 +201,7 @@ class FastaM10Parser(object):
             self.line = self.handle.readline()
         return hit_rows
 
-    def parse_qresult(self):
+    def _parse_qresult(self):
         # initial qresult value
         qresult = None
         hit_rows = []
@@ -229,7 +233,7 @@ class FastaM10Parser(object):
             if qres_state is not None:
                 if qres_state == state_QRES_HITTAB:
                     # parse hit table if flag is set
-                    hit_rows = self.parse_hit_table()
+                    hit_rows = self.__parse_hit_table()
 
                 elif qres_state == state_QRES_END:
                     yield _set_qresult_hits(qresult, hit_rows)
@@ -257,7 +261,7 @@ class FastaM10Parser(object):
 
                 elif qres_state == state_QRES_CONTENT:
                     assert self.line[3:].startswith(qresult.id), self.line
-                    for hit, strand in self.parse_hit(query_id):
+                    for hit, strand in self._parse_hit(query_id):
                         # re-set desc, for hsp hit description
                         hit.description = hit.description
                         # if hit is not in qresult, append it
@@ -273,7 +277,7 @@ class FastaM10Parser(object):
 
             self.line = self.handle.readline()
 
-    def parse_hit(self, query_id):
+    def _parse_hit(self, query_id):
         while True:
             self.line = self.handle.readline()
             if self.line.startswith('>>'):
@@ -288,10 +292,11 @@ class FastaM10Parser(object):
             if peekline.strip() in [">>><<<", ">>>///"] or \
                     (not peekline.startswith('>>>') and '>>>' in peekline):
                 # append last parsed_hsp['hit']['seq'] line
-                if state == STATE_HIT_BLOCK:
+                if state == _STATE_HIT_BLOCK:
                     parsed_hsp['hit']['seq'] += self.line.strip()
-                elif state == STATE_CONS_BLOCK:
-                    hsp.alignment_annotation['homology'] += self.line.strip('\n')
+                elif state == _STATE_CONS_BLOCK:
+                    hsp.alignment_annotation['homology'] += \
+                            self.line.strip('\n')
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
                 print hit_id, [x.hit_id for x in hsp_list]
@@ -322,7 +327,7 @@ class FastaM10Parser(object):
                 hsp = HSP([frag])
                 hsp_list.append(hsp)
                 # set or reset the state to none
-                state = STATE_NONE
+                state = _STATE_NONE
                 parsed_hsp = {'query':{}, 'hit': {}}
             # create and append a new HSP if line starts with '>--'
             elif self.line.startswith('>--'):
@@ -333,24 +338,24 @@ class FastaM10Parser(object):
                 hsp = HSP([frag])
                 hsp_list.append(hsp)
                 # set the state ~ none yet
-                state = STATE_NONE
+                state = _STATE_NONE
                 parsed_hsp = {'query':{}, 'hit': {}}
             # this is either query or hit data in the HSP, depending on the state
             elif self.line.startswith('>'):
-                if state == STATE_NONE:
+                if state == _STATE_NONE:
                     # make sure it's the correct query
                     assert query_id.startswith(self.line[1:].split(' ')[0]), \
                             "%r vs %r" % (query_id, self.line)
-                    state = STATE_QUERY_BLOCK
+                    state = _STATE_QUERY_BLOCK
                     parsed_hsp['query']['seq'] = ''
-                elif state == STATE_QUERY_BLOCK:
+                elif state == _STATE_QUERY_BLOCK:
                     # make sure it's the correct hit
                     assert hit_id.startswith(self.line[1:].split(' ')[0])
-                    state = STATE_HIT_BLOCK
+                    state = _STATE_HIT_BLOCK
                     parsed_hsp['hit']['seq'] = ''
             # check for conservation block
             elif self.line.startswith('; al_cons'):
-                state = STATE_CONS_BLOCK
+                state = _STATE_CONS_BLOCK
                 hsp.fragment.alignment_annotation['homology'] = ''
             elif self.line.startswith(';'):
                 # Fasta outputs do not make a clear distinction between Hit
@@ -361,7 +366,7 @@ class FastaM10Parser(object):
                 value = regx.group(2)
 
                 # for values before the '>...' query block
-                if state == STATE_NONE:
+                if state == _STATE_NONE:
                     if name in _HSP_ATTR_MAP:
                         attr_name, caster = _HSP_ATTR_MAP[name]
                         if caster is not str:
@@ -370,9 +375,9 @@ class FastaM10Parser(object):
                             value *= 100
                         setattr(hsp, attr_name, value)
                 # otherwise, pool the values for processing later
-                elif state == STATE_QUERY_BLOCK:
+                elif state == _STATE_QUERY_BLOCK:
                     parsed_hsp['query'][name] = value
-                elif state == STATE_HIT_BLOCK:
+                elif state == _STATE_HIT_BLOCK:
                     if name == '_len':
                         seq_len = int(value)
                     else:
@@ -384,12 +389,13 @@ class FastaM10Parser(object):
             else:
                 assert '>' not in self.line
                 # if we're in hit, parse into hsp.hit
-                if state == STATE_HIT_BLOCK:
+                if state == _STATE_HIT_BLOCK:
                     parsed_hsp['hit']['seq'] += self.line.strip()
-                elif state == STATE_QUERY_BLOCK:
+                elif state == _STATE_QUERY_BLOCK:
                     parsed_hsp['query']['seq'] += self.line.strip()
-                elif state == STATE_CONS_BLOCK:
-                    hsp.fragment.alignment_annotation['homology'] += self.line.strip('\n')
+                elif state == _STATE_CONS_BLOCK:
+                    hsp.fragment.alignment_annotation['homology'] += \
+                            self.line.strip('\n')
                 # we should not get here!
                 else:
                     raise ValueError("Unexpected line: %r" % self.line)

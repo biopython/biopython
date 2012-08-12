@@ -12,6 +12,7 @@ from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 __all__ = ['BlastTabIndexer', 'BlastTabParser', 'BlastTabWriter']
 
+
 # longname-shortname map
 # maps the column names shown in a commented output to its short name
 # (the one used in the command line)
@@ -574,9 +575,9 @@ class BlastTabWriter(object):
 
         for qresult in qresults:
             if self.has_comments:
-                handle.write(self.build_comments(qresult))
+                handle.write(self._build_comments(qresult))
             if qresult:
-                handle.write(self.build_rows(qresult))
+                handle.write(self._build_rows(qresult))
                 if not self.has_comments:
                     qresult_counter += 1
                 hit_counter += len(qresult)
@@ -592,7 +593,7 @@ class BlastTabWriter(object):
 
         return qresult_counter, hit_counter, hsp_counter
 
-    def build_rows(self, qresult):
+    def _build_rows(self, qresult):
         """Returns a string containing tabular rows of the QueryResult object."""
         coordinates = set(['qstart', 'qend', 'sstart', 'send'])
         qresult_lines = ''
@@ -621,9 +622,9 @@ class BlastTabWriter(object):
                     # adjust from and to according to strand, if from and to
                     # is included in the output field
                     if field in coordinates:
-                        value = self.adjust_coords(field, value, hsp)
+                        value = self._adjust_coords(field, value, hsp)
                     # adjust output formatting
-                    value = self.adjust_output(field, value)
+                    value = self._adjust_output(field, value)
 
                     line.append(value)
 
@@ -632,7 +633,7 @@ class BlastTabWriter(object):
 
         return qresult_lines
 
-    def adjust_coords(self, field, value, hsp):
+    def _adjust_coords(self, field, value, hsp):
         """Adjusts start and end coordinates according to strand."""
         assert field in ('qstart', 'qend', 'sstart', 'send')
         # determine sequence type to operate on based on field's first letter
@@ -654,7 +655,7 @@ class BlastTabWriter(object):
 
         return value
 
-    def adjust_output(self, field, value):
+    def _adjust_output(self, field, value):
         """Adjusts formatting of the given field and value to mimic native tab output."""
 
         # evalue formatting, adapted from BLAST+ source:
@@ -695,7 +696,7 @@ class BlastTabWriter(object):
 
         return value
 
-    def build_comments(self, qres):
+    def _build_comments(self, qres):
         """Returns a string of a QueryResult tabular comment."""
         comments = []
         # inverse mapping of the long-short name map, required

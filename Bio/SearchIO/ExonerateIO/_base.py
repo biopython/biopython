@@ -5,8 +5,8 @@
 
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
 # strand char-value mapping
@@ -63,7 +63,7 @@ def _parse_hit_or_query_line(line):
     return id, desc
 
 
-class BaseExonerateParser(object):
+class _BaseExonerateParser(object):
 
     """Abstract iterator for exonerate format."""
 
@@ -88,7 +88,7 @@ class BaseExonerateParser(object):
             elif not self.line or self.line.startswith('-- completed '):
                 raise StopIteration
 
-        for qresult in self.parse_qresult():
+        for qresult in self._parse_qresult():
             qresult.program = 'exonerate'
             # HACK: so that all descriptions are set
             qresult.description = qresult.description
@@ -107,7 +107,7 @@ class BaseExonerateParser(object):
     def parse_alignment_block(self, header):
         raise NotImplementedError("Subclass must implement this")
 
-    def parse_alignment_header(self):
+    def _parse_alignment_header(self):
         # read all header lines and store them
         aln_header = []
         while not self.line == '\n':
@@ -160,7 +160,7 @@ class BaseExonerateParser(object):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
-    def parse_qresult(self):
+    def _parse_qresult(self):
         # state values
         state_EOF = 0
         state_QRES_NEW = 1
@@ -190,8 +190,9 @@ class BaseExonerateParser(object):
                 header = {'qresult': {}, 'hit': {}, 'hsp': {}}
                 # if the file has c4 alignments, try to parse the header
                 if self.has_c4_alignment:
-                    self.read_until(lambda line: line.strip().startswith('Query:'))
-                    header = self.parse_alignment_header()
+                    self.read_until(lambda line: \
+                            line.strip().startswith('Query:'))
+                    header = self._parse_alignment_header()
                 # parse the block contents
                 cur = self.parse_alignment_block(header)
                 cur_qid = cur['qresult']['id']
@@ -242,7 +243,7 @@ class BaseExonerateParser(object):
                 self.line = self.handle.readline()
 
 
-class BaseExonerateIndexer(SearchIndexer):
+class _BaseExonerateIndexer(SearchIndexer):
 
     """Indexer class for Exonerate plain text."""
 

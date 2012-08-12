@@ -1,5 +1,4 @@
 # Copyright 2009-2011 by Peter Cock.
-# Copyright 2012 by Wibowo Arindrarto.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
@@ -18,7 +17,6 @@ try:
 except ImportError:
     # apparently jython2.5 may not support sqlite
     sqlite = None
-
 try:
     from collections import UserDict as _dict_base
 except ImportError:
@@ -26,6 +24,9 @@ except ImportError:
 
 from Bio import SearchIO
 from Bio._py3k import _bytes_to_string
+
+
+__all__ = ['SearchIndexer']
 
 
 class SearchIndexer(object):
@@ -44,12 +45,12 @@ class SearchIndexer(object):
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
 
 
-class IndexedSearch(_dict_base):
+class _IndexedSearch(_dict_base):
 
     """Dictionary-like object for implementing Search indexing."""
 
     def __init__(self, filename, format, key_function=None, **kwargs):
-        """Initializes IndexedSearch instance.
+        """Initializes _IndexedSearch instance.
 
         filename -- The source filename as string.
         format -- Lower case string denoting one of the supported formats.
@@ -82,8 +83,17 @@ class IndexedSearch(_dict_base):
 
         self._index = index
 
+    def __iter__(self):
+        return iter(self._index)
+
+    def __contains__(self, key):
+        return key in self._index
+
+    def __len__(self):
+        return len(self._index)
+
     def __repr__(self):
-        return "IndexedSearch(%r, %r, key_function=%r)" % \
+        return "SearchIO.index(%r, %r, key_function=%r)" % \
                 (self._filename, self._format, self._key_function)
 
     def __str__(self):
@@ -91,12 +101,6 @@ class IndexedSearch(_dict_base):
             return "{%r: QueryResult(...), ...}" % repr(self.keys()[0])
         else:
             return "{}"
-
-    def __contains__(self, key):
-        return key in self._index
-
-    def __len__(self):
-        return len(self._index)
 
     # dynamic method assignments to deal with different dict behavior in
     # python 2 and python 3
@@ -139,9 +143,6 @@ class IndexedSearch(_dict_base):
 
         def keys(self):
             return self.__iter__()
-
-    def __iter__(self):
-        return iter(self._index)
 
     def __getitem__(self, key):
         result = self._indexer.get(self._index[key])
@@ -197,13 +198,13 @@ class IndexedSearch(_dict_base):
                 "support this.")
 
 
-class DbIndexedSearch(IndexedSearch):
+class _DbIndexedSearch(_IndexedSearch):
 
     """Dictionary-like object for implementing storable Search indexing."""
 
-    def __init__(self, index_filename, filenames, format, key_function, \
+    def __init__(self, index_filename, filenames, format, key_function,
             max_open=10, overwrite=False, **kwargs):
-        """Initializes a DbIndexedSearch instance.
+        """Initializes a _DbIndexedSearch instance.
 
         index_filename -- The SQLite filename.
         filenames -- List of strings specifying file(s) to be indexed, or when
@@ -239,8 +240,8 @@ class DbIndexedSearch(IndexedSearch):
             self._con = con
             try:
                 # get the # of result offsets stored in the database
-                count, = con.execute("SELECT value FROM meta_data WHERE key=?;", \
-                        ('count',)).fetchone()
+                count, = con.execute("SELECT value FROM meta_data WHERE "
+                        "key=?;", ('count',)).fetchone()
                 self._length = int(count)
                 if self._length == -1:
                     con.close()
@@ -252,7 +253,7 @@ class DbIndexedSearch(IndexedSearch):
                         "offset_data;").fetchone()
                 if self._length != int(count):
                     con.close()
-                    raise ValueError("Corrupt database? %i entries not %i" % \
+                    raise ValueError("Corrupt database? %i entries not %i" %
                             (int(count), self._length))
 
                 # check if the database format is the same as the given format
@@ -269,7 +270,7 @@ class DbIndexedSearch(IndexedSearch):
                             "file_number;").fetchall()]
                 if filenames and len(filenames) != len(self._filenames):
                     con.close()
-                    raise ValueError("Index file says %i files, not %i" % \
+                    raise ValueError("Index file says %i files, not %i" %
                             (len(self._filenames), len(filenames)))
                 if filenames and filenames != self._filenames:
                     con.close()
@@ -313,10 +314,10 @@ class DbIndexedSearch(IndexedSearch):
                 indexed_obj = indexer_class(filename, **self._kwargs)
 
                 if key_function:
-                    offset_iter = ((key_function(key), idx, offset, length) for \
+                    offset_iter = ((key_function(key), idx, offset, length) for
                             (key, offset, length) in indexed_obj)
                 else:
-                    offset_iter = ((key, idx, offset, length) for (key, offset, \
+                    offset_iter = ((key, idx, offset, length) for (key, offset,
                             length) in indexed_obj)
 
                 # and the results in a file into offset_data
@@ -324,9 +325,9 @@ class DbIndexedSearch(IndexedSearch):
                     batch = list(itertools.islice(offset_iter, 100))
                     if not batch:
                         break
-                    con.executemany("INSERT INTO offset_data " \
-                            "(key,file_number,offset,length) VALUES (?,?,?,?);", \
-                            batch)
+                    con.executemany("INSERT INTO offset_data "
+                            "(key,file_number,offset,length) VALUES "
+                            "(?,?,?,?);", batch)
                     con.commit()
                     count += len(batch)
 
@@ -359,8 +360,8 @@ class DbIndexedSearch(IndexedSearch):
         self._key_function = key_function
 
     def __repr__(self):
-        return "DbIndexedSearch(%r, %r, sources=%r, key_function=%r)" % \
-                (self._index_filename, self._format, self._filenames, \
+        return "SearchIO.index_db(%r, %r, sources=%r, key_function=%r)" % \
+                (self._index_filename, self._format, self._filenames,
                 self._key_function)
 
     def __contains__(self, key):
@@ -377,8 +378,8 @@ class DbIndexedSearch(IndexedSearch):
     # handle python2
     if hasattr(dict, 'iteritems'):
         def keys(self):
-            return [str(row[0]) for row in \
-                    self._con.execute("SELECT key FROM offset_data;").fetchall()]
+            return [str(row[0]) for row in
+                self._con.execute("SELECT key FROM offset_data;").fetchall()]
 
     def __getitem__(self, key):
         row = self._con.execute("SELECT file_number, offset FROM offset_data "
@@ -394,7 +395,7 @@ class DbIndexedSearch(IndexedSearch):
             if len(proxies) >= self._max_open:
                 proxies.popitem()[1]._handle.close()
             # open a new handle
-            proxy = self._indexer_class(self._filenames[file_number], \
+            proxy = self._indexer_class(self._filenames[file_number],
                     **self._kwargs)
             result = proxy.get(offset)
             proxies[file_number] = proxy
@@ -435,7 +436,7 @@ class DbIndexedSearch(IndexedSearch):
             if len(proxies) >= self._max_open:
                 proxies.popitem()[1]._handle.close()
             # open a new handle
-            proxy = self._indexer_class(self._filenames[file_number], \
+            proxy = self._indexer_class(self._filenames[file_number],
                     **self._kwargs)
             proxies[file_number] = proxy
             if length:

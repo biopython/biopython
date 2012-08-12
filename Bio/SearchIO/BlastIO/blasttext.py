@@ -14,6 +14,9 @@ from Bio.Blast import NCBIStandalone
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
+__all__ = ['BlastTextParser']
+
+
 class BlastTextParser(object):
 
     """Parser for the BLAST text format."""
@@ -137,7 +140,7 @@ class BlastTextParser(object):
 
 
 def _test():
-    """Run the Bio.SearchIO.BlastIO module's doctests.
+    """Run the Bio.SearchIO.BlastIO.blasttext module's doctests.
 
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.

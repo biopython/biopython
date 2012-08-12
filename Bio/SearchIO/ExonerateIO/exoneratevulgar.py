@@ -9,7 +9,10 @@ import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 
-from _base import BaseExonerateParser, BaseExonerateIndexer, _STRAND_MAP
+from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP
+
+
+__all__ = ['ExonerateVulgarParser', 'ExonerateVulgarIndexer']
 
 
 # precompile regex
@@ -105,7 +108,7 @@ def parse_vulgar_comp(hsp, vulgar_comp):
     return hsp
 
 
-class ExonerateVulgarParser(BaseExonerateParser):
+class ExonerateVulgarParser(_BaseExonerateParser):
 
     """Parser for Exonerate vulgar strings."""
 
@@ -157,7 +160,7 @@ class ExonerateVulgarParser(BaseExonerateParser):
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
 
-class ExonerateVulgarIndexer(BaseExonerateIndexer):
+class ExonerateVulgarIndexer(_BaseExonerateIndexer):
 
     """Indexer class for exonerate vulgar lines."""
 

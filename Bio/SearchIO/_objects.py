@@ -9,21 +9,24 @@ import warnings
 from itertools import chain
 
 from Bio import BiopythonWarning
+from Bio._py3k import OrderedDict
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio._py3k import OrderedDict
 
 
-# helper functions
+__all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
+
+
+# helper property functions
 def _singleitem(attr=None):
     """Returns a property that fetches the given attribute from
     the first item in a SearchIO container object."""
     @property
     def getter(self):
         if len(self._items) > 1:
-            raise ValueError("More than one HSPFragment objects " \
+            raise ValueError("More than one HSPFragment objects "
                     "found in HSP")
         if attr is None:
             return self._items[0]
@@ -87,7 +90,7 @@ def _fullcascade(attr):
     return property(fget=getter, fset=setter)
 
 
-class BaseSearchObject(object):
+class _BaseSearchObject(object):
 
     """Abstract class for SearchIO objects."""
 
@@ -112,13 +115,13 @@ class BaseSearchObject(object):
             if attr not in self._NON_STICKY_ATTRS:
                 setattr(obj, attr, self.__dict__[attr])
 
-    def _concat_display(string, max_len, concat_char):
-        """Concatenates the given string for display."""
+    def _trunc_display(string, max_len, concat_char):
+        """Truncates the given string for display."""
         if len(string) > max_len:
             return string[:max_len - len(concat_char)] + concat_char
         return string
 
-    _concat_display = staticmethod(_concat_display)
+    _trunc_display = staticmethod(_trunc_display)
 
     def _attr_display(obj, attr, fmt=None, fallback='?'):
         """Returns a string of the given object's attribute."""
@@ -131,7 +134,7 @@ class BaseSearchObject(object):
     _attr_display = staticmethod(_attr_display)
 
 
-class QueryResult(BaseSearchObject):
+class QueryResult(_BaseSearchObject):
 
     """Class representing search results from a single query.
 
@@ -256,19 +259,15 @@ class QueryResult(BaseSearchObject):
         self._id = id
         self._hit_key_function = hit_key_function
         self._items = OrderedDict()
-        # default program, target, version, and description
+        self._description = '<unknown description>'
         self.program = '<unknown program>'
         self.target = '<unknown target>'
         self.version = '<unknown version>'
-        self._description = '<unknown description>'
 
         # validate Hit objects and fill up self._items
         for hit in hits:
             # validation is handled by __setitem__
             self.append(hit)
-
-    id = _partialcascade('_id', 'query_id')
-    description = _partialcascade('_description', 'query_description')
 
     # handle Python 2 OrderedDict behavior
     if hasattr(OrderedDict, 'iteritems'):
@@ -276,23 +275,20 @@ class QueryResult(BaseSearchObject):
         def __iter__(self):
             return iter(self.iterhits())
 
-        def _hits_get(self):
+        @property
+        def hits(self):
+            """Hit objects contained in the QueryResult."""
             return self._items.values()
 
-        hits = property(fget=_hits_get, \
-                doc="""Returns a list of Hit objects contained by this object.""")
-
-        def _hit_keys_get(self):
+        @property
+        def hit_keys(self):
+            """Hit IDs of the Hit objects contained in the QueryResult."""
             return self._items.keys()
 
-        hit_keys = property(fget=_hit_keys_get, \
-                doc="""Returns a list of Hit IDs contained by this object.""")
-
-        def _items_get(self):
+        @property
+        def items(self):
+            """List of tuples of Hit IDs and Hit objects."""
             return self._items.items()
-
-        items = property(fget=_items_get, \
-            doc="""Returns a list of tuples of Hit ID and Hit object contained by this object.""")
 
         def iterhits(self):
             """Returns an iterator over the Hit objects."""
@@ -316,24 +312,28 @@ class QueryResult(BaseSearchObject):
 
         @property
         def hits(self):
-            """Returns an iterator over the Hit objects contained by this object."""
+            """Returns an iterator over the Hit objects contained by this
+            object."""
             for hit in self._items.values():
                 yield hit
 
         @property
         def hit_keys(self):
-            """Returns an iterator over the Hit IDs contained by this object."""
+            """Returns an iterator over the Hit IDs contained by this
+            object."""
             for hit_id in  self._items.keys():
                 yield hit_id
 
         @property
         def items(self):
-            """Returns an iterator over the Hit ID and Hit object contained by this object."""
+            """Returns an iterator over the Hit ID and Hit object contained
+            by this object."""
             for item in self._items.items():
                 yield item
 
     def __contains__(self, hit_key):
-        """Checks whether a Hit object or a Hit object with the given ID exists."""
+        """Checks whether a Hit object or a Hit object with the given ID
+        exists."""
         if isinstance(hit_key, Hit):
             return self._hit_key_function(hit_key) in self._items
         return hit_key in self._items
@@ -358,7 +358,7 @@ class QueryResult(BaseSearchObject):
         if hasattr(self, 'seq_len'):
             qid_line += ' (%i)' % self.seq_len
         if self.description:
-            qid_line += QueryResult._concat_display('\n         %s' % \
+            qid_line += QueryResult._trunc_display('\n         %s' %
                     self.description, 80, '...')
         lines.append(qid_line)
 
@@ -371,42 +371,26 @@ class QueryResult(BaseSearchObject):
         else:
             lines.append('   Hits: %s  %s  %s' % ('-'*4, '-'*5, '-'*58))
             pattern = '%13s  %5s  %56s'
-            lines.append(pattern % ('#', '# HSP', 'ID + description'.ljust(58)))
+            lines.append(pattern % ('#', '# HSP',
+                'ID + description'.ljust(58)))
             lines.append(pattern % ('-'*4, '-'*5, '-'*58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
                     hid_line = '%s  %s' % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + '...'
-                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(58)))
+                    lines.append(pattern % (idx, str(len(hit)),
+                        hid_line.ljust(58)))
                 elif idx > len(self.hits) - 4:
                     hid_line = '%s  %s' % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + '...'
-                    lines.append(pattern % (idx, str(len(hit)), hid_line.ljust(58)))
+                    lines.append(pattern % (idx, str(len(hit)),
+                        hid_line.ljust(58)))
                 elif idx == 30:
                     lines.append('%14s' % '~~~')
 
         return '\n'.join(lines)
-
-    def __setitem__(self, hit_key, hit):
-        """Custom Search object item assignment.
-
-        Hit key must be a string and hit must be a Hit object.
-
-        """
-        # only accept string keys
-        if not isinstance(hit_key, basestring):
-            raise TypeError("QueryResult object keys must be a string.")
-        # hit must be a Hit object
-        if not isinstance(hit, Hit):
-            raise TypeError("QueryResult objects can only contain Hit objects.")
-        # and it must have the same query ID as this object's ID
-        if hit.query_id != self.id:
-            raise ValueError("Expected Hit with query ID '%s', found '%s' "
-                    "instead." % (self.id, hit.query_id))
-
-        self._items[hit_key] = hit
 
     def __getitem__(self, hit_key):
         """Custom Search object item retrieval.
@@ -431,6 +415,25 @@ class QueryResult(BaseSearchObject):
         # if key is a string, then do a regular dictionary retrieval
         return self._items[hit_key]
 
+    def __setitem__(self, hit_key, hit):
+        """Custom Search object item assignment.
+
+        Hit key must be a string and hit must be a Hit object.
+
+        """
+        # only accept string keys
+        if not isinstance(hit_key, basestring):
+            raise TypeError("QueryResult object keys must be a string.")
+        # hit must be a Hit object
+        if not isinstance(hit, Hit):
+            raise TypeError("QueryResult objects can only contain Hit objects.")
+        # and it must have the same query ID as this object's ID
+        if hit.query_id != self.id:
+            raise ValueError("Expected Hit with query ID '%s', found '%s' "
+                    "instead." % (self.id, hit.query_id))
+
+        self._items[hit_key] = hit
+
     def __delitem__(self, hit_key):
         """Custom Search object item deletion.
 
@@ -454,6 +457,11 @@ class QueryResult(BaseSearchObject):
             del self._items[key]
         return
 
+    ## properties ##
+    id = _partialcascade('_id', 'query_id')
+    description = _partialcascade('_description', 'query_description')
+
+    ## public methods ##
     def absorb(self, hit):
         """Adds a Hit object to the end of QueryResult. If the QueryResult
         already has a Hit with the same ID, append the new Hit's HSPs into
@@ -495,18 +503,20 @@ class QueryResult(BaseSearchObject):
         if hit_key not in self:
             self[hit_key] = hit
         else:
-            raise ValueError("Hit '%s' already present in this QueryResult." % \
+            raise ValueError("Hit '%s' already present in this QueryResult." %
                     hit_key)
 
     def hit_filter(self, func=None):
-        """Creates a new QueryResult object whose Hit objects pass the filter function."""
+        """Creates a new QueryResult object whose Hit objects pass the filter
+        function."""
         hits = filter(func, self.hits)
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
     def hit_map(self, func=None):
-        """Creates a new QueryResult object, mapping the given function to its Hits."""
+        """Creates a new QueryResult object, mapping the given function to its
+        Hits."""
         hits = (hit[:] for hit in self.hits)
         if func is not None:
             hits = map(func, hits)
@@ -515,14 +525,16 @@ class QueryResult(BaseSearchObject):
         return obj
 
     def hsp_filter(self, func=None):
-        """Creates a new QueryResult object whose HSP objects pass the filter function."""
+        """Creates a new QueryResult object whose HSP objects pass the filter
+        function."""
         hits = filter(None, (hit.filter(func) for hit in self.hits))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
         return obj
 
     def hsp_map(self, func=None):
-        """Creates a new QueryResult object, mapping the given function to its HSPs."""
+        """Creates a new QueryResult object, mapping the given function to its
+        HSPs."""
         hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
@@ -681,8 +693,7 @@ class QueryResult(BaseSearchObject):
             return obj
 
 
-
-class Hit(BaseSearchObject):
+class Hit(_BaseSearchObject):
 
     """Class representing a single database hit of a search result.
 
@@ -776,7 +787,7 @@ class Hit(BaseSearchObject):
         for attr in ('query_id', 'query_description', 'hit_id', \
                 'hit_description'):
             if len(set([getattr(hsp, attr) for hsp in hsps])) != 1:
-                raise ValueError("Hit object can not contain HSPs with " \
+                raise ValueError("Hit object can not contain HSPs with "
                         "more than one %s." % attr)
 
         self._items = []
@@ -787,7 +798,7 @@ class Hit(BaseSearchObject):
             self.append(hsp)
 
     def __repr__(self):
-        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id, \
+        return "Hit(id=%r, query_id=%r, %r hsps)" % (self.id, self.query_id,
                 len(self))
 
     def __iter__(self):
@@ -813,7 +824,7 @@ class Hit(BaseSearchObject):
         if hasattr(self, 'seq_len'):
             hid_line += ' (%i)' % self.seq_len
         if self.description:
-            hid_line += Hit._concat_display('\n       %s' % self.description, \
+            hid_line += Hit._trunc_display('\n       %s' % self.description,
                     80, '...')
         lines.append(hid_line)
 
@@ -824,7 +835,7 @@ class Hit(BaseSearchObject):
             lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
                     ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
             pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
-            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span', \
+            lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
                     'Query range', 'Hit range'))
             lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
             for idx, hsp in enumerate(self.hsps):
@@ -839,14 +850,14 @@ class Hit(BaseSearchObject):
                 query_end = Hit._attr_display(hsp, 'query_end')
                 query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 18
-                query_range = Hit._concat_display(query_range, 15, '~]')
+                query_range = Hit._trunc_display(query_range, 15, '~]')
                 # hit region
                 hit_start = Hit._attr_display(hsp, 'hit_start')
                 hit_end = Hit._attr_display(hsp, 'hit_end')
                 hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = Hit._concat_display(hit_range, 21, '~]')
+                hit_range = Hit._trunc_display(hit_range, 21, '~]')
                 # append the hsp row
-                lines.append(pattern % (str(idx), evalue, bitscore, aln_span, \
+                lines.append(pattern % (str(idx), evalue, bitscore, aln_span,
                         query_range, hit_range))
 
         return '\n'.join(lines)
@@ -892,6 +903,7 @@ class Hit(BaseSearchObject):
                 raise ValueError("Expected HSP with query ID %r, " \
                         "found %r instead." % (self.query_id, hsp.query_id))
 
+    ## properties ##
     description = _fullcascade('hit_description')
     query_description = _fullcascade('query_description')
     id = _fullcascade('hit_id')
@@ -907,7 +919,8 @@ class Hit(BaseSearchObject):
         self._items.append(hsp)
 
     def filter(self, func=None):
-        """Creates a new Hit object whose HSP objects pass the filter function."""
+        """Creates a new Hit object whose HSP objects pass the filter
+        function."""
         hsps = filter(func, self.hsps)
         if hsps:
             obj = self.__class__(hsps)
@@ -942,27 +955,27 @@ class Hit(BaseSearchObject):
             return obj
 
 
-class BaseHSP(BaseSearchObject):
+class _BaseHSP(_BaseSearchObject):
 
     """Abstract base class for HSP objects."""
 
-    def _display_hsp_header(self):
+    def _str_hsp_header(self):
         """Prints the alignment header info."""
         lines = []
         # set query id line
-        qid_line = self._concat_display('      Query: %s %s' % \
+        qid_line = self._trunc_display('      Query: %s %s' %
                 (self.query_id, self.query_description), 80, '...')
         # set hit id line
-        hid_line = self._concat_display('        Hit: %s %s' % \
+        hid_line = self._trunc_display('        Hit: %s %s' %
                 (self.hit_id, self.hit_description), 80, '...')
         lines.append(qid_line)
         lines.append(hid_line)
 
         # coordinates
-        query_start = BaseHSP._attr_display(self, 'query_start')
-        query_end = BaseHSP._attr_display(self, 'query_end')
-        hit_start = BaseHSP._attr_display(self, 'hit_start')
-        hit_end = BaseHSP._attr_display(self, 'hit_end')
+        query_start = _BaseHSP._attr_display(self, 'query_start')
+        query_end = _BaseHSP._attr_display(self, 'query_end')
+        hit_start = _BaseHSP._attr_display(self, 'hit_start')
+        hit_end = _BaseHSP._attr_display(self, 'hit_end')
 
         # strands
         try:
@@ -971,15 +984,15 @@ class BaseHSP(BaseSearchObject):
         except ValueError:
             qstrand = self.query_strands[0]
             hstrand = self.hit_strands[0]
-        lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end, \
+        lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end,
                 qstrand))
-        lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end, \
+        lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end,
                 hstrand))
 
         return '\n'.join(lines)
 
 
-class HSP(BaseHSP):
+class HSP(_BaseHSP):
 
     """Class representing high-scoring region between query and hit."""
 
@@ -995,13 +1008,13 @@ class HSP(BaseHSP):
 
         """
         if not fragments:
-            raise ValueError("HSP objects must have at least one HSPFragment " \
+            raise ValueError("HSP objects must have at least one HSPFragment "
                     "object.")
-        # check that all fragments contain the same IDs, descriptions, and alphabet
-        for attr in ('query_id', 'query_description', 'hit_id', \
+        # check that all fragments contain the same IDs, descriptions, alphabet
+        for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description', 'alphabet'):
-            if len(set([getattr(fragment, attr) for fragment in fragments])) != 1:
-                raise ValueError("HSP object can not contain fragments with " \
+            if len(set([getattr(frag, attr) for frag in fragments])) != 1:
+                raise ValueError("HSP object can not contain fragments with "
                         "more than one %s." % attr)
 
         self._items = []
@@ -1014,6 +1027,9 @@ class HSP(BaseHSP):
 
     def __iter__(self):
         return iter(self._items)
+
+    def __contains__(self, fragment):
+        return fragment in self._items
 
     def __len__(self):
         return len(self._items)
@@ -1035,10 +1051,10 @@ class HSP(BaseHSP):
         lines.append('Quick stats: ' + '; '.join(statline))
 
         if len(self.fragments) == 1:
-            return '\n'.join([self._display_hsp_header(), '\n'.join(lines), \
-                    self.fragments[0]._display_aln()])
+            return '\n'.join([self._str_hsp_header(), '\n'.join(lines),
+                    self.fragments[0]._str_aln()])
         else:
-            lines.append('  Fragments: %s  %s  %s  %s' % \
+            lines.append('  Fragments: %s  %s  %s  %s' %
                     ('-'*3, '-'*14, '-'*22, '-'*22))
             pattern = '%16s  %14s  %22s  %22s'
             lines.append(pattern % ('#', 'Span', 'Query range', 'Hit range'))
@@ -1052,16 +1068,16 @@ class HSP(BaseHSP):
                 query_end = HSP._attr_display(block, 'query_end')
                 query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 20
-                query_range = HSP._concat_display(query_range, 22, '~]')
+                query_range = HSP._trunc_display(query_range, 22, '~]')
                 # hit region
                 hit_start = HSP._attr_display(block, 'hit_start')
                 hit_end = HSP._attr_display(block, 'hit_end')
                 hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = HSP._concat_display(hit_range, 22, '~]')
+                hit_range = HSP._trunc_display(hit_range, 22, '~]')
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
-            return self._display_hsp_header() + '\n' + '\n'.join(lines)
+            return self._str_hsp_header() + '\n' + '\n'.join(lines)
 
     def __getitem__(self, idx):
         # if key is slice, return a new HSP instance
@@ -1086,12 +1102,9 @@ class HSP(BaseHSP):
         # invalid
         del self._items[idx]
 
-    def __contains__(self, fragment):
-        return fragment in self._items
-
     def _validate_fragment(self, fragment):
         if not isinstance(fragment, HSPFragment):
-            raise TypeError("HSP objects can only contain HSPFragment " \
+            raise TypeError("HSP objects can only contain HSPFragment "
                     "objects.")
 
     def _aln_span_get(self):
@@ -1102,7 +1115,7 @@ class HSP(BaseHSP):
             self._aln_span = self._items[0].aln_span
         else:
             if not hasattr(self, '_aln_span'):
-                self._aln_span = sum([frag.aln_span for frag in self.fragments])
+                self._aln_span = sum([frg.aln_span for frg in self.fragments])
 
         return self._aln_span
 
@@ -1116,9 +1129,9 @@ class HSP(BaseHSP):
         assert seq_type in ('hit', 'query')
         assert coord_type in ('start', 'end')
         coord_name = '%s_%s' % (seq_type, coord_type)
-        coords = [getattr(fragment, coord_name) for fragment in self.fragments]
+        coords = [getattr(frag, coord_name) for frag in self.fragments]
         if None in coords:
-            warnings.warn("'None' exist in %s coordinates; ignored" % \
+            warnings.warn("'None' exist in %s coordinates; ignored" %
                     (coord_name), BiopythonWarning)
         return coords
 
@@ -1201,14 +1214,14 @@ class HSP(BaseHSP):
 
     ## shorthands for fragments' properties ##
 
+    # bool check if there's more than one fragments
+    is_fragmented = property(lambda self: len(self) > 1)
+
     # first item properties with setters
     hit_description = _fullcascade('hit_description')
     query_description = _fullcascade('query_description')
     hit_id = _fullcascade('hit_id')
     query_id = _fullcascade('query_id')
-
-    # bool check if there's more than one fragments
-    is_fragmented = property(lambda self: len(self) > 1)
 
     # properties for single-fragment HSPs
     fragment = _singleitem()
@@ -1245,7 +1258,7 @@ class HSP(BaseHSP):
     query_ranges = _allitems('query_range')
 
 
-class HSPFragment(BaseHSP):
+class HSPFragment(_BaseHSP):
 
     """Class representing a fragment of matching hit-query sequence."""
 
@@ -1289,12 +1302,12 @@ class HSPFragment(BaseHSP):
         return self.aln_span
 
     def __str__(self):
-        return self._display_hsp_header() + '\n' + self._display_aln()
+        return self._str_hsp_header() + '\n' + self._str_aln()
 
     def __getitem__(self, idx):
         if self.alignment is not None:
             obj = self.__class__(
-                    hit_id=self.hit_id, query_id=self.query_id, \
+                    hit_id=self.hit_id, query_id=self.query_id,
                     alphabet=self.alphabet)
             # transfer query and hit attributes
             if self.query is not None:
@@ -1316,7 +1329,7 @@ class HSPFragment(BaseHSP):
             raise TypeError("Slicing for HSP objects without "
                     "alignment is not supported.")
 
-    def _display_aln(self):
+    def _str_aln(self):
         lines = []
         # alignment length
         aln_span = HSPFragment._attr_display(self, 'aln_span')
@@ -1349,12 +1362,12 @@ class HSPFragment(BaseHSP):
                     cont = '~' * 3
                 else:
                     cont = '~' * (self.aln_span - 66)
-                lines.append("%10s - %s%s%s" % ('Query', \
+                lines.append("%10s - %s%s%s" % ('Query',
                                 qseq[:59], cont, qseq[-5:]))
                 if homol:
-                    lines.append("             %s%s%s" % \
+                    lines.append("             %s%s%s" %
                             (homol[:59], cont, homol[-5:]))
-                lines.append("%10s - %s%s%s" % ('Hit', \
+                lines.append("%10s - %s%s%s" % ('Hit',
                                 hseq[:59], cont, hseq[-5:]))
 
         return '\n'.join(lines)
@@ -1375,8 +1388,8 @@ class HSPFragment(BaseHSP):
         opp_seq = getattr(self, opp_type, None)
         if opp_seq is not None:
             if len(seq) != len(opp_seq):
-                raise ValueError("Sequence lengths do not match. Expected: " \
-                        "%r (%s); found: %r (%s)." % (len(opp_seq), opp_type, \
+                raise ValueError("Sequence lengths do not match. Expected: "
+                        "%r (%s); found: %r (%s)." % (len(opp_seq), opp_type,
                         len(seq), seq_type))
 
         seq_id = getattr(self, '%s_id' % seq_type)
@@ -1457,7 +1470,7 @@ class HSPFragment(BaseHSP):
     def _hit_description_set(self, value):
         self._set_id_or_desc(value, 'hit', 'description')
 
-    hit_description = property(fget=_hit_description_get, \
+    hit_description = property(fget=_hit_description_get,
             fset=_hit_description_set)
 
     def _query_description_get(self):
@@ -1466,7 +1479,7 @@ class HSPFragment(BaseHSP):
     def _query_description_set(self, value):
         self._set_id_or_desc(value, 'query', 'description')
 
-    query_description = property(fget=_query_description_get, \
+    query_description = property(fget=_query_description_get,
             fset=_query_description_set)
 
     def _hit_id_get(self):
@@ -1475,8 +1488,7 @@ class HSPFragment(BaseHSP):
     def _hit_id_set(self, value):
         self._set_id_or_desc(value, 'hit', 'id')
 
-    hit_id = property(fget=_hit_id_get, \
-            fset=_hit_id_set)
+    hit_id = property(fget=_hit_id_get, fset=_hit_id_set)
 
     def _query_id_get(self):
         return self._query_id
@@ -1484,14 +1496,13 @@ class HSPFragment(BaseHSP):
     def _query_id_set(self, value):
         self._set_id_or_desc(value, 'query', 'id')
 
-    query_id = property(fget=_query_id_get, \
-            fset=_query_id_set)
+    query_id = property(fget=_query_id_get, fset=_query_id_set)
 
     ## strand properties ##
     def _prep_strand(self, strand):
         # follow SeqFeature's convention
         if not strand in (-1, 0, 1, None):
-            raise ValueError("Strand should be -1, 0, 1, or None; not %r" % \
+            raise ValueError("Strand should be -1, 0, 1, or None; not %r" %
                     strand)
         return strand
 

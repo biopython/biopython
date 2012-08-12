@@ -28,8 +28,11 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+
+
+__all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']
 
 
 # precompile regex patterns
@@ -236,7 +239,7 @@ class BlatPslParser(object):
             qresult.program = 'blat'
             yield qresult
 
-    def _parse_cols(self):
+    def _parse_row(self):
         """Returns a dictionary of parsed column values."""
         assert self.line
         cols = filter(None, self.line.strip().split('\t'))
@@ -301,7 +304,7 @@ class BlatPslParser(object):
                 prev_hid = cur_hid
             # only parse the result row if it's not EOF
             if self.line:
-                cur = self._parse_cols()
+                cur = self._parse_row()
                 cur_qid = cur['qname']
                 cur_hid = cur['tname']
             else:
@@ -437,32 +440,32 @@ class BlatPslWriter(object):
         qresult_counter, hit_counter, hsp_counter = 0, 0, 0
 
         if self.header:
-            handle.write(self.build_header())
+            handle.write(self._build_header())
 
         for qresult in qresults:
             if qresult:
-                handle.write(self.build_row(qresult))
+                handle.write(self._build_row(qresult))
                 qresult_counter += 1
                 hit_counter += len(qresult)
                 hsp_counter += sum([len(hit) for hit in qresult])
 
         return qresult_counter, hit_counter, hsp_counter
 
-    def build_header(self):
+    def _build_header(self):
         # for now, always use the psLayout version 3
         header = 'psLayout version 3\n'
 
         # adapted from BLAT's source: lib/psl.c#L496
-        header += "\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT " \
-        "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   \tT    " \
+        header += "\nmatch\tmis- \trep. \tN's\tQ gap\tQ gap\tT gap\tT "
+        "gap\tstrand\tQ        \tQ   \tQ    \tQ  \tT        \tT   \tT    "
         "\tT  \tblock\tblockSizes \tqStarts\t tStarts\n     " \
-        "\tmatch\tmatch\t   \tcount\tbases\tcount\tbases\t      \tname     " \
-        "\tsize\tstart\tend\tname     \tsize\tstart\tend\tcount" \
+        "\tmatch\tmatch\t   \tcount\tbases\tcount\tbases\t      \tname     "
+        "\tsize\tstart\tend\tname     \tsize\tstart\tend\tcount"
         "\n%s\n" % ('-' * 159)
 
         return header
 
-    def build_row(self, qresult):
+    def _build_row(self, qresult):
         """Returns a string or one row or more of the QueryResult object."""
         # For now, our writer writes the row according to the order in
         # the QueryResult and Hit objects.
@@ -493,7 +496,7 @@ class BlatPslWriter(object):
                     strand = '+'
                 else:
                     strand = '-'
-                qstarts = _reorient_starts([x[0] for x in hsp.query_ranges], \
+                qstarts = _reorient_starts([x[0] for x in hsp.query_ranges],
                         hsp.query_spans, qresult.seq_len, hsp[0].query_strand)
 
                 if hsp[0].hit_strand == 1:
@@ -504,7 +507,7 @@ class BlatPslWriter(object):
                 else:
                     hstrand = -1
                     strand += '-'
-                hstarts = _reorient_starts([x[0] for x in hsp.hit_ranges], \
+                hstarts = _reorient_starts([x[0] for x in hsp.hit_ranges],
                         hsp.hit_spans, hit.seq_len, hstrand)
 
                 line.append(strand)

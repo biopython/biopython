@@ -15,8 +15,11 @@ except ImportError:
     from xml.etree import ElementTree as ET
 
 from Bio._py3k import _as_bytes, _bytes_to_string
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._index import SearchIndexer
+from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+
+
+__all__ = ['BlastXmlParser', 'BlastXmlIndexer', 'BlastXmlWriter']
 
 
 # element - optional qresult attribute name mapping
@@ -170,13 +173,13 @@ class BlastXmlParser(object):
 
     def __init__(self, handle):
         self.xml_iter = iter(ET.iterparse(handle, events=('start', 'end')))
-        self._meta, self._fallback = self.parse_preamble()
+        self._meta, self._fallback = self._parse_preamble()
 
     def __iter__(self):
-        for qresult in self.parse_qresult():
+        for qresult in self._parse_qresult():
             yield qresult
 
-    def parse_preamble(self):
+    def _parse_preamble(self):
         """Parses all tag data prior to the first query result."""
         # dictionary for containing all information prior to the first query
         meta = {}
@@ -221,7 +224,7 @@ class BlastXmlParser(object):
 
         return meta, fallback
 
-    def parse_qresult(self):
+    def _parse_qresult(self):
         """Parses query results."""
         # parse the queries
         for event, qresult_elem in self.xml_iter:
@@ -268,7 +271,7 @@ class BlastXmlParser(object):
                     blast_query_id = ''
 
                 hit_list, key_list = [], []
-                for hit in self.parse_hit(qresult_elem.find('Iteration_hits'), \
+                for hit in self._parse_hit(qresult_elem.find('Iteration_hits'), \
                         query_id):
                     if hit:
                         # need to keep track of hit IDs, since there could be duplicates,
@@ -321,7 +324,7 @@ class BlastXmlParser(object):
                 qresult_elem.clear()
                 yield qresult
 
-    def parse_hit(self, root_hit_elem, query_id):
+    def _parse_hit(self, root_hit_elem, query_id):
         """Generator that transforms Iteration_hits XML elements into Hit objects.
 
         Arguments:
@@ -362,7 +365,7 @@ class BlastXmlParser(object):
                 blast_hit_id = ''
 
             hsps = [hsp for hsp in \
-                    self.parse_hsp_frag(hit_elem.find('Hit_hsps'),
+                    self._parse_hsp(hit_elem.find('Hit_hsps'),
                         query_id, hit_id)]
 
             hit = Hit(hsps)
@@ -383,7 +386,7 @@ class BlastXmlParser(object):
             hit_elem.clear()
             yield hit
 
-    def parse_hsp_frag(self, root_hsp_frag_elem, query_id, hit_id):
+    def _parse_hsp(self, root_hsp_frag_elem, query_id, hit_id):
         """Iterator that transforms Hit_hsps XML elements into HSP objects.
 
         Arguments:
@@ -485,14 +488,6 @@ class BlastXmlIndexer(SearchIndexer):
         iter_obj = self._parser(self._handle)
         self._meta, self._fallback = iter_obj._meta, iter_obj._fallback
 
-    def get_offsets(self, string, sub, offset=0):
-        """Retrieves the offsets of a given substring in a string."""
-        idx = string.find(sub, offset)
-        # yield offset as long as it's present in the string
-        while idx >= 0:
-            yield idx
-            idx = string.find(sub, idx + 1)
-
     def __iter__(self):
         qstart_mark = self.qstart_mark
         qend_mark = self.qend_mark
@@ -510,7 +505,7 @@ class BlastXmlIndexer(SearchIndexer):
             # read file content (every block size) and store into block
             block = handle.read(block_size)
             # for each iteration start mark
-            for qstart_idx in self.get_offsets(block, qstart_mark):
+            for qstart_idx in self._get_offsets(block, qstart_mark):
                 # get the id of the query (re.search gets the 1st result)
                 regx = re.search(re_desc, block[qstart_idx:])
                 try:
@@ -543,7 +538,8 @@ class BlastXmlIndexer(SearchIndexer):
                 while qlen < 0:
                     ext = handle.read(block_size)
                     if not ext:
-                        raise ValueError("Query end for %r not found" % qstart_id)
+                        raise ValueError("Query end for %r not found" %
+                                qstart_id)
                     block_ext += ext
                     qlen = block_ext[qstart_idx:].find(qend_mark)
 
@@ -561,6 +557,14 @@ class BlastXmlIndexer(SearchIndexer):
 
             if not block:
                 break
+
+    def _get_offsets(self, string, sub, offset=0):
+        """Retrieves the offsets of a given substring in a string."""
+        idx = string.find(sub, offset)
+        # yield offset as long as it's present in the string
+        while idx >= 0:
+            yield idx
+            idx = string.find(sub, idx + 1)
 
     def get_raw(self, offset):
         qend_mark = self.qend_mark
@@ -703,16 +707,16 @@ class BlastXmlWriter(object):
         # start the XML document, set the root element, and create the preamble
         xml.startDocument()
         xml.startParent('BlastOutput')
-        self.write_preamble(first_qresult)
+        self._write_preamble(first_qresult)
         # and write the qresults
         xml.startParent('BlastOutput_iterations')
-        self.write_qresults(chain([first_qresult], qresults))
+        self._write_qresults(chain([first_qresult], qresults))
         xml.endParents(2)
         xml.endDocument()
 
         return self.qresult_counter, self.hit_counter, self.hsp_counter
 
-    def write_elem_block(self, block_name, map_name, obj, opt_dict={}):
+    def _write_elem_block(self, block_name, map_name, obj, opt_dict={}):
         """Writes sibling XML elements.
 
         Arguments:
@@ -727,15 +731,15 @@ class BlastXmlWriter(object):
                 content = str(getattr(obj, attr))
             except AttributeError:
                 # ensure attrs that is not present is optional
-                assert elem in _DTD_OPT, "Element %r (attribute %r) not found" \
-                        % (elem, attr)
+                assert elem in _DTD_OPT, "Element %r (attribute %r) not " \
+                    "found" % (elem, attr)
             else:
                 # custom element-attribute mapping, for fallback values
                 if elem in opt_dict:
                     content = opt_dict[elem]
                 self.xml.simpleElement(elem, content)
 
-    def write_preamble(self, qresult):
+    def _write_preamble(self, qresult):
         """Writes the XML file preamble."""
         xml = self.xml
 
@@ -743,33 +747,34 @@ class BlastXmlWriter(object):
             elem = 'BlastOutput_' + elem
             if elem == 'BlastOutput_param':
                 xml.startParent(elem)
-                self.write_param(qresult)
+                self._write_param(qresult)
                 xml.endParent()
                 continue
             try:
                 content = str(getattr(qresult, attr))
             except AttributeError:
-                assert elem in _DTD_OPT, "Element %s (attribute %s) not found" \
-                        % (elem, attr)
+                assert elem in _DTD_OPT, "Element %s (attribute %s) not " \
+                    "found" % (elem, attr)
             else:
                 if elem == 'BlastOutput_version':
-                    content = '%s %s' % (qresult.program.upper(), \
+                    content = '%s %s' % (qresult.program.upper(),
                             qresult.version)
                 elif qresult._blast_id:
                     if elem == 'BlastOutput_query-ID':
                         content = qresult._blast_id
                     elif elem == 'BlastOutput_query-def':
-                        content = ' '.join([qresult.id, qresult.description]).strip()
+                        content = ' '.join([qresult.id, 
+                            qresult.description]).strip()
                 xml.simpleElement(elem, content)
 
-    def write_param(self, qresult):
+    def _write_param(self, qresult):
         """Writes the parameter block of the preamble."""
         xml = self.xml
         xml.startParent('Parameters')
-        self.write_elem_block('Parameters_', 'param', qresult)
+        self._write_elem_block('Parameters_', 'param', qresult)
         xml.endParent()
 
-    def write_qresults(self, qresults):
+    def _write_qresults(self, qresults):
         """Writes QueryResult objects into iteration elements."""
         xml = self.xml
 
@@ -785,18 +790,18 @@ class BlastXmlWriter(object):
                     'Iteration_query-def': ' '.join([qresult.id, \
                             qresult.description]).strip(),
                 }
-            self.write_elem_block('Iteration_', 'qresult', qresult, opt_dict)
+            self._write_elem_block('Iteration_', 'qresult', qresult, opt_dict)
             # the Iteration_hits tag only has children if there are hits
             if qresult:
                 xml.startParent('Iteration_hits')
-                self.write_hits(qresult.hits)
+                self._write_hits(qresult.hits)
                 xml.endParent()
             # otherwise it's a simple element without any contents
             else:
                 xml.simpleElement('Iteration_hits', '')
 
             xml.startParents('Iteration_stat', 'Statistics')
-            self.write_elem_block('Statistics_', 'stat', qresult)
+            self._write_elem_block('Statistics_', 'stat', qresult)
             xml.endParents(2)
             # there's a message if no hits is present
             if not qresult:
@@ -804,7 +809,7 @@ class BlastXmlWriter(object):
             self.qresult_counter += 1
             xml.endParent()
 
-    def write_hits(self, hits):
+    def _write_hits(self, hits):
         """Writes Hit objects."""
         xml = self.xml
 
@@ -819,13 +824,13 @@ class BlastXmlWriter(object):
                     'Hit_id': hit._blast_id,
                     'Hit_def': ' '.join([hit.id, hit.description]).strip(),
                 }
-            self.write_elem_block('Hit_', 'hit', hit, opt_dict)
+            self._write_elem_block('Hit_', 'hit', hit, opt_dict)
             xml.startParent('Hit_hsps')
-            self.write_hsps(hit.hsps)
+            self._write_hsps(hit.hsps)
             self.hit_counter += 1
             xml.endParents(2)
 
-    def write_hsps(self, hsps):
+    def _write_hsps(self, hsps):
         """Writes HSP objects."""
         xml = self.xml
         for num, hsp in enumerate(hsps):
@@ -834,7 +839,7 @@ class BlastXmlWriter(object):
             for elem, attr in _WRITE_MAPS['hsp']:
                 elem = 'Hsp_' + elem
                 try:
-                    content = self.adjust_output(hsp, elem, attr)
+                    content = self._adjust_output(hsp, elem, attr)
                 # make sure any elements that is not present is optional
                 # in the DTD
                 except AttributeError:
@@ -845,7 +850,7 @@ class BlastXmlWriter(object):
             self.hsp_counter += 1
             xml.endParent()
 
-    def adjust_output(self, hsp, elem, attr):
+    def _adjust_output(self, hsp, elem, attr):
         """Adjusts output to mimic native BLAST+ XML as much as possible."""
 
         # adjust coordinates

@@ -9,8 +9,11 @@ import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 
-from _base import BaseExonerateParser, _STRAND_MAP
+from _base import _BaseExonerateParser, _STRAND_MAP
 from exoneratevulgar import ExonerateVulgarIndexer
+
+
+__all__ = ['ExonerateCigarParser', 'ExonerateCigarIndexer']
 
 
 # precompile regex
@@ -21,7 +24,7 @@ _RE_CIGAR = re.compile(r"""^cigar:\s+
         """, re.VERBOSE)
 
 
-class ExonerateCigarParser(BaseExonerateParser):
+class ExonerateCigarParser(_BaseExonerateParser):
 
     """Parser for Exonerate cigar strings."""
 

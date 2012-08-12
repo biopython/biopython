@@ -8,6 +8,7 @@
 from itertools import chain
 
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+
 from hmmertab import HmmerTabParser, HmmerTabIndexer
 
 
@@ -15,7 +16,7 @@ class HmmerDomtabParser(HmmerTabParser):
 
     """Base hmmer-domtab iterator."""
 
-    def parse_result_row(self):
+    def _parse_row(self):
         """Returns a dictionary of parsed row values."""
         assert self.line
         cols = filter(None, self.line.strip().split(' '))
@@ -67,7 +68,7 @@ class HmmerDomtabParser(HmmerTabParser):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp, 'frag': frag}
 
-    def parse_qresult(self):
+    def _parse_qresult(self):
         """Generator function that returns QueryResult objects."""
         # state values, determines what to do for each line
         state_EOF = 0
@@ -94,7 +95,7 @@ class HmmerDomtabParser(HmmerTabParser):
                 prev_hid = cur_hid
             # only parse the line if it's not EOF
             if self.line:
-                cur = self.parse_result_row()
+                cur = self._parse_row()
                 cur_qid = cur['qresult']['id']
                 cur_hid = cur['hit']['id']
             else:
@@ -203,21 +204,21 @@ class HmmerDomtabHmmhitWriter(object):
         try:
             first_qresult = qresults.next()
         except StopIteration:
-            handle.write(self.build_header())
+            handle.write(self._build_header())
         else:
             # write header
-            handle.write(self.build_header(first_qresult))
+            handle.write(self._build_header(first_qresult))
             # and then the qresults
             for qresult in chain([first_qresult], qresults):
                 if qresult:
-                    handle.write(self.build_row(qresult))
+                    handle.write(self._build_row(qresult))
                     qresult_counter += 1
                     hit_counter += len(qresult)
                     hsp_counter += sum([len(hit) for hit in qresult])
 
         return qresult_counter, hit_counter, hsp_counter
 
-    def build_header(self, first_qresult=None):
+    def _build_header(self, first_qresult=None):
         """Returns the header string of a domain HMMER table output."""
 
         # calculate whitespace required
@@ -234,8 +235,7 @@ class HmmerDomtabHmmhitWriter(object):
         else:
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
-        header = ''
-        header += "#%*s %22s %40s %11s %11s %11s\n" % \
+        header = "#%*s %22s %40s %11s %11s %11s\n" % \
                 (tnamew+qnamew-1+15+taccw+qaccw, "", "--- full sequence ---", \
                 "-------------- this domain -------------", "hmm coord", \
                 "ali coord", "env coord")
@@ -257,7 +257,7 @@ class HmmerDomtabHmmhitWriter(object):
 
         return header
 
-    def build_row(self, qresult):
+    def _build_row(self, qresult):
         """Returns a string or one row or more of the QueryResult object."""
         rows = ''
 

@@ -10,9 +10,12 @@ from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 
-from _base import BaseExonerateParser, BaseExonerateIndexer, _STRAND_MAP, \
+from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
 from exoneratevulgar import parse_vulgar_comp, _RE_VULGAR
+
+
+__all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
 
 
 _RE_ALN_ROW = re.compile(r'\s*\d+\s+: (.*) :\s+\d+')
@@ -24,7 +27,7 @@ _RE_SCODON_START = re.compile(r'\{(\w{1,2})\}$')
 _RE_SCODON_END = re.compile(r'^\{(\w{1,2})\}')
 
 
-def flip_codons(codon_seq, target_seq):
+def _flip_codons(codon_seq, target_seq):
     """Flips the codon characters from one seq to another."""
     a, b = '', ''
     for char1, char2 in zip(codon_seq, target_seq):
@@ -39,7 +42,7 @@ def flip_codons(codon_seq, target_seq):
     return a, b
 
 
-def get_block_coords(parsed_seq, has_ner=False):
+def _get_block_coords(parsed_seq, has_ner=False):
     """Returns a list of start, end coordinates for each given block in the sequence."""
     start = 0
     coords = []
@@ -55,7 +58,7 @@ def get_block_coords(parsed_seq, has_ner=False):
     return coords
 
 
-def get_inter_coords(coords, strand=1):
+def _get_inter_coords(coords, strand=1):
     """From the given pairs of coordinates, returns a list of pairs
     covering the intervening ranges."""
     # adapted from Python's itertools guide
@@ -69,7 +72,7 @@ def get_inter_coords(coords, strand=1):
         return zip(inter_coords[::2], inter_coords[1::2])
 
 
-def stitch_rows(raw_rows):
+def _stitch_rows(raw_rows):
     """Stitches together the parsed alignment rows and returns them in a list."""
     # deal with possible codon surprise!
     # (i.e. alignments with codons using cdna2genome model)
@@ -94,7 +97,7 @@ def stitch_rows(raw_rows):
     return cmbn_rows
 
 
-def get_row_idx(row_len):
+def _get_row_idx(row_len):
     """Returns a dictionary of row indices for parsing alignment blocks."""
     idx = {}
     # 3 lines, usually in dna vs dna models
@@ -124,7 +127,7 @@ def get_row_idx(row_len):
     return idx
 
 
-def get_blocks(rows, coords, idx):
+def _get_blocks(rows, coords, idx):
     """Returns a list of dictionaries of sequences split by the coordinates."""
     for idx_name in ('query', 'hit', 'midline', 'qannot', 'hannot'):
         assert idx_name in idx
@@ -144,7 +147,7 @@ def get_blocks(rows, coords, idx):
     return blocks
 
 
-def fill_coords(hsp, seq_type, inter_lens):
+def _fill_coords(hsp, seq_type, inter_lens):
     """Fill the block coordinates of the given hsp dictionary."""
 
     # manually fill the first coord
@@ -171,7 +174,7 @@ def fill_coords(hsp, seq_type, inter_lens):
     return hsp
 
 
-class ExonerateTextParser(BaseExonerateParser):
+class ExonerateTextParser(_BaseExonerateParser):
 
     """Parser for Exonerate plain text output."""
 
@@ -187,28 +190,28 @@ class ExonerateTextParser(BaseExonerateParser):
             assert val_name in hsp, hsp
 
         # get the alignment rows
-        raw_aln_blocks, vulgar_comp = self.read_alignment()
+        raw_aln_blocks, vulgar_comp = self._read_alignment()
         # and stitch them so we have the full sequences in single strings
         # cmbn_rows still has split codon markers
-        cmbn_rows = stitch_rows(raw_aln_blocks)
-        row_idx = get_row_idx(len(cmbn_rows))
+        cmbn_rows = _stitch_rows(raw_aln_blocks)
+        row_idx = _get_row_idx(len(cmbn_rows))
 
         if len(cmbn_rows) == 5:
             # the real aligned sequence is always the 'outer' one, so we want
             # to flip them with their 'inner' pairs
             # flip query sequence
             cmbn_rows[0], cmbn_rows[1] = \
-                    flip_codons(cmbn_rows[0], cmbn_rows[1])
+                    _flip_codons(cmbn_rows[0], cmbn_rows[1])
             # flip hit sequence
             cmbn_rows[4], cmbn_rows[3] = \
-                    flip_codons(cmbn_rows[4], cmbn_rows[3])
+                    _flip_codons(cmbn_rows[4], cmbn_rows[3])
 
         # get the sequence blocks
         # we use the query row as reference for block coords
         block_ref = cmbn_rows[row_idx['query']]
         has_ner = 'NER' in qresult['model'].upper()
-        seq_coords = get_block_coords(block_ref, has_ner)
-        tmp_seq_blocks = get_blocks(cmbn_rows, seq_coords, row_idx)
+        seq_coords = _get_block_coords(block_ref, has_ner)
+        tmp_seq_blocks = _get_blocks(cmbn_rows, seq_coords, row_idx)
 
         # get split codon temp coords for later use
         # this result in pairs of base movement for both ends of each row
@@ -269,8 +272,8 @@ class ExonerateTextParser(BaseExonerateParser):
         # otherwise we need to get the coordinates from the alignment
         # get the intervening blocks first, so we can use them
         # to adjust the coordinates
-        inter_coords = get_inter_coords(seq_coords)
-        inter_blocks = get_blocks(cmbn_rows, inter_coords, row_idx)
+        inter_coords = _get_inter_coords(seq_coords)
+        inter_blocks = _get_blocks(cmbn_rows, inter_coords, row_idx)
         # if model is not ner, scan for possible intron lengths, for later use
         if not has_ner:
             # returns a three-component tuple of intron lengths
@@ -323,7 +326,7 @@ class ExonerateTextParser(BaseExonerateParser):
                 opp_type = seq_type
 
             # fill the hsp query and hit coordinates
-            hsp = fill_coords(hsp, opp_type, inter_lens)
+            hsp = _fill_coords(hsp, opp_type, inter_lens)
             strand = 1 if hsp[opp_type + 'strand'] >= 0 else -1
             # and fill the intervening ranges' values
             if not has_ner:
@@ -358,7 +361,7 @@ class ExonerateTextParser(BaseExonerateParser):
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
-    def read_alignment(self):
+    def _read_alignment(self):
         """Reads the raw alignment block strings, returns them in a list."""
         raw_aln_blocks = []
         # flag to check whether we're in an aligment row
@@ -403,7 +406,7 @@ class ExonerateTextParser(BaseExonerateParser):
         return raw_aln_blocks, vulgar_comp
 
 
-class ExonerateTextIndexer(BaseExonerateIndexer):
+class ExonerateTextIndexer(_BaseExonerateIndexer):
 
     """Indexer class for Exonerate plain text."""
 

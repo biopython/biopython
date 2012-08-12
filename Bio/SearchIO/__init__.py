@@ -3,11 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-# This is a work in progress, some useful links:
-# http://bit.ly/searchio-terms (Spreadsheet of proposed obj/attr name scheme)
-
 """Biopython representation of sequence homology search program outputs.
-
 
 Input
 =====
@@ -63,9 +59,11 @@ from __future__ import with_statement
 
 __docformat__ = 'epytext en'
 
-
 from Bio.File import as_handle
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+
+
+__all__ = ['read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert']
 
 
 # dictionary of supported formats for parse() and read()
@@ -133,7 +131,7 @@ def _get_handler(format, mapping):
         elif not isinstance(format, basestring):
             raise TypeError("Need a string for the file format (lower case)")
         elif format != format.lower():
-            raise ValueError("Format string '%s' should be lower case" % \
+            raise ValueError("Format string '%s' should be lower case" %
                     format)
         elif mapping == _WRITER_MAP and format in _ITERATOR_MAP:
             raise ValueError("Reading format '%s' is supported, but not "
@@ -149,7 +147,8 @@ def _get_handler(format, mapping):
 
 
 def parse(handle, format=None, **kwargs):
-    """Turns a search output file into an iterator returning QueryResult objects.
+    """Turns a search output file into an iterator returning QueryResult
+    objects.
 
     Arguments:
     handle -- Handle to the file, or the filename as a string.
@@ -204,7 +203,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:
-            raise ValueError("Duplicate key '%s'" % key)
+            raise ValueError("Duplicate key %r" % key)
         qdict[key] = qresult
     return qdict
 
@@ -223,11 +222,11 @@ def index(handle, format=None, key_function=None, **kwargs):
     if not isinstance(handle, basestring):
         raise TypeError("Handle must be a string of filename")
 
-    from Bio.SearchIO._index import IndexedSearch
-    return IndexedSearch(handle, format, key_function, **kwargs)
+    from Bio.SearchIO._index import _IndexedSearch
+    return _IndexedSearch(handle, format, key_function, **kwargs)
 
 
-def index_db(index_filename, filenames=None, format=None, \
+def index_db(index_filename, filenames=None, format=None,
         key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
@@ -248,8 +247,8 @@ def index_db(index_filename, filenames=None, format=None, \
     if isinstance(filenames, basestring):
         filenames = [filenames]
 
-    from Bio.SearchIO._index import DbIndexedSearch
-    return DbIndexedSearch(index_filename, filenames, format, key_function, \
+    from Bio.SearchIO._index import _DbIndexedSearch
+    return _DbIndexedSearch(index_filename, filenames, format, key_function,
             **kwargs)
 
 
