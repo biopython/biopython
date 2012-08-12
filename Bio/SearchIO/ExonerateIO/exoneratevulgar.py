@@ -33,7 +33,7 @@ def parse_vulgar_comp(hsp, vulgar_comp):
     qstarts, qends, hstarts, hends = \
             [hsp['query_start']], [], [hsp['hit_start']], []
     # containers for split codons
-    hsp['query_scodon_ranges'], hsp['hit_scodon_ranges'] = [], []
+    hsp['query_split_codons'], hsp['hit_split_codons'] = [], []
     # containers for ner blocks
     hsp['query_ner_ranges'], hsp['hit_ner_ranges'] = [], []
     # sentinels for tracking query and hit positions
@@ -72,8 +72,8 @@ def parse_vulgar_comp(hsp, vulgar_comp):
             # split codons
             # XXX: is it possible to have a frameshift that introduces
             # a codon split? If so, this may need a different treatment..
-            hsp['query_scodon_ranges'].append((sqstart, sqend))
-            hsp['hit_scodon_ranges'].append((shstart, shend))
+            hsp['query_split_codons'].append((sqstart, sqend))
+            hsp['hit_split_codons'].append((shstart, shend))
 
         # move sentinels accordingly
         qpos += qstep * qmove

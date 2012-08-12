@@ -346,7 +346,7 @@ class ExonerateTextParser(BaseExonerateParser):
                         anchor = func(anchor_pair)
                         start_c, end_c = anchor + b * strand, anchor
                     scodons.append((min(start_c, end_c), max(start_c, end_c)))
-                hsp[opp_type + 'scodon_ranges'] = scodons
+                hsp[opp_type + 'split_codons'] = scodons
 
         # now that we've finished parsing coords, we can set the hit and start
         # coord according to Biopython's convention (start <= end)
