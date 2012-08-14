@@ -55,10 +55,10 @@ def read(handle):
     return record
 
 
-class MEMEMotif (Motif):
+class MEMEMotif(Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
     
-    This sublcass defines functions and data specific to MEME motifs. 
+    This subclass defines functions and data specific to MEME motifs. 
     This includes the evalue for a motif and the PSSM of the motif.
     
     Methods:
