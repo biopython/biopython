@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Parsing AlignACE files: AlignAceParser
+"""Parsing AlignACE output files
 """
 
 from Bio.Motif import Motif
@@ -54,5 +54,3 @@ def read(handle):
         else:
             raise ValueError(line)
     return record
-
-
