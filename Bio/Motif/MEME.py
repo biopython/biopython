@@ -30,7 +30,7 @@ def read(handle):
     __read_version(record, handle)
     __read_datafile(record, handle)
     __read_alphabet(record, handle)
-    __read_sequence_names(record, handle)
+    __read_sequences(record, handle)
     __read_command(record, handle)
     for line in handle:
         if line.startswith('MOTIF  1'):
@@ -158,7 +158,7 @@ class MEMERecord(object):
         self.datafile = ""
         self.command = ""
         self.alphabet = None
-        self.sequence_names = []
+        self.sequences = []
         
     def get_motif_by_name (self, name):
         for m in self.motifs:
@@ -219,7 +219,7 @@ def __read_alphabet(record, handle):
     record.alphabet = al
 
 
-def __read_sequence_names(record, handle):
+def __read_sequences(record, handle):
     try:
         line = handle.next()
     except StopIteration:
@@ -237,9 +237,9 @@ def __read_sequence_names(record, handle):
             break
         line = line.strip()
         ls = line.split()
-        record.sequence_names.append(ls[0])
+        record.sequences.append(ls[0])
         if len(ls) == 6:
-            record.sequence_names.append(ls[3])
+            record.sequences.append(ls[3])
     else:
         raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
 
