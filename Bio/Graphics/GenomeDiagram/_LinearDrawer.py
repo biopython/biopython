@@ -1362,40 +1362,42 @@ class LinearDrawer(AbstractDrawer):
 
     def _draw_sigil_jaggy(self, bottom, center, top, x1, x2, strand,
                           color, border=None, **kwargs):
-        """Draw JAGGY sigil, spanning axis with one or both edges jagged.
+        """Draw JAGGY sigil.
 
-        For positive strand, only the right edge is jagged. For negative strand,
-        only the left edge is jagged. For strandless features, both the left and
-        right edges are jagged. In all cases, like BIGARROW, it strandles the
-        axis.
+        Although we may in future expose the head/tail jaggy lengths, for now
+        both the left and right edges are drawn jagged.
         """
-        teeth = 4
+        if strand == 1:
+            y1 = center
+            y2 = top
+            teeth = 2
+        elif strand == -1:
+            y1 = bottom
+            y2 = center
+            teeth = 2
+        else:
+            y1 = bottom
+            y2 = top
+            teeth = 4
 
         xmin = min(x1, x2)
         xmax = max(x1, x2)
-        height = top - bottom
+        height = y2 - y1
         boxwidth = x2 - x1
         tooth_length = min(height/teeth, boxwidth*0.5)
 
-        if strand == +1:
-            taillength = 0.0
-            headlength = tooth_length
-        elif strand == -1:
-            taillength = tooth_length
-            headlength = 0.0
-        else:
-            headlength = tooth_length
-            taillength = tooth_length
+        headlength = tooth_length
+        taillength = tooth_length
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         points = []
         for i in range(teeth):
-            points.extend((xmin, bottom+i*height/teeth,
-                           xmin+taillength, bottom+(i+1)*height/teeth))
+            points.extend((xmin, y1+i*height/teeth,
+                           xmin+taillength, y1+(i+1)*height/teeth))
         for i in range(teeth):
-            points.extend((xmax, bottom+(teeth-i)*height/teeth,
-                           xmax-headlength, bottom+(teeth-i-1)*height/teeth))
+            points.extend((xmax, y1+(teeth-i)*height/teeth,
+                           xmax-headlength, y1+(teeth-i-1)*height/teeth))
 
         return Polygon(points,
                        strokeColor=strokecolor,

@@ -364,7 +364,7 @@ class SigilsTest(unittest.TestCase):
 
     def test_all_sigils(self):
         """All sigils."""
-        for glyph in ["BOX", "OCTO", "ARROW", "BIGARROW", "JAGGY"]:
+        for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
              self.add_track_with_sigils(sigil=glyph)
         self.finish("GD_sigils")
 
@@ -469,7 +469,7 @@ class SigilsTest(unittest.TestCase):
         self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
         #We'll just use one feature set for these features if strand specific
         self.gds_features = self.gdt_features.new_set()
-        if glyph in ["BIGARROW", "JAGGY"]:
+        if glyph in ["BIGARROW"]:
             #These straddle the axis, so don't want to draw them on top of each other
             feature = SeqFeature(FeatureLocation(25, 375), strand=None)
             self.gds_features.add_feature(feature, color="lightblue")
@@ -480,7 +480,7 @@ class SigilsTest(unittest.TestCase):
         self.gds_features.add_feature(feature, name="Forward", sigil=glyph,
                                       color="blue", arrowhead_length=2.0)
 
-        if glyph in ["BIGARROW", "JAGGY"]:
+        if glyph in ["BIGARROW"]:
             #These straddle the axis, so don't want to draw them on top of each other
             self.gdt_features = self.gdd.new_track(1, greytrack=True, height=3)
             self.gds_features = self.gdt_features.new_set()

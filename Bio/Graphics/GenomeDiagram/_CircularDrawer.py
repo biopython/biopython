@@ -1430,30 +1430,33 @@ class CircularDrawer(AbstractDrawer):
                           startangle, endangle, strand,
                           color, border=None,
                           **kwargs):
-        """Draw JAGGY sigil, like BIGARROW straddles the axis but jagged edged
+        """Draw JAGGY sigil.
 
-        For positive strand, only the right edge is jagged. For negative strand,
-        only the left edge is jagged. For strandless features, both the left and
-        right edges are jagged. In all cases, like BIGARROW, it strandles the
-        axis.
+        Although we may in future expose the head/tail jaggy lengths, for now
+        both the left and right edges are drawn jagged.
         """
-        if strand == +1:
-            tail_length_ratio = 0.0
-            head_length_ratio = 1.0
+        if strand == 1:
+            inner_radius = center
+            outer_radius = top
+            teeth = 2
         elif strand == -1:
-            tail_length_ratio = 1.0
-            head_length_ratio = 0.0
+            inner_radius = bottom
+            outer_radius = center
+            teeth = 2
         else:
-            tail_length_ratio = 1.0
-            head_length_ratio = 1.0
+            inner_radius = bottom
+            outer_radius = top
+            teeth = 4
 
-        teeth = 4
+        #TODO, expose these settings?
+        tail_length_ratio = 1.0
+        head_length_ratio = 1.0
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
 
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         angle = float(endangle - startangle)    # angle subtended by arc
-        height = top - bottom
+        height = outer_radius - inner_radius
         
         assert startangle <= endangle and angle >= 0
         if head_length_ratio and tail_length_ratio:
@@ -1485,29 +1488,29 @@ class CircularDrawer(AbstractDrawer):
         #(as in mathematics, e.g. complex numbers and polar coordinates)
         #but we use clockwise from the vertical.  Also reportlab uses
         #degrees, but we use radians.
-        p.addArc(self.xcenter, self.ycenter, bottom,
+        p.addArc(self.xcenter, self.ycenter, inner_radius,
                  90 - (headangle * 180 / pi), 90 - (tailangle * 180 / pi),
                  moveTo=True)
         for i in range(0, teeth):
-            p.addArc(self.xcenter, self.ycenter, bottom+i*height/teeth,
+            p.addArc(self.xcenter, self.ycenter, inner_radius+i*height/teeth,
                      90 - (tailangle * 180 / pi), 90 - (startangle * 180 / pi))
             #Curved line needed when drawing long jaggies
             self._draw_arc_line(p,
-                                bottom+i*height/teeth,
-                                bottom+(i+1)*height/teeth,
+                                inner_radius+i*height/teeth,
+                                inner_radius+(i+1)*height/teeth,
                                 90 - (startangle * 180 / pi),
                                 90 - (tailangle * 180 / pi))
-        p.addArc(self.xcenter, self.ycenter, top,
+        p.addArc(self.xcenter, self.ycenter, outer_radius,
                  90 - (headangle * 180 / pi), 90 - (tailangle * 180 / pi),
                  reverse=True)
         for i in range(0, teeth):
-            p.addArc(self.xcenter, self.ycenter, top-i*height/teeth,
+            p.addArc(self.xcenter, self.ycenter, outer_radius-i*height/teeth,
                      90 - (endangle * 180 / pi), 90 - (headangle * 180 / pi),
                      reverse=True)
             #Curved line needed when drawing long jaggies
             self._draw_arc_line(p,
-                                top-i*height/teeth,
-                                top-(i+1)*height/teeth,
+                                outer_radius-i*height/teeth,
+                                outer_radius-(i+1)*height/teeth,
                                 90 - (endangle * 180 / pi),
                                 90 - (headangle * 180 / pi))
         p.closePath()
