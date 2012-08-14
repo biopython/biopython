@@ -290,7 +290,8 @@ def write(qresults, handle, format=None, **kwargs):
     return qresult_count, hit_count, hsp_count
 
 
-def convert(in_file, in_format, out_file, out_format):
+def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
+        out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
     Arguments:
@@ -298,6 +299,8 @@ def convert(in_file, in_format, out_file, out_format):
     in_format -- Lower case string denoting the format of the input file.
     out_file -- Handle to the output file, or the filename as string.
     out_format -- Lower case string denoting the format of the output file.
+    in_kwargs --  Dictionary of keyword arguments for the input function.
+    out_kwargs -- Dictionary of keyword arguments for the output function.
 
     Note that some conversion are lossy, so it can only go one way. For
     example conversion from blast-xml to blast-tab is possible as blast-xml
@@ -306,8 +309,13 @@ def convert(in_file, in_format, out_file, out_format):
     blast-xml (e.g. the HSP alignment is not always present in blast-tab). 
 
     """
-    qresults = parse(in_file, in_format)
-    return write(qresults, out_file, out_format)
+    if in_kwargs is None:
+        in_kwargs = {}
+    if out_kwargs is None:
+        out_kwargs = {}
+
+    qresults = parse(in_file, in_format, **in_kwargs)
+    return write(qresults, out_file, out_format, **out_kwargs)
 
 
 def _test():
