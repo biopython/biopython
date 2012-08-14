@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for SearchIO HmmerIO hmmer-tab parser."""
+"""Tests for SearchIO HmmerIO hmmer3-tab parser."""
 
 
 import os
@@ -13,7 +13,7 @@ from Bio.SearchIO import parse, read
 
 # test case files are in the Blast directory
 TEST_DIR = 'Hmmer'
-FMT = 'hmmer-tab'
+FMT = 'hmmer3-tab'
 
 
 def get_file(filename):
@@ -24,7 +24,7 @@ def get_file(filename):
 class HmmerscanCases(unittest.TestCase):
 
     def test_30_hmmscan_001(self):
-        "Test parsing hmmer-tab, hmmscan 3.0, multiple queries (tab_30_hmmscan_001)"
+        "Test parsing hmmer3-tab, hmmscan 3.0, multiple queries (tab_30_hmmscan_001)"
 
         tab_file = get_file('tab_30_hmmscan_001.out')
         qresults = parse(tab_file, FMT)
@@ -268,7 +268,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(4, counter)
 
     def test_30_hmmscan_002(self):
-        "Test parsing hmmer-tab, hmmscan 3.0, single query, no hits (tab_30_hmmscan_002)"
+        "Test parsing hmmer3-tab, hmmscan 3.0, single query, no hits (tab_30_hmmscan_002)"
 
         tab_file = get_file('tab_30_hmmscan_002.out')
         qresults = parse(tab_file, FMT)
@@ -276,7 +276,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
 
     def test_30_hmmscan_003(self):
-        "Test parsing hmmer-tab, hmmscan 3.0, single query, single hit, single hsp (tab_30_hmmscan_003)"
+        "Test parsing hmmer3-tab, hmmscan 3.0, single query, single hit, single hsp (tab_30_hmmscan_003)"
 
         tab_file = get_file('tab_30_hmmscan_003.out')
         qresults = parse(tab_file, FMT)
@@ -313,7 +313,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
     def test_30_hmmscan_004(self):
-        "Test parsing hmmer-tab, hmmscan 3.0, single query, multiple hits (tab_30_hmmscan_004)"
+        "Test parsing hmmer3-tab, hmmscan 3.0, single query, multiple hits (tab_30_hmmscan_004)"
 
         tab_file = get_file('tab_30_hmmscan_004.out')
         qresults = parse(tab_file, FMT)

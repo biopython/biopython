@@ -11,9 +11,9 @@ to find homology across protein sequences.
 
 Specifically, this module supports the following HMMER output formats:
 
-  - Plain text - 'hmmer-text'
-  - Table - 'hmmer-tab'
-  - Domain table - 'hmmscan-domtab', 'hmmsearch-domtab', or 'phmmer-domtab'
+  - Plain text - 'hmmer3-text'
+  - Table - 'hmmer3-tab'
+  - Domain table - 'hmmscan-domtab', 'hmmsearch-domtab', or 'phmmer3-domtab'
 
 And the following HMMER programs: hmmersearch, hmmerscan, phmmer
 
@@ -23,9 +23,9 @@ More information are available through these links:
 
 """
 
-from hmmerdomtab import *
-from hmmertext import *
-from hmmertab import *
+from hmmer3_domtab import *
+from hmmer3_text import *
+from hmmer3_tab import *
 
 
 def _test():

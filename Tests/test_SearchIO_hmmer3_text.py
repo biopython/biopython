@@ -13,7 +13,7 @@ from Bio.SearchIO import parse, read
 
 # test case files are in the Blast directory
 TEST_DIR = 'Hmmer'
-FMT = 'hmmer-text'
+FMT = 'hmmer3-text'
 
 
 def get_file(filename):

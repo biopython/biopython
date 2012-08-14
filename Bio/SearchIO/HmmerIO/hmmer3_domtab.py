@@ -9,12 +9,12 @@ from itertools import chain
 
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
-from hmmertab import HmmerTabParser, HmmerTabIndexer
+from hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
 
-class HmmerDomtabParser(HmmerTabParser):
+class Hmmer3DomtabParser(Hmmer3TabParser):
 
-    """Base hmmer-domtab iterator."""
+    """Base hmmer3-domtab iterator."""
 
     def _parse_row(self):
         """Returns a dictionary of parsed row values."""
@@ -148,7 +148,7 @@ class HmmerDomtabParser(HmmerTabParser):
             self.line = self.handle.readline()
 
 
-class HmmerDomtabHmmhitParser(HmmerDomtabParser):
+class Hmmer3DomtabHmmhitParser(Hmmer3DomtabParser):
 
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are hit coordinates."""
@@ -156,7 +156,7 @@ class HmmerDomtabHmmhitParser(HmmerDomtabParser):
     hmm_as_hit = True
 
 
-class HmmerDomtabHmmqueryParser(HmmerDomtabParser):
+class Hmmer3DomtabHmmqueryParser(Hmmer3DomtabParser):
 
     """Parser for the HMMER domain table format that assumes HMM profile
     coordinates are query coordinates."""
@@ -164,27 +164,27 @@ class HmmerDomtabHmmqueryParser(HmmerDomtabParser):
     hmm_as_hit = False
 
 
-class HmmerDomtabHmmhitIndexer(HmmerTabIndexer):
+class Hmmer3DomtabHmmhitIndexer(Hmmer3TabIndexer):
 
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are hit coordinates."""
 
-    _parser = HmmerDomtabHmmhitParser
+    _parser = Hmmer3DomtabHmmhitParser
     _query_id_idx = 3
 
 
-class HmmerDomtabHmmqueryIndexer(HmmerTabIndexer):
+class Hmmer3DomtabHmmqueryIndexer(Hmmer3TabIndexer):
 
     """Indexer class for HMMER domain table output that assumes HMM profile
     coordinates are query coordinates."""
 
-    _parser = HmmerDomtabHmmqueryParser
+    _parser = Hmmer3DomtabHmmqueryParser
     _query_id_idx = 3
 
 
-class HmmerDomtabHmmhitWriter(object):
+class Hmmer3DomtabHmmhitWriter(object):
 
-    """Writer for hmmer-domtab output format which writes hit coordinates
+    """Writer for hmmer3-domtab output format which writes hit coordinates
     as HMM profile coordinates."""
 
     hmm_as_hit = True
@@ -305,9 +305,9 @@ class HmmerDomtabHmmhitWriter(object):
         return rows
 
 
-class HmmerDomtabHmmqueryWriter(HmmerDomtabHmmhitWriter):
+class Hmmer3DomtabHmmqueryWriter(Hmmer3DomtabHmmhitWriter):
 
-    """Writer for hmmer-domtab output format which writes query coordinates
+    """Writer for hmmer3-domtab output format which writes query coordinates
     as HMM profile coordinates."""
 
     hmm_as_hit = False

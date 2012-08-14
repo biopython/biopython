@@ -12,7 +12,7 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['HmmerTextParser', 'HmmerTextIndexer']
+__all__ = ['Hmmer3TextParser', 'Hmmer3TextIndexer']
 
 
 # precompile regex patterns for faster processing
@@ -46,7 +46,7 @@ def _read_forward(handle):
             return line
 
 
-class HmmerTextParser(object):
+class Hmmer3TextParser(object):
 
     """Parser for the HMMER 3.0 text output."""
 
@@ -377,11 +377,11 @@ class HmmerTextParser(object):
                 self.line = self.handle.readline()
 
 
-class HmmerTextIndexer(SearchIndexer):
+class Hmmer3TextIndexer(SearchIndexer):
 
     """Indexer class for HMMER plain text output."""
 
-    _parser = HmmerTextParser
+    _parser = Hmmer3TextParser
     qresult_start = _as_bytes('Query: ')
     qresult_end = _as_bytes('//')
 

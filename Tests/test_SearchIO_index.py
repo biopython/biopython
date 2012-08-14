@@ -856,10 +856,10 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 
 class HmmerTextRawCases(unittest.TestCase):
 
-    fmt = 'hmmer-text'
+    fmt = 'hmmer3-text'
 
     def test_hmmertext_30_multiple_first(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, first (text_30_hmmscan_001.out)"""
+        """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, first (text_30_hmmscan_001.out)"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -905,7 +905,7 @@ Domain search space  (domZ):               0  [number of targets reported over t
         self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
 
     def test_hmmertext_30_multiple_middle(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_30_hmmscan_001.out)"""
+        """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_30_hmmscan_001.out)"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -968,7 +968,7 @@ Domain search space  (domZ):               1  [number of targets reported over t
         self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
     def test_hmmertext_30_multiple_last(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, multiple queries, last (text_30_hmmscan_001.out)"""
+        """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, last (text_30_hmmscan_001.out)"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -1085,7 +1085,7 @@ Domain search space  (domZ):               5  [number of targets reported over t
         self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
     def test_hmmertext_30_single(self):
-        """Test hmmer-text raw string retrieval, HMMER 3.0, single query (text_30_hmmscan_003.out)"""
+        """Test hmmer3-text raw string retrieval, HMMER 3.0, single query (text_30_hmmscan_003.out)"""
         filename = 'Hmmer/text_30_hmmscan_003.out'
         idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
@@ -1150,10 +1150,10 @@ Domain search space  (domZ):               1  [number of targets reported over t
 
 class HmmerTabRawCases(unittest.TestCase):
 
-    fmt = 'hmmer-tab'
+    fmt = 'hmmer3-tab'
 
     def test_hmmertab_30_multiple_first(self):
-        """Test hmmer-tab raw string retrieval, HMMER 3.0, multiple queries, first (tab_30_hmmscan_001.out)"""
+        """Test hmmer3-tab raw string retrieval, HMMER 3.0, multiple queries, first (tab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
         idx = SearchIO.index(filename, self.fmt)
         raw = """Globin               PF00042.17 gi|4885477|ref|NP_005359.1| -              6e-21   74.6   0.3   9.2e-21   74.0   0.2   1.3   1   0   0   1   1   1   1 Globin
@@ -1161,7 +1161,7 @@ class HmmerTabRawCases(unittest.TestCase):
         self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
 
     def test_hmmertab_30_multiple_middle(self):
-        """Test hmmer-tab raw string retrieval, HMMER 3.0, multiple queries, middle (tab_30_hmmscan_001.out)"""
+        """Test hmmer3-tab raw string retrieval, HMMER 3.0, multiple queries, middle (tab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
         idx = SearchIO.index(filename, self.fmt)
         raw = """Ig_3                 PF13927.1  gi|126362951:116-221 -            1.4e-09   38.2   0.4   2.1e-09   37.6   0.3   1.3   1   0   0   1   1   1   1 Immunoglobulin domain
@@ -1170,7 +1170,7 @@ Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7
         self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
 
     def test_hmmertab_30_multiple_last(self):
-        """Test hmmer-tab raw string retrieval, HMMER 3.0, multiple queries, last (tab_30_hmmscan_001.out)"""
+        """Test hmmer3-tab raw string retrieval, HMMER 3.0, multiple queries, last (tab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
         idx = SearchIO.index(filename, self.fmt)
         raw = """Pou                  PF00157.12 gi|125490392|ref|NP_038661.2| -              7e-37  124.8   0.5   1.4e-36  123.9   0.3   1.5   1   0   0   1   1   1   1 Pou domain - N-terminal to homeobox domain
@@ -1182,7 +1182,7 @@ DUF521               PF04412.8  gi|125490392|ref|NP_038661.2| -               0.
         self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
 
     def test_hmmertab_30_single(self):
-        """Test hmmer-tab raw string retrieval, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
+        """Test hmmer3-tab raw string retrieval, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_004.out')
         idx = SearchIO.index(filename, self.fmt)
         raw = """Ig_3                 PF13927.1  gi|126362951:116-221 -            1.4e-09   38.2   0.4   2.1e-09   37.6   0.3   1.3   1   0   0   1   1   1   1 Immunoglobulin domain
@@ -1193,7 +1193,7 @@ Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7
 
 class HmmerDomtabRawCases(unittest.TestCase):
 
-    fmt = 'hmmscan-domtab'
+    fmt = 'hmmscan3-domtab'
 
     def test_hmmerdomtab_30_multiple_first(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, multiple queries, first (domtab_30_hmmscan_001.out)"""
@@ -1353,60 +1353,60 @@ class BlastTabIndexCases(SearchIndexCases):
 
 class HmmerTextIndexCases(SearchIndexCases):
 
-    fmt = 'hmmer-text'
+    fmt = 'hmmer3-text'
 
     def test_hmmertext_text_30_hmmscan_001(self):
-        """Test hmmer-text indexing, HMMER 3.0, multiple queries"""
+        """Test hmmer3-text indexing, HMMER 3.0, multiple queries"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_002(self):
-        """Test hmmer-text indexing, HMMER 3.0, single query, no hits"""
+        """Test hmmer3-text indexing, HMMER 3.0, single query, no hits"""
         filename = 'Hmmer/text_30_hmmscan_002.out'
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_006(self):
-        """Test hmmer-text indexing, HMMER 3.0, single query, multiple hits"""
+        """Test hmmer3-text indexing, HMMER 3.0, single query, multiple hits"""
         filename = 'Hmmer/text_30_hmmscan_006.out'
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_007(self):
-        """Test hmmer-text indexing, HMMER 3.0, single query, no alignments"""
+        """Test hmmer3-text indexing, HMMER 3.0, single query, no alignments"""
         filename = 'Hmmer/text_30_hmmscan_007.out'
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmscan_008(self):
-        """Test hmmer-text indexing, HMMER 3.0, single query, no alignment width"""
+        """Test hmmer3-text indexing, HMMER 3.0, single query, no alignment width"""
         filename = 'Hmmer/text_30_hmmscan_008.out'
         self.check_index(filename, self.fmt)
 
     def test_hmmertext_text_30_hmmsearch_005(self):
-        """Test hmmer-text indexing, HMMER 3.0, multiple queries"""
+        """Test hmmer3-text indexing, HMMER 3.0, multiple queries"""
         filename = 'Hmmer/text_30_hmmsearch_005.out'
         self.check_index(filename, self.fmt)
 
 
 class HmmerTabIndexCases(SearchIndexCases):
 
-    fmt = 'hmmer-tab'
+    fmt = 'hmmer3-tab'
 
     def test_hmmertab_30_hmmscan_001(self):
-        """Test hmmer-tab indexing, HMMER 3.0, multiple queries"""
+        """Test hmmer3-tab indexing, HMMER 3.0, multiple queries"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertab_30_hmmscan_002(self):
-        """Test hmmer-tab indexing, HMMER 3.0, single query, no hits"""
+        """Test hmmer3-tab indexing, HMMER 3.0, single query, no hits"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_002.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertab_30_hmmscan_003(self):
-        """Test hmmer-tab indexing, HMMER 3.0, single query, multiple hits"""
+        """Test hmmer3-tab indexing, HMMER 3.0, single query, multiple hits"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_003.out')
         self.check_index(filename, self.fmt)
 
     def test_hmmertab_30_hmmscan_004(self):
-        """Test hmmer-tab indexing, HMMER 3.0, single query, no alignments"""
+        """Test hmmer3-tab indexing, HMMER 3.0, single query, no alignments"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_004.out')
         self.check_index(filename, self.fmt)
 
@@ -1416,27 +1416,27 @@ class HmmerDomtabIndexCases(SearchIndexCases):
     def test_hmmerdomtab_30_hmmscan_001(self):
         """Test hmmscan-domtab indexing, HMMER 3.0, multiple queries"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_001.out')
-        self.check_index(filename, 'hmmscan-domtab')
+        self.check_index(filename, 'hmmscan3-domtab')
 
     def test_hmmerdomtab_30_hmmscan_002(self):
         """Test hmmscan-domtab indexing, HMMER 3.0, single query, no hits"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_002.out')
-        self.check_index(filename, 'hmmscan-domtab')
+        self.check_index(filename, 'hmmscan3-domtab')
 
     def test_hmmerdomtab_30_hmmscan_003(self):
         """Test hmmscan-domtab indexing, HMMER 3.0, single query, multiple hits"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_003.out')
-        self.check_index(filename, 'hmmscan-domtab')
+        self.check_index(filename, 'hmmscan3-domtab')
 
     def test_hmmerdomtab_30_hmmscan_004(self):
         """Test hmmscan-domtab indexing, HMMER 3.0, single query, no alignments"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_004.out')
-        self.check_index(filename, 'hmmscan-domtab')
+        self.check_index(filename, 'hmmscan3-domtab')
 
     def test_hmmerdomtab_30_hmmsearch_001(self):
         """Test hmmsearch-domtab indexing, HMMER 3.0, single query, no alignments"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmsearch_001.out')
-        self.check_index(filename, 'hmmsearch-domtab')
+        self.check_index(filename, 'hmmsearch3-domtab')
 
 
 class FastaM10IndexCases(SearchIndexCases):

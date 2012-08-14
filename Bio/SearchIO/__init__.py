@@ -120,8 +120,8 @@ Support for parsing, indexing, and writing:
  - blat-psl         - The default output of BLAT (PSL format). Variants with or
                       without header are both supported. PSLX (PSL + sequences)
                       is also supported.
- - hmmer-tab        - HMMER3 table output.
- - hmmer-domtab     - HMMER3 domain table output. When using this format, the
+ - hmmer3-tab       - HMMER3 table output.
+ - hmmer3-domtab    - HMMER3 domain table output. When using this format, the
                       program name has to be specified. For example, for parsing
                       hmmscan output, the name would be 'hmmscan-domtab'.
 
@@ -131,7 +131,7 @@ Support for parsing and indexing:
  - exonerate-vulgar - Exonerate vulgar line.
  - exonerate-text   - Exonerate cigar line.
  - fasta-m10        - Bill Pearson's FASTA -m 10 output.
- - hmmer-text       - HMMER regular text output format. Supported HMMER
+ - hmmer3-text      - HMMER regular text output format. Supported HMMER
                       subprograms are hmmscan, hmmsearch, and phmmer.
 
 Support for parsing:
@@ -166,13 +166,13 @@ _ITERATOR_MAP = {
         'exonerate-text': ('ExonerateIO', 'ExonerateTextParser'),
         'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarParser'),
         'fasta-m10': ('FastaIO', 'FastaM10Parser'),
-        'hmmer-text': ('HmmerIO', 'HmmerTextParser'),
-        'hmmer-tab': ('HmmerIO', 'HmmerTabParser'),
-        # for hmmer-domtab, the specific program is part of the format name
+        'hmmer3-text': ('HmmerIO', 'Hmmer3TextParser'),
+        'hmmer3-tab': ('HmmerIO', 'Hmmer3TabParser'),
+        # for hmmer3-domtab, the specific program is part of the format name
         # as we need it distinguish hit / target coordinates
-        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitParser'),
-        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryParser'),
-        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryParser'),
+        'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitParser'),
+        'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
+        'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryParser'),
 }
 
 # dictionary of supported formats for index()
@@ -184,11 +184,11 @@ _INDEXER_MAP = {
         'exonerate-text': ('ExonerateIO', 'ExonerateTextIndexer'),
         'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarIndexer'),
         'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
-        'hmmer-text': ('HmmerIO', 'HmmerTextIndexer'),
-        'hmmer-tab': ('HmmerIO', 'HmmerTabIndexer'),
-        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitIndexer'),
-        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIndexer'),
-        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryIndexer'),
+        'hmmer3-text': ('HmmerIO', 'Hmmer3TextIndexer'),
+        'hmmer3-tab': ('HmmerIO', 'Hmmer3TabIndexer'),
+        'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitIndexer'),
+        'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryIndexer'),
+        'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryIndexer'),
 }
 
 # dictionary of supported formats for write()
@@ -196,10 +196,10 @@ _WRITER_MAP = {
         'blast-tab': ('BlastIO', 'BlastTabWriter'),
         'blast-xml': ('BlastIO', 'BlastXmlWriter'),
         'blat-psl': ('BlatIO', 'BlatPslWriter'),
-        'hmmer-tab': ('HmmerIO', 'HmmerTabWriter'),
-        'hmmscan-domtab': ('HmmerIO', 'HmmerDomtabHmmhitWriter'),
-        'hmmsearch-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryWriter'),
-        'phmmer-domtab': ('HmmerIO', 'HmmerDomtabHmmqueryWriter'),
+        'hmmer3-tab': ('HmmerIO', 'Hmmer3TabWriter'),
+        'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitWriter'),
+        'hmmsearch3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
+        'phmmer3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmqueryWriter'),
 }
 
 

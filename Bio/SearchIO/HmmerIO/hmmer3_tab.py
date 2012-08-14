@@ -12,10 +12,10 @@ from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
-__all__ = ['HmmerTabParser', 'HmmerTabIndexer', 'HmmerTabWriter']
+__all__ = ['Hmmer3TabParser', 'Hmmer3TabIndexer', 'Hmmer3TabWriter']
 
 
-class HmmerTabParser(object):
+class Hmmer3TabParser(object):
 
     """Parser for the HMMER table format."""
 
@@ -141,11 +141,11 @@ class HmmerTabParser(object):
             self.line = self.handle.readline()
 
 
-class HmmerTabIndexer(SearchIndexer):
+class Hmmer3TabIndexer(SearchIndexer):
 
     """Indexer class for HMMER table output."""
 
-    _parser = HmmerTabParser
+    _parser = Hmmer3TabParser
     # denotes column location for query identifier
     _query_id_idx = 2
 
@@ -215,9 +215,9 @@ class HmmerTabIndexer(SearchIndexer):
         return qresult_raw
 
 
-class HmmerTabWriter(object):
+class Hmmer3TabWriter(object):
 
-    """Writer for hmmer-tab output format."""
+    """Writer for hmmer3-tab output format."""
 
     def __init__(self, handle):
         self.handle = handle

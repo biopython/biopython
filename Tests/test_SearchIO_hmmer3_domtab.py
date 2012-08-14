@@ -3,7 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Tests for SearchIO HmmerIO hmmer-domtab parsers."""
+"""Tests for SearchIO HmmerIO hmmer3-domtab parsers."""
 
 
 import os
@@ -22,7 +22,7 @@ def get_file(filename):
 
 class HmmerscanCases(unittest.TestCase):
 
-    fmt = 'hmmscan-domtab'
+    fmt = 'hmmscan3-domtab'
 
     def test_domtab_30_hmmscan_001(self):
         "Test parsing hmmscan-domtab, hmmscan 3.0, multiple queries (domtab_30_hmmscan_001)"
@@ -490,7 +490,7 @@ class HmmerscanCases(unittest.TestCase):
 
 class HmmersearchCases(unittest.TestCase):
 
-    fmt = 'hmmsearch-domtab'
+    fmt = 'hmmsearch3-domtab'
 
     def test_domtab_30_hmmsearch_001(self):
         "Test parsing hmmsearch-domtab, hmmsearch 3.0, multiple queries (domtab_30_hmmsearch_001)"
