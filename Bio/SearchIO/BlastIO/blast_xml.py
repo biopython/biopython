@@ -15,6 +15,7 @@ except ImportError:
     from xml.etree import ElementTree as ET
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
@@ -459,6 +460,13 @@ class BlastXmlParser(object):
                     # convert to python range and setattr
                     setattr(frag, start_type, min(start, end) - 1)
                     setattr(frag, end_type, max(start, end))
+
+            # set alphabet, based on program
+            prog = self._meta.get('program')
+            if prog == 'blastn':
+                frag.alphabet = generic_dna
+            elif prog in ['blastp', 'blastx', 'tblastn', 'tblastx']:
+                frag.alphabet = generic_protein
 
             hsp = HSP([frag])
             for key, val_info in _ELEM_HSP.items():

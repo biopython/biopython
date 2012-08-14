@@ -28,6 +28,7 @@ import re
 from math import log
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
@@ -172,6 +173,8 @@ def _create_hsp(hid, qid, psl):
         qseqlist = psl.get('qseqs')
         qseq = '' if not qseqlist else qseqlist[idx]
         frag = HSPFragment(hid, qid, hit=hseq, query=qseq)
+        # set alphabet
+        frag.alphabet = generic_dna
         # set coordinates
         frag.query_start = qcoords[0]
         frag.query_end = qcoords[1]

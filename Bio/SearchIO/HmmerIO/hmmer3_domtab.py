@@ -7,6 +7,7 @@
 
 from itertools import chain
 
+from Bio.Alphabet import generic_protein
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 from hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
@@ -58,6 +59,8 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
         frag['hit_end'] = int(cols[16])          # hmm to
         frag['query_start'] = int(cols[17]) - 1  # ali from
         frag['query_end'] = int(cols[18])        # ali to
+        # HMMER alphabets are always protein
+        frag['alphabet'] = generic_protein
 
         # switch hmm<-->ali coordinates if hmm is not hit
         if not self.hmm_as_hit:

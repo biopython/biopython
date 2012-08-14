@@ -9,6 +9,7 @@ import re
 from itertools import chain
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio.Alphabet import generic_protein
 
 from _base import _BaseExonerateParser, _BaseExonerateIndexer, _STRAND_MAP, \
         _parse_hit_or_query_line
@@ -208,10 +209,17 @@ class ExonerateTextParser(_BaseExonerateParser):
 
         # get the sequence blocks
         # we use the query row as reference for block coords
+        model = qresult['model'].upper()
+        has_ner = 'NER' in model
         block_ref = cmbn_rows[row_idx['query']]
-        has_ner = 'NER' in qresult['model'].upper()
         seq_coords = _get_block_coords(block_ref, has_ner)
         tmp_seq_blocks = _get_blocks(cmbn_rows, seq_coords, row_idx)
+
+        # determine alphabet from model
+        if 'protein2' in model or 'coding2' in model:
+            alphabet = generic_protein
+        else:
+            alphabet = None
 
         # get split codon temp coords for later use
         # this result in pairs of base movement for both ends of each row
@@ -256,6 +264,9 @@ class ExonerateTextParser(_BaseExonerateParser):
         hsp['query'] = [x['query'] for x in seq_blocks]
         hsp['hit'] = [x['hit'] for x in seq_blocks]
         hsp['alignment_annotation'] = {}
+        # set the alphabet
+        if alphabet is not None:
+            hsp['alphabet'] = alphabet
         # get the annotations if they exist
         for annot_type in ('homology', 'query_annotation', 'hit_annotation'):
             try:

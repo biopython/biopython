@@ -8,6 +8,7 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio.Alphabet import generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
@@ -259,6 +260,8 @@ class Hmmer3TextParser(object):
                 # hmmfrom, hmmto, query_ends, hit_ends, alifrom, alito,
                 # envfrom, envto, acc_avg
                 frag = HSPFragment(hid, qid)
+                # HMMER3 alphabets are always protein alphabets
+                frag.alphabet = generic_protein
                 # depending on whether the program is hmmsearch, hmmscan, or phmmer
                 # {hmm,ali}{from,to} can either be hit_{from,to} or query_{from,to}
                 # for hmmscan, hit is the hmm profile, query is the sequence

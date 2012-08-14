@@ -45,7 +45,7 @@ def _create_hsp(hid, qid, hspd):
     hsp = HSP(frags)
     # set hsp-specific attributes
     for attr in ('score', 'hit_split_codons', 'query_split_codons', \
-            'model', 'vulgar_comp', 'cigar_comp'):
+            'model', 'vulgar_comp', 'cigar_comp', 'alphabet'):
         if attr in hspd:
             setattr(hsp, attr, hspd[attr])
 
