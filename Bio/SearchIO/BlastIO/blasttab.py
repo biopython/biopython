@@ -628,7 +628,7 @@ class BlastTabWriter(object):
     def write_file(self, qresults):
         """Writes to the handle, returns how many QueryResult objects are written."""
         handle = self.handle
-        qresult_counter, hit_counter, hsp_counter = 0, 0, 0
+        qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
         for qresult in qresults:
             if self.has_comments:
@@ -639,6 +639,7 @@ class BlastTabWriter(object):
                     qresult_counter += 1
                 hit_counter += len(qresult)
                 hsp_counter += sum([len(hit) for hit in qresult])
+                frag_counter += sum([len(hit.fragments) for hit in qresult])
             # if it's commented and there are no hits in the qresult, we still
             # increment the counter
             if self.has_comments:
@@ -648,7 +649,7 @@ class BlastTabWriter(object):
         if self.has_comments:
             handle.write('# BLAST processed %i queries' % qresult_counter)
 
-        return qresult_counter, hit_counter, hsp_counter
+        return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_rows(self, qresult):
         """Returns a string containing tabular rows of the QueryResult object."""

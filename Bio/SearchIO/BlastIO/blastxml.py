@@ -700,7 +700,8 @@ class BlastXmlWriter(object):
     def write_file(self, qresults):
         """Writes the XML contents to the output handle."""
         xml = self.xml
-        self.qresult_counter, self.hit_counter, self.hsp_counter = 0, 0, 0
+        self.qresult_counter, self.hit_counter, self.hsp_counter, \
+            self.frag_counter = 0, 0, 0, 0
 
         # get the first qresult, since the preamble requires its attr values
         first_qresult = qresults.next()
@@ -714,7 +715,8 @@ class BlastXmlWriter(object):
         xml.endParents(2)
         xml.endDocument()
 
-        return self.qresult_counter, self.hit_counter, self.hsp_counter
+        return self.qresult_counter, self.hit_counter, self.hsp_counter, \
+            self.frag_counter
 
     def _write_elem_block(self, block_name, map_name, obj, opt_dict={}):
         """Writes sibling XML elements.
@@ -848,6 +850,7 @@ class BlastXmlWriter(object):
                 else:
                     xml.simpleElement(elem, str(content))
             self.hsp_counter += 1
+            self.frag_counter += len(hsp.fragments)
             xml.endParent()
 
     def _adjust_output(self, hsp, elem, attr):

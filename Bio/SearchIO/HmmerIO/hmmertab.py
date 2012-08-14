@@ -229,7 +229,7 @@ class HmmerTabWriter(object):
 
         """
         handle = self.handle
-        qresult_counter, hit_counter, hsp_counter = 0, 0, 0
+        qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
         try:
             first_qresult = qresults.next()
@@ -245,8 +245,9 @@ class HmmerTabWriter(object):
                     qresult_counter += 1
                     hit_counter += len(qresult)
                     hsp_counter += sum([len(hit) for hit in qresult])
+                    frag_counter += sum([len(hit.fragments) for hit in qresult])
 
-        return qresult_counter, hit_counter, hsp_counter
+        return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self, first_qresult=None):
         """Returns the header string of a HMMER table output."""

@@ -285,9 +285,10 @@ def write(qresults, handle, format=None, **kwargs):
     with as_handle(handle, 'w') as target_file:
         writer = writer_class(target_file, **kwargs)
         # count how many qresults, hits, and hsps
-        qresult_count, hit_count, hsp_count = writer.write_file(qresults)
+        qresult_count, hit_count, hsp_count, frag_count = \
+                writer.write_file(qresults)
 
-    return qresult_count, hit_count, hsp_count
+    return qresult_count, hit_count, hsp_count, frag_count
 
 
 def convert(in_file, in_format, out_file, out_format, in_kwargs=None,

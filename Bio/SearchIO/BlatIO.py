@@ -437,7 +437,7 @@ class BlatPslWriter(object):
 
     def write_file(self, qresults):
         handle = self.handle
-        qresult_counter, hit_counter, hsp_counter = 0, 0, 0
+        qresult_counter, hit_counter, hsp_counter, frag_counter = 0, 0, 0, 0
 
         if self.header:
             handle.write(self._build_header())
@@ -448,8 +448,9 @@ class BlatPslWriter(object):
                 qresult_counter += 1
                 hit_counter += len(qresult)
                 hsp_counter += sum([len(hit) for hit in qresult])
+                frag_counter += sum([len(hit.fragments) for hit in qresult])
 
-        return qresult_counter, hit_counter, hsp_counter
+        return qresult_counter, hit_counter, hsp_counter, frag_counter
 
     def _build_header(self):
         # for now, always use the psLayout version 3
