@@ -1222,6 +1222,7 @@ class HSP(_BaseHSP):
     query_description = _fullcascade('query_description')
     hit_id = _fullcascade('hit_id')
     query_id = _fullcascade('query_id')
+    alphabet = _fullcascade('alphabet')
 
     # properties for single-fragment HSPs
     fragment = _singleitem()
@@ -1278,7 +1279,7 @@ class HSPFragment(_BaseHSP):
         self._query_id = query_id
         self._hit_description = hit_description
         self._query_description = query_description
-        self.alphabet = alphabet
+        self._alphabet = alphabet
 
         for seq_type in ('query', 'hit'):
             # self.query or self.hit
@@ -1400,6 +1401,7 @@ class HSPFragment(_BaseHSP):
             seq.id = seq_id
             seq.description = seq_desc
             seq.name = seq_name
+            seq.seq.alphabet = self.alphabet
             return seq
         elif isinstance(seq, basestring):
             return SeqRecord(Seq(seq, self.alphabet), id=seq_id, name=seq_name,
@@ -1435,6 +1437,19 @@ class HSPFragment(_BaseHSP):
             return MultipleSeqAlignment([self.query, self.hit], self.alphabet)
 
     alignment = property(fget=_alignment_get)
+
+    def _alphabet_get(self):
+        return self._alphabet
+
+    def _alphabet_set(self, value):
+        self._alphabet = value
+        # try to set SeqRecords' alphabets if they exist
+        if self.query is not None:
+            self.query.seq.alphabet = value
+        if self.hit is not None:
+            self.hit.seq.alphabet = value
+
+    alphabet = property(fget=_alphabet_get, fset=_alphabet_set)
 
     def _aln_span_get(self):
         # length of alignment (gaps included)

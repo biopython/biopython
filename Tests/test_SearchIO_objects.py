@@ -17,7 +17,7 @@ from copy import deepcopy
 from search_tests_common import compare_search_obj
 
 from Bio.Align import MultipleSeqAlignment
-from Bio.Alphabet import single_letter_alphabet
+from Bio.Alphabet import single_letter_alphabet, generic_dna
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -969,6 +969,22 @@ class HSPMultipleFragmentCases(unittest.TestCase):
                     self.assertEqual(getattr(fragment, attr_name), new_value)
                     self.assertNotEqual(getattr(fragment, attr_name), value)
 
+    def test_alphabet(self):
+        """Test HSP.alphabet getter"""
+        self.assertTrue(self.hsp.alphabet is single_letter_alphabet)
+
+    def test_alphabet_set(self):
+        """Test HSP.alphabet setter"""
+        # test initial values
+        self.assertTrue(self.hsp.alphabet is single_letter_alphabet)
+        for frag in self.hsp.fragments:
+            self.assertTrue(frag.alphabet is single_letter_alphabet)
+        self.hsp.alphabet = generic_dna
+        # test values after setting
+        self.assertTrue(self.hsp.alphabet is generic_dna)
+        for frag in self.hsp.fragments:
+            self.assertTrue(frag.alphabet is generic_dna)
+
     def test_range(self):
         """Test HSP range properties"""
         # range on HSP with multiple fragment should give the
@@ -1105,6 +1121,22 @@ class HSPFragmentCases(unittest.TestCase):
         # check alignment
         self.assertTrue(isinstance(self.fragment.alignment, MultipleSeqAlignment))
         self.assertEqual(single_letter_alphabet, self.fragment.alignment._alphabet)
+
+    def test_alphabet_no_seq(self):
+        """Test HSPFragment alphabet property, query and hit sequences not present"""
+        self.assertTrue(self.fragment.alphabet is single_letter_alphabet)
+        self.fragment.alphabet = generic_dna
+        self.assertTrue(self.fragment.alphabet is generic_dna)
+
+    def test_alphabet_with_seq(self):
+        """Test HSPFragment alphabet property, query or hit sequences present"""
+        self.assertTrue(self.fragment.alphabet is single_letter_alphabet)
+        self.fragment._hit = SeqRecord(Seq('AAA'))
+        self.fragment._query = SeqRecord(Seq('AAA'))
+        self.fragment.alphabet = generic_dna
+        self.assertTrue(self.fragment.alphabet is generic_dna)
+        self.assertTrue(self.fragment.hit.seq.alphabet is generic_dna)
+        self.assertTrue(self.fragment.query.seq.alphabet is generic_dna)
 
     def test_seq_unequal_hit_query_len(self):
         """Test HSPFragment sequence setter with unequal hit and query lengths"""
