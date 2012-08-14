@@ -276,7 +276,7 @@ class LabelTest(unittest.TestCase):
                       fragments=1,
                       start=0, end=400)
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
-        #For the tutorial this might be useful:
+        #For the tutorial this is useful:
         #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
             #Circular diagram
@@ -323,9 +323,12 @@ class SigilsTest(unittest.TestCase):
                            y=0.01, yt=0.01, yb=0.01,
                            x=0.01, xl=0.01, xr=0.01)
 
-    def add_track_with_sigils(self, **kwargs):
+    def add_track_with_sigils(self, track_caption="", **kwargs):
         #Add a track of features,
-        self.gdt_features = self.gdd.new_track(1, greytrack=False)
+        self.gdt_features = self.gdd.new_track(1, 
+                                               greytrack=(track_caption!=""),
+                                               name=track_caption,
+                                               greytrack_labels=1)
         #We'll just use one feature set for these features,
         self.gds_features = self.gdt_features.new_set()
         #Add three features to show the strand options,
@@ -352,7 +355,7 @@ class SigilsTest(unittest.TestCase):
                       start=0, end=400)
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
         #For the tutorial this might be useful:
-        #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+        self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
             #Circular diagram
             self.gdd.draw(tracklines=False,
@@ -365,7 +368,8 @@ class SigilsTest(unittest.TestCase):
     def test_all_sigils(self):
         """All sigils."""
         for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
-             self.add_track_with_sigils(sigil=glyph)
+             self.add_track_with_sigils(track_caption = '  sigil="%s"' % glyph,
+                                        sigil=glyph)
         self.finish("GD_sigils")
 
     def test_labels(self):
