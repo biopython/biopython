@@ -11711,12 +11711,11 @@ you will usually be drawing many (small) features on a page, not just a
 few large ones as shown here.
 
 \subsection{Feature sigils}
-\label{sec:gd_arrow_sigils}
+\label{sec:gd_sigils}
 
 The examples above have all just used the default sigil for the feature, a
-plain box, but you can also use \emph{arrows} instead.  Note this wasn't
-available in the last publically released standalone version of
-GenomeDiagram.
+plain box, which was all that was available in the last publicly released standalone version of GenomeDiagram. Arrow sigils were included when
+GenomeDiagram was added to Biopython 1.50:
 
 \begin{verbatim}
 #Default uses a BOX sigil
@@ -11729,17 +11728,49 @@ gd_feature_set.add_feature(feature, sigil="BOX")
 gd_feature_set.add_feature(feature, sigil="ARROW")
 \end{verbatim}
 
-The default arrows are shown at the top of
+\noindent
+Biopython 1.61 added three more sigils,
+
+\begin{verbatim}
+#Box with corners cut off (making it an octagon)
+gd_feature_set.add_feature(feature, sigil="OCTO")
+
+#Box with jagged edges (useful for showing breaks in contains)
+gd_feature_set.add_feature(feature, sigil="JAGGY")
+
+#Arrow which spans the axis with strand used only for direction
+gd_feature_set.add_feature(feature, sigil="BIGARROW")
+\end{verbatim}
+
+These are shown
 \begin{htmlonly}
-the next two images.
+below.
 \end{htmlonly}
-\begin{latexonly}
-Figures~\ref{fig:gd_sigil_arrow_shafts} and~\ref{fig:gd_sigil_arrow_heads}.
+\begin{latexonly}in Figure~\ref{fig:gd_sigils}.
 \end{latexonly}
-The arrows fit into a bounding box (as given by the default BOX sigil),
+Most sigils fit into a bounding box (as given by the default BOX sigil),
 either above or below the axis for the forward or reverse strand, or
 straddling it (double the height) for strand-less features.
+The BIGARROW sigil is different, always straddling the axis with the
+direction taken from the feature's stand.
 
+\begin{htmlonly}
+\imgsrc[width=425, height=600]{images/GD_sigils.png}
+\end{htmlonly}
+\begin{latexonly}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{images/GD_sigils.png}
+\caption{Simple GenomeDiagram showing different sigils
+(see Section~\ref{sec:gd_sigils})}
+\label{fig:gd_sigils}
+\end{figure}
+\end{latexonly}
+
+\subsection{Arrow sigils}
+\label{sec:gd_arrow_sigils}
+
+We introduced the arrow sigils in the previous section.
 There are two additional options to adjust the shapes of the arrows, firstly
 the thickness of the arrow shaft, given as a proportion of the height of the
 bounding box:
