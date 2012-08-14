@@ -3,54 +3,144 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Biopython representation of sequence homology search program outputs.
+"""Biopython interface for sequence search program outputs.
+
+The SearchIO submodule provides parsers, indexers, and writers for outputs from
+various sequence search programs. It provides an API similar to SeqIO and
+AlignIO, with the following main functions: parse, read, to_dict, index,
+index_db, write, and convert.
+
+SearchIO parses a search output file's contents into a hierarchy of four
+objects:
+
+    - QueryResult, to represent a search query. This is the top-level object
+      returned by the main SearchIO parse and read functions. QueryResult
+      objects may contain zero or more Hit objects, each accessible by its ID
+      string (like in Python dictionaries) or integer index (like in Python
+      lists).
+
+    - Hit, to represent a database entry containing a full or partial sequence
+      match with the query sequence. Hit objects contain one or more HSP
+      objects, each accessible by its integer index.
+
+    - HSP, to represent a region of significant alignment(s) between the query
+      and hit sequences. HSP objects contain one or more HSPFragment objects,
+      each accessible by its integer index.
+
+    - HSPFragment, to represent a single contiguous alignment between the query
+      and hit sequences.
+
+      Most search programs only have HSPs with one HSPFragment in them, making
+      these two objects inseparable. However, there are programs (e.g. BLAT and
+      Exonerate) which may have more than one HSPFragment objects in any given
+      HSP. If you are not using these programs, you can safely consider HSP and
+      HSPFragment as a single union.
+
+More details and examples of the objects' usage are available in their
+respective documentations.
+
+In addition to the four objects above, SearchIO is also tightly integrated with
+the SeqRecord objects (see SeqIO) and MultipleSeqAlignment objects (see
+AlignIO). SeqRecord objects are used to store the actual matching hit and query
+sequences, while MultipleSeqAlignment objects stores the alignment between them.
+
 
 Input
 =====
-The main interface for this module is the Bio.SearchIO.parse(...) function.
+The main function used to parse search output files is Bio.SearchIO.parse(...).
+This function reads in a given search output file and returns a generator that
+yields a QueryResult object per iteration.
+
 It takes two arguments: 1) a file handle or a filename of the input file
 (the search output) and 2) a string of one of the supported formats.
 
-    >>> # TODO: example
+    >>> from Bio import SearchIO
+    >>> for qresult in SearchIO.parse('Blast/mirna.xml', 'blast-xml'):
+    ...     print qresult.id, qresult.description
+    ...
+    48363 mir_1
+    48364 mir_2
+    48365 mir_3
+
+SearchIO also provides a Bio.SearchIO.read(...) function, which is intended for
+use for search output files containing only a single query. This function
+returns a QueryResult object and will raise an exception if the source file
+contains more than one queries:
+
+    >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
+    >>> print qresult.id, qresult.description
+    ...
+    gi|11464971:4-101 pleckstrin [Mus musculus]
+
+For accessing search results of large output files, you can use the indexing
+functions Bio.SearchIO.index(...) or Bio.SearchIO.index_db(...). They have a
+similar interface to their counterparts in SeqIO and AlignIO, with the addition
+of the optional keyword arguments.
 
 
-Input - Search Result with a Single Query
-=========================================
+Output
+======
+SearchIO has writing support for several formats, using the
+Bio.SearchIO.write(...) function. This function returns a tuple of four
+numbers: the number of QueryResult, Hit, HSP, and HSPFragment written:
 
-    >>> # TODO: example
+    >>> qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+    >>> SearchIO.write(qresults, 'results.tab', 'blast-tab')
+    (3, 243, 245, 245)
+
+Note that different writers may require different attribute values of the
+SearchIO objects. This limits the scope of writable search results to search
+results that have the required attribute.
+
+For example, the writer for HMMER domain table output require
+the conditional e-value from each HSP object. If you try to write to the HMMER
+domain table format and your HSPs do not have this attribute, an exception will
+be raised.
 
 
-Input - Search Result with Multiple Queries
-===========================================
+Conversion
+==========
+SearchIO provides a shortcut function Bio.SearchIO.convert(...) to convert a
+given file into another format. Under the hood, the function simply parses a
+given output file and writes it to another using the parse and write functions.
 
-    >>> # TODO: example
+Note that the same restrictions found in Bio.SearchIO.write(...) applies to the
+convert function as well.
 
 
-Format Conversion
+Supported Formats
 =================
+Below is a list of search program output formats supported by SearchIO.
 
-    >>> # TODO: example
+Support for parsing, indexing, and writing:
 
+ - blast-tab        - BLAST+ tabular output. Both variants without comments
+                      (-m 6 flag) and with comments (-m 7 flag) are supported.
+ - blast-xml        - BLAST+ XML output.
+ - blat-psl         - The default output of BLAT (PSL format). Variants with or
+                      without header are both supported. PSLX (PSL + sequences)
+                      is also supported.
+ - hmmer-tab        - HMMER3 table output.
+ - hmmer-domtab     - HMMER3 domain table output. When using this format, the
+                      program name has to be specified. For example, for parsing
+                      hmmscan output, the name would be 'hmmscan-domtab'.
 
-Supported Homology Search Programs
-==================================
-Below is a list of supported search program output formats. Note that it is
-not always enough to specify the program name alone; its format must also be
-specified as well (not all output formats from a given program is supported).
+Support for parsing and indexing:
 
- - blast-tab    - BLAST+ tabular output. Variants with or without header
-                  comments are both supported, but for the variant without
-                  header comments, only the default column ordering is
-                  supported.
- - blast-xml    - BLAST+ XML output. 
- - blast-text   - BLAST+ plain text output.
- - blat-psl     - The default output of BLAT (PSL format). Variants with or
-                  without header are both supported.
- - blat-pslx    - PSL format with hit and query sequences. Variants with or
-                  without header are both supported.
- - fasta-m10    - Bill Pearson's FASTA -m 10 output.
- - hmmer-text   - HMMER regular text output format. Supported HMMER
-                  subprograms are hmmerscan and hmmersearch.
+ - exonerate-text   - Exonerate plain text output.
+ - exonerate-vulgar - Exonerate vulgar line.
+ - exonerate-text   - Exonerate cigar line.
+ - fasta-m10        - Bill Pearson's FASTA -m 10 output.
+ - hmmer-text       - HMMER regular text output format. Supported HMMER
+                      subprograms are hmmscan, hmmsearch, and phmmer.
+
+Support for parsing:
+
+ - blast-text       - BLAST+ plain text output.
+
+Each of these formats have different keyword arguments available for use with
+the main SearchIO functions. More details and examples are available in each
+of the format's documentation.
 
 """
 
@@ -116,7 +206,7 @@ _WRITER_MAP = {
 def _get_handler(format, mapping):
     """Returns the object to handle the given format according to the mapping.
 
-    Arguments:
+    Parameters:
     format -- Lower case string denoting one of the supported formats.
     mapping -- Dictionary of format and object name mapping.
 
@@ -147,12 +237,42 @@ def _get_handler(format, mapping):
 
 
 def parse(handle, format=None, **kwargs):
-    """Turns a search output file into an iterator returning QueryResult
+    """Turns a search output file into a generator that yields QueryResult
     objects.
 
-    Arguments:
+    Parameters:
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
+    kwargs -- Format-specific keyword arguments.
+
+    This function is used to iterate over each query in a given search output
+    file:
+
+    >>> from Bio import SearchIO
+    >>> qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+    >>> qresults
+    <generator object parse at ...>
+    >>> for qresult in qresults:
+    ...     print "Search %s has %i hits" % (qresult.id, len(qresult))
+    ...
+    Search 48363 has 95 hits
+    Search 48364 has 48 hits
+    Search 48365 has 100 hits
+
+    Depending on the file format, parse may also take additional keyword
+    argument(s) that modifies the behavior of the format parser. Here is a
+    simple example, where the keyword argument enables parsing of a commented
+    BLAST tabular output file:
+
+    >>> from Bio import SearchIO
+    >>> for qresult in SearchIO.parse('Blast/wnts.tab', 'blast-tab', comments=True):
+    ...     print "Search %s has %i hits" % (qresult.id, len(qresult))
+    ...
+    Search gi|195230749:301-1383 has 5 hits
+    Search gi|325053704:108-1166 has 5 hits
+    Search gi|156630997:105-1160 has 5 hits
+    Search gi|371502086:108-1205 has 5 hits
+    Search gi|53729353:216-1313 has 5 hits
 
     """
     # get the iterator object and do error checking
@@ -169,9 +289,39 @@ def parse(handle, format=None, **kwargs):
 def read(handle, format=None, **kwargs):
     """Turns a search output file into a single QueryResult.
 
-    Arguments:
+    Parameters:
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
+    kwargs -- Format-specific keyword arguments.
+
+    The read function is used for parsing search output files containing exactly
+    one query:
+
+    >>> from Bio import SearchIO
+    >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
+    >>> print qresult.id, qresult.description
+    ...
+    gi|11464971:4-101 pleckstrin [Mus musculus]
+
+    If the given handle has no results, an exception will be raised:
+
+    >>> from Bio import SearchIO
+    >>> qresult = SearchIO.read('Blast/tab_2226_tblastn_002.txt', 'blast-tab')
+    Traceback (most recent call last):
+    ...
+    ValueError: No query results found in handle
+
+    Similarly, if the given handle has more than one results, an exception will
+    also be raised:
+
+    >>> from Bio import SearchIO
+    >>> qresult = SearchIO.read('Blast/tab_2226_tblastn_001.txt', 'blast-tab')
+    Traceback (most recent call last):
+    ...
+    ValueError: More than one query results found in handle
+
+    Like parse, read may also accept keyword argument(s) depending on the search
+    file format.
 
     """
     generator = parse(handle, format, **kwargs)
@@ -195,18 +345,44 @@ def read(handle, format=None, **kwargs):
 def to_dict(qresults, key_function=lambda rec: rec.id):
     """Turns a QueryResult iterator or list into a dictionary.
 
-    Arguments:
-    qresults -- Parser returning QueryResult objects or a list containing
-                QueryResult objects.
+    Parameters:
+    qresults -- Iterable returning QueryResult objects.
     key_function -- Optional callback function which when given a
-                    QUeryResult should return a unique key for the dictionary.
+                    QueryResult object should return a unique key for the
+                    dictionary.
 
-    e.g. key_function = lambda rec : rec.id
-    or,  key_function = lambda rec : rec.id.split('|')[0]
+    This function enables access of QueryResult objects in a single search
+    output file using its identifier.
 
-    If key_function is ommitted then query.id is used, on the assumption
-    that the objects returned are Queries with a unique id. If duplicate
-    keys are present, an error will be raised.
+    >>> from Bio import SearchIO
+    >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
+    >>> search_dict = SearchIO.to_dict(qresults)
+    >>> sorted(search_dict.keys())
+    ['gi|156630997:105-1160', ..., 'gi|371502086:108-1205', 'gi|53729353:216-1313']
+    >>> search_dict['gi|156630997:105-1160']
+    QueryResult(id='gi|156630997:105-1160', 5 hits)
+
+    By default, the dictionary key is the QueryResult's string ID. This may be
+    changed by supplying a callback function that returns the desired identifier.
+    Here is an example using a function that removes the 'gi|' part in the
+    beginning of the QueryResult ID.
+
+    >>> from Bio import SearchIO
+    >>> qresults = SearchIO.parse('Blast/wnts.xml', 'blast-xml')
+    >>> key_func = lambda qresult: qresult.id.split('|')[1]
+    >>> search_dict = SearchIO.to_dict(qresults, key_func)
+    >>> sorted(search_dict.keys())
+    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
+    >>> search_dict['156630997:105-1160']
+    QueryResult(id='gi|156630997:105-1160', 5 hits)
+
+    Note that the callback function does not change the QueryResult's ID value.
+    It only changes the key value used to retrieve the associated QueryResult.
+
+    As this function loads all QueryResult objects into memory, it may be
+    unsuitable for dealing with files containing many queries. In that case, it
+    is recommended that you use either SearchIO.index(...) or
+    SearchIO.index_db(...)
 
     """
     qdict = {}
@@ -221,11 +397,48 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
 def index(handle, format=None, key_function=None, **kwargs):
     """Indexes a search output file and returns a dictionary-like object.
 
-    Arguments:
+    Parameters:
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
     key_function -- Optional callback function which when given a
                     QueryResult should return a unique key for the dictionary.
+    kwargs -- Format-specific keyword arguments.
+
+    Index returns a pseudo-dictionary object with QueryResult objects as its
+    values and a string identifier as its keys. The function is mainly useful
+    for dealing with large search output files, as it enables access to any
+    given QueryResult object much faster than using parse or read.
+
+    Index works by creating storing in-memory the start locations of all
+    QueryResult objects in a file. When a user requested access to that
+    QueryResult, this function will jump into that position, parse the query
+    directly, and returns a QueryResult object:
+
+    >>> from Bio import SearchIO
+    >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml')
+    >>> search_idx
+    SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=None)
+    >>> sorted(search_idx.keys())
+    ['gi|156630997:105-1160', 'gi|195230749:301-1383', ..., 'gi|53729353:216-1313']
+    >>> search_idx['gi|195230749:301-1383']
+    QueryResult(id='gi|195230749:301-1383', 5 hits)
+
+    You can supply a custom callback function to alter the default identifier
+    string. This function should accept as its input the QueryResult ID string
+    and returns a modified version of it.
+
+    >>> from Bio import SearchIO
+    >>> key_func = lambda id: id.split('|')[1]
+    >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml', key_func)
+    >>> search_idx
+    SearchIO.index('Blast/wnts.xml', 'blast-xml', key_function=<function <lambda> at ...>)
+    >>> sorted(search_idx.keys())
+    ['156630997:105-1160', ..., '371502086:108-1205', '53729353:216-1313']
+    >>> search_idx['156630997:105-1160']
+    QueryResult(id='gi|156630997:105-1160', 5 hits)
+
+    Note that the callback function does not change the QueryResult's ID value.
+    It only changes the key value used to retrieve the associated QueryResult.
 
     """
     # check if handle type is correct
@@ -240,7 +453,7 @@ def index_db(index_filename, filenames=None, format=None,
         key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
-    Arguments:
+    Parameters:
     index_filename -- The SQLite filename.
     filenames -- List of strings specifying file(s) to be indexed, or when
                  indexing a single file this can be given as a string.
@@ -250,6 +463,33 @@ def index_db(index_filename, filenames=None, format=None,
     key_function -- Optional callback function which when given a
                     QueryResult identifier string should return a unique
                     key for the dictionary.
+    kwargs -- Format-specific keyword arguments.
+
+    The index_db function is similar to Bio.SearchIO.index(...) in that it
+    indexes the start position of all queries from search output files. The main
+    difference is instead of storing these indices in-memory, they are written
+    into a flat SQLite database. This allows the indices to persist between
+    Python sessions, so the QueryResult objects in the source file can be
+    accessed without any indexing overhead.
+
+    >>> from Bio import SearchIO
+    >>> db_idx = SearchIO.index_db('search.idx', 'Blast/mirna.xml', 'blast-xml')
+    >>> sorted(db_idx.keys())
+    ['48363', '48364', '48365']
+    >>> db_idx['48364']
+    QueryResult(id='48364', 48 hits)
+
+    index_db can also index multiple files and store them in the same database,
+    making it easier to group multiple search files and access them from a
+    single interface.
+
+    >>> from Bio import SearchIO
+    >>> files = ['Blast/mirna.xml', 'Blast/wnts.xml']
+    >>> db_idx = SearchIO.index_db(':memory:', files, 'blast-xml')
+    >>> sorted(db_idx.keys())
+    ['48363', '48364', '48365', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']
+    >>> db_idx['48364']
+    QueryResult(id='48364', 48 hits)
 
     """
     # cast filenames to list if it's a string
@@ -265,11 +505,32 @@ def index_db(index_filename, filenames=None, format=None,
 def write(qresults, handle, format=None, **kwargs):
     """Writes QueryResult objects to a file in the given format.
 
-    Arguments:
+    Parameters:
     qresults -- An iterator returning QueryResult objects or a single
                 QueryResult object.
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
+    kwargs -- Format-specific keyword arguments.
+
+    The write function writes QueryResult object(s) into a the given output
+    handle / filename. You can supply it with a single QueryResult object or an
+    iterable returning one or more QueryResult objects. In both cases, the
+    function will return a tuple of four values: the number of QueryResult, Hit,
+    HSP, and HSPFragment objects it writes to the output file.
+
+    >>> from Bio import SearchIO
+    >>> qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+    >>> SearchIO.write(qresults, 'results.tab', 'blast-tab')
+    (3, 243, 245, 245)
+
+    The output of different formats may be adjusted using the format-specific
+    keyword arguments. Here is an example that writes BLAT PSL output file with
+    a header:
+
+    >>> from Bio import SearchIO
+    >>> qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')
+    >>> SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)
+    (2, 13, 22, 26)
 
     """
     # turn qresults into an iterator if it's a single QueryResult object
@@ -295,7 +556,7 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
         out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
-    Arguments:
+    Parameters:
     in_file -- Handle to the input file, or the filename as string.
     in_format -- Lower case string denoting the format of the input file.
     out_file -- Handle to the output file, or the filename as string.
@@ -303,11 +564,40 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
     in_kwargs --  Dictionary of keyword arguments for the input function.
     out_kwargs -- Dictionary of keyword arguments for the output function.
 
-    Note that some conversion are lossy, so it can only go one way. For
-    example conversion from blast-xml to blast-tab is possible as blast-xml
-    has richer information than blast-tab. However the reverse is not possible,
-    as blast-tab does not always contain the same information content as
-    blast-xml (e.g. the HSP alignment is not always present in blast-tab). 
+    The convert function is a shortcut function for Bio.SearchIO.parse(...)
+    and Bio.SearchIO.write(...). It has the same return type as the write
+    function. Format-specific arguments may be passed to the convert function,
+    but only as dictionaries.
+
+    Here is an example of using convert to convert from a BLAST+ XML file into a
+    tabular file with comments:
+
+    >>> from Bio import SearchIO
+    >>> in_file = 'Blast/mirna.xml'
+    >>> in_fmt = 'blast-xml'
+    >>> out_file = 'results.tab'
+    >>> out_fmt = 'blast-tab'
+    >>> out_kwarg = {'comments': True}
+    >>> SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)
+    (3, 243, 245, 245)
+
+    Given that different search output file provide different statistics and
+    different level of details, the convert function is limited only to
+    converting formats that have the same statistics and for conversion to
+    formats with the same level of detail, or less.
+
+    For example, converting from a BLAST+ XML output to a HMMER table file
+    is not possible, as these are two search programs with different kinds of
+    statistics. In theory, you may provide the necessary values required by the
+    HMMER table file (e.g. conditional e-values, envelope coordinates). However,
+    these values are likely to be meaningless as they are not true
+    HMMER-computed values.
+
+    Another example is converting from BLAST+ XML to BLAST+ tabular file. This
+    is possible, as BLAST+ XML provide all the values necessary to create a
+    BLAST+ tabular file. However, the reverse conversion may not be possible.
+    There are more details covered in the XML file that are not found in a
+    tabular file (e.g. the lambda and kappa values)
 
     """
     if in_kwargs is None:
@@ -329,12 +619,21 @@ def _test():
     import os
 
     test_dir = 'Tests'
+    outfiles = ['results.tab', 'search.idx']
 
     if os.path.isdir(os.path.join('..', '..', test_dir)):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
+        # check that we're not overwriting any file, as the doctest
+        # writes several output files
+        for ofile in outfiles:
+            assert not os.path.exists(ofile), ofile
         os.chdir(os.path.join('..', '..', test_dir))
-        doctest.testmod()
+        doctest.testmod(optionflags=doctest.ELLIPSIS)
+        # delete example from SearchIO.write
+        for ofile in outfiles:
+            if os.path.exists(ofile):
+                os.remove(ofile)
         os.chdir(cur_dir)
         print "Done"
 
