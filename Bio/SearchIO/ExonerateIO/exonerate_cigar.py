@@ -10,7 +10,7 @@ import re
 from Bio._py3k import _as_bytes, _bytes_to_string
 
 from _base import _BaseExonerateParser, _STRAND_MAP
-from exoneratevulgar import ExonerateVulgarIndexer
+from exonerate_vulgar import ExonerateVulgarIndexer
 
 
 __all__ = ['ExonerateCigarParser', 'ExonerateCigarIndexer']

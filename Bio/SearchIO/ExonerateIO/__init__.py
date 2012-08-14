@@ -23,6 +23,6 @@ More information are available through these links:
 # - Cigar and vulgar parsing results will most likely be different, due to the
 #   different type of data stored by both formats
 
-from exoneratetext import *
-from exoneratevulgar import *
-from exoneratecigar import *
+from exonerate_text import *
+from exonerate_vulgar import *
+from exonerate_cigar import *
