@@ -87,7 +87,7 @@ class ShortQueryBlastError(Exception):
     pass
     
 
-class _Scanner:
+class _Scanner(object):
     """Scan BLAST output from blastall or blastpgp.
 
     Tested with blastall and blastpgp v2.0.10, v2.0.11
@@ -834,7 +834,7 @@ class PSIBlastParser(AbstractParser):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
-class _HeaderConsumer:
+class _HeaderConsumer(object):
     def start_header(self):
         self._header = Record.Header()
         
@@ -890,7 +890,7 @@ class _HeaderConsumer:
         self._header.reference = self._header.reference.rstrip()
         self._header.query = self._header.query.rstrip()
 
-class _DescriptionConsumer:
+class _DescriptionConsumer(object):
     def start_descriptions(self):
         self._descriptions = []
         self._model_sequences = []
@@ -969,7 +969,7 @@ class _DescriptionConsumer:
         dh.e = _safe_float(dh.e)
         return dh
 
-class _AlignmentConsumer:
+class _AlignmentConsumer(object):
     # This is a little bit tricky.  An alignment can either be a
     # pairwise alignment or a multiple alignment.  Since it's difficult
     # to know a-priori which one the blast record will contain, I'm going
@@ -1133,7 +1133,7 @@ class _AlignmentConsumer:
         except AttributeError:
             pass
 
-class _HSPConsumer:
+class _HSPConsumer(object):
     def start_hsp(self):
         self._hsp = Record.HSP()
 
@@ -1259,7 +1259,7 @@ class _HSPConsumer:
     def end_hsp(self):
         pass
 
-class _DatabaseReportConsumer:
+class _DatabaseReportConsumer(object):
 
     def start_database_report(self):
         self._dr = Record.DatabaseReport()
@@ -1302,7 +1302,7 @@ class _DatabaseReportConsumer:
     def end_database_report(self):
         pass
     
-class _ParametersConsumer:
+class _ParametersConsumer(object):
     def start_parameters(self):
         self._params = Record.Parameters()
 
