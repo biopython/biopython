@@ -6,9 +6,9 @@ C4 Alignment:
          Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
         Target: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
          Model: coding2coding
-     Raw score: 245
-   Query range: 0 -> 164
-  Target range: 465 -> 629
+     Raw score: 213
+   Query range: 0 -> 160
+  Target range: 465 -> 630
 
    1 : ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACA :  64
        ThrValAsnThrSerIleGluValGlnProHisThrGlnGluAsnGluLysValMetTrpAsnI
@@ -16,17 +16,17 @@ C4 Alignment:
        ThrValAsnThrSerIleGluValGlnProHisThrGlnGluAsnGluLysValMetTrpAsnI
  466 : ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACA : 529
 
-  65 : TAGGCTCATGGAACGCTCCCAGTTTAACCAAAATTCGTGGGATTCTCCCCCCGGAAATCGAACA : 126
-       leGlySerTrpAsnAlaProSerLeuThr##AsnSerTrpAspSerProProGlyAsnArgThr
-       |||||||||||||||||||||||||||||##|||||||||||||||||||||||||||||||||
-       leGlySerTrpAsnAlaProSerLeuThr--AsnSerTrpAspSerProProGlyAsnArgThr
- 530 : TAGGCTCATGGAACGCTCCCAGTTTAACC--AATTCGTGGGATTCTCCCCCCGGAAATCGAACA : 589
+  65 : TAGGCTCATGGAACGCTCCCAGTTTAACCAAATTCGTGGGATACTCCCCCCGGAAATCGAACA- : 128
+       leGlySerTrpAsnAlaProSerLeuThr#AsnSerTrpAspThrProProGlyAsnArgThr-
+       |||||||||||||||||||||||||||||#||||||||||||:!!||||||||||||||||||#
+       leGlySerTrpAsnAlaProSerLeuThr-AsnSerTrpAspSerProProGlyAsnArgThr#
+ 530 : TAGGCTCATGGAACGCTCCCAGTTTAACC-AATTCGTGGGATTCTCCCCCCGGAAATCGAACAG : 592
 
- 127 : --TGCCGTTACCATCGGTGACGAAAGTATTAATGGTAG : 164
-       --CysArgTyrHisArg***ArgLysTyr***Trp***
-       ##||||||||||||||||||||||||||||||||||||
-       ##CysArgTyrHisArg***ArgLysTyr***Trp***
- 590 : GGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAG : 629
+ 129 : -TGCCGTTACCAT----GACGAAAGTATTAATGGTAGT : 160
+       -CysArgTyrHis----AspGluSerIleAsnGlySer
+       #||||||||||||####|||||||||||||||||||||
+       #CysArgTyrHis####AspGluSerIleAsnGlySer
+ 593 : GTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAGT : 630
 
 
 C4 Alignment:
@@ -34,26 +34,26 @@ C4 Alignment:
          Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]
         Target: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]
          Model: coding2coding
-     Raw score: 234
-   Query range: 163 -> 2
-  Target range: 628 -> 467
+     Raw score: 201
+   Query range: 158 -> 1
+  Target range: 628 -> 466
 
- 163 : TACCATTAATACTTTCGTCACCGATGGTAACGGCAT--GTTCGATTTCCGGGGGGAGAATCCCA : 103
-       TyrHis***TyrPheArgHisArgTrp***ArgHis--ValArgPheProGlyGlyGluSerHi
-       |||||||||||||||||||||||||||||||||||+##||||||||||||||||||||||||||
-       TyrHis***TyrPheArgHisArgTrp***ArgHis##ValArgPheProGlyGlyGluSerHi
- 628 : TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCA : 566
+ 158 : TACCATTAATACTTTCGTCATGGT<-><->AACGGCATGTTCGATTTCCGGGGGGAGTATCCCA : 101
+       TyrHis***TyrPheArgHisGly<-><->AsnGlyMetPheAspPheArgGlyGluTyrProT
+       ||||||||||||||||||||+ !       ...  !:!!|||||||||||||||||| !!||||
+       TyrHis***TyrPheArgHisArgTrp***ArgHisLeuPheAspPheArgGlyGluAsnProT
+ 628 : TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCA : 565
 
- 102 : CGAATTTTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTT :  38
-       sGlu##LeuValLysLeuGlyAlaPheHisGluProMetPheHisIleThrPheSerPheSer*
-       ||||##||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-       sGlu--LeuValLysLeuGlyAlaPheHisGluProMetPheHisIleThrPheSerPheSer*
- 565 : CGAA--TTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTT : 503
+ 100 : CGAATTTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTG :  37
+       hrAsn#TrpLeuAsnTrpGluArgSerMetSerLeuCysSerThr***LeuSerHisSerLeuG
+       |||||#||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       hrAsn-TrpLeuAsnTrpGluArgSerMetSerLeuCysSerThr***LeuSerHisSerLeuG
+ 564 : CGAAT-TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTTG : 502
 
-  37 : GAGTGTGCGGCTGTACTTCTATACTTGTGTTCACA :   3
-       **ValCysGlyCysThrSerIleLeuValPheThr
+  36 : AGTGTGCGGCTGTACTTCTATACTTGTGTTCACAG :   2
+       luCysAlaAlaValLeuLeuTyrLeuCysSerGln
        |||||||||||||||||||||||||||||||||||
-       **ValCysGlyCysThrSerIleLeuValPheThr
- 502 : GAGTGTGCGGCTGTACTTCTATACTTGTGTTCACA : 468
+       luCysAlaAlaValLeuLeuTyrLeuCysSerGln
+ 501 : AGTGTGCGGCTGTACTTCTATACTTGTGTTCACAG : 467
 
 -- completed exonerate analysis
