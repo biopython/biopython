@@ -701,8 +701,256 @@ class InDepthLoadTest(unittest.TestCase):
         # mRNA, so really cDNA, so the strand should be 1 (not complemented)
         self.assertEqual(test_feature.strand, 1)
 
+
+#####################################################################
+
+class AutoSeqIOTests(unittest.TestCase):
+    """Test SeqIO and BioSQL together."""
+    abort = False
+    server = None
+    db = None
+
+    def setUp(self):
+        """Connect to the database."""
+        if self.abort:
+            return
+        db_name = "biosql-test-seqio"
+        try:
+            server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                                  user = DBUSER,
+                                                  passwd = DBPASSWD,
+                                                  host = DBHOST, db = TESTDB)
+            self.server = server
+            if db_name not in server.keys():
+                self.db = server.new_database(db_name)
+                server.commit()
+            self.db = self.server[db_name]
+        except Exception:
+            self.abort = True
+            raise
+
+    def tearDown(self):
+        if self.db:
+            del self.db
+        if self.server:
+            self.server.close()
+            del self.server
+
+    def check(self, t_format, t_filename, t_count=1):
+        self.assertTrue(os.path.isfile(t_filename), t_filename)
+        if self.abort:
+            print "ABORTING"
+            return
+        try:
+            self.check_real(t_format, t_filename, t_count)
+        except Exception:
+            print "ABORTING REST"
+            self.abort = True
+            raise
+
+    def check_real(self, t_format, t_filename, t_count):
+        db = self.db
+
+        iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
+        count = db.load(iterator)
+        assert count == t_count
+        self.server.commit()
+
+        iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
+        for record in iterator:
+            #print " - %s, %s" % (checksum_summary(record), record.id)
+            key = record.name
+            #print " - Retrieving by name/display_id '%s'," % key,
+            db_rec = db.lookup(name=key)
+            compare_record(record, db_rec)
+            db_rec = db.lookup(display_id=key)
+            compare_record(record, db_rec)
+
+            key = record.id
+            if key.count(".")==1 and key.split(".")[1].isdigit():
+                #print " - Retrieving by version '%s'," % key,
+                db_rec = db.lookup(version=key)
+                compare_record(record, db_rec)
+
+            if "accessions" in record.annotations:
+                #Only expect FIRST accession to work!
+                key = record.annotations["accessions"][0]
+                assert key, "Blank accession in annotation %s" % repr(accs)
+                if key != record.id:
+                    #print " - Retrieving by accession '%s'," % key,
+                    db_rec = db.lookup(accession=key)
+                    compare_record(record, db_rec)
+
+            if "gi" in record.annotations:
+                key = record.annotations['gi']
+                if key != record.id:
+                    #print " - Retrieving by GI '%s'," % key,
+                    db_rec = db.lookup(primary_id=key)
+                    compare_record(record, db_rec)
+
+    def test_SeqIO_Fasta_lupine_nu(self):
+        self.check('fasta', 'Fasta/lupine.nu')
+
+    def test_SeqIO_Fasta_elderberry_nu(self):
+        self.check('fasta', 'Fasta/elderberry.nu')
+
+    def test_SeqIO_Fasta_phlox_nu(self):
+        self.check('fasta', 'Fasta/phlox.nu')
+
+    def test_SeqIO_Fasta_centaurea_nu(self):
+        self.check('fasta', 'Fasta/centaurea.nu')
+
+    def test_SeqIO_Fasta_wisteria_nu(self):
+        self.check('fasta', 'Fasta/wisteria.nu')
+
+    def test_SeqIO_Fasta_sweetpea_nu(self):
+        self.check('fasta', 'Fasta/sweetpea.nu')
+
+    def test_SeqIO_Fasta_lavender_nu(self):
+        self.check('fasta', 'Fasta/lavender.nu')
+
+    def test_SeqIO_Fasta_aster_pro(self):
+        self.check('fasta', 'Fasta/aster.pro')
+
+    def test_SeqIO_Fasta_loveliesbleeding_pro(self):
+        self.check('fasta', 'Fasta/loveliesbleeding.pro')
+
+    def test_SeqIO_Fasta_rose_pro(self):
+        self.check('fasta', 'Fasta/rose.pro')
+
+    def test_SeqIO_Fasta_rosemary_pro(self):
+        self.check('fasta', 'Fasta/rosemary.pro')
+
+    def test_SeqIO_Fasta_f001(self):
+        self.check('fasta', 'Fasta/f001')
+
+    def test_SeqIO_Fasta_f002(self):
+        self.check('fasta', 'Fasta/f002', 3)
+
+    def test_SeqIO_Fasta_fa01(self):
+        self.check('fasta', 'Fasta/fa01', 2)
+
+    def test_SeqIO_GFF_NC_001802_fna(self):
+        self.check('fasta', 'GFF/NC_001802.fna')
+
+    def test_SeqIO_GFF_multi_fna(self):
+        self.check('fasta', 'GFF/multi.fna', 3)
+
+    def test_SeqIO_Registry_seqs_fasta(self):
+        self.check('fasta', 'Registry/seqs.fasta', 2)
+
+    def test_SeqIO_SwissProt_sp001(self):
+        self.check('swiss', 'SwissProt/sp001')
+
+    def test_SeqIO_SwissProt_sp002(self):
+        self.check('swiss', 'SwissProt/sp002')
+
+    def test_SeqIO_SwissProt_sp003(self):
+        self.check('swiss', 'SwissProt/sp003')
+
+    def test_SeqIO_SwissProt_sp004(self):
+        self.check('swiss', 'SwissProt/sp004')
+
+    def test_SeqIO_SwissProt_sp005(self):
+        self.check('swiss', 'SwissProt/sp005')
+
+    def test_SeqIO_SwissProt_sp006(self):
+        self.check('swiss', 'SwissProt/sp006')
+
+    def test_SeqIO_SwissProt_sp007(self):
+        self.check('swiss', 'SwissProt/sp007')
+
+    def test_SeqIO_SwissProt_sp008(self):
+        self.check('swiss', 'SwissProt/sp008')
+
+    def test_SeqIO_SwissProt_sp009(self):
+        self.check('swiss', 'SwissProt/sp009')
+
+    def test_SeqIO_SwissProt_sp010(self):
+        self.check('swiss', 'SwissProt/sp010')
+
+    def test_SeqIO_SwissProt_sp011(self):
+        self.check('swiss', 'SwissProt/sp011')
+
+    def test_SeqIO_SwissProt_sp012(self):
+        self.check('swiss', 'SwissProt/sp012')
+
+    def test_SeqIO_SwissProt_sp013(self):
+        self.check('swiss', 'SwissProt/sp013')
+
+    def test_SeqIO_SwissProt_sp014(self):
+        self.check('swiss', 'SwissProt/sp014')
+
+    def test_SeqIO_SwissProt_sp015(self):
+        self.check('swiss', 'SwissProt/sp015')
+
+    def test_SeqIO_SwissProt_sp016(self):
+        self.check('swiss', 'SwissProt/sp016')
+
+    def test_SeqIO_Registry_EDD_RAT_dat(self):
+        self.check('swiss', 'Registry/EDD_RAT.dat')
+
+    def test_SeqIO_GenBank_noref_gb(self):
+        self.check('genbank', 'GenBank/noref.gb')
+
+    def test_SeqIO_GenBank_cor6_6_gb(self):
+        self.check('genbank', 'GenBank/cor6_6.gb', 6)
+
+    def test_SeqIO_GenBank_iro_gb(self):
+        self.check('genbank', 'GenBank/iro.gb')
+
+    def test_SeqIO_GenBank_pri1_gb(self):
+        self.check('genbank', 'GenBank/pri1.gb')
+
+    def test_SeqIO_GenBank_arab1_gb(self):
+        self.check('genbank', 'GenBank/arab1.gb')
+
+    def test_SeqIO_GenBank_protein_refseq2_gb(self):
+        self.check('genbank', 'GenBank/protein_refseq2.gb')
+
+    def test_SeqIO_GenBank_extra_keywords_gb(self):
+        self.check('genbank', 'GenBank/extra_keywords.gb')
+
+    def test_SeqIO_GenBank_one_of_gb(self):
+        self.check('genbank', 'GenBank/one_of.gb')
+
+    def test_SeqIO_GenBank_NT_019265_gb(self):
+        self.check('genbank', 'GenBank/NT_019265.gb')
+
+    def test_SeqIO_GenBank_origin_line_gb(self):
+        self.check('genbank', 'GenBank/origin_line.gb')
+
+    def test_SeqIO_GenBank_blank_seq_gb(self):
+        self.check('genbank', 'GenBank/blank_seq.gb')
+
+    def test_SeqIO_GenBank_dbsource_wrap_gb(self):
+        self.check('genbank', 'GenBank/dbsource_wrap.gb')
+
+    def test_SeqIO_GenBank_NC_005816_gb(self):
+        self.check('genbank', 'GenBank/NC_005816.gb')
+
+    def test_SeqIO_GenBank_gbvrl1_start_seq(self):
+        self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
+
+    def test_SeqIO_GFF_NC_001422_gbk(self):
+        self.check('genbank', 'GFF/NC_001422.gbk')
+
+    def test_SeqIO_EMBL_TRBG361_embl(self):
+        self.check('embl', 'EMBL/TRBG361.embl')
+
+    def test_SeqIO_EMBL_DD231055_edited_embl(self):
+        self.check('embl', 'EMBL/DD231055_edited.embl')
+
+    def test_SeqIO_EMBL_SC10H5_embl(self):
+        self.check('embl', 'EMBL/SC10H5.embl')
+
+    def test_SeqIO_EMBL_U87107_embl(self):
+        self.check('embl', 'EMBL/U87107.embl')
+
+
 #Some of the unit tests don't create their own database,
 #so just in case there is no database already:
+                                                                                                                                          
 create_database()
 
 if __name__ == "__main__":
