@@ -25,10 +25,10 @@ class ExonerateSpcCases(unittest.TestCase):
     coords = ('inter_ranges', )
     stype = ('hit_', 'query_')
 
-    def test_vulgar_text_similar(self):
+    def check_vulgar_text(self, vulgar, text):
         """Compares coordinate parsing for vulgar and text formats."""
-        vfile = get_file('exn_22_o_vulgar.exn')
-        tfile = get_file('exn_22_m_genome2genome.exn')
+        vfile = get_file(vulgar)
+        tfile = get_file(text)
 
         vqres = read(vfile, 'exonerate-vulgar')
         tqres = read(tfile, 'exonerate-text')
@@ -46,6 +46,11 @@ class ExonerateSpcCases(unittest.TestCase):
                 self.assertEqual(vhsp.hit_inter_ranges, thsp.hit_inter_ranges)
                 self.assertEqual(vhsp.query_split_codons, thsp.query_split_codons)
                 self.assertEqual(vhsp.hit_split_codons, thsp.hit_split_codons)
+
+    def test_vulgar_text_similar_g2g(self):
+        """Compares vulgar-text coordinate parsing for the genome2genome model."""
+        self.check_vulgar_text('exn_22_o_vulgar.exn', 'exn_22_m_genome2genome.exn')
+
 
 class ExonerateTextCases(unittest.TestCase):
 
