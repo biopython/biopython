@@ -95,10 +95,20 @@ def _stitch_rows(raw_rows):
         cmbn_row = ''.join(aln_row[idx] for aln_row in raw_rows)
         cmbn_rows.append(cmbn_row)
 
+    # the real aligned sequence is always the 'outer' one, so we want
+    # to flip them with their 'inner' pairs
+    if len(cmbn_rows) == 5:
+        # flip query sequence
+        cmbn_rows[0], cmbn_rows[1] = \
+                _flip_codons(cmbn_rows[0], cmbn_rows[1])
+        # flip hit sequence
+        cmbn_rows[4], cmbn_rows[3] = \
+                _flip_codons(cmbn_rows[4], cmbn_rows[3])
+
     return cmbn_rows
 
 
-def _get_row_idx(row_len):
+def _get_row_dict(row_len):
     """Returns a dictionary of row indices for parsing alignment blocks."""
     idx = {}
     # 3 lines, usually in dna vs dna models
@@ -148,31 +158,132 @@ def _get_blocks(rows, coords, idx):
     return blocks
 
 
-def _fill_coords(hsp, seq_type, inter_lens):
-    """Fill the block coordinates of the given hsp dictionary."""
+def _get_scodon_moves(tmp_seq_blocks):
+    """Returns a dictionary of split codon locations relative to each
+    fragment's end"""
+    scodon_moves = {'query': [], 'hit': []}
+    for seq_type in scodon_moves:
+        scoords = []
+        for block in tmp_seq_blocks:
+            # check both ends of the sequence for residues in curly braces
+            m_start = re.search(_RE_SCODON_START, block[seq_type])
+            m_end = re.search(_RE_SCODON_END, block[seq_type])
+            if m_start:
+                m_start = len(m_start.group(1))
+                scoords.append((m_start, 0))
+            else:
+                scoords.append((0, 0))
+            if m_end:
+                m_end = len(m_end.group(1))
+                scoords.append((0, m_end))
+            else:
+                scoords.append((0, 0))
+        scodon_moves[seq_type] = scoords
 
+    return scodon_moves
+
+
+def _clean_blocks(tmp_seq_blocks):
+    """Removes curly braces (split codon markers) from the given sequences."""
+    seq_blocks = []
+    for seq_block in tmp_seq_blocks:
+        for line_name in seq_block:
+            seq_block[line_name] = \
+                    seq_block[line_name].replace('{', '').replace('}', '')
+        seq_blocks.append(seq_block)
+
+    return seq_blocks
+
+
+def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
+    """Returns the length of introns between fragments."""
+    # set opposite type, for setting introns
+    opp_type = 'hit' if seq_type == 'query' else 'query'
+    # list of flags to denote if an intron follows a block
+    # it reads e.g. this line:
+    # "ATGTT{TT}  >>>> Target Intron 1 >>>>  {G}TGTGTGTACATT"
+    # and sets the opposing sequence type's intron (since this
+    # line is present on the opposite sequence type line)
+    has_intron_after = ['Intron' in x[seq_type] for x in \
+            inter_blocks]
+    assert len(has_intron_after) == len(raw_inter_lens)
+    # create list containing coord adjustments incorporating
+    # intron lengths
+    inter_lens = []
+    for flag, parsed_len in zip(has_intron_after, raw_inter_lens):
+        if flag:
+            # joint introns
+            if all(parsed_len[:2]):
+                # intron len is [0] if opp_type is query, otherwise it's [1]
+                intron_len = int(parsed_len[0]) if opp_type == 'query' \
+                        else int(parsed_len[1])
+            # single hit/query introns
+            elif parsed_len[2]:
+                intron_len = int(parsed_len[2])
+            else:
+                raise ValueError("Unexpected intron parsing " \
+                        "result: %r" % parsed_len)
+        else:
+            intron_len = 0
+
+        inter_lens.append(intron_len)
+
+    return inter_lens
+
+
+def _comp_coords(hsp, seq_type, inter_lens):
+    """Fill the block coordinates of the given hsp dictionary."""
+    assert seq_type in ('hit', 'query')
     # manually fill the first coord
-    seq_step = 1 if hsp[seq_type + 'strand'] >= 0 else -1
-    fstart = hsp[seq_type + 'start']
+    seq_step = 1 if hsp['%s_strand' % seq_type] >= 0 else -1
+    fstart = hsp['%s_start' % seq_type]
+    # fend is fstart + number of residues in the sequence, minus gaps
     fend = fstart + len(\
-            hsp[seq_type[:-1]][0].replace('-','').replace('>', \
+            hsp[seq_type][0].replace('-','').replace('>', \
             '').replace('<', '')) * seq_step
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
-    for idx, block in enumerate(hsp[seq_type[:-1]][1:]):
+    for idx, block in enumerate(hsp[seq_type][1:]):
         bstart = coords[-1][1] + inter_lens[idx] * seq_step
         bend = bstart + seq_step * \
                 len(block.replace('-', ''))
         coords.append((bstart, bend))
 
     # adjust the coords so the smallest is [0], if strand is -1
-    # couldn't do this above since we need the initial ordering
+    # couldn't do this in the previous steps since we need the initial
+    # block ordering
     if seq_step != 1:
-        for i in range(len(coords)):
-            coords[i] = coords[i][1], coords[i][0]
-    hsp[seq_type + 'ranges'] = coords
+        for idx, coord in enumerate(coords):
+            coords[idx] = coords[idx][1], coords[idx][0]
 
-    return hsp
+    return coords
+
+
+def _comp_split_codons(hsp, seq_type, scodon_moves):
+    """Computes the positions of split codons and puts the values in the given
+    HSP dictionary."""
+    scodons = []
+    for idx in range(len(scodon_moves[seq_type])):
+        pair = scodon_moves[seq_type][idx]
+        if not any(pair):
+            continue
+        else:
+            assert not all(pair)
+        a, b = pair
+        anchor_pair = hsp['%s_ranges' % seq_type][idx // 2]
+        strand = 1 if hsp['%s_strand' % seq_type] >= 0 else -1
+
+        if a:
+            func = max if strand == 1 else min
+            anchor = func(anchor_pair)
+            start_c, end_c = anchor + a * strand * -1, anchor
+        elif b:
+            func = min if strand == 1 else max
+            anchor = func(anchor_pair)
+            start_c, end_c = anchor + b * strand, anchor
+        scodons.append((min(start_c, end_c), max(start_c, end_c)))
+
+    return scodons
 
 
 class ExonerateTextParser(_BaseExonerateParser):
@@ -191,64 +302,20 @@ class ExonerateTextParser(_BaseExonerateParser):
             assert val_name in hsp, hsp
 
         # get the alignment rows
-        raw_aln_blocks, vulgar_comp = self._read_alignment()
         # and stitch them so we have the full sequences in single strings
-        # cmbn_rows still has split codon markers
+        raw_aln_blocks, vulgar_comp = self._read_alignment()
+        # cmbn_rows still has split codon markers (curly braces)
         cmbn_rows = _stitch_rows(raw_aln_blocks)
-        row_idx = _get_row_idx(len(cmbn_rows))
-
-        if len(cmbn_rows) == 5:
-            # the real aligned sequence is always the 'outer' one, so we want
-            # to flip them with their 'inner' pairs
-            # flip query sequence
-            cmbn_rows[0], cmbn_rows[1] = \
-                    _flip_codons(cmbn_rows[0], cmbn_rows[1])
-            # flip hit sequence
-            cmbn_rows[4], cmbn_rows[3] = \
-                    _flip_codons(cmbn_rows[4], cmbn_rows[3])
-
+        row_dict = _get_row_dict(len(cmbn_rows))
         # get the sequence blocks
-        # we use the query row as reference for block coords
-        model = qresult['model'].upper()
-        has_ner = 'NER' in model
-        block_ref = cmbn_rows[row_idx['query']]
-        seq_coords = _get_block_coords(block_ref, has_ner)
-        tmp_seq_blocks = _get_blocks(cmbn_rows, seq_coords, row_idx)
-
-        # determine alphabet from model
-        if 'protein2' in model or 'coding2' in model:
-            alphabet = generic_protein
-        else:
-            alphabet = None
-
+        has_ner = 'NER' in qresult['model'].upper()
+        seq_coords = _get_block_coords(cmbn_rows[row_dict['query']], has_ner)
+        tmp_seq_blocks = _get_blocks(cmbn_rows, seq_coords, row_dict)
         # get split codon temp coords for later use
         # this result in pairs of base movement for both ends of each row
-        scodon_coords = {'query': [], 'hit': []}
-        for seq_type in scodon_coords:
-            scoords = []
-            for block in tmp_seq_blocks:
-                m_start = re.search(_RE_SCODON_START, block[seq_type])
-                m_end = re.search(_RE_SCODON_END, block[seq_type])
-                if m_start:
-                    m_start = len(m_start.group(1))
-                    scoords.append((m_start, 0))
-                else:
-                    scoords.append((0, 0))
-                if m_end:
-                    m_end = len(m_end.group(1))
-                    scoords.append((0, m_end))
-                else:
-                    scoords.append((0, 0))
-            # discard first element, assuming that we never start alns with codons
-            scodon_coords[seq_type] = scoords
-
+        scodon_moves = _get_scodon_moves(tmp_seq_blocks)
         # remove the split codon markers
-        seq_blocks = []
-        for seq_block in tmp_seq_blocks:
-            for line_name in seq_block:
-                seq_block[line_name] = \
-                        seq_block[line_name].replace('{', '').replace('}', '')
-            seq_blocks.append(seq_block)
+        seq_blocks = _clean_blocks(tmp_seq_blocks)
 
         # adjust strands
         hsp['query_strand'] = _STRAND_MAP[hsp['query_strand']]
@@ -265,8 +332,9 @@ class ExonerateTextParser(_BaseExonerateParser):
         hsp['hit'] = [x['hit'] for x in seq_blocks]
         hsp['alignment_annotation'] = {}
         # set the alphabet
-        if alphabet is not None:
-            hsp['alphabet'] = alphabet
+        # currently only limited to models with protein queries
+        if 'protein2' in qresult['model'] or 'coding2' in qresult['model']:
+            hsp['alphabet'] = generic_protein
         # get the annotations if they exist
         for annot_type in ('homology', 'query_annotation', 'hit_annotation'):
             try:
@@ -278,96 +346,57 @@ class ExonerateTextParser(_BaseExonerateParser):
         # use vulgar coordinates if vulgar line is present and return
         if vulgar_comp is not None:
             hsp = parse_vulgar_comp(hsp, vulgar_comp)
+
             return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
         # otherwise we need to get the coordinates from the alignment
         # get the intervening blocks first, so we can use them
         # to adjust the coordinates
-        inter_coords = _get_inter_coords(seq_coords)
-        inter_blocks = _get_blocks(cmbn_rows, inter_coords, row_idx)
-        # if model is not ner, scan for possible intron lengths, for later use
         if not has_ner:
+            # get intervening coordinates and blocks, only if model is not ner
+            # ner models have a much more simple coordinate calculation
+            inter_coords = _get_inter_coords(seq_coords)
+            inter_blocks = _get_blocks(cmbn_rows, inter_coords, row_dict)
             # returns a three-component tuple of intron lengths
             # first two component filled == intron in hit and query
             # last component filled == intron in hit or query
-            parsed_lens = re.findall(_RE_EXON_LEN, \
-                    cmbn_rows[row_idx['midline']])
+            raw_inter_lens = re.findall(_RE_EXON_LEN, \
+                    cmbn_rows[row_dict['midline']])
+
         # compute start and end coords for each block
-        for seq_type in ('query_', 'hit_'):
+        for seq_type in ('query', 'hit'):
 
             # ner blocks and intron blocks require different adjustments
             if not has_ner:
-                # set opposite type, for setting introns
-                opp_type = 'hit_' if seq_type == 'query_' else 'query_'
-                # list of flags to denote if an intron follows a block
-                # it reads e.g. this line:
-                # "ATGTT{TT}  >>>> Target Intron 1 >>>>  {G}TGTGTGTACATT"
-                # and sets the opposing sequence type's intron (since this
-                # line is present on the opposite sequence type line)
-                has_intron_after = ['Intron' in x[seq_type[:-1]] for x in \
-                        inter_blocks]
-                assert len(has_intron_after) == len(parsed_lens)
-                # create list containing coord adjustments incorporating
-                # intron lengths
-                inter_lens = []
-                for flag, parsed_len in zip(has_intron_after, parsed_lens):
-                    if flag:
-                        # joint introns
-                        if all(parsed_len[:2]):
-                            # intron len is [0] if opp_type is query, otherwise
-                            # it's [1]
-                            intron_len = int(parsed_len[0]) if opp_type == \
-                                    'query_' else int(parsed_len[1])
-                        # single hit/query introns
-                        elif parsed_len[2]:
-                            intron_len = int(parsed_len[2])
-                        else:
-                            raise ValueError("Unexpected intron parsing " \
-                                    "result: %r" % parsed_len)
-                    else:
-                        intron_len = 0
-
-                    inter_lens.append(intron_len)
-                # check that inter_lens's length is len opp_type block - 1
-                assert len(inter_lens) == len(hsp[opp_type[:-1]])-1, \
-                        "%r vs %r" % (len(inter_lens), len(hsp[opp_type[:-1]])-1)
+                opp_type = 'hit' if seq_type == 'query' else 'query'
+                inter_lens = _comp_intron_lens(seq_type, inter_blocks,
+                        raw_inter_lens)
             else:
-                inter_lens = [int(x) for x in \
-                        re.findall(_RE_NER_LEN, cmbn_rows[row_idx[seq_type[:-1]]])]
+                # for NER blocks, the length of the inter-fragment gaps is
+                # written on the same strand, so opp_type is seq_type
                 opp_type = seq_type
+                inter_lens = [int(x) for x in \
+                        re.findall(_RE_NER_LEN, cmbn_rows[row_dict[seq_type]])]
 
+            # check that inter_lens's length is len opp_type block - 1
+            assert len(inter_lens) == len(hsp[opp_type])-1, \
+                    "%r vs %r" % (len(inter_lens), len(hsp[opp_type])-1)
             # fill the hsp query and hit coordinates
-            hsp = _fill_coords(hsp, opp_type, inter_lens)
-            strand = 1 if hsp[opp_type + 'strand'] >= 0 else -1
-            # and fill the intervening ranges' values
+            hsp['%s_ranges' % opp_type] = \
+                    _comp_coords(hsp, opp_type, inter_lens)
+            # and fill the split codon coordinates, if model != ner
+            # can't do this in the if-else clause above since we need to
+            # compute the ranges first
             if not has_ner:
-                # set split codon coordinates
-                scodons = []
-                for idx in range(len(scodon_coords[seq_type[:-1]])):
-                    pair = scodon_coords[opp_type[:-1]][idx]
-                    if not any(pair):
-                        continue
-                    else:
-                        assert not all(pair)
-                    a, b = pair
-                    anchor_pair = hsp[opp_type + 'ranges'][idx // 2]
-                    if a:
-                        func = max if strand == 1 else min
-                        anchor = func(anchor_pair)
-                        start_c, end_c = anchor + a * strand * -1, anchor
-                    elif b:
-                        func = min if strand == 1 else max
-                        anchor = func(anchor_pair)
-                        start_c, end_c = anchor + b * strand, anchor
-                    scodons.append((min(start_c, end_c), max(start_c, end_c)))
-                hsp[opp_type + 'split_codons'] = scodons
+                hsp['%s_split_codons' % opp_type] = \
+                        _comp_split_codons(hsp, opp_type, scodon_moves)
 
         # now that we've finished parsing coords, we can set the hit and start
         # coord according to Biopython's convention (start <= end)
-        for seq_type in ('query_', 'hit_'):
-            if hsp[seq_type + 'strand'] == -1:
-                n_start = seq_type + 'start'
-                n_end = seq_type + 'end'
+        for seq_type in ('query', 'hit'):
+            if hsp['%s_strand' % seq_type] == -1:
+                n_start = '%s_start' % seq_type
+                n_end = '%s_end' % seq_type
                 hsp[n_start], hsp[n_end] = hsp[n_end], hsp[n_start]
 
         return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
