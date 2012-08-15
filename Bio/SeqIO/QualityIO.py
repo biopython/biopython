@@ -1462,7 +1462,7 @@ class QualPhredWriter(SequentialSequenceWriter):
     >>> import os
     >>> os.remove("Quality/temp.qual")
     """
-    def __init__(self, handle, wrap=60, record2title=None):
+    def __init__(self, handle, wrap=20, record2title=None):
         """Create a QUAL writer.
 
         Arguments:
@@ -1526,17 +1526,17 @@ class QualPhredWriter(SequentialSequenceWriter):
 
         if wrap > 5:
             #Fast wrapping
-            data = " ".join(qualities_strs)
-            while True:
-                if len(data) <= wrap:
-                    self.handle.write(data + "\n")
-                    break
+            # Corner case of writing an empty line
+            if (0 == len(qualities_strs)):
+                handle.write("\n")
+            else:
+                # Using wrap as the number of values output not the characters per line
+                if len(qualities_strs) <= wrap:
+                    handle.write(" ".join(qualities_strs) + "\n")
                 else:
-                    #By construction there must be spaces in the first X chars
-                    #(unless we have X digit or higher quality scores!)
-                    i = data.rfind(" ", 0, wrap)
-                    handle.write(data[:i] + "\n")
-                    data = data[i+1:]
+                    for i in xrange(int((len(qualities_strs)/ wrap)) + 1):
+                        handle.write(" ".join(qualities_strs[(i * wrap): (wrap * (i + 1))]) + "\n" )
+
         elif wrap:
             #Safe wrapping
             while qualities_strs:
