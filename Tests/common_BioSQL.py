@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -20,33 +19,49 @@ from Bio.SeqRecord import SeqRecord
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
-# This testing suite should try to detect whether a valid database
-# installation exists on this computer.  Only run the tests if it
-# does.
-try:
-    from setup_BioSQL import DBDRIVER, DBTYPE
-    from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
-    from setup_BioSQL import DBSCHEMA, SQL_FILE
-except (NameError, ImportError):
-    message = "Check settings in Tests/setup_BioSQL.py "\
-              "if you plan to use BioSQL."
-    raise MissingExternalDependencyError(message)
-
-try:
-    if DBDRIVER in ["sqlite3"]:
-        server = BioSeqDatabase.open_database(driver = DBDRIVER, db = TESTDB)
-    else:
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
-                                              user = DBUSER, passwd = DBPASSWD,
-                                              host = DBHOST)
-    server.close()
-    del server
-except Exception, e:
-    message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
-              "if you plan to use BioSQL: %s" % str(e)
-    raise MissingExternalDependencyError(message)
-
 from seq_tests_common import compare_record, compare_records
+
+if __name__ == "__main__":
+    raise RuntimeError("Call this via test_BioSQL_*.py not directly")
+
+global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
+
+def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
+    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
+    DBDRIVER = dbdriver
+    DBTYPE = dbtype
+    DBHOST = dbhost
+    DBUSER = dbuser
+    DBPASSWD = dbpasswd
+    TESTDB = testdb
+
+    #Check the database driver is installed:
+    try:
+        __import__(DBDRIVER)
+    except ImportError:
+        message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
+        raise MissingExternalDependencyError(message)
+
+    try:
+        if DBDRIVER in ["sqlite3"]:
+            server = BioSeqDatabase.open_database(driver = DBDRIVER, db = TESTDB)
+        else:
+            server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                                  user = DBUSER, passwd = DBPASSWD,
+                                                  host = DBHOST)
+            server.close()
+            del server
+    except Exception, e:
+        message = "Connection failed, check settings if you plan to use BioSQL: %s" % str(e)
+        raise MissingExternalDependencyError(message)
+
+    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
+    SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
+
+    if not os.path.isfile(SQL_FILE):
+        message = "Missing SQL schema file: %s" % SQL_FILE
+        raise MissingExternalDependencyError(message)
+
 
 def _do_db_create():
     """Do the actual work of database creation. Relevant for MySQL and PostgreSQL
@@ -825,12 +840,3 @@ class AutoSeqIOTests(unittest.TestCase):
         self.check('embl', 'EMBL/U87107.embl')
         self.assertEqual(len(self.db), 66)
 
-
-#Some of the unit tests don't create their own database,
-#so just in case there is no database already:
-                                                                                                                                          
-create_database()
-
-if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
-    unittest.main(testRunner=runner)
