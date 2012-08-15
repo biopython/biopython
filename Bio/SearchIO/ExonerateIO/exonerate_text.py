@@ -20,7 +20,7 @@ __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
 
 
 _RE_ALN_ROW = re.compile(r'\s*\d+\s+: (.*) :\s+\d+')
-_RE_EXON = re.compile(r'[atgc ]{2,}?[<>]+ \w+ Intron \d+ [<>]+[atgc ]{2,}?')
+_RE_EXON = re.compile(r'[atgc ]{2,}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2,}?')
 _RE_EXON_LEN = re.compile(r'(?:(\d+) bp // (\d+) bp)|(?:(\d+) bp)')
 _RE_NER = re.compile(r'--<\s+\d+\s+>--')
 _RE_NER_LEN = re.compile(r'--<\s+(\d+)\s+>--')
@@ -43,7 +43,7 @@ def _flip_codons(codon_seq, target_seq):
     return a, b
 
 
-def _get_block_coords(parsed_seq, has_ner=False):
+def _get_block_coords(parsed_seq, row_dict, has_ner=False):
     """Returns a list of start, end coordinates for each given block in the sequence."""
     start = 0
     coords = []
@@ -51,8 +51,12 @@ def _get_block_coords(parsed_seq, has_ner=False):
         splitter = _RE_EXON
     else:
         splitter = _RE_NER
-    for block in re.split(splitter, parsed_seq):
-        start += parsed_seq[start:].find(block)
+
+    # use the query line for reference
+    seq = parsed_seq[row_dict['query']]
+
+    for block in re.split(splitter, seq):
+        start += seq[start:].find(block)
         end = start + len(block)
         coords.append((start, end))
 
@@ -309,7 +313,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         row_dict = _get_row_dict(len(cmbn_rows))
         # get the sequence blocks
         has_ner = 'NER' in qresult['model'].upper()
-        seq_coords = _get_block_coords(cmbn_rows[row_dict['query']], has_ner)
+        seq_coords = _get_block_coords(cmbn_rows, row_dict, has_ner)
         tmp_seq_blocks = _get_blocks(cmbn_rows, seq_coords, row_dict)
         # get split codon temp coords for later use
         # this result in pairs of base movement for both ends of each row
