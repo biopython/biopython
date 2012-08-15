@@ -8,7 +8,6 @@ import collections
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.SCOP.three_to_one_dict import to_one_letter_code
 
 
 def PdbSeqresIterator(handle):
@@ -21,6 +20,9 @@ def PdbSeqresIterator(handle):
 
     See: http://www.wwpdb.org/documentation/format23/sect3.html
     """
+    # Late-binding import to avoid circular dependency on SeqIO in Bio.SCOP
+    from Bio.SCOP.three_to_one_dict import to_one_letter_code
+
     chains = collections.defaultdict(list)
     metadata = collections.defaultdict(list)
     for line in handle:
