@@ -19,11 +19,21 @@ from exonerate_vulgar import parse_vulgar_comp, _RE_VULGAR
 __all__ = ['ExonerateTextParser', 'ExonerateTextIndexer']
 
 
+# for capturing sequences in alignment blocks
+# e.g. ' 529 : ATCCCTTATCTCTTTATCTTGTA :    472'
 _RE_ALN_ROW = re.compile(r'\s*\d+\s+: (.*) :\s+\d+')
+# for splitting the line based on intron annotations
+# e.g. '  >>>> Target Intron 1 >>>>  ' or 'gt.........................ag'
 _RE_EXON = re.compile(r'[atgc ]{2,}?(?:(?:[<>]+ \w+ Intron \d+ [<>]+)|(?:\.+))[atgc ]{2,}?')
+# captures the intron length
+# from e.g. '61 bp // 154295 bp' (joint intron lengths) or '177446 bp'
 _RE_EXON_LEN = re.compile(r'(?:(\d+) bp // (\d+) bp)|(?:(\d+) bp)')
+# for splitting lines in the NER model
 _RE_NER = re.compile(r'--<\s+\d+\s+>--')
+# for capturing NER gap lengths
 _RE_NER_LEN = re.compile(r'--<\s+(\d+)\s+>--')
+# regexes for capturing the letters inside curly braces
+# no. of letters is either 1 or 2, since they are split codons
 _RE_SCODON_START = re.compile(r'\{(\w{1,2})\}$')
 _RE_SCODON_END = re.compile(r'^\{(\w{1,2})\}')
 
