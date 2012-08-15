@@ -1,0 +1,59 @@
+Command line: [exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar no --showalignment yes --bestn 3]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+        Target: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+         Model: coding2coding
+     Raw score: 245
+   Query range: 0 -> 164
+  Target range: 465 -> 629
+
+   1 : ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACA :  64
+       ThrValAsnThrSerIleGluValGlnProHisThrGlnGluAsnGluLysValMetTrpAsnI
+       ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       ThrValAsnThrSerIleGluValGlnProHisThrGlnGluAsnGluLysValMetTrpAsnI
+ 466 : ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAGTTATGTGGAACA : 529
+
+  65 : TAGGCTCATGGAACGCTCCCAGTTTAACCAAAATTCGTGGGATTCTCCCCCCGGAAATCGAACA : 126
+       leGlySerTrpAsnAlaProSerLeuThr##AsnSerTrpAspSerProProGlyAsnArgThr
+       |||||||||||||||||||||||||||||##|||||||||||||||||||||||||||||||||
+       leGlySerTrpAsnAlaProSerLeuThr--AsnSerTrpAspSerProProGlyAsnArgThr
+ 530 : TAGGCTCATGGAACGCTCCCAGTTTAACC--AATTCGTGGGATTCTCCCCCCGGAAATCGAACA : 589
+
+ 127 : --TGCCGTTACCATCGGTGACGAAAGTATTAATGGTAG : 164
+       --CysArgTyrHisArg***ArgLysTyr***Trp***
+       ##||||||||||||||||||||||||||||||||||||
+       ##CysArgTyrHisArg***ArgLysTyr***Trp***
+ 590 : GGTGCCGTTACCATCGGTGACGAAAGTATTAATGGTAG : 629
+
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]
+        Target: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds:[revcomp]
+         Model: coding2coding
+     Raw score: 234
+   Query range: 163 -> 2
+  Target range: 628 -> 467
+
+ 163 : TACCATTAATACTTTCGTCACCGATGGTAACGGCAT--GTTCGATTTCCGGGGGGAGAATCCCA : 103
+       TyrHis***TyrPheArgHisArgTrp***ArgHis--ValArgPheProGlyGlyGluSerHi
+       |||||||||||||||||||||||||||||||||||+##||||||||||||||||||||||||||
+       TyrHis***TyrPheArgHisArgTrp***ArgHis##ValArgPheProGlyGlyGluSerHi
+ 628 : TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGTTCGATTTCCGGGGGGAGAATCCCA : 566
+
+ 102 : CGAATTTTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTT :  38
+       sGlu##LeuValLysLeuGlyAlaPheHisGluProMetPheHisIleThrPheSerPheSer*
+       ||||##||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       sGlu--LeuValLysLeuGlyAlaPheHisGluProMetPheHisIleThrPheSerPheSer*
+ 565 : CGAA--TTGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACATAACTTTCTCATTCTCTT : 503
+
+  37 : GAGTGTGCGGCTGTACTTCTATACTTGTGTTCACA :   3
+       **ValCysGlyCysThrSerIleLeuValPheThr
+       |||||||||||||||||||||||||||||||||||
+       **ValCysGlyCysThrSerIleLeuValPheThr
+ 502 : GAGTGTGCGGCTGTACTTCTATACTTGTGTTCACA : 468
+
+-- completed exonerate analysis
