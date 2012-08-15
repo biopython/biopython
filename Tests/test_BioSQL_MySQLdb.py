@@ -7,6 +7,7 @@
 import os
 from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
+
 from common_BioSQL import *
 
 ##################################
@@ -33,6 +34,7 @@ check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 #so just in case there is no database already:
 create_database()
 
-#Run the test cases
-runner = unittest.TextTestRunner(verbosity = 2)
-unittest.main(testRunner=runner)
+if __name__ == "__main__":
+    #Run the test cases
+    runner = unittest.TextTestRunner(verbosity = 2)
+    unittest.main(testRunner=runner)
