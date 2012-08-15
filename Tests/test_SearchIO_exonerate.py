@@ -1311,6 +1311,57 @@ class ExonerateVulgarCases(unittest.TestCase):
         self.assertEqual([(386123, 386125), (208676, 208677)], hsp.hit_split_codons)
         self.assertEqual(' M 31 31 G 3 0 M 4 4 G 2 0 M 19 19 G 0 3 M 9 9 G 0 1 M 6 6 G 1 0 M 5 5 5 2 2 I 0 154244 I 57 0 I 0 47 3 2 2 M 25 25 G 5 0 M 4 4 G 1 0 M 3 3 G 3 0 M 4 4 G 1 0 M 9 9 G 0 1 M 14 14 5 2 2 I 0 101116 I 31 0 3 2 2 M 23 23 G 0 1 M 15 15 G 1 0 M 9 9 G 1 0 M 2 2 G 1 0 M 14 14 C 18 18 S 2 2 5 0 2 I 0 177442 3 0 2 S 1 1 C 12 12 M 2 2 G 0 1 M 22 22 5 2 2 I 0 136697 I 7 0 I 0 6 I 1 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 2 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 3 0 I 0 1 I 2 0 I 0 1 I 1 0 I 0 1 I 1 0 I 0 1 I 2 0 I 0 2 I 2 0 I 0 2 I 17 0 3 2 2 M 12 12 G 2 0 M 22 22', hsp.vulgar_comp)
 
+    def test_exn_22_o_vulgar_fshifts(self):
+        """Test parsing exonerate output (exn_22_o_vulgar_fshifts.exn)"""
+
+        exn_file = get_file('exn_22_o_vulgar_fshifts.exn')
+        qresult = read(exn_file, self.fmt)
+
+        # check common attributes
+        for hit in qresult:
+            self.assertEqual(qresult.id, hit.query_id)
+            for hsp in hit:
+                self.assertEqual(hit.id, hsp.hit_id)
+                self.assertEqual(qresult.id, hsp.query_id)
+
+        self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
+        self.assertEqual('exonerate', qresult.program)
+        self.assertEqual(1, len(qresult))
+        # first hit
+        hit = qresult[0]
+        self.assertEqual('gi|296143771|ref|NM_001180731.1|', hit.id)
+        self.assertEqual('<unknown description>', hit.description)
+        self.assertEqual(2, len(hit))
+        # first hit, first hsp
+        hsp = qresult[0][0]
+        self.assertEqual(245, hsp.score)
+        self.assertEqual(1, hsp[0].query_strand)
+        self.assertEqual(1, hsp[0].hit_strand)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(465, hsp.hit_start)
+        self.assertEqual(164, hsp.query_end)
+        self.assertEqual(629, hsp.hit_end)
+        self.assertEqual([(0, 93), (95, 128), (128, 164)], hsp.query_ranges[:5])
+        self.assertEqual([(465, 558), (558, 591), (593, 629)], hsp.hit_ranges[:5])
+        self.assertEqual([], hsp.query_split_codons)
+        self.assertEqual([], hsp.hit_split_codons)
+        self.assertEqual(' C 93 93 F 2 0 C 33 33 F 0 2 C 36 36', hsp.vulgar_comp)
+        # first hit, second hsp
+        hsp = qresult[0][1]
+        self.assertEqual(234, hsp.score)
+        self.assertEqual(-1, hsp[0].query_strand)
+        self.assertEqual(-1, hsp[0].hit_strand)
+        self.assertEqual(2, hsp.query_start)
+        self.assertEqual(467, hsp.hit_start)
+        self.assertEqual(163, hsp.query_end)
+        self.assertEqual(628, hsp.hit_end)
+        self.assertEqual([(127, 163), (97, 127), (2, 95)], hsp.query_ranges[:5])
+        self.assertEqual([(592, 628), (560, 590), (467, 560)], hsp.hit_ranges[:5])
+        self.assertEqual([], hsp.query_split_codons)
+        self.assertEqual([], hsp.hit_split_codons)
+        self.assertEqual(' C 36 36 F 0 2 C 30 30 F 2 0 C 93 93', hsp.vulgar_comp)
+
 
 class ExonerateCigarCases(unittest.TestCase):
 

@@ -50,12 +50,11 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         label, qstep, hstep = match[0], int(match[1]), int(match[2])
         # check for label, must be recognized
         assert label in 'MCGF53INS', "Unexpected vulgar label: %r" % label
-        # match, codon, gaps, or frameshift
-        # for now, consider frameshift as gaps
-        if label in 'MCGFS':
-            # if the previous comp is not an MCGFS block, it's the
+        # match, codon, or gaps
+        if label in 'MCGS':
+            # if the previous comp is not an MCGS block, it's the
             # start of a new block
-            if vcomps[idx-1][0] not in 'MCGFS':
+            if vcomps[idx-1][0] not in 'MCGS':
                 qstarts.append(qpos)
                 hstarts.append(hpos)
         # other labels
@@ -82,10 +81,10 @@ def parse_vulgar_comp(hsp, vulgar_comp):
         qpos += qstep * qmove
         hpos += hstep * hmove
 
-        # append to ends if the next comp is not an MCGFS block or
+        # append to ends if the next comp is not an MCGS block or
         # if it's the last comp
         if idx == len(vcomps)-1 or \
-                (label in 'MCGFS' and vcomps[idx+1][0] not in 'MCGFS'):
+                (label in 'MCGS' and vcomps[idx+1][0] not in 'MCGS'):
                 qends.append(qpos)
                 hends.append(hpos)
 
