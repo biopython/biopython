@@ -1,0 +1,5 @@
+Command line: [exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar yes --showalignment no --bestn 3]
+Hostname: [blackbriar]
+vulgar: sp|P24813|YAP2_YEAST 330 409 . gi|296143771|ref|NM_001180731.1| 216 455 + 367 M 43 129 F 0 2 M 36 108
+vulgar: sp|P24813|YAP2_YEAST 6 70 . gi|296143771|ref|NM_001180731.1| 16 208 + 322 M 64 192
+-- completed exonerate analysis
