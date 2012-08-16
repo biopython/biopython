@@ -57,6 +57,10 @@ class ExonerateSpcCases(unittest.TestCase):
         """Compares vulgar-text coordinate parsing for the coding2coding model."""
         self.check_vulgar_text('exn_22_o_vulgar_fshifts.exn', 'exn_22_m_coding2coding_fshifts.exn')
 
+    def test_vulgar_text_similar_p2d(self):
+        """Compares vulgar-text coordinate parsing for the protein2dna model."""
+        self.check_vulgar_text('exn_22_o_vulgar_fshifts2.exn', 'exn_22_m_protein2dna_fshifts.exn')
+
 
 class ExonerateTextCases(unittest.TestCase):
 
@@ -1301,6 +1305,79 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].query.seq)[:40])
         self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[-1].alignment_annotation['homology'][:40])
         self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].hit.seq)[:40])
+
+    def test_exn_22_m_protein2dna_fshifts(self):
+        """Test parsing exonerate output (exn_22_m_protein2dna_fshifts.exn)"""
+
+        exn_file = get_file('exn_22_m_protein2dna_fshifts.exn')
+        qresult = read(exn_file, self.fmt)
+
+        # check common attributes
+        for hit in qresult:
+            self.assertEqual(qresult.id, hit.query_id)
+            for hsp in hit:
+                self.assertEqual(hit.id, hsp.hit_id)
+                self.assertEqual(qresult.id, hsp.query_id)
+
+        self.assertEqual('sp|P24813|YAP2_YEAST', qresult.id)
+        self.assertEqual('AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2', qresult.description)
+        self.assertEqual('exonerate', qresult.program)
+        self.assertEqual('protein2dna:local', qresult.model)
+        self.assertEqual(1, len(qresult))
+        # first hit
+        hit = qresult[0]
+        self.assertEqual('gi|296143771|ref|NM_001180731.1|', hit.id)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', hit.description)
+        self.assertEqual(2, len(hit))
+        # first hit, first hsp
+        hsp = qresult[0][0]
+        self.assertEqual(367, hsp.score)
+        self.assertEqual([0, 0], hsp.query_strands)
+        self.assertEqual([1, 1], hsp.hit_strands)
+        self.assertEqual(330, hsp.query_start)
+        self.assertEqual(216, hsp.hit_start)
+        self.assertEqual(409, hsp.query_end)
+        self.assertEqual(455, hsp.hit_end)
+        self.assertEqual([(330, 373), (373, 409)], hsp.query_ranges)
+        self.assertEqual([(216, 345), (347, 455)], hsp.hit_ranges)
+        self.assertEqual([(373, 373)], hsp.query_inter_ranges)
+        self.assertEqual([(345, 347)], hsp.hit_inter_ranges)
+        self.assertEqual([0, 0], hsp.query_frames)
+        self.assertEqual([1, 3], hsp.hit_frames)
+        self.assertEqual(2, len(hsp.queries))
+        self.assertEqual(2, len(hsp.hits))
+        self.assertEqual(2, len(hsp.alignment_annotations))
+        # first block
+        self.assertEqual('HTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYS', str(hsp[0].query.seq)[:40])
+        self.assertEqual('HTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYS', str(hsp[0].hit.seq)[:40])
+        self.assertEqual('TIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLD', str(hsp[0].query.seq)[-40:])
+        self.assertEqual('TIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYSSLD', str(hsp[0].hit.seq)[-40:])
+        # last block
+        self.assertEqual('IDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL', str(hsp[-1].query.seq))
+        self.assertEqual('IDDLCSELIIKAKCTDDCKIVVKARDLQSALVRQLL', str(hsp[-1].hit.seq))
+
+        # first hit, second hsp
+        hsp = qresult[0][1]
+        self.assertEqual(322, hsp.score)
+        self.assertEqual([0], hsp.query_strands)
+        self.assertEqual([1], hsp.hit_strands)
+        self.assertEqual(6, hsp.query_start)
+        self.assertEqual(16, hsp.hit_start)
+        self.assertEqual(70, hsp.query_end)
+        self.assertEqual(208, hsp.hit_end)
+        self.assertEqual([(6, 70)], hsp.query_ranges)
+        self.assertEqual([(16, 208)], hsp.hit_ranges)
+        self.assertEqual([], hsp.query_inter_ranges)
+        self.assertEqual([], hsp.hit_inter_ranges)
+        self.assertEqual([0], hsp.query_frames)
+        self.assertEqual([2], hsp.hit_frames)
+        self.assertEqual(1, len(hsp.queries))
+        self.assertEqual(1, len(hsp.hits))
+        self.assertEqual(1, len(hsp.alignment_annotations))
+        self.assertEqual('KGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAK', str(hsp[0].query.seq)[:40])
+        self.assertEqual('KGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAK', str(hsp[0].hit.seq)[:40])
+        self.assertEqual('RKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKS', str(hsp[0].query.seq)[-40:])
+        self.assertEqual('RKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKS', str(hsp[0].hit.seq)[-40:])
 
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)"""

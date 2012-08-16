@@ -9,6 +9,7 @@ import re
 
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SeqUtils import seq1
 
 
 # strand char-value mapping
@@ -24,6 +25,56 @@ def _set_frame(frag):
     frag.hit_frame = (frag.hit_start % 3 + 1) * frag.hit_strand
     frag.query_frame = (frag.query_start % 3 + 1) * frag.query_strand
 
+
+def _make_triplets(seq):
+    """Splits a string into a list containing triplets of the original
+    string."""
+    return [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
+
+
+def _adjust_aa_seq(fraglist):
+    """Transforms three-letter amino acid codes into one-letters in the
+    given HSPFragments."""
+    hsp_hstart = fraglist[0].hit_start
+    hsp_qstart = fraglist[0].query_start
+    for frag in fraglist:
+        assert frag.query_strand == 0
+        # fragment should have a length that is a multiple of 3
+        assert len(frag) % 3 == 0
+        # hit step may be -1 as we're aligning to DNA
+        hstep = 1 if frag.hit_strand >= 0 else -1
+        # get one letter codes
+        # and replace gap codon markers and termination characters
+        custom_map = {'***': '*', '<->': '-'}
+
+        hseq1 = seq1(str(frag.hit.seq), custom_map=custom_map)
+        hstart = hsp_hstart
+        hend = hstart + len(hseq1.replace('-', '')) * hstep
+
+        qseq1 = seq1(str(frag.query.seq), custom_map=custom_map)
+        qstart = hsp_qstart
+        qend = qstart + len(qseq1.replace('-', ''))
+
+        # replace the old frag sequences with the new ones
+        frag.hit = None
+        frag.hit = hseq1
+        frag.query = None
+        frag.query = qseq1
+
+        # set coordinates
+        # no need to set the hit coordinates since the hit sequence
+        # is not a protein sequence
+        frag.query_start, frag.query_end = qstart, qend
+
+        # update alignment annotation
+        # by turning them into list of triplets
+        for annot, annotseq in frag.alignment_annotation.items():
+            frag.alignment_annotation[annot] = _make_triplets(annotseq)
+
+        # update values for next iteration
+        hsp_hstart, hsp_qstart = hend, qend
+
+    return fraglist
 
 def _split_fragment(frag):
     """Splits one HSPFragment containing frame-shifted alignment into two."""
@@ -127,6 +178,12 @@ def _create_hsp(hid, qid, hspd):
             _set_frame(frag)
 
         frags.append(frag)
+
+    # if the query is protein, we need to change the hit and query sequences
+    # from three-letter amino acid codes to one letter, and adjust their
+    # coordinates accordingly
+    if len(frags[0].alignment_annotation) == 2: # 2 annotations == protein query
+        frags = _adjust_aa_seq(frags)
 
     hsp = HSP(frags)
     # set hsp-specific attributes
