@@ -5,12 +5,88 @@
 
 """Bio.SearchIO abstract base parser for Exonerate standard output format."""
 
+import re
+
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
 
 
 # strand char-value mapping
 _STRAND_MAP = {'+': 1, '-': -1, '.': 0}
+
+_RE_SHIFTS = re.compile(r'(#+)')
+# regex for checking whether a vulgar line has protein/translated components
+_RE_TRANS = re.compile(r'[53ISCF]')
+
+
+def _set_frame(frag):
+    """Sets the HSPFragment frames."""
+    frag.hit_frame = (frag.hit_start % 3 + 1) * frag.hit_strand
+    frag.query_frame = (frag.query_start % 3 + 1) * frag.query_strand
+
+
+def _split_fragment(frag):
+    """Splits one HSPFragment containing frame-shifted alignment into two."""
+    # given an HSPFragment object with frameshift(s), this method splits it
+    # into fragments without frameshifts by sequentially chopping it off
+    # starting from the beginning
+    homol = frag.alignment_annotation['homology']
+    # we should have at least 1 frame shift for splitting
+    assert homol.count('#') > 0
+
+    split_frags = []
+    qstep = 1 if frag.query_strand >= 0 else -1
+    hstep = 1 if frag.hit_strand >= 0 else -1
+    qpos = min(frag.query_range) if qstep >= 0 else max(frag.query_range)
+    hpos = min(frag.hit_range) if qstep >= 0 else max(frag.hit_range)
+    abs_pos = 0
+    # split according to hit, then query
+    while homol:
+
+        try:
+            shifts = re.search(_RE_SHIFTS, homol).group(1)
+            s_start = homol.find(shifts)
+            s_stop = s_start + len(shifts)
+            split = frag[abs_pos:abs_pos+s_start]
+        except AttributeError: # no '#' in homol, i.e. last frag
+            shifts = ''
+            s_start = 0
+            s_stop = len(homol)
+            split = frag[abs_pos:]
+
+        # coordinates for the split strand
+        qstart, hstart = qpos, hpos
+        qpos += (len(split) - sum(str(split.query.seq).count(x)
+            for x in ('-', '<', '>'))) * qstep
+        hpos += (len(split) - sum(str(split.hit.seq).count(x)
+            for x in ('-', '<', '>'))) * hstep
+
+        split.hit_start = min(hstart, hpos)
+        split.query_start = min(qstart, qpos)
+        split.hit_end = max(hstart, hpos)
+        split.query_end = max(qstart, qpos)
+
+        # account for frameshift length
+        abs_slice = slice(abs_pos+s_start, abs_pos+s_stop)
+        if len(frag.alignment_annotation) == 2:
+            seqs = (str(frag[abs_slice].query.seq),
+                    str(frag[abs_slice].hit.seq))
+        elif len(frag.alignment_annotation) == 3:
+            seqs = (frag[abs_slice].alignment_annotation['query_annotation'],
+                    frag[abs_slice].alignment_annotation['hit_annotation'],)
+        if '#' in seqs[0]:
+            qpos += len(shifts) * qstep
+        elif '#' in seqs[1]:
+            hpos += len(shifts) * hstep
+
+        # set frame
+        _set_frame(split)
+        split_frags.append(split)
+        # set homology string and absolute position for the next loop
+        homol = homol[s_stop:]
+        abs_pos += s_stop
+
+    return split_frags
 
 
 def _create_hsp(hid, qid, hspd):
@@ -40,6 +116,15 @@ def _create_hsp(hid, qid, hspd):
         frag.query_strand = hspd['query_strand']
         frag.hit_strand = hspd['hit_strand']
         # and append the hsp object to the list
+        if frag.alignment_annotation.get('homology') is not None:
+            if '#' in frag.alignment_annotation['homology']:
+                frags.extend(_split_fragment(frag))
+                continue
+        # try to set frame if there are translation in the alignment
+        if len(frag.alignment_annotation) > 1 or \
+            ('vulgar_comp' in hspd and re.search(_RE_TRANS, hspd['vulgar_comp'])):
+            _set_frame(frag)
+
         frags.append(frag)
 
     hsp = HSP(frags)
@@ -144,7 +229,7 @@ class _BaseExonerateParser(object):
         if qresult['description'].endswith(':[revcomp]'):
             hsp['query_strand'] = '-'
             qresult['description'] = qresult['description'].replace(':[revcomp]', '')
-        elif qresult['model'].startswith('protein2'):
+        elif 'protein2' in qresult['model']:
             hsp['query_strand'] = '.'
         else:
             hsp['query_strand'] = '+'

@@ -46,10 +46,16 @@ class ExonerateSpcCases(unittest.TestCase):
                 self.assertEqual(vhsp.hit_inter_ranges, thsp.hit_inter_ranges)
                 self.assertEqual(vhsp.query_split_codons, thsp.query_split_codons)
                 self.assertEqual(vhsp.hit_split_codons, thsp.hit_split_codons)
+                self.assertEqual(vhsp.query_frames, thsp.query_frames)
+                self.assertEqual(vhsp.hit_frames, thsp.hit_frames)
 
     def test_vulgar_text_similar_g2g(self):
         """Compares vulgar-text coordinate parsing for the genome2genome model."""
         self.check_vulgar_text('exn_22_o_vulgar.exn', 'exn_22_m_genome2genome.exn')
+
+    def test_vulgar_text_similar_c2c(self):
+        """Compares vulgar-text coordinate parsing for the coding2coding model."""
+        self.check_vulgar_text('exn_22_o_vulgar_fshifts.exn', 'exn_22_m_coding2coding_fshifts.exn')
 
 
 class ExonerateTextCases(unittest.TestCase):
@@ -1215,6 +1221,86 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual('CTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAA', str(hsp.queries[-1].seq)[-40:])
         self.assertEqual('|  | | || |  | || ||  ||||||||  ||  ||||', hsp[-1].alignment_annotation['homology'][-40:])
         self.assertEqual('CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA', str(hsp.hits[-1].seq)[-40:])
+
+    def test_exn_22_m_coding2coding_fshifts(self):
+        """Test parsing exonerate output (exn_22_m_coding2coding_fshifts.exn)"""
+
+        exn_file = get_file('exn_22_m_coding2coding_fshifts.exn')
+        qresult = read(exn_file, self.fmt)
+
+        # check common attributes
+        for hit in qresult:
+            self.assertEqual(qresult.id, hit.query_id)
+            for hsp in hit:
+                self.assertEqual(hit.id, hsp.hit_id)
+                self.assertEqual(qresult.id, hsp.query_id)
+
+        self.assertEqual('gi|296143771|ref|NM_001180731.1|', qresult.id)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', qresult.description)
+        self.assertEqual('exonerate', qresult.program)
+        self.assertEqual('coding2coding', qresult.model)
+        self.assertEqual(1, len(qresult))
+        # first hit
+        hit = qresult[0]
+        self.assertEqual('gi|296143771|ref|NM_001180731.1|', hit.id)
+        self.assertEqual('Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds', hit.description)
+        self.assertEqual(2, len(hit))
+        # first hit, first hsp
+        hsp = qresult[0][0]
+        self.assertEqual(213, hsp.score)
+        self.assertEqual([1, 1, 1, 1], hsp.query_strands)
+        self.assertEqual([1, 1, 1, 1], hsp.hit_strands)
+        self.assertEqual(0, hsp.query_start)
+        self.assertEqual(465, hsp.hit_start)
+        self.assertEqual(160, hsp.query_end)
+        self.assertEqual(630, hsp.hit_end)
+        self.assertEqual([(0, 93), (94, 127), (127, 139), (139, 160)], hsp.query_ranges)
+        self.assertEqual([(465, 558), (558, 591), (593, 605), (609, 630)], hsp.hit_ranges)
+        self.assertEqual([(93, 94), (127, 127), (139, 139)], hsp.query_inter_ranges)
+        self.assertEqual([(558, 558), (591, 593), (605, 609)], hsp.hit_inter_ranges)
+        self.assertEqual([1, 2, 2, 2], hsp.query_frames)
+        self.assertEqual([1, 1, 3, 1], hsp.hit_frames)
+        self.assertEqual(4, len(hsp.queries))
+        self.assertEqual(4, len(hsp.hits))
+        self.assertEqual(4, len(hsp.alignment_annotations))
+        # first block
+        self.assertEqual('ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAG', str(hsp[0].query.seq)[:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAG', str(hsp[0].hit.seq)[:40])
+        self.assertEqual('TATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC', str(hsp[0].query.seq)[-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('TATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC', str(hsp[0].hit.seq)[-40:])
+        # last block
+        self.assertEqual('GACGAAAGTATTAATGGTAGT', str(hsp[-1].query.seq))
+        self.assertEqual('|||||||||||||||||||||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('GACGAAAGTATTAATGGTAGT', str(hsp[-1].hit.seq))
+
+        # first hit, second hsp
+        hsp = qresult[0][1]
+        self.assertEqual(201, hsp.score)
+        self.assertEqual([-1, -1], hsp.query_strands)
+        self.assertEqual([-1, -1], hsp.hit_strands)
+        self.assertEqual(1, hsp.query_start)
+        self.assertEqual(466, hsp.hit_start)
+        self.assertEqual(158, hsp.query_end)
+        self.assertEqual(628, hsp.hit_end)
+        self.assertEqual([(95, 158), (1, 94)], hsp.query_ranges)
+        self.assertEqual([(559, 628), (466, 559)], hsp.hit_ranges)
+        self.assertEqual([(94, 95)], hsp.query_inter_ranges)
+        self.assertEqual([(559, 559)], hsp.hit_inter_ranges)
+        self.assertEqual([-3, -2], hsp.query_frames)
+        self.assertEqual([-2, -2], hsp.hit_frames)
+        self.assertEqual(2, len(hsp.queries))
+        self.assertEqual(2, len(hsp.hits))
+        self.assertEqual(2, len(hsp.alignment_annotations))
+        # first block
+        self.assertEqual('TACCATTAATACTTTCGTCATGGT<-><->AACGGCATGT', str(hsp[0].query.seq)[:40])
+        self.assertEqual('||||||||||||||||||||+ !       ...  !:!!|', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGT', str(hsp[0].hit.seq)[:40])
+        # last block
+        self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].query.seq)[:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[-1].alignment_annotation['homology'][:40])
+        self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].hit.seq)[:40])
 
     def test_exn_22_q_none(self):
         """Test parsing exonerate output (exn_22_q_none.exn)"""
