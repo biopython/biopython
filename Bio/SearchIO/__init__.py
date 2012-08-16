@@ -10,39 +10,25 @@ various sequence search programs. It provides an API similar to SeqIO and
 AlignIO, with the following main functions: parse, read, to_dict, index,
 index_db, write, and convert.
 
-SearchIO parses a search output file's contents into a hierarchy of four
-objects:
+SearchIO parses a search output file's contents into a hierarchy of four nested
+objects: QueryResult, Hit, HSP, and HSPFragment. Each of them models a part of
+the search output file:
 
-    - QueryResult, to represent a search query. This is the top-level object
-      returned by the main SearchIO parse and read functions. QueryResult
-      objects may contain zero or more Hit objects, each accessible by its ID
-      string (like in Python dictionaries) or integer index (like in Python
-      lists).
+    - QueryResult represents a search query,
+    - Hit represents a database hit,
+    - HSP represents high-scoring pairs in the hit,
+    - HSPFragment represents a contiguous alignment within the HSP
 
-    - Hit, to represent a database entry containing a full or partial sequence
-      match with the query sequence. Hit objects contain one or more HSP
-      objects, each accessible by its integer index.
-
-    - HSP, to represent a region of significant alignment(s) between the query
-      and hit sequences. HSP objects contain one or more HSPFragment objects,
-      each accessible by its integer index.
-
-    - HSPFragment, to represent a single contiguous alignment between the query
-      and hit sequences.
-
-      Most search programs only have HSPs with one HSPFragment in them, making
-      these two objects inseparable. However, there are programs (e.g. BLAT and
-      Exonerate) which may have more than one HSPFragment objects in any given
-      HSP. If you are not using these programs, you can safely consider HSP and
-      HSPFragment as a single union.
-
-More details and examples of the objects' usage are available in their
-respective documentations.
+QueryResult is the main top-level object returned by the input functions. Every
+other objects is contained within.
 
 In addition to the four objects above, SearchIO is also tightly integrated with
 the SeqRecord objects (see SeqIO) and MultipleSeqAlignment objects (see
 AlignIO). SeqRecord objects are used to store the actual matching hit and query
 sequences, while MultipleSeqAlignment objects stores the alignment between them.
+
+Please consult the objects' documentations for more details and examples of
+their usage and features.
 
 
 Input
@@ -106,6 +92,63 @@ given output file and writes it to another using the parse and write functions.
 
 Note that the same restrictions found in Bio.SearchIO.write(...) applies to the
 convert function as well.
+
+
+Conventions
+===========
+The main goal of creating SearchIO is to have a common, easy to use interface
+across different search output files. As such, we have also created some
+conventions / standards for SearchIO that extends beyond the common object model.
+You can expect these to apply to all files parsed by SearchIO, regardless of
+their individual formats.
+
+    * Python-style sequence coordinates.
+
+      When storing sequence coordinates (start and end values), SearchIO uses
+      the Python-style slice values: zero-based and half-open intervals. For
+      example, if in a BLAST XML output file the start and end coordinates of an
+      HSP are 10 and 28, they would become 9 and 28 in SearchIO. The start
+      coordinate becomes 9 because Python indices start from zero, while the end
+      coordinate remains 28 because Python slices omit the last item in an
+      interval.
+
+      Besides giving you the benefits of standardization, this convention also
+      makes the coordinates usable for slicing sequences. For example, given a
+      full query sequence and the start and end coordinates of an HSP, one can
+      use the coordinates to extract part of the query sequence that results in
+      the database hit.
+
+      When these objects are written to an output file using
+      SearchIO.write(...), the coordinate values are restored to their
+      respective format's convention. Using the example above, if the HSP would
+      be written to an XML file, the start and end coordinates would become 10
+      and 28 again.
+
+    * Sequence coordinates' order.
+
+      Some search output format reverses the start and end coordinate sequences
+      according to the sequence's strand. For example, in BLAST plain text
+      format if the matching strand lies in the minus orientation, then the
+      start coordinate will always be bigger than the end coordinate.
+
+      In SearchIO, the start coordinate is always smaller than the end
+      coordinate, regardless of strand. This ensures consistency when using the
+      coordinates to slice full sequences.
+
+      Note that this coordinate order convention is only enforced in the
+      HSPFragment level. If an HSP object has several HSPFragment objects, each
+      individual fragment will conform to this convention. But the order of the
+      fragments within the HSP object follows what the search output file uses.
+
+      Similar to the coordinate style convention, the start and end coordinates'
+      order are restored to their respective formats when the objects are
+      written using Bio.SearchIO.write(...).
+
+    * Frames and strand values.
+
+      SearchIO only allows -1, 0, 1 and None as strand values. For frames, the
+      only allowed values are integers from -3 to 3 (inclusive) and None. Both
+      of these are standard Biopython conventions.
 
 
 Supported Formats
