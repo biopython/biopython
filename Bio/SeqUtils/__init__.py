@@ -210,7 +210,7 @@ _THREECODE = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
              'U':'Sel', 'O':'Pyl', 'J':'Xle',
              }
 
-def seq3(seq, term_map={'*': 'Ter'}, undef_code='Xaa'):
+def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.
 
     The single input argument 'seq' should be a protein sequence using single
@@ -229,8 +229,8 @@ def seq3(seq, term_map={'*': 'Ter'}, undef_code='Xaa'):
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
     You can set a custom translation of the codon termination code using the
-    "term_map" argument, e.g.
-    >>> seq3("MAIVMGRWKGAR*", term_map={"*": "***"})
+    "custom_map" argument, e.g.
+    >>> seq3("MAIVMGRWKGAR*", custom_map={"*": "***"})
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'
 
     You can also set a custom translation for non-amino acid characters, such
@@ -246,13 +246,13 @@ def seq3(seq, term_map={'*': 'Ter'}, undef_code='Xaa'):
     """
     threecode = _THREECODE
     # add the given termination codon code
-    threecode.update(term_map)
+    threecode.update(custom_map)
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
     return ''.join([threecode.get(aa, undef_code) for aa in seq])
 
 
-def seq1(seq, term_map={'Ter': '*'}, undef_code='X'):
+def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     """Turns a three-letter code protein sequence into one with single letter codes.
 
     The single input argument 'seq' should be a protein sequence using three-
@@ -271,8 +271,8 @@ def seq1(seq, term_map={'Ter': '*'}, undef_code='X'):
     'MAIVMGRWKGAR*'
 
     You can set a custom translation of the codon termination code using the
-    "term_map" argument, e.g.
-    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", term_map={"***": "*"})
+    "custom_map" argument, e.g.
+    >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
     'MAIVMGRWKGAR*'
 
     You can also set a custom translation for non-amino acid characters, such
@@ -288,7 +288,7 @@ def seq1(seq, term_map={'Ter': '*'}, undef_code='X'):
     # reverse map of threecode
     onecode = dict([(x[1], x[0]) for x in _THREECODE.items()])
     # add the given termination codon code and custom maps
-    onecode.update(term_map)
+    onecode.update(custom_map)
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
     return ''.join([onecode.get(aa, undef_code) for aa in seqlist])
 
