@@ -57,8 +57,8 @@ def _adjust_aa_seq(fraglist):
 
         # replace the old frag sequences with the new ones
         frag.hit = None
-        frag.hit = hseq1
         frag.query = None
+        frag.hit = hseq1
         frag.query = qseq1
 
         # set coordinates
