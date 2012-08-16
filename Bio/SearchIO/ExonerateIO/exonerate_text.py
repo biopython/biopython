@@ -358,10 +358,10 @@ class ExonerateTextParser(_BaseExonerateParser):
                 pass
 
         # use vulgar coordinates if vulgar line is present and return
-        if vulgar_comp is not None:
-            hsp = parse_vulgar_comp(hsp, vulgar_comp)
+        #if vulgar_comp is not None:
+        #    hsp = parse_vulgar_comp(hsp, vulgar_comp)
 
-            return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
+        #    return {'qresult': qresult, 'hit': hit, 'hsp': hsp}
 
         # otherwise we need to get the coordinates from the alignment
         # get the intervening blocks first, so we can use them
