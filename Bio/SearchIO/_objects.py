@@ -6,6 +6,7 @@
 """Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
 
 import warnings
+from copy import deepcopy
 from itertools import chain
 
 from Bio import BiopythonWarning
@@ -517,7 +518,7 @@ class QueryResult(_BaseSearchObject):
     def hit_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its
         Hits."""
-        hits = (hit[:] for hit in self.hits)
+        hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
             hits = map(func, hits)
         obj =  self.__class__(self.id, hits, self._hit_key_function)
