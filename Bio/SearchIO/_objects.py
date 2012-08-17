@@ -24,7 +24,6 @@ __all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
 def _singleitem(attr=None, doc=''):
     """Returns a property that fetches the given attribute from
     the first item in a SearchIO container object."""
-    @property
     def getter(self):
         if len(self._items) > 1:
             raise ValueError("More than one HSPFragment objects "
@@ -32,22 +31,17 @@ def _singleitem(attr=None, doc=''):
         if attr is None:
             return self._items[0]
         return getattr(self._items[0], attr)
-    if doc:
-        getter.__doc__ = doc
-    return getter
+    return property(fget=getter, doc=doc)
 
 
 def _allitems(attr=None, doc=''):
     """Returns a property that fetches the given attributes from
     all items in a SearchIO container object."""
-    @property
     def getter(self):
         if attr is None:
             return self._items
         return [getattr(frag, attr) for frag in self._items]
-    if doc:
-        getter.__doc__ = doc
-    return getter
+    return property(fget=getter, doc=doc)
 
 
 def _partialcascade(cont_attr, item_attr, doc=''):
