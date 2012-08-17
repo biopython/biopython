@@ -816,7 +816,11 @@ class Hit(_BaseSearchObject):
         lines = []
 
         # set query id line
-        lines.append('Query: %s' % self.query_id)
+        qid_line = 'Query: %s' % self.query_id
+        if self.query_description:
+            qid_line += Hit._trunc_display('\n       %s' %
+                    self.query_description, 80, '...')
+        lines.append(qid_line)
 
         # set hit id line
         hid_line = '  Hit: %s' % self.id
