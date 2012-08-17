@@ -1025,7 +1025,8 @@ class HSP(_BaseHSP):
             self._items.append(fragment)
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, self._items)
+        return "%s(hit_id=%r, query_id=%r, %r fragments)" % \
+                (self.__class__.__name__, self.hit_id, self.query_id, len(self))
 
     def __iter__(self):
         return iter(self._items)
