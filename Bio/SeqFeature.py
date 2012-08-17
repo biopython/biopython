@@ -558,13 +558,13 @@ class FeatureLocation(object):
         elif isinstance(start, int):
             self._start = ExactPosition(start)
         else:
-            raise TypeError(start)
+            raise TypeError("start=%r %s" % (start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
         elif isinstance(end, int):
             self._end = ExactPosition(end)
         else:
-            raise TypeError(end)
+            raise TypeError("end=%r %s" % (end, type(end)))
         self.strand = strand
         self.ref = ref
         self.ref_db = ref_db
