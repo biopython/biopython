@@ -870,7 +870,6 @@ class Hit(_BaseSearchObject):
     def __getitem__(self, idx):
         # if key is slice, return a new Hit instance
         if isinstance(idx, slice):
-            print idx
             obj = self.__class__(self.hsps[idx])
             self._transfer_attrs(obj)
             return obj
