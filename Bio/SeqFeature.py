@@ -555,13 +555,13 @@ class FeatureLocation(object):
         """
         if isinstance(start, AbstractPosition):
             self._start = start
-        elif isinstance(start, int):
+        elif isinstance(start, int) or isinstance(start, long):
             self._start = ExactPosition(start)
         else:
             raise TypeError("start=%r %s" % (start, type(start)))
         if isinstance(end, AbstractPosition):
             self._end = end
-        elif isinstance(end, int):
+        elif isinstance(end, int) or isinstance(end, long):
             self._end = ExactPosition(end)
         else:
             raise TypeError("end=%r %s" % (end, type(end)))
