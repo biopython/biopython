@@ -349,7 +349,7 @@ class TestRunner(unittest.TextTestRunner):
                 sys.stderr.write("%s docstring test ... " % name)
                 #Can't use fromlist=name.split(".") until python 2.5+
                 module = __import__(name, None, None, name.split("."))
-                suite = doctest.DocTestSuite(module)
+                suite = doctest.DocTestSuite(module, optionflags=doctest.ELLIPSIS)
                 del module
             suite.run(result)
             if cur_dir != os.path.abspath("."):
