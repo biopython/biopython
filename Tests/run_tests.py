@@ -113,6 +113,7 @@ try:
 except ImportError:
     #Missing on Jython or Python 2.4
     DOCTEST_MODULES.remove("Bio.SeqIO")
+    DOCTEST_MODULES.remove("Bio.SearchIO")
 
 #Skip Bio.Seq doctest under Python 3, see http://bugs.python.org/issue7490
 if sys.version_info[0] == 3:
