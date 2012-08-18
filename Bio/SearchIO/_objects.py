@@ -3,7 +3,46 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO objects to model homology search program outputs (PRIVATE)."""
+"""Bio.SearchIO objects to model homology search program outputs.
+
+The SearchIO object model is made up of a hierarchy of four nested objects:
+
+    * QueryResult, to represent a search query.
+
+      This is the top-level object returned by the main SearchIO `parse` and
+      `read` functions. QueryResult objects may contain zero or more Hit
+      objects, each accessible by its ID string (like in Python dictionaries)
+      or integer index (like in Python lists).
+
+    * Hit, to represent a database entry containing a full or partial sequence
+      match with the query sequence.
+
+      Hit objects contain one or more HSP objects, each accessible by its integer
+      index. They behave very similar to a Python list.
+
+    * HSP, to represent a region of significant alignment(s) between the query
+      and hit sequences.
+
+      HSP objects contain one or more HSPFragment objects, each accessible by
+      its integer index. In most cases, the HSP objects are where the bulk of
+      search result statistics (e.g. e-value, bitscore) are stored. Like Hit
+      objects, HSPs also behave very similar to a Python list.
+
+    * HSPFragment, to represent a single contiguous alignment between the query
+      and hit sequences.
+
+      HSPFragment objects may store hit and query sequences resulting from the
+      sequence search. If present, these sequences are stored as SeqRecord
+      objects (see SeqRecord). If both of them are present, HSPFragment will
+      create a MultipleSeqAlignment object from both sequences.
+
+      Most search programs only have HSPs with one HSPFragment in them, making
+      these two objects inseparable. However, there are programs (e.g. BLAT and
+      Exonerate) which may have more than one HSPFragment objects in any given
+      HSP. If you are not using these programs, you can safely consider HSP and
+      HSPFragment as a single union.
+
+"""
 
 import warnings
 from copy import deepcopy
@@ -69,10 +108,9 @@ def _fullcascade(attr, doc=''):
     """Returns a getter property with a cascading setter.
 
     This is similar to `_partialcascade`, but for SearchIO containers that have
-    at least one item (`Hit` and `HSP`). The getter always retrieves the
-    attribute value from the first item. If the items have more than one
-    attribute values, an error will be raised. The setter behaves like
-    `_partialcascade`.
+    at least one item (Hit and HSP). The getter always retrieves the attribute
+    value from the first item. If the items have more than one attribute values,
+    an error will be raised. The setter behaves like `_partialcascade`.
 
     """
     def getter(self):
@@ -99,7 +137,7 @@ class _BaseSearchObject(object):
         """Transfer instance attributes to the given object.
 
         This method is used to transfer attributes set externally (for example
-        using setattr()) to a new object created from this one (for example
+        using `setattr`) to a new object created from this one (for example
         from slicing).
 
         The reason this method is necessary is because different parsers will
@@ -137,102 +175,157 @@ class QueryResult(_BaseSearchObject):
 
     """Class representing search results from a single query.
 
-    The QueryResult object is a container for storing all search hits from a single
-    search query. It is the top-level object returned by SearchIO's two main
-    functions, SearchIO.read:
+    QueryResult is the container object that stores all search hits from a
+    single search query. It is the top-level object returned by SearchIO's two
+    main functions, `read` and `parse`. Depending on the search results and
+    search output format, a QueryResult object contains zero or more Hit
+    objects (see Hit).
+
+    You can take a quick look at a QueryResult's contents and attributes by
+    invoking `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
-    >>> qresult
-    QueryResult(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 5 hits)
+    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> print qresult[:12]      # show the first 11 hits
+    Program: blastn (2.2.27+)
+      Query: 33211 (61)
+             mir_1
+     Target: refseq_rna
+       Hits: ----  -----  ----------------------------------------------------------
+                #  # HSP  ID + description                                          
+             ----  -----  ----------------------------------------------------------
+                0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+                1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+                2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+                3      2  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+                4      1  gi|301171267|ref|NR_035851.1|  Pan troglodytes microRNA...
+                5      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+                6      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+                7      1  gi|301171259|ref|NR_035850.1|  Pan troglodytes microRNA...
+                8      1  gi|262205451|ref|NR_030222.1|  Homo sapiens microRNA 51...
+                9      2  gi|301171447|ref|NR_035871.1|  Pan troglodytes microRNA...
+               10      1  gi|301171276|ref|NR_035852.1|  Pan troglodytes microRNA...
+               11      1  gi|262205290|ref|NR_030188.1|  Homo sapiens microRNA 51...
 
-    and SearchIO.parse:
-
-    >>> qresults = SearchIO.parse('tblastx_human_wnts.xml', 'blast-xml')
-    >>> qresult = qresults.next()
-    >>> qresult
-    QueryResult(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 5 hits)
-
-    QueryResult is basically a container of the hits (see Hit objects) from one
-    query sequence. Its length is how many hits it has and iteration over a
-    QueryResult object returns Hit objects.
+    If you just want to know how many hits a QueryResult has, you can invoke
+    `len` on it. Alternatively, you can simply type its name in the interpreter:
 
     >>> len(qresult)
-    5
-    >>> for hit in qresult:
-    ...     print hit.id
-    ...
-    gi|195230749|ref|NM_003391.2|
-    gi|281183280|ref|NM_001168718.1|
-    gi|281182577|ref|NM_001168597.1|
-    gi|274325896|ref|NM_001168687.1|
-    gi|209529663|ref|NM_001135848.1|
+    100
+    >>> qresult
+    QueryResult(id='33211', 100 hits)
 
-    QueryResult objects behaves like a hybrid of Python's built-in list and
-    dictionary, enabling retrieval of search hits using its index (integer) or
-    its key (string, defaults to ID).
-
-    Indexing using integers works exactly the same as Python lists:
+    QueryResult behaves like a hybrid of Python's built-in list and dictionary.
+    You can retrieve its items (Hit objects) using the integer index of the
+    item, just like regular Python lists:
 
     >>> first_hit = qresult[0]
     >>> first_hit
-    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+    Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
 
-    >>> last_hit = qresult[-1]
-    >>> last_hit
-    Hit(id='gi|209529663|ref|NM_001135848.1|', query_id='gi|195230749:301-1383', 10 alignments)
+    You can slice QueryResult objects as well. However, instead of returning a
+    list, slicing will return a new QueryResult object containing only the
+    sliced hits:
 
-    Indexing using hit IDs works just like Python dictionaries. This is useful
-    if you know what you are expecting from the search beforehand.
-
-    >>> qresult['gi|195230749|ref|NM_003391.2|']
-    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
-
-    To get a list of all the hits contained in a QueryResult object, you can use
-    the hits attribute. To obtain all the hit keys, the hit_keys attribute
-    is used.
-
-    >>> qresult.hits
-    [Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|281183280|ref|NM_001168718.1|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|281182577|ref|NM_001168597.1|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|274325896|ref|NM_001168687.1|', query_id='gi|195230749:301-1383', 10 alignments), Hit(id='gi|209529663|ref|NM_001135848.1|', query_id='gi|195230749:301-1383', 10 alignments)]
-
-    >>> qresult.hit_keys
-    [u'gi|195230749|ref|NM_003391.2|', u'gi|281183280|ref|NM_001168718.1|', u'gi|281182577|ref|NM_001168597.1|', u'gi|274325896|ref|NM_001168687.1|', u'gi|209529663|ref|NM_001135848.1|']
-
-    Similar to Python lists, you can also slice QueryResult objects. However,
-    instead of returning a list, slicing will return a new QueryResult object.
-    The new QueryResult object will have its hits sliced accordingly and attributes
-    present in the unsliced QueryResult object are retained.
-
-    >>> qresult
-    QueryResult(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 5 hits)
-    >>> sliced_qresult = qresult[:3]
-    >>> sliced_qresult
-    QueryResult(program='TBLASTX', target='refseq_mrna', id='gi|195230749:301-1383', 3 hits)
+    >>> sliced_qresult = qresult[:3]    # slice the first three hits
     >>> len(qresult)
-    5
+    100
     >>> len(sliced_qresult)
     3
-    >>> qresult.program
-    u'TBLASTX'
-    >>> qresult.program == sliced_qresult.program
+    >>> print sliced_qresult
+    Program: blastn (2.2.27+)
+      Query: 33211 (61)
+             mir_1
+     Target: refseq_rna
+       Hits: ----  -----  ----------------------------------------------------------
+                #  # HSP  ID + description                                          
+             ----  -----  ----------------------------------------------------------
+                0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+                1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+                2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+
+    It is also possible to retrieve hits using the hit's ID. This is useful for
+    retrieving hits that you know should exist in a given search:
+
+    >>> hit = qresult['gi|262205317|ref|NR_030195.1|']
+    >>> hit
+    Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
+
+    You can also replace a Hit in QueryResult with another Hit using either the
+    integer index or hit key string. Note that the replacing object must be a
+    Hit that has the same `query_id` property as the QueryResult object.
+
+    If you're not sure whether a QueryResult contains a particular hit, you can
+    use the hit ID to check for membership first:
+
+    >>> 'gi|262205317|ref|NR_030195.1|' in qresult
     True
-    >>> qresult[0] in sliced_qresult
-    True
-    >>> qresult[4] in sliced_qresult
+    >>> 'gi|262380031|ref|NR_023426.1|' in qresult
     False
 
-    You can check whether a hit is present in a QueryResult object using its key
-    (defaults to hit ID) or the Hit object itself.
+    Or, if you just want to know the rank / position of a given hit, you can
+    use the hit ID as an argument for the `index` method. Note that the values
+    returned will be zero-based. So zero (0) means the hit is the first in the
+    QueryResult, three (3) means the hit is the fourth item, and so on. If the
+    hit does not exist in the QueryResult, a `ValueError` will be raised.
 
-    >>> hit = qresult[0]
-    >>> hit in qresult
-    True
-    >>> hit.id in qresult
-    True
+    >>> qresult.index('gi|262205317|ref|NR_030195.1|')
+    0
+    >>> qresult.index('gi|262205330|ref|NR_030198.1|')
+    5
+    >>> qresult.index('gi|262380031|ref|NR_023426.1|')
+    Traceback (most recent call last):
+    ...
+    ValueError: 'gi|262380031|ref|NR_023426.1|' is not in list
 
-    Finally, QueryResult objects has other methods normally used in Python lists:
-    append(), index(), pop(), and sort(). Consult their documentation for more
-    information.
+    To ease working with a large number of hits, QueryResult has several filter
+    and map methods, analogous to Python's built-in functions with the same
+    names. There are filter and map methods available for operations over Hit
+    objects or HSP objects. As an example, here we are using the `hit_map`
+    method to rename all hit IDs within a QueryResult:
+
+    >>> def renamer(hit):
+    ...     hit.id = hit.id.split('|')[3]
+    ...     return hit
+    >>> mapped_qresult = qresult.hit_map(renamer)
+    >>> print mapped_qresult[:3]
+    Program: blastn (2.2.27+)
+      Query: 33211 (61)
+             mir_1
+     Target: refseq_rna
+       Hits: ----  -----  ----------------------------------------------------------
+                #  # HSP  ID + description                                          
+             ----  -----  ----------------------------------------------------------
+                0      1  NR_030195.1  Homo sapiens microRNA 520b (MIR520B), micr...
+                1      1  NR_035856.1  Pan troglodytes microRNA mir-520b (MIR520B...
+                2      1  NR_032573.1  Macaca mulatta microRNA mir-519a (MIR519A)...
+
+    The principle for other map and filter methods are similar: they take a
+    function, applies it, and returns a new QueryResult object.
+
+    There are also other methods useful for working with list-like objects:
+    `append`, `pop`, and `sort`. More details and examples are available in
+    their respective documentations.
+
+    Finally, just like Python lists and dictionaries, QueryResult objects are
+    iterable. Iteration over QueryResults will yield Hit objects:
+
+    >>> for hit in qresult[:4]:     # iterate over the first four items
+    ...     hit
+    ...
+    Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
+    Hit(id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 hsps)
+    Hit(id='gi|270133242|ref|NR_032573.1|', query_id='33211', 1 hsps)
+    Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
+
+    If you need access to all the hits in a QueryResult object, you can access
+    them in a list using the `hits` property. Similary, access to all hit IDs is
+    available through the `hit_keys` property.
+
+    >>> qresult.hits
+    [Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps), ...]
+    >>> qresult.hit_keys
+    ['gi|262205317|ref|NR_030195.1|', 'gi|301171311|ref|NR_035856.1|', ...]
 
     """
 
@@ -245,8 +338,8 @@ class QueryResult(_BaseSearchObject):
         """Initializes a QueryResult object.
 
         Arguments:
-        query_id -- String of query sequence ID.
-        hits     -- Parser returning Hit objects.
+        id -- String of query sequence ID.
+        hits -- Iterator returning Hit objects.
         hit_key_function -- Function to define hit keys, defaults to a function
                             that return Hit object IDs.
 
@@ -300,7 +393,7 @@ class QueryResult(_BaseSearchObject):
                 yield hit_id
 
         def iteritems(self):
-            """Returns an iterator of tuples of Hit ID and Hit objects."""
+            """Returns an iterator yielding tuples of Hit ID and Hit objects."""
             for item in self._items.iteritems():
                 yield item
 
@@ -311,28 +404,23 @@ class QueryResult(_BaseSearchObject):
 
         @property
         def hits(self):
-            """Returns an iterator over the Hit objects contained by this
-            object."""
+            """Iterator over the Hit objects contained by this object."""
             for hit in self._items.values():
                 yield hit
 
         @property
         def hit_keys(self):
-            """Returns an iterator over the Hit IDs contained by this
-            object."""
+            """Iterator over the Hit IDs contained by this object."""
             for hit_id in  self._items.keys():
                 yield hit_id
 
         @property
         def items(self):
-            """Returns an iterator over the Hit ID and Hit object contained
-            by this object."""
+            """Iterator returning tuples of Hit ID and Hit objects."""
             for item in self._items.items():
                 yield item
 
     def __contains__(self, hit_key):
-        """Checks whether a Hit object or a Hit object with the given ID
-        exists."""
         if isinstance(hit_key, Hit):
             return self._hit_key_function(hit_key) in self._items
         return hit_key in self._items
@@ -392,12 +480,6 @@ class QueryResult(_BaseSearchObject):
         return '\n'.join(lines)
 
     def __getitem__(self, hit_key):
-        """Custom Search object item retrieval.
-
-        Allows value retrieval by its key, location index, or a slice of
-        location index.
-
-        """
         # retrieval using slice objects returns another QueryResult object
         if isinstance(hit_key, slice):
             # should we return just a list of Hits instead of a full blown
@@ -415,11 +497,6 @@ class QueryResult(_BaseSearchObject):
         return self._items[hit_key]
 
     def __setitem__(self, hit_key, hit):
-        """Custom Search object item assignment.
-
-        Hit key must be a string and hit must be a Hit object.
-
-        """
         # only accept string keys
         if not isinstance(hit_key, basestring):
             raise TypeError("QueryResult object keys must be a string.")
@@ -434,13 +511,6 @@ class QueryResult(_BaseSearchObject):
         self._items[hit_key] = hit
 
     def __delitem__(self, hit_key):
-        """Custom Search object item deletion.
-
-        If hit_key is a string, then the method will delete the Hit object whose
-        ID matches the string. If key is an integer or a slice object, then
-        the Hit objects within that range will be deleted.
-
-        """
         # if hit_key an integer or slice, get the corresponding key first
         # and put it into a list
         if isinstance(hit_key, int):
@@ -457,14 +527,18 @@ class QueryResult(_BaseSearchObject):
         return
 
     ## properties ##
-    id = _partialcascade('_id', 'query_id')
-    description = _partialcascade('_description', 'query_description')
+    id = _partialcascade('_id', 'query_id', """QueryResult ID string""")
+    description = _partialcascade('_description', 'query_description',
+            """QueryResult description""")
 
     ## public methods ##
     def absorb(self, hit):
         """Adds a Hit object to the end of QueryResult. If the QueryResult
         already has a Hit with the same ID, append the new Hit's HSPs into
         the existing Hit.
+
+        Arguments:
+        hit -- Hit object to absorb.
 
         This method is used for file formats that may output the same Hit in
         separate places, such as BLAT or Exonerate. In both formats, Hit
@@ -483,14 +557,12 @@ class QueryResult(_BaseSearchObject):
     def append(self, hit):
         """Adds a Hit object to the end of QueryResult.
 
-        Argument:
-        hit -- Hit object.
+        Parameters
+        hit -- Hit object to append.
 
-        The hit key used for the appended Hit object depends on the
-        hit_key_function used to initialize the QueryResult object. Any Hit object
-        appended must have the same query_id attribute as the QueryResult object's
-        id attribute. If the hit key already exists, a ValueError will be
-        raised.
+        Any Hit object appended must have the same `query_id` property as the
+        QueryResult's `id` property. If the hit key already exists, a
+        `ValueError` will be raised.
 
         """
         # if a custom hit_key_function is supplied, use it to define th hit key
@@ -507,7 +579,47 @@ class QueryResult(_BaseSearchObject):
 
     def hit_filter(self, func=None):
         """Creates a new QueryResult object whose Hit objects pass the filter
-        function."""
+        function.
+
+        Arguments:
+        func -- Callback function that accepts a Hit object as its parameter,
+                does a boolean check, and returns True or False
+
+        Here is an example of using `hit_filter` to select Hits whose
+        description begins with the string 'Homo sapiens', case sensitive:
+
+        >>> from Bio import SearchIO
+        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> def desc_filter(hit):
+        ...     return hit.description.startswith('Homo sapiens')
+        ...
+        >>> len(qresult)
+        100
+        >>> filtered = qresult.hit_filter(desc_filter)
+        >>> len(filtered)
+        39
+        >>> print filtered[:4]
+        Program: blastn (2.2.27+)
+          Query: 33211 (61)
+                 mir_1
+         Target: refseq_rna
+           Hits: ----  -----  ----------------------------------------------------------
+                    #  # HSP  ID + description                                          
+                 ----  -----  ----------------------------------------------------------
+                    0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+                    1      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+                    2      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+                    3      1  gi|262205451|ref|NR_030222.1|  Homo sapiens microRNA 51...
+
+        Note that instance attributes (other than the hits) from the unfiltered
+        QueryResult are retained in the filtered object.
+
+            >>> qresult.program == filtered.program
+            True
+            >>> qresult.target == filtered.target
+            True
+
+        """
         hits = filter(func, self.hits)
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
@@ -515,7 +627,54 @@ class QueryResult(_BaseSearchObject):
 
     def hit_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its
-        Hits."""
+        Hits.
+
+        Arguments:
+        func -- Callback function that accepts a Hit object as its parameter and
+                also returns a Hit object.
+
+        Here is an example of using `hit_map` with a function that discards all
+        HSPs in a Hit except for the first one:
+
+        >>> from Bio import SearchIO
+        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> print qresult[:8]
+        Program: blastn (2.2.27+)
+          Query: 33211 (61)
+                 mir_1
+         Target: refseq_rna
+           Hits: ----  -----  ----------------------------------------------------------
+                    #  # HSP  ID + description                                          
+                 ----  -----  ----------------------------------------------------------
+                    0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+                    1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+                    2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+                    3      2  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+                    4      1  gi|301171267|ref|NR_035851.1|  Pan troglodytes microRNA...
+                    5      2  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+                    6      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+                    7      1  gi|301171259|ref|NR_035850.1|  Pan troglodytes microRNA...
+
+        >>> top_hsp = lambda hit: hit[:1]
+        >>> mapped_qresult = qresult.hit_map(top_hsp)
+        >>> print mapped_qresult[:8]
+        Program: blastn (2.2.27+)
+          Query: 33211 (61)
+                 mir_1
+         Target: refseq_rna
+           Hits: ----  -----  ----------------------------------------------------------
+                    #  # HSP  ID + description                                          
+                 ----  -----  ----------------------------------------------------------
+                    0      1  gi|262205317|ref|NR_030195.1|  Homo sapiens microRNA 52...
+                    1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
+                    2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
+                    3      1  gi|301171322|ref|NR_035857.1|  Pan troglodytes microRNA...
+                    4      1  gi|301171267|ref|NR_035851.1|  Pan troglodytes microRNA...
+                    5      1  gi|262205330|ref|NR_030198.1|  Homo sapiens microRNA 52...
+                    6      1  gi|262205302|ref|NR_030191.1|  Homo sapiens microRNA 51...
+                    7      1  gi|301171259|ref|NR_035850.1|  Pan troglodytes microRNA...
+
+        """
         hits = [deepcopy(hit) for hit in self.hits]
         if func is not None:
             hits = map(func, hits)
@@ -525,7 +684,14 @@ class QueryResult(_BaseSearchObject):
 
     def hsp_filter(self, func=None):
         """Creates a new QueryResult object whose HSP objects pass the filter
-        function."""
+        function.
+
+        `hsp_filter` is the same as `hit_filter`, except that it filters
+        directly on each HSP object in every Hit. If a the filtering removes
+        all HSP object in a given Hit, the entire Hit will be discarded. This
+        will result in the QueryResult having less Hit after filtering.
+
+        """
         hits = filter(None, (hit.filter(func) for hit in self.hits))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
@@ -533,7 +699,12 @@ class QueryResult(_BaseSearchObject):
 
     def hsp_map(self, func=None):
         """Creates a new QueryResult object, mapping the given function to its
-        HSPs."""
+        HSPs.
+
+        `hsp_map` is the same as `hit_map`, except that it applies the given
+        function to all HSP objects in every Hit, instead of the Hit objects.
+
+        """
         hits = filter(None, (hit.map(func) for hit in list(self.hits)[:]))
         obj =  self.__class__(self.id, hits, self._hit_key_function)
         self._transfer_attrs(obj)
@@ -553,34 +724,34 @@ class QueryResult(_BaseSearchObject):
         default -- Value that will be returned if the Hit object with the
                    specified index or hit key is not found.
 
-        By default, pop will remove and return the last Hit object in the
-        QueryResult object. To remove specific Hit objects, you can use its integer
-        index or its hit key.
+        By default, `pop` will remove and return the last Hit object in the
+        QueryResult object. To remove specific Hit objects, you can use its
+        integer index or hit key.
 
         >>> from Bio import SearchIO
-        >>> qresult = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
+        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
         >>> len(qresult)
-        5
-        >>> for hit in qresult:
+        100
+        >>> for hit in qresult[:5]:
         ...     print hit.id
         ...
-        gi|195230749|ref|NM_003391.2|
-        gi|281183280|ref|NM_001168718.1|
-        gi|281182577|ref|NM_001168597.1|
-        gi|274325896|ref|NM_001168687.1|
-        gi|209529663|ref|NM_001135848.1|
+        gi|262205317|ref|NR_030195.1|
+        gi|301171311|ref|NR_035856.1|
+        gi|270133242|ref|NR_032573.1|
+        gi|301171322|ref|NR_035857.1|
+        gi|301171267|ref|NR_035851.1|
 
+        # remove the last hit
         >>> qresult.pop()
-        Hit(id='gi|209529663|ref|NM_001135848.1|', query_id='gi|195230749:301-1383', 10 alignments)
+        Hit(id='gi|397513516|ref|XM_003827011.1|', query_id='33211', 1 hsps)
 
+        # remove the first hit
         >>> qresult.pop(0)
-        Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+        Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
 
-        >>> qresult.pop('gi|281182577|ref|NM_001168597.1|')
-        Hit(id='gi|281182577|ref|NM_001168597.1|', query_id='gi|195230749:301-1383', 10 alignments)
-
-        >>> len(qresult)
-        2
+        # remove hit with the given ID
+        >>> qresult.pop('gi|301171322|ref|NR_035857.1|')
+        Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
 
         """
         # if key is an integer (index)
@@ -603,19 +774,16 @@ class QueryResult(_BaseSearchObject):
     def index(self, hit_key):
         """Returns the index of a given hit key, zero-based.
 
-        Argument:
-        hit_key -- String of hit key or Hit object.
-
-        >>> from Bio import SearchIO
-        >>> qresult = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
-        >>> qresult.index('gi|209529663|ref|NM_001135848.1|')
-        4
-        >>> hit = qresult['gi|209529663|ref|NM_001135848.1|']
-        >>> qresult.index(hit)
-        4
+        Arguments:
+        hit_key -- Hit ID string to look up.
 
         This method is useful for finding out the integer index (usually
         correlated with search rank) of a given hit key.
+
+        >>> from Bio import SearchIO
+        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> qresult.index('gi|301171259|ref|NR_035850.1|')
+        7
 
         """
         if isinstance(hit_key, Hit):
@@ -629,44 +797,13 @@ class QueryResult(_BaseSearchObject):
         Arguments:
         key -- Function used to sort the Hit objects.
         reverse -- Boolean, whether to reverse the sorting or not.
+        in_place -- Boolean, whether to perform sorting in place (in the same
+                    object) or not (creating a new object).
 
-        >>> from Bio import SearchIO
-        >>> qresult = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
-        >>> for hit in qresult:
-        ...     print hit.id
-        ...
-        gi|195230749|ref|NM_003391.2|
-        gi|281183280|ref|NM_001168718.1|
-        gi|281182577|ref|NM_001168597.1|
-        gi|274325896|ref|NM_001168687.1|
-        gi|209529663|ref|NM_001135848.1|
-
-        >>> qresult.sort(reverse=True)
-        >>> for hit in qresult:
-        ...     print hit.id
-        ...
-        gi|209529663|ref|NM_001135848.1|
-        gi|274325896|ref|NM_001168687.1|
-        gi|281182577|ref|NM_001168597.1|
-        gi|281183280|ref|NM_001168718.1|
-        gi|195230749|ref|NM_003391.2|
-
-        >>> qresult.sort(key=lambda hit: hit.id)
-        >>> for hit in qresult:
-        ...     print hit.id
-        ...
-        gi|195230749|ref|NM_003391.2|
-        gi|209529663|ref|NM_001135848.1|
-        gi|274325896|ref|NM_001168687.1|
-        gi|281182577|ref|NM_001168597.1|
-        gi|281183280|ref|NM_001168718.1|
-
-        By default, sorting is based on the expect values of the Hit objects,
-        from the smallest to the largest. If the Hit objects do not have any
-        expect values (e.g. BLAT Hit objects), then no sorting is performed.
-
-        The sort creates a new Hit container object, but appears to be
-        in-place since the new Hit container replaces the old one.
+        `sort` defaults to sorting in-place, to mimick Python's `list.sort`
+        method. If you set the `in_place` argument to False, it will treat
+        return a new, sorted QueryResult object and keep the initial one
+        unsorted.
 
         """
         if key is None:
@@ -697,87 +834,97 @@ class Hit(_BaseSearchObject):
     """Class representing a single database hit of a search result.
 
     Hit objects are the second-level container in the SearchIO module. They
-    are the objects contained within a QueryResult object (see QueryResult). Each Hit
-    object is uniquely identified by its ID and the query ID that results in
-    its creation.
+    are the objects contained within a QueryResult (see QueryResult). They
+    themselves are container for HSP objects and will contain at least one
+    HSP.
+
+    To have a quick look at a Hit and its contents, invoke `print` on it:
 
     >>> from Bio import SearchIO
-    >>> qresult = SearchIO.read('tblastx_human_wnts.xml', 'blast-xml')
-    >>> hit = qresult[0]
-    >>> hit
-    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
+    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> hit = qresult[3]
+    >>> print hit
+    Query: 33211
+           mir_1
+      Hit: gi|301171322|ref|NR_035857.1| (86)
+           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+              #   E-value  Bit score    Span      Query range              Hit range
+           ----  --------  ---------  ------  ---------------  ---------------------
+              0   8.9e-20     100.47      60           [1:61]                [13:73]
+              1   3.3e-06      55.39      60           [0:60]                [13:73]
 
-    Hit objects themselves are container for the basic SearchIO unit: the
-    HSP object (see HSP). Since these HSPs usually do not have any unique
-    IDs, Hit objects behave very similar to a Python built-in list.
-
-    The length of a Hit object is how many HSPs it contains and iteration
-    over Hit objects return these HSPs:
+    You can invoke `len` on a Hit object to see how many HSP objects it contains:
 
     >>> len(hit)
-    10
-    >>> for hsp in hit:
-    ...     print hsp.hit_id, hsp.evalue, len(hsp)
-    gi|195230749|ref|NM_003391.2| 0.0 340
-    gi|195230749|ref|NM_003391.2| 0.0 253
-    gi|195230749|ref|NM_003391.2| 0.0 69
-    gi|195230749|ref|NM_003391.2| 0.0 361
-    gi|195230749|ref|NM_003391.2| 0.0 178
-    gi|195230749|ref|NM_003391.2| 0.0 161
-    gi|195230749|ref|NM_003391.2| 0.0 237
-    gi|195230749|ref|NM_003391.2| 0.0 106
-    gi|195230749|ref|NM_003391.2| 0.0 288
-    gi|195230749|ref|NM_003391.2| 0.0 28
+    2
 
-    Like built-in Python lists, you can index Hit objects with integers or
-    slice them. Slicing a Hit object will return a new Hit object with its
-    HSPs properly sliced but any other attributes retained.
+    Hit objects behave very similar to Python lists. You can retrieve the HSP
+    object inside a Hit using the HSP's integer index. Hit objects can also be
+    sliced, which will return a new Hit objects containing only the sliced HSPs:
 
+    # HSP items inside the Hit can be retrieved using its integer index
     >>> hit[0]
-    HSP(hit_id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', evalue=0.0, 340-column alignment)
-    >>> hit[-1]
-    HSP(hit_id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', evalue=0.0, 28-column alignment)
+    HSP(hit_id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 fragments)
 
+    # slicing returns a new Hit
     >>> hit
-    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 10 alignments)
-    >>> sliced_hit = hit[:3]
-    >>> sliced_hit
-    Hit(id='gi|195230749|ref|NM_003391.2|', query_id='gi|195230749:301-1383', 3 alignments)
+    Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
+    >>> hit[:1]
+    Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 1 hsps)
+    >>> print hit[1:]
+    Query: 33211
+           mir_1
+      Hit: gi|301171322|ref|NR_035857.1| (86)
+           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+              #   E-value  Bit score    Span      Query range              Hit range
+           ----  --------  ---------  ------  ---------------  ---------------------
+              0   3.3e-06      55.39      60           [0:60]                [13:73]
+
+    Hit objects provide `filter` and `map` methods, which are analogous to
+    Python's built-in `filter` and `map` except that they return a new Hit
+    object instead of a list.
+
+    Here is an example of using `filter` to select for HSPs whose e-value is
+    less than 1e-10:
+
+    >>> evalue_filter = lambda hsp: hsp.evalue < 1e-10
+    >>> filtered_hit = hit.filter(evalue_filter)
     >>> len(hit)
-    10
-    >>> len(sliced_hit)
-    3
-    >>> hit.description
-    u'Homo sapiens wingless-type MMTV integration site family member 2 (WNT2), transcript variant 1, mRNA'
-    >>> hit.description == sliced_hit.description
-    True
-    >>> hit[0] in sliced_hit
-    True
-    >>> hit[6] in sliced_hit
-    False
+    2
+    >>> len(filtered_hit)
+    1
+    >>> print filtered_hit
+    Query: 33211
+           mir_1
+      Hit: gi|301171322|ref|NR_035857.1| (86)
+           Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+     HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+              #   E-value  Bit score    Span      Query range              Hit range
+           ----  --------  ---------  ------  ---------------  ---------------------
+              0   8.9e-20     100.47      60           [1:61]                [13:73]
 
-    You can check whether an hsp is present in a QueryResult object using the HSP
-    object itself.
-
-    >>> hsp = hit[0]
-    >>> hsp in hit
-    True
-
-    Finally, similar to Python built-in list, the Hit object also has the
-    append(), pop(), reverse(), and sort() method, which behave similar to
-    their list method counterparts.
+    There are also other methods which are counterparts of Python lists' methods
+    with the same names: `append`, `index`, `pop`, and `sort`. Consult their
+    respective documentations for more details and examples of their usage.
 
     """
 
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_items',)
+    _NON_STICKY_ATTRS = ('_items', )
 
     def __init__(self, hsps=[]):
         """Initializes a Hit object.
 
         Arguments:
-        hsps     -- Iterable returning HSP objects.
+        hsps -- List containing HSP objects.
+
+        Hit objects must be initialized with a list containing at least one HSP
+        object. If multiple HSP objects are used for initialization, they must
+        all have the same `query_id`, `query_description`, `hit_id`, and
+        `hit_description` properties.
 
         """
         if not hsps:
@@ -906,23 +1053,66 @@ class Hit(_BaseSearchObject):
                         "found %r instead." % (self.query_id, hsp.query_id))
 
     ## properties ##
-    description = _fullcascade('hit_description')
-    query_description = _fullcascade('query_description')
-    id = _fullcascade('hit_id')
-    query_id = _fullcascade('query_id')
+    description = _fullcascade('hit_description', """Hit description""")
+    query_description = _fullcascade('query_description',
+            """Description of the query that produced the hit""")
+    id = _fullcascade('hit_id', """Hit ID string.""")
+    query_id = _fullcascade('query_id',
+            """ID string of the query that produced the hit""")
     # returns all hsps
-    hsps = _allitems()
+    hsps = _allitems(doc="""HSP objects contained in the Hit""")
     # returns all fragments
-    fragments = property(lambda self: list(chain(*self._items)))
+    fragments = property(lambda self: list(chain(*self._items)), \
+            doc="""HSPFragment objects contained in the Hit""")
 
     ## public methods ##
     def append(self, hsp):
+        """Adds a HSP object to the end of Hit.
+
+        Parameters
+        hsp -- HSP object to append.
+
+        Any HSP object appended must have the same `hit_id` property as the
+        Hit object's `id` property and the same `query_id` property as the
+        Hit object's `query_id` property.
+
+        """
         self._validate_hsp(hsp)
         self._items.append(hsp)
 
     def filter(self, func=None):
         """Creates a new Hit object whose HSP objects pass the filter
-        function."""
+        function.
+
+        Arguments:
+        func -- Callback function that accepts a HSP object as its parameter,
+                does a boolean check, and returns True or False.
+
+        `filter` is analogous to Python's built-in `filter` function, except
+        that instead of returning a list it returns a `Hit` object. Here is an
+        example of using `filter` to select for HSPs having bitscores bigger
+        than 60:
+
+        >>> from Bio import SearchIO
+        >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+        >>> hit = qresult[3]
+        >>> evalue_filter = lambda hsp: hsp.bitscore > 60
+        >>> filtered_hit = hit.filter(evalue_filter)
+        >>> len(hit)
+        2
+        >>> len(filtered_hit)
+        1
+        >>> print filtered_hit
+        Query: 33211
+               mir_1
+          Hit: gi|301171322|ref|NR_035857.1| (86)
+               Pan troglodytes microRNA mir-520c (MIR520C), microRNA
+         HSPs: ----  --------  ---------  ------  ---------------  ---------------------
+                  #   E-value  Bit score    Span      Query range              Hit range
+               ----  --------  ---------  ------  ---------------  ---------------------
+                  0   8.9e-20     100.47      60           [1:61]                [13:73]
+
+        """
         hsps = filter(func, self.hsps)
         if hsps:
             obj = self.__class__(hsps)
@@ -930,10 +1120,25 @@ class Hit(_BaseSearchObject):
             return obj
 
     def index(self, hsp):
+        """Returns the index of a given HSP object, zero-based.
+
+        Arguments:
+        hsp -- HSP object to be looked up.
+
+        """
         return self._items.index(hsp)
 
     def map(self, func=None):
-        """Creates a new Hit object, mapping the given function to its HSPs."""
+        """Creates a new Hit object, mapping the given function to its HSPs.
+
+        Arguments:
+        func -- Callback function that accepts a HSP object as its parameter and
+                also returns a HSP object.
+
+        `map` is analogous to Python's built-in `map` function. It is applied to
+        all HSPs contained in the Hit object and returns a new Hit object.
+
+        """
         if func is not None:
             hsps = map(func, self.hsps[:])  # this creates a shallow copy
         else:
@@ -944,9 +1149,28 @@ class Hit(_BaseSearchObject):
             return obj
 
     def pop(self, index=-1):
+        """Removes and returns the HSP object at the specified index.
+
+        Arguments:
+        index -- Integer denoting the index of the HSP object to remove.
+
+        """
         return self._items.pop(index)
 
     def sort(self, key=None, reverse=False, in_place=True):
+        """Sorts the HSP objects.
+
+        Arguments:
+        key -- Function used to sort the HSP objects.
+        reverse -- Boolean, whether to reverse the sorting or not.
+        in_place -- Boolean, whether to perform sorting in place (in the same
+                    object) or not (creating a new object).
+
+        `sort` defaults to sorting in-place, to mimick Python's `list.sort`
+        method. If you set the `in_place` argument to False, it will treat
+        return a new, sorted Hit object and keep the initial one unsorted
+
+        """
         if in_place:
             self._items.sort(key=key, reverse=reverse)
         else:
@@ -996,17 +1220,227 @@ class _BaseHSP(_BaseSearchObject):
 
 class HSP(_BaseHSP):
 
-    """Class representing high-scoring region between query and hit."""
+    """Class representing high-scoring region(s) between query and hit.
 
+    HSP (high-scoring pair) objects are contained by Hit objects (see Hit).
+    In most cases, HSP objects store the bulk of the statistics and results
+    (e.g. e-value, bitscores, query sequence, etc.) produced by a search
+    program.
+
+    Depending on the search output file format, a given HSP will contain one
+    or more HSPFragment object(s). Examples of search programs that produce HSP
+    with one HSPFragments are BLAST, HMMER, and FASTA. Other programs such as
+    BLAT or Exonerate may produce HSPs containing more than one HSPFragment.
+    However, their native terminologies may differ: in BLAT these fragments
+    are called 'blocks' while in in Exonerate they are called exons or NER.
+
+    Here are examples from each type of HSP. The first one comes from a BLAST
+    search:
+
+    >>> from Bio import SearchIO
+    >>> blast_qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> blast_hsp = blast_qresult[1][0]     # the first HSP from the second hit
+    >>> blast_hsp
+    HSP(hit_id='gi|301171311|ref|NR_035856.1|', query_id='33211', 1 fragments)
+    >>> print blast_hsp
+          Query: 33211 mir_1
+            Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+    Query range: [1:61] (1)
+      Hit range: [0:60] (1)
+    Quick stats: evalue 1.7e-22; bitscore 109.49
+      Fragments: 1 (60 columns)
+         Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+
+    For HSPs with a single HSPFragment, you can invoke `print` on it and see the
+    underlying sequence alignment, if it exists. This is not the case for HSPs
+    with more than one HSPFragment. Below is an example, using an HSP from a
+    BLAT search. Invoking `print` on these HSPs will instead show a table of the
+    HSPFragment objects it contains:
+
+    >>> blat_qresult = SearchIO.read('Blat/mirna.pslx', 'blat-psl', pslx=True)
+    >>> blat_hsp = blat_qresult[1][0]       # the first HSP from the second hit
+    >>> blat_hsp
+    HSP(hit_id='chr11', query_id='blat_1', 2 fragments)
+    >>> print blat_hsp
+          Query: blat_1 <unknown description>
+            Hit: chr11 <unknown description>
+    Query range: [42:67] (-1)
+      Hit range: [59018929:59018955] (1)
+    Quick stats: evalue ?; bitscore ?
+      Fragments: ---  --------------  ----------------------  ----------------------
+                   #            Span             Query range               Hit range
+                 ---  --------------  ----------------------  ----------------------
+                   0               6                 [61:67]     [59018929:59018935]
+                   1              16                 [42:58]     [59018939:59018955]
+
+    Notice that in HSPs with more than one HSPFragments, the HSP's `query_range`
+    `hit_range` properties encompasses all fragments it contains.
+
+    You can check whether an HSP has more than one HSPFragments or not using the
+    `is_fragmented` property:
+
+    >>> blast_hsp.is_fragmented
+    False
+    >>> blat_hsp.is_fragmented
+    True
+
+    Since HSP objects are also containers similar to Python lists, you can
+    access a single fragment in an HSP using its integer index:
+
+    >>> blat_fragment = blat_hsp[0]
+    >>> print blat_fragment
+          Query: blat_1 <unknown description>
+            Hit: chr11 <unknown description>
+    Query range: [61:67] (-1)
+      Hit range: [59018929:59018935] (1)
+      Fragments: 1 (6 columns)
+         Query - tatagt
+           Hit - tatagt
+
+    This applies to HSPs objects with a single fragment as well:
+
+    >>> blast_fragment = blast_hsp[0]
+    >>> print blast_fragment
+          Query: 33211 mir_1
+            Hit: gi|301171311|ref|NR_035856.1| Pan troglodytes microRNA mir-520b ...
+    Query range: [1:61] (1)
+      Hit range: [0:60] (1)
+      Fragments: 1 (60 columns)
+         Query - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           Hit - CCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+
+    Regardless of the search output file format, HSP objects provide the
+    properties listed below. These properties always return values in a list,
+    due to the HSP object itself being a list-like container. However, for
+    HSP objects with a single HSPFragment, shortcut properties that fetches
+    the item from the list are also provided.
+
+    ---------------------  --------------------  -------------------------------
+    Property               Shortcut              Value
+    ---------------------  --------------------  -------------------------------
+    alignments             alignment             HSP alignments as
+                                                 MultipleSeqAlignment object
+
+    alignment_annotations  alignment_annotation  Dictionary of annotation(s) of
+                                                 all fragments' alignments
+
+    fragments              fragment              HSPFragment objects
+
+    hits                   hit                   Hit sequence as SeqRecord
+                                                 objects
+
+    hit_starts             hit_start*            Start coordinates of the hit
+                                                 fragments
+
+    hit_ends               hit_end*              End coordinates of the hit
+                                                 fragments
+
+    hit_spans              hit_span*             Sizes of each hit fragments
+
+    hit_strands            hit_strand            Strand orientations of the hit
+                                                 fragments
+
+    hit_frames             hit_frame             Reading frames of the hit
+                                                 fragments
+
+    hit_ranges             hit_range             Tuples of start and end
+                                                 coordinates of each hit
+                                                 fragment
+
+    queries                query                 Query sequence as SeqRecord
+                                                 object
+
+    query_starts           query_start*          Start coordinates of the query
+                                                 fragments
+
+    query_ends             query_end*            End coordinates of the query
+                                                 fragments
+
+    query_spans            query_span*           Sizes of each query fragments
+
+    query_strands          query_strand          Strand orientations of the
+                                                 query fragments
+
+    query_frames           query_frame           Reading frames of the query
+                                                 fragments
+
+    query_ranges           query_range           Tuples of start and end
+                                                 coordinates of each query
+                                                 fragment
+    ----------------------------------------------------------------------------
+    * may be used in HSPs with multiple fragments
+
+    For all types of HSP objects, the property will return the values in a list.
+    Shorcuts are only applicable for HSPs with one fragment. Except the ones
+    noted, if they are used on an HSP with more than one fragments, an exception
+    will be raised.
+
+    For properties that may be used in HSPs with multiple or single fragments
+    (`*_start`, `*_end`, and `*_span` properties), their interpretation depends
+    on how many fragment the HSP has:
+
+    -----------  ------------------------------------------------
+    Property     Value
+    -----------  ------------------------------------------------
+    hit_start    Smallest coordinate value of all hit fragments
+
+    hit_end      Largest coordinate value of all hit fragments
+
+    hit_span     Difference between `hit_start` and `hit_end`
+
+    query_start  Smallest coordinate value of all query fragments
+
+    query_end    Largest coordinate value of all query fragments
+
+    query_span   Difference between `query_start` and `query_end`
+    --------------------------------------------------------------
+
+    In addition to the objects listed above, HSP objects also provide the
+    following properties:
+
+    ------------------  --------------------------------------------------------
+    Property            Value
+    ------------------  --------------------------------------------------------
+    aln_span            Total number of residues in all HSPFragment objects
+
+    alphabet            Alphabet used in hit and query SeqRecord objects
+
+    is_fragmented       Boolean, whether the HSP has multiple fragments or not
+
+    hit_id              ID of the hit sequence
+
+    hit_description     Description of the hit sequence
+
+    hit_inter_ranges    List of hit sequence coordinates of the regions between
+                        fragments
+
+    query_id            ID of the query sequence
+
+    query_description   Description of the query sequence
+
+    query_inter_ranges  List of query sequence coordinates of the regions
+                        between fragments
+    ------------------  --------------------------------------------------------
+
+    """
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
     _NON_STICKY_ATTRS = ('_items', '_aln_span')
 
     def __init__(self, fragments=[]):
-        """Initializes an `HSP` object.
+        """Initializes an HSP object.
 
         Arguments:
         fragments -- List of HSPFragment objects.
+
+        HSP objects must be initialized with a list containing at least one
+        HSPFragment object. If multiple HSPFragment objects are used for
+        initialization, they must all have the same `query_id`,
+        `query_description`, `hit_id`, `hit_description`, and alphabet
+        properties.
 
         """
         if not fragments:
@@ -1125,7 +1559,8 @@ class HSP(_BaseHSP):
     def _aln_span_set(self, value):
         self._aln_span = value
 
-    aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
+    aln_span = property(fget=_aln_span_get, fset=_aln_span_set, \
+            doc="""Total number of columns in all HSPFragment objects.""")
 
     ## coordinate properties ##
     def _get_coords(self, seq_type, coord_type):
@@ -1141,22 +1576,26 @@ class HSP(_BaseHSP):
     def _hit_start_get(self):
         return min(self._get_coords('hit', 'start'))
 
-    hit_start = property(fget=_hit_start_get)
+    hit_start = property(fget=_hit_start_get, \
+            doc="""Smallest coordinate value of all hit fragments""")
 
     def _query_start_get(self):
         return min(self._get_coords('query', 'start'))
 
-    query_start = property(fget=_query_start_get)
+    query_start = property(fget=_query_start_get, \
+            doc="""Smallest coordinate value of all query fragments""")
 
     def _hit_end_get(self):
         return max(self._get_coords('hit', 'end'))
 
-    hit_end = property(fget=_hit_end_get)
+    hit_end = property(fget=_hit_end_get, \
+            doc="""Largest coordinate value of all hit fragments""")
 
     def _query_end_get(self):
         return max(self._get_coords('query', 'end'))
 
-    query_end = property(fget=_query_end_get)
+    query_end = property(fget=_query_end_get, \
+            doc="""Largest coordinate value of all hit fragments""")
 
     ## coordinate-dependent properties ##
     def _hit_span_get(self):
@@ -1165,7 +1604,8 @@ class HSP(_BaseHSP):
         except TypeError:  # triggered if any of the coordinates are None
             return None
 
-    hit_span = property(fget=_hit_span_get)
+    hit_span = property(fget=_hit_span_get, \
+            doc="""The number of hit residues covered by the HSP.""")
 
     def _query_span_get(self):
         try:
@@ -1173,17 +1613,20 @@ class HSP(_BaseHSP):
         except TypeError:  # triggered if any of the coordinates are None
             return None
 
-    query_span = property(fget=_query_span_get)
+    query_span = property(fget=_query_span_get, \
+            doc="""The number of query residues covered by the HSP.""")
 
     def _hit_range_get(self):
         return (self.hit_start, self.hit_end)
 
-    hit_range = property(fget=_hit_range_get)
+    hit_range = property(fget=_hit_range_get, \
+            doc="""Tuple of HSP hit start and end coordinates.""")
 
     def _query_range_get(self):
         return (self.query_start, self.query_end)
 
-    query_range = property(fget=_query_range_get)
+    query_range = property(fget=_query_range_get, \
+            doc="""Tuple of HSP query start and end coordinates.""")
 
     def _inter_ranges_get(self, seq_type):
         # this property assumes that there are no mixed strands in a hit/query
@@ -1208,63 +1651,168 @@ class HSP(_BaseHSP):
     def _hit_inter_ranges_get(self):
         return self._inter_ranges_get('hit')
 
-    hit_inter_ranges = property(fget=_hit_inter_ranges_get)
+    hit_inter_ranges = property(fget=_hit_inter_ranges_get,
+        doc="""Hit sequence coordinates of the regions between fragments""")
 
     def _query_inter_ranges_get(self):
         return self._inter_ranges_get('query')
 
-    query_inter_ranges = property(fget=_query_inter_ranges_get)
+    query_inter_ranges = property(fget=_query_inter_ranges_get,
+        doc="""Query sequence coordinates of the regions between fragments""")
 
-    ## shorthands for fragments' properties ##
+    ## shortcuts for fragments' properties ##
 
     # bool check if there's more than one fragments
-    is_fragmented = property(lambda self: len(self) > 1)
+    is_fragmented = property(lambda self: len(self) > 1,
+            doc="""Whether the HSP has more than one HSPFragment objects""")
 
     # first item properties with setters
-    hit_description = _fullcascade('hit_description')
-    query_description = _fullcascade('query_description')
-    hit_id = _fullcascade('hit_id')
-    query_id = _fullcascade('query_id')
-    alphabet = _fullcascade('alphabet')
+    hit_description = _fullcascade('hit_description',
+            doc="""Description of the hit sequence""")
+
+    query_description = _fullcascade('query_description',
+            doc="""Description of the query sequence""")
+
+    hit_id = _fullcascade('hit_id',
+            doc="""ID of the hit sequence""")
+
+    query_id = _fullcascade('query_id',
+            doc="""ID of the query sequence""")
+
+    alphabet = _fullcascade('alphabet',
+            doc="""Alphabet used in hit and query SeqRecord objects""")
 
     # properties for single-fragment HSPs
-    fragment = _singleitem()
-    hit = _singleitem('hit')
-    query = _singleitem('query')
-    alignment = _singleitem('alignment')
-    alignment_annotation = _singleitem('alignment_annotation')
+    fragment = _singleitem(\
+            doc="""HSPFragment object, first fragment""")
 
-    hit_strand = _singleitem('hit_strand')
-    query_strand = _singleitem('query_strand')
-    hit_frame = _singleitem('hit_frame')
-    query_frame = _singleitem('query_frame')
+    hit = _singleitem('hit',
+            doc="""Hit sequence as a SeqRecord object, first fragment""")
+
+    query = _singleitem('query',
+            doc="""Query sequence as a SeqRecord object, first fragment""")
+
+    alignment = _singleitem('alignment',
+            doc="""Alignment of the first fragment as a MultipleSeqAlignment object""")
+
+    alignment_annotation = _singleitem('alignment_annotation',
+            doc="""Dictionary of annotation(s) of the first fragment's alignment""")
+
+    hit_strand = _singleitem('hit_strand',
+            doc="""Hit strand orientation, first fragment""")
+
+    query_strand = _singleitem('query_strand',
+            doc="""Query strand orientation, first fragment""")
+
+    hit_frame = _singleitem('hit_frame',
+            doc="""Hit sequence reading frame, first fragment""")
+
+    query_frame = _singleitem('query_frame',
+            doc="""Query sequence reading frame, first fragment""")
 
     # properties for multi-fragment HSPs
-    fragments = _allitems()
-    hits = _allitems('hit')
-    queries = _allitems('query')
-    alignments = _allitems('alignment')
-    alignment_annotations = _allitems('alignment_annotation')
+    fragments = _allitems(doc="""List of all HSPFragment objects""")
 
-    hit_strands = _allitems('hit_strand')
-    query_strands = _allitems('query_strand')
-    hit_frames = _allitems('hit_frame')
-    query_frames = _allitems('query_frame')
+    hits = _allitems('hit',
+            doc="""List of all fragments' hit sequences as SeqRecord objects""")
 
-    hit_starts = _allitems('hit_start')
-    query_starts = _allitems('query_starts')
-    hit_ends = _allitems('hit_ends')
-    query_ends = _allitems('query_ends')
+    queries = _allitems('query',
+            doc="""List of all fragments' query sequences as SeqRecord objects""")
 
-    hit_spans = _allitems('hit_span')
-    query_spans = _allitems('query_span')
-    hit_ranges = _allitems('hit_range')
-    query_ranges = _allitems('query_range')
+    alignments = _allitems('alignment',
+            doc="""List of all fragments' alignments as MultipleSeqAlignment objects""")
+
+    alignment_annotations = _allitems('alignment_annotation',
+            doc="""Dictionary of annotation(s) of all fragments' alignments""")
+
+    hit_strands = _allitems('hit_strand',
+            doc="""List of all fragments' hit sequence strands""")
+
+    query_strands = _allitems('query_strand',
+            doc="""List of all fragments' query sequence strands""")
+
+    hit_frames = _allitems('hit_frame',
+            doc="""List of all fragments' hit sequence reading frames""")
+
+    query_frames = _allitems('query_frame',
+            doc="""List of all fragments' query sequence reading frames""")
+
+    hit_starts = _allitems('hit_start',
+            doc="""List of all fragments' hit start coordinates""")
+
+    query_starts = _allitems('query_starts',
+            doc="""List of all fragments' query start coordinates""")
+
+    hit_ends = _allitems('hit_ends',
+            doc="""List of all fragments' hit end coordinates""")
+
+    query_ends = _allitems('query_ends',
+            doc="""List of all fragments' query end coordinates""")
+
+    hit_spans = _allitems('hit_span',
+            doc="""List of all fragments' hit sequence size""")
+
+    query_spans = _allitems('query_span',
+            doc="""List of all fragments' query sequence size""")
+
+    hit_ranges = _allitems('hit_range',
+            doc="""List of all fragments' hit start and end coordinates""")
+
+    query_ranges = _allitems('query_range',
+            doc="""List of all fragments' query start and end coordinates""")
 
 
 class HSPFragment(_BaseHSP):
 
-    """Class representing a fragment of matching hit-query sequence."""
+    """Class representing a contiguous alignment of hit-query sequence.
+
+    HSPFragment forms the core of any parsed search output file. Depending on
+    the search output file format, it may contain the actual query and/or hit
+    sequences that produces the search hits. These sequences are stored as
+    SeqRecord objects (see SeqRecord):
+
+    >>> from Bio import SearchIO
+    >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
+    >>> fragment = qresult[0][0][0]   # first hit, first hsp, first fragment
+    >>> print fragment
+          Query: 33211 mir_1
+            Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
+    Query range: [0:61] (1)
+      Hit range: [0:61] (1)
+      Fragments: 1 (61 columns)
+         Query - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+                 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           Hit - CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
+
+    # the query sequence is a SeqRecord object
+    >>> fragment.query.__class__
+    <class 'Bio.SeqRecord.SeqRecord'>
+    >>> print fragment.query
+    ID: 33211
+    Name: aligned query sequence
+    Description: mir_1
+    Number of features: 0
+    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet())
+
+    # the hit sequence is a SeqRecord object as well
+    >>> fragment.hit.__class__
+    <class 'Bio.SeqRecord.SeqRecord'>
+    >>> print fragment.hit
+    ID: gi|262205317|ref|NR_030195.1|
+    Name: aligned hit sequence
+    Description: Homo sapiens microRNA 520b (MIR520B), microRNA
+    Number of features: 0
+    Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet())
+
+    # when both query and hit are present, we get a MultipleSeqAlignment object
+    >>> fragment.alignment.__class__
+    <class 'Bio.Align.MultipleSeqAlignment'>
+    >>> print fragment.alignment
+    DNAAlphabet() alignment with 2 rows and 61 columns
+    CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 33211
+    CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
+
+    """
 
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
             hit='', query='',
@@ -1420,7 +1968,8 @@ class HSPFragment(_BaseHSP):
     def _hit_set(self, value):
         self._hit = self._prep_seq(value, 'hit')
 
-    hit = property(fget=_hit_get, fset=_hit_set)
+    hit = property(fget=_hit_get, fset=_hit_set,
+            doc="""Hit sequence as a SeqRecord object, defaults to None""")
 
     def _query_get(self):
         return self._query
@@ -1428,7 +1977,8 @@ class HSPFragment(_BaseHSP):
     def _query_set(self, value):
         self._query = self._prep_seq(value, 'query')
 
-    query = property(fget=_query_get, fset=_query_set)
+    query = property(fget=_query_get, fset=_query_set,
+            doc="""Query sequence as a SeqRecord object, defaults to None""")
 
     def _alignment_get(self):
         if self.query is None and self.hit is None:
@@ -1440,7 +1990,9 @@ class HSPFragment(_BaseHSP):
         else:
             return MultipleSeqAlignment([self.query, self.hit], self.alphabet)
 
-    alignment = property(fget=_alignment_get)
+    alignment = property(fget=_alignment_get,
+            doc="""Query-hit alignment as a MultipleSeqAlignment object,
+            defaults to None""")
 
     def _alphabet_get(self):
         return self._alphabet
@@ -1453,7 +2005,9 @@ class HSPFragment(_BaseHSP):
         if self.hit is not None:
             self.hit.seq.alphabet = value
 
-    alphabet = property(fget=_alphabet_get, fset=_alphabet_set)
+    alphabet = property(fget=_alphabet_get, fset=_alphabet_set,
+            doc="""Alphabet object used in the fragment's sequences and alignment,
+            defaults to single_letter_alphabet""")
 
     def _aln_span_get(self):
         # length of alignment (gaps included)
@@ -1470,7 +2024,8 @@ class HSPFragment(_BaseHSP):
     def _aln_span_set(self, value):
         self._aln_span = value
 
-    aln_span = property(fget=_aln_span_get, fset=_aln_span_set)
+    aln_span = property(fget=_aln_span_get, fset=_aln_span_set,
+            doc="""The number of alignment columns covered by the fragment""")
 
     ## id and description properties ##
     def _set_id_or_desc(self, value, seq_type, attr):
@@ -1490,7 +2045,8 @@ class HSPFragment(_BaseHSP):
         self._set_id_or_desc(value, 'hit', 'description')
 
     hit_description = property(fget=_hit_description_get,
-            fset=_hit_description_set)
+            fset=_hit_description_set,
+            doc="""Hit sequence description""")
 
     def _query_description_get(self):
         return self._query_description
@@ -1499,7 +2055,8 @@ class HSPFragment(_BaseHSP):
         self._set_id_or_desc(value, 'query', 'description')
 
     query_description = property(fget=_query_description_get,
-            fset=_query_description_set)
+            fset=_query_description_set,
+            doc="""Query sequence description""")
 
     def _hit_id_get(self):
         return self._hit_id
@@ -1507,7 +2064,8 @@ class HSPFragment(_BaseHSP):
     def _hit_id_set(self, value):
         self._set_id_or_desc(value, 'hit', 'id')
 
-    hit_id = property(fget=_hit_id_get, fset=_hit_id_set)
+    hit_id = property(fget=_hit_id_get, fset=_hit_id_set,
+            doc="""Hit ID string""")
 
     def _query_id_get(self):
         return self._query_id
@@ -1515,7 +2073,8 @@ class HSPFragment(_BaseHSP):
     def _query_id_set(self, value):
         self._set_id_or_desc(value, 'query', 'id')
 
-    query_id = property(fget=_query_id_get, fset=_query_id_set)
+    query_id = property(fget=_query_id_get, fset=_query_id_set,
+            doc="""Query ID string""")
 
     ## strand properties ##
     def _prep_strand(self, strand):
@@ -1547,7 +2106,8 @@ class HSPFragment(_BaseHSP):
     def _hit_strand_set(self, value):
         self._hit_strand = self._prep_strand(value)
 
-    hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set)
+    hit_strand = property(fget=_hit_strand_get, fset=_hit_strand_set,
+            doc="""Hit sequence strand, defaults to None""")
 
     def _query_strand_get(self):
         return self._get_strand('query')
@@ -1555,7 +2115,8 @@ class HSPFragment(_BaseHSP):
     def _query_strand_set(self, value):
         self._query_strand = self._prep_strand(value)
 
-    query_strand = property(fget=_query_strand_get, fset=_query_strand_set)
+    query_strand = property(fget=_query_strand_get, fset=_query_strand_set,
+            doc="""Query sequence strand, defaults to None""")
 
     ## frame properties ##
     def _prep_frame(self, frame):
@@ -1570,7 +2131,8 @@ class HSPFragment(_BaseHSP):
     def _hit_frame_set(self, value):
         self._hit_frame = self._prep_frame(value)
 
-    hit_frame = property(fget=_hit_frame_get, fset=_hit_frame_set)
+    hit_frame = property(fget=_hit_frame_get, fset=_hit_frame_set,
+            doc="""Hit sequence reading frame, defaults to None""")
 
     def _query_frame_get(self):
         return self._query_frame
@@ -1578,7 +2140,8 @@ class HSPFragment(_BaseHSP):
     def _query_frame_set(self, value):
         self._query_frame = self._prep_frame(value)
 
-    query_frame = property(fget=_query_frame_get, fset=_query_frame_set)
+    query_frame = property(fget=_query_frame_get, fset=_query_frame_set,
+            doc="""Query sequence reading frame, defaults to None""")
 
     ## coordinate properties ##
     def _prep_coord(self, coord):
@@ -1593,7 +2156,8 @@ class HSPFragment(_BaseHSP):
     def _hit_start_set(self, value):
         self._hit_start = self._prep_coord(value)
 
-    hit_start = property(fget=_hit_start_get, fset=_hit_start_set)
+    hit_start = property(fget=_hit_start_get, fset=_hit_start_set,
+            doc="""Hit sequence start coordinate, defaults to None""")
 
     def _query_start_get(self):
         return self._query_start
@@ -1601,7 +2165,8 @@ class HSPFragment(_BaseHSP):
     def _query_start_set(self, value):
         self._query_start = self._prep_coord(value)
 
-    query_start = property(fget=_query_start_get, fset=_query_start_set)
+    query_start = property(fget=_query_start_get, fset=_query_start_set,
+            doc="""Query sequence start coordinate, defaults to None""")
 
     def _hit_end_get(self):
         return self._hit_end
@@ -1609,7 +2174,8 @@ class HSPFragment(_BaseHSP):
     def _hit_end_set(self, value):
         self._hit_end = self._prep_coord(value)
 
-    hit_end = property(fget=_hit_end_get, fset=_hit_end_set)
+    hit_end = property(fget=_hit_end_get, fset=_hit_end_set,
+            doc="""Hit sequence start coordinate, defaults to None""")
 
     def _query_end_get(self):
         return self._query_end
@@ -1617,7 +2183,8 @@ class HSPFragment(_BaseHSP):
     def _query_end_set(self, value):
         self._query_end = self._prep_coord(value)
 
-    query_end = property(fget=_query_end_get, fset=_query_end_set)
+    query_end = property(fget=_query_end_get, fset=_query_end_set,
+            doc="""Query sequence end coordinate, defaults to None""")
 
     ## coordinate-dependent properties ##
     def _hit_span_get(self):
@@ -1626,7 +2193,8 @@ class HSPFragment(_BaseHSP):
         except TypeError:  # triggered if any of the coordinates are None
             return None
 
-    hit_span = property(fget=_hit_span_get)
+    hit_span = property(fget=_hit_span_get,
+            doc="""The number of residues covered by the hit sequence""")
 
     def _query_span_get(self):
         try:
@@ -1634,17 +2202,20 @@ class HSPFragment(_BaseHSP):
         except TypeError:  # triggered if any of the coordinates are None
             return None
 
-    query_span = property(fget=_query_span_get)
+    query_span = property(fget=_query_span_get,
+            doc="""The number of residues covered by the query sequence""")
 
     def _hit_range_get(self):
         return (self.hit_start, self.hit_end)
 
-    hit_range = property(fget=_hit_range_get)
+    hit_range = property(fget=_hit_range_get,
+            doc="""Tuple of hit start and end coordinates""")
 
     def _query_range_get(self):
         return (self.query_start, self.query_end)
 
-    query_range = property(fget=_query_range_get)
+    query_range = property(fget=_query_range_get,
+            doc="""Tuple of query start and end coordinates""")
 
 
 def _test():
@@ -1656,13 +2227,13 @@ def _test():
     import doctest
     import os
 
-    test_dir = os.path.join('Tests', 'Blast')
+    test_dir = 'Tests'
 
     if os.path.isdir(os.path.join('..', '..', test_dir)):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join('..', '..', test_dir))
-        doctest.testmod()
+        doctest.testmod(optionflags=doctest.ELLIPSIS)
         os.chdir(cur_dir)
         print "Done"
 
