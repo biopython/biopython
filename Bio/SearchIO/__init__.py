@@ -292,7 +292,7 @@ def parse(handle, format=None, **kwargs):
     >>> from Bio import SearchIO
     >>> qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
     >>> qresults
-    <generator object parse at ...>
+    <generator object ...>
     >>> for qresult in qresults:
     ...     print "Search %s has %i hits" % (qresult.id, len(qresult))
     ...

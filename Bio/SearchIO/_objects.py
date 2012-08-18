@@ -276,7 +276,7 @@ class QueryResult(_BaseSearchObject):
     >>> qresult.index('gi|262380031|ref|NR_023426.1|')
     Traceback (most recent call last):
     ...
-    ValueError: 'gi|262380031|ref|NR_023426.1|' is not in list
+    ValueError: ...
 
     To ease working with a large number of hits, QueryResult has several filter
     and map methods, analogous to Python's built-in functions with the same
