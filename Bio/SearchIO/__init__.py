@@ -68,9 +68,9 @@ SearchIO has writing support for several formats, accessible from the
 Bio.SearchIO.write(...) function. This function returns a tuple of four
 numbers: the number of QueryResult, Hit, HSP, and HSPFragment written:
 
-    >>> qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
-    >>> SearchIO.write(qresults, 'results.tab', 'blast-tab')
-    (3, 239, 277, 277)
+    qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+    SearchIO.write(qresults, 'results.tab', 'blast-tab')
+    <stdout> (3, 239, 277, 277)
 
 Note that different writers may require different attribute values of the
 SearchIO objects. This limits the scope of writable search results to search
@@ -514,7 +514,7 @@ def index_db(index_filename, filenames=None, format=None,
     accessed without any indexing overhead.
 
     >>> from Bio import SearchIO
-    >>> db_idx = SearchIO.index_db('search.idx', 'Blast/mirna.xml', 'blast-xml')
+    >>> db_idx = SearchIO.index_db(':memory:', 'Blast/mirna.xml', 'blast-xml')
     >>> sorted(db_idx.keys())
     ['33211', '33212', '33213']
     >>> db_idx['33212']
@@ -559,19 +559,19 @@ def write(qresults, handle, format=None, **kwargs):
     function will return a tuple of four values: the number of QueryResult, Hit,
     HSP, and HSPFragment objects it writes to the output file.
 
-    >>> from Bio import SearchIO
-    >>> qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
-    >>> SearchIO.write(qresults, 'results.tab', 'blast-tab')
-    (3, 239, 277, 277)
+    from Bio import SearchIO
+    qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+    SearchIO.write(qresults, 'results.tab', 'blast-tab')
+    <stdout> (3, 239, 277, 277)
 
     The output of different formats may be adjusted using the format-specific
     keyword arguments. Here is an example that writes BLAT PSL output file with
     a header:
 
-    >>> from Bio import SearchIO
-    >>> qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')
-    >>> SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)
-    (2, 13, 22, 26)
+    from Bio import SearchIO
+    qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')
+    SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)
+    <stdout> (2, 13, 22, 26)
 
     """
     # turn qresults into an iterator if it's a single QueryResult object
@@ -613,14 +613,15 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
     Here is an example of using convert to convert from a BLAST+ XML file into a
     tabular file with comments:
 
-    >>> from Bio import SearchIO
-    >>> in_file = 'Blast/mirna.xml'
-    >>> in_fmt = 'blast-xml'
-    >>> out_file = 'results.tab'
-    >>> out_fmt = 'blast-tab'
-    >>> out_kwarg = {'comments': True}
-    >>> SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)
-    (3, 239, 277, 277)
+    from Bio import SearchIO
+    in_file = 'Blast/mirna.xml'
+    in_fmt = 'blast-xml'
+    out_file = 'results.tab'
+    out_fmt = 'blast-tab'
+    out_kwarg = {'comments': True}
+    SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)
+
+    <stdout> (3, 239, 277, 277)
 
     Given that different search output file provide different statistics and
     different level of details, the convert function is limited only to
