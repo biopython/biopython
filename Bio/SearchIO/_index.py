@@ -6,7 +6,7 @@
 
 #TODO: factor out this module with SeqIO's _index to stay DRY
 
-"""Custom indexing for Bio.SearchIO objects (PRIVATE)."""
+"""Custom indexing for Bio.SearchIO objects."""
 
 import itertools
 import os

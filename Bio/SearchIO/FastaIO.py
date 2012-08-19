@@ -84,7 +84,7 @@ def _set_qresult_hits(qresult, hit_rows=[]):
 
 
 def _set_hsp_seqs(hsp, parsed, program):
-    """Helper function for the main parsing code (PRIVATE).
+    """Helper function for the main parsing code.
 
     Arguments:
     hsp -- HSP object whose properties are to be set.
@@ -126,7 +126,7 @@ def _set_hsp_seqs(hsp, parsed, program):
 
 
 def _extract_alignment(parsed_hsp):
-    """Helper function for the main parsing code (PRIVATE).
+    """Helper function for the main parsing code.
 
     To get the actual pairwise alignment sequences, we must first
     translate the un-gapped sequence based coordinates into positions
