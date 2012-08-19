@@ -299,7 +299,6 @@ class FastaM10Parser(object):
                             self.line.strip('\n')
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
-                print hit_id, [x.hit_id for x in hsp_list]
                 hit = Hit(hsp_list)
                 hit.description = hit_desc
                 hit.seq_len = seq_len
