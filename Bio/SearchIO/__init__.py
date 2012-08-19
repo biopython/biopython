@@ -306,14 +306,12 @@ def parse(handle, format=None, **kwargs):
     BLAST tabular output file:
 
     >>> from Bio import SearchIO
-    >>> for qresult in SearchIO.parse('Blast/wnts.tab', 'blast-tab', comments=True):
+    >>> for qresult in SearchIO.parse('Blast/mirna.tab', 'blast-tab', comments=True):
     ...     print "Search %s has %i hits" % (qresult.id, len(qresult))
     ...
-    Search gi|195230749:301-1383 has 5 hits
-    Search gi|325053704:108-1166 has 5 hits
-    Search gi|156630997:105-1160 has 5 hits
-    Search gi|371502086:108-1205 has 5 hits
-    Search gi|53729353:216-1313 has 5 hits
+    Search 33211 has 100 hits
+    Search 33212 has 44 hits
+    Search 33213 has 95 hits
 
     """
     # get the iterator object and do error checking
