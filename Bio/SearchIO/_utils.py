@@ -8,7 +8,8 @@
 import os
 
 
-TEST_DIR = 'Tests'
+TEST_DIR = 'Tests'    # Biopython test directory name
+MOD_DIR = 'Bio'       # Biopython main library directory name
 
 
 def get_processor(format, mapping):
@@ -41,12 +42,11 @@ def get_processor(format, mapping):
     return getattr(mod, obj_name)
 
 
-def find_test_dir(test_dir=TEST_DIR, start_dir=None):
+def find_test_dir(start_dir=None):
     """Finds the absolute path of Biopython's Tests directory.
 
     Arguments:
     start_dir -- Initial directory to begin lookup.
-    test_dir -- Biopython test directory name.
 
     If the directory is not found up the filesystem's root directory, an
     exception will be raised.
@@ -55,23 +55,27 @@ def find_test_dir(test_dir=TEST_DIR, start_dir=None):
     # no callbacks in function signatures!
     # defaults to the current _utils directory
     if start_dir is None:
-        start_dir = os.path.abspath(__file__)
+        start_dir = os.path.dirname(os.path.abspath(__file__))
 
     # raise error if search goes all the way to root without results
     # to prevent infinite loop
+    # this happens when the Bio directory is not a parent directory of the
+    # running module
     if start_dir == os.path.dirname(start_dir):
-        raise IOError("%r directory not found" % test_dir)
+        raise IOError("Biopython directory not found")
 
-    target_dir = os.path.join(start_dir, test_dir)
-    # recurse if the test directory is not present in the current directory
-    if not os.path.isdir(target_dir):
-        parent = os.path.dirname(start_dir)
-        return find_test_dir(test_dir=test_dir, start_dir=parent)
+    parent, cur = os.path.split(start_dir)
+    if cur == MOD_DIR:
+        target_dir = os.path.join(parent, TEST_DIR)
+        assert os.path.isdir(target_dir), \
+                "Directory %r not found in Biopython's test directory" % \
+                TEST_DIR
+        return target_dir
 
-    return target_dir
+    return find_test_dir(start_dir=parent)
 
 
-def run_doctest(test_dir=TEST_DIR, start_dir=None, *args, **kwargs):
+def run_doctest(target_dir=None, *args, **kwargs):
     """Runs doctest for the importing module."""
     import doctest
 
@@ -81,12 +85,17 @@ def run_doctest(test_dir=TEST_DIR, start_dir=None, *args, **kwargs):
     }
     kwargs.update(default_kwargs)
 
-    test_dir = find_test_dir(test_dir, start_dir)
+    test_dir = find_test_dir()
+    # set target directory if it's not None
+    if target_dir is not None:
+        target_dir = os.path.join(test_dir, target_dir)
+    else:
+        target_dir = test_dir
     cur_dir = os.path.abspath(os.curdir)
 
     print "Runing doctests..."
     # change to test directory
-    os.chdir(test_dir)
+    os.chdir(target_dir)
     doctest.testmod(*args, **kwargs)
     # and revert back to initial directory
     os.chdir(cur_dir)
