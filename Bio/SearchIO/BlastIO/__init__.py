@@ -219,6 +219,20 @@ HSP)           query_end       qend
 * When 'frames' is present, both `query_frame` and `hit_frame` will be present
   as well. It is recommended that you use these instead of 'frames' directly.
 
+If the parsed file is commented, the following attributes may be available as
+well:
+
+-------------  --------------  --------------------------
+Object         Attribute       Value
+-------------  --------------  --------------------------
+QueryResult    description     query description
+               fields          columns in the output file
+               program         BLAST flavor
+               rid             remote search ID
+               target          target database
+               version         BLAST version
+---------------------------------------------------------
+
 
 blast-text
 ==========
@@ -243,12 +257,15 @@ QueryResult       description               query sequence description
                   id                        query sequence ID
                   program                   BLAST flavor
                   seq_len                   full length of query sequence
+                  target                    target database of the search
                   version                   BLAST version
-
+----------------  ------------------------  ------------------------------------
 Hit               evalue                    hit-level evalue, from the hit table  
+                  id                        hit sequence ID
+                  description               hit sequence description
                   score                     hit-level score, from the hit table
                   seq_len                   full length of hit sequence
-
+----------------  ------------------------  ------------------------------------
 HSP               evalue                    hsp-level evalue
                   bitscore                  hsp-level bit score
                   bitscore_raw              hsp-level score
@@ -257,7 +274,7 @@ HSP               evalue                    hsp-level evalue
                                             in alignment
                   pos_num                   number of positive matches in
                                             alignment
-
+----------------  ------------------------  ------------------------------------
 HSPFragment       alignment_annotation      alignment homology string
 (also via         aln_span                  length of alignment fragment
 HSP)              hit                       hit sequence
