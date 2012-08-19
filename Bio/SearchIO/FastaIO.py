@@ -1,23 +1,85 @@
-# Copyright 2008-2011 by Peter Cock.
+# Adapted from Bio.AlignIO.FastIO copyright 2008-2011 by Peter Cock.
 # Copyright 2012 by Wibowo Arindrarto.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Bio.SearchIO parser for Bill Pearson's FASTA tools.
+"""Bio.SearchIO support for Bill Pearson's FASTA tools.
 
 This module adds support for parsing FASTA outputs. FASTA is a suite of
 programs that finds regions of local or global similarity between protein
 or nucleotide sequences, either by searching databases or identifying
 local duplications.
 
-The following FASTA output format is supported: format 10 (triggered by the
--m 10 flag).
+Bio.SearchIO.FastaIO was tested on the following FASTA flavors and versions:
 
-More information are available through these links:
+    - flavors: fasta, ssearch, tfastx
+    - versions: 35, 36
+
+Other flavors and/or versions may introduce some bugs. Please file a bug report
+if you see such problems to Biopython's bug tracker.
+
+More information on FASTA are available through these links:
   - Website: http://fasta.bioch.virginia.edu/fasta_www2/fasta_list2.shtml
   - User guide: http://fasta.bioch.virginia.edu/fasta_www2/fasta_guide.pdf
+
+
+Supported Formats
+=================
+
+Bio.SearchIO.FastaIO supports parsing and indexing FASTA outputs triggered by
+the -m 10 flag. Other formats that mimic other programs (e.g. the BLAST tabular
+format using the -m 8 flag) may be parseable but using SearchIO's other parser
+(in this case, using the 'blast-tab' parser).
+
+
+fasta-m10
+=========
+
+Note that in FASTA -m 10 outputs, HSPs from different strands are considered to
+be from different hits. They are listed as two separate entries in the hit
+table. The parser recognizes this and will group HSPs with the same hit ID into
+a single Hit object, regardless of strand.
+
+FASTA also sometimes output extra sequences adjacent to the HSP match. These
+extra sequences are discarded by the parser. Only regions containing the actual
+sequence match are extracted.
+
+The following object attributes are provided:
+
+----------------  ------------------------  ------------------------------------
+Object            Attribute                 Value
+----------------  ------------------------  ------------------------------------
+QueryResult       description               query sequence description
+                  id                        query sequence ID
+                  program                   HMMER flavor
+                  seq_len                   full length of query sequence
+                  target                    target search database
+                  version                   BLAST version
+----------------  ------------------------  ------------------------------------
+Hit               seq_len                   full length of the hit sequence
+----------------  ------------------------  ------------------------------------
+HSP               bitscore                  *_bits line
+                  evalue                    *_expect line
+                  ident_pct                 *_ident line
+                  init1_score               *_init1 line
+                  initn_score               *_initn line
+                  opt_score                 *_opt line, *_s-w opt line
+                  pos_pct                   *_sim line
+                  sw_score                  *_score line
+                  z_score                   *_z-score line
+----------------  ------------------------  ------------------------------------
+HSPFragment       alignment_annotation      al_cons block, if present
+(also via HSP)    hit                       hit sequence
+                  hit_end                   hit sequence end coordinate
+                  hit_start                 hit sequence start coordinate
+                  hit_strand                hit sequence strand
+                  query                     query sequence
+                  query_end                 query sequence end coordinate
+                  query_start               query sequence start coordinate
+                  query_strand              query sequence strand
+--------------------------------------------------------------------------------
 
 """
 
