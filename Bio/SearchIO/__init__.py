@@ -192,6 +192,7 @@ __docformat__ = 'epytext en'
 
 from Bio.File import as_handle
 from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._utils import get_processor
 
 
 __all__ = ['read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert']
@@ -244,39 +245,6 @@ _WRITER_MAP = {
 }
 
 
-def _get_handler(format, mapping):
-    """Returns the object to handle the given format according to the mapping.
-
-    Arguments:
-    format -- Lower case string denoting one of the supported formats.
-    mapping -- Dictionary of format and object name mapping.
-
-    """
-    # map file format to iterator name
-    try:
-        obj_info = mapping[format]
-    except KeyError:
-        # handle the errors with helpful messages
-        if format is None:
-            raise ValueError("Format required (lower case string)")
-        elif not isinstance(format, basestring):
-            raise TypeError("Need a string for the file format (lower case)")
-        elif format != format.lower():
-            raise ValueError("Format string '%s' should be lower case" %
-                    format)
-        elif mapping == _WRITER_MAP and format in _ITERATOR_MAP:
-            raise ValueError("Reading format '%s' is supported, but not "
-                    "writing" % format)
-        else:
-            raise ValueError("Unknown format '%s'. Supported formats are "
-                    "'%s'" % (format, "', '".join(mapping.keys())))
-
-    mod_name, obj_name = obj_info
-    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
-
-    return getattr(mod, obj_name)
-
-
 def parse(handle, format=None, **kwargs):
     """Turns a search output file into a generator that yields QueryResult
     objects.
@@ -315,7 +283,7 @@ def parse(handle, format=None, **kwargs):
 
     """
     # get the iterator object and do error checking
-    iterator = _get_handler(format, _ITERATOR_MAP)
+    iterator = get_processor(format, _ITERATOR_MAP)
 
     # and start iterating
     with as_handle(handle, 'rU') as source_file:
@@ -579,7 +547,7 @@ def write(qresults, handle, format=None, **kwargs):
         qresults = iter(qresults)
 
     # get the writer object and do error checking
-    writer_class = _get_handler(format, _WRITER_MAP)
+    writer_class = get_processor(format, _WRITER_MAP)
 
     # write to the handle
     with as_handle(handle, 'w') as target_file:

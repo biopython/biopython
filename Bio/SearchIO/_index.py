@@ -22,8 +22,9 @@ try:
 except ImportError:
     from UserDict import DictMixin as _dict_base
 
-from Bio import SearchIO
 from Bio._py3k import _bytes_to_string
+from Bio.SearchIO import _INDEXER_MAP
+from Bio.SearchIO._utils import get_processor
 
 
 __all__ = ['SearchIndexer']
@@ -62,7 +63,7 @@ class _IndexedSearch(_dict_base):
         self._format = format
         self._key_function = key_function
 
-        indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
+        indexer_class = get_processor(format, _INDEXER_MAP)
         indexed_obj = indexer_class(filename, **kwargs)
         self._indexer = indexed_obj
 
@@ -227,7 +228,7 @@ class _DbIndexedSearch(_IndexedSearch):
             raise MissingPythonDependencyError("Requires sqlite3, which is "
                                                "included Python 2.5+")
         indexer_proxies = {}
-        indexer_class = SearchIO._get_handler(format, SearchIO._INDEXER_MAP)
+        indexer_class = get_processor(format, _INDEXER_MAP)
         self._indexer_class = indexer_class
         self._kwargs = kwargs
 

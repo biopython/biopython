@@ -8,6 +8,36 @@
 import os
 
 
+def get_processor(format, mapping):
+    """Returns the object to process the given format according to the mapping.
+
+    Arguments:
+    format -- Lower case string denoting one of the supported formats.
+    mapping -- Dictionary of format and object name mapping.
+
+    """
+    # map file format to iterator name
+    try:
+        obj_info = mapping[format]
+    except KeyError:
+        # handle the errors with helpful messages
+        if format is None:
+            raise ValueError("Format required (lower case string)")
+        elif not isinstance(format, basestring):
+            raise TypeError("Need a string for the file format (lower case)")
+        elif format != format.lower():
+            raise ValueError("Format string %r should be lower case" %
+                    format)
+        else:
+            raise ValueError("Unknown format %r. Supported formats are "
+                    "%r" % (format, "', '".join(mapping.keys())))
+
+    mod_name, obj_name = obj_info
+    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
+
+    return getattr(mod, obj_name)
+
+
 def find_test_dir(test_dir='Tests', start_dir=None):
     """Finds the absolute path of Biopython's Tests directory.
 
