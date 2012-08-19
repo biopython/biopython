@@ -8,6 +8,9 @@
 import os
 
 
+TEST_DIR = 'Tests'
+
+
 def get_processor(format, mapping):
     """Returns the object to process the given format according to the mapping.
 
@@ -38,7 +41,7 @@ def get_processor(format, mapping):
     return getattr(mod, obj_name)
 
 
-def find_test_dir(test_dir='Tests', start_dir=None):
+def find_test_dir(test_dir=TEST_DIR, start_dir=None):
     """Finds the absolute path of Biopython's Tests directory.
 
     Arguments:
@@ -68,7 +71,7 @@ def find_test_dir(test_dir='Tests', start_dir=None):
     return target_dir
 
 
-def run_doctest(*args, **kwargs):
+def run_doctest(test_dir=TEST_DIR, start_dir=None, *args, **kwargs):
     """Runs doctest for the importing module."""
     import doctest
 
@@ -78,7 +81,7 @@ def run_doctest(*args, **kwargs):
     }
     kwargs.update(default_kwargs)
 
-    test_dir = find_test_dir()
+    test_dir = find_test_dir(test_dir, start_dir)
     cur_dir = os.path.abspath(os.curdir)
 
     print "Runing doctests..."
