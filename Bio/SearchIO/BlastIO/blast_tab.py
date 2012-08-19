@@ -115,6 +115,7 @@ _MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
 _RE_GAPOPEN = re.compile(r'\w-')
 
 def _compute_gapopen_num(hsp):
+    """Returns the number of gap openings in the given HSP."""
     gapopen = 0
     for seq_type in ('query', 'hit'):
         seq = str(getattr(hsp, seq_type).seq)
@@ -122,6 +123,7 @@ def _compute_gapopen_num(hsp):
     return gapopen
 
 def _augment_blast_hsp(hsp, attr):
+    """Calculates the given HSP attribute, for writing."""
     if attr == 'aln_span':
         # aln_span is number of identical matches + mismatches + gaps
         func = lambda hsp: hsp.ident_num + hsp.mismatch_num + hsp.gap_num
@@ -166,7 +168,7 @@ def _augment_blast_hsp(hsp, attr):
 
 class BlastTabParser(object):
 
-    """Main parser for the BLAST tabular format."""
+    """Parser for the BLAST tabular format."""
 
     def __init__(self, handle, comments=False, fields=_DEFAULT_FIELDS):
         self.handle = handle

@@ -172,6 +172,8 @@ _RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
 
 class BlastXmlParser(object):
 
+    """Parser for the BLAST XML format"""
+
     def __init__(self, handle):
         self.xml_iter = iter(ET.iterparse(handle, events=('start', 'end')))
         self._meta, self._fallback = self._parse_preamble()
@@ -392,7 +394,8 @@ class BlastXmlParser(object):
 
         Arguments:
         root_hsp_frag_elem -- Element object of the Hit_hsps tag.
-        hit_id -- String of hit ID to initialize all HSP objects.
+        query_id -- Query ID string.
+        hit_id -- Hit ID string.
 
         """
         # Hit_hsps DTD:
@@ -483,7 +486,7 @@ class BlastXmlParser(object):
 
 class BlastXmlIndexer(SearchIndexer):
 
-    """Indexer class for BLAST+ XML output."""
+    """Indexer class for BLAST XML output."""
 
     _parser = BlastXmlParser
     qstart_mark = _as_bytes('<Iteration>')
@@ -733,6 +736,7 @@ class BlastXmlWriter(object):
         block_name -- String of common element name prefix.
         map_name -- Dictionary name to for mapping element and attribute names.
         obj -- Object whose attribute values will be used.
+        opt_dict -- Dictionary for custom element-attribute mapping.
 
         """
         for elem, attr in _WRITE_MAPS[map_name]:
