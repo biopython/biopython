@@ -129,13 +129,13 @@ the keyword argument 'comments' set to True:
 
     # blast-tab defaults to parsing uncommented files
     >>> from Bio import SearchIO
-    >>> uncommented = 'tab_2226_tblastn_004.txt'
+    >>> uncommented = 'Blast/tab_2226_tblastn_004.txt'
     >>> qresult = SearchIO.read(uncommented, 'blast-tab')
     >>> qresult
     QueryResult(id='gi|11464971:4-101', 5 hits)
 
     # set the keyword argument to parse commented files
-    >>> commented = 'tab_2226_tblastn_008.txt'
+    >>> commented = 'Blast/tab_2226_tblastn_008.txt'
     >>> qresult = SearchIO.read(commented, 'blast-tab', comments=True)
     >>> qresult
     QueryResult(id='gi|11464971:4-101', 5 hits)
@@ -151,14 +151,14 @@ query sequence ID. These names may be passed either as a Python list or as a
 space-separated strings.
 
     # pass the custom column names as a Python list
-    >>> fname = 'tab_2226_tblastn_009.txt'
+    >>> fname = 'Blast/tab_2226_tblastn_009.txt'
     >>> custom_fields = ['qseqid', 'sseqid']
     >>> qresult = SearchIO.parse(fname, 'blast-tab', fields=custom_fields).next()
     >>> qresult
     QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 
     # pass the custom column names as a space-separated string
-    >>> fname = 'tab_2226_tblastn_009.txt'
+    >>> fname = 'Blast/tab_2226_tblastn_009.txt'
     >>> custom_fields = 'qseqid sseqid'
     >>> qresult = SearchIO.parse(fname, 'blast-tab', fields=custom_fields).next()
     >>> qresult
@@ -282,4 +282,4 @@ from blast_text import *
 # if not used as a module, run the doctest
 if __name__ == "__main__":
     from Bio.SearchIO._utils import run_doctest
-    run_doctest(target_dir='Blast')
+    run_doctest()
