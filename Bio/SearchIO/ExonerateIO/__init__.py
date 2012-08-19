@@ -26,3 +26,9 @@ More information are available through these links:
 from exonerate_text import *
 from exonerate_vulgar import *
 from exonerate_cigar import *
+
+
+# if not used as a module, run the doctest
+if __name__ == "__main__":
+    from Bio.SearchIO._utils import run_doctest
+    run_doctest()

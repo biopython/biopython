@@ -649,35 +649,7 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
     return write(qresults, out_file, out_format, **out_kwargs)
 
 
-def _test():
-    """Run the Bio.SearchIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-
-    test_dir = 'Tests'
-    outfiles = ['results.tab', 'search.idx']
-
-    if os.path.isdir(os.path.join('..', '..', test_dir)):
-        print "Runing doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        # check that we're not overwriting any file, as the doctest
-        # writes several output files
-        for ofile in outfiles:
-            assert not os.path.exists(ofile), ofile
-        os.chdir(os.path.join('..', '..', test_dir))
-        doctest.testmod(optionflags=doctest.ELLIPSIS)
-        # delete example from SearchIO.write
-        for ofile in outfiles:
-            if os.path.exists(ofile):
-                os.remove(ofile)
-        os.chdir(cur_dir)
-        print "Done"
-
-
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    _test()
+    from Bio.SearchIO._utils import run_doctest
+    run_doctest()
