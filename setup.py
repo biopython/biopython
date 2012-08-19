@@ -381,6 +381,7 @@ PACKAGES = [
     'Bio.SearchIO.ExonerateIO',
     'Bio.SeqIO',
     'Bio.SeqUtils',
+    'Bio.SeqUtils.Mapper',
     'Bio.Sequencing',
     'Bio.Sequencing.Applications',
     'Bio.Statistics',
