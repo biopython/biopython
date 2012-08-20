@@ -6,7 +6,7 @@
 """Abstract base classes for the SearchIO object model."""
 
 
-from Bio.SearchIO._utils import getattr_str
+from Bio.SearchIO._utils import getattr_str, trim_str
 
 
 class _BaseSearchObject(object):
@@ -43,10 +43,10 @@ class _BaseHSP(_BaseSearchObject):
         """Prints the alignment header info."""
         lines = []
         # set query id line
-        qid_line = self._trunc_display('      Query: %s %s' %
+        qid_line = trim_str('      Query: %s %s' %
                 (self.query_id, self.query_description), 80, '...')
         # set hit id line
-        hid_line = self._trunc_display('        Hit: %s %s' %
+        hid_line = trim_str('        Hit: %s %s' %
                 (self.hit_id, self.hit_description), 80, '...')
         lines.append(qid_line)
         lines.append(hid_line)

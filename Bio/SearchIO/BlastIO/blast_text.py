@@ -12,7 +12,7 @@ parser.
 
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.Blast import NCBIStandalone
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
 __all__ = ['BlastTextParser']

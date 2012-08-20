@@ -18,7 +18,7 @@ from search_tests_common import compare_search_obj
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import single_letter_alphabet, generic_dna
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -1035,7 +1035,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         self.assertTrue(fragment.alphabet is single_letter_alphabet)
         self.assertEqual(fragment.alignment_annotation, {})
 
-    def test_seq_objects(self):
+    def test_seqmodel(self):
         """Test HSPFragment sequence attributes, no alignments"""
         # all query, hit, and alignment objects should be None
         self.assertTrue(self.fragment.query is None)
@@ -1106,7 +1106,7 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertRaises(TypeError, HSPFragment, 'hit_id', 'query_id', \
                 wrong_hit, wrong_query)
 
-    def test_seq_objects(self):
+    def test_seqmodel(self):
         """Test HSPFragment sequence attribute types and default values"""
         # check hit
         self.assertTrue(isinstance(self.fragment.hit, SeqRecord))

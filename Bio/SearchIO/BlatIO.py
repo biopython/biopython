@@ -155,7 +155,7 @@ from math import log
 from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_dna
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 
 __all__ = ['BlatPslParser', 'BlatPslIndexer', 'BlatPslWriter']

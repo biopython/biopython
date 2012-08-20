@@ -197,7 +197,7 @@ from __future__ import with_statement
 __docformat__ = 'epytext en'
 
 from Bio.File import as_handle
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
 
 

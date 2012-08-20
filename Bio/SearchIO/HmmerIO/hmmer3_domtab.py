@@ -8,7 +8,7 @@
 from itertools import chain
 
 from Bio.Alphabet import generic_protein
-from Bio.SearchIO._objects import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from hmmer3_tab import Hmmer3TabParser, Hmmer3TabIndexer
 
