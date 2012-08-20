@@ -5,7 +5,7 @@
 
 """Bio.SearchIO support for HMMER output formats.
 
-This module adds support for parsing HMMER version outputs. HMMER is a
+This module adds support for parsing HMMER outputs. HMMER is a
 suite of programs implementing the profile hidden Markov models to find
 homology across protein sequences.
 
