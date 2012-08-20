@@ -175,9 +175,9 @@ def _list_from_csv(csv_string, caster=None):
     caster -- Cast function to use on each list item.
 
     """
-    filtered = [x for x in filter(None, csv_string.split(','))]
+    filtered = (x for x in filter(None, csv_string.split(',')))
     if caster is None:
-        return filtered
+        return list(filtered)
     else:
         return [caster(x) for x in filtered]
 
