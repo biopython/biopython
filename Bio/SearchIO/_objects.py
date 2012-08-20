@@ -5,7 +5,7 @@
 
 """Bio.SearchIO objects to model homology search program outputs.
 
-The SearchIO object model is made up of a hierarchy of four nested objects:
+The SearchIO object model consists of a hierarchy of four nested objects:
 
     * QueryResult, to represent a search query.
 
@@ -110,7 +110,8 @@ def _fullcascade(attr, doc=''):
     This is similar to `_partialcascade`, but for SearchIO containers that have
     at least one item (Hit and HSP). The getter always retrieves the attribute
     value from the first item. If the items have more than one attribute values,
-    an error will be raised. The setter behaves like `_partialcascade`.
+    an error will be raised. The setter behaves like `_partialcascade`, except
+    that it only sets attributes to items in the object, not the object itself.
 
     """
     def getter(self):
@@ -141,9 +142,9 @@ class _BaseSearchObject(object):
         from slicing).
 
         The reason this method is necessary is because different parsers will
-        set different attributes for each QueryResult, Hit, or HSP object they use,
-        depending on the attributes they found in the search output file.
-        Ideally, we want these attributes to 'stick' with any new instance
+        set different attributes for each QueryResult, Hit, HSP, or HSPFragment
+        objects, depending on the attributes they found in the search output
+        file. Ideally, we want these attributes to 'stick' with any new instance
         object created from the original one.
 
         """
@@ -178,7 +179,7 @@ class QueryResult(_BaseSearchObject):
     QueryResult is the container object that stores all search hits from a
     single search query. It is the top-level object returned by SearchIO's two
     main functions, `read` and `parse`. Depending on the search results and
-    search output format, a QueryResult object contains zero or more Hit
+    search output format, a QueryResult object will contain zero or more Hit
     objects (see Hit).
 
     You can take a quick look at a QueryResult's contents and attributes by
@@ -186,7 +187,7 @@ class QueryResult(_BaseSearchObject):
 
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.parse('Blast/mirna.xml', 'blast-xml').next()
-    >>> print qresult[:12]      # show the first 11 hits
+    >>> print qresult
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -206,6 +207,7 @@ class QueryResult(_BaseSearchObject):
                 9      2  gi|301171447|ref|NR_035871.1|  Pan troglodytes microRNA...
                10      1  gi|301171276|ref|NR_035852.1|  Pan troglodytes microRNA...
                11      1  gi|262205290|ref|NR_030188.1|  Homo sapiens microRNA 51...
+    ...
 
     If you just want to know how many hits a QueryResult has, you can invoke
     `len` on it. Alternatively, you can simply type its name in the interpreter:
@@ -223,9 +225,8 @@ class QueryResult(_BaseSearchObject):
     >>> first_hit
     Hit(id='gi|262205317|ref|NR_030195.1|', query_id='33211', 1 hsps)
 
-    You can slice QueryResult objects as well. However, instead of returning a
-    list, slicing will return a new QueryResult object containing only the
-    sliced hits:
+    You can slice QueryResult objects as well. Slicing will return a new
+    QueryResult object containing only the sliced hits:
 
     >>> sliced_qresult = qresult[:3]    # slice the first three hits
     >>> len(qresult)
@@ -244,8 +245,9 @@ class QueryResult(_BaseSearchObject):
                 1      1  gi|301171311|ref|NR_035856.1|  Pan troglodytes microRNA...
                 2      1  gi|270133242|ref|NR_032573.1|  Macaca mulatta microRNA ...
 
-    It is also possible to retrieve hits using the hit's ID. This is useful for
-    retrieving hits that you know should exist in a given search:
+    Like Python dictionaries, you can also retrieve hits using the hit's ID.
+    This is useful for retrieving hits that you know should exist in a given
+    search:
 
     >>> hit = qresult['gi|262205317|ref|NR_030195.1|']
     >>> hit
@@ -278,17 +280,17 @@ class QueryResult(_BaseSearchObject):
     ...
     ValueError: ...
 
-    To ease working with a large number of hits, QueryResult has several filter
-    and map methods, analogous to Python's built-in functions with the same
-    names. There are filter and map methods available for operations over Hit
-    objects or HSP objects. As an example, here we are using the `hit_map`
-    method to rename all hit IDs within a QueryResult:
+    To ease working with a large number of hits, QueryResult has several
+    `filter` and `map` methods, analogous to Python's built-in functions with
+    the same names. There are `filter` and `map` methods available for
+    operations over both Hit objects or HSP objects. As an example, here we are
+    using the `hit_map` method to rename all hit IDs within a QueryResult:
 
     >>> def renamer(hit):
     ...     hit.id = hit.id.split('|')[3]
     ...     return hit
     >>> mapped_qresult = qresult.hit_map(renamer)
-    >>> print mapped_qresult[:3]
+    >>> print mapped_qresult
     Program: blastn (2.2.27+)
       Query: 33211 (61)
              mir_1
@@ -299,9 +301,10 @@ class QueryResult(_BaseSearchObject):
                 0      1  NR_030195.1  Homo sapiens microRNA 520b (MIR520B), micr...
                 1      1  NR_035856.1  Pan troglodytes microRNA mir-520b (MIR520B...
                 2      1  NR_032573.1  Macaca mulatta microRNA mir-519a (MIR519A)...
+    ...
 
-    The principle for other map and filter methods are similar: they take a
-    function, applies it, and returns a new QueryResult object.
+    The principle for other `map` and `filter` methods are similar: they accept
+    a function, applies it, and returns a new QueryResult object.
 
     There are also other methods useful for working with list-like objects:
     `append`, `pop`, and `sort`. More details and examples are available in

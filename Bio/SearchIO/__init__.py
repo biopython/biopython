@@ -31,12 +31,12 @@ available in their respective documentations.
 
 Input
 =====
-The main function used to parse search output files is Bio.SearchIO.parse(...).
-This function reads in a given search output file and returns a generator that
-yields one QueryResult object per iteration.
+The main function for parsing search output files is Bio.SearchIO.parse(...).
+This function parses a given search output file and returns a generator object
+that yields one QueryResult object per iteration.
 
 `parse` takes two arguments: 1) a file handle or a filename of the input file
-(the search output) and 2) a string of one of the supported formats.
+(the search output file) and 2) the format name.
 
     >>> from Bio import SearchIO
     >>> for qresult in SearchIO.parse('Blast/mirna.xml', 'blast-xml'):
@@ -51,12 +51,19 @@ for use on search output files containing only one query. `read` returns one
 QueryResult object and will raise an exception if the source file contains more
 than one queries:
 
+    # reading works for files with one query
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
     >>> print qresult.id, qresult.description
     ...
     gi|11464971:4-101 pleckstrin [Mus musculus]
 
-For accessing search results of large output files, you can use the indexing
+    # files containing more or less than one queries will raise an error
+    >>> SearchIO.read('Blast/mirna.xml', 'blast-xml')
+    Traceback (most recent call last):
+    ...
+    ValueError: ...
+
+For accessing search results of large output files, you may use the indexing
 functions Bio.SearchIO.index(...) or Bio.SearchIO.index_db(...). They have a
 similar interface to their counterparts in SeqIO and AlignIO, with the addition
 of optional, format-specific keyword arguments.
@@ -74,12 +81,12 @@ numbers: the number of QueryResult, Hit, HSP, and HSPFragment written:
 
 Note that different writers may require different attribute values of the
 SearchIO objects. This limits the scope of writable search results to search
-results that have the required attributes.
+results possessing the required attributes.
 
 For example, the writer for HMMER domain table output requires
-the conditional e-value attribute from each HSP object. If you try to write
-to the HMMER domain table format and your HSPs do not have this attribute,
-an exception will be raised.
+the conditional e-value attribute from each HSP object, among others. If you
+try to write to the HMMER domain table format and your HSPs do not have this
+attribute, an exception will be raised.
 
 
 Conversion
@@ -97,8 +104,8 @@ Conventions
 The main goal of creating SearchIO is to have a common, easy to use interface
 across different search output files. As such, we have also created some
 conventions / standards for SearchIO that extend beyond the common object model.
-You can expect these to apply to all files parsed by SearchIO, regardless of
-their individual formats.
+These conventions apply to all files parsed by SearchIO, regardless of their
+individual formats.
 
     * Python-style sequence coordinates.
 
@@ -107,10 +114,9 @@ their individual formats.
       example, if in a BLAST XML output file the start and end coordinates of an
       HSP are 10 and 28, they would become 9 and 28 in SearchIO. The start
       coordinate becomes 9 because Python indices start from zero, while the end
-      coordinate remains 28 because Python slices omit the last item in an
-      interval.
+      coordinate remains 28 as Python slices omit the last item in an interval.
 
-      Besides giving you the benefits of standardization, this convention also
+      Beside giving you the benefits of standardization, this convention also
       makes the coordinates usable for slicing sequences. For example, given a
       full query sequence and the start and end coordinates of an HSP, one can
       use the coordinates to extract part of the query sequence that results in
@@ -129,9 +135,9 @@ their individual formats.
       format if the matching strand lies in the minus orientation, then the
       start coordinate will always be bigger than the end coordinate.
 
-      In SearchIO, the start coordinate is always smaller than the end
-      coordinate, regardless of strand. This ensures consistency when using the
-      coordinates to slice full sequences.
+      In SearchIO, start coordinates are always smaller than the end
+      coordinates, regardless of their originating strand. This ensures
+      consistency when using the coordinates to slice full sequences.
 
       Note that this coordinate order convention is only enforced in the
       HSPFragment level. If an HSP object has several HSPFragment objects, each
@@ -268,7 +274,7 @@ def parse(handle, format=None, **kwargs):
     Search 33212 has 44 hits
     Search 33213 has 95 hits
 
-    Depending on the file format, parse may also take additional keyword
+    Depending on the file format, `parse` may also accept additional keyword
     argument(s) that modifies the behavior of the format parser. Here is a
     simple example, where the keyword argument enables parsing of a commented
     BLAST tabular output file:
@@ -294,15 +300,14 @@ def parse(handle, format=None, **kwargs):
 
 
 def read(handle, format=None, **kwargs):
-    """Turns a search output file into a single QueryResult.
+    """Turns a search output file containing one query into a single QueryResult.
 
     Arguments:
     handle -- Handle to the file, or the filename as a string.
     format -- Lower case string denoting one of the supported formats.
     kwargs -- Format-specific keyword arguments.
 
-    The read function is used for parsing search output files containing exactly
-    one query:
+    `read` is used for parsing search output files containing exactly one query:
 
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
@@ -327,8 +332,8 @@ def read(handle, format=None, **kwargs):
     ...
     ValueError: More than one query results found in handle
 
-    Like parse, read may also accept keyword argument(s) depending on the search
-    file format.
+    Like `parse`, `read` may also accept keyword argument(s) depending on the
+    search output file format.
 
     """
     generator = parse(handle, format, **kwargs)
@@ -358,7 +363,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
                     QueryResult object should return a unique key for the
                     dictionary.
 
-    This function enables access of QueryResult objects in a single search
+    This function enables access of QueryResult objects from a single search
     output file using its identifier.
 
     >>> from Bio import SearchIO
@@ -388,8 +393,7 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
 
     As this function loads all QueryResult objects into memory, it may be
     unsuitable for dealing with files containing many queries. In that case, it
-    is recommended that you use either SearchIO.index(...) or
-    SearchIO.index_db(...)
+    is recommended that you use either `index` or `index_db`.
 
     """
     qdict = {}
@@ -416,10 +420,10 @@ def index(handle, format=None, key_function=None, **kwargs):
     for dealing with large search output files, as it enables access to any
     given QueryResult object much faster than using parse or read.
 
-    Index works by creating storing in-memory the start locations of all
-    QueryResult objects in a file. When a user requested access to that
-    QueryResult, this function will jump into that position, parse the query
-    directly, and returns a QueryResult object:
+    Index works by storing in-memory the start locations of all queries in a
+    file. When a user requested access to the query, this function will jump
+    to its start position, parse the whole query, and return it as a
+    QueryResult object:
 
     >>> from Bio import SearchIO
     >>> search_idx = SearchIO.index('Blast/wnts.xml', 'blast-xml')
@@ -432,7 +436,7 @@ def index(handle, format=None, key_function=None, **kwargs):
 
     You can supply a custom callback function to alter the default identifier
     string. This function should accept as its input the QueryResult ID string
-    and returns a modified version of it.
+    and return a modified version of it.
 
     >>> from Bio import SearchIO
     >>> key_func = lambda id: id.split('|')[1]
@@ -472,12 +476,12 @@ def index_db(index_filename, filenames=None, format=None,
                     key for the dictionary.
     kwargs -- Format-specific keyword arguments.
 
-    The index_db function is similar to Bio.SearchIO.index(...) in that it
-    indexes the start position of all queries from search output files. The main
-    difference is instead of storing these indices in-memory, they are written
-    into a flat SQLite database. This allows the indices to persist between
-    Python sessions, so the QueryResult objects in the source file can be
-    accessed without any indexing overhead.
+    The `index_db` function is similar to `index` in that it indexes the start
+    position of all queries from search output files. The main difference is
+    instead of storing these indices in-memory, they are written into a flat
+    SQLite database file. This allows the indices to persist between Python
+    sessions. This enables access to any queries in the file without any
+    indexing overhead, provided it has been indexed at least once.
 
     >>> from Bio import SearchIO
     >>> db_idx = SearchIO.index_db(':memory:', 'Blast/mirna.xml', 'blast-xml')
@@ -486,9 +490,9 @@ def index_db(index_filename, filenames=None, format=None,
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
 
-    index_db can also index multiple files and store them in the same database,
-    making it easier to group multiple search files and access them from a
-    single interface.
+    `index_db` can also index multiple files and store them in the same
+    database, making it easier to group multiple search files and access them
+    from a single interface.
 
     >>> from Bio import SearchIO
     >>> files = ['Blast/mirna.xml', 'Blast/wnts.xml']
@@ -519,7 +523,7 @@ def write(qresults, handle, format=None, **kwargs):
     format -- Lower case string denoting one of the supported formats.
     kwargs -- Format-specific keyword arguments.
 
-    The write function writes QueryResult object(s) into a the given output
+    The `write` function writes QueryResult object(s) into the given output
     handle / filename. You can supply it with a single QueryResult object or an
     iterable returning one or more QueryResult objects. In both cases, the
     function will return a tuple of four values: the number of QueryResult, Hit,
@@ -571,13 +575,12 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
     in_kwargs --  Dictionary of keyword arguments for the input function.
     out_kwargs -- Dictionary of keyword arguments for the output function.
 
-    The convert function is a shortcut function for Bio.SearchIO.parse(...)
-    and Bio.SearchIO.write(...). It has the same return type as the write
-    function. Format-specific arguments may be passed to the convert function,
-    but only as dictionaries.
+    The convert function is a shortcut function for `parse` and `write`. It has
+    the same return type as `write`. Format-specific arguments may be passed to
+    the convert function, but only as dictionaries.
 
-    Here is an example of using convert to convert from a BLAST+ XML file into a
-    tabular file with comments:
+    Here is an example of using `convert` to convert from a BLAST+ XML file
+    into a tabular file with comments:
 
     from Bio import SearchIO
     in_file = 'Blast/mirna.xml'
@@ -597,8 +600,8 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
     For example, converting from a BLAST+ XML output to a HMMER table file
     is not possible, as these are two search programs with different kinds of
     statistics. In theory, you may provide the necessary values required by the
-    HMMER table file (e.g. conditional e-values, envelope coordinates). However,
-    these values are likely to be meaningless as they are not true
+    HMMER table file (e.g. conditional e-values, envelope coordinates, etc).
+    However, these values are likely to hold little meaning as they are not true
     HMMER-computed values.
 
     Another example is converting from BLAST+ XML to BLAST+ tabular file. This

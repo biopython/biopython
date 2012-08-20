@@ -39,11 +39,11 @@ fasta-m10
 
 Note that in FASTA -m 10 outputs, HSPs from different strands are considered to
 be from different hits. They are listed as two separate entries in the hit
-table. The parser recognizes this and will group HSPs with the same hit ID into
-a single Hit object, regardless of strand.
+table. FastaIO recognizes this and will group HSPs with the same hit ID into a
+single Hit object, regardless of strand.
 
 FASTA also sometimes output extra sequences adjacent to the HSP match. These
-extra sequences are discarded by the parser. Only regions containing the actual
+extra sequences are discarded by FastaIO. Only regions containing the actual
 sequence match are extracted.
 
 The following object attributes are provided:

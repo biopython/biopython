@@ -24,9 +24,9 @@ More information on BLAT is available from these sites:
 Supported Formats
 =================
 
-BlatIO supports parsing, indexing, and writing both PSL and PSLX output formats,
-with or without header. To parse, index, or write PSLX format, use the 'pslx'
-keyword argument and set it to True.
+BlatIO supports parsing, indexing, and writing for both PSL and PSLX output
+formats, with or without header. To parse, index, or write PSLX files, use the
+'pslx' keyword argument and set it to True.
 
     # blat-psl defaults to PSL files
     >>> from Bio import SearchIO
@@ -59,23 +59,23 @@ they share the same statistics (e.g. match numbers, BLAT score, etc.). However,
 they do not share the same sequence attributes, such as the start and end
 coordinates, making them distinct objects.
 
-In addition to parsing PSL(X) files, BlatIO also computes the percent identity
-and score of your search results. This is done using the calculation formula
+In addition to parsing PSL(X) files, BlatIO also computes the percent identities
+and scores of your search results. This is done using the calculation formula
 posted here: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4. It mimics the score
 and percent identity calculation done by UCSC's web BLAT service.
 
-Since BlatIO parses the file in a single-read pass, it expects all results from
+Since BlatIO parses the file in a single pass, it expects all results from
 the same query to be in consecutive rows. If the results from one query are
 spread in nonconsecutive rows, BlatIO will consider them to be separate
 QueryResult objects.
 
-In most cases, PSL uses the same coordinate system as Python (zero-based, half
-open). These coordinates are anchored on the plus strand. However, if the query
-aligns on the minus strand, BLAT will anchor the qStarts coordinates on the
-minus strand instead. BlatIO is aware of this, and will re-anchor the qStarts
-coordinates to the plus strand whenever it sees a minus strand query match.
-Conversely, when you write out to a PSL file, BlatIO will reanchor qStarts to
-the minus strand again.
+In most cases, the PSL(X) format uses the same coordinate system as Python
+(zero-based, half open). These coordinates are anchored on the plus strand.
+However, if the query aligns on the minus strand, BLAT will anchor the qStarts
+coordinates on the minus strand instead. BlatIO is aware of this, and will
+re-anchor the qStarts coordinates to the plus strand whenever it sees a minus
+strand query match. Conversely, when you write out to a PSL(X) file, BlatIO will
+reanchor qStarts to the minus strand again.
 
 BlatIO provides the following attribute-column mapping:
 
@@ -88,12 +88,15 @@ QueryResutl       id                        Q name, query sequence ID
 Hit               id                        T name, hit sequence ID
                   seq_len                   T size, hit sequence full length
 ----------------  ------------------------  ------------------------------------
-HSP               hit_gap_num               T gap bases, number of bases
+HSP               hit_end                   T end, end coordinate of the last
+                                            hit fragment
+                  hit_gap_num               T gap bases, number of bases
                                             inserted in hit
-                  hit_gapopen_num           T gap count, number of hit inserts
-                  hit_spans                 blockSizes, sizes of each block
+                  hit_gapopen_num           T gap count, number of hit gap
+                                            inserts
+                  hit_spans                 blockSizes, sizes of each fragment
                   hit_start                 T start, start coordinate of the
-                                            first hit block
+                                            first hit fragment
                   hit_starts                tStarts, start coordinate of each
                                             hit fragment
                   match_num                 match, number of non-repeat matches
@@ -101,10 +104,13 @@ HSP               hit_gap_num               T gap bases, number of bases
                   match_rep_num             rep. match, number of matches that
                                             are part of repeats
                   n_num                     N's, number of N bases
+                  query_end                 Q end, end coordinate of the last
+                                            query fragment
                   query_gap_num             Q gap bases, number of bases
                                             inserted in query
-                  query_gapopen_num         Q gap count, number of query inserts
-                  query_spans               blockSizes, sizes of each block
+                  query_gapopen_num         Q gap count, number of query gap
+                                            inserts
+                  query_spans               blockSizes, sizes of each fragment
                   query_start               Q start, start coordinate of the
                                             first query block
                   query_starts              qStarts, start coordinate of each
@@ -134,7 +140,7 @@ HSP               gapopen_num               Q gap count + T gap count, total
                                             UCSC's formula
                   query_is_protein          boolean, whether the query sequence
                                             is a protein
-                  score                     HSP score, calculated using UCS's
+                  score                     HSP score, calculated using UCSC's
                                             formula
 --------------------------------------------------------------------------------
 

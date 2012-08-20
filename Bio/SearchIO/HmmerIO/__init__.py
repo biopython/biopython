@@ -35,7 +35,7 @@ Bio.SearchIO.HmmerIO supports the following HMMER output formats:
   name.
 
 Note that for all output formats, HMMER uses its own convention of input and
-output coordinates. It does not use the term 'input' or 'output', instead it
+output coordinates. It does not use the term 'hit' or 'query', instead it
 uses 'hmm' or 'ali'. For example, 'hmmfrom' is the start coordinate of the HMM
 sequence while 'alifrom' is the start coordinate of the protein sequence.
 
@@ -47,9 +47,9 @@ if the the HMMER flavor is hmmscan, 'hmm' will be query and 'ali' will be hit.
 
 This is why the 'hmmer3-domtab' format has to be specified with the source HMMER
 flavor. The parsers need to know which is the hit and which is the query.
-hmmer3-text has its source program information present in the file, while
-hmmer3-tab does not output any coordinates. That's why both formats do not need
-direct flavor specification.
+'hmmer3-text' has its source program information present in the file, while
+'hmmer3-tab' does not output any coordinates. That's why both of these formats
+do not need direct flavor specification like 'hmmer3-domtab'.
 
 Also note that when using the domain table format writers, it will use HMMER's
 naming convention ('hmm' and 'ali') so the files you write will be similar to
