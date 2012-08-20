@@ -9,18 +9,137 @@ This module adds support for parsing BLAT outputs. BLAT (BLAST-Like Alignment
 Tool) is a sequence homology search program initially built for annotating
 the human genome.
 
-Specifically, this module supports the following BLAT output formats:
+Bio.SearchIO.BlastIO was tested using standalone BLAT version 34, psLayout
+version 3. It should be able to parse psLayout version 4 without problems.
 
-  - PSL - 'blat-psl'
-  - PSLX - 'blat-pslx'
-
-More information are available through these links:
+More information on BLAT is available from these sites:
   
   - Publication: http://genome.cshlp.org/content/12/4/656
   - User guide: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
   - Source download: http://www.soe.ucsc.edu/~kent/src
   - Executable download: http://hgdownload.cse.ucsc.edu/admin/exe/
   - Blat score calculation: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4
+
+
+Supported Formats
+=================
+
+BlatIO supports parsing, indexing, and writing both PSL and PSLX output formats,
+with or without header. To parse, index, or write PSLX format, use the 'pslx'
+keyword argument and set it to True.
+
+    # blat-psl defaults to PSL files
+    >>> from Bio import SearchIO
+    >>> psl = 'Blat/psl_34_004.psl'
+    >>> qresult = SearchIO.read(psl, 'blat-psl')
+    >>> qresult
+    QueryResult(id='hg19_dna', 10 hits)
+
+    # set the pslx flag to parse PSLX files
+    >>> pslx = 'Blat/pslx_34_004.pslx'
+    >>> qresult = SearchIO.read(pslx, 'blat-psl', pslx=True)
+    >>> qresult
+    QueryResult(id='hg19_dna', 10 hits)
+
+For parsing and indexing, you do not need to specify whether the file has a
+header or not. For writing, if you want to write a header, you can set the
+'header' keyword argument to True. This will write a 'psLayout version 3' header
+to your output file.
+
+    from Bio import SearchIO
+    qresult = SearchIO.read(psl, 'blat-psl')
+    SearchIO.write(qresult, 'header.psl', header=True)
+    <stdout> (1, 10, 19, 23)
+
+Note that the number of HSPFragments written may exceed the number of HSP
+objects. This is because in PSL files, it is possible to have single matches
+consisting of noncontiguous sequence fragments. This is where the HSPFragment
+object comes into play. These fragments are grouped into a single HSP because
+they share the same statistics (e.g. match numbers, BLAT score, etc.). However,
+they do not share the same sequence attributes, such as the start and end
+coordinates, making them distinct objects.
+
+In addition to parsing PSL(X) files, BlatIO also computes the percent identity
+and score of your search results. This is done using the calculation formula
+posted here: http://genome.ucsc.edu/FAQ/FAQblat.html#blat4. It mimics the score
+and percent identity calculation done by UCSC's web BLAT service.
+
+Since BlatIO parses the file in a single-read pass, it expects all results from
+the same query to be in consecutive rows. If the results from one query are
+spread in nonconsecutive rows, BlatIO will consider them to be separate
+QueryResult objects.
+
+In most cases, PSL uses the same coordinate system as Python (zero-based, half
+open). These coordinates are anchored on the plus strand. However, if the query
+aligns on the minus strand, BLAT will anchor the qStarts coordinates on the
+minus strand instead. BlatIO is aware of this, and will re-anchor the qStarts
+coordinates to the plus strand whenever it sees a minus strand query match.
+Conversely, when you write out to a PSL file, BlatIO will reanchor qStarts to
+the minus strand again.
+
+BlatIO provides the following attribute-column mapping:
+
+----------------  ------------------------  ------------------------------------
+Object            Attribute                 Column Name, Value
+----------------  ------------------------  ------------------------------------
+QueryResutl       id                        Q name, query sequence ID
+                  seq_len                   Q size, query sequence full length
+----------------  ------------------------  ------------------------------------
+Hit               id                        T name, hit sequence ID
+                  seq_len                   T size, hit sequence full length
+----------------  ------------------------  ------------------------------------
+HSP               hit_gap_num               T gap bases, number of bases
+                                            inserted in hit
+                  hit_gapopen_num           T gap count, number of hit inserts
+                  hit_spans                 blockSizes, sizes of each block
+                  hit_start                 T start, start coordinate of the
+                                            first hit block
+                  hit_starts                tStarts, start coordinate of each
+                                            hit fragment
+                  match_num                 match, number of non-repeat matches
+                  mismatch_num              mismatch, number of mismatches
+                  match_rep_num             rep. match, number of matches that
+                                            are part of repeats
+                  n_num                     N's, number of N bases
+                  query_gap_num             Q gap bases, number of bases
+                                            inserted in query
+                  query_gapopen_num         Q gap count, number of query inserts
+                  query_spans               blockSizes, sizes of each block
+                  query_start               Q start, start coordinate of the
+                                            first query block
+                  query_starts              qStarts, start coordinate of each
+                                            query fragment
+                  `len`*                    block count, the number of blocks in
+                                            the alignment
+----------------  ------------------------  ------------------------------------
+HSPFragment       hit                       hit sequence, if present
+                  hit_strand                strand, hit sequence strand
+                  query                     query sequence, if present
+                  query_strand              strand, query sequence strand
+--------------------------------------------------------------------------------
+* You can obtain the number of blocks / fragments in the HSP by invoking `len`
+  on the HSP
+
+In addition to the column mappings above, BlatIO also provides the following
+object attributes:
+
+----------------  ------------------------  ------------------------------------
+Object            Attribute                 Value
+----------------  ------------------------  ------------------------------------
+HSP               gapopen_num               Q gap count + T gap count, total
+                                            number of gap openings
+                  ident_num                 matches + repmatches, total number
+                                            of identical residues
+                  ident_pct                 percent identity, calculated using
+                                            UCSC's formula
+                  query_is_protein          boolean, whether the query sequence
+                                            is a protein
+                  score                     HSP score, calculated using UCS's
+                                            formula
+--------------------------------------------------------------------------------
+
+Finally, the default HSP and HSPFragment properties are also provided. See the
+HSP and HSPFragment documentation for more details on these properties.
 
 """
 
