@@ -42,6 +42,74 @@ def get_processor(format, mapping):
     return getattr(mod, obj_name)
 
 
+def singleitem(attr=None, doc=''):
+    """Returns a property that fetches the given attribute from
+    the first item in a SearchIO container object."""
+    def getter(self):
+        if len(self._items) > 1:
+            raise ValueError("More than one HSPFragment objects "
+                    "found in HSP")
+        if attr is None:
+            return self._items[0]
+        return getattr(self._items[0], attr)
+    return property(fget=getter, doc=doc)
+
+
+def allitems(attr=None, doc=''):
+    """Returns a property that fetches the given attributes from
+    all items in a SearchIO container object."""
+    def getter(self):
+        if attr is None:
+            return self._items
+        return [getattr(frag, attr) for frag in self._items]
+    return property(fget=getter, doc=doc)
+
+
+def partialcascade(cont_attr, item_attr, doc=''):
+    """Returns a getter property with a cascading setter.
+
+    This is used for the `id` and `description` properties of the container
+    objects. These items have their own private attributes that stores query
+    and/or hit ID and description. To keep the container items' query and/or
+    hit ID and description in-sync, the setter cascades any new value given
+    to the items' values as well.
+
+    """
+    def getter(self):
+        return getattr(self, cont_attr)
+
+    def setter(self, value):
+        setattr(self, cont_attr, value)
+        for item in self:
+            setattr(item, item_attr, value)
+
+    return property(fget=getter, fset=setter, doc=doc)
+
+
+def fullcascade(attr, doc=''):
+    """Returns a getter property with a cascading setter.
+
+    This is similar to `partialcascade`, but for SearchIO containers that have
+    at least one item (Hit and HSP). The getter always retrieves the attribute
+    value from the first item. If the items have more than one attribute values,
+    an error will be raised. The setter behaves like `partialcascade`, except
+    that it only sets attributes to items in the object, not the object itself.
+
+    """
+    def getter(self):
+        attrset = set([getattr(item, attr) for item in self._items])
+        if len(attrset) > 1:
+            raise ValueError("More than one value present in the contained "
+                    "items: %r" % list(attrset))
+        return getattr(self._items[0], attr)
+
+    def setter(self, value):
+        for item in self:
+            setattr(item, attr, value)
+
+    return property(fget=getter, fset=setter, doc=doc)
+
+
 def find_test_dir(start_dir=None):
     """Finds the absolute path of Biopython's Tests directory.
 
