@@ -6,6 +6,9 @@
 """Abstract base classes for the SearchIO object model."""
 
 
+from Bio.SearchIO._utils import getattr_str
+
+
 class _BaseSearchObject(object):
 
     """Abstract class for SearchIO objects."""
@@ -31,24 +34,6 @@ class _BaseSearchObject(object):
             if attr not in self._NON_STICKY_ATTRS:
                 setattr(obj, attr, self.__dict__[attr])
 
-    def _trunc_display(string, max_len, concat_char):
-        """Truncates the given string for display."""
-        if len(string) > max_len:
-            return string[:max_len - len(concat_char)] + concat_char
-        return string
-
-    _trunc_display = staticmethod(_trunc_display)
-
-    def _attr_display(obj, attr, fmt=None, fallback='?'):
-        """Returns a string of the given object's attribute."""
-        if hasattr(obj, attr):
-            if fmt is not None:
-                return fmt % getattr(obj, attr)
-            return str(getattr(obj, attr))
-        return fallback
-
-    _attr_display = staticmethod(_attr_display)
-
 
 class _BaseHSP(_BaseSearchObject):
 
@@ -67,10 +52,10 @@ class _BaseHSP(_BaseSearchObject):
         lines.append(hid_line)
 
         # coordinates
-        query_start = _BaseHSP._attr_display(self, 'query_start')
-        query_end = _BaseHSP._attr_display(self, 'query_end')
-        hit_start = _BaseHSP._attr_display(self, 'hit_start')
-        hit_end = _BaseHSP._attr_display(self, 'hit_end')
+        query_start = getattr_str(self, 'query_start')
+        query_end = getattr_str(self, 'query_end')
+        hit_start = getattr_str(self, 'hit_start')
+        hit_end = getattr_str(self, 'hit_end')
 
         # strands
         try:

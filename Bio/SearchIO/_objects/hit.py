@@ -7,7 +7,7 @@
 
 from itertools import chain
 
-from Bio.SearchIO._utils import allitems, fullcascade
+from Bio.SearchIO._utils import allitems, fullcascade, getattr_str, trim_str
 
 from _base import _BaseSearchObject
 from hsp import HSP
@@ -149,7 +149,7 @@ class Hit(_BaseSearchObject):
         # set query id line
         qid_line = 'Query: %s' % self.query_id
         if self.query_description:
-            qid_line += Hit._trunc_display('\n       %s' %
+            qid_line += trim_str('\n       %s' %
                     self.query_description, 80, '...')
         lines.append(qid_line)
 
@@ -158,7 +158,7 @@ class Hit(_BaseSearchObject):
         if hasattr(self, 'seq_len'):
             hid_line += ' (%i)' % self.seq_len
         if self.description:
-            hid_line += Hit._trunc_display('\n       %s' % self.description,
+            hid_line += trim_str('\n       %s' % self.description,
                     80, '...')
         lines.append(hid_line)
 
@@ -174,22 +174,22 @@ class Hit(_BaseSearchObject):
             lines.append(pattern % ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
             for idx, hsp in enumerate(self.hsps):
                 # evalue
-                evalue = Hit._attr_display(hsp, 'evalue', fmt='%.2g')
+                evalue = getattr_str(hsp, 'evalue', fmt='%.2g')
                 # bitscore
-                bitscore = Hit._attr_display(hsp, 'bitscore', fmt='%.2f')
+                bitscore = getattr_str(hsp, 'bitscore', fmt='%.2f')
                 # alignment length
-                aln_span = Hit._attr_display(hsp, 'aln_span')
+                aln_span = getattr_str(hsp, 'aln_span')
                 # query region
-                query_start = Hit._attr_display(hsp, 'query_start')
-                query_end = Hit._attr_display(hsp, 'query_end')
+                query_start = getattr_str(hsp, 'query_start')
+                query_end = getattr_str(hsp, 'query_end')
                 query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 18
-                query_range = Hit._trunc_display(query_range, 15, '~]')
+                query_range = trim_str(query_range, 15, '~]')
                 # hit region
-                hit_start = Hit._attr_display(hsp, 'hit_start')
-                hit_end = Hit._attr_display(hsp, 'hit_end')
+                hit_start = getattr_str(hsp, 'hit_start')
+                hit_end = getattr_str(hsp, 'hit_end')
                 hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = Hit._trunc_display(hit_range, 21, '~]')
+                hit_range = trim_str(hit_range, 21, '~]')
                 # append the hsp row
                 lines.append(pattern % (str(idx), evalue, bitscore, aln_span,
                         query_range, hit_range))

@@ -13,7 +13,8 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from Bio.SearchIO._utils import singleitem, allitems, fullcascade
+from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
+        getattr_str, trim_str
 
 from _base import _BaseHSP
 
@@ -280,10 +281,10 @@ class HSP(_BaseHSP):
         # set hsp info line
         statline = []
         # evalue
-        evalue = HSP._attr_display(self, 'evalue', fmt='%.2g')
+        evalue = getattr_str(self, 'evalue', fmt='%.2g')
         statline.append('evalue ' +  evalue)
         # bitscore
-        bitscore = HSP._attr_display(self, 'bitscore', fmt='%.2f')
+        bitscore = getattr_str(self, 'bitscore', fmt='%.2f')
         statline.append('bitscore ' +  bitscore)
         lines.append('Quick stats: ' + '; '.join(statline))
 
@@ -299,18 +300,18 @@ class HSP(_BaseHSP):
             for idx, block in enumerate(self.fragments):
                 # set hsp line and table
                 # alignment span
-                aln_span = HSP._attr_display(block, 'aln_span')
+                aln_span = getattr_str(block, 'aln_span')
                 # query region
-                query_start = HSP._attr_display(block, 'query_start')
-                query_end = HSP._attr_display(block, 'query_end')
+                query_start = getattr_str(block, 'query_start')
+                query_end = getattr_str(block, 'query_end')
                 query_range = '[%s:%s]' % (query_start, query_end)
                 # max column length is 20
-                query_range = HSP._trunc_display(query_range, 22, '~]')
+                query_range = trim_str(query_range, 22, '~]')
                 # hit region
-                hit_start = HSP._attr_display(block, 'hit_start')
-                hit_end = HSP._attr_display(block, 'hit_end')
+                hit_start = getattr_str(block, 'hit_start')
+                hit_end = getattr_str(block, 'hit_end')
                 hit_range = '[%s:%s]' % (hit_start, hit_end)
-                hit_range = HSP._trunc_display(hit_range, 22, '~]')
+                hit_range = trim_str(hit_range, 22, '~]')
                 # append the hsp row
                 lines.append(pattern % (str(idx), aln_span, query_range, hit_range))
 
@@ -685,7 +686,7 @@ class HSPFragment(_BaseHSP):
     def _str_aln(self):
         lines = []
         # alignment length
-        aln_span = HSPFragment._attr_display(self, 'aln_span')
+        aln_span = getattr_str(self, 'aln_span')
         lines.append('  Fragments: 1 (%s columns)' % aln_span)
         # sequences
         if self.query is not None and self.hit is not None:

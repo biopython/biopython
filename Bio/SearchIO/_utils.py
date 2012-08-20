@@ -110,6 +110,23 @@ def fullcascade(attr, doc=''):
     return property(fget=getter, fset=setter, doc=doc)
 
 
+def trim_str(string, max_len, concat_char):
+    """Truncates the given string for display."""
+    if len(string) > max_len:
+        return string[:max_len - len(concat_char)] + concat_char
+    return string
+
+
+def getattr_str(obj, attr, fmt=None, fallback='?'):
+    """Returns a string of the given object's attribute, defaulting to the
+    fallback value if attribute is not present."""
+    if hasattr(obj, attr):
+        if fmt is not None:
+            return fmt % getattr(obj, attr)
+        return str(getattr(obj, attr))
+    return fallback
+
+
 def find_test_dir(start_dir=None):
     """Finds the absolute path of Biopython's Tests directory.
 
