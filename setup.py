@@ -35,6 +35,10 @@ def is_pypy():
         pass
     return False
 
+def is_ironpython():
+    return sys.platform == "cli"
+    #TODO - Use platform as in Pypy test?
+
 def get_yes_or_no(question, default):
     if default:
         option_str = "(Y/n)"
@@ -105,8 +109,8 @@ def get_install_requires():
     # skip this with distutils (otherwise get a warning)
     if not _SETUPTOOLS:
         return []
-    # skip this with jython and pypy
-    if os.name=="java" or is_pypy():
+    # skip this with jython and pypy and ironpython
+    if os.name=="java" or is_pypy() or is_ironpython():
         return []
     # check for easy_install and pip
     is_automated = False
@@ -147,6 +151,8 @@ def check_dependencies():
         return True #NumPy is not avaliable for Jython (for now)
     if is_pypy():
         return True #Full NumPy not available for PyPy (for now)
+    if is_ironpython():
+        return True #We're ignoring NumPy under IronPython (for now)
 
     print ("""
 Numerical Python (NumPy) is not installed.
@@ -334,7 +340,7 @@ NUMPY_PACKAGES = [
 if os.name == 'java' :
     # Jython doesn't support C extensions
     EXTENSIONS = []
-elif is_pypy():
+elif is_pypy() or is_ironpython():
     # Skip C extensions for now
     EXTENSIONS = []
 elif sys.version_info[0] == 3:
