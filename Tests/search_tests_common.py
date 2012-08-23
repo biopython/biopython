@@ -40,11 +40,14 @@ def compare_search_obj(obj_a, obj_b):
 def compare_attrs(obj_a, obj_b, attrs):
     """Compares attribute values of two objects."""
     for attr in attrs:
-        # don't check for private attributes
-        if attr.startswith('_'):
-            # except for _query and _hit
-            if attr not in ('_query', '_hit'):
-                continue
+        # don't check for contained items, they are handled separately
+        if attr.startswith('_items'):
+            continue
+        # these are properties that may have its private attributes
+        # set on the fly, so we try to use the property first
+        elif attr in ('_aln_span'):
+            getattr(obj_a, attr[1:])
+            getattr(obj_b, attr[1:])
         # get attribute values from each objects
         val_a = getattr(obj_a, attr)
         val_b = getattr(obj_b, attr)
@@ -72,6 +75,11 @@ def compare_attrs(obj_a, obj_b, attrs):
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
             assert values_a == values_b, "%s: %r vs %r" % (attr, values_a, \
                     values_b)
+        # if it's an alphabet, check the class names as alphabets are instances
+        elif attr == '_alphabet':
+            alph_a = val_a.__class__.__name__
+            alph_b = val_b.__class__.__name__
+            assert alph_a == alph_b, "%s: %r vs %r" % (attr, alph_a, alph_b)
         else:
             assert val_a == val_b, "%s: %r vs %r" % (attr, val_a, val_b)
 
