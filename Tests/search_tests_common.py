@@ -69,8 +69,9 @@ def compare_attrs(obj_a, obj_b, attrs):
             keys_b, values_b = val_b.keys(), val_b.values()
             # sort all values and keys
             [x.sort() for x in (keys_a, values_a, keys_b, values_b)]
-            assert keys_a == keys_b
-            assert values_a == values_b
+            assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
+            assert values_a == values_b, "%s: %r vs %r" % (attr, values_a, \
+                    values_b)
         else:
             assert val_a == val_b, "%s: %r vs %r" % (attr, val_a, val_b)
 
