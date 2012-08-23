@@ -97,10 +97,7 @@ if __name__ == '__main__':
     # Test
     import sys
     from Bio import SeqIO
-    with open(sys.argv[1]) as handle:
-        result = PdbSeqresIterator(handle)
-        results = list(result)
-        for r in results:
-            print r
-        SeqIO.write(results, sys.stdout, 'fasta')
+    handle = open(sys.argv[1])
+    results = PdbSeqresIterator(handle)
+    SeqIO.write(results, sys.stdout, 'fasta')
 
