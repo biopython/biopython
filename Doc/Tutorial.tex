@@ -8591,6 +8591,10 @@ The Bio.Phylo module was introduced in Biopython 1.54. Following the lead of Seq
 it aims to provide a common way to work with phylogenetic trees independently of the source data
 format, as well as a consistent API for I/O operations.
 
+Bio.Phylo is described in an open-access BMC Bioinformatics article
+by Talevich et al.~(2012) \cite{talevich2012}, which you might also find
+helpful.
+
 \section{Demo: What's in a Tree?}
 
 To get acquainted with the module, let's start with a tree that we've already constructed, and
@@ -9316,6 +9320,10 @@ newtree = copy.deepcopy(tree)
 
     In all cases, the total branch length of the tree stays the same.
 
+  \item[\texttt{root\_at\_midpoint}]
+    Reroot this tree at the calculated midpoint between the two most distant
+    tips of the tree. (This uses \verb|root_with_outgroup| under the hood.)
+
   \item[\texttt{split}]
     Generate \textit{n} (default 2) new descendants. In a species tree, this is a speciation
     event.  New clades have the given \verb|branch_length| and the same name as this clade's
@@ -9404,7 +9412,7 @@ programs like these.
 \section{PAML integration}
 \label{sec:PhyloPAML}
 
-Biopython 1.58 brings support for PAML
+Biopython 1.58 brought support for PAML
 (\url{http://abacus.gene.ucl.ac.uk/software/paml.html}), a suite of programs for
 phylogenetic analysis by maximum likelihood. Currently the programs codeml, baseml and 
 yn00 are implemented. Due to PAML's usage of control files rather than command line 
@@ -15026,6 +15034,8 @@ Florian Jupe, Leighton Pritchard, Graham J. Etherington, Katrin MacKenzie, Peter
 Peter J. A. Cock, Christopher J. Fields, Naohisa Goto, Michael L. Heuer, Peter M. Rice: ``The Sanger FASTQ file format for sequences with quality scores, and the Solexa/Illumina FASTQ variants''.  \textit{Nucleic Acids Research} {\bf 38} (6): 1767--1771 (2009). \href{http://dx.doi.org/10.1093/nar/gkp1137}{doi:10.1093/nar/gkp1137}
 \bibitem{brown1999}
 Patrick O. Brown, David Botstein: ``Exploring the new world of the genome with DNA microarrays''. \textit{Nature Genetics} {\bf 21} (Supplement 1), 33--37 (1999). \href{http://dx.doi.org/10.1038/4462}{doi:10.1038/4462}
+\bibitem{talevich2012}
+Eric Talevich, Brandon M. Invergo, Peter J.A. Cock, Brad A. Chapman: ``Bio.Phylo: A unified toolkit for processing, analyzing and visualizing phylogenetic trees in Biopython''.  \textit{BMC Bioinformatics} {\bf 13}: 209 (2012).  \href{http://dx.doi.org/10.1186/1471-2105-13-209}{doi:10.1186/1471-2105-13-209}
 \bibitem{dehoon2004}
 Michiel J. L. de Hoon, Seiya Imoto, John Nolan, Satoru Miyano: ``Open source clustering software''. \textit{Bioinformatics} {\bf 20} (9): 1453--1454 (2004). \href{http://dx.doi.org/10.1093/bioinformatics/bth078}{doi:10.1093/bioinformatics/bth078}
 \bibitem{eisen1998}
