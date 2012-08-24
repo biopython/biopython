@@ -43,11 +43,6 @@ def compare_attrs(obj_a, obj_b, attrs):
         # don't check for contained items, they are handled separately
         if attr.startswith('_items'):
             continue
-        # these are properties that may have its private attributes
-        # set on the fly, so we try to use the property first
-        elif attr in ('_aln_span'):
-            getattr(obj_a, attr[1:])
-            getattr(obj_b, attr[1:])
         # get attribute values from each objects
         val_a = getattr(obj_a, attr)
         val_b = getattr(obj_b, attr)

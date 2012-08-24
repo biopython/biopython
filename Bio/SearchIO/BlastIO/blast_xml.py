@@ -147,7 +147,7 @@ _WRITE_MAPS = {
         ('identity', 'ident_num'),
         ('positive', 'pos_num'),
         ('gaps', 'gap_num'),
-        ('align-len', None),
+        ('align-len', 'aln_span'),
         ('density', 'density'),
         ('qseq', 'query'),
         ('hseq', 'hit'),
@@ -893,8 +893,6 @@ class BlastXmlWriter(object):
             content = str(getattr(hsp, attr).seq)
         elif elem == 'Hsp_midline':
             content = hsp.alignment_annotation['homology']
-        elif elem == 'Hsp_align-len':
-            content = len(hsp)
         elif elem in ('Hsp_evalue', 'Hsp_bit-score'):
             # adapted from src/algo/blast/format/blastxml_format.cpp#L138-140
             content = '%.*g' % (6, getattr(hsp, attr))

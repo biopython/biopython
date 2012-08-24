@@ -229,7 +229,7 @@ class HSP(_BaseHSP):
     """
     # attributes we don't want to transfer when creating a new Hit class
     # from this one
-    _NON_STICKY_ATTRS = ('_items', '_aln_span')
+    _NON_STICKY_ATTRS = ('_items', )
 
     def __init__(self, fragments=[]):
         """Initializes an HSP object.
@@ -349,18 +349,9 @@ class HSP(_BaseHSP):
         # length of all alignments
         # alignment span can be its own attribute, or computed from
         # query / hit length
-        if len(self) == 1:
-            self._aln_span = self._items[0].aln_span
-        else:
-            if not hasattr(self, '_aln_span'):
-                self._aln_span = sum([frg.aln_span for frg in self.fragments])
+        return sum([frg.aln_span for frg in self.fragments])
 
-        return self._aln_span
-
-    def _aln_span_set(self, value):
-        self._aln_span = value
-
-    aln_span = property(fget=_aln_span_get, fset=_aln_span_set, \
+    aln_span = property(fget=_aln_span_get, \
             doc="""Total number of columns in all HSPFragment objects.""")
 
     ## coordinate properties ##
