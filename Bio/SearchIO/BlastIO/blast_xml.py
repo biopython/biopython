@@ -577,6 +577,15 @@ class BlastXmlIndexer(SearchIndexer):
             yield idx
             idx = string.find(sub, idx + 1)
 
+    def _parse(self, handle):
+        # overwrites SearchIndexer._parse, since we need to set the meta and
+        # fallback dictionaries to the parser
+        generator = self._parser(handle, **self._kwargs)
+        generator._meta = self._meta
+        generator._fallback = self._fallback
+
+        return iter(generator).next()
+
     def get_raw(self, offset):
         qend_mark = self.qend_mark
         block_size = self.block_size
@@ -600,13 +609,6 @@ class BlastXmlIndexer(SearchIndexer):
                 return qresult_raw[:qend_idx + len(qend_mark)]
             # otherwise, increment the counter and go on to the next iteration
             counter += 1
-
-    def get(self, offset):
-        qresult = SearchIndexer.get(self, offset)
-        # set qresult object attributes with values from preamble
-        for key, value in self._meta.items():
-            setattr(qresult, key, value)
-        return qresult
 
 
 class _BlastXmlGenerator(XMLGenerator):
