@@ -245,9 +245,11 @@ class Hit(_BaseSearchObject):
             """ID string of the query that produced the hit""")
     # returns all hsps
     hsps = allitems(doc="""HSP objects contained in the Hit""")
-    # returns all fragments
-    fragments = property(lambda self: list(chain(*self._items)), \
-            doc="""HSPFragment objects contained in the Hit""")
+
+    @property
+    def fragments(self):
+        """HSPFragment objects contained in the Hit"""
+        return [frag for frag in chain(*self._items)]
 
     ## public methods ##
     def append(self, hsp):
