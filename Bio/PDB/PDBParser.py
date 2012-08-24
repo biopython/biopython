@@ -49,7 +49,7 @@ class PDBParser(object):
         the SMCRA data will be supressed. If false (DEFAULT), they will be shown.
         These warnings might be indicative of problems in the PDB file!
         """
-        if structure_builder != None:
+        if structure_builder is not None:
             self.structure_builder = structure_builder
         else:
             self.structure_builder = StructureBuilder()
