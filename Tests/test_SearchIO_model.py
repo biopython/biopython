@@ -92,6 +92,20 @@ class QueryResultCases(unittest.TestCase):
         self.assertEqual([('hit1', hit11), ('hit2', hit21), \
                 ('hit3', hit31)], items)
 
+    def test_hsps(self):
+        """Test QueryResult.hsps"""
+        # hsps should return all hsps contained in qresult
+        hsps = self.qresult.hsps
+        self.assertEqual([hsp111, hsp112, hsp113, hsp114, hsp211, hsp311, \
+                hsp312, ], hsps)
+
+    def test_fragments(self):
+        """Test QueryResult.fragments"""
+        # fragments should return all fragments contained in qresult
+        frags = self.qresult.fragments
+        self.assertEqual([frag111, frag112, frag113, frag113b, frag114,
+            frag114b, frag211, frag311, frag312], frags)
+
     def test_contains(self):
         """Test QueryResult.__contains__"""
         # contains should work with hit ids or hit objects
