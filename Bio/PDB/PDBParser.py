@@ -290,28 +290,23 @@ if __name__ == "__main__":
 
     import sys
 
-    p = PDBParser(PERMISSIVE=True)
-
     usage = """Usage:
     $ python PDBParser.py <structure_filename> """
     if not len(sys.argv) > 1:
         print usage
         sys.exit(1)
 
-    filename = sys.argv[1]
-    s = p.get_structure("scr", filename)
+    parser = PDBParser(PERMISSIVE=True)
 
-    for m in s:
-        p = m.get_parent()
-        assert(p is s)
-        for c in m:
-            p = c.get_parent()
-            assert(p is m)
-            for r in c:
-                print r
-                p = r.get_parent()
-                assert(p is c)
-                for a in r:
-                    p = a.get_parent()
-                    if not p is r:
-                        print p, r
+    filename = sys.argv[1]
+    structure = parser.get_structure("scr", filename)
+
+    for model in structure:
+        assert(model.get_parent() is structure)
+        for chain in model:
+            assert(chain.get_parent() is model)
+            for res in chain:
+                print res
+                assert(res.get_parent() is chain)
+                for atom in res:
+                    assert(atom.get_parent() is res)
