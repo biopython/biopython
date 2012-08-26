@@ -106,6 +106,7 @@ class PDBParser(object):
         self.header, coords_trailer = self._get_header(header_coords_trailer)
         # Parse the atomic data; return the PDB file trailer
         self.trailer = self._parse_coordinates(coords_trailer)
+        self._check_trailer()
 
     def _get_header(self, header_coords_trailer):
         "Get the header of the PDB file, return the rest."
@@ -267,6 +268,36 @@ class PDBParser(object):
         # EOF (does not end in END or CONECT)
         self.line_counter = self.line_counter + local_line_counter
         return []
+
+    def _check_trailer(self):
+        """ Check that the trailer has no structural records or data after END.
+
+        This method is called when the first CONECT or END record is
+        encountered, and verifies that the trailer doesn't break some
+        aspects of the PDB specification.
+
+        An exception will be raised every time:
+          - A structural record (e.g. ATOM, or MODEL) follows CONECT
+          - A line containing non-whitespace follows END
+
+        All non-structural records (e.g. 'REMARK') are okay to have in the
+        trailer- this parser doesn't really do anything with them anyway.
+        """
+        disallowed_records = set(["ATOM  ", "HETATM", "ANISOU", "MODEL ",
+                                  "ENDMDL", "SIGUIJ", "SIGATM"])
+
+        found_end_record = False
+        for line in self.trailer:
+            record_type = line[0:6]
+            if record_type in disallowed_records:
+                self._handle_PDB_exception("%s record found in trailer"
+                                           % record_type, self.line_counter)
+            elif found_end_record and line.strip():
+                self._handle_PDB_exception("Non-blank line follows END record",
+                                            self.line_counter)
+            if record_type == "END   ":
+                found_end_record = True
+            self.line_counter += 1
 
     def _handle_PDB_exception(self, message, line_counter):
         """
