@@ -292,6 +292,12 @@ if __name__ == "__main__":
 
     p = PDBParser(PERMISSIVE=True)
 
+    usage = """Usage:
+    $ python PDBParser.py <structure_filename> """
+    if not len(sys.argv) > 1:
+        print usage
+        sys.exit(1)
+
     filename = sys.argv[1]
     s = p.get_structure("scr", filename)
 
