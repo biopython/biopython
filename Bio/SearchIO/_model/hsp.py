@@ -119,59 +119,60 @@ class HSP(_BaseHSP):
     HSP objects with a single HSPFragment, shortcut properties that fetches
     the item from the list are also provided.
 
-    ---------------------  --------------------  -------------------------------
-    Property               Shortcut              Value
-    ---------------------  --------------------  -------------------------------
-    alignments             alignment             HSP alignments as
-                                                 MultipleSeqAlignment object
-
-    alignment_annotations  alignment_annotation  Dictionary of annotation(s) of
-                                                 all fragments' alignments
-
-    fragments              fragment              HSPFragment objects
-
-    hits                   hit                   Hit sequence as SeqRecord
-                                                 objects
-
-    hit_starts             hit_start*            Start coordinates of the hit
-                                                 fragments
-
-    hit_ends               hit_end*              End coordinates of the hit
-                                                 fragments
-
-    hit_spans              hit_span*             Sizes of each hit fragments
-
-    hit_strands            hit_strand            Strand orientations of the hit
-                                                 fragments
-
-    hit_frames             hit_frame             Reading frames of the hit
-                                                 fragments
-
-    hit_ranges             hit_range             Tuples of start and end
-                                                 coordinates of each hit
-                                                 fragment
-
-    queries                query                 Query sequence as SeqRecord
-                                                 object
-
-    query_starts           query_start*          Start coordinates of the query
-                                                 fragments
-
-    query_ends             query_end*            End coordinates of the query
-                                                 fragments
-
-    query_spans            query_span*           Sizes of each query fragments
-
-    query_strands          query_strand          Strand orientations of the
-                                                 query fragments
-
-    query_frames           query_frame           Reading frames of the query
-                                                 fragments
-
-    query_ranges           query_range           Tuples of start and end
-                                                 coordinates of each query
-                                                 fragment
-    ----------------------------------------------------------------------------
+    +----------------------+---------------------+-----------------------------+
+    | Property             | Shortcut            | Value                       |
+    +======================+=====================+=============================+
+    | alignments           | alignment           | HSP alignments as           |
+    |                      |                     | MultipleSeqAlignment object |
+    +----------------------+---------------------+-----------------------------+
+    | alignment_annotations| alignment_annotation| dictionary of annotation(s) |
+    |                      |                     | of all fragments' alignments|
+    +----------------------+---------------------+-----------------------------+
+    | fragments            | fragment            | HSPFragment objects         |
+    +----------------------+---------------------+-----------------------------+
+    | hits                 | hit                 | hit sequence as SeqRecord   |
+    |                      |                     | objects                     |
+    +----------------------+---------------------+-----------------------------+
+    | hit_starts           | hit_start*          | start coordinates of the    |
+    |                      |                     | hit fragments               |
+    +----------------------+---------------------+-----------------------------+
+    | hit_ends             | hit_end*            | end coordinates of the hit  |
+    |                      |                     | fragments                   |
+    +----------------------+---------------------+-----------------------------+
+    | hit_spans            | hit_span*           | sizes of each hit fragments |
+    +----------------------+---------------------+-----------------------------+
+    | hit_strands          | hit_strand          | strand orientations of the  |
+    |                      |                     | hit fragments               |
+    +----------------------+---------------------+-----------------------------+
+    | hit_frames           | hit_frame           | reading frames of the hit   |
+    |                      |                     | fragments                   |
+    +----------------------+---------------------+-----------------------------+
+    | hit_ranges           | hit_range           | tuples of start and end     |
+    |                      |                     | coordinates of each hit     |
+    |                      |                     | fragment                    |
+    +----------------------+---------------------+-----------------------------+
+    | queries              | query               | query sequence as SeqRecord |
+    |                      |                     | object                      |
+    +----------------------+---------------------+-----------------------------+
+    | query_starts         | query_start*        | start coordinates of the    |
+    |                      |                     | fragments                   |
+    +----------------------+---------------------+-----------------------------+
+    | query_ends           | query_end*          | end coordinates of the      |
+    |                      |                     | query fragments             |
+    +----------------------+---------------------+-----------------------------+
+    | query_spans          | query_span*         | sizes of each query         |
+    |                      |                     | fragments                   |
+    +----------------------+---------------------+-----------------------------+
+    | query_strands        | query_strand        | strand orientations of the  |
+    |                      |                     | query fragments             |
+    +----------------------+---------------------+-----------------------------+
+    | query_frames         | query_frame         | reading frames of the query |
+    |                      |                     | fragments                   |
+    +----------------------+---------------------+-----------------------------+
+    | query_ranges         | query_range         | tuples of start and end     |
+    |                      |                     | coordinates of each query   |
+    |                      |                     | fragment                    |
+    +----------------------+---------------------+-----------------------------+
     * may be used in HSPs with multiple fragments
 
     For all types of HSP objects, the property will return the values in a list.
@@ -183,48 +184,48 @@ class HSP(_BaseHSP):
     (`*_start`, `*_end`, and `*_span` properties), their interpretation depends
     on how many fragment the HSP has:
 
-    -----------  ------------------------------------------------
-    Property     Value
-    -----------  ------------------------------------------------
-    hit_start    Smallest coordinate value of all hit fragments
-
-    hit_end      Largest coordinate value of all hit fragments
-
-    hit_span     Difference between `hit_start` and `hit_end`
-
-    query_start  Smallest coordinate value of all query fragments
-
-    query_end    Largest coordinate value of all query fragments
-
-    query_span   Difference between `query_start` and `query_end`
-    --------------------------------------------------------------
+    +------------+---------------------------------------------------+
+    | Property   | Value                                             |
+    +============+===================================================+
+    | hit_start  | smallest coordinate value of all hit fragments    |
+    +------------+---------------------------------------------------+
+    | hit_end    | largest coordinate value of all hit fragments     |
+    +------------+---------------------------------------------------+
+    | hit_span   | difference between `hit_start` and `hit_end`      |
+    +------------+---------------------------------------------------+
+    | query_start| smallest coordinate value of all query fragments  |
+    +------------+---------------------------------------------------+
+    | query_end  | largest coordinate value of all query fragments   |
+    +------------+---------------------------------------------------+
+    | query_span | difference between `query_start` and `query_end`  |
+    +------------+---------------------------------------------------+
 
     In addition to the objects listed above, HSP objects also provide the
     following properties:
 
-    ------------------  --------------------------------------------------------
-    Property            Value
-    ------------------  --------------------------------------------------------
-    aln_span            Total number of residues in all HSPFragment objects
-
-    alphabet            Alphabet used in hit and query SeqRecord objects
-
-    is_fragmented       Boolean, whether the HSP has multiple fragments or not
-
-    hit_id              ID of the hit sequence
-
-    hit_description     Description of the hit sequence
-
-    hit_inter_ranges    List of hit sequence coordinates of the regions between
-                        fragments
-
-    query_id            ID of the query sequence
-
-    query_description   Description of the query sequence
-
-    query_inter_ranges  List of query sequence coordinates of the regions
-                        between fragments
-    ------------------  --------------------------------------------------------
+    +--------------------+------------------------------------------------------+
+    | Property           | Value                                                |
+    +====================+======================================================+
+    | aln_span           | total number of residues in all HSPFragment objects  |
+    +--------------------+------------------------------------------------------+
+    | alphabet           | alphabet used in hit and query SeqRecord objects     |
+    +--------------------+------------------------------------------------------+
+    | is_fragmented      | boolean, whether there are multiple fragments or not |
+    +--------------------+------------------------------------------------------+
+    | hit_id             | ID of the hit sequence                               |
+    +--------------------+------------------------------------------------------+
+    | hit_description    | description of the hit sequence                      |
+    +--------------------+------------------------------------------------------+
+    | hit_inter_ranges   | list of hit sequence coordinates of the regions      |
+    |                    | between fragments                                    |
+    +--------------------+------------------------------------------------------+
+    | query_id           | ID of the query sequence                             |
+    +--------------------+------------------------------------------------------+
+    | query_description  | description of the query sequence                    |
+    +--------------------+------------------------------------------------------+
+    | query_inter_ranges | list of query sequence coordinates of the regions    |
+    |                    | between fragments                                    |
+    +--------------------+------------------------------------------------------+
 
     """
     # attributes we don't want to transfer when creating a new Hit class

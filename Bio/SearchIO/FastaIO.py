@@ -48,38 +48,59 @@ sequence match are extracted.
 
 The following object attributes are provided:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Value
-----------------  ------------------------  ------------------------------------
-QueryResult       description               query sequence description
-                  id                        query sequence ID
-                  program                   HMMER flavor
-                  seq_len                   full length of query sequence
-                  target                    target search database
-                  version                   BLAST version
-----------------  ------------------------  ------------------------------------
-Hit               seq_len                   full length of the hit sequence
-----------------  ------------------------  ------------------------------------
-HSP               bitscore                  *_bits line
-                  evalue                    *_expect line
-                  ident_pct                 *_ident line
-                  init1_score               *_init1 line
-                  initn_score               *_initn line
-                  opt_score                 *_opt line, *_s-w opt line
-                  pos_pct                   *_sim line
-                  sw_score                  *_score line
-                  z_score                   *_z-score line
-----------------  ------------------------  ------------------------------------
-HSPFragment       alignment_annotation      al_cons block, if present
-(also via HSP)    hit                       hit sequence
-                  hit_end                   hit sequence end coordinate
-                  hit_start                 hit sequence start coordinate
-                  hit_strand                hit sequence strand
-                  query                     query sequence
-                  query_end                 query sequence end coordinate
-                  query_start               query sequence start coordinate
-                  query_strand              query sequence strand
---------------------------------------------------------------------------------
++-----------------+-------------------------+----------------------------------+
+| Object          | Attribute               | Value                            |
++=================+=========================+==================================+
+| QueryResult     | description             | query sequence description       |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | query sequence ID                |
+|                 +-------------------------+----------------------------------+
+|                 | program                 | FASTA flavor                     |
+|                 +-------------------------+----------------------------------+
+|                 | seq_len                 | full length of query sequence    |
+|                 +-------------------------+----------------------------------+
+|                 | target                  | target search database           |
+|                 +-------------------------+----------------------------------+
+|                 | version                 | FASTA version                    |
++-----------------+-------------------------+----------------------------------+
+| Hit             | seq_len                 | full length of the hit sequence  |
++-----------------+-------------------------+----------------------------------+
+| HSP             | bitscore                | *_bits line                      |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | *_expect line                    |
+|                 +-------------------------+----------------------------------+
+|                 | ident_pct               | *_ident line                     |
+|                 +-------------------------+----------------------------------+
+|                 | init1_score             | *_init1 line                     |
+|                 +-------------------------+----------------------------------+
+|                 | initn_score             | *_initn line                     |
+|                 +-------------------------+----------------------------------+
+|                 | opt_score               | *_opt line, *_s-w opt line       |
+|                 +-------------------------+----------------------------------+
+|                 | pos_pct                 | *_sim line                       |
+|                 +-------------------------+----------------------------------+
+|                 | sw_score                | *_score line                     |
+|                 +-------------------------+----------------------------------+
+|                 | z_score                 | *_z-score line                   |
++-----------------+-------------------------+----------------------------------+
+| HSPFragment     | alignment_annotation    | al_cons block, if present        |
+| (also via HSP)  +-------------------------+----------------------------------+
+|                 | hit                     | hit sequence                     |
+|                 +-------------------------+----------------------------------+
+|                 | hit_end                 | hit sequence end coordinate      |
+|                 +-------------------------+----------------------------------+
+|                 | hit_start               | hit sequence start coordinate    |
+|                 +-------------------------+----------------------------------+
+|                 | hit_strand              | hit sequence strand              |
+|                 +-------------------------+----------------------------------+
+|                 | query                   | query sequence                   |
+|                 +-------------------------+----------------------------------+
+|                 | query_end               | query sequence end coordinate    |
+|                 +-------------------------+----------------------------------+
+|                 | query_start             | query sequence start coordinate  |
+|                 +-------------------------+----------------------------------+
+|                 | query_strand            | query sequence strand            |
++-----------------+-------------------------+----------------------------------+
 
 """
 

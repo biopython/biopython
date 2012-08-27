@@ -79,70 +79,99 @@ reanchor qStarts to the minus strand again.
 
 BlatIO provides the following attribute-column mapping:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Column Name, Value
-----------------  ------------------------  ------------------------------------
-QueryResutl       id                        Q name, query sequence ID
-                  seq_len                   Q size, query sequence full length
-----------------  ------------------------  ------------------------------------
-Hit               id                        T name, hit sequence ID
-                  seq_len                   T size, hit sequence full length
-----------------  ------------------------  ------------------------------------
-HSP               hit_end                   T end, end coordinate of the last
-                                            hit fragment
-                  hit_gap_num               T gap bases, number of bases
-                                            inserted in hit
-                  hit_gapopen_num           T gap count, number of hit gap
-                                            inserts
-                  hit_spans                 blockSizes, sizes of each fragment
-                  hit_start                 T start, start coordinate of the
-                                            first hit fragment
-                  hit_starts                tStarts, start coordinate of each
-                                            hit fragment
-                  match_num                 match, number of non-repeat matches
-                  mismatch_num              mismatch, number of mismatches
-                  match_rep_num             rep. match, number of matches that
-                                            are part of repeats
-                  n_num                     N's, number of N bases
-                  query_end                 Q end, end coordinate of the last
-                                            query fragment
-                  query_gap_num             Q gap bases, number of bases
-                                            inserted in query
-                  query_gapopen_num         Q gap count, number of query gap
-                                            inserts
-                  query_spans               blockSizes, sizes of each fragment
-                  query_start               Q start, start coordinate of the
-                                            first query block
-                  query_starts              qStarts, start coordinate of each
-                                            query fragment
-                  `len`*                    block count, the number of blocks in
-                                            the alignment
-----------------  ------------------------  ------------------------------------
-HSPFragment       hit                       hit sequence, if present
-                  hit_strand                strand, hit sequence strand
-                  query                     query sequence, if present
-                  query_strand              strand, query sequence strand
---------------------------------------------------------------------------------
++----------------+-------------------------+-----------------------------------+
+| Object         | Attribute               | Column Name, Value                |
++================+=========================+===================================+
+| QueryResutl    | id                      | Q name, query sequence ID         |
+|                +-------------------------+-----------------------------------+
+|                | seq_len                 | Q size, query sequence full       |
+|                |                         | length                            |
++----------------+-------------------------+-----------------------------------+
+| Hit            | id                      | T name, hit sequence ID           |
+|                +-------------------------+-----------------------------------+
+|                | seq_len                 | T size, hit sequence full length  |
++----------------+-------------------------+-----------------------------------+
+| HSP            | hit_end                 | T end, end coordinate of the last |
+|                |                         | hit fragment                      |
+|                +-------------------------+-----------------------------------+
+|                | hit_gap_num             | T gap bases, number of bases      |
+|                |                         | inserted in hit                   |
+|                +-------------------------+-----------------------------------+
+|                | hit_gapopen_num         | T gap count, number of hit gap    |
+|                |                         | inserts                           |
+|                +-------------------------+-----------------------------------+
+|                | hit_spans               | blockSizes, sizes of each         |
+|                |                         | fragment                          |
+|                +-------------------------+-----------------------------------+
+|                | hit_start               | T start, start coordinate of the  |
+|                |                         | first hit fragment                |
+|                +-------------------------+-----------------------------------+
+|                | hit_starts              | tStarts, start coordinate of each |
+|                |                         | hit fragment                      |
+|                +-------------------------+-----------------------------------+
+|                | match_num               | match, number of non-repeat       |
+|                |                         | matches                           |
+|                +-------------------------+-----------------------------------+
+|                | mismatch_num            | mismatch, number of mismatches    |
+|                +-------------------------+-----------------------------------+
+|                | match_rep_num           | rep. match, number of matches     |
+|                |                         | that are part of repeats          |
+|                +-------------------------+-----------------------------------+
+|                | n_num                   | N's, number of N bases            |
+|                +-------------------------+-----------------------------------+
+|                | query_end               | Q end, end coordinate of the last |
+|                +-------------------------+-----------------------------------+
+|                |                         | query fragment                    |
+|                | query_gap_num           | Q gap bases, number of bases      |
+|                |                         | inserted in query                 |
+|                +-------------------------+-----------------------------------+
+|                | query_gapopen_num       | Q gap count, number of query gap  |
+|                |                         | inserts                           |
+|                +-------------------------+-----------------------------------+
+|                | query_spans             | blockSizes, sizes of each         |
+|                |                         | fragment                          |
+|                +-------------------------+-----------------------------------+
+|                | query_start             | Q start, start coordinate of the  |
+|                |                         | first query block                 |
+|                +-------------------------+-----------------------------------+
+|                | query_starts            | qStarts, start coordinate of each |
+|                |                         | query fragment                    |
+|                +-------------------------+-----------------------------------+
+|                | `len`*                  | block count, the number of blocks |
+|                |                         | in the alignment                  |
++----------------+-------------------------+-----------------------------------+
+| HSPFragment    | hit                     | hit sequence, if present          |
+|                +-------------------------+-----------------------------------+
+|                | hit_strand              | strand, hit sequence strand       |
+|                +-------------------------+-----------------------------------+
+|                | query                   | query sequence, if present        |
+|                +-------------------------+-----------------------------------+
+|                | query_strand            | strand, query sequence strand     |
++----------------+-------------------------+-----------------------------------+
 * You can obtain the number of blocks / fragments in the HSP by invoking `len`
   on the HSP
 
 In addition to the column mappings above, BlatIO also provides the following
 object attributes:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Value
-----------------  ------------------------  ------------------------------------
-HSP               gapopen_num               Q gap count + T gap count, total
-                                            number of gap openings
-                  ident_num                 matches + repmatches, total number
-                                            of identical residues
-                  ident_pct                 percent identity, calculated using
-                                            UCSC's formula
-                  query_is_protein          boolean, whether the query sequence
-                                            is a protein
-                  score                     HSP score, calculated using UCSC's
-                                            formula
---------------------------------------------------------------------------------
++----------------+-------------------------+-----------------------------------+
+| Object         | Attribute               | Value                             |
++================+=========================+===================================+
+| HSP            | gapopen_num             | Q gap count + T gap count, total  |
+|                |                         |  number of gap openings           |
+|                +-------------------------+-----------------------------------+
+|                | ident_num               | matches + repmatches, total       |
+|                |                         | number of identical residues      |
+|                +-------------------------+-----------------------------------+
+|                | ident_pct               | percent identity, calculated      |
+|                |                         | using UCSC's formula              |
+|                +-------------------------+-----------------------------------+
+|                | query_is_protein        | boolean, whether the query        |
+|                |                         | sequence is a protein             |
+|                +-------------------------+-----------------------------------+
+|                | score                   | HSP score, calculated using       |
+|                |                         | UCSC's formula                    |
++----------------+-------------------------+-----------------------------------+
 
 Finally, the default HSP and HSPFragment properties are also provided. See the
 HSP and HSPFragment documentation for more details on these properties.

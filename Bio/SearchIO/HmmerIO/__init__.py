@@ -66,97 +66,148 @@ are present, you can also parse files with variable alignment width (using the
 
 The following SearchIO objects attributes are provided:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Value
-----------------  ------------------------  ------------------------------------
-QueryResult       acc                       accession (if present)
-                  description               query sequence description
-                  id                        query sequence ID
-                  program                   HMMER flavor
-                  seq_len                   full length of query sequence
-                  target                    target search database
-                  version                   BLAST version
-----------------  ------------------------  ------------------------------------
-Hit               bias                      hit-level bias
-                  bitscore                  hit-level score
-                  description               hit sequence description
-                  domain_exp_num            expected number of domains in the
-                                            hit (exp column)
-                  domain_obs_num            observed number of domains in the
-                                            hit (N column)
-                  evalue                    hit-level e-value
-                  id                        hit sequence ID
-                  is_included               boolean, whether the hit is in the
-                                            inclusion threshold or not
-----------------  ------------------------  ------------------------------------
-HSP               acc_avg                   expected accuracy per alignment
-                                            residue (acc column)
-                  bias                      hsp-level bias
-                  bitscore                  hsp-level score
-                  domain_index              the domain index set by HMMER
-                  env_end                   end coordinate of the envelope
-                  env_endtype               envelope end types (e.g. '[]', '..',
-                                            '[.', etc.)
-                  env_start                 start coordinate of the envelope
-                  evalue                    hsp-level independent e-value
-                  evalue_cond               hsp-level conditional e-value
-                  hit_endtype               hit sequence end types
-                  is_included               boolean, whether the hit of the hsp
-                                            is in the inclusion threshold
-                  query_endtype             query sequence end types
-----------------  ------------------------  ------------------------------------
-HSPFragment       alignment_annotation      alignment homology string and other
-(also via HSP)                              annotations (e.g. PP, CS)
-                  aln_span                  length of alignment fragment
-                  hit                       hit sequence
-                  hit_end                   hit sequence end coordinate, may be
-                                            'hmmto' or 'alito' depending on the
-                                            HMMER flavor
-                  hit_start                 hit sequence start coordinate, may
-                                            be 'hmmfrom' or 'alifrom' depending
-                                            on the HMMER flavor
-                  hit_strand                hit sequence strand
-                  query                     query sequence
-                  query_end                 query sequence end coordinate, may
-                                            be 'hmmto' or 'alito' depending on
-                                            the HMMER flavor
-                  query_start               query sequence start coordinate, may
-                                            be 'hmmfrom' or 'alifrom' depending
-                                            on the HMMER flavor
-                  query_strand              query sequence strand
---------------------------------------------------------------------------------
++-----------------+-------------------------+----------------------------------+
+| Object          | Attribute               | Value                            |
++=================+=========================+==================================+
+| QueryResult     | acc                     | accession (if present)           |
+|                 +-------------------------+----------------------------------+
+|                 | description             | query sequence description       |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | query sequence ID                |
+|                 +-------------------------+----------------------------------+
+|                 | program                 | HMMER flavor                     |
+|                 +-------------------------+----------------------------------+
+|                 | seq_len                 | full length of query sequence    |
+|                 +-------------------------+----------------------------------+
+|                 | target                  | target search database           |
+|                 +-------------------------+----------------------------------+
+|                 | version                 | BLAST version                    |
++-----------------+-------------------------+----------------------------------+
+| Hit             | bias                    | hit-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hit-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | description             | hit sequence description         |
+|                 +-------------------------+----------------------------------+
+|                 | domain_exp_num          | expected number of domains in    |
+|                 |                         | the hit (exp column)             |
+|                 +-------------------------+----------------------------------+
+|                 | domain_obs_num          | observed number of domains in    |
+|                 |                         | the hit (N column)               |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hit-level e-value                |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | hit sequence ID                  |
+|                 +-------------------------+----------------------------------+
+|                 | is_included             | boolean, whether the hit is in   |
+|                 |                         | the inclusion threshold or not   |
++-----------------+-------------------------+----------------------------------+
+| HSP             | acc_avg                 | expected accuracy per alignment  |
+|                 |                         | residue (acc column)             |
+|                 +-------------------------+----------------------------------+
+|                 | bias                    | hsp-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hsp-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | domain_index            | the domain index set by HMMER    |
+|                 +-------------------------+----------------------------------+
+|                 | env_end                 | end coordinate of the envelope   |
+|                 +-------------------------+----------------------------------+
+|                 | env_endtype             | envelope end types (e.g. '[]',   |
+|                 |                         | '..', '[.', etc.)                |
+|                 +-------------------------+----------------------------------+
+|                 | env_start               | start coordinate of the envelope |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hsp-level independent e-value    |
+|                 +-------------------------+----------------------------------+
+|                 | evalue_cond             | hsp-level conditional e-value    |
+|                 +-------------------------+----------------------------------+
+|                 | hit_endtype             | hit sequence end types           |
+|                 +-------------------------+----------------------------------+
+|                 | is_included             | boolean, whether the hit of the  |
+|                 |                         | hsp is in the inclusion          |
+|                 |                         | threshold                        |
+|                 +-------------------------+----------------------------------+
+|                 | query_endtype           | query sequence end types         |
++-----------------+-------------------------+----------------------------------+
+| HSPFragment     | alignment_annotation    | alignment homology string and    |
+| (also via HSP)  |                         | other annotations (e.g. PP, CS)  |
+|                 +-------------------------+----------------------------------+
+|                 | aln_span                | length of alignment fragment     |
+|                 +-------------------------+----------------------------------+
+|                 | hit                     | hit sequence                     |
+|                 +-------------------------+----------------------------------+
+|                 | hit_end                 | hit sequence end coordinate, may |
+|                 |                         | be 'hmmto' or 'alito' depending  |
+|                 |                         | on the HMMER flavor              |
+|                 +-------------------------+----------------------------------+
+|                 | hit_start               | hit sequence start coordinate,   |
+|                 |                         | may be 'hmmfrom' or 'alifrom'    |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | hit_strand              | hit sequence strand              |
+|                 +-------------------------+----------------------------------+
+|                 | query                   | query sequence                   |
+|                 +-------------------------+----------------------------------+
+|                 | query_end               | query sequence end coordinate,   |
+|                 |                         | may be 'hmmto' or 'alito'        |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_start             | query sequence start coordinate, |
+|                 |                         | may be 'hmmfrom' or 'alifrom'    |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_strand            | query sequence strand            |
++-----------------+-------------------------+----------------------------------+
 
 
 hmmer3-tab
 ==========
 The following SearchIO objects attributes are provided:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Column / Value
-----------------  ------------------------  ------------------------------------
-QueryResult       acc                       query accession (if present)
-                  description               query sequence description
-                  id                        query name
-----------------  ------------------------  ------------------------------------
-Hit               acc                       hit accession
-                  bias                      hit-level bias
-                  bitscore                  hit-level score
-                  description               hit sequence description
-                  cluster_num               clu column
-                  domain_exp_num            exp column
-                  domain_included_num       inc column
-                  domain_obs_num            dom column
-                  domain_reported_num       rep column
-                  env_num                   env column
-                  evalue                    hit-level evalue
-                  id                        target name
-                  overlap_num               ov column
-                  region_num                reg column
-----------------  ------------------------  ------------------------------------
-HSP               bias                      bias of the best domain
-                  bitscore                  bitscore of the best domain
-                  evalue                    evalue of the best domain
---------------------------------------------------------------------------------
++-----------------+-------------------------+----------------------------------+
+| Object          | Attribute               | Column / Value                   |
++=================+=========================+==================================+
+| QueryResult     | acc                     | query accession (if present)     |
+|                 +-------------------------+----------------------------------+
+|                 | description             | query sequence description       |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | query name                       |
++-----------------+-------------------------+----------------------------------+
+| Hit             | acc                     | hit accession                    |
+|                 +-------------------------+----------------------------------+
+|                 | bias                    | hit-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hit-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | description             | hit sequence description         |
+|                 +-------------------------+----------------------------------+
+|                 | cluster_num             | clu column                       |
+|                 +-------------------------+----------------------------------+
+|                 | domain_exp_num          | exp column                       |
+|                 +-------------------------+----------------------------------+
+|                 | domain_included_num     | inc column                       |
+|                 +-------------------------+----------------------------------+
+|                 | domain_obs_num          | dom column                       |
+|                 +-------------------------+----------------------------------+
+|                 | domain_reported_num     | rep column                       |
+|                 +-------------------------+----------------------------------+
+|                 | env_num                 | env column                       |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hit-level evalue                 |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | target name                      |
+|                 +-------------------------+----------------------------------+
+|                 | overlap_num             | ov column                        |
+|                 +-------------------------+----------------------------------+
+|                 | region_num              | reg column                       |
++-----------------+-------------------------+----------------------------------+
+| HSP             | bias                    | bias of the best domain          |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | bitscore of the best domain      |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | evalue of the best domain        |
++-----------------+-------------------------+----------------------------------+
 
 
 hmmer3-domtab
@@ -167,46 +218,66 @@ file. So instead of using 'hmmer3-domtab', use either 'hmmsearch3-domtab',
 
 The following SearchIO objects attributes are provided:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Value
-----------------  ------------------------  ------------------------------------
-QueryResult       acc                       accession
-                  description               query sequence description
-                  id                        query sequence ID
-                  seq_len                   full length of query sequence
-----------------  ------------------------  ------------------------------------
-Hit               acc                       accession
-                  bias                      hit-level bias
-                  bitscore                  hit-level score
-                  description               hit sequence description
-                  evalue                    hit-level e-value
-                  id                        hit sequence ID
-----------------  ------------------------  ------------------------------------
-HSP               acc_avg                   expected accuracy per alignment
-                                            residue (acc column)
-                  bias                      hsp-level bias
-                  bitscore                  hsp-level score
-                  domain_index              the domain index set by HMMER
-                  env_end                   end coordinate of the envelope
-                  env_start                 start coordinate of the envelope
-                  evalue                    hsp-level independent e-value
-                  evalue_cond               hsp-level conditional e-value
-----------------  ------------------------  ------------------------------------
-HSPFragment       hit_end                   hit sequence end coordinate, may be
-(also via HSP)                              'hmmto' or 'alito' depending on the
-                                            HMMER flavor
-                  hit_start                 hit sequence start coordinate, may
-                                            be 'hmmfrom' or 'alifrom' depending
-                                            on the HMMER flavor
-                  hit_strand                hit sequence strand
-                  query_end                 query sequence end coordinate, may
-                                            be 'hmmto' or 'alito' depending on
-                                            the HMMER flavor
-                  query_start               query sequence start coordinate, may
-                                            be 'hmmfrom' or 'alifrom' depending
-                                            on the HMMER flavor
-                  query_strand              query sequence strand
---------------------------------------------------------------------------------
++-----------------+-------------------------+----------------------------------+
+| Object          | Attribute               | Value                            |
++=================+=========================+==================================+
+| QueryResult     | acc                     | accession                        |
+|                 +-------------------------+----------------------------------+
+|                 | description             | query sequence description       |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | query sequence ID                |
+|                 +-------------------------+----------------------------------+
+|                 | seq_len                 | full length of query sequence    |
++-----------------+-------------------------+----------------------------------+
+| Hit             | acc                     | accession                        |
+|                 +-------------------------+----------------------------------+
+|                 | bias                    | hit-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hit-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | description             | hit sequence description         |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hit-level e-value                |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | hit sequence ID                  |
++-----------------+-------------------------+----------------------------------+
+| HSP             | acc_avg                 | expected accuracy per alignment  |
+|                 |                         | residue (acc column)             |
+|                 +-------------------------+----------------------------------+
+|                 | bias                    | hsp-level bias                   |
+|                 +-------------------------+----------------------------------+
+|                 | bitscore                | hsp-level score                  |
+|                 +-------------------------+----------------------------------+
+|                 | domain_index            | the domain index set by HMMER    |
+|                 +-------------------------+----------------------------------+
+|                 | env_end                 | end coordinate of the envelope   |
+|                 +-------------------------+----------------------------------+
+|                 | env_start               | start coordinate of the envelope |
+|                 +-------------------------+----------------------------------+
+|                 | evalue                  | hsp-level independent e-value    |
+|                 +-------------------------+----------------------------------+
+|                 | evalue_cond             | hsp-level conditional e-value    |
++-----------------+-------------------------+----------------------------------+
+| HSPFragment     | hit_end                 | hit sequence end coordinate, may |
+| (also via HSP)  |                         | be 'hmmto' or 'alito' depending  |
+|                 |                         | on the HMMER flavor              |
+|                 +-------------------------+----------------------------------+
+|                 | hit_start               | hit sequence start coordinate,   |
+|                 |                         | may be 'hmmfrom' or 'alifrom'    |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | hit_strand              | hit sequence strand              |
+|                 +-------------------------+----------------------------------+
+|                 | query_end               | query sequence end coordinate,   |
+|                 |                         | may be 'hmmto' or 'alito'        |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_start             | query sequence start coordinate, |
+|                 |                         | may be 'hmmfrom' or 'alifrom'    |
+|                 |                         | depending on the HMMER flavor    |
+|                 +-------------------------+----------------------------------+
+|                 | query_strand            | query sequence strand            |
++-----------------+-------------------------+----------------------------------+
 
 """
 

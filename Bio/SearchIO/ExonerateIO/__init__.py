@@ -111,37 +111,53 @@ in the `alignment_annotation` dictionary.
 
 For 'exonerate-text', ExonerateIO provides the following object attributes:
 
-----------------  ------------------------  ------------------------------------
-Object            Attribute                 Value
-----------------  ------------------------  ------------------------------------
-QueryResult       description               query sequence description
-                  id                        query sequence ID
-                  model                     alignment model
-                  program                   'exonerate'
-----------------  ------------------------  ------------------------------------
-Hit               description               hit sequence description
-                  id                        hit sequence ID
-----------------  ------------------------  ------------------------------------
-HSP               hit_split_codons          list of split codon coordinates in
-                                            the hit sequence
-                  score                     alignment score
-                  query_split_codons        list of split codon coordinates in
-                                            the query sequence
-----------------  ------------------------  ------------------------------------
-HSPFragment       alignment_annotation      alignment homology string, hit
-                                            sequence annotation, and/or query
-                                            sequence annotation
-                  hit                       hit sequence
-                  hit_end                   hit sequence end coordinate
-                  hit_frame                 hit sequence reading frame
-                  hit_start                 hit sequence start coordinate
-                  hit_strand                hit sequence strand
-                  query                     query sequence
-                  query_end                 query sequence end coordinate
-                  query_frame               query sequence reading frame
-                  query_start               query sequence start coordinate
-                  query_strand              query sequence strand
---------------------------------------------------------------------------------
++-----------------+-------------------------+----------------------------------+
+| Object          | Attribute               | Value                            |
++=================+=========================+==================================+
+| QueryResult     | description             | query sequence description       |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | query sequence ID                |
+|                 +-------------------------+----------------------------------+
+|                 | model                   | alignment model                  |
+|                 +-------------------------+----------------------------------+
+|                 | program                 | 'exonerate'                      |
++-----------------+-------------------------+----------------------------------+
+| Hit             | description             | hit sequence description         |
+|                 +-------------------------+----------------------------------+
+|                 | id                      | hit sequence ID                  |
++-----------------+-------------------------+----------------------------------+
+| HSP             | hit_split_codons        | list of split codon coordinates  |
+|                 |                         | in the hit sequence              |
+|                 +-------------------------+----------------------------------+
+|                 | score                   | alignment score                  |
+|                 +-------------------------+----------------------------------+
+|                 | query_split_codons      | list of split codon coordinates  |
+|                 |                         | in the query sequence            |
++-----------------+-------------------------+----------------------------------+
+| HSPFragment     | alignment_annotation    | alignment homology string, hit   |
+|                 |                         | sequence annotation, and/or      |
+|                 |                         | query sequence annotation        |
+|                 +-------------------------+----------------------------------+
+|                 | hit                     | hit sequence                     |
+|                 +-------------------------+----------------------------------+
+|                 | hit_end                 | hit sequence end coordinate      |
+|                 +-------------------------+----------------------------------+
+|                 | hit_frame               | hit sequence reading frame       |
+|                 +-------------------------+----------------------------------+
+|                 | hit_start               | hit sequence start coordinate    |
+|                 +-------------------------+----------------------------------+
+|                 | hit_strand              | hit sequence strand              |
+|                 +-------------------------+----------------------------------+
+|                 | query                   | query sequence                   |
+|                 +-------------------------+----------------------------------+
+|                 | query_end               | query sequence end coordinate    |
+|                 +-------------------------+----------------------------------+
+|                 | query_frame             | query sequence reading frame     |
+|                 +-------------------------+----------------------------------+
+|                 | query_start             | query sequence start coordinate  |
+|                 +-------------------------+----------------------------------+
+|                 | query_strand            | query sequence strand            |
++-----------------+-------------------------+----------------------------------+
 
 Note that you can also use the default HSP or HSPFragment properties. For
 example, to check the intron coordinates of your result you can use the
