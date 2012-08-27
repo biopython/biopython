@@ -266,7 +266,7 @@ class PDBParser(object):
                 structure_builder.set_sigatm(sigatm_array)
             local_line_counter += 1
         # EOF (does not end in END or CONECT)
-        self.line_counter = self.line_counter + local_line_counter
+        self.line_counter += local_line_counter
         return []
 
     def _check_trailer(self):
