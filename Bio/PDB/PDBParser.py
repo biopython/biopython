@@ -71,7 +71,7 @@ class PDBParser(object):
 
         if self.QUIET:
             warning_list = warnings.filters[:]
-            warnings.filterwarnings('ignore', category=PDBConstructionWarning)
+            warnings.filterwarnings("ignore", category=PDBConstructionWarning)
 
         self.header = None
         self.trailer = None
@@ -115,7 +115,7 @@ class PDBParser(object):
             structure_builder.set_line_counter(i + 1)
             line = header_coords_trailer[i]
             record_type = line[0:6]
-            if record_type == 'ATOM  ' or record_type == 'HETATM' or record_type == 'MODEL ':
+            if record_type == "ATOM  " or record_type == "HETATM" or record_type == "MODEL ":
                 break
         header = header_coords_trailer[0:i]
         # Return the rest of the coords+trailer for further processing
@@ -140,7 +140,7 @@ class PDBParser(object):
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
             structure_builder.set_line_counter(global_line_counter)
-            if record_type == 'ATOM  ' or record_type == 'HETATM':
+            if record_type == "ATOM  " or record_type == "HETATM":
                 # Initialize the Model - there was no explicit MODEL record
                 if not model_open:
                     structure_builder.init_model(current_model_id)
@@ -165,7 +165,7 @@ class PDBParser(object):
                     serial_number = 0
                 resseq = int(line[22:26].split()[0])  # sequence identifier
                 icode = line[26]  # insertion code
-                if record_type == 'HETATM':  # hetero atom flag
+                if record_type == "HETATM":  # hetero atom flag
                     if resname == "HOH" or resname == "WAT":
                         hetero_flag = "W"
                     else:
@@ -183,7 +183,7 @@ class PDBParser(object):
                     # If so, what coordindates should we default to?  Easier to abort!
                     raise PDBConstructionException("Invalid or missing coordinate(s) at line %i."
                                                    % global_line_counter)
-                coord = numpy.array((x, y, z), 'f')
+                coord = numpy.array((x, y, z), "f")
                 # occupancy & B factor
                 try:
                     occupancy = float(line[54:60])
@@ -224,13 +224,13 @@ class PDBParser(object):
                                                 fullname, serial_number, element)
                 except PDBConstructionException, message:
                     self._handle_PDB_exception(message, global_line_counter)
-            elif record_type == 'ANISOU':
+            elif record_type == "ANISOU":
                 anisou = map(float, (line[28:35], line[35:42], line[43:49],
                                      line[49:56], line[56:63], line[63:70]))
                 # U's are scaled by 10^4
-                anisou_array = (numpy.array(anisou, 'f') / 10000.0).astype('f')
+                anisou_array = (numpy.array(anisou, "f") / 10000.0).astype("f")
                 structure_builder.set_anisou(anisou_array)
-            elif record_type == 'MODEL ':
+            elif record_type == "MODEL ":
                 try:
                     serial_num = int(line[10:14])
                 except:
@@ -242,26 +242,26 @@ class PDBParser(object):
                 model_open = 1
                 current_chain_id = None
                 current_residue_id = None
-            elif record_type == 'END   ' or record_type == 'CONECT':
+            elif record_type == "END   " or record_type == "CONECT":
                 # End of atomic data, return the trailer
                 self.line_counter += local_line_counter
                 return coords_trailer[local_line_counter:]
-            elif record_type == 'ENDMDL':
+            elif record_type == "ENDMDL":
                 model_open = 0
                 current_chain_id = None
                 current_residue_id = None
-            elif record_type == 'SIGUIJ':
+            elif record_type == "SIGUIJ":
                 # standard deviation of anisotropic B factor
                 siguij = map(float, (line[28:35], line[35:42], line[42:49],
                                      line[49:56], line[56:63], line[63:70]))
                 # U sigma's are scaled by 10^4
-                siguij_array = (numpy.array(siguij, 'f') / 10000.0).astype('f')
+                siguij_array = (numpy.array(siguij, "f") / 10000.0).astype("f")
                 structure_builder.set_siguij(siguij_array)
-            elif record_type == 'SIGATM':
+            elif record_type == "SIGATM":
                 # standard deviation of atomic positions
                 sigatm = map(float, (line[30:38], line[38:45], line[46:54],
                                      line[54:60], line[60:66]))
-                sigatm_array = numpy.array(sigatm, 'f')
+                sigatm_array = numpy.array(sigatm, "f")
                 structure_builder.set_sigatm(sigatm_array)
             local_line_counter += 1
         # EOF (does not end in END or CONECT)
