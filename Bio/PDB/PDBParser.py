@@ -287,14 +287,17 @@ class PDBParser(object):
                                   "ENDMDL", "SIGUIJ", "SIGATM"])
 
         found_end_record = False
+        warned_about_end_data = False  # Only warn once about post-END lines
         for line in self.trailer:
             record_type = line[0:6]
             if record_type in disallowed_records:
                 self._handle_PDB_exception("%s record found in trailer"
                                            % record_type, self.line_counter)
             elif found_end_record and line.strip():
-                self._handle_PDB_exception("Non-blank line follows END record",
-                                            self.line_counter)
+                if not warned_about_end_data:
+                    self._handle_PDB_exception("Unparsed data follows END record",
+                                                self.line_counter)
+                    warned_about_end_data = True
             if record_type == "END   ":
                 found_end_record = True
             self.line_counter += 1
