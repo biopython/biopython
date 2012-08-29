@@ -292,7 +292,7 @@ def six_frame_translations(seq, genetic_code = 1):
     for i in range(0,length,60):
         subseq = seq[i:i+60]
         csubseq = comp[i:i+60]
-        p = i/3
+        p = i//3
         res = res + '%d/%d\n' % (i+1, i/3+1)
         res = res + '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
         res = res + ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'
