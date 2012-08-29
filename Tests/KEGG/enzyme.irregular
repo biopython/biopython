@@ -1,64 +1,172 @@
-ENTRY       EC 1.14.18.1
-NAME        Monophenol monooxygenase
-            Tyrosinase
-            Phenolase
-            Monophenol oxidase
-            Cresolase
-SYSNAME     Monophenol,L-dopa:oxygen oxidoreductase
-CLASS       Oxidoreductases
-            Acting on paired donors with incorporation of molecular oxygen
-            With another compound as one donor, and incorporation of one atom
-            of oxygen
-REACTION    L-Tyrosine + L-Dopa + O2 = L-Dopa + Dopaquinone + H2O
-SUBSTRATE   L-Tyrosine
-            L-Dopa
-            Benzenediol
-            O2
-PRODUCT     L-Dopa
-            Dopaquinone
-            H2O
-COFACTOR    Copper
-COMMENT     A group of copper proteins that also catalyse the reaction of
-            EC 1.10.3.1, if only benzenediols are available as substrate.
-            (EC 1.10.3.1 Catechol oxidase)
-PATHWAY     PATH: MAP00350  Tyrosine metabolism
-            PATH: MAP00740  Riboflavin metabolism
-            PATH: MAP00940  Flavonoids, stilbene and lignin biosynthesis
-            PATH: MAP00950  Alkaloid biosynthesis I
-GENES       DME: CG5779
-            MMU: 94856 98880(Tyr)
-            HSA: 7299(TYR)
-DISEASE     MIM: 203100  Tyrosinase
-DBLINKS     IUBMB Enzyme Nomenclature: 1.14.18.1
+ENTRY       EC 1.14.18.1                Enzyme
+NAME        monophenol monooxygenase;
+            tyrosinase;
+            phenolase;
+            monophenol oxidase;
+            cresolase;
+            catechol oxidase;
+            polyphenolase;
+            pyrocatechol oxidase;
+            dopa oxidase;
+            chlorogenic oxidase;
+            catecholase;
+            polyphenol oxidase;
+            monophenolase;
+            o-diphenol oxidase;
+            chlorogenic acid oxidase;
+            diphenol oxidase;
+            o-diphenolase;
+            tyrosine-dopa oxidase;
+            o-diphenol:oxygen oxidoreductase;
+            polyaromatic oxidase;
+            monophenol monooxidase;
+            o-diphenol oxidoreductase;
+            monophenol dihydroxyphenylalanine:oxygen oxidoreductase;
+            N-acetyl-6-hydroxytryptophan oxidase;
+            monophenol, dihydroxy-L-phenylalanine oxygen oxidoreductase;
+            o-diphenol:O2 oxidoreductase;
+            phenol oxidase
+CLASS       Oxidoreductases;
+            Acting on paired donors, with O2 as oxidant and incorporation or reduction of oxygen. The oxygen incorporated need not be derived from O2;
+            With another compound as one donor, and incorporation of one atom of oxygen into the other donor
+SYSNAME     monophenol,L-dopa:oxygen oxidoreductase
+REACTION    L-tyrosine + L-dopa + O2 = L-dopa + dopaquinone + H2O [RN:R02078]
+ALL_REAC    R02078;
+            (other) R00058 R00731 R02363 R02383 R02950 R04693 R04884
+SUBSTRATE   L-tyrosine [CPD:C00082];
+            L-dopa [CPD:C00355];
+            O2 [CPD:C00007]
+PRODUCT     L-dopa [CPD:C00355];
+            dopaquinone [CPD:C00822];
+            H2O [CPD:C00001]
+COMMENT     A group of copper proteins that also catalyse the reaction of EC 1.10.3.1 catechol oxidase, if only 1,2-benzenediols are available as substrate.
+REFERENCE   1
+  AUTHORS   Dawson, C.R. and Tarpley, W.B.
+  TITLE     The copper oxidases.
+  JOURNAL   In: Sumner, J.B. and Myrback, K. (Eds.), The Enzymes, 1st ed., vol. 2, Academic Press, New York, 1951, p. 454-498.
+REFERENCE   2  [PMID:151279]
+  AUTHORS   Lerch K.
+  TITLE     Amino acid sequence of tyrosinase from Neurospora crassa.
+  JOURNAL   Proc. Natl. Acad. Sci. U. S. A. 75 (1978) 3635-9.
+  ORGANISM  Neurospora crassa [GN:ncr]
+REFERENCE   3
+  AUTHORS   Malmstrom, B.G., Andreasson, L.-E. and Reinhammar, B.
+  TITLE     Copper-containing oxidases and superoxide dismutase.
+  JOURNAL   In: Boyer, P.D. (Ed.), The Enzymes, 3rd ed., vol. 12, Academic Press, New York, 1975, p. 507-579.
+REFERENCE   4  [PMID:170916]
+  AUTHORS   McIntyre RJ, Vaughan PF.
+  TITLE     Kinetic studies on the hydroxylation of p-coumaric acid to caffeic acid by spinach-beet phenolase.
+  JOURNAL   Biochem. J. 149 (1975) 447-61.
+  ORGANISM  Beta vulgaris
+REFERENCE   5  [PMID:5842066]
+  AUTHORS   Patil SS, Zucker M.
+  TITLE     Potato phenolases. Purification and properties.
+  JOURNAL   J. Biol. Chem. 240 (1965) 3938-43.
+  ORGANISM  Solanum tuberosum
+REFERENCE   6  [PMID:13972077]
+  AUTHORS   POMERANTZ SH.
+  TITLE     Separation, purification, and properties of two tyrosinases from hamster melanoma.
+  JOURNAL   J. Biol. Chem. 238 (1963) 2351-7.
+  ORGANISM  hamster
+REFERENCE   7
+  AUTHORS   Robb, D.A.
+  TITLE     `Tyrosinase.
+  JOURNAL   In: Lontie, R. (Ed.), Copper Proteins and Copper Enzymes, vol. 2, CRC Press, Boca Raton, FL, 1984, p. 207-240.
+PATHWAY     ec00350  Tyrosine metabolism
+            ec00740  Riboflavin metabolism
+            ec00950  Isoquinoline alkaloid biosynthesis
+            ec00965  Betalain biosynthesis
+            ec01100  Metabolic pathways
+            ec01110  Biosynthesis of secondary metabolites
+ORTHOLOGY   K00505  tyrosinase
+GENES       HSA: 7299(TYR)
+            PTR: 451473(TYR)
+            PON: 100453479(TYR)
+            MCC: 705792(TYR)
+            MMU: 22173(Tyr)
+            RNO: 308800(Tyr)
+            CFA: 403405(TYR)
+            AML: 100475022
+            BTA: 280951(TYR)
+            SSC: 407745(TYR)
+            ECB: 100060227
+            OAA: 100080574(TYR)
+            GGA: 373971(TYR)
+            MGP: 100538462
+            TGU: 100225893
+            ACS: 100552257
+            XTR: 100125152(tyr)
+            DRE: 30207(tyr)
+            BFO: BRAFLDRAFT_57224
+            DME: Dmel_CG42639(proPO-A1) Dmel_CG42640
+            DPO: Dpse_GA19121
+            DER: Dere_GG22822(Dere_Dox-A3)
+            DYA: Dyak_GE14257
+            CEL: C34G6.2(tyr-4)
+            SMM: Smp_013540
+            NCR: NCU00776 NCU11382
+            PAN: PODANSg09832 PODANSg3516 PODANSg6905
+            MGR: MGG_01571(MG01571.4) MGG_05914(MG05914.4) MGG_06169(MG06169.4) MGG_08455(MG08455.4) MGG_10585(MG10585.4)
+            FGR: FG01988.1 FG03801.1 FG11450.1
+            SSL: SS1G_14461
+            BFU: BC1G_01000 BC1G_15125 BC1G_15830
+            ANI: AN2799.2 AN5311.2 AN9388.2
+            AFM: AFUA_1G17430 AFUA_3G01070
+            NFI: NFIA_001930
+            AOR: AOR_1_1028194(AO090012000590) AOR_1_662164(AO090001000383) AOR_1_722144(AO090023000424) AOR_1_932024(AO090010000557)
+            ANG: ANI_1_1250014(An01g09220) ANI_1_26034(An03g00280)
+            AFV: AFLA_018450 AFLA_067860 AFLA_137910
+            ACT: ACLA_063650
+            PCS: Pc15g00990 Pc22g18500
+            CIM: CIMG_07314
+            CPW: CPC735_001120 CPC735_018390 CPC735_043510
+            URE: UREG_04223 UREG_07862
+            PNO: SNOG_04287 SNOG_04568 SNOG_13474
+            TML: GSTUM_00004221001
+            LBC: LACBIDRAFT_252993(R2) LACBIDRAFT_295069(R1)
+            MPR: MPER_00316 MPER_10173 MPER_11172
+            CCI: CC1G_05599 CC1G_14163
+            PTI: PHATRDRAFT_40017(TYR1)
+            PFO: Pfl01_3461
+            CVI: CV_3262
+            RSO: RSc1501(mel)
+            RSC: RCFBP_11480
+            RSL: RPSI07_1536
+            RSN: RSPO_c01550(mel)
+            BPM: BURPS1710b_A0806
+            BPL: BURPS1106A_A2352
+            BTE: BTH_II0649
+            BUR: Bcep18194_C6986
+            BPH: Bphy_4746
+            NEU: NE1241
+            NMU: Nmul_A2156
+            RET: RHE_PD00076
+            RPB: RPB_2167
+            NWI: Nwi_0968
+            NHA: Nham_1018 Nham_2941
+            MET: M446_5336
+            BCA: BCE_A0211
+            BCU: BCAH820_B0256
+            BTB: BMB171_P0244
+            BMQ: BMQ_3385
+            BMD: BMD_3389
+            CEF: CE1756
+            SCO: SCO2700(melC2)
+            SMA: SAV_1137(melC1) SAV_5362(melC1-2)
+            SGR: SGR_2447(melC2-2) SGR_527(melC2-1)
+            SCB: SCAB_59241(melC2) SCAB_85681(melC2B)
+            FRA: Francci3_0237
+            FRE: Franean1_0747
+            FAL: FRAAL0531
+            RXY: Rxyl_1947
+            SUS: Acid_5081
+            DFE: Dfer_1836
+            CAO: Celal_3121
+            NPU: Npun_R1263 Npun_R2099
+            AMR: AM1_B0356
+DBLINKS     ExplorEnz - The Enzyme Database: 1.14.18.1
+            IUBMB Enzyme Nomenclature: 1.14.18.1
             ExPASy - ENZYME nomenclature database: 1.14.18.1
-            WIT (What Is There) Metabolic Reconstruction: 1.14.18.1
             BRENDA, the Enzyme Database: 1.14.18.1
-///
-ENTRY       EC 3.4.21.50
-NAME        Lysyl endopeptidase
-            Achromobacter proteinase I
-            Endoproteinase Lys-C
-            Ps-1
-CLASS       Hydrolases
-            Acting on peptide bonds (peptidases)
-            Serine endopeptidases
-REACTION    Preferential cleavage: Lys+, including -Lys-|-Pro-
-SUBSTRATE   Protein
-            Peptide
-            H2O
-PRODUCT     Protein
-            Peptide
-COMMENT     A chymotrypsin homologue isolated from Achromobacter lyticus.
-            Enzymes with similar specificity are produced by Lysobacter
-            enzymogenes (Endoproteinase Lys-C) and Pseudomonas aeruginosa
-            (Ps-1).
-COMMENT     Also hydrolyses lysine amides and esters.
-GENES       MJA: MJ1468
-            MTH: MTH995
-STRUCTURES  PDB: 1ARC  1ARB  
-DBLINKS     IUBMB Enzyme Nomenclature: 3.4.21.50
-            ExPASy - ENZYME nomenclature database: 3.4.21.50
-            WIT (What Is There) Metabolic Reconstruction: 3.4.21.50
-            BRENDA, the Enzyme Database: 3.4.21.50
-            SCOP (Structural Classification of Proteins): 3.4.21.50
+            CAS: 9002-10-2
 ///
