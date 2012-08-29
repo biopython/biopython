@@ -259,18 +259,18 @@ def parse(handle):
         elif keyword=="INHIBITOR   ":
              record.inhibitor.append(data.strip(";"))
         elif keyword=="NAME        ":
-             record.name.append(data.strip(";"))
-        elif keyword=="PATHWAY     ":
-            if data[:5]=='PATH:':
+             record.name.append(data.strip(";"))     
+        elif keyword=="PATHWAY ":
+            if data[:5]=='PATH':
                 path, map, name = data.split(None,2)
+                path = 'PATH:'
                 pathway = (path[:-1], map, name)
                 record.pathway.append(pathway)
             else:
-                pathway = record.pathway[-1]
-                path, map, name = pathway
-                name = name + " " + data
-                pathway = path, map, name
-                record.pathway[-1] = pathway
+                map, name = data.split(None,1)
+                path = 'PATH:'
+                pathway = (path[:-1], map, name)
+                record.pathway.append(pathway)
         elif keyword=="PRODUCT     ":
              record.product.append(data.strip(";"))
         elif keyword=="REACTION    ":
