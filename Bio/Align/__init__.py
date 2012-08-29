@@ -496,12 +496,12 @@ class MultipleSeqAlignment(_Alignment):
             return MultipleSeqAlignment((rec[col_index] for rec in self._records[row_index]),
                                         self._alphabet)
 
-    def sort(self):
+    def sort(self, key=None, reverse=False):
         """Sort the rows (SeqRecord objects) of the alignment in place.
 
-        This sorts the rows alphabetically using the SeqRecord object id.
-        Currently no advanced sort options are available, although this may
-        be added in a future release of Biopython.
+        This sorts the rows alphabetically using the SeqRecord object id by
+        default. The sorting can be controlled by supplying a key function
+        which must map each SeqRecord to a sort value.
 
         This is useful if you want to add two alignments which use the same
         record identifiers, but in a different order. For example,
@@ -542,8 +542,37 @@ class MultipleSeqAlignment(_Alignment):
         ACGTCGTT Human
         ACGGCGGT Mouse
 
+        As an example using a different sort order, you could sort on the
+        GC content of each sequence.
+
+        >>> from Bio.SeqUtils import GC
+        >>> print align1
+        DNAAlphabet() alignment with 3 rows and 4 columns
+        ACGC Chicken
+        ACGT Human
+        ACGG Mouse
+        >>> align1.sort(key = lambda record: GC(record.seq))
+        >>> print align1
+        DNAAlphabet() alignment with 3 rows and 4 columns
+        ACGT Human
+        ACGC Chicken
+        ACGG Mouse
+
+        There is also a reverse argument, so if you wanted to sort by ID
+        but backwards:
+
+        >>> align1.sort(reverse=True)
+        >>> print align1
+        DNAAlphabet() alignment with 3 rows and 4 columns
+        ACGG Mouse
+        ACGT Human
+        ACGC Chicken
+
         """
-        self._records.sort(key = lambda r: r.id)
+        if key is None:
+            self._records.sort(key = lambda r: r.id, reverse = reverse)
+        else:
+            self._records.sort(key = key, reverse = reverse)
 
     def get_column(self, col):
         """Returns a string containing a given column (DEPRECATED).

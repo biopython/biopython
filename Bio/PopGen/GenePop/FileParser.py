@@ -21,7 +21,6 @@ Functions:
 
 
 """
-from copy import deepcopy
 from Bio.PopGen.GenePop import get_indiv
 
 def read(fname):
@@ -37,8 +36,8 @@ class FileRecord(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).    
-    
+    marker_len         The marker length (2 or 3 digit code per allele).
+
     comment_line       Comment line.
 
     loci_list          List of loci names.
@@ -47,7 +46,7 @@ class FileRecord(object):
     get_individual     Returns the next individual of the current population.
 
     skip_population    Skips the current population.
-    
+
     skip_population skips the individuals of the current population, returns
     True if there are more populations.
 
@@ -60,7 +59,7 @@ class FileRecord(object):
             ('Ind2', [(2,None), (3,3), (None,None)]
             ('Other1', [(1,1),  (4,3), (200,200)]
 
-    
+
     """
     def __init__(self, fname):
         self.comment_line    = ""
@@ -173,7 +172,6 @@ class FileRecord(object):
            be of the following pop.
            Returns False if at end of file.
         """
-        marker_len = None
         for line in self._handle:
             line = line.rstrip()
             if line.upper()=='POP':
@@ -224,10 +222,10 @@ class FileRecord(object):
                                 aStr = "".join(['0', aStr])
                             f.write(aStr)
                     f.write('\n')
-        
+
             l_parser = old_rec.get_individual()
         f.close()
-    
+
     def remove_locus_by_position(self, pos, fname):
         """Removes a locus by position.
 
@@ -280,8 +278,10 @@ class FileRecord(object):
         loci_list = old_rec.loci_list
         positions.sort()
         positions.reverse()
+        posSet = set()
         for pos in positions:
             del loci_list[pos]
+            posSet.add(pos)
         for locus in loci_list:
             f.write(locus + "\n")
         l_parser = old_rec.get_individual()
@@ -294,7 +294,7 @@ class FileRecord(object):
                 f.write(name + ",")
                 marker_pos = 0
                 for marker in markers:
-                    if marker_pos in positions:
+                    if marker_pos in posSet:
                         marker_pos += 1
                         continue
                     marker_pos += 1
@@ -323,7 +323,7 @@ class FileRecord(object):
                 return
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
-    
+
     def remove_loci_by_name(self, names, fname):
         """Removes a loci list (by name).
 

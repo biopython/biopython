@@ -1,6 +1,6 @@
 #include <Python.h>
+#include "lex.yy.h"
 
-char *mmcif_get_string(void);
 
 FILE *fp;
 
@@ -63,7 +63,7 @@ static PyMethodDef MMCIFlexMethods[]=
 };
 
 
-void initMMCIFlex()
+void initMMCIFlex(void)
 {
 	(void) Py_InitModule("MMCIFlex", MMCIFlexMethods);
 }

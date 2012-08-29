@@ -20,7 +20,7 @@ def to_networkx(tree):
     plotting with pylab, matplotlib or pygraphviz, though the resulting diagram
     is usually not ideal for displaying a phylogeny.
 
-    Requires NetworkX version 0.99 or 1.0.
+    Requires NetworkX version 0.99 or later.
     """
     try:
         import networkx
@@ -106,9 +106,9 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
             The Graphviz program to use when rendering the graph. 'twopi'
             behaves the best for large graphs, reliably avoiding crossing edges,
             but for moderate graphs 'neato' looks a bit nicer.  For small
-            directed graphs, 'dot' may produce the most normal-looking
-            phylogram, but will cross and distort edges in larger graphs. (The
-            programs 'circo' and 'fdp' are not recommended.)
+            directed graphs, 'dot' may produce a normal-looking cladogram, but
+            will cross and distort edges in larger graphs. (The programs 'circo'
+            and 'fdp' are not recommended.)
         args : string
             Options passed to the external graphviz program.  Normally not
             needed, but offered here for completeness.
@@ -133,15 +133,10 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
     G = to_networkx(tree)
     Gi = networkx.convert_node_labels_to_integers(G, discard_old_labels=False)
     try:
-        posi = networkx.pygraphviz_layout(Gi, prog, args=args)
+        posi = networkx.graphviz_layout(Gi, prog, args=args)
     except ImportError:
-        try:
-            posi = networkx.pydot_layout(Gi, prog)
-        except ImportError:
-            raise MissingPythonDependencyError(
-                    "Install PyGraphviz or Pydot if you want to use "
-                    "draw_graphviz.")
-    posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
+        raise MissingPythonDependencyError(
+                "Install PyGraphviz or pydot if you want to use draw_graphviz.")
 
     def get_label_mapping(G, selection):
         for node in G.nodes():
@@ -166,6 +161,8 @@ def draw_graphviz(tree, label_func=str, prog='twopi', args='',
         kwargs['width'] = [isinstance(e[2], dict) and
                            e[2].get('width', 1.0) or 1.0
                            for e in G.edges(data=True)]
+
+    posn = dict((n, posi[Gi.node_labels[n]]) for n in G)
     networkx.draw(G, posn, labels=labels, node_color=node_color, **kwargs)
 
 
@@ -256,7 +253,9 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
     file.write('\n')
 
 
-def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
+def draw(tree, label_func=str, do_show=True, show_confidence=True,
+        # For power users
+        axes=None, branch_labels=None):
     """Plot the given tree using matplotlib (or pylab).
 
     The graphic is a rooted tree, drawn with roughly the same algorithm as
@@ -280,6 +279,14 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
         axes : matplotlib/pylab axes
             If a valid matplotlib.axes.Axes instance, the phylogram is plotted
             in that Axes. By default (None), a new figure is created.
+        branch_labels : dict or callable
+            A mapping of each clade to the label that will be shown along the
+            branch leading to it. By default this is the confidence value(s) of
+            the clade, taken from the ``confidence`` attribute, and can be
+            easily toggled off with this function's ``show_confidence`` option.
+            But if you would like to alter the formatting of confidence values,
+            or label the branches with something other than confidence, then use
+            this option.
     """
     try:
         import matplotlib.pyplot as plt
@@ -290,6 +297,34 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError(
                     "Install matplotlib or pylab if you want to use draw.")
+
+    # Options for displaying branch labels / confidence
+    def conf2str(conf):
+        if int(conf) == conf:
+            return str(int(conf))
+        return str(conf)
+    if not branch_labels:
+        if show_confidence:
+            def format_branch_label(clade):
+                if hasattr(clade, 'confidences'):
+                    # phyloXML supports multiple confidences
+                    return '/'.join(conf2str(cnf.value)
+                                    for cnf in clade.confidences)
+                if clade.confidence:
+                    return conf2str(clade.confidence)
+                return None
+        else:
+            def format_branch_label(clade):
+                return None
+    elif isinstance(branch_labels, dict):
+        def format_branch_label(clade):
+            return branch_labels.get(clade)
+    else:
+        assert callable(branch_labels), \
+                "branch_labels must be either a dict or a callable (function)"
+        format_branch_label = branch_labels
+
+    # Layout
 
     def get_x_positions(tree):
         """Create a mapping of each clade to its horizontal position.
@@ -348,20 +383,12 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
         # Add node/taxon labels
         label = label_func(clade)
         if label not in (None, clade.__class__.__name__):
-            axes.text(x_here, y_here, ' ' + label,
-                    fontsize=0.83*plt.rcParams['font.size'], # aesthetics
-                    verticalalignment='center')
-        # Add confidence as a label above the branch
-        if hasattr(clade, 'confidences'):
-            # phyloXML supports multiple confidences
-            conf_label = '/'.join(map(str, map(float, clade.confidences)))
-        elif clade.confidence is not None:
-            conf_label = str(clade.confidence)
-        else:
-            conf_label = None
-        if conf_label and show_confidence:
-            axes.text(x_start, y_here, conf_label,
-                    fontsize=0.75*plt.rcParams['font.size']) # aesthetics
+            axes.text(x_here, y_here, ' %s' % label, verticalalignment='center')
+        # Add label above the branch (optional)
+        conf_label = format_branch_label(clade)
+        if conf_label:
+            axes.text(0.5*(x_start + x_here), y_here, conf_label,
+                    fontsize='small', horizontalalignment='center')
         if clade.clades:
             # Draw a vertical line connecting all children
             y_top = y_posns[clade.clades[0]]
@@ -373,14 +400,16 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True, axes=None):
                 draw_clade(child, x_here, color, lw)
 
     draw_clade(tree.root, 0, 'k', plt.rcParams['lines.linewidth'])
+
+    # Aesthetics
+
     if hasattr(tree, 'name') and tree.name:
         axes.set_title(tree.name)
     axes.set_xlabel('branch length')
     axes.set_ylabel('taxa')
     # Add margins around the tree to prevent overlapping the axes
-    xmin, xmax = axes.get_xlim()
-    pad = 0.05 * xmax
-    axes.set_xlim(-pad, xmax + pad)
+    xmax = max(x_posns.itervalues())
+    axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
     # Also invert the y-axis (origin at the top)
     # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
     axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)

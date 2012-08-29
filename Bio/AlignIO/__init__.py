@@ -107,7 +107,9 @@ names are also used in Bio.SeqIO and include the following:
                MASE alignment format.
  - nexus     - Output from NEXUS, see also the module Bio.Nexus which can also
                read any phylogenetic trees in these files.
- - phylip    - Used by the PHLIP tools.
+ - phylip    - Interlaced PHYLIP, as used by the PHLIP tools.
+ - phylip-sequential - Sequential PHYLIP.
+ - phylip-relaxed - PHYLIP like format allowing longer names.
  - stockholm - A richly annotated alignment file format used by PFAM.
 
 Note that while Bio.AlignIO can read all the above file formats, it cannot

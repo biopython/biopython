@@ -295,6 +295,7 @@ class Atom(object):
         shallow = copy.copy(self)
         shallow.detach_parent()
         shallow.set_coord(copy.copy(self.get_coord()))
+        shallow.xtra = self.xtra.copy()
         return shallow
 
 

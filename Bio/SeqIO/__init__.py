@@ -699,6 +699,16 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> print records.get("Missing", None)
     None
 
+    If the file is BGZF compressed, this is detected automatically. Ordinary
+    GZIP files are not supported:
+
+    >>> from Bio import SeqIO
+    >>> records = SeqIO.index("Quality/example.fastq.bgz", "fastq")
+    >>> len(records)
+    3
+    >>> print records["EAS54_6_R1_2_1_540_792"].seq
+    TTGGCAGGCCAAGGCCGATGGATCA
+
     Note that this psuedo dictionary will not support all the methods of a
     true Python dictionary, for example values() is not defined since this
     would require loading all of the records into memory at once.
@@ -822,6 +832,9 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     'gi|45478717|ref|NP_995572.1| pesticin [Yersinia pestis biovar Microtus str. 91001]'
 
     In this example the two files contain 85 and 10 records respectively.
+
+    BGZF compressed files are supported, and detected automatically. Ordinary
+    GZIP compressed files are not supported.
 
     See also: Bio.SeqIO.index() and Bio.SeqIO.to_dict()
     """

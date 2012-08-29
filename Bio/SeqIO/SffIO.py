@@ -55,6 +55,8 @@ tools (and the 3rd party tool sff_extract) for SFF to FASTA.
 The annotations dictionary also contains any adapter clip positions
 (usually zero), and information about the flows. e.g.
 
+    >>> len(record.annotations)
+    11
     >>> print record.annotations["flow_key"]
     TCAG
     >>> print record.annotations["flow_values"][:10], "..."
@@ -73,9 +75,23 @@ homopolymer stretch estimate, the value should be rounded to the nearest 100:
     ...        for value in record.annotations["flow_values"][:10]], '...'
     [1, 0, 1, 0, 0, 1, 0, 1, 0, 2] ...
 
+If a read name is exactly 14 alphanumeric characters, the annotations 
+dictionary will also contain meta-data about the read extracted by 
+interpretting the name as a 454 Sequencing System "Universal" Accession
+Number. Note that if a read name happens to be exactly 14 alphanumeric
+characters but was not generated automatically, these annotation records
+will contain nonsense information.
+
+    >>> print record.annotations["region"]
+    2
+    >>> print record.annotations["time"]
+    [2008, 1, 9, 16, 16, 0]
+    >>> print record.annotations["coords"]
+    (2434, 1658)
+
 As a convenience method, you can read the file with SeqIO format name "sff-trim"
 instead of "sff" to get just the trimmed sequences (without any annotation
-except for the PHRED quality scores):
+except for the PHRED quality scores and anything encoded in the read names):
 
     >>> from Bio import SeqIO
     >>> for record in SeqIO.parse("Roche/E3MFGYR02_random_10_reads.sff", "sff-trim"):
@@ -100,8 +116,14 @@ example above:
     AATCATCCAC ...
     >>> print record.letter_annotations["phred_quality"][:10], "..."
     [26, 15, 12, 21, 28, 21, 36, 28, 27, 27] ...
-    >>> print record.annotations
-    {}
+    >>> len(record.annotations)
+    3
+    >>> print record.annotations["region"]
+    2
+    >>> print record.annotations["coords"]
+    (2434, 1658)
+    >>> print record.annotations["time"]
+    [2008, 1, 9, 16, 16, 0]
 
 You might use the Bio.SeqIO.convert() function to convert the (trimmed) SFF
 reads into a FASTQ file (or a FASTA file and a QUAL file), e.g.
@@ -200,6 +222,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import struct
 import sys
+import re
 
 from Bio._py3k import _bytes_to_string, _as_bytes
 _null = _as_bytes("\0")
@@ -516,7 +539,7 @@ def _sff_read_roche_index(handle):
         raise ValueError("Problem with index length? %i vs %i" \
                          % (handle.tell(), read_index_offset + read_index_size))
 
-
+_valid_UAN_read_name = re.compile(r'^[a-zA-Z0-9]{14}$')
 def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                          key_sequence, alphabet, trim=False):
     """Parse the next read in the file, return data as a SeqRecord (PRIVATE)."""
@@ -599,6 +622,10 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
                        "clip_qual_right":clip_qual_right,
                        "clip_adapter_left":clip_adapter_left,
                        "clip_adapter_right":clip_adapter_right}
+    if re.match(_valid_UAN_read_name, name):
+        annotations["time"] = _get_read_time(name)
+        annotations["region"] = _get_read_region(name)
+        annotations["coords"] = _get_read_xy(name)
     record = SeqRecord(Seq(seq, alphabet),
                        id=name,
                        name=name,
@@ -611,6 +638,50 @@ def _sff_read_seq_record(handle, number_of_flows_per_read, flow_chars,
     #Return the record and then continue...
     return record
 
+_powers_of_36 = [36**i for i in range(6)]
+def _string_as_base_36(string):
+    """Interpret a string as a base-36 number as per 454 manual."""
+    total = 0
+    for c, power in zip(string[::-1], _powers_of_36):
+        # For reference: ord('0') = 48, ord('9') = 57
+        # For reference: ord('A') = 65, ord('Z') = 90
+        # For reference: ord('a') = 97, ord('z') = 122
+        if 48 <= ord(c) <= 57:
+            val = ord(c) - 22 # equivalent to: - ord('0') + 26
+        elif 65 <= ord(c) <= 90:
+            val = ord(c) - 65
+        elif 97 <= ord(c) <= 122:
+            val = ord(c) - 97
+        else:
+            # Invalid character
+            val = 0
+        total += val * power 
+    return total
+
+def _get_read_xy(read_name):
+    """Extract coordinates from last 5 characters of read name."""
+    number = _string_as_base_36(read_name[9:])
+    return divmod(number, 4096)
+
+_time_denominators = [13 * 32 * 24 * 60 * 60,
+                      32 * 24 * 60 * 60,
+                      24 * 60 * 60,
+                      60 * 60,
+                      60]
+def _get_read_time(read_name):
+    """Extract time from first 6 characters of read name."""
+    time_list = []
+    remainder = _string_as_base_36(read_name[:6])
+    for denominator in _time_denominators:
+        this_term, remainder = divmod(remainder, denominator)
+        time_list.append(this_term)
+    time_list.append(remainder)
+    time_list[0] += 2000
+    return time_list
+
+def _get_read_region(read_name):
+    """Extract region from read name."""
+    return int(read_name[8])
 
 def _sff_read_raw_record(handle, number_of_flows_per_read):
     """Extract the next read in the file as a raw (bytes) string (PRIVATE)."""
@@ -1040,9 +1111,10 @@ class SffWriter(SequenceWriter):
         if self._index is not None:
             offset = self.handle.tell()
             #Check the position of the final record (before sort by name)
-            #See comments earlier about how base 255 seems to be used.
-            #This means the limit is 255**4 + 255**3 +255**2 + 255**1
-            if offset > 4244897280:
+            #Using a four-digit base 255 number, so the upper bound is
+            #254*(1)+254*(255)+254*(255**2)+254*(255**3) = 4228250624
+            #or equivalently it overflows at 255**4 = 4228250625
+            if offset > 4228250624:
                 import warnings
                 warnings.warn("Read %s has file offset %i, which is too large "
                               "to store in the Roche SFF index structure. No "

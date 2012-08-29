@@ -41,6 +41,10 @@ class Entity(object):
         "Remove a child."
         return self.detach_child(id)
 
+    def __contains__(self, id):
+        "True if there is a child element with the given id."
+        return (id in self.child_dict)
+
     def __iter__(self):
         "Iterate over children."
         for child in self.child_list:
@@ -167,15 +171,16 @@ class Entity(object):
 
     def copy(self):
         shallow = copy(self)
-        shallow.child_list = copy(self.child_list)
-        shallow.child_dict = copy(self.child_dict)
+
+        shallow.child_list = []
+        shallow.child_dict = {}
         shallow.xtra = copy(self.xtra)
+
         shallow.detach_parent()
-        for index, child in self.child_dict.items():
-            shallow.detach_child(index)
+
+        for child in self.child_list:
             shallow.add(child.copy())
         return shallow
-        
 
 class DisorderedEntityWrapper(object):
     """
@@ -212,6 +217,10 @@ class DisorderedEntityWrapper(object):
     def __setitem__(self, id, child):
         "Add a child, associated with a certain id."
         self.child_dict[id]=child
+
+    def __contains__(self, id):
+        "True if the child has the given id."
+        return (id in self.selected_child)
 
     def __iter__(self):
         "Return the number of children."

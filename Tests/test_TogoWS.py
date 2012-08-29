@@ -205,16 +205,9 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "invalid_db", "invalid_id")
 
-    def test_ddbj_genbank_length(self):
-        """Bio.TogoWS.entry("genbank", "NC_000913.2", field="length")"""
-        handle = TogoWS.entry("genbank", "NC_000913.2", field="length")
-        data = handle.read().strip() #ignore trailing \n
-        handle.close()
-        self.assertEqual(data, "4639675")
-
-    def test_ddbj_genbank(self):
-        """Bio.TogoWS.entry("ddbj", "X52960")"""
-        handle = TogoWS.entry("ddbj", "X52960") #Returns "genbank" format
+    def test_nucleotide_genbank(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960")"""
+        handle = TogoWS.entry("nucleotide", "X52960") #Returns "genbank" format
         record  = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
@@ -222,71 +215,71 @@ class TogoEntry(unittest.TestCase):
         self.assertEqual(len(record), 248)
         self.assertEqual(seguid(record.seq), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
-    def test_ddbj_genbank_length(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="length")
+    def test_nucleotide_genbank_length(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="length")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="length")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "248")
 
-    def test_ddbj_genbank_seq(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="seq")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="seq")
+    def test_nucleotide_genbank_seq(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="seq")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="seq")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(seguid(data), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
-    def test_ddbj_genbank_definition(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="definition")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="definition")
+    def test_nucleotide_genbank_definition(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="definition")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="definition")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1 (CbVd) RNA.")
 
-    def test_ddbj_genbank_accession(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="accession")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="accession")
+    def test_nucleotide_genbank_accession(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="accession")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="accession")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960")
 
-    def test_ddbj_genbank_accession(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="version")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="version")
+    def test_nucleotide_genbank_accession(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="version")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="version")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "1")
 
-    def test_ddbj_genbank_acc_version(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="acc_version")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="acc_version")
+    def test_nucleotide_genbank_acc_version(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="acc_version")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="acc_version")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960.1")
 
-    def test_ddbj_genbank_organism(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="organism")"""
-        handle = TogoWS.entry("ddbj", "X52960", field="organism")
+    def test_nucleotide_genbank_organism(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="organism")"""
+        handle = TogoWS.entry("nucleotide", "X52960", field="organism")
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1")
         
     def test_ddbj_genbank_invalid_field(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", field="invalid_for_testing")"""
+        """Bio.TogoWS.entry("nucleotide", "X52960", field="invalid_for_testing")"""
         self.assertRaises(ValueError, TogoWS.entry,
-                          "ddbj", "X52960", field="invalid_for_testing")
+                          "nucleotide", "X52960", field="invalid_for_testing")
 
-    def test_ddbj_invalid_format(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", format="invalid_for_testing")"""
+    def test_nucleotide_invalid_format(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", format="invalid_for_testing")"""
         self.assertRaises(ValueError, TogoWS.entry,
-                          "ddbj", "X52960", format="invalid_for_testing")
+                          "nucleotide", "X52960", format="invalid_for_testing")
 
-    def test_ddbj_gff3(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
-        handle = TogoWS.entry("ddbj", "X52960", format="gff")
-        data = handle.read()
-        handle.close()
-        self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
+    #def test_ddbj_gff3(self):
+    #    """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
+    #    handle = TogoWS.entry("ddbj", "X52960", format="gff")
+    #    data = handle.read()
+    #    handle.close()
+    #    self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
 
     def test_genbank_gff3(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
@@ -328,9 +321,9 @@ class TogoEntry(unittest.TestCase):
         self.assertEqual(len(record), 1164)
         self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
-    def test_ddbj_fasta(self):
-        """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
-        handle = TogoWS.entry("ddbj", "X52960", "fasta")
+    def test_nucleotide_fasta(self):
+        """Bio.TogoWS.entry("nucleotide", "X52960", "fasta")"""
+        handle = TogoWS.entry("nucleotide", "X52960", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("X52960" in record.id, record.id)

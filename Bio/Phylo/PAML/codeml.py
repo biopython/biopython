@@ -202,8 +202,10 @@ def read(results_file):
     handle = open(results_file)
     lines = handle.readlines()
     handle.close()
-    (results, multi_models) = _parse_codeml.parse_basics(lines, results)
-    results = _parse_codeml.parse_nssites(lines, results, multi_models)
+    (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines, 
+            results)
+    results = _parse_codeml.parse_nssites(lines, results, multi_models, 
+            multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
     if len(results) == 0:

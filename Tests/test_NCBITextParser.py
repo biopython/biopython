@@ -14609,6 +14609,353 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(None, records.next())
         handle.close()
 
+    def test_bt082(self):
+        """Test parsing BLASTN 2.2.26+ output with no results."""
+
+        path = os.path.join('Blast', 'bt082.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTN')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'random_s00')
+        self.assertEqual(record.query_letters, 128)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt083(self):
+        """Test parsing BLASTN 2.2.26+ output with single hsp results."""
+
+        path = os.path.join('Blast', 'bt083.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTN')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
+        self.assertEqual(record.query_letters, 490)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 8)
+        self.assertEqual(len(record.alignments), 8)
+        for ali in record.alignments:
+            self.assertEqual(len(ali.hsps), 1)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt084(self):
+        """Test parsing BLASTN 2.2.26+ output with multiple hsp results present."""
+
+        path = os.path.join('Blast', 'bt084.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTN')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, "hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
+        self.assertEqual(record.query_letters, 66)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for idx, ali in enumerate(record.alignments):
+            if idx == 1:
+                self.assertEqual(len(ali.hsps), 2)
+            else:
+                self.assertEqual(len(ali.hsps), 1)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt085(self):
+        """Test parsing BLASTP 2.2.26+ with no results."""
+
+        path = os.path.join('Blast', 'bt085.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTP')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'random_s00')
+        self.assertEqual(record.query_letters, 32)
+        self.assertEqual(record.database, 'NCBI Protein Reference Sequences')
+        self.assertEqual(record.database_sequences, 11879989)
+        self.assertEqual(record.database_letters, 4140237112)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt086(self):
+        """Test parsing BLASTP 2.2.26+ with single hsp results."""
+
+        path = os.path.join('Blast', 'bt086.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTP')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus\nsubtilis subsp. subtilis str. 168]')
+        self.assertEqual(record.query_letters, 102)
+        self.assertEqual(record.database, 'NCBI Protein Reference Sequences')
+        self.assertEqual(record.database_sequences, 11879989)
+        self.assertEqual(record.database_letters, 4140237112)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for ali in record.alignments:
+            self.assertEqual(len(ali.hsps), 1)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt087(self):
+        """Test parsing BLASTP 2.2.26+ with multiple hsp results present."""
+
+        path = os.path.join('Blast', 'bt087.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTP')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, "gi|11464971:4-101 pleckstrin [Mus musculus]")
+        self.assertEqual(record.query_letters, 98)
+        self.assertEqual(record.database, 'NCBI Protein Reference Sequences')
+        self.assertEqual(record.database_sequences, 11879989)
+        self.assertEqual(record.database_letters, 4140237112)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for idx, ali in enumerate(record.alignments):
+            if idx in [4, 9]:
+                self.assertEqual(len(ali.hsps), 1)
+            else:
+                self.assertEqual(len(ali.hsps), 2)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt088(self):
+        """Test parsing BLASTX 2.2.26+ with no results."""
+
+        path = os.path.join('Blast', 'bt088.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTX')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'random_s00')
+        self.assertEqual(record.query_letters, 128)
+        self.assertEqual(record.database, 'NCBI Protein Reference Sequences')
+        self.assertEqual(record.database_sequences, 11879989)
+        self.assertEqual(record.database_letters, 4140237112)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+    def test_bt089(self):
+        """Test parsing BLASTX 2.2.26+ with single hsp results."""
+
+        path = os.path.join('Blast', 'bt089.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTX')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
+        self.assertEqual(record.query_letters, 490)
+        self.assertEqual(record.database, 'NCBI Protein Reference Sequences')
+        self.assertEqual(record.database_sequences, 11879989)
+        self.assertEqual(record.database_letters, 4140237112)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for ali in record.alignments:
+            self.assertEqual(len(ali.hsps), 1)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt090(self):
+        """Test parsing BLASTP 2.2.26+ with multiple hsp results present."""
+
+        path = os.path.join('Blast', 'bt090.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'BLASTX')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, "hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
+        self.assertEqual(record.query_letters, 485)
+        self.assertEqual(record.database, 'NCBI Protein Reference Sequences')
+        self.assertEqual(record.database_sequences, 11879989)
+        self.assertEqual(record.database_letters, 4140237112)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for idx, ali in enumerate(record.alignments):
+            if idx in [2, 9]:
+                self.assertEqual(len(ali.hsps), 1)
+            else:
+                self.assertEqual(len(ali.hsps), 2)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt091(self):
+        """Test parsing TBLASTN 2.2.26+ output with no results."""
+
+        path = os.path.join('Blast', 'bt091.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'TBLASTN')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'random_s00')
+        self.assertEqual(record.query_letters, 32)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt092(self):
+        """Test parsing TBLASTN 2.2.26+ output with single hsp results."""
+
+        path = os.path.join('Blast', 'bt092.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'TBLASTN')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus\nsubtilis subsp. subtilis str. 168]')
+        self.assertEqual(record.query_letters, 102)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 4)
+        self.assertEqual(len(record.alignments), 4)
+        for ali in record.alignments:
+            self.assertEqual(len(ali.hsps), 1)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt093(self):
+        """Test parsing TBLASTN 2.2.26+ output with multiple hsp results present."""
+
+        path = os.path.join('Blast', 'bt093.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'TBLASTN')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, "gi|11464971:4-101 pleckstrin [Mus musculus]")
+        self.assertEqual(record.query_letters, 98)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for idx, ali in enumerate(record.alignments):
+            if idx == 9:
+                self.assertEqual(len(ali.hsps), 1)
+            else:
+                self.assertEqual(len(ali.hsps), 2)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt094(self):
+        """Test parsing TBLASTX 2.2.26+ output with no results."""
+
+        path = os.path.join('Blast', 'bt094.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'TBLASTX')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'random_s00')
+        self.assertEqual(record.query_letters, 128)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 0)
+        self.assertEqual(len(record.alignments), 0)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt095(self):
+        """Test parsing TBLASTX 2.2.26+ output with single hsp results."""
+
+        path = os.path.join('Blast', 'bt095.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'TBLASTX')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, 'gi|356995852:1-490 Mus musculus POU domain, class 5, transcription\nfactor 1 (Pou5f1), transcript variant 1, mRNA')
+        self.assertEqual(record.query_letters, 490)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for ali in record.alignments:
+            self.assertEqual(len(ali.hsps), 1)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
+    def test_bt096(self):
+        """Test parsing TBLASTX 2.2.26+ output with multiple hsp results present."""
+
+        path = os.path.join('Blast', 'bt096.txt')
+        handle = open(path)
+        records = NCBIStandalone.Iterator(handle, self.parser)
+
+        record = records.next()
+        self.assertEqual(record.application, 'TBLASTX')
+        self.assertEqual(record.version, '2.2.26+')
+        self.assertEqual(record.query, "hg19_dna range=chr1:1207057-1207541 5'pad=0 3'pad=0 strand=+\nrepeatMasking=none")
+        self.assertEqual(record.query_letters, 485)
+        self.assertEqual(record.database, 'NCBI Transcript Reference Sequences')
+        self.assertEqual(record.database_sequences, 2903055)
+        self.assertEqual(record.database_letters, 4626651242)
+        self.assertEqual(len(record.descriptions), 20)
+        self.assertEqual(len(record.alignments), 10)
+        for idx, ali in enumerate(record.alignments):
+            if idx == 9:
+                self.assertEqual(len(ali.hsps), 1)
+            else:
+                self.assertEqual(len(ali.hsps), 3)
+
+        self.assertEqual(None, records.next())
+        handle.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

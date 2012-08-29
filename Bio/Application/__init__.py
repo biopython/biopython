@@ -24,12 +24,7 @@ import StringIO
 import subprocess
 import re
 
-#TODO - Remove this hack once we drop Python 2.4 support.
-try:
-    from subprocess import CalledProcessError as _ProcessCalledError
-except:
-    #For Python 2.4 use Exception as base class
-    _ProcessCalledError = Exception
+from subprocess import CalledProcessError as _ProcessCalledError
 
 from Bio import File
 
@@ -59,8 +54,7 @@ class ApplicationError(_ProcessCalledError):
     the command line string used in the cmd attribute, and (if captured)
     stdout and stderr as strings.
     
-    This exception is a subclass of subprocess.CalledProcessError
-    (unless run on Python 2.4 where that does not exist).
+    This exception is a subclass of subprocess.CalledProcessError.
     
     >>> err = ApplicationError(-11, "helloworld", "", "Some error text")
     >>> err.returncode, err.cmd, err.stdout, err.stderr

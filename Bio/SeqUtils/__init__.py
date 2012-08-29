@@ -9,7 +9,7 @@
 
 """Miscellaneous functions for dealing with sequences."""
 
-import re, time
+import re
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio import Alphabet
@@ -249,9 +249,24 @@ def six_frame_translations(seq, genetic_code = 1):
     nice looking 6 frame translation with GC content - code from xbbtools
     similar to DNA Striders six-frame translation
 
-    e.g.
-    from Bio.SeqUtils import six_frame_translations
-    print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
+    >>> from Bio.SeqUtils import six_frame_translations
+    >>> print six_frame_translations("AUGGCCAUUGUAAUGGGCCGCUGA")
+    GC_Frame: a:5 t:0 g:8 c:5 
+    Sequence: auggccauug ... gggccgcuga, 24 nt, 54.17 %GC
+    <BLANKLINE>
+    <BLANKLINE>
+    1/1
+      G  H  C  N  G  P  L
+     W  P  L  *  W  A  A
+    M  A  I  V  M  G  R  *
+    auggccauuguaaugggccgcuga   54 %
+    uaccgguaacauuacccggcgacu
+    A  M  T  I  P  R  Q 
+     H  G  N  Y  H  A  A  S
+      P  W  Q  L  P  G  S
+    <BLANKLINE>
+    <BLANKLINE>
+
     """
     from Bio.Seq import reverse_complement, translate
     anti = reverse_complement(seq)
@@ -260,16 +275,14 @@ def six_frame_translations(seq, genetic_code = 1):
     frames = {}
     for i in range(0,3):
         frames[i+1]  = translate(seq[i:], genetic_code)
-        frames[-(i+1)] = reverse(translate(anti[i:], genetic_code))
+        frames[-(i+1)] = translate(anti[i:], genetic_code)[::-1]
 
     # create header
     if length > 20:
         short = '%s ... %s' % (seq[:10], seq[-10:])
     else:
         short = seq
-    #TODO? Remove the date as this would spoil any unit test...
-    date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
-    header = 'GC_Frame: %s, ' % date
+    header = 'GC_Frame: '
     for nt in ['a','t','g','c']:
         header += '%s:%d ' % (nt, seq.count(nt.upper()))
       
@@ -279,7 +292,7 @@ def six_frame_translations(seq, genetic_code = 1):
     for i in range(0,length,60):
         subseq = seq[i:i+60]
         csubseq = comp[i:i+60]
-        p = i/3
+        p = i//3
         res = res + '%d/%d\n' % (i+1, i/3+1)
         res = res + '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
         res = res + ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'

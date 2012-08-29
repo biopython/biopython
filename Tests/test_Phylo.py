@@ -85,6 +85,17 @@ class IOTests(unittest.TestCase):
 
 class TreeTests(unittest.TestCase):
     """Tests for methods on BaseTree.Tree objects."""
+    def test_randomized(self):
+        """Tree.randomized: generate a new randomized tree."""
+        for N in (2, 5, 20):
+            tree = Phylo.BaseTree.Tree.randomized(N)
+            self.assertEqual(tree.count_terminals(), N)
+            self.assertEqual(tree.total_branch_length(), (N-1)*2)
+            tree = Phylo.BaseTree.Tree.randomized(N, branch_length=2.0)
+            self.assertEqual(tree.total_branch_length(), (N-1)*4)
+        tree = Phylo.BaseTree.Tree.randomized(5, branch_stdev=.5)
+        self.assertEqual(tree.count_terminals(), 5)
+
     def test_root_with_outgroup(self):
         """Tree.root_with_outgroup: reroot at a given clade."""
         # On a large realistic tree, at a deep internal node
@@ -92,6 +103,18 @@ class TreeTests(unittest.TestCase):
         orig_num_tips = len(tree.get_terminals())
         orig_tree_len = tree.total_branch_length()
         tree.root_with_outgroup('19_NEMVE', '20_NEMVE')
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        # Now, at an external node
+        tree.root_with_outgroup('1_BRAFL')
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        # Specifying outgroup branch length mustn't change the total tree size
+        tree.root_with_outgroup('2_BRAFL', outgroup_branch_length=0.5)
+        self.assertEqual(orig_num_tips, len(tree.get_terminals()))
+        self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        tree.root_with_outgroup('36_BRAFL', '37_BRAFL',
+                outgroup_branch_length=0.5)
         self.assertEqual(orig_num_tips, len(tree.get_terminals()))
         self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
         # On small contrived trees, testing edge cases
@@ -107,6 +130,24 @@ class TreeTests(unittest.TestCase):
                 tree.root_with_outgroup(node)
                 self.assertAlmostEqual(orig_tree_len,
                                        tree.total_branch_length())
+
+    def test_root_at_midpoint(self):
+        """Tree.root_at_midpoint: reroot at the tree's midpoint."""
+        for treefname, fmt in [(EX_APAF, 'phyloxml'),
+                               (EX_BCL2, 'phyloxml'),
+                               (EX_NEWICK, 'newick'),
+                              ]:
+            tree = Phylo.read(treefname, fmt)
+            orig_tree_len = tree.total_branch_length()
+            # Total branch length does not change
+            tree.root_at_midpoint()
+            self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+            # Root is bifurcating
+            self.assertEqual(len(tree.root.clades), 2)
+            # Deepest tips under each child of the root are equally deep
+            deep_dist_0 = max(tree.clade[0].depths().itervalues())
+            deep_dist_1 = max(tree.clade[1].depths().itervalues())
+            self.assertAlmostEqual(deep_dist_0, deep_dist_1)
 
     # Magic method
     def test_str(self):

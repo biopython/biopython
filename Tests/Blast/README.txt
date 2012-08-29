@@ -86,6 +86,21 @@ bt078 blastall 2.2.20 opuntia    nr       -p blastx       multiple queries, most
 bt079 blastall 2.2.21 ad-hoc     nr       -p blastp       multiple queries
 bt080 blastall 2.2.22 ad-hoc     nr       -p blastx       multiple queries
 bt081 blastx   2.2.22+           nr                       the new C++ BLAST toolkit, multiple queries
+bt082 blastn   2.2.26+           refseq_rna               blastn with no results
+bt083 blastn   2.2.26+           refseq_rna               blastn with each result containing single hsp
+bt084 blastn   2.2.26+           refseq_rna               blastn with multiple hsps present in a result
+bt085 blastp   2.2.26+           refseq_protein           blastp with no results
+bt086 blastp   2.2.26+           refseq_protein           blastp with each result containing single hsp
+bt087 blastp   2.2.26+           refseq_protein           blastp with multiple hsps present in a result
+bt088 blastx   2.2.26+           refseq_protein           blastx with no results
+bt089 blastx   2.2.26+           refseq_protein           blastx with each result containing single hsp
+bt090 blastx   2.2.26+           refseq_protein           blastx with multiple hsps present in a result
+bt091 tblastn  2.2.26+           refseq_rna               tblastn with no results
+bt092 tblastn  2.2.26+           refseq_rna               tblastn with each result containing single hsp
+bt093 tblastn  2.2.26+           refseq_rna               tblastn with multiple hsps present in a result
+bt094 tblastx  2.2.26+           refseq_rna               tblastx with no results
+bt095 tblastx  2.2.26+           refseq_rna               tblastx with each result containing single hsp
+bt096 tblastx  2.2.26+           refseq_rna               tblastx with multiple hsps present in a result
 
 * bt008 is not included because the file is too big (>15Mb).
 

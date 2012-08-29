@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -20,32 +19,49 @@ from Bio.SeqRecord import SeqRecord
 from BioSQL import BioSeqDatabase
 from BioSQL import BioSeq
 
-# This testing suite should try to detect whether a valid database
-# installation exists on this computer.  Only run the tests if it
-# does.
-try:
-    from setup_BioSQL import DBDRIVER, DBTYPE
-    from setup_BioSQL import DBHOST, DBUSER, DBPASSWD, TESTDB
-    from setup_BioSQL import DBSCHEMA, SQL_FILE
-except (NameError, ImportError):
-    message = "Check settings in Tests/setup_BioSQL.py "\
-              "if you plan to use BioSQL."
-    raise MissingExternalDependencyError(message)
-
-try:
-    if DBDRIVER in ["sqlite3"]:
-        server = BioSeqDatabase.open_database(driver = DBDRIVER, db = TESTDB)
-    else:
-        server = BioSeqDatabase.open_database(driver = DBDRIVER,
-                                              user = DBUSER, passwd = DBPASSWD,
-                                              host = DBHOST)
-    del server
-except Exception, e:
-    message = "Connection failed, check settings in Tests/setup_BioSQL.py "\
-              "if you plan to use BioSQL: %s" % str(e)
-    raise MissingExternalDependencyError(message)
-
 from seq_tests_common import compare_record, compare_records
+
+if __name__ == "__main__":
+    raise RuntimeError("Call this via test_BioSQL_*.py not directly")
+
+global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
+
+def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
+    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
+    DBDRIVER = dbdriver
+    DBTYPE = dbtype
+    DBHOST = dbhost
+    DBUSER = dbuser
+    DBPASSWD = dbpasswd
+    TESTDB = testdb
+
+    #Check the database driver is installed:
+    try:
+        __import__(DBDRIVER)
+    except ImportError:
+        message = "Install %s if you want to use %s with BioSQL " % (DBDRIVER, DBTYPE)
+        raise MissingExternalDependencyError(message)
+
+    try:
+        if DBDRIVER in ["sqlite3"]:
+            server = BioSeqDatabase.open_database(driver = DBDRIVER, db = TESTDB)
+        else:
+            server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                                  user = DBUSER, passwd = DBPASSWD,
+                                                  host = DBHOST)
+            server.close()
+            del server
+    except Exception, e:
+        message = "Connection failed, check settings if you plan to use BioSQL: %s" % str(e)
+        raise MissingExternalDependencyError(message)
+
+    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
+    SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
+
+    if not os.path.isfile(SQL_FILE):
+        message = "Missing SQL schema file: %s" % SQL_FILE
+        raise MissingExternalDependencyError(message)
+
 
 def _do_db_create():
     """Do the actual work of database creation. Relevant for MySQL and PostgreSQL
@@ -700,10 +716,127 @@ class InDepthLoadTest(unittest.TestCase):
         # mRNA, so really cDNA, so the strand should be 1 (not complemented)
         self.assertEqual(test_feature.strand, 1)
 
-#Some of the unit tests don't create their own database,
-#so just in case there is no database already:
-create_database()
 
-if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
-    unittest.main(testRunner=runner)
+#####################################################################
+
+class AutoSeqIOTests(unittest.TestCase):
+    """Test SeqIO and BioSQL together."""
+    server = None
+    db = None
+
+    def setUp(self):
+        """Connect to the database."""
+        db_name = "biosql-test-seqio"
+        server = BioSeqDatabase.open_database(driver = DBDRIVER,
+                                              user = DBUSER,
+                                              passwd = DBPASSWD,
+                                              host = DBHOST, db = TESTDB)
+        self.server = server
+        if db_name not in server.keys():
+            self.db = server.new_database(db_name)
+            server.commit()
+        self.db = self.server[db_name]
+ 
+    def tearDown(self):
+        if self.db:
+            del self.db
+        if self.server:
+            self.server.close()
+            del self.server
+
+    def check(self, t_format, t_filename, t_count=1):
+        db = self.db
+
+        iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
+        count = db.load(iterator)
+        assert count == t_count
+        self.server.commit()
+
+        iterator = SeqIO.parse(handle=open(t_filename,"r"), format=t_format)
+        for record in iterator:
+            #print " - %s, %s" % (checksum_summary(record), record.id)
+            key = record.name
+            #print " - Retrieving by name/display_id '%s'," % key,
+            db_rec = db.lookup(name=key)
+            compare_record(record, db_rec)
+            db_rec = db.lookup(display_id=key)
+            compare_record(record, db_rec)
+
+            key = record.id
+            if key.count(".")==1 and key.split(".")[1].isdigit():
+                #print " - Retrieving by version '%s'," % key,
+                db_rec = db.lookup(version=key)
+                compare_record(record, db_rec)
+
+            if "accessions" in record.annotations:
+                #Only expect FIRST accession to work!
+                key = record.annotations["accessions"][0]
+                assert key, "Blank accession in annotation %s" % repr(accs)
+                if key != record.id:
+                    #print " - Retrieving by accession '%s'," % key,
+                    db_rec = db.lookup(accession=key)
+                    compare_record(record, db_rec)
+
+            if "gi" in record.annotations:
+                key = record.annotations['gi']
+                if key != record.id:
+                    #print " - Retrieving by GI '%s'," % key,
+                    db_rec = db.lookup(primary_id=key)
+                    compare_record(record, db_rec)
+
+    def test_SeqIO_loading(self):
+        self.check('fasta', 'Fasta/lupine.nu')
+        self.check('fasta', 'Fasta/elderberry.nu')
+        self.check('fasta', 'Fasta/phlox.nu')
+        self.check('fasta', 'Fasta/centaurea.nu')
+        self.check('fasta', 'Fasta/wisteria.nu')
+        self.check('fasta', 'Fasta/sweetpea.nu')
+        self.check('fasta', 'Fasta/lavender.nu')
+        self.check('fasta', 'Fasta/aster.pro')
+        self.check('fasta', 'Fasta/loveliesbleeding.pro')
+        self.check('fasta', 'Fasta/rose.pro')
+        self.check('fasta', 'Fasta/rosemary.pro')
+        self.check('fasta', 'Fasta/f001')
+        self.check('fasta', 'Fasta/f002', 3)
+        self.check('fasta', 'Fasta/fa01', 2)
+        self.check('fasta', 'GFF/NC_001802.fna')
+        self.check('fasta', 'GFF/multi.fna', 3)
+        self.check('fasta', 'Registry/seqs.fasta', 2)
+        self.check('swiss', 'SwissProt/sp001')
+        self.check('swiss', 'SwissProt/sp002')
+        self.check('swiss', 'SwissProt/sp003')
+        self.check('swiss', 'SwissProt/sp004')
+        self.check('swiss', 'SwissProt/sp005')
+        self.check('swiss', 'SwissProt/sp006')
+        self.check('swiss', 'SwissProt/sp007')
+        self.check('swiss', 'SwissProt/sp008')
+        self.check('swiss', 'SwissProt/sp009')
+        self.check('swiss', 'SwissProt/sp010')
+        self.check('swiss', 'SwissProt/sp011')
+        self.check('swiss', 'SwissProt/sp012')
+        self.check('swiss', 'SwissProt/sp013')
+        self.check('swiss', 'SwissProt/sp014')
+        self.check('swiss', 'SwissProt/sp015')
+        self.check('swiss', 'SwissProt/sp016')
+        self.check('swiss', 'Registry/EDD_RAT.dat')
+        self.check('genbank', 'GenBank/noref.gb')
+        self.check('genbank', 'GenBank/cor6_6.gb', 6)
+        self.check('genbank', 'GenBank/iro.gb')
+        self.check('genbank', 'GenBank/pri1.gb')
+        self.check('genbank', 'GenBank/arab1.gb')
+        self.check('genbank', 'GenBank/protein_refseq2.gb')
+        self.check('genbank', 'GenBank/extra_keywords.gb')
+        self.check('genbank', 'GenBank/one_of.gb')
+        self.check('genbank', 'GenBank/NT_019265.gb')
+        self.check('genbank', 'GenBank/origin_line.gb')
+        self.check('genbank', 'GenBank/blank_seq.gb')
+        self.check('genbank', 'GenBank/dbsource_wrap.gb')
+        self.check('genbank', 'GenBank/NC_005816.gb')
+        self.check('genbank', 'GenBank/gbvrl1_start.seq', 3)
+        self.check('genbank', 'GFF/NC_001422.gbk')
+        self.check('embl', 'EMBL/TRBG361.embl')
+        self.check('embl', 'EMBL/DD231055_edited.embl')
+        self.check('embl', 'EMBL/SC10H5.embl')
+        self.check('embl', 'EMBL/U87107.embl')
+        self.assertEqual(len(self.db), 66)
+

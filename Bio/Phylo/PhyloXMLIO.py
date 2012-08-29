@@ -34,11 +34,10 @@ else:
         # Alternative Python implementation, perhaps?
         from xml.etree import ElementTree as ElementTree
 
-# Keep the standard namespace prefixes when writing
+# Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
 NAMESPACES = {
         'phy':  'http://www.phyloxml.org',
-        'xs':   'http://www.w3.org/2001/XMLSchema',
         }
 
 try:
@@ -663,12 +662,7 @@ class Writer(object):
     # Convert classes to ETree elements
 
     def phyloxml(self, obj):
-        elem = ElementTree.Element(_ns('phyloxml'),
-                # NB: This is for XSD validation, which we don't do
-                # {_ns('schemaLocation', NAMESPACES['xsi']):
-                #     obj.attributes['schemaLocation'],
-                #     }
-                )
+        elem = ElementTree.Element('phyloxml', obj.attributes) # Namespaces
         for tree in obj.phylogenies:
             elem.append(self.phylogeny(tree))
         for otr in obj.other:
@@ -682,7 +676,7 @@ class Writer(object):
             elem.append(self.other(child))
         return elem
 
-    phylogeny = _handle_complex(_ns('phylogeny'),
+    phylogeny = _handle_complex('phylogeny',
             ('rooted', 'rerootable', 'branch_length_unit', 'type'),
             ( 'name',
               'id',
@@ -696,7 +690,7 @@ class Writer(object):
               ('other',             'other'),
               ))
 
-    clade = _handle_complex(_ns('clade'), ('id_source',),
+    clade = _handle_complex('clade', ('id_source',),
             ( 'name',
               'branch_length',
               ('confidence',    'confidences'),
@@ -715,10 +709,10 @@ class Writer(object):
               ('other',         'other'),
               ))
 
-    accession = _handle_complex(_ns('accession'), ('source',),
+    accession = _handle_complex('accession', ('source',),
             (), has_text=True)
 
-    annotation = _handle_complex(_ns('annotation'),
+    annotation = _handle_complex('annotation',
             ('ref', 'source', 'evidence', 'type'),
             ( 'desc',
               'confidence',
@@ -728,30 +722,30 @@ class Writer(object):
 
     def binary_characters(self, obj):
         """Serialize a binary_characters node and its subnodes."""
-        elem = ElementTree.Element(_ns('binary_characters'),
+        elem = ElementTree.Element('binary_characters',
                 _clean_attrib(obj,
                     ('type', 'gained_count', 'lost_count',
                         'present_count', 'absent_count')))
         for subn in ('gained', 'lost', 'present', 'absent'):
-            subelem = ElementTree.Element(_ns(subn))
+            subelem = ElementTree.Element(subn)
             for token in getattr(obj, subn):
                 subelem.append(self.bc(token))
             elem.append(subelem)
         return elem
 
-    clade_relation = _handle_complex(_ns('clade_relation'),
+    clade_relation = _handle_complex('clade_relation',
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
             ('confidence',))
 
-    color = _handle_complex(_ns('color'), (), ('red', 'green', 'blue'))
+    color = _handle_complex('color', (), ('red', 'green', 'blue'))
 
-    confidence = _handle_complex(_ns('confidence'), ('type',),
+    confidence = _handle_complex('confidence', ('type',),
             (), has_text=True)
 
-    date = _handle_complex(_ns('date'), ('unit',),
+    date = _handle_complex('date', ('unit',),
             ('desc', 'value', 'minimum', 'maximum'))
 
-    distribution = _handle_complex(_ns('distribution'), (),
+    distribution = _handle_complex('distribution', (),
             ( 'desc',
               ('point',     'points'),
               ('polygon',   'polygons'),
@@ -759,7 +753,7 @@ class Writer(object):
 
     def domain(self, obj):
         """Serialize a domain node."""
-        elem = ElementTree.Element(_ns('domain'),
+        elem = ElementTree.Element('domain',
                 {'from': str(obj.start + 1), 'to': str(obj.end)})
         if obj.confidence is not None:
             elem.set('confidence', _serialize(obj.confidence))
@@ -768,11 +762,11 @@ class Writer(object):
         elem.text = _serialize(obj.value)
         return elem
 
-    domain_architecture = _handle_complex(_ns('domain_architecture'),
+    domain_architecture = _handle_complex('domain_architecture',
             ('length',),
             (('domain', 'domains'),))
 
-    events = _handle_complex(_ns('events'), (),
+    events = _handle_complex('events', (),
             ( 'type',
               'duplications',
               'speciations',
@@ -780,25 +774,25 @@ class Writer(object):
               'confidence',
               ))
 
-    id = _handle_complex(_ns('id'), ('provider',), (), has_text=True)
+    id = _handle_complex('id', ('provider',), (), has_text=True)
 
-    mol_seq = _handle_complex(_ns('mol_seq'), ('is_aligned',),
+    mol_seq = _handle_complex('mol_seq', ('is_aligned',),
             (), has_text=True)
 
-    node_id = _handle_complex(_ns('node_id'), ('provider',), (), has_text=True)
+    node_id = _handle_complex('node_id', ('provider',), (), has_text=True)
 
-    point = _handle_complex(_ns('point'), ('geodetic_datum', 'alt_unit'),
+    point = _handle_complex('point', ('geodetic_datum', 'alt_unit'),
             ('lat', 'long', 'alt'))
 
-    polygon = _handle_complex(_ns('polygon'), (), (('point', 'points'),))
+    polygon = _handle_complex('polygon', (), (('point', 'points'),))
 
-    property = _handle_complex(_ns('property'),
+    property = _handle_complex('property',
             ('ref', 'unit', 'datatype', 'applies_to', 'id_ref'),
             (), has_text=True)
 
-    reference = _handle_complex(_ns('reference'), ('doi',), ('desc',))
+    reference = _handle_complex('reference', ('doi',), ('desc',))
 
-    sequence = _handle_complex(_ns('sequence'),
+    sequence = _handle_complex('sequence',
             ('type', 'id_ref', 'id_source'),
             ( 'symbol',
               'accession',
@@ -811,11 +805,11 @@ class Writer(object):
               ('other',      'other'),
               ))
 
-    sequence_relation = _handle_complex(_ns('sequence_relation'),
+    sequence_relation = _handle_complex('sequence_relation',
             ('id_ref_0', 'id_ref_1', 'distance', 'type'),
             ('confidence',))
 
-    taxonomy = _handle_complex(_ns('taxonomy'),
+    taxonomy = _handle_complex('taxonomy',
             ('id_source',),
             ( 'id',
               'code',
@@ -828,40 +822,39 @@ class Writer(object):
               ('other',         'other'),
               ))
 
-    uri = _handle_complex(_ns('uri'), ('desc', 'type'), (), has_text=True)
+    uri = _handle_complex('uri', ('desc', 'type'), (), has_text=True)
 
     # Primitive types
 
     # Floating point
-    alt = _handle_simple(_ns('alt'))
-    branch_length = _handle_simple(_ns('branch_length'))
-    lat = _handle_simple(_ns('lat'))
-    long = _handle_simple(_ns('long'))
-    maximum = _handle_simple(_ns('maximum'))
-    minimum = _handle_simple(_ns('minimum'))
-    value = _handle_simple(_ns('value'))
-    width = _handle_simple(_ns('width'))
+    alt = _handle_simple('alt')
+    branch_length = _handle_simple('branch_length')
+    lat = _handle_simple('lat')
+    long = _handle_simple('long')
+    maximum = _handle_simple('maximum')
+    minimum = _handle_simple('minimum')
+    value = _handle_simple('value')
+    width = _handle_simple('width')
 
     # Integers
-    blue = _handle_simple(_ns('blue'))
-    duplications = _handle_simple(_ns('duplications'))
-    green = _handle_simple(_ns('green'))
-    losses = _handle_simple(_ns('losses'))
-    red = _handle_simple(_ns('red'))
-    speciations = _handle_simple(_ns('speciations'))
+    blue = _handle_simple('blue')
+    duplications = _handle_simple('duplications')
+    green = _handle_simple('green')
+    losses = _handle_simple('losses')
+    red = _handle_simple('red')
+    speciations = _handle_simple('speciations')
 
     # Strings
-    bc = _handle_simple(_ns('bc'))
-    code = _handle_simple(_ns('code'))
-    common_name = _handle_simple(_ns('common_name'))
-    desc = _handle_simple(_ns('desc'))
-    description = _handle_simple(_ns('description'))
-    location = _handle_simple(_ns('location'))
-    mol_seq = _handle_simple(_ns('mol_seq'))
-    name = _handle_simple(_ns('name'))
-    rank = _handle_simple(_ns('rank'))
-    scientific_name = _handle_simple(_ns('scientific_name'))
-    symbol = _handle_simple(_ns('symbol'))
-    synonym = _handle_simple(_ns('synonym'))
-    type = _handle_simple(_ns('type'))
+    bc = _handle_simple('bc')
+    code = _handle_simple('code')
+    common_name = _handle_simple('common_name')
+    desc = _handle_simple('desc')
+    description = _handle_simple('description')
+    location = _handle_simple('location')
+    name = _handle_simple('name')
+    rank = _handle_simple('rank')
+    scientific_name = _handle_simple('scientific_name')
+    symbol = _handle_simple('symbol')
+    synonym = _handle_simple('synonym')
+    type = _handle_simple('type')
 

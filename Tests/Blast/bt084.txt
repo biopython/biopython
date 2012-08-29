@@ -1,0 +1,242 @@
+BLASTN 2.2.26+
+
+
+Reference: Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb
+Miller (2000), "A greedy algorithm for aligning DNA sequences", J
+Comput Biol 2000; 7(1-2):203-14.
+
+
+
+Database: NCBI Transcript Reference Sequences
+           2,903,055 sequences; 4,626,651,242 total letters
+
+
+
+Query= hg19_dna range=chr1:1207307-1207372 5'pad=0 3'pad=0 strand=+
+repeatMasking=none
+
+Length=66
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+ref|XM_003267724.1|  PREDICTED: Nomascus leucogenys ATG14 autopha...   115    3e-24
+ref|NM_001040441.1|  Homo sapiens zinc finger and BTB domain cont...   115    3e-24
+ref|XM_003318468.1|  PREDICTED: Pan troglodytes zinc finger prote...   111    4e-23
+ref|XM_527768.3|  PREDICTED: Pan troglodytes zinc finger protein ...   111    4e-23
+ref|XM_003276378.1|  PREDICTED: Nomascus leucogenys S100P binding...   111    4e-23
+ref|XM_003276377.1|  PREDICTED: Nomascus leucogenys S100P binding...   111    4e-23
+ref|XM_001082839.2|  PREDICTED: Macaca mulatta transmembrane prot...   111    4e-23
+ref|NM_001132567.1|  Pongo abelii zinc finger protein 665 (ZNF665...   111    4e-23
+ref|XM_003311344.1|  PREDICTED: Pan troglodytes hypothetical prot...   110    1e-22
+ref|XM_516695.3|  PREDICTED: Pan troglodytes poly (ADP-ribose) po...   110    1e-22
+ref|XM_003268225.1|  PREDICTED: Nomascus leucogenys ankyrin repea...   110    1e-22
+ref|XM_003268224.1|  PREDICTED: Nomascus leucogenys ankyrin repea...   110    1e-22
+ref|XR_121161.1|  PREDICTED: Nomascus leucogenys zinc/RING finger...   110    1e-22
+ref|XM_002812147.1|  PREDICTED: Pongo abelii spastin-like (LOC100...   110    1e-22
+ref|XM_002805124.1|  PREDICTED: Macaca mulatta putative uncharact...   110    1e-22
+ref|NM_173511.3|  Homo sapiens family with sequence similarity 11...   110    1e-22
+ref|XM_515388.2|  PREDICTED: Pan troglodytes spastin, transcript ...   110    1e-22
+ref|XM_001164367.1|  PREDICTED: Pan troglodytes spastin, transcri...   110    1e-22
+ref|XM_003315843.1|  PREDICTED: Pan troglodytes desmocollin 1, tr...   108    5e-22
+ref|XM_518630.3|  PREDICTED: Pan troglodytes arginyl-tRNA synthet...   108    5e-22
+
+
+>ref|XM_003267724.1| PREDICTED: Nomascus leucogenys ATG14 autophagy related 14 homolog 
+(S. cerevisiae) (ATG14), mRNA
+Length=4771
+
+ Score =  115 bits (62),  Expect = 3e-24
+ Identities = 62/62 (100%), Gaps = 0/62 (0%)
+ Strand=Plus/Plus
+
+Query  5     GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaa  64
+             ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  2865  GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAA  2924
+
+Query  65    aa  66
+             ||
+Sbjct  2925  AA  2926
+
+
+>ref|NM_001040441.1| Homo sapiens zinc finger and BTB domain containing 8A (ZBTB8A), 
+mRNA
+Length=7333
+
+ Score =  115 bits (62),  Expect = 3e-24
+ Identities = 62/62 (100%), Gaps = 0/62 (0%)
+ Strand=Plus/Plus
+
+Query  5     GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaa  64
+             ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  3677  GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAAAAAA  3736
+
+Query  65    aa  66
+             ||
+Sbjct  3737  AA  3738
+
+
+ Score = 99.0 bits (53),  Expect = 3e-19
+ Identities = 53/53 (100%), Gaps = 0/53 (0%)
+ Strand=Plus/Plus
+
+Query  6     CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaa  58
+             |||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  2824  CCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAA  2876
+
+
+>ref|XM_003318468.1| PREDICTED: Pan troglodytes zinc finger protein 273, transcript 
+variant 1 (ZNF273), mRNA
+Length=4430
+
+ Score =  111 bits (60),  Expect = 4e-23
+ Identities = 64/66 (97%), Gaps = 0/66 (0%)
+ Strand=Plus/Minus
+
+Query  1     TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaa  60
+             ||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||
+Sbjct  2800  TCACGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAA  2741
+
+Query  61    aaaaaa  66
+             ||||||
+Sbjct  2740  AAAAAA  2735
+
+
+>ref|XM_527768.3| PREDICTED: Pan troglodytes zinc finger protein 273, transcript 
+variant 2 (ZNF273), mRNA
+Length=4335
+
+ Score =  111 bits (60),  Expect = 4e-23
+ Identities = 64/66 (97%), Gaps = 0/66 (0%)
+ Strand=Plus/Minus
+
+Query  1     TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaa  60
+             ||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||
+Sbjct  2705  TCACGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAA  2646
+
+Query  61    aaaaaa  66
+             ||||||
+Sbjct  2645  AAAAAA  2640
+
+
+>ref|XM_003276378.1| PREDICTED: Nomascus leucogenys S100P binding protein, transcript 
+variant 2 (S100PBP), mRNA
+Length=4345
+
+ Score =  111 bits (60),  Expect = 4e-23
+ Identities = 64/66 (97%), Gaps = 0/66 (0%)
+ Strand=Plus/Minus
+
+Query  1     TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaa  60
+             ||| |||| |||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  2857  TCATGCCACTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAA  2798
+
+Query  61    aaaaaa  66
+             ||||||
+Sbjct  2797  AAAAAA  2792
+
+
+>ref|XM_003276377.1| PREDICTED: Nomascus leucogenys S100P binding protein, transcript 
+variant 1 (S100PBP), mRNA
+Length=4359
+
+ Score =  111 bits (60),  Expect = 4e-23
+ Identities = 64/66 (97%), Gaps = 0/66 (0%)
+ Strand=Plus/Minus
+
+Query  1     TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaa  60
+             ||| |||| |||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  2871  TCATGCCACTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCAAAAAAAAAAAA  2812
+
+Query  61    aaaaaa  66
+             ||||||
+Sbjct  2811  AAAAAA  2806
+
+
+>ref|XM_001082839.2| PREDICTED: Macaca mulatta transmembrane protein 150B-like (LOC694136), 
+mRNA
+Length=3419
+
+ Score =  111 bits (60),  Expect = 4e-23
+ Identities = 64/66 (97%), Gaps = 0/66 (0%)
+ Strand=Plus/Plus
+
+Query  1     TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaa  60
+             ||||||||||||||||||||||||||||||||||||||||||| ||||||||||||||||
+Sbjct  2716  TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCATCTCAAAAAAAAAAAA  2775
+
+Query  61    aaaaaa  66
+              |||||
+Sbjct  2776  GAAAAA  2781
+
+
+>ref|NM_001132567.1| Pongo abelii zinc finger protein 665 (ZNF665), mRNA
+ emb|CR859627.1| Pongo abelii mRNA; cDNA DKFZp459D1134 (from clone DKFZp459D1134)
+Length=2274
+
+ Score =  111 bits (60),  Expect = 4e-23
+ Identities = 64/66 (97%), Gaps = 0/66 (0%)
+ Strand=Plus/Plus
+
+Query  1     TCAAGCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaa  60
+             ||| |||||||||||||||||||||||||||||| |||||||||||||||||||||||||
+Sbjct  2209  TCATGCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAA  2268
+
+Query  61    aaaaaa  66
+             ||||||
+Sbjct  2269  AAAAAA  2274
+
+
+>ref|XM_003311344.1| PREDICTED: Pan troglodytes hypothetical protein LOC100608148 
+(LOC100608148), mRNA
+Length=7609
+
+ Score =  110 bits (59),  Expect = 1e-22
+ Identities = 61/62 (98%), Gaps = 0/62 (0%)
+ Strand=Plus/Minus
+
+Query  5     GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaa  64
+             |||||||||||||||||||||||||||||||||||||| |||||||||||||||||||||
+Sbjct  6139  GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCTGTCTCAAAAAAAAAAAAAAAA  6080
+
+Query  65    aa  66
+             ||
+Sbjct  6079  AA  6078
+
+
+>ref|XM_516695.3| PREDICTED: Pan troglodytes poly (ADP-ribose) polymerase family, 
+member 14 (PARP14), mRNA
+Length=7914
+
+ Score =  110 bits (59),  Expect = 1e-22
+ Identities = 61/62 (98%), Gaps = 0/62 (0%)
+ Strand=Plus/Minus
+
+Query  5     GCCATTGCACTCCAGCCTGGGCAACAAGAGCGAAACTCCGTCTCaaaaaaaaaaaaaaaa  64
+             |||||||||||||||||||||||||||||| |||||||||||||||||||||||||||||
+Sbjct  6571  GCCATTGCACTCCAGCCTGGGCAACAAGAGTGAAACTCCGTCTCAAAAAAAAAAAAAAAA  6512
+
+Query  65    aa  66
+             ||
+Sbjct  6511  AA  6510
+
+
+
+Lambda     K      H
+    1.33    0.621     1.12 
+
+Gapped
+Lambda     K      H
+    1.28    0.460    0.850 
+
+Effective search space used: 177382481523
+
+
+  Database: NCBI Transcript Reference Sequences
+    Posted date:  Mar 1, 2012  8:32 PM
+  Number of letters in database: 4,626,651,242
+  Number of sequences in database:  2,903,055
+
+
+
+Matrix: blastn matrix 1 -2
+Gap Penalties: Existence: 0, Extension: 2.5

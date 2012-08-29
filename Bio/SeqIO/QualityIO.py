@@ -405,7 +405,7 @@ def solexa_quality_from_phred(phred_quality):
       solexa_quality = 10*log(10**(phred_quality/10.0) - 1, 10)
 
     However, real Solexa files use a minimum quality of -5. This does have a
-    good reason - a random a random base call would be correct 25% of the time,
+    good reason - a random base call would be correct 25% of the time,
     and thus have a probability of error of 0.75, which gives 1.25 as the PHRED
     quality, or -4.77 as the Solexa quality. Thus (after rounding), a random
     nucleotide read would have a PHRED quality of 1, or a Solexa quality of -5.
@@ -883,11 +883,14 @@ def FastqGeneralIterator(handle):
     #Skip any text before the first record (e.g. blank lines, comments?)
     while True:
         line = handle_readline()
-        if line == "" : return #Premature end of file, or just empty?
+        if not line:
+            return #Premature end of file, or just empty?
         if line[0] == "@":
             break
+        if isinstance(line[0], int):
+            raise ValueError("Is this handle in binary mode not text mode?")
 
-    while True:
+    while line:
         if line[0] != "@":
             raise ValueError("Records in Fastq files should start with '@' character")
         title_line = line[1:].rstrip()
@@ -938,8 +941,8 @@ def FastqGeneralIterator(handle):
 
         #Return the record and then continue...
         yield (title_line, seq_string, quality_string)
-        if not line : return #StopIteration at end of file
-    assert False, "Should not reach this line"
+    raise StopIteration
+
         
 #This is a generator function!
 def FastqPhredIterator(handle, alphabet = single_letter_alphabet, title2ids = None):

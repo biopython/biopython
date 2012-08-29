@@ -1,0 +1,42 @@
+BLASTN 2.2.26+
+
+
+Reference: Zheng Zhang, Scott Schwartz, Lukas Wagner, and Webb
+Miller (2000), "A greedy algorithm for aligning DNA sequences", J
+Comput Biol 2000; 7(1-2):203-14.
+
+
+
+Database: NCBI Transcript Reference Sequences
+           2,903,055 sequences; 4,626,651,242 total letters
+
+
+
+Query= random_s00
+
+Length=128
+
+
+***** No hits found *****
+
+
+
+Lambda     K      H
+    1.33    0.621     1.12 
+
+Gapped
+Lambda     K      H
+    1.28    0.460    0.850 
+
+Effective search space used: 454536570200
+
+
+  Database: NCBI Transcript Reference Sequences
+    Posted date:  Mar 1, 2012  8:32 PM
+  Number of letters in database: 4,626,651,242
+  Number of sequences in database:  2,903,055
+
+
+
+Matrix: blastn matrix 1 -2
+Gap Penalties: Existence: 0, Extension: 2.5

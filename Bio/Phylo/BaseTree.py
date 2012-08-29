@@ -314,7 +314,7 @@ class TreeMixin(object):
         >>> matches.next()
         Taxonomy(code='OCTVU', scientific_name='Octopus vulgaris')
 
-        """ 
+        """
         if terminal is not None:
             kwargs['terminal'] = terminal
         is_matching_elem = _combine_matchers(target, kwargs, False)
@@ -390,7 +390,7 @@ class TreeMixin(object):
     def common_ancestor(self, targets, *more_targets):
         """Most recent common ancestor (clade) of all the given targets.
 
-        Edge cases: 
+        Edge cases:
         - If no target is given, returns self.root
         - If 1 target is given, returns the target
         - If any target is not found in this tree, raises a ValueError
@@ -440,7 +440,7 @@ class TreeMixin(object):
             for child in node.clades:
                 new_depth = curr_depth + depth_of(child)
                 update_depths(child, new_depth)
-        update_depths(self.root, 0)
+        update_depths(self.root, self.root.branch_length or 0)
         return depths
 
     def distance(self, target1, target2=None):
@@ -456,7 +456,7 @@ class TreeMixin(object):
 
     def is_bifurcating(self):
         """Return True if tree downstream of node is strictly bifurcating.
-        
+
         I.e., all nodes have either 2 or 0 children (internal or external,
         respectively). The root may have 3 descendents and still be considered
         part of a bifurcating tree, because it has no ancestor.
@@ -509,7 +509,7 @@ class TreeMixin(object):
         """True if target is a descendent of this tree.
 
         Not required to be a direct descendent.
-        
+
         To check only direct descendents of a clade, simply use list membership
         testing: ``if subclade in clade: ...``
         """
@@ -652,12 +652,14 @@ class TreeMixin(object):
         New clades have the given branch_length and the same name as this
         clade's root plus an integer suffix (counting from 0). For example,
         splitting a clade named "A" produces sub-clades named "A0" and "A1".
+        If the clade has no name, the prefix "n" is used for child nodes, e.g.
+        "n0" and "n1".
         """
         clade_cls = type(self.root)
-        base_name = self.root.name or ''
+        base_name = self.root.name or 'n'
         for i in range(n):
             clade = clade_cls(name=base_name+str(i),
-                                branch_length=branch_length)
+                              branch_length=branch_length)
             self.root.clades.append(clade)
 
 
@@ -715,7 +717,8 @@ class Tree(TreeElement, TreeMixin):
         terminals = [rtree.root]
         while len(terminals) < len(taxa):
             newsplit = random.choice(terminals)
-            newterms = newsplit.split(branch_length=branch_length)
+            newsplit.split(branch_length=branch_length)
+            newterms = newsplit.clades
             if branch_stdev:
                 # Add some noise to the branch lengths
                 for nt in newterms:
@@ -743,7 +746,9 @@ class Tree(TreeElement, TreeMixin):
         from Bio.Phylo.PhyloXML import Phylogeny
         return Phylogeny.from_tree(self, **kwargs)
 
-    def root_with_outgroup(self, outgroup_targets, *more_targets):
+    # XXX Compatibility: In Python 2.6+, **kwargs can be replaced with the named
+    # keyword argument outgroup_branch_length=None
+    def root_with_outgroup(self, outgroup_targets, *more_targets, **kwargs):
         """Reroot this tree with the outgroup clade containing outgroup_targets.
 
         Operates in-place.
@@ -757,6 +762,14 @@ class Tree(TreeElement, TreeMixin):
           trifurcating root, keeping branches the same
         - If the original root was bifurcating, drop it from the tree,
           preserving total branch lengths
+
+        :param outgroup_branch_length: length of the branch leading to the
+            outgroup after rerooting. If not specified (None), then:
+
+            - If the outgroup is an internal node (not a single terminal taxon),
+              then use that node as the new root.
+            - Otherwise, create a new root node as the parent of the outgroup.
+
         """
         # This raises a ValueError if any target is not in this tree
         # Otherwise, common_ancestor guarantees outgroup is in this tree
@@ -766,20 +779,31 @@ class Tree(TreeElement, TreeMixin):
             # Outgroup is the current root -- no change
             return
 
-        prev_blen = outgroup.branch_length
-        if outgroup.is_terminal():
+        prev_blen = outgroup.branch_length or 0.0
+        # Hideous kludge because Py2.x doesn't allow keyword args after *args
+        outgroup_branch_length = kwargs.get('outgroup_branch_length')
+        if outgroup_branch_length is not None:
+            assert 0 <= outgroup_branch_length <= prev_blen, \
+                    "outgroup_branch_length must be between 0 and the " \
+                    "original length of the branch leading to the outgroup."
+
+        if outgroup.is_terminal() or outgroup_branch_length is not None:
             # Create a new root with a 0-length branch to the outgroup
-            outgroup.branch_length = 0.0
+            outgroup.branch_length = outgroup_branch_length or 0.0
             new_root = self.root.__class__(
                     branch_length=self.root.branch_length, clades=[outgroup])
             # The first branch reversal (see the upcoming loop) is modified
             if len(outgroup_path) == 1:
-                # Trivial tree like '(A,B);
+                # No nodes between the original root and outgroup to rearrange.
+                # Most of the code below will be skipped, but we still need
+                # 'new_parent' pointing at the new root.
                 new_parent = new_root
             else:
                 parent = outgroup_path.pop(-2)
+                # First iteration of reversing the path to the outgroup
                 parent.clades.pop(parent.clades.index(outgroup))
-                prev_blen, parent.branch_length = parent.branch_length, prev_blen
+                (prev_blen, parent.branch_length) = (parent.branch_length,
+                        prev_blen - outgroup.branch_length)
                 new_root.clades.insert(0, parent)
                 new_parent = parent
         else:
@@ -822,13 +846,48 @@ class Tree(TreeElement, TreeMixin):
         self.rooted = True
         return
 
+    def root_at_midpoint(self):
+        """Root the tree at the midpoint of the two most distant taxa.
+
+        This operates in-place, leaving a bifurcating root. The topology of the
+        tree is otherwise retained, though no guarantees are made about the
+        stability of clade/node/taxon ordering.
+        """
+        # Identify the largest pairwise distance
+        max_distance = 0.0
+        tips = self.get_terminals()
+        for tip in tips:
+            self.root_with_outgroup(tip)
+            new_max = max(self.depths().iteritems(), key=lambda nd: nd[1])
+            if new_max[1] > max_distance:
+                tip1 = tip
+                tip2 = new_max[0]
+                max_distance = new_max[1]
+        self.root_with_outgroup(tip1)
+        # Depth to go from the ingroup tip toward the outgroup tip
+        root_remainder = 0.5 * (max_distance - (self.root.branch_length or 0))
+        assert root_remainder >= 0
+        # Identify the midpoint and reroot there.
+        # Trace the path to the outgroup tip until all of the root depth has
+        # been traveled/accounted for.
+        for node in self.get_path(tip2):
+            root_remainder -= node.branch_length
+            if root_remainder < 0:
+                outgroup_node = node
+                outgroup_branch_length = -root_remainder
+                break
+        else:
+            raise ValueError("Somehow, failed to find the midpoint!")
+        self.root_with_outgroup(outgroup_node,
+                                outgroup_branch_length=outgroup_branch_length)
+
     # Method assumed by TreeMixin
 
     def is_terminal(self):
         """True if the root of this tree is terminal."""
         return (not self.root.clades)
 
-    # Convention from SeqRecord and Alignment classes  
+    # Convention from SeqRecord and Alignment classes
 
     def __format__(self, format_spec):
         """Serialize the tree as a string in the specified file format.

@@ -10,17 +10,70 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.60
+(In progress, not released yet) Biopython 1.61
 
-Nothing major to mention so far.
+Not much to talk about yet...
+
+GenomeDiagram has a new BIGARROW sigil, like the existing ARROW sigil but
+drawn straddling the axis. This is useful for drawing vertically compact
+figures where you do not have overlapping genes.
 
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-Kamil Slowikowski (first contribution)
+David Cain
+Kai Blin (first contribution)
+Lenna Peterson
 Peter Cock
+Tiago Antao
+
+===================================================================
+
+25 June 2012: Biopython 1.60
+
+New module Bio.bgzf supports reading and writing BGZF files (Blocked GNU
+Zip Format), a variant of GZIP with efficient random access, most commonly
+used as part of the BAM file format. This uses Python's zlib library
+internally, and provides a simple interface like Python's gzip library.
+Using this the Bio.SeqIO indexing functions now support BGZF compressed
+sequence files.
+
+The GenBank/EMBL parser will now give a warning on unrecognised feature
+locations and continue parsing (leaving the feature's location as None).
+Previously it would abort with an exception, which was often unhelpful.
+
+The Bio.PDB.MMCIFParser is now compiled by default (but is still not
+available under Jython, PyPy or Python 3).
+
+The SFF parser in Bio.SeqIO now decodes Roche 454 'universal accession
+number' 14 character read names, which encode the timestamp of the run,
+the region the read came from, and the location of the well.
+
+In the Phylo module, the "draw" function for plotting tree objects has become
+much more flexible, with improved support for matplotlib conventions and new
+parameters for specifying branch and taxon labels. Writing in the PhyloXML
+format has been updated to more closely match the output of other programs. A
+wrapper for the program RAxML has been added under Bio.Phylo.Applications,
+alongside the existing wrapper for PhyML.
+
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Brandon Invergo
+Eric Talevich
+Jeff Hussmann (first contribution)
+John Comeau (first contribution)
+Kamil Slowikowski (first contribution)
+Kevin Jacobs
+Lenna Peterson (first contribution)
+Matt Fenwick (first contribution)
+Peter Cock
+Paul T. Bathen
+Wibowo Arindrarto
 
 ===================================================================
 

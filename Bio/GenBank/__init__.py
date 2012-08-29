@@ -86,7 +86,7 @@ assert _re_oneof_position.match("one-of(3,6,9)")
 
 
 _simple_location = r"\d+\.\.\d+"
-_re_simple_location = re.compile(_simple_location)
+_re_simple_location = re.compile(r"^%s$" % _simple_location)
 _re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
                                  % (_simple_location, _simple_location))
 _complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
@@ -100,6 +100,7 @@ _re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
                                     _possibly_complemented_complex_location))
 
 assert _re_simple_location.match("104..160")
+assert not _re_simple_location.match("68451760..68452073^68452074")
 assert not _re_simple_location.match("<104..>160")
 assert not _re_simple_location.match("104")
 assert not _re_simple_location.match("<1")
@@ -393,7 +394,7 @@ class LocationParserError(Exception):
     """Could not Properly parse out a location from a GenBank file.
     """
     pass
-                                                          
+
 class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects (OBSOLETE).
 
@@ -1047,7 +1048,13 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             msg = 'Combinations of "join" and "order" within the same ' + \
                   'location (nested operators) are illegal:\n' + location_line
             raise LocationParserError(msg)
-        raise LocationParserError(location_line)
+        #This used to be an error....
+        cur_feature.location = None
+        import warnings
+        from Bio import BiopythonParserWarning
+        warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r" \
+                                             % (location_line)))
+
 
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.

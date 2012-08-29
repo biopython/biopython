@@ -5,12 +5,14 @@
 
 """mmCIF parser (partly implemented in C)."""
 
-from string import letters
+from string import ascii_letters
 
 import numpy
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
+from Bio.PDB.PDBExceptions import \
+        PDBConstructionException, PDBConstructionWarning
 
 
 class MMCIFParser(object):
@@ -24,6 +26,10 @@ class MMCIFParser(object):
         mmcif_dict=self._mmcif_dict
         atom_id_list=mmcif_dict["_atom_site.label_atom_id"]
         residue_id_list=mmcif_dict["_atom_site.label_comp_id"]
+        try:
+            element_list = mmcif_dict["_atom_site.type_symbol"]
+        except KeyError:
+            element_list = None
         seq_id_list=mmcif_dict["_atom_site.label_seq_id"]
         chain_id_list=mmcif_dict["_atom_site.label_asym_id"]
         x_list=map(float, mmcif_dict["_atom_site.Cartn_x"])
@@ -33,6 +39,14 @@ class MMCIFParser(object):
         b_factor_list=mmcif_dict["_atom_site.B_iso_or_equiv"]
         occupancy_list=mmcif_dict["_atom_site.occupancy"]
         fieldname_list=mmcif_dict["_atom_site.group_PDB"]
+        try:
+            serial_list = [int(n) for n in mmcif_dict["_atom_site.pdbx_PDB_model_num"]]
+        except KeyError:
+            # No model number column
+            serial_list = None
+        except ValueError:
+            # Invalid model number (malformed file)
+            raise PDBConstructionException("Invalid model number")
         try:
             aniso_u11=mmcif_dict["_atom_site.aniso_U[1][1]"]
             aniso_u12=mmcif_dict["_atom_site.aniso_U[1][2]"]
@@ -53,11 +67,13 @@ class MMCIFParser(object):
         # Now loop over atoms and build the structure
         current_chain_id=None
         current_residue_id=None
-        current_model_id=0
         structure_builder=self._structure_builder
         structure_builder.init_structure(structure_id)
-        structure_builder.init_model(current_model_id)
         structure_builder.init_seg(" ")
+        # Historically, Biopython PDB parser uses model_id to mean array index
+        # so serial_id means the Model ID specified in the file
+        current_model_id = 0
+        current_serial_id = 0 
         for i in xrange(0, len(atom_id_list)):
             x=x_list[i]
             y=y_list[i]
@@ -76,6 +92,17 @@ class MMCIFParser(object):
                 hetatm_flag="H"
             else:
                 hetatm_flag=" "
+            if serial_list is not None:
+                # model column exists; use it
+                serial_id = serial_list[i]
+                if current_serial_id != serial_id:
+                    # if serial changes, update it and start new model
+                    current_serial_id = serial_id
+                    structure_builder.init_model(current_model_id, current_serial_id)
+                    current_model_id += 1
+            else:
+                # no explicit model column; initialize single model
+                structure_builder.init_model(current_model_id)
             if current_chain_id!=chainid:
                 current_chain_id=chainid
                 structure_builder.init_chain(current_chain_id)
@@ -89,8 +116,9 @@ class MMCIFParser(object):
                 structure_builder.init_residue(resname, hetatm_flag, int_resseq, 
                     icode)
             coord=numpy.array((x, y, z), 'f')  
+            element = element_list[i] if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
-                name)   
+                name, element=element)   
             if aniso_flag==1:
                 u=(aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
@@ -118,7 +146,7 @@ class MMCIFParser(object):
         """Tries to return the icode. In MMCIF files this is just part of
         resseq! In PDB files, it's a separate field."""
         last_resseq_char=resseq[-1]
-        if last_resseq_char in letters:
+        if last_resseq_char in ascii_letters:
             icode=last_resseq_char
             int_resseq=int(resseq[0:-1])
         else:
@@ -130,6 +158,9 @@ class MMCIFParser(object):
 if __name__=="__main__":
     import sys
 
+    if len(sys.argv) != 2:
+        print "Usage: python MMCIFparser.py filename"
+        raise SystemExit
     filename=sys.argv[1]
 
     p=MMCIFParser()

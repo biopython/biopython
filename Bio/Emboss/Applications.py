@@ -785,6 +785,10 @@ class WaterCommandline(_EmbossCommandLine):
          _Option(["-datafile","datafile"],
                  "Matrix file",
                  filename=True),
+         _Switch(["-nobrief", "nobrief"],
+                 "Display extended identity and similarity"),
+         _Switch(["-brief", "brief"],
+                 "Display brief identity and similarity"),
          _Option(["-similarity","similarity"],
                  "Display percent identity and similarity"),
          _Option(["-snucleotide","snucleotide"],
@@ -818,8 +822,100 @@ class NeedleCommandline(_EmbossCommandLine):
          _Option(["-datafile","datafile"],
                  "Matrix file",
                  filename=True),
+         _Option(["-endweight", "endweight"],
+                 "Apply And gap penalties"),
+         _Option(["-endopen", "endopen"],
+                 "The score taken away when an end gap is created."),
+         _Option(["-endextend", "endextend"],
+                 "The score added to the end gap penality for each base or "
+                 "residue in the end gap."),
+         _Switch(["-nobrief", "nobrief"],
+                 "Display extended identity and similarity"),
+         _Switch(["-brief", "brief"],
+                 "Display brief identity and similarity"),
          _Option(["-similarity","similarity"],
                  "Display percent identity and similarity"),
+         _Option(["-snucleotide","snucleotide"],
+                 "Sequences are nucleotide (boolean)"),
+         _Option(["-sprotein","sprotein"],
+                 "Sequences are protein (boolean)"),
+         _Option(["-aformat","aformat"],
+                 "Display output in a different specified output format")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class NeedleallCommandline(_EmbossCommandLine):
+    """Commandline object for the needleall program from EMBOSS.
+    """
+    def __init__(self, cmd="needleall", **kwargs):
+        self.parameters = [
+         _Option(["-asequence","asequence"],
+                 "First sequence to align",
+                 filename=True,
+                 is_required=True),
+         _Option(["-bsequence","bsequence"],
+                  "Second sequence to align",
+                 filename=True,
+                 is_required=True),
+         _Option(["-gapopen","gapopen"],
+                 "Gap open penalty",
+                 is_required=True),
+         _Option(["-gapextend","gapextend"],
+                 "Gap extension penalty",
+                 is_required=True),
+         _Option(["-datafile","datafile"],
+                 "Matrix file",
+                 filename=True),
+         _Option(["-minscore","minscore"],
+                 "Exclude alignments with scores below this threshold score."),
+         _Option(["-errorfile", "errorfile"],
+                 "Error file to be written to."),
+         _Option(["-endweight", "endweight"],
+                 "Apply And gap penalties"),
+         _Option(["-endopen", "endopen"],
+                 "The score taken away when an end gap is created."),
+         _Option(["-endextend", "endextend"],
+                 "The score added to the end gap penality for each base or "
+                 "residue in the end gap."),
+         _Switch(["-nobrief", "nobrief"],
+                 "Display extended identity and similarity"),
+         _Switch(["-brief", "brief"],
+                 "Display brief identity and similarity"),
+         _Option(["-similarity","similarity"],
+                 "Display percent identity and similarity"),
+         _Option(["-snucleotide","snucleotide"],
+                 "Sequences are nucleotide (boolean)"),
+         _Option(["-sprotein","sprotein"],
+                 "Sequences are protein (boolean)"),
+         _Option(["-aformat","aformat"],
+                 "Display output in a different specified output format")]
+        _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
+
+class StretcherCommandline(_EmbossCommandLine):
+    """Commandline object for the stretcher program from EMBOSS.
+    """
+    def __init__(self, cmd="stretcher", **kwargs):
+        self.parameters = [
+         _Option(["-asequence","asequence"],
+                 "First sequence to align",
+                 filename=True,
+                 is_required=True),
+         _Option(["-bsequence","bsequence"],
+                  "Second sequence to align",
+                 filename=True,
+                 is_required=True),
+         _Option(["-gapopen","gapopen"],
+                 "Gap open penalty",
+                 is_required=True,
+                 checker_function=lambda value: isinstance(value, int)),
+         _Option(["-gapextend","gapextend"],
+                 "Gap extension penalty",
+                 is_required=True,
+                 checker_function=lambda value: isinstance(value, int)),
+         _Option(["-datafile","datafile"],
+                 "Matrix file",
+                 filename=True),
          _Option(["-snucleotide","snucleotide"],
                  "Sequences are nucleotide (boolean)"),
          _Option(["-sprotein","sprotein"],

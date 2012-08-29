@@ -388,6 +388,18 @@ class SigilsTest(unittest.TestCase):
         self.assertEqual(len(self.gdd.tracks), 4)
         self.finish("GD_sigil_arrow_shafts")        
 
+    def test_big_arrow_shafts(self):
+        """Feature big-arrow sigils, varying shafts."""
+        self.add_track_with_sigils(sigil="BIGARROW")
+        self.add_track_with_sigils(sigil="BIGARROW", color="orange",
+                                   arrowshaft_height=1.0)
+        self.add_track_with_sigils(sigil="BIGARROW", color="teal",
+                                   arrowshaft_height=0.2)
+        self.add_track_with_sigils(sigil="BIGARROW", color="green",
+                                   arrowshaft_height=0.1)
+        self.assertEqual(len(self.gdd.tracks), 4)
+        self.finish("GD_sigil_bigarrow_shafts")
+
     def test_arrow_heads(self):
         """Feature arrow sigils, varying heads."""
         self.add_track_with_sigils(sigil="ARROW")

@@ -262,6 +262,9 @@ class Vector(object):
     def __setitem__(self, i, value):
         self._ar[i]=value
 
+    def __contains__(self, i):
+        return (i in self._ar)
+
     def norm(self):
         "Return vector norm"
         return numpy.sqrt(sum(self._ar*self._ar))

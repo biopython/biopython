@@ -28,14 +28,16 @@ def parse_basics(lines, results):
     # multi_models is used to designate there being results for more than one
     # model in the file
     multi_models = False
+    multi_genes = False
     version_re = re.compile(".+ \(in paml version (\d+\.\d+[a-z]*).*")
     model_re = re.compile("Model:\s+(.+)")
+    num_genes_re = re.compile("\(([0-9]+) genes: separate data\)")
     # In codeml 4.1, the codon substitution model is headed by:
     # "Codon frequencies:"
     # In codeml 4.3+ it is headed by:
     # "Codon frequency model:"
     codon_freq_re = re.compile("Codon frequenc[a-z\s]{3,7}:\s+(.+)")
-    siteclass_re = re.compile("Site-class models:\s*(.*)")
+    siteclass_re = re.compile("Site-class models:\s*([^\s]*)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -49,6 +51,14 @@ def parse_basics(lines, results):
         model_res = model_re.match(line)
         if model_res is not None:
             results["model"] = model_res.group(1)
+        # Find out if more than one genes are analyzed
+        num_genes_res = num_genes_re.search(line)
+        if num_genes_res is not None:
+            results["genes"] = []
+            num_genes = int(num_genes_res.group(1))
+            for n in range(num_genes):
+                results["genes"].append({})
+            multi_genes = True
             continue
         # Get the codon substitution model
         codon_freq_res = codon_freq_re.match(line)
@@ -71,14 +81,15 @@ def parse_basics(lines, results):
         # Get the maximum log-likelihood
         if "ln Lmax" in line and len(line_floats) > 0:
             results["lnL max"] = line_floats[0]
-    return (results, multi_models)
+    return (results, multi_models, multi_genes)
  
-def parse_nssites(lines, results, multi_models):
+def parse_nssites(lines, results, multi_models, multi_genes):
     """Determine which NSsites models are present and parse them.
     """
 
     ns_sites = {}
     model_re = re.compile("Model (\d+):\s+(.+)")
+    gene_re = re.compile("Gene\s+([0-9]+)\s+.+")
     siteclass_model = results.get("site-class model")
     if not multi_models:
     # If there's only one model in the results, find out
@@ -88,23 +99,40 @@ def parse_nssites(lines, results, multi_models):
         current_model = {"one-ratio" : 0,
                         "NearlyNeutral" : 1,
                         "PositiveSelection" : 2,
-                        "discrete (4 categories)" : 3,
-                        "beta (4 categories)" : 7,
-                        "beta&w>1 (5 categories)" : 8}[siteclass_model]
-        model_results = {"description" : siteclass_model}
-        model_results = parse_model(lines, model_results)
-        ns_sites[current_model] = model_results
+                        "discrete" : 3,
+                        "beta" : 7,
+                        "beta&w>1" : 8}[siteclass_model]
+        if multi_genes:
+            genes = results["genes"]
+            current_gene = None
+            gene_start = None
+            for line_num, line in enumerate(lines):
+                gene_res = gene_re.match(line)
+                if gene_res:
+                    if current_gene is not None:
+                        parse_model(lines[gene_start:line_num], model_results)
+                        genes[current_gene-1] = model_results
+                    gene_start = line_num
+                    current_gene = int(gene_res.group(1))
+                    model_results = {"description": siteclass_model}
+            if len(genes[current_gene-1]) == 0:
+                model_results = parse_model(lines[gene_start:], model_results)
+                genes[current_gene-1] = model_results
+        else:
+            model_results = {"description" : siteclass_model}
+            model_results = parse_model(lines, model_results)
+            ns_sites[current_model] = model_results
     else:
     # If there are multiple models in the results, scan through
     # the file and send each model's text to be parsed individually.
         current_model = None
         model_start = None
-        for line_num in range(len(lines)):
+        for line_num, line in enumerate(lines):
             # Find model names. If this is found on a line,
             # all of the following lines until the next time this matches
             # contain results for Model X.
             # Example match: "Model 1: NearlyNeutral (2 categories)"
-            model_res = model_re.match(lines[line_num])
+            model_res = model_re.match(line)
             if model_res:
                 if current_model is not None:
                 # We've already been tracking a model, so it's time
