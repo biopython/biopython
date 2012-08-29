@@ -260,7 +260,7 @@ def six_frame_translations(seq, genetic_code = 1):
     frames = {}
     for i in range(0,3):
         frames[i+1]  = translate(seq[i:], genetic_code)
-        frames[-(i+1)] = reverse(translate(anti[i:], genetic_code))
+        frames[-(i+1)] = translate(anti[i:], genetic_code)[::-1]
 
     # create header
     if length > 20:
