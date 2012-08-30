@@ -29,6 +29,25 @@ check_config(DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB)
 #so just in case there is no database already:
 create_database()
 
+if False:
+    #This is how I generated test file Tests/BioSQL/cor6_6.db
+    #which is test cross-checked with the latest bindings to
+    #catch any regressions in how we map GenBank entries to
+    #the database.
+    assert not os.path.isfile("BioSQL/cor6_6.db")
+    server = BioSeqDatabase.open_database(driver=DBDRIVER, db="BioSQL/cor6_6.db")
+    DBSCHEMA = "biosqldb-" + DBTYPE + ".sql"
+    SQL_FILE = os.path.join(os.getcwd(), "BioSQL", DBSCHEMA)
+    assert os.path.isfile(SQL_FILE), SQL_FILE
+    server.load_database_sql(SQL_FILE)
+    server.commit()
+    db = server.new_database("OLD")
+    count = db.load(SeqIO.parse("GenBank/cor6_6.gb", "gb"))
+    assert count == 6
+    server.commit()
+    assert len(db) == 6
+    server.close()
+
 if __name__ == "__main__":
     #Run the test cases
     runner = unittest.TextTestRunner(verbosity = 2)
