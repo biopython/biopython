@@ -1,6 +1,6 @@
 # Copyright 2000-2003 Jeff Chang.
 # Copyright 2001-2008 Brad Chapman.
-# Copyright 2005-2011 by Peter Cock.
+# Copyright 2005-2012 by Peter Cock.
 # Copyright 2006-2009 Michiel de Hoon.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -45,6 +45,7 @@ o BetweenPosition - Specify a position occuring between a range (OBSOLETE?).
 o BeforePosition - Specify the position as being found before some base.
 o AfterPosition - Specify the position as being found after some base.
 o OneOfPosition - Specify a position where the location can be multiple positions.
+o UnknownPosition - Represents missing information like '?' in UniProt.
 """
 
 from Bio.Seq import MutableSeq, reverse_complement
