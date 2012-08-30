@@ -12,11 +12,12 @@ The latest news is at the top of this file.
 
 (In progress, not released yet) Biopython 1.61
 
-Not much to talk about yet...
-
-GenomeDiagram has a new BIGARROW sigil, like the existing ARROW sigil but
-drawn straddling the axis. This is useful for drawing vertically compact
-figures where you do not have overlapping genes.
+GenomeDiagram has three new sigils (shapes to illustrate features). OCTO shows
+an octagonal shape, like the existing BOX sigil but with the corners cut off.
+JAGGY shows a box with jagged edges at the start and end, intended for things
+like NNNNN regions in draft genomes. Finally BIGARROW is like the existing
+ARROW sigil but is drawn straddling the axis. This is useful for drawing
+vertically compact figures where you do not have overlapping genes.
 
 Additionally there have been other minor bug fixes and more unit tests.
 
@@ -25,6 +26,7 @@ possible, especially the following contributors:
 
 David Cain
 Kai Blin (first contribution)
+Leighton Pritchard
 Lenna Peterson
 Peter Cock
 Tiago Antao
