@@ -957,7 +957,35 @@ class CompoundLocation(object):
         for loc in self.parts:
             loc.strand = value
     strand = property(fget = _get_strand, fset = _set_strand,
-                      doc = "Overall strand of the compound location (read only).")
+                      doc = """Overall strand of the compound location.
+
+        If all the parts have the same strand, that is returned. Otherwise
+        for mixed strands, this returns None.
+
+        >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
+        >>> f1 = FeatureLocation(15,17, strand=1)
+        >>> f2 = FeatureLocation(20,30, strand=-1)
+        >>> f = f1 + f2
+        >>> f1.strand
+        1
+        >>> f2.strand
+        -1
+        >>> f.strand
+        >>> f.strand is None
+        True
+
+        If you set the strand of a CompoundLocation, this is applied to
+        all the parts - use with caution:
+
+        >>> f.strand = 1
+        >>> f1.strand
+        1
+        >>> f2.strand
+        1
+        >>> f.strand
+        1
+
+        """)
 
     def __add__(self, other):
         """Combine locations.
