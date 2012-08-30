@@ -114,12 +114,20 @@ def compare_feature(old_f, new_f):
              assert old_l.ref == new_l.ref
              assert old_l.ref_db == new_l.ref_db
 
+    assert len(old_f.location.parts) == len(new_f.location.parts)
+    for old_sub, new_sub in zip(old_f.location.parts, new_f.location.parts):
+        #These are FeatureLocation objects
+        assert old_sub.nofuzzy_start == new_sub.nofuzzy_start
+        assert old_sub.nofuzzy_end == new_sub.nofuzzy_end
+        assert old_sub.strand == new_sub.strand
+
     #Using private variable to avoid deprecation warnings
     assert len(old_f._sub_features) == len(new_f._sub_features), \
         "number of sub_features: %s -> %s" % \
         (len(old_f._sub_features), len(new_f._sub_features))
     
     for old_sub, new_sub in zip(old_f._sub_features, new_f._sub_features):
+        #These are SeqFeature objects
         assert old_sub.type == new_sub.type, \
             "%s -> %s" % (old_sub.type, new_sub.type)
 

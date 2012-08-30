@@ -846,21 +846,31 @@ class FeatureLocation(object):
     def nofuzzy_start(self):
         """Start position (integer, approximated if fuzzy, read only) (OBSOLETE).
 
-        This is now a alias for int(feature.start), which should be
+        This is now an alias for int(feature.start), which should be
         used in preference -- unless you are trying to support old
         versions of Biopython.
         """
-        return int(self._start)
+        try:
+            return int(self._start)
+        except TypeError:
+            if isinstance(self._start, UnknownPosition):
+                return None
+            raise
 
     @property
     def nofuzzy_end(self):
         """End position (integer, approximated if fuzzy, read only) (OBSOLETE).
 
-        This is now a alias for int(feature.end), which should be
+        This is now an alias for int(feature.end), which should be
         used in preference -- unless you are trying to support old
         versions of Biopython.
         """
-        return int(self._end)
+        try:
+            return int(self._end)
+        except TypeError:
+            if isinstance(self._end, UnknownPosition):
+                return None
+            raise
 
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
@@ -1085,13 +1095,33 @@ class CompoundLocation(object):
 
     @property
     def nofuzzy_start(self):
-        """Start position (integer, approximated if fuzzy, read only) (OBSOLETE)."""
-        return int(self.start)
+        """Start position (integer, approximated if fuzzy, read only) (OBSOLETE).
+
+        This is an alias for int(feature.start), which should be used in
+        preference -- unless you are trying to support old versions of
+        Biopython.
+        """
+        try:
+            return int(self.start)
+        except TypeError:
+            if isinstance(self.start, UnknownPosition):
+                return None
+            raise
 
     @property
     def nofuzzy_end(self):
-        """End position (integer, approximated if fuzzy, read only) (OBSOLETE)."""
-        return int(self.end)
+        """End position (integer, approximated if fuzzy, read only) (OBSOLETE).
+
+        This is an alias for int(feature.end), which should be used in
+        preference -- unless you are trying to support old versions of
+        Biopython.
+        """
+        try:
+            return int(self.end)
+        except TypeError:
+            if isinstance(self.end, UnknownPosition):
+                return None
+            raise
 
     @property
     def ref(self):
