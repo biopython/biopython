@@ -48,6 +48,21 @@ if False:
     assert len(db) == 6
     server.close()
 
+class BackwardsCompatibilityTest(unittest.TestCase):
+    def test_backwards_compatibility(self):
+        """Check can re-use an old BioSQL SQLite3 database."""
+        original_records = list(SeqIO.parse("GenBank/cor6_6.gb", "gb"))
+        # now open a connection to load the database
+        server = BioSeqDatabase.open_database(driver=DBDRIVER,
+                                              db="BioSQL/cor6_6.db")
+        db = server["OLD"]
+        self.assertEqual(len(db), len(original_records))
+        #Now read them back...
+        biosql_records = [db.lookup(name=rec.name) \
+                          for rec in original_records]
+        #And check they agree
+        self.assertTrue(compare_records(original_records, biosql_records))
+
 if __name__ == "__main__":
     #Run the test cases
     runner = unittest.TextTestRunner(verbosity = 2)
