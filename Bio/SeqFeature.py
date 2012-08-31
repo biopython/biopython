@@ -687,14 +687,13 @@ class FeatureLocation(object):
                    % (self.__class__.__name__, self.start, self.end, optional)
 
     def __add__(self, other):
-        """Combine location with another feature location.
+        """Combine location with another feature location, or shift it.
+
+        You can add two feature locations to make a join CompoundLocation:
 
         >>> from Bio.SeqFeature import FeatureLocation
         >>> f1 = FeatureLocation(5,10)
         >>> f2 = FeatureLocation(20,30)
-
-        You can add the two features to make a join feature:
-
         >>> combined = f1 + f2
         >>> print combined
         join{[5:10], [20:30]}
@@ -706,13 +705,39 @@ class FeatureLocation(object):
         >>> print join
         join{[5:10], [20:30]}
 
-        The real benefit is for combining simple features and
-        compound features together.
+        You can also use sum(...) in this way:
+
+        >>> join = sum([f1, f2])
+        >>> print join
+        join{[5:10], [20:30]}
+
+        Furthermore, you can combine a FeatureLocation with a CompoundLocation
+        in this way.
+
+        Separately, adding an integer will give a new FeatureLocation with
+        its start and end offset by that amount. For example:
+
+        >>> print f1
+        [5:10]
+        >>> print f1 + 100
+        [105:110]
+        >>> print 200 + f1
+        [205:210]
+
+        This can be useful when editing annotation.
         """
         if isinstance(other, FeatureLocation):
             return CompoundLocation([self, other])
+        elif isinstance(other, int):
+            return self._shift(other)
         else:
             #This will allow CompoundLocation's __radd__ to be called:
+            return NotImplemented
+
+    def __radd__(self, other):
+        if isinstance(other, int):
+            return self._shift(other)
+        else:
             return NotImplemented
 
     def __nonzero__(self):
@@ -797,6 +822,7 @@ class FeatureLocation(object):
 
     def _shift(self, offset):
         """Returns a copy of the location shifted by the offset (PRIVATE)."""
+        #TODO - What if offset is a fuzzy position?
         if self.ref or self.ref_db:
             #TODO - Return self?
             raise ValueError("Feature references another sequence.")
@@ -997,7 +1023,7 @@ class CompoundLocation(object):
         """)
 
     def __add__(self, other):
-        """Combine locations.
+        """Combine locations, or shift the location by an integer offset.
 
         >>> from Bio.SeqFeature import FeatureLocation, CompoundLocation
         >>> f1 = FeatureLocation(15,17) + FeatureLocation(20,30)
@@ -1019,6 +1045,15 @@ class CompoundLocation(object):
         >>> print f1 + f2
         join{[15:17], [20:30], [40:50], [60:70]}
 
+        Also, as with the FeatureLocation, adding an integer shifts the
+        location's co-ordinates by that offset:
+
+        >>> print f1 + 100
+        join{[115:117], [120:130]}
+        >>> print 200 + f1
+        join{[215:217], [220:230]}
+        >>> print f1 + (-5)
+        join{[10:12], [15:25]}
         """
         if isinstance(other, FeatureLocation):
             return CompoundLocation(self.parts + [other], self.operator)
@@ -1028,6 +1063,8 @@ class CompoundLocation(object):
                 raise ValueError("Mixed operators %s and %s" \
                                  % (self.operator, other.operator))
             return CompoundLocation(self.parts + other.parts, self.operator)
+        elif isinstance(other, int):
+            return self._shift(other)
         else:
             raise NotImplementedError
 
@@ -1036,6 +1073,8 @@ class CompoundLocation(object):
         """
         if isinstance(other, FeatureLocation):
             return CompoundLocation([other] + self.parts, self.operator)
+        elif isinstance(other, int):
+            return self._shift(other)
         else:
             raise NotImplementedError
 
