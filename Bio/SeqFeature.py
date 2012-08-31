@@ -486,18 +486,64 @@ class Reference(object):
 class FeatureLocation(object):
     """Specify the location of a feature along a sequence.
 
-    This attempts to deal with fuzziness of position ends, but also
-    make it easy to get the start and end in the 'normal' case (no
-    fuzziness).
-
-    You should access the start and end attributes with
-    your_location.start and your_location.end. If the start and
-    end are exact, this will return the positions, if not, we'll return
-    the approriate Fuzzy class with info about the position and fuzziness.
+    The FeatureLocation is used for simple continous features, which can
+    be described as running from a start position to and end position
+    (optionally with a strand and reference information).  More complex
+    locations made up from several non-continuous parts (e.g. a coding
+    sequence made up of several exons) are described using multiple
+    FeatureLocation objects combined as a CompoundLocation object.
 
     Note that the start and end location numbering follow Python's scheme,
     thus a GenBank entry of 123..150 (one based counting) becomes a location
     of [122:150] (zero based counting).
+
+    >>> from Bio.SeqFeature import FeatureLocation
+    >>> f = FeatureLocation(122, 150)
+    >>> print f
+    [122:150]
+    >>> print f.start
+    122
+    >>> print f.end
+    150
+    >>> print f.strand
+    None
+
+    Note the strand defaults to None. If you are working with nucleotide
+    sequences you'd want to be explicit if it is the forward strand:
+
+    >>> from Bio.SeqFeature import FeatureLocation
+    >>> f = FeatureLocation(122, 150, strand=+1)
+    >>> print f
+    [122:150](+)
+    >>> print f.strand
+    1
+
+    Note that for a parent sequence of length n, the FeatureLocation
+    start and end must satisfy the inequality 0 <= start <= end <= n.
+    This means even for features on the reverse strand of a nucleotide
+    sequence, we expect the 'start' coordindate to be less than the
+    'end' coordindate.
+
+    >>> from Bio.SeqFeature import FeatureLocation
+    >>> r = FeatureLocation(122, 150, strand=-1)
+    >>> print r
+    [122:150](-)
+    >>> print r.start
+    122
+    >>> print r.end
+    150
+    >>> print r.strand
+    -1
+
+    i.e. Rather than thinking of the 'start' and 'end' biologically in a
+    strand aware manor, think of them as the 'left most' or 'minimum'
+    boundary, and the 'right most' or 'maximum' boundary of the region
+    being described.
+
+    In the example above we have used standard exact positions, but there
+    are also specialised position objects used to represent fuzzy positions
+    as well, for example a GenBank location like complement(<123..150)
+    would use a BeforePosition object for the start.
     """
     def __init__(self, start, end, strand=None, ref=None, ref_db=None):
         """Specify the start, end, strand etc of a sequence feature.
@@ -554,6 +600,7 @@ class FeatureLocation(object):
         AL391218.9
 
         """
+        #TODO - Check 0 <= start <= end (<= length of reference)
         if isinstance(start, AbstractPosition):
             self._start = start
         elif isinstance(start, int) or isinstance(start, long):
