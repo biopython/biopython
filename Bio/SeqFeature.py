@@ -545,7 +545,6 @@ class FeatureLocation(object):
     start and end must satisfy the inequality 0 <= start <= end <= n.
     This means even for features on the reverse strand of a nucleotide
     sequence, we expect the 'start' coordinate to be less than the
-    'end' coordinate.
 
     >>> from Bio.SeqFeature import FeatureLocation
     >>> r = FeatureLocation(122, 150, strand=-1)
