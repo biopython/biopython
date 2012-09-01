@@ -22,11 +22,11 @@ print "==========="
 
 s = Seq.Seq("TCAAAAGGATGCATCATG", IUPAC.unambiguous_dna)
 
-print s.tostring()
+print str(s)
 print len(s)
 print s[0]
 print s[-1]
-print s[3:5].tostring()
+print str(s[3:5])
 
 print "Reverse using -1 stride:", repr(s[::-1])
 
@@ -41,7 +41,7 @@ t = Seq.Seq("T", IUPAC.unambiguous_dna)
 u = s + t
 print str(u.alphabet)
 print len(u)
-assert s.tostring() + "T" == u.tostring()
+assert str(s) + "T" == str(u)
 
 t = Seq.Seq("T", IUPAC.protein)
 try:
@@ -70,7 +70,7 @@ converted_seq = s.tomutable()
 
 for test_seq in [string_seq]:
     print repr(test_seq)
-    print test_seq.tostring()
+    print str(test_seq)
     print len(test_seq)
     print repr(test_seq.toseq())
 
@@ -223,11 +223,11 @@ print "Testing Seq string methods"
 print "=========================="
 for a in dna + rna + nuc + protein:
     if not isinstance(a, Seq.Seq) : continue
-    assert a.strip().tostring() == a.tostring().strip()
-    assert a.lstrip().tostring() == a.tostring().lstrip()
-    assert a.rstrip().tostring() == a.tostring().rstrip()
-    assert a.lower().tostring() == a.tostring().lower()
-    assert a.upper().tostring() == a.tostring().upper()
+    assert str(a.strip()) == str(a).strip()
+    assert str(a.lstrip()) == str(a).lstrip()
+    assert str(a.rstrip()) == str(a).rstrip()
+    assert str(a.lower()) == str(a).lower()
+    assert str(a.upper()) == str(a).upper()
     test_chars = ["-", Seq.Seq("-"), Seq.Seq("*"), "-X@"]
     alpha = Alphabet._get_base_alphabet(a.alphabet)
     if isinstance(alpha, Alphabet.DNAAlphabet):
@@ -245,32 +245,32 @@ for a in dna + rna + nuc + protein:
     else:
         b = Seq.Seq("-", Alphabet.generic_protein)
     try:
-        print a.strip(b).tostring()
+        print str(a.strip(b))
         assert False, "Alphabet should have clashed!"
     except TypeError:
         pass #Good!
             
     for chars in  test_chars:
         str_chars = str(chars)
-        assert a.strip(chars).tostring() == a.tostring().strip(str_chars)
-        assert a.lstrip(chars).tostring() == a.tostring().lstrip(str_chars)
-        assert a.rstrip(chars).tostring() == a.tostring().rstrip(str_chars)
-        assert a.find(chars) == a.tostring().find(str_chars)
-        assert a.find(chars,2,-2) == a.tostring().find(str_chars,2,-2)
-        assert a.rfind(chars) == a.tostring().rfind(str_chars)
-        assert a.rfind(chars,2,-2) == a.tostring().rfind(str_chars,2,-2)
-        assert a.count(chars) == a.tostring().count(str_chars)
-        assert a.count(chars,2,-2) == a.tostring().count(str_chars,2,-2)
+        assert str(a.strip(chars)) == str(a).strip(str_chars)
+        assert str(a.lstrip(chars)) == str(a).lstrip(str_chars)
+        assert str(a.rstrip(chars)) == str(a).rstrip(str_chars)
+        assert a.find(chars) == str(a).find(str_chars)
+        assert a.find(chars,2,-2) == str(a).find(str_chars,2,-2)
+        assert a.rfind(chars) == str(a).rfind(str_chars)
+        assert a.rfind(chars,2,-2) == str(a).rfind(str_chars,2,-2)
+        assert a.count(chars) == str(a).count(str_chars)
+        assert a.count(chars,2,-2) == str(a).count(str_chars,2,-2)
         #Now check splits
-        assert [x.tostring() for x in a.split(chars)] \
-               == a.tostring().split(str(chars))
-        assert [x.tostring() for x in a.rsplit(chars)] \
-               == a.tostring().rsplit(str(chars))
+        assert [str(x) for x in a.split(chars)] \
+               == str(a).split(str(chars))
+        assert [str(x) for x in a.rsplit(chars)] \
+               == str(a).rsplit(str(chars))
         for max_sep in [0,1,2,999]:
-            assert [x.tostring() for x in a.split(chars, max_sep)] \
-                   == a.tostring().split(str(chars), max_sep)
-            assert [x.tostring() for x in a.rsplit(chars, max_sep)] \
-                   == a.tostring().rsplit(str(chars), max_sep)
+            assert [str(x) for x in a.split(chars, max_sep)] \
+                   == str(a).split(str(chars), max_sep)
+            assert [str(x) for x in a.rsplit(chars, max_sep)] \
+                   == str(a).rsplit(str(chars), max_sep)
 del a, alpha, chars, str_chars, test_chars
 del dna, rna, nuc, protein
 ###########################################################################
@@ -321,8 +321,8 @@ for sequence in [Seq.Seq("".join(sorted(ambiguous_rna_values))),
             Seq.Seq("AWGAARCKG")]:  # Note no U or T
         print "%s -> %s" \
               % (repr(sequence), repr(Seq.reverse_complement(sequence)))
-        assert sequence.tostring() \
-           == Seq.reverse_complement(Seq.reverse_complement(sequence)).tostring(), \
+        assert str(sequence) \
+           == str(Seq.reverse_complement(Seq.reverse_complement(sequence))), \
            "Dobule reverse complement didn't preserve the sequence!"
 print
 
@@ -606,8 +606,8 @@ for nucleotide_seq in test_seqs:
         try:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , repr(nucleotide_seq.complement()))
-            assert nucleotide_seq.complement().tostring() \
-                == Seq.reverse_complement(nucleotide_seq).tostring()[::-1], \
+            assert str(nucleotide_seq.complement()) \
+                == str(Seq.reverse_complement(nucleotide_seq))[::-1], \
                 "Bio.Seq function and method disagree!"
         except ValueError, e:
             print "%s -> %s" \
@@ -621,8 +621,8 @@ for nucleotide_seq in test_seqs:
         try:
             print "%s -> %s" \
             % (repr(nucleotide_seq) , repr(nucleotide_seq.reverse_complement()))
-            assert nucleotide_seq.reverse_complement().tostring() \
-                == Seq.reverse_complement(nucleotide_seq).tostring(), \
+            assert str(nucleotide_seq.reverse_complement()) \
+                == str(Seq.reverse_complement(nucleotide_seq)), \
                 "Bio.Seq function and method disagree!"
         except ValueError, e:
             print "%s -> %s" \

@@ -25,7 +25,7 @@ def lcc_mult(seq,wsize):
         upper = seq.upper()
     except AttributeError:
         #Should be a Seq object then
-        upper = seq.tostring().upper()
+        upper = str(seq).upper()
     compone = [0]
     lccsal = [0]
     for i in range(wsize):
@@ -135,7 +135,7 @@ def lcc_simp(seq):
         upper = seq.upper()
     except AttributeError:
         #Should be a Seq object then
-        upper = seq.tostring().upper()
+        upper = str(seq).upper()
     l2 = math.log(2)
     if 'A' not in seq:
         term_a = 0

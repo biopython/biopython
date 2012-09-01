@@ -106,7 +106,7 @@ class NexusWriter(AlignmentWriter):
         n = Nexus.Nexus(minimal_record)
         n.alphabet = alignment._alphabet
         for record in alignment:
-            n.add_sequence(record.id, record.seq.tostring())
+            n.add_sequence(record.id, str(record.seq))
         n.write_nexus_data(self.handle)
     
     def _classify_alphabet_for_nexus(self, alphabet):

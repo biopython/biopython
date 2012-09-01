@@ -144,7 +144,7 @@ class FormattedSeq(object):
         if seq is a FormattedSeq, linear will have no effect on the
         shape of the sequence."""
         if isinstance(seq, Seq) or isinstance(seq, MutableSeq):
-            stringy       = seq.tostring()
+            stringy       = str(seq)
             self.lower    = stringy.islower()
             #Note this adds a leading space to the sequence (!)
             self.data     = _check_bases(stringy)

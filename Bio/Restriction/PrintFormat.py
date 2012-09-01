@@ -320,8 +320,8 @@ class PrintFormat(object):
                     break
             cutloc[x] = l
         cutloc[x] = mapping
-        sequence = self.sequence.tostring()
-        revsequence = self.sequence.complement().tostring()
+        sequence = str(self.sequence)
+        revsequence = str(self.sequence.complement())
         a = '|'
         base, counter = 0, 0
         emptyline = ' ' * 60

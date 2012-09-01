@@ -19,11 +19,11 @@ class AstralTests(unittest.TestCase):
                 
 
     def testGetSeq(self):
-        self.assertEqual(self.astral.getSeqBySid('d3sdha_').tostring(), "AAAAA")
-        self.assertEqual(self.astral.getSeqBySid('d4hbib_').tostring(), "KKKKK")
+        self.assertEqual(str(self.astral.getSeqBySid('d3sdha_')), "AAAAA")
+        self.assertEqual(str(self.astral.getSeqBySid('d4hbib_')), "KKKKK")
 
         dom = self.scop.getDomainBySid('d3sdha_')
-        self.assertEqual(self.astral.getSeq(dom).tostring(), "AAAAA")
+        self.assertEqual(str(self.astral.getSeq(dom)), "AAAAA")
 
         
         
@@ -31,8 +31,8 @@ class AstralTests(unittest.TestCase):
     def testConstructWithCustomFile(self):
         scop = Scop(dir_path="SCOP", version="test")
         astral = Astral(scop=scop, astral_file="SCOP/scopseq-test/astral-scopdom-seqres-all-test.fa")
-        self.assertEqual(astral.getSeqBySid('d3sdha_').tostring(), "AAAAA")
-        self.assertEqual(astral.getSeqBySid('d4hbib_').tostring(), "KKKKK")
+        self.assertEqual(str(astral.getSeqBySid('d3sdha_')), "AAAAA")
+        self.assertEqual(str(astral.getSeqBySid('d4hbib_')), "KKKKK")
                        
          
     def testGetDomainsFromFile(self):

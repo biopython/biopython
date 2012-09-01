@@ -31,7 +31,7 @@ def fitness_calculator(genome):
     assert isinstance(genome, MutableSeq), "Expected MutableSeq for a genome."
 
     regular_seq = genome.toseq()
-    return int(regular_seq.tostring())
+    return int(str(regular_seq))
 
 class CreatePopulationTest(unittest.TestCase):
     """Tests for utility functions for creating populations.

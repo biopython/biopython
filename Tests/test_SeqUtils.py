@@ -26,7 +26,7 @@ assert len(tuple_records)==3
 seq_records = list(SeqIO.parse(open(dna_fasta_filename),"fasta"))
 assert len(seq_records)==3
 for tuple_record, seq_record in zip(tuple_records, seq_records):
-    assert tuple_record == (seq_record.description, seq_record.seq.tostring())
+    assert tuple_record == (seq_record.description, str(seq_record.seq))
     print "%s has GC%% of %0.1f" % (seq_record.name, GC(seq_record.seq))
 
 ##############

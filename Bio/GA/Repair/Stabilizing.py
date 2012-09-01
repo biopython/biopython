@@ -44,7 +44,7 @@ class AmbiguousRepair(object):
         while 1:
             # first find all of the ambigous items
             seq_genome = new_org.genome.toseq()
-            all_ambiguous = self._ambig_finder.find_ambiguous(seq_genome.tostring())
+            all_ambiguous = self._ambig_finder.find_ambiguous(str(seq_genome))
 
             # if we have less then the number of ambiguous allowed, stop
             if len(all_ambiguous) <= self._num_ambiguous:

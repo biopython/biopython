@@ -275,7 +275,7 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertTrue(isinstance(alphabet, Alphabet.Alphabet))
         data = test_seq.data
         self.assertEqual(type(data), type(""))
-        string_rep = test_seq.tostring()
+        string_rep = str(test_seq)
         self.assertEqual(string_rep, str(test_seq)) #check __str__ too
         self.assertEqual(type(string_rep), type(""))
         self.assertEqual(len(test_seq), 880)
@@ -314,15 +314,15 @@ class SeqInterfaceTest(unittest.TestCase):
         new_seq = test_seq[:10]
         self.assertTrue(isinstance(new_seq, BioSeq.DBSeq))
         # simple slicing
-        self.assertEqual(test_seq[:5].tostring(), 'ATTTG')
-        self.assertEqual(test_seq[0:5].tostring(), 'ATTTG')
-        self.assertEqual(test_seq[2:3].tostring(), 'T')
-        self.assertEqual(test_seq[2:4].tostring(), 'TT')
-        self.assertEqual(test_seq[870:].tostring(), 'TTGAATTATA')
+        self.assertEqual(str(test_seq[:5]), 'ATTTG')
+        self.assertEqual(str(test_seq[0:5]), 'ATTTG')
+        self.assertEqual(str(test_seq[2:3]), 'T')
+        self.assertEqual(str(test_seq[2:4]), 'TT')
+        self.assertEqual(str(test_seq[870:]), 'TTGAATTATA')
         # getting more fancy
         self.assertEqual(test_seq[-1], 'A')
         self.assertEqual(test_seq[1], 'T')
-        self.assertEqual(test_seq[-10:][5:].tostring(), "TTATA")
+        self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
         self.assertEqual(str(test_seq[-10:][5:]), "TTATA")
 
     def test_seq_features(self):
@@ -657,14 +657,14 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(test_record.id, "X55053.1")
         self.assertEqual(test_record.description, "A.thaliana cor6.6 mRNA.")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
-        self.assertEqual(test_record.seq[:10].tostring(), 'AACAAAACAC')
+        self.assertEqual(str(test_record.seq[:10]), 'AACAAAACAC')
 
         test_record = self.db.lookup(accession = "X62281")
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.id, "X62281.1")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene.")
         self.assertTrue(isinstance(test_record.seq.alphabet, Alphabet.DNAAlphabet))
-        self.assertEqual(test_record.seq[:10].tostring(), 'ATTTGGCCTA')
+        self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
 
     def test_seq_feature(self):
         """Indepth check that SeqFeatures are transmitted through the db.

@@ -63,7 +63,7 @@ class ClustalWriter(SequentialAlignmentWriter):
                 #identifier when output in the file by replacing
                 #them with underscores:
                 line = record.id[0:30].replace(" ","_").ljust(36)
-                line += record.seq[cur_char:(cur_char + show_num)].tostring()
+                line += str(record.seq[cur_char:(cur_char + show_num)])
                 output += line + "\n"
 
             # now we need to print out the star info, if we've got it
@@ -349,7 +349,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     assert 2 == len(alignment)
     assert alignment[0].id == "gi|4959044|gb|AAD34209.1|AF069"
     assert alignment[1].id == "gi|671626|emb|CAA85685.1|"
-    assert alignment[0].seq.tostring() == \
+    assert str(alignment[0].seq) == \
           "MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVNNLSEEDYRLMRDNN" + \
           "LLGTPGESTEEELLRRLQQIKEGPPPQSPDENRAGESSDDVTNSDSIIDW" + \
           "LNSVRQTGNTTRSRQRGNQSWRAVSRTNPNSGDFRFSLEINVNRNNGSQT" + \
@@ -362,7 +362,7 @@ HISJ_E_COLI                    LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV
     alignment = alignments[0]
     assert 9 == len(alignment)
     assert alignment[-1].id == "HISJ_E_COLI"
-    assert alignment[-1].seq.tostring() == \
+    assert str(alignment[-1].seq) == \
           "MKKLVLSLSLVLAFSSATAAF-------------------AAIPQNIRIG" + \
           "TDPTYAPFESKNS-QGELVGFDIDLAKELCKRINTQCTFVENPLDALIPS" + \
           "LKAKKIDAIMSSLSITEKRQQEIAFTDKLYAADSRLV"

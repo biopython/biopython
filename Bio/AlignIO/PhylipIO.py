@@ -504,7 +504,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
         for record in alignment:
             count=count+1
             print record.id
-            #print record.seq.tostring()
+            #print str(record.seq)
     assert count == 8
 
     expected="""mkklvlslsl vlafssataa faaipqniri gtdptyapfe sknsqgelvg
@@ -512,7 +512,7 @@ HISJ_E_COL MKKLVLSLSL VLAFSSATAA F--------- ---------- AAIPQNIRIG
     aadsrlvvak nsdiqptves lkgkrvgvlq gttqetfgne hwapkgieiv syqgqdniys
     dltagridaafqdevaaseg flkqpvgkdy kfggpsvkde klfgvgtgmg lrkednelre
     alnkafaemradgtyeklak kyfdfdvygg""".replace(" ","").replace("\n","").upper()
-    assert record.seq.tostring().replace("-","") == expected
+    assert str(record.seq).replace("-","") == expected
 
     #From here:
     #http://atgc.lirmm.fr/phyml/usersguide.html
@@ -550,7 +550,7 @@ Tax5        CCATCTCACGGTCGGTAAGATACACCTGCTTTTGGCGGGAAATGGTCAATATTAAAAGGT"""
 
     for i in range(0,5):
         list2[0][i].id == list3[0][i].id
-        list2[0][i].seq.tostring() == list3[0][i].seq.tostring()
+        str(list2[0][i].seq) == str(list3[0][i].seq)
 
     #From here:
     #http://evolution.genetics.washington.edu/phylip/doc/sequence.html
@@ -630,5 +630,5 @@ Gorilla   AAACCCTTGC CGGTACGCTT AAACCATTGC CGGTACGCTT AA"""
         assert len(a1) == len(a2)
         for r1, r2 in zip(a1, a2):
             assert r1.id == r2.id
-            assert r1.seq.tostring() == r2.seq.tostring()
+            assert str(r1.seq) == str(r2.seq)
     print "Done"

@@ -26,7 +26,7 @@ def assert_equal_records(testCase,record_a,record_b):
     testCase.assertEqual(record_a.id,record_b.id)
     testCase.assertEqual(record_a.name,record_b.name)
     testCase.assertEqual(record_a.description,record_b.description)
-    testCase.assertEqual(record_a.seq.tostring(),record_b.seq.tostring())
+    testCase.assertEqual(str(record_a.seq), str(record_b.seq))
     testCase.assertEqual(record_a.dbxrefs,record_b.dbxrefs)
     testCase.assertEqual(record_a.annotations,record_a.annotations)
     
@@ -59,9 +59,9 @@ class TestDetailedRead(unittest.TestCase):
         
     def test_full_characters_set_read(self):
         """Read full characters set for each type"""
-        self.assertEqual(self.records["dna"][1].seq.tostring(),"ACGTMRWSYKVHDBXN.-" )
-        self.assertEqual(self.records["rna"][1].seq.tostring(),"ACGUMRWSYKVHDBXN.-" )
-        self.assertEqual(self.records["protein"][1].seq.tostring(),"ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*")
+        self.assertEqual(str(self.records["dna"][1].seq),"ACGTMRWSYKVHDBXN.-" )
+        self.assertEqual(str(self.records["rna"][1].seq),"ACGUMRWSYKVHDBXN.-" )
+        self.assertEqual(str(self.records["protein"][1].seq),"ABCDEFGHIJKLMNOPQRSTUVWXYZ.-*")
     
     def test_duplicated_property(self):
         """Read property with multiple values"""

@@ -153,7 +153,7 @@ if __name__ == "__main__":
             print record.id
             print record.annotations['keywords']
             print repr(record.annotations['organism'])
-            print record.seq.tostring()[:20] + "..."
+            print str(record.seq)[:20] + "..."
             for f in record.features: print f
         handle.close()
 

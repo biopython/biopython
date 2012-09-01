@@ -124,7 +124,7 @@ class WriterTests(unittest.TestCase):
                                 new_record.id.startswith(record.id+".copy"))
             else:
                 self.assertEqual(record.id, new_record.id)
-            self.assertEqual(record.seq.tostring(), new_record.seq.tostring())
+            self.assertEqual(str(record.seq), str(new_record.seq))
         handle.close()
 
     def check_write_fails(self, records, format, err_type, err_msg=""):
