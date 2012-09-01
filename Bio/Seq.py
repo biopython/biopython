@@ -16,6 +16,7 @@ __docformat__ ="epytext en"  # Don't just use plain text in epydoc API pages!
 import string  # for maketrans only
 import array
 import sys
+from functools import wraps
 
 from Bio import Alphabet
 from Bio.Alphabet import IUPAC
@@ -48,6 +49,34 @@ def _maketrans(complement_mapping):
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
+
+
+def _invalid_for(*invalids):
+    """Decorator for limiting Seq methods applicability.
+
+    Arguments:
+    invalids -- String or list of invalid alphabets. Must either be 'protein',
+                'dna', or 'rna'.
+    """
+    _alphs = set(['dna', 'rna', 'protein'])
+    def decorator(func):
+        assert all([x in _alphs for x in invalids])
+        @wraps(func)
+        def wrapped(self, *args, **kwargs):
+            base = Alphabet._get_base_alphabet(self.alphabet)
+            if 'protein' in invalids and isinstance(base,
+                    Alphabet.ProteinAlphabet):
+                raise ValueError("%r is not applicable for protein sequences" %
+                        func.__name__)
+            elif 'dna' in invalids and isinstance(base, Alphabet.DNAAlphabet):
+                raise ValueError("%r is not applicable for DNA sequences" %
+                        func.__name__)
+            elif 'rna' in invalids and isinstance(base, Alphabet.RNAAlphabet):
+                raise ValueError("%r is not applicable for RNA sequences" %
+                        func.__name__)
+            return func(self, *args, **kwargs)
+        return wrapped
+    return decorator
 
 
 class Seq(object):
@@ -719,6 +748,7 @@ class Seq(object):
         """
         return Seq(str(self).lower(), self.alphabet._lower())
 
+    @_invalid_for('protein')
     def complement(self):
         """Returns the complement sequence. New Seq object.
 
@@ -749,11 +779,9 @@ class Seq(object):
         >>> my_protein.complement()
         Traceback (most recent call last):
            ...
-        ValueError: Proteins do not have complements!
+        ValueError: 'complement' is not applicable for protein sequences
         """
         base = Alphabet._get_base_alphabet(self.alphabet)
-        if isinstance(base, Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins do not have complements!")
         if isinstance(base, Alphabet.DNAAlphabet):
             ttable = _dna_complement_table
         elif isinstance(base, Alphabet.RNAAlphabet):
@@ -770,6 +798,7 @@ class Seq(object):
         #thx to Michael Palmer, University of Waterloo
         return Seq(str(self).translate(ttable), self.alphabet)
 
+    @_invalid_for('protein')
     def reverse_complement(self):
         """Returns the reverse complement sequence. New Seq object.
 
@@ -800,11 +829,12 @@ class Seq(object):
         >>> my_protein.reverse_complement()
         Traceback (most recent call last):
            ...
-        ValueError: Proteins do not have complements!
+        ValueError: 'reverse_complement' is not applicable for protein sequences
         """
         #Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
 
+    @_invalid_for('rna', 'protein')
     def transcribe(self):
         """Returns the RNA sequence from a DNA sequence. New Seq object.
 
@@ -823,22 +853,18 @@ class Seq(object):
         >>> my_protein.transcribe()
         Traceback (most recent call last):
            ...
-        ValueError: Proteins cannot be transcribed!
+        ValueError: 'transcribe' is not applicable for protein sequences
         """
-        base = Alphabet._get_base_alphabet(self.alphabet)
-        if isinstance(base, Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins cannot be transcribed!")
-        if isinstance(base, Alphabet.RNAAlphabet):
-            raise ValueError("RNA cannot be transcribed!")
-
         if self.alphabet==IUPAC.unambiguous_dna:
             alphabet = IUPAC.unambiguous_rna
         elif self.alphabet==IUPAC.ambiguous_dna:
             alphabet = IUPAC.ambiguous_rna
         else:
             alphabet = Alphabet.generic_rna
-        return Seq(str(self).replace('T', 'U').replace('t', 'u'), alphabet)
 
+        return Seq(str(self).replace('T', 'U').replace('t', 'u'), alphabet)
+    
+    @_invalid_for('dna', 'protein')
     def back_transcribe(self):
         """Returns the DNA sequence from an RNA sequence. New Seq object.
 
@@ -858,14 +884,8 @@ class Seq(object):
         >>> my_protein.back_transcribe()
         Traceback (most recent call last):
            ...
-        ValueError: Proteins cannot be back transcribed!
+        ValueError: 'back_transcribe' is not applicable for protein sequences
         """
-        base = Alphabet._get_base_alphabet(self.alphabet)
-        if isinstance(base, Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins cannot be back transcribed!")
-        if isinstance(base, Alphabet.DNAAlphabet):
-            raise ValueError("DNA cannot be back transcribed!")
-
         if self.alphabet==IUPAC.unambiguous_rna:
             alphabet = IUPAC.unambiguous_dna
         elif self.alphabet==IUPAC.ambiguous_rna:
@@ -874,6 +894,7 @@ class Seq(object):
             alphabet = Alphabet.generic_dna
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
+    @_invalid_for('protein')
     def translate(self, table="Standard", stop_symbol="*", to_stop=False,
                   cds=False):
         """Turns a nucleotide sequence into a protein sequence. New Seq object.
@@ -957,9 +978,6 @@ class Seq(object):
                              + "a 256 character string mapping table like "
                              + "the python string object's translate method. "
                              + "Use str(my_seq).translate(...) instead.")
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins cannot be translated!")
         try:
             table_id = int(table)
         except ValueError:
@@ -1318,6 +1336,7 @@ class UnknownSeq(Seq):
             else:
                 return 0
 
+    @_invalid_for('protein')
     def complement(self):
         """The complement of an unknown nucleotide equals itself.
 
@@ -1331,11 +1350,9 @@ class UnknownSeq(Seq):
         >>> print my_nuc.complement()
         ????????
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins do not have complements!")
         return self
 
+    @_invalid_for('protein')
     def reverse_complement(self):
         """The reverse complement of an unknown nucleotide equals itself.
 
@@ -1349,9 +1366,6 @@ class UnknownSeq(Seq):
         >>> print my_nuc.reverse_complement()
         ??????????
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins do not have complements!")
         return self
 
     def transcribe(self):
@@ -1430,6 +1444,7 @@ class UnknownSeq(Seq):
         """
         return UnknownSeq(self._length, self.alphabet._lower(), self._character.lower())
 
+    @_invalid_for('protein')
     def translate(self, **kwargs):
         """Translate an unknown nucleotide sequence into an unknown protein.
 
@@ -1456,9 +1471,6 @@ class UnknownSeq(Seq):
         XXX
 
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins cannot be translated!")
         return UnknownSeq(self._length//3, Alphabet.generic_protein, "X")
 
     def ungap(self, gap=None):
@@ -1786,6 +1798,7 @@ class MutableSeq(object):
         """
         self.data.reverse()
 
+    @_invalid_for('protein')
     def complement(self):
         """Modify the mutable sequence to take on its complement.
 
@@ -1793,9 +1806,6 @@ class MutableSeq(object):
 
         No return value.
         """
-        if isinstance(Alphabet._get_base_alphabet(self.alphabet),
-                      Alphabet.ProteinAlphabet):
-            raise ValueError("Proteins do not have complements!")
         if self.alphabet in (IUPAC.ambiguous_dna, IUPAC.unambiguous_dna):
             d = ambiguous_dna_complement
         elif self.alphabet in (IUPAC.ambiguous_rna, IUPAC.unambiguous_rna):
@@ -1811,7 +1821,8 @@ class MutableSeq(object):
         d.update(c)
         self.data = map(lambda c: d[c], self.data)
         self.data = array.array(self.array_indicator, self.data)
-
+        
+    @_invalid_for('protein')
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
 

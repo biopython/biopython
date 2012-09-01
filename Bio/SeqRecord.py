@@ -1060,7 +1060,7 @@ class SeqRecord(object):
         >>> protein_rec.reverse_complement()
         Traceback (most recent call last):
            ...
-        ValueError: Proteins do not have complements!
+        ValueError: 'reverse_complement' is not applicable for protein sequences
 
         Also note you can reverse complement a SeqRecord using a MutableSeq:
 
