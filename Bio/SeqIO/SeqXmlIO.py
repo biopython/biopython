@@ -334,7 +334,7 @@ class SeqXmlWriter(SequentialSequenceWriter):
         if isinstance(record.seq,UnknownSeq):
             raise TypeError("Sequence type is UnknownSeq but SeqXML requires sequence")
         
-        seq = record.seq.tostring()
+        seq = str(record.seq)
         
         if not len(seq) > 0:
             raise ValueError("The sequence length should be greater than 0")

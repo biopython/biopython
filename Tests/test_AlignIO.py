@@ -83,7 +83,7 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
         #Show each sequence row horizontally
         for record in alignment:
             answer.append("%s%s %s" \
-            % (index,str_summary(record.seq.tostring()),record.id))
+            % (index,str_summary(str(record.seq)),record.id))
     else:
         #Show each sequence row vertically
         for i in range(min(5,alignment_len)):
@@ -172,7 +172,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
             #many formats can't store more than that.
 
             #Check the sequence
-            assert r1.seq.tostring() == r2.seq.tostring()
+            assert str(r1.seq) == str(r2.seq)
 
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!

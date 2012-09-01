@@ -254,7 +254,7 @@ def compare_record(record_one, record_two):
         #object (out of heap memory error)
         if record_one.seq._character != record_two.seq._character:
             return False
-    elif record_one.seq.tostring() != record_two.seq.tostring():
+    elif str(record_one.seq) != str(record_two.seq):
         return False
     #TODO - check features and annotation (see code for BioSQL tests)
     for key in set(record_one.letter_annotations).intersection( \
@@ -274,9 +274,9 @@ def record_summary(record, indent=" "):
         answer += "None"
     else:
         if len(record.seq) > 50:
-            answer += record.seq[:40].tostring() + "..." + record.seq[-7:].tostring()
+            answer += str(record.seq[:40]) + "..." + str(record.seq[-7:])
         else:
-            answer += record.seq.tostring()
+            answer += str(record.seq)
         answer += "', length=%i" % (len(record.seq))
     return answer
 
@@ -373,12 +373,12 @@ def check_simple_write_read(records, indent=" "):
                     #UnknownSeq object (out of heap memory error)
                     assert r1.seq._character.upper() == r2.seq._character
                 else:
-                    assert r1.seq.tostring().upper() == r2.seq.tostring()
+                    assert str(r1.seq).upper() == str(r2.seq)
             elif format == "qual":
                 assert isinstance(r2.seq, UnknownSeq)
                 assert len(r2) == len(r1)
             else:
-                assert r1.seq.tostring() == r2.seq.tostring()
+                assert str(r1.seq) == str(r2.seq)
             #Beware of different quirks and limitations in the
             #valid character sets and the identifier lengths!
             if format in ["phylip", "phylip-sequential"]:

@@ -119,7 +119,7 @@ def Antiparallel(sequence):
 
     returns a string which represents the reverse complementary strand of
     a DNA sequence."""
-    return antiparallel(sequence.tostring())
+    return antiparallel(str(sequence))
 
 def is_palindrom(sequence):
     """is_palindrom(sequence) -> bool.
@@ -949,10 +949,10 @@ class DictionaryBuilder(object):
                     print name, 'has two different sites.\n'
                     other = line[0].replace("-","_")
                     dna = DNA(line[1])
-                    sense1 = regex(dna.tostring())
+                    sense1 = regex(str(dna))
                     antisense1 = regex(Antiparallel(dna))
                     dna = DNA(enzymedict[other][0])
-                    sense2 = regex(dna.tostring())
+                    sense2 = regex(str(dna))
                     antisense2 = regex(Antiparallel(dna))
                     sense = '(?P<'+other+'>'+sense1+'|'+sense2+')'
                     antisense = '(?P<'+other+'_as>'+antisense1+'|'+antisense2 + ')'

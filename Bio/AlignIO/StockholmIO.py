@@ -205,7 +205,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         if seq_name in self._ids_written:
             raise ValueError("Duplicate record identifier: %s" % seq_name)
         self._ids_written.append(seq_name)
-        self.handle.write("%s %s\n" % (seq_name, record.seq.tostring()))
+        self.handle.write("%s %s\n" % (seq_name, str(record.seq)))
 
         #The recommended placement for GS lines (per sequence annotation)
         #is above the alignment (as a header block) or just below the

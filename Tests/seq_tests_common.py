@@ -10,10 +10,10 @@ def checksum_summary(record):
     if isinstance(record.seq, UnknownSeq):
         return repr(record.seq)
     if len(record.seq) < 25:
-        short = record.seq.tostring()
+        short = str(record.seq)
     else:
-        short = record.seq.tostring()[:19] \
-              + "..." + record.seq.tostring()[-3:]
+        short = str(record.seq)[:19] \
+              + "..." + str(record.seq)[-3:]
     return "%s [%s] len %i" \
            % (short, seguid(record.seq), len(record.seq))
 
@@ -178,7 +178,7 @@ def compare_feature(old_f, new_f):
 def compare_sequence(old, new):
     """Compare two Seq or DBSeq objects"""
     assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
-    assert old.tostring() == new.tostring()
+    assert str(old) == str(new)
 
     if isinstance(old, UnknownSeq):
         assert isinstance(new, UnknownSeq)
@@ -186,7 +186,7 @@ def compare_sequence(old, new):
         assert not isinstance(new, UnknownSeq)
 
     ln = len(old)
-    s = old.tostring()
+    s = str(old)
     assert isinstance(s, str)
 
     #Don't check every single element; for long sequences
@@ -210,29 +210,29 @@ def compare_sequence(old, new):
     for i in indices:
         for j in indices:
             expected = s[i:j]
-            assert expected == old[i:j].tostring(), \
+            assert expected == str(old[i:j]), \
                    "Slice %s vs %s" % (repr(expected), repr(old[i:j]))
-            assert expected == new[i:j].tostring(), \
+            assert expected == str(new[i:j]), \
                    "Slice %s vs %s" % (repr(expected), repr(new[i:j]))
             #Slicing with step of 1 should make no difference.
             #Slicing with step 3 might be useful for codons.
             for step in [1,3]:
                 expected = s[i:j:step]
-                assert expected == old[i:j:step].tostring()
-                assert expected == new[i:j:step].tostring()
+                assert expected == str(old[i:j:step])
+                assert expected == str(new[i:j:step])
 
         #Check automatic end points
         expected = s[i:]
-        assert expected == old[i:].tostring()
-        assert expected == new[i:].tostring()
+        assert expected == str(old[i:])
+        assert expected == str(new[i:])
                 
         expected = s[:i]
-        assert expected == old[:i].tostring()
-        assert expected == new[:i].tostring()
+        assert expected == str(old[:i])
+        assert expected == str(new[:i])
 
     #Check "copy" splice
-    assert s == old[:].tostring()
-    assert s == new[:].tostring()
+    assert s == str(old[:])
+    assert s == str(new[:])
     return True
 
 def compare_features(old_list, new_list):

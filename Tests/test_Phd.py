@@ -107,10 +107,10 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ('g', '11', '10840'))
         self.assertEqual(record.sites[-2], ('t', '11', '10855'))
         self.assertEqual(record.sites[-1], ('g', '11', '10864'))
-        self.assertEqual(record.seq.tostring()[:10], 'ctccgtcgga')
-        self.assertEqual(record.seq.tostring()[-10:], 'ccaaagcgtg')
-        self.assertEqual(record.seq_trimmed.tostring()[:10], 'cgtcggaaca')
-        self.assertEqual(record.seq_trimmed.tostring()[-10:], 'tatttcggag')
+        self.assertEqual(str(record.seq)[:10], 'ctccgtcgga')
+        self.assertEqual(str(record.seq)[-10:], 'ccaaagcgtg')
+        self.assertEqual(str(record.seq_trimmed)[:10], 'cgtcggaaca')
+        self.assertEqual(str(record.seq_trimmed)[-10:], 'tatttcggag')
         # Record 2
         record = records.next()
         center = len(record.sites)//2
@@ -159,10 +159,10 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ('a', '8', '10574'))
         self.assertEqual(record.sites[-2], ('a', '7', '10584'))
         self.assertEqual(record.sites[-1], ('g', '7', '10599'))
-        self.assertEqual(record.seq.tostring()[:10], 'cgggatccca')
-        self.assertEqual(record.seq.tostring()[-10:], 'cccagccaag')
-        self.assertEqual(record.seq_trimmed.tostring()[:10], 'cctgatccga')
-        self.assertEqual(record.seq_trimmed.tostring()[-10:], 'ggggccgcca')
+        self.assertEqual(str(record.seq)[:10], 'cgggatccca')
+        self.assertEqual(str(record.seq)[-10:], 'cccagccaag')
+        self.assertEqual(str(record.seq_trimmed)[:10], 'cctgatccga')
+        self.assertEqual(str(record.seq_trimmed)[-10:], 'ggggccgcca')
         # Record 3
         record = records.next()
         center = len(record.sites)//2
@@ -211,8 +211,8 @@ class PhdTestOne(unittest.TestCase):
         self.assertEqual(record.sites[-3], ('t', '8', '9495'))
         self.assertEqual(record.sites[-2], ('t', '3', '9504'))
         self.assertEqual(record.sites[-1], ('n', '0', '9511'))
-        self.assertEqual(record.seq.tostring()[:10], 'acataaatca')
-        self.assertEqual(record.seq.tostring()[-10:], 'atctgctttn')
+        self.assertEqual(str(record.seq)[:10], 'acataaatca')
+        self.assertEqual(str(record.seq)[-10:], 'atctgctttn')
         # Make sure that no further records are found
         self.assertRaises(StopIteration, records.next)
 

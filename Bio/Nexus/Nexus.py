@@ -262,7 +262,7 @@ def _unique_label(previous_labels,label):
 
 def _seqmatrix2strmatrix(matrix):
     """Converts a Seq-object matrix to a plain sequence-string matrix."""
-    return dict([(t,matrix[t].tostring()) for t in matrix])
+    return dict([(t, str(matrix[t])) for t in matrix])
 
 def _compact4nexus(orig_list):
     """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
@@ -335,13 +335,13 @@ def combine(matrices):
         m_only=[t for t in m.taxlabels if t not in both]
         for t in both:
             # concatenate sequences and unify gap and missing character symbols
-            combined.matrix[t]+=Seq(m.matrix[t].tostring().replace(m.gap,combined.gap).replace(m.missing,combined.missing),combined.alphabet)
+            combined.matrix[t]+=Seq(str(m.matrix[t]).replace(m.gap,combined.gap).replace(m.missing,combined.missing),combined.alphabet)
         # replace date of missing taxa with symbol for missing data
         for t in combined_only:
             combined.matrix[t]+=Seq(combined.missing*m.nchar,combined.alphabet)
         for t in m_only:
             combined.matrix[t]=Seq(combined.missing*combined.nchar,combined.alphabet)+\
-                Seq(m.matrix[t].tostring().replace(m.gap,combined.gap).replace(m.missing,combined.missing),combined.alphabet)
+                Seq(str(m.matrix[t]).replace(m.gap,combined.gap).replace(m.missing,combined.missing),combined.alphabet)
         combined.taxlabels.extend(m_only)    # new taxon list
         for cn,cs in m.charsets.iteritems(): # adjust character sets for new matrix
             combined.charsets['%s.%s' % (n,cn)]=[x+combined.nchar for x in cs]
@@ -854,12 +854,12 @@ class Nexus(object):
             else:
                 if self.matchchar:
                     while 1:
-                        p=iupac_seq.tostring().find(self.matchchar)
+                        p=str(iupac_seq).find(self.matchchar)
                         if p==-1:
                             break
-                        iupac_seq=Seq(iupac_seq.tostring()[:p]+refseq[p]+iupac_seq.tostring()[p+1:],self.alphabet)
+                        iupac_seq=Seq(str(iupac_seq)[:p]+refseq[p]+str(iupac_seq)[p+1:],self.alphabet)
             #check for invalid characters
-            for i,c in enumerate(iupac_seq.tostring()):
+            for i,c in enumerate(str(iupac_seq)):
                 if c not in self.valid_characters and c!=self.gap and c!=self.missing:
                     raise NexusError( \
                         ('Taxon %s: Illegal character %s in sequence %s ' + \
@@ -1425,8 +1425,8 @@ class Nexus(object):
         fh=open(filename,'w')
         for taxon in self.taxlabels:
             fh.write('>'+safename(taxon)+'\n')
-            for i in range(0, len(self.matrix[taxon].tostring()), width):
-                fh.write(self.matrix[taxon].tostring()[i:i+width] + '\n')    
+            for i in range(0, len(str(self.matrix[taxon])), width):
+                fh.write(str(self.matrix[taxon])[i:i+width] + '\n')    
         fh.close()
         return filename
 
@@ -1443,7 +1443,7 @@ class Nexus(object):
         fh=open(filename,'w')
         fh.write('%d %d\n' % (self.ntax,self.nchar))
         for taxon in self.taxlabels:
-            fh.write('%s %s\n' % (safename(taxon),self.matrix[taxon].tostring()))
+            fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
         fh.close()
         return filename
     
@@ -1458,7 +1458,8 @@ class Nexus(object):
             return [x for x in range(len(matrix[undelete[0]])) if x not in exclude]
         # get the first sequence and expand all ambiguous values
         constant=[(x,self.ambiguous_values.get(n.upper(),n.upper())) for 
-                x,n in enumerate(matrix[undelete[0]].tostring()) if x not in exclude]
+                x,n in enumerate(str(matrix[undelete[0]])) if x not in exclude]
+
         for taxon in undelete[1:]:
             newconstant=[]
             for site in constant:
@@ -1533,7 +1534,7 @@ class Nexus(object):
             undelete=[t for t in self.taxlabels if t in matrix and t not in delete]
             if not undelete:
                 return {}
-            m=[matrix[k].tostring() for k in undelete]
+            m=[str(matrix[k]) for k in undelete]
             zipped_m=zip(*m)
             sitesm=[s for i,s in enumerate(zipped_m) if i not in exclude]
             if sitesm==[]:
@@ -1557,7 +1558,7 @@ class Nexus(object):
             return cm
         undelete=[t for t in self.taxlabels if t in cm]  
         if seqobjects:
-            sitesm=zip(*[cm[t].tostring() for t in undelete])
+            sitesm=zip(*[str(cm[t]) for t in undelete])
             alphabet=matrix[matrix.keys()[0]].alphabet
         else:
             sitesm=zip(*[cm[t] for t in undelete])
@@ -1624,7 +1625,7 @@ class Nexus(object):
             return
         if self.taxlabels:
             #python 2.3 does not support zip(*[])
-            sitesm=zip(*[self.matrix[t].tostring() for t in self.taxlabels])
+            sitesm=zip(*[str(self.matrix[t]) for t in self.taxlabels])
         else:
             sitesm=[]
         sitesm[pos:pos]=[['-']*len(self.taxlabels)]*n
@@ -1683,7 +1684,7 @@ class Nexus(object):
         gap=set(self.gap)
         if include_missing:
             gap.add(self.missing)
-        sitesm=zip(*[self.matrix[t].tostring() for t in self.taxlabels])
+        sitesm=zip(*[str(self.matrix[t]) for t in self.taxlabels])
         gaponly=[i for i,site in enumerate(sitesm) if set(site).issubset(gap)]
         return gaponly 
         
@@ -1698,7 +1699,7 @@ class Nexus(object):
         if not skip_n:
             replace.extend(['n','N'])
         for taxon in self.taxlabels:
-            sequence=self.matrix[taxon].tostring()
+            sequence=str(self.matrix[taxon])
             length=len(sequence)
             start,end=get_start_end(sequence,skiplist=replace)
             if start==-1 and end==-1:

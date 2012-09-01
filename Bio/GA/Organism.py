@@ -123,7 +123,7 @@ class Organism(object):
     def __str__(self):
         """Provide a string output for debugging.
         """
-        return "Genome: %s; Fitness %s" % (self.genome.tostring(), self.fitness)
+        return "Genome: %s; Fitness %s" % (str(self.genome), self.fitness)
 
     def __eq__(self, other):
         """Compare organisms by their genomes (as strings of letters).

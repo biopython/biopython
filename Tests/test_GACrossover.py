@@ -30,7 +30,7 @@ def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     seq_genome = genome.toseq()
-    return int(seq_genome.tostring())
+    return int(str(seq_genome))
 
 class SinglePointTest(unittest.TestCase):
     """Test simple point crossovers.
@@ -108,8 +108,8 @@ class UniformTest(unittest.TestCase):
         self.assertTrue(len(new_org_1.genome) > len(new_org_2.genome),
                      "Strings are of wrong sizes after uniform crossover.")
 
-        self.assertEqual(new_org_2.genome.tostring().count("1"),
-                         new_org_1.genome.tostring().count("3"),
+        self.assertEqual(str(new_org_2.genome).count("1"),
+                         str(new_org_1.genome).count("3"),
                          "There should be equal distributions of the smaller string")
 
         self.assertEqual(str(self.org_1.genome[len(new_org_2.genome):]),
@@ -125,11 +125,11 @@ class UniformTest(unittest.TestCase):
         self.assertEqual(len(new_org_1.genome), len(new_org_2.genome),
                          "Strings are of different sizes after uniform crossover.")
 
-        self.assertEqual(new_org_1.genome.tostring().count("1"),
-                         new_org_2.genome.tostring().count("2"),
+        self.assertEqual(str(new_org_1.genome).count("1"),
+                         str(new_org_2.genome).count("2"),
                          "There should be equal, inverse distributions")
-        self.assertEqual(new_org_1.genome.tostring().count("2") ,
-                         new_org_2.genome.tostring().count("1"),
+        self.assertEqual(str(new_org_1.genome).count("2") ,
+                         str(new_org_2.genome).count("1"),
                          "There should be equal, inverse distributions")
 
 
@@ -176,16 +176,16 @@ class InterleaveTest(unittest.TestCase):
         self.assertEqual(len(new_org_1.genome), len(new_org_2.genome),
             "Strings are of different sizes after interleave point crossover.")
 
-        self.assertEqual(new_org_1.genome.tostring().count("1"),
-                         new_org_2.genome.tostring().count("2"),
+        self.assertEqual(str(new_org_1.genome).count("1"),
+                         str(new_org_2.genome).count("2"),
                          "There should be equal, inverse distributions")
-        self.assertEqual(new_org_1.genome.tostring().count("2") ,
-                         new_org_2.genome.tostring().count("1"),
+        self.assertEqual(str(new_org_1.genome).count("2") ,
+                         str(new_org_2.genome).count("1"),
                          "There should be equal, inverse distributions")
        
-        self.assertEqual(new_org_1.genome.tostring(), "12121",
+        self.assertEqual(str(new_org_1.genome), "12121",
                          "Did not interleave.")
-        self.assertEqual(new_org_2.genome.tostring(), "21212",
+        self.assertEqual(str(new_org_2.genome), "21212",
                          "Did not interleave.")
 
     def test_prop_asym_crossover(self):
@@ -206,9 +206,9 @@ class InterleaveTest(unittest.TestCase):
         self.assertNotEqual(str(new_org_3), str(self.org_3),
                             "Returned an exact copy of the original organism.")
 
-        self.assertEqual(new_org_1.genome.tostring(), "13131",
+        self.assertEqual(str(new_org_1.genome), "13131",
                          "Did not interleave with growth.")
-        self.assertEqual(new_org_3.genome.tostring(), "31313333",
+        self.assertEqual(str(new_org_3.genome), "31313333",
                          "Did not interleave with growth.")
     
 class FourPointTest(unittest.TestCase):
@@ -253,11 +253,11 @@ class FourPointTest(unittest.TestCase):
         self.assertEqual(len(new_org_1.genome), len(new_org_2.genome),
                          "Strings are of different sizes after symmetric crossover.")
 
-        self.assertEqual(new_org_1.genome.tostring().count("1"),
-                         new_org_2.genome.tostring().count("2"),
+        self.assertEqual(str(new_org_1.genome).count("1"),
+                         str(new_org_2.genome).count("2"),
                          "There should be equal, inverse distributions")
-        self.assertEqual(new_org_1.genome.tostring().count("2") ,
-                         new_org_2.genome.tostring().count("1"),
+        self.assertEqual(str(new_org_1.genome).count("2") ,
+                         str(new_org_2.genome).count("1"),
                          "There should be equal, inverse distributions")
     
     def test_basic_asym_crossover(self):
@@ -324,8 +324,8 @@ class TestCrossover:
     def do_crossover(self, org_1, org_2):
         seq_org1 = org_1.genome.toseq()
         seq_org2 = org_2.genome.toseq()
-        org1_genome = seq_org1.tostring()
-        org2_genome = seq_org2.tostring()
+        org1_genome = str(seq_org1)
+        org2_genome = str(seq_org2)
 
         new_org_1 = org_1.copy()
         new_org_2 = org_2.copy()

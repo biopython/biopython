@@ -20,7 +20,7 @@ def crc32(seq):
     #TODO - Should we return crc32(x) & 0xffffffff here?
     try:
         #Assume its a Seq object
-        return _crc32(_as_bytes(seq.tostring()))
+        return _crc32(_as_bytes(str(seq)))
     except AttributeError:
         #Assume its a string/unicode
         return _crc32(_as_bytes(seq))
@@ -68,7 +68,7 @@ def gcg(seq):
     All sequences are converted to uppercase """
     try:
         #Assume its a Seq object
-        seq = seq.tostring()
+        seq = str(seq)
     except AttributeError:
         #Assume its a string
         pass
@@ -99,7 +99,7 @@ def seguid(seq):
     import base64
     try:
         #Assume its a Seq object
-        seq = seq.tostring()
+        seq = str(seq)
     except AttributeError:
         #Assume its a string
         pass

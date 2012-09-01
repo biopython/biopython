@@ -28,7 +28,7 @@ class SimpleEnzyme(unittest.TestCase):
 
         parts = EcoRI.catalyse(self.ecosite_seq)
         self.assertEqual(len(parts), 2)
-        self.assertEqual(parts[1].tostring(), "AATTCAAAA")
+        self.assertEqual(str(parts[1]), "AATTCAAAA")
         parts = EcoRI.catalyze(self.ecosite_seq)
         self.assertEqual(len(parts), 2)
 
