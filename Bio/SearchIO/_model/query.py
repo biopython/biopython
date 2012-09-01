@@ -164,7 +164,7 @@ class QueryResult(_BaseSearchObject):
     Hit(id='gi|270133242|ref|NR_032573.1|', query_id='33211', 1 hsps)
     Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
 
-    If you need access to all the hits in a QueryResult object, you can access
+    If you need access to all the hits in a QueryResult object, you can get
     them in a list using the `hits` property. Similary, access to all hit IDs is
     available through the `hit_keys` property.
 
