@@ -190,7 +190,7 @@ class Motif(object):
             raise ValueError ("This motif has no instances")
         for pos in xrange(0,len(sequence)-self.length+1):
             for instance in self.instances:
-                if instance.tostring()==sequence[pos:pos+self.length].tostring():
+                if str(instance) == str(sequence[pos:pos+self.length]):
                     yield(pos,instance)
                     break # no other instance will fit (we don't want to return multiple hits)
 
@@ -379,19 +379,19 @@ class Motif(object):
     def __str__(self,masked=False):
         """ string representation of a motif.
         """
-        str = ""
+        string = ""
         if self.instances!=None:
             for inst in self.instances:
-                str = str + inst.tostring() + "\n"
+                string = string + str(inst) + "\n"
 
         if masked:
             for i in xrange(self.length):
                 if self.mask[i]:
-                    str = str + "*"
+                    string = string + "*"
                 else:
-                    str = str + " "
-            str = str + "\n"
-        return str
+                    string = string + " "
+            string = string + "\n"
+        return string
 
     def __len__(self):
         """return the length of a motif
@@ -418,11 +418,11 @@ class Motif(object):
         """
         if self.instances==None:
             self.make_instances_from_counts()
-        str = ""
+        string = ""
         for i,inst in enumerate(self.instances):
-            str = str + ">instance%d\n"%i + inst.tostring() + "\n"
+            string = string + ">instance%d\n"%i + str(inst) + "\n"
             
-        return str       
+        return string
 
     def reverse_complement(self):
         """
@@ -787,7 +787,7 @@ class Motif(object):
         if seq.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA sequences")
 
-        seq = seq.tostring()
+        seq = str(seq)
 
         # check if the fast C code can be used
         try:
