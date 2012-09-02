@@ -181,6 +181,12 @@ def _set_hsp_seqs(hsp, parsed, program):
             parsed[seq_type]['seq'] = _extract_alignment(parsed[seq_type])
     assert len(parsed['query']['seq']) == len(parsed['hit']['seq']), parsed
 
+    # query and hit sequence types must be the same
+    assert parsed['query']['_type'] == parsed['hit']['_type']
+    type_val = parsed['query']['_type'] # hit works fine too
+    alphabet =  generic_dna if type_val == 'D' else generic_protein
+    setattr(hsp.fragment, 'alphabet', alphabet)
+
     for seq_type in ('hit', 'query'):
         # get and set start and end coordinates
         start = int(parsed[seq_type]['_start'])
@@ -190,12 +196,6 @@ def _set_hsp_seqs(hsp, parsed, program):
         setattr(hsp.fragment, seq_type + '_end', max(start, end))
         # set seq and alphabet
         setattr(hsp.fragment, seq_type, parsed[seq_type]['seq'])
-
-        # alphabet of the sequence, not of the actual query that
-        # produces the sequence
-        type_val = parsed[seq_type]['_type']
-        alphabet =  generic_dna if type_val == 'D' else generic_protein
-        setattr(getattr(hsp.fragment, seq_type).seq, 'alphabet', alphabet)
 
         if alphabet is not generic_protein:
             # get strand from coordinate; start <= end is plus
