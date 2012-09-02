@@ -219,12 +219,17 @@ class HSP(_BaseHSP):
     | hit_inter_ranges   | list of hit sequence coordinates of the regions      |
     |                    | between fragments                                    |
     +--------------------+------------------------------------------------------+
+    | hit_inter_spans    | list of lengths of the regions between hit fragments |
+    +--------------------+------------------------------------------------------+
     | query_id           | ID of the query sequence                             |
     +--------------------+------------------------------------------------------+
     | query_description  | description of the query sequence                    |
     +--------------------+------------------------------------------------------+
     | query_inter_ranges | list of query sequence coordinates of the regions    |
     |                    | between fragments                                    |
+    +--------------------+------------------------------------------------------+
+    | query_inter_spans  | list of lengths of the regions between query         |
+    |                    |fragments                                             |
     +--------------------+------------------------------------------------------+
 
     """
@@ -452,6 +457,23 @@ class HSP(_BaseHSP):
 
     query_inter_ranges = property(fget=_query_inter_ranges_get,
         doc="""Query sequence coordinates of the regions between fragments""")
+
+    def _inter_spans_get(self, seq_type):
+        assert seq_type in ('query', 'hit')
+        attr_name = '%s_inter_ranges' % seq_type
+        return [coord[1] - coord[0] for coord in getattr(self, attr_name)]
+
+    def _hit_inter_spans_get(self):
+        return self._inter_spans_get('hit')
+
+    hit_inter_spans = property(fget=_hit_inter_spans_get,
+        doc="""Lengths of regions between hit fragments""")
+
+    def _query_inter_spans_get(self):
+        return self._inter_spans_get('query')
+
+    query_inter_spans = property(fget=_query_inter_spans_get,
+        doc="""Lengths of regions between query fragments""")
 
     ## shortcuts for fragments' properties ##
 
