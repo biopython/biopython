@@ -87,17 +87,13 @@ class BlastTextParser(object):
                         else:
                             frag.hit_frame = 1
                     # set query coordinates
-                    startfunc = min if frag.query_strand >= 0 else max
-                    endfunc = max if frag.query_strand >= 0 else min
-                    frag.query_start = startfunc(bhsp.query_start, \
+                    frag.query_start = min(bhsp.query_start, \
                             bhsp.query_end) - 1
-                    frag.query_end = endfunc(bhsp.query_start, bhsp.query_end)
+                    frag.query_end = max(bhsp.query_start, bhsp.query_end)
                     # set hit coordinates
-                    startfunc = min if frag.hit_strand >= 0 else max
-                    endfunc = max if frag.hit_strand >= 0 else min
-                    frag.hit_start = startfunc(bhsp.sbjct_start, \
+                    frag.hit_start = min(bhsp.sbjct_start, \
                             bhsp.sbjct_end) - 1
-                    frag.hit_end = endfunc(bhsp.sbjct_start, bhsp.sbjct_end)
+                    frag.hit_end = max(bhsp.sbjct_start, bhsp.sbjct_end)
                     # set query, hit sequences and its annotation
                     qseq = ''
                     hseq = ''
