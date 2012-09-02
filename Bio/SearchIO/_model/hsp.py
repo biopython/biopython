@@ -742,24 +742,17 @@ class HSPFragment(_BaseHSP):
         return '\n'.join(lines)
 
     ## sequence properties ##
-    def _prep_seq(self, seq, seq_type):
-        """Transforms a sequence into a SeqRecord object).
+    def _get_seq(self, seq_type):
+        """Retrieves sequences as SeqRecord.
 
         Argument:
-        seq -- String of sequence.
         seq_type -- String of sequence type, must be 'hit' or 'query'
 
         """
         assert seq_type in ('hit', 'query')
-        if seq is None: return seq # return immediately if seq is None
-        # check length if the opposite sequence is not None
-        opp_type = 'hit' if seq_type == 'query' else 'query'
-        opp_seq = getattr(self, opp_type, None)
-        if opp_seq is not None:
-            if len(seq) != len(opp_seq):
-                raise ValueError("Sequence lengths do not match. Expected: "
-                        "%r (%s); found: %r (%s)." % (len(opp_seq), opp_type,
-                        len(seq), seq_type))
+        seq = getattr(self, '_%s' % seq_type, None)
+        if seq is None:
+            return seq
 
         seq_id = getattr(self, '%s_id' % seq_type)
         seq_desc = getattr(self, '%s_description' % seq_type)
@@ -774,24 +767,46 @@ class HSPFragment(_BaseHSP):
         elif isinstance(seq, basestring):
             return SeqRecord(Seq(seq, self.alphabet), id=seq_id, name=seq_name,
                     description=seq_desc)
+
+    def _set_seq(self, seq, seq_type):
+        """Checks the given sequence for attribute setting
+
+        Arguments:
+        seq -- String or SeqRecord to check
+        seq_type -- String of sequence type, must be 'hit' or 'query'
+
+        """
+        assert seq_type in ('hit', 'query')
+        if seq is None:
+            return seq # return immediately if seq is None
         else:
-            raise TypeError("%s sequence must be a string or a "
-                    "SeqRecord object." % seq_type.capitalize())
+            if not isinstance(seq, (basestring, SeqRecord)):
+                raise TypeError("%s sequence must be a string or a SeqRecord"
+                        " object." % seq_type)
+        # check length if the opposite sequence is not None
+        opp_type = '_hit' if seq_type == 'query' else '_query'
+        opp_seq = getattr(self, opp_type, None)
+        if opp_seq is not None:
+            if len(seq) != len(opp_seq):
+                raise ValueError("Sequence lengths do not match. Expected: "
+                        "%r (%s); found: %r (%s)." % (len(opp_seq), opp_type,
+                        len(seq), seq_type))
+        return seq
 
     def _hit_get(self):
-        return self._hit
+        return self._get_seq('hit')
 
     def _hit_set(self, value):
-        self._hit = self._prep_seq(value, 'hit')
+        self._hit = self._set_seq(value, 'hit')
 
     hit = property(fget=_hit_get, fset=_hit_set,
             doc="""Hit sequence as a SeqRecord object, defaults to None""")
 
     def _query_get(self):
-        return self._query
+        return self._get_seq('query')
 
     def _query_set(self, value):
-        self._query = self._prep_seq(value, 'query')
+        self._query = self._set_seq(value, 'query')
 
     query = property(fget=_query_get, fset=_query_set,
             doc="""Query sequence as a SeqRecord object, defaults to None""")
@@ -815,11 +830,6 @@ class HSPFragment(_BaseHSP):
 
     def _alphabet_set(self, value):
         self._alphabet = value
-        # try to set SeqRecords' alphabets if they exist
-        if self.query is not None:
-            self.query.seq.alphabet = value
-        if self.hit is not None:
-            self.hit.seq.alphabet = value
 
     alphabet = property(fget=_alphabet_get, fset=_alphabet_set,
             doc="""Alphabet object used in the fragment's sequences and alignment,
