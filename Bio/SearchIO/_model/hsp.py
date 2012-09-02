@@ -6,6 +6,7 @@
 """Bio.SearchIO objects to model high scoring regions between query and hit."""
 
 import warnings
+from operator import ge, le
 
 from Bio import BiopythonWarning
 from Bio.Align import MultipleSeqAlignment
@@ -959,17 +960,29 @@ class HSPFragment(_BaseHSP):
             doc="""Query sequence reading frame, defaults to None""")
 
     ## coordinate properties ##
-    def _prep_coord(self, coord):
-        if not isinstance(coord, int):
-            if coord is not None:
-                raise ValueError("Coordinate must be an integer or None.")
+    def _prep_coord(self, coord, opp_coord_name, op):
+        # coord must either be None or int
+        if coord is None:
+            return coord
+        assert isinstance(coord, int)
+        # try to get opposite coordinate, if it's not present, return
+        try:
+            opp_coord = getattr(self, opp_coord_name)
+        except AttributeError:
+            return coord
+        # if opposite coordinate is None, return
+        if opp_coord is None:
+            return coord
+        # otherwise compare it to coord ('>=' or '<=')
+        else:
+            assert op(coord, opp_coord)
         return coord
 
     def _hit_start_get(self):
         return self._hit_start
 
     def _hit_start_set(self, value):
-        self._hit_start = self._prep_coord(value)
+        self._hit_start = self._prep_coord(value, 'hit_end', le)
 
     hit_start = property(fget=_hit_start_get, fset=_hit_start_set,
             doc="""Hit sequence start coordinate, defaults to None""")
@@ -978,7 +991,7 @@ class HSPFragment(_BaseHSP):
         return self._query_start
 
     def _query_start_set(self, value):
-        self._query_start = self._prep_coord(value)
+        self._query_start = self._prep_coord(value, 'query_end', le)
 
     query_start = property(fget=_query_start_get, fset=_query_start_set,
             doc="""Query sequence start coordinate, defaults to None""")
@@ -987,7 +1000,7 @@ class HSPFragment(_BaseHSP):
         return self._hit_end
 
     def _hit_end_set(self, value):
-        self._hit_end = self._prep_coord(value)
+        self._hit_end = self._prep_coord(value, 'hit_start', ge)
 
     hit_end = property(fget=_hit_end_get, fset=_hit_end_set,
             doc="""Hit sequence start coordinate, defaults to None""")
@@ -996,7 +1009,7 @@ class HSPFragment(_BaseHSP):
         return self._query_end
 
     def _query_end_set(self, value):
-        self._query_end = self._prep_coord(value)
+        self._query_end = self._prep_coord(value, 'query_start', ge)
 
     query_end = property(fget=_query_end_get, fset=_query_end_set,
             doc="""Query sequence end coordinate, defaults to None""")
