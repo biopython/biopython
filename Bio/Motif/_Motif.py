@@ -382,15 +382,15 @@ class Motif(object):
         string = ""
         if self.instances!=None:
             for inst in self.instances:
-                string = string + str(inst) + "\n"
+                string += str(inst) + "\n"
 
         if masked:
             for i in xrange(self.length):
                 if self.mask[i]:
-                    string = string + "*"
+                    string += "*"
                 else:
-                    string = string + " "
-            string = string + "\n"
+                    string += " "
+            string += "\n"
         return string
 
     def __len__(self):
@@ -420,7 +420,7 @@ class Motif(object):
             self.make_instances_from_counts()
         string = ""
         for i,inst in enumerate(self.instances):
-            string = string + ">instance%d\n"%i + str(inst) + "\n"
+            string += ">instance%d\n"%i + str(inst) + "\n"
             
         return string
 
