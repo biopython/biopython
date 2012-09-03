@@ -955,8 +955,8 @@ class CompoundLocation(object):
 
         >>> min(f)
         3
-        >>> max(12)
-        10
+        >>> max(f)
+        12
         >>> f.start == min(f)
         True
         >>> f.end == max(f) + 1
