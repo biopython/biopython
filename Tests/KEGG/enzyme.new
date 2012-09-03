@@ -1,0 +1,105 @@
+ENTRY       EC 6.2.1.25                 Enzyme
+NAME        benzoate---CoA ligase;
+            benzoate---coenzyme A ligase;
+            benzoyl-coenzyme A synthetase;
+            benzoyl CoA synthetase (AMP forming)
+CLASS       Ligases;
+            Forming carbon-sulfur bonds;
+            Acid-thiol ligases
+SYSNAME     benzoate:CoA ligase (AMP-forming)
+REACTION    ATP + benzoate + CoA = AMP + diphosphate + benzoyl-CoA [RN:R01422]
+ALL_REAC    R01422
+SUBSTRATE   ATP [CPD:C00002];
+            benzoate [CPD:C00180];
+            CoA [CPD:C00010]
+PRODUCT     AMP [CPD:C00020];
+            diphosphate [CPD:C00013];
+            benzoyl-CoA [CPD:C00512]
+COMMENT     Also acts on 2-, 3- and 4-fluorobenzoate, but only very slowly on the corresponding chlorobenzoates.
+REFERENCE   1
+  AUTHORS   Hutber, G.N. and Ribbons, D.W.
+  TITLE     Involvement of coenzyme-A esters in the metabolism of benzoate and cyclohexanecarboxylate by Rhodopseudomonas palustris.
+  JOURNAL   J. Gen. Microbiol. 129 (1983) 2413-2420.
+REFERENCE   2  [PMID:2857161]
+  AUTHORS   Schennen U, Braun K, Knackmuss HJ.
+  TITLE     Anaerobic degradation of 2-fluorobenzoate by benzoate-degrading, denitrifying bacteria.
+  JOURNAL   J. Bacteriol. 161 (1985) 321-5.
+  ORGANISM  Pseudomonas sp.
+PATHWAY     ec00362  Benzoate degradation
+            ec00627  Aminobenzoate degradation
+            ec01100  Metabolic pathways
+            ec01120  Microbial metabolism in diverse environments
+ORTHOLOGY   K04105  4-hydroxybenzoate-CoA ligase
+            K04110  benzoate-CoA ligase
+GENES       REU: Reut_A1327
+            REH: H16_A1412(h16_A1412) H16_B1918
+            RME: Rmet_1224(bzdA)
+            CTI: RALTA_A1325 RALTA_B1617
+            CNC: CNE_1c14400(bclA) CNE_2c18780(boxD)
+            BXE: Bxe_A1419 Bxe_C0896
+            BPH: Bphy_1543
+            BPY: Bphyt_2700
+            BGL: bglu_2g11460
+            BUG: BC1001_2395
+            BGE: BC1002_1980
+            BGF: BC1003_1063
+            BRH: RBRH_00494
+            BPT: Bpet3574
+            AXY: AXYL_05035
+            AKA: TKWG_07570
+            RFR: Rfer_0216
+            POL: Bpro_1624 Bpro_2983
+            PNA: Pnap_2948
+            VEI: Veis_0730
+            DAC: Daci_0076
+            DEL: DelCs14_0077
+            VAP: Vapar_0089
+            VPE: Varpa_0102
+            CTT: CtCNB1_0097
+            RTA: Rta_22340
+            LCH: Lcho_3655
+            EBA: ebA2757(bclA) ebA5301(bclA)
+            AZO: azo3052(bzdA)
+            TMZ: Tmz1t_3136
+            GME: Gmet_2143
+            GLO: Glov_2397
+            GEO: Geob_0200
+            GEM: GM21_2825
+            DMA: DMR_19390
+            DAS: Daes_3238
+            DPR: Despr_3172
+            DTI: Desti_5323
+            BJA: blr1077
+            BRA: BRADO6791
+            BBT: BBta_0747 BBta_6637(badA)
+            RPA: RPA0661(badA) RPA0669(hbaA)
+            RPB: RPB_4656
+            RPC: RPC_1016 RPC_1025
+            RPD: RPD_1526 RPD_1534
+            RPE: RPE_0592 RPE_0604
+            RPT: Rpal_0728 Rpal_0736
+            RPX: Rpdx1_4117 Rpdx1_4125
+            RVA: Rvan_0044
+            SIL: SPO3697(badA-1)
+            JAN: Jann_0669
+            SWI: Swit_0829
+            RPM: RSPPHO_01133
+            MAG: amb2869
+            GYC: GYMC61_2828
+            GYA: GYMC52_1957
+            GCT: GC56T3_1519
+            SCB: SCAB_8391
+            SCT: SCAT_5491
+            SCY: SCATT_54890
+            BSD: BLASA_2555(badA)
+            AMD: AMED_8609(badA)
+            AMN: RAM_35745 RAM_44185
+            AMM: AMES_6861(badA) AMES_8478(badA)
+            PDX: Psed_1491
+DBLINKS     ExplorEnz - The Enzyme Database: 6.2.1.25
+            IUBMB Enzyme Nomenclature: 6.2.1.25
+            ExPASy - ENZYME nomenclature database: 6.2.1.25
+            UM-BBD (Biocatalysis/Biodegradation Database): 6.2.1.25
+            BRENDA, the Enzyme Database: 6.2.1.25
+            CAS: 95329-17-2
+///

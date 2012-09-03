@@ -8,8 +8,8 @@ from Bio.KEGG import Compound
 from Bio.KEGG import Map
 from Bio.Pathway import System
 
-test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular"]
-test_KEGG_Compound_files = ["compound.sample", "compound.irregular"] 
+test_KEGG_Enzyme_files   = ["enzyme.sample", "enzyme.irregular", "enzyme.new"]
+test_KEGG_Compound_files = ["compound.sample", "compound.irregular"]
 test_KEGG_Map_files      = ["map00950.rea"]
 
 def t_KEGG_Enzyme(testfiles):
@@ -60,5 +60,3 @@ def t_KEGG_Map(testfiles):
 t_KEGG_Enzyme(test_KEGG_Enzyme_files)
 t_KEGG_Compound(test_KEGG_Compound_files)
 t_KEGG_Map(test_KEGG_Map_files)
-
-
