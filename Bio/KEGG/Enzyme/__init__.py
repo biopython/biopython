@@ -158,7 +158,7 @@ class Record(object):
             s.append(entry[0] + ": " + entry[1] + "  " + entry[2])
         return _write_kegg("DISEASE",
                            [_wrap_kegg(l, wrap_rule = id_wrap(13)) \
-                            for l in s])    
+                            for l in s])
     def _structures(self):
         s = []
         for entry in self.structures:
@@ -175,7 +175,6 @@ class Record(object):
         for entry in self.dblinks:
             s.append(entry[0] + ": " + "  ".join(entry[1]))
         return _write_kegg("DBLINKS", s)
-
 
 
 def parse(handle):
@@ -241,7 +240,7 @@ def parse(handle):
                 row = database, number, name
                 record.disease[-1] = row
         elif keyword=="EFFECTOR    ":
-             record.effector.append(data.strip(";"))
+            record.effector.append(data.strip(";"))
         elif keyword=="GENES       ":
             if data[3:5]==': ':
                 key, values = data.split(":",1)
@@ -257,24 +256,22 @@ def parse(handle):
                 row = key, values
                 record.genes[-1] = row
         elif keyword=="INHIBITOR   ":
-             record.inhibitor.append(data.strip(";"))
+            record.inhibitor.append(data.strip(";"))
         elif keyword=="NAME        ":
-             record.name.append(data.strip(";"))
+            record.name.append(data.strip(";"))
         elif keyword=="PATHWAY     ":
             if data[:5]=='PATH:':
-                path, map, name = data.split(None,2)
-                pathway = (path[:-1], map, name)
+                _, map_num, name = data.split(None,2)
+                pathway = ('PATH', map_num, name)
                 record.pathway.append(pathway)
             else:
-                pathway = record.pathway[-1]
-                path, map, name = pathway
-                name = name + " " + data
-                pathway = path, map, name
-                record.pathway[-1] = pathway
+                ec_num, name = data.split(None,1)
+                pathway = 'PATH', ec_num, name
+                record.pathway.append(pathway)
         elif keyword=="PRODUCT     ":
-             record.product.append(data.strip(";"))
+            record.product.append(data.strip(";"))
         elif keyword=="REACTION    ":
-             record.reaction.append(data.strip(";"))
+            record.reaction.append(data.strip(";"))
         elif keyword=="STRUCTURES  ":
             if data[:4]=='PDB:':
                 database = data[:3]
@@ -288,13 +285,13 @@ def parse(handle):
                 row = (database, accessions)
                 record.structures[-1] = row
         elif keyword=="SUBSTRATE   ":
-             record.substrate.append(data.strip(";"))
+            record.substrate.append(data.strip(";"))
         elif keyword=="SYSNAME     ":
-             record.sysname.append(data.strip(";"))
+            record.sysname.append(data.strip(";"))
 
 def _test():
     """Run the Bio.KEGG.Enzyme module's doctests.
-    
+
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.
     """
