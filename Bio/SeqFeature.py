@@ -949,6 +949,19 @@ class CompoundLocation(object):
         >>> list(f)
         [3, 4, 5, 12, 11, 10]
 
+        The example above doing list(f) iterates over the coordinates within the
+        feature. This allows you to use max and min on the location, which should
+        be equivalent to the location's start and end limits.
+
+        >>> min(f)
+        3
+        >>> max(12)
+        10
+        >>> f.start == min(f)
+        True
+        >>> f.end == max(f) + 1
+        True
+
         Note that adding locations provides a more intuitive method of
         construction:
 
