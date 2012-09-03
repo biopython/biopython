@@ -5838,7 +5838,7 @@ themselves contain \verb|HSP| objects.
 
 Let's see what they look like, beginning with our BLAST search:
 
-%doctest
+%doctest ../Tests/Tutorial
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -5995,7 +5995,7 @@ apparent compared to the differences you've seen in \verb|QueryResult| or
 Let's see some examples from our BLAST and BLAT searches. We'll look at the
 BLAST HSP first:
 
-%doctest
+%doctest ../Tests/Tutorial
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
@@ -6277,7 +6277,7 @@ coordinates, the sequences themselves, and their IDs and descriptions.
 These attributes are readily shown when you invoke \verb|print| on an
 \verb|HSPFragment|. Here's an example, taken from our BLAST search:
 
-%doctest
+%doctest ../Tests/Tutorial
 \begin{verbatim}
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
