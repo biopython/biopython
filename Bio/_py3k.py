@@ -70,6 +70,9 @@ if sys.version_info[0] >= 3:
                 return self._handle.tell(pos)
         return EvilHandleHack(handle)
 
+    #On Python 3, can depend on OrderedDict being present:
+    from collections import OrderedDict
+
 else:
     #Python 2 code
 
@@ -99,3 +102,14 @@ else:
     def _binary_to_string_handle(handle):
         """Treat a binary handle like a text handle."""
         return handle
+
+    try:
+        #Present on Python 2.7
+        from collections import OrderedDict
+    except ImportError:
+        try:
+            #Raymond Hettinger's backport available on PyPI
+            from ordereddict import OrderedDict
+        except ImportError:
+            #Use our bundled copy instead
+            from _ordereddict import OrderedDict
