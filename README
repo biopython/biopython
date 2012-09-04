@@ -35,8 +35,7 @@ directory at the command line, and type:
 System Requirements
 ===================
 
-- Python 2.4, 2.5, 2.6 or 2.7, see http://www.python.org
-  We are phasing out support for Python 2.4.
+- Python 2.5, 2.6 or 2.7, see http://www.python.org
   See below for notes about testing with Python 3.
  
 - NumPy, see http://numpy.scipy.org (optional, but strongly recommended)
