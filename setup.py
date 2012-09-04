@@ -326,6 +326,7 @@ PACKAGES = [
     'Bio.Phylo.PAML',
     'Bio.UniGene',
     'Bio.Wise',
+    'Bio._py3k',
     #Other top level packages,
     'BioSQL',
     ]
