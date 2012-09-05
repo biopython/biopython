@@ -32,12 +32,20 @@ class MafWriter(SequentialAlignmentWriter):
     def _write_record (self, record):
         """Writes a single SeqRecord object to an 's' line in a MAF block"""
 
+        # convert biopython-style +1/-1 strand to MAF-style +/- strand
+        if record.annotations.get("strand") == "+1":
+            strand = "+"
+        elif record.annotations.get("strand") == "-1":
+            strand = "-"
+        else:
+            strand = "+"
+
         fields = ["s",
                   #In the MAF file format, spaces are not allowed in the id
                   "%-40s" % record.id.replace(" ","_"),
                   "%15s" % record.annotations.get("start", 0),
                   "%5s" % record.annotations.get("size", len(str(record.seq).replace("-",""))),
-                  record.annotations.get("strand", "+"),
+                  strand,
                   "%15s" % record.annotations.get("srcSize", 0),
                   str(record.seq)]
         self.handle.write(" ".join(fields) + "\n")
@@ -106,10 +114,18 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
                 if len(line_split) <> 7:
                     raise ValueError("Error parsing alignment - 's' line must have 7 fields")
 
+                # convert MAF-style +/- strand to biopython-stype +1/-1
+                if line_split[4] == "+":
+                    strand = "+1"
+                elif line_split[4] == "-":
+                    strand = "-1"
+                else:
+                    strand = "+1"
+
                 # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
                 anno = {"start": int(line_split[2]),
                         "size": int(line_split[3]),
-                        "strand": line_split[4],
+                        "strand": strand,
                         "srcSize": int(line_split[5])}
                         
                 sequence = line_split[6]
@@ -407,7 +423,7 @@ class MafIndex():
                         
             yield fetched
             
-    def get_spliced(self, starts, ends, strand = "+"):
+    def get_spliced(self, starts, ends, strand = "+1"):
         """Returns a multiple alignment of the exact sequence range provided.
         
         Accepts two lists of start and end positions on target_seqname, representing
@@ -416,8 +432,8 @@ class MafIndex():
         """
 
         # validate strand
-        if strand not in ("+", "-"):
-            raise ValueError("Strand must be + or -")
+        if strand not in ("+1", "-1"):
+            raise ValueError("Strand must be +1 or -1")
                 
         # pull all alignments that span the desired intervals
         fetched = [x for x in self.search(starts, ends)]
@@ -451,8 +467,8 @@ class MafIndex():
                         if ref_first_strand == None:
                             ref_first_strand = seqrec.annotations["strand"]
                             
-                            if ref_first_strand not in ("+", "-"):
-                                raise ValueError("Strand must be + or -")
+                            if ref_first_strand not in ("+1", "-1"):
+                                raise ValueError("Strand must be +1 or -1")
                         elif ref_first_strand != seqrec.annotations["strand"]:
                             raise ValueError("Encountered strand='%s' on target seqname, expected '%s'" % \
                             (seqrec.annotations["strand"], ref_first_strand))
