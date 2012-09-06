@@ -1223,6 +1223,8 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertEqual(None, fragment.hit)
         self.assertEqual(None, fragment.query)
         self.assertEqual(None, fragment.aln)
+        self.assertEqual([], fragment.hit_features)
+        self.assertEqual([], fragment.query_features)
         self.assertEqual(None, fragment.hit_strand)
         self.assertEqual(None, fragment.query_strand)
         self.assertEqual(None, fragment.hit_frame)

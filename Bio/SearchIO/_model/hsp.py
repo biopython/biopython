@@ -134,6 +134,9 @@ class HSP(_BaseHSP):
     | hit_all              | hit                 | hit sequence as SeqRecord   |
     |                      |                     | objects                     |
     +----------------------+---------------------+-----------------------------+
+    | hit_features_all     | hit_features        | SeqFeatures of all hit      |
+    |                      |                     | fragments                   |
+    +----------------------+---------------------+-----------------------------+
     | hit_start_all        | hit_start*          | start coordinates of the    |
     |                      |                     | hit fragments               |
     +----------------------+---------------------+-----------------------------+
@@ -154,6 +157,9 @@ class HSP(_BaseHSP):
     +----------------------+---------------------+-----------------------------+
     | query_all            | query               | query sequence as SeqRecord |
     |                      |                     | object                      |
+    +----------------------+---------------------+-----------------------------+
+    | query_features_all   | query_features      | SeqFeatures of all query    |
+    |                      |                     | fragments                   |
     +----------------------+---------------------+-----------------------------+
     | query_start_all      | query_start*        | start coordinates of the    |
     |                      |                     | fragments                   |
@@ -514,6 +520,12 @@ class HSP(_BaseHSP):
     aln_annotation = singleitem('aln_annotation',
             doc="""Dictionary of annotation(s) of the first fragment's alignment""")
 
+    hit_features = singleitem('hit_features',
+            doc="""Hit sequence features, first fragment""")
+
+    query_features = singleitem('query_features',
+            doc="""Query sequence features, first fragment""")
+
     hit_strand = singleitem('hit_strand',
             doc="""Hit strand orientation, first fragment""")
 
@@ -540,6 +552,12 @@ class HSP(_BaseHSP):
 
     aln_annotation_all = allitems('aln_annotation',
             doc="""Dictionary of annotation(s) of all fragments' alignments""")
+
+    hit_features_all = allitems('hit_features',
+            doc="""List of all hit sequence features""")
+
+    query_features_all = allitems('query_features',
+            doc="""List of all query sequence features""")
 
     hit_strand_all = allitems('hit_strand',
             doc="""List of all fragments' hit sequence strands""")
@@ -645,6 +663,8 @@ class HSPFragment(_BaseHSP):
         self._hit_description = '<unknown description>'
         self._query_description = '<unknown description>'
         self._alphabet = alphabet
+        self.hit_features = []
+        self.query_features = []
 
         for seq_type in ('query', 'hit'):
             # self.query or self.hit
@@ -676,10 +696,14 @@ class HSPFragment(_BaseHSP):
                     hit_id=self.hit_id, query_id=self.query_id,
                     alphabet=self.alphabet)
             # transfer query and hit attributes
+            # let SeqRecord handle feature slicing, then retrieve the sliced
+            # features into the sliced HSPFragment
             if self.query is not None:
                 obj.query = self.query[idx]
+                obj.query_features = obj.query.features
             if self.hit is not None:
                 obj.hit = self.hit[idx]
+                obj.hit_features = obj.hit.features
             # description, strand, frame
             for attr in ('description', 'strand', 'frame'):
                 for seq_type in ('hit', 'query'):
@@ -756,16 +780,18 @@ class HSPFragment(_BaseHSP):
         seq_id = getattr(self, '%s_id' % seq_type)
         seq_desc = getattr(self, '%s_description' % seq_type)
         seq_name = 'aligned %s sequence' % seq_type
+        seq_feats = getattr(self, '%s_features' % seq_type)
 
         if isinstance(seq, SeqRecord):
             seq.id = seq_id
             seq.description = seq_desc
             seq.name = seq_name
+            seq.features = seq_feats
             seq.seq.alphabet = self.alphabet
             return seq
         elif isinstance(seq, basestring):
             return SeqRecord(Seq(seq, self.alphabet), id=seq_id, name=seq_name,
-                    description=seq_desc)
+                    description=seq_desc, features=seq_feats)
 
     def _set_seq(self, seq, seq_type):
         """Checks the given sequence for attribute setting
