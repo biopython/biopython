@@ -1213,10 +1213,18 @@ class HSPFragmentCases(unittest.TestCase):
 
     def test_default_attrs(self):
         """Test HSPFragment attributes' default values"""
-        self.assertEqual(None, self.fragment.hit_strand)
-        self.assertEqual(None, self.fragment.query_strand)
-        self.assertEqual(None, self.fragment.hit_frame)
-        self.assertEqual(None, self.fragment.query_frame)
+        fragment = HSPFragment()
+        self.assertEqual('<unknown id>', fragment.hit_id)
+        self.assertEqual('<unknown id>', fragment.query_id)
+        self.assertEqual('<unknown description>', fragment.hit_description)
+        self.assertEqual('<unknown description>', fragment.query_description)
+        self.assertEqual(None, fragment.hit)
+        self.assertEqual(None, fragment.query)
+        self.assertEqual(None, fragment.alignment)
+        self.assertEqual(None, fragment.hit_strand)
+        self.assertEqual(None, fragment.query_strand)
+        self.assertEqual(None, fragment.hit_frame)
+        self.assertEqual(None, fragment.query_frame)
 
     def test_id_desc_set(self):
         """Test HSPFragment query and hit id and description setters"""
