@@ -632,8 +632,6 @@ class HSPFragment(_BaseHSP):
 
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
             hit='', query='',
-            hit_description='<unknown description>',
-            query_description='<unknown description>',
             aln_annotation=None, alphabet=single_letter_alphabet):
 
         # no callables in default args!
@@ -644,8 +642,8 @@ class HSPFragment(_BaseHSP):
 
         self._hit_id = hit_id
         self._query_id = query_id
-        self._hit_description = hit_description
-        self._query_description = query_description
+        self._hit_description = '<unknown description>'
+        self._query_description = '<unknown description>'
         self._alphabet = alphabet
 
         for seq_type in ('query', 'hit'):
@@ -676,17 +674,18 @@ class HSPFragment(_BaseHSP):
         if self.alignment is not None:
             obj = self.__class__(
                     hit_id=self.hit_id, query_id=self.query_id,
-                    hit_description=self.hit_description,
-                    query_description=self.query_description,
                     alphabet=self.alphabet)
             # transfer query and hit attributes
             if self.query is not None:
                 obj.query = self.query[idx]
             if self.hit is not None:
                 obj.hit = self.hit[idx]
-            # and strand
-            obj.hit_strand = self.hit_strand
-            obj.query_strand = self.query_strand
+            # description, strand, frame
+            for attr in ('description', 'strand', 'frame'):
+                for seq_type in ('hit', 'query'):
+                    attr_name = '%s_%s' % (seq_type, attr)
+                    self_val = getattr(self, attr_name)
+                    setattr(obj, attr_name, self_val)
             # alignment annotation should be transferred, since we can compute
             # the resulting annotation
             obj.alignment_annotation = {}

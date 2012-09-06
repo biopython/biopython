@@ -1185,11 +1185,23 @@ class HSPFragmentCases(unittest.TestCase):
     def test_getitem_attrs(self):
         """Test HSPFragment.__getitem__, with attributes"""
         # attributes from the original instance should not be present in the new
-        # objects, except for query, hit, and alignment
+        # objects, except for query, hit, and alignment - related attributes
         setattr(self.fragment, 'attr_original', 1000)
-        self.assertTrue(hasattr(self.fragment, 'attr_original'))
+        setattr(self.fragment, 'hit_description', 'yeah')
+        setattr(self.fragment, 'hit_strand', 1)
+        setattr(self.fragment, 'query_frame', None)
+        # test values prior to slicing
+        self.assertEqual(1000, getattr(self.fragment, 'attr_original'))
+        self.assertEqual('yeah', getattr(self.fragment, 'hit_description'))
+        self.assertEqual(1, getattr(self.fragment, 'hit_strand'))
+        self.assertEqual(None, getattr(self.fragment, 'query_frame'))
         new_hsp = self.fragment[:5]
+        # test values after slicing
         self.assertFalse(hasattr(new_hsp, 'attr_original'))
+        self.assertEqual(1000, getattr(self.fragment, 'attr_original'))
+        self.assertEqual('yeah', getattr(self.fragment, 'hit_description'))
+        self.assertEqual(1, getattr(self.fragment, 'hit_strand'))
+        self.assertEqual(None, getattr(self.fragment, 'query_frame'))
 
     def test_getitem_alignment_annot(self):
         """Test HSPFragment.__getitem__, with alignment annotation"""
