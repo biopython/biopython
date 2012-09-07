@@ -188,8 +188,8 @@ two exact same numbers. This means that the query sequence does not have any
 gaps at that position. The gap is only present in the hit sequence, where we see
 that the third tuple contains (208677, 386123), a gap of about 177k bases.
 
-Another example is to use the `hit_frames` and `query_frames` to see if there
-are any frameshifts in your alignment:
+Another example is to use the `hit_frame_all` and `query_frame_all` to see if
+there are any frameshifts in your alignment:
 
     >>> from Bio import SearchIO
     >>> fname = 'Exonerate/exn_22_m_coding2coding_fshifts.exn'
@@ -197,9 +197,9 @@ are any frameshifts in your alignment:
     >>> hsp = qresult[0][0]      # first hit, first hsp
     >>> hsp
     HSP(...)
-    >>> hsp.query_frames
+    >>> hsp.query_frame_all
     [1, 2, 2, 2]
-    >>> hsp.hit_frames
+    >>> hsp.hit_frame_all
     [1, 1, 3, 1]
 
 Here you can see that the alignment as a whole has three frameshifts. The first

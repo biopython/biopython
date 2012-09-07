@@ -6220,11 +6220,11 @@ All these attributes are accessible from the HSP directly, by the way:
 \begin{verbatim}
 >>> blat_hsp2.hit_range         # hit start and end coordinates of the entire HSP
 (54233104, 54264463)
->>> blat_hsp2.hit_ranges        # hit start and end coordinates of each fragment
+>>> blat_hsp2.hit_range_all     # hit start and end coordinates of each fragment
 [(54233104, 54233122), (54264420, 54264463)]
 >>> blat_hsp2.hit_span          # hit span of the entire HSP
 31359
->>> blat_hsp2.hit_spans         # hit span of each fragment
+>>> blat_hsp2.hit_span_all      # hit span of each fragment
 [18, 43]
 >>> blat_hsp2.hit_inter_ranges  # start and end coordinates of intervening regions in the hit sequence
 [(54233122, 54264420)]
@@ -6239,8 +6239,8 @@ them. All it needs are the start and end coordinates of each fragment.
 What about the \verb|query|, \verb|hit|, and \verb|aln| attributes? If the
 HSP has multiple fragments, you won't be able to use these attributes as they
 only fetch single \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects.
-However, you can use their plural counterparts: \verb|queries|, \verb|hits|, and
-\verb|alignments|. These properties will return a list containing
+However, you can use their \verb|*_all| counterparts: \verb|query_all|,
+\verb|hit_all|, and \verb|aln_all|. These properties will return a list containing
 \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects from each of the HSP
 fragment. There are other attributes that behave similarly, i.e. they only work
 for HSPs with one fragment. Check out the \verb|HSP| documentation for a full

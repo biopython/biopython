@@ -956,8 +956,10 @@ class HSPMultipleFragmentCases(unittest.TestCase):
 
     def test_seqs(self):
         """Test HSP sequence properties"""
-        self.assertEqual(['ATCAGT', 'GGG'], [str(x.seq) for x in self.hsp.hits])
-        self.assertEqual(['AT-ACT', 'CCC'], [str(x.seq) for x in self.hsp.queries])
+        self.assertEqual(['ATCAGT', 'GGG'], [str(x.seq) for x in
+            self.hsp.hit_all])
+        self.assertEqual(['AT-ACT', 'CCC'], [str(x.seq) for x in
+            self.hsp.query_all])
 
     def test_id_desc_set(self):
         """Test HSP query and hit id and description setters"""
@@ -1008,8 +1010,8 @@ class HSPMultipleFragmentCases(unittest.TestCase):
 
     def test_ranges(self):
         """Test HSP ranges properties"""
-        self.assertEqual([(15, 20), (158, 161)], self.hsp.hit_ranges)
-        self.assertEqual([(0, 6), (10, 13)], self.hsp.query_ranges)
+        self.assertEqual([(15, 20), (158, 161)], self.hsp.hit_range_all)
+        self.assertEqual([(0, 6), (10, 13)], self.hsp.query_range_all)
 
     def test_span(self):
         """Test HSP span properties"""
@@ -1019,17 +1021,17 @@ class HSPMultipleFragmentCases(unittest.TestCase):
 
     def test_setters_readonly(self):
         """Test HSP read-only properties"""
-        read_onlies = ('ranges', 'strands', 'frames')
+        read_onlies = ('range_all', 'strand_all', 'frame_all')
         for seq_type in ('query', 'hit'):
             for attr in read_onlies:
                 self.assertRaises(AttributeError, setattr, \
                         self.hsp, '%s_%s' % (seq_type, attr), 5)
         self.assertRaises(AttributeError, setattr, \
-                self.hsp, 'alns', None)
+                self.hsp, 'aln_all', None)
         self.assertRaises(AttributeError, setattr, \
-                self.hsp, 'hits', None)
+                self.hsp, 'hit_all', None)
         self.assertRaises(AttributeError, setattr, \
-                self.hsp, 'queries', None)
+                self.hsp, 'query_all', None)
 
 
 class HSPFragmentWithoutSeqCases(unittest.TestCase):

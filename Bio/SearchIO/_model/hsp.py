@@ -123,54 +123,54 @@ class HSP(_BaseHSP):
     +----------------------+---------------------+-----------------------------+
     | Property             | Shortcut            | Value                       |
     +======================+=====================+=============================+
-    | alns                 | aln                 | HSP alignments as           |
+    | aln_all              | aln                 | HSP alignments as           |
     |                      |                     | MultipleSeqAlignment object |
     +----------------------+---------------------+-----------------------------+
-    | aln_annotations      | aln_annotation      | dictionary of annotation(s) |
+    | aln_annotation_all   | aln_annotation      | dictionary of annotation(s) |
     |                      |                     | of all fragments' alignments|
     +----------------------+---------------------+-----------------------------+
     | fragments            | fragment            | HSPFragment objects         |
     +----------------------+---------------------+-----------------------------+
-    | hits                 | hit                 | hit sequence as SeqRecord   |
+    | hit_all              | hit                 | hit sequence as SeqRecord   |
     |                      |                     | objects                     |
     +----------------------+---------------------+-----------------------------+
-    | hit_starts           | hit_start*          | start coordinates of the    |
+    | hit_start_all        | hit_start*          | start coordinates of the    |
     |                      |                     | hit fragments               |
     +----------------------+---------------------+-----------------------------+
-    | hit_ends             | hit_end*            | end coordinates of the hit  |
+    | hit_end_all          | hit_end*            | end coordinates of the hit  |
     |                      |                     | fragments                   |
     +----------------------+---------------------+-----------------------------+
-    | hit_spans            | hit_span*           | sizes of each hit fragments |
+    | hit_span_all         | hit_span*           | sizes of each hit fragments |
     +----------------------+---------------------+-----------------------------+
-    | hit_strands          | hit_strand          | strand orientations of the  |
+    | hit_strand_all       | hit_strand          | strand orientations of the  |
     |                      |                     | hit fragments               |
     +----------------------+---------------------+-----------------------------+
-    | hit_frames           | hit_frame           | reading frames of the hit   |
+    | hit_frame_all        | hit_frame           | reading frames of the hit   |
     |                      |                     | fragments                   |
     +----------------------+---------------------+-----------------------------+
-    | hit_ranges           | hit_range           | tuples of start and end     |
+    | hit_range_all        | hit_range           | tuples of start and end     |
     |                      |                     | coordinates of each hit     |
     |                      |                     | fragment                    |
     +----------------------+---------------------+-----------------------------+
-    | queries              | query               | query sequence as SeqRecord |
+    | query_all            | query               | query sequence as SeqRecord |
     |                      |                     | object                      |
     +----------------------+---------------------+-----------------------------+
-    | query_starts         | query_start*        | start coordinates of the    |
+    | query_start_all      | query_start*        | start coordinates of the    |
     |                      |                     | fragments                   |
     +----------------------+---------------------+-----------------------------+
-    | query_ends           | query_end*          | end coordinates of the      |
+    | query_end_all        | query_end*          | end coordinates of the      |
     |                      |                     | query fragments             |
     +----------------------+---------------------+-----------------------------+
-    | query_spans          | query_span*         | sizes of each query         |
+    | query_span_all       | query_span*         | sizes of each query         |
     |                      |                     | fragments                   |
     +----------------------+---------------------+-----------------------------+
-    | query_strands        | query_strand        | strand orientations of the  |
+    | query_strand_all     | query_strand        | strand orientations of the  |
     |                      |                     | query fragments             |
     +----------------------+---------------------+-----------------------------+
-    | query_frames         | query_frame         | reading frames of the query |
+    | query_frame_all      | query_frame         | reading frames of the query |
     |                      |                     | fragments                   |
     +----------------------+---------------------+-----------------------------+
-    | query_ranges         | query_range         | tuples of start and end     |
+    | query_range_all      | query_range         | tuples of start and end     |
     |                      |                     | coordinates of each query   |
     |                      |                     | fragment                    |
     +----------------------+---------------------+-----------------------------+
@@ -430,8 +430,8 @@ class HSP(_BaseHSP):
     def _inter_ranges_get(self, seq_type):
         # this property assumes that there are no mixed strands in a hit/query
         assert seq_type in ('query', 'hit')
-        strand = getattr(self, '%s_strands' % seq_type)[0]
-        coords = getattr(self, '%s_ranges' % seq_type)
+        strand = getattr(self, '%s_strand_all' % seq_type)[0]
+        coords = getattr(self, '%s_range_all' % seq_type)
         # determine function used to set inter range
         # start and end coordinates, given two pairs
         # of fragment start and end coordinates
@@ -529,52 +529,52 @@ class HSP(_BaseHSP):
     # properties for multi-fragment HSPs
     fragments = allitems(doc="""List of all HSPFragment objects""")
 
-    hits = allitems('hit',
+    hit_all = allitems('hit',
             doc="""List of all fragments' hit sequences as SeqRecord objects""")
 
-    queries = allitems('query',
+    query_all = allitems('query',
             doc="""List of all fragments' query sequences as SeqRecord objects""")
 
-    alns = allitems('aln',
+    aln_all = allitems('aln',
             doc="""List of all fragments' alignments as MultipleSeqAlignment objects""")
 
-    aln_annotations = allitems('aln_annotation',
+    aln_annotation_all = allitems('aln_annotation',
             doc="""Dictionary of annotation(s) of all fragments' alignments""")
 
-    hit_strands = allitems('hit_strand',
+    hit_strand_all = allitems('hit_strand',
             doc="""List of all fragments' hit sequence strands""")
 
-    query_strands = allitems('query_strand',
+    query_strand_all = allitems('query_strand',
             doc="""List of all fragments' query sequence strands""")
 
-    hit_frames = allitems('hit_frame',
+    hit_frame_all = allitems('hit_frame',
             doc="""List of all fragments' hit sequence reading frames""")
 
-    query_frames = allitems('query_frame',
+    query_frame_all = allitems('query_frame',
             doc="""List of all fragments' query sequence reading frames""")
 
-    hit_starts = allitems('hit_start',
+    hit_start_all = allitems('hit_start',
             doc="""List of all fragments' hit start coordinates""")
 
-    query_starts = allitems('query_starts',
+    query_start_all = allitems('query_starts',
             doc="""List of all fragments' query start coordinates""")
 
-    hit_ends = allitems('hit_ends',
+    hit_end_all = allitems('hit_ends',
             doc="""List of all fragments' hit end coordinates""")
 
-    query_ends = allitems('query_ends',
+    query_end_all = allitems('query_ends',
             doc="""List of all fragments' query end coordinates""")
 
-    hit_spans = allitems('hit_span',
+    hit_span_all = allitems('hit_span',
             doc="""List of all fragments' hit sequence size""")
 
-    query_spans = allitems('query_span',
+    query_span_all = allitems('query_span',
             doc="""List of all fragments' query sequence size""")
 
-    hit_ranges = allitems('hit_range',
+    hit_range_all = allitems('hit_range',
             doc="""List of all fragments' hit start and end coordinates""")
 
-    query_ranges = allitems('query_range',
+    query_range_all = allitems('query_range',
             doc="""List of all fragments' query start and end coordinates""")
 
 

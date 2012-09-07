@@ -62,8 +62,8 @@ class _BaseHSP(_BaseSearchObject):
             qstrand = self.query_strand
             hstrand = self.hit_strand
         except ValueError:
-            qstrand = self.query_strands[0]
-            hstrand = self.hit_strands[0]
+            qstrand = self.query_strand_all[0]
+            hstrand = self.hit_strand_all[0]
         lines.append('Query range: [%s:%s] (%r)' % (query_start, query_end,
                 qstrand))
         lines.append('  Hit range: [%s:%s] (%r)' % (hit_start, hit_end,

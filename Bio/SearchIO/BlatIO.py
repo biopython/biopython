@@ -100,13 +100,13 @@ BlatIO provides the following attribute-column mapping:
 |                | hit_gapopen_num         | T gap count, number of hit gap    |
 |                |                         | inserts                           |
 |                +-------------------------+-----------------------------------+
-|                | hit_spans               | blockSizes, sizes of each         |
+|                | hit_span_all            | blockSizes, sizes of each         |
 |                |                         | fragment                          |
 |                +-------------------------+-----------------------------------+
 |                | hit_start               | T start, start coordinate of the  |
 |                |                         | first hit fragment                |
 |                +-------------------------+-----------------------------------+
-|                | hit_starts              | tStarts, start coordinate of each |
+|                | hit_start_all           | tStarts, start coordinate of each |
 |                |                         | hit fragment                      |
 |                +-------------------------+-----------------------------------+
 |                | match_num               | match, number of non-repeat       |
@@ -128,13 +128,13 @@ BlatIO provides the following attribute-column mapping:
 |                | query_gapopen_num       | Q gap count, number of query gap  |
 |                |                         | inserts                           |
 |                +-------------------------+-----------------------------------+
-|                | query_spans             | blockSizes, sizes of each         |
+|                | query_span_all          | blockSizes, sizes of each         |
 |                |                         | fragment                          |
 |                +-------------------------+-----------------------------------+
 |                | query_start             | Q start, start coordinate of the  |
 |                |                         | first query block                 |
 |                +-------------------------+-----------------------------------+
-|                | query_starts            | qStarts, start coordinate of each |
+|                | query_start_all         | qStarts, start coordinate of each |
 |                |                         | query fragment                    |
 |                +-------------------------+-----------------------------------+
 |                | `len`*                  | block count, the number of blocks |
@@ -308,20 +308,20 @@ def _create_hsp(hid, qid, psl):
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-    query_ranges = zip(qstarts, [x + y for x, y in \
+    query_range_all = zip(qstarts, [x + y for x, y in \
             zip(qstarts, psl['blocksizes'])])
-    hit_ranges = zip(hstarts, [x + y for x, y in \
+    hit_range_all = zip(hstarts, [x + y for x, y in \
             zip(hstarts, psl['blocksizes'])])
     # check length of sequences and coordinates, all must match
     if 'tseqs' in psl and 'qseqs' in psl:
         assert len(psl['tseqs']) == len(psl['qseqs']) == \
-                len(query_ranges) == len(hit_ranges)
+                len(query_range_all) == len(hit_range_all)
     else:
-        assert len(query_ranges) == len(hit_ranges)
+        assert len(query_range_all) == len(hit_range_all)
 
     frags = []
-    # iterating over query_ranges, but hit_ranges works just as well
-    for idx, qcoords in enumerate(query_ranges):
+    # iterating over query_range_all, but hit_range_all works just as well
+    for idx, qcoords in enumerate(query_range_all):
         hseqlist = psl.get('tseqs')
         hseq = '' if not hseqlist else hseqlist[idx]
         qseqlist = psl.get('qseqs')
@@ -332,8 +332,8 @@ def _create_hsp(hid, qid, psl):
         # set coordinates
         frag.query_start = qcoords[0]
         frag.query_end = qcoords[1]
-        frag.hit_start = hit_ranges[idx][0]
-        frag.hit_end = hit_ranges[idx][1]
+        frag.hit_start = hit_range_all[idx][0]
+        frag.hit_end = hit_range_all[idx][1]
         # and strands
         frag.query_strand = qstrand
         frag.hit_strand = hstrand
@@ -347,7 +347,7 @@ def _create_hsp(hid, qid, psl):
     assert hsp.hit_start == psl['tstart']
     assert hsp.hit_end == psl['tend']
     # and check block spans as well
-    assert hsp.query_spans == hsp.hit_spans == psl['blocksizes']
+    assert hsp.query_span_all == hsp.hit_span_all == psl['blocksizes']
     # set its attributes
     hsp.match_num = psl['matches']
     hsp.mismatch_num = psl['mismatches']
@@ -646,16 +646,16 @@ class BlatPslWriter(object):
                 line.append(hsp.hit_gap_num)
 
                 # check spans
-                assert hsp.query_spans == hsp.hit_spans
-                block_sizes = hsp.query_spans
+                assert hsp.query_span_all == hsp.hit_span_all
+                block_sizes = hsp.query_span_all
 
                 # set strand and starts
                 if hsp[0].query_strand >= 0: # since it may be a protein seq
                     strand = '+'
                 else:
                     strand = '-'
-                qstarts = _reorient_starts([x[0] for x in hsp.query_ranges],
-                        hsp.query_spans, qresult.seq_len, hsp[0].query_strand)
+                qstarts = _reorient_starts([x[0] for x in hsp.query_range_all],
+                        hsp.query_span_all, qresult.seq_len, hsp[0].query_strand)
 
                 if hsp[0].hit_strand == 1:
                     hstrand = 1
@@ -665,8 +665,8 @@ class BlatPslWriter(object):
                 else:
                     hstrand = -1
                     strand += '-'
-                hstarts = _reorient_starts([x[0] for x in hsp.hit_ranges],
-                        hsp.hit_spans, hit.seq_len, hstrand)
+                hstarts = _reorient_starts([x[0] for x in hsp.hit_range_all],
+                        hsp.hit_span_all, hit.seq_len, hstrand)
 
                 line.append(strand)
                 line.append(qresult.id)
@@ -683,8 +683,8 @@ class BlatPslWriter(object):
                 line.append(','.join((str(x) for x in hstarts)) + ',')
 
                 if self.pslx:
-                    line.append(','.join((str(x.seq) for x in hsp.queries)) + ',')
-                    line.append(','.join((str(x.seq) for x in hsp.hits)) + ',')
+                    line.append(','.join((str(x.seq) for x in hsp.query_all)) + ',')
+                    line.append(','.join((str(x.seq) for x in hsp.hit_all)) + ',')
 
                 qresult_lines.append('\t'.join((str(x) for x in line)))
 
