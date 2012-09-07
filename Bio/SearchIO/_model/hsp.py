@@ -123,7 +123,7 @@ class HSP(_BaseHSP):
     +----------------------+---------------------+-----------------------------+
     | Property             | Shortcut            | Value                       |
     +======================+=====================+=============================+
-    | alignments           | alignment           | HSP alignments as           |
+    | alns                 | aln                 | HSP alignments as           |
     |                      |                     | MultipleSeqAlignment object |
     +----------------------+---------------------+-----------------------------+
     | aln_annotations      | aln_annotation      | dictionary of annotation(s) |
@@ -508,7 +508,7 @@ class HSP(_BaseHSP):
     query = singleitem('query',
             doc="""Query sequence as a SeqRecord object, first fragment""")
 
-    alignment = singleitem('alignment',
+    aln = singleitem('aln',
             doc="""Alignment of the first fragment as a MultipleSeqAlignment object""")
 
     aln_annotation = singleitem('aln_annotation',
@@ -535,7 +535,7 @@ class HSP(_BaseHSP):
     queries = allitems('query',
             doc="""List of all fragments' query sequences as SeqRecord objects""")
 
-    alignments = allitems('alignment',
+    alns = allitems('aln',
             doc="""List of all fragments' alignments as MultipleSeqAlignment objects""")
 
     aln_annotations = allitems('aln_annotation',
@@ -621,9 +621,9 @@ class HSPFragment(_BaseHSP):
     Seq('CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTT...GGG', DNAAlphabet())
 
     # when both query and hit are present, we get a MultipleSeqAlignment object
-    >>> fragment.alignment.__class__
+    >>> fragment.aln.__class__
     <class 'Bio.Align.MultipleSeqAlignment'>
-    >>> print fragment.alignment
+    >>> print fragment.aln
     DNAAlphabet() alignment with 2 rows and 61 columns
     CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 33211
     CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
@@ -671,7 +671,7 @@ class HSPFragment(_BaseHSP):
         return self._str_hsp_header() + '\n' + self._str_aln()
 
     def __getitem__(self, idx):
-        if self.alignment is not None:
+        if self.aln is not None:
             obj = self.__class__(
                     hit_id=self.hit_id, query_id=self.query_id,
                     alphabet=self.alphabet)
@@ -810,7 +810,7 @@ class HSPFragment(_BaseHSP):
     query = property(fget=_query_get, fset=_query_set,
             doc="""Query sequence as a SeqRecord object, defaults to None""")
 
-    def _alignment_get(self):
+    def _aln_get(self):
         if self.query is None and self.hit is None:
             return None
         elif self.hit is None:
@@ -820,7 +820,7 @@ class HSPFragment(_BaseHSP):
         else:
             return MultipleSeqAlignment([self.query, self.hit], self.alphabet)
 
-    alignment = property(fget=_alignment_get,
+    aln = property(fget=_aln_get,
             doc="""Query-hit alignment as a MultipleSeqAlignment object,
             defaults to None""")
 

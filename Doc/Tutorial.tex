@@ -6103,7 +6103,7 @@ It probably should not surprise you that the \verb|HSP| object has an
 
 %cont-doctest
 \begin{verbatim}
->>> print blast_hsp.alignment
+>>> print blast_hsp.aln
 DNAAlphabet() alignment with 2 rows and 61 columns
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG 42291
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAG...GGG gi|262205317|ref|NR_030195.1|
@@ -6132,7 +6132,7 @@ and descriptions and the sequence coordinates. Values for evalue and bitscore is
 is that you don't see any sequence alignments displayed. If you look closer, PSL
 formats themselves do not have any hit or query sequences, so
 \verb|Bio.SearchIO| won't create any sequence or alignment objects. What happens
-if you try to access \verb|HSP.query|, \verb|HSP.hit|, or \verb|HSP.alignment|?
+if you try to access \verb|HSP.query|, \verb|HSP.hit|, or \verb|HSP.aln|?
 You'll get the default values for these attributes, which is \verb|None|:
 
 %cont-doctest
@@ -6141,7 +6141,7 @@ You'll get the default values for these attributes, which is \verb|None|:
 True
 >>> blat_hsp.query is None
 True
->>> blat_hsp.alignment is None
+>>> blat_hsp.aln is None
 True
 \end{verbatim}
 
@@ -6236,7 +6236,7 @@ Most of these attributes are not readily available from the PSL file we have,
 but \verb|Bio.SearchIO| calculates them for you on the fly when you ask for
 them. All it needs are the start and end coordinates of each fragment.
 
-What about the \verb|query|, \verb|hit|, and \verb|alignment| attributes? If the
+What about the \verb|query|, \verb|hit|, and \verb|aln| attributes? If the
 HSP has multiple fragments, you won't be able to use these attributes as they
 only fetch single \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects.
 However, you can use their plural counterparts: \verb|queries|, \verb|hits|, and

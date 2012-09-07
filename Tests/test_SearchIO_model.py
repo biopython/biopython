@@ -426,7 +426,7 @@ class QueryResultCases(unittest.TestCase):
         for hit in qresult:
             for hsp in hit:
                 setattr(hsp, 'mock', 13)
-        # map func: remove first letter of all HSP.alignment
+        # map func: remove first letter of all HSP.aln
         def map_func(hsp):
             mapped_frags = [x[1:] for x in hsp]
             return HSP(mapped_frags)
@@ -860,7 +860,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
 
     def test_alignment(self):
         """Test HSP.alignment property"""
-        aln = self.hsp.alignment
+        aln = self.hsp.aln
         self.assertTrue(isinstance(aln, MultipleSeqAlignment))
         self.assertEqual(2, len(aln))
         self.assertTrue('ATCAGT', str(aln[0].seq))
@@ -890,7 +890,7 @@ class HSPSingleFragmentCases(unittest.TestCase):
                 self.assertRaises(AttributeError, setattr, \
                         self.hsp, '%s_%s' % (seq_type, attr), 5)
         self.assertRaises(AttributeError, setattr, \
-                self.hsp, 'alignment', None)
+                self.hsp, 'aln', None)
 
 
 class HSPMultipleFragmentCases(unittest.TestCase):
@@ -1025,7 +1025,7 @@ class HSPMultipleFragmentCases(unittest.TestCase):
                 self.assertRaises(AttributeError, setattr, \
                         self.hsp, '%s_%s' % (seq_type, attr), 5)
         self.assertRaises(AttributeError, setattr, \
-                self.hsp, 'alignments', None)
+                self.hsp, 'alns', None)
         self.assertRaises(AttributeError, setattr, \
                 self.hsp, 'hits', None)
         self.assertRaises(AttributeError, setattr, \
@@ -1045,7 +1045,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
             for attr in ('strand', 'frame', 'start', 'end'):
                 attr_name = '%s_%s' % (seq_type, attr)
                 self.assertTrue(getattr(fragment, attr_name) is None)
-        self.assertTrue(fragment.alignment is None)
+        self.assertTrue(fragment.aln is None)
         self.assertTrue(fragment.alphabet is single_letter_alphabet)
         self.assertEqual(fragment.aln_annotation, {})
 
@@ -1054,7 +1054,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
         # all query, hit, and alignment objects should be None
         self.assertTrue(self.fragment.query is None)
         self.assertTrue(self.fragment.hit is None)
-        self.assertTrue(self.fragment.alignment is None)
+        self.assertTrue(self.fragment.aln is None)
 
     def test_len(self):
         """Test HSPFragment.__len__, no alignments"""
@@ -1110,7 +1110,7 @@ class HSPFragmentCases(unittest.TestCase):
         hsp = HSPFragment('hit_id', 'query_id', hit_seq, query_seq)
         self.assertTrue(isinstance(hsp.query, SeqRecord))
         self.assertTrue(isinstance(hsp.hit, SeqRecord))
-        self.assertTrue(isinstance(hsp.alignment, MultipleSeqAlignment))
+        self.assertTrue(isinstance(hsp.aln, MultipleSeqAlignment))
 
     def test_init_wrong_seqtypes(self):
         """Test HSPFragment.__init__, wrong sequence argument types"""
@@ -1133,8 +1133,8 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertEqual('aligned query sequence', self.fragment.query.name)
         self.assertEqual(single_letter_alphabet, self.fragment.query.seq.alphabet)
         # check alignment
-        self.assertTrue(isinstance(self.fragment.alignment, MultipleSeqAlignment))
-        self.assertEqual(single_letter_alphabet, self.fragment.alignment._alphabet)
+        self.assertTrue(isinstance(self.fragment.aln, MultipleSeqAlignment))
+        self.assertEqual(single_letter_alphabet, self.fragment.aln._alphabet)
 
     def test_alphabet_no_seq(self):
         """Test HSPFragment alphabet property, query and hit sequences not present"""
@@ -1220,7 +1220,7 @@ class HSPFragmentCases(unittest.TestCase):
         self.assertEqual('<unknown description>', fragment.query_description)
         self.assertEqual(None, fragment.hit)
         self.assertEqual(None, fragment.query)
-        self.assertEqual(None, fragment.alignment)
+        self.assertEqual(None, fragment.aln)
         self.assertEqual(None, fragment.hit_strand)
         self.assertEqual(None, fragment.query_strand)
         self.assertEqual(None, fragment.hit_frame)
