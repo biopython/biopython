@@ -319,6 +319,7 @@ import AceIO
 import FastaIO
 import IgIO #IntelliGenetics or MASE format
 import InsdcIO #EMBL and GenBank
+import PdbIO
 import PhdIO
 import PirIO
 import SeqXmlIO
@@ -347,6 +348,7 @@ _FormatToIterator = {"fasta" : FastaIO.FastaIterator,
                      "imgt" : InsdcIO.ImgtIterator,
                      "ig" : IgIO.IgIterator,
                      "swiss" : SwissIO.SwissIterator,
+                     "pdb-seqres" : PdbIO.PdbSeqresIterator,
                      "phd" : PhdIO.PhdIterator,
                      "ace" : AceIO.AceIterator,
                      "tab" : TabIO.TabIterator,
