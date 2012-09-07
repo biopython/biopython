@@ -68,8 +68,8 @@ def _adjust_aa_seq(fraglist):
 
         # update alignment annotation
         # by turning them into list of triplets
-        for annot, annotseq in frag.alignment_annotation.items():
-            frag.alignment_annotation[annot] = _make_triplets(annotseq)
+        for annot, annotseq in frag.aln_annotation.items():
+            frag.aln_annotation[annot] = _make_triplets(annotseq)
 
         # update values for next iteration
         hsp_hstart, hsp_qstart = hend, qend
@@ -81,7 +81,7 @@ def _split_fragment(frag):
     # given an HSPFragment object with frameshift(s), this method splits it
     # into fragments without frameshifts by sequentially chopping it off
     # starting from the beginning
-    homol = frag.alignment_annotation['homology']
+    homol = frag.aln_annotation['homology']
     # we should have at least 1 frame shift for splitting
     assert homol.count('#') > 0
 
@@ -119,12 +119,12 @@ def _split_fragment(frag):
 
         # account for frameshift length
         abs_slice = slice(abs_pos+s_start, abs_pos+s_stop)
-        if len(frag.alignment_annotation) == 2:
+        if len(frag.aln_annotation) == 2:
             seqs = (str(frag[abs_slice].query.seq),
                     str(frag[abs_slice].hit.seq))
-        elif len(frag.alignment_annotation) == 3:
-            seqs = (frag[abs_slice].alignment_annotation['query_annotation'],
-                    frag[abs_slice].alignment_annotation['hit_annotation'],)
+        elif len(frag.aln_annotation) == 3:
+            seqs = (frag[abs_slice].aln_annotation['query_annotation'],
+                    frag[abs_slice].aln_annotation['hit_annotation'],)
         if '#' in seqs[0]:
             qpos += len(shifts) * qstep
         elif '#' in seqs[1]:
@@ -158,21 +158,21 @@ def _create_hsp(hid, qid, hspd):
         frag.hit_end = hspd['hit_ranges'][idx][1]
         # alignment annotation
         try:
-            aln_annot = hspd.get('alignment_annotation', {})
+            aln_annot = hspd.get('aln_annotation', {})
             for key, value in aln_annot.items():
-                frag.alignment_annotation[key] = value[idx]
+                frag.aln_annotation[key] = value[idx]
         except IndexError:
             pass
         # strands
         frag.query_strand = hspd['query_strand']
         frag.hit_strand = hspd['hit_strand']
         # and append the hsp object to the list
-        if frag.alignment_annotation.get('homology') is not None:
-            if '#' in frag.alignment_annotation['homology']:
+        if frag.aln_annotation.get('homology') is not None:
+            if '#' in frag.aln_annotation['homology']:
                 frags.extend(_split_fragment(frag))
                 continue
         # try to set frame if there are translation in the alignment
-        if len(frag.alignment_annotation) > 1 or \
+        if len(frag.aln_annotation) > 1 or \
             frag.query_strand == 0 or \
             ('vulgar_comp' in hspd and re.search(_RE_TRANS, hspd['vulgar_comp'])):
             _set_frame(frag)
@@ -182,7 +182,7 @@ def _create_hsp(hid, qid, hspd):
     # if the query is protein, we need to change the hit and query sequences
     # from three-letter amino acid codes to one letter, and adjust their
     # coordinates accordingly
-    if len(frags[0].alignment_annotation) == 2: # 2 annotations == protein query
+    if len(frags[0].aln_annotation) == 2: # 2 annotations == protein query
         frags = _adjust_aa_seq(frags)
 
     hsp = HSP(frags)

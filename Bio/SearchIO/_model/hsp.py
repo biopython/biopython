@@ -126,7 +126,7 @@ class HSP(_BaseHSP):
     | alignments           | alignment           | HSP alignments as           |
     |                      |                     | MultipleSeqAlignment object |
     +----------------------+---------------------+-----------------------------+
-    | alignment_annotations| alignment_annotation| dictionary of annotation(s) |
+    | aln_annotations      | aln_annotation      | dictionary of annotation(s) |
     |                      |                     | of all fragments' alignments|
     +----------------------+---------------------+-----------------------------+
     | fragments            | fragment            | HSPFragment objects         |
@@ -511,7 +511,7 @@ class HSP(_BaseHSP):
     alignment = singleitem('alignment',
             doc="""Alignment of the first fragment as a MultipleSeqAlignment object""")
 
-    alignment_annotation = singleitem('alignment_annotation',
+    aln_annotation = singleitem('aln_annotation',
             doc="""Dictionary of annotation(s) of the first fragment's alignment""")
 
     hit_strand = singleitem('hit_strand',
@@ -538,7 +538,7 @@ class HSP(_BaseHSP):
     alignments = allitems('alignment',
             doc="""List of all fragments' alignments as MultipleSeqAlignment objects""")
 
-    alignment_annotations = allitems('alignment_annotation',
+    aln_annotations = allitems('aln_annotation',
             doc="""Dictionary of annotation(s) of all fragments' alignments""")
 
     hit_strands = allitems('hit_strand',
@@ -636,9 +636,9 @@ class HSPFragment(_BaseHSP):
 
         # no callables in default args!
         if aln_annotation is None:
-            self.alignment_annotation = {}
+            self.aln_annotation = {}
         else:
-            self.alignment_annotation = aln_annotation
+            self.aln_annotation = aln_annotation
 
         self._hit_id = hit_id
         self._query_id = query_id
@@ -688,10 +688,10 @@ class HSPFragment(_BaseHSP):
                     setattr(obj, attr_name, self_val)
             # alignment annotation should be transferred, since we can compute
             # the resulting annotation
-            obj.alignment_annotation = {}
-            for key, value in self.alignment_annotation.items():
+            obj.aln_annotation = {}
+            for key, value in self.aln_annotation.items():
                 assert len(value[idx]) == len(obj)
-                obj.alignment_annotation[key] = value[idx]
+                obj.aln_annotation[key] = value[idx]
             return obj
         else:
             raise TypeError("Slicing for HSP objects without "
@@ -715,8 +715,8 @@ class HSPFragment(_BaseHSP):
 
             # homology line
             homol = ''
-            if 'homology' in self.alignment_annotation:
-                homol = self.alignment_annotation['homology']
+            if 'homology' in self.aln_annotation:
+                homol = self.aln_annotation['homology']
 
             if self.aln_span <= 67:
                 lines.append("%10s - %s" % ('Query', qseq))

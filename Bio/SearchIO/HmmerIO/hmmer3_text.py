@@ -352,7 +352,7 @@ class Hmmer3TextParser(object):
                 elif self.line.startswith('  == domain') or \
                         self.line.startswith('>>') or \
                         self.line.startswith('Internal pipeline'):
-                    frag.alignment_annotation = annot
+                    frag.aln_annotation = annot
                     if self._meta.get('program') == 'hmmscan':
                         frag.hit = hmmseq
                         frag.query = aliseq

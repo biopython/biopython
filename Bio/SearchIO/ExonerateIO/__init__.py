@@ -99,14 +99,14 @@ such as in the protein2dna model, ExonerateIO will transform the protein
 sequence into using one letter codes. This is because the SeqRecord objects that
 store the sequences are designed for single-letter sequences only. If Exonerate
 also outputs the underlying nucleotide sequence, it will be saved into an
-`alignment_annotation` entry as a list of triplets.
+`aln_annotation` entry as a list of triplets.
 
 If the protein sequence is not part of the actual alignment, such as in the
 est2genome or genome2genome models, ExonerateIO will keep the three letter codes
-and store them as `alignment_annotation` entries. In these cases, the hit and
+and store them as `aln_annotation` entries. In these cases, the hit and
 query sequences may be used directly as SeqRecord objects as they are one-letter
 nucleotide codes. The three-letter protein sequences are then stored as entries
-in the `alignment_annotation` dictionary.
+in the `aln_annotation` dictionary.
 
 
 For 'exonerate-text', ExonerateIO provides the following object attributes:
@@ -134,7 +134,7 @@ For 'exonerate-text', ExonerateIO provides the following object attributes:
 |                 | query_split_codons      | list of split codon coordinates  |
 |                 |                         | in the query sequence            |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | alignment_annotation    | alignment homology string, hit   |
+| HSPFragment     | aln_annotation          | alignment homology string, hit   |
 |                 |                         | sequence annotation, and/or      |
 |                 |                         | query sequence annotation        |
 |                 +-------------------------+----------------------------------+

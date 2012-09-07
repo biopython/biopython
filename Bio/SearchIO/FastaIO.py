@@ -83,7 +83,7 @@ The following object attributes are provided:
 |                 +-------------------------+----------------------------------+
 |                 | z_score                 | *_z-score line                   |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | alignment_annotation    | al_cons block, if present        |
+| HSPFragment     | aln_annotation          | al_cons block, if present        |
 | (also via HSP)  +-------------------------+----------------------------------+
 |                 | hit                     | hit sequence                     |
 |                 +-------------------------+----------------------------------+
@@ -378,7 +378,7 @@ class FastaM10Parser(object):
                 if state == _STATE_HIT_BLOCK:
                     parsed_hsp['hit']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.alignment_annotation['homology'] += \
+                    hsp.aln_annotation['homology'] += \
                             self.line.strip('\n')
                 # process HSP alignment and coordinates
                 _set_hsp_seqs(hsp, parsed_hsp, self._preamble['program'])
@@ -438,7 +438,7 @@ class FastaM10Parser(object):
             # check for conservation block
             elif self.line.startswith('; al_cons'):
                 state = _STATE_CONS_BLOCK
-                hsp.fragment.alignment_annotation['homology'] = ''
+                hsp.fragment.aln_annotation['homology'] = ''
             elif self.line.startswith(';'):
                 # Fasta outputs do not make a clear distinction between Hit
                 # and HSPs, so we check the attribute names to determine
@@ -476,7 +476,7 @@ class FastaM10Parser(object):
                 elif state == _STATE_QUERY_BLOCK:
                     parsed_hsp['query']['seq'] += self.line.strip()
                 elif state == _STATE_CONS_BLOCK:
-                    hsp.fragment.alignment_annotation['homology'] += \
+                    hsp.fragment.aln_annotation['homology'] += \
                             self.line.strip('\n')
                 # we should not get here!
                 else:

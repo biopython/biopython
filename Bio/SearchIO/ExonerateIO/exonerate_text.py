@@ -344,7 +344,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         # set sequences
         hsp['query'] = [x['query'] for x in seq_blocks]
         hsp['hit'] = [x['hit'] for x in seq_blocks]
-        hsp['alignment_annotation'] = {}
+        hsp['aln_annotation'] = {}
         # set the alphabet
         # currently only limited to models with protein queries
         if 'protein2' in qresult['model'] or 'coding2' in qresult['model']:
@@ -352,7 +352,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         # get the annotations if they exist
         for annot_type in ('homology', 'query_annotation', 'hit_annotation'):
             try:
-                hsp['alignment_annotation'][annot_type] = \
+                hsp['aln_annotation'][annot_type] = \
                         [x[annot_type] for x in seq_blocks]
             except KeyError:
                 pass

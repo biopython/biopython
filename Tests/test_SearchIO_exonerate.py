@@ -107,10 +107,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -136,10 +136,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAA-AGGAT', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||| |||| |||||   ||| | |  ||| |||  | |||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||| |||| |||||   ||| | |  ||| |||  | |||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCAAGAT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AAGTTATGTGGAACA--TAGGCTCATGGAACGCTCCCAGT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('| ||   | | ||||  ||   |||   || | ||| |||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('| ||   | | ||||  ||   |||   || | ||| |||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('ATGT--GGGGAAACAATTACCTTCACCAAATGATCCAAGT', str(hsp.hits[0].seq)[-40:])
 
         # third hit
@@ -165,10 +165,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTG-', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||| || || || | |||||   |   |||| ||    | ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||| || || || | |||||   |   |||| ||    | ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGATGATATATTA-GATGGGG-ATG-AAGATGAGCCAGA', str(hsp.hits[0].seq)[:40])
         self.assertEqual('G-TATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('| |  |||||   | | | | |   | ||| | |||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('| |  |||||   | | | | |   | ||| | |||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GTTGAAGAAGCCAAACGGAAGAAAGACGAGGA-GAGAAAG', str(hsp.hits[0].seq)[-40:])
 
     def test_exn_22_m_cdna2genome(self):
@@ -212,10 +212,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
@@ -236,10 +236,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGA', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGA', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -266,17 +266,17 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(5, len(hsp.hits))
         # first block
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||  ||  | ||||   | ||||||  |||| | | | ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||  ||  | ||||   | ||||||  |||| | | | ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGTGAACCT-CTTCAAGACGGTCAG--AATA-A-TCAA', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||  |||| | | | ||||    ||||||||||||| | |', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||  |||| | | | ||||    ||||||||||||| | |', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('AG--AATA-A-TCAACAGG----ATGAAGAAGCAAAAGAT', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('TATTAGCCTTCC--TCGATGATCTGCA--A-GAACAACAG', str(hsp.queries[-1].seq)[:40])
-        self.assertEqual('|  |||| || |  ||||| | || ||  | ||| | |  ', hsp[-1].alignment_annotation['homology'][:40])
+        self.assertEqual('|  |||| || |  ||||| | || ||  | ||| | |  ', hsp[-1].aln_annotation['homology'][:40])
         self.assertEqual('TCATAGCGTTACGTTCGAT-ACCTTCACTACGAAGATCCA', str(hsp.hits[-1].seq)[:40])
         self.assertEqual('AAGTATAGAAGTACAGCCGCACACTCAAGAGAATGAGAAA', str(hsp.queries[-1].seq)[-40:])
-        self.assertEqual('   |||||||||||||     ||  ||| | ||  | |||', hsp[-1].alignment_annotation['homology'][-40:])
+        self.assertEqual('   |||||||||||||     ||  ||| | ||  | |||', hsp[-1].aln_annotation['homology'][-40:])
         self.assertEqual('TTCTATAGAAGTACAGTTATTCAAACAAAAAAAAAAAAAA', str(hsp.hits[-1].seq)[-40:])
 
     def test_exn_22_m_coding2coding(self):
@@ -320,10 +320,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGC', str(hsp.hits[0].seq)[:40])
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
@@ -344,10 +344,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -373,10 +373,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('TGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAAT', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||+!  .!.|||   !!:...||+:!::!:!  ||+||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||+!  .!.|||   !!:...||+:!::!:!  ||+||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('TGTTCGGAAATTTGGGATAGAATAACAACACATCCGAAAT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTC', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('!!!.||+...|||:!:||+   |||+||  !!::!!.:!:', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('!!!.||+...|||:!:||+   |||+||  !!::!!.:!:', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CAATGCAGAAGACGTTCAATTAGCTTTGAATAAGCATATG', str(hsp.hits[0].seq)[-40:])
 
     def test_exn_22_m_coding2genome(self):
@@ -420,10 +420,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGC', str(hsp.hits[0].seq)[:40])
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
@@ -444,10 +444,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -473,10 +473,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('TGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAAT', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||+!  .!.|||   !!:...||+:!::!:!  ||+||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||+!  .!.|||   !!:...||+:!::!:!  ||+||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('TGTTCGGAAATTTGGGATAGAATAACAACACATCCGAAAT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTC', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('!!!.||+...|||:!:||+   |||+||  !!::!!.:!:', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('!!!.||+...|||:!:||+   |||+||  !!::!!.:!:', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CAATGCAGAAGACGTTCAATTAGCTTTGAATAAGCATATG', str(hsp.hits[0].seq)[-40:])
 
     def test_exn_22_m_est2genome(self):
@@ -520,10 +520,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -550,14 +550,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(4, len(hsp.hits))
         # first block
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||  ||  | ||||   | ||||||  |||| | | | ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||  ||  | ||||   | ||||||  |||| | | | ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGTGAACCT-CTTCAAGACGGTCAG--AATA-A-TCAA', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||  |||| | | | ||||    ||||||||||||| | |', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||  |||| | | | ||||    ||||||||||||| | |', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('AG--AATA-A-TCAACAGG----ATGAAGAAGCAAAAGAT', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('AGCTAAGAATTCTGATGATG-----AAAGAA', str(hsp.queries[-1].seq))
-        self.assertEqual('|   |||||||||||| |||     ||||||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('|   |||||||||||| |||     ||||||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('ATGGAAGAATTCTGATAATGCTGTAAAAGAA', str(hsp.hits[-1].seq))
 
         # second hit, second hsp
@@ -579,17 +579,17 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(3, len(hsp.hits))
         # first block
         self.assertEqual('AGCAAATATATTTA-GCAGGTGACATGAAGAAGCAAATGT', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('| |||| |||   | ||||   | | || |||| | |  |', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('| |||| |||   | ||||   | | || |||| | |  |', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACCAAAGATAACAAGGCAG--AAAAAGAGGAAGAAGAAAT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AG-GACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('|| |||  ||||||  ||   |||  || ||   ||| ||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('|| |||  ||||||  ||   |||  || ||   ||| ||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('AGTGAC--CCCAGAGGAGCCAAGCAAAAAGA---TTCGGA', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('AATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAA', str(hsp.queries[-1].seq)[:40])
-        self.assertEqual('|||||||  | ||| |    |||| | |  | | ||    ', hsp[-1].alignment_annotation['homology'][:40])
+        self.assertEqual('|||||||  | ||| |    |||| | |  | | ||    ', hsp[-1].aln_annotation['homology'][:40])
         self.assertEqual('AATAAGAGCAACACAG----TTTA-TCTTATATGTA----', str(hsp.hits[-1].seq)[:40])
         self.assertEqual('CTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAA', str(hsp.queries[-1].seq)[-40:])
-        self.assertEqual('|  | | || |  | || ||  ||||||||  ||  ||||', hsp[-1].alignment_annotation['homology'][-40:])
+        self.assertEqual('|  | | || |  | || ||  ||||||||  ||  ||||', hsp[-1].aln_annotation['homology'][-40:])
         self.assertEqual('CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA', str(hsp.hits[-1].seq)[-40:])
 
     def test_exn_22_m_genome2genome(self):
@@ -633,10 +633,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATCCCTTATCTCTTTATCTTGTTGCCTGGTTCTCTTTTCC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATCCCTTATCTCTTTATCTTGTTGCCTGGTTCTCTTTTCC', str(hsp.hits[0].seq)[:40])
         self.assertEqual('ACGGCAATACCTGGCATGTGATTGTCGGAAAGAACTTTGG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('ACGGCAATACCTGGCATGTGATTGTCGGAAAGAACTTTGG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
@@ -657,10 +657,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('CCAAAGTTCTTTCCGACAATCACATGCCAGGTATTGCCGT', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('CCAAAGTTCTTTCCGACAATCACATGCCAGGTATTGCCGT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('GGAAAAGAGAACCAGGCAACAAGATAAAGAGATAAGGGAT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GGAAAAGAGAACCAGGCAACAAGATAAAGAGATAAGGGAT', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -687,14 +687,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(5, len(hsp.hits))
         # first block
         self.assertEqual('CCCTTTAAATGGAGATTACAAACTAGCGA', str(hsp.queries[0].seq))
-        self.assertEqual('||  | ||| | |||  ||||| |  | |', hsp[0].alignment_annotation['homology'])
+        self.assertEqual('||  | ||| | |||  ||||| |  | |', hsp[0].aln_annotation['homology'])
         self.assertEqual('CCGCTGAAAGGAAGAGAACAAAGTTACAA', str(hsp.hits[0].seq))
         # last block
         self.assertEqual('TTTTCTTTACTAAC-TCGAGGAAGAGTGAGGTTTTCTTCC', str(hsp.queries[-1].seq)[:40])
-        self.assertEqual('| ||    || | | |  |||||| |||| | | |  |||', hsp[-1].alignment_annotation['homology'][:40])
+        self.assertEqual('| ||    || | | |  |||||| |||| | | |  |||', hsp[-1].aln_annotation['homology'][:40])
         self.assertEqual('TCTTGAAGACCAGCATGTAGGAAG-GTGATGATATGCTCC', str(hsp.hits[-1].seq)[:40])
         self.assertEqual('TTTGTGTGTGTACATTTGAATATATATATTTAC-TAACAA', str(hsp.queries[-1].seq)[-40:])
-        self.assertEqual(' |||  ||| |   |||||||||||||   | | ||||||', hsp[-1].alignment_annotation['homology'][-40:])
+        self.assertEqual(' |||  ||| |   |||||||||||||   | | ||||||', hsp[-1].aln_annotation['homology'][-40:])
         self.assertEqual('ATTGATTGTTTTGTTTTGAATATATATTGATGCTTAACAA', str(hsp.hits[-1].seq)[-40:])
 
         # third hit
@@ -721,14 +721,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(5, len(hsp.hits))
         # first block
         self.assertEqual('ATCCCTTATCTCTTTATCTTGTTGCCTGGTTCTCTTTTCC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||       |||  |||||   ||||  ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||       |||  |||||   ||||  ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATCCCTTATCTCTTCTAAAGATTGTGTGGTT---TTTT--', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AAATGGAGATTACAA---ACTAGCGAA-ACTGCAGAAAAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('  ||     || |||    || || ||  || || | |||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('  ||     || |||    || || ||  || || | |||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GCATATTTTTTCCAACCTTCTTGCCAATTCTTCA-ACAAG', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('TAAAGATGCTCTGGACAAGTACCAGTTGGAAAGAGA', str(hsp.queries[-1].seq))
-        self.assertEqual(' ||||||  |||  || | |  ||||||||||||||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual(' ||||||  |||  || | |  ||||||||||||||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('AAAAGATTTTCT--ACGACTTGCAGTTGGAAAGAGA', str(hsp.hits[-1].seq))
 
     def test_exn_22_m_ungapped(self):
@@ -772,10 +772,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # second hit
@@ -801,10 +801,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('TTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('| ||  ||||| |||||   | |||||||||||| ||| |', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('| ||  ||||| |||||   | |||||||||||| ||| |', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('TGGATCCTGAAACTAAGCAGAAGAGGACTGCCCAAAATCG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CCAAAATGAAGAGTTTGCAAGAGAGGGTAGAGTTACTAGA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('  || ||||||   ||| |  ||| |||| |     ||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('  || ||||||   ||| |  ||| |||| |     ||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GGAAGATGAAGGAATTGGAGAAGAAGGTACAAAGTTTAGA', str(hsp.hits[0].seq)[-40:])
 
         # second hit, second hsp
@@ -825,10 +825,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('CCAAAATATTCATCGTTGGACATAGATGATTTATGCAGCG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('|| ||||| |||    | ||  | |||| ||||||   ||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('|| ||||| |||    | ||  | |||| ||||||   ||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('CCGAAATACTCAGATATTGATGTCGATGGTTTATGTTCCG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('ATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual(' ||||||   |||  ||||    |||||||||||| ||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual(' ||||||   |||  ||||    |||||||||||| ||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GTTTATGTTCCGAGCTAATGGCAAAGGCAAAATGTTCAGA', str(hsp.hits[0].seq)[-40:])
 
     def test_exn_22_m_ungapped_trans(self):
@@ -872,10 +872,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGAGC', str(hsp.hits[0].seq)[:40])
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('GCTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCA', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
@@ -896,10 +896,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, third hsp
@@ -920,10 +920,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGA', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('CTACAGGAGCTGTCTAACCAGAGCACTCTGTAAGTCGCGA', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CTAAATATATTTGCTGACCTTTCCGAAGGATATTGCCCAT', str(hsp.hits[0].seq)[-40:])
 
     def test_exn_22_m_ner(self):
@@ -965,10 +965,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # first hit, second hsp
@@ -988,11 +988,11 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(24, len(hsp.hits))
         # first block
         self.assertEqual('TGAGA', str(hsp.queries[0].seq))
-        self.assertEqual('|||||', hsp[0].alignment_annotation['homology'])
+        self.assertEqual('|||||', hsp[0].aln_annotation['homology'])
         self.assertEqual('TGAGA', str(hsp.hits[0].seq))
         # last block
         self.assertEqual('GACTGCAAAATAGTAGTCAAAGCTC', str(hsp.queries[-1].seq))
-        self.assertEqual('||| | ||||||||||||| | |||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('||| | ||||||||||||| | |||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('GACGGTAAAATAGTAGTCACACCTC', str(hsp.hits[-1].seq))
 
         # second hit
@@ -1017,11 +1017,11 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(33, len(hsp.hits))
         # first block
         self.assertEqual('CAGAAAA', str(hsp.queries[0].seq))
-        self.assertEqual('| |||||', hsp[0].alignment_annotation['homology'])
+        self.assertEqual('| |||||', hsp[0].aln_annotation['homology'])
         self.assertEqual('CTGAAAA', str(hsp.hits[0].seq))
         # last block
         self.assertEqual('TGGTTAGACAGCTCCTGTAG', str(hsp.queries[-1].seq))
-        self.assertEqual('|| |  ||||||||||||||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('|| |  ||||||||||||||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('TGATAGGACAGCTCCTGTAG', str(hsp.hits[-1].seq))
 
     def test_exn_22_q_multiple(self):
@@ -1065,10 +1065,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CAGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATAA', str(hsp.hits[0].seq)[-40:])
 
         # first qresult, second hit
@@ -1092,10 +1092,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('GAGCGGTGAATTAGCAAATTACAAAAGACTTGAGAAAGTC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||  |  || | || |||  |  ||  | || ||  | ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||  |  || | || |||  |  ||  | || ||  | ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('GAGC--TCTATGAACAGATTTAAGCAG-TTAGAAAAGCTT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('C-AGAAGAGCAGCCATCCACCCCTACTTCCAAGAATCATA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('| || ||      ||| ||||| |  ||   ||| |  ||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('| || ||      ||| ||||| |  ||   ||| |  ||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CAAGCAGGCTCTGCAT-CACCCTTGGTTTGCAGAGTACTA', str(hsp.hits[0].seq)[-40:])
 
         # first qresult, third hit
@@ -1120,14 +1120,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(2, len(hsp.hits))
         # first block
         self.assertEqual('AGAAAGTCGGTGAAGGTACATACGGTGTTGTTTATAAAGC', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||| ||||| ||||| || |  ||||||||    | ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||| ||||| ||||| || |  ||||||||    | ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('AGAAAGTTGGTGAGGGTACTTATGCGGTTGTTTA-CTTGG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('CGATCAGATTTTCAAG--ATATTCAGAGTATTGGGAACGC', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('|||||| |  |  |||  |  ||||| |  || || || |', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('|||||| |  |  |||  |  ||||| |  || || || |', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('CGATCAAA--TGGAAGTAACGTTCAGGGCCTTAGGGACAC', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('CGAATGAAGCTA-TATGGCCAGATATTGTCT', str(hsp.queries[-1].seq))
-        self.assertEqual('| ||   || ||  ||||||||||||| |||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('| ||   || ||  ||||||||||||| |||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('CAAACCGAGATAGAATGGCCAGATATTCTCT', str(hsp.hits[-1].seq))
 
         # test second qresult
@@ -1157,10 +1157,10 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.hits[0].seq)[:40])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG', str(hsp.hits[0].seq)[-40:])
 
         # second qresult, second hit
@@ -1185,14 +1185,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(4, len(hsp.hits))
         # first block
         self.assertEqual('ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAG', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('||||  ||  | ||||   | ||||||  |||| | | | ', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||  ||  | ||||   | ||||||  |||| | | | ', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ATGGTGAACCT-CTTCAAGACGGTCAG--AATA-A-TCAA', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTT', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('||  |||| | | | ||||    ||||||||||||| | |', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||  |||| | | | ||||    ||||||||||||| | |', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('AG--AATA-A-TCAACAGG----ATGAAGAAGCAAAAGAT', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('AGCTAAGAATTCTGATGATG-----AAAGAA', str(hsp.queries[-1].seq))
-        self.assertEqual('|   |||||||||||| |||     ||||||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('|   |||||||||||| |||     ||||||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('ATGGAAGAATTCTGATAATGCTGTAAAAGAA', str(hsp.hits[-1].seq))
 
         # second qresult, second hit, second hsp
@@ -1213,17 +1213,17 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual(3, len(hsp.hits))
         # first block
         self.assertEqual('AGCAAATATATTTA-GCAGGTGACATGAAGAAGCAAATGT', str(hsp.queries[0].seq)[:40])
-        self.assertEqual('| |||| |||   | ||||   | | || |||| | |  |', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('| |||| |||   | ||||   | | || |||| | |  |', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACCAAAGATAACAAGGCAG--AAAAAGAGGAAGAAGAAAT', str(hsp.hits[0].seq)[:40])
         self.assertEqual('AG-GACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGA', str(hsp.queries[0].seq)[-40:])
-        self.assertEqual('|| |||  ||||||  ||   |||  || ||   ||| ||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('|| |||  ||||||  ||   |||  || ||   ||| ||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('AGTGAC--CCCAGAGGAGCCAAGCAAAAAGA---TTCGGA', str(hsp.hits[0].seq)[-40:])
         # last block
         self.assertEqual('AATAAGACTACCACGGACTTTTTACTATGTTCTTTAAAAA', str(hsp.queries[-1].seq)[:40])
-        self.assertEqual('|||||||  | ||| |    |||| | |  | | ||    ', hsp[-1].alignment_annotation['homology'][:40])
+        self.assertEqual('|||||||  | ||| |    |||| | |  | | ||    ', hsp[-1].aln_annotation['homology'][:40])
         self.assertEqual('AATAAGAGCAACACAG----TTTA-TCTTATATGTA----', str(hsp.hits[-1].seq)[:40])
         self.assertEqual('CTGCAAGAACAACAGAAAAGGGAAAACGAAAAAGGAACAA', str(hsp.queries[-1].seq)[-40:])
-        self.assertEqual('|  | | || |  | || ||  ||||||||  ||  ||||', hsp[-1].alignment_annotation['homology'][-40:])
+        self.assertEqual('|  | | || |  | || ||  ||||||||  ||  ||||', hsp[-1].aln_annotation['homology'][-40:])
         self.assertEqual('CCACTAAAAAATTATAAGAGCCAAAACGAAGTAGATACAA', str(hsp.hits[-1].seq)[-40:])
 
     def test_exn_22_m_coding2coding_fshifts(self):
@@ -1266,17 +1266,17 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual([1, 1, 3, 1], hsp.hit_frames)
         self.assertEqual(4, len(hsp.queries))
         self.assertEqual(4, len(hsp.hits))
-        self.assertEqual(4, len(hsp.alignment_annotations))
+        self.assertEqual(4, len(hsp.aln_annotations))
         # first block
         self.assertEqual('ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAG', str(hsp[0].query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('ACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAAG', str(hsp[0].hit.seq)[:40])
         self.assertEqual('TATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC', str(hsp[0].query.seq)[-40:])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].alignment_annotation['homology'][-40:])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[0].aln_annotation['homology'][-40:])
         self.assertEqual('TATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACC', str(hsp[0].hit.seq)[-40:])
         # last block
         self.assertEqual('GACGAAAGTATTAATGGTAGT', str(hsp[-1].query.seq))
-        self.assertEqual('|||||||||||||||||||||', hsp[-1].alignment_annotation['homology'])
+        self.assertEqual('|||||||||||||||||||||', hsp[-1].aln_annotation['homology'])
         self.assertEqual('GACGAAAGTATTAATGGTAGT', str(hsp[-1].hit.seq))
 
         # first hit, second hsp
@@ -1296,14 +1296,14 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual([-2, -2], hsp.hit_frames)
         self.assertEqual(2, len(hsp.queries))
         self.assertEqual(2, len(hsp.hits))
-        self.assertEqual(2, len(hsp.alignment_annotations))
+        self.assertEqual(2, len(hsp.aln_annotations))
         # first block
         self.assertEqual('TACCATTAATACTTTCGTCATGGT<-><->AACGGCATGT', str(hsp[0].query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||+ !       ...  !:!!|', hsp[0].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||+ !       ...  !:!!|', hsp[0].aln_annotation['homology'][:40])
         self.assertEqual('TACCATTAATACTTTCGTCACCGATGGTAACGGCACCTGT', str(hsp[0].hit.seq)[:40])
         # last block
         self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].query.seq)[:40])
-        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[-1].alignment_annotation['homology'][:40])
+        self.assertEqual('||||||||||||||||||||||||||||||||||||||||', hsp[-1].aln_annotation['homology'][:40])
         self.assertEqual('TGGTTAAACTGGGAGCGTTCCATGAGCCTATGTTCCACAT', str(hsp[-1].hit.seq)[:40])
 
     def test_exn_22_m_protein2dna_fshifts(self):
@@ -1346,7 +1346,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual([1, 3], hsp.hit_frames)
         self.assertEqual(2, len(hsp.queries))
         self.assertEqual(2, len(hsp.hits))
-        self.assertEqual(2, len(hsp.alignment_annotations))
+        self.assertEqual(2, len(hsp.aln_annotations))
         # first block
         self.assertEqual('HTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYS', str(hsp[0].query.seq)[:40])
         self.assertEqual('HTKTIRTQSEAIEHISSAISNGKASCYHILEEISSLPKYS', str(hsp[0].hit.seq)[:40])
@@ -1373,7 +1373,7 @@ class ExonerateTextCases(unittest.TestCase):
         self.assertEqual([2], hsp.hit_frames)
         self.assertEqual(1, len(hsp.queries))
         self.assertEqual(1, len(hsp.hits))
-        self.assertEqual(1, len(hsp.alignment_annotations))
+        self.assertEqual(1, len(hsp.aln_annotations))
         self.assertEqual('KGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAK', str(hsp[0].query.seq)[:40])
         self.assertEqual('KGQQIYLAGDMKKQMLLNKDGTPKRKVGRPGRKRIDSEAK', str(hsp[0].hit.seq)[:40])
         self.assertEqual('RKVGRPGRKRIDSEAKSRRTAQNRAAQRAFRDRKEAKMKS', str(hsp[0].query.seq)[-40:])

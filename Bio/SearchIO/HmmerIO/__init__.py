@@ -130,7 +130,7 @@ The following SearchIO objects attributes are provided:
 |                 +-------------------------+----------------------------------+
 |                 | query_endtype           | query sequence end types         |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | alignment_annotation    | alignment homology string and    |
+| HSPFragment     | aln_annotation          | alignment homology string and    |
 | (also via HSP)  |                         | other annotations (e.g. PP, CS)  |
 |                 +-------------------------+----------------------------------+
 |                 | aln_span                | length of alignment fragment     |

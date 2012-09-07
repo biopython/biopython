@@ -131,7 +131,7 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | hit                     | Hsp_hseq                    |
 |                +-------------------------+-----------------------------+
-|                | alignment_annotation    | Hsp_midline                 |
+|                | aln_annotation          | Hsp_midline                 |
 |                +-------------------------+-----------------------------+
 |                | pattern_start           | Hsp_pattern-from            |
 |                +-------------------------+-----------------------------+
@@ -368,7 +368,7 @@ The blast-text parser provides the following object attributes:
 |                 | pos_num                 | number of positive matches in    |
 |                 |                         | alignment                        |
 +-----------------+-------------------------+----------------------------------+
-| HSPFragment     | alignment_annotation    | alignment homology string        |
+| HSPFragment     | aln_annotation          | alignment homology string        |
 | (also via       +-------------------------+----------------------------------+
 | HSP)            | aln_span                | length of alignment fragment     |
 |                 +-------------------------+----------------------------------+

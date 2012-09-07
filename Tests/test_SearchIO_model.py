@@ -1047,7 +1047,7 @@ class HSPFragmentWithoutSeqCases(unittest.TestCase):
                 self.assertTrue(getattr(fragment, attr_name) is None)
         self.assertTrue(fragment.alignment is None)
         self.assertTrue(fragment.alphabet is single_letter_alphabet)
-        self.assertEqual(fragment.alignment_annotation, {})
+        self.assertEqual(fragment.aln_annotation, {})
 
     def test_seqmodel(self):
         """Test HSPFragment sequence attributes, no alignments"""
@@ -1207,9 +1207,9 @@ class HSPFragmentCases(unittest.TestCase):
         """Test HSPFragment.__getitem__, with alignment annotation"""
         # the alignment is annotated, it should be sliced accordingly
         # and transferred to the new object
-        setattr(self.fragment, 'alignment_annotation', {'test': '182718738172'})
+        setattr(self.fragment, 'aln_annotation', {'test': '182718738172'})
         new_hsp = self.fragment[:5]
-        self.assertEqual('18271', new_hsp.alignment_annotation['test'])
+        self.assertEqual('18271', new_hsp.aln_annotation['test'])
 
     def test_default_attrs(self):
         """Test HSPFragment attributes' default values"""
