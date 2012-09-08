@@ -649,20 +649,14 @@ class HSPFragment(_BaseHSP):
     """
 
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
-            hit='', query='',
-            aln_annotation=None, alphabet=single_letter_alphabet):
-
-        # no callables in default args!
-        if aln_annotation is None:
-            self.aln_annotation = {}
-        else:
-            self.aln_annotation = aln_annotation
+            hit='', query='', alphabet=single_letter_alphabet):
 
         self._hit_id = hit_id
         self._query_id = query_id
         self._hit_description = '<unknown description>'
         self._query_description = '<unknown description>'
         self._alphabet = alphabet
+        self.aln_annotation = {}
         self.hit_features = []
         self.query_features = []
 
