@@ -1,4 +1,7 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
+#
+# Modifications copyright 2012 Lenna X. Peterson (arklenna@gmail.com)
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.

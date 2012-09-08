@@ -10,6 +10,10 @@ from __future__ import with_statement
 
 import warnings
 
+import platform
+if platform.python_implementation() == 'PyPy':
+    import numpypy
+
 import numpy
 
 from Bio.File import as_handle
