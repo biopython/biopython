@@ -22,6 +22,7 @@ def PdbSeqresIterator(handle):
     See: http://www.wwpdb.org/documentation/format23/sect3.html
     """
     # Late-binding import to avoid circular dependency on SeqIO in Bio.SCOP
+    # TODO - swap in Bow's SeqUtils.seq1 once that's merged
     from Bio.SCOP.three_to_one_dict import to_one_letter_code
 
     chains = collections.defaultdict(list)
@@ -29,7 +30,8 @@ def PdbSeqresIterator(handle):
     for line in handle:
         rec_name = line[0:6].strip()
         if rec_name == 'SEQRES':
-            # NB: We only actually need chain ID and the residues here
+            # NB: We only actually need chain ID and the residues here;
+            # commented bits are placeholders from the wwPDB spec.
             # Serial number of the SEQRES record for the current chain.
             # Starts at 1 and increments by one each line.
             # Reset to 1 for each chain.
@@ -84,7 +86,6 @@ def PdbSeqresIterator(handle):
             record.description = ("%s:%s %s" % (m['database'],
                                                 m['db_acc'],
                                                 m['db_id_code']))
-            # XXX Is this the best way to do this?
             for melem in metadata[chn_id]:
                 record.dbxrefs.extend([
                     "%s:%s" % (melem['database'], melem['db_acc']),
