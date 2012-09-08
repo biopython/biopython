@@ -15,7 +15,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
 from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
-        getattr_str, trim_str
+        fragcascade, getattr_str, trim_str
 
 from _base import _BaseHSP
 
@@ -651,24 +651,24 @@ class HSPFragment(_BaseHSP):
     def __init__(self, hit_id='<unknown id>', query_id='<unknown id>',
             hit='', query='', alphabet=single_letter_alphabet):
 
-        self._hit_id = hit_id
-        self._query_id = query_id
-        self._hit_description = '<unknown description>'
-        self._query_description = '<unknown description>'
         self._alphabet = alphabet
         self.aln_annotation = {}
-        self.hit_features = []
-        self.query_features = []
+
+        self._hit_id = hit_id
+        self._query_id = query_id
 
         for seq_type in ('query', 'hit'):
+            # query or hit attributes default attributes
+            setattr(self, '_%s_description' % seq_type, '<unknown description>')
+            setattr(self, '_%s_features' % seq_type, [])
+            # query or hit attributes whose default attribute is None
+            for attr in ('strand', 'frame', 'start', 'end'):
+                setattr(self, '%s_%s' % (seq_type, attr), None)
             # self.query or self.hit
             if eval(seq_type):
                 setattr(self, seq_type, eval(seq_type))
             else:
                 setattr(self, seq_type, None)
-            # query or hit attributes
-            for attr in ('strand', 'frame', 'start', 'end'):
-                setattr(self, '%s_%s' % (seq_type, attr), None)
 
     def __repr__(self):
         info = "hit_id=%r, query_id=%r" % (self.hit_id, self.query_id)
@@ -785,8 +785,8 @@ class HSPFragment(_BaseHSP):
 
         seq_id = getattr(self, '%s_id' % seq_type)
         seq_desc = getattr(self, '%s_description' % seq_type)
-        seq_name = 'aligned %s sequence' % seq_type
         seq_feats = getattr(self, '%s_features' % seq_type)
+        seq_name = 'aligned %s sequence' % seq_type
 
         if isinstance(seq, SeqRecord):
             seq.id = seq_id
@@ -868,54 +868,24 @@ class HSPFragment(_BaseHSP):
     aln_span = property(fget=_aln_span_get, fset=_aln_span_set,
             doc="""The number of alignment columns covered by the fragment""")
 
-    ## id and description properties ##
-    def _set_id_or_desc(self, value, seq_type, attr):
-        assert seq_type in ('query', 'hit')
-        assert attr in ('id', 'description')
-        # set own attribute
-        setattr(self, '_%s_%s' % (seq_type, attr), value)
-        # and the seqrecord object's, if it exists
-        if getattr(self, seq_type) is not None:
-            seq = getattr(self, seq_type)
-            setattr(seq, attr, value)
-
-    def _hit_description_get(self):
-        return self._hit_description
-
-    def _hit_description_set(self, value):
-        self._set_id_or_desc(value, 'hit', 'description')
-
-    hit_description = property(fget=_hit_description_get,
-            fset=_hit_description_set,
+    ## id, description, and features properties ##
+    hit_description = fragcascade('description', 'hit',
             doc="""Hit sequence description""")
 
-    def _query_description_get(self):
-        return self._query_description
-
-    def _query_description_set(self, value):
-        self._set_id_or_desc(value, 'query', 'description')
-
-    query_description = property(fget=_query_description_get,
-            fset=_query_description_set,
+    query_description = fragcascade('description', 'query',
             doc="""Query sequence description""")
 
-    def _hit_id_get(self):
-        return self._hit_id
+    hit_id = fragcascade('id', 'hit',
+            doc="""Hit sequence ID""")
 
-    def _hit_id_set(self, value):
-        self._set_id_or_desc(value, 'hit', 'id')
+    query_id = fragcascade('id', 'query',
+            doc="""Query sequence ID""")
 
-    hit_id = property(fget=_hit_id_get, fset=_hit_id_set,
-            doc="""Hit ID string""")
+    hit_features = fragcascade('features', 'hit',
+            doc="""Hit sequence features""")
 
-    def _query_id_get(self):
-        return self._query_id
-
-    def _query_id_set(self, value):
-        self._set_id_or_desc(value, 'query', 'id')
-
-    query_id = property(fget=_query_id_get, fset=_query_id_set,
-            doc="""Query ID string""")
+    query_features = fragcascade('features', 'query',
+            doc="""Query sequence features""")
 
     ## strand properties ##
     def _prep_strand(self, strand):
