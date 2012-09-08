@@ -53,7 +53,7 @@ CREATE TABLE biodatabase (
 	description	TEXT,
 	PRIMARY KEY (biodatabase_id),
   	UNIQUE (name)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX db_auth on biodatabase(authority);
 
@@ -79,7 +79,7 @@ CREATE TABLE taxon (
        UNIQUE (ncbi_taxon_id),
        UNIQUE (left_value),
        UNIQUE (right_value)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX taxparent ON taxon(parent_taxon_id);
 
@@ -89,7 +89,7 @@ CREATE TABLE taxon_name (
        name		VARCHAR(255) BINARY NOT NULL,
        name_class	VARCHAR(32) BINARY NOT NULL,
        UNIQUE (taxon_id,name,name_class)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX taxnametaxonid ON taxon_name(taxon_id);
 CREATE INDEX taxnamename    ON taxon_name(name);
@@ -102,7 +102,7 @@ CREATE TABLE ontology (
        	definition	   TEXT,
 	PRIMARY KEY (ontology_id),
 	UNIQUE (name)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 -- any controlled vocab term, everything from full ontology
 -- terms eg GO IDs to the various keys allowed as qualifiers
@@ -125,7 +125,7 @@ CREATE TABLE term (
 -- obsoleteness into the uniqueness constraint.
 --        UNIQUE (name,ontology_id)
           UNIQUE (name,ontology_id,is_obsolete)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX term_ont ON term(ontology_id);
 
@@ -136,7 +136,7 @@ CREATE TABLE term_synonym (
        synonym		  VARCHAR(255) BINARY NOT NULL,
        term_id		  INT(10) UNSIGNED NOT NULL,
        PRIMARY KEY (term_id,synonym)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 -- ontology terms to dbxref association: ontology terms have dbxrefs
 CREATE TABLE term_dbxref (
@@ -144,7 +144,7 @@ CREATE TABLE term_dbxref (
        	dbxref_id         INT(10) UNSIGNED NOT NULL,
 	rank		  SMALLINT,
 	PRIMARY KEY (term_id, dbxref_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX trmdbxref_dbxrefid ON term_dbxref(dbxref_id);
 
@@ -171,7 +171,7 @@ CREATE TABLE term_relationship (
 	ontology_id	INT(10) UNSIGNED NOT NULL,
 	PRIMARY KEY (term_relationship_id),
 	UNIQUE (subject_term_id,predicate_term_id,object_term_id,ontology_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX trmrel_predicateid ON term_relationship(predicate_term_id);
 CREATE INDEX trmrel_objectid ON term_relationship(object_term_id);
@@ -192,7 +192,7 @@ CREATE TABLE term_relationship_term (
         term_id              INT(10) UNSIGNED NOT NULL,
         PRIMARY KEY ( term_relationship_id ),
         UNIQUE ( term_id ) 
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 -- the infamous transitive closure table on ontology term relationships
 -- this is a warehouse approach - you will need to update this regularly
@@ -214,7 +214,7 @@ CREATE TABLE term_path (
 	distance	     INT(10) UNSIGNED,
 	PRIMARY KEY (term_path_id),
 	UNIQUE (subject_term_id,predicate_term_id,object_term_id,ontology_id,distance)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX trmpath_predicateid ON term_path(predicate_term_id);
 CREATE INDEX trmpath_objectid ON term_path(object_term_id);
@@ -260,7 +260,7 @@ CREATE TABLE bioentry (
 -- within a namespace.
 --  	UNIQUE (identifier)
  	UNIQUE (identifier, biodatabase_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX bioentry_name ON bioentry(name);
 CREATE INDEX bioentry_db   ON bioentry(biodatabase_id);
@@ -277,7 +277,7 @@ CREATE TABLE bioentry_relationship (
    	rank 			 INT(5),
    	PRIMARY KEY (bioentry_relationship_id),
 	UNIQUE (object_bioentry_id,subject_bioentry_id,term_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX bioentryrel_trm   ON bioentry_relationship(term_id);
 CREATE INDEX bioentryrel_child ON bioentry_relationship(subject_bioentry_id);
@@ -293,7 +293,7 @@ CREATE TABLE bioentry_path (
    	term_id 		INT(10) UNSIGNED NOT NULL,
 	distance	     	INT(10) UNSIGNED,
 	UNIQUE (object_bioentry_id,subject_bioentry_id,term_id,distance)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX bioentrypath_trm   ON bioentry_path(term_id);
 CREATE INDEX bioentrypath_child ON bioentry_path(subject_bioentry_id);
@@ -311,7 +311,7 @@ CREATE TABLE biosequence (
   	alphabet        VARCHAR(10),
   	seq 		LONGTEXT,
 	PRIMARY KEY (bioentry_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 -- CONFIG: add these only if you want them:
 -- ALTER TABLE biosequence ADD COLUMN ( isoelec_pt NUMERIC(4,2) );
@@ -334,7 +334,7 @@ CREATE TABLE dbxref (
 	version		SMALLINT UNSIGNED NOT NULL,
 	PRIMARY KEY (dbxref_id),
         UNIQUE(accession, dbname, version)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX dbxref_db  ON dbxref(dbname);
 
@@ -352,7 +352,7 @@ CREATE TABLE dbxref_qualifier_value (
   	rank  		   	SMALLINT NOT NULL DEFAULT 0,
        	value			TEXT,
 	PRIMARY KEY (dbxref_id,term_id,rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX dbxrefqual_dbx ON dbxref_qualifier_value(dbxref_id);
 CREATE INDEX dbxrefqual_trm ON dbxref_qualifier_value(term_id);
@@ -368,7 +368,7 @@ CREATE TABLE bioentry_dbxref (
        	dbxref_id          INT(10) UNSIGNED NOT NULL,
   	rank  		   SMALLINT,
 	PRIMARY KEY (bioentry_id,dbxref_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX dblink_dbx  ON bioentry_dbxref(dbxref_id);
 
@@ -388,7 +388,7 @@ CREATE TABLE reference (
 	PRIMARY KEY (reference_id),
 	UNIQUE (dbxref_id),
 	UNIQUE (crc)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 -- bioentry to reference associations
 CREATE TABLE bioentry_reference (
@@ -398,7 +398,7 @@ CREATE TABLE bioentry_reference (
   	end_pos	  	INT(10),
   	rank  		SMALLINT NOT NULL DEFAULT 0,
   	PRIMARY KEY(bioentry_id,reference_id,rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX bioentryref_ref ON bioentry_reference(reference_id);
 
@@ -413,7 +413,7 @@ CREATE TABLE comment (
   	rank   		SMALLINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (comment_id),
   	UNIQUE(bioentry_id, rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 
 -- tag/value and ontology term annotation for bioentries goes here
@@ -423,7 +423,7 @@ CREATE TABLE bioentry_qualifier_value (
    	value         		TEXT,
 	rank			INT(5) NOT NULL DEFAULT 0,
 	UNIQUE (bioentry_id,term_id,rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX bioentryqual_trm ON bioentry_qualifier_value(term_id);
 
@@ -441,7 +441,7 @@ CREATE TABLE seqfeature (
    	rank 			SMALLINT UNSIGNED NOT NULL DEFAULT 0,
 	PRIMARY KEY (seqfeature_id),
 	UNIQUE (bioentry_id,type_term_id,source_term_id,rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX seqfeature_trm  ON seqfeature(type_term_id);
 CREATE INDEX seqfeature_fsrc ON seqfeature(source_term_id);
@@ -461,7 +461,7 @@ CREATE TABLE seqfeature_relationship (
    	rank 			INT(5),
    	PRIMARY KEY (seqfeature_relationship_id),
 	UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX seqfeaturerel_trm   ON seqfeature_relationship(term_id);
 CREATE INDEX seqfeaturerel_child ON seqfeature_relationship(subject_seqfeature_id);
@@ -477,7 +477,7 @@ CREATE TABLE seqfeature_path (
    	term_id 		INT(10) UNSIGNED NOT NULL,
 	distance	     	INT(10) UNSIGNED,
 	UNIQUE (object_seqfeature_id,subject_seqfeature_id,term_id,distance)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX seqfeaturepath_trm   ON seqfeature_path(term_id);
 CREATE INDEX seqfeaturepath_child ON seqfeature_path(subject_seqfeature_id);
@@ -492,7 +492,7 @@ CREATE TABLE seqfeature_qualifier_value (
    	rank 			SMALLINT NOT NULL DEFAULT 0,
    	value  			TEXT NOT NULL,
    	PRIMARY KEY (seqfeature_id,term_id,rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX seqfeaturequal_trm ON seqfeature_qualifier_value(term_id);
    
@@ -506,7 +506,7 @@ CREATE TABLE seqfeature_dbxref (
        	dbxref_id          INT(10) UNSIGNED NOT NULL,
   	rank  		   SMALLINT,
 	PRIMARY KEY (seqfeature_id,dbxref_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX feadblink_dbx  ON seqfeature_dbxref(dbxref_id);
 
@@ -536,7 +536,7 @@ CREATE TABLE location (
    	rank          		SMALLINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (location_id),
    	UNIQUE (seqfeature_id, rank)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX seqfeatureloc_start ON location(start_pos, end_pos);
 CREATE INDEX seqfeatureloc_dbx   ON location(dbxref_id);
@@ -556,7 +556,7 @@ CREATE TABLE location_qualifier_value (
    	value  			VARCHAR(255) NOT NULL,
    	int_value 		INT(10),
 	PRIMARY KEY (location_id,term_id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE INDEX locationqual_trm ON location_qualifier_value(term_id);
 
