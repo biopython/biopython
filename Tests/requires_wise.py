@@ -18,7 +18,7 @@ not_found_types = ["command not found", "dnal: not found", "not recognized"]
 dnal_output = commands.getoutput("dnal")
 
 for not_found in not_found_types:
-    if dnal_output.find(not_found) != -1:
+    if not_found in dnal_output:
         #raise MissingExternalDependencyError(dnal_output)
         raise MissingExternalDependencyError(\
             "Install Wise2 (dnal) if you want to use Bio.Wise.")

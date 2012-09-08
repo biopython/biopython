@@ -227,9 +227,9 @@ class DBServer:
         sql_handle = open(sql_file, "rU")
         sql = r""
         for line in sql_handle:
-            if line.find("--") == 0: # don't include comment lines
+            if line.startswith("--"): # don't include comment lines
                 pass
-            elif line.find("#") == 0: # ditto for MySQL comments
+            elif line.startswith("#"): # ditto for MySQL comments
                 pass
             elif line.strip(): # only include non-blank lines
                 sql += line.strip()

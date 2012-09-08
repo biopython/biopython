@@ -564,8 +564,8 @@ class GenBankWriter(_InsdcWriter):
         assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
         assert line[47:54].strip() == "" \
-        or line[47:54].strip().find('DNA') != -1 \
-        or line[47:54].strip().find('RNA') != -1, \
+        or 'DNA' in line[47:54].strip() \
+        or 'RNA' in line[47:54].strip(), \
                'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
         assert line[54:55] == ' ', \
                'LOCUS line does not contain space at position 55:\n' + line

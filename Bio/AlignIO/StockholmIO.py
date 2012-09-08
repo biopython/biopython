@@ -456,7 +456,7 @@ class StockholmIterator(AlignmentIterator):
 
     def _identifier_split(self, identifier):
         """Returns (name,start,end) string tuple from an identier."""
-        if identifier.find("/")!=-1:
+        if '/' in identifier:
             name, start_end = identifier.rsplit("/",1)
             if start_end.count("-")==1:
                 try:

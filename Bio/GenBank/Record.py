@@ -233,17 +233,17 @@ class Record(object):
         output += "%-9s" % self.locus
         output += " " # 22 space
         output += "%7s" % self.size
-        if self.residue_type.find("PROTEIN") >= 0:
+        if "PROTEIN" in self.residue_type:
             output += " aa"
         else:
             output += " bp "
 
         # treat circular types differently, since they'll have long residue
         # types
-        if self.residue_type.find("circular") >= 0:
+        if "circular" in self.residue_type:
              output += "%17s" % self.residue_type
         # second case: ss-DNA types of records
-        elif self.residue_type.find("-") >= 0:
+        elif "-" in self.residue_type:
             output += "%7s" % self.residue_type
             output += " " * 10 # spaces for circular
         else:
@@ -635,7 +635,7 @@ class Feature(object):
             space_wrap = 1
             for no_space_key in \
                 Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
-                if qualifier.key.find(no_space_key) >= 0:
+                if no_space_key in qualifier.key:
                     space_wrap = 0
             
             output += _wrapped_genbank(qualifier.key + qualifier.value,
