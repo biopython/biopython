@@ -240,7 +240,7 @@ class OrganismGraphicTest(unittest.TestCase):
         properties = new_stdout.getvalue()
         sys.stdout = save_stdout
 
-        self.assertTrue(properties.find(expected_string) >= 0,
+        self.assertTrue(expected_string in properties,
                "Unexpected results from dumpProperties: \n %s" % properties)
 
         properties = test_widget.getProperties()

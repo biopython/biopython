@@ -918,9 +918,9 @@ class GenBankScanner(InsdcScanner):
                 continue
             if line=='//':
                 break
-            if line.find('CONTIG')==0:
+            if line.startswith('CONTIG'):
                 break
-            if len(line) > 9 and  line[9:10]!=' ':
+            if len(line) > 9 and line[9:10]!=' ':
                 raise ValueError("Sequence line mal-formed, '%s'" % line)
             seq_lines.append(line[10:]) #remove spaces later
             line = self.handle.readline()
@@ -986,7 +986,7 @@ class GenBankScanner(InsdcScanner):
                        'LOCUS line does not contain - at position 69 in date:\n' + line
 
             name_and_length_str = line[GENBANK_INDENT:29]
-            while name_and_length_str.find('  ')!=-1:
+            while '  ' in name_and_length_str:
                 name_and_length_str = name_and_length_str.replace('  ',' ')
             name_and_length = name_and_length_str.split(' ')
             assert len(name_and_length)<=2, \
@@ -1039,8 +1039,8 @@ class GenBankScanner(InsdcScanner):
             assert line[44:47] in ['   ', 'ss-', 'ds-', 'ms-'], \
                    'LOCUS line does not have valid strand type (Single stranded, ...):\n' + line
             assert line[47:54].strip() == "" \
-            or line[47:54].strip().find('DNA') != -1 \
-            or line[47:54].strip().find('RNA') != -1, \
+            or 'DNA' in line[47:54].strip() \
+            or 'RNA' in line[47:54].strip(), \
                    'LOCUS line does not contain valid sequence type (DNA, RNA, ...):\n' + line
             assert line[54:55] == ' ', \
                    'LOCUS line does not contain space at position 55:\n' + line
@@ -1057,7 +1057,7 @@ class GenBankScanner(InsdcScanner):
                        'LOCUS line does not contain - at position 75 in date:\n' + line
 
             name_and_length_str = line[GENBANK_INDENT:40]
-            while name_and_length_str.find('  ')!=-1:
+            while '  ' in name_and_length_str:
                 name_and_length_str = name_and_length_str.replace('  ',' ')
             name_and_length = name_and_length_str.split(' ')
             assert len(name_and_length)<=2, \
@@ -1181,9 +1181,9 @@ class GenBankScanner(InsdcScanner):
                     #Need to call consumer.version(), and maybe also consumer.gi() as well.
                     #e.g.
                     # VERSION     AC007323.5  GI:6587720
-                    while data.find('  ')!=-1:
+                    while '  ' in data:
                         data = data.replace('  ',' ')
-                    if data.find(' GI:')==-1:
+                    if ' GI:' not in data:
                         consumer.version(data)
                     else:
                         if self.debug : print "Version [" + data.split(' GI:')[0] + "], gi [" + data.split(' GI:')[1] + "]"
@@ -1218,9 +1218,9 @@ class GenBankScanner(InsdcScanner):
 
                     #We now have all the reference line(s) stored in a string, data,
                     #which we pass to the consumer
-                    while data.find('  ')!=-1:
+                    while '  ' in data:
                         data = data.replace('  ',' ')
-                    if data.find(' ')==-1:
+                    if ' ' not in data:
                         if self.debug >2 : print 'Reference number \"' + data + '\"'
                         consumer.reference_num(data)
                     else:
@@ -1298,23 +1298,23 @@ class GenBankScanner(InsdcScanner):
         line_iter = iter(lines)
         try:
             for line in line_iter:
-                if line.find('BASE COUNT')==0:
+                if line.startswith('BASE COUNT'):
                     line = line[10:].strip()
                     if line:
                         if self.debug : print "base_count = " + line
                         consumer.base_count(line)
-                if line.find("ORIGIN")==0:
+                if line.startswith('ORIGIN'):
                     line = line[6:].strip()
                     if line:
                         if self.debug : print "origin_name = " + line
                         consumer.origin_name(line)
-                if line.find("WGS ")==0 :                        
+                if line.startswith('WGS '):
                     line = line[3:].strip()
                     consumer.wgs(line)
-                if line.find("WGS_SCAFLD")==0 :                        
+                if line.startswith('WGS_SCAFLD'):
                     line = line[10:].strip()
                     consumer.add_wgs_scafld(line)
-                if line.find("CONTIG")==0:
+                if line.startswith('CONTIG'):
                     line = line[6:].strip()
                     contig_location = line
                     while True:

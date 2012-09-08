@@ -813,14 +813,12 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         all_locations = []
         # parse if we've got 'bases' and 'to'
-        if ref_base_info.find('bases') != -1 and \
-            ref_base_info.find('to') != -1:
+        if 'bases' in ref_base_info and 'to' in ref_base_info:
             # get rid of the beginning 'bases'
             ref_base_info = ref_base_info[5:]
             locations = self._split_reference_locations(ref_base_info)
             all_locations.extend(locations)
-        elif (ref_base_info.find("residues") >= 0 and
-              ref_base_info.find("to") >= 0):
+        elif 'residues' in ref_base_info and 'to' in ref_base_info:
             residues_start = ref_base_info.find("residues")
             # get only the information after "residues"
             ref_base_info = ref_base_info[(residues_start + len("residues ")):]
@@ -944,7 +942,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # the number 266 and have the information in a more reasonable
         # place. So we'll just grab out the number and feed this to the
         # parser. We shouldn't really be losing any info this way.
-        if location_line.find('replace') != -1:
+        if 'replace' in location_line:
             comma_pos = location_line.find(',')
             location_line = location_line[8:comma_pos]
         
@@ -955,8 +953,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             assert location_line.endswith(")")
             location_line = location_line[11:-1]
             strand = -1
-        elif self._seq_type.find("DNA") >= 0 \
-        or self._seq_type.find("RNA") >= 0:
+        elif 'DNA' in self._seq_type or 'RNA' in self._seq_type:
             #Nucleotide
             strand = 1
         else:
@@ -1162,18 +1159,17 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
-            if self._seq_type.find('DNA') != -1 or \
-               self._seq_type.find('mRNA') != -1:
+            if 'DNA' in self._seq_type or 'mRNA' in self._seq_type:
                 seq_alphabet = IUPAC.ambiguous_dna
             # are there ever really RNA sequences in GenBank?
-            elif self._seq_type.find('RNA') != -1:
+            elif 'RNA' in self._seq_type:
                 #Even for data which was from RNA, the sequence string
                 #is usually given as DNA (T not U).  Bug 2408
                 if "T" in sequence and "U" not in sequence:
                     seq_alphabet = IUPAC.ambiguous_dna
                 else:
                     seq_alphabet = IUPAC.ambiguous_rna
-            elif self._seq_type.upper().find('PROTEIN') != -1:
+            elif 'PROTEIN' in self._seq_type.upper():
                 seq_alphabet = IUPAC.protein  # or extended protein?
             # work around ugly GenBank records which have circular or
             # linear but no indication of sequence type
@@ -1374,7 +1370,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         import Record
         for content in content_list:
             # the record parser keeps the /s -- add them if we don't have 'em
-            if content.find("/") != 0:
+            if not content.startswith("/"):
                 content = "/%s" % content
             # add on a qualifier if we've got one
             if self._cur_qualifier is not None:
@@ -1385,13 +1381,13 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def feature_qualifier_description(self, content):
         # if we have info then the qualifier key should have a ='s
-        if self._cur_qualifier.key.find("=") == -1:
+        if '=' not in self._cur_qualifier.key:
             self._cur_qualifier.key = "%s=" % self._cur_qualifier.key
         cur_content = self._remove_newlines(content)
         # remove all spaces from the value if it is a type where spaces
         # are not important
         for remove_space_key in self.__class__.remove_space_keys:
-            if self._cur_qualifier.key.find(remove_space_key) >= 0:
+            if remove_space_key in self._cur_qualifier.key:
                 cur_content = self._remove_spaces(cur_content)
         self._cur_qualifier.value = self._normalize_spaces(cur_content)
 

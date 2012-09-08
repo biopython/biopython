@@ -173,9 +173,9 @@ def t_cleaning_features():
     # test for cleaning of translation
     translation_feature = first_record.features[1]
     test_trans = translation_feature.qualifiers["translation"][0]
-    assert test_trans.find(" ") == -1, \
+    assert ' ' not in test_trans, \
       "Did not clean spaces out of the translation"
-    assert test_trans.find("\012") == -1, \
+    assert '\012' not in test_trans, \
       "Did not clean newlines out of the translation"
 
     handle.close()

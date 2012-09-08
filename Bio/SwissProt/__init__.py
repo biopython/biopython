@@ -305,7 +305,7 @@ def _read_dt(record, line):
         uprcols = uprline.split()
         rel_index = -1
         for index in range(len(uprcols)):
-            if uprcols[index].find("REL.") >= 0:
+            if 'REL.' in uprcols[index]:
                 rel_index = index
         assert rel_index >= 0, \
                 "Could not find Rel. in DT line: %s" % line
@@ -316,7 +316,7 @@ def _read_dt(record, line):
         if str_version == '':
             version = 0
         # dot versioned
-        elif str_version.find(".") >= 0:
+        elif '.' in str_version:
             version = str_version
         # integer versioned
         else:

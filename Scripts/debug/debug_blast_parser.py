@@ -58,9 +58,9 @@ def chomp(line):
 def choose_parser(outfile):
     data = open(outfile).read()
     ldata = data.lower()
-    if ldata.find("<html>") >= 0 or ldata.find("<pre>") >= 0:
+    if "<html>" in ldata or "<pre>" in ldata:
         return NCBIWWW.BlastParser
-    if ldata.find("results from round") >= 0 or ldata.find("converged!") >= 0:
+    if "results from round") in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
 

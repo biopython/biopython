@@ -129,7 +129,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
                     self.master_key = key
         elif( self.context == 'general_info' ):
             self.master_key = key
-            if( string.find( key, 'SEQUENCE' ) != -1 ):
+            if 'SEQUENCE' in key:
                 self.context = 'seq_info'
             self.queue[ key ] = UserDict.UserDict()
         elif( self.context == 'seq_info' ):

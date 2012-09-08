@@ -84,7 +84,7 @@ class PatternIO(object):
 
             cur_pattern = cur_line.rstrip()
             # split up signatures
-            if cur_pattern.find(self.separator) >= 0:
+            if self.separator in cur_pattern:
                 cur_pattern = tuple(cur_pattern.split(self.separator))
 
             if self._alphabet is not None:

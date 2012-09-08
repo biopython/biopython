@@ -38,10 +38,10 @@ def _gp_int(tok):
     
 def _read_allele_freq_table(f):
     l = f.readline()
-    while l.find(" --")==-1:
+    while ' --' not in l:
         if l == "":
             raise StopIteration
-        if l.find("No data")>-1:
+        if 'No data' in l:
             return None, None
         l = f.readline()
     alleles = filter(lambda x: x != '', f.readline().rstrip().split(" "))
@@ -66,10 +66,10 @@ def _read_allele_freq_table(f):
 def _read_table(f, funs):
     table = []
     l = f.readline().rstrip()
-    while l.find("---")==-1:
+    while '---' not in l:
         l = f.readline().rstrip()
     l = f.readline().rstrip()
-    while l.find("===")==-1 and l.find("---")==-1 and l != "":
+    while '===' not in l and '---' not in l and l != "":
         toks = filter(lambda x: x != "", l.split(" ")) 
         line = []
         for i in range(len(toks)):
@@ -94,7 +94,7 @@ def _read_triangle_matrix(f):
 def _read_headed_triangle_matrix(f):
     matrix = {}
     header = f.readline().rstrip()
-    if header.find("---")>-1 or header.find("===")>-1:
+    if '---' in header or '===' in header:
         header = f.readline().rstrip()
     nlines = len(filter(lambda x:x != '', header.split(' '))) - 1
     for line_pop in range(nlines):
@@ -301,17 +301,17 @@ class GenePopController(object):
             return _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
         f1 = open(fname + ext)
         l = f1.readline()
-        while l.find("by population") == -1:
+        while "by population" not in l:
             l = f1.readline()
         pop_p = _read_table(f1, [str, _gp_float, _gp_float, _gp_float])
         f2 = open(fname + ext)
         l = f2.readline()
-        while l.find("by locus") == -1:
+        while "by locus" not in l:
             l = f2.readline()
         loc_p = _read_table(f2, [str, _gp_float, _gp_float, _gp_float])
         f = open(fname + ext)
         l = f.readline()
-        while l.find("all locus") == -1:
+        while "all locus" not in l:
             l = f.readline()
         f.readline()
         f.readline()
@@ -454,14 +454,14 @@ class GenePopController(object):
             return (locus1, locus2), (chi2, df, p)
         f1 = open(fname + ".DIS")
         l = f1.readline()
-        while l.find("----")==-1:
+        while "----" not in l:
             l = f1.readline()
         shutil.copyfile(fname + ".DIS", fname + ".DI2")
         f2 = open(fname + ".DI2")
         l = f2.readline()
-        while l.find("Locus pair")==-1:
+        while "Locus pair" not in l:
             l = f2.readline()
-        while l.find("----")==-1:
+        while "----" not in l:
             l = f2.readline()
         return _FileIterator(ld_pop_func, f1, fname+".DIS"), _FileIterator(ld_func, f2, fname + ".DI2")
 
@@ -573,7 +573,7 @@ class GenePopController(object):
             loci_content = {}
             while l != '':
                 l = l.rstrip()
-                if l.find("Tables of allelic frequencies for each locus")>-1:
+                if "Tables of allelic frequencies for each locus" in l:
                     return self.curr_pop, loci_content
                 match = re.match(".*Pop: (.+) Locus: (.+)", l)
                 if match != None:
@@ -595,9 +595,9 @@ class GenePopController(object):
                     continue
                 geno_list = []
                 l = self.stream.readline()
-                if l.find("No data")>-1: continue
+                if "No data" in l: continue
 
-                while l.find("Genotypes  Obs.")==-1:
+                while "Genotypes  Obs." not in l:
                     l = self.stream.readline()
 
                 while l != "\n":
@@ -610,7 +610,7 @@ class GenePopController(object):
                         continue
                     l = self.stream.readline()
 
-                while l.find("Expected number of ho")==-1:
+                while "Expected number of ho" not in l:
                     l = self.stream.readline()
                 expHo =  _gp_float(l[38:])
                 l = self.stream.readline()
@@ -621,12 +621,12 @@ class GenePopController(object):
                 obsHe =  _gp_int(l[38:])
                 l = self.stream.readline()
 
-                while l.find("Sample count")==-1:
+                while "Sample count" not in l:
                     l = self.stream.readline()
                 l = self.stream.readline()
                 freq_fis={}
                 overall_fis = None
-                while l.find("----")==-1:
+                while "----" not in l:
                     vals = filter(lambda x: x!='',
                             l.rstrip().split(' '))
                     if vals[0]=="Tot":
@@ -680,7 +680,7 @@ class GenePopController(object):
                 if m != None:
                     locus = m.group(1)
                     self.stream.readline()
-                    if self.stream.readline().find("No complete")>-1: return locus, None
+                    if "No complete" in self.stream.readline(): return locus, None
                     self.stream.readline()
                     fis_table = _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
                     self.stream.readline()

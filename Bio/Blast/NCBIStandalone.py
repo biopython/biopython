@@ -255,7 +255,7 @@ class _Scanner(object):
             if (not line.startswith('Searching') and
                 not line.startswith('Results from round') and
                 re.search(r"Score +E", line) is None and
-                line.find('No hits found') == -1):
+                'No hits found' not in line):
                 break
             self._scan_descriptions(uhandle, consumer)
             self._scan_alignments(uhandle, consumer)
@@ -304,7 +304,7 @@ class _Scanner(object):
         # Check for these error lines and ignore them for now.  Let
         # the BlastErrorParser deal with them.
         line = uhandle.peekline()
-        if line.find("ERROR:") != -1 or line.startswith("done"):
+        if "ERROR:" in line or line.startswith("done"):
             read_and_call_while(uhandle, consumer.noevent, contains="ERROR:")
             read_and_call(uhandle, consumer.noevent, start="done")
 
@@ -610,7 +610,7 @@ class _Scanner(object):
 
             line = safe_readline(uhandle)
             uhandle.saveline(line)
-            if line.find('Lambda') != -1:
+            if 'Lambda' in line:
                 break
 
         read_and_call(uhandle, consumer.noevent, start='Lambda')
@@ -1160,14 +1160,14 @@ class _HSPConsumer(object):
         self._hsp.identities = _safe_int(x), _safe_int(y)
         self._hsp.align_length = _safe_int(y)
 
-        if line.find('Positives') != -1:
+        if 'Positives' in line:
             x, y = _re_search(
                 r"Positives = (\d+)\/(\d+)", line,
                 "I could not find the positives in line\n%s" % line)
             self._hsp.positives = _safe_int(x), _safe_int(y)
             assert self._hsp.align_length == _safe_int(y)
 
-        if line.find('Gaps') != -1:
+        if 'Gaps' in line:
             x, y = _re_search(
                 r"Gaps = (\d+)\/(\d+)", line,
                 "I could not find the gaps in line\n%s" % line)
@@ -1184,7 +1184,7 @@ class _HSPConsumer(object):
         # Frame can be in formats:
         # Frame = +1
         # Frame = +2 / +2
-        if line.find('/') != -1:
+        if '/' in line:
             self._hsp.frame = _re_search(
                 r"Frame\s?=\s?([-+][123])\s?/\s?([-+][123])", line,
                 "I could not find the frame in line\n%s" % line)
@@ -1315,7 +1315,7 @@ class _ParametersConsumer(object):
         self._params.gap_penalties = map(_safe_float, x)
 
     def num_hits(self, line):
-        if line.find('1st pass') != -1:
+        if '1st pass' in line:
             x, = _get_cols(line, (-4,), ncols=11, expected={2:"Hits"})
             self._params.num_hits = _safe_int(x)
         else:
@@ -1323,7 +1323,7 @@ class _ParametersConsumer(object):
             self._params.num_hits = _safe_int(x)
 
     def num_sequences(self, line):
-        if line.find('1st pass') != -1:
+        if '1st pass' in line:
             x, = _get_cols(line, (-4,), ncols=9, expected={2:"Sequences:"})
             self._params.num_sequences = _safe_int(x)
         else:
@@ -1331,7 +1331,7 @@ class _ParametersConsumer(object):
             self._params.num_sequences = _safe_int(x)
 
     def num_extends(self, line):
-        if line.find('1st pass') != -1:
+        if '1st pass' in line:
             x, = _get_cols(line, (-4,), ncols=9, expected={2:"extensions:"})
             self._params.num_extends = _safe_int(x)
         else:
@@ -1339,7 +1339,7 @@ class _ParametersConsumer(object):
             self._params.num_extends = _safe_int(x)
 
     def num_good_extends(self, line):
-        if line.find('1st pass') != -1:
+        if '1st pass' in line:
             x, = _get_cols(line, (-4,), ncols=10, expected={3:"extensions:"})
             self._params.num_good_extends = _safe_int(x)
         else:
@@ -2119,7 +2119,7 @@ class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
         _BlastConsumer.__init__(self)
     def noevent(self, line):
-        if line.find("Query must be at least wordsize") != -1:
+        if 'Query must be at least wordsize' in line:
             raise ShortQueryBlastError("Query must be at least wordsize")
         # Now pass the line back up to the superclass.
         method = getattr(_BlastConsumer, 'noevent',

@@ -379,7 +379,7 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
         if line.rstrip()[-len(end):] != end:
             return "Line does not end with '%s':\n%s" % (end, line)
     if contains is not None:
-        if line.find(contains) == -1:
+        if contains not in line:
             return "Line does not contain '%s':\n%s" % (contains, line)
     if blank is not None:
         if blank:

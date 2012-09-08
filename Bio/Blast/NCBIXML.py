@@ -647,7 +647,7 @@ def parse(handle, debug=0):
             #start of another XML file...
             pending = handle.read(MARGIN)
 
-            if (text+pending).find("\n" + XML_START) == -1:
+            if ("\n" + XML_START) not in (text + pending):
                 # Good - still dealing with the same XML file
                 expat_parser.Parse(text, False)        
                 while blast_parser._records:
