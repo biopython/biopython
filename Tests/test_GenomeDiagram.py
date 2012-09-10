@@ -24,6 +24,14 @@ except ImportError:
     raise MissingPythonDependencyError(
             "Install reportlab if you want to use Bio.Graphics.")
 
+try:
+    from reportlab.graphics import renderPM
+except ImportError:
+    #This is an optional part of ReportLab, so may not be installed.
+    #We'll raise a missing dependency error if rendering to a
+    #bitmap format is attempted.
+    renderPM=None
+
 # Biopython core
 from Bio import SeqIO
 from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -276,8 +284,9 @@ class LabelTest(unittest.TestCase):
                       fragments=1,
                       start=0, end=400)
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
-        #For the tutorial this is useful:
-        #self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+        if renderPM:
+            #For the tutorial this is useful:
+            self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
             #Circular diagram
             self.gdd.draw(tracklines=False,
@@ -354,8 +363,9 @@ class SigilsTest(unittest.TestCase):
                       fragments=1,
                       start=0, end=400)
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
-        #For the tutorial this might be useful:
-        self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+        if renderPM:
+            #For the tutorial this might be useful:
+            self.gdd.write(os.path.join('Graphics', name+".png"), "png")
         if circular:
             #Circular diagram
             self.gdd.draw(tracklines=False,
