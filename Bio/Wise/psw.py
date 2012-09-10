@@ -131,7 +131,7 @@ def main():
     print align(sys.argv[1:3])
 
 def _test(*args, **keywds):
-    import doctest, sys
+    import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 if __name__ == "__main__":

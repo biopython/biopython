@@ -15,7 +15,6 @@ Functions:
 qblast        Do a BLAST search using the QBLAST API.
 """
 
-import sys
 try:
     from cStringIO import StringIO
 except ImportError:

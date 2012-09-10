@@ -198,7 +198,6 @@ NC_000932.1
 """
 #TODO - Move somewhere else in Bio.* namespace?
 
-import gzip
 import zlib
 import struct
 import __builtin__ #to access the usual open function

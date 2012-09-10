@@ -687,7 +687,6 @@ def parse(handle, debug=0):
 
 if __name__ == '__main__':
     import sys
-    import os
     handle = open(sys.argv[1])
     r_list = parse(handle)
 

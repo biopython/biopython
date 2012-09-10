@@ -4,8 +4,6 @@
 # as part of this package.
 
 
-import os
-from Bio.PopGen import GenePop
 from Bio.PopGen.GenePop import FileParser
 import Bio.PopGen.FDist
 

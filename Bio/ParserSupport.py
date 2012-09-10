@@ -33,8 +33,14 @@ warnings.warn("The module Bio.ParserSupport is now obsolete, and will be depreca
 
 import sys
 import traceback
-from types import *
 import StringIO
+from types import MethodType
+
+# Fixes a Python3 issue, see: http://bugs.python.org/issue8206
+try:
+  from types import InstanceType
+except ImportError:
+  InstanceType = object
 
 from Bio import File
 

@@ -8,13 +8,8 @@ This version will run Sincoal2 (if necessary) Asynchrously.
 
 """
 
-from logging import debug
-from sys import exit
 import os
-import tarfile
-import tempfile
 
-from Controller import SimCoalController
 import Cache
 
 class SimCoalCache(Cache.SimCoalCache):

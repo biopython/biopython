@@ -4,7 +4,7 @@
 # as part of this package.
 
 import os.path
-from _paml import Paml, PamlError
+from _paml import Paml
 import _parse_yn00
 
 #TODO - Restore use of with statement for closing handles automatically

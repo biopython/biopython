@@ -7,7 +7,7 @@
 # written by Ziheng Yang and included in the PAML software package:
 # http://abacus.gene.ucl.ac.uk/software/paml.html
 
-from math import sqrt, log, exp
+from math import log, exp
 
 def cdf_chi2(df, stat):
     if df < 1:

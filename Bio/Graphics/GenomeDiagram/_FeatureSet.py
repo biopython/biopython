@@ -33,10 +33,6 @@
 #------------------------------------------------------------------------------
 # IMPORTS
 
-# ReportLab
-from reportlab.pdfbase import _fontdata
-from reportlab.lib import colors
-
 # GenomeDiagram
 from _Feature import Feature
 
@@ -282,7 +278,6 @@ class FeatureSet(object):
 if __name__ == '__main__':
 
     from Bio import SeqIO
-    from Bio.SeqFeature import SeqFeature
     
     genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 

@@ -5,14 +5,12 @@ compare different types of information. The most basic example is comparing
 two variables in a traditional scatter plot.
 """
 # reportlab
-from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.graphics.charts.lineplots import LinePlot
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 
-from reportlab.graphics.shapes import Drawing, String, Group
-from reportlab.graphics import renderPDF, renderPS
+from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics.charts.markers import *
 
 from Bio.Graphics import _write
