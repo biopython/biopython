@@ -45,12 +45,12 @@ System Requirements
   installing Biopython. The older Numeric library is no longer supported in
   Biopython.
 
-- ReportLab, see http://www.reportlab.org/downloads.html (optional)
+- ReportLab, see http://www.reportlab.com/software/opensource/ (optional)
   This package is only used in Bio.Graphics, so if you do not need this
   functionality, you will not need to install this package.  You can install
   it later if needed.
 
-- psycopg2, see http://initd.org/software/psycopg/ (optional) or
+- psycopg2, see http://initd.org/psycopg/ (optional) or
   PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
   These packages are used by BioSQL to access a PostgreSQL database.
 
@@ -113,7 +113,7 @@ Source Code Repository
 
 Like most of the Open Bioinformatics Foundation (OBF) projects, Biopython
 currently uses git for distributed source code control, hosted by github
-at http://github.com/biopython/biopython
+at https://github.com/biopython/biopython
 
 Until late September 2009, Biopython source code was kept in CVS running
 on the OBF servers. These will remain online for a while as "read only"
@@ -127,7 +127,7 @@ While we try to ship a robust package, bugs inevitably pop up.  If you are
 having problems that might be caused by a bug in Biopython, it is possible
 that it has already been identified. Update to the latest release if you are
 not using it already, and retry. If the problem persists, please search our
-bug database at http://redmine.open-bio.org/projects/biopython and our
+bug database at https://redmine.open-bio.org/projects/biopython and our
 mailing lists to see if it has already been reported (and hopefully fixed),
 and if not please do report the bug. We can't fix problems we don't know
 about ;)
