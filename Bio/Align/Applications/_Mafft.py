@@ -7,9 +7,6 @@
 
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
-#TODO - Remove file exist checks? Other wrappers don't do this, and
-#it prevent things like preparing commands to run on a cluster.
-
 import os
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
@@ -261,7 +258,6 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--tm", "tm"],
                     "Transmembrane PAM number (Jones et al. 1994) "
                     "matrix is used. number>0. Default: BLOSUM62",
-                    checker_function=os.path.exists,
                     filename=True,
                     equate=False),
             #Use a user-defined AA scoring matrix. The format of matrixfile is
@@ -270,7 +266,6 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--aamatrix", "aamatrix"],
                     "Use a user-defined AA scoring matrix. "
                     "Default: BLOSUM62",
-                    checker_function=os.path.exists,
                     filename=True,
                     equate=False),
             #Incorporate the AA/nuc composition information into the scoring
@@ -315,7 +310,6 @@ class MafftCommandline(AbstractCommandline):
             _Option(["--seed", "seed"],
                     "Seed alignments given in alignment_n (fasta format) "
                     "are aligned with sequences in input.",
-                    checker_function=os.path.exists,
                     filename=True,
                     equate=False),
             #The old solution of also defining extra parameters with
@@ -329,7 +323,6 @@ class MafftCommandline(AbstractCommandline):
             #The input (must be FASTA format)
             _Argument(["input"],
                       "Input file name",
-                      checker_function=os.path.exists,
                       filename=True,
                       is_required=True),
             ###################################################################
@@ -337,7 +330,6 @@ class MafftCommandline(AbstractCommandline):
             #mafft-profile align1 align2
             _Argument(["input1"],
                       "Second input file name for the mafft-profile command",
-                      checker_function=os.path.exists,
                       filename=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
