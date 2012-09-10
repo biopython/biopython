@@ -1,7 +1,6 @@
 import urllib
-from xml.sax import handler, make_parser, expatreader
+from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
-from xml.sax._exceptions import SAXParseException
 
 class Record(list):
     """\

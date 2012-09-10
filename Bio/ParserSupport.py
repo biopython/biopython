@@ -33,7 +33,7 @@ warnings.warn("The module Bio.ParserSupport is now obsolete, and will be depreca
 
 import sys
 import traceback
-from types import *
+from types import InstanceType, MethodType
 import StringIO
 
 from Bio import File

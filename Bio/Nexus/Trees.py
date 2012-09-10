@@ -12,7 +12,7 @@ common ancestors,...) and to manipulate trees (reroot trees, split terminal
 nodes).
 """
 
-import sys, random, copy
+import sys, random
 import Nodes
 
 PRECISION_BRANCHLENGTH=6

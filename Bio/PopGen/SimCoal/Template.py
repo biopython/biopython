@@ -3,9 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from math import sqrt
-from sys import argv,exit
-from os import sep, mkdir
+from os import sep
 import re
 
 from Bio.PopGen.SimCoal import builtin_tpl_dir

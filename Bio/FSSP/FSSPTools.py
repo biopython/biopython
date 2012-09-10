@@ -2,7 +2,6 @@ from Bio import FSSP
 import copy
 from Bio.Align import Generic
 from Bio import Alphabet
-import time
 
 class FSSPAlign(Generic.Alignment):
     def _add_numbering_table(self, new_record):

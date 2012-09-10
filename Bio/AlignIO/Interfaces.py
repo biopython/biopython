@@ -9,7 +9,7 @@ Unless you are writing a new parser or writer for Bio.AlignIO, you should not
 use this module.  It provides base classes to try and simplify things.
 """
 
-from Bio.Alphabet import single_letter_alphabet, Gapped
+from Bio.Alphabet import single_letter_alphabet
 
 class AlignmentIterator(object):
     """Base class for building MultipleSeqAlignment iterators.

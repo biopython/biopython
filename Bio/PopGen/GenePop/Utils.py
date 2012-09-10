@@ -5,7 +5,6 @@
 
 
 from Bio.PopGen import GenePop
-from copy import deepcopy
 
 """
 Utility functions to deal with GenePop files

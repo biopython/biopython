@@ -387,7 +387,6 @@ if __name__ == '__main__':
 
     # test code
     from Bio import SeqIO
-    from Bio.SeqFeature import SeqFeature
     from _FeatureSet import FeatureSet
     from _GraphSet import GraphSet
     from random import normalvariate

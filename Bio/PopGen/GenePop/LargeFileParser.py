@@ -17,9 +17,6 @@ read             Parses a GenePop record (file) into a Record object.
 
 """
 
-from copy import deepcopy
-
-
 def get_indiv(line):
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')

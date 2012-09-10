@@ -7,7 +7,7 @@
 from Bio.Seq import Seq
 from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
-import math,random
+import math
 
 class Motif(object):
     """

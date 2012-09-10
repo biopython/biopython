@@ -11,11 +11,8 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
 __docformat__ = "restructuredtext en"
 
-import warnings
-
 from cStringIO import StringIO
 
-from Bio import BiopythonDeprecationWarning
 from Bio.Phylo import Newick
 
 # Definitions retrieved from Bio.Nexus.Trees

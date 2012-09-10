@@ -6,9 +6,6 @@ type of crossover.
 # standard library
 import random
 
-# local stuff
-from Bio.GA.Organism import Organism
-
 class SafeFitnessCrossover(object):
     """Perform crossovers, but do not allow decreases in organism fitness.
 

@@ -87,6 +87,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Restriction.Restriction_Dictionary import rest_dict as enzymedict
 from Bio.Restriction.Restriction_Dictionary import typedict
 from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
+# TODO: Consider removing this wildcard import.
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
 

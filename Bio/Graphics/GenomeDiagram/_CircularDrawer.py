@@ -29,7 +29,6 @@
 # ReportLab imports
 from reportlab.graphics.shapes import *
 from reportlab.lib import colors
-from reportlab.pdfbase import _fontdata
 from reportlab.graphics.shapes import ArcPath
 
 # GenomeDiagram imports
@@ -38,7 +37,7 @@ from _AbstractDrawer import _stroke_and_fill_colors
 from _FeatureSet import FeatureSet
 from _GraphSet import GraphSet
 
-from math import ceil, pi, cos, sin, asin
+from math import pi, cos, sin
 
 class CircularDrawer(AbstractDrawer):
     """ CircularDrawer(AbstractDrawer)

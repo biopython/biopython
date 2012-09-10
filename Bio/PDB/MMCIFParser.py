@@ -11,8 +11,7 @@ import numpy
 
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 from Bio.PDB.StructureBuilder import StructureBuilder
-from Bio.PDB.PDBExceptions import \
-        PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionException
 
 
 class MMCIFParser(object):

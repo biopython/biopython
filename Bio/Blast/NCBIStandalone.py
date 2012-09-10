@@ -1763,7 +1763,6 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
-    import warnings
     warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", PendingDeprecationWarning)
     from Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
@@ -1848,7 +1847,6 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     
     """
 
-    import warnings
     warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", PendingDeprecationWarning)
     _security_check_parameters(keywds)
 
@@ -1968,7 +1966,6 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
                         from the returned handles).
     """
 
-    import warnings
     warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", PendingDeprecationWarning)
     _security_check_parameters(keywds)
     

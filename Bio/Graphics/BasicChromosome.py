@@ -25,17 +25,12 @@ http://www.reportlab.com
 This provides nice output in PDF, SVG and postscript.  If you have
 reportlab's renderPM module installed you can also use PNG etc.
 """
-# standard library
-import os
-
 # reportlab
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 
 from reportlab.graphics.shapes import Drawing, String, Line, Rect, Wedge, ArcPath
-from reportlab.graphics import renderPDF, renderPS
 from reportlab.graphics.widgetbase import Widget
 
 from Bio.Graphics import _write

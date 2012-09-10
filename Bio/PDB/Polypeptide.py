@@ -54,7 +54,6 @@ from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
 from Bio.SCOP.Raf import to_one_letter_code
 from Bio.PDB.PDBExceptions import PDBException
-from Bio.PDB.Residue import Residue, DisorderedResidue
 from Bio.PDB.Vector import calc_dihedral, calc_angle
 
 

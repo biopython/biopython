@@ -350,7 +350,6 @@ def _test():
     """
     #TODO - Remove os.path checks on input filenames?
     import doctest
-    import os
     if os.path.isdir(os.path.join("..","Tests")):
         print "Runing doctests..."
         cur_dir = os.path.abspath(os.curdir)

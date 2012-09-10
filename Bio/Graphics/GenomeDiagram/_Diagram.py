@@ -28,22 +28,10 @@
 #------------------------------------------------------------------------------
 # IMPORTS
 
-# ReportLab
-from reportlab.graphics import renderPS, renderPDF, renderSVG
-try:
-    from reportlab.graphics import renderPM
-except ImportError:
-    #This is an optional part of ReportLab, so may not be installed.
-    renderPM=None
-from reportlab.lib import pagesizes
-
 # GenomeDiagram
 from _LinearDrawer import LinearDrawer
 from _CircularDrawer import CircularDrawer
 from _Track import Track
-
-# Builtins
-import sys
 
 from Bio.Graphics import _write
 

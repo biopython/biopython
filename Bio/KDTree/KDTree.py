@@ -14,7 +14,7 @@ Algorithms and Applications" (Mark de Berg, Marc van Kreveld, Mark Overmars,
 Otfried Schwarzkopf). Author: Thomas Hamelryck.
 """
 
-from numpy import sum, sqrt, dtype, array
+from numpy import sum, sqrt, array
 from numpy.random import random
 
 from Bio.KDTree import _CKDTree 
@@ -217,8 +217,6 @@ class KDTree(object):
         return [neighbor.radius for neighbor in self.neighbors]
 
 if __name__=="__main__":
-
-    from numpy.random import random
 
     nr_points=100000
     dim=3

@@ -47,13 +47,13 @@ _open         -- Internally used function.
 
 """
 
-from types import *
 import os
+import re
 
 import Des
 import Cla
 import Hie
-from Residues import *
+import Residues
 from Bio import SeqIO
 from Bio.Seq import Seq
 
@@ -139,7 +139,7 @@ def parse_domain(str):
     dom = Domain()
     dom.sid = m.group(1)
     dom.sccs = m.group(2)
-    dom.residues = Residues(m.group(3))
+    dom.residues = Residues.Residues(m.group(3))
     if not dom.residues.pdbid:
         dom.residues.pdbid= dom.sid[1:5]
     dom.description = m.group(4).strip()
@@ -371,7 +371,7 @@ class Scop(object):
                                sunid)
                 
                 [n.sid,n.residues,pdbid] = cur.fetchone()
-                n.residues = Residues(n.residues)
+                n.residues = Residues.Residues(n.residues)
                 n.residues.pdbid=pdbid
                 self._sidDict[n.sid] = n
                 
@@ -455,7 +455,7 @@ class Scop(object):
                     #n.description,n.parent] = data
                     [n.sunid,n.sid, pdbid,n.residues,n.sccs,n.type,n.description,
                      n.parent] = d[0:8]
-                    n.residues = Residues(n.residues)
+                    n.residues = Residues.Residues(n.residues)
                     n.residues.pdbid = pdbid
                     n.sunid = int(n.sunid)
                     self._sunidDict[n.sunid] = n
