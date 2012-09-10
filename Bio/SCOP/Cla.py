@@ -19,7 +19,7 @@ The latest CLA file can be found
 
 
 
-from Residues import * 
+import Residues
 
 
 class Record(object):
@@ -55,7 +55,7 @@ class Record(object):
             raise ValueError("I don't understand the format of %s" % line)
         
         self.sid, pdbid, residues, self.sccs, self.sunid, hierarchy = columns
-        self.residues = Residues(residues)
+        self.residues = Residues.Residues(residues)
         self.residues.pdbid = pdbid
         self.sunid = int(self.sunid)
         

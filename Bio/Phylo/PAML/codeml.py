@@ -5,7 +5,7 @@
 
 import os
 import os.path
-from _paml import Paml, PamlError, _relpath
+from _paml import Paml, _relpath
 import _parse_codeml
 
 #TODO - Restore use of with statement for closing handles automatically

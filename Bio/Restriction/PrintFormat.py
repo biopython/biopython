@@ -9,7 +9,6 @@
 #
 
 import re
-import itertools
 from Bio.Restriction import RanaConfig as RanaConf
 
 """

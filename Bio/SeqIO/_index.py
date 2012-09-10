@@ -29,7 +29,6 @@ try:
 except ImportError:
     from UserDict import DictMixin as _dict_base
 import re
-import gzip
 import itertools
 from StringIO import StringIO
 
@@ -43,7 +42,7 @@ except ImportError:
     _sqlite = None
     pass
 
-from Bio._py3k import _bytes_to_string, _as_bytes, _as_string
+from Bio._py3k import _bytes_to_string, _as_bytes
 
 from Bio import SeqIO
 from Bio import Alphabet

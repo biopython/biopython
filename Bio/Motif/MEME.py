@@ -6,9 +6,6 @@
 
 from Bio.Alphabet import IUPAC
 from Bio import Seq
-import re
-from math import sqrt
-import sys
 from Bio.Motif import Motif
 
 

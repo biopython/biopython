@@ -13,11 +13,8 @@ This module allows to control GenePop.
 import os
 import re
 import shutil
-import subprocess
-import sys
-import tempfile
 
-from Bio.Application import AbstractCommandline, _Argument, _Option
+from Bio.Application import AbstractCommandline, _Argument
 
 def _gp_float(tok):
     """Gets a float from a token, if it fails, returns the string.

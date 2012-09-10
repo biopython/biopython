@@ -5,7 +5,7 @@
 
 from copy import copy
 
-from Bio.PDB.PDBExceptions import PDBConstructionException, PDBException
+from Bio.PDB.PDBExceptions import PDBConstructionException
 
 """Base class for Residue, Chain, Model and Structure classes.
 

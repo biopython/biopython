@@ -171,8 +171,6 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
 
 
 if __name__=="__main__":
-    
-    import sys
     from Bio.PDB import PDBParser
     
     p=PDBParser()

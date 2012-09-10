@@ -6,11 +6,8 @@ in case the calculation was done.
 
 """
 
-from logging import debug
-from sys import exit
 import os
 import tarfile
-import tempfile
 from Controller import SimCoalController
 
 class SimCoalCache(object):

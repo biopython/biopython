@@ -12,7 +12,7 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 # For with in Python/Jython 2.5
 from __future__ import with_statement
 
-import os,sys, math, random, copy
+import sys, math, random, copy
 
 from Bio import File
 from Bio.Alphabet import IUPAC

@@ -132,7 +132,7 @@ def main():
     pass
 
 def _test(*args, **keywds):
-    import doctest, sys
+    import doctest
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 if __name__ == "__main__":

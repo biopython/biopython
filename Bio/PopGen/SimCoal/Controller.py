@@ -10,9 +10,6 @@ This module allows you to control Simcoal2.
 
 import os
 import sys
-import tempfile
-from shutil import copyfile
-from logging import debug
 
 class SimCoalController(object):
     def __init__(self, simcoal_dir):

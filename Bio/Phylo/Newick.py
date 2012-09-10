@@ -9,8 +9,6 @@ See classes in `Bio.Nexus`: Trees.Tree, Trees.NodeData, and Nodes.Chain.
 """
 __docformat__ = "restructuredtext en"
 
-import warnings
-
 from Bio.Phylo import BaseTree
 
 

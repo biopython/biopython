@@ -25,8 +25,6 @@ warnings.warn("The module Bio.UniGene.UniGene is now obsolete, "
               PendingDeprecationWarning)
 
 import string
-import operator
-import urllib
 import sgmllib
 import UserDict
 import Bio.File

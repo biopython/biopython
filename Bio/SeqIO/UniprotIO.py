@@ -25,7 +25,6 @@ try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
-import warnings
 
 #For speed try to use cElementTree rather than ElemenTree
 try:

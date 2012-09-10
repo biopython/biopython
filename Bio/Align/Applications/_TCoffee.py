@@ -7,7 +7,7 @@
 
 __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
-from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
+from Bio.Application import _Option, _Switch, AbstractCommandline
 
 class TCoffeeCommandline(AbstractCommandline):
     """Commandline object for the TCoffee alignment program.

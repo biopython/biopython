@@ -19,7 +19,6 @@ About capitalization:
 __docformat__ = "restructuredtext en"
 
 import sys
-import warnings
 
 from Bio.Phylo import PhyloXML as PX
 

@@ -20,7 +20,6 @@ import datetime
 import struct
 
 from os.path import basename
-from sys import version_info
 
 from Bio import Alphabet
 from Bio.Alphabet.IUPAC import ambiguous_dna, unambiguous_dna

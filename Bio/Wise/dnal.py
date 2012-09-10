@@ -15,7 +15,6 @@ __version__ = "$Revision: 1.12 $"
 
 import commands
 import itertools
-import os
 import re
 
 from Bio import Wise

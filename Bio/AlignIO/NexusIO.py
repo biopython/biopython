@@ -14,7 +14,6 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord  
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment

@@ -13,9 +13,7 @@ Restriction_Dictionary.py module."""
 
 import os
 import sys
-import sre
 import time
-import gzip
 from urllib import FancyURLopener
 
 from Bio.Restriction.RanaConfig import *

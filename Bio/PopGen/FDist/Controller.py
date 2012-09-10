@@ -14,10 +14,8 @@ http://www.rubic.rdg.ac.uk/~mab/software.html
 """
 
 import os
-import tempfile
 import sys
-from shutil import copyfile
-from random import randint, random
+from random import randint
 from time import strftime, clock
 #from logging import debug
 
