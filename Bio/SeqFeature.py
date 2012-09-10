@@ -1008,7 +1008,9 @@ class WithinPosition(int, AbstractPosition):
     
     """
     def __new__(cls, position, left, right):
-        assert position==left or position==right
+        assert position==left or position==right, \
+            "WithinPosition: %r should match left %r or right %r" \
+            (position, left, right)
         obj = int.__new__(cls, position)
         obj._left = left
         obj._right = right
