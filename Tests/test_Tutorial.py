@@ -10,6 +10,12 @@ if sys.version_info[0] >= 3:
            ">>> print(2+2)\n4\n"
     
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
+if not os.path.isfile(tutorial) and sys.version_info[0] >= 3:
+    tutorial = s.path.join(os.path.dirname(sys.argv[0]), "../../../../Doc/Tutorial.tex")
+if not os.path.isfile(tutorial):
+    from Bio import MissingExternalDependencyError
+    raise MissingExternalDependencyError("Could not find ../Doc/Tutorial.tex file")
+
 tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
 original_path = os.path.abspath(".")
 
