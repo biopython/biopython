@@ -5,7 +5,7 @@
 
 # NACCESS interface adapted from Bio/PDB/DSSP.py
 
-import os, sys, tempfile
+import os, tempfile
 from Bio.PDB.PDBIO import PDBIO
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
@@ -171,6 +171,7 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
 
 
 if __name__=="__main__":
+    import sys
     from Bio.PDB import PDBParser
     
     p=PDBParser()
