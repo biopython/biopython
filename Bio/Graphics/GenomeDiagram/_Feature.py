@@ -29,8 +29,6 @@ from reportlab.lib import colors
 # GenomeDiagram imports
 from _Colors import ColorTranslator
 
-import string
-
 class Feature(object):
     """ Class to wrap Bio.SeqFeature objects for GenomeDiagram
 
