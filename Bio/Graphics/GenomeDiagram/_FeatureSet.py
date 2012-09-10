@@ -280,9 +280,7 @@ class FeatureSet(object):
 ################################################################################
 
 if __name__ == '__main__':
-
     from Bio import SeqIO
-    from Bio.SeqFeature import SeqFeature
     
     genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
@@ -300,5 +298,4 @@ if __name__ == '__main__':
     #for feature in gdfs.get_features():
     #    print feature.id, feature.start, feature.end
     #print gdfs[500]   
-
     
