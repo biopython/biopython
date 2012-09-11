@@ -27,9 +27,6 @@ try:
     test_db_fname = tempfile.mkstemp(dir='/dev/shm')[1]
 except OSError:
     # We can't use /dev/shm
-    import warnings
-    warnings.warn('/dev/shm not available: '
-                  'Using (MUCH!) slower local file for sqlite3 testing')
     test_db_fname = os.path.join(os.getcwd(), "BioSQL", "temp_sqlite.db")
 
 TESTDB = test_db_fname
@@ -84,4 +81,4 @@ if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     # exit=False so we can return to unlink TESTDB, which could be in RAM.
     unittest.main(testRunner=runner, exit=False)
-    os.unlink(TESTDB)
+    os.remove(TESTDB)
