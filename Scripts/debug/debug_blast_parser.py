@@ -60,7 +60,7 @@ def choose_parser(outfile):
     ldata = data.lower()
     if "<html>" in ldata or "<pre>" in ldata:
         return NCBIWWW.BlastParser
-    if "results from round") in ldata or "converged!" in ldata:
+    if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
 
