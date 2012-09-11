@@ -220,23 +220,23 @@ class ReadTest(unittest.TestCase):
     def test_lookup_items(self):
         """Test retrieval of items using various ids.
         """
-        item = self.db.lookup(accession = "X62281")
+        self.db.lookup(accession = "X62281")
         try:
-            item = self.db.lookup(accession = "Not real")
+            self.db.lookup(accession = "Not real")
             raise Assertionerror("No problem on fake id retrieval")
         except IndexError:
             pass
-        item = self.db.lookup(display_id = "ATKIN2")
+        self.db.lookup(display_id = "ATKIN2")
         try:
-            item = self.db.lookup(display_id = "Not real")
+            self.db.lookup(display_id = "Not real")
             raise AssertionError("No problem on fake id retrieval")
         except IndexError:
             pass
 
         # primary id retrieval
-        item = self.db.lookup(primary_id = "16353")
+        self.db.lookup(primary_id = "16353")
         try:
-            item = self.db.lookup(primary_id = "Not Real")
+            self.db.lookup(primary_id = "Not Real")
             raise AssertionError("No problem on fake primary id retrieval")
         except IndexError:
             pass
@@ -274,12 +274,12 @@ class SeqInterfaceTest(unittest.TestCase):
         self.assertEqual(test_record.id, "X62281.1", test_record.id)
         self.assertEqual(test_record.name, "ATKIN2")
         self.assertEqual(test_record.description, "A.thaliana kin2 gene.")
-        annotations = test_record.annotations
+        self.assertTrue(hasattr(test_record, 'annotations'))
         # XXX should do something with annotations once they are like
         # a dictionary
         for feature in test_record.features:
             self.assertTrue(isinstance(feature, SeqFeature))
-        s = str(test_record)  # shouldn't cause any errors!
+        self.assertTrue(isinstance(str(test_record), basestring))  # shouldn't cause any errors!
 
     def test_seq(self):
         """Make sure Seqs from BioSQL implement the right interface.
@@ -798,7 +798,7 @@ class AutoSeqIOTests(unittest.TestCase):
             if "accessions" in record.annotations:
                 #Only expect FIRST accession to work!
                 key = record.annotations["accessions"][0]
-                assert key, "Blank accession in annotation %s" % repr(accs)
+                assert key, "Blank accession in annotation %s" % repr(record.annotations)
                 if key != record.id:
                     #print " - Retrieving by accession '%s'," % key,
                     db_rec = db.lookup(accession=key)
