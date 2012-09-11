@@ -121,6 +121,13 @@ def create_database():
     server.commit()
     server.close()
 
+def destroy_database():
+    """Delete any temporary BioSQL sqlite3 database files."""
+    if DBDRIVER in ["sqlite3"]:
+        if os.path.exists(TESTDB):
+            os.remove(TESTDB)
+
+
 def load_database(gb_handle):
     """Load a GenBank file into a new BioSQL database.
     
@@ -165,6 +172,7 @@ class ReadTest(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
+        destroy_database()
         del self.db
         del self.server
 
@@ -248,6 +256,7 @@ class SeqInterfaceTest(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
+        destroy_database()
         del self.db
         del self.item
         del self.server
@@ -379,6 +388,7 @@ class LoaderTest(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
+        destroy_database()
         del self.db
         del self.server
 
@@ -419,6 +429,7 @@ class DupLoadTest(unittest.TestCase):
     def tearDown(self):
         self.server.rollback()
         self.server.close()
+        destroy_database()
         del self.db
         del self.server
 
@@ -537,6 +548,9 @@ class TransferTest(unittest.TestCase):
     #NOTE - For speed I don't bother to create a new database each time,
     #simple a new unique namespace is used for each test.
     
+    def setUp(self):
+        create_database()
+
     def test_NC_005816(self):
         """GenBank file to BioSQL, then again to a new namespace, NC_005816."""
         self.trans("GenBank/NC_005816.gb", "gb")
@@ -598,6 +612,9 @@ class TransferTest(unittest.TestCase):
         #Done
         server.close()
 
+    def tearDown(self):
+        destroy_database()
+
 
 class InDepthLoadTest(unittest.TestCase):
     """Make sure we are loading and retreiving in a semi-lossless fashion.
@@ -615,6 +632,7 @@ class InDepthLoadTest(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
+        destroy_database()
         del self.db
         del self.server
 

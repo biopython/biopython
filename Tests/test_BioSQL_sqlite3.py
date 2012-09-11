@@ -79,6 +79,4 @@ class BackwardsCompatibilityTest(unittest.TestCase):
 if __name__ == "__main__":
     #Run the test cases
     runner = unittest.TextTestRunner(verbosity=2)
-    # exit=False so we can return to unlink TESTDB, which could be in RAM.
-    unittest.main(testRunner=runner, exit=False)
-    os.remove(TESTDB)
+    unittest.main(testRunner=runner)
