@@ -25,6 +25,7 @@ except ImportError:
             "Install reportlab if you want to use Bio.Graphics.")
 
 try:
+    import Image
     from reportlab.graphics import renderPM
 except ImportError:
     #This is an optional part of ReportLab, so may not be installed.
