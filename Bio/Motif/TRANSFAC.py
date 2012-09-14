@@ -16,7 +16,8 @@ is stored as attributes of the base class when possible; see the
 Bio.Motif.Motif base class for a description of these attributes. All
 other information associated with the motif is stored as (key, value)
 pairs in the dictionary, where the key is the two-letter fields as found
-in the TRANSFAC file.
+in the TRANSFAC file. References are an exception: These are stored in
+the .references attribute.
 
 These fields are commonly found in TRANSFAC files:
     AC:    Accession number
@@ -42,16 +43,21 @@ These fields are commonly found in TRANSFAC files:
     OS:    Species/Taxon
     OV:    Older version
     PV:    Preferred version
-    RA:    Reference authors
-    RL:    Reference data
-    RN:    Reference number
-    RT:    Reference title
-    RX:    PubMed ID
     TY:    Type
     XX:    Empty line; these are not stored in the Record.
 
+References are stored in an .references attribute, which is a list of
+dictionaries with the following keys:
+    RN:    Reference number
+    RA:    Reference authors
+    RL:    Reference data
+    RT:    Reference title
+    RX:    PubMed ID
+
 For more information, see the TRANSFAC documentation.
 """
+    def __getitem__(self,index):
+        return dict.__getitem__(self, index)
 
 class Record(object):
     """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC
@@ -65,6 +71,10 @@ Attributes:
 
 def read(handle):
     """record = read(handle)"""
+    multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
+    # These keys can occur multiple times for one motif
+    reference_keys = set(['RX', 'RA', 'RT', 'RL'])
+    # These keys occur for references
     record = Record()
     for line in handle:
         line = line.strip()
@@ -112,6 +122,22 @@ def read(handle):
                 for c in "ACGT":
                     motif.counts[c] = []
                 status = "freq"
+            elif key=='RN':
+                index, accession = value.split(";")
+                assert index[0]=='['
+                assert index[-1]==']'
+                index = int(index[1:-1])
+                if index==1:
+                    motif.references = []
+                assert len(motif.references)==index-1
+                reference = {key: value}
+                motif.references.append(reference)
+            elif key in reference_keys:
+                reference[key] = value
+            elif key in multiple_value_keys:
+                if not key in motif:
+                    motif[key] = []
+                motif[key].append(value)
             else:
                 motif[key] = value
     return record
