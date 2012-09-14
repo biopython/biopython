@@ -284,9 +284,16 @@ class LabelTest(unittest.TestCase):
                       fragments=1,
                       start=0, end=400)
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
+        global renderPM
         if renderPM:
-            #For the tutorial this is useful:
-            self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+            try:
+                #For the tutorial this is useful:
+                self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+            except renderPM.RenderPMError:
+                #Probably a font problem, e.g.
+                #RenderPMError: Can't setFont(Times-Roman) missing the T1 files?
+                #Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2 must be string, not None
+                renderPM = None
         if circular:
             #Circular diagram
             self.gdd.draw(tracklines=False,
@@ -363,9 +370,14 @@ class SigilsTest(unittest.TestCase):
                       fragments=1,
                       start=0, end=400)
         self.gdd.write(os.path.join('Graphics', name+".pdf"), "pdf")
+        global renderPM
         if renderPM:
             #For the tutorial this might be useful:
-            self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+            try:
+                self.gdd.write(os.path.join('Graphics', name+".png"), "png")
+            except renderPM.RenderPMError:
+                #Probably a font problem
+                renderPM = None
         if circular:
             #Circular diagram
             self.gdd.draw(tracklines=False,
