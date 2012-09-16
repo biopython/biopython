@@ -460,7 +460,7 @@ class SeqRecord(object):
                 answer._per_letter_annotations[key] = value[index]
 
             return answer
-        raise ValueError, "Invalid index"
+        raise ValueError("Invalid index")
 
     def __iter__(self):
         """Iterate over the letters in the sequence.

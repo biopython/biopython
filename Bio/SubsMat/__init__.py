@@ -170,7 +170,7 @@ class SeqMat(dict):
           try:
               self.update(data)
           except ValueError:
-              raise ValueError, "Failed to store data in a dictionary"
+              raise ValueError("Failed to store data in a dictionary")
       if alphabet == None:
          alphabet = Alphabet.Alphabet()
       assert Alphabet.generic_alphabet.contains(alphabet)
@@ -570,14 +570,14 @@ def two_mat_correlation(mat_1, mat_2):
     try:
         import numpy
     except ImportError:
-        raise ImportError, "Please install Numerical Python (numpy) if you want to use this function"
+        raise ImportError("Please install Numerical Python (numpy) if you want to use this function")
     values = []
     assert mat_1.ab_list == mat_2.ab_list
     for ab_pair in mat_1:
        try:
           values.append((mat_1[ab_pair], mat_2[ab_pair]))
        except KeyError:
-          raise ValueError, "%s is not a common key" % ab_pair
+          raise ValueError("%s is not a common key" % ab_pair)
     correlation_matrix = numpy.corrcoef(values, rowvar=0)
     correlation = correlation_matrix[0,1]
     return correlation

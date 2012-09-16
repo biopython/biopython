@@ -292,7 +292,7 @@ def _read(handle):
             elif value=="NO":
                 record.homol = True
             else:
-                raise ValueError, "Cannot parse HOMOL line %s" % line
+                raise ValueError("Cannot parse HOMOL line %s" % line)
         elif tag=="EXPRESS":
             record.express = [word.strip() for word in value.split("|")]
         elif tag=="RESTR_EXPR":
@@ -314,9 +314,10 @@ def _read(handle):
             record.sts.append(sts)
         elif tag=='//':
             if len(record.sequence)!=scount:
-                raise ValueError, "The number of sequences specified in the record (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence))
+                raise ValueError("The number of sequences specified in the record"
+                                 " (%d) does not agree with the number of sequences found (%d)" % (scount, len(record.sequence)))
             return record
         else:
-            raise ValueError, "Unknown tag %s" % tag
+            raise ValueError("Unknown tag %s" % tag)
     if record:
         raise ValueError("Unexpected end of stream.")
