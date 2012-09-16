@@ -78,7 +78,7 @@ def page_sizes(size):
     try:
         return sizes[size]
     except:
-        raise ValueError, "%s not in list of page sizes" % size
+        raise ValueError("%s not in list of page sizes" % size)
 
 
 def _stroke_and_fill_colors(color, border):
@@ -462,12 +462,12 @@ class AbstractDrawer(object):
         elif type(pagesize) == type((1,2)): # A tuple, so don't translate
             pagesize = pagesize
         else:
-            raise ValueError, "Page size %s not recognised" % pagesize        
+            raise ValueError("Page size %s not recognised" % pagesize)
         shortside, longside = min(pagesize), max(pagesize)
 
         orientation = orientation.lower()
         if orientation not in ('landscape', 'portrait'):
-            raise ValueError, "Orientation %s not recognised" % orientation
+            raise ValueError("Orientation %s not recognised" % orientation)
         if orientation == 'landscape':
             self.pagesize = (longside, shortside)
         else:

@@ -121,7 +121,7 @@ class ColorTranslator(object):
                 self._colorscheme[label] = (self.int255_color((red, green, blue)),
                                              comment)
             except:
-                raise IOError, "Expected INT \t INT \t INT \t INT \t string input"
+                raise ValueError("Expected INT \t INT \t INT \t INT \t string input")
 
     def get_artemis_colorscheme(self):
         """ get_artemis_colorscheme(self)
@@ -153,7 +153,7 @@ class ColorTranslator(object):
         if value in self._artemis_colorscheme:
             return self._artemis_colorscheme[value][0]
         else:
-            raise ValueError, "Artemis color out of range: %d" % value
+            raise ValueError("Artemis color out of range: %d" % value)
 
 
     def get_colorscheme(self):
@@ -176,7 +176,7 @@ class ColorTranslator(object):
         if value in self._colorscheme:
             return self._colorscheme[value][0]
         else:
-            raise ValueError, "Scheme color out of range: %d" % value
+            raise ValueError("Scheme color out of range: %d" % value)
 
 
     def int255_color(self, values):
