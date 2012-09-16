@@ -49,9 +49,11 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 
 import Bio.Restriction.Restriction
-from Bio.Restriction.Restriction import AbstractCut, RestrictionType, NoCut, OneCut,\
-TwoCuts, Meth_Dep, Meth_Undep, Palindromic, NonPalindromic, Unknown, Blunt,\
-Ov5, Ov3, NotDefined, Defined, Ambiguous, Commercially_available, Not_available 
+from Bio.Restriction.Restriction import AbstractCut, RestrictionType, NoCut, OneCut
+from Bio.Restriction.Restriction import TwoCuts, Meth_Dep, Meth_Undep, Palindromic
+from Bio.Restriction.Restriction import NonPalindromic, Unknown, Blunt, Ov5, Ov3
+from Bio.Restriction.Restriction import NotDefined, Defined, Ambiguous
+from Bio.Restriction.Restriction import Commercially_available, Not_available 
 
 import Bio.Restriction.RanaConfig as config
 from Bio.Restriction._Update.Update import RebaseUpdate
