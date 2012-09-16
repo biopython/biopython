@@ -51,7 +51,7 @@ class Paml(object):
             self.working_dir = working_dir
         if alignment is not None:
             if not os.path.exists(alignment):
-                raise IOError, "The specified alignment file does not exist."
+                raise IOError("The specified alignment file does not exist.")
         self.alignment = alignment
         self.out_file = out_file
         
@@ -74,14 +74,14 @@ class Paml(object):
         """
         for option, value in kwargs.items():
             if not self._options.has_key(option):
-                raise KeyError, "Invalid option: " + option
+                raise KeyError("Invalid option: " + option)
             else:
                 self._options[option] = value
         
     def get_option(self, option):
         """Return the value of an option."""
         if not self._options.has_key(option):
-            raise KeyError, "Invalid option: " + option
+            raise KeyError("Invalid option: " + option)
         else:
             return self._options.get(option)
     
@@ -114,13 +114,13 @@ class Paml(object):
         requires relative paths.
         """
         if self.alignment is None:
-            raise ValueError, "Alignment file not specified."
+            raise ValueError("Alignment file not specified.")
         if not os.path.exists(self.alignment):
-            raise IOError, "The specified alignment file does not exist."
+            raise IOError("The specified alignment file does not exist.")
         if self.out_file is None:
-            raise ValueError, "Output file not specified."
+            raise ValueError("Output file not specified.")
         if self.working_dir is None:
-            raise ValueError, "Working directory not specified."
+            raise ValueError("Working directory not specified.")
         # Get the current working directory
         cwd = os.getcwd()
         # Move to the desired working directory
@@ -139,7 +139,7 @@ class Paml(object):
                     stdout=subprocess.PIPE)
         else:
             if not os.path.exists(ctl_file):
-                raise IOError, "The specified control file does not exist."
+                raise IOError("The specified control file does not exist.")
             if verbose:
                 result_code = subprocess.call([command, ctl_file])
             else:
@@ -148,10 +148,10 @@ class Paml(object):
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
-            raise PamlError, \
+            raise PamlError( \
             "%s has failed (return code %i). Run with verbose = True to view error message" \
-            % (command, result_code)
+            % (command, result_code))
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError, "The %s process was killed (return code %i)." \
-                  % (command, result_code)
+            raise EnvironmentError("The %s process was killed (return code %i)." \
+                  % (command, result_code))

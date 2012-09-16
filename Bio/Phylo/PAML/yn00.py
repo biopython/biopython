@@ -68,8 +68,8 @@ class Yn00(Paml):
                 if uncommented != "":
                     if "=" not in uncommented:
                         ctl_handle.close()
-                        raise AttributeError, \
-                            "Malformed line in control file:\n%r" % line
+                        raise AttributeError( \
+                            "Malformed line in control file:\n%r" % line)
                     (option, value) = uncommented.split("=")
                     option = option.strip()
                     value = value.strip()
@@ -79,7 +79,7 @@ class Yn00(Paml):
                         self.out_file = value
                     elif option not in self._options:
                         ctl_handle.close()
-                        raise KeyError, "Invalid option: %s" % option
+                        raise KeyError("Invalid option: %s" % option)
                     else:
                         if "." in value or "e-" in value:
                             try:
@@ -112,7 +112,7 @@ def read(results_file):
     """Parse a yn00 results file."""
     results = {}
     if not os.path.exists(results_file):
-        raise IOError, "Results file does not exist."
+        raise IOError("Results file does not exist.")
     handle = open(results_file)
     lines = handle.readlines()
     handle.close()
@@ -130,7 +130,7 @@ def read(results_file):
             results = _parse_yn00.parse_others(lines[line_num+1:], results, 
                     sequences)
     if len(results) == 0:
-        raise ValueError, "Invalid results file."
+        raise ValueError("Invalid results file.")
     return results
 
 

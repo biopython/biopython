@@ -29,7 +29,7 @@ class Baseml(Paml):
         Paml.__init__(self, alignment, working_dir, out_file)
         if tree is not None:
             if not os.path.exists(tree):
-                raise IOError, "The specified tree file does not exist."
+                raise IOError("The specified tree file does not exist.")
         self.tree = tree
         self.ctl_file = "baseml.ctl"
         self._options = {"noisy": None,
@@ -107,8 +107,8 @@ class Baseml(Paml):
                 if uncommented != "":
                     if "=" not in uncommented:
                         ctl_handle.close()
-                        raise AttributeError, \
-                            "Malformed line in control file:\n%r" % line
+                        raise AttributeError( \
+                            "Malformed line in control file:\n%r" % line)
                     (option, value) = uncommented.split("=")
                     option = option.strip()
                     value = value.strip()
@@ -120,7 +120,7 @@ class Baseml(Paml):
                         self.out_file = value
                     elif option not in self._options:
                         ctl_handle.close()
-                        raise KeyError, "Invalid option: %s" % option
+                        raise KeyError("Invalid option: %s" % option)
                     elif option == "model":
                         if len(value) <= 2 and value.isdigit():
                             temp_options["model"] = int(value)
@@ -171,9 +171,9 @@ class Baseml(Paml):
         requires relative paths.
         """
         if self.tree is None:
-            raise ValueError, "Tree file not specified."
+            raise ValueError("Tree file not specified.")
         if not os.path.exists(self.tree):
-            raise IOError, "The specified tree file does not exist."
+            raise IOError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
             results = read(self.out_file)
@@ -185,12 +185,12 @@ def read(results_file):
     results = {}
     """Parse a BASEML results file."""
     if not os.path.exists(results_file):
-        raise IOError, "Results file does not exist."
+        raise IOError("Results file does not exist.")
     handle = open(results_file)
     lines = handle.readlines()
     handle.close()
     (results, num_params) = _parse_baseml.parse_basics(lines, results)
     results = _parse_baseml.parse_parameters(lines, results, num_params)
     if results.get("version") is None:
-        raise ValueError, "Invalid results file"
+        raise ValueError("Invalid results file")
     return results

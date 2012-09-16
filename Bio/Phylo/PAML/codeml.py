@@ -31,7 +31,7 @@ class Codeml(Paml):
         Paml.__init__(self, alignment, working_dir, out_file)
         if tree is not None:
             if not os.path.exists(tree):
-                raise IOError, "The specified tree file does not exist."
+                raise IOError("The specified tree file does not exist.")
         self.tree = tree
         self.ctl_file = "codeml.ctl"
         self._options = {"noisy": None, 
@@ -107,8 +107,8 @@ class Codeml(Paml):
                 if uncommented != "":
                     if "=" not in uncommented:
                         ctl_handle.close()
-                        raise AttributeError, \
-                            "Malformed line in control file:\n%r" % line
+                        raise AttributeError( \
+                            "Malformed line in control file:\n%r" % line)
                     (option, value) = uncommented.split("=")
                     option = option.strip()
                     value = value.strip()
@@ -125,12 +125,12 @@ class Codeml(Paml):
                                 site_classes[n] = int(site_classes[n])
                             except:
                                 ctl_handle.close()
-                                raise TypeError, \
-                                    "Invalid site class: %s" % site_classes[n]
+                                raise TypeError( \
+                                    "Invalid site class: %s" % site_classes[n])
                         temp_options["NSsites"] = site_classes
                     elif option not in self._options:
                         ctl_handle.close()
-                        raise KeyError, "Invalid option: %s" % option
+                        raise KeyError("Invalid option: %s" % option)
                     else:
                         if "." in value:
                             try:
@@ -184,9 +184,9 @@ class Codeml(Paml):
         requires relative paths.
         """
         if self.tree is None:
-            raise ValueError, "Tree file not specified."
+            raise ValueError("Tree file not specified.")
         if not os.path.exists(self.tree):
-            raise IOError, "The specified tree file does not exist."
+            raise IOError("The specified tree file does not exist.")
         Paml.run(self, ctl_file, verbose, command)
         if parse:
             results = read(self.out_file)
@@ -198,7 +198,7 @@ def read(results_file):
     """Parse a CODEML results file."""
     results = {}
     if not os.path.exists(results_file):
-        raise IOError, "Results file does not exist."
+        raise IOError("Results file does not exist.")
     handle = open(results_file)
     lines = handle.readlines()
     handle.close()
@@ -209,5 +209,5 @@ def read(results_file):
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)
     if len(results) == 0:
-        raise ValueError, "Invalid results file"
+        raise ValueError("Invalid results file")
     return results
