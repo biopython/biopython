@@ -17,8 +17,8 @@ from Bio.PDB.Chain import Chain
 from Bio.PDB.Residue import Residue, DisorderedResidue
 from Bio.PDB.Atom import Atom, DisorderedAtom 
 
-from Bio.PDB.PDBExceptions import \
-        PDBConstructionException, PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBConstructionException
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 
 class StructureBuilder(object):
