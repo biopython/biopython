@@ -2009,7 +2009,7 @@ class RestrictionBatch(set):
 
     @classmethod
     def show_codes(self):
-        "B.show_codes() -> letter codes for the suppliers"""
+        """B.show_codes() -> letter codes for the suppliers"""
         supply = [' = '.join(i) for i in self.suppl_codes().iteritems()]
         print '\n'.join(supply)
         return
