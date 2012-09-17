@@ -693,7 +693,8 @@ class EmblScanner(InsdcScanner):
                 # Reformat reference numbers for the GenBank based consumer
                 # e.g. '1-4639675' becomes '(bases 1 to 4639675)'
                 # and '160-550, 904-1055' becomes '(bases 160 to 550; 904 to 1055)'
-                parts = [bases.replace("-"," to ").strip() for bases in data.split(",")]
+                # Note could be multi-line, and end with a comma
+                parts = [bases.replace("-"," to ").strip() for bases in data.split(",") if bases.strip()]
                 consumer.reference_bases("(bases %s)" % "; ".join(parts))
             elif line_type == 'RT':
                 #Remove the enclosing quotes and trailing semi colon.
