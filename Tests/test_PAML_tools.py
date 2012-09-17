@@ -64,7 +64,7 @@ class Common(unittest.TestCase):
 
 
 class CodemlTest(Common):
-    "Tests for PAML tool codeml."""
+    """Tests for PAML tool codeml."""
 
     def setUp(self):
         self.cml = codeml.Codeml()
