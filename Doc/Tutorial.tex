@@ -13966,12 +13966,15 @@ alignment. The file containing \href{examples/protein.aln}{protein.aln}
 contains the Clustalw alignment output.
 
 \begin{verbatim}
-from Bio import Clustalw
+from Bio import AlignIO
+from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Align import AlignInfo
 
 # get an alignment object from a Clustalw alignment output
-c_align = Clustalw.parse_file("protein.aln", IUPAC.protein)
+filename = "protein.aln"
+alpha = Alphabet.Gapped(IUPAC.protein)
+c_align = AlignIO.read(open(filename), "clustal", alphabet=alpha)
 summary_align = AlignInfo.SummaryInfo(c_align)
 \end{verbatim}
 
