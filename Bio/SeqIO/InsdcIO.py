@@ -356,7 +356,7 @@ class _InsdcWriter(SequentialSequenceWriter):
         return answer
 
     def _split_contig(self, record, max_len):
-        "Returns a list of strings, splits on commas."""
+        """Returns a list of strings, splits on commas."""
         #TODO - Merge this with _write_multi_line method?
         #It would need the addition of the comma splitting logic...
         #are there any other cases where that would be sensible?
@@ -383,7 +383,7 @@ class GenBankWriter(_InsdcWriter):
     QUALIFIER_INDENT = 21
     
     def _write_single_line(self, tag, text):
-        "Used in the the 'header' of each GenBank record."""
+        """Used in the 'header' of each GenBank record."""
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             import warnings
@@ -392,7 +392,7 @@ class GenBankWriter(_InsdcWriter):
                                       text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
-        "Used in the the 'header' of each GenBank record."""
+        """Used in the the 'header' of each GenBank record."""
         #TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)
