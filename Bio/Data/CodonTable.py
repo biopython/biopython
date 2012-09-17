@@ -252,11 +252,12 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
             answer.append(ambig_codon)
     return answer
 
-assert list_ambiguous_codons(['TGA', 'TAA'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
-assert list_ambiguous_codons(['TAG', 'TGA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
-assert list_ambiguous_codons(['TAG', 'TAA'],IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
-assert list_ambiguous_codons(['UAG', 'UAA'],IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
-assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
+assert list_ambiguous_codons(['TGA', 'TAA'], IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
+assert list_ambiguous_codons(['TAG', 'TGA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
+assert list_ambiguous_codons(['TAG', 'TAA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
+assert list_ambiguous_codons(['UAG', 'UAA'], IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
+assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'], \
+                                 IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
 
 # Forward translation is "onto", that is, any given codon always maps
 # to the same protein, or it doesn't map at all.  Thus, I can build
