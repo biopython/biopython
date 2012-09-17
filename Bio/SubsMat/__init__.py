@@ -152,7 +152,7 @@ class SeqMat(dict):
       # data: matrix itself
       # mat_name: its name. See below.
       # alphabet: an instance of Bio.Alphabet, or a subclass. If not
-      # supplied, constructor builds its own from that matrix."""
+      # supplied, constructor builds its own from that matrix.
       # build_later: skip the matrix size assertion. User will build the
       # matrix after creating the instance. Constructor builds a half matrix
       # filled with zeroes.
