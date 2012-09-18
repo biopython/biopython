@@ -3,7 +3,11 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio.Data.CodonTable import *
+from Bio.Data.CodonTable import IUPACData, ambiguous_generic_by_id
+from Bio.Data.CodonTable import ambiguous_generic_by_name
+from Bio.Data.CodonTable import ambiguous_rna_by_id, ambiguous_dna_by_id
+from Bio.Data.CodonTable import unambiguous_rna_by_id, unambiguous_dna_by_id
+from Bio.Data.CodonTable import list_ambiguous_codons, TranslationError
 
 #Check the extension of stop codons to include well defined ambiguous ones
 assert list_ambiguous_codons(['TGA', 'TAA'],IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TRA']
