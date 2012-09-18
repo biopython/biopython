@@ -12,6 +12,11 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Bio.HotRand
+===========
+Obsolete file Bio/HotRand.py was deprecated in Release 1.61, consider using
+an alternative RNG, or the Python module "randomdotorg".
+
 Bio.Search
 ==========
 Long obsolete file Bio/Search.py was deprecated in Release 1.61.
