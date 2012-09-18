@@ -72,47 +72,74 @@ For more information, see the TRANSFAC documentation.
         return dict.__getitem__(self, index)
 
     def __str__(self):
-        keys = ('AC', 'AS', 'ID', 'DT', 'CO', 'NA', 'DE',
-                'TY', 'OS', 'OC', 'HP', 'HC', 'BF', 'P0',
-                'BA', 'BS', 'CC', 'DR', 'OV', 'PV')
+        sections = (('AC', 'AS',), # Accession
+                    ('ID',),       # ID
+                    ('DT', 'CO'),  # Date, copyright
+                    ('NA',),       # Name
+                    ('DE',),       # Short factor description
+                    ('TY',),       # Type
+                    ('OS', 'OC'),  # Organism
+                    ('HP', 'HC'),  # Superfamilies, subfamilies
+                    ('BF',),       # Binding factors
+                    ('P0',),       # Frequency matrix
+                    ('BA',),       # Statistical basis
+                    ('BS',),       # Factor binding sites
+                    ('CC',),       # Comments
+                    ('DR',),       # External databases
+                    ('OV', 'PV',), # Versions
+                   )
         lines = []
-        for key in keys:
-            if key=='P0':
-                length = self.length
-                line = "P0      A      C      G      T"
-                lines.append(line)
-                for i in range(length):
-                    position = string.zfill(i+1, 2)
-                    line = "%s\t%f\t%f\t%f\t%f" % (position,
+        for section in sections:
+            blank = False
+            for key in section:
+                if key=='P0':
+                    # Frequency matrix
+                    length = self.length
+                    if length==0:
+                        continue
+                    line = "P0      A      C      G      T"
+                    lines.append(line)
+                    for i in range(length):
+                        position = string.zfill(i+1, 2)
+                        line = "%s      %f      %f      %f      %f" % (
+                                             position,
                                              self.counts['A'][i],
                                              self.counts['C'][i],
                                              self.counts['G'][i],
-                                             self.counts['T'][i])
-                    lines.append(line)
-                continue
-            value = self.get(key)
-            if value==None:
-                continue
-            if key in Motif._multiple_value_keys:
-                for v in value:
-                    line = "%s  %s" % (key, v)
-                    lines.append(line)
-            else:
-                line = "%s  %s" % (key, value)
+                                             self.counts['T'][i],
+                                            )
+                        lines.append(line)
+                    blank = True
+                else:
+                    value = self.get(key)
+                    if value!=None:
+                        if key in Motif._multiple_value_keys:
+                            for v in value:
+                                line = "%s  %s" % (key, v)
+                                lines.append(line)
+                        else:
+                            line = "%s  %s" % (key, value)
+                            lines.append(line)
+                        blank = True
+                if key=='PV':
+                    # References
+                    keys = ("RN", "RX", "RA", "RT", "RL")
+                    for reference in self.references:
+                        for key in keys:
+                            value = reference.get(key)
+                            if value==None:
+                                continue
+                            line = "%s  %s" % (key, value)
+                            lines.append(line)
+                            blank = True
+            if blank:
+                line = 'XX'
                 lines.append(line)
-        keys = ("RN", "RX", "RA", "RT", "RL")
-        for reference in self.references:
-            for key in keys:
-                value = reference.get(key)
-                if value==None:
-                    continue
-                line = "%s  %s" % (key, value)
-                lines.append(line)
+        # Finished; glue the lines together
         line = "//"
         lines.append(line)
         text = "\n".join(lines) + "\n"
         return text
-
 
 class Record(object):
     """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC
@@ -129,6 +156,8 @@ Attributes:
     def __str__(self):
         lines = []
         line = "VV  %s" % self.version
+        lines.append(line)
+        line = "XX"
         lines.append(line)
         line = "//"
         lines.append(line)
@@ -155,7 +184,7 @@ def read(handle):
         elif line=='XX':
             pass
         else:
-            key, value = line.split(None, 1)
+            key, value = line[:2], line[4:]
             if key=='VV':
                 record.version = value
                 continue
