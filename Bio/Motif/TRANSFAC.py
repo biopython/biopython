@@ -6,6 +6,7 @@
 """Parsing TRANSFAC files
 """
 
+import string
 from Bio.Motif import Motif as BaseMotif
 
 class Motif(BaseMotif, dict):
@@ -56,8 +57,62 @@ dictionaries with the following keys:
 
 For more information, see the TRANSFAC documentation.
 """
+    _multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
+    # These keys can occur multiple times for one motif
+
+    _reference_keys = set(['RX', 'RA', 'RT', 'RL'])
+    # These keys occur for references
+
+    def __init__(self):
+        BaseMotif.__init__(self)
+        self.references = []
+
     def __getitem__(self,index):
+        # This can be removed if we remove the __getitem__ method from BaseMotif
         return dict.__getitem__(self, index)
+
+    def __str__(self):
+        keys = ('AC', 'AS', 'ID', 'DT', 'CO', 'NA', 'DE',
+                'TY', 'OS', 'OC', 'HP', 'HC', 'BF', 'P0',
+                'BA', 'BS', 'CC', 'DR', 'OV', 'PV')
+        lines = []
+        for key in keys:
+            if key=='P0':
+                length = self.length
+                line = "P0      A      C      G      T"
+                lines.append(line)
+                for i in range(length):
+                    position = string.zfill(i+1, 2)
+                    line = "%s\t%f\t%f\t%f\t%f" % (position,
+                                             self.counts['A'][i],
+                                             self.counts['C'][i],
+                                             self.counts['G'][i],
+                                             self.counts['T'][i])
+                    lines.append(line)
+                continue
+            value = self.get(key)
+            if value==None:
+                continue
+            if key in Motif._multiple_value_keys:
+                for v in value:
+                    line = "%s  %s" % (key, v)
+                    lines.append(line)
+            else:
+                line = "%s  %s" % (key, value)
+                lines.append(line)
+        keys = ("RN", "RX", "RA", "RT", "RL")
+        for reference in self.references:
+            for key in keys:
+                value = reference.get(key)
+                if value==None:
+                    continue
+                line = "%s  %s" % (key, value)
+                lines.append(line)
+        line = "//"
+        lines.append(line)
+        text = "\n".join(lines) + "\n"
+        return text
+
 
 class Record(object):
     """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC
@@ -68,39 +123,44 @@ Attributes:
                  in the TRANSFAC file;
     o motifs:    The list of motifs.
 """
+    def __init__(self):
+        self.motifs = []
+
+    def __str__(self):
+        lines = []
+        line = "VV  %s" % self.version
+        lines.append(line)
+        line = "//"
+        lines.append(line)
+        block = "\n".join(lines) + "\n"
+        blocks = [block]
+        for motif in self.motifs:
+            block = str(motif)
+            blocks.append(block)
+        text = "".join(blocks)
+        return text
 
 def read(handle):
     """record = read(handle)"""
-    multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
-    # These keys can occur multiple times for one motif
-    reference_keys = set(['RX', 'RA', 'RT', 'RL'])
-    # These keys occur for references
+    motif = None
+    status = None
     record = Record()
     for line in handle:
         line = line.strip()
         if line=='//':
-            break
-        elif line=='XX':
-            pass
-        else:
-            key, value = line.split(None, 1)
-            assert key=='VV'
-            record.version = value
-    record.motifs = []
-    motif = None
-    status = None
-    for line in handle:
-        line = line.strip()
-        if motif==None:
-            motif = Motif()
-        if line=='//':
-            record.motifs.append(motif)
+            if motif!=None:
+                record.motifs.append(motif)
             motif = None
             status = None
         elif line=='XX':
             pass
         else:
             key, value = line.split(None, 1)
+            if key=='VV':
+                record.version = value
+                continue
+            if motif==None:
+                motif = Motif()
             if status=="freq":
                try:
                    i = int(key)
@@ -127,14 +187,12 @@ def read(handle):
                 assert index[0]=='['
                 assert index[-1]==']'
                 index = int(index[1:-1])
-                if index==1:
-                    motif.references = []
                 assert len(motif.references)==index-1
                 reference = {key: value}
                 motif.references.append(reference)
-            elif key in reference_keys:
+            elif key in Motif._reference_keys:
                 reference[key] = value
-            elif key in multiple_value_keys:
+            elif key in Motif._multiple_value_keys:
                 if not key in motif:
                     motif[key] = []
                 motif[key].append(value)
