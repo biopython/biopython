@@ -146,11 +146,16 @@ class ColorSpiral(object):
     def _set_jitter(self, value):
         self._jitter = max(0, min(1, value))
 
-    a = property(_get_a, _set_a)
-    b = property(_get_b, _set_b)
-    v_init = property(_get_v_init, _set_v_init)
-    v_final = property(_get_v_final, _set_v_final)
-    jitter = property(_get_jitter, _set_jitter)
+    a = property(_get_a, _set_a,
+                 doc="Parameter controlling initial spiral direction (a > 0)")
+    b = property(_get_b, _set_b,
+                 doc="Parameter controlling rate spiral revolves around axis (b > 0)")
+    v_init = property(_get_v_init, _set_v_init,
+                      doc="Initial value of V (brightness) for the spiral (range 0 to 1)")
+    v_final = property(_get_v_final, _set_v_final,
+                       doc="Final value of V (brightness) for the spiral (range 0 to 1)")
+    jitter = property(_get_jitter, _set_jitter,
+                      doc="Degree of V (brightness) jitter to add to each color (range 0 to 1)")
 
 # Convenience functions for those who don't want to bother with a
 # ColorSpiral object
