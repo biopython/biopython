@@ -73,7 +73,9 @@ class ColorSpiral(object):
         self.jitter = jitter
 
     def get_colors(self, k, offset=0.1):
-        """ A generator returning the RGB colour space values for k 
+        """Generate k different RBG colours evenly-space on the spiral.
+
+            A generator returning the RGB colour space values for k 
             evenly-spaced points along the defined spiral in HSV space.
 
             Arguments:
@@ -114,46 +116,46 @@ class ColorSpiral(object):
             # we can use this value directly as s in HSV
             yield colorsys.hsv_to_rgb(h, r, max(0, min(v, 1)))
 
-    def get_a(self):
+    def _get_a(self):
         return self._a
 
-    def set_a(self, value):
+    def _set_a(self, value):
         self._a = max(0, value)
 
-    def get_b(self):
+    def _get_b(self):
         return self._b
 
-    def set_b(self, value):
+    def _set_b(self, value):
         self._b = max(0, value)
 
-    def get_v_init(self):
+    def _get_v_init(self):
         return self._v_init
 
-    def set_v_init(self, value):
+    def _set_v_init(self, value):
         self._v_init = max(0, min(1, value))
 
-    def get_v_final(self):
+    def _get_v_final(self):
         return self._v_final
 
-    def set_v_final(self, value):
+    def _set_v_final(self, value):
         self._v_final = max(0, min(1, value))
 
-    def get_jitter(self):
+    def _get_jitter(self):
         return self._jitter
 
-    def set_jitter(self, value):
+    def _set_jitter(self, value):
         self._jitter = max(0, min(1, value))
 
-    a = property(get_a, set_a)
-    b = property(get_b, set_b)
-    v_init = property(get_v_init, set_v_init)
-    v_final = property(get_jitter, set_v_final)
-    jitter = property(get_jitter, set_jitter)
+    a = property(_get_a, _set_a)
+    b = property(_get_b, _set_b)
+    v_init = property(_get_v_init, _set_v_init)
+    v_final = property(_get_v_final, _set_v_final)
+    jitter = property(_get_jitter, _set_jitter)
 
 # Convenience functions for those who don't want to bother with a
 # ColorSpiral object
 def get_colors(k, **kwargs):
-    """Returns k colours selected by the ColorSpiral object, as a generator
+    """Returns k colours selected by the ColorSpiral object, as a generator.
 
        Arguments:
 
@@ -165,7 +167,9 @@ def get_colors(k, **kwargs):
     return cs.get_colors(k)
 
 def get_color_dict(l, **kwargs):
-    """Returns a dictionary, keyed by the members of iterable l, with a
+    """Returns a dictionary of colours using the provided values as keys.
+
+       Returns a dictionary, keyed by the members of iterable l, with a
        colour assigned to each member.
 
        Arguments:
