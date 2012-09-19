@@ -151,18 +151,18 @@ Attributes:
     o motifs:    The list of motifs.
 """
     def __init__(self):
+        self.version = None
         self.motifs = []
 
     def __str__(self):
-        lines = []
-        line = "VV  %s" % self.version
-        lines.append(line)
-        line = "XX"
-        lines.append(line)
-        line = "//"
-        lines.append(line)
-        block = "\n".join(lines) + "\n"
-        blocks = [block]
+        blocks = []
+        if self.version!=None:
+            block = """\
+VV  %s
+XX
+//
+""" % self.version
+            blocks.append(block)
         for motif in self.motifs:
             block = str(motif)
             blocks.append(block)
