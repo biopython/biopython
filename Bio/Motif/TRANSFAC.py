@@ -101,7 +101,7 @@ For more information, see the TRANSFAC documentation.
                     lines.append(line)
                     for i in range(length):
                         position = string.zfill(i+1, 2)
-                        line = "%s      %f      %f      %f      %f" % (
+                        line = "%s      %g      %g      %g      %g" % (
                                              position,
                                              self.counts['A'][i],
                                              self.counts['C'][i],
