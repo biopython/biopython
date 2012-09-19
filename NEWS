@@ -19,6 +19,10 @@ like NNNNN regions in draft genomes. Finally BIGARROW is like the existing
 ARROW sigil but is drawn straddling the axis. This is useful for drawing
 vertically compact figures where you do not have overlapping genes.
 
+New module Bio.Graphics.ColorSpiral can generate colors along a spiral path
+through HSV color space. This can be used to make arbitrary 'rainbow' scales,
+for example to color features or cross-links on a GenomeDiagram figure.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
