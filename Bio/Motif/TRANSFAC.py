@@ -100,9 +100,8 @@ For more information, see the TRANSFAC documentation.
                     line = "P0      A      C      G      T"
                     lines.append(line)
                     for i in range(length):
-                        position = string.zfill(i+1, 2)
-                        line = "%s      %g      %g      %g      %g" % (
-                                             position,
+                        line = "%02.d %5.20g %5.20g %5.20g %5.20g" % (
+                                             i+1,
                                              self.counts['A'][i],
                                              self.counts['C'][i],
                                              self.counts['G'][i],
