@@ -13974,7 +13974,7 @@ from Bio.Align import AlignInfo
 # get an alignment object from a Clustalw alignment output
 filename = "protein.aln"
 alpha = Alphabet.Gapped(IUPAC.protein)
-c_align = AlignIO.read(open(filename), "clustal", alphabet=alpha)
+c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
 summary_align = AlignInfo.SummaryInfo(c_align)
 \end{verbatim}
 
