@@ -295,6 +295,10 @@ class LabelTest(unittest.TestCase):
                 #RenderPMError: Can't setFont(Times-Roman) missing the T1 files?
                 #Originally <type 'exceptions.TypeError'>: makeT1Font() argument 2 must be string, not None
                 renderPM = None
+            except IOError:
+                #Probably a library problem, e.g.
+                #IOError: encoder zip not available
+                renderPM = None
         if circular:
             #Circular diagram
             self.gdd.draw(tracklines=False,
