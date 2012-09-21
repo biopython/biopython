@@ -265,9 +265,10 @@ class InsdcScanner(object):
 
             qualifiers = []
 
-            for i, line in enumerate(iterator):
+            first_line = True
+            for line in iterator:
                 # check for extra wrapping of the location closing parentheses
-                if i == 0 and line.startswith(")"):
+                if first_line and line.startswith(")"):
                     feature_location += line.strip()
                 elif line[0] == "/":
                     #New qualifier
@@ -305,6 +306,7 @@ class InsdcScanner(object):
                     assert key == qualifiers[-1][0]
                     #if debug : print "Unquoted Cont %s:%s" % (key, line)
                     qualifiers[-1] = (key, qualifiers[-1][1] + "\n" + line)
+                first_line = False
             return (feature_key, feature_location, qualifiers)
         except StopIteration:
             #Bummer
