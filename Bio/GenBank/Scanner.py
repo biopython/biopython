@@ -283,10 +283,12 @@ class InsdcScanner(object):
                         qualifiers.append((key, ""))
                     elif value[0] == '"':
                         #Quoted...
-                        if value[-1] != '"' or value != '"':
+                        if value != '"':
                             #No closing quote on the first line...
-                            while value[-1] != '"':
-                                value += "\n" + iterator.next()
+                            value_list = [value]
+                            while value_list[-1][-1] != '"':
+                                value_list.append(iterator.next())
+                            value = '\n'.join(value_list)
                         else:
                             #One single line (quoted)
                             assert value == '"'
