@@ -257,11 +257,11 @@ class InsdcScanner(object):
         try:
             line = iterator.next()
 
-            feature_location = line.strip()
-            while feature_location[-1:] == ",":
+            feature_location_list = [line.strip()]
+            while feature_location_list[-1][-1] == ",":
                 #Multiline location, still more to come!
                 line = iterator.next()
-                feature_location += line.strip()
+                feature_location_list.append(line.strip())
 
             qualifiers = []
 
@@ -269,7 +269,7 @@ class InsdcScanner(object):
             for line in iterator:
                 # check for extra wrapping of the location closing parentheses
                 if first_line and line.startswith(")"):
-                    feature_location += line.strip()
+                    feature_location_list.append(line.strip())
                 elif line[0] == "/":
                     #New qualifier
                     i = line.find("=")
@@ -307,6 +307,7 @@ class InsdcScanner(object):
                     #if debug : print "Unquoted Cont %s:%s" % (key, line)
                     qualifiers[-1] = (key, qualifiers[-1][1] + "\n" + line)
                 first_line = False
+            feature_location = ''.join(feature_location_list)
             return (feature_key, feature_location, qualifiers)
         except StopIteration:
             #Bummer
