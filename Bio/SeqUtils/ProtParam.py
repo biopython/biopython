@@ -18,7 +18,8 @@ print X.protein_scale(ProtParamData.kd, 9, 0.4)
 """
 
 import sys
-import ProtParamData, IsoelectricPoint
+import ProtParamData #Local
+import IsoelectricPoint #Local
 from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData
