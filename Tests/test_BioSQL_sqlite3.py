@@ -7,6 +7,7 @@
 import os
 import tempfile
 from Bio import MissingExternalDependencyError
+from Bio import SeqIO
 from BioSQL import BioSeqDatabase
 
 from common_BioSQL import *
