@@ -43,8 +43,8 @@ class AppTests(unittest.TestCase):
         # Smoke test
         try:
             out, err = cmd()
-            self.assert_(len(out) > 0)
-            self.assert_(len(err) == 0)
+            self.assertTrue(len(out) > 0)
+            self.assertEqual(len(err), 0)
             # Check the output tree
             tree = Phylo.read(EX_PHYLIP + '_phyml_tree.txt', 'newick')
             self.assertEqual(tree.count_terminals(), 4)
