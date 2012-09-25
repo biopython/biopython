@@ -70,11 +70,10 @@ class _XMLparser(ContentHandler):
             eval("self.%s()" % method)
             if self._debug > 4:
                 print "NCBIXML: Parsed:  " + method
-        else:
-            # Doesn't exist (yet)
+        elif self._debug > 3:
+            # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                if self._debug > 3:
-                    print "NCBIXML: Ignored: " + method
+                print "NCBIXML: Ignored: " + method
                 self._debug_ignore_list.append(method)
 
         #We don't care about white space in parent tags like Hsp,
@@ -106,11 +105,10 @@ class _XMLparser(ContentHandler):
             eval("self.%s()" % method)
             if self._debug > 2:
                 print "NCBIXML: Parsed:  " + method, self._value
-        else:
-            # Doesn't exist (yet)
+        elif self._debug > 1:
+            # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                if self._debug > 1:
-                    print "NCBIXML: Ignored: " + method, self._value
+                print "NCBIXML: Ignored: " + method, self._value
                 self._debug_ignore_list.append(method)
         
         # Reset character buffer
