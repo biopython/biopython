@@ -29,8 +29,8 @@ def test_fitness(genome):
 class MutationHelper:
     """Mixin class which provides useful functions for testing mutations.
     """
-    num_trials = 500
-    
+    num_trials = 1000
+
     def _always_mutate(self, mutator, expected_percent):
         """Test the ability of a mutator to always mutate.
 
