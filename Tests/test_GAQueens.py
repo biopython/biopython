@@ -22,6 +22,7 @@ import math
 import random
 import copy
 import time
+import unittest
 
 # Biopython
 from Bio import Alphabet
@@ -63,17 +64,17 @@ def main(num_queens):
     end_time = time.ctime(time.time())
 
     unique_solutions = []
-    for organism in evolved_pop:
-        if organism.fitness == num_queens:
-            if organism not in unique_solutions:
-                unique_solutions.append(organism)
+    for org in evolved_pop:
+        if org.fitness == num_queens:
+            if org not in unique_solutions:
+                unique_solutions.append(org)
 
     if VERBOSE:
         print "Search started at %s and ended at %s" % (start_time, end_time)
-        for organism in unique_solutions:
-            print "We did it!", organism
-            display_board(organism.genome)
-        
+        for orgm in unique_solutions:
+            print "We did it!", org
+            display_board(org.genome)
+
 
 def display_board(genome):
     """Display a genome in the N-queens problem.
@@ -150,7 +151,7 @@ class QueensAlphabet(Alphabet.Alphabet):
         """Initialize with the number of queens we are calculating for.
         """
         # set up the letters for the alphabet
-        assert 0 <= num_queens <= 9
+        assert 0 < num_queens <= 9
         self.letters = "".join(str(i) for i in range(num_queens))
 
 # --- Problem specific crossover, mutation and repair operations
@@ -380,18 +381,27 @@ class QueensMutation:
                 new_org.genome[gene_index] = new_letter
 
         return new_org
- 
+
 num_queens = 5
 
+#Class defined for use via run_tests.py
+class QueensTest(unittest.TestCase):
+    def test_queens(self):
+        """Place five queens with a GA"""
+        main(num_queens)
+
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 1:
+        #Run with defaults, for use as a unit test
+        main(num_queens)
+    elif len(sys.argv) == 2:
         num_queens = int(sys.argv[1])
-    elif len(sys.argv) > 2:
+        main(num_queens)
+    else:
         print "Usage:"
         print "python test_GAQueens.py <Number of Queens to place>\n"
         print "where <Number of Queens to place> is an optional parameter"
         print "specifying how many queens you want to try to calculate"
         print "this for. The default number of queens to place is 5."
+        print "Range 1 to 9 is supported."
         sys.exit(1)
-
-main(num_queens)
