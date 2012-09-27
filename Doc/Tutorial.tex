@@ -13965,17 +13965,16 @@ alignment. The file containing \href{examples/protein.aln}{protein.aln}
 \href{http://biopython.org/DIST/docs/tutorial/examples/protein.aln}{here})
 contains the Clustalw alignment output.
 
+%doctest examples
 \begin{verbatim}
-from Bio import AlignIO
-from Bio import Alphabet
-from Bio.Alphabet import IUPAC
-from Bio.Align import AlignInfo
-
-# get an alignment object from a Clustalw alignment output
-filename = "protein.aln"
-alpha = Alphabet.Gapped(IUPAC.protein)
-c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
-summary_align = AlignInfo.SummaryInfo(c_align)
+>>> from Bio import AlignIO
+>>> from Bio import Alphabet
+>>> from Bio.Alphabet import IUPAC
+>>> from Bio.Align import AlignInfo
+>>> filename = "protein.aln"
+>>> alpha = Alphabet.Gapped(IUPAC.protein)
+>>> c_align = AlignIO.read(filename, "clustal", alphabet=alpha)
+>>> summary_align = AlignInfo.SummaryInfo(c_align)
 \end{verbatim}
 
 Sections~\ref{sec:align_clustal} and~\ref{sec:summary_info} contain
@@ -13989,14 +13988,15 @@ when generating a replacement dictionary, by passing in all of the
 characters that should be ignored. Thus we'll create a dictionary of
 replacements for only charged polar amino acids using:
 
+%cont-doctest
 \begin{verbatim}
-replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
-                                                     "M", "P", "F", "W", "S",
-                                                     "T", "N", "Q", "Y", "C"])
+>>> replace_info = summary_align.replacement_dictionary(["G", "A", "V", "L", "I",
+...                                                      "M", "P", "F", "W", "S",
+...                                                      "T", "N", "Q", "Y", "C"])
 \end{verbatim}
 
 This information about amino acid replacements is represented as a
-python dictionary which will look something like:
+python dictionary which will look something like (the order can vary):
 
 \begin{verbatim}
 {('R', 'R'): 2079.0, ('R', 'H'): 17.0, ('R', 'K'): 103.0, ('R', 'E'): 2.0,
@@ -14015,16 +14015,18 @@ need to go ahead and create a substitution matrix. First, we use the
 replacement dictionary information to create an Accepted Replacement
 Matrix (ARM):
 
+%cont-doctest
 \begin{verbatim}
-from Bio import SubsMat
-my_arm = SubsMat.SeqMat(replace_info)
+>>> from Bio import SubsMat
+>>> my_arm = SubsMat.SeqMat(replace_info)
 \end{verbatim}
 
 With this accepted replacement matrix, we can go right ahead and
 create our log odds matrix (i.~e.~a standard type Substitution Matrix):
 
+%cont-doctest
 \begin{verbatim}
-my_lom = SubsMat.make_log_odds_matrix(my_arm)
+>>> my_lom = SubsMat.make_log_odds_matrix(my_arm)
 \end{verbatim}
 
 The log odds matrix you create is customizable with the following
@@ -14052,6 +14054,7 @@ Once you've got your log odds matrix, you can display it prettily
 using the function \verb|print_mat|. Doing this on our created matrix
 gives:
 
+%TODO - why don't we get this old output?
 \begin{verbatim}
 >>> my_lom.print_mat()
 D   6
