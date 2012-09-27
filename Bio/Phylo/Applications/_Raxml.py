@@ -326,6 +326,7 @@ class RaxmlCommandline(AbstractCommandline):
                 _Option(['-w', 'working_dir'],
                         "Name of the working directory where RAxML will "
                         "write its output files. Default: current directory.",
+                        filename=True,
                         equate=False,
                         ),
 
