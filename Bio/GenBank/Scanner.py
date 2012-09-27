@@ -281,17 +281,18 @@ class InsdcScanner(object):
                     elif not value:
                         #ApE can output /note=
                         qualifiers.append((key, ""))
+                    elif value == '"':
+                        #One single quote
+                        if self.debug:
+                            print "Single quote %s:%s" % (key, value)
+                        #DO NOT remove the quote...
+                        qualifiers.append((key, value))
                     elif value[0] == '"':
                         #Quoted...
-                        if value[-1] != '"' or value != '"':
-                            #No closing quote on the first line...
-                            while value[-1] != '"':
-                                value += "\n" + iterator.next()
-                        else:
-                            #One single line (quoted)
-                            assert value == '"'
-                            if self.debug:
-                                print "Quoted line %s:%s" % (key, value)
+                        value_list = [value]
+                        while value_list[-1][-1] != '"':
+                            value_list.append(iterator.next())
+                        value = '\n'.join(value_list)
                         #DO NOT remove the quotes...
                         qualifiers.append((key, value))
                     else:
