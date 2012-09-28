@@ -327,6 +327,7 @@ class RaxmlCommandline(AbstractCommandline):
                         "Name of the working directory where RAxML will "
                         "write its output files. Default: current directory.",
                         filename=True,
+                        equate=False,
                         ),
 
                 _Option(['-x', 'rapid_bootstrap_seed'],
