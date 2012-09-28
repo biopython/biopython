@@ -14,7 +14,6 @@ categories to be coloured).
 """
 
 # standard library
-import cmath       # polar <-> Cartesian conversions
 import colorsys    # colour format conversions
 from math import log, exp, floor, pi
 import random      # for jitter values
