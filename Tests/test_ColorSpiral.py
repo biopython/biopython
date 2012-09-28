@@ -3,11 +3,18 @@
 """
 
 # Builtins
-import cmath
 import colorsys
 from math import pi
 import os
 import unittest
+
+try:
+    from cmath import rect
+except ImportError:
+    #This was added in Python 2.6, fallback for Python 2.5:
+    from math import sin, cos
+    def rect(r, phi):
+        return r * (cos(phi) + sin(phi)*1j)
 
 # Do we have ReportLab?  Raise error if not present.
 from Bio import MissingPythonDependencyError
@@ -51,7 +58,7 @@ class SpiralTest(unittest.TestCase):
             self.c.setFillColor((r, g, b))
             # Convert HSV colour to rectangular coordinates on HSV disc
             h, s, v = colorsys.rgb_to_hsv(r, g, b)
-            coords = cmath.rect(s * A4[0] * 0.45, h * 2 * pi)
+            coords = rect(s * A4[0] * 0.45, h * 2 * pi)
             x, y = self.x_0 + coords.real, self.y_0 + coords.imag
             self.c.ellipse(x - radius, y - radius, x + radius, y + radius, 
                            stroke = 0, fill = 1)
