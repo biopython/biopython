@@ -129,13 +129,6 @@ class BlastTextParser(object):
 
                 hit = Hit(hsp_list)
                 hit.seq_len = aln.length
-                # get hit-level e-value and score, if available
-                try:
-                    hit.evalue = rec.descriptions[idx].e
-                    hit.score = rec.descriptions[idx].score
-                except IndexError:
-                    pass
-
                 hit.description = hdesc
                 qresult.append(hit)
 

@@ -77,8 +77,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', hit.description)
         self.assertEqual(1353, hit.seq_len)
-        self.assertEqual(905, hit.score)
-        self.assertEqual(0.0, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -108,8 +106,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('ref|XR_141831.1|', hit.id)
         self.assertEqual('PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA ref|XR_105837.2| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA ref|XR_141464.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA ref|XR_141446.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA', hit.description)
         self.assertEqual(570, hit.seq_len)
-        self.assertEqual(900, hit.score)
-        self.assertEqual(0.0, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -157,8 +153,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('ref|XM_003267724.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys ATG14 autophagy related 14 homolog (S. cerevisiae) (ATG14), mRNA', hit.description)
         self.assertEqual(4771, hit.seq_len)
-        self.assertEqual(115, hit.score)
-        self.assertEqual(3e-24, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -188,8 +182,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('ref|NM_001040441.1|', hit.id)
         self.assertEqual('Homo sapiens zinc finger and BTB domain containing 8A (ZBTB8A), mRNA', hit.description)
         self.assertEqual(7333, hit.seq_len)
-        self.assertEqual(115, hit.score)
-        self.assertEqual(3e-24, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -270,8 +262,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('gi|356995852|ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', hit.description)
         self.assertEqual(1353, hit.seq_len)
-        self.assertEqual(905, hit.score)
-        self.assertEqual(0.0, hit.evalue)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -301,8 +291,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('gi|377833530|ref|XR_141831.1|', hit.id)
         self.assertEqual('PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA', hit.description)
         self.assertEqual(570, hit.seq_len)
-        self.assertEqual(900, hit.score)
-        self.assertEqual(0.0, hit.evalue)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -342,8 +330,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('gi|94721341|ref|NM_001040441.1|', hit.id)
         self.assertEqual('Homo sapiens zinc finger and BTB domain containing 8A (ZBTB8A), mRNA', hit.description)
         self.assertEqual(7333, hit.seq_len)
-        self.assertEqual(115, hit.score)
-        self.assertEqual(6e-29, hit.evalue)
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -396,8 +382,6 @@ class BlastnCases(BaseBlastCases):
         self.assertEqual('gi|332237160|ref|XM_003267724.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys ATG14 autophagy related 14 homolog (S. cerevisiae) (ATG14), mRNA', hit.description)
         self.assertEqual(4771, hit.seq_len)
-        self.assertEqual(115, hit.score)
-        self.assertEqual(6e-29, hit.evalue)
         self.assertEqual(1, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -466,8 +450,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('ref|NP_391444.1|', hit.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] ref|ZP_03593363.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168] ref|ZP_03597648.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. NCIB 3610] ref|ZP_03602051.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. JH642] ref|ZP_03606337.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. SMY] ref|YP_004205398.1| unnamed protein product [Bacillus subtilis BSn5]', hit.description)
         self.assertEqual(102, hit.seq_len)
-        self.assertEqual(205, hit.score)
-        self.assertEqual(1e-66, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -497,8 +479,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('ref|YP_003922001.1|', hit.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus amyloliquefaciens DSM 7]', hit.description)
         self.assertEqual(100, hit.seq_len)
-        self.assertEqual(139, hit.score)
-        self.assertEqual(1e-40, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -546,8 +526,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('ref|NP_062422.1|', hit.id)
         self.assertEqual('pleckstrin [Mus musculus]', hit.description)
         self.assertEqual(350, hit.seq_len)
-        self.assertEqual(205, hit.score)
-        self.assertEqual(1e-63, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -600,8 +578,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('ref|XP_003502426.1|', hit.id)
         self.assertEqual('PREDICTED: pleckstrin-like [Cricetulus griseus]', hit.description)
         self.assertEqual(350, hit.seq_len)
-        self.assertEqual(205, hit.score)
-        self.assertEqual(2e-63, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -682,8 +658,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('gi|308175296|ref|YP_003922001.1|', hit.id)
         self.assertEqual('membrane bound lipoprotein [Bacillus amyloliquefaciens DSM 7]', hit.description)
         self.assertEqual(100, hit.seq_len)
-        self.assertEqual(139, hit.score)
-        self.assertEqual(2e-46, hit.evalue)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -713,8 +687,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('gi|375363999|ref|YP_005132038.1|', hit.id)
         self.assertEqual('lytA gene product [Bacillus amyloliquefaciens subsp. plantarum CAU B946]', hit.description)
         self.assertEqual(105, hit.seq_len)
-        self.assertEqual(89, hit.score)
-        self.assertEqual(7e-27, hit.evalue)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -754,8 +726,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('gi|11464971|ref|NP_062422.1|', hit.id)
         self.assertEqual('pleckstrin [Mus musculus]', hit.description)
         self.assertEqual(350, hit.seq_len)
-        self.assertEqual(205, hit.score)
-        self.assertEqual(2e-69, hit.evalue)
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -808,8 +778,6 @@ class BlastpCases(BaseBlastCases):
         self.assertEqual('gi|354480464|ref|XP_003502426.1|', hit.id)
         self.assertEqual('PREDICTED: pleckstrin-like [Cricetulus griseus]', hit.description)
         self.assertEqual(350, hit.seq_len)
-        self.assertEqual(205, hit.score)
-        self.assertEqual(3e-69, hit.evalue)
         self.assertEqual(2, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -901,8 +869,6 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('ref|NP_038661.2|', hit.id)
         self.assertEqual('POU domain, class 5, transcription factor 1 isoform 1 [Mus musculus]', hit.description)
         self.assertEqual(352, hit.seq_len)
-        self.assertEqual(192, hit.score)
-        self.assertEqual(4e-57, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -932,8 +898,6 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('ref|NP_001009178.1|', hit.id)
         self.assertEqual('POU class 5 homeobox 1 [Rattus norvegicus]', hit.description)
         self.assertEqual(352, hit.seq_len)
-        self.assertEqual(179, hit.score)
-        self.assertEqual(3e-52, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -981,8 +945,6 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('ref|XP_003278367.1|', hit.id)
         self.assertEqual('PREDICTED: UPF0764 protein C16orf89-like [Nomascus leucogenys]', hit.description)
         self.assertEqual(132, hit.seq_len)
-        self.assertEqual(121, hit.score)
-        self.assertEqual(2e-32, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1035,8 +997,6 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('ref|NP_001243358.1|', hit.id)
         self.assertEqual('PDZ and LIM domain protein 5 isoform i [Homo sapiens]', hit.description)
         self.assertEqual(136, hit.seq_len)
-        self.assertEqual(114, hit.score)
-        self.assertEqual(1e-29, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1117,8 +1077,6 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('gi|332258565|ref|XP_003278367.1|', hit.id)
         self.assertEqual('PREDICTED: UPF0764 protein C16orf89-like [Nomascus leucogenys]', hit.description)
         self.assertEqual(132, hit.seq_len)
-        self.assertEqual(121, hit.score)
-        self.assertEqual(3e-38, hit.evalue)
         self.assertEqual(2, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1171,8 +1129,6 @@ class BlastxCases(BaseBlastCases):
         self.assertEqual('gi|374093214|ref|NP_001243358.1|', hit.id)
         self.assertEqual('PDZ and LIM domain protein 5 isoform i [Homo sapiens]', hit.description)
         self.assertEqual(136, hit.seq_len)
-        self.assertEqual(114, hit.score)
-        self.assertEqual(2e-35, hit.evalue)
         self.assertEqual(2, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1264,8 +1220,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('ref|XM_001425911.1|', hit.id)
         self.assertEqual('Paramecium tetraurelia hypothetical protein (GSPATT00004923001) partial mRNA', hit.description)
         self.assertEqual(4632, hit.seq_len)
-        self.assertEqual(34, hit.score)
-        self.assertEqual(0.74, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1295,8 +1249,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('ref|XM_003382561.1|', hit.id)
         self.assertEqual('PREDICTED: Amphimedon queenslandica CWF19-like protein 1-like (LOC100635130), mRNA', hit.description)
         self.assertEqual(1811, hit.seq_len)
-        self.assertEqual(32, hit.score)
-        self.assertEqual(6.4, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1344,8 +1296,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('ref|XM_003502378.1|', hit.id)
         self.assertEqual('PREDICTED: Cricetulus griseus pleckstrin-like (LOC100773128), mRNA', hit.description)
         self.assertEqual(1119, hit.seq_len)
-        self.assertEqual(205, hit.score)
-        self.assertEqual(1e-63, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1398,8 +1348,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('ref|XM_003360601.2|', hit.id)
         self.assertEqual('PREDICTED: Sus scrofa pleckstrin-like (LOC100626968), mRNA', hit.description)
         self.assertEqual(772, hit.seq_len)
-        self.assertEqual(199, hit.score)
-        self.assertEqual(1e-62, hit.evalue)
         self.assertEqual(2, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1480,8 +1428,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('gi|145479850|ref|XM_001425911.1|', hit.id)
         self.assertEqual('Paramecium tetraurelia hypothetical protein (GSPATT00004923001) partial mRNA', hit.description)
         self.assertEqual(4632, hit.seq_len)
-        self.assertEqual(34, hit.score)
-        self.assertEqual(1e-05, hit.evalue)
         self.assertEqual(1, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1511,8 +1457,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('gi|72012412|ref|XM_777959.1|', hit.id)
         self.assertEqual('PREDICTED: Strongylocentrotus purpuratus hypothetical LOC577746 (LOC577746), mRNA', hit.description)
         self.assertEqual(1593, hit.seq_len)
-        self.assertEqual(31, hit.score)
-        self.assertEqual(0.0001, hit.evalue)
         self.assertEqual(1, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1552,8 +1496,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('gi|350596019|ref|XM_003360601.2|', hit.id)
         self.assertEqual('PREDICTED: Sus scrofa pleckstrin-like (LOC100626968), mRNA', hit.description)
         self.assertEqual(772, hit.seq_len)
-        self.assertEqual(199, hit.score)
-        self.assertEqual(2e-67, hit.evalue)
         self.assertEqual(2, len(hit))
         # third qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1606,8 +1548,6 @@ class TblastnCases(BaseBlastCases):
         self.assertEqual('gi|301779869|ref|XM_002925302.1|', hit.id)
         self.assertEqual('PREDICTED: Ailuropoda melanoleuca pleckstrin-like (LOC100466932), mRNA', hit.description)
         self.assertEqual(1144, hit.seq_len)
-        self.assertEqual(202, hit.score)
-        self.assertEqual(2e-67, hit.evalue)
         self.assertEqual(2, len(hit))
         # third qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1699,8 +1639,6 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('ref|NM_013633.3|', hit.id)
         self.assertEqual('Mus musculus POU domain, class 5, transcription factor 1 (Pou5f1), transcript variant 1, mRNA', hit.description)
         self.assertEqual(1353, hit.seq_len)
-        self.assertEqual(418, hit.score)
-        self.assertEqual(2e-115, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1730,8 +1668,6 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('ref|XR_141831.1|', hit.id)
         self.assertEqual('PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA ref|XR_105837.2| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA ref|XR_141464.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA ref|XR_141446.1| PREDICTED: Mus musculus predicted gene, 19553 (Gm19553), miscRNA', hit.description)
         self.assertEqual(570, hit.seq_len)
-        self.assertEqual(415, hit.score)
-        self.assertEqual(3e-114, hit.evalue)
         self.assertEqual(1, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1779,8 +1715,6 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('ref|NM_002985.2|', hit.id)
         self.assertEqual('Homo sapiens chemokine (C-C motif) ligand 5 (CCL5), mRNA', hit.description)
         self.assertEqual(1237, hit.seq_len)
-        self.assertEqual(118, hit.score)
-        self.assertEqual(4e-49, hit.evalue)
         self.assertEqual(3, len(hit))
         # first qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1833,8 +1767,6 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('ref|XM_003255417.1|', hit.id)
         self.assertEqual('PREDICTED: Nomascus leucogenys 5\'-nucleotidase, cytosolic II, transcript variant 2 (NT5C2), mRNA', hit.description)
         self.assertEqual(3285, hit.seq_len)
-        self.assertEqual(197, hit.score)
-        self.assertEqual(9e-49, hit.evalue)
         self.assertEqual(3, len(hit))
         # first qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
@@ -1915,8 +1847,6 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('gi|296147483|ref|NM_001183135.1|', hit.id)
         self.assertEqual('Saccharomyces cerevisiae S288c Mon2p (MON2) mRNA, complete cds', hit.description)
         self.assertEqual(4911, hit.seq_len)
-        self.assertEqual(289, hit.score)
-        self.assertEqual(2e-81, hit.evalue)
         self.assertEqual(8, len(hit))
         # second qresult, first hit, first hsp
         hsp = qresult[0].hsps[0]
@@ -1969,8 +1899,6 @@ class TblastxCases(BaseBlastCases):
         self.assertEqual('gi|365982352|ref|XM_003667962.1|', hit.id)
         self.assertEqual('Naumovozyma dairenensis CBS 421 hypothetical protein (NDAI0A06120), mRNA', hit.description)
         self.assertEqual(4932, hit.seq_len)
-        self.assertEqual(152, hit.score)
-        self.assertEqual(5e-42, hit.evalue)
         self.assertEqual(10, len(hit))
         # second qresult, second hit, first hsp
         hsp = qresult[1].hsps[0]
