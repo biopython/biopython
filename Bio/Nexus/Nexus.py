@@ -511,8 +511,6 @@ class Block(object):
 
 class Nexus(object):
 
-    __slots__=['original_taxon_order','__dict__']
-
     def __init__(self, input=None):
         self.ntax=0                     # number of taxa
         self.nchar=0                    # number of characters
