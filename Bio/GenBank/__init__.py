@@ -1211,6 +1211,12 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.size = content
 
     def residue_type(self, content):
+        # Be lenient about parsing, but technically lowercase residue types are malformed.
+        if 'dna' in content or 'rna' in content:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
+                          BiopythonParserWarning)
         self.data.residue_type = content
 
     def data_file_division(self, content):
