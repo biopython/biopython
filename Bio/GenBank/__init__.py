@@ -953,7 +953,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             assert location_line.endswith(")")
             location_line = location_line[11:-1]
             strand = -1
-        elif 'DNA' in self._seq_type or 'RNA' in self._seq_type:
+        elif 'DNA' in self._seq_type.upper() or 'RNA' in self._seq_type.upper():
             #Nucleotide
             strand = 1
         else:
@@ -1159,10 +1159,10 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
         if self._seq_type:
             # mRNA is really also DNA, since it is actually cDNA
-            if 'DNA' in self._seq_type or 'mRNA' in self._seq_type:
+            if 'DNA' in self._seq_type.upper() or 'MRNA' in self._seq_type.upper():
                 seq_alphabet = IUPAC.ambiguous_dna
             # are there ever really RNA sequences in GenBank?
-            elif 'RNA' in self._seq_type:
+            elif 'RNA' in self._seq_type.upper():
                 #Even for data which was from RNA, the sequence string
                 #is usually given as DNA (T not U).  Bug 2408
                 if "T" in sequence and "U" not in sequence:
@@ -1211,6 +1211,12 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self.data.size = content
 
     def residue_type(self, content):
+        # Be lenient about parsing, but technically lowercase residue types are malformed.
+        if 'dna' in content or 'rna' in content:
+            import warnings
+            from Bio import BiopythonParserWarning
+            warnings.warn("Invalid seq_type (%s): DNA/RNA should be uppercase." % content,
+                          BiopythonParserWarning)
         self.data.residue_type = content
 
     def data_file_division(self, content):
