@@ -648,6 +648,7 @@ class BgzfReader(object):
         self._handle.close()
         self._buffer = None
         self._block_start_offset = None
+        self._buffers = None
 
 
 class BgzfWriter(object):
