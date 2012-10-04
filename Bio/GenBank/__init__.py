@@ -651,7 +651,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.annotations['accessions'] = new_acc_nums
 
         # if we haven't set the id information yet, add the first acc num
-        if self.data.id is None:
+        if not self.data.id:
             if len(new_acc_nums) > 0:
                 #self.data.id = new_acc_nums[0]
                 #Use the FIRST accession as the ID, not the first on this line!
@@ -678,7 +678,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if version_id.count(".")==1 and version_id.split(".")[1].isdigit():
             self.accession(version_id.split(".")[0])
             self.version_suffix(version_id.split(".")[1])
-        else:
+        elif version_id:
             #For backwards compatibility...
             self.data.id = version_id
 
@@ -1129,7 +1129,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         from Bio.Seq import Seq, UnknownSeq
 
         #Try and append the version number to the accession for the full id
-        if self.data.id is None:
+        if not self.data.id:
             assert 'accessions' not in self.data.annotations, \
                    self.data.annotations['accessions']
             self.data.id = self.data.name #Good fall back?
