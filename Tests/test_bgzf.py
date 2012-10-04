@@ -35,6 +35,9 @@ class BgzfTests(unittest.TestCase):
 
         h = bgzf.BgzfWriter(output_file, "wb")
         h.write(data)
+        self.assertFalse(h.seekable())
+        self.assertFalse(h.isatty())
+        self.assertEqual(h.fileno(), h._handle.fileno())
         h.close() #Gives empty BGZF block as BAM EOF marker
 
         h = gzip.open(output_file)
@@ -147,6 +150,9 @@ class BgzfTests(unittest.TestCase):
         #Forward
         new = _empty_bytes_string
         h = bgzf.BgzfReader(filename, "rb")
+        self.assertTrue(h.seekable())
+        self.assertFalse(h.isatty())
+        self.assertEqual(h.fileno(), h._handle.fileno())
         for start, raw_len, data_start, data_len in blocks:
             #print start, raw_len, data_start, data_len
             h.seek(bgzf.make_virtual_offset(start,0))

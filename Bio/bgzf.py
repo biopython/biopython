@@ -650,6 +650,15 @@ class BgzfReader(object):
         self._block_start_offset = None
         self._buffers = None
 
+    def seekable(self):
+        return True
+
+    def isatty(self):
+        return False
+
+    def fileno(self):
+        return self._handle.fileno()
+
 
 class BgzfWriter(object):
 
@@ -741,6 +750,17 @@ class BgzfWriter(object):
     def tell(self):
         """Returns a BGZF 64-bit virtual offset."""
         return make_virtual_offset(self.handle.tell(), len(self._buffer)) 
+
+    def seekable(self):
+        #Not seekable, but we do support tell...
+        return False
+
+    def isatty(self):
+        return False
+
+    def fileno(self):
+        return self._handle.fileno()
+
 
 if __name__ == "__main__":
     import sys
