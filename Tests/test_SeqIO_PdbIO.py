@@ -6,6 +6,15 @@
 import unittest
 import warnings
 
+try:
+    import numpy
+    from numpy import dot #Missing on PyPy's micronumpy
+    del dot
+except ImportError:
+    from Bio import MissingPythonDependencyError
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use PDB formats with SeqIO.")
+
 from Bio import SeqIO
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
