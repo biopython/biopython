@@ -5,6 +5,7 @@
 from __future__ import with_statement
 
 import collections
+import warnings
 
 from Bio.Alphabet import generic_protein
 from Bio.Seq import Seq
@@ -95,11 +96,123 @@ def PdbSeqresIterator(handle):
         yield record
 
 
+def PdbAtomIterator(handle):
+    """Returns SeqRecord objects for each chain in a PDB file
+
+    The sequences are derived from the 3D structure (ATOM records), not the
+    SEQRES lines in the PDB file header.
+
+    Unrecognised three letter amino acid codes (e.g. "CSD") from HETATM entries
+    are converted to "X" in the sequence.
+
+    In addition to information from the PDB header (which is the same for all
+    records), the following chain specific information is placed in the
+    annotation:
+
+    record.annotations["residues"] = List of residue ID strings
+    record.annotations["chain"] = Chain ID (typically A, B ,...)
+    record.annotations["model"] = Model ID (typically zero)
+
+    Where amino acids are missing from the structure, as indicated by residue
+    numbering, the sequence is filled in with 'X' characters to match the size
+    of the missing region, and  None is included as the corresponding entry in
+    the list record.annotations["residues"].
+
+    This function uses the Bio.PDB module to do most of the hard work. The
+    annotation information could be improved but this extra parsing should be
+    done in parse_pdb_header, not this module. 
+    """
+    # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
+    from Bio.PDB import PDBParser
+    from Bio.SCOP.three_to_one_dict import to_one_letter_code
+
+    def restype(residue):
+        """Return a residue's type as a one-letter code.
+
+        Non-standard residues (e.g. CSD, ANP) are returned as 'X'.
+        """
+        return to_one_letter_code.get(residue.resname, 'X')
+
+    # Deduce the PDB ID from the PDB header
+    # ENH: or filename?
+    from Bio.File import UndoHandle
+    undo_handle = UndoHandle(handle)
+    firstline = undo_handle.peekline()
+    if firstline.startswith("HEADER"):
+        pdb_id = firstline[62:66]
+    else:
+        warnings.warn("First line is not a 'HEADER'; can't determine PDB ID")
+        pdb_id = '????'
+
+    struct = PDBParser().get_structure(pdb_id, undo_handle)
+    model = struct[0]
+    for chn_id, chain in sorted(model.child_dict.iteritems()):
+        # HETATM mod. res. policy: remove mod if in sequence, else discard
+        residues = [res for res in chain.get_unpacked_list()
+                    if res.get_resname().upper() in to_one_letter_code]
+        if not residues:
+            continue
+        # Identify missing residues in the structure
+        # (fill the sequence with 'X' residues in these regions)
+        gaps = []
+        rnumbers = [r.id[1] for r in residues]
+        for i, rnum in enumerate(rnumbers[:-1]):
+            if rnumbers[i+1] != rnum + 1:
+                # It's a gap!
+                gaps.append((i+1, rnum, rnumbers[i+1]))
+        if gaps:
+            res_out = []
+            prev_idx = 0
+            for i, pregap, postgap in gaps:
+                if postgap > pregap:
+                    gapsize = postgap - pregap - 1
+                    res_out.extend(map(restype, residues[prev_idx:i]))
+                    prev_idx = i
+                    res_out.append('X'*gapsize)
+                    # Last segment
+                    res_out.extend(map(restype, residues[prev_idx:]))
+                else:
+                    warnings.warn("Ignoring out-of-order residues after a gap",
+                                  UserWarning)
+                    # Keep the normal part, drop the out-of-order segment
+                    # (presumably modified or hetatm residues, e.g. 3BEG)
+                    res_out.extend(map(restype, residues[prev_idx:i]))
+        else:
+            # No gaps
+            res_out = map(restype, residues)
+        record_id = "%s:%s" % (pdb_id, chn_id)
+        # ENH - model number in SeqRecord id if multiple models?
+        # id = "Chain%s" % str(chain.id)
+        # if len(structure) > 1 :
+        #     id = ("Model%s|" % str(model.id)) + id
+
+        record = SeqRecord(Seq(''.join(res_out), generic_protein),
+                id=record_id,
+                description=record_id,
+                )
+
+        # The PDB header was loaded as a dictionary, so let's reuse it all
+        record.annotations = struct.header.copy()
+        # Plus some chain specifics:
+        record.annotations["model"] = model.id
+        record.annotations["chain"] = chain.id
+
+        # Start & end
+        record.annotations["start"] = int(rnumbers[0])
+        record.annotations["end"] = int(rnumbers[-1])
+
+        # ENH - add letter annotations -- per-residue info, e.g. numbers
+
+        yield record
+
+
 if __name__ == '__main__':
     # Test
     import sys
     from Bio import SeqIO
-    with open(sys.argv[1]) as handle:
-        records = PdbSeqresIterator(handle)
-        SeqIO.write(records, sys.stdout, 'fasta')
+    for fname in sys.argv[1:]:
+        for parser in (PdbSeqresIterator, PdbAtomIterator):
+            with open(fname) as handle:
+                records = parser(handle)
+                SeqIO.write(records, sys.stdout, 'fasta')
 
