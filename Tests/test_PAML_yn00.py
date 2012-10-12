@@ -41,11 +41,11 @@ class ModTest(unittest.TestCase):
         self.yn00 = yn00.Yn00()
         
     def testAlignmentFileIsValid(self):
-        self.assertRaises((AttributeError, TypeError),
-            yn00.Yn00, alignment = 1)
-        self.yn00.alignment = 1
+        self.assertRaises((AttributeError, TypeError, OSError),
+            yn00.Yn00, alignment = list())
+        self.yn00.alignment = list()
         self.yn00.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError),
+        self.assertRaises((AttributeError, TypeError, OSError),
             self.yn00.run)
         
     def testAlignmentExists(self):
@@ -58,14 +58,14 @@ class ModTest(unittest.TestCase):
     def testWorkingDirValid(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.yn00.working_dir = 1
-        self.assertRaises((AttributeError, TypeError),
+        self.yn00.working_dir = list()
+        self.assertRaises((AttributeError, TypeError, OSError),
             self.yn00.run)
     
     def testOutputFileValid(self):
         self.yn00.alignment = self.align_file
-        self.yn00.out_file = 1
-        self.assertRaises((AttributeError, TypeError),
+        self.yn00.out_file = list()
+        self.assertRaises((AttributeError, ValueError, OSError),
             self.yn00.run)
     
     def testOptionExists(self):
@@ -93,8 +93,8 @@ class ModTest(unittest.TestCase):
     def testCtlFileValidOnRun(self):
         self.yn00.alignment = self.align_file
         self.yn00.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError),
-            self.yn00.run, ctl_file = 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            self.yn00.run, ctl_file = list())
         
     def testCtlFileExistsOnRun(self):
         self.yn00.alignment = self.align_file
@@ -103,8 +103,8 @@ class ModTest(unittest.TestCase):
             self.yn00.run, ctl_file = "nonexistent")
             
     def testCtlFileValidOnRead(self):
-        self.assertRaises((AttributeError, TypeError),
-            self.yn00.read_ctl_file, 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            self.yn00.read_ctl_file, list())
         self.assertRaises((AttributeError, KeyError), 
             self.yn00.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError, 
@@ -122,8 +122,8 @@ class ModTest(unittest.TestCase):
             self.yn00.read_ctl_file, ctl_file = "nonexistent")
         
     def testResultsValid(self):
-        self.assertRaises((AttributeError, TypeError),
-            yn00.read, 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            yn00.read, list())
     
     def testResultsExist(self):
         self.assertRaises((EnvironmentError, IOError),

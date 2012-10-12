@@ -44,12 +44,12 @@ class ModTest(unittest.TestCase):
         self.bml = baseml.Baseml()
         
     def testAlignmentFileIsValid(self):
-        self.assertRaises((AttributeError, TypeError),
-            baseml.Baseml, alignment = 1)
-        self.bml.alignment = 1
+        self.assertRaises((AttributeError, TypeError, OSError),
+            baseml.Baseml, alignment = list())
+        self.bml.alignment = list()
         self.bml.tree = self.tree_file
         self.bml.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError),
+        self.assertRaises((AttributeError, TypeError, OSError),
             self.bml.run)
         
     def testAlignmentExists(self):
@@ -62,12 +62,12 @@ class ModTest(unittest.TestCase):
             self.bml.run)
     
     def testTreeFileValid(self):
-        self.assertRaises((AttributeError, TypeError),
-            baseml.Baseml, tree = 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            baseml.Baseml, tree = list())
         self.bml.alignment = self.align_file
-        self.bml.tree = 1
+        self.bml.tree = list()
         self.bml.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError),
+        self.assertRaises((AttributeError, TypeError, OSError),
             self.bml.run)
         
     def testTreeExists(self):
@@ -83,15 +83,15 @@ class ModTest(unittest.TestCase):
         self.bml.tree = self.tree_file
         self.bml.alignment = self.align_file
         self.bml.out_file = self.out_file
-        self.bml.working_dir = 1
-        self.assertRaises((AttributeError, TypeError),
+        self.bml.working_dir = list()
+        self.assertRaises((AttributeError, TypeError, OSError),
             self.bml.run)
     
     def testOutputFileValid(self):
         self.bml.tree = self.tree_file
         self.bml.alignment = self.align_file
-        self.bml.out_file = 1
-        self.assertRaises((AttributeError, TypeError),
+        self.bml.out_file = list()
+        self.assertRaises((AttributeError, ValueError, OSError),
             self.bml.run)
     
     def testOptionExists(self):
@@ -129,8 +129,8 @@ class ModTest(unittest.TestCase):
         self.bml.alignment = self.align_file
         self.bml.tree = self.tree_file
         self.bml.out_file = self.out_file
-        self.assertRaises((AttributeError, TypeError),
-            self.bml.run, ctl_file = 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            self.bml.run, ctl_file = list())
         
     def testCtlFileExistsOnRun(self):
         self.bml.alignment = self.align_file
@@ -140,8 +140,8 @@ class ModTest(unittest.TestCase):
             self.bml.run, ctl_file = "nonexistent")
             
     def testCtlFileValidOnRead(self):
-        self.assertRaises((AttributeError, TypeError),
-            self.bml.read_ctl_file, 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            self.bml.read_ctl_file, list())
         self.assertRaises((AttributeError, KeyError), 
             self.bml.read_ctl_file, self.bad_ctl_file1)
         self.assertRaises(AttributeError, 
@@ -183,8 +183,8 @@ class ModTest(unittest.TestCase):
             self.bml.read_ctl_file, ctl_file = "nonexistent")
         
     def testResultsValid(self):
-        self.assertRaises((AttributeError, TypeError),
-            baseml.read, 1)
+        self.assertRaises((AttributeError, TypeError, OSError),
+            baseml.read, list())
     
     def testResultsExist(self):
         self.assertRaises(IOError, baseml.read, "nonexistent")
