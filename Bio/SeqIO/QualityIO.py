@@ -958,7 +958,6 @@ def FastqGeneralIterator(handle):
     raise StopIteration
 
 
-#This is a generator function!
 def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over FASTQ records (as SeqRecord objects).
 
@@ -1054,8 +1053,6 @@ def FastqPhredIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
         dict.__setitem__(record._per_letter_annotations,
                          "phred_quality", qualities)
         yield record
-
-#This is a generator function!
 
 
 def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
@@ -1216,8 +1213,6 @@ def FastqSolexaIterator(handle, alphabet=single_letter_alphabet, title2ids=None)
         dict.__setitem__(record._per_letter_annotations,
                          "solexa_quality", qualities)
         yield record
-
-#This is a generator function!
 
 
 def FastqIlluminaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):

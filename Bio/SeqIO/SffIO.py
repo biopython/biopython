@@ -317,8 +317,6 @@ def _sff_file_header(handle):
         number_of_reads, number_of_flows_per_read, \
         flow_chars, key_sequence
 
-#This is a generator function!
-
 
 def _sff_do_slow_index(handle):
     """Generates an index by scanning though all the reads in an SFF file (PRIVATE).
