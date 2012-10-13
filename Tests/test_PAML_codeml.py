@@ -236,7 +236,6 @@ class ModTest(unittest.TestCase):
             version_msg = "Improper parsing for version %s" \
                         % version.replace('_', '.')
             results_path = os.path.join(res_dir, results_file)
-            print results_path
             results = codeml.read(results_path)
             # There should be 4 top-level items: 'codon model', 'model',
             # 'version', & 'NSsites'
@@ -253,7 +252,7 @@ class ModTest(unittest.TestCase):
                 self.assertTrue("parameters" in model, version_msg)
                 params = model["parameters"]
                 self.assertEqual(len(params), SITECLASS_PARAMS[model_num],
-                    version_msg + " {0}".format(model_num))
+                    version_msg))
                 self.assertTrue("branches" in params, version_msg)
                 branches = params["branches"]
                 # There are 7 branches in the test case (specific to these
