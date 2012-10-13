@@ -315,7 +315,7 @@ class DatabaseLoader:
 
         #Try automatically by adding spaces before each capital
         def add_space(letter):
-            """Adds a space before a capital letter."
+            """Adds a space before a capital letter."""
             if letter.isupper():
                 return " " + letter.lower()
             else:
