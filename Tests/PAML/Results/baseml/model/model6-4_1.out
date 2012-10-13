@@ -1,5 +1,5 @@
 
-seed used = 1024664621
+seed used = 1105670833
 
 BASEML (in paml version 4.1, August 2008)  Alignments/alignment.phylip  TN93 dGamma (ncatG=5)
 Frequencies..
@@ -27,20 +27,20 @@ Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
 Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
 
 TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
-lnL(ntime:  7  np: 10):   -320.887953   +0.000000
+lnL(ntime:  7  np: 10):   -320.887952   +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
-  0.00000  0.00000  0.00000  0.00453  0.00453  0.00000  0.00920 21.53731  0.00001 999.00000
+  0.00000  0.00000  0.00000  0.00453  0.00454  0.00000  0.00920 21.54034  0.00001 999.00000
 
 tree length =   0.01827
 
 (((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.004531): 0.000000, Gorilla_go: 0.004534): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009200);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004527): 0.000000, Gorilla_go: 0.004536): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.009202);
 
 Detailed output identifying parameters
 
 Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
- 21.53731  0.00001
+ 21.54034  0.00001
 
 alpha (gamma, K=5) = 999.00000
 rate:   0.95611  0.98294  0.99967  1.01660  1.04468
