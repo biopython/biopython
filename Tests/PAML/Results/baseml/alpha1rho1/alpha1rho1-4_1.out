@@ -1,5 +1,5 @@
 
-seed used = 1024367537
+seed used = 1105670841
 
 BASEML (in paml version 4.1, August 2008)  Alignments/alignment.phylip  TN93   Auto-dGamma (ncatG=5)
 Frequencies..
@@ -27,22 +27,22 @@ Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
 Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
 
 TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
-lnL(ntime:  7  np: 11):   -319.613609   +0.000000
+lnL(ntime:  7  np: 11):   -319.613620   +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
-  0.00000  0.00000  0.00000  0.00379  0.00382  0.00000  0.00815 22.70755  0.00001  0.01601  0.99000
+  0.00000  0.00000  0.00000  0.00380  0.00384  0.00000  0.00817 22.73116  0.00001  0.00500  0.99000
 
-tree length =   0.01577
+tree length =   0.01582
 
 (((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.003790): 0.000000, Gorilla_go: 0.003822): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.008154);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.003804): 0.000000, Gorilla_go: 0.003838): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.008170);
 
 Detailed output identifying parameters
 
 Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
- 22.70755  0.00001
+ 22.73116  0.00001
 
-alpha (gamma, K=5) =  0.01601
+alpha (gamma, K=5) =  0.00500
 rate:   0.00000  0.00000  0.00000  0.00000  5.00000
 freq:   0.20000  0.20000  0.20000  0.20000  0.20000
 rho for the auto-discrete-gamma model:   0.99000
