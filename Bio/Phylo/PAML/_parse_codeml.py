@@ -17,7 +17,7 @@ except ValueError:
             return float(text)
         except ValueError:
             if text.lower()=="nan":
-                import struct 
+                import struct
                 return struct.unpack('d', struct.pack('Q', 0xfff8000000000000))[0]
             else:
                 raise
@@ -82,7 +82,7 @@ def parse_basics(lines, results):
         if "ln Lmax" in line and len(line_floats) > 0:
             results["lnL max"] = line_floats[0]
     return (results, multi_models, multi_genes)
- 
+
 def parse_nssites(lines, results, multi_models, multi_genes):
     """Determine which NSsites models are present and parse them.
     """
@@ -93,7 +93,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
     siteclass_model = results.get("site-class model")
     if not multi_models:
     # If there's only one model in the results, find out
-    # which one it is and then parse it. 
+    # which one it is and then parse it.
         if siteclass_model is None:
             siteclass_model = "one-ratio"
         current_model = {"one-ratio" : 0,
@@ -148,8 +148,8 @@ def parse_nssites(lines, results, multi_models, multi_genes):
         # model to parse.
             model_results = parse_model(lines[model_start:], model_results)
             ns_sites[current_model] = model_results
-    # Only add the ns_sites dict to the results if we really have results. 
-    # Model M0 is added by default in some cases, so if it exists, make sure 
+    # Only add the ns_sites dict to the results if we really have results.
+    # Model M0 is added by default in some cases, so if it exists, make sure
     # it's not empty
     if len(ns_sites) == 1:
         m0 = ns_sites.get(0)
@@ -170,7 +170,7 @@ def parse_model(lines, results):
     num_params = None
     tree_re = re.compile("\(\(+")
     branch_re = re.compile("\s+(\d+\.\.\d+)[\s+\d+\.\d+]+")
-    model_params_re = re.compile("([a-z]\d?)=\s+(\d+\.\d+)")
+    model_params_re = re.compile("(?<!\S)([a-z]\d?)\s*=\s+(\d+\.\d+)")
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = line_floats_re.findall(line)
@@ -200,7 +200,7 @@ def parse_model(lines, results):
         # the parameter format.
         # Example match:
         # "SEs for parameters:
-        # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000 
+        # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000
         elif "SEs for parameters:" in line:
             SEs_flag = True
         elif SEs_flag and len(line_floats) == num_params:
@@ -276,7 +276,7 @@ def parse_model(lines, results):
             site_classes = parameters.get("site classes")
             site_classes = parse_siteclass_omegas(line, site_classes)
             parameters["site classes"] = site_classes
-        # Find the omega values corresponding to a branch type from  
+        # Find the omega values corresponding to a branch type from
         # the clade model C for each site class
         # Example match:
         # "branch type 0:    0.31022   1.00000   0.00000"
@@ -285,7 +285,7 @@ def parse_model(lines, results):
             if branch_type:
                 site_classes = parameters.get("site classes")
                 branch_type_no = int(branch_type.group(1))
-                site_classes = parse_clademodelc(branch_type_no, line_floats, 
+                site_classes = parse_clademodelc(branch_type_no, line_floats,
                         site_classes)
                 parameters["site classes"] = site_classes
         # Find the omega values of the foreground branch for each site
