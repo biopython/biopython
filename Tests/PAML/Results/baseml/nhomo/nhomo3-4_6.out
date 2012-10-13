@@ -1,0 +1,60 @@
+
+BASEML (in paml version 4.6, August 2012)  Alignments/alignment.phylip  F84 dGamma (ncatG=5)
+Nonhomo: 3  fix_kappa 0
+
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.20090 0.16306 0.37027 0.26577
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances:  F84 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo        -0.0000(-0.5000)
+Gorilla_go        -0.0000(-0.5000) -0.0000(-0.5000)
+Pongo_pygm         0.0000(-0.5000) -0.0000(-0.5000) -0.0000(-0.5000)
+Macaca_mul         0.0092( 0.4161)  0.0139( 1.3980)  0.0139( 1.4011)  0.0092( 0.4161)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 36):   -320.028080    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.002240 0.001601 0.000004 0.000297 4.967404 4.921218 5.504625 64.179405 70.802178 5.718726 1.320007 0.271290 0.214061 0.288334 0.000001 0.081626 0.787480 0.005262 0.000000 0.913508 0.255013 0.233511 0.288538 0.000000 0.020108 0.979522 0.334191 0.153650 0.303990 0.203457 0.161982 0.369560 16.783993
+
+tree length =   0.00415
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.002240): 0.000004, Gorilla_go: 0.001601): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.000297);
+
+Detailed output identifying parameters
+kappa under F84 (in order of branches):  4.96740  4.92122  5.50463 64.17941 70.80218  5.71873  1.32001
+
+(frequency parameters for branches)  [frequencies at nodes] (see Yang & Roberts 1995 fig 1)
+
+Node #1  ( 0.27129  0.21406  0.28833  0.22631 )
+Node #2  ( 0.00000  0.08163  0.78748  0.13089 )
+Node #3  ( 0.00526  0.00000  0.91351  0.08123 )
+Node #4  ( 0.25501  0.23351  0.28854  0.22294 )
+Node #5  ( 0.00000  0.02011  0.97952  0.00037 )
+Node #6  ( 0.20346  0.16198  0.36956  0.26500 )
+Node #7  ( 0.33419  0.15365  0.30399  0.20817 )
+Node #8  ( 0.33419  0.15365  0.30399  0.20817 )
+
+Note: node 6 is root.
+
+alpha (gamma, K=5) = 16.78399
+rate:   0.68404  0.85798  0.98063  1.11479  1.36257
+freq:   0.20000  0.20000  0.20000  0.20000  0.20000
+
+check convergence..

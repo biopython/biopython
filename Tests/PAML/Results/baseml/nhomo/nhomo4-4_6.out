@@ -1,0 +1,60 @@
+
+BASEML (in paml version 4.6, August 2012)  Alignments/alignment.phylip  F84 dGamma (ncatG=5)
+Nonhomo: 4  fix_kappa 0
+
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.20090 0.16306 0.37027 0.26577
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances:  F84 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo        -0.0000(-0.5000)
+Gorilla_go        -0.0000(-0.5000) -0.0000(-0.5000)
+Pongo_pygm         0.0000(-0.5000) -0.0000(-0.5000) -0.0000(-0.5000)
+Macaca_mul         0.0092( 0.4161)  0.0139( 1.3980)  0.0139( 1.4011)  0.0092( 0.4161)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 39):   -320.224923    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.000716 0.000710 0.000004 0.000982 4.900290 5.049651 4.181698 7.779250 8.219953 5.399855 1.257356 0.270017 0.256473 0.242881 0.000316 0.508459 0.481713 0.594066 0.000094 0.399435 0.245435 0.262865 0.254539 0.000020 0.048763 0.942828 0.202387 0.161944 0.370189 0.265012 0.246425 0.265971 0.254134 0.235185 0.276679 2.390385
+
+tree length =   0.00242
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.000716): 0.000004, Gorilla_go: 0.000710): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.000982);
+
+Detailed output identifying parameters
+kappa under F84 (in order of branches):  4.90029  5.04965  4.18170  7.77925  8.21995  5.39985  1.25736
+
+(frequency parameters for branches)  [frequencies at nodes] (see Yang & Roberts 1995 fig 1)
+
+Node #1  ( 0.27002  0.25647  0.24288  0.23063 )
+Node #2  ( 0.00032  0.50846  0.48171  0.00951 )
+Node #3  ( 0.59407  0.00009  0.39943  0.00641 )
+Node #4  ( 0.24543  0.26287  0.25454  0.23716 )
+Node #5  ( 0.00002  0.04876  0.94283  0.00839 )
+Node #6  ( 0.20239  0.16194  0.37019  0.26548 )
+Node #7  ( 0.26501  0.24643  0.26597  0.22259 )
+Node #8  ( 0.25413  0.23518  0.27668  0.23400 )
+
+Note: node 6 is root.
+
+alpha (gamma, K=5) =  2.39039
+rate:   0.29699  0.59017  0.86746  1.22435  2.02103
+freq:   0.20000  0.20000  0.20000  0.20000  0.20000
+
+check convergence..
