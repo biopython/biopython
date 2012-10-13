@@ -1,0 +1,54 @@
+
+BASEML (in paml version 4.6, August 2012)  Alignments/alignment.phylip  TN93 dGamma (ncatG=5)
+nparK:   4  K:   5
+
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.20090 0.16306 0.37027 0.26577
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances: TN93 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo         0.0047(999.0000)
+Gorilla_go         0.0047(999.0000)  0.0097(999.0000)
+Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
+Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 33):   -320.889683    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.004535 0.004543 0.000004 0.009204 21.559723 0.000010 0.995175 0.999043 1.002619 1.000625 0.170354 0.187038 0.194874 0.224865 0.172877 0.180087 0.206159 0.220346 0.178666 0.187016 0.197432 0.215511 0.193393 0.191358 0.196772 0.209883 0.215280 0.206093 0.210281 0.184654
+
+tree length =   0.01830
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004535): 0.000004, Gorilla_go: 0.004543): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.009204);
+
+Detailed output identifying parameters
+
+Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
+ 21.55972  0.00001
+
+rate:  0.99517  0.99904  1.00262  1.00062  1.00202
+freq:  0.18683  0.19064  0.20119  0.21049  0.21086
+transition probabilities between rate categories:
+  0.17035  0.18704  0.19487  0.22487  0.22287
+  0.17288  0.18009  0.20616  0.22035  0.22053
+  0.17867  0.18702  0.19743  0.21551  0.22137
+  0.19339  0.19136  0.19677  0.20988  0.20859
+  0.21528  0.20609  0.21028  0.18465  0.18369
+
+check convergence..

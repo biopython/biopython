@@ -1,0 +1,54 @@
+
+BASEML (in paml version 4.6, August 2012)  Alignments/alignment.phylip  UNREST dGamma (ncatG=5)
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.20090 0.16306 0.37027 0.26577
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances: TN93 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo         0.0047(999.0000)
+Gorilla_go         0.0047(999.0000)  0.0097(999.0000)
+Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
+Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 19):   -319.787136    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.004500 0.004493 0.000004 0.009111 177.269147 53.250696 0.000482 213.581963 0.000010 0.008354 28.034463 0.000010 0.706440 0.000010 0.000010 46.095554
+
+tree length =   0.01812
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004500): 0.000004, Gorilla_go: 0.004493): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.009111);
+
+Detailed output identifying parameters
+
+Parameters  in the rate matrix (UNREST) (Yang 1994 J Mol Evol 39:105-111):
+
+Rate parameters:   177.26915 53.25070  0.00048 213.58196  0.00001  0.00835 28.03446  0.00001  0.70644  0.00001  0.00001
+Base frequencies:   0.19688  0.16340  0.37403  0.26568
+rate matrix Q, Average Ts/Tv (similar to kappa/2) =   3.3537
+   -2.524784    1.941548    0.583231    0.000005
+    2.339266   -2.339357    0.000000    0.000091
+    0.307049    0.000000   -0.314786    0.007737
+    0.000000    0.000000    0.010953   -0.010953
+
+alpha (gamma, K=5) = 46.09555
+rate:   0.80286  0.91700  0.99293  1.07306  1.21415
+freq:   0.20000  0.20000  0.20000  0.20000  0.20000
+
+check convergence..

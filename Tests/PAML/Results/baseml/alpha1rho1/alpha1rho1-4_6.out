@@ -1,18 +1,16 @@
 
-seed used = 1105670841
-
-BASEML (in paml version 4.1, August 2008)  Alignments/alignment.phylip  TN93   Auto-dGamma (ncatG=5)
+BASEML (in paml version 4.6, August 2012)  Alignments/alignment.phylip  TN93   Auto-dGamma (ncatG=5)
 Frequencies..
                                     T      C      A      G
-Homo_sapie                     0.2027 0.1622 0.3694 0.2658
-Pan_troglo                     0.1982 0.1667 0.3694 0.2658
-Gorilla_go                     0.2072 0.1577 0.3694 0.2658
-Pongo_pygm                     0.2027 0.1622 0.3694 0.2658
-Macaca_mul                     0.1937 0.1667 0.3739 0.2658
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
 
 Homogeneity statistic: X2 = 0.00092 G = 0.00092 
 
-Average                        0.200901 0.163063 0.370270 0.265766
+Average                        0.20090 0.16306 0.37027 0.26577
 
 # constant sites:    218 (98.20%)
 ln Lmax (unconstrained) = -316.049385
@@ -27,20 +25,20 @@ Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
 Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
 
 TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
-lnL(ntime:  7  np: 11):   -319.613620   +0.000000
+lnL(ntime:  7  np: 11):   -319.615785    +0.000000
    6..7     7..8     8..1     8..2     7..3     6..4     6..5  
-  0.00000  0.00000  0.00000  0.00380  0.00384  0.00000  0.00817 22.73116  0.00001  0.00500  0.99000
+ 0.000004 0.000004 0.000004 0.003806 0.003839 0.000004 0.008171 22.740450 0.000010 0.005000 0.990000
 
-tree length =   0.01582
+tree length =   0.01583
 
 (((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
 
-(((Homo_sapie: 0.000004, Pan_troglo: 0.003804): 0.000000, Gorilla_go: 0.003838): 0.000000, Pongo_pygm: 0.000004, Macaca_mul: 0.008170);
+(((Homo_sapie: 0.000004, Pan_troglo: 0.003806): 0.000004, Gorilla_go: 0.003839): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.008171);
 
 Detailed output identifying parameters
 
 Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
- 22.73116  0.00001
+ 22.74045  0.00001
 
 alpha (gamma, K=5) =  0.00500
 rate:   0.00000  0.00000  0.00000  0.00000  5.00000
