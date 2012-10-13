@@ -262,7 +262,7 @@ making up each alignment as SeqRecords.
 # For using with statement in Python 2.5 or Jython
 from __future__ import with_statement
 
-__docformat__ = "epytext en" #not just plaintext
+__docformat__ = "epytext en"  # not just plaintext
 
 #TODO
 # - define policy on reading aligned sequences with gaps in
@@ -317,8 +317,8 @@ from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 import AbiIO
 import AceIO
 import FastaIO
-import IgIO #IntelliGenetics or MASE format
-import InsdcIO #EMBL and GenBank
+import IgIO  # IntelliGenetics or MASE format
+import InsdcIO  # EMBL and GenBank
 import PdbIO
 import PhdIO
 import PirIO
@@ -326,7 +326,7 @@ import SeqXmlIO
 import SffIO
 import SwissIO
 import TabIO
-import QualityIO #FastQ and qual files
+import QualityIO  # FastQ and qual files
 import UniprotIO
 
 
@@ -339,48 +339,48 @@ import UniprotIO
 #
 #Most alignment file formats will be handled via Bio.AlignIO
 
-_FormatToIterator = {"fasta" : FastaIO.FastaIterator,
-                     "gb" : InsdcIO.GenBankIterator,
-                     "genbank" : InsdcIO.GenBankIterator,
-                     "genbank-cds" : InsdcIO.GenBankCdsFeatureIterator,
-                     "embl" : InsdcIO.EmblIterator,
-                     "embl-cds" : InsdcIO.EmblCdsFeatureIterator,
-                     "imgt" : InsdcIO.ImgtIterator,
-                     "ig" : IgIO.IgIterator,
-                     "swiss" : SwissIO.SwissIterator,
-                     "pdb-seqres" : PdbIO.PdbSeqresIterator,
-                     "phd" : PhdIO.PhdIterator,
-                     "ace" : AceIO.AceIterator,
-                     "tab" : TabIO.TabIterator,
-                     "pir" : PirIO.PirIterator,
-                     "fastq" : QualityIO.FastqPhredIterator,
-                     "fastq-sanger" : QualityIO.FastqPhredIterator,
-                     "fastq-solexa" : QualityIO.FastqSolexaIterator,
-                     "fastq-illumina" : QualityIO.FastqIlluminaIterator,
-                     "qual" : QualityIO.QualPhredIterator,
+_FormatToIterator = {"fasta": FastaIO.FastaIterator,
+                     "gb": InsdcIO.GenBankIterator,
+                     "genbank": InsdcIO.GenBankIterator,
+                     "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
+                     "embl": InsdcIO.EmblIterator,
+                     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
+                     "imgt": InsdcIO.ImgtIterator,
+                     "ig": IgIO.IgIterator,
+                     "swiss": SwissIO.SwissIterator,
+                     "pdb-seqres": PdbIO.PdbSeqresIterator,
+                     "phd": PhdIO.PhdIterator,
+                     "ace": AceIO.AceIterator,
+                     "tab": TabIO.TabIterator,
+                     "pir": PirIO.PirIterator,
+                     "fastq": QualityIO.FastqPhredIterator,
+                     "fastq-sanger": QualityIO.FastqPhredIterator,
+                     "fastq-solexa": QualityIO.FastqSolexaIterator,
+                     "fastq-illumina": QualityIO.FastqIlluminaIterator,
+                     "qual": QualityIO.QualPhredIterator,
                      "sff": SffIO.SffIterator,
                      #Not sure about this in the long run:
                      "sff-trim": SffIO._SffTrimIterator,
                      "uniprot-xml": UniprotIO.UniprotIterator,
-                     "seqxml" : SeqXmlIO.SeqXmlIterator,
+                     "seqxml": SeqXmlIO.SeqXmlIterator,
                      "abi": AbiIO.AbiIterator,
                      "abi-trim": AbiIO._AbiTrimIterator,
                      }
 
-_FormatToWriter = {"fasta" : FastaIO.FastaWriter,
-                   "gb" : InsdcIO.GenBankWriter,
-                   "genbank" : InsdcIO.GenBankWriter,
-                   "embl" : InsdcIO.EmblWriter,
-                   "imgt" : InsdcIO.ImgtWriter,
-                   "tab" : TabIO.TabWriter,
-                   "fastq" : QualityIO.FastqPhredWriter,
-                   "fastq-sanger" : QualityIO.FastqPhredWriter,
-                   "fastq-solexa" : QualityIO.FastqSolexaWriter,
-                   "fastq-illumina" : QualityIO.FastqIlluminaWriter,
-                   "phd" : PhdIO.PhdWriter,
-                   "qual" : QualityIO.QualPhredWriter,
-                   "sff" : SffIO.SffWriter,
-                   "seqxml" : SeqXmlIO.SeqXmlWriter,
+_FormatToWriter = {"fasta": FastaIO.FastaWriter,
+                   "gb": InsdcIO.GenBankWriter,
+                   "genbank": InsdcIO.GenBankWriter,
+                   "embl": InsdcIO.EmblWriter,
+                   "imgt": InsdcIO.ImgtWriter,
+                   "tab": TabIO.TabWriter,
+                   "fastq": QualityIO.FastqPhredWriter,
+                   "fastq-sanger": QualityIO.FastqPhredWriter,
+                   "fastq-solexa": QualityIO.FastqSolexaWriter,
+                   "fastq-illumina": QualityIO.FastqIlluminaWriter,
+                   "phd": PhdIO.PhdWriter,
+                   "qual": QualityIO.QualPhredWriter,
+                   "sff": SffIO.SffWriter,
+                   "seqxml": SeqXmlIO.SeqXmlWriter,
                    }
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
@@ -429,8 +429,8 @@ def write(sequences, handle, format):
             alignment = MultipleSeqAlignment(sequences)
             alignment_count = AlignIO.write([alignment], fp, format)
             assert alignment_count == 1, \
-                    "Internal error - the underlying writer " \
-                    " should have returned 1, not %s" % repr(alignment_count)
+                "Internal error - the underlying writer " \
+                " should have returned 1, not %s" % repr(alignment_count)
             count = len(alignment)
             del alignment_count, alignment
         elif format in _FormatToIterator or format in AlignIO._FormatToIterator:
@@ -440,10 +440,11 @@ def write(sequences, handle, format):
             raise ValueError("Unknown format '%s'" % format)
 
         assert isinstance(count, int), "Internal error - the underlying %s " \
-               "writer should have returned the record count, not %s" \
-               % (format, repr(count))
+            "writer should have returned the record count, not %s" \
+            % (format, repr(count))
 
     return count
+
 
 def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
@@ -501,7 +502,7 @@ def parse(handle, format, alphabet=None):
     from Bio import AlignIO
 
     #Hack for SFF, will need to make this more general in future
-    if format in _BinaryFormats :
+    if format in _BinaryFormats:
         mode = 'rb'
     else:
         mode = 'rU'
@@ -513,7 +514,7 @@ def parse(handle, format, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
@@ -539,6 +540,7 @@ def parse(handle, format, alphabet=None):
         for r in i:
             yield r
 
+
 def _force_alphabet(record_iterator, alphabet):
     """Iterate over records, over-riding the alphabet (PRIVATE)."""
     #Assume the alphabet argument has been pre-validated
@@ -549,9 +551,10 @@ def _force_alphabet(record_iterator, alphabet):
             record.seq.alphabet = alphabet
             yield record
         else:
-            raise ValueError("Specified alphabet %s clashes with "\
-                             "that determined from the file, %s" \
+            raise ValueError("Specified alphabet %s clashes with "
+                             "that determined from the file, %s"
                              % (repr(alphabet), repr(record.seq.alphabet)))
+
 
 def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
@@ -611,6 +614,7 @@ def read(handle, format, alphabet=None):
         raise ValueError("More than one record found in handle")
     return first
 
+
 def to_dict(sequences, key_function=None):
     """Turns a sequence iterator or list into a dictionary.
 
@@ -661,7 +665,7 @@ def to_dict(sequences, key_function=None):
     Bio.SeqIO.index() function (if it supports your particular file format).
     """
     if key_function is None:
-        key_function = lambda rec : rec.id
+        key_function = lambda rec: rec.id
 
     d = dict()
     for record in sequences:
@@ -670,6 +674,7 @@ def to_dict(sequences, key_function=None):
             raise ValueError("Duplicate key '%s'" % key)
         d[key] = record
     return d
+
 
 def index(filename, format, alphabet=None, key_function=None):
     """Indexes a sequence file and returns a dictionary like object.
@@ -785,16 +790,17 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index #Lazy import
+    import _index  # Lazy import
     return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
 
+
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
-               key_function=None):
+             key_function=None):
     """Index several sequence files and return a dictionary like object.
 
     The index is stored in an SQLite database rather than in memory (as in the
@@ -848,17 +854,18 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         #to Bio.SeqIO.index(...) for indexing just one file.
         filenames = [filenames]
     if filenames is not None and not isinstance(filenames, list):
-        raise TypeError("Need a list of filenames (as strings), or one filename")
+        raise TypeError(
+            "Need a list of filenames (as strings), or one filename")
     if format is not None and not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
     if format and format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index #Lazy import
+    import _index  # Lazy import
     return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
                                           alphabet, key_function)
 
@@ -893,26 +900,27 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     <BLANKLINE>
     """
     #Hack for SFF, will need to make this more general in future
-    if in_format in _BinaryFormats :
+    if in_format in _BinaryFormats:
         in_mode = 'rb'
-    else :
+    else:
         in_mode = 'rU'
 
     #Don't open the output file until we've checked the input is OK?
-    if out_format in ["sff", "sff_trim"] :
+    if out_format in ["sff", "sff_trim"]:
         out_mode = 'wb'
-    else :
+    else:
         out_mode = 'w'
 
     #This will check the arguments and issue error messages,
     #after we have opened the file which is a shame.
-    from _convert import _handle_convert #Lazy import
+    from _convert import _handle_convert  # Lazy import
     with as_handle(in_file, in_mode) as in_handle:
         with as_handle(out_file, out_mode) as out_handle:
             count = _handle_convert(in_handle, in_format,
                                     out_handle, out_format,
                                     alphabet)
     return count
+
 
 def _test():
     """Run the Bio.SeqIO module's doctests.

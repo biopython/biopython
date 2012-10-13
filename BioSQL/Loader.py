@@ -120,13 +120,13 @@ class DatabaseLoader:
             return self.adaptor.last_id("term")
 
     def _add_dbxref(self, dbname, accession, version):
-       """Insert a dbxref and return its id."""
-       
-       self.adaptor.execute(
-           "INSERT INTO dbxref(dbname, accession, version)" \
-           " VALUES (%s, %s, %s)", (dbname, accession, version))
-       return self.adaptor.last_id("dbxref")
-           
+        """Insert a dbxref and return its id."""
+
+        self.adaptor.execute(
+            "INSERT INTO dbxref(dbname, accession, version)" \
+            " VALUES (%s, %s, %s)", (dbname, accession, version))
+        return self.adaptor.last_id("dbxref")
+
     def _get_taxon_id(self, record):
         """Get the taxon id for this record (PRIVATE).
 
@@ -153,8 +153,8 @@ class DatabaseLoader:
         ncbi_taxon_id = None
         if "ncbi_taxid" in record.annotations:
             #Could be a list of IDs.
-            if isinstance(record.annotations["ncbi_taxid"],list):
-                if len(record.annotations["ncbi_taxid"])==1:
+            if isinstance(record.annotations["ncbi_taxid"], list):
+                if len(record.annotations["ncbi_taxid"]) == 1:
                     ncbi_taxon_id = record.annotations["ncbi_taxid"][0]
             else:
                 ncbi_taxon_id = record.annotations["ncbi_taxid"]
@@ -315,8 +315,9 @@ class DatabaseLoader:
 
         #Try automatically by adding spaces before each capital
         def add_space(letter):
+            """Adds a space before a capital letter."""
             if letter.isupper():
-                return " "+letter.lower()
+                return " " + letter.lower()
             else:
                 return letter
         answer = "".join([add_space(letter) for letter in entrez_name]).strip()
@@ -374,7 +375,7 @@ class DatabaseLoader:
         
         if self.fetch_NCBI_taxonomy:
             #Go online to get the parent taxon ID!
-            handle = Entrez.efetch(db="taxonomy",id=ncbi_taxon_id,retmode="XML")
+            handle = Entrez.efetch(db="taxonomy", id=ncbi_taxon_id, retmode="XML")
             taxonomic_record = Entrez.read(handle)
             if len(taxonomic_record) == 1:
                 assert taxonomic_record[0]["TaxId"] == str(ncbi_taxon_id), \
@@ -1000,9 +1001,9 @@ class DatabaseLoader:
             #
             # Annoyingly I have seen the NCBI use both the style
             # "GO:GO:123" and "GO:123" in different vintages.
-            assert value.count("\n")==0
+            assert value.count("\n") == 0
             try:
-                db, accession = value.split(':',1)
+                db, accession = value.split(':', 1)
                 db = db.strip()
                 accession = accession.strip()
             except:
@@ -1010,7 +1011,7 @@ class DatabaseLoader:
             # Get the dbxref_id value for the dbxref data
             dbxref_id = self._get_dbxref_id(db, accession)
             # Insert the bioentry_dbxref  data
-            self._get_bioentry_dbxref(bioentry_id, dbxref_id, rank+1)
+            self._get_bioentry_dbxref(bioentry_id, dbxref_id, rank + 1)
 
     def _get_bioentry_dbxref(self, bioentry_id, dbxref_id, rank):
         """ Check for a pre-existing bioentry_dbxref entry with the passed

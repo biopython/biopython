@@ -20,45 +20,47 @@ from Bio import Alphabet
 from Bio import SeqFeature
 from Bio import SwissProt
 
+
 def _make_position(location_string, offset=0):
     """Turn a Swiss location position into a SeqFeature position object (PRIVATE).
 
     An offset of -1 is used with a start location to make it pythonic.
     """
-    if location_string=="?":
+    if location_string == "?":
         return SeqFeature.UnknownPosition()
     #Hack so that feature from 0 to 0 becomes 0 to 0, not -1 to 0.
     try:
-        return SeqFeature.ExactPosition(max(0, offset+int(location_string)))
+        return SeqFeature.ExactPosition(max(0, offset + int(location_string)))
     except ValueError:
         pass
     if location_string.startswith("<"):
         try:
-            return SeqFeature.BeforePosition(max(0,offset+int(location_string[1:])))
+            return SeqFeature.BeforePosition(max(0, offset + int(location_string[1:])))
         except ValueError:
             pass
-    elif location_string.startswith(">"): # e.g. ">13"
+    elif location_string.startswith(">"):  # e.g. ">13"
         try:
-            return SeqFeature.AfterPosition(max(0,offset+int(location_string[1:])))
-        except ValueError :
+            return SeqFeature.AfterPosition(max(0, offset + int(location_string[1:])))
+        except ValueError:
             pass
-    elif location_string.startswith("?"): # e.g. "?22"
+    elif location_string.startswith("?"):  # e.g. "?22"
         try:
-            return SeqFeature.UncertainPosition(max(0,offset+int(location_string[1:])))
+            return SeqFeature.UncertainPosition(max(0, offset + int(location_string[1:])))
         except ValueError:
             pass
     raise NotImplementedError("Cannot parse location '%s'" % location_string)
 
+
 def _make_seqfeature(name, from_res, to_res, description, ft_id):
     """Construct SeqFeature from feature data from parser (PRIVATE)."""
-    loc = SeqFeature.FeatureLocation(_make_position(from_res,-1),
+    loc = SeqFeature.FeatureLocation(_make_position(from_res, -1),
                                      _make_position(to_res, 0))
     if not ft_id:
-        ft_id = "<unknown id>" #The default in SeqFeature object
+        ft_id = "<unknown id>"  # The default in SeqFeature object
     return SeqFeature.SeqFeature(loc, type=name, id=ft_id,
-                                 qualifiers={"description":description})
+                                 qualifiers={"description": description})
 
-#This is a generator function!
+
 def SwissIterator(handle):
     """Breaks up a Swiss-Prot/UniProt file into SeqRecord objects.
 
@@ -81,9 +83,9 @@ def SwissIterator(handle):
                                      id=swiss_record.accessions[0],
                                      name=swiss_record.entry_name,
                                      description=swiss_record.description,
-                                     features=[_make_seqfeature(*f) for f \
+                                     features=[_make_seqfeature(*f) for f
                                                in swiss_record.features],
-                                    )
+                                     )
         record.description = swiss_record.description
         for cross_reference in swiss_record.cross_references:
             if len(cross_reference) < 2:
@@ -95,7 +97,8 @@ def SwissIterator(handle):
         annotations = record.annotations
         annotations['accessions'] = swiss_record.accessions
         annotations['date'] = swiss_record.created[0]
-        annotations['date_last_sequence_update'] = swiss_record.sequence_update[0]
+        annotations[
+            'date_last_sequence_update'] = swiss_record.sequence_update[0]
         if swiss_record.annotation_update:
             annotations['date_last_annotation_update'] = swiss_record.annotation_update[0]
         if swiss_record.gene_name:
@@ -113,8 +116,8 @@ def SwissIterator(handle):
             annotations['references'] = []
             for reference in swiss_record.references:
                 feature = SeqFeature.Reference()
-                feature.comment = " ".join(["%s=%s;" % (key, value) \
-                                            for key, value \
+                feature.comment = " ".join(["%s=%s;" % (key, value)
+                                            for key, value
                                             in reference.comments])
                 for key, value in reference.references:
                     if key == 'PubMed':
@@ -126,7 +129,7 @@ def SwissIterator(handle):
                     elif key == 'AGRICOLA':
                         pass
                     else:
-                        raise ValueError(\
+                        raise ValueError(
                             "Unknown key %s found in references" % key)
                 feature.authors = reference.authors
                 feature.title = reference.title
@@ -154,6 +157,6 @@ if __name__ == "__main__":
             print record.annotations['keywords']
             print repr(record.annotations['organism'])
             print str(record.seq)[:20] + "..."
-            for f in record.features: print f
+            for f in record.features:
+                print f
         handle.close()
-

@@ -7,7 +7,7 @@
 """Bio.SeqIO parser for the ABI format.
 
 ABI is the format used by Applied Biosystem's sequencing machines to store
-sequencing results. 
+sequencing results.
 
 For more details on the format specification, visit:
 http://www.appliedbiosystem.com/support/software_community/ABIF_File_Format.pdf
@@ -32,48 +32,49 @@ from Bio._py3k import _bytes_to_string, _as_bytes
 # if a tag entry needs to be added, just add its key and its key
 # for the annotations dictionary as the value
 _EXTRACT = {
-            'TUBE1': 'sample_well',
-            'DySN1': 'dye',
-            'GTyp1': 'polymer',
-            'MODL1': 'machine_model',
-           }
+    'TUBE1': 'sample_well',
+    'DySN1': 'dye',
+    'GTyp1': 'polymer',
+    'MODL1': 'machine_model',
+}
 # dictionary for tags that require preprocessing before use in creating
 # seqrecords
 _SPCTAGS = [
-            'PBAS2',    # base-called sequence
-            'PCON2',    # quality values of base-called sequence
-            'SMPL1',    # sample id inputted before sequencing run
-            'RUND1',    # run start date
-            'RUND2',    # run finish date
-            'RUNT1',    # run start time
-            'RUNT2',    # run finish time
-           ]
+    'PBAS2',    # base-called sequence
+    'PCON2',    # quality values of base-called sequence
+    'SMPL1',    # sample id inputted before sequencing run
+    'RUND1',    # run start date
+    'RUND2',    # run finish date
+    'RUNT1',    # run start time
+    'RUNT2',    # run finish time
+]
 # dictionary for data unpacking format
 _BYTEFMT = {
-            1: 'b',     # byte
-            2: 's',     # char
-            3: 'H',     # word
-            4: 'h',     # short
-            5: 'i',     # long
-            6: '2i',    # rational, legacy unsupported
-            7: 'f',     # float
-            8: 'd',     # double
-            10: 'h2B',  # date
-            11: '4B',   # time
-            12: '2i2b', # thumb
-            13: 'B',    # bool
-            14: '2h',   # point, legacy unsupported
-            15: '4h',   # rect, legacy unsupported
-            16: '2i',   # vPoint, legacy unsupported
-            17: '4i',   # vRect, legacy unsupported
-            18: 's',    # pString
-            19: 's',    # cString
-            20: '2i',   # tag, legacy unsupported
-           }
+    1: 'b',     # byte
+    2: 's',     # char
+    3: 'H',     # word
+    4: 'h',     # short
+    5: 'i',     # long
+    6: '2i',    # rational, legacy unsupported
+    7: 'f',     # float
+    8: 'd',     # double
+    10: 'h2B',  # date
+    11: '4B',   # time
+    12: '2i2b',  # thumb
+    13: 'B',    # bool
+    14: '2h',   # point, legacy unsupported
+    15: '4h',   # rect, legacy unsupported
+    16: '2i',   # vPoint, legacy unsupported
+    17: '4i',   # vRect, legacy unsupported
+    18: 's',    # pString
+    19: 's',    # cString
+    20: '2i',   # tag, legacy unsupported
+}
 # header data structure (exluding 4 byte ABIF marker)
 _HEADFMT = '>H4sI2H3I'
 # directory data structure
 _DIRFMT = '>4sI2H4I'
+
 
 def AbiIterator(handle, alphabet=None, trim=False):
     """Iterator for the Abi file format.
@@ -82,7 +83,8 @@ def AbiIterator(handle, alphabet=None, trim=False):
     if alphabet is not None:
         if isinstance(Alphabet._get_base_alphabet(alphabet),
                       Alphabet.ProteinAlphabet):
-            raise ValueError("Invalid alphabet, ABI files do not hold proteins.")
+            raise ValueError(
+                "Invalid alphabet, ABI files do not hold proteins.")
         if isinstance(Alphabet._get_base_alphabet(alphabet),
                       Alphabet.RNAAlphabet):
             raise ValueError("Invalid alphabet, ABI files do not hold RNA.")
@@ -90,7 +92,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
     # raise exception if handle mode is not 'rb'
     if hasattr(handle, 'mode'):
         if set('rb') != set(handle.mode.lower()):
-            raise ValueError("ABI files has to be opened in 'rb' mode.") 
+            raise ValueError("ABI files has to be opened in 'rb' mode.")
 
     # check if input file is a valid Abi file
     handle.seek(0)
@@ -108,8 +110,8 @@ def AbiIterator(handle, alphabet=None, trim=False):
     annot = dict(zip(_EXTRACT.values(), [None] * len(_EXTRACT)))
 
     # parse header and extract data from directories
-    header = struct.unpack(_HEADFMT, \
-             handle.read(struct.calcsize(_HEADFMT)))
+    header = struct.unpack(_HEADFMT,
+                           handle.read(struct.calcsize(_HEADFMT)))
 
     for tag_name, tag_number, tag_data in _abi_parse_header(header, handle):
         # stop iteration if all desired tags have been extracted
@@ -120,7 +122,7 @@ def AbiIterator(handle, alphabet=None, trim=False):
         key = tag_name + str(tag_number)
 
         # PBAS2 is base-called sequence
-        if key == 'PBAS2': 
+        if key == 'PBAS2':
             seq = tag_data
             ambigs = 'KYWMRS'
             if alphabet is None:
@@ -137,17 +139,17 @@ def AbiIterator(handle, alphabet=None, trim=False):
         elif key in times:
             times[key] = tag_data
         else:
-            # extract sequence annotation as defined in _EXTRACT          
+            # extract sequence annotation as defined in _EXTRACT
             if key in _EXTRACT:
                 annot[_EXTRACT[key]] = tag_data
 
     # set time annotations
     annot['run_start'] = '%s %s' % (times['RUND1'], times['RUNT1'])
     annot['run_finish'] = '%s %s' % (times['RUND2'], times['RUNT2'])
-    
+
     # use the file name as SeqRecord.name if available
     try:
-        file_name = basename(handle.name).replace('.ab1','')
+        file_name = basename(handle.name).replace('.ab1', '')
     except:
         file_name = ""
 
@@ -156,16 +158,18 @@ def AbiIterator(handle, alphabet=None, trim=False):
                        description='',
                        annotations=annot,
                        letter_annotations={'phred_quality': qual})
-                      
+
     if not trim:
         yield record
     else:
         yield _abi_trim(record)
 
+
 def _AbiTrimIterator(handle):
     """Iterator for the Abi file format that yields trimmed SeqRecord objects.
     """
     return AbiIterator(handle, trim=True)
+
 
 def _abi_parse_header(header, handle):
     """Generator that returns directory contents.
@@ -184,8 +188,8 @@ def _abi_parse_header(header, handle):
         # add directory offset to tuple
         # to handle directories with data size <= 4 bytes
         handle.seek(start)
-        dir_entry = struct.unpack(_DIRFMT, \
-                    handle.read(struct.calcsize(_DIRFMT))) + (start,)
+        dir_entry = struct.unpack(_DIRFMT,
+                                  handle.read(struct.calcsize(_DIRFMT))) + (start,)
         index += 1
         # only parse desired dirs
         key = _bytes_to_string(dir_entry[0])
@@ -205,7 +209,7 @@ def _abi_parse_header(header, handle):
             handle.seek(data_offset)
             data = handle.read(data_size)
             yield tag_name, tag_number, \
-                  _parse_tag_data(elem_code, elem_num, data)
+                _parse_tag_data(elem_code, elem_num, data)
 
 
 def _abi_trim(seq_record):
@@ -231,7 +235,7 @@ def _abi_trim(seq_record):
         return seq_record
     else:
         # calculate base score
-        score_list = [cutoff - (10 ** (qual/-10.0)) for qual in
+        score_list = [cutoff - (10 ** (qual / -10.0)) for qual in
                       seq_record.letter_annotations['phred_quality']]
 
         # calculate cummulative score
@@ -249,16 +253,17 @@ def _abi_trim(seq_record):
                     # trim_start = value when cummulative score is first > 0
                     trim_start = i
                     start = True
-        
+
         # trim_finish = index of highest cummulative score,
         # marking the end of sequence segment with highest cummulative score
         trim_finish = cummul_score.index(max(cummul_score))
-                         
+
         return seq_record[trim_start:trim_finish]
+
 
 def _parse_tag_data(elem_code, elem_num, raw_data):
     """Returns single data value.
-    
+
     elem_code - What kind of data
     elem_num - How many data points
     raw_data - abi file object from which the tags would be unpacked
