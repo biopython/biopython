@@ -1,0 +1,48 @@
+
+BASEML (in paml version 4.6, August 2012)  Alignments/alignment.phylip  TN93 dGamma (ncatG=5)
+nparK:   2  K:   5
+
+Frequencies..
+                                    T      C      A      G
+Homo_sapie                     0.20270 0.16216 0.36937 0.26577
+Pan_troglo                     0.19820 0.16667 0.36937 0.26577
+Gorilla_go                     0.20721 0.15766 0.36937 0.26577
+Pongo_pygm                     0.20270 0.16216 0.36937 0.26577
+Macaca_mul                     0.19369 0.16667 0.37387 0.26577
+
+Homogeneity statistic: X2 = 0.00092 G = 0.00092 
+
+Average                        0.20090 0.16306 0.37027 0.26577
+
+# constant sites:    218 (98.20%)
+ln Lmax (unconstrained) = -316.049385
+
+Distances: TN93 (kappa)  (alpha set at 0.50)
+This matrix is not used in later m.l. analysis.
+
+Homo_sapie       
+Pan_troglo         0.0047(999.0000)
+Gorilla_go         0.0047(999.0000)  0.0097(999.0000)
+Pongo_pygm         0.0000(999.0000)  0.0047(999.0000)  0.0047(999.0000)
+Macaca_mul         0.0093( 3.6925)  0.0145( 7.6730)  0.0145( 7.7118)  0.0093( 3.6925)
+
+TREE #  1:  (((1, 2), 3), 4, 5);  MP score: 4.00
+lnL(ntime:  7  np: 17):   -320.889684    +0.000000
+   6..7     7..8     8..1     8..2     7..3     6..4     6..5  
+ 0.000004 0.000004 0.000004 0.004536 0.004545 0.000004 0.009206 21.547175 0.000010 0.999192 1.000640 0.999689 1.000195 0.152309 0.167751 0.202505 0.258827
+
+tree length =   0.01830
+
+(((Homo_sapie, Pan_troglo), Gorilla_go), Pongo_pygm, Macaca_mul);
+
+(((Homo_sapie: 0.000004, Pan_troglo: 0.004536): 0.000004, Gorilla_go: 0.004545): 0.000004, Pongo_pygm: 0.000004, Macaca_mul: 0.009206);
+
+Detailed output identifying parameters
+
+Parameters (kappa) in the rate matrix (TN93) (Yang 1994 J Mol Evol 39:105-111):
+ 21.54717  0.00001
+
+rate:  0.99919  1.00064  0.99969  1.00020  1.00013
+freq:  0.15231  0.16775  0.20251  0.25883  0.21861
+
+check convergence..
