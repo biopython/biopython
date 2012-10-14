@@ -64,11 +64,12 @@ class SequenceIterator(object):
         myFile.close()"""
         return iter(self.next, None)
 
+
 class InterlacedSequenceIterator(SequenceIterator):
     """Base class for any iterator of a non-sequential file type.
 
     This object is not intended for use directly.
-    
+
     When writing a parser for any interlaced sequence file where the whole
     file must be read in order to extract any single record, then you should
     subclass this object.
@@ -125,14 +126,15 @@ class InterlacedSequenceIterator(SequenceIterator):
     def next(self):
         next_record = self._n
         if next_record < len(self):
-            self._n = next_record+1
+            self._n = next_record + 1
             return self[next_record]
         else:
             #StopIteration
             return None
-    
+
     def __iter__(self):
         return iter(self.next, None)
+
 
 class SequenceWriter(object):
     """This class should be subclassed.
@@ -153,17 +155,17 @@ class SequenceWriter(object):
         if not isinstance(record, SeqRecord):
             raise TypeError("Expected a SeqRecord object")
         if record.seq is None:
-            raise TypeError("SeqRecord (id=%s) has None for its sequence." \
+            raise TypeError("SeqRecord (id=%s) has None for its sequence."
                             % record.id)
         elif not isinstance(record.seq, (Seq, MutableSeq)):
-            raise TypeError("SeqRecord (id=%s) has an invalid sequence." \
+            raise TypeError("SeqRecord (id=%s) has an invalid sequence."
                             % record.id)
         return str(record.seq)
 
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
-    
+
     def write_file(self, records):
         """Use this to write an entire file containing the given records.
 
@@ -178,6 +180,7 @@ class SequenceWriter(object):
         #####################################################
         # You SHOULD subclass this                          #
         #####################################################
+
 
 class SequentialSequenceWriter(SequenceWriter):
     """This class should be subclassed.
@@ -196,7 +199,7 @@ class SequentialSequenceWriter(SequenceWriter):
     the file format concerned doesn't have a header or footer.
     This is to try and make life as easy as possible when
     switching the output format.
-    
+
     Note that write_header() cannot require any assumptions about
     the number of records.
     """
@@ -211,7 +214,7 @@ class SequentialSequenceWriter(SequenceWriter):
         assert not self._record_written, "You have aleady called write_record() or write_records()"
         assert not self._footer_written, "You have aleady called write_footer()"
         self._header_written = True
-        
+
     def write_footer(self):
         assert self._header_written, "You must call write_header() first"
         assert self._record_written, "You have not called write_record() or write_records() yet"

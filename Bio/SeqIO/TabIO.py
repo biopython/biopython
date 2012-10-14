@@ -36,8 +36,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
-#This is a generator function!
-def TabIterator(handle, alphabet = single_letter_alphabet):
+
+def TabIterator(handle, alphabet=single_letter_alphabet):
     """Iterates over tab separated lines (as SeqRecord objects).
 
     Each line of the file should contain one tab only, dividing the line
@@ -53,19 +53,20 @@ def TabIterator(handle, alphabet = single_letter_alphabet):
     """
     for line in handle:
         try:
-            title, seq = line.split("\t") #will fail if more than one tab!
+            title, seq = line.split("\t")  # will fail if more than one tab!
         except:
             if line.strip() == "":
                 #It's a blank line, ignore it
                 continue
-            raise ValueError("Each line should have one tab separating the" + \
-                             " title and sequence, this line has %i tabs: %s" \
+            raise ValueError("Each line should have one tab separating the" +
+                             " title and sequence, this line has %i tabs: %s"
                              % (line.count("\t"), repr(line)))
         title = title.strip()
-        seq = seq.strip() #removes the trailing new line
+        seq = seq.strip()  # removes the trailing new line
         yield SeqRecord(Seq(seq, alphabet),
                         id=title, name=title,
                         description="")
+
 
 class TabWriter(SequentialSequenceWriter):
     """Class to write simple tab separated format files.
@@ -79,9 +80,9 @@ class TabWriter(SequentialSequenceWriter):
         assert self._header_written
         assert not self._footer_written
         self._record_written = True
-        
+
         title = self.clean(record.id)
-        seq = self._get_seq_string(record) #Catches sequence being None
+        seq = self._get_seq_string(record)  # Catches sequence being None
         assert "\t" not in title
         assert "\n" not in title
         assert "\r" not in title
@@ -108,4 +109,4 @@ if __name__ == "__main__":
         #Good!
         pass
 
-    print "Done"    
+    print "Done"

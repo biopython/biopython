@@ -16,8 +16,8 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
-#This is a generator function!
-def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
+
+def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over Fasta records (as SeqRecord objects).
 
     handle - input file
@@ -35,13 +35,15 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
     #Skip any text before the first record (e.g. blank lines, comments)
     while True:
         line = handle.readline()
-        if line == "" : return #Premature end of file, or just empty?
+        if line == "":
+            return  # Premature end of file, or just empty?
         if line[0] == ">":
             break
 
     while True:
-        if line[0]!=">":
-            raise ValueError("Records in Fasta files should start with '>' character")
+        if line[0] != ">":
+            raise ValueError(
+                "Records in Fasta files should start with '>' character")
         if title2ids:
             id, name, descr = title2ids(line[1:].rstrip())
         else:
@@ -57,8 +59,10 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
         lines = []
         line = handle.readline()
         while True:
-            if not line : break
-            if line[0] == ">": break
+            if not line:
+                break
+            if line[0] == ">":
+                break
             lines.append(line.rstrip())
             line = handle.readline()
 
@@ -69,10 +73,12 @@ def FastaIterator(handle, alphabet = single_letter_alphabet, title2ids = None):
 
         #Return the record and then continue...
         yield SeqRecord(Seq(result, alphabet),
-                         id = id, name = name, description = descr)
+                        id=id, name=name, description=descr)
 
-        if not line : return #StopIteration
+        if not line:
+            return  # StopIteration
     assert False, "Should not reach this line"
+
 
 class FastaWriter(SequentialSequenceWriter):
     """Class to write Fasta format files."""
@@ -122,13 +128,13 @@ class FastaWriter(SequentialSequenceWriter):
         self._record_written = True
 
         if self.record2title:
-            title=self.clean(self.record2title(record))
+            title = self.clean(self.record2title(record))
         else:
             id = self.clean(record.id)
             description = self.clean(record.description)
 
             #if description[:len(id)]==id:
-            if description and description.split(None,1)[0]==id:
+            if description and description.split(None, 1)[0] == id:
                 #The description includes the id at the start
                 title = description
             elif description:
@@ -140,14 +146,14 @@ class FastaWriter(SequentialSequenceWriter):
         assert "\r" not in title
         self.handle.write(">%s\n" % title)
 
-        data = self._get_seq_string(record) #Catches sequence being None
+        data = self._get_seq_string(record)  # Catches sequence being None
 
         assert "\n" not in data
         assert "\r" not in data
 
         if self.wrap:
             for i in range(0, len(data), self.wrap):
-                self.handle.write(data[i:i+self.wrap] + "\n")
+                self.handle.write(data[i:i + self.wrap] + "\n")
         else:
             self.handle.write(data + "\n")
 
@@ -163,9 +169,9 @@ if __name__ == "__main__":
     faa_filename = "NC_005213.faa"
 
     def genbank_name_function(text):
-        text, descr = text.split(None,1)
+        text, descr = text.split(None, 1)
         id = text.split("|")[3]
-        name = id.split(".",1)[0]
+        name = id.split(".", 1)[0]
         return id, name, descr
 
     def print_record(record):
@@ -179,15 +185,16 @@ if __name__ == "__main__":
             print '/%s=%s' % (feature, record.annotations[feature])
         if record.dbxrefs:
             print "Database cross references:"
-            for x in record.dbxrefs : print " - %s" % x
+            for x in record.dbxrefs:
+                print " - %s" % x
 
     if os.path.isfile(fna_filename):
         print "--------"
         print "FastaIterator (single sequence)"
         iterator = FastaIterator(open(fna_filename, "r"), alphabet=generic_nucleotide, title2ids=genbank_name_function)
-        count=0
+        count = 0
         for record in iterator:
-            count=count+1
+            count += 1
             print_record(record)
         assert count == 1
         print str(record.__class__)
@@ -196,12 +203,12 @@ if __name__ == "__main__":
         print "--------"
         print "FastaIterator (multiple sequences)"
         iterator = FastaIterator(open(faa_filename, "r"), alphabet=generic_protein, title2ids=genbank_name_function)
-        count=0
+        count = 0
         for record in iterator:
-            count=count+1
+            count += 1
             print_record(record)
             break
-        assert count>0
+        assert count > 0
         print str(record.__class__)
 
     from cStringIO import StringIO
@@ -211,7 +218,7 @@ if __name__ == "__main__":
     iterator = FastaIterator(StringIO(""))
     count = 0
     for record in iterator:
-        count = count+1
-    assert count==0
+        count += 1
+    assert count == 0
 
     print "Done"

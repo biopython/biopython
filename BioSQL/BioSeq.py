@@ -59,7 +59,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
         #Return the (sub)sequence as another DBSeq or Seq object
         #(see the Seq obect's __getitem__ method)
         if index.start is None:
-            i=0
+            i = 0
         else:
             i = index.start
         if i < 0:
@@ -153,7 +153,7 @@ def _retrieve_seq(adaptor, primary_id):
             " WHERE bioentry_id = %s", (primary_id,))
         assert len(seqs) == 1
         moltype, given_length, seq = seqs[0]
-        assert seq is None or seq==""
+        assert seq is None or seq == ""
         length = int(given_length)
         have_seq = False
         del seq
@@ -294,7 +294,7 @@ def _retrieve_features(adaptor, primary_id):
                 #so for consistency with older versions of Biopython default
                 #to assuming its a join.
                 if not subfeature.location_operator:
-                    subfeature.location_operator="join"
+                    subfeature.location_operator = "join"
                 subfeature.location = SeqFeature.FeatureLocation(start, end)
                 subfeature.strand = strand
                 subfeature.ref_db = dbname
@@ -313,7 +313,7 @@ def _retrieve_features(adaptor, primary_id):
             # need to consider evil mixed strand examples like this,
             # join(complement(69611..69724),139856..140087,140625..140650)
             strands = set(sf.strand for sf in feature.sub_features)
-            if len(strands)==1:
+            if len(strands) == 1:
                 feature.strand = feature.sub_features[0].strand
             else:
                 feature.strand = None # i.e. mixed strands

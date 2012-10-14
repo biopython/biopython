@@ -209,7 +209,7 @@ class DBServer:
         # make the database
         sql = r"INSERT INTO biodatabase (name, authority, description)" \
               r" VALUES (%s, %s, %s)" 
-        self.adaptor.execute(sql, (db_name,authority, description))
+        self.adaptor.execute(sql, (db_name, authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
 
     def load_database_sql(self, sql_file):
@@ -523,13 +523,13 @@ class BioSeqDatabase:
         #Assuming this will automatically cascade to the other tables...
         sql = "DELETE FROM bioentry " + \
               "WHERE biodatabase_id=%s AND bioentry_id=%s;"
-        self.adaptor.execute(sql, (self.dbid,key))
+        self.adaptor.execute(sql, (self.dbid, key))
 
     def __len__(self):
         """Number of records in this namespace (sub database)."""
         sql = "SELECT COUNT(bioentry_id) FROM bioentry " + \
               "WHERE biodatabase_id=%s;"
-        return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid,))[0])
+        return int(self.adaptor.execute_and_fetch_col0(sql, (self.dbid, ))[0])
 
     def __contains__(self, value):
         """Check if a primary (internal) id is this namespace (sub database)."""
