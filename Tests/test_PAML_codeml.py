@@ -252,7 +252,7 @@ class ModTest(unittest.TestCase):
                 self.assertTrue("parameters" in model, version_msg)
                 params = model["parameters"]
                 self.assertEqual(len(params), SITECLASS_PARAMS[model_num],
-                    version_msg))
+                    version_msg)
                 self.assertTrue("branches" in params, version_msg)
                 branches = params["branches"]
                 # There are 7 branches in the test case (specific to these
