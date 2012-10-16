@@ -242,6 +242,10 @@ class BgzfTests(unittest.TestCase):
         """Check random access to Quality/example.fastq.bgz"""
         self.check_random("Quality/example.fastq.bgz")
 
+    def test_random_example_cor6(self):
+        """Check random access to GenBank/cor6_6.gb.bgz"""
+        self.check_random("GenBank/cor6_6.gb.bgz")
+
     def test_text_example_fastq(self):
         """Check text mode access to Quality/example.fastq.bgz"""
         self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
@@ -250,6 +254,11 @@ class BgzfTests(unittest.TestCase):
         """Check iteration over Quality/example.fastq.bgz"""
         self.check_by_line("Quality/example.fastq", "Quality/example.fastq.bgz")
         self.check_by_char("Quality/example.fastq", "Quality/example.fastq.bgz")
+
+    def test_iter_example_cor6(self):
+        """Check iteration over GenBank/cor6_6.gb.bgz"""
+        self.check_by_line("GenBank/cor6_6.gb", "GenBank/cor6_6.gb.bgz")
+        self.check_by_char("GenBank/cor6_6.gb", "GenBank/cor6_6.gb.bgz")
 
     def test_iter_example_gb(self):
         """Check iteration over GenBank/NC_000932.gb.bgz"""
@@ -277,6 +286,18 @@ class BgzfTests(unittest.TestCase):
         temp_file = self.temp_file
         self.rewrite("Quality/example.fastq.gz", temp_file)
         self.check_blocks("Quality/example.fastq.bgz", temp_file)
+
+    def test_example_gb(self):
+        """Reproduce BGZF compression for NC_000932 GenBank file"""
+        temp_file = self.temp_file
+        self.rewrite("GenBank/NC_000932.gb.bgz", temp_file)
+        self.check_blocks("GenBank/NC_000932.gb.bgz", temp_file)
+
+    def test_example_cor6(self):
+        """Reproduce BGZF compression for cor6_6.gb GenBank file"""
+        temp_file = self.temp_file
+        self.rewrite("GenBank/cor6_6.gb.bgz", temp_file)
+        self.check_blocks("GenBank/cor6_6.gb.bgz", temp_file)
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
