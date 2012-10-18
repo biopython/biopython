@@ -16,15 +16,12 @@ python:
   - "2.7"
   - "3.2"
   - "jython2.5"
-  - "pypy1.8"
-  - "pypy1.9"
+  - "pypy"
 
 before_install:
   - "export PYTHON_EXE=python"
   - "export JYTHON_URL='http://downloads.sourceforge.net/project/jython/jython/2.5.2/jython_installer-2.5.2.jar?r=http%3A%2F%2Fwww.jython.org%2Fdownloads.html&ts=1338089844&use_mirror=iweb'"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython | tail -n 2; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.8' ]]; then wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.8-linux.tar.bz2 -O pypy.tar.bz2; tar -xvjf pypy.tar.bz2 | tail -n 2; export PYTHON_EXE=$PWD/pypy-1.8/bin/pypy; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.9' ]]; then wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.9-linux.tar.bz2 -O pypy.tar.bz2; tar -xvjf pypy.tar.bz2 | tail -n 2; export PYTHON_EXE=$PWD/pypy-1.9/bin/pypy; fi"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
 #Can easily install NumPy for the sytem python, hack to use this in virtualevn
 #Idea from @peterlandry here https://github.com/travis-ci/travis-cookbooks/issues/48
@@ -36,8 +33,7 @@ before_install:
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then export PG=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.8' ]]; then export PG=no; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.9' ]]; then export PG=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then export PG=no; fi"
   - "if [[ $PG == 'yes' ]]; then pip install psycopg2 --use-mirrors 2>&1 | tail -n 2; fi"
 #Installing mysql-python does not work under Python 3.2
   - "export MSQL=$PG"
