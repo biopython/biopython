@@ -26,6 +26,13 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.8' ]]; then wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.8-linux.tar.bz2 -O pypy.tar.bz2; tar -xvjf pypy.tar.bz2 | tail -n 2; export PYTHON_EXE=$PWD/pypy-1.8/bin/pypy; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'pypy1.9' ]]; then wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.9-linux.tar.bz2 -O pypy.tar.bz2; tar -xvjf pypy.tar.bz2 | tail -n 2; export PYTHON_EXE=$PWD/pypy-1.9/bin/pypy; fi"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
+#Can easily install NumPy for the sytem python, hack to use this in virtualevn
+#Idea from @peterlandry here https://github.com/travis-ci/travis-cookbooks/issues/48
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then sudo apt-get install python-numpy python-numpy-dev 2>&1 | tail -n 2; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then ln -s /usr/lib/python2.7/dist-packages/numpy ~/virtualenv/python2.7/lib/python2.7/site-packages/; fi"
+#Same trick for NumPy with Python 3.2,
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then sudo apt-get install python3-numpy python3-numpy-dev 2>&1 | tail -n 2; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then ln -s /usr/lib/python3/dist-packages/numpy ~/virtualenv/python3.2/lib/python3.2/site-packages/; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then export PG=no; fi"
