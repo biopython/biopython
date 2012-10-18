@@ -35,7 +35,7 @@ install:
   - "if [[ $PG == 'yes' ]]; then pip install psycopg2 --use-mirrors 2>&1 | tail -n 2; fi"
 #Installing mysql-python does not work under Python 3.2
   - "export MSQL=$PG"
-  - "if [[ $TRAVIS_PYTHON_VERSION == 'python3.2' ]]; then export MSQL=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
 
 before_script:
