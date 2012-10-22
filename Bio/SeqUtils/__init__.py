@@ -315,17 +315,26 @@ def six_frame_translations(seq, genetic_code = 1):
 
 
 def quick_FASTA_reader(file):
-    """Simple FASTA reader, returning a list of string tuples.
+    """Simple FASTA reader, returning a list of string tuples (OBSOLETE).
 
     The single argument 'file' should be the filename of a FASTA format file.
     This function will open and read in the entire file, constructing a list
     of all the records, each held as a tuple of strings (the sequence name or
     title, and its sequence).
 
-    This function was originally intended for use on large files, where its
-    low overhead makes it very fast.  However, because it returns the data as
-    a single in memory list, this can require a lot of RAM on large files.
-   
+    >>> seqs = quick_FASTA_reader("Fasta/dups.fasta")
+    >>> for title, sequence in seqs:
+    ...     print title, sequence
+    alpha ACGTA
+    beta CGTC
+    gamma CCGCC
+    alpha (again - this is a duplicate entry to test the indexing code) ACGTA
+    delta CGCGC
+
+    This function was is fast, but because it returns the data as a single in
+    memory list, is unsuitable for large files where an iterator approach is
+    preferable.
+
     You are generally encouraged to use Bio.SeqIO.parse(handle, "fasta") which
     allows you to iterate over the records one by one (avoiding having all the
     records in memory at once).  Using Bio.SeqIO also makes it easy to switch
@@ -350,11 +359,26 @@ def quick_FASTA_reader(file):
 
 
 def _test():
-    """Run the Bio.SeqUtils module's doctests (PRIVATE)."""
-    print "Runing doctests..."
+    """Run the module's doctests (PRIVATE)."""
+    import os
     import doctest
-    doctest.testmod()
-    print "Done"
+    if os.path.isdir(os.path.join("..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+    elif os.path.isdir(os.path.join("Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
 
 if __name__ == "__main__":
     _test()
