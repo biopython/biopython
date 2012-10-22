@@ -23,6 +23,16 @@ def SimpleFastaParser(handle):
     line (without the leading '>' character), and the sequence (with any
     whitespace removed). The title line is not divided up into an
     identifier (the first word) and comment or description.
+
+    >>> with open("Fasta/dups.fasta") as handle:
+    ...     for values in SimpleFastaParser(handle):
+    ...         print values
+    ('alpha', 'ACGTA')
+    ('beta', 'CGTC')
+    ('gamma', 'CCGCC')
+    ('alpha (again - this is a duplicate entry to test the indexing code)', 'ACGTA')
+    ('delta', 'CGCGC')
+
     """
     #Skip any text before the first record (e.g. blank lines, comments)
     while True:
@@ -69,8 +79,31 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     If this is not given, then the entire title line will be used
     as the description, and the first word as the id and name.
 
-    Note that use of title2ids matches that of Bio.Fasta.SequenceParser
-    but the defaults are slightly different.
+    By default this will act like calling Bio.SeqIO.parse(handle, "fasta")
+    with no custom handling of the title lines:
+
+    >>> with open("Fasta/dups.fasta") as handle:
+    ...     for record in FastaIterator(handle):                                                                                                                           
+    ...         print record.id
+    alpha
+    beta
+    gamma
+    alpha
+    delta
+
+    However, you can supply a title2ids function to alter this:
+
+    >>> def take_upper(title):
+    ...     return title.split(None,1)[0].upper(), "", title
+    >>> with open("Fasta/dups.fasta") as handle:
+    ...     for record in FastaIterator(handle, title2ids=take_upper):
+    ...         print record.id
+    ALPHA
+    BETA
+    GAMMA
+    ALPHA
+    DELTA
+
     """
     for title, sequence in SimpleFastaParser(handle): 
         if title2ids:

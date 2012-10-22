@@ -87,6 +87,7 @@ DOCTEST_MODULES = [
                    "Bio.Phylo.Applications._Raxml",
                    "Bio.Seq",
                    "Bio.SeqIO",
+                   "Bio.SeqIO.FastaIO",
                    "Bio.SeqIO.AceIO",
                    "Bio.SeqIO.PhdIO",
                    "Bio.SeqIO.QualityIO",
