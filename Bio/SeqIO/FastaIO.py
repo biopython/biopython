@@ -105,22 +105,21 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     DELTA
 
     """
-    for title, sequence in SimpleFastaParser(handle): 
-        if title2ids:
+    if title2ids:
+        for title, sequence in SimpleFastaParser(handle): 
             id, name, descr = title2ids(title)
-        else:
-            descr = title
+            yield SeqRecord(Seq(sequence, alphabet),
+                            id=id, name=name, description=descr)
+    else:
+        for title, sequence in SimpleFastaParser(handle):
             try:
-                id = descr.split()[0]
+                first_word = title.split(None, 1)[0]
             except IndexError:
-                assert not descr, repr(line)
+                assert not title, repr(title)
                 #Should we use SeqRecord default for no ID?
-                id = ""
-            name = id
-
-        #Return the record and then continue...
-        yield SeqRecord(Seq(sequence, alphabet),
-                        id=id, name=name, description=descr)
+                first_word = ""
+            yield SeqRecord(Seq(sequence, alphabet),
+                            id=first_word, name=first_word, description=title)
 
 
 class FastaWriter(SequentialSequenceWriter):
