@@ -23,10 +23,9 @@ def SimpleFastaParser(handle):
     line (without the leading '>' character), and the sequence (with any
     whitespace removed). The title line is not divided up into an
     identifier (the first word) and comment or description.
-
-    >>> with open("Fasta/dups.fasta") as handle:
-    ...     for values in SimpleFastaParser(handle):
-    ...         print values
+    
+    >>> for values in SimpleFastaParser(open("Fasta/dups.fasta")):
+    ...     print values
     ('alpha', 'ACGTA')
     ('beta', 'CGTC')
     ('gamma', 'CCGCC')
@@ -82,9 +81,8 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     By default this will act like calling Bio.SeqIO.parse(handle, "fasta")
     with no custom handling of the title lines:
 
-    >>> with open("Fasta/dups.fasta") as handle:
-    ...     for record in FastaIterator(handle):                                                                                                                           
-    ...         print record.id
+    >>> for record in FastaIterator(open("Fasta/dups.fasta")):
+    ...     print record.id
     alpha
     beta
     gamma
@@ -95,9 +93,8 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     >>> def take_upper(title):
     ...     return title.split(None,1)[0].upper(), "", title
-    >>> with open("Fasta/dups.fasta") as handle:
-    ...     for record in FastaIterator(handle, title2ids=take_upper):
-    ...         print record.id
+    >>> for record in FastaIterator(open("Fasta/dups.fasta"), title2ids=take_upper):
+    ...     print record.id
     ALPHA
     BETA
     GAMMA
