@@ -13,13 +13,18 @@ try:
 except ImportError:
     raise MissingExternalDependencyError(
             "Install matplotlib if you want to use Bio.Phylo._utils.")
-else:
-    # Don't use the Wx backend for matplotlib, use the simpler postscript
-    # backend -- we're not going to display or save the plot anyway, so it
-    # doesn't matter much, as long as it's not Wx.  See:
-    # http://lists.open-bio.org/pipermail/biopython-dev/2012-April/009559.html
-    matplotlib.use('ps')
+
+# Don't use the Wx backend for matplotlib, use the simpler postscript
+# backend -- we're not going to display or save the plot anyway, so it
+# doesn't matter much, as long as it's not Wx.  See:
+# http://lists.open-bio.org/pipermail/biopython-dev/2012-April/009559.html
+matplotlib.use('ps')
+try:
     from matplotlib import pyplot
+except ImportError:
+    #Can fail here with font problems
+    raise MissingExternalDependencyError(
+            "Install matplotlib installation if you want to use Bio.Phylo._utils.")
 
 try:
     import networkx
