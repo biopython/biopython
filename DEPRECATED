@@ -398,7 +398,9 @@ Funtions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
 quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
 in Release 1.58.
 
-Function quick_FASTA_reader was decleared obsolete in Release 1.61.
+Function quick_FASTA_reader was declared obsolete in Release 1.61. Use
+function list(SimpleFastaParser(handle)) in Bio.SeqIO.FastaIO instead
+(but ideally convert your code to using an iterator approach).
 
 Bio.GFF (for accessing a MySQL database created with BioPerl, etc)
 =======
