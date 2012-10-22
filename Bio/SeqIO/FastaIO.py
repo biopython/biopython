@@ -16,6 +16,46 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
+def SimpleFastaParser(handle):
+    """Generator function to iterator over Fasta records (as string tuples).
+
+    For each record a tuple of two strings is returned, the FASTA title
+    line (without the leading '>' character), and the sequence (with any
+    whitespace removed). The title line is not divided up into an
+    identifier (the first word) and comment or description.
+    """
+    #Skip any text before the first record (e.g. blank lines, comments)
+    while True:
+        line = handle.readline()
+        if line == "":
+            return  # Premature end of file, or just empty?
+        if line[0] == ">":
+            break
+
+    while True:
+        if line[0] != ">":
+            raise ValueError(
+                "Records in Fasta files should start with '>' character")
+        title = line[1:].rstrip()
+        lines = []
+        line = handle.readline()
+        while True:
+            if not line:
+                break
+            if line[0] == ">":
+                break
+            lines.append(line.rstrip())
+            line = handle.readline()
+
+        #Remove trailing whitespace, and any internal spaces
+        #(and any embedded \r which are possible in mangled files
+        #when not opened in universal read lines mode)
+        yield title, "".join(lines).replace(" ", "").replace("\r", "")
+
+        if not line:
+            return  # StopIteration
+
+    assert False, "Should not reach this line"
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over Fasta records (as SeqRecord objects).
@@ -32,22 +72,11 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     Note that use of title2ids matches that of Bio.Fasta.SequenceParser
     but the defaults are slightly different.
     """
-    #Skip any text before the first record (e.g. blank lines, comments)
-    while True:
-        line = handle.readline()
-        if line == "":
-            return  # Premature end of file, or just empty?
-        if line[0] == ">":
-            break
-
-    while True:
-        if line[0] != ">":
-            raise ValueError(
-                "Records in Fasta files should start with '>' character")
+    for title, sequence in SimpleFastaParser(handle): 
         if title2ids:
-            id, name, descr = title2ids(line[1:].rstrip())
+            id, name, descr = title2ids(title)
         else:
-            descr = line[1:].rstrip()
+            descr = title
             try:
                 id = descr.split()[0]
             except IndexError:
@@ -56,28 +85,9 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
                 id = ""
             name = id
 
-        lines = []
-        line = handle.readline()
-        while True:
-            if not line:
-                break
-            if line[0] == ">":
-                break
-            lines.append(line.rstrip())
-            line = handle.readline()
-
-        #Remove trailing whitespace, and any internal spaces
-        #(and any embedded \r which are possible in mangled files
-        #when not opened in universal read lines mode)
-        result = "".join(lines).replace(" ", "").replace("\r", "")
-
         #Return the record and then continue...
-        yield SeqRecord(Seq(result, alphabet),
+        yield SeqRecord(Seq(sequence, alphabet),
                         id=id, name=name, description=descr)
-
-        if not line:
-            return  # StopIteration
-    assert False, "Should not reach this line"
 
 
 class FastaWriter(SequentialSequenceWriter):
