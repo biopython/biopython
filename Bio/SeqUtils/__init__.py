@@ -340,18 +340,16 @@ def quick_FASTA_reader(file):
     records in memory at once).  Using Bio.SeqIO also makes it easy to switch
     between different input file formats.  However, please note that rather
     than simple strings, Bio.SeqIO uses SeqRecord objects for each record.
+
+    If you want to use simple strings, use the function SimpleFastaParser
+    added to Bio.SeqIO.FastaIO in Biopython 1.61 instead.
     """
-    #Want to split on "\n>" not just ">" in case there are any extra ">"
-    #in the name/description.  So, in order to make sure we also split on
-    #the first entry, prepend a "\n" to the start of the file.
     handle = open(file)
-    txt = "\n" + handle.read()
-    handle.close()
     entries = []
-    for entry in txt.split('\n>')[1:]:
-        name,seq= entry.split('\n',1)
-        seq = seq.replace('\n','').replace(' ','').upper()
-        entries.append((name, seq))
+    from Bio.SeqIO.FastaIO import SimpleFastaParser
+    for title, sequence in SimpleFastaParser(handle):
+        entries.append((title, sequence))
+    handle.close()
     return entries
 
 
