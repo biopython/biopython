@@ -23,6 +23,13 @@ New module Bio.Graphics.ColorSpiral can generate colors along a spiral path
 through HSV color space. This can be used to make arbitrary 'rainbow' scales,
 for example to color features or cross-links on a GenomeDiagram figure.
 
+The Bio.SeqIO module now supports reading sequences from PDB files in two
+different ways. The "pdb-atom" format determines the sequence as it appears in
+the structure based on the atom coordinate section of the file (via Bio.PDB,
+so NumPy is currently required for this). Alternatively, you can use the
+"pdb-seqres" format to read the complete protein sequence as it is listed in
+the the PDB header, if available.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -30,6 +37,7 @@ possible, especially the following contributors:
 
 Brandon Invergo
 David Cain
+Eric Talevich
 Grace Yeo (first contribution)
 Jingping Li (first contribution)
 Kai Blin (first contribution)
