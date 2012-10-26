@@ -96,7 +96,7 @@ class ProteinAnalysis(object):
         # make local dictionary for speed
         if self.monoisotopic:
             water = 18.01
-            iupac_weights = IUPACData.monoisotopic_protein_weight
+            iupac_weights = IUPACData.monoisotopic_protein_weights
         else:
             iupac_weights = IUPACData.protein_weights
             water = 18.02

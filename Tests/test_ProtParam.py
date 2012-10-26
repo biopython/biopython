@@ -23,6 +23,11 @@ class ProtParamTest(unittest.TestCase):
         "Test calculating protein molecular weight"
         self.assertAlmostEqual(self.analysis.molecular_weight(), 17102.76)
 
+    def test_get_monoisotopic_molecular_weight(self):
+        "Test calculating the monoisotopic molecular weight"
+        self.analysis = ProtParam.ProteinAnalysis(self.seq_text, monoisotopic=True)
+        self.assertAlmostEqual(self.analysis.molecular_weight(), 17092.53)
+
     def test_aromaticity(self):
         "Test calculating protein aromaticity"
         # Old test used a number rounded to two digits, so use the same
