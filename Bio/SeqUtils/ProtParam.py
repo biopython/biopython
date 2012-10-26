@@ -28,10 +28,18 @@ from Bio.Data import IUPACData
 class ProteinAnalysis(object):
     """Class containing methods for protein analysis.
 
-    The constructor takes one argument: the protein sequence as a
-    string and builds a sequence object using the Bio.Seq module. This is done
-    just to make sure the sequence is a protein sequence and not anything else.
-    
+    The constructor takes two arguments.
+    The first is the protein sequence as a string, which is then converted to a
+    sequence object using the Bio.Seq module. This is done just to make sure
+    the sequence is a protein sequence and not anything else.
+
+    The second argument is optional. If set to True, the weight of the amino
+    acids will be calculated using their monoisotopic mass (the weight of the
+    most abundant isotopes for each element), instead of the average molecular
+    mass (the averaged weight of all stable isotopes for each element).
+    If set to false (the default value) or left out, the IUPAC average
+    molecular mass will be used for the calculation.
+
     """
     def __init__(self, prot_sequence, monoisotopic=False):
         if prot_sequence.islower():
