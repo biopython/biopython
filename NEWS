@@ -30,6 +30,14 @@ so NumPy is currently required for this). Alternatively, you can use the
 "pdb-seqres" format to read the complete protein sequence as it is listed in
 the the PDB header, if available.
 
+A new warning, Bio.BiopythonExperimentalWarning, has been introduced. This
+marks any experimental code included in the otherwise stable release. Such
+'beta' level code is ready for wider testing, but still likely to change and
+should only be tried by early adopters to give feedback via the biopython-dev
+mailing list. We'd expect such experimental code to reach stable status in
+one or two releases time, at which point our normal policies about trying to
+preserve backwards compatibility would apply. See also the README file.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release

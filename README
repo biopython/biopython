@@ -120,6 +120,20 @@ on the OBF servers. These will remain online for a while as "read only"
 static backups of everything up to and including Biopython 1.52.
 
 
+Experimental code
+=================
+
+Biopython 1.61 introduced a new warning, Bio.BiopythonExperimentalWarning,
+which will be used to mark any experimental code included in the otherwise
+stable Biopython releases. Such 'beta' level code is ready for wider
+testing, but still likely to change, and should only be tried by early
+adopters in order to give feedback via the biopython-dev mailing list.
+
+We'd expect such experimental code to reach stable status within one or two
+releases, at which point our normal policies about trying to preserve
+backwards compatibility would apply.
+
+
 Bugs
 ====
 
