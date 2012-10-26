@@ -28,12 +28,20 @@ from Bio.Data import IUPACData
 class ProteinAnalysis(object):
     """Class containing methods for protein analysis.
 
-    The constructor takes one argument: the protein sequence as a
-    string and builds a sequence object using the Bio.Seq module. This is done
-    just to make sure the sequence is a protein sequence and not anything else.
-    
+    The constructor takes two arguments.
+    The first is the protein sequence as a string, which is then converted to a
+    sequence object using the Bio.Seq module. This is done just to make sure
+    the sequence is a protein sequence and not anything else.
+
+    The second argument is optional. If set to True, the weight of the amino
+    acids will be calculated using their monoisotopic mass (the weight of the
+    most abundant isotopes for each element), instead of the average molecular
+    mass (the averaged weight of all stable isotopes for each element).
+    If set to false (the default value) or left out, the IUPAC average
+    molecular mass will be used for the calculation.
+
     """
-    def __init__(self, prot_sequence):
+    def __init__(self, prot_sequence, monoisotopic=False):
         if prot_sequence.islower():
             self.sequence = Seq(prot_sequence.upper(), IUPAC.protein)
         else:
@@ -41,6 +49,7 @@ class ProteinAnalysis(object):
         self.amino_acids_content = None
         self.amino_acids_percent = None
         self.length = len(self.sequence)
+        self.monoisotopic = monoisotopic
         
     def count_amino_acids(self):
         """Count standard amino acids, returns a dict.
@@ -85,12 +94,19 @@ class ProteinAnalysis(object):
     def molecular_weight (self):
         """Calculate MW from Protein sequence"""
         # make local dictionary for speed
-        aa_weights = {}
-        for i in IUPACData.protein_weights:
-            # remove a molecule of water from the amino acid weight
-            aa_weights[i] = IUPACData.protein_weights[i] - 18.02
+        if self.monoisotopic:
+            water = 18.01
+            iupac_weights = IUPACData.monoisotopic_protein_weights
+        else:
+            iupac_weights = IUPACData.protein_weights
+            water = 18.02
 
-        total_weight = 18.02 # add just one water molecule for the whole sequence
+        aa_weights = {}
+        for i in iupac_weights:
+            # remove a molecule of water from the amino acid weight
+            aa_weights[i] = iupac_weights[i] - water
+
+        total_weight = water # add just one water molecule for the whole sequence
         for aa in self.sequence:
             total_weight += aa_weights[aa]
 
