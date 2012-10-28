@@ -10,7 +10,7 @@ class ProtParamTest(unittest.TestCase):
         "Test getting amino acid counts"
         count_dict = self.analysis.count_amino_acids()
         for i in sorted(count_dict):
-            self.assertAlmostEqual(count_dict[i], self.seq_text.count(i))
+            self.assertEqual(count_dict[i], self.seq_text.count(i))
 
     def test_get_amino_acids_percent(self):
         "Test getting amino acid percentage"
