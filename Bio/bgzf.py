@@ -167,17 +167,41 @@ Raw start 77304, raw length 14939; data start 262144, data length 43478
 Raw start 92243, raw length 28; data start 305622, data length 0
 >>> handle.close()
 
+In this example the first three blocks are 'full' and hold 65536 bytes
+of uncompressed data. The fourth block isn't full and holds 43478 bytes.
+Finally there is a special empty fifth block which takes 28 bytes on
+disk and serves as an 'end of file' (EOF) marker. If this is missing,
+it is possible your BGZF file is incomplete.
+
 By reading ahead 70,000 bytes we moved into the second BGZF block,
 and at that point the BGZF virtual offsets start to look different
 a simple offset into the decompressed data as exposed by the gzip
 library.
 
-Using the seek for the decompressed co-ordinates, 65536*3 + 126
-is equivalent to jumping the first three blocks (each size 65536
-after decompression) and starting at byte 126 of the third block
-(after decompression). For BGZF, we need to know the block's
-offset of 55074 and the offset within the block of 126 to get
-the BGZF virtual offset.
+As an example, consider seeking to the decompressed position 196734.
+Since 196734 = 65536 + 65536 + 65536 + 126 = 65536*3 + 126, this
+is equivalent to jumping the first three blocks (which in this
+specific example are all size 65536 after decompression - which
+does not always hold) and starting at byte 126 of the fourth block
+(after decompression). For BGZF, we need to know the fourth block's
+offset of 55074 and the offset within the block of 126 to get the
+BGZF virtual offset.
+
+>>> 55074 << 16 | 126
+3609329790
+>>> bgzf.make_virtual_offset(55074, 126)
+3609329790
+
+Thus for this BGZF file, decompressed position 196734 corresponds
+to the virtual offset 3609329790. However, another BGZF file with
+different contents would have compressed more or less efficiently,
+so the compressed blocks would be different sizes. What this means
+is the mapping between the uncompressed offset and the compressed
+virtual offset depends on the BGZF file you are using.
+
+If you are accessing a BGZF file via this module, just use the
+handle.tell() method to note the virtual offset of a position you
+may later want to return to using handle.seek().
 
 The catch with BGZF virtual offsets is while they can be compared
 (which offset comes first in the file), you cannot safely subtract
@@ -196,7 +220,6 @@ you want to index BGZF compressed sequence files:
 NC_000932.1
 
 """
-#TODO - Move somewhere else in Bio.* namespace?
 
 import zlib
 import struct
