@@ -187,9 +187,9 @@ does not always hold) and starting at byte 126 of the fourth block
 offset of 55074 and the offset within the block of 126 to get the
 BGZF virtual offset.
 
->>> 55074 << 16 | 126
+>>> print 55074 << 16 | 126
 3609329790
->>> bgzf.make_virtual_offset(55074, 126)
+>>> print bgzf.make_virtual_offset(55074, 126)
 3609329790
 
 Thus for this BGZF file, decompressed position 196734 corresponds
