@@ -111,12 +111,13 @@ class Hit(_BaseSearchObject):
         `hit_description` properties.
 
         """
-        if not hsps:
-            raise ValueError("Hit objects must have at least one HSP object.")
-        # check that all fragments contain the same IDs, descriptions
         for attr in ('query_id', 'query_description', 'hit_id', \
                 'hit_description'):
-            if len(set([getattr(hsp, attr) for hsp in hsps])) != 1:
+            # HACK: setting the if clause to '> 1' allows for empty hit objects.
+            # This makes it easier to work with file formats with unpredictable
+            # hit-hsp ordering. The empty hit object itself is nonfunctional,
+            # however, since all its cascading properties are empty.
+            if len(set([getattr(hsp, attr) for hsp in hsps])) > 1:
                 raise ValueError("Hit object can not contain HSPs with "
                         "more than one %s." % attr)
 

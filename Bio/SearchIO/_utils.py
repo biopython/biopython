@@ -98,9 +98,15 @@ def fullcascade(attr, doc=''):
     """
     def getter(self):
         attrset = set([getattr(item, attr) for item in self._items])
-        if len(attrset) > 1:
-            raise ValueError("More than one value present in the contained "
-                    "items: %r" % list(attrset))
+        if len(attrset) != 1:
+            if len(attrset) > 1:
+                raise ValueError("More than one value present in the contained"
+                        " %s objects: %r" % (self._items[0].__class__.__name__,
+                            list(attrset)))
+            else:
+                raise AttributeError("%r attribute requires %s objects to be"
+                        "filled" % (attr, self.__class__.__name__))
+
         return getattr(self._items[0], attr)
 
     def setter(self, value):
