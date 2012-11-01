@@ -57,16 +57,16 @@ _LONG_SHORT_MAP = {
 # column to class attribute map
 _COLUMN_QRESULT = {
     'qseqid': ('id', str),
-    'qacc': ('acc', str),
-    'qaccver': ('acc_ver', str),
+    'qacc': ('accession', str),
+    'qaccver': ('accession_version', str),
     'qlen': ('seq_len', int),
     'qgi': ('gi', str),
 }
 _COLUMN_HIT = {
     'sseqid': ('id', str),
     'sallseqid': ('id_all', str),
-    'sacc': ('acc', str),
-    'saccver': ('acc_ver', str),
+    'sacc': ('accession', str),
+    'saccver': ('accession_version', str),
     'sgi': ('gi', str),
     'sallgi': ('gi_all', str),
     'slen': ('seq_len', int),
@@ -313,14 +313,14 @@ class BlastTabParser(object):
 
     def _get_id(self, parsed):
         """Returns the value used for a QueryResult or Hit ID from a parsed row."""
-        # use 'id', with 'acc' and 'acc_ver' fallbacks
+        # use 'id', with 'accession' and 'accession_version' fallbacks
         # one of these must have a value since we've checked whether
         # they exist or not when parsing the comments
         id_cache = parsed.get('id')
         if id_cache is None:
-            id_cache = parsed.get('acc')
+            id_cache = parsed.get('accession')
         if id_cache is None:
-            id_cache = parsed.get('acc_ver')
+            id_cache = parsed.get('accession_version')
 
         return id_cache
 

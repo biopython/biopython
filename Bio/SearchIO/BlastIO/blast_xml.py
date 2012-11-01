@@ -36,7 +36,7 @@ _ELEM_QRESULT_OPT = {
 # element - hit attribute name mapping
 _ELEM_HIT = {
     #'Hit_def': ('description', str),   # not set by this dict
-    'Hit_accession': ('acc', str),
+    'Hit_accession': ('accession', str),
     'Hit_len': ('seq_len', int),
 }
 # element - hsp attribute name mapping
@@ -129,7 +129,7 @@ _WRITE_MAPS = {
     'hit': (
         ('id', 'id'),
         ('def', 'description'),
-        ('accession', 'acc'),
+        ('accession', 'accession'),
         ('len', 'seq_len'),
     ),
     'hsp': (

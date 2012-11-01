@@ -69,7 +69,7 @@ The following SearchIO objects attributes are provided:
 +-----------------+-------------------------+----------------------------------+
 | Object          | Attribute               | Value                            |
 +=================+=========================+==================================+
-| QueryResult     | acc                     | accession (if present)           |
+| QueryResult     | accession               | accession (if present)           |
 |                 +-------------------------+----------------------------------+
 |                 | description             | query sequence description       |
 |                 +-------------------------+----------------------------------+
@@ -168,13 +168,13 @@ The following SearchIO objects attributes are provided:
 +-----------------+-------------------------+----------------------------------+
 | Object          | Attribute               | Column / Value                   |
 +=================+=========================+==================================+
-| QueryResult     | acc                     | query accession (if present)     |
+| QueryResult     | accession               | query accession (if present)     |
 |                 +-------------------------+----------------------------------+
 |                 | description             | query sequence description       |
 |                 +-------------------------+----------------------------------+
 |                 | id                      | query name                       |
 +-----------------+-------------------------+----------------------------------+
-| Hit             | acc                     | hit accession                    |
+| Hit             | accession               | hit accession                    |
 |                 +-------------------------+----------------------------------+
 |                 | bias                    | hit-level bias                   |
 |                 +-------------------------+----------------------------------+
@@ -221,7 +221,7 @@ The following SearchIO objects attributes are provided:
 +-----------------+-------------------------+----------------------------------+
 | Object          | Attribute               | Value                            |
 +=================+=========================+==================================+
-| QueryResult     | acc                     | accession                        |
+| QueryResult     | accession               | accession                        |
 |                 +-------------------------+----------------------------------+
 |                 | description             | query sequence description       |
 |                 +-------------------------+----------------------------------+
@@ -229,7 +229,7 @@ The following SearchIO objects attributes are provided:
 |                 +-------------------------+----------------------------------+
 |                 | seq_len                 | full length of query sequence    |
 +-----------------+-------------------------+----------------------------------+
-| Hit             | acc                     | accession                        |
+| Hit             | accession               | accession                        |
 |                 +-------------------------+----------------------------------+
 |                 | bias                    | hit-level bias                   |
 |                 +-------------------------+----------------------------------+

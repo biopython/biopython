@@ -32,11 +32,11 @@ class Hmmer3DomtabParser(Hmmer3TabParser):
         # assign parsed column data into qresult, hit, and hsp dicts
         qresult = {}
         qresult['id'] = cols[3]                 # query name
-        qresult['acc'] = cols[4]                # query accession
+        qresult['accession'] = cols[4]          # query accession
         qresult['seq_len'] = int(cols[5])       # qlen
         hit = {}
         hit['id'] = cols[0]                     # target name
-        hit['acc'] = cols[1]                    # target accession
+        hit['accession'] = cols[1]              # target accession
         hit['seq_len'] = int(cols[2])           # tlen
         hit['evalue'] = float(cols[6])          # evalue
         hit['bitscore'] = float(cols[7])        # score
@@ -270,9 +270,9 @@ class Hmmer3DomtabHmmhitWriter(object):
         qnamew = max(20, len(qresult.id))
         tnamew = max(20, len(qresult[0].id))
         try:
-            qaccw = max(10, len(qresult.acc))
-            taccw = max(10, len(qresult[0].acc))
-            qresult_acc = qresult.acc
+            qaccw = max(10, len(qresult.accession))
+            taccw = max(10, len(qresult[0].accession))
+            qresult_acc = qresult.accession
         except AttributeError:
             qaccw, taccw = 10, 10
             qresult_acc = '-'
@@ -281,7 +281,7 @@ class Hmmer3DomtabHmmhitWriter(object):
             
             # try to get hit accession
             try:
-                hit_acc = hit.acc
+                hit_acc = hit.accession
             except AttributeError:
                 hit_acc = '-'
 

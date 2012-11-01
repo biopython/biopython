@@ -135,7 +135,7 @@ class Hmmer3TextParser(object):
 
                 if self.line.startswith('Accession:'):
                     acc = self.line.strip().split(' ', 1)[1]
-                    qresult_attrs['acc'] = acc.strip()
+                    qresult_attrs['accession'] = acc.strip()
                 elif self.line.startswith('Description:'):
                     desc = self.line.strip().split(' ', 1)[1]
                     qresult_attrs['description'] = desc.strip()
