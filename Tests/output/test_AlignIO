@@ -1,4 +1,3 @@
-test_AlignIO
 Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
  Alignment 0, with 2 sequences of length 601
   MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069
@@ -705,6 +704,31 @@ Testing reading maf format file MAF/humor.maf with 2 alignments
  Checking can write/read as 'phylip' format
  Checking can write/read as 'phylip-relaxed' format
  Checking can write/read as 'phylip-sequential' format
+ Checking can write/read as 'stockholm' format
+ Checking can write/read as 'fasta' format
+ Checking can write/read as 'tab' format
+Testing reading maf format file MAF/mugsy.maf with 4 alignments
+ Alignment 0, with 2 sequences of length 32
+  AGGGCTTCATACTCTGCATCCCTGTCCCGGCT Escherichia_coli_O104_H4_2009EL_2071_uid176128.NC_018661.1
+  AGGGCTTCATACTCTGCATCCCTGTCCCGGCT Escherichia_coli_O104_H4_2011C_3493_uid176127.NC_018658.1
+ Alignment 1, with 2 sequences of length 32
+  GCTGTTTACCAGTGATTTGGCTTCAGTATTGG Escherichia_coli_SE11_uid59425.NC_011407.1
+  ACTGTTTACCAGTGATTAAGCTTCTGCATTGG Escherichia_coli_E24377A_uid58395.NC_009791.1
+ Alignment 2, with 2 sequences of length 35
+  AACATAAAACACTATCAGTAAGTTGGAGTCATTAC Shigella_flexneri_5_8401_uid58583.NC_008258.1
+  AACATAAAACACTATCAGTAAGTTGGAGTCATTAC Shigella_boydii_Sb227_uid58215.NC_007613.1
+ Alignment 3, with 2 sequences of length 32
+  GCGGCCACAGCAGTAAGACTTCCTTCCTGGTA Shigella_dysenteriae_Sd197_uid58213.NC_007606.1
+  GCGGCGACAGCAGTAAGACTTCCTTCCTGGTA Shigella_sonnei_Ss046_uid58217.NC_007384.1
+ Checking can write/read as 'clustal' format
+ Checking can write/read as 'maf' format
+ Checking can write/read as 'nexus' format
+ Failed: We can only write one Alignment to a Nexus file.
+ Checking can write/read as 'phylip' format
+ Failed: Repeated name 'Escherichi' (originally 'Escherichia_coli_E24377A_uid58395.NC_009791.1'), possibly due to truncation
+ Checking can write/read as 'phylip-relaxed' format
+ Checking can write/read as 'phylip-sequential' format
+ Failed: Repeated name 'Escherichi' (originally 'Escherichia_coli_E24377A_uid58395.NC_009791.1'), possibly due to truncation
  Checking can write/read as 'stockholm' format
  Checking can write/read as 'fasta' format
  Checking can write/read as 'tab' format
