@@ -176,10 +176,10 @@ def MafIterator(handle, seq_count = None, alphabet = single_letter_alphabet):
             # start a bundle of records
             in_a_bundle = True
             
-            annotations = dict([x.split("=") for x in line.strip().split()[1:]])
-                
-            if len([x for x in annotations.keys() if x not in ("score", "pass")]) > 0:
+            if len(line.strip().split()[1:]) != line.count("="):
                 raise ValueError("Error parsing alignment - invalid key in 'a' line")
+
+            annotations = dict([x.split("=") for x in line.strip().split()[1:]])
         elif line.startswith("#"):
             # ignore comments
             pass

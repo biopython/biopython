@@ -67,6 +67,7 @@ test_files = [
     ("ig", 16, 1, 'IntelliGenetics/VIF_mase-pro.txt'),
     ("pir", 2, 1, 'NBRF/clustalw.pir'),
     ("maf", 3, 2, 'MAF/humor.maf'),
+    ("maf", 2, 4, 'MAF/mugsy.maf'),
     ("maf", None, 3, "MAF/bug2453.maf"), #Have 5, 5, 4 sequences
     ("maf", None, 3, "MAF/ucsc_test.maf"), #Have 5, 5, 4 sequences
     ("maf", None, 48, "MAF/ucsc_mm9_chr10.maf")
