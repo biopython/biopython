@@ -1,3 +1,4 @@
+test_AlignIO
 Testing reading clustal format file Clustalw/cw02.aln with 1 alignments
  Alignment 0, with 2 sequences of length 601
   MENSDSNDKGSDQSAAQRRSQMDRLDREEAFYQFVN...SVV gi|4959044|gb|AAD34209.1|AF069
