@@ -150,6 +150,7 @@ import NexusIO
 import PhylipIO
 import EmbossIO
 import FastaIO
+import MafIO
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
@@ -159,6 +160,7 @@ _FormatToIterator = {#"fasta" is done via Bio.SeqIO
                      "emboss" : EmbossIO.EmbossIterator,
                      "fasta-m10" : FastaIO.FastaM10Iterator,
                      "nexus" : NexusIO.NexusIterator,
+                     "maf": MafIO.MafIterator,
                      "phylip" : PhylipIO.PhylipIterator,
                      "phylip-sequential" : PhylipIO.SequentialPhylipIterator,
                      "phylip-relaxed" : PhylipIO.RelaxedPhylipIterator,
@@ -168,6 +170,7 @@ _FormatToIterator = {#"fasta" is done via Bio.SeqIO
 _FormatToWriter = {#"fasta" is done via Bio.SeqIO
                    #"emboss" : EmbossIO.EmbossWriter, (unfinished)
                    "nexus" : NexusIO.NexusWriter,
+                   "maf" : MafIO.MafWriter,
                    "phylip" : PhylipIO.PhylipWriter,
                    "phylip-sequential" : PhylipIO.SequentialPhylipWriter,
                    "phylip-relaxed" : PhylipIO.RelaxedPhylipWriter,
