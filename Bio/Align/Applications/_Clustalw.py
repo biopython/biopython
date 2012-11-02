@@ -116,8 +116,9 @@ class ClustalwCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int)),
             _Switch(["-quiet", "-QUIET", "QUIET", "quiet"],
                     "Reduce console output to minimum"),
-            _Switch(["-stats", "-STATS", "STATS", "stats"],
-                    "Log some alignents statistics to file"),
+            _Option(["-stats", "-STATS", "STATS", "stats"],
+                    "Log some alignents statistics to file",
+                    filename=True),
             # ***Fast Pairwise Alignments:***
             _Option(["-ktuple", "-KTUPLE", "KTUPLE", "ktuple"],
                     "Word size",
