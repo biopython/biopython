@@ -174,7 +174,7 @@ class NovoalignCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing Novoalign doctests..."
+    print "Running Novoalign doctests..."
     import doctest
     doctest.testmod()
     print "Done"

@@ -2127,7 +2127,7 @@ def _test():
         print "Not running Bio.Seq doctest on Python 3.1"
         print "See http://bugs.python.org/issue7490"
     else:
-        print "Runing doctests..."
+        print "Running doctests..."
         import doctest
         doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
         print "Done"

@@ -298,7 +298,7 @@ def _test():
     import doctest
     import os
     if os.path.isdir(os.path.join("..","..","..","Tests")):
-        print "Runing doctests..."
+        print "Running doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("..","..","..","Tests"))
         doctest.testmod()
