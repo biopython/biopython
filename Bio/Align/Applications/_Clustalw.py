@@ -35,8 +35,7 @@ class ClustalwCommandline(AbstractCommandline):
 
     Last checked against versions: 1.83 and 2.0.10
     """
-    #TODO - Should we default to cmd="clustalw2" now?
-    def __init__(self, cmd="clustalw", **kwargs):
+    def __init__(self, cmd="clustalw2", **kwargs):
         self.parameters = \
             [
             _Option(["-infile", "-INFILE", "INFILE", "infile"],
