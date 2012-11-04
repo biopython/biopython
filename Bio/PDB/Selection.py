@@ -79,7 +79,7 @@ def unfold_entities(entity_list, target_level):
 def _test():
     """Run the Bio.PDB.Selection module's doctests (PRIVATE)."""
     import doctest
-    print "Runing doctests ..."
+    print "Running doctests ..."
     doctest.testmod()
     print "Done"
 

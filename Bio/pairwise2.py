@@ -855,7 +855,7 @@ except ImportError:
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing doctests..."
+    print "Running doctests..."
     import doctest
     doctest.testmod(optionflags=doctest.IGNORE_EXCEPTION_DETAIL)
     print "Done"

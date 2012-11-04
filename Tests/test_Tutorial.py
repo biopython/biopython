@@ -127,7 +127,7 @@ class TutorialTestCase(unittest.TestCase):
 
 #This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
-    print "Runing Tutorial doctests..."
+    print "Running Tutorial doctests..."
     import doctest
     tests = doctest.testmod()
     if tests[0]:
