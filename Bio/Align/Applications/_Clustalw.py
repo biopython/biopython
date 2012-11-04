@@ -309,7 +309,7 @@ class ClustalwCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing ClustalW doctests..."
+    print "Running ClustalW doctests..."
     import doctest
     doctest.testmod()
     print "Done"

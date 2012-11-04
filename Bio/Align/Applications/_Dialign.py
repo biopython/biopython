@@ -180,7 +180,7 @@ class DialignCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing modules doctests..."
+    print "Running modules doctests..."
     import doctest
     doctest.testmod()
     print "Done"
