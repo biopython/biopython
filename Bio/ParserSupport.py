@@ -32,7 +32,6 @@ warnings.warn("The module Bio.ParserSupport is now obsolete, and will be depreca
 
 
 import sys
-import traceback
 try:
     from types import InstanceType
 except ImportError:
