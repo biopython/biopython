@@ -37,16 +37,13 @@ The Rebase files are in the emboss format:
 ### is a 3 digit number. The first digit is the year and the two last the month.
 """
 
-import sre
 import os
 import itertools
 import time
 import sys
-import site
 import shutil
 
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
 
 import Bio.Restriction.Restriction
 from Bio.Restriction.Restriction import AbstractCut, RestrictionType, NoCut, OneCut
