@@ -117,7 +117,7 @@ class ClustalwCommandline(AbstractCommandline):
             _Switch(["-quiet", "-QUIET", "QUIET", "quiet"],
                     "Reduce console output to minimum"),
             _Option(["-stats", "-STATS", "STATS", "stats"],
-                    "Log some alignents statistics to file",
+                    "Log some alignment statistics to file",
                     filename=True),
             # ***Fast Pairwise Alignments:***
             _Option(["-ktuple", "-KTUPLE", "KTUPLE", "ktuple"],
