@@ -465,7 +465,7 @@ class MuscleCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Runing MUSCLE doctests..."
+    print "Running MUSCLE doctests..."
     import doctest
     doctest.testmod()
     print "Done"
