@@ -88,20 +88,14 @@ def seguid(seq):
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
     DOI: 10.1002/pmic.200600032 """
-    try:
-        #Python 2.5 sha1 is in hashlib
-        import hashlib
-        m = hashlib.sha1()
-    except:
-        #For older versions 
-        import sha
-        m = sha.new()
+    import hashlib
     import base64
+    m = hashlib.sha1()
     try:
-        #Assume its a Seq object
+        #Assume it's a Seq object
         seq = str(seq)
     except AttributeError:
-        #Assume its a string
+        #Assume it's a string
         pass
     m.update(_as_bytes(seq.upper()))
     try:
@@ -109,16 +103,9 @@ def seguid(seq):
         return base64.encodebytes(m.digest()).decode().replace("\n","").rstrip("=")
     except AttributeError:
         pass
-    try:
-        #For Python 2.5+
-        return base64.b64encode(m.digest()).rstrip("=")
-    except:
-        #For older versions
-        import os
-        #Note: Using os.linesep doesn't work on Windows,
-        #where os.linesep= "\r\n" but the encoded string
-        #contains "\n" but not "\r\n"
-        return base64.encodestring(m.digest()).replace("\n","").rstrip("=")
+    # For all other Pythons
+    return base64.b64encode(m.digest()).rstrip("=")
+
 
 if __name__ == "__main__":
     print "Quick self test"
