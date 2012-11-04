@@ -155,7 +155,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
 def _test():
     """Run the module's doctests (PRIVATE)."""
-    print "Running ClustalW doctests..."
+    print "Running ClustalOmega doctests..."
     import doctest
     doctest.testmod()
     print "Done"
