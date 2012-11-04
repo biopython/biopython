@@ -33,7 +33,7 @@ class ClustalwCommandline(AbstractCommandline):
     Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
     Bioinformatics, 23, 2947-2948. 
 
-    Last checked against versions: 1.83 and 2.0.10
+    Last checked against versions: 1.83 and 2.1
     """
     #TODO - Should we default to cmd="clustalw2" now?
     def __init__(self, cmd="clustalw", **kwargs):
@@ -61,6 +61,8 @@ class ClustalwCommandline(AbstractCommandline):
                     "Do full multiple alignment."),
             _Switch(["-tree", "-TREE", "TREE", "tree"],
                     "Calculate NJ tree."),
+            _Switch(["-pim", "-PIM", "PIM", "pim"],
+                    "Output percent identity matrix (while calculating the tree)."),
             _Option(["-bootstrap", "-BOOTSTRAP", "BOOTSTRAP", "bootstrap"],
                     "Bootstrap a NJ tree (n= number of bootstraps; def. = 1000).",
                     checker_function=lambda x: isinstance(x, int)),
@@ -87,11 +89,11 @@ class ClustalwCommandline(AbstractCommandline):
                     "Output sequence alignment file name",
                     filename=True),
             _Option(["-output", "-OUTPUT", "OUTPUT", "output"],
-                    "Output format: GCG, GDE, PHYLIP, PIR or NEXUS",
-                    checker_function=lambda x: x in ["GCG", "GDE", "PHYLIP",
-                                                     "PIR", "NEXUS",
-                                                     "gcg", "gde", "phylip",
-                                                     "pir", "nexus"]),
+                    "Output format: CLUSTAL(default), GCG, GDE, PHYLIP, PIR, NEXUS and FASTA",
+                    checker_function=lambda x: x in ["CLUSTAL", "GCG", "GDE", "PHYLIP",
+                                                     "PIR", "NEXUS", "FASTA",
+                                                     "clustal", "gcg", "gde", "phylip",
+                                                     "pir", "nexus", "fasta"]),
             _Option(["-outorder", "-OUTORDER", "OUTORDER", "outorder"],
                     "Output taxon order: INPUT or ALIGNED",
                     checker_function=lambda x: x in ["INPUT", "input",
@@ -160,7 +162,7 @@ class ClustalwCommandline(AbstractCommandline):
                     checker_function=lambda x: isinstance(x, int) or \
                                                isinstance(x, float)),
             _Option(["-pwgapext", "-PWGAPEXT", "PWGAPEXT", "pwgapext"],
-                    "Gap opening penalty",
+                    "Gap extension penalty",
                     checker_function=lambda x: isinstance(x, int) or \
                                                isinstance(x, float)),
             # ***Multiple Alignments:***
@@ -209,6 +211,12 @@ class ClustalwCommandline(AbstractCommandline):
                     "% ident. for delay",
                     checker_function=lambda x: isinstance(x, int) or \
                                                isinstance(x, float)),
+            # Already handled in General Settings section, but appears a second
+            # time under Multiple Alignments in the help
+            #_Option(["-type", "-TYPE", "TYPE", "type"],
+            #        "PROTEIN or DNA",
+            #        checker_function=lambda x: x in ["PROTEIN", "DNA",
+            #                                         "protein", "dna"]),
             _Option(["-transweight", "-TRANSWEIGHT", "TRANSWEIGHT", "transweight"],
                     "Transitions weighting",
                     checker_function=lambda x: isinstance(x, int) or \
@@ -244,11 +252,20 @@ class ClustalwCommandline(AbstractCommandline):
             # ***Sequence to Profile Alignments:***
             _Switch(["-sequences", "-SEQUENCES", "SEQUENCES", "sequences"],
                     "Sequentially add profile2 sequences to profile1 alignment"),
+            # These are already handled in the Multiple Alignments section,
+            # but appear a second time here in the help.
+            #_Option(["-newtree", "-NEWTREE", "NEWTREE", "newtree"],
+            #        "File for new guide tree",
+            #        filename=True),
+            #_Option(["-usetree", "-USETREE", "USETREE", "usetree"],
+            #        "File for old guide tree",
+            #        checker_function=lambda x: os.path.exists,
+            #        filename=True),
+            # ***Structure Alignments:***
             _Switch(["-nosecstr1", "-NOSECSTR1", "NOSECSTR1", "nosecstr1"],
                     "Do not use secondary structure-gap penalty mask for profile 1"),
             _Switch(["-nosecstr2", "-NOSECSTR2", "NOSECSTR2", "nosecstr2"],
                     "Do not use secondary structure-gap penalty mask for profile 2"),
-            # ***Structure Alignments:***
             _Option(["-secstrout", "-SECSTROUT", "SECSTROUT", "secstrout"],
                     "STRUCTURE or MASK or BOTH or NONE output in alignment file",
                     checker_function=lambda x: x in ["STRUCTURE", "MASK",
@@ -281,7 +298,7 @@ class ClustalwCommandline(AbstractCommandline):
                     "Number of residues inside strand to be treated as terminal",
                     checker_function=lambda x: isinstance(x, int)),
             _Option(["-strandendout", "-STRANDENDOUT", "STRANDENDOUT", "strandendout"],
-                    "number of residues outside strand to be treated as terminal",
+                    "Number of residues outside strand to be treated as terminal",
                     checker_function=lambda x: isinstance(x, int)),
             # ***Trees:***
             _Option(["-outputtree", "-OUTPUTTREE", "OUTPUTTREE", "outputtree"],
