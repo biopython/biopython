@@ -155,15 +155,15 @@ SeqIO.write(records, handle, "fasta")
 handle.close()
 del handle, records
 
-for input_file, output_file, newtree_file in [
-    ("Fasta/f002", "temp_test.aln", None),
-    ("GFF/multi.fna", "temp with space.aln", None),
-    ("Registry/seqs.fasta", "temp_test.aln", None),
-    ("Registry/seqs.fasta", "temp_test.aln", "temp_test.dnd"),
-    ("Registry/seqs.fasta", "temp_test.aln", "temp with space.dnd"),
-    (temp_filename_with_spaces, "temp_test.aln", None),
-    (temp_filename_with_spaces, "temp with space.aln", None),
-    (temp_large_fasta_file, "temp_cw_prot.aln", None),
+for input_file, output_file, statistics_file, newtree_file in [
+    ("Fasta/f002", "temp_test.aln", "temp_stats.txt", None),
+    ("GFF/multi.fna", "temp with space.aln", "temp_stats.txt", None),
+    ("Registry/seqs.fasta", "temp_test.aln", "temp_stats.txt", None),
+    ("Registry/seqs.fasta", "temp_test.aln", "temp stats with space.txt", "temp_test.dnd"),
+    ("Registry/seqs.fasta", "temp_test.aln", "temp_stats.txt", "temp with space.dnd"),
+    (temp_filename_with_spaces, "temp_test.aln", "temp_stats.txt", None),
+    (temp_filename_with_spaces, "temp with space.aln", "temp_stats", None),
+    (temp_large_fasta_file, "temp_cw_prot.aln", "temp_stats.txt", None),
     ]:
     #Note that ClustalW will map ":" to "_" in it's output file
     input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"),
@@ -178,9 +178,16 @@ for input_file, output_file, newtree_file in [
 
     #Any filesnames with spaces should get escaped with quotes automatically.
     #Using keyword arguments here.
-    cline = ClustalwCommandline(clustalw_exe,
-                                infile=input_file,
-                                outfile=output_file)
+    if clustalw_exe == "clustalw2":
+        # By using the stats keyword, we require ClustalW 2.0.10 or higher.
+        cline = ClustalwCommandline(clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    stats=statistics_file)
+    else:
+        cline = ClustalwCommandline(clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file)
     assert str(eval(repr(cline)))==str(cline)
     if newtree_file is not None:
         #Test using a property:
@@ -197,6 +204,9 @@ for input_file, output_file, newtree_file in [
     #The length of the alignment will depend on the version of clustalw
     #(clustalw 2.0.10 and clustalw 1.83 are certainly different).
     print "Got an alignment, %i sequences" % (len(align))
+    if clustalw_exe == "clustalw2":
+        assert os.path.isfile(statistics_file)
+        os.remove(statistics_file)
     output_records = SeqIO.to_dict(SeqIO.parse(output_file,"clustal"))
     assert set(input_records.keys()) == set(output_records.keys())
     for record in align:
