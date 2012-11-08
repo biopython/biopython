@@ -5,6 +5,9 @@
 
 """Parser for PDB files."""
 
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
+
 import warnings
 
 import numpy
