@@ -70,7 +70,10 @@ class ClustalOmegaCommandline(AbstractCommandline):
                                                      "Protein", "RNA", "DNA",
                                                      "PROTEIN"]),
             _Option(["--infmt", "infmt"],
-                    "{a2m=fa[sta],clu[stal],msf,phy[lip],selex,st[ockholm],vie[nna]} Forced sequence input file format (default: auto)",
+                    """Forced sequence input file format (default: auto)
+
+                    Allowed values: a2m, fa[sta], clu[stal], msf, phy[lip], selex, st[ockholm], vie[nna]
+                    """,
                     equate=False,
                     checker_function=lambda x: x in ["a2m", "fa", "fasta", 
                                                      "clu", "clustal", 
