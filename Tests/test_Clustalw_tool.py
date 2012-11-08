@@ -176,7 +176,7 @@ for input_file, output_file, statistics_file, newtree_file in [
     if newtree_file is not None:
         print "requesting output guide tree file %s" % repr(newtree_file)
 
-    #Any filesnames with spaces should get escaped with quotes automatically.
+    #Any filenames with spaces should get escaped with quotes automatically.
     #Using keyword arguments here.
     if clustalw_exe == "clustalw2":
         # By using the stats keyword, we require ClustalW 2.0.10 or higher.
@@ -195,7 +195,6 @@ for input_file, output_file, statistics_file, newtree_file in [
         #I don't just want the tree, also want the alignment:
         cline.align = True
         assert str(eval(repr(cline)))==str(cline)
-    #print cline
     output, error = cline()
     assert output.strip().startswith("CLUSTAL")
     assert error.strip() == ""
