@@ -38,7 +38,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
     sequence alignments using Clustal Omega.
     Molecular Systems Biology 2011; accepted. 
 
-    Last checked against versions: 1.0.3
+    Last checked against versions: 1.1.0
     """
     def __init__(self, cmd="clustalo", **kwargs):
         # order parameters in the same order as clustalo --help
@@ -46,15 +46,15 @@ class ClustalOmegaCommandline(AbstractCommandline):
             [
             # Sequence Input
             _Option(["-i", "--in", "--infile", "infile"],
-                    "Multiple sequence input",
+                    "Multiple sequence input file",
                     filename=True,
                     equate=False),
-            _Switch(["--dealign", "dealign"],
-                    "Dealign input sequences"),
             _Option(["--hmm-in", "HMM input", "hmm_input"],
                     "HMM input files",
                     filename=True,
                     equate=False),
+            _Switch(["--dealign", "dealign"],
+                    "Dealign input sequences"),
             _Option(["--profile1", "--p1", "profile1"],
                     "Pre-aligned multiple sequence file (aligned columns will be kept fix).",
                     filename=True,
@@ -63,6 +63,25 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     "Pre-aligned multiple sequence file (aligned columns will be kept fix).",
                     filename=True,
                     equate=False),
+            _Option(["--t", "--seqtype", "seqtype"],
+                    "{Protein, RNA, DNA} Force a sequence type (default: auto).",
+                    equate=False,
+                    checker_function=lambda x: x in ["protein", "rna", "dna",
+                                                     "Protein", "RNA", "DNA",
+                                                     "PROTEIN"]),
+            _Option(["--infmt", "infmt"],
+                    """Forced sequence input file format (default: auto)
+
+                    Allowed values: a2m, fa[sta], clu[stal], msf, phy[lip], selex, st[ockholm], vie[nna]
+                    """,
+                    equate=False,
+                    checker_function=lambda x: x in ["a2m", "fa", "fasta", 
+                                                     "clu", "clustal", 
+                                                     "msf",
+                                                     "phy", "phylip", 
+                                                     "selex",
+                                                     "st", "stockholm",
+                                                     "vie", "vienna"]),
 
             # Clustering
             _Option(["--distmat-in", "distmat_in"],
