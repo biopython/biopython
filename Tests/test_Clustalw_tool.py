@@ -124,113 +124,149 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
 
 
 class ClustalWTestNormalConditions(ClustalWTestCase):
-    """Tests for normal situations."""
+    """Tests for normal conditions."""
 
     def tearDown(self):
-        if os.path.isfile("Fasta/f001.aln"):
-            os.remove("Fasta/f001.aln")
-        if os.path.isfile("Medline/pubmed_result1.aln"):
-            os.remove("Medline/pubmed_result1.aln")
-        if os.path.isfile(self.temp_filename_with_spaces):
-            os.remove(self.temp_filename_with_spaces)
-        if os.path.isfile(self.temp_large_fasta_file):
-            os.remove(self.temp_large_fasta_file)
+        pass
+        #if os.path.isfile("Fasta/f001.aln"):
+        #    os.remove("Fasta/f001.aln")
+        #if os.path.isfile("Medline/pubmed_result1.aln"):
+        #    os.remove("Medline/pubmed_result1.aln")
+        #if os.path.isfile(self.temp_filename_with_spaces):
+        #    os.remove(self.temp_filename_with_spaces)
+        #if os.path.isfile(self.temp_large_fasta_file):
+        #    os.remove(self.temp_large_fasta_file)
+
+    def test_properties(self):
+        """Test passing options via properties"""
+        cline = ClustalwCommandline(self.clustalw_exe)
+        cline.infile = "Fasta/f002"
+        cline.outfile = "temp_test.aln"
+        cline.align = True
+
+        self.standard_test_procedure(cline)
 
     def test_simple_fasta(self):
+        """Test a simple fasta input file"""
+        input_file = "Fasta/f002"
+        output_file = "temp_test.aln"
+        cline = ClustalwCommandline(self.clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file)
+
+        self.standard_test_procedure(cline)
+
+    def test_newtree(self):
+        """Test newtree files"""
+        input_file = "Registry/seqs.fasta"
+        output_file = "temp_test.aln"
+        newtree_file = "temp_test.dnd"
+        cline = ClustalwCommandline(self.clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    newtree=newtree_file,
+                                    align=True)
+
+        self.standard_test_procedure(cline)
+
+        cline.newtree = "temp with space.dnd"
+
+        self.standard_test_procedure(cline)
+
+    def test_statistics(self):
+        """Test statistics file"""
         input_file = "Fasta/f002"
         output_file = "temp_test.aln"
         statistics_file = "temp_stats.txt"
+        cline = ClustalwCommandline(self.clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file,
+                                    stats=statistics_file)
 
-    def test_multiple_alignment(self):
-        #Create a temp fasta file with a space in the name
-        self.temp_filename_with_spaces = "Clustalw/temp horses.fasta"
-        handle = open(self.temp_filename_with_spaces, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy","phylip"), handle, "fasta")
-        handle.close()
+        self.standard_test_procedure(cline)
+
+        self.assertTrue(os.path.isfile(statistics_file))
+        os.remove(statistics_file)
+
+    def test_large_input_file(self):
+        """Test large input file"""
 
         #Create a large input file by converting another example file
         #(See Bug 2804, this will produce so much output on stdout that
         #subprocess could suffer a deadlock and hang).  Using all the
         #records should show the deadlock but is very slow - just thirty
         #seems to lockup on Mac OS X, even 20 on Linux (without the fix).
-        self.temp_large_fasta_file = "temp_cw_prot.fasta"
-        handle = open(self.temp_large_fasta_file, "w")
+        input_file = "temp_cw_prot.fasta"
+        handle = open(input_file, "w")
         records = list(SeqIO.parse("NBRF/Cw_prot.pir", "pir"))[:40]
         SeqIO.write(records, handle, "fasta")
         handle.close()
         del handle, records
+        output_file = "temp_cw_prot.aln"
 
-        for input_file, output_file, statistics_file, newtree_file in [
-            ("Fasta/f002", "temp_test.aln", "temp_stats.txt", None),
-            ("GFF/multi.fna", "temp with space.aln", "temp_stats.txt", None),
-            ("Registry/seqs.fasta", "temp_test.aln", "temp_stats.txt", None),
-            ("Registry/seqs.fasta", "temp_test.aln", "temp stats with space.txt", "temp_test.dnd"),
-            ("Registry/seqs.fasta", "temp_test.aln", "temp_stats.txt", "temp with space.dnd"),
-            (self.temp_filename_with_spaces, "temp_test.aln", "temp_stats.txt", None),
-            (self.temp_filename_with_spaces, "temp with space.aln", "temp_stats", None),
-            (self.temp_large_fasta_file, "temp_cw_prot.aln", "temp_stats.txt", None),
-        ]:
-            #Note that ClustalW will map ":" to "_" in it's output file
-            input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"),
-                                          lambda rec : rec.id.replace(":","_"))
-            if os.path.isfile(output_file):
-                os.remove(output_file)
-            print "Calling clustalw on %s (with %i records)" \
-                   % (repr(input_file), len(input_records))
-            print "using output file %s" % repr(output_file)
-            if newtree_file is not None:
-                print "requesting output guide tree file %s" % repr(newtree_file)
+        cline = ClustalwCommandline(self.clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file)
 
-            #Any filenames with spaces should get escaped with quotes automatically.
-            #Using keyword arguments here.
-            if self.clustalw_exe == "clustalw2":
-                # By using the stats keyword, we require ClustalW 2.0.10 or higher.
-                cline = ClustalwCommandline(self.clustalw_exe,
-                                            infile=input_file,
-                                            outfile=output_file,
-                                            stats=statistics_file)
-            else:
-                cline = ClustalwCommandline(self.clustalw_exe,
-                                            infile=input_file,
-                                            outfile=output_file)
-            self.assertTrue(str(eval(repr(cline))) == str(cline))
-            if newtree_file is not None:
-                #Test using a property:
-                cline.newtree = newtree_file
-                #I don't just want the tree, also want the alignment:
-                cline.align = True
-                self.assertTrue(str(eval(repr(cline))) == str(cline))
-            output, error = cline()
-            self.assertTrue(output.strip().startswith("CLUSTAL"))
-            self.assertTrue(error.strip() == "")
+        self.standard_test_procedure(cline)
 
-            #Check the output...
-            align = AlignIO.read(output_file, "clustal")
-            #The length of the alignment will depend on the version of clustalw
-            #(clustalw 2.0.10 and clustalw 1.83 are certainly different).
-            print "Got an alignment, %i sequences" % (len(align))
-            if self.clustalw_exe == "clustalw2":
-                self.assertTrue(os.path.isfile(statistics_file))
-                os.remove(statistics_file)
-            output_records = SeqIO.to_dict(SeqIO.parse(output_file,"clustal"))
-            self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
-            for record in align:
-                self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
-                self.assertTrue(str(record.seq).replace("-","") == \
-                       str(input_records[record.id].seq))
+    def test_input_filename_with_spaces(self):
+        """Test input filename containing a space"""
+        input_file = "Clustalw/temp horses.fasta"
+        handle = open(input_file, "w")
+        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy","phylip"), handle, "fasta")
+        handle.close()
+        output_file = "temp with space.aln"
 
-            #Clean up...
-            os.remove(output_file)
+        cline = ClustalwCommandline(self.clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file)
 
-            #Check the DND file was created.
-            #TODO - Try and parse this with Bio.Nexus?
-            if newtree_file is not None:
-                tree_file = newtree_file
-            else:
-                #Clustalw will name it based on the input file
-                tree_file = os.path.splitext(input_file)[0] + ".dnd"
-            self.assertTrue(os.path.isfile(tree_file))
-            os.remove(tree_file)
+        self.standard_test_procedure(cline)
+
+    def test_output_filename_with_spaces(self):
+        """Test output filename containing spaces"""
+        input_file = "GFF/multi.fna"
+        output_file = "temp with space.aln"
+        cline = ClustalwCommandline(self.clustalw_exe,
+                                    infile=input_file,
+                                    outfile=output_file)
+
+        self.standard_test_procedure(cline)
+
+    def standard_test_procedure(self, cline):
+        """Standard testing procedure used by all tests."""
+        self.assertTrue(str(eval(repr(cline))) == str(cline))
+        input_records = SeqIO.to_dict(SeqIO.parse(cline.infile, "fasta"),
+                                      lambda rec : rec.id.replace(":", "_"))
+
+        output, error = cline()
+        self.assertTrue(output.strip().startswith("CLUSTAL"))
+        self.assertTrue(error.strip() == "")
+
+        #Check the output...
+        align = AlignIO.read(cline.outfile, "clustal")
+        #The length of the alignment will depend on the version of clustalw
+        #(clustalw 2.1 and clustalw 1.83 are certainly different).
+        output_records = SeqIO.to_dict(SeqIO.parse(cline.outfile,"clustal"))
+        self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
+        for record in align:
+            self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
+            self.assertTrue(str(record.seq).replace("-","") == \
+                   str(input_records[record.id].seq))
+
+        #Check the DND file was created.
+        #TODO - Try and parse this with Bio.Nexus?
+        if cline.newtree:
+            tree_file = cline.newtree
+        else:
+            #Clustalw will name it based on the input file
+            tree_file = os.path.splitext(cline.infile)[0] + ".dnd"
+        self.assertTrue(os.path.isfile(tree_file))
+
+        #Clean up...
+        os.remove(cline.outfile)
+        os.remove(tree_file)
 
 
 if __name__ == "__main__":
