@@ -196,9 +196,17 @@ from __future__ import with_statement
 
 __docformat__ = 'epytext en'
 
+import warnings
+
+from Bio import BiopythonExperimentalWarning
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 from Bio.SearchIO._utils import get_processor
+
+
+warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
+        'significant changes prior to its future official release.',
+        BiopythonExperimentalWarning)
 
 
 __all__ = ['read', 'parse', 'to_dict', 'index', 'index_db', 'write', 'convert']
