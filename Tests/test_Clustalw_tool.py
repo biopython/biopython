@@ -5,6 +5,7 @@
 
 #TODO - Clean up the extra files created by clustalw?  e.g. *.dnd
 #and *.aln where we have not requested an explicit name?
+from Bio import MissingExternalDependencyError
 
 import sys
 import os
