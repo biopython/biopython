@@ -20,6 +20,7 @@ class ClustalWTestCase(unittest.TestCase):
 
     def setUp(self):
         self.files_to_clean = set()
+        self.clustalw_exe = ""
         if sys.platform=="win32":
             #TODO - Check the path?
             try:
@@ -265,17 +266,20 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
 
     def test_statistics(self):
         """Test a statistics file."""
-        input_file = "Fasta/f002"
-        output_file = "temp_test.aln"
-        statistics_file = "temp_stats.txt"
-        cline = ClustalwCommandline(self.clustalw_exe,
-                                    infile=input_file,
-                                    outfile=output_file,
-                                    stats=statistics_file)
+	if self.clustalw_exe == "clustalw2":
+            input_file = "Fasta/f002"
+            output_file = "temp_test.aln"
+            statistics_file = "temp_stats.txt"
+            cline = ClustalwCommandline(self.clustalw_exe,
+                                        infile=input_file,
+                                        outfile=output_file,
+                                        stats=statistics_file)
 
-	self.add_file_to_clean(statistics_file)
-        self.standard_test_procedure(cline)
-        self.assertTrue(os.path.isfile(statistics_file))
+            self.add_file_to_clean(statistics_file)
+            self.standard_test_procedure(cline)
+            self.assertTrue(os.path.isfile(statistics_file))
+        else:
+            print "Skipping ClustalW2 specific test."
 
 
 if __name__ == "__main__":
