@@ -130,7 +130,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         input_file = "does_not_exist.fasta"
         self.assertFalse(os.path.isfile(input_file))
         cline = ClustalwCommandline(self.clustalw_exe, infile=input_file)
-	with self.assertRaises(ApplicationError) as cm:
+        with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
         err = cm.exception
         self.assertTrue("Cannot open sequence file" in str(err) or \
@@ -232,7 +232,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
                                     infile=input_file,
                                     outfile=output_file)
 
-	self.add_file_to_clean(input_file)
+        self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
 
     def test_input_filename_with_space(self):
@@ -247,7 +247,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
                                     infile=input_file,
                                     outfile=output_file)
 
-	self.add_file_to_clean(input_file)
+        self.add_file_to_clean(input_file)
         self.standard_test_procedure(cline)
 
     def test_output_filename_with_spaces(self):
@@ -266,7 +266,7 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
 
     def test_statistics(self):
         """Test a statistics file."""
-	if self.clustalw_exe == "clustalw2":
+        if self.clustalw_exe == "clustalw2":
             input_file = "Fasta/f002"
             output_file = "temp_test.aln"
             statistics_file = "temp_stats.txt"
