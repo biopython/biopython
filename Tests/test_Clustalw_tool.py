@@ -20,8 +20,8 @@ class ClustalWTestCase(unittest.TestCase):
 
     def setUp(self):
         self.files_to_clean = set()
-        self.clustalw_exe = ""
-        if sys.platform=="win32":
+        self.clustalw_exe = None
+        if sys.platform == "win32":
             #TODO - Check the path?
             try:
                 #This can vary depending on the Windows language.
@@ -43,7 +43,7 @@ class ClustalWTestCase(unittest.TestCase):
             #clustalw1.83 installer which uses the following long location:
             #C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
             likely_dirs = ["ClustalW2", "",
-                           "Clustal","Clustalw","Clustalw183","Clustalw1.83",
+                           "Clustal", "Clustalw", "Clustalw183", "Clustalw1.83",
                            r"CTCBioApps\clustalw\v1.83"]
             likely_exes = ["clustalw2.exe",
                            "clustalw.exe", "clustalw1.83.exe"]
@@ -53,7 +53,8 @@ class ClustalWTestCase(unittest.TestCase):
                         if os.path.isfile(os.path.join(prog_files, folder, filename)):
                             self.clustalw_exe = os.path.join(prog_files, folder, filename)
                             break
-                    if self.clustalw_exe : break
+                    if self.clustalw_exe:
+                        break
         else:
             import commands
             #Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
@@ -109,13 +110,12 @@ class ClustalWTestCase(unittest.TestCase):
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
             self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
-            self.assertTrue(str(record.seq).replace("-","") == \
+            self.assertTrue(str(record.seq).replace("-", "") == \
                    str(input_records[record.id].seq))
 
         #Check the DND file was created.
         #TODO - Try and parse this with Bio.Nexus?
         self.assertTrue(os.path.isfile(tree_file))
-
 
     def add_file_to_clean(self, filename):
         """Adds a file for deferred removal by the tearDown routine."""
@@ -239,7 +239,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         """Test an input filename containing a space."""
         input_file = "Clustalw/temp horses.fasta"
         handle = open(input_file, "w")
-        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy","phylip"), handle, "fasta")
+        SeqIO.write(SeqIO.parse("Phylip/hennigian.phy", "phylip"), handle, "fasta")
         handle.close()
         output_file = "temp with space.aln"
 
