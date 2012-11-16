@@ -18,7 +18,7 @@ class PrankCommandline(AbstractCommandline):
 
     To align a FASTA file (unaligned.fasta) with the output in aligned
     FASTA format with the output filename starting with "aligned" (you
-    can't pick the filename explicitly), no tree ouput and no XML output,
+    can't pick the filename explicitly), no tree output and no XML output,
     use:
 
     >>> from Bio.Align.Applications import PrankCommandline

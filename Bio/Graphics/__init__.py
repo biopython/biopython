@@ -4,7 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 ################################################################################
-"""Bio.Graphics offsers several graphical ouputs, all using ReportLab."""
+"""Bio.Graphics offsers several graphical outputs, all using ReportLab."""
 
 # Check if ReportLab is installed.
 try:
