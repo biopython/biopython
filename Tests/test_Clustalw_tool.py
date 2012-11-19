@@ -131,12 +131,15 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         input_file = "does_not_exist.fasta"
         self.assertFalse(os.path.isfile(input_file))
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
-        with self.assertRaises(ApplicationError) as cm:
+
+        try:
             stdout, stderr = cline()
-        err = cm.exception
-        self.assertTrue("Cannot open sequence file" in str(err) or \
-                        "Cannot open input file" in str(err) or \
-                        "non-zero exit status" in str(err))
+        except ApplicationError, err:
+            self.assertTrue("Cannot open sequence file" in str(err) or \
+                            "Cannot open input file" in str(err) or \
+                            "non-zero exit status" in str(err))
+        else:
+            self.fail("expected an ApplicationError")
 
     def test_single_sequence(self):
         """Test an input file containing a single sequence."""
@@ -144,36 +147,37 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         self.assertTrue(os.path.isfile(input_file))
         self.assertTrue(len(list(SeqIO.parse(input_file, "fasta"))) == 1)
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
-        with self.assertRaises(ApplicationError) as cm:
-            self.add_file_to_clean(os.path.splitext(input_file)[0] + ".aln")
+
+        try:
             stdout, stderr = cline()
-            # Apparently some versions of clustal have zero as return code
-            # on error.  The following abuses ApplicationError to catch
-            # both cases.
-            if "cannot do multiple alignment" in (stdout + stderr):
-                raise ApplicationError(-1, "", "", "cannot do multiple alignment")
-        err = cm.exception
-        self.assertTrue("No records found in handle" in str(err) or \
-                        "cannot do multiple alignment" in str(err))
+
+            #Zero return code is a possible bug in clustal?
+            self.add_file_to_clean(input_file + ".aln")
+            self.assertTrue("cannot do multiple alignment" in (stdout + stderr))
+        except ApplicationError, err:
+            self.assertTrue(str(err) == "No records found in handle")
 
     def test_invalid_sequence(self):
         """Test an input file containing an invalid sequence."""
         input_file = "Medline/pubmed_result1.txt"
         self.assertTrue(os.path.isfile(input_file))
         cline = ClustalwCommandline(clustalw_exe, infile=input_file)
-        with self.assertRaises(ApplicationError) as cm:
+
+        try:
             stdout, stderr = cline()
-        err = cm.exception
-        #Ideally we'd catch the return code and raise the specific
-        #error for "invalid format", rather than just notice there
-        #is not output file.
-        #Note:
-        #Python 2.3 on Windows gave (0, 'Error')
-        #Python 2.5 on Windows gives [Errno 0] Error
-        self.assertTrue("invalid format" in str(err) or \
-                   "not produced" in str(err) or \
-                   "No sequences in file" in str(err) or\
-                   "non-zero exit status " in str(err))
+        except ApplicationError, err:
+            #Ideally we'd catch the return code and raise the specific
+            #error for "invalid format", rather than just notice there
+            #is not output file.
+            #Note:
+            #Python 2.3 on Windows gave (0, 'Error')
+            #Python 2.5 on Windows gives [Errno 0] Error
+            self.assertTrue("invalid format" in str(err) or \
+                            "not produced" in str(err) or \
+                            "No sequences in file" in str(err) or\
+                            "non-zero exit status " in str(err))
+        else:
+            self.fail("expected an ApplicationError")
 
 
 class ClustalWTestNormalConditions(ClustalWTestCase):
