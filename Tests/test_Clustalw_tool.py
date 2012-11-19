@@ -15,66 +15,67 @@ from Bio import AlignIO
 from Bio.Align.Applications import ClustalwCommandline
 from Bio.Application import ApplicationError
 
+clustalw_exe = None
+if sys.platform == "win32":
+    #TODO - Check the path?
+    try:
+        #This can vary depending on the Windows language.
+        prog_files = os.environ["PROGRAMFILES"]
+    except KeyError:
+        prog_files = r"C:\Program Files"
+
+        #Note that EBI's clustalw2 installer, e.g. clustalw-2.0.10-win.msi
+        #uses C:\Program Files\ClustalW2\clustalw2.exe so we should check
+        #for that.
+        #
+        #Some users doing a manual install have reported using
+        #C:\Program Files\clustalw.exe
+        #
+        #Older installers might use something like this,
+        #C:\Program Files\Clustalw\clustalw.exe
+        #
+        #One particular case is www.tc.cornell.edu currently provide a
+        #clustalw1.83 installer which uses the following long location:
+        #C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
+        likely_dirs = ["ClustalW2", "",
+                       "Clustal", "Clustalw", "Clustalw183", "Clustalw1.83",
+                       r"CTCBioApps\clustalw\v1.83"]
+        likely_exes = ["clustalw2.exe",
+                       "clustalw.exe", "clustalw1.83.exe"]
+        for folder in likely_dirs:
+            if os.path.isdir(os.path.join(prog_files, folder)):
+                for filename in likely_exes:
+                    if os.path.isfile(os.path.join(prog_files, folder, filename)):
+                        clustalw_exe = os.path.join(prog_files, folder, filename)
+                        break
+                if clustalw_exe:
+                    break
+else:
+    import commands
+    #Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
+    #command, but this does cause them to quit cleanly.  Otherwise they prompt
+    #the user for input (causing a lock up).
+    output = commands.getoutput("clustalw2 --version")
+    #Since "not found" may be in another language, try and be sure this is
+    #really the clustalw tool's output
+    if "not found" not in output and "CLUSTAL" in output \
+    and "Multiple Sequence Alignments" in output:
+        clustalw_exe = "clustalw2"
+    if not clustalw_exe:
+        output = commands.getoutput("clustalw --version")
+        if "not found" not in output and "CLUSTAL" in output \
+        and "Multiple Sequence Alignments" in output:
+            clustalw_exe = "clustalw"
+
+if not clustalw_exe:
+    raise MissingExternalDependencyError(\
+        "Install clustalw or clustalw2 if you want to use it from Biopython.")
+
 class ClustalWTestCase(unittest.TestCase):
     """Class implementing common functions for ClustalW tests."""
 
     def setUp(self):
         self.files_to_clean = set()
-        self.clustalw_exe = None
-        if sys.platform == "win32":
-            #TODO - Check the path?
-            try:
-                #This can vary depending on the Windows language.
-                prog_files = os.environ["PROGRAMFILES"]
-            except KeyError:
-                prog_files = r"C:\Program Files"
-
-            #Note that EBI's clustalw2 installer, e.g. clustalw-2.0.10-win.msi
-            #uses C:\Program Files\ClustalW2\clustalw2.exe so we should check
-            #for that.
-            #
-            #Some users doing a manual install have reported using
-            #C:\Program Files\clustalw.exe
-            #
-            #Older installers might use something like this,
-            #C:\Program Files\Clustalw\clustalw.exe
-            #
-            #One particular case is www.tc.cornell.edu currently provide a
-            #clustalw1.83 installer which uses the following long location:
-            #C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
-            likely_dirs = ["ClustalW2", "",
-                           "Clustal", "Clustalw", "Clustalw183", "Clustalw1.83",
-                           r"CTCBioApps\clustalw\v1.83"]
-            likely_exes = ["clustalw2.exe",
-                           "clustalw.exe", "clustalw1.83.exe"]
-            for folder in likely_dirs:
-                if os.path.isdir(os.path.join(prog_files, folder)):
-                    for filename in likely_exes:
-                        if os.path.isfile(os.path.join(prog_files, folder, filename)):
-                            self.clustalw_exe = os.path.join(prog_files, folder, filename)
-                            break
-                    if self.clustalw_exe:
-                        break
-        else:
-            import commands
-            #Note that clustalw 1.83 and clustalw 2.1 don't obey the --version
-            #command, but this does cause them to quit cleanly.  Otherwise they prompt
-            #the user for input (causing a lock up).
-            output = commands.getoutput("clustalw2 --version")
-            #Since "not found" may be in another language, try and be sure this is
-            #really the clustalw tool's output
-            if "not found" not in output and "CLUSTAL" in output \
-            and "Multiple Sequence Alignments" in output:
-                self.clustalw_exe = "clustalw2"
-            if not self.clustalw_exe:
-                output = commands.getoutput("clustalw --version")
-                if "not found" not in output and "CLUSTAL" in output \
-                and "Multiple Sequence Alignments" in output:
-                    self.clustalw_exe = "clustalw"
-
-        if not self.clustalw_exe:
-            raise MissingExternalDependencyError(\
-                "Install clustalw or clustalw2 if you want to use it from Biopython.")
 
     def tearDown(self):
         for filename in self.files_to_clean:
@@ -129,7 +130,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         """Test a non-existing input file."""
         input_file = "does_not_exist.fasta"
         self.assertFalse(os.path.isfile(input_file))
-        cline = ClustalwCommandline(self.clustalw_exe, infile=input_file)
+        cline = ClustalwCommandline(clustalw_exe, infile=input_file)
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
         err = cm.exception
@@ -142,7 +143,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         input_file = "Fasta/f001"
         self.assertTrue(os.path.isfile(input_file))
         self.assertTrue(len(list(SeqIO.parse(input_file, "fasta"))) == 1)
-        cline = ClustalwCommandline(self.clustalw_exe, infile=input_file)
+        cline = ClustalwCommandline(clustalw_exe, infile=input_file)
         with self.assertRaises(ApplicationError) as cm:
             self.add_file_to_clean(os.path.splitext(input_file)[0] + ".aln")
             stdout, stderr = cline()
@@ -159,7 +160,7 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         """Test an input file containing an invalid sequence."""
         input_file = "Medline/pubmed_result1.txt"
         self.assertTrue(os.path.isfile(input_file))
-        cline = ClustalwCommandline(self.clustalw_exe, infile=input_file)
+        cline = ClustalwCommandline(clustalw_exe, infile=input_file)
         with self.assertRaises(ApplicationError) as cm:
             stdout, stderr = cline()
         err = cm.exception
@@ -180,7 +181,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
 
     def test_properties(self):
         """Test passing options via properties."""
-        cline = ClustalwCommandline(self.clustalw_exe)
+        cline = ClustalwCommandline(clustalw_exe)
         cline.infile = "Fasta/f002"
         cline.outfile = "temp_test.aln"
         cline.align = True
@@ -191,7 +192,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         """Test a simple fasta input file."""
         input_file = "Fasta/f002"
         output_file = "temp_test.aln"
-        cline = ClustalwCommandline(self.clustalw_exe,
+        cline = ClustalwCommandline(clustalw_exe,
                                     infile=input_file,
                                     outfile=output_file)
 
@@ -202,7 +203,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         input_file = "Registry/seqs.fasta"
         output_file = "temp_test.aln"
         newtree_file = "temp_test.dnd"
-        cline = ClustalwCommandline(self.clustalw_exe,
+        cline = ClustalwCommandline(clustalw_exe,
                                     infile=input_file,
                                     outfile=output_file,
                                     newtree=newtree_file,
@@ -228,7 +229,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         del handle, records
         output_file = "temp_cw_prot.aln"
 
-        cline = ClustalwCommandline(self.clustalw_exe,
+        cline = ClustalwCommandline(clustalw_exe,
                                     infile=input_file,
                                     outfile=output_file)
 
@@ -243,7 +244,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         handle.close()
         output_file = "temp with space.aln"
 
-        cline = ClustalwCommandline(self.clustalw_exe,
+        cline = ClustalwCommandline(clustalw_exe,
                                     infile=input_file,
                                     outfile=output_file)
 
@@ -254,7 +255,7 @@ class ClustalWTestNormalConditions(ClustalWTestCase):
         """Test an output filename containing spaces."""
         input_file = "GFF/multi.fna"
         output_file = "temp with space.aln"
-        cline = ClustalwCommandline(self.clustalw_exe,
+        cline = ClustalwCommandline(clustalw_exe,
                                     infile=input_file,
                                     outfile=output_file)
 
@@ -266,11 +267,11 @@ class ClustalWTestVersionTwoSpecific(ClustalWTestCase):
 
     def test_statistics(self):
         """Test a statistics file."""
-        if self.clustalw_exe == "clustalw2":
+        if clustalw_exe == "clustalw2":
             input_file = "Fasta/f002"
             output_file = "temp_test.aln"
             statistics_file = "temp_stats.txt"
-            cline = ClustalwCommandline(self.clustalw_exe,
+            cline = ClustalwCommandline(clustalw_exe,
                                         infile=input_file,
                                         outfile=output_file,
                                         stats=statistics_file)
