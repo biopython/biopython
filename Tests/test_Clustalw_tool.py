@@ -20,7 +20,7 @@ from Bio.Application import ApplicationError
 os.environ['LANG'] = 'C'
 
 clustalw_exe = None
-if sys.platform=="win32":
+if sys.platform == "win32":
     #TODO - Check the path?
     try:
         #This can vary depending on the Windows language.
@@ -42,7 +42,7 @@ if sys.platform=="win32":
     #clustalw1.83 installer which uses the following long location:
     #C:\Program Files\CTCBioApps\clustalw\v1.83\clustalw1.83.exe
     likely_dirs = ["ClustalW2", "",
-                   "Clustal","Clustalw","Clustalw183","Clustalw1.83",
+                   "Clustal", "Clustalw", "Clustalw183", "Clustalw1.83",
                    r"CTCBioApps\clustalw\v1.83"]
     likely_exes = ["clustalw2.exe",
                    "clustalw.exe", "clustalw1.83.exe"]
@@ -52,7 +52,8 @@ if sys.platform=="win32":
                 if os.path.isfile(os.path.join(prog_files, folder, filename)):
                     clustalw_exe = os.path.join(prog_files, folder, filename)
                     break
-            if clustalw_exe : break
+            if clustalw_exe:
+                break
 else:
     import commands
     #Note that clustalw 1.83 and clustalw 2.0.10 don't obey the --version
