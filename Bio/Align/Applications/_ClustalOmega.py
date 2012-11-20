@@ -63,7 +63,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
                     "Pre-aligned multiple sequence file (aligned columns will be kept fix).",
                     filename=True,
                     equate=False),
-            _Option(["--t", "--seqtype", "seqtype"],
+            _Option(["-t", "--seqtype", "seqtype"],
                     "{Protein, RNA, DNA} Force a sequence type (default: auto).",
                     equate=False,
                     checker_function=lambda x: x in ["protein", "rna", "dna",
