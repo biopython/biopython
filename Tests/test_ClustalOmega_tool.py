@@ -114,9 +114,7 @@ for input_file, output_file, newtree_file in [
     (temp_filename_with_spaces, "temp with space.aln", None),
     (temp_large_fasta_file, "temp_cw_prot.aln", None),
     ]:
-    #Note that ClustalOmega will map ":" to "_" in it's output file
-    input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"),
-                                  lambda rec : rec.id.replace(":","_"))
+    input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"))
     if os.path.isfile(output_file):
         os.remove(output_file)
     print "Calling clustalo on %s (with %i records)" \
