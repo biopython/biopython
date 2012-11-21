@@ -108,8 +108,8 @@ del handle, records
 for input_file, output_file, newtree_file in [
     ("Registry/seqs.fasta", "temp with space.aln", None),
     ("Registry/seqs.fasta", "temp_test.aln", None),
-    ("Registry/seqs.fasta", "temp_test.aln", "temp_test.dnd"),
-    ("Registry/seqs.fasta", "temp_test.aln", "temp with space.dnd"),
+    ("Fasta/f002", "temp_test.aln", "temp_test.dnd"),
+    ("Fasta/f002", "temp_test.aln", "temp with space.dnd"),
     (temp_filename_with_spaces, "temp_test.aln", None),
     (temp_filename_with_spaces, "temp with space.aln", None),
     (temp_large_fasta_file, "temp_cw_prot.aln", None),
