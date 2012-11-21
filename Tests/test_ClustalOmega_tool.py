@@ -114,12 +114,12 @@ for input_file, output_file, newtree_file in [
     (temp_filename_with_spaces, "temp with space.aln", None),
     (temp_large_fasta_file, "temp_cw_prot.aln", None),
     ]:
-    #Note that ClustalW will map ":" to "_" in it's output file
+    #Note that ClustalOmega will map ":" to "_" in it's output file
     input_records = SeqIO.to_dict(SeqIO.parse(input_file,"fasta"),
                                   lambda rec : rec.id.replace(":","_"))
     if os.path.isfile(output_file):
         os.remove(output_file)
-    print "Calling clustalw on %s (with %i records)" \
+    print "Calling clustalo on %s (with %i records)" \
           % (repr(input_file), len(input_records))
     print "using output file %s" % repr(output_file)
     if newtree_file is not None:
@@ -146,8 +146,7 @@ for input_file, output_file, newtree_file in [
            error.startswith("WARNING: DNA alignment is still experimental."), error
     #Check the output...
     align = AlignIO.read(output_file, "clustal")
-    #The length of the alignment will depend on the version of clustalw
-    #(clustalw 2.0.10 and clustalw 1.83 are certainly different).
+    #The length of the alignment will depend on the version of clustalo
     print "Got an alignment, %i sequences" % (len(align))
     output_records = SeqIO.to_dict(SeqIO.parse(output_file,"clustal"))
     assert len(set(input_records.keys())) == len(set(output_records.keys())), \
