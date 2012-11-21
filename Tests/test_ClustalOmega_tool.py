@@ -149,11 +149,8 @@ for input_file, output_file, newtree_file in [
     output_records = SeqIO.to_dict(SeqIO.parse(output_file,"clustal"))
     assert len(set(input_records.keys())) == len(set(output_records.keys())), \
         "%r vs %r" %(sorted(input_records.keys()), sorted(output_records.keys()))
-    #TODO - Investigate Clustal Omega underscore/semi-colon mapping
-    #for record in align:
-    #    assert str(record.seq) == str(output_records[record.id].seq)
-    #    assert str(record.seq).replace("-","") == \
-    #           str(input_records[record.id].seq)
+    for record in align:
+        assert str(record.seq) == str(output_records[record.id].seq)
 
     #Clean up...
     os.remove(output_file)
