@@ -217,7 +217,7 @@ class BgzfTests(unittest.TestCase):
         h = bgzf.BgzfReader(filename, "rb", max_cache = 1)
         for voffset, real_offset in v_offsets:
             h.seek(0)
-            assert voffset >= 0 and real_offset >= 0
+            self.assertTrue(voffset >= 0 and real_offset >= 0)
             self.assertEqual(h.read(real_offset), old[:real_offset])
             self.assertEqual(h.tell(), voffset)
         for voffset, real_offset in v_offsets:
