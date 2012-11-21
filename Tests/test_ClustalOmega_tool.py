@@ -142,7 +142,8 @@ for input_file, output_file, newtree_file in [
     #assert output, "No output from: %s\n%s" % (cline, error)
     assert not output or output.strip().startswith("CLUSTAL"), output
     assert error.strip() == "" or \
-           error.startswith("WARNING: Sequence type is DNA."), error
+           error.startswith("WARNING: Sequence type is DNA.") or \
+           error.startswith("WARNING: DNA alignment is still experimental."), error
     #Check the output...
     align = AlignIO.read(output_file, "clustal")
     #The length of the alignment will depend on the version of clustalw
