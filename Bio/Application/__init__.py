@@ -28,7 +28,7 @@ from subprocess import CalledProcessError as _ProcessCalledError
 
 from Bio import File
 
-#Use this regular expresion to test the property names are going to
+#Use this regular expression to test the property names are going to
 #be valid as Python properties or arguments
 _re_prop_name = re.compile(r"[a-zA-Z][a-zA-Z0-9_]*")
 assert _re_prop_name.match("t")
