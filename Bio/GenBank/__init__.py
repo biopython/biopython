@@ -57,7 +57,7 @@ FEATURE_QUALIFIER_INDENT = 21
 FEATURE_KEY_SPACER = " " * FEATURE_KEY_INDENT
 FEATURE_QUALIFIER_SPACER = " " * FEATURE_QUALIFIER_INDENT
 
-#Regular expresions for location parsing
+#Regular expressions for location parsing
 _solo_location = r"[<>]?\d+"
 _pair_location = r"[<>]?\d+\.\.[<>]?\d+"
 _between_location = r"\d+\^\d+"
