@@ -201,6 +201,39 @@ def nt_search(seq, subseq):
 ######################
 # {{{ 
 
+IUPAC_threeletter_code = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
+             'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
+             'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
+             'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
+             'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
+             'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
+             'U':'Sel', 'O':'Pyl', 'J':'Xle',
+             }   
+
+threeletter_IUPAC_code = dict((three.lower(), one) for (one, three) in IUPAC_threeletter_code.iteritems())
+
+def seq1(seq):
+    """Turn a three letter code protein sequence into one with one letter codes.
+
+    The single input argument 'seq' should be a protein sequence using three
+    letter codes, either as a python string or as a Seq or MutableSeq object.
+
+    This function returns the amino acid sequence as a string using the single
+    letter amino acid codes. Output follows the IUPAC standard (including
+    ambiguous characters B for "Asx", J for "Xle" and X for "Xaa", and also U
+    for "Sel" and O for "Pyl") plus "Ter" for a terminator given as an asterisk.
+    Any unknown character (including possible gap characters), is changed into
+    'X'.
+
+    e.g.
+    >>> from Bio.SeqUtils import seq1
+    >>> seq1('METalaIleValMetGlyArgTrpLysGlyAlaArgTer')
+    'MAIVMGRWKGAR*'
+    """
+    #We use a default of 'X' for undefined triplets
+    assert len(seq) % 3 == 0
+    
+    return ''.join(threeletter_IUPAC_code.get(seq[x:x+3].lower(), "X") for x in xrange(0, len(seq), 3))
 
 def seq3(seq):
     """Turn a one letter code protein sequence into one with three letter codes.
@@ -222,17 +255,9 @@ def seq3(seq):
 
     This function was inspired by BioPerl's seq3.
     """
-    threecode = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
-                 'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
-                 'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
-                 'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
-                 'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
-                 'Y':'Tyr', 'Z':'Glx', 'X':'Xaa', '*':'Ter',
-                 'U':'Sel', 'O':'Pyl', 'J':'Xle',
-                 }
     #We use a default of 'Xaa' for undefined letters
     #Note this will map '-' to 'Xaa' which may be undesirable!
-    return ''.join([threecode.get(aa,'Xaa') for aa in seq])
+    return ''.join([IUPAC_threeletter_code.get(aa,'Xaa') for aa in seq])
 
 
 # }}}
