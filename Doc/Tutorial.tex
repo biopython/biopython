@@ -9618,7 +9618,7 @@ pseudo-counts we should add to the PWM. By default it is set to $1.0$,
 \end{verbatim}
 so that the total input of pseudo-counts is equal to that of one instance. 
 
-Using the background distribution and pwm with pseudo-counts added,
+Using the background distribution and PWM with pseudo-counts added,
 it's easy to compute the log-odds ratios, telling us what are the log
 odds of a particular symbol to be coming from a motif against the
 background. We can use the \verb|.log_odds()| method:
@@ -9649,7 +9649,7 @@ background. We can use the \verb|.log_odds()| method:
 \end{verbatim}
 Here we can see positive values for symbols more frequent in the motif
 than in the background and negative for symbols more frequent in the
-background. $0.0$ means that it's equally likely to see a symbol in
+background. $0.0$ means that it's equally likely to see a symbol in the
 background and in the motif (e.g. `T' in the second-last position).
 
 \subsection{Reading and writing}
@@ -9717,7 +9717,7 @@ different representations:
 The important thing to remember here is that the method
 \verb|make_instances_from_counts()| creates fake instances, because
 usually there are very many possible sets of instances which give rise
-to the same pwm, and if we have only the count matrix, we cannot
+to the same PWM, and if we have only the count matrix, we cannot
 reconstruct the original one. This does not make any difference if we
 are using the PWM as the representation of the motif, but one should
 be careful with exporting instances from count-based motifs.
@@ -9809,7 +9809,7 @@ background. The default threshold is $0.0$, which selects everything
 that looks more like the motif than the background.
 
 If you want to use a less arbitrary way of selecting thresholds, you
-can explore the \verb|Motif.score_distribution| class implementing an
+can explore the \verb|Motif.score_distribution| class implementing a
 distribution of scores for a given motif. Since the space for a score
 distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
@@ -9861,9 +9861,9 @@ that, we have currently three different methods of \verb|Bio.Motif|
 objects.
 
 Before we start comparing motifs, I should point out that motif
-boundaries are usually quite arbitrary. This means, that we often need
+boundaries are usually quite arbitrary. This means we often need
 to compare motifs of different lengths, so comparison needs to involve
-some kind of alignment.  This means, that we have to take into account two things:
+some kind of alignment.  This means we have to take into account two things:
 \begin{itemize}
 \item alignment of motifs
 \item some function to compare aligned motifs
@@ -9888,7 +9888,7 @@ which is similar to our test motif \verb|m|:
 Seq('TAAT', IUPACUnambiguousDNA())
 \end{verbatim}
 
-The first function we'll use to compare these motifs is based on
+The first function we'll use to compare these motifs is based on the
 Pearson correlation. Since we want it to resemble a distance
 measure, we actually take $1-r$, where $r$ is the Pearson correlation
 coefficient (PCC):
@@ -9914,7 +9914,7 @@ bATTA
 TATAA
 \end{verbatim}
 
-There are two other functions: \verb|dist_dpq|, which is a true metric (satisfying traingle inequality) based on the Kullback-Leibler divergence 
+There are two other functions: \verb|dist_dpq|, which is a true metric (satisfying the triangle inequality) based on the Kullback-Leibler divergence 
 \begin{verbatim}
 >>> m.dist_dpq(ubx.reverse_complement())
 (0.49292358382899853, 1)
@@ -9982,7 +9982,7 @@ Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 \subsection{AlignAce}
 \label{sec:alignace}
 
-We can do very similar things with AlignACE program. Assume, you have
+We can do very similar things with the AlignACE program. Assume, you have
 your output in the file \verb|alignace.out|. You can parse your output
 with the following code:
 
@@ -9997,7 +9997,7 @@ Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 In fact you can even see, that AlignAce found a very similar motif as
-MEME, it is just a longer version of a reverse complement of MEME
+MEME. It is just a longer version of a reverse complement of the MEME
 motif:
 \begin{verbatim}
 >>> motifsM[0].reverse_complement().consensus()
@@ -10005,7 +10005,7 @@ Seq('TACGATTGAG', IUPACUnambiguousDNA())
 \end{verbatim}
 
 If you have AlignAce installed on the same machine, you can also run
-it directly from Biopython. Short example of how this can be done is
+it directly from Biopython. A short example of how this can be done is
 shown below (other parameters can be specified as keyword parameters):
 
 \begin{verbatim}
@@ -10016,7 +10016,7 @@ shown below (other parameters can be specified as keyword parameters):
 >>> stdout,stderr= cmd()
 \end{verbatim}
 
-Since AlignAce prints all its output to standard output, you can get
+Since AlignAce prints all of its output to standard output, you can get
 to your motifs by parsing the first part of the result:
 \begin{verbatim}
 motifs=list(Motif.parse(stdout,"AlignAce"))
