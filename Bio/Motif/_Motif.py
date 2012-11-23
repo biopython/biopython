@@ -368,6 +368,8 @@ class Motif(object):
         the self.alphabet variable must be set beforehand.
         If the last line contains asterisks it is used for setting mask
         """
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython. As a replacement, please use Bio.Motif.parse instead.", PendingDeprecationWarning)
         
         while 1:
             ln = stream.readline()
