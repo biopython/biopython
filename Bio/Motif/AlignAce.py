@@ -41,16 +41,22 @@ def read(handle):
         elif line[:5]=="Input":
             record.sequences=[]
         elif line[:5]=="Motif":
-            current_motif = Motif()
-            current_motif.alphabet=IUPAC.unambiguous_dna
-            record.motifs.append(current_motif)
+            words = line.split()
+            assert words[0]=="Motif"
+            number = int(words[1])
+            instances = []
         elif line[:3]=="MAP":
-            current_motif.score = float(line.split()[-1])
+            motif = Motif(instances)
+            motif.alphabet = IUPAC.unambiguous_dna
+            motif.score = float(line.split()[-1])
+            motif.number = number
+            motif.set_mask(mask)
+            record.motifs.append(motif)
         elif len(line.split("\t"))==4:
             seq = Seq(line.split("\t")[0],IUPAC.unambiguous_dna)
-            current_motif.add_instance(seq)
+            instances.append(seq)
         elif "*" in line:
-            current_motif.set_mask(line.strip("\n\c"))
+            mask = line.strip("\r\n")
         else:
             raise ValueError(line)
     return record
