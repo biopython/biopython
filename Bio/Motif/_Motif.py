@@ -13,8 +13,7 @@ class Motif(object):
     """
     A class representing sequence motifs.
     """
-    def __init__(self,alphabet=IUPAC.unambiguous_dna):
-        self.instances = None
+    def __init__(self, instances=None, alphabet=IUPAC.unambiguous_dna):
         self.counts = None
         self.mask = []
         self._pwm_is_current = False
@@ -28,6 +27,24 @@ class Motif(object):
         self.beta=1.0
         self.info=None
         self.name=""
+        if instances==None:
+            self.instances = None
+        else:
+            import warnings
+            from Bio import BiopythonExperimentalWarning
+            warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
+            self.instances = []
+            for instance in instances:
+                if self.alphabet==None:
+                    self.alphabet=instance.alphabet
+                elif self.alphabet != instance.alphabet:
+                    raise ValueError("Alphabets are inconsistent")
+                if self.length==None:
+                    self.length = len(instance)
+                elif self.length != len(instance):
+                    message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
+                    raise ValueError(message)
+                self.instances.append(instance)
 
     @property
     def has_instances(self):
@@ -430,11 +447,14 @@ class Motif(object):
         """
         Gives the reverse complement of the motif
         """
-        res = Motif()
         if self.instances!=None:
-            for i in self.instances:
-                res.add_instance(i.reverse_complement())
+            instances = []
+            for instance in self.instances:
+                instance = instance.reverse_complement()
+                instances.append(instance)
+            res = Motif(instances)
         else: # has counts
+            res = Motif()
             res.counts={}
             res.counts["A"]=self.counts["T"][:]
             res.counts["T"]=self.counts["A"][:]
