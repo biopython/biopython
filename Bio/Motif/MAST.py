@@ -85,7 +85,7 @@ def __read_database_and_motifs(record, handle):
         motif.alphabet = record.alphabet
         motif.name = words[0]
         motif.length = int(words[1])
-        # motif.add_instance(words[2])
+        # words[2] contains the best possible match
         record.motifs.append(motif)
 
 
