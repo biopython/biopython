@@ -24,13 +24,6 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython | tail -n 2; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi"
   - "sudo apt-get install clustalw clustalo | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
-#Can easily install NumPy for the sytem python, hack to use this in virtualevn
-#Idea from @peterlandry here https://github.com/travis-ci/travis-cookbooks/issues/48
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then sudo apt-get install python-numpy python-numpy-dev 2>&1 | tail -n 2; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then ln -s /usr/lib/python2.7/dist-packages/numpy ~/virtualenv/python2.7/lib/python2.7/site-packages/; fi"
-#Same trick for NumPy with Python 3.2,
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then sudo apt-get install python3-numpy python3-numpy-dev 2>&1 | tail -n 2; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then ln -s /usr/lib/python3/dist-packages/numpy ~/virtualenv/python3.2/lib/python3.2/site-packages/; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then export PG=no; fi"
