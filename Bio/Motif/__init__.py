@@ -5,9 +5,9 @@
 """
 Module containing different tools for sequence motif analysis.
 
-it contains the core Motif class containing various I/O methods
+It contains the core Motif class containing various I/O methods
 as well as methods for motif comparisons and motif searching in sequences.
-It also inlcudes functionality for parsing AlignACE and MEME programs
+It also includes functionality for parsing AlignACE and MEME programs.
 """
 from Bio.Motif._Motif import Motif
 from Bio.Motif.AlignAce import read as _AlignAce_read
