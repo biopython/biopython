@@ -580,24 +580,28 @@ class Motif(object):
 
         The instances and pwm are OK.
         """
-        
-        while True:
-            ln = stream.readline()# read the header "$>...."
-            if ln=="" or ln[0]!=">":
+        # Probably this should be in a separate submodule of Bio.Motif
+        self.instances = []
+        for line in stream:
+            if not line.startswith(">"):
                 break
-            
-            ln=stream.readline().strip()#read the actual sequence
-            i=0
-            while ln[i]==ln[i].lower():
-                i+=1
-            inst=""
-            while i<len(ln) and ln[i]==ln[i].upper():
-                inst+=ln[i]
-                i+=1
-            inst=Seq(inst,self.alphabet)                
-            self.add_instance(inst)
-
-        self.set_mask("*"*len(inst))
+            # line contains the header ">...."
+            # now read the actual sequence
+            line = stream.next()
+            instance = ""
+            for c in line.strip():
+                if c==c.upper():
+                   instance += c
+            instance = Seq(instance, self.alphabet)
+            length = len(instance)
+            if self.length==None:
+                self.length = length
+            elif length!=self.length:
+                raise ValueError("Inconsistent motif lengths found")
+            self.instances.append(instance)
+        self._pwm_is_current = False
+        self._log_odds_is_current = False
+        self.set_mask("*"*len(instance))
         return self
 
 
