@@ -7,8 +7,11 @@
 import os
 import unittest
 
+
 from Bio import Motif
 from Bio.Seq import Seq
+
+
 
 class MotifTestsBasic(unittest.TestCase):
     def setUp(self):
@@ -31,6 +34,9 @@ class MotifTestsBasic(unittest.TestCase):
     def test_alignace_parsing(self):
         """Test if Motif can parse AlignAce output files.
         """
+        import warnings
+        from Bio import BiopythonExperimentalWarning
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
         from Bio.Alphabet import IUPAC
         from Bio.Motif import AlignAce
         handle = open("Motif/alignace.out")
