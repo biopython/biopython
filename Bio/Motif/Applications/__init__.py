@@ -6,3 +6,4 @@
 """Motif command line tool wrappers."""
 from _AlignAce import AlignAceCommandline
 from _AlignAce import CompareAceCommandline
+from _XXmotif import XXmotifCommandline
