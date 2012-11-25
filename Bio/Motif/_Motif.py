@@ -447,14 +447,15 @@ class Motif(object):
         """
         Gives the reverse complement of the motif
         """
+        alphabet = self.alphabet
         if self.instances!=None:
             instances = []
             for instance in self.instances:
                 instance = instance.reverse_complement()
                 instances.append(instance)
-            res = Motif(instances)
+            res = Motif(alphabet, instances)
         else: # has counts
-            res = Motif()
+            res = Motif(alphabet)
             res.counts={}
             res.counts["A"]=self.counts["T"][:]
             res.counts["T"]=self.counts["A"][:]
