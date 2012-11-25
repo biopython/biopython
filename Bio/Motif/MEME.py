@@ -34,12 +34,18 @@ def read(handle):
             break
     else:
         raise ValueError('Unexpected end of stream')
+    alphabet = record.alphabet
+    revcomp = 'revcomp' in record.command
     while True:
-        motif = __create_motif(line)
-        motif.alphabet = record.alphabet
+        length, num_occurrences, evalue = __read_motif_statistics(line)
+        name = __read_motif_name(handle)
+        instances = __read_motif_sequences(handle, name, alphabet, length, revcomp)
+        motif = MEMEMotif(alphabet, instances)
+        motif.length = length
+        motif.num_occurrences = num_occurrences
+        motif.evalue = evalue
+        motif.name = name
         record.motifs.append(motif)
-        __read_motif_name(motif, handle)
-        __read_motif_sequences(motif, handle, 'revcomp' in record.command)
         __skip_unused_lines(handle)
         try:
             line = handle.next()
@@ -60,15 +66,16 @@ class MEMEMotif(Motif):
     
     Methods:
     add_instance_from_values (name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = +): create a new instance of the motif with the specified values.
-    add_to_pssm (position): add a new position to the pssm. The position should be a list of nucleotide/amino acid frequencies
-    add_to_logodds (position): add a new position to the log odds matrix. The position should be a tuple of log odds values for the nucleotide/amino acid at that position.
-    compare_motifs (other_motif): returns the maximum correlation between this motif and other_motif
+       (DEPRECATION PENDING)
     """
-    def __init__ (self):
-        Motif.__init__(self)
+    def __init__ (self, alphabet=None, instances=None):
+        Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
     
     def _numoccurrences (self, number):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         if type(number) == int:
             self.num_occurrences = number
         else:
@@ -82,6 +89,9 @@ class MEMEMotif(Motif):
         return None
 
     def add_instance_from_values (self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         inst = MEMEInstance(sequence,self.alphabet)
         inst._pvalue(pvalue)
         inst._seqname(name)
@@ -96,6 +106,9 @@ class MEMEMotif(Motif):
         self.add_instance(inst)
     
     def _evalue (self, evalue):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         if type(evalue) == float:
             self.evalue = evalue
         else:
@@ -117,27 +130,48 @@ class MEMEInstance(Seq.Seq):
         
     
     def _seqname (self, name):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         self.sequence_name = name
         
     def _motifname (self, name):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         self.motif_name = name
     
     def _start (self,start):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         start = int(start)
         self.start = start
     
     def _pvalue (self,pval):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         pval = float(pval)
         self.pvalue = pval
     
     def _score (self, score):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         score = float(score)
         self.score = score
     
     def _strand (self, strand):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         self.strand = strand
     
     def _length (self, length):
+        import warnings
+        warnings.warn("This function is now obsolete, and will be deprecated and removed "
+                      "in a future release of Biopython.", PendingDeprecationWarning)
         self.length = length
     
 
@@ -252,17 +286,16 @@ def __read_command(record, handle):
     record.command = line
 
 
-def __create_motif(line):
+def __read_motif_statistics(line):
     line = line[5:].strip()
     ls = line.split()
-    motif = MEMEMotif()
-    motif.length = int(ls[3])
-    motif._numoccurrences(ls[6])
-    motif._evalue(ls[12])
-    return motif
+    length = int(ls[3])
+    num_occurrences = int(ls[6])
+    evalue = float(ls[12])
+    return length, num_occurrences, evalue
 
 
-def __read_motif_name(motif, handle):
+def __read_motif_name(handle):
     for line in handle:
         if 'sorted by position p-value' in line:
             break
@@ -271,10 +304,10 @@ def __read_motif_name(motif, handle):
     line = line.strip()
     ls = line.split()
     name = " ".join(ls[0:2])
-    motif.name=name
+    return name
 
 
-def __read_motif_sequences(motif, handle, rv):
+def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
     try:
         line = handle.next()
     except StopIteration:
@@ -293,19 +326,29 @@ def __read_motif_sequences(motif, handle, rv):
         raise ValueError('Unexpected end of stream: Failed to find motif sequences')
     if not line.startswith('---'):
         raise ValueError("Line does not start with '---':\n%s" % line)
+    instances = []
     for line in handle:
         if line.startswith('---'):
             break
         line = line.strip()
-        ls = line.split()
-        if rv:
-            #seq = Seq.Seq(ls[5], record.alphabet)
-            motif.add_instance_from_values(name = ls[0], sequence = ls[5], start = ls[2], pvalue = ls[3], strand = ls[1])
+        words = line.split()
+        if revcomp:
+            strand = words.pop(1)
         else:
-            #seq = Seq.Seq(ls[4], record.alphabet)
-            motif.add_instance_from_values(name = ls[0], sequence = ls[4], start = ls[1], pvalue = ls[2])
+            strand = '+'
+        sequence = words[4]
+        assert len(sequence)==length
+        instance = MEMEInstance(sequence, alphabet)
+        instance.motif_name = motif_name
+        instance.sequence_name = words[0]
+        instance.start = int(words[1])
+        instance.pvalue = float(words[2])
+        instance.strand = strand
+        instance.length = length
+        instances.append(instance)
     else:
         raise ValueError('Unexpected end of stream')
+    return instances
 
 
 def __skip_unused_lines(handle):

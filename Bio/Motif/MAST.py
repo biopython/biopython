@@ -81,8 +81,7 @@ def __read_database_and_motifs(record, handle):
         if not line.strip():
             break
         words = line.strip().split()
-        motif = MEMEMotif()
-        motif.alphabet = record.alphabet
+        motif = MEMEMotif(record.alphabet)
         motif.name = words[0]
         motif.length = int(words[1])
         # words[2] contains the best possible match

@@ -46,8 +46,7 @@ def read(handle):
             number = int(words[1])
             instances = []
         elif line[:3]=="MAP":
-            motif = Motif(instances)
-            motif.alphabet = IUPAC.unambiguous_dna
+            motif = Motif(IUPAC.unambiguous_dna, instances)
             motif.score = float(line.split()[-1])
             motif.number = number
             motif.set_mask(mask)

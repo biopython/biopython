@@ -13,7 +13,7 @@ class Motif(object):
     """
     A class representing sequence motifs.
     """
-    def __init__(self, instances=None, alphabet=IUPAC.unambiguous_dna):
+    def __init__(self, alphabet=IUPAC.unambiguous_dna, instances=None):
         self.counts = None
         self.mask = []
         self._pwm_is_current = False
