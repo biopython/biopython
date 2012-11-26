@@ -32,11 +32,11 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
     Citation:
 
-    Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R,
-    McWilliam H, Remmert R, Soding J, Thompson JD Higgins DG
+    Sievers F, Wilm A, Dineen DG, Gibson TJ, Karplus K, Li W, Lopez R,
+    McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG (2011).
     Fast, scalable generation of high-quality protein multiple
     sequence alignments using Clustal Omega.
-    Molecular Systems Biology 2011; accepted. 
+    Molecular Systems Biology 7:539 doi:10.1038/msb.2011.75
 
     Last checked against versions: 1.1.0
     """
