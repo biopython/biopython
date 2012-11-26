@@ -3,7 +3,9 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""handles true random numbers supplied from the the web server of fourmilab. Based on atmospheric noise.  The motivation is to support biosimulations that rely on random numbers.
+"""handles true random numbers supplied from the the web server of
+   fourmilab. Based on atmospheric noise.  The motivation is to
+   support biosimulations that rely on random numbers.
 """
 
 import urllib

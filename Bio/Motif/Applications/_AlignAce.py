@@ -8,7 +8,7 @@ for motif search in DNA sequences.
 
 AlignACE homepage:
 
-http://atlas.med.harvard.edu/
+http://arep.med.harvard.edu/mrnadata/mrnasoft.html
 
 AlignACE Citations:
 
