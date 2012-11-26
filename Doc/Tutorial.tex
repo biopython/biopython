@@ -4863,6 +4863,14 @@ and running BLAST remotely (on another machine, typically the NCBI servers).
 We're going to start this chapter by invoking the NCBI online BLAST service
 from within a Python script.
 
+\emph{NOTE}: The following Chapter~\ref{chapter:searchio} describes
+\verb|Bio.SearchIO|, an \emph{experimental} module in Biopython. We
+intend this to ultimately replace the older \verb|Bio.Blast| module, as it
+provides a more general framework handling other related sequence
+searching tools as well. However, until that is declared stable, for
+production code please continue to use the  \verb|Bio.Blast| module
+for dealing with NCBI BLAST.
+
 \section{Running BLAST over the Internet}
 \label{sec:running-www-blast}
 
@@ -5510,15 +5518,17 @@ You can use the \verb|Bio.Blast.NCBIXML| parser to read the XML output from
 current versions of RPS-BLAST.
 
 
-\chapter{Working with BLAST and other sequence search tools using Bio.SearchIO}
+\chapter{BLAST and other sequence search tools (\textit{experimental code})}
 \label{chapter:searchio}
 
-WARNING: This chapter of the Tutorial describes an \emph{experimental}
+\emph{WARNING}: This chapter of the Tutorial describes an \emph{experimental}
 module in Biopython. It is being included in Biopython and documented
 here in  the tutorial in a pre-final state to allow a period of feedback
 and refinement before we declare it stable. Until then the details will
 probably change, and any scripts using the current \verb|Bio.SearchIO|
-would need to be updated. Please keep this in mind!
+would need to be updated. Please keep this in mind! For stable code
+working with NCBI BLAST, please continue to use Bio.Blast described
+in the preceding Chapter~\ref{chapter:blast}.
 
 Biological sequence identification is an integral part of bioinformatics.
 Several tools are available for this, each with their own algorithms and
