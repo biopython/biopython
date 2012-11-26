@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 20 November 2012 (Biopython 1.60+)}
+\date{Last Update -- 26 November 2012 (Biopython 1.60+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -5513,13 +5513,20 @@ current versions of RPS-BLAST.
 \chapter{Working with BLAST and other sequence search tools using Bio.SearchIO}
 \label{chapter:searchio}
 
+WARNING: This chapter of the Tutorial describes an \emph{experimental}
+module in Biopython. It is being included in Biopython and documented
+here in  the tutorial in a pre-final state to allow a period of feedback
+and refinement before we declare it stable. Until then the details will
+probably change, and any scripts using the current \verb|Bio.SearchIO|
+would need to be updated. Please keep this in mind!
+
 Biological sequence identification is an integral part of bioinformatics.
 Several tools are available for this, each with their own algorithms and
 approaches, such as BLAST (arguably the most popular), FASTA, HMMER, and many
 more. In general, these tools usually use your sequence to search a database of
 potential matches. With the growing number of known sequences (hence the
 growing number of potential matches), interpreting the results becomes
-increasingly harder as there could be hundreds or even thousands of potential
+increasingly hard as there could be hundreds or even thousands of potential
 matches. In this scenario, interpreting the results manually is out of the
 question. Moreover, you often need to work with several sequence search tools,
 each with its own statistics, conventions, and output format. Imagine how
@@ -5530,6 +5537,7 @@ We know this too well ourselves, which is why we created the \verb|Bio.SearchIO|
 submodule in Biopython. \verb|Bio.SearchIO| allows you to extract information
 from your search results in a convenient way, while also dealing with the
 different standards and conventions used by different search tools.
+The name \verb|SearchIO| is a homage to BioPerl's module of the same name.
 
 In this chapter, we'll go through the main features of \verb|Bio.SearchIO| to
 show what it can do for you. We'll use two popular search tools along the way:
@@ -5539,6 +5547,7 @@ be able to adapt the workflow to any other search tools supported by
 search output files we'll be using. The BLAST output file can be downloaded
 here, and the BLAT output file here. Both output files were generated using
 this sequence:
+%TODO - Add the missing links above.
 
 \begin{verbatim}
 >mystery_seq
@@ -5546,8 +5555,8 @@ CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 \end{verbatim}
 
 The BLAST result is an XML file generated using blastn against the NCBI
-refseq_rna database. For BLAT, the sequence database was the February 2009 hg19
-human genome draft and the output format is PSL.
+\verb|refseq_rna| database. For BLAT, the sequence database was the February 2009
+\verb|hg19| human genome draft and the output format is PSL.
 
 We'll start from an introduction to the \verb|Bio.SearchIO| object model. The
 model is the representation of your search results, thus it is core to
@@ -5555,8 +5564,8 @@ model is the representation of your search results, thus it is core to
 \verb|Bio.SearchIO|, from the ones that reads in your search output files to
 the ones that can write new files.
 
-Now that we're all set let's go to the first step: introduction to the core
-object model
+Now that we're all set let's go to the first step: introducing the core
+object model.
 
 \section{The SearchIO object model}
 \label{sec:searchio-model}
@@ -5679,13 +5688,13 @@ there's already some useful information. By invoking \verb|print| on the
 \begin{itemize}
 \item The program name and version (blastn version 2.2.27+)
 \item The query ID, description, and its sequence length (ID is 42291,
-    description is 'mystery_seq', and it is 61 nucleotides long)
-\item The target database to search against (refseq_rna)
+    description is `mystery\_seq', and it is 61 nucleotides long)
+\item The target database to search against (refseq\_rna)
 \item A quick overview of the resulting hits. For our query sequence, there are
-    100 potential hits (no. 0 - 99 in the table). For each hit, we can also see
+    100 potential hits (numbered 0--99 in the table). For each hit, we can also see
     how many HSPs it contains, its ID, and a snippet of its description. Notice
     here that \verb|Bio.SearchIO| truncates the hit table overview, by showing
-    only hits no. 0 - 29, and then 97 - 99.
+    only hits numbered 0--29, and then 97--99.
 \end{itemize}
 
 Now let's check our BLAT results using the same procedure as above:
@@ -5712,17 +5721,17 @@ and BLAT searches:
 \begin{itemize}
 \item The program name and version. \verb|Bio.SearchIO| knows that the program
     is BLAT, but in the output file there is no information regarding the
-    program version so it defaults to '<unknown version>'.
+    program version so it defaults to `<unknown version>'.
 \item The query ID, description, and its sequence length. Notice here that these
     details is slightly different from the ones we see in BLAST. The ID is
-    'mystery_seq' instead of 42991, there is no known description, but the query
+    `mystery\_seq' instead of 42991, there is no known description, but the query
     length is still 61. This is actually a difference introduced by the file
     formats themselves. BLAST sometimes creates its own query IDs and uses your
     original ID as the sequence description.
 \item The target database is not known, as it is not stated in the BLAT output
     file.
 \item And finally, the list of hits we have is completely different. Here, we
-    see that our query sequence only hits the 'chr19' database entry, but in it
+    see that our query sequence only hits the `chr19' database entry, but in it
     we see 17 HSP regions. This should not be surprising however, given that we
     are using a different program on a different target database.
 \end{itemize}
@@ -5900,7 +5909,8 @@ model, let's take a look at two more sets of methods that could make it even
 easier to work with \verb|QueryResult| objects: the \verb|filter| and \verb|map|
 methods.
 
-If you're familiar with Python's built in \verb|filter| and \verb|map| methods,
+If you're familiar with Python's list comprehensions, generator expressions
+or the built in \verb|filter| and \verb|map| functions,
 you'll know how useful they are for working with list-like objects (if you're
 not, check them out!). You can use these built in methods to manipulate
 \verb|QueryResult| objects, but you'll end up with regular Python lists and lose
@@ -6052,12 +6062,12 @@ There are some differences worth explaining, though:
 
 \begin{itemize}
 \item The e-value and bit score column values. As BLAT HSPs do not have e-values
-    and bit scores, the display defaults to '?'.
+    and bit scores, the display defaults to `?'.
 \item What about the span column? The span values is meant to display the
     complete alignment length, which consists of all residues and any gaps that
     may be present. The PSL format do not have this information readily available
     and \verb|Bio.SearchIO| does not attempt to try guess what it is, so we get a
-    '?' similar to the e-value and bit score columns.
+    `?' similar to the e-value and bit score columns.
 \end{itemize}
 
 In terms of Python objects, \verb|Hit| behaves almost the same as Python lists,
@@ -6270,7 +6280,7 @@ Quick stats: evalue ?; bitscore ?
 
 Some of the outputs you may have alredy guessed. We have the query and hit IDs
 and descriptions and the sequence coordinates. Values for evalue and bitscore is
-'?' as BLAT HSPs do not have these attributes. But The biggest difference here
+`?' as BLAT HSPs do not have these attributes. But The biggest difference here
 is that you don't see any sequence alignments displayed. If you look closer, PSL
 formats themselves do not have any hit or query sequences, so
 \verb|Bio.SearchIO| won't create any sequence or alignment objects. What happens
@@ -6306,13 +6316,13 @@ Other format-specific attributes are still present as well:
 \begin{verbatim}
 >>> blat_hsp.score          # PSL score
 61
->>> blat_hsp.mismatch_num   # the 'mismatch' column
+>>> blat_hsp.mismatch_num   # the mismatch column
 0
 \end{verbatim}
 
-So far so good? Things get more interesting when you look at another 'variant'
+So far so good? Things get more interesting when you look at another `variant'
 of HSP present in our BLAT results. You might recall that in BLAT searches,
-sometimes we get our results separated into 'blocks'. These blocks are
+sometimes we get our results separated into `blocks'. These blocks are
 essentially alignment fragments that may have some intervening sequence between
 them.
 
@@ -6338,7 +6348,7 @@ Quick stats: evalue ?; bitscore ?
 What's happening here? We still some essential details covered: the IDs and
 descriptions, the coordinates, and the quick statistics are similar to what
 you've seen before. But the fragments detail is all different. Instead of
-showing 'Fragments: 1', we now have a table with two data rows.
+showing `Fragments: 1', we now have a table with two data rows.
 
 This is how \verb|Bio.SearchIO| deals with HSPs having multiple fragments. As
 mentioned before, an HSP alignment may be separated by intervening sequences
@@ -6612,7 +6622,7 @@ Or also with the format-specific keyword argument:
 QueryResult(id='gi|16080617|ref|NP_391444.1|', 3 hits)
 \end{verbatim}
 
-Or with the key_function argument, like in \verb|Bio.SeqIO|:
+Or with the \verb|key_function| argument, as in \verb|Bio.SeqIO|:
 
 %cont-doctest
 \begin{verbatim}
