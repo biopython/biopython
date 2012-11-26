@@ -11,12 +11,18 @@
 import itertools
 import os
 from StringIO import StringIO
+
+
 try:
-    from sqlite3 import dbapi2 as sqlite
-    from sqlite3 import IntegrityError, OperationalError
+    from sqlite3 import dbapi2 as _sqlite
+    from sqlite3 import IntegrityError as _IntegrityError
+    from sqlite3 import OperationalError as _OperationalError
 except ImportError:
-    # apparently jython2.5 may not support sqlite
-    sqlite = None
+    #Not expected to be present on Python 2.4, ignore it
+    #and at least offer Bio.SearchIO.index() functionality
+    _sqlite = None
+    pass
+
 try:
     from collections import UserDict as _dict_base
 except ImportError:
@@ -222,8 +228,8 @@ class _DbIndexedSearch(_IndexedSearch):
                      (if it exists) or not.
 
         """
-        # COMPAT: for Jython, which may not have sqlite3 baked in
-        if not sqlite:
+        if not _sqlite:
+            # Hack for Jython (of if Python is compiled without it)
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError("Requires sqlite3, which is "
                                                "included Python 2.5+")
@@ -237,7 +243,7 @@ class _DbIndexedSearch(_IndexedSearch):
             os.remove(index_filename)
 
         if os.path.isfile(index_filename):
-            con = sqlite.connect(index_filename)
+            con = _sqlite.connect(index_filename)
             self._con = con
             try:
                 # get the # of result offsets stored in the database
@@ -277,7 +283,7 @@ class _DbIndexedSearch(_IndexedSearch):
                     con.close()
                     raise ValueError("Index file has different filenames")
 
-            except OperationalError, err:
+            except _OperationalError, err:
                 con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
         else:
@@ -285,10 +291,10 @@ class _DbIndexedSearch(_IndexedSearch):
             self._format = format
 
             # create the index db file
-            con = sqlite.connect(index_filename)
+            con = _sqlite.connect(index_filename)
             self._con = con
 
-            # speed optimization
+            # Sqlite PRAGMA settings for speed
             con.execute("PRAGMA synchronous=OFF")
             con.execute("PRAGMA locking_mode=EXCLUSIVE")
 
@@ -343,7 +349,7 @@ class _DbIndexedSearch(_IndexedSearch):
             try:
                 con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
                         "key_index ON offset_data(key);")
-            except IntegrityError, err:
+            except _IntegrityError, err:
                 self._proxies = indexer_proxies
                 self.close()
                 con.close()
@@ -428,9 +434,10 @@ class _DbIndexedSearch(_IndexedSearch):
         proxies = self._proxies
         if file_number in proxies:
             if length:
-                handle = proxies[file_number]._handle
-                handle.seek(offset)
-                return handle.read(length)
+                #Shortcut if we have the length
+                h = proxies[file_number]._handle
+                h.seek(offset)
+                return h.read(length)
             else:
                 return proxies[file_number].get_raw(offset)
         else:
