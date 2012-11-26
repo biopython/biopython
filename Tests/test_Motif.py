@@ -401,13 +401,19 @@ class MotifTestsBasic(unittest.TestCase):
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
-        m = Motif.read(self.PFMin,"jaspar-pfm")
+        import warnings
+        from Bio import BiopythonExperimentalWarning
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+        m = Motif.read(self.PFMin,"pfm")
         self.assertEqual(m.length, 12)
 
     def test_sites_parsing(self):
         """Test to be sure that Motif can parse sites files.
         """
-        m = Motif.read(self.SITESin,"jaspar-sites")
+        import warnings
+        from Bio import BiopythonExperimentalWarning
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
+        m = Motif.read(self.SITESin,"sites")
         self.assertEqual(m.length, 6)
 
     def test_FAoutput(self):
@@ -1511,8 +1517,11 @@ class TestMAST(unittest.TestCase):
 
 class MotifTestPWM(unittest.TestCase):
     def setUp(self):
+        import warnings
+        from Bio import BiopythonExperimentalWarning
+        warnings.simplefilter('ignore', BiopythonExperimentalWarning)
         handle = open("Motif/SRF.pfm")
-        self.m = Motif.read(handle, "jaspar-pfm")
+        self.m = Motif.read(handle, "pfm")
         handle.close()
         self.s = Seq("ACGTGTGCGTAGTGCGT", self.m.alphabet)
 

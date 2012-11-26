@@ -12,6 +12,7 @@ It also includes functionality for parsing AlignACE and MEME programs.
 from Bio.Motif._Motif import Motif
 from Bio.Motif.AlignAce import read as _AlignAce_read
 from Bio.Motif.MEME import read as _MEME_read
+from Bio.Motif import Jaspar
 from Bio.Motif.Thresholds import ScoreDistribution
 
 _parsers={"AlignAce" : _AlignAce_read,
@@ -25,7 +26,7 @@ def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
 
 _readers={"jaspar-pfm": _from_pfm,
-          "jaspar-sites": _from_sites
+          "jaspar-sites": _from_sites,
           }
 
 
@@ -64,19 +65,22 @@ def parse(handle,format):
     GACGCCGGGGAT
     CGACTCGCGCTTACAAGG
     """
-    try:
-        parser=_parsers[format]
+    if format in ('pfm', 'sites'):
+        yield Jaspar.read(handle, format)
+    else:
+        try:
+            parser=_parsers[format]
         
-    except KeyError:
-        try: #not a true parser, try reader formats
-            reader=_readers[format]
-        except:
-            raise ValueError("Wrong parser format")
-        else: #we have a proper reader 
-            yield reader(handle)
-    else: # we have a proper reader
-        for m in parser(handle).motifs:
-            yield m
+        except KeyError:
+            try: #not a true parser, try reader formats
+                reader=_readers[format]
+            except:
+                raise ValueError("Wrong parser format")
+            else: #we have a proper reader 
+                yield reader(handle)
+        else: # we have a proper reader
+            for m in parser(handle).motifs:
+                yield m
 
 def read(handle,format):
     """Reads a motif from a handle using a specified file-format.

@@ -9,12 +9,15 @@ from Bio.SubsMat import FreqTable
 from Bio.Alphabet import IUPAC
 import math
 
+import warnings
+from Bio import BiopythonExperimentalWarning
+
 class Motif(object):
     """
     A class representing sequence motifs.
     """
-    def __init__(self, alphabet=IUPAC.unambiguous_dna, instances=None):
-        self.counts = None
+    def __init__(self, alphabet=IUPAC.unambiguous_dna,
+                       instances=None, counts=None):
         self.mask = []
         self._pwm_is_current = False
         self._pwm = []
@@ -27,11 +30,20 @@ class Motif(object):
         self.beta=1.0
         self.info=None
         self.name=""
-        if instances==None:
+        if counts!=None and instances!=None:
+            raise Exception(ValueError,
+                "Specify either instances or counts, don't specify both")
+        elif counts!=None:
+            warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
+            for letter in counts:
+                length = len(counts[letter])
+                if self.length==None:
+                    self.length = length
+                elif self.length!=length:
+                    raise Exception("counts matrix has inconsistent lengths")
             self.instances = None
-        else:
-            import warnings
-            from Bio import BiopythonExperimentalWarning
+            self.counts = counts
+        elif instances!=None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
             for instance in instances:
@@ -45,11 +57,19 @@ class Motif(object):
                     message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
                     raise ValueError(message)
                 self.instances.append(instance)
+            self.counts = {}
+            for letter in self.alphabet.letters:
+                self.counts[letter] = [0] * self.length
+            for instance in self.instances:
+                for position, letter in enumerate(instance):
+                    self.counts[letter][position] += 1
+        else:
+            self.counts = None
+            self.instances = None
 
     @property
     def has_instances(self):
         """Legacy property, check if m.instances is None instead (DEPRECATED)."""
-        import warnings
         from Bio import BiopythonDeprecationWarning
         warnings.warn("Instead of 'm.has_instances' use 'm.instances is not None'",
                       BiopythonDeprecationWarning)
@@ -58,7 +78,6 @@ class Motif(object):
     @property
     def has_counts(self):
         """Legacy property, check if m.counts is None instead (DEPRECATED)."""
-        import warnings
         from Bio import BiopythonDeprecationWarning
         warnings.warn("Instead of 'm.has_counts' use 'm.counts is not None'",
                       BiopythonDeprecationWarning)
@@ -385,7 +404,6 @@ class Motif(object):
         the self.alphabet variable must be set beforehand.
         If the last line contains asterisks it is used for setting mask
         """
-        import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython. As a replacement, please use Bio.Motif.parse instead.", PendingDeprecationWarning)
         
         while 1:
@@ -436,11 +454,30 @@ class Motif(object):
         FASTA representation of motif
         """
         if self.instances==None:
-            self.make_instances_from_counts()
+            alpha="".join(self.alphabet.letters)
+            #col[i] is a column taken from aligned motif instances
+            col=[]
+            instances=[]
+            s = sum(self.counts[nuc][0] for nuc in self.alphabet.letters)
+            for i in range(self.length):
+                col.append("")
+                for n in self.alphabet.letters:
+                    col[i] += n * self.counts[n][i]
+                if len(col[i])<s:
+                    warnings.warn(UserWarning, "WARNING, column too short (%d; expected %d)" % (len(col[i]), s))
+                    col[i]+=(alpha*s)[:(s-len(col[i]))]
+            #iterate over instances
+            for i in range(s): 
+                instance="" #start with empty seq
+                for j in range(self.length): #iterate over positions
+                    instance+=col[j][i]
+                instance = Seq(instance, self.alphabet)                
+                instances.append(instance)
+        else:
+            instances = self.instances
         string = ""
-        for i,inst in enumerate(self.instances):
-            string += ">instance%d\n"%i + str(inst) + "\n"
-            
+        for i, instance in enumerate(instances):
+            string += ">instance%d\n%s\n "% (i, instance)
         return string
 
     def reverse_complement(self):
@@ -476,12 +513,13 @@ class Motif(object):
 
         The instances are fake, but the pwm is accurate.
         """
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython. Please use the 'pfm' format instead of the 'jaspar-pfm' format", PendingDeprecationWarning)
         return self._from_horiz_matrix(stream,letters="ACGT",make_instances=make_instances)
 
     def _from_vert_matrix(self,stream,letters=None,make_instances=False):
         """reads a vertical count matrix from stream and fill in the counts.
         """
-
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         self.counts = {}
         if letters==None:
             letters=self.alphabet.letters
@@ -501,6 +539,7 @@ class Motif(object):
     def _from_horiz_matrix(self,stream,letters=None,make_instances=False):
         """reads a horizontal count matrix from stream and fill in the counts.
         """
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         if letters==None:
             letters=self.alphabet.letters
         self.counts = {}
@@ -529,9 +568,10 @@ class Motif(object):
     def make_instances_from_counts(self):
         """Creates "fake" instances for a motif created from a count matrix.
 
-        In case the sums of counts are different for different columnes, the
+        In case the sums of counts are different for different columns, the
         shorter columns are padded with background.
         """
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         alpha="".join(self.alphabet.letters)
         #col[i] is a column taken from aligned motif instances
         col=[]
@@ -580,6 +620,7 @@ class Motif(object):
 
         The instances and pwm are OK.
         """
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython. Please use the 'sites' format instead of the 'jaspar-sites' format", PendingDeprecationWarning)
         # Probably this should be in a separate submodule of Bio.Motif
         self.instances = []
         for line in stream:
