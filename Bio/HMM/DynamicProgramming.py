@@ -34,7 +34,7 @@ class AbstractDPAlgorithms(object):
         self._mm = markov_model
         self._seq = sequence
 
-    def _foward_recursion(self, cur_state, sequence_pos, forward_vars):
+    def _forward_recursion(self, cur_state, sequence_pos, forward_vars):
         """Calculate the forward recursion value.
         """
         raise NotImplementedError("Subclasses must implement")
