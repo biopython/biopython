@@ -38,6 +38,15 @@ mailing list. We'd expect such experimental code to reach stable status in
 one or two releases time, at which point our normal policies about trying to
 preserve backwards compatibility would apply. See also the README file.
 
+This release also includes Bow's Google Summer of Code work writing a unified
+parsing framework for NCBI BLAST (assorted formats including tabular and XML),
+HMMER, BLAT, and other sequence searching tools. This is currently available
+with the new BiopythonExperimentalWarning to indicate that this is still
+somewhat experimental. We're bundling it with the main release to get more
+public feedback, but with the big warning that the API is likely to change.
+In fact, even the current name of Bio.SearchIO may change since unless you
+are familiar with BioPerl its purpose isn't immediately clear.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Many thanks to the Biopython developers and community for making this release
@@ -57,6 +66,7 @@ Nick Semenkovich (first contribution)
 Peter Cock
 Robert Ernst (first contribution)
 Tiago Antao
+Wibowo 'Bow' Arindrarto
 
 ===================================================================
 
