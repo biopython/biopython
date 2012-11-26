@@ -268,7 +268,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         #Furthermore could compare a generator to the DB on reloading
         #(no need to turn it into a list)
         if not _sqlite:
-            #Hack for Python 2.4 (of if Python is compiled without it)
+            # Hack for Jython (of if Python is compiled without it)
             from Bio import MissingPythonDependencyError
             raise MissingPythonDependencyError("Requires sqlite3, which is "
                                                "included Python 2.5+")
@@ -333,7 +333,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             self._con = con
             #print "Creating index"
             # Sqlite PRAGMA settings for speed
-            con.execute("PRAGMA synchronous='OFF'")
+            con.execute("PRAGMA synchronous=OFF")
             con.execute("PRAGMA locking_mode=EXCLUSIVE")
             #Don't index the key column until the end (faster)
             #con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
