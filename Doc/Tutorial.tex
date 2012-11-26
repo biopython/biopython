@@ -4117,8 +4117,9 @@ print clustal_data
 \label{sec:manipulating-alignments}
 
 Now that we've covered loading and saving alignments, we'll look at what else you can do
-with them. Note that many of these features are new in Biopython 1.54.
+with them.
 
+\subsection{Slicing alignments}
 First of all, in some senses the alignment objects act like a Python \verb|list| of
 \verb|SeqRecord| objects (the rows). With this model in mind hopefully the actions
 of \verb|len()| (the number of rows) and iteration (each row as a \verb|SeqRecord|)
@@ -4287,6 +4288,48 @@ AEGDDPAKAAFDSLQASATEYIGYAWAMVVVIVGATIGIKLFKKFTSKA Q9T0Q9_BPFD/1-49
 
 \noindent Note that you can only add two alignments together if they
 have the same number of rows.
+
+\subsection{Alignments as arrays}
+Depending on what you are doing, it can be more useful to turn the alignment
+object into an array of letters -- and you can do this with NumPy:
+
+\begin{verbatim}
+>>> import numpy as np
+>>> from Bio import AlignIO>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
+>>> align_array = np.array([list(rec) for rec in alignment], np.character)
+>>> print align_array
+[['A' 'E' 'P' 'N' 'A' 'A' 'T' 'N' 'Y' 'A' 'T' 'E' 'A' 'M' 'D' 'S' 'L' 'K'
+  'T' 'Q' 'A' 'I' 'D' 'L' 'I' 'S' 'Q' 'T' 'W' 'P' 'V' 'V' 'T' 'T' 'V' 'V'
+  'V' 'A' 'G' 'L' 'V' 'I' 'R' 'L' 'F' 'K' 'K' 'F' 'S' 'S' 'K' 'A']
+ ['A' 'E' 'P' 'N' 'A' 'A' 'T' 'N' 'Y' 'A' 'T' 'E' 'A' 'M' 'D' 'S' 'L' 'K'
+  'T' 'Q' 'A' 'I' 'D' 'L' 'I' 'S' 'Q' 'T' 'W' 'P' 'V' 'V' 'T' 'T' 'V' 'V'
+  'V' 'A' 'G' 'L' 'V' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'V' 'S' 'R' 'A']
+ ['D' 'G' 'T' 'S' 'T' 'A' 'T' 'S' 'Y' 'A' 'T' 'E' 'A' 'M' 'N' 'S' 'L' 'K'
+  'T' 'Q' 'A' 'T' 'D' 'L' 'I' 'D' 'Q' 'T' 'W' 'P' 'V' 'V' 'T' 'S' 'V' 'A'
+  'V' 'A' 'G' 'L' 'A' 'I' 'R' 'L' 'F' 'K' 'K' 'F' 'S' 'S' 'K' 'A']
+ ['A' 'E' 'G' 'D' 'D' 'P' '-' '-' '-' 'A' 'K' 'A' 'A' 'F' 'N' 'S' 'L' 'Q'
+  'A' 'S' 'A' 'T' 'E' 'Y' 'I' 'G' 'Y' 'A' 'W' 'A' 'M' 'V' 'V' 'V' 'I' 'V'
+  'G' 'A' 'T' 'I' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'T' 'S' 'K' 'A']
+ ['A' 'E' 'G' 'D' 'D' 'P' '-' '-' '-' 'A' 'K' 'A' 'A' 'F' 'D' 'S' 'L' 'Q'
+  'A' 'S' 'A' 'T' 'E' 'Y' 'I' 'G' 'Y' 'A' 'W' 'A' 'M' 'V' 'V' 'V' 'I' 'V'
+  'G' 'A' 'T' 'I' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'A' 'S' 'K' 'A']
+ ['A' 'E' 'G' 'D' 'D' 'P' '-' '-' '-' 'A' 'K' 'A' 'A' 'F' 'D' 'S' 'L' 'Q'
+  'A' 'S' 'A' 'T' 'E' 'Y' 'I' 'G' 'Y' 'A' 'W' 'A' 'M' 'V' 'V' 'V' 'I' 'V'
+  'G' 'A' 'T' 'I' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'T' 'S' 'K' 'A']
+ ['F' 'A' 'A' 'D' 'D' 'A' 'T' 'S' 'Q' 'A' 'K' 'A' 'A' 'F' 'D' 'S' 'L' 'T'
+  'A' 'Q' 'A' 'T' 'E' 'M' 'S' 'G' 'Y' 'A' 'W' 'A' 'L' 'V' 'V' 'L' 'V' 'V'
+  'G' 'A' 'T' 'V' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'V' 'S' 'R' 'A']]
+\end{verbatim}
+
+If you will be working heavily with the columns, you can tell NumPy to store
+the array by column (as in Fortan) rather then its default of by row (as in C):
+
+\begin{verbatim}
+>>> align_array = np.array([list(rec) for rec in alignment], np.character, order="F")
+\end{verbatim}
+
+Note that this leaves the original Biopython alignment object and the NumPy array
+in memory as separate objects - editing one will not update the other!
 
 \section{Alignment Tools}
 \label{sec:alignment-tools}
