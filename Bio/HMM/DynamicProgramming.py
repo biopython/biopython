@@ -5,12 +5,12 @@ algorithms that can be used generally.
 """
 
 class AbstractDPAlgorithms(object):
-    """An abstract class to calculate forward and backward probabiliies.
+    """An abstract class to calculate forward and backward probabilities.
 
     This class should not be instantiated directly, but should be used
     through a derived class which implements proper scaling of variables.
 
-    This class is just meant to encapsulate the basic foward and backward
+    This class is just meant to encapsulate the basic forward and backward
     algorithms, and allow derived classes to deal with the problems of
     multiplying probabilities.
 
@@ -23,7 +23,7 @@ class AbstractDPAlgorithms(object):
     step using some technique to prevent underflow errors.
     """
     def __init__(self, markov_model, sequence):
-        """Initialize to calculate foward and backward probabilities.
+        """Initialize to calculate forward and backward probabilities.
 
         Arguments:
 
@@ -42,12 +42,12 @@ class AbstractDPAlgorithms(object):
     def forward_algorithm(self):
         """Calculate sequence probability using the forward algorithm.
 
-        This implements the foward algorithm, as described on p57-58 of
+        This implements the forward algorithm, as described on p57-58 of
         Durbin et al.
 
         Returns:
 
-        o A dictionary containing the foward variables. This has keys of the
+        o A dictionary containing the forward variables. This has keys of the
         form (state letter, position in the training sequence), and values
         containing the calculated forward variable.
 
@@ -161,7 +161,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
     manageable numerical interval during calculations. This approach is
     described in Durbin et al. on p 78.
 
-    This approach is a little more straightfoward then log transformation
+    This approach is a little more straightforward then log transformation
     but may still give underflow errors for some types of models. In these
     cases, the LogDPAlgorithms class should be used.
     """

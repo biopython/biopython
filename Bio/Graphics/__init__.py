@@ -4,7 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 ################################################################################
-"""Bio.Graphics offsers several graphical outputs, all using ReportLab."""
+"""Bio.Graphics offers several graphical outputs, all using ReportLab."""
 
 # Check if ReportLab is installed.
 try:
@@ -21,7 +21,7 @@ except ImportError:
 # code to deal with the different ReportLab renderers
 # and the API quirks consistently.
 def _write(drawing, output_file, format, dpi=72):
-    """Helper function to standize output to files (PRIVATE).
+    """Helper function to standardize output to files (PRIVATE).
 
     Writes the provided drawing out to a file in a prescribed format.
 
