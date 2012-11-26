@@ -409,6 +409,8 @@ class _Scanner(object):
         elif line[0] == '>':
             # XXX make a better check here between pairwise and masterslave
             self._scan_pairwise_alignments(uhandle, consumer)
+        elif line.startswith('Effective'):
+            return
         else:
             # XXX put in a check to make sure I'm in a masterslave alignment
             self._scan_masterslave_alignment(uhandle, consumer)
@@ -613,8 +615,10 @@ class _Scanner(object):
             if 'Lambda' in line:
                 break
 
-        read_and_call(uhandle, consumer.noevent, start='Lambda')
-        read_and_call(uhandle, consumer.ka_params)
+        try:
+            read_and_call(uhandle, consumer.noevent, start='Lambda')
+            read_and_call(uhandle, consumer.ka_params)
+        except: pass
 
         #This blank line is optional:
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)

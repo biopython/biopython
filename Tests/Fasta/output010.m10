@@ -1,0 +1,28 @@
+# fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_s00.fasta mrnalib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: mrna_s00.fasta
+  1>>>random_s00 - 15 nt
+Library: mrnalib.fasta
+   178611 residues in   250 sequences
+
+Statistics: Altschul/Gish params: n0: 15 Lambda: 0.192 K: 0.177 H: 0.360
+ statistics sampled from 59 (59) to 59 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ ktup: 1, E-join: 0.25 (0.802), E-opt: 0.05 (0.126), width:  16
+ Scan time:  0.060
+!! No sequences with E() < 1.7
+>>><<<
+>>>///
+
+15 residues in 1 query   sequences
+178611 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:57 2012 done: Tue May  8 01:06:57 2012
+ Total Scan time:  0.060 Total Display time:  0.000
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

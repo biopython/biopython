@@ -1,0 +1,58 @@
+Command line: [exonerate -m protein2dna scer_cad1_prot.fa scer_cad1frameshift.fa --showvulgar no --bestn 3]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: sp|P24813|YAP2_YEAST AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2
+        Target: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+         Model: protein2dna:local
+     Raw score: 367
+   Query range: 330 -> 409
+  Target range: 216 -> 455
+
+ 331 : HisThrLysThrIleArgThrGlnSerGluAlaIleGluHisIleSerSerAlaIleSerAsnG : 352
+       ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       HisThrLysThrIleArgThrGlnSerGluAlaIleGluHisIleSerSerAlaIleSerAsnG
+ 217 : CATACTAAAACAATTCGAACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATG : 280
+
+ 353 : lyLysAlaSerCysTyrHisIleLeuGluGluIleSerSerLeuProLysTyrSerSerLeuAs : 373
+       ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       lyLysAlaSerCysTyrHisIleLeuGluGluIleSerSerLeuProLysTyrSerSerLeuAs
+ 281 : GAAAAGCGTCTTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGA : 343
+
+ 374 : p--IleAspAspLeuCysSerGluLeuIleIleLysAlaLysCysThrAspAspCysLysIleV : 394
+       |##|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       p##IleAspAspLeuCysSerGluLeuIleIleLysAlaLysCysThrAspAspCysLysIleV
+ 344 : CAAATAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAAATAG : 408
+
+ 395 : alValLysAlaArgAspLeuGlnSerAlaLeuValArgGlnLeuLeu : 409
+       |||||||||||||||||||||||||||||||||||||||||||||||
+       alValLysAlaArgAspLeuGlnSerAlaLeuValArgGlnLeuLeu
+ 409 : TAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTG : 455
+
+
+C4 Alignment:
+------------
+         Query: sp|P24813|YAP2_YEAST AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2
+        Target: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+         Model: protein2dna:local
+     Raw score: 322
+   Query range: 6 -> 70
+  Target range: 16 -> 208
+
+   7 : LysGlyGlnGlnIleTyrLeuAlaGlyAspMetLysLysGlnMetLeuLeuAsnLysAspGlyT :  28
+       ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       LysGlyGlnGlnIleTyrLeuAlaGlyAspMetLysLysGlnMetLeuLeuAsnLysAspGlyT
+  17 : AAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAAGCAAATGTTGCTAAATAAAGATGGAA :  80
+
+  29 : hrProLysArgLysValGlyArgProGlyArgLysArgIleAspSerGluAlaLysSerArgAr :  49
+       ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       hrProLysArgLysValGlyArgProGlyArgLysArgIleAspSerGluAlaLysSerArgAr
+  81 : CACCTAAGAGGAAGGTGGGCAGACCAGGCAGAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAG : 143
+
+  50 : gThrAlaGlnAsnArgAlaAlaGlnArgAlaPheArgAspArgLysGluAlaLysMetLysSer :  70
+       ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+       gThrAlaGlnAsnArgAlaAlaGlnArgAlaPheArgAspArgLysGluAlaLysMetLysSer
+ 144 : GACTGCCCAGAATAGGGCAGCTCAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGT : 206
+
+-- completed exonerate analysis

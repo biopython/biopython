@@ -1,0 +1,28 @@
+# fasta36 -E 0.5 -F 0.3 -m 10 prot_s00.fasta protlib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: prot_s00.fasta
+  1>>>random_s00 - 16 aa
+Library: protlib.fasta
+  1375680 residues in   250 sequences
+
+Statistics: (shuffled [500]) MLE statistics: Lambda= 0.2886;  K=0.1163
+ statistics sampled from 200 (200) to 500 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 1, E-join: 1 (0.996), E-opt: 0.2 (0.8), width:  16
+ Scan time:  0.200
+!! No sequences with E() < 0.5
+>>><<<
+>>>///
+
+16 residues in 1 query   sequences
+1375680 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:58 2012 done: Tue May  8 01:06:58 2012
+ Total Scan time:  0.200 Total Display time:  0.010
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

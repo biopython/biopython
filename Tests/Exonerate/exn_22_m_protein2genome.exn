@@ -1,0 +1,193 @@
+Command line: [exonerate -m protein2genome ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: sp|P24813|YAP2_YEAST AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]
+         Model: protein2genome:local
+     Raw score: 2105
+   Query range: 0 -> 409
+  Target range: 1319275 -> 1318048
+
+       1 : MetGlyAsnIleLeuArgLysGlyGlnGlnIleTyrLeuAlaGlyAspMetLysLy :      19
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           MetGlyAsnIleLeuArgLysGlyGlnGlnIleTyrLeuAlaGlyAspMetLysLy
+ 1319275 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAA : 1319221
+
+      20 : sGlnMetLeuLeuAsnLysAspGlyThrProLysArgLysValGlyArgProGlyA :      38
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           sGlnMetLeuLeuAsnLysAspGlyThrProLysArgLysValGlyArgProGlyA
+ 1319220 : GCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCA : 1319164
+
+      39 : rgLysArgIleAspSerGluAlaLysSerArgArgThrAlaGlnAsnArgAlaAla :      56
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rgLysArgIleAspSerGluAlaLysSerArgArgThrAlaGlnAsnArgAlaAla
+ 1319163 : GAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCT : 1319110
+
+      57 : GlnArgAlaPheArgAspArgLysGluAlaLysMetLysSerLeuGlnGluArgVa :      75
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GlnArgAlaPheArgAspArgLysGluAlaLysMetLysSerLeuGlnGluArgVa
+ 1319109 : CAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGT : 1319053
+
+      76 : lGluLeuLeuGluGlnLysAspAlaGlnAsnLysThrThrThrAspPheLeuLeuC :      94
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lGluLeuLeuGluGlnLysAspAlaGlnAsnLysThrThrThrAspPheLeuLeuC
+ 1319052 : AGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTAT : 1318996
+
+      95 : ysSerLeuLysSerLeuLeuSerGluIleThrLysTyrArgAlaLysAsnSerAsp :     112
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ysSerLeuLysSerLeuLeuSerGluIleThrLysTyrArgAlaLysAsnSerAsp
+ 1318995 : GTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGAT : 1318942
+
+     113 : AspGluArgIleLeuAlaPheLeuAspAspLeuGlnGluGlnGlnLysArgGluAs :     131
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           AspGluArgIleLeuAlaPheLeuAspAspLeuGlnGluGlnGlnLysArgGluAs
+ 1318941 : GATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAA : 1318885
+
+     132 : nGluLysGlyThrSerThrAlaValSerLysAlaAlaLysGluLeuProSerProA :     150
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           nGluLysGlyThrSerThrAlaValSerLysAlaAlaLysGluLeuProSerProA
+ 1318884 : CGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTA : 1318828
+
+     151 : snSerAspGluAsnMetThrValAsnThrSerIleGluValGlnProHisThrGln :     168
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           snSerAspGluAsnMetThrValAsnThrSerIleGluValGlnProHisThrGln
+ 1318827 : ATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAA : 1318774
+
+     169 : GluAsnGluLysValMetTrpAsnIleGlySerTrpAsnAlaProSerLeuThrAs :     187
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GluAsnGluLysValMetTrpAsnIleGlySerTrpAsnAlaProSerLeuThrAs
+ 1318773 : GAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAA : 1318717
+
+     188 : nSerTrpAspSerProProGlyAsnArgThrGlyAlaValThrIleGlyAspGluS :     206
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           nSerTrpAspSerProProGlyAsnArgThrGlyAlaValThrIleGlyAspGluS
+ 1318716 : TTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAA : 1318660
+
+     207 : erIleAsnGlySerGluMetProAspPheSerLeuAspLeuValSerAsnAspArg :     224
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           erIleAsnGlySerGluMetProAspPheSerLeuAspLeuValSerAsnAspArg
+ 1318659 : GTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGA : 1318606
+
+     225 : GlnThrGlyLeuGluAlaLeuAspTyrAspIleHisAsnTyrPheProGlnHisSe :     243
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           GlnThrGlyLeuGluAlaLeuAspTyrAspIleHisAsnTyrPheProGlnHisSe
+ 1318605 : CAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTC : 1318549
+
+     244 : rGluArgLeuThrAlaGluLysIleAspThrSerAlaCysGlnCysGluIleAspG :     262
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rGluArgLeuThrAlaGluLysIleAspThrSerAlaCysGlnCysGluIleAspG
+ 1318548 : TGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACC : 1318492
+
+     263 : lnLysTyrLeuProTyrGluThrGluAspAspThrLeuPheProSerValLeuPro :     280
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lnLysTyrLeuProTyrGluThrGluAspAspThrLeuPheProSerValLeuPro
+ 1318491 : AAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCC : 1318438
+
+     281 : LeuAlaValGlySerGlnCysAsnAsnIleCysAsnArgLysCysIleGlyThrLy :     299
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           LeuAlaValGlySerGlnCysAsnAsnIleCysAsnArgLysCysIleGlyThrLy
+ 1318437 : CTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAA : 1318381
+
+     300 : sProCysSerAsnLysGluIleLysCysAspLeuIleThrSerHisLeuLeuAsnG :     318
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           sProCysSerAsnLysGluIleLysCysAspLeuIleThrSerHisLeuLeuAsnG
+ 1318380 : ACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATC : 1318324
+
+     319 : lnLysSerLeuAlaSerValLeuProValAlaAlaSerHisThrLysThrIleArg :     336
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           lnLysSerLeuAlaSerValLeuProValAlaAlaSerHisThrLysThrIleArg
+ 1318323 : AGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGA : 1318270
+
+     337 : ThrGlnSerGluAlaIleGluHisIleSerSerAlaIleSerAsnGlyLysAlaSe :     355
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           ThrGlnSerGluAlaIleGluHisIleSerSerAlaIleSerAsnGlyLysAlaSe
+ 1318269 : ACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTC : 1318213
+
+     356 : rCysTyrHisIleLeuGluGluIleSerSerLeuProLysTyrSerSerLeuAspI :     374
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           rCysTyrHisIleLeuGluGluIleSerSerLeuProLysTyrSerSerLeuAspI
+ 1318212 : TTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACA : 1318156
+
+     375 : leAspAspLeuCysSerGluLeuIleIleLysAlaLysCysThrAspAspCysLys :     392
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+           leAspAspLeuCysSerGluLeuIleIleLysAlaLysCysThrAspAspCysLys
+ 1318155 : TAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAA : 1318102
+
+     393 : IleValValLysAlaArgAspLeuGlnSerAlaLeuValArgGlnLeuLeu :     409
+           |||||||||||||||||||||||||||||||||||||||||||||||||||
+           IleValValLysAlaArgAspLeuGlnSerAlaLeuValArgGlnLeuLeu
+ 1318101 : ATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTG : 1318049
+
+
+C4 Alignment:
+------------
+         Query: sp|P24813|YAP2_YEAST AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2
+        Target: gi|330443688|ref|NC_001145.3| Saccharomyces cerevisiae S288c chromosome XIII, complete sequence
+         Model: protein2genome:local
+     Raw score: 205
+   Query range: 28 -> 120
+  Target range: 253991 -> 254270
+
+     29 : ProLysArgLysValGlyArgProGlyArgLysArg<->IleAspSerGluAlaLysS :     47
+          ||||||!:!|||! !.!!!:! !!.!!!:!|||!:!   :!:||| !!|||.!!|||.
+          ProLysLysLysGlySerLysThrSerLysLysGlnAspLeuAspProGluThrLysG
+ 253992 : CCGAAGAAGAAGGGTAGCAAAACTAGCAAAAAGCAAGATTTGGATCCTGAAACTAAGC : 254049
+
+     48 : erArgArgThrAlaGlnAsnArgAlaAlaGlnArgAlaPheArgAspArgLysGluAl :     66
+          .!!:!|||||||||||||||||||||||||||||||||||||||!!:|||||||||  
+          lnLysArgThrAlaGlnAsnArgAlaAlaGlnArgAlaPheArgGluArgLysGluAr
+ 254050 : AGAAGAGGACTGCCCAAAATCGGGCCGCTCAAAGAGCTTTTAGGGAACGTAAGGAGAG : 254106
+
+     67 : aLysMetLysSerLeuGlnGluArgValGluLeuLeuGluGlnLysAspAlaGlnAsn :     85
+          !|||||||||..!|||:!!:!!!:!|||:!!  !||||||...!  .!.  !||||||
+          gLysMetLysGluLeuGluLysLysValGlnSerLeuGluSerIleGlnGlnGlnAsn
+ 254107 : GAAGATGAAGGAATTGGAGAAGAAGGTACAAAGTTTAGAGAGTATTCAGCAGCAAAAT : 254163
+
+     86 : LysThrThrThrAspPheLeuLeuCysSerLeuLysSerLeuLeuSerGluIleThrL :    105
+          :!!..!  !.!!  !||||||  !  !..!|||!  !!!|||:!!!:!|||:!!! !|
+          GluValGluAlaThrPheLeuArgAspGlnLeuIleThrLeuValAsnGluLeuLysL
+ 254164 : GAAGTGGAAGCTACTTTTTTGAGGGACCAGTTAATCACTCTGGTGAATGAGTTAAAAA : 254223
+
+    106 : ysTyrArgAlaLysAsnSerAspAspGluArgIleLeuAlaPheLeu :    120
+          |||||||| !!:!!!..!!!:!!|||..!!:!:!:|||! !!:!|||
+          ysTyrArgProGluThrArgAsnAspSerLysValLeuGluTyrLeu
+ 254224 : AATATAGACCAGAGACAAGAAATGACTCAAAAGTGCTGGAATATTTA : 254270
+
+
+C4 Alignment:
+------------
+         Query: sp|P24813|YAP2_YEAST AP-1-like transcription activator YAP2 OS=Saccharomyces cerevisiae (strain ATCC 204508 / S288c) GN=CAD1 PE=1 SV=2
+        Target: gi|330443590|ref|NC_001140.6| Saccharomyces cerevisiae S288c chromosome VIII, complete sequence:[revcomp]
+         Model: protein2genome:local
+     Raw score: 122
+   Query range: 37 -> 125
+  Target range: 84646 -> 68450
+
+    38 : ArgLysArgIleAspSerGluAlaLysSerArgArgThrAlaGlnAsnArgAlaAlaGln :    57
+         !.!:!!!.!:!!   ..!!!::!!|||:!!!:!!:!! !|||||||||||||||||||||
+         AsnGluAsnValProAspAspSerLysAlaLysLysLysAlaGlnAsnArgAlaAlaGln
+ 84646 : AATGAGAATGTTCCAGATGACTCTAAGGCAAAGAAAAAGGCTCAAAACAGAGCCGCCCAA : 84589
+
+    58 : ArgAlaPheArgAspArgLysGluAlaLysMetLysSerLeuGlnGluArg{Va}  >>> :    75
+         !:!|||||||||!!:||||||||||||!:!||||||..!||||||!!:!:!{:!}     
+         LysAlaPheArgGluArgLysGluAlaArgMetLysGluLeuGlnAspLys{Le}++   
+ 84588 : AAAGCCTTCAGAGAGAGAAAAGAAGCCAGAATGAAAGAATTACAAGATAAA{TT}gt... : 84531
+
+    76 : > Target Intron 1 >>>>  {l}GluLeuLeuGluGlnLysAspAlaGlnAsnLys :    86
+               15932 bp          {!}.!.  !:!!  !.!.!:!||| !!|||  !! !
+                               +-{u}AsnLysIleLeuAsnArgAspProGlnPheMet
+ 84530 : ......................at{A}AACAAGATACTGAACAGGGACCCCCAGTTCATG : 68570
+
+    87 : ThrThrThrAspPheLeuLeuCysSerLeuLysSerLeuLeuSerGluIleThrLysTyr :   106
+         :!!!.!:!!..!|||! !! !|||  !! !  !..!! !:!!!:!   |||  !||| !!
+         SerAsnSerSerPheHisGlnCysValSerLeuAspSerIleAsnThrIleGluLysAsp
+ 68569 : TCGAATTCCAGCTTTCATCAGTGTGTTTCACTAGATTCCATAAACACTATTGAAAAAGAT : 68510
+
+   107 : ArgAlaLysAsnSerAspAspGluArgIleLeuAlaPheLeuAspAspLeuGlnGlu :   125
+         ..!! !|||||||||||||||!!:  !  !|||  !  !  !   |||  !::!|||
+         GluGluLysAsnSerAspAspAspAlaGlyLeuGlnAlaAlaThrAspAlaArgGlu
+ 68509 : GAAGAAAAGAATAGTGACGATGATGCTGGTTTGCAGGCCGCCACAGATGCAAGAGAA : 68451
+
+-- completed exonerate analysis

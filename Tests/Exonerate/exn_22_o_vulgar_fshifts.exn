@@ -1,0 +1,5 @@
+Command line: [exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showvulgar yes --showalignment no --bestn 3]
+Hostname: [blackbriar]
+vulgar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1| 465 630 + 213 C 93 93 F 1 0 C 33 33 F 0 2 C 12 12 F 0 4 C 21 21
+vulgar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1| 628 466 - 201 C 24 24 G 0 6 C 39 39 F 1 0 C 93 93
+-- completed exonerate analysis

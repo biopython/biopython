@@ -1,0 +1,908 @@
+# fasta36 -E 0.5 -F 0.3 -m 10 prot_s02.fasta protlib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: prot_s02.fasta
+  1>>>sp|Q9Y2H6|265-345 - 81 aa
+Library: protlib.fasta
+  1375680 residues in   250 sequences
+
+Statistics: (shuffled [494]) MLE statistics: Lambda= 0.1722;  K=0.003655
+ statistics sampled from 237 (237) to 494 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: BL50 matrix (15:-5), open/ext: -10/-2
+ ktup: 2, E-join: 1 (0.996), E-opt: 0.2 (0.948), width:  16
+ Scan time:  0.180
+
+The best scores are:                                      opt bits E(250)
+gi|167518632|ref|XP_001743656.1| hypothetical prot (1145)   68 26.1    0.32
+gi|9507013|ref|NP_062122.1| receptor-type tyrosine (1898)   70 26.6    0.37
+gi|115648048|ref|NP_035343.2| receptor-type tyrosi (1898)   70 26.6    0.37
+gi|354481005|ref|XP_003502693.1| PREDICTED: LOW QU (1898)   70 26.6    0.37
+gi|328789682|ref|XP_003251305.1| PREDICTED: LOW QU (8619)   78 28.6    0.43
+gi|260828627|ref|XP_002609264.1| hypothetical prot (4389)   74 27.6    0.43
+gi|119220552|ref|NP_689957.3| protein sidekick-1 i (2213)   70 26.6    0.43
+gi|332864595|ref|XP_518946.3| PREDICTED: protein s (2213)   70 26.6    0.43
+gi|312079033|ref|XP_003141999.1| hypothetical prot (1184)   66 25.6    0.46
+gi|159484056|ref|XP_001700076.1| predicted protein (1007)   65 25.4    0.47
+gi|339251812|ref|XP_003372928.1| hypothetical prot (1013)   65 25.4    0.47
+gi|296192587|ref|XP_002744137.1| PREDICTED: protei (2093)   69 26.4    0.49
+gi|194218739|ref|XP_001492769.2| PREDICTED: protei (2113)   69 26.4    0.49
+gi|301766892|ref|XP_002918867.1| PREDICTED: LOW QU (33410)   85 30.3     0.5
+gi|297465038|ref|XP_002703630.1| PREDICTED: LOW QU (33452)   85 30.3     0.5
+gi|297471578|ref|XP_002685306.1| PREDICTED: LOW QU (33452)   85 30.3     0.5
+gi|359323893|ref|XP_535982.4| PREDICTED: LOW QUALI (33534)   85 30.3     0.5
+
+>>>sp|Q9Y2H6|265-345, 81 aa vs protlib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 0.5 -F 0.3 -m 10 prot_s02.fasta protlib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: BL50 (15:-5)
+; pg_open-ext: -10 -2
+; pg_ktup: 2
+; pg_join_E(): 1 (0.996)
+; pg_optcut_E(): 0.2 (0.948)
+; mp_extrap: 60000 494
+; mp_stats: (shuffled [494]) MLE statistics: Lambda= 0.1722;  K=0.003655
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: BL50 matrix (15:-5), open/ext: -10/-2  ktup: 2, E-join: 1 (0.996), E-opt: 0.2 (0.948), width:  16
+>>gi|167518632|ref|XP_001743656.1| hypothetical protein [Monosiga brevicollis MX1]
+; fa_frame: f
+; fa_initn:  88
+; fa_init1:  68
+; fa_opt:  68
+; fa_z-score: 97.5
+; fa_bits: 26.1
+; fa_expect:   0.32
+; sw_score: 68
+; sw_ident: 0.435
+; sw_sim: 0.652
+; sw_overlap: 23
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 57
+; al_stop: 79
+; al_display_start: 27
+SLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPA
+MDYHA
+>gi|167518632|ref|XP_001743656.1| ..
+; sq_len: 1145
+; sq_offset: 1
+; sq_type: p
+; al_start: 425
+; al_stop: 447
+; al_display_start: 395
+VAQTTVDLSWEAIQNATEYILEMDDDSGYGFRPVYTGIDTNYKVVDLTPN
+CDYRFRLRVVNPRGKGPASEVLDIKTRPERPAAPGAPRVLGRPTQDALAL
+EWTVHPSAQDNDTPPSYLVQ
+>>gi|9507013|ref|NP_062122.1| receptor-type tyrosine-protein phosphatase F precursor [Rattus norvegicus]
+; fa_frame: f
+; fa_initn:  83
+; fa_init1:  43
+; fa_opt:  72
+; fa_z-score: 96.2
+; fa_bits: 26.6
+; fa_expect:   0.37
+; sw_score: 72
+; sw_ident: 0.268
+; sw_sim: 0.549
+; sw_overlap: 71
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 79
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQARTVVLTWSPPSSL
+INGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMD
+YHA
+>gi|9507013|ref|NP_062122.1| ..
+; sq_len: 1898
+; sq_offset: 1
+; sq_type: p
+; al_start: 326
+; al_stop: 385
+; al_display_start: 296
+YTCVAISSLGMIEATAQVTVKALPKPPIDLVVTETTATSVTLTWD-----
+-SGNTEPVS---FYG--IQYRAAGTDGPFQEVDGVASTRYSIGGLSPFSE
+YAFRVLAVNSIGRGPPSEAVRARTGEQAPSSPPRRVQARMLSASTMLVQW
+EPPEEPNGLVRGYRVYYTPDSRRPLSAWHK
+>--
+; fa_frame: f
+; fa_initn:  98
+; fa_init1:  70
+; fa_opt:  70
+; fa_z-score: 96.2
+; fa_bits: 26.6
+; fa_expect:   0.37
+; sw_score: 70
+; sw_ident: 0.324
+; sw_sim: 0.622
+; sw_overlap: 37
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 44
+; al_stop: 80
+; al_display_start: 14
+QARTVVLTWSPPSSLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVG
+EETNITLNDLKPAMDYHA
+>gi|9507013|ref|NP_062122.1| ..
+; sq_len: 1898
+; sq_offset: 1
+; sq_type: p
+; al_start: 543
+; al_stop: 579
+; al_display_start: 513
+AQPADFQAKAESDTRIQLSWLLPPQERIIKYELVYWAAEDEGQQHKVTFD
+PTSSYTLEDLKPDTLYHFQLAARSDLGVGVFTPTVEACTAQSTPSAPPQK
+VTCVSTGSTTVRVSWVPPPA
+>>gi|115648048|ref|NP_035343.2| receptor-type tyrosine-protein phosphatase F precursor [Mus musculus]
+; fa_frame: f
+; fa_initn:  98
+; fa_init1:  70
+; fa_opt:  73
+; fa_z-score: 96.2
+; fa_bits: 26.6
+; fa_expect:   0.37
+; sw_score: 73
+; sw_ident: 0.256
+; sw_sim: 0.549
+; sw_overlap: 82
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 8
+; al_stop: 80
+; al_display_start: 1
+-----------------------LLSNIVKPVASDIQARTVVLTWSPPSS
+L-INGETDESS-----VP---ELYGYEVLISSTGKDGKYKSVYVGEETNI
+TLNDLKPAMDYHA
+>gi|115648048|ref|NP_035343.2| ..
+; sq_len: 1898
+; sq_offset: 1
+; sq_type: p
+; al_start: 498
+; al_stop: 579
+; al_display_start: 468
+DAGLLTTVGSLLPGITYSLRVLAFTAVGDGPPSPTIQVKTQQGVPAQPAD
+FQANAESDTRIQLSWLLPPQERIVKYELVYWAAEDEGQQHKVTFDPTSSY
+TLEDLKPDTLYHFQLAARSDLGVGVFTPTVEARTAQSTPSAPPQKVTCVS
+TGSTTVRVSWVPPPADSRNGIITQYSVAYE
+>--
+; fa_frame: f
+; fa_initn:  76
+; fa_init1:  43
+; fa_opt:  72
+; fa_z-score: 96.2
+; fa_bits: 26.6
+; fa_expect:   0.37
+; sw_score: 72
+; sw_ident: 0.268
+; sw_sim: 0.549
+; sw_overlap: 71
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 79
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQARTVVLTWSPPSSL
+INGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMD
+YHA
+>gi|115648048|ref|NP_035343.2| ..
+; sq_len: 1898
+; sq_offset: 1
+; sq_type: p
+; al_start: 326
+; al_stop: 385
+; al_display_start: 296
+YTCVAISSLGMIEATAQVTVKALPKPPIDLVVTETTATSVTLTWD-----
+-SGNTEPVS---FYG--IQYRAAGTDGPFQEVDGVASTRYSIGGLSPFSE
+YAFRVLAVNSIGRGPPSEAVRARTGEQAPSSPPRRVQARMLSASTMLVQW
+EPPEEPNGLVRGYRVYYTPDSRRPLSAWHK
+>>gi|354481005|ref|XP_003502693.1| PREDICTED: LOW QUALITY PROTEIN: receptor-type tyrosine-protein phosphatase F-like [Cricetulus griseus]
+; fa_frame: f
+; fa_initn:  98
+; fa_init1:  70
+; fa_opt:  70
+; fa_z-score: 96.2
+; fa_bits: 26.6
+; fa_expect:   0.37
+; sw_score: 70
+; sw_ident: 0.324
+; sw_sim: 0.622
+; sw_overlap: 37
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 44
+; al_stop: 80
+; al_display_start: 14
+QARTVVLTWSPPSSLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVG
+EETNITLNDLKPAMDYHA
+>gi|354481005|ref|XP_003502693.1| ..
+; sq_len: 1898
+; sq_offset: 1
+; sq_type: p
+; al_start: 543
+; al_stop: 579
+; al_display_start: 513
+AQPADFLAEAESDTRIHLSWLLPPQERITKYELVYWAAEDEGQQHKVTFD
+PTSSYTLEDLKPDTVYHFQLAARSDLGVGVFTPTIEARTAQSTPSAPPQK
+VTCVSTGSTTVRVSWVPPPA
+>>gi|328789682|ref|XP_003251305.1| PREDICTED: LOW QUALITY PROTEIN: twitchin [Apis mellifera]
+; fa_frame: f
+; fa_initn:  70
+; fa_init1:  70
+; fa_opt:  78
+; fa_z-score: 95.2
+; fa_bits: 28.6
+; fa_expect:   0.43
+; sw_score: 78
+; sw_ident: 0.286
+; sw_sim: 0.543
+; sw_overlap: 70
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 79
+; al_display_start: 1
+---------------------LLSNIVKPVASDIQARTVVLTWSPPSSLI
+NGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDY
+HA
+>gi|328789682|ref|XP_003251305.1| ..
+; sq_len: 8619
+; sq_offset: 1
+; sq_type: p
+; al_start: 4761
+; al_stop: 4823
+; al_display_start: 4731
+ITAENINGEDEAFVKVTVLDVPSPPQGPLRASDVHAEGCTLTWKPP----
+--EDDGGQPIDKYVVEKMDEATGRWVPAGETD-GPQTSLQVEGLTPGHKY
+KFRVRAVNKQGKSEPLAAMQSIEAKNPFDEPGKPGTPVVSDYDSDFVELQ
+WDRPQEDGGSPITGYIIEKRDKYNPNWEKC
+>>gi|260828627|ref|XP_002609264.1| hypothetical protein BRAFLDRAFT_124749 [Branchiostoma floridae]
+; fa_frame: f
+; fa_initn:  81
+; fa_init1:  73
+; fa_opt:  97
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 97
+; sw_ident: 0.214
+; sw_sim: 0.671
+; sw_overlap: 70
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 79
+; al_display_start: 1
+---------------------LLSNIVKPVASDIQARTVVLTWSPPSSLI
+NGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDY
+HA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 2242
+; al_stop: 2302
+; al_display_start: 2212
+ALTGVGEGQTSDSVTVLTPAGAPSFPMDVEANAVDSQSIRINWQPPTE-P
+NGN--------VLGYNIFYTTEGESGNNQQTVGPDDTTYVIEGLRPATQY
+AITLNAFTEAGEGERTEERVVTTLTDVPGAPASIDATAVDTTSIRVEWQA
+PSEMGGTLLGYKIYYQLVGEDSPSTADVEP
+>--
+; fa_frame: f
+; fa_initn: 177
+; fa_init1:  55
+; fa_opt:  90
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 90
+; sw_ident: 0.306
+; sw_sim: 0.569
+; sw_overlap: 72
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 79
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQA-RTVVLTWSPPSS
+LINGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAM
+DYHA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 2819
+; al_stop: 2881
+; al_display_start: 2789
+IAGVTGGGEGDRSDQVKVTTLEGVPSTPLSVTADGQAPDTVVVTWQSPAE
+T-NGD--------LLGYYIYYQVVGSTETSQAETGPDETTYSISGLRPAT
+EYIITLTAYTEGGESERSGEALVRTLSGVPSTPLSVTAEENAPDAILVTW
+EPPTQTNGDLLGYYIYYQVDGDTETSRAEA
+>--
+; fa_frame: f
+; fa_initn: 196
+; fa_init1:  61
+; fa_opt:  84
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 84
+; sw_ident: 0.278
+; sw_sim: 0.569
+; sw_overlap: 72
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 79
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQA-RTVVLTWSPPSS
+LINGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAM
+DYHA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 3301
+; al_stop: 3363
+; al_display_start: 3271
+LTAYTEGGESERSGEALVSTLSGAPSTPLSVTAEGQAPDTITVTWQSPAE
+T-NGD--------LLGYYIYYQVVGSTEDVRAEAGPEETTYSISGLRPAT
+EYIITLTAYTEGGESERSGEVLVQTLSGAPGAPASIRASSLGSEAIEVSW
+QPPPQSNGEILGYRLHYQIVGEESASTQEV
+>--
+; fa_frame: f
+; fa_initn:  79
+; fa_init1:  49
+; fa_opt:  83
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 83
+; sw_ident: 0.279
+; sw_sim: 0.574
+; sw_overlap: 68
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 13
+; al_stop: 80
+; al_display_start: 1
+------------------LLSNIVKPVASDIQARTVVLTWSPPSSLINGE
+TDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDYHA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 3687
+; al_stop: 3747
+; al_display_start: 3657
+SAGDGERSETITVQTEEGVPGAPREVQGLAIDSTTIELQWMPPSP-----
+-DEQN-GVIKGYKILYKKVGEEGENEEDAGLLDLMYTLSDLEKWTEYNIW
+VSAYTSAGDGLRSPVIVVRTGEDVPGPPIGIEARPGDDSASVLVQWQQPI
+VQNGVIVGYKILYQKSGDEDVEETDIGTPQ
+>--
+; fa_frame: f
+; fa_initn: 100
+; fa_init1:  50
+; fa_opt:  81
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 81
+; sw_ident: 0.257
+; sw_sim: 0.571
+; sw_overlap: 70
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 79
+; al_display_start: 1
+---------------------LLSNIVKPVASDIQARTVVLTWSPPSSLI
+NGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDY
+HA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 3399
+; al_stop: 3459
+; al_display_start: 3369
+AYTEGGESERSGEVLVQTLSGAPGAPASIRASSLGSEAIEVSWQPPPQS-
+NGE--------ILGYRLHYQIVGEESASTQEVEGYETFYLLRGLRPVTEY
+SIWLLAFTAAGDGERSEQVTVQTAEGVPGAPRDVKGQAVEPTTITVDWQP
+PLEINGVLLGYKVIYMPENAAEFSTVELGP
+>--
+; fa_frame: f
+; fa_initn: 178
+; fa_init1:  58
+; fa_opt:  81
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 81
+; sw_ident: 0.271
+; sw_sim: 0.557
+; sw_overlap: 70
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 79
+; al_display_start: 1
+---------------------LLSNIVKPVASDIQARTVVLTWSPPSSLI
+NGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDY
+HA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 2146
+; al_stop: 2206
+; al_display_start: 2116
+GGLQPFTVYIISVSGFTAAGEVPASPTGLGATPVDPRTVRVEWQPPQQ-P
+NGE--------IQGYNIYYRTTESDEDALQQAGAQDIFLTLTGLSPFTEY
+TIRVSALTGVGEGQTSDSVTVLTPAGAPSFPMDVEANAVDSQSIRINWQP
+PTEPNGNVLGYNIFYTTEGESGNNQQTVGP
+>--
+; fa_frame: f
+; fa_initn: 102
+; fa_init1:  48
+; fa_opt:  79
+; fa_z-score: 95.1
+; fa_bits: 27.6
+; fa_expect:   0.43
+; sw_score: 79
+; sw_ident: 0.294
+; sw_sim: 0.544
+; sw_overlap: 68
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 13
+; al_stop: 79
+; al_display_start: 1
+------------------LLSNIVKPVASDIQARTVVLTWSPPSSLINGE
+TDESSVPELYGYEVLISSTGKDGKYKSVYVGE-ETNITLNDLKPAMDYHA
+>gi|260828627|ref|XP_002609264.1| ..
+; sq_len: 4389
+; sq_offset: 1
+; sq_type: p
+; al_start: 3498
+; al_stop: 3555
+; al_display_start: 3468
+AAGDGERSEQVTVQTAEGVPGAPRDVKGQAVEPTTITVDWQPPLE-INGV
+--------LLGYKVIYMPENA-AEFSTVELGPAELSTMLLDLEPATTYSI
+VVLAFTSAGDGDESEEILVSTMQGVPGAPTDLSAVETTSNSMKLSWQAPE
+GDIEGYRVFYSLTGSDTEEAVDTRSADASW
+>>gi|119220552|ref|NP_689957.3| protein sidekick-1 isoform 1 [Homo sapiens]
+; fa_frame: f
+; fa_initn:  87
+; fa_init1:  51
+; fa_opt:  70
+; fa_z-score: 95.0
+; fa_bits: 26.6
+; fa_expect:   0.43
+; sw_score: 70
+; sw_ident: 0.299
+; sw_sim: 0.582
+; sw_overlap: 67
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 73
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQARTVVLTWSPPSSL
+INGETDESSVPELYGYEVLISSTGKDGKYKSVYV-GEETNITL-NDLKPA
+MDYHA
+>gi|119220552|ref|NP_689957.3| ..
+; sq_len: 2213
+; sq_offset: 1
+; sq_type: p
+; al_start: 776
+; al_stop: 835
+; al_display_start: 746
+VNEVGRGQYSAETSRLMLPEEPPSAPPKNIVASGRTNQSIMVQWQPPP--
+---ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVTDLIIW
+TQYEIQVAAYNGAGLGVFSRAVTEYTLQGVPTAPPQNVQTEAVNSTTIQF
+LWNPPPQQFINGINQGYKLLAWPADAPEAV
+>>gi|332864595|ref|XP_518946.3| PREDICTED: protein sidekick-1 [Pan troglodytes]
+; fa_frame: f
+; fa_initn:  68
+; fa_init1:  45
+; fa_opt:  76
+; fa_z-score: 95.0
+; fa_bits: 26.6
+; fa_expect:   0.43
+; sw_score: 76
+; sw_ident: 0.325
+; sw_sim: 0.610
+; sw_overlap: 77
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 5
+; al_stop: 80
+; al_display_start: 1
+--------------------------LLSNIVKPVASDIQARTVVLTWSP
+PSSLINGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEE-TNITLNDL
+KPAMDYHA
+>gi|332864595|ref|XP_518946.3| ..
+; sq_len: 2213
+; sq_offset: 1
+; sq_type: p
+; al_start: 675
+; al_stop: 740
+; al_display_start: 645
+YSCEIVSEGGNDSRMARLEVIELPHSPQNLLASPNSS--HSHAVVLSWVR
+P---FDGNS-----PILY-YIVELSENNSPWKVHLSNVGPEMTGITVSGL
+TPARTYQFRVCAVNEVGRGQYSAETSRLMLPEEPPSAPPKNIVASGRTNQ
+SIMVQWQPPPETEHNGVLRGYILRYRLAGL
+>--
+; fa_frame: f
+; fa_initn:  87
+; fa_init1:  51
+; fa_opt:  70
+; fa_z-score: 95.0
+; fa_bits: 26.6
+; fa_expect:   0.43
+; sw_score: 70
+; sw_ident: 0.299
+; sw_sim: 0.582
+; sw_overlap: 67
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 73
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQARTVVLTWSPPSSL
+INGETDESSVPELYGYEVLISSTGKDGKYKSVYV-GEETNITL-NDLKPA
+MDYHA
+>gi|332864595|ref|XP_518946.3| ..
+; sq_len: 2213
+; sq_offset: 1
+; sq_type: p
+; al_start: 776
+; al_stop: 835
+; al_display_start: 746
+VNEVGRGQYSAETSRLMLPEEPPSAPPKNIVASGRTNQSIMVQWQPPP--
+---ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVTDLIIW
+TQYEIQVAAYNGAGLGVFSRAVTEYTLQGVPTAPPQNVQTEAVNSTTIQF
+LWNPPPQQFINGINQGYKLLAWPADAPEAV
+>>gi|312079033|ref|XP_003141999.1| hypothetical protein LOAG_06415 [Loa loa]
+; fa_frame: f
+; fa_initn:  65
+; fa_init1:  54
+; fa_opt:  66
+; fa_z-score: 94.6
+; fa_bits: 25.6
+; fa_expect:   0.46
+; sw_score: 66
+; sw_ident: 0.391
+; sw_sim: 0.609
+; sw_overlap: 46
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 11
+; al_stop: 53
+; al_display_start: 1
+--------------------LLSNIVKPVASDIQART-VVLTWSPPSSLI
+NGETDESSVPELYGYEVLI--SSTGKDGKYKSVYVGEETNITLNDLKPAM
+DYHA
+>gi|312079033|ref|XP_003141999.1| ..
+; sq_len: 1184
+; sq_offset: 1
+; sq_type: p
+; al_start: 716
+; al_stop: 756
+; al_display_start: 686
+ISISFDGTRLEGEWSRVAVGRTAAQPPSPPTDVYVDTDNVLHWSPPNST-
+NG----ASITEYIIERILVLSSSTSKSKSDNDQATSADCGWTVKRESAEV
+LSISVAEGQPGCKYQLSVSA
+>>gi|159484056|ref|XP_001700076.1| predicted protein [Chlamydomonas reinhardtii]
+; fa_frame: f
+; fa_initn: 152
+; fa_init1:  64
+; fa_opt:  93
+; fa_z-score: 94.5
+; fa_bits: 25.4
+; fa_expect:   0.47
+; sw_score: 93
+; sw_ident: 0.292
+; sw_sim: 0.569
+; sw_overlap: 72
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 8
+; al_stop: 79
+; al_display_start: 1
+-----------------------LLSNIVKPVASDIQARTVVLTWSPPSS
+LINGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAM
+DYHA
+>gi|159484056|ref|XP_001700076.1| ..
+; sq_len: 1007
+; sq_offset: 1
+; sq_type: p
+; al_start: 66
+; al_stop: 127
+; al_display_start: 36
+VQAINPLGEGPFSLCSAYTTQATVPAAPEPPVVQTASSSTITLAWAPPA-
+------DNGSPITAYCLE---RDDGGVGDFTLEYAGPNTSCTVKGLKPGQ
+AYRFRLRADNDEGKSMWSSTASLSTGAAPPDSPVALQVVTAGRTSATMAW
+RTPDDDGGSKVVAFGVELQAKSKAATACMG
+>>gi|339251812|ref|XP_003372928.1| hypothetical protein Tsp_10483 [Trichinella spiralis]
+; fa_frame: f
+; fa_initn:  74
+; fa_init1:  60
+; fa_opt:  79
+; fa_z-score: 94.4
+; fa_bits: 25.4
+; fa_expect:   0.47
+; sw_score: 79
+; sw_ident: 0.314
+; sw_sim: 0.557
+; sw_overlap: 70
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 10
+; al_stop: 79
+; al_display_start: 1
+---------------------LLSNIVKPVASDIQARTVVLTWSPPSSLI
+NGETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDY
+HA
+>gi|339251812|ref|XP_003372928.1| ..
+; sq_len: 1013
+; sq_offset: 1
+; sq_type: p
+; al_start: 505
+; al_stop: 563
+; al_display_start: 475
+ARNSAGFGPVSEPVSVVTQPGIPGQPQNVKASAIGARRILLTWESP--LF
+SSD--------ITGYVLRYNSTSTDHVEEEVG-GSKTERVVENLTPNTDY
+SFQVYAKSQRGKGLFSRAVSQRTNPSVPSGAPESVVVEALSSRQLRVIWE
+PPLKSQQNGLITGYRINWEPLINADDDADD
+>>gi|296192587|ref|XP_002744137.1| PREDICTED: protein sidekick-1 [Callithrix jacchus]
+; fa_frame: f
+; fa_initn:  87
+; fa_init1:  51
+; fa_opt:  69
+; fa_z-score: 94.1
+; fa_bits: 26.4
+; fa_expect:   0.49
+; sw_score: 69
+; sw_ident: 0.286
+; sw_sim: 0.571
+; sw_overlap: 63
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 70
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQARTVVLTWSPPSSL
+INGETDESSVPELYGYEVLISSTGKDGKYKSVYV-GEETNITLNDLKPAM
+DYHA
+>gi|296192587|ref|XP_002744137.1| ..
+; sq_len: 2093
+; sq_offset: 1
+; sq_type: p
+; al_start: 702
+; al_stop: 757
+; al_display_start: 672
+VNEVGRGQYSAETSRLMLPEEPPSAPPKNIVASGRTNQSIMVQWQPPP--
+---ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVMDLIIW
+TQYEIQVAAYNGAGLGVFSRAVTEYTLQGVPTAPPQNVQTEAVNSTTIQF
+LWNPPPQQFINGINQGYKLLAWPADAPEAV
+>>gi|194218739|ref|XP_001492769.2| PREDICTED: protein sidekick-1 [Equus caballus]
+; fa_frame: f
+; fa_initn:  87
+; fa_init1:  51
+; fa_opt:  69
+; fa_z-score: 94.1
+; fa_bits: 26.4
+; fa_expect:   0.49
+; sw_score: 69
+; sw_ident: 0.286
+; sw_sim: 0.571
+; sw_overlap: 63
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 9
+; al_stop: 70
+; al_display_start: 1
+----------------------LLSNIVKPVASDIQARTVVLTWSPPSSL
+INGETDESSVPELYGYEVLISSTGKDGKYKSVYV-GEETNITLNDLKPAM
+DYHA
+>gi|194218739|ref|XP_001492769.2| ..
+; sq_len: 2113
+; sq_offset: 1
+; sq_type: p
+; al_start: 681
+; al_stop: 736
+; al_display_start: 651
+VNQVGKGQYSTETSRLMLPEEPPSAPPKNIVASGRTNQSIMVQWQPPP--
+---ETEHNGV--LRGYILRYRLAGLPGEYQQRNITSPEVNYCLVTELIIW
+TQYEIQVAAYNGAGLGVFSRAVTEYTLQGVPTAPPQNVQAEAVNSTTIQF
+LWNPPPQQFINGINQGYKLLAWPADVPEAS
+>>gi|301766892|ref|XP_002918867.1| PREDICTED: LOW QUALITY PROTEIN: titin-like [Ailuropoda melanoleuca]
+; fa_frame: f
+; fa_initn: 125
+; fa_init1:  74
+; fa_opt:  85
+; fa_z-score: 94.0
+; fa_bits: 30.3
+; fa_expect:    0.5
+; sw_score: 85
+; sw_ident: 0.290
+; sw_sim: 0.580
+; sw_overlap: 69
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 80
+; al_display_start: 1
+-------------------LLSNIVKPVASDIQARTVVLTWSPPSSLING
+ETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDYHA
+>gi|301766892|ref|XP_002918867.1| ..
+; sq_len: 33410
+; sq_offset: 1
+; sq_type: p
+; al_start: 30222
+; al_stop: 30282
+; al_display_start: 30192
+LENKCGKKAVYIKVRVIGNPNPPEGPLEYDDIQARSVRVSWRPPAD--DG
+GAD------ILGYILERREVSKAAWYTIDSRVRGTSLVVKGLKENVEYHF
+RVSAENQFGISKPLKSEEPVIPKTPLNPPEPPSNPPEVLDVTKSSVSLSW
+SRPKDDGGSRVTGYYIERKETSTDKWVRHN
+>>gi|297465038|ref|XP_002703630.1| PREDICTED: LOW QUALITY PROTEIN: titin [Bos taurus]
+; fa_frame: f
+; fa_initn: 126
+; fa_init1:  74
+; fa_opt:  85
+; fa_z-score: 94.0
+; fa_bits: 30.3
+; fa_expect:    0.5
+; sw_score: 85
+; sw_ident: 0.290
+; sw_sim: 0.580
+; sw_overlap: 69
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 80
+; al_display_start: 1
+-------------------LLSNIVKPVASDIQARTVVLTWSPPSSLING
+ETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDYHA
+>gi|297465038|ref|XP_002703630.1| ..
+; sq_len: 33452
+; sq_offset: 1
+; sq_type: p
+; al_start: 30256
+; al_stop: 30316
+; al_display_start: 30226
+LENKCGKKAVYIKVRVIGNPNTPEGPLEYDDIQARSVRVSWRPPAD--DG
+GAD------ILGYILERREVPKSAWYTIDSRVRGTSLVVKGLKENVEYHF
+RVSAENQFGISKPLKSEEPVIPKTPLNPPEPPSNPPEILDVTKSSVSLSW
+SRPKDDGGSRVTGYYIERKETSTDKWVRHN
+>>gi|297471578|ref|XP_002685306.1| PREDICTED: LOW QUALITY PROTEIN: titin [Bos taurus]
+; fa_frame: f
+; fa_initn: 126
+; fa_init1:  74
+; fa_opt:  85
+; fa_z-score: 94.0
+; fa_bits: 30.3
+; fa_expect:    0.5
+; sw_score: 85
+; sw_ident: 0.290
+; sw_sim: 0.580
+; sw_overlap: 69
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 80
+; al_display_start: 1
+-------------------LLSNIVKPVASDIQARTVVLTWSPPSSLING
+ETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDYHA
+>gi|297471578|ref|XP_002685306.1| ..
+; sq_len: 33452
+; sq_offset: 1
+; sq_type: p
+; al_start: 30256
+; al_stop: 30316
+; al_display_start: 30226
+LENKCGKKAVYIKVRVIGNPNTPEGPLEYDDIQARSVRVSWRPPAD--DG
+GAD------ILGYILERREVPKSAWYTIDSRVRGTSLVVKGLKENVEYHF
+RVSAENQFGISKPLKSEEPVIPKTPLNPPEPPSNPPEILDVTKSSVSLSW
+SRPKDDGGSRVTGYYIERKETSTDKWVRHN
+>>gi|359323893|ref|XP_535982.4| PREDICTED: LOW QUALITY PROTEIN: titin [Canis lupus familiaris]
+; fa_frame: f
+; fa_initn: 126
+; fa_init1:  74
+; fa_opt:  85
+; fa_z-score: 94.0
+; fa_bits: 30.3
+; fa_expect:    0.5
+; sw_score: 85
+; sw_ident: 0.290
+; sw_sim: 0.580
+; sw_overlap: 69
+>sp|Q9Y2H6|26 ..
+; sq_len: 81
+; sq_offset: 1
+; sq_type: p
+; al_start: 12
+; al_stop: 80
+; al_display_start: 1
+-------------------LLSNIVKPVASDIQARTVVLTWSPPSSLING
+ETDESSVPELYGYEVLISSTGKDGKYKSVYVGEETNITLNDLKPAMDYHA
+>gi|359323893|ref|XP_535982.4| ..
+; sq_len: 33534
+; sq_offset: 1
+; sq_type: p
+; al_start: 30336
+; al_stop: 30396
+; al_display_start: 30306
+LENKCGKKTVYIKVRVIGNPNPPEGPLEYDDIQARSVRVSWRPPAD--DG
+GAD------ILGYILERREVSKAAWYTIDSRVRGTSLVVKGLKENVEYHF
+RVSAENQFGISKSLKSEEPVIPKTPLNPPEPPSNPPEVLDVTKSSVSLSW
+SRPKDDGGSRVTGYYIERKETSTDKWVRHN
+
+>>><<<
+>>>///
+
+81 residues in 1 query   sequences
+1375680 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:58 2012 done: Tue May  8 01:06:59 2012
+ Total Scan time:  0.180 Total Display time:  0.040
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

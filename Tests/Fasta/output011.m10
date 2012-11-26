@@ -1,0 +1,204 @@
+# fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_s01.fasta mrnalib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: mrna_s01.fasta
+  1>>>gi|255708421:1-99 Mus musculus myoglobin (Mb), transcript varia - 99 nt
+Library: mrnalib.fasta
+   178611 residues in   250 sequences
+
+Statistics:  Expectation_n fit: rho(ln(x))= 0.6048+/-0.0187; mu= 57.5189+/- 1.259
+ mean_var=109.2865+/-49.006, 0's: 0 Z-trim(83.7): 6  B-trim: 0 in 0/14
+ Lambda= 0.122685
+ statistics sampled from 218 (219) to 218 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ ktup: 3, E-join: 0.25 (0.93), E-opt: 0.05 (0.61), width:  16
+ Scan time:  0.050
+
+The best scores are:                                      opt bits E(250)
+gi|284005422|ref|NM_001171502.1| Oryctolagus c ( 429) [f]   99 23.6     1.4
+gi|284005386|ref|NM_001171415.1| Oryctolagus c ( 429) [f]   99 23.6     1.4
+gi|284005381|ref|NM_001171414.1| Oryctolagus c ( 429) [f]   99 23.6     1.4
+gi|23308614|ref|NM_152952.1| Danio rerio cytog (5188) [f]   80 23.6     1.4
+gi|291415427|ref|XM_002723908.1| PREDICTED: Or ( 423) [f]   99 23.6     1.4
+
+>>>gi|255708421:1-99, 99 nt vs mrnalib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_s01.fasta mrnalib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: +5/-4 (5:-4)
+; pg_open-ext: -12 -4
+; pg_ktup: 3
+; pg_join_E(): 0.25 (0.93)
+; pg_optcut_E(): 0.05 (0.61)
+; mp_extrap: 60000 218
+; mp_stats:  Expectation_n fit: rho(ln(x))= 0.6048+/-0.0187; mu= 57.5189+/- 1.259  mean_var=109.2865+/-49.006, 0's: 0 Z-trim(83.7): 6  B-trim: 0 in 0/14  Lambda= 0.122685
+; mp_KS: -0.0000 (N=0) at  20
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4  ktup: 3, E-join: 0.25 (0.93), E-opt: 0.05 (0.61), width:  16
+>>gi|284005422|ref|NM_001171502.1| Oryctolagus cuniculus hemoglobin, zeta (HBZ_2), mRNA
+; fa_frame: f
+; fa_initn:  79
+; fa_init1:  66
+; fa_opt:  99
+; fa_z-score: 90.0
+; fa_bits: 23.6
+; fa_expect:    1.4
+; bs_ident: 0.738
+; bs_sim: 0.738
+; bs_overlap: 42
+>gi|255708421 ..
+; sq_len: 99
+; sq_offset: 1
+; sq_type: D
+; al_start: 34
+; al_stop: 75
+; al_display_start: 4
+GGAACTGTTTTAGAAACAGAACATCATCTTCAACATCCAGAGGACTGTCA
+TCCTTGTCCCTGTGGGTGAGGGAAACAAACACTTGGCTTCAATGTC
+>gi|284005422|ref|NM_001171502.1| ..
+; sq_len: 429
+; sq_offset: 1
+; sq_type: D
+; al_start: 12
+; al_stop: 52
+; al_display_start: 1
+-------------------ATGTCTCTGACCAAGAGCGAGAGGACCATCA
+T-CATGTCCCTCTGGGACAAGGTCTCCTCCCAGTCTGAGGCCATCGGCAC
+TGAGGCCCTGGAGAGGCTCT
+>>gi|284005386|ref|NM_001171415.1| Oryctolagus cuniculus zeta globin (HBZ0), mRNA
+; fa_frame: f
+; fa_initn:  73
+; fa_init1:  66
+; fa_opt:  99
+; fa_z-score: 90.0
+; fa_bits: 23.6
+; fa_expect:    1.4
+; bs_ident: 0.738
+; bs_sim: 0.738
+; bs_overlap: 42
+>gi|255708421 ..
+; sq_len: 99
+; sq_offset: 1
+; sq_type: D
+; al_start: 34
+; al_stop: 75
+; al_display_start: 4
+GGAACTGTTTTAGAAACAGAACATCATCTTCAACATCCAGAGGACTGTCA
+TCCTTGTCCCTGTGGGTGAGGGAAACAAACACTTGGCTTCAATGTC
+>gi|284005386|ref|NM_001171415.1| ..
+; sq_len: 429
+; sq_offset: 1
+; sq_type: D
+; al_start: 12
+; al_stop: 52
+; al_display_start: 1
+-------------------ATGTCTCTGACCAAGAGCGAGAGGACCATCA
+T-CATGTCCCTCTGGGACAAGGTCTCCTCCCAGTCTGAGGCCATCGGCAC
+TGAGGCCCTGGAGAGGCTCT
+>>gi|284005381|ref|NM_001171414.1| Oryctolagus cuniculus hemoglobin subunit zeta (RA_M008_JSM295ECF), mRNA
+; fa_frame: f
+; fa_initn:  90
+; fa_init1:  66
+; fa_opt:  99
+; fa_z-score: 90.0
+; fa_bits: 23.6
+; fa_expect:    1.4
+; bs_ident: 0.738
+; bs_sim: 0.738
+; bs_overlap: 42
+>gi|255708421 ..
+; sq_len: 99
+; sq_offset: 1
+; sq_type: D
+; al_start: 34
+; al_stop: 75
+; al_display_start: 4
+GGAACTGTTTTAGAAACAGAACATCATCTTCAACATCCAGAGGACTGTCA
+TCCTTGTCCCTGTGGGTGAGGGAAACAAACACTTGGCTTCAATGTC
+>gi|284005381|ref|NM_001171414.1| ..
+; sq_len: 429
+; sq_offset: 1
+; sq_type: D
+; al_start: 12
+; al_stop: 52
+; al_display_start: 1
+-------------------ATGTCTCTGACCAAGAGCGAGAGGACCATCA
+T-CATGTCCCTCTGGGACAAGGTCTCCTCCCAGTCTGAGGCCATCGGCAC
+TGAGGCCCTGGAGAGGCTCT
+>>gi|23308614|ref|NM_152952.1| Danio rerio cytoglobin 1 (cygb1), mRNA
+; fa_frame: f
+; fa_initn: 115
+; fa_init1:  78
+; fa_opt:  80
+; fa_z-score: 70.4
+; fa_bits: 23.6
+; fa_expect:    1.4
+; bs_ident: 0.800
+; bs_sim: 0.800
+; bs_overlap: 25
+>gi|255708421 ..
+; sq_len: 99
+; sq_offset: 1
+; sq_type: D
+; al_start: 13
+; al_stop: 37
+; al_display_start: 1
+------------------TCGGGAACTGTTTTAGAAACAGAACATCATCT
+TCAACATCCAGAGGACTGTCATCCTTGTCCCTGTGGGTGAGGGAAACAAA
+CACTTGGCTTCAATGTC
+>gi|23308614|ref|NM_152952.1| ..
+; sq_len: 5188
+; sq_offset: 1
+; sq_type: D
+; al_start: 416
+; al_stop: 440
+; al_display_start: 386
+CAACACACTGGTGGAAAACCTGCGAGATGCTGACAAACTCAACACCATCT
+TCAACCAGATGGGCAAATCACACGCGCTGCGCCACAAGGTGGACCCTGTT
+TACTTCAAAATTCTGGCCGG
+>>gi|291415427|ref|XM_002723908.1| PREDICTED: Oryctolagus cuniculus zeta globin-like (LOC100357627), mRNA
+; fa_frame: f
+; fa_initn:  91
+; fa_init1:  66
+; fa_opt:  99
+; fa_z-score: 90.0
+; fa_bits: 23.6
+; fa_expect:    1.4
+; bs_ident: 0.738
+; bs_sim: 0.738
+; bs_overlap: 42
+>gi|255708421 ..
+; sq_len: 99
+; sq_offset: 1
+; sq_type: D
+; al_start: 34
+; al_stop: 75
+; al_display_start: 4
+GGAACTGTTTTAGAAACAGAACATCATCTTCAACATCCAGAGGACTGTCA
+TCCTTGTCCCTGTGGGTGAGGGAAACAAACACTTGGCTTCAATGTC
+>gi|291415427|ref|XM_002723908.1| ..
+; sq_len: 423
+; sq_offset: 1
+; sq_type: D
+; al_start: 12
+; al_stop: 52
+; al_display_start: 1
+-------------------ATGTCTCTGACCAAGAGCGAGAGGACCATCA
+T-CATGTCCCTCTGGGACAAGGTCTCCTCCCAGTCTGAGGCCATCGGCAC
+TGAGGCCCTGGAGAGGCTCT
+
+>>><<<
+>>>///
+
+99 residues in 1 query   sequences
+178611 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:58 2012 done: Tue May  8 01:06:58 2012
+ Total Scan time:  0.050 Total Display time:  0.010
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

@@ -1,0 +1,233 @@
+Command line: [exonerate -m ner ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showcigar no --showvulgar no]
+Hostname: [blackbriar]
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence:[revcomp]
+         Model: NER:affine:local:dna2dna
+     Raw score: 6150
+   Query range: 0 -> 1230
+  Target range: 1319275 -> 1318045
+
+       1 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAA :      56
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319275 : ATGGGCAATATCCTTCGGAAAGGTCAGCAAATATATTTAGCAGGTGACATGAAGAA : 1319220
+
+      57 : GCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCA :     112
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319219 : GCAAATGTTGCTAAATAAAGATGGAACACCTAAGAGGAAGGTGGGCAGACCAGGCA : 1319164
+
+     113 : GAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCT :     168
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319163 : GAAAAAGGATTGACTCTGAAGCTAAGAGTAGGAGGACTGCCCAGAATAGGGCAGCT : 1319108
+
+     169 : CAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGT :     224
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319107 : CAACGAGCGTTCCGAGATAGGAAAGAAGCCAAAATGAAGAGTTTGCAAGAGAGGGT : 1319052
+
+     225 : AGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTAT :     280
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1319051 : AGAGTTACTAGAACAGAAAGATGCGCAGAATAAGACTACCACGGACTTTTTACTAT : 1318996
+
+     281 : GTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGAT :     336
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318995 : GTTCTTTAAAAAGTTTACTGTCGGAAATTACAAAATATAGAGCTAAGAATTCTGAT : 1318940
+
+     337 : GATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAA :     392
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318939 : GATGAAAGAATATTAGCCTTCCTCGATGATCTGCAAGAACAACAGAAAAGGGAAAA : 1318884
+
+     393 : CGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTA :     448
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318883 : CGAAAAAGGAACAAGTACAGCAGTTAGCAAGGCTGCAAAGGAATTGCCATCGCCTA : 1318828
+
+     449 : ATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAA :     504
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318827 : ATTCAGATGAAAACATGACTGTGAACACAAGTATAGAAGTACAGCCGCACACTCAA : 1318772
+
+     505 : GAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAA :     560
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318771 : GAGAATGAGAAAGTTATGTGGAACATAGGCTCATGGAACGCTCCCAGTTTAACCAA : 1318716
+
+     561 : TTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAA :     616
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318715 : TTCGTGGGATTCTCCCCCCGGAAATCGAACAGGTGCCGTTACCATCGGTGACGAAA : 1318660
+
+     617 : GTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGA :     672
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318659 : GTATTAATGGTAGTGAAATGCCAGATTTCAGTCTCGATCTTGTCTCCAATGATAGA : 1318604
+
+     673 : CAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTC :     728
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318603 : CAGACTGGTCTAGAAGCTTTAGATTACGACATTCATAACTACTTTCCTCAGCACTC : 1318548
+
+     729 : TGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACC :     784
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318547 : TGAACGCCTGACCGCTGAAAAAATAGATACGTCAGCATGTCAATGTGAAATTGACC : 1318492
+
+     785 : AAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCC :     840
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318491 : AAAAGTATCTTCCATACGAGACAGAAGATGATACTTTATTCCCCAGCGTGCTTCCC : 1318436
+
+     841 : CTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAA :     896
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318435 : CTTGCTGTAGGGAGCCAGTGTAATAATATTTGCAACCGCAAGTGTATCGGGACCAA : 1318380
+
+     897 : ACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATC :     952
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318379 : ACCATGTTCAAATAAGGAGATCAAATGCGACTTAATAACAAGCCACCTGTTGAATC : 1318324
+
+     953 : AGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGA :    1008
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318323 : AGAAATCTCTAGCTTCGGTGCTTCCGGTGGCTGCTTCTCATACTAAAACAATTCGA : 1318268
+
+    1009 : ACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTC :    1064
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318267 : ACCCAATCTGAAGCAATTGAACACATTAGCAGCGCCATATCGAATGGAAAAGCGTC : 1318212
+
+    1065 : TTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACA :    1120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318211 : TTGCTACCACATTCTCGAAGAGATCTCCTCCCTACCAAAATATTCATCGTTGGACA : 1318156
+
+    1121 : TAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAA :    1176
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318155 : TAGATGATTTATGCAGCGAATTAATAATCAAGGCAAAATGTACAGATGACTGCAAA : 1318100
+
+    1177 : ATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG :    1230
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1318099 : ATAGTAGTCAAAGCTCGCGACTTACAGAGTGCTCTGGTTAGACAGCTCCTGTAG : 1318046
+
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+        Target: gi|330443681|ref|NC_001144.5| Saccharomyces cerevisiae S288c chromosome XII, complete sequence
+         Model: NER:affine:local:dna2dna
+     Raw score: 502
+   Query range: 110 -> 1230
+  Target range: 297910 -> 318994
+
+    111 : CAGAAAA--<   31  >--CTGCCCAGAAT--<   10  >--AACGAGCGTTCCG- :    184
+          | |||||--< NER 1 >--| ||||| | |--< NER 2 >--|||  | ||||||-
+ 297911 : CTGAAAA--<   29  >--CCGCCCAAAGT--<   13  >--AACTGGAGTTCCG- : 297993
+
+    185 : -<   2   >--ATAGGAAAGAAGC--<   30  >--GTTA-CTAGAAC-AGAAAG- :    246
+          -< NER 3 >--|| || |||| ||--< NER 4 >--|||| | ||||| | ||||-
+ 297994 : -<   9   >--ATTGG-AAGATGC--<   15  >--GTTATCAAGAACAATAAAG- : 298050
+
+    247 : -<   11  >--AAGACT--<   5   >--GGACTTTTTACTATGTTC--<   12  :    286
+          -< NER 5 >--||||||--< NER 6 >--| ||| || ||| |  ||--< NER 7
+ 298051 : -<   11  >--AAGACT--<   10  >--GCACTATTCACTGTCCTC--<   12  : 298096
+
+    287 :  >--ACTGTCGGAAAT--<   1   >--ACAAAATATAGAGCTAA--GAAT-TCTGA :    335
+           >--||  ||  ||||--< NER 8 >--|||||| | | |||| |  || | | |||
+ 298097 :  >--ACATTCTCAAAT--<   10  >--ACAAAA-AAACAGCTGATTGATTATTTGA : 298145
+
+    336 : TGAT--<  369  >--AACTACTT--<   12   >--TGAACG--<   10   >- :    736
+          ||| --< NER 9 >--| || |||--< NER 10 >--|||| |--< NER 11 >-
+ 298146 : TGAA--< 20288 >--AGCTTCTT--<    9   >--TGAAAG--<   16   >- : 318477
+
+    737 : -GAAAAAATAGATACGTCAGCATG--<   11   >--TTGACCAAAAGTATCTTCCA :    798
+          -||| ||||| ||  | || | ||--< NER 12 >--|||||    | |  |||| |
+ 318478 : -GAATAAATACAT--GGCACCTTG--<    6   >--TTGACATTCAATGCCTTCTA : 318523
+
+    799 : TACGAG--<   12   >--ACTTT--<   11   >--TGCTTCCCCTTGC--<    :    847
+           | |||--< NER 13 >--|||||--< NER 14 >--| | ||||||| |--< NE
+ 318524 : -AAGAG--<   37   >--ACTTT--<   41   >--TTCCTCCCCTTCC--<    : 318631
+
+    848 : 44   >--GGACCAA--<   19   >--ATCAAATGCGACTTAA--<    9   >- :    933
+          R 15 >--|||| ||--< NER 16 >--||||||| | ||  ||--< NER 17 >-
+ 318632 :  6   >--GGACGAA--<    2   >--ATCAAAT-CAACCAAA--<    5   >- : 318660
+
+    934 : -ACCTGT--<    7   >--GAAATC--<    1   >--CTAGCTTC--<   11  :    970
+          -||||||--< NER 18 >--||||||--< NER 19 >--|||| |||--< NER 2
+ 318661 : -ACCTGT--<   16   >--GAAATC--<    4   >--CTAGTTTC--<    9  : 318709
+
+    971 :   >--TGGCTGCTTCTCAT--<   13   >--GAACCCAAT--<    1   >--TG :   1018
+          0 >--|| || | ||||||--< NER 21 >--||| ||| |--< NER 22 >--||
+ 318710 :   >--TGTCT-CATCTCAT--<    4   >--GAATCCAGT--<    8   >--TG : 318744
+
+   1019 : AAGC--<    2   >--TTGAACACATT-AGCAG--<    7   >--TCGAATGGA :   1056
+           |||--< NER 23 >--|||| |||||| | |||--< NER 24 >--|||||| | 
+ 318745 : TAGC--<    7   >--TTGACCACATTCACCAG--<   15   >--TCGAAT-GC : 318795
+
+   1057 : AAAGCGTCTTGCTACCACATTCTCGAA--<    9   >--TCCCT--<    2   > :   1099
+          ||||   || |||   ||||| |||||--< NER 25 >--|||||--< NER 26 >
+ 318796 : AAAGAAGCTAGCT-GAACATTATCGAA--<   13   >--TCCCT--<   12   > : 318852
+
+   1100 : --CAAAATATTCATCGTTGGA--<    3   >--AGATGATTT--<    3   >-- :   1132
+          --|||||| ||| || | | |--< NER 27 >--|||| ||||--< NER 28 >--
+ 318853 : --CAAAATTTTCTTCATAGAA--<   19   >--AGAT-ATTT--<   16   >-- : 318914
+
+   1133 : CAGCGA--<   17   >--AATGTACAG--<    2   >--GACTGCAAAA--<   :   1179
+          |||| |--< NER 29 >--| ||||| |--< NER 30 >--|||| |||||--< N
+ 318915 : CAGCTA--<    5   >--ACTGTACCG--<   11   >--GACTTCAAAA--<   : 318960
+
+   1180 :  10   >--AGCTCGCGACTTA--<   10   >--TGGTTAGACAGCTCCTGTAG :   1230
+          ER 31 >--||||   |||| |--< NER 32 >--|| |  ||||||||||||||
+ 318961 :   5   >--AGCTATAGACTCA--<    2   >--TGATAGGACAGCTCCTGTAG : 318994
+
+
+C4 Alignment:
+------------
+         Query: gi|296143771|ref|NM_001180731.1| Saccharomyces cerevisiae S288c Cad1p (CAD1) mRNA, complete cds
+        Target: gi|330443520|ref|NC_001136.10| Saccharomyces cerevisiae S288c chromosome IV, complete sequence
+         Model: NER:affine:local:dna2dna
+     Raw score: 440
+   Query range: 509 -> 1192
+  Target range: 183946 -> 184603
+
+    510 : TGAGA--<   23  >--TGGAACGCTC--<   20  >--GATTCTCCCCCCGGAAA :    584
+          |||||--< NER 1 >--|| |||  ||--< NER 2 >--||  |||   | | |||
+ 183947 : TGAGA--<   26  >--TGAAACTGTC--<   15  >--GAAGCTCTTTCAGAAAA : 184019
+
+    585 : TCGAACAGGTG--<   12  >--GTGACGAAAG--<   19  >--CCAGATTTCAG :    647
+           | |||  |||--< NER 3 >--|||| || ||--< NER 4 >--|| |||| || 
+ 184020 : GCCAACTCGTG--<   14  >--GTGAAGACAG--<   12  >--CCGGATTACAA : 184077
+
+    648 : TCT--<   17  >--ATAGACAGACTGGTC--<   1   >--AGAAGCT-TTAGAT :    696
+          |||--< NER 5 >--| ||| || |  |||--< NER 6 >--|||| ||   ||||
+ 184078 : TCT--<   12  >--AGAGAAAGGCAAGTC--<   4   >--AGAAACTGGCAGAT : 184125
+
+    697 : -TACGACATTCATAACTACTTTC--<   19  >--GACCGCTGA--<   2   >-- :    748
+           |  ||| || | ||  | ||||--< NER 7 >--| |||||||--< NER 8 >--
+ 184126 : CTTGGAC-TTGAAAAGGAGTTTC--<   22  >--GGCCGCTGA--<   12  >-- : 184191
+
+    749 : AAAT--AGATACGTCAGCAT--<   11  >--ATTGACCAAAAGTA--<    6    :    793
+          ||||  |||| | |||||||--< NER 9 >--||| || |||| ||--< NER 10 
+ 184192 : AAATGCAGAT-CATCAGCAT--<   2   >--ATT-ACGAAAACTA--<   15    : 184240
+
+    794 : >--ATACGAGACAGA--<    6   >--TACTTTATTCCCCAGCGT--<   10    :    835
+          >--| || ||| |||--< NER 11 >--||||   ||  ||||| |--< NER 12 
+ 184241 : >--AAACCAGAAAGA--<   20   >--TACTAGGTT-ACCAGCTT--<   11    : 184300
+
+    836 : >--GCTGT--<   13   >--AATAATATTTGCAACCGCAAG--<   20   >--T :    903
+          >--|||||--< NER 13 >--|| || |  || || | || |--< NER 14 >--|
+ 184301 : >--GCTGT--<   11   >--AAGAAGACATGGAAACCCAGG--<   10   >--T : 184347
+
+    904 : TCAAATAAGGAGATCAA--<    7   >--TTAATAACAAG--<   19   >--TC :    959
+          ||||| ||| |||  ||--< NER 15 >--|||| || |||--< NER 16 >--| 
+ 184348 : TCAAAGAAGAAGAAGAA--<    2   >--TTAAAAAGAAG--<   16   >--TG : 184395
+
+    960 : TCTAGCTTCGGTGCTT-CCGG--TGGCTGCTTCTCATAC--<   15   >--CCAAT :   1015
+          |||| ||   |  ||| ||||   || ||  ||| ||||--< NER 17 >--| |||
+ 184396 : TCTA-CTAGAGAACTTGCCGGCAAGGTTGGGTCT-ATAC--<    7   >--CAAAT : 184444
+
+   1016 : CTGAA--<    2   >--AATTGAACA--<   19   >--AATGGAAAAGCGTCTT :   1066
+          ||| |--< NER 18 >--||||| | |--< NER 19 >--| ||| |||| ||   
+ 184445 : CTGGA--<   14   >--AATTGGAAA--<   13   >--ATTGGCAAAG-GTGCC : 184500
+
+   1067 : GCTACCACATTCT--<   20   >--CAAAATATT--<   14   >--GATGATTT :   1130
+          |  |||||||| |--< NER 20 >--||| || ||--< NER 21 >--||||||  
+ 184501 : GAAACCACATTTT--<    2   >--CAAGATGTT--<   18   >--GATGATGC : 184550
+
+   1131 : AT--GCAGCGAA--<    7   >--TCAAGGC--<   13   >--GACTGCAAAAT :   1178
+          ||   ||||| |--< NER 22 >--|| ||||--< NER 23 >--||| | |||||
+ 184551 : ATCCTCAGCGGA--<    3   >--TCTAGGC--<    6   >--GACGGTAAAAT : 184589
+
+   1179 : AGTAGTCAAAGCTC :   1192
+          |||||||| | |||
+ 184590 : AGTAGTCACACCTC : 184603
+
+-- completed exonerate analysis

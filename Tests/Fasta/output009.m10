@@ -1,0 +1,298 @@
+# fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_mult.fasta mrnalib.fasta
+FASTA searches a protein or DNA sequence data bank
+ version 36.3.5c Dec, 2011(preload8)
+Please cite:
+ W.R. Pearson & D.J. Lipman PNAS (1988) 85:2444-2448
+
+Query: mrna_mult.fasta
+  1>>>random_s00 - 15 nt
+Library: mrnalib.fasta
+   178611 residues in   250 sequences
+
+Statistics: Altschul/Gish params: n0: 15 Lambda: 0.192 K: 0.177 H: 0.360
+ statistics sampled from 59 (59) to 59 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ ktup: 1, E-join: 0.25 (0.802), E-opt: 0.05 (0.126), width:  16
+ Scan time:  0.050
+!! No sequences with E() < 1.7
+>>><<<
+  2>>>gi|255708421:1-99 Mus musculus myoglobin (Mb), transcript varia - 99 nt
+Library: mrnalib.fasta
+   178611 residues in   250 sequences
+
+Statistics: Altschul/Gish params: n0: 99 Lambda: 0.192 K: 0.177 H: 0.360
+ statistics sampled from 211 (219) to 211 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ ktup: 3, E-join: 0.25 (0.866), E-opt: 0.05 (0.368), width:  16
+ Scan time:  0.040
+
+The best scores are:                                      opt bits E(250)
+gi|23308614|ref|NM_152952.1| Danio rerio cytog (5188) [r]   74 23.6     1.4
+
+>>>gi|255708421:1-99, 99 nt vs mrnalib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_mult.fasta mrnalib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: +5/-4 (5:-4)
+; pg_open-ext: -12 -4
+; pg_ktup: 3
+; pg_join_E(): 0.25 (0.866)
+; pg_optcut_E(): 0.05 (0.368)
+; mp_extrap: 60000 211
+; mp_stats: Altschul/Gish params: n0: 99 Lambda: 0.192 K: 0.177 H: 0.360
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4  ktup: 3, E-join: 0.25 (0.866), E-opt: 0.05 (0.368), width:  16
+>>gi|23308614|ref|NM_152952.1| Danio rerio cytoglobin 1 (cygb1), mRNA
+; fa_frame: r
+; fa_initn: 124
+; fa_init1:  74
+; fa_opt:  74
+; fa_z-score: 70.3
+; fa_bits: 23.6
+; fa_expect:    1.4
+; bs_ident: 0.818
+; bs_sim: 0.818
+; bs_overlap: 22
+>gi|255708421 ..
+; sq_len: 99
+; sq_offset: 100
+; sq_type: D
+; al_start: 29
+; al_stop: 8
+; al_display_start: 59
+CAAGGATGACAGTCCTCTGGATGTTGAAGATGATGTTCTGTTTCTAAAAC
+AGTTCCCGA
+>gi|23308614|ref|NM_152952.1| ..
+; sq_len: 5188
+; sq_offset: 1
+; sq_type: D
+; al_start: 3484
+; al_stop: 3505
+; al_display_start: 3454
+CATTGTATAAAATACAACAAAATTTGTGTTTGATTTTTTTTGTCTAAAAC
+AGCAAGAATGGATGAGTAATGAAATAATAAAAAAAACATAAAAAAATAAG
+TAAAAAAATAACAGAAATAA
+
+>>><<<
+  3>>>gi|156718121:2361-2376 Bos taurus nucleoporin 43kDa (NU - 16 nt
+Library: mrnalib.fasta
+   178611 residues in   250 sequences
+
+Statistics: Altschul/Gish params: n0: 16 Lambda: 0.192 K: 0.177 H: 0.360
+ statistics sampled from 176 (177) to 176 sequences
+Algorithm: FASTA (3.7 Nov 2010) [optimized]
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ ktup: 1, E-join: 0.25 (0.903), E-opt: 0.05 (0.403), width:  16
+ Scan time:  0.080
+
+The best scores are:                                      opt bits E(250)
+gi|47271416|ref|NM_131257.2| Danio rerio hemog ( 597) [f]   52 21.0     1.4
+gi|332859474|ref|XM_001156938.2| PREDICTED: Pa ( 762) [f]   52 20.9     1.4
+gi|332211534|ref|XM_003254825.1| PREDICTED: No ( 805) [r]   52 20.9     1.4
+gi|23308614|ref|NM_152952.1| Danio rerio cytog (5188) [f]   52 20.9     1.4
+gi|297689475|ref|XM_002822130.1| PREDICTED: Po (1158) [r]   52 20.9     1.4
+gi|297689475|ref|XM_002822130.1| PREDICTED: Po (1158) [f]   52 20.9     1.4
+
+>>>gi|156718121:2361-2376, 16 nt vs mrnalib.fasta library
+; pg_name: fasta36
+; pg_ver: 36.3.5c Dec, 2011(preload8)
+; pg_argv:  fasta36 -E 1.7 -F 1.3 -m 10 -n mrna_mult.fasta mrnalib.fasta; pg_name_alg: FASTA
+; pg_ver_rel: 3.7 Nov 2010
+; pg_matrix: +5/-4 (5:-4)
+; pg_open-ext: -12 -4
+; pg_ktup: 1
+; pg_join_E(): 0.25 (0.903)
+; pg_optcut_E(): 0.05 (0.403)
+; mp_extrap: 60000 176
+; mp_stats: Altschul/Gish params: n0: 16 Lambda: 0.192 K: 0.177 H: 0.360
+; mp_KS: -0.0000 (N=0) at  30
+; mp_Algorithm: FASTA (3.7 Nov 2010) [optimized]
+; mp_Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4  ktup: 1, E-join: 0.25 (0.903), E-opt: 0.05 (0.403), width:  16
+>>gi|47271416|ref|NM_131257.2| Danio rerio hemoglobin alpha adult-1 (hbaa1), mRNA
+; fa_frame: f
+; fa_initn:  52
+; fa_init1:  52
+; fa_opt:  52
+; fa_z-score: 87.3
+; fa_bits: 21.0
+; fa_expect:    1.4
+; bs_ident: 0.857
+; bs_sim: 0.857
+; bs_overlap: 14
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 3
+; al_stop: 16
+; al_display_start: 1
+----------------------------GAAGAAGGAAAAAAAA
+>gi|47271416|ref|NM_131257.2| ..
+; sq_len: 597
+; sq_offset: 1
+; sq_type: D
+; al_start: 573
+; al_stop: 586
+; al_display_start: 543
+GTCTGAATGAAATTTCTCAATAAAAGGCACAGAACTAAAAAAAAAAAAAA
+AAAAA
+>>gi|332859474|ref|XM_001156938.2| PREDICTED: Pan troglodytes myoglobin, transcript variant 11 (MB), mRNA
+; fa_frame: f
+; fa_initn:  52
+; fa_init1:  52
+; fa_opt:  52
+; fa_z-score: 85.3
+; fa_bits: 20.9
+; fa_expect:    1.4
+; bs_ident: 0.857
+; bs_sim: 0.857
+; bs_overlap: 14
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 3
+; al_stop: 16
+; al_display_start: 1
+----------------------------GAAGAAGGAAAAAAAA
+>gi|332859474|ref|XM_001156938.2| ..
+; sq_len: 762
+; sq_offset: 1
+; sq_type: D
+; al_start: 85
+; al_stop: 98
+; al_display_start: 55
+AGCCATTGAGCGATCTTTGTCAAGCATCCCAGAAGGTATAAAAACGCCCT
+TGGGGCCAGGCAGCCTCAAACCCCAGCTGTTGGGGCCAGGACACCCAGTG
+AGCCCATACTTGCTCTTTTT
+>>gi|332211534|ref|XM_003254825.1| PREDICTED: Nomascus leucogenys hemoglobin subunit gamma-2-like (LOC100581638), mRNA
+; fa_frame: r
+; fa_initn:  52
+; fa_init1:  52
+; fa_opt:  52
+; fa_z-score: 84.9
+; fa_bits: 20.9
+; fa_expect:    1.4
+; bs_ident: 0.857
+; bs_sim: 0.857
+; bs_overlap: 14
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 15
+; al_stop: 2
+; al_display_start: 16
+-----------------------------TTTTTTTTCCTTCTTC
+>gi|332211534|ref|XM_003254825.1| ..
+; sq_len: 805
+; sq_offset: 1
+; sq_type: D
+; al_start: 634
+; al_stop: 647
+; al_display_start: 604
+TAAGAGATCACACATGATTTTCTTCAGCTCTTTTTTTACATCTTTTTAAA
+TATATGAGCCACAAAGGGTTTATATTGAGGGATGTGTGTATGTGTATTTC
+TGCTGCCTGTGTGTGTTTGT
+>>gi|23308614|ref|NM_152952.1| Danio rerio cytoglobin 1 (cygb1), mRNA
+; fa_frame: f
+; fa_initn:  52
+; fa_init1:  52
+; fa_opt:  52
+; fa_z-score: 70.2
+; fa_bits: 20.9
+; fa_expect:    1.4
+; bs_ident: 0.857
+; bs_sim: 0.857
+; bs_overlap: 14
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 2
+; al_stop: 15
+; al_display_start: 1
+-----------------------------GAAGAAGGAAAAAAAA
+>gi|23308614|ref|NM_152952.1| ..
+; sq_len: 5188
+; sq_offset: 1
+; sq_type: D
+; al_start: 3548
+; al_stop: 3561
+; al_display_start: 3518
+AGTAATGAAATAATAAAAAAAACATAAAAAAATAAGTAAAAAAATAACAG
+AAATAATAATAATGATAACAAAAATGGTAAAAGTAAATAAAACTAAAATA
+TTGTACAAACAGTAGAAAAC
+>>gi|297689475|ref|XM_002822130.1| PREDICTED: Pongo abelii hemoglobin subunit gamma-like (LOC100439631), mRNA
+; fa_frame: r
+; fa_initn:  52
+; fa_init1:  52
+; fa_opt:  52
+; fa_z-score: 82.0
+; fa_bits: 20.9
+; fa_expect:    1.4
+; bs_ident: 0.857
+; bs_sim: 0.857
+; bs_overlap: 14
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 17
+; sq_type: D
+; al_start: 15
+; al_stop: 2
+; al_display_start: 16
+-----------------------------TTTTTTTTCCTTCTTC
+>gi|297689475|ref|XM_002822130.1| ..
+; sq_len: 1158
+; sq_offset: 1
+; sq_type: D
+; al_start: 984
+; al_stop: 997
+; al_display_start: 954
+TAAGAGATCACACATGCTTTTCTTCAGCTCTTTTTTTACATCTTTTTAAA
+TATATGAGCCACAAACAGTTTATATTGAGGGATGTGTGTATGTGTATTTC
+TGCTGCTTGTGTGTGTTTGT
+>>gi|297689475|ref|XM_002822130.1| PREDICTED: Pongo abelii hemoglobin subunit gamma-like (LOC100439631), mRNA
+; fa_frame: f
+; fa_initn:  52
+; fa_init1:  52
+; fa_opt:  52
+; fa_z-score: 82.0
+; fa_bits: 20.9
+; fa_expect:    1.4
+; bs_ident: 0.857
+; bs_sim: 0.857
+; bs_overlap: 14
+>gi|156718121 ..
+; sq_len: 16
+; sq_offset: 1
+; sq_type: D
+; al_start: 2
+; al_stop: 15
+; al_display_start: 1
+------------------GAAGAAGGAAAAAAAA
+>gi|297689475|ref|XM_002822130.1| ..
+; sq_len: 1158
+; sq_offset: 1
+; sq_type: D
+; al_start: 20
+; al_stop: 33
+; al_display_start: 1
+CCTCACTGGAGCTAAAGACAAGAAGGTAAAAGAGGCTGACAAAAGAAGTC
+CTGGTATCCTCTATGGTGGGAGAAGAAAACTAGGTAAAAGGAAGAATAAA
+TTAGAGAAAAATTGGAACGA
+
+>>><<<
+>>>///
+
+130 residues in 3 query   sequences
+178611 residues in 250 library sequences
+ Tcomplib [36.3.5c Dec, 2011(preload8)] (4 proc in memory [0G])
+ start: Tue May  8 01:06:58 2012 done: Tue May  8 01:06:58 2012
+ Total Scan time:  0.170 Total Display time:  0.010
+
+Function used was FASTA [36.3.5c Dec, 2011(preload8)]

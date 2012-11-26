@@ -1,0 +1,307 @@
+BLASTP 2.2.26+
+
+
+Reference: Stephen F. Altschul, Thomas L. Madden, Alejandro A.
+Schaffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J.
+Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of
+protein database search programs", Nucleic Acids Res. 25:3389-3402.
+
+
+
+Reference for composition-based statistics: Alejandro A. Schaffer,
+L. Aravind, Thomas L. Madden, Sergei Shavirin, John L. Spouge, Yuri
+I. Wolf, Eugene V. Koonin, and Stephen F. Altschul (2001),
+"Improving the accuracy of PSI-BLAST protein database searches with
+composition-based statistics and other refinements", Nucleic Acids
+Res. 29:2994-3005.
+
+
+
+Database: minirefseq_prot
+           20 sequences; 6,406 total letters
+
+
+
+Query= random_s00
+
+Length=32
+
+
+***** No hits found *****
+
+
+
+Lambda     K      H
+   0.399    0.202    0.884 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 156650
+
+
+Query= gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus
+subtilis subsp. subtilis str. 168]
+
+Length=102
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  gi|308175296|ref|YP_003922001.1| membrane bound lipoprotein [Ba...   139    2e-46
+  gi|375363999|ref|YP_005132038.1| lytA gene product [Bacillus am...  89.0    7e-27
+  gi|154687679|ref|YP_001422840.1| LytA [Bacillus amyloliquefacie...  89.0    8e-27
+  gi|311070071|ref|YP_003974994.1| unnamed protein product [Bacil...  83.2    1e-24
+  gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein C16...  15.8    7.1  
+
+
+> gi|308175296|ref|YP_003922001.1| membrane bound lipoprotein [Bacillus 
+amyloliquefaciens DSM 7]
+Length=100
+
+ Score =  139 bits (350),  Expect = 2e-46, Method: Compositional matrix adjust.
+ Identities = 69/102 (68%), Positives = 81/102 (79%), Gaps = 2/102 (2%)
+
+Query  1    MKKFIALLFFILLLSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVDNEPV  60
+            MKK    LFFILLL+GCGV ++KSQGED      + TKEGTYVGLADTHTIEVTVD+EPV
+Sbjct  1    MKKIFGCLFFILLLAGCGVTNEKSQGEDAG--EKLVTKEGTYVGLADTHTIEVTVDHEPV  58
+
+Query  61   SLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERAN  102
+            S DITEES  D+   N+G+KVT+ Y+KN +GQL+LKDIE AN
+Sbjct  59   SFDITEESADDVKNLNNGEKVTVKYQKNSKGQLVLKDIEPAN  100
+
+
+> gi|375363999|ref|YP_005132038.1| lytA gene product [Bacillus 
+amyloliquefaciens subsp. plantarum CAU B946]
+Length=105
+
+ Score = 89.0 bits (219),  Expect = 7e-27, Method: Compositional matrix adjust.
+ Identities = 48/105 (46%), Positives = 69/105 (66%), Gaps = 5/105 (5%)
+
+Query  1    MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD  56
+            MKK IA  F ILL    L+ CG   Q  +G   S ++  + +   YVG+ADTHTIEV VD
+Sbjct  1    MKKTIAASFLILLFSVVLAACGTAEQSKKGSG-SSENQAQKETAYYVGMADTHTIEVKVD  59
+
+Query  57   NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA  101
+            ++PVS + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A
+Sbjct  60   DQPVSFEFSDDFSDVLNKFSENDKVSITYFTNDKGQKEIKEIEKA  104
+
+
+> gi|154687679|ref|YP_001422840.1| LytA [Bacillus amyloliquefaciens 
+FZB42]
+Length=105
+
+ Score = 89.0 bits (219),  Expect = 8e-27, Method: Compositional matrix adjust.
+ Identities = 48/105 (46%), Positives = 69/105 (66%), Gaps = 5/105 (5%)
+
+Query  1    MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD  56
+            MKK IA  F ILL    L+ CG   Q  +G   S ++  + +   YVG+ADTHTIEV VD
+Sbjct  1    MKKTIAASFLILLFSVVLAACGTADQSKKGSG-SSENQAQKETAYYVGMADTHTIEVKVD  59
+
+Query  57   NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIERA  101
+            ++PVS + +++ +  L+KF+  DKV+ITY  ND+GQ  +K+IE+A
+Sbjct  60   DQPVSFEFSDDFSDVLNKFSENDKVSITYFTNDKGQKEIKEIEKA  104
+
+
+> gi|311070071|ref|YP_003974994.1| unnamed protein product [Bacillus 
+atrophaeus 1942]
+Length=105
+
+ Score = 83.2 bits (204),  Expect = 1e-24, Method: Compositional matrix adjust.
+ Identities = 45/104 (43%), Positives = 66/104 (63%), Gaps = 5/104 (5%)
+
+Query  1    MKKFIALLFFILL----LSGCGVNSQKSQGEDVSPDSNIETKEGTYVGLADTHTIEVTVD  56
+            MKK +A  F ILL    L+ CG   Q  +G + S  S ++ +   YVG+ADTHTIEV +D
+Sbjct  1    MKKNVASSFLILLFSIILAACGTAEQSKEG-NGSSSSQVQNETAYYVGMADTHTIEVKID  59
+
+Query  57   NEPVSLDITEESTSDLDKFNSGDKVTITYEKNDEGQLLLKDIER  100
+            ++PVS + T++ +  L++F   DKV I+Y  ND+GQ  L +IE+
+Sbjct  60   DQPVSFEFTDDFSEILNEFEENDKVNISYLTNDKGQKELTEIEK  103
+
+
+> gi|332258565|ref|XP_003278367.1| PREDICTED: UPF0764 protein C16orf89-like 
+[Nomascus leucogenys]
+Length=132
+
+ Score = 15.8 bits (29),  Expect = 7.1, Method: Compositional matrix adjust.
+ Identities = 7/25 (28%), Positives = 11/25 (44%), Gaps = 0/25 (0%)
+
+Query  60   VSLDITEESTSDLDKFNSGDKVTIT  84
+            V +       + L+   SGD  T+T
+Sbjct  80   VEMGFLHVGQAGLELVTSGDPPTLT  104
+
+
+
+Lambda     K      H
+   0.310    0.131    0.353 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 361344
+
+
+Query= gi|11464971:4-101 pleckstrin [Mus musculus]
+
+Length=98
+                                                                      Score     E
+Sequences producing significant alignments:                          (Bits)  Value
+
+  gi|11464971|ref|NP_062422.1| pleckstrin [Mus musculus]               205    2e-69
+  gi|354480464|ref|XP_003502426.1| PREDICTED: pleckstrin-like [Cr...   205    3e-69
+  gi|156616273|ref|NP_002655.2| pleckstrin [Homo sapiens]              204    1e-68
+  gi|297667453|ref|XP_002811995.1| PREDICTED: pleckstrin-like [Po...   204    1e-68
+  gi|350596020|ref|XP_003360649.2| PREDICTED: pleckstrin-like [Su...   199    2e-68
+  gi|33188429|ref|NP_872601.1| histone demethylase UTY isoform 1 ...  18.5    0.88 
+  gi|57113895|ref|NP_001009002.1| histone demethylase UTY [Pan tr...  18.5    0.88 
+
+
+> gi|11464971|ref|NP_062422.1| pleckstrin [Mus musculus]
+Length=350
+
+ Score =  205 bits (522),  Expect = 2e-69, Method: Compositional matrix adjust.
+ Identities = 98/98 (100%), Positives = 98/98 (100%), Gaps = 0/98 (0%)
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  4    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  63
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  64   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  101
+
+
+ Score = 43.5 bits (101),  Expect = 3e-09, Method: Compositional matrix adjust.
+ Identities = 29/100 (29%), Positives = 48/100 (48%), Gaps = 6/100 (6%)
+
+Query  3    IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTS--PCQD  58
+            I++G L+K+G     WK    +L ED   + +Y       P G + L+G  +TS     D
+Sbjct  246  IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAVHLRGCVVTSVESSHD  305
+
+Query  59   FGK--RMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+              K     + +I T  +  ++ QAA  +ER  W++ I+ A
+Sbjct  306  VKKSDEENLFEIITADEVHYYLQAATSKERTEWIKAIQVA  345
+
+
+> gi|354480464|ref|XP_003502426.1| PREDICTED: pleckstrin-like [Cricetulus 
+griseus]
+Length=350
+
+ Score =  205 bits (521),  Expect = 3e-69, Method: Compositional matrix adjust.
+ Identities = 98/98 (100%), Positives = 98/98 (100%), Gaps = 0/98 (0%)
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  4    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  63
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  64   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  101
+
+
+ Score = 43.9 bits (102),  Expect = 2e-09, Method: Compositional matrix adjust.
+ Identities = 30/100 (30%), Positives = 50/100 (50%), Gaps = 6/100 (6%)
+
+Query  3    IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDF-  59
+            I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  
+Sbjct  246  IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGGEDPLGAIHLRGCVVTSVESNHD  305
+
+Query  60   GKRM---FVLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+            GK+     + +I T  +  ++ QAA  +ER  W++ I+ A
+Sbjct  306  GKKSDDENLFEIITADEVHYYLQAAAPKERTEWIKAIQVA  345
+
+
+> gi|156616273|ref|NP_002655.2| pleckstrin [Homo sapiens]
+Length=350
+
+ Score =  204 bits (518),  Expect = 1e-68, Method: Compositional matrix adjust.
+ Identities = 97/98 (99%), Positives = 97/98 (99%), Gaps = 0/98 (0%)
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  4    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  63
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  64   KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  101
+
+
+ Score = 47.4 bits (111),  Expect = 2e-10, Method: Compositional matrix adjust.
+ Identities = 31/100 (31%), Positives = 48/100 (48%), Gaps = 6/100 (6%)
+
+Query  3    IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  
+Sbjct  246  IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGAEDPLGAIHLRGCVVTSVESNSN  305
+
+Query  61   KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+             R      + +I T  +  +F QAA  +ER  W+R I+ A
+Sbjct  306  GRKSEEENLFEIITADEVHYFLQAATPKERTEWIRAIQMA  345
+
+
+> gi|297667453|ref|XP_002811995.1| PREDICTED: pleckstrin-like [Pongo 
+abelii]
+Length=350
+
+ Score =  204 bits (518),  Expect = 1e-68, Method: Compositional matrix adjust.
+ Identities = 97/98 (99%), Positives = 97/98 (99%), Gaps = 0/98 (0%)
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  4    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  63
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERDAWVRDIKKAIK
+Sbjct  64   KRMFVFKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  101
+
+
+ Score = 45.4 bits (106),  Expect = 6e-10, Method: Compositional matrix adjust.
+ Identities = 30/100 (30%), Positives = 48/100 (48%), Gaps = 6/100 (6%)
+
+Query  3    IREGYLVKKGSVFNTWKPMWVVLLEDG--IEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            I++G L+K+G     WK    +L ED   + +Y       P G I L+G  +TS   +  
+Sbjct  246  IKQGCLLKQGHRRKNWKVRKFILREDPAYLHYYDPAGAEDPLGAIHLRGCVVTSVESNSN  305
+
+Query  61   KRMF----VLKITTTKQQDHFFQAAFLEERDAWVRDIKKA  96
+             R      + +I T  +  +F QAA  +ER  W++ I+ A
+Sbjct  306  GRKSEEENLFEIITADEVHYFLQAATPKERTEWIKAIQVA  345
+
+
+> gi|350596020|ref|XP_003360649.2| PREDICTED: pleckstrin-like [Sus 
+scrofa]
+Length=228
+
+ Score =  199 bits (506),  Expect = 2e-68, Method: Compositional matrix adjust.
+ Identities = 94/98 (96%), Positives = 96/98 (98%), Gaps = 0/98 (0%)
+
+Query  1    KRIREGYLVKKGSVFNTWKPMWVVLLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  60
+            KRIREGYLVKKGS+FNTWKPMWV+LLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG
+Sbjct  4    KRIREGYLVKKGSMFNTWKPMWVILLEDGIEFYKKKSDNSPKGMIPLKGSTLTSPCQDFG  63
+
+Query  61   KRMFVLKITTTKQQDHFFQAAFLEERDAWVRDIKKAIK  98
+            KRMFV KITTTKQQDHFFQAAFLEERD WVRDIKKAIK
+Sbjct  64   KRMFVFKITTTKQQDHFFQAAFLEERDGWVRDIKKAIK  101
+
+
+
+Lambda     K      H
+   0.321    0.137    0.422 
+
+Gapped
+Lambda     K      H
+   0.267   0.0410    0.140 
+
+Effective search space used: 345626
+
+
+  Database: minirefseq_prot
+    Posted date:  Jun 9, 2012  2:05 PM
+  Number of letters in database: 6,406
+  Number of sequences in database:  20
+
+
+
+Matrix: BLOSUM62
+Gap Penalties: Existence: 11, Extension: 1
+Neighboring words threshold: 11
+Window for multiple hits: 40

@@ -18,8 +18,8 @@ fa01   fasta alignment
 
 The following are example "machine readable" pairwise alignment
 output files from the FASTA tools when using the -m 10 command
-line option.  These are for testing the Bio.AlignIO code where
-the format is called "fasta-m10".
+line option.  These are for testing the Bio.AlignIO and Bio.SearchIO
+code where the format is called "fasta-m10".
 
 output001.m10 - fasta35 protein-protein, 3 query sequences,
                 no histogram, with expectation threshold
@@ -40,3 +40,11 @@ output007.m10 - recreation of output001.m10 using fasta-36.3.4 (note that
                 just end of the file!
 output008.m10 - tfastx36 protein-nucleotide, 4 queries, some with no hits,
                 some matches with multiple HSPs (new feature in FASTA v36)
+output009.m10 - fasta36, multiple dna queries
+output010.m10 - fasta36, single dna query, no hit
+output011.m10 - fasta36, single dna query, each hit contains a single hsp
+output012.m10 - fasta36, single dna query, some hits contain multiple hsps
+output013.m10 - fasta36, multiple protein queries
+output014.m10 - fasta36, single protein query, no hit
+output015.m10 - fasta36, single protein query, each hit contains a single hsp
+output016.m10 - fasta36, single protein query, some hits contain multiple hsps

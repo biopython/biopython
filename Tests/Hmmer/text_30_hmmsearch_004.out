@@ -1,0 +1,193 @@
+# hmmsearch :: search profile(s) against a sequence database
+# HMMER 3.0 (March 2010); http://hmmer.org/
+# Copyright (C) 2010 Howard Hughes Medical Institute.
+# Freely distributed under the GNU General Public License (GPLv3).
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query HMM file:                  h01.hmm
+# target sequence database:        /home/bow/db/hmmer/uniprot_sprot.fasta
+# output directed to file:         hmmer_cases/text_hmmsearch_spc_notextw.out
+# per-seq hits tabular output:     hmmer_cases/tab_hmmsearch_spc_notextw.out
+# per-dom hits tabular output:     hmmer_cases/domtab_hmmsearch_spc_notextw.out
+# max ASCII text line length:      unlimited
+# sequence reporting threshold:    score >= 480
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       Pkinase  [M=260]
+Accession:   PF00069.17
+Description: Protein kinase domain
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence              Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------              -----------
+   8.4e-147  492.3   0.0    1.1e-72  249.3   0.0    2.1  2  sp|Q9WUT3|KS6A2_MOUSE Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1
+   2.7e-146  490.7   0.0    8.7e-73  249.7   0.0    2.1  2  sp|Q63531|KS6A1_RAT   Ribosomal protein S6 kinase alpha-1 OS=Rattus norvegicus GN=Rps6ka1 PE=1 SV=1
+   2.2e-145  487.7   0.0    4.6e-72  247.4   0.0    2.1  2  sp|Q15418|KS6A1_HUMAN Ribosomal protein S6 kinase alpha-1 OS=Homo sapiens GN=RPS6KA1 PE=1 SV=2
+   2.5e-145  487.5   0.0    7.5e-72  246.7   0.0    2.1  2  sp|P18652|KS6AA_CHICK Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1
+   2.4e-144  484.2   0.0    2.4e-70  241.7   0.0    2.1  2  sp|Q15349|KS6A2_HUMAN Ribosomal protein S6 kinase alpha-2 OS=Homo sapiens GN=RPS6KA2 PE=1 SV=2
+     5e-144  483.2   0.0    3.9e-70  241.0   0.0    2.2  2  sp|P51812|KS6A3_HUMAN Ribosomal protein S6 kinase alpha-3 OS=Homo sapiens GN=RPS6KA3 PE=1 SV=1
+     5e-144  483.2   0.0    3.9e-70  241.0   0.0    2.2  2  sp|P18654|KS6A3_MOUSE Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2
+
+
+Domain annotation for each sequence (and alignments):
+>> sp|Q9WUT3|KS6A2_MOUSE  Ribosomal protein S6 kinase alpha-2 OS=Mus musculus GN=Rps6ka2 PE=2 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  241.2   0.0   4.6e-75   3.5e-70       1     260 []      59     318 ..      59     318 .. 0.95
+   2 !  249.3   0.0   1.5e-77   1.1e-72       1     260 []     415     672 ..     415     672 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 241.2 bits;  conditional E-value: 4.6e-75
+                            EEEEEEEEEETTEEEEEEEE...TTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakk...kktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl 260
+                            +ell+ lG+Gs+GkV+ ++k   ++ g+ +A+K+lkk + k + + +++ E  il++++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lH  gii+rDLKpeNiLld++g++ki+DFGl+k+++ +++++++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e+++ ilk kl  ++  s    +e+++l++ l++++p +Rl      +eei++hp++
+  sp|Q9WUT3|KS6A2_MOUSE  59 FELLKVLGQGSYGKVFLVRKvtgSDAGQLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHGLGIIYRDLKPENILLDEEGHIKITDFGLSKEATDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----AEAQSLLRALFKRNPCNRLGagvdgVEEIKRHPFF 318
+                            67899**********7666611155667*****************99999****************************************************************************************************************************.******************************...999999999999999998866....99******************9999999*****997 PP
+
+  == domain 2    score: 249.3 bits;  conditional E-value: 1.5e-77
+                            EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                            ye++e +G Gs+++++++++k t  ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++ylv+e+++gg+l d + +++++se+e+ +++++i++ ++ylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++DvWslG++ly++l g +pf +  +++ +e++++i ++k+  +  +++s s+ +kd+++k+l+ dp++Rlta ++lkhpw+
+  sp|Q9WUT3|KS6A2_MOUSE 415 YEIKEDIGVGSYSVCKRCVHKATDAEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVMELMRGGELLDRILRQRCFSEREASDVLYTIARTMDYLHSQGVVHRDLKPSNILYMDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDVWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPQQRLTAVQVLKHPWI 672
+                            7899***********************************98......9*******99**************************************************************************98544444888**********************************.***************************************************************************************7 PP
+
+>> sp|Q63531|KS6A1_RAT  Ribosomal protein S6 kinase alpha-1 OS=Rattus norvegicus GN=Rps6ka1 PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  239.2   0.0   1.9e-74   1.4e-69       1     258 [.      62     319 ..      62     321 .. 0.94
+   2 !  249.7   0.0   1.1e-77   8.7e-73       2     260 .]     419     675 ..     418     675 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 239.2 bits;  conditional E-value: 1.9e-74
+                          EEEEEEEEEETTEEE...EEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSG CS
+              Pkinase   1 yelleklGsGsfGkV...ykakkkktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhp 258
+                          +ell+ lG+GsfGkV    k+++ ++g+ +A+K+lkk + k + + +++ E  il+ ++Hp++vkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ gl++lHs gii+rDLKpeNiLld++g++k++DFGl+k++  +++k+++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e++  ilk kl  ++  s    +e+++l++ l++++pa+Rl      aeei++h 
+  sp|Q63531|KS6A1_RAT  62 FELLKVLGQGSFGKVflvRKVTRPDNGHLYAMKVLKKATLKVRDRVRTKMERDILADVNHPFVVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALGLDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKEAIDHEKKAYSFCGTVEYMAPEVVN-RQGHTHSADWWSYGVLMFEMLTGSLPFQGK---DRKETMTLILKAKLGMPQFLS----TEAQSLLRALFKRNPANRLGsgpdgAEEIKRHI 319
+                          67899**********4444555666777****************999999****************************************************************************************************************************.******************************...999999999999999998866....89*****************98888888888885 PP
+
+  == domain 2    score: 249.7 bits;  conditional E-value: 1.1e-77
+                          EEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+              Pkinase   2 elleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                           ++e++G Gs+++++++++k t+ ++AvK+++k++++ ++      E++il +  +Hpni++l +v+ +++++ylv+e+++gg+l d + +++ +se+e+ +++++i + +eylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++ +D+WslGv+ly++l g +pf +  +++ +e++ +i+++k   +  ++++ se++kdl++k+l+ dp++Rlta+++l+hpw+
+  sp|Q63531|KS6A1_RAT 419 IVKETIGVGSYSVCKRCVHKATNMEYAVKVIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDSKHVYLVTELMRGGELLDKILRQKFFSEREASFVLYTISKTVEYLHSQGVVHRDLKPSNILYVDESGNpeclRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDEGCDIWSLGVLLYTMLAGYTPFANGPSDTPEEILTRISSGKFTLSGGNWNTVSETAKDLVSKMLHVDPHQRLTAKQVLQHPWI 675
+                          6789**********************************98......9*******99**********************************9***************************************98554445999**********************************.***************************************************************************************7 PP
+
+>> sp|Q15418|KS6A1_HUMAN  Ribosomal protein S6 kinase alpha-1 OS=Homo sapiens GN=RPS6KA1 PE=1 SV=2
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  238.6   0.0   2.9e-74   2.2e-69       1     258 [.      62     319 ..      62     321 .. 0.94
+   2 !  247.4   0.0     6e-77   4.6e-72       1     260 []     418     675 ..     418     675 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 238.6 bits;  conditional E-value: 2.9e-74
+                            EEEEEEEEEETTEEE...EEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSG CS
+                Pkinase   1 yelleklGsGsfGkV...ykakkkktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhp 258
+                            +ell+ lG+GsfGkV    k+++ ++g+ +A+K+lkk + k + + +++ E  il+ ++Hp++vkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ gl++lHs gii+rDLKpeNiLld++g++k++DFGl+k++  +++k+++++gt eYmAPEv++ ++++++++D+Ws+Gv+++e+ltg+lpf+g+   d++e++  ilk kl  ++  s    +e+++l++ l++++pa+Rl      aeei++h 
+  sp|Q15418|KS6A1_HUMAN  62 FELLKVLGQGSFGKVflvRKVTRPDSGHLYAMKVLKKATLKVRDRVRTKMERDILADVNHPFVVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALGLDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKEAIDHEKKAYSFCGTVEYMAPEVVN-RQGHSHSADWWSYGVLMFEMLTGSLPFQGK---DRKETMTLILKAKLGMPQFLS----TEAQSLLRALFKRNPANRLGsgpdgAEEIKRHV 319
+                            67899**********4444555566667****************999999****************************************************************************************************************************.******************************...999999999999999998866....89*****************98888889988885 PP
+
+  == domain 2    score: 247.4 bits;  conditional E-value: 6e-77
+                            EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                            y ++e++G Gs+++++++++k t+ ++AvK+++k++++ ++      E++il +  +Hpni++l +v+ + +++ylv+e+++gg+l d + +++ +se+e+ +++ +i + +eylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++ +D+WslG++ly++l g +pf +  +++ +e++ +i ++k   +  ++++ se++kdl++k+l+ dp++Rlta+++l+hpw+
+  sp|Q15418|KS6A1_HUMAN 418 YVVKETIGVGSYSECKRCVHKATNMEYAVKVIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKHVYLVTELMRGGELLDKILRQKFFSEREASFVLHTIGKTVEYLHSQGVVHRDLKPSNILYVDESGNpeclRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDEGCDIWSLGILLYTMLAGYTPFANGPSDTPEEILTRIGSGKFTLSGGNWNTVSETAKDLVSKMLHVDPHQRLTAKQVLQHPWV 675
+                            67899**********************************98......9*******99**********************************9***************************************98554445999**********************************.***************************************************************************************6 PP
+
+>> sp|P18652|KS6AA_CHICK  Ribosomal protein S6 kinase 2 alpha OS=Gallus gallus GN=RPS6KA PE=2 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  239.0   0.0   2.1e-74   1.6e-69       1     259 [.      80     338 ..      80     339 .. 0.95
+   2 !  246.7   0.0   9.8e-77   7.5e-72       1     260 []     435     692 ..     435     692 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 239.0 bits;  conditional E-value: 2.1e-74
+                            EEEEEEEEEETTEEEEEEEET...TTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkk...ktgkkvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpw 259
+                            +ell+ lG+GsfGkV+ ++k    ++++ +A+K+lkk + k + + +++ E  il+ ++Hp++vkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ gl++lHs gii+rDLKpeNiLld++g++k++DFGl+k++  +++k+++++gt eYmAPEv++ ++++++++D+Ws+Gv+++e+ltg+lpf+g+   d++e++  ilk kl  ++  s    +e+++l++ l++++pa+Rl      aeei++hp+
+  sp|P18652|KS6AA_CHICK  80 FELLKVLGQGSFGKVFLVRKItppDSNHLYAMKVLKKATLKVRDRVRTKIERDILADVNHPFVVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALGLDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKEAIDHEKKAYSFCGTVEYMAPEVVN-RQGHSHSADWWSYGVLMFEMLTGSLPFQGK---DRKETMTLILKAKLGMPQFLS----AEAQSLLRALFKRNPANRLGsgpdgAEEIKRHPF 338
+                            67899**********7777661115677**************99999888****************************************************************************************************************************.******************************...999999999999999998866....99*****************999999*******98 PP
+
+  == domain 2    score: 246.7 bits;  conditional E-value: 9.8e-77
+                            EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                            y ++e +G Gs+++++++++k+t+ ++AvK+++k++++ ++      E++il +  +Hpni++l +v+ + +++ylv+e+++gg+l d + +++ +se+e+ +++ +i++ +eylHs+g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++ +D+WslGv+ly++l g++pf +  +++ +e++ +i ++k + +  ++++ s+ +kdl++k+l+ dp++Rlta+++l+hpw+
+  sp|P18652|KS6AA_CHICK 435 YVVKEAIGVGSYSVCKRCIHKTTNMEYAVKVIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKYVYLVTELMRGGELLDKILRQKFFSEREASSVLHTICKTVEYLHSQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDEGCDIWSLGVLLYTMLAGCTPFANGPSDTPEEILTRIGGGKFSVNGGNWDTISDVAKDLVSKMLHVDPHQRLTAKQVLQHPWI 692
+                            568899*********************************98......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7 PP
+
+>> sp|Q15349|KS6A2_HUMAN  Ribosomal protein S6 kinase alpha-2 OS=Homo sapiens GN=RPS6KA2 PE=1 SV=2
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  241.7   0.0   3.2e-75   2.4e-70       1     260 []      59     318 ..      59     318 .. 0.95
+   2 !  240.7   0.0   6.4e-75   4.9e-70       1     260 []     415     672 ..     415     672 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 241.7 bits;  conditional E-value: 3.2e-75
+                            EEEEEEEEEETTEEEEEEEETTTTE...EEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl 260
+                            +ell+ lG+Gs+GkV+ ++k k ++    +A+K+lkk + k + + +++ E  il++++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lHs gii+rDLKpeNiLld++g++ki+DFGl+k++  +++++++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e+++ ilk kl  ++  s     e+++l++ l++++p +Rl      +eei++hp++
+  sp|Q15349|KS6A2_HUMAN  59 FELLKVLGQGSYGKVFLVRKVKGSDagqLYAMKVLKKATLKVRDRVRSKMERDILAEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKITDFGLSKEAIDHDKRAYSFCGTIEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGSLPFQGK---DRKETMALILKAKLGMPQFLS----GEAQSLLRALFKRNPCNRLGagidgVEEIKRHPFF 318
+                            67899**********7777665544444*****************99999****************************************************************************************************************************.******************************...999999999999999888866....89******************9999999*****997 PP
+
+  == domain 2    score: 240.7 bits;  conditional E-value: 6.4e-75
+                            EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                            ye++e +G Gs+++++++++k t +++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + + +ylv+e+++gg+l d + +++ +se+e+ +++ +i + ++ylHs+g++HrDLKp+NiL  +++      +++DFG+ak+l   ++ l t + t +++APEvl+ +++y++++D+WslG++ly++l g +pf +  +++ +e++++i ++k+  +  +++s s+ +kd+++k+l+ dp++Rlta+++lkhpw+
+  sp|Q15349|KS6A2_HUMAN 415 YEIKEDIGVGSYSVCKRCVHKATDTEYAVKIIDKSKRDPSE------EIEILLRYgQHPNIITLKDVYDDGKFVYLVMELMRGGELLDRILRQRYFSEREASDVLCTITKTMDYLHSQGVVHRDLKPSNILYRDESGSpesiRVCDFGFAKQLRAGNGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGILLYTMLAGFTPFANGPDDTPEEILARIGSGKYALSGGNWDSISDAAKDVVSKMLHVDPHQRLTAMQVLKHPWV 672
+                            7899***********************************98......9*******99***************************************************************************9554445888**********************************.***************************************************************************************6 PP
+
+>> sp|P51812|KS6A3_HUMAN  Ribosomal protein S6 kinase alpha-3 OS=Homo sapiens GN=RPS6KA3 PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  240.3   0.0   8.7e-75   6.6e-70       1     260 []      68     327 ..      68     327 .. 0.95
+   2 !  241.0   0.0   5.1e-75   3.9e-70       1     260 []     422     679 ..     422     679 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 240.3 bits;  conditional E-value: 8.7e-75
+                            EEEEEEEEEETTEEEEEEEETTTTE...EEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl 260
+                            +ell+ lG+GsfGkV+ +kk + ++    +A+K+lkk + k + + +++ E  il +++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lHs gii+rDLKpeNiLld++g++k++DFGl+k+   +++k+++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e++ +ilk kl  ++  s    +e+++l++ l++++pa+Rl      +eei++h+++
+  sp|P51812|KS6A3_HUMAN  68 FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF 327
+                            67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886 PP
+
+  == domain 2    score: 241.0 bits;  conditional E-value: 5.1e-75
+                            EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                            ye++e +G Gs+++++++++k t+ ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++y+v+e+++gg+l d + +++ +se+e+  ++ +i + +eylH +g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++D+WslGv+ly++ltg +pf +  +++ +e++++i ++k + +   ++s s+++kdl++k+l+ dp++Rlta+ +l+hpw+
+  sp|P51812|KS6A3_HUMAN 422 YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI 679
+                            7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7 PP
+
+>> sp|P18654|KS6A3_MOUSE  Ribosomal protein S6 kinase alpha-3 OS=Mus musculus GN=Rps6ka3 PE=1 SV=2
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 !  240.3   0.0   8.7e-75   6.6e-70       1     260 []      68     327 ..      68     327 .. 0.95
+   2 !  241.0   0.0   5.1e-75   3.9e-70       1     260 []     422     679 ..     422     679 .. 0.97
+
+  Alignments for each domain:
+  == domain 1    score: 240.3 bits;  conditional E-value: 8.7e-75
+                            EEEEEEEEEETTEEEEEEEETTTTE...EEEEEEEEHHHCCCCCCHHHHHHHHHHHHHSSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEEEE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTT.....HHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgk...kvAvKilkkeeekskkektavrElkilkklsHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgevkiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRlt.....aeeilkhpwl 260
+                            +ell+ lG+GsfGkV+ +kk + ++    +A+K+lkk + k + + +++ E  il +++Hp+ivkl+ +f+t+ +lyl+l++++ggdlf+ l+ke  ++ee++k+++ +++ +l++lHs gii+rDLKpeNiLld++g++k++DFGl+k+   +++k+++++gt eYmAPEv++ ++++t+++D+Ws+Gv+++e+ltg+lpf+g+   d++e++ +ilk kl  ++  s    +e+++l++ l++++pa+Rl      +eei++h+++
+  sp|P18654|KS6A3_MOUSE  68 FELLKVLGQGSFGKVFLVKKISGSDarqLYAMKVLKKATLKVRDRVRTKMERDILVEVNHPFIVKLHYAFQTEGKLYLILDFLRGGDLFTRLSKEVMFTEEDVKFYLAELALALDHLHSLGIIYRDLKPENILLDEEGHIKLTDFGLSKESIDHEKKAYSFCGTVEYMAPEVVN-RRGHTQSADWWSFGVLMFEMLTGTLPFQGK---DRKETMTMILKAKLGMPQFLS----PEAQSLLRMLFKRNPANRLGagpdgVEEIKRHSFF 327
+                            67899**********8888876655455****************999999****************************************************************************************************9***********************.******************************...999999999999988888866....9******************9888888999999886 PP
+
+  == domain 2    score: 241.0 bits;  conditional E-value: 5.1e-75
+                            EEEEEEEEEETTEEEEEEEETTTTEEEEEEEEEHHHCCCCCCHHHHHHHHHHHHH.SSSSB--EEEEEEETTEEEEEEE--TS-BHHHHHHHHHST-HHHHHHHHHHHHHHHHHHHHTTEE-S--SGGGEEEETTTEE....EE--GTT.E..EECSS-C-S--S-GGGS-HHHHCCS-CTHHHHHHHHHHHHHHHHHHSS-TTSSSHHCCTHHHHSSHHH......TTS.....HHHHHHHHHHT-SSGGGSTTHHHHHTSGGG CS
+                Pkinase   1 yelleklGsGsfGkVykakkkktgkkvAvKilkkeeekskkektavrElkilkkl.sHpnivkllevfetkdelylvleyveggdlfdllkkegklseeeikkialqilegleylHsngiiHrDLKpeNiLldkkgev....kiaDFGlakkleksseklttlvgtreYmAPEvllkakeytkkvDvWslGvilyelltgklpfsgeseedqleliekilkkkleedepkssskseelkdlikkllekdpakRltaeeilkhpwl 260
+                            ye++e +G Gs+++++++++k t+ ++AvKi++k++++ ++      E++il +  +Hpni++l +v+ + +++y+v+e+++gg+l d + +++ +se+e+  ++ +i + +eylH +g++HrDLKp+NiL  +++      +i+DFG+ak+l  +++ l t + t +++APEvl+ +++y++++D+WslGv+ly++ltg +pf +  +++ +e++++i ++k + +   ++s s+++kdl++k+l+ dp++Rlta+ +l+hpw+
+  sp|P18654|KS6A3_MOUSE 422 YEVKEDIGVGSYSVCKRCIHKATNMEFAVKIIDKSKRDPTE------EIEILLRYgQHPNIITLKDVYDDGKYVYVVTELMKGGELLDKILRQKFFSEREASAVLFTITKTVEYLHAQGVVHRDLKPSNILYVDESGNpesiRICDFGFAKQLRAENGLLMTPCYTANFVAPEVLK-RQGYDAACDIWSLGVLLYTMLTGYTPFANGPDDTPEEILARIGSGKFSLSGGYWNSVSDTAKDLVSKMLHVDPHQRLTAALVLRHPWI 679
+                            7899***********************************88......9*******99**********************************9***************************************98554444888**********************************.***************************************************************************************7 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (260 nodes)
+Target sequences:                     535698  (190107059 residues)
+Passed MSV filter:                     21115  (0.0394159); expected 10714.0 (0.02)
+Passed bias filter:                    15859  (0.0296044); expected 10714.0 (0.02)
+Passed Vit filter:                      4968  (0.00927388); expected 535.7 (0.001)
+Passed Fwd filter:                      3953  (0.00737916); expected 5.4 (1e-05)
+Initial search space (Z):             535698  [actual number of targets]
+Domain search space  (domZ):               7  [number of targets reported over threshold]
+# CPU time: 39.18u 0.36s 00:00:39.54 Elapsed: 00:00:10.84
+# Mc/sec: 4559.76
+//
