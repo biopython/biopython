@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2011 by Andreas Wilm. All rights reserved.
 # Based on ClustalW wrapper copyright 2009 by Cymon J. Cox.
 #
