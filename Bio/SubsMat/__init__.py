@@ -19,7 +19,7 @@ Matrices are implemented as a dictionary. Each index contains a 2-tuple,
 which are the two residue/nucleotide types replaced. The value differs
 according to the matrix's purpose: e.g in a log-odds frequency matrix, the
 value would be log(Pij/(Pi*Pj)) where:
-Pij: frequency of substitution of letter (residue/nucletide) i by j 
+Pij: frequency of substitution of letter (residue/nucleotide) i by j 
 Pi, Pj: expected frequencies of i and j, respectively.
 
 Usage:
@@ -42,7 +42,7 @@ ARM entries would be:
 As order doesn't matter, user can already provide only one entry:
 ['A','C']: 22 
 A SeqMat instance may be initialized with either a full (first
-method of counting: 10, 12) or half (the latter method, 22) matrices. A
+method of counting: 10, 12) or half (the latter method, 22) matrix. A
 Full protein alphabet matrix would be of the size 20x20 = 400. A Half
 matrix of that alphabet would be 20x20/2 + 20/2 = 210. That is because
 same-letter entries don't change. (The matrix diagonal). Given an
@@ -50,7 +50,7 @@ alphabet size of N:
 Full matrix size:N*N
 Half matrix size: N(N+1)/2
  
-If you provide a full matrix, the constructore will create a half-matrix
+If you provide a full matrix, the constructor will create a half-matrix
 automatically.
 If you provide a half-matrix, make sure of a (low, high) sorted order in
 the keys: there should only be 
@@ -541,7 +541,7 @@ def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
       if i in key_list_2:
          key_list.append(i)
    if len(key_list_1) != len(key_list_2):
-      sys.stderr.write("Warning:first matrix has more entries than the second\n")
+      sys.stderr.write("Warning: first matrix has more entries than the second\n")
    if key_list_1 != key_list_2:
       sys.stderr.write("Warning: indices not the same between matrices\n")
    for key in key_list:

@@ -21,7 +21,7 @@ the specialized classes Reaction and System should be used in place of Interacto
 Network.
 
 The Bio.Pathway classes, especially Interaction, are intentionally
-desgined to be very flexible. Their intended use are as wrappers around database
+designed to be very flexible. Their intended use are as wrappers around database
 specific records, such as BIND objects. The value-added in this module is a
 framework for representing collections of reactions in a way that supports
 graph theoretic and numeric analysis.
@@ -221,7 +221,7 @@ class System(object):
 class Interaction(object):
     """An arbitrary interaction between any number of species.
 
-    This class definition is inteded solely as a minimal wrapper interface that should
+    This class definition is intended solely as a minimal wrapper interface that should
     be implemented and extended by more specific abstractions.
 
     Attributes:
