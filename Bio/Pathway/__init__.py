@@ -303,8 +303,3 @@ class Network(object):
     def interactions(self):
         """Returns list of the unique interactions in this network."""
         return self.__graph.labels()
-
-
-
-
-
