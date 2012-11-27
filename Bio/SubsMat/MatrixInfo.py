@@ -18,9 +18,9 @@ available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
                       'pam90', 'rao', 'risler', 'structure'
                      ]
 
-#NOTE - The only reason we define temp functions rather than assinging
-#the dictionaries directly to variables is too work arround a JVM
-#limitation on code size if runnning under Jython. The temp functions
+#NOTE - The only reason we define temp functions rather than assigning
+#the dictionaries directly to variables is to work around a JVM
+#limitation on code size if running under Jython. The temp functions
 #have an underscore to indicate they are private, and are in any case
 #deleted after use (partly to ensure we don't use any of them twice).
 

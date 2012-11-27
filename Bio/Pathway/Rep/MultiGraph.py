@@ -180,4 +180,3 @@ def bf_search(graph, root = None):
             seen[node] = 1
             current.extend(graph.children(node))
     return search
-

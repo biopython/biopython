@@ -137,6 +137,3 @@ class Graph(object):
         """Removes edge. -- NOT IMPLEMENTED"""
         # hm , this is a multigraph - how should this be implemented?
         raise NotImplementedError("remove_edge is not yet implemented")
-
-
-
