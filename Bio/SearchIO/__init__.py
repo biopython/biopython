@@ -299,8 +299,15 @@ def parse(handle, format=None, **kwargs):
     # get the iterator object and do error checking
     iterator = get_processor(format, _ITERATOR_MAP)
 
+    # HACK: force BLAST xml files to be opened using utf-8 encoding
+    # BLAST XML files do not specify this, which may lead to problems
+    # in some python versions
+    handle_kwargs = {}
+    if format == 'blast-xml':
+        handle_kwargs['encoding'] = 'utf-8'
+
     # and start iterating
-    with as_handle(handle, 'rU') as source_file:
+    with as_handle(handle, 'rU', **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
 
         for qresult in generator:
