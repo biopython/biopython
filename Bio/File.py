@@ -19,6 +19,7 @@ SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
 """
 # For with statement in Python 2.5
 from __future__ import with_statement
+import sys
 import contextlib
 import StringIO
 
@@ -53,8 +54,13 @@ def as_handle(handleish, mode='r', **kwargs):
     >>> fp.close()
     """
     if isinstance(handleish, basestring):
-        with open(handleish, mode, **kwargs) as fp:
-            yield fp
+        if 'encoding' in kwargs and sys.version_info[0] < 3:
+            import codecs
+            with codecs.open(handleish, mode, **kwargs) as fp:
+                yield fp
+        else:
+            with open(handleish, mode, **kwargs) as fp:
+                yield fp
     else:
         yield handleish
 
