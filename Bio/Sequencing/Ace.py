@@ -121,7 +121,7 @@ class af(object):
             self.padded_start = int(header[3])
 
 class bs(object):
-    """"BS (base segment), which read was chosen as the consensus at each position."""
+    """BS (base segment), which read was chosen as the consensus at each position."""
     def __init__(self, line=None):
         self.name=''
         self.padded_start=None

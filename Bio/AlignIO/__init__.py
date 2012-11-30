@@ -201,7 +201,7 @@ def write(alignments, handle, format):
         raise ValueError("Format string '%s' should be lower case" % format)
 
     if isinstance(alignments, Alignment):
-        #This raised an exception in older version of Biopython
+        #This raised an exception in older versions of Biopython
         alignments = [alignments]
 
     with as_handle(handle, 'w') as fp:
@@ -210,7 +210,7 @@ def write(alignments, handle, format):
             writer_class = _FormatToWriter[format]
             count = writer_class(fp).write_file(alignments)
         elif format in SeqIO._FormatToWriter:
-            #Exploit the existing SeqIO parser to the dirty work!
+            #Exploit the existing SeqIO parser to do the dirty work!
             #TODO - Can we make one call to SeqIO.write() and count the alignments?
             count = 0
             for alignment in alignments:
