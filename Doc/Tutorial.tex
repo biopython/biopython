@@ -6048,6 +6048,9 @@ Let's see what they look like, beginning with our BLAST search:
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
 >>> blast_hit = blast_qresult[3]    # fourth hit from the query result
+\end{verbatim}
+%HACK: because Py2.5 in windows output floating points slightly different
+\begin{verbatim}
 >>> print blast_hit
 Query: 42291
        mystery_seq
@@ -6205,6 +6208,9 @@ BLAST HSP first:
 >>> from Bio import SearchIO
 >>> blast_qresult = SearchIO.read('my_blast.xml', 'blast-xml')
 >>> blast_hsp = blast_qresult[0][0]    # first hit, first hsp
+\end{verbatim}
+%HACK: because Py2.5 in windows output floating points slightly different
+\begin{verbatim}
 >>> print blast_hsp
       Query: 42291 mystery_seq
         Hit: gi|262205317|ref|NR_030195.1| Homo sapiens microRNA 520b (MIR520...
