@@ -47,7 +47,7 @@ def parse(handle,format):
 
     >>> from Bio import Motif
     >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
-    ...     print motif.consensus()
+    ...     print motif.consensus
     TCTACGATTGAG
     CTGCACCTAGCTACGAGTGAG
     GTGCCCTAAGCATACTAGGCG
@@ -91,14 +91,14 @@ def read(handle,format):
 
     >>> from Bio import Motif
     >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
-    >>> motif.consensus()
+    >>> motif.consensus
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import Motif
     >>> motif =  Motif.read(open("Motif/meme.out"),"MEME")
-    >>> motif.consensus()
+    >>> motif.consensus
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
     If the handle contains no records, or more than one record,
@@ -116,7 +116,7 @@ def read(handle,format):
 
     >>> from Bio import Motif
     >>> motif = Motif.parse(open("Motif/alignace.out"),"AlignAce").next()
-    >>> motif.consensus()
+    >>> motif.consensus
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
     Use the Bio.Motif.parse(handle, format) function if you want

@@ -102,7 +102,7 @@ For more information, see the TRANSFAC documentation.
                     length = self.length
                     if length==0:
                         continue
-                    sequence = self.degenerate_consensus()
+                    sequence = self.degenerate_consensus
                     line = "P0      A      C      G      T"
                     lines.append(line)
                     for i in range(length):
@@ -147,48 +147,6 @@ For more information, see the TRANSFAC documentation.
         text = "\n".join(lines) + "\n"
         return text
 
-    def degenerate_consensus(self):
-        """Following the rules adapted from
-D. R. Cavener: "Comparison of the consensus sequence flanking
-translational start sites in Drosophila and vertebrates."
-Nucleic Acids Research 15(4): 1353-1361. (1987).
-The same rules are used by TRANSFAC."""
-        # This method could be moved up to the base class
-        degenerate_nucleotide = {
-            'A': 'A',
-            'C': 'C',
-            'G': 'G',
-            'T': 'T',
-            'AC': 'M',
-            'AG': 'R',
-            'AT': 'W',
-            'CG': 'S',
-            'CT': 'Y',
-            'GT': 'K',
-            'ACG': 'V',
-            'ACT': 'H',
-            'AGT': 'D',
-            'CGT': 'B',
-            'ACGT': 'N',
-        }
-        sequence = ""
-        for i in range(self.length):
-            def get(nucleotide):
-                return self.counts[nucleotide][i]
-            nucleotides = sorted(self.counts, key=get, reverse=True)
-            counts = [self.counts[c][i] for c in nucleotides]
-            # Follow the Cavener rules:
-            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
-                key = nucleotides[0]
-            elif 4*sum(counts[:2]) > 3*sum(counts):
-                key = "".join(sorted(nucleotides[:2]))
-            elif counts[3]==0:
-                key = "".join(sorted(nucleotides[:3]))
-            else:
-                key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
-            sequence += nucleotide
-        return sequence
 
 class Record(object):
     """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC

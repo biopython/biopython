@@ -12,6 +12,21 @@ import math
 import warnings
 from Bio import BiopythonExperimentalWarning
 
+
+class ConsensusSeq(Seq):
+    # This is an ugly hack that allows us raise a warning if a user attempts
+    # to call the method motif.consensus() instead of accessing the property
+    # motif.consensus. It can be removed after consensus() as a method has
+    # been removed from Biopython. Same thing for motif.anticonsensus.
+    def __call__(self):
+        warnings.warn("""\
+Motif.consensus and Motif.anticonsensus are now properties instead of methods.
+Please use yourmotif.consensus instead of yourmotif.consensus(), and
+yourmotif.anticonsensus instead of yourmotif.anticonsensus()""",
+            PendingDeprecationWarning)
+        return self
+ConsensusSeq.__name__ = Seq.__name__
+
 class Motif(object):
     """
     A class representing sequence motifs.
@@ -663,6 +678,7 @@ class Motif(object):
         else:
             return self.background
 
+    @property
     def consensus(self):
         """Returns the consensus sequence of a motif.
         """
@@ -675,8 +691,13 @@ class Motif(object):
                     max_f=self[i][n]
                     max_n=n
             res+=max_n
-        return Seq(res,self.alphabet)
+        sequence = ConsensusSeq(res,self.alphabet)
+        # This is an ugly hack that allows us raise a warning if a user
+        # attempts to call the method motif.consensus() instead of accessing
+        # the property motif.consensus.
+        return sequence
 
+    @property
     def anticonsensus(self):
         """returns the least probable pattern to be generated from this motif.
         """
@@ -689,21 +710,69 @@ class Motif(object):
                     min_f=self[i][n]
                     min_n=n
             res+=min_n
-        return Seq(res,self.alphabet)
+        sequence = ConsensusSeq(res,self.alphabet)
+        # This is an ugly hack that allows us raise a warning if a user
+        # attempts to call the method motif.anticonsensus() instead of
+        # accessing the property motif.anticonsensus.
+        return sequence
+
+    @property
+    def degenerate_consensus(self):
+        """Following the rules adapted from
+D. R. Cavener: "Comparison of the consensus sequence flanking
+translational start sites in Drosophila and vertebrates."
+Nucleic Acids Research 15(4): 1353-1361. (1987).
+The same rules are used by TRANSFAC."""
+        degenerate_nucleotide = {
+            'A': 'A',
+            'C': 'C',
+            'G': 'G',
+            'T': 'T',
+            'AC': 'M',
+            'AG': 'R',
+            'AT': 'W',
+            'CG': 'S',
+            'CT': 'Y',
+            'GT': 'K',
+            'ACG': 'V',
+            'ACT': 'H',
+            'AGT': 'D',
+            'CGT': 'B',
+            'ACGT': 'N',
+        }
+        res = ""
+        for i in range(self.length):
+            def get(nucleotide):
+                return self.counts[nucleotide][i]
+            nucleotides = sorted(self.counts, key=get, reverse=True)
+            counts = [self.counts[c][i] for c in nucleotides]
+            # Follow the Cavener rules:
+            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
+                key = nucleotides[0]
+            elif 4*sum(counts[:2]) > 3*sum(counts):
+                key = "".join(sorted(nucleotides[:2]))
+            elif counts[3]==0:
+                key = "".join(sorted(nucleotides[:3]))
+            else:
+                key = "ACGT"
+            nucleotide = degenerate_nucleotide[key]
+            res += nucleotide
+        sequence = Seq(res, alphabet = IUPAC.ambiguous_dna)
+        return sequence
 
     def max_score(self):
         """Maximal possible score for this motif.
 
         returns the score computed for the consensus sequence.
         """
-        return self.score_hit(self.consensus(),0)
+        return self.score_hit(self.consensus,0)
     
     def min_score(self):
         """Minimal possible score for this motif.
 
         returns the score computed for the anticonsensus sequence.
         """
-        return self.score_hit(self.anticonsensus(),0)
+        return self.score_hit(self.anticonsensus,0)
 
     def weblogo(self,fname,format="PNG",**kwds):
         """
