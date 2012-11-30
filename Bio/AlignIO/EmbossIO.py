@@ -23,7 +23,7 @@ class EmbossWriter(SequentialAlignmentWriter):
 
     Writes a simplfied version of the EMBOSS pairs/simple file format.
     A lot of the information their tools record in their headers is not
-    available and is ommitted.
+    available and is omitted.
     """
 
     def write_header(self):

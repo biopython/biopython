@@ -1145,7 +1145,7 @@ class GenBankScanner(InsdcScanner):
             consumer.locus(line.split()[1])
             consumer.size(line.split()[2])
         elif len(line.split()) >= 4 and line.split()[-1] in ["aa", "bp"]:
-            #Cope with psuedo-GenBank files like this:
+            #Cope with pseudo-GenBank files like this:
             #   "LOCUS       RNA5 complete       1718 bp"
             #Treat everything between LOCUS and the size as the identifier.
             warnings.warn("Malformed LOCUS line found - is this correct?\n:%r" % line)

@@ -727,7 +727,7 @@ class TelomereSegment(ChromosomeSegment):
         cur_drawing.add(cap_wedge)
         
         #Now draw an arc for the the curved edge of the wedge,
-        #ommiting the flat end.
+        #omitting the flat end.
         cap_arc = ArcPath()
         cap_arc.addArc(center_x, center_y, width / 2,
                        start_angle, end_angle, height)

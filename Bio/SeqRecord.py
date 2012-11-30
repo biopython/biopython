@@ -96,7 +96,7 @@ class SeqRecord(object):
      - description - Additional text (string)
      - dbxrefs     - List of database cross references (list of strings)
      - features    - Any (sub)features defined (list of SeqFeature objects)
-     - annotations - Further information about the whole sequence (dictionary)
+     - annotations - Further information about the whole sequence (dictionary).
                      Most entries are strings, or lists of strings.
      - letter_annotations - Per letter/symbol annotation (restricted
                      dictionary). This holds Python sequences (lists, strings
@@ -662,7 +662,7 @@ class SeqRecord(object):
         in this example a blank line is shown.  If you look at the string
         representation you can see there is a trailing new line (shown as
         slash n) which is important when writing to a file or if
-        concatenating mutliple sequence strings together.
+        concatenating multiple sequence strings together.
 
         Note that this method will NOT work on every possible file format
         supported by Bio.SeqIO (e.g. some are for multiple sequences only).

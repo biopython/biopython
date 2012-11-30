@@ -627,7 +627,7 @@ def to_dict(sequences, key_function=None):
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
 
-    If key_function is ommitted then record.id is used, on the assumption
+    If key_function is omitted then record.id is used, on the assumption
     that the records objects returned are SeqRecords with a unique id.
 
     If there are duplicate keys, an error is raised.
@@ -717,7 +717,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> print records["EAS54_6_R1_2_1_540_792"].seq
     TTGGCAGGCCAAGGCCGATGGATCA
 
-    Note that this psuedo dictionary will not support all the methods of a
+    Note that this pseudo dictionary will not support all the methods of a
     true Python dictionary, for example values() is not defined since this
     would require loading all of the records into memory at once.
 

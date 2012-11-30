@@ -20,7 +20,7 @@ class NovoalignCommandline(AbstractCommandline):
     >>> print novoalign_cline
     novoalign -d some_db -f some_seq.txt
 
-    As will all the Biopython application wrappers, you can also add or
+    As with all the Biopython application wrappers, you can also add or
     change options after creating the object:
 
     >>> novoalign_cline.format = 'PRBnSEQ'

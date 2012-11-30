@@ -96,7 +96,7 @@ def parse(handle):
 class Record(object):
     """
     Hold information from one compass hit.
-    Ali1 one is the query, Ali2 the hit.
+    Ali1 is the query, Ali2 the hit.
     """
 
     def __init__(self):
@@ -121,12 +121,12 @@ class Record(object):
 
 
     def query_coverage(self):
-        """Return the length of the query covered in alignment"""
+        """Return the length of the query covered in the alignment."""
         s = self.query_aln.replace("=", "")
         return len(s)
 
     def hit_coverage(self):
-        """Return the length of the hit covered in the alignment"""
+        """Return the length of the hit covered in the alignment."""
         s = self.hit_aln.replace("=", "")
         return len(s)
 

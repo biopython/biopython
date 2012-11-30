@@ -150,7 +150,7 @@ def parse(handle):
         record = Record()
 
 def read(handle):
-    """Read a single Medline records from the handle.
+    """Read a single Medline record from the handle.
 
     The handle is either is a Medline file, a file-like object, or a list
     of lines describing a Medline record.

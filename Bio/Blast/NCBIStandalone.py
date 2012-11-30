@@ -731,7 +731,7 @@ class _Scanner(object):
                                      start="Number of HSP's gapped:"):
                 read_and_call(uhandle, consumer.noevent,
                               start="Number of HSP's successfully")
-                #This is ommitted in 2.2.15
+                #This is omitted in 2.2.15
                 attempt_read_and_call(uhandle, consumer.noevent,
                               start="Number of extra gapped extensions")
             else:
@@ -1636,7 +1636,7 @@ class Iterator(object):
                           or line.startswith('<?xml ')):
                 self._uhandle.saveline(line)
                 break
-            # New style files ommit the BLAST line to mark a new query:
+            # New style files omit the BLAST line to mark a new query:
             if line.startswith("Query="):
                 if not query:
                     if not self._header:
@@ -1724,7 +1724,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     outfile             Output file for report.  Filename to write to, if
-                        ommitted standard output is used (which you can access
+                        omitted standard output is used (which you can access
                         from the returned handles).
     """
 
@@ -1844,7 +1844,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     hit_infile          Hit file for PHI-BLAST.
     matrix_outfile      Output file for PSI-BLAST matrix in ASCII.
     align_outfile       Output file for alignment.  Filename to write to, if
-                        ommitted standard output is used (which you can access
+                        omitted standard output is used (which you can access
                         from the returned handles).
 
     align_infile        Input alignment file for PSI-BLAST restart.
@@ -1966,7 +1966,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
     show_gi             Show GI's in deflines?  T/F
     seqalign_file       seqalign file to output.
     align_outfile       Output file for alignment.  Filename to write to, if
-                        ommitted standard output is used (which you can access
+                        omitted standard output is used (which you can access
                         from the returned handles).
     """
 
