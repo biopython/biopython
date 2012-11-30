@@ -627,7 +627,7 @@ def to_dict(sequences, key_function=None):
     e.g. key_function = lambda rec : rec.name
     or,  key_function = lambda rec : rec.description.split()[0]
 
-    If key_function is ommitted then record.id is used, on the assumption
+    If key_function is omitted then record.id is used, on the assumption
     that the records objects returned are SeqRecords with a unique id.
 
     If there are duplicate keys, an error is raised.

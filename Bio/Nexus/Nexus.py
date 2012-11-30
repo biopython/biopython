@@ -1237,7 +1237,7 @@ class Nexus(object):
                    be written to but NOT closed).
         interleave_by_partition - Optional name of partition (string)
         omit_NEXUS - Boolean.  If true, the '#NEXUS' line normally at the
-                   start of the file is ommitted.
+                   start of the file is omitted.
 
         Returns the filename/handle used to write the data.
         """
