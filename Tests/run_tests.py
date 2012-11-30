@@ -131,6 +131,13 @@ except ImportError:
 if sys.version_info[0] == 3:
     DOCTEST_MODULES.remove("Bio.Seq")
 
+#HACK: Since Python2.5 under Windows have slightly different str(float) output,
+#we're removing doctests that may fail because of this
+if sys.version_info[0] == 2 and sys.version_info[1] == 5 and \
+        sys.platform == 'nt':
+    DOCTEST_MODULES.remove("Bio.SearchIO._model.hit")
+    DOCTEST_MODULES.remove("Bio.SearchIO._model.hsp")
+
 system_lang = os.environ.get('LANG', 'C') #Cache this
 
 def main(argv):
