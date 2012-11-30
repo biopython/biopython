@@ -597,7 +597,7 @@ def parse(handle, debug=0):
     in.
 
     Should cope with new BLAST 2.2.14+ which gives a single XML file
-    for mutliple query records.
+    for multiple query records.
 
     Should also cope with XML output from older versions BLAST which
     gave multiple XML files concatenated together (giving a single file

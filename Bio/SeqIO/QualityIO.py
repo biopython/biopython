@@ -849,7 +849,7 @@ def FastqGeneralIterator(handle):
 
     This example has been edited to illustrate some of the nasty things allowed
     in the FASTQ format.  Firstly, on the "+" lines most but not all of the
-    (redundant) identifiers are ommited.  In real files it is likely that all or
+    (redundant) identifiers are ommitted.  In real files it is likely that all or
     none of these extra identifiers will be present.
 
     Secondly, while the first three sequences have been shown without line

@@ -717,7 +717,7 @@ def index(filename, format, alphabet=None, key_function=None):
     >>> print records["EAS54_6_R1_2_1_540_792"].seq
     TTGGCAGGCCAAGGCCGATGGATCA
 
-    Note that this psuedo dictionary will not support all the methods of a
+    Note that this pseudo dictionary will not support all the methods of a
     true Python dictionary, for example values() is not defined since this
     would require loading all of the records into memory at once.
 

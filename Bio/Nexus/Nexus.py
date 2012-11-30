@@ -1116,13 +1116,13 @@ class Nexus(object):
 
         Characters (which are referred to by their index in Nexus.py):
             Plain numbers are returned minus 1 (Nexus indices to python indices)
-            Text identifiers are translaterd into their indices (if plain character indentifiers),
+            Text identifiers are translated into their indices (if plain character identifiers),
             the first hit in charlabels is returned (charlabels don't need to be unique)
             or the range of indices is returned (if names of character sets).
         Taxa (which are referred to by their unique name in Nexus.py):
             Plain numbers are translated in their taxon name, underscores and spaces are considered equal.
             Names are returned unchanged (if plain taxon identifiers), or the names in
-            the corresponding taxon set is returned
+            the corresponding taxon set is returned.
         """
         identifier=quotestrip(identifier)
         if not set_type:
@@ -1237,7 +1237,7 @@ class Nexus(object):
                    be written to but NOT closed).
         interleave_by_partition - Optional name of partition (string)
         omit_NEXUS - Boolean.  If true, the '#NEXUS' line normally at the
-                   start of the file is ommited.
+                   start of the file is ommitted.
 
         Returns the filename/handle used to write the data.
         """

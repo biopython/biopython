@@ -317,7 +317,7 @@ class _InsdcWriter(SequentialSequenceWriter):
                 #String, int, etc
                 self._write_feature_qualifier(key, values)
             else:
-                #e.g. a /psuedo entry
+                #e.g. a /pseudo entry
                 self._write_feature_qualifier(key)
 
     def _get_annotation_str(self, record, key, default=".", just_first=False):

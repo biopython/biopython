@@ -568,7 +568,7 @@ class Seq(object):
 
         Return a list of the 'words' in the string (as Seq objects),
         using sep as the delimiter string.  If maxsplit is given, at
-        most maxsplit splits are done.  If maxsplit is ommited, all
+        most maxsplit splits are done.  If maxsplit is ommitted, all
         splits are made.
 
         Following the python string method, sep will by default be any
@@ -607,7 +607,7 @@ class Seq(object):
         Return a list of the 'words' in the string (as Seq objects),
         using sep as the delimiter string.  If maxsplit is given, at
         most maxsplit splits are done COUNTING FROM THE RIGHT.
-        If maxsplit is ommited, all splits are made.
+        If maxsplit is ommitted, all splits are made.
 
         Following the python string method, sep will by default be any
         white space (tabs, spaces, newlines) but this is unlikely to
@@ -1138,7 +1138,7 @@ class UnknownSeq(Seq):
     def __init__(self, length, alphabet = Alphabet.generic_alphabet, character = None):
         """Create a new UnknownSeq object.
 
-        If character is ommited, it is determed from the alphabet, "N" for
+        If character is ommitted, it is determined from the alphabet, "N" for
         nucleotides, "X" for proteins, and "?" otherwise.
         """
         self._length = int(length)
