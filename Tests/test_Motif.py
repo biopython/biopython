@@ -20,8 +20,9 @@ class MotifTestsBasic(unittest.TestCase):
         self.TFout = "Motif/tf.out"
         self.FAout = "Motif/fa.out"
         self.PFMout = "Motif/fa.out"
-        self.m=Motif.Motif()
-        self.m.add_instance(Seq("ATATA",self.m.alphabet))
+        instance = Seq("ATATA")
+        instances = [instance]
+        self.m=Motif.Motif(instances=instances)
         
     def tearDown(self):
         self.PFMin.close()

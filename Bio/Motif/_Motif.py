@@ -16,18 +16,13 @@ class Motif(object):
     """
     A class representing sequence motifs.
     """
-    def __init__(self, alphabet=IUPAC.unambiguous_dna,
-                       instances=None, counts=None):
+    def __init__(self, alphabet=None, instances=None, counts=None):
         self.mask = []
         self._pwm_is_current = False
         self._pwm = []
         self._log_odds_is_current = False
         self._log_odds = []
-        self.alphabet=alphabet
         self.length=None
-        self.background=dict((n, 1.0/len(self.alphabet.letters)) \
-                             for n in self.alphabet.letters)
-        self.beta=1.0
         self.info=None
         self.name=""
         if counts!=None and instances!=None:
@@ -35,6 +30,8 @@ class Motif(object):
                 "Specify either instances or counts, don't specify both")
         elif counts!=None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
+            if alphabet==None:
+                alphabet = IUPAC.unambiguous_dna
             for letter in counts:
                 length = len(counts[letter])
                 if self.length==None:
@@ -47,9 +44,9 @@ class Motif(object):
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
             for instance in instances:
-                if self.alphabet==None:
-                    self.alphabet=instance.alphabet
-                elif self.alphabet != instance.alphabet:
+                if alphabet==None:
+                    alphabet=instance.alphabet
+                elif alphabet != instance.alphabet:
                     raise ValueError("Alphabets are inconsistent")
                 if self.length==None:
                     self.length = len(instance)
@@ -57,8 +54,12 @@ class Motif(object):
                     message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
                     raise ValueError(message)
                 self.instances.append(instance)
+            if alphabet.letters==None:
+                # If we didn't get a meaningful alphabet from the instances,
+                # assume it is DNA.
+                alphabet = IUPAC.unambiguous_dna
             self.counts = {}
-            for letter in self.alphabet.letters:
+            for letter in alphabet.letters:
                 self.counts[letter] = [0] * self.length
             for instance in self.instances:
                 for position, letter in enumerate(instance):
@@ -66,6 +67,12 @@ class Motif(object):
         else:
             self.counts = None
             self.instances = None
+            if alphabet==None:
+                alphabet = IUPAC.unambiguous_dna
+        self.alphabet = alphabet
+        self.background=dict((n, 1.0/len(self.alphabet.letters)) \
+                             for n in self.alphabet.letters)
+        self.beta=1.0
 
     @property
     def has_instances(self):
