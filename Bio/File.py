@@ -75,7 +75,7 @@ def as_handle(handleish, mode='r', **kwargs):
     >>> fp.close()
     """
     if isinstance(handleish, basestring):
-        if 'encoding' in kwargs and sys.version_info[0] < 3:
+        if sys.version_info[0] < 3:
             import codecs
             with codecs.open(handleish, mode, **kwargs) as fp:
                 yield fp
