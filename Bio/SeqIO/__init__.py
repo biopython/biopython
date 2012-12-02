@@ -797,7 +797,12 @@ def index(filename, format, alphabet=None, key_function=None):
 
     #Map the file format to a sequence iterator:
     import _index  # Lazy import
-    return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
+    try:
+        proxy_class = _index._FormatToRandomAccess[format]
+    except KeyError:
+        raise ValueError("Unsupported format %r" % format)
+    return _index._IndexedSeqFileDict(filename, proxy_class,
+                                      format, alphabet, key_function)
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
@@ -867,8 +872,9 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
 
     #Map the file format to a sequence iterator:
     import _index  # Lazy import
-    return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
-                                          alphabet, key_function)
+    return _index._SQLiteManySeqFilesDict(index_filename, filenames,
+                                          _index._FormatToRandomAccess,
+                                          format, alphabet, key_function)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
