@@ -413,11 +413,11 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     return qdict
 
 
-def index(handle, format=None, key_function=None, **kwargs):
+def index(filename, format=None, key_function=None, **kwargs):
     """Indexes a search output file and returns a dictionary-like object.
 
     Arguments:
-    handle -- Handle to the file, or the filename as a string.
+    filename -- string giving name of file to be indexed
     format -- Lower case string denoting one of the supported formats.
     key_function -- Optional callback function which when given a
                     QueryResult should return a unique key for the dictionary.
@@ -460,12 +460,11 @@ def index(handle, format=None, key_function=None, **kwargs):
     It only changes the key value used to retrieve the associated QueryResult.
 
     """
-    # check if handle type is correct
-    if not isinstance(handle, basestring):
-        raise TypeError("Handle must be a string of filename")
+    if not isinstance(filename, basestring):
+        raise TypeError("Need a filename (not a handle)")
 
     from Bio.SearchIO._index import _IndexedSearch
-    return _IndexedSearch(handle, format, key_function, **kwargs)
+    return _IndexedSearch(filename, format, key_function, **kwargs)
 
 
 def index_db(index_filename, filenames=None, format=None,
