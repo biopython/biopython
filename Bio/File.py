@@ -230,19 +230,21 @@ else:
 #for indexing
 
 class _IndexedSeqFileDict(_dict_base):
-    """Read only dictionary interface to a sequential sequence file.
+    """Read only dictionary interface to a sequential record file.
 
-    Keeps the keys and associated file offsets in memory, reads the file to
-    access entries as SeqRecord objects using Bio.SeqIO for parsing them.
-    This approach is memory limited, but will work even with millions of
-    sequences.
+    This code is used in both Bio.SeqIO for indexing as SeqRecord
+    objects, and in Bio.SearchIO for indexing QueryResult objects.
 
-    Note - as with the Bio.SeqIO.to_dict() function, duplicate keys
-    (record identifiers by default) are not allowed. If this happens,
-    a ValueError exception is raised.
+    Keeps the keys and associated file offsets in memory, reads the file
+    to access entries as objects parsing them on demand. This approach
+    is memory limited, but will work even with millions of records.
 
-    By default the SeqRecord's id string is used as the dictionary
-    key. This can be changed by suppling an optional key_function,
+    Note duplicate keys are not allowed. If this happens, a ValueError
+    exception is raised.
+
+    As used in Bio.SeqIO, by default the SeqRecord's id string is used
+    as the dictionary key. In Bio.SearchIO, the query's id string is
+    used. This can be changed by suppling an optional key_function,
     a callback function which will be given the record id and must
     return the desired key. For example, this allows you to parse
     NCBI style FASTA identifiers, and extract the GI number to use
@@ -280,11 +282,13 @@ class _IndexedSeqFileDict(_dict_base):
         self._offsets = offsets
 
     def __repr__(self):
+        #TODO - How best to handle the __repr__ for SeqIO and SearchIO? 
         return "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
                % (self._proxy._handle.name, self._proxy._format,
                   self._proxy._alphabet, self._key_function)
 
     def __str__(self):
+        #TODO - How best to handle the __str__ for SeqIO and SearchIO? 
         if self:
             return "{%s : SeqRecord(...), ...}" % repr(self.keys()[0])
         else:
@@ -425,11 +429,11 @@ class _IndexedSeqFileDict(_dict_base):
                                   "support this.")
 
 class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
-    """Read only dictionary interface to many sequential sequence files.
+    """Read only dictionary interface to many sequential record files.
 
     Keeps the keys, file-numbers and offsets in an SQLite database. To access
-    a record by key, reads from the offset in the approapriate file using
-    Bio.SeqIO for parsing.
+    a record by key, reads from the offset in the appropriate file and then
+    parses the record into an object.
 
     There are OS limits on the number of files that can be open at once,
     so a pool are kept. If a record is required from a closed file, then
@@ -574,6 +578,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._key_function = key_function
 
     def __repr__(self):
+        #TODO - How best to handle the __repr__ for SeqIO and SearchIO?
         return "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (self._index_filename, self._filenames, self._format,
                   self._alphabet, self._key_function)
