@@ -519,9 +519,18 @@ def index_db(index_filename, filenames=None, format=None,
     if isinstance(filenames, basestring):
         filenames = [filenames]
 
-    from Bio.SearchIO._index import _DbIndexedSearch
-    return _DbIndexedSearch(index_filename, filenames, format, key_function,
-            **kwargs)
+    from Bio.File import _SQLiteManySeqFilesDict
+    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" \
+               % (index_filename, filenames, format, key_function)
+    def proxy_factory(format, filename=None):
+        """Given a filename returns proxy object, else boolean if format OK."""
+        if filename:
+            return get_processor(format, _INDEXER_MAP)(filename, **kwargs)
+        else:
+            return format in _INDEXER_MAP
+    return _SQLiteManySeqFilesDict(index_filename, filenames,
+                                   proxy_factory, format,
+                                   key_function, repr)
 
 
 def write(qresults, handle, format=None, **kwargs):
