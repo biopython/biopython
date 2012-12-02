@@ -430,6 +430,9 @@ class _IndexedSeqFileDict(_dict_base):
 class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     """Read only dictionary interface to many sequential record files.
 
+    This code is used in both Bio.SeqIO for indexing as SeqRecord
+    objects, and in Bio.SearchIO for indexing QueryResult objects.
+
     Keeps the keys, file-numbers and offsets in an SQLite database. To access
     a record by key, reads from the offset in the appropriate file and then
     parses the record into an object.
@@ -440,8 +443,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     """
     def __init__(self, index_filename, filenames,
                  proxy_dict, format, alphabet,
-                 key_function, max_open=10):
+                 key_function, repr, max_open=10):
         self._proxy_dict = proxy_dict
+        self._repr = repr
         random_access_proxies = {}
         #TODO? - Don't keep filename list in memory (just in DB)?
         #Should save a chunk of memory if dealing with 1000s of files.
@@ -577,10 +581,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._key_function = key_function
 
     def __repr__(self):
-        #TODO - How best to handle the __repr__ for SeqIO and SearchIO?
-        return "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
-               % (self._index_filename, self._filenames, self._format,
-                  self._alphabet, self._key_function)
+        return self._repr
 
     def __contains__(self, key):
         return bool(

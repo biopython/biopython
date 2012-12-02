@@ -876,9 +876,11 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     #Map the file format to a sequence iterator:
     from _index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
+    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
+               % (index_filename, filenames, format, alphabet, key_function)
     return _SQLiteManySeqFilesDict(index_filename, filenames,
                                    _FormatToRandomAccess,
-                                   format, alphabet, key_function)
+                                   format, alphabet, key_function, repr)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
