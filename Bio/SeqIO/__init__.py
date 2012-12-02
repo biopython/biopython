@@ -878,9 +878,15 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (index_filename, filenames, format, alphabet, key_function)
+    def proxy_factory(format, filename=None):
+        """Given a filename returns proxy object, else boolean if format OK."""
+        if filename:
+            return _FormatToRandomAccess[format](filename, format, alphabet)
+        else:
+            return format in _FormatToRandomAccess
     return _SQLiteManySeqFilesDict(index_filename, filenames,
-                                   _FormatToRandomAccess,
-                                   format, alphabet, key_function, repr)
+                                   proxy_factory, format,
+                                   key_function, repr)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

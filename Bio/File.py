@@ -442,9 +442,9 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     one of the open handles is closed first.
     """
     def __init__(self, index_filename, filenames,
-                 proxy_dict, format, alphabet,
+                 proxy_factory, format,
                  key_function, repr, max_open=10):
-        self._proxy_dict = proxy_dict
+        self._proxy_factory = proxy_factory
         self._repr = repr
         random_access_proxies = {}
         #TODO? - Don't keep filename list in memory (just in DB)?
@@ -498,9 +498,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.close()
                 raise ValueError("Not a Biopython index database? %s" % err)
             #Now we have the format (from the DB if not given to us),
-            try:
-                proxy_class = proxy_dict[self._format]
-            except KeyError:
+            if not proxy_factory(self._format):
                 con.close()
                 raise ValueError("Unsupported format '%s'" % self._format)
         else:
@@ -508,9 +506,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
             self._format = format
             if not format or not filenames:
                 raise ValueError("Filenames to index and format required")
-            try:
-                proxy_class = proxy_dict[format]
-            except KeyError:
+            if not proxy_factory(format):
                 raise ValueError("Unsupported format '%s'" % format)
             #Create the index
             con = _sqlite.connect(index_filename)
@@ -537,7 +533,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 con.execute(
                     "INSERT INTO file_data (file_number, name) VALUES (?,?);",
                     (i, filename))
-                random_access_proxy = proxy_class(filename, format, alphabet)
+                random_access_proxy = proxy_factory(format, filename)
                 if key_function:
                     offset_iter = ((key_function(
                         k), i, o, l) for (k, o, l) in random_access_proxy)
@@ -577,7 +573,6 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         self._proxies = random_access_proxies
         self._max_open = max_open
         self._index_filename = index_filename
-        self._alphabet = alphabet
         self._key_function = key_function
 
     def __repr__(self):
@@ -623,9 +618,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 #Close an old handle...
                 proxies.popitem()[1]._handle.close()
             #Open a new handle...
-            proxy = self._proxy_dict[self._format](
-                self._filenames[file_number],
-                self._format, self._alphabet)
+            proxy = self._proxy_factory(self._format, self._filenames[file_number])
             record = proxy.get(offset)
             proxies[file_number] = proxy
         if self._key_function:
@@ -675,9 +668,7 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
                 #Close an old handle...
                 proxies.popitem()[1]._handle.close()
             #Open a new handle...
-            proxy = self._proxy_dict[self._format](
-                self._filenames[file_number],
-                self._format, self._alphabet)
+            proxy = self._proxy_factory(self._format, self._filenames[file_number])
             proxies[file_number] = proxy
             if length:
                 #Shortcut if we have the length
