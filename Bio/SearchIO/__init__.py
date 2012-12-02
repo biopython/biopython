@@ -463,8 +463,12 @@ def index(filename, format=None, key_function=None, **kwargs):
     if not isinstance(filename, basestring):
         raise TypeError("Need a filename (not a handle)")
 
-    from Bio.SearchIO._index import _IndexedSearch
-    return _IndexedSearch(filename, format, key_function, **kwargs)
+    from Bio.File import _IndexedSeqFileDict
+    proxy_class = get_processor(format, _INDEXER_MAP)
+    repr = "SearchIO.index(%r, %r, key_function=%r)" \
+        % (filename, format, key_function)
+    return _IndexedSeqFileDict(proxy_class(filename, **kwargs),
+                               key_function, repr, "QueryResult")
 
 
 def index_db(index_filename, filenames=None, format=None,

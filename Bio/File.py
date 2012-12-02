@@ -253,10 +253,13 @@ class _IndexedSeqFileDict(_dict_base):
     Note that this dictionary is essentially read only. You cannot
     add or change values, pop values, nor clear the dictionary.
     """
-    def __init__(self, random_access_proxy, key_function):
+    def __init__(self, random_access_proxy, key_function,
+                 repr, obj_repr):
         #Use key_function=None for default value
         self._proxy = random_access_proxy
         self._key_function = key_function
+        self._repr = repr
+        self._obj_repr = obj_repr
         if key_function:
             offset_iter = (
                 (key_function(k), o, l) for (k, o, l) in random_access_proxy)
@@ -281,15 +284,12 @@ class _IndexedSeqFileDict(_dict_base):
         self._offsets = offsets
 
     def __repr__(self):
-        #TODO - How best to handle the __repr__ for SeqIO and SearchIO? 
-        return "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
-               % (self._proxy._handle.name, self._proxy._format,
-                  self._proxy._alphabet, self._key_function)
+        return self._repr
 
     def __str__(self):
         #TODO - How best to handle the __str__ for SeqIO and SearchIO? 
         if self:
-            return "{%s : SeqRecord(...), ...}" % repr(self.keys()[0])
+            return "{%r : %s(...), ...}" % (self.keys()[0], self._obj_repr)
         else:
             return "{}"
 
