@@ -253,9 +253,8 @@ class _IndexedSeqFileDict(_dict_base):
     Note that this dictionary is essentially read only. You cannot
     add or change values, pop values, nor clear the dictionary.
     """
-    def __init__(self, filename, proxy_class, format, alphabet, key_function):
+    def __init__(self, random_access_proxy, key_function):
         #Use key_function=None for default value
-        random_access_proxy = proxy_class(filename, format, alphabet)
         self._proxy = random_access_proxy
         self._key_function = key_function
         if key_function:

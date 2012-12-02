@@ -802,8 +802,8 @@ def index(filename, format, alphabet=None, key_function=None):
         proxy_class = _FormatToRandomAccess[format]
     except KeyError:
         raise ValueError("Unsupported format %r" % format)
-    return _IndexedSeqFileDict(filename, proxy_class,
-                               format, alphabet, key_function)
+    return _IndexedSeqFileDict(proxy_class(filename, format, alphabet),
+                               key_function)
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
