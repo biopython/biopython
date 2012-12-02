@@ -796,13 +796,14 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index  # Lazy import
+    from _index import _FormatToRandomAccess # Lazy import
+    from Bio.File import _IndexedSeqFileDict
     try:
-        proxy_class = _index._FormatToRandomAccess[format]
+        proxy_class = _FormatToRandomAccess[format]
     except KeyError:
         raise ValueError("Unsupported format %r" % format)
-    return _index._IndexedSeqFileDict(filename, proxy_class,
-                                      format, alphabet, key_function)
+    return _IndexedSeqFileDict(filename, proxy_class,
+                               format, alphabet, key_function)
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
@@ -871,10 +872,11 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index  # Lazy import
-    return _index._SQLiteManySeqFilesDict(index_filename, filenames,
-                                          _index._FormatToRandomAccess,
-                                          format, alphabet, key_function)
+    from _index import _FormatToRandomAccess  # Lazy import
+    from Bio.File import _SQLiteManySeqFilesDict
+    return _SQLiteManySeqFilesDict(index_filename, filenames,
+                                   _FormatToRandomAccess,
+                                   format, alphabet, key_function)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

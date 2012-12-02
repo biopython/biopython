@@ -32,8 +32,6 @@ from Bio import SeqIO
 from Bio import Alphabet
 from Bio import bgzf
 
-from Bio.File import _IndexedSeqFileDict, _SQLiteManySeqFilesDict
-
 class SeqFileRandomAccess(object):
     def __init__(self, filename, format, alphabet):
         h = open(filename, "rb")
