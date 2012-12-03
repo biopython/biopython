@@ -22,14 +22,23 @@ from Bio._py3k import _as_bytes
 from search_tests_common import compare_search_obj
 
 
-class BlastXmlRawCases(unittest.TestCase):
+class CheckRaw(unittest.TestCase):
+    """Base class for testing index's get_raw method."""
+
+    def check_raw(self, filename, id, raw, **kwargs):
+        """Index filename using **kwargs, check get_raw(id)==raw."""
+        idx = SearchIO.index(filename, self.fmt, **kwargs)
+        self.assertEqual(_as_bytes(raw), idx.get_raw(id))
+        idx._proxy._handle.close() # To silence a ResourceWarning 
+
+class BlastXmlRawCases(CheckRaw):
+    """Check BLAST XML get_raw method."""
 
     fmt = 'blast-xml'
 
     def test_blastxml_2226_multiple_first(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, first (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """    <Iteration>
       <Iteration_iter-num>1</Iteration_iter-num>
       <Iteration_query-ID>Query_1</Iteration_query-ID>
@@ -49,13 +58,11 @@ class BlastXmlRawCases(unittest.TestCase):
       </Iteration_stat>
       <Iteration_message>No hits found</Iteration_message>
     </Iteration>"""
-        self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "random_s00", raw)
 
     def test_blastxml_2226_multiple_middle(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, middle (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """    <Iteration>
       <Iteration_iter-num>2</Iteration_iter-num>
       <Iteration_query-ID>Query_2</Iteration_query-ID>
@@ -215,13 +222,11 @@ class BlastXmlRawCases(unittest.TestCase):
         </Statistics>
       </Iteration_stat>
     </Iteration>"""
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|16080617|ref|NP_391444.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|16080617|ref|NP_391444.1|", raw)
 
     def test_blastxml_2226_multiple_last(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, last (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """    <Iteration>
       <Iteration_iter-num>3</Iteration_iter-num>
       <Iteration_query-ID>Query_3</Iteration_query-ID>
@@ -476,13 +481,11 @@ class BlastXmlRawCases(unittest.TestCase):
         </Statistics>
       </Iteration_stat>
     </Iteration>"""
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|11464971:4-101", raw)
 
     def test_blastxml_2226_single(self):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, single query (xml_2226_blastp_004.xml)"""
         filename = 'Blast/xml_2226_blastp_004.xml'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """    <Iteration>
       <Iteration_iter-num>1</Iteration_iter-num>
       <Iteration_query-ID>Query_1</Iteration_query-ID>
@@ -737,29 +740,26 @@ class BlastXmlRawCases(unittest.TestCase):
         </Statistics>
       </Iteration_stat>
     </Iteration>"""
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|11464971:4-101", raw)
 
 
-class BlastTabRawCases(unittest.TestCase):
+class BlastTabRawCases(CheckRaw):
+    """Check BLAST tabular get_raw method."""
 
     fmt = 'blast-tab'
 
     def test_blasttab_2226_multiple_first(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, first (tab_2226_tblastn_001.txt)"""
         filename = 'Blast/tab_2226_tblastn_001.txt'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|	34.88	43	28	0	31	73	1744	1872	1e-05	34.7
 gi|16080617|ref|NP_391444.1|	gi|72012412|ref|XM_777959.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|16080617|ref|NP_391444.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|16080617|ref|NP_391444.1|", raw)
 
     def test_blasttab_2226_multiple_last(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last (tab_2226_tblastn_001.txt)"""
         filename = 'Blast/tab_2226_tblastn_001.txt'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	95.92	98	4	0	1	98	95	388	2e-67	 199
 gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	29.58	71	46	2	30	96	542	754	4e-05	32.7
 gi|11464971:4-101	gi|301779869|ref|XM_002925302.1|	97.96	98	2	0	1	98	78	371	2e-67	 202
@@ -770,13 +770,11 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	97.96	98	2	0	1	98	173	466	2e-
 gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	1e-09	46.6
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|11464971:4-101", raw)
 
     def test_blasttab_2226_single(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query (tab_2226_tblastn_004.txt)"""
         filename = 'Blast/tab_2226_tblastn_004.txt'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	95.92	98	4	0	1	98	95	388	2e-67	 199
 gi|11464971:4-101	gi|350596019|ref|XM_003360601.2|	29.58	71	46	2	30	96	542	754	4e-05	32.7
 gi|11464971:4-101	gi|301779869|ref|XM_002925302.1|	97.96	98	2	0	1	98	78	371	2e-67	 202
@@ -787,25 +785,21 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	97.96	98	2	0	1	98	173	466	2e-
 gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	1e-09	46.6
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|11464971:4-101", raw)
 
     def test_blasttab_2226_multiple_first_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, first, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        idx = SearchIO.index(filename, self.fmt, comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: random_s00
 # Database: db/minirefseq_mrna
 # 0 hits found
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "random_s00", raw, comments=True)
 
     def test_blasttab_2226_multiple_middle_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, middle, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        idx = SearchIO.index(filename, self.fmt, comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]
 # Database: db/minirefseq_mrna
@@ -815,13 +809,11 @@ gi|16080617|ref|NP_391444.1|	gi|145479850|ref|XM_001425911.1|	34.88	43	28	0	31	7
 gi|16080617|ref|NP_391444.1|	gi|72012412|ref|XM_777959.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 gi|16080617|ref|NP_391444.1|	gi|115975252|ref|XM_001180111.1|	33.90	59	31	1	44	94	1057	1233	1e-04	31.6
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|16080617|ref|NP_391444.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|16080617|ref|NP_391444.1|", raw, comments=True)
 
     def test_blasttab_2226_multiple_last_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, multiple queries, last, commented (tab_2226_tblastn_005.txt)"""
         filename = 'Blast/tab_2226_tblastn_005.txt'
-        idx = SearchIO.index(filename, self.fmt, comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: gi|11464971:4-101 pleckstrin [Mus musculus]
 # Database: db/minirefseq_mrna
@@ -838,13 +830,11 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 # BLAST processed 3 queries
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|11464971:4-101", raw, comments=True)
 
     def test_blasttab_2226_single_commented(self):
         """Test blast-tab raw string retrieval, BLAST 2.2.26+, single query, commented (tab_2226_tblastn_008.txt)"""
         filename = 'Blast/tab_2226_tblastn_008.txt'
-        idx = SearchIO.index(filename, self.fmt, comments=True)
         raw = """# TBLASTN 2.2.26+
 # Query: gi|11464971:4-101 pleckstrin [Mus musculus]
 # Database: db/minirefseq_mrna
@@ -861,18 +851,16 @@ gi|11464971:4-101	gi|338714227|ref|XM_001492113.3|	31.00	100	63	2	3	96	899	1198	
 gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336	1.7	19.6
 # BLAST processed 1 queries
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|11464971:4-101'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|11464971:4-101", raw, comments=True)
 
 
-class HmmerTextRawCases(unittest.TestCase):
+class HmmerTextRawCases(CheckRaw):
 
     fmt = 'hmmer3-text'
 
     def test_hmmertext_30_multiple_first(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, first (text_30_hmmscan_001.out)"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -913,13 +901,11 @@ Domain search space  (domZ):               0  [number of targets reported over t
 # Mc/sec: 403.60
 //
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('random_s00'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "random_s00", raw)
 
     def test_hmmertext_30_multiple_middle(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, middle (text_30_hmmscan_001.out)"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -977,13 +963,11 @@ Domain search space  (domZ):               1  [number of targets reported over t
 # Mc/sec: 1757.33
 //
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
     def test_hmmertext_30_multiple_last(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, multiple queries, last (text_30_hmmscan_001.out)"""
         filename = 'Hmmer/text_30_hmmscan_001.out'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -1095,13 +1079,11 @@ Domain search space  (domZ):               5  [number of targets reported over t
 # Mc/sec: 3667.47
 //
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|125490392|ref|NP_038661.2|", raw)
 
     def test_hmmertext_30_single(self):
         """Test hmmer3-text raw string retrieval, HMMER 3.0, single query (text_30_hmmscan_003.out)"""
         filename = 'Hmmer/text_30_hmmscan_003.out'
-        idx = SearchIO.index(filename, self.fmt)
         raw = """# hmmscan :: search sequence(s) against a profile database
 # HMMER 3.0 (March 2010); http://hmmer.org/
 # Copyright (C) 2010 Howard Hughes Medical Institute.
@@ -1159,84 +1141,70 @@ Domain search space  (domZ):               1  [number of targets reported over t
 # Mc/sec: 1757.33
 //
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
 
-class HmmerTabRawCases(unittest.TestCase):
+class HmmerTabRawCases(CheckRaw):
 
     fmt = 'hmmer3-tab'
 
     def test_hmmertab_30_multiple_first(self):
         """Test hmmer3-tab raw string retrieval, HMMER 3.0, multiple queries, first (tab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Globin               PF00042.17 gi|4885477|ref|NP_005359.1| -              6e-21   74.6   0.3   9.2e-21   74.0   0.2   1.3   1   0   0   1   1   1   1 Globin
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
     def test_hmmertab_30_multiple_middle(self):
         """Test hmmer3-tab raw string retrieval, HMMER 3.0, multiple queries, middle (tab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Ig_3                 PF13927.1  gi|126362951:116-221 -            1.4e-09   38.2   0.4   2.1e-09   37.6   0.3   1.3   1   0   0   1   1   1   1 Immunoglobulin domain
 Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7   0.1   4.3e-05   23.4   0.1   1.1   1   0   0   1   1   1   1 Immunoglobulin domain
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|126362951:116-221", raw)
 
     def test_hmmertab_30_multiple_last(self):
         """Test hmmer3-tab raw string retrieval, HMMER 3.0, multiple queries, last (tab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_001.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Pou                  PF00157.12 gi|125490392|ref|NP_038661.2| -              7e-37  124.8   0.5   1.4e-36  123.9   0.3   1.5   1   0   0   1   1   1   1 Pou domain - N-terminal to homeobox domain
 Homeobox             PF00046.24 gi|125490392|ref|NP_038661.2| -            2.1e-18   65.5   1.1   4.1e-18   64.6   0.7   1.5   1   0   0   1   1   1   1 Homeobox domain
 HTH_31               PF13560.1  gi|125490392|ref|NP_038661.2| -              0.012   15.6   0.0      0.16   12.0   0.0   2.2   2   0   0   2   2   2   0 Helix-turn-helix domain
 Homeobox_KN          PF05920.6  gi|125490392|ref|NP_038661.2| -              0.039   13.5   0.0     0.095   12.3   0.0   1.6   1   0   0   1   1   1   0 Homeobox KN domain
 DUF521               PF04412.8  gi|125490392|ref|NP_038661.2| -               0.14   10.5   0.1      0.26    9.6   0.1   1.4   1   0   0   1   1   1   0 Protein of unknown function (DUF521)
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|125490392|ref|NP_038661.2|", raw)
 
     def test_hmmertab_30_single(self):
         """Test hmmer3-tab raw string retrieval, HMMER 3.0, single query (tab_30_hmmscan_004.out)"""
         filename = os.path.join('Hmmer', 'tab_30_hmmscan_004.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Ig_3                 PF13927.1  gi|126362951:116-221 -            1.4e-09   38.2   0.4   2.1e-09   37.6   0.3   1.3   1   0   0   1   1   1   1 Immunoglobulin domain
 Ig_2                 PF13895.1  gi|126362951:116-221 -            3.5e-05   23.7   0.1   4.3e-05   23.4   0.1   1.1   1   0   0   1   1   1   1 Immunoglobulin domain
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|126362951:116-221", raw)
 
 
-class HmmerDomtabRawCases(unittest.TestCase):
+class HmmerDomtabRawCases(CheckRaw):
 
     fmt = 'hmmscan3-domtab'
 
     def test_hmmerdomtab_30_multiple_first(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, multiple queries, first (domtab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_001.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Globin               PF00042.17   108 gi|4885477|ref|NP_005359.1| -            154     6e-21   74.6   0.3   1   1   6.7e-25   9.2e-21   74.0   0.2     1   107     7   112     7   113 0.97 Globin
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|4885477|ref|NP_005359.1|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|4885477|ref|NP_005359.1|", raw)
 
     def test_hmmerdomtab_30_multiple_middle(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, multiple queries, middle (domtab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_001.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Ig_3                 PF13927.1     75 gi|126362951:116-221 -            106   1.4e-09   38.2   0.4   1   1     3e-13   2.1e-09   37.6   0.3     1    73     9    84     9    88 0.94 Immunoglobulin domain
 Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.5e-05   23.7   0.1   1   1   6.2e-09   4.3e-05   23.4   0.1     1    80     9   104     9   104 0.71 Immunoglobulin domain
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|126362951:116-221", raw)
 
     def test_hmmerdomtab_30_multiple_last(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, multiple queries, last (domtab_30_hmmscan_001.out)"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_001.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Pou                  PF00157.12    75 gi|125490392|ref|NP_038661.2| -            352     7e-37  124.8   0.5   1   1     5e-40   1.4e-36  123.9   0.3     3    75   133   205   131   205 0.97 Pou domain - N-terminal to homeobox domain
 Homeobox             PF00046.24    57 gi|125490392|ref|NP_038661.2| -            352   2.1e-18   65.5   1.1   1   1   1.5e-21   4.1e-18   64.6   0.7     1    57   224   280   224   280 0.98 Homeobox domain
 HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -            352     0.012   15.6   0.0   1   2   5.7e-05      0.16   12.0   0.0     1    35   141   181   141   184 0.96 Helix-turn-helix domain
@@ -1244,18 +1212,15 @@ HTH_31               PF13560.1     64 gi|125490392|ref|NP_038661.2| -           
 Homeobox_KN          PF05920.6     40 gi|125490392|ref|NP_038661.2| -            352     0.039   13.5   0.0   1   1   3.5e-05     0.095   12.3   0.0     7    39   244   276   241   277 0.91 Homeobox KN domain
 DUF521               PF04412.8    400 gi|125490392|ref|NP_038661.2| -            352      0.14   10.5   0.1   1   1   9.4e-05      0.26    9.6   0.1   273   334   221   280   197   294 0.77 Protein of unknown function (DUF521)
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|125490392|ref|NP_038661.2|'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|125490392|ref|NP_038661.2|", raw)
 
     def test_hmmerdomtab_30_single(self):
         """Test hmmscan-domtab raw string retrieval, HMMER 3.0, single query (domtab_30_hmmscan_004.out)"""
         filename = os.path.join('Hmmer', 'domtab_30_hmmscan_004.out')
-        idx = SearchIO.index(filename, self.fmt)
         raw = """Ig_3                 PF13927.1     75 gi|126362951:116-221 -            106   1.4e-09   38.2   0.4   1   1     3e-13   2.1e-09   37.6   0.3     1    73     9    84     9    88 0.94 Immunoglobulin domain
 Ig_2                 PF13895.1     80 gi|126362951:116-221 -            106   3.5e-05   23.7   0.1   1   1   6.2e-09   4.3e-05   23.4   0.1     1    80     9   104     9   104 0.71 Immunoglobulin domain
 """
-        self.assertEqual(_as_bytes(raw), idx.get_raw('gi|126362951:116-221'))
-        idx._proxy._handle.close() # To silence a ResourceWarning
+        self.check_raw(filename, "gi|126362951:116-221", raw)
 
 
 class SearchIndexCases(unittest.TestCase):
