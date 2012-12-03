@@ -9,13 +9,15 @@
 """Custom indexing for Bio.SearchIO objects."""
 
 from StringIO import StringIO
-
 from Bio._py3k import _bytes_to_string
+from Bio.File import _IndexedSeqFileProxy
 
-__all__ = ['SearchIndexer']
+class SearchIndexer(_IndexedSeqFileProxy):
+    """Base class for file format specific random access.
 
-class SearchIndexer(object):
-    """Iterator returning file positions of results in a search output file."""
+    Subclasses for each file format should define '_parser' and optionally
+    'get_raw' methods.
+    """
 
     def __init__(self, filename, **kwargs):
         self._handle = open(filename, 'rb')

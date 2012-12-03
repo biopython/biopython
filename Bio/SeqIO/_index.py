@@ -31,8 +31,9 @@ from Bio._py3k import _bytes_to_string, _as_bytes
 from Bio import SeqIO
 from Bio import Alphabet
 from Bio import bgzf
+from Bio.File import _IndexedSeqFileProxy
 
-class SeqFileRandomAccess(object):
+class SeqFileRandomAccess(_IndexedSeqFileProxy):
     def __init__(self, filename, format, alphabet):
         h = open(filename, "rb")
         try:
@@ -64,19 +65,10 @@ class SeqFileRandomAccess(object):
                                                  alphabet).next()
         self._parse = _parse
 
-    def __iter__(self):
-        """Returns (id,offset) tuples."""
-        raise NotImplementedError("Subclass should implement this")
-
     def get(self, offset):
         """Returns SeqRecord."""
         #Should be overriden for binary file formats etc:
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
-
-    def get_raw(self, offset):
-        """Returns bytes string (if implemented for this file format)."""
-        #Should be done by each sub-class (if possible)
-        raise NotImplementedError("Not available for this file format.")
 
 
 ####################

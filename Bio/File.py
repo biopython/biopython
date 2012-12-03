@@ -228,6 +228,36 @@ else:
 #The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
 #for indexing
 
+class _IndexedSeqFileProxy(object):
+    """Base class for file format specific random access (PRIVATE).
+
+    This is subclasses in both Bio.SeqIO for indexing as SeqRecord
+    objects, and in Bio.SearchIO for indexing QueryResult objects.
+
+    Subclasses for each file format should define '__iter__', 'get'
+    and optionally 'get_raw' methods.
+    """
+
+    def __iter__(self):
+        """Returns (identifier, offset, length in bytes) tuples.
+
+        The length can be zero where it is not implemented or not
+        possible for a particular file format.
+        """
+        raise NotImplementedError("Subclass should implement this")
+
+    def get(self, offset):
+        """Returns parsed object for this entry."""
+        #Most file formats with self contained records can be handled by
+        #parsing StringIO(_bytes_to_string(self.get_raw(offset)))
+        raise NotImplementedError("Subclass should implement this")
+
+    def get_raw(self, offset):
+        """Returns bytes string (if implemented for this file format)."""
+        #Should be done by each sub-class (if possible)
+        raise NotImplementedError("Not available for this file format.")
+
+
 class _IndexedSeqFileDict(_dict_base):
     """Read only dictionary interface to a sequential record file.
 
