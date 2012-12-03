@@ -774,7 +774,7 @@ The same rules are used by TRANSFAC."""
         """
         return self.score_hit(self.anticonsensus,0)
 
-    def weblogo(self,fname,format="PNG",**kwds):
+    def weblogo(self,fname,format="PNG",version="2.8.2", **kwds):
         """
         uses the Berkeley weblogo service to download and save a weblogo of itself
         
@@ -783,42 +783,87 @@ The same rules are used by TRANSFAC."""
         """
         import urllib
         import urllib2
-        al= self._to_fasta()
-        url = 'http://weblogo.berkeley.edu/logo.cgi'
-        values = {'sequence' : al,
-                  'format' : format,
-                  'logowidth' : '18',
-                  'logoheight' : '5',
-                  'logounits' : 'cm',
-                  'kind' : 'AUTO',
-                  'firstnum' : "1",
-                  'command' : 'Create Logo',
-                  'smallsamplecorrection' : "on",
-                  'symbolsperline' : 32,
-                  'res' : '96',
-                  'res_units' : 'ppi',
-                  'antialias' : 'on',
-                  'title' : '',
-                  'barbits' : '',
-                  'xaxis': 'on',
-                  'xaxis_label'  : '',
-                  'yaxis': 'on',
-                  'yaxis_label' : '',
-                  'showends' : 'on',
-                  'shrink' : '0.5',
-                  'fineprint' : 'on',
-                  'ticbits' : '1',
-                  'colorscheme' : 'DEFAULT',
-                  'color1' : 'green',
-                  'color2' : 'blue',
-                  'color3' : 'red',
-                  'color4' : 'black',
-                  'color5' : 'purple',
-                  'color6' : 'orange',
-                  'color1' : 'black',
-                  }
-        for k,v in kwds.iteritems():
-            values[k]=str(v)
+        version = str(version)
+        if version.startswith("2"):
+            al= self._to_fasta()
+            url = 'http://weblogo.berkeley.edu/logo.cgi'
+            values = {'sequence' : al,
+                      'format' : format,
+                      'logowidth' : '18',
+                      'logoheight' : '5',
+                      'logounits' : 'cm',
+                      'kind' : 'AUTO',
+                      'firstnum' : "1",
+                      'command' : 'Create Logo',
+                      'smallsamplecorrection' : "on",
+                      'symbolsperline' : 32,
+                      'res' : '96',
+                      'res_units' : 'ppi',
+                      'antialias' : 'on',
+                      'title' : '',
+                      'barbits' : '',
+                      'xaxis': 'on',
+                      'xaxis_label' : '',
+                      'yaxis': 'on',
+                      'yaxis_label' : '',
+                      'showends' : 'on',
+                      'shrink' : '0.5',
+                      'fineprint' : 'on',
+                      'ticbits' : '1',
+                      'colorscheme' : 'DEFAULT',
+                      'color1' : 'green',
+                      'color2' : 'blue',
+                      'color3' : 'red',
+                      'color4' : 'black',
+                      'color5' : 'purple',
+                      'color6' : 'orange',
+                      'color1' : 'black',
+                      }
+            for k,v in kwds.iteritems():
+                values[k]=str(v)
+        else:
+            frequencies= self._to_transfac()
+            url = 'http://weblogo.threeplusone.com/create.cgi'
+            values = {'sequences' : frequencies,
+                      'format' : format.lower(),
+                      'stack_width' : 'medium',
+                      'stack_per_line' : '40',
+                      'alphabet' : 'alphabet_dna',
+                      'ignore_lower_case' : True,
+                      'unit_name' : "bits",
+                      'first_index' : '1',
+                      'logo_start' : '1',
+                      'logo_end': str(self.length),
+                      'composition' : "comp_auto",
+                      'percentCG' : '',
+                      'scale_width' : True,
+                      'show_errorbars' : True,
+                      'logo_title' : '',
+                      'logo_label' : '',
+                      'show_xaxis': True,
+                      'xaxis_label': '',
+                      'show_yaxis': True,
+                      'yaxis_label': '',
+                      'yaxis_scale': 'auto',
+                      'yaxis_tic_interval' : '1.0',
+                      'show_ends' : True,
+                      'show_fineprint' : True,
+                      'symbols0': '',
+                      'symbols1': '',
+                      'symbols2': '',
+                      'symbols3': '',
+                      'symbols4': '',
+                      'color0': '',
+                      'color1': '',
+                      'color2': '',
+                      'color3': '',
+                      'color4': '',
+                      }
+            for k,v in kwds.iteritems():
+                if type(values[k])==bool:
+                    if not v:
+                        v = ""
+                values[k]=str(v)
             
         data = urllib.urlencode(values)
         req = urllib2.Request(url, data)
