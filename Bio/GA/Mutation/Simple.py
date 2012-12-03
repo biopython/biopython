@@ -83,6 +83,3 @@ class ConversionMutation(object):
                 mutated_org.genome[gene_index] = new_letter
 
         return mutated_org
-                
-        
-    

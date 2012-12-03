@@ -216,5 +216,3 @@ class Record(object):
                 return
         #If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
-    
-

@@ -682,4 +682,3 @@ class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
         proxies = self._proxies
         while proxies:
             proxies.popitem()[1]._handle.close()
-

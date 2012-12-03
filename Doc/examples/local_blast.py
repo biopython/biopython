@@ -48,5 +48,3 @@ while 1:
                 print hsp.query[0:75] + dots
                 print hsp.match[0:75] + dots
                 print hsp.sbjct[0:75] + dots
-
-

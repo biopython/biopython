@@ -132,5 +132,3 @@ def read(results_file):
     if len(results) == 0:
         raise ValueError("Invalid results file.")
     return results
-
-

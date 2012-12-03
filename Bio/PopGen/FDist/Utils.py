@@ -208,4 +208,3 @@ def approximate_fst(desired_fst, simulated_fst, parameter_fst,
         min_run_fst = parameter_fst
         next_parameter_fst = (max_run_fst + parameter_fst)/2
     return next_parameter_fst, max_run_fst, min_run_fst
-

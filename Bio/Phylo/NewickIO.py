@@ -243,4 +243,3 @@ class Writer(object):
                             ) % (clade.confidence, clade.branch_length or 0.0)
 
         return make_info_string
-

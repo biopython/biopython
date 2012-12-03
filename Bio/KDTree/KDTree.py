@@ -259,4 +259,3 @@ if __name__=="__main__":
 
         x, y, z=center
         print "Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)
-

@@ -85,11 +85,3 @@ class Residues(object):
             if start: s.append("%s-%s" % (start, end))
             strs.append("".join(s))
         return prefix+ ",".join(strs)
-
-
-
-
-
-
-
-

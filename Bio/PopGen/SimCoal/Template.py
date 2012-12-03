@@ -215,5 +215,3 @@ def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=No
     par_stream = open(out_dir + sep + 'tmp.par', 'r')
     generate_model(par_stream, model, params, out_dir = out_dir)
     par_stream.close()
-
-

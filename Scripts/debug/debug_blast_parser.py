@@ -242,4 +242,3 @@ if __name__ == '__main__':
         print >>sys.stderr, "-p and -n not implemented yet"
         sys.exit(-1)
     test_blast_output(TESTFILE)
-        

@@ -99,6 +99,3 @@ class HashSet(object):
             for j in s.list():
                 p.append((i,j))
         return HashSet(p)
-    
-
-

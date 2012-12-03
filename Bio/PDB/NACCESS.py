@@ -181,4 +181,3 @@ if __name__=="__main__":
     n = NACCESS(model, sys.argv[1])
     for e in n.get_iterator():
         print e
-

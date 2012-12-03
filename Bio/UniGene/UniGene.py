@@ -222,5 +222,3 @@ if( __name__ == '__main__' ):
     unigene_parser = UniGeneParser()
     unigene_parser.parse( handle )
     unigene_parser.print_tags()
-
-

@@ -852,4 +852,3 @@ def consensus(trees, threshold=0.5,outgroup=None):
     if alltaxa != set(consensus.get_taxa()):
         raise TreeError('FATAL ERROR: consensus tree is corrupt')
     return consensus
-

@@ -144,4 +144,3 @@ class SequentialAlignmentWriter(AlignmentWriter):
         # You SHOULD subclass this, to write the alignment  #
         # objecta to the file handle                        #
         #####################################################
-

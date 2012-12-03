@@ -137,4 +137,3 @@ for i, seq_str in enumerate(examples):
         assert value == checksum(Seq(seq_str, single_letter_alphabet))
         #Finally check it works with a MutableSeq object
         assert value == checksum(MutableSeq(seq_str, single_letter_alphabet))
-

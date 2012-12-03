@@ -122,4 +122,3 @@ if __name__ == '__main__':
     
 #     for i in Translate.unambiguous_dna_by_id.keys():
 #         print Translate.unambiguous_dna_by_id[i].table.names[0]
-        

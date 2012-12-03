@@ -171,4 +171,3 @@ if __name__=="__main__":
 
     for item in rd:
         print item
-

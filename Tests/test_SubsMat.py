@@ -82,4 +82,3 @@ except ImportError:
     #test into two, and have one raise MissingExternalDependencyError cheat:
     f.write("BLOSUM30 & BLOSUM90 0.88\n")
     f.write("BLOSUM90 & BLOSUM30 0.88\n")
-    

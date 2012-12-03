@@ -56,4 +56,3 @@ class AmbiguousRepair(object):
             new_org.genome[to_change] = new_gene
 
         return new_org
-            

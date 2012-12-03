@@ -40,4 +40,3 @@ for location in [location1, location2, location3]:
     print "Location:", location
     print "  Non-Fuzzy Start:", location.nofuzzy_start
     print "  Non-Fuzzy End:", location.nofuzzy_end
-

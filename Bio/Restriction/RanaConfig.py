@@ -79,5 +79,3 @@ ftp_emb_r           =   ftp_Rebase+'pub/rebase/emboss_r.###'
 Rebase_name         =   'anonymous'
 Rebase_password     =   ''
 #Rebase_password     =   'your_address@somewhere.something'
-
-

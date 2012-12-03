@@ -215,4 +215,3 @@ if __name__ == '__main__':
             with open(fname) as handle:
                 records = parser(handle)
                 SeqIO.write(records, sys.stdout, 'fasta')
-

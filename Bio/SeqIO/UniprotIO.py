@@ -517,4 +517,3 @@ class Parser(object):
             self.ParsedSeqRecord.id = self.ParsedSeqRecord.annotations['accessions'][0]
         
         return self.ParsedSeqRecord
-        

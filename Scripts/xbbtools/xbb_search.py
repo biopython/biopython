@@ -166,6 +166,3 @@ if __name__ == '__main__':
     xtest = XDNAsearch(seq = seq, master = win)
 
     win.mainloop()
-    
-    
-        

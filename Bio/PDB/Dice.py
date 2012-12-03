@@ -78,4 +78,3 @@ if __name__=="__main__":
     s=p.get_structure("scr", sys.argv[1])
 
     extract(s, " ", 1, 100, "out.pdb")
-    

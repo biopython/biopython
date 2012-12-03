@@ -323,6 +323,3 @@ class LogDPAlgorithms(AbstractDPAlgorithms):
     """
     def __init__(self, markov_model, sequence):
         raise NotImplementedError("Haven't coded this yet...")
-
-        
-    

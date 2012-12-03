@@ -87,4 +87,3 @@ def read_freq(f):
         key, value = line.strip().split()
         freq_dict[key] = float(value) 
     return FreqTable(freq_dict,FREQ)
-
