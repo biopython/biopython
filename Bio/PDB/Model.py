@@ -67,4 +67,3 @@ class Model(Entity):
         for r in self.get_residues():
             for a in r:
                 yield a
-

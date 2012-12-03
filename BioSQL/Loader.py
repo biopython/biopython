@@ -1064,4 +1064,3 @@ class DatabaseRemover:
         self.adaptor.execute(sql, (self.dbid,))
         sql = r"DELETE FROM biodatabase WHERE biodatabase_id = %s"
         self.adaptor.execute(sql, (self.dbid,))
-

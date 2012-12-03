@@ -160,4 +160,3 @@ class DisorderedResidue(DisorderedEntityWrapper):
         assert(not self.disordered_has_id(resname))
         self[resname]=residue
         self.disordered_select(resname)
-

@@ -485,4 +485,3 @@ class Diagram(object):
             outstr.append("Track %d: %s\n" % (level, self.tracks[level]))
         outstr = '\n'.join(outstr)
         return outstr       
-

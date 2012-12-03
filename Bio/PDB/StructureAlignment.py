@@ -132,4 +132,3 @@ if __name__=="__main__":
     # Print aligned pairs (r is None if gap)
     for (r1,r2) in al.get_iterator():
         print r1, r2
-

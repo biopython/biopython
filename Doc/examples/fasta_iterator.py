@@ -57,4 +57,3 @@ if __name__ == "__main__":
     all_species = extract_organisms("ls_orchid.fasta")
     print "number of species:", len(all_species)
     print 'species names:', all_species
-    

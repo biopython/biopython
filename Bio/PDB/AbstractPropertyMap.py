@@ -131,4 +131,3 @@ class AbstractAtomPropertyMap(AbstractPropertyMap):
         if isinstance(res_id, int):
             ent_id=(chain_id, (' ', res_id, ' '), atom_name, icode)
         return ent_id
-

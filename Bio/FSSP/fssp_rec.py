@@ -31,4 +31,3 @@ class align(object):
    turn5 = (20,22)
    acc = (34,37)
    start_aa_list = 42
-

@@ -255,4 +255,3 @@ class PhymlCommandline(AbstractCommandline):
                 ),
                 ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
-

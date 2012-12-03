@@ -262,6 +262,3 @@ if __name__ == '__main__':
     for id in ids:
         #print db_index.Get(id)
         print func(id)
-        
-
-

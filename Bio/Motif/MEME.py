@@ -396,4 +396,3 @@ def __skip_unused_lines(handle):
         raise ValueError("Unexpected end of stream: Expected to find line starting with '***'")
     if not line.startswith('***'):
         raise ValueError("Line does not start with '***':\n%s" % line)
-

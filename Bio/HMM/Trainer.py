@@ -418,12 +418,3 @@ class KnownStateTrainer(AbstractTrainer):
                                (cur_state, next_state))
 
         return transition_counts
-
-            
-        
-            
-                
-            
-
-            
-    

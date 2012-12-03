@@ -280,5 +280,3 @@ class GraphData(object):
         outstr.append("Minimum: %s\n1Q: %s\n2Q: %s\n3Q: %s\nMaximum: %s" % self.quartiles())
         outstr.append("Sequence Range: %s..%s" % self.range())
         return "\n".join(outstr)
-
-

@@ -71,6 +71,3 @@ if( __name__ == '__main__' ):
     nums = [ '0000', 'abcd', '1234', '5555', '4321', 'aaaa', 'ffff' ]
     for num in nums:
         print hex_convert( num )
-
-
-

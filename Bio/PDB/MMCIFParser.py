@@ -171,4 +171,3 @@ if __name__=="__main__":
         for chain in model.get_list():
             print chain
             print "Found %d residues." % len(chain.get_list())
-

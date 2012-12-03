@@ -128,4 +128,3 @@ class Chain(Entity):
         for r in self:
             for a in r:
                 yield a
-

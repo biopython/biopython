@@ -50,6 +50,3 @@ while 1:
         print feature
 
 handle.close()
-    
-
-

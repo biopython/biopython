@@ -72,4 +72,3 @@ class TournamentSelection(AbstractSelection):
             new_population.extend([new_org_1, new_org_2])
 
         return new_population
-                

@@ -84,4 +84,3 @@ class Record(object):
                 rep.append('\n')
             rep.append('\n')
         return "".join(rep)
-    

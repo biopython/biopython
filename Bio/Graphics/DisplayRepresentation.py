@@ -179,6 +179,3 @@ class ChromosomeCounts(object):
         # if we got here we didn't find a color for the count
         raise ValueError("Count value %s was not found in the color scheme."
                          % count)
-        
-        
-        

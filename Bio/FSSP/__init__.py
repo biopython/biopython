@@ -264,4 +264,3 @@ def read_fssp(fssp_handle):
       del i.PosAlignList
    align_dict.build_resnum_list()
    return (header, sum_dict, align_dict)
-

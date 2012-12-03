@@ -415,4 +415,3 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
     axes.set_ylim(max(y_posns.itervalues()) + 0.8, 0.2)
     if do_show:
         plt.show()
-

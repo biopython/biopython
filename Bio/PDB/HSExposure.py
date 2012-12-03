@@ -344,5 +344,3 @@ if __name__=="__main__":
                 print r.xtra['PCB_CB_ANGLE']
             except:
                 pass
-
-

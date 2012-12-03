@@ -17,5 +17,3 @@ class xbb_sequence(Sequence):
 
 if __name__ == '__main__':
     test = xbb_sequence()
-    
-    

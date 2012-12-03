@@ -98,6 +98,3 @@ class BlastTableReader(object):
       return 0
    def _Parse(self, method_name, inline):
       return getattr(self,method_name)(inline)
-      
-
-

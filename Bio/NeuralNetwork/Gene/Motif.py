@@ -209,4 +209,3 @@ class MotifCoder(object):
             motif_amounts.append(seq_motifs[motif])
 
         return motif_amounts
-        

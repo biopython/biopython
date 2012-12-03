@@ -57,5 +57,3 @@ class SimCoalController(object):
             cmd += ' >/dev/null 2>&1'
         os.system(cmd)
         os.chdir(curr_dir)
-    
-

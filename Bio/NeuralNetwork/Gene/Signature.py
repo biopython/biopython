@@ -215,4 +215,3 @@ class SignatureCoder(object):
             sig_amounts.append(sequence_sigs[sig])
 
         return sig_amounts
-        

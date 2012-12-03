@@ -368,4 +368,3 @@ class RaxmlCommandline(AbstractCommandline):
         # ENH: enforce -s, -n and -m
         if not self.parsimony_seed:
             self.parsimony_seed = 10000
-

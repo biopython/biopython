@@ -89,4 +89,3 @@ def name_filter(sum_dict, align_dict, name_list):
          new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
                    align_dict.abs(pos_num).pos_align_dict[prot_num]
    return new_sum_dict, new_align_dict
-

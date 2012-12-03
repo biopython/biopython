@@ -224,7 +224,3 @@ if __name__ == '__main__':
     print gdct.translate((1, 75, 240))
     print gdct.translate(7)
     print gdct.translate(2)
-
-                
-                        
-

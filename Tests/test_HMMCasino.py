@@ -198,4 +198,3 @@ predicted_states, prob = trained_mm.viterbi(test_rolls, DiceTypeAlphabet())
 if VERBOSE:
     print "Prediction probability:", prob
     Utilities.pretty_print_prediction(test_rolls, test_states, predicted_states)
-
