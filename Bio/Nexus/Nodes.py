@@ -4,7 +4,7 @@
 # as part of this package.
 #
 # Nodes.py
-# 
+#
 # Provides functionality of a linked list.
 # Each node has one (or none) predecessor, and an arbitrary number of successors.
 # Nodes can store arbitrary data in a NodeData class.
@@ -22,7 +22,7 @@ class NodeException(Exception):
 
 class Chain(object):
     """Stores a list of nodes that are linked together."""
-    
+
     def __init__(self):
         """Initiates a node chain: (self)."""
         self.chain={}
@@ -31,8 +31,8 @@ class Chain(object):
     def _get_id(self):
         """Gets a new id for a node in the chain."""
         self.id+=1
-        return self.id 
-   
+        return self.id
+
     def all_ids(self):
         """Return a list of all node ids."""
         return self.chain.keys()
@@ -113,7 +113,7 @@ class Chain(object):
         for sn in self.chain[start].get_succ():
             if self.is_parent_of(sn,finish):
                 return [sn]+self.trace(sn,finish)
-                
+
 class Node(object):
     """A single node."""
 
@@ -162,7 +162,7 @@ class Node(object):
     def set_prev(self,id):
         """Sets the node's predecessor: (self,id)."""
         self.prev=id
-    
+
     def get_data(self):
         """Returns a node's data: (self)."""
         return self.data
