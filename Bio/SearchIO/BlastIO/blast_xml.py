@@ -560,28 +560,18 @@ class BlastXmlIndexer(SearchIndexer):
 
     def get_raw(self, offset):
         qend_mark = self.qend_mark
-        block_size = self.block_size
         handle = self._handle
         handle.seek(offset)
-        counter = 0
-        qresult_raw = _as_bytes('')
-
-        while True:
-            block = handle.read(block_size)
-
-            # if we reach EOF without encountering any query end mark
-            if not block:
-                raise ValueError("Query end not found")
-
-            qresult_raw += block
-            qend_idx = qresult_raw.find(qend_mark)
-
-            # if a match is found, return the raw qresult string
-            if qend_idx > 0:
-                return qresult_raw[:qend_idx + len(qend_mark)]
-            # otherwise, increment the counter and go on to the next iteration
-            counter += 1
-
+        
+        qresult_raw = handle.readline()
+        assert qresult_raw.lstrip().startswith(self.qstart_mark)
+        while qend_mark not in qresult_raw:
+            qresult_raw += handle.readline()
+        assert qresult_raw.rstrip().endswith(qend_mark)
+        assert qresult_raw.count(qend_mark) == 1
+        # Note this will include any leading and trailing whitespace, in
+        # general expecting "    <Iteration>\n...\n    </Iteration>\n"
+        return qresult_raw
 
 class _BlastXmlGenerator(XMLGenerator):
     """Event-based XML Generator."""

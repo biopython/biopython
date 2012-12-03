@@ -75,7 +75,8 @@ class BlastXmlRawCases(CheckRaw):
         </Statistics>
       </Iteration_stat>
       <Iteration_message>No hits found</Iteration_message>
-    </Iteration>"""
+    </Iteration>
+"""
         self.check_raw(filename, "random_s00", raw)
 
     def test_blastxml_2226_multiple_middle(self):
@@ -239,7 +240,8 @@ class BlastXmlRawCases(CheckRaw):
           <Statistics_entropy>0.14</Statistics_entropy>
         </Statistics>
       </Iteration_stat>
-    </Iteration>"""
+    </Iteration>
+"""
         self.check_raw(filename, "gi|16080617|ref|NP_391444.1|", raw)
 
     def test_blastxml_2226_multiple_last(self):
@@ -498,7 +500,8 @@ class BlastXmlRawCases(CheckRaw):
           <Statistics_entropy>0.14</Statistics_entropy>
         </Statistics>
       </Iteration_stat>
-    </Iteration>"""
+    </Iteration>
+"""
         self.check_raw(filename, "gi|11464971:4-101", raw)
 
     def test_blastxml_2226_single(self):
@@ -757,7 +760,8 @@ class BlastXmlRawCases(CheckRaw):
           <Statistics_entropy>0.14</Statistics_entropy>
         </Statistics>
       </Iteration_stat>
-    </Iteration>"""
+    </Iteration>
+"""
         self.check_raw(filename, "gi|11464971:4-101", raw)
 
 
