@@ -943,7 +943,7 @@ class Nexus(object):
                 try:
                     tree.node(n).data.taxon=safename(self.translate[int(tree.node(n).data.taxon)])
                 except (ValueError,KeyError):
-                    raise NexusError('Unable to substitue %s using \'translate\' data.' \
+                    raise NexusError('Unable to substitute %s using \'translate\' data.' \
                                      % tree.node(n).data.taxon)
         self.trees.append(tree)
 
