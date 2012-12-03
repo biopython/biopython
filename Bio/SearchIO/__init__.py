@@ -448,6 +448,16 @@ def index(filename, format=None, key_function=None, **kwargs):
     >>> search_idx['gi|195230749:301-1383']
     QueryResult(id='gi|195230749:301-1383', 5 hits)
 
+    If the file is BGZF compressed, this is detected automatically. Ordinary
+    GZIP files are not supported:
+
+    >>> from Bio import SearchIO
+    >>> search_idx = SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml')
+    >>> search_idx
+    SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml', key_function=None)
+    >>> search_idx['gi|195230749:301-1383']
+    QueryResult(id='gi|195230749:301-1383', 5 hits)
+
     You can supply a custom callback function to alter the default identifier
     string. This function should accept as its input the QueryResult ID string
     and return a modified version of it.
@@ -519,6 +529,12 @@ def index_db(index_filename, filenames=None, format=None,
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
 
+    Note that ':memory:' rather than an index filename tells SQLite to hold
+    the index database in memory. This is useful for quick tests, but using
+    the Bio.SearchIO.index(...) function instead would use less memory.
+
+    BGZF compressed files are supported, and detected automatically. Ordinary
+    GZIP compressed files are not supported.
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)

@@ -10,6 +10,7 @@
 
 from StringIO import StringIO
 from Bio._py3k import _bytes_to_string
+from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy
 
 class SearchIndexer(_IndexedSeqFileProxy):
@@ -20,8 +21,14 @@ class SearchIndexer(_IndexedSeqFileProxy):
     """
 
     def __init__(self, filename, **kwargs):
-        self._handle = open(filename, 'rb')
-        self._handle.seek(0) 
+        h = open(filename, 'rb')
+        try:
+            self._handle = bgzf.BgzfReader(mode="rb", fileobj=h)
+        except ValueError, e:
+            assert "BGZF" in str(e)
+            #Not a BGZF file
+            h.seek(0)
+            self._handle = h
         self._kwargs = kwargs
 
     def _parse(self, handle):
