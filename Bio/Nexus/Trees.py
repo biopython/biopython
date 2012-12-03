@@ -105,7 +105,7 @@ class Tree(Nodes.Chain):
             return [subclades,val]
 
     def _add_subtree(self,parent_id=None,tree=None):
-        """Adds leaf or tree (in newick format) to a parent_id. (self,parent_id,tree)."""
+        """Adds leaf or tree (in newick format) to a parent_id."""
         if parent_id is None:
             raise TreeError('Need node_id to connect to.')
         for st in tree:
@@ -252,7 +252,7 @@ class Tree(Nodes.Chain):
             return prev
 
     def get_taxa(self,node_id=None):
-        """Return a list of all otus downwards from a node (self, node_id).
+        """Return a list of all otus downwards from a node.
 
         nodes = get_taxa(self,node_id=None)
         """
@@ -297,7 +297,7 @@ class Tree(Nodes.Chain):
         return len([n for n in self._walk(node) if self.is_terminal(n)])
 
     def collapse_genera(self,space_equals_underscore=True):
-        """Collapses all subtrees which belong to the same genus (i.e share the same first word in their taxon name."""
+        """Collapses all subtrees which belong to the same genus (i.e share the same first word in their taxon name.)"""
 
         while True:
             for n in self._walk():
@@ -552,10 +552,7 @@ class Tree(Nodes.Chain):
         print '\nRoot: ',self.root
 
     def to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True,plain_newick=False,ladderize=None,ignore_comments=True):
-        """Return a paup compatible tree line.
-
-        to_string(self,support_as_branchlengths=False,branchlengths_only=False,plain=True)
-        """
+        """Return a paup compatible tree line."""
         # if there's a conflict in the arguments, we override plain=True
         if support_as_branchlengths or branchlengths_only:
             plain=False
