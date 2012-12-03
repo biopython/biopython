@@ -242,7 +242,7 @@ class GenePopController(object):
         opts["BatchNumber"]=batches
         opts["BatchLength"]=iterations
         if enum_test != None:
-            if enum_test == True:
+            if enum_test is True:
                 opts["HWtests"]="Enumeration"
             else:
                 opts["HWtests"]="MCMC"

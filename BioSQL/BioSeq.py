@@ -497,16 +497,24 @@ class DBSeqRecord(SeqRecord):
         if not hasattr(self, "_seq"):
             self._seq = _retrieve_seq(self._adaptor, self._primary_id)
         return self._seq
-    def __set_seq(self, seq): self._seq = seq
-    def __del_seq(self):      del self._seq
+
+    def __set_seq(self, seq):
+        self._seq = seq
+
+    def __del_seq(self):
+        del self._seq
     seq = property(__get_seq, __set_seq, __del_seq, "Seq object")
 
     def __get_dbxrefs(self):
         if not hasattr(self,"_dbxrefs"):
             self._dbxrefs = _retrieve_dbxrefs(self._adaptor, self._primary_id)
         return self._dbxrefs
-    def __set_dbxrefs(self, dbxrefs): self._dbxrefs = dbxrefs
-    def __del_dbxrefs(self):      del self._dbxrefs
+
+    def __set_dbxrefs(self, dbxrefs):
+        self._dbxrefs = dbxrefs
+
+    def __del_dbxrefs(self):
+        del self._dbxrefs
     dbxrefs = property(__get_dbxrefs, __set_dbxrefs, __del_dbxrefs,
                        "Database cross references")
 
@@ -515,8 +523,12 @@ class DBSeqRecord(SeqRecord):
             self._features = _retrieve_features(self._adaptor,
                                                 self._primary_id)
         return self._features
-    def __set_features(self, features): self._features = features
-    def __del_features(self):      del self._features
+
+    def __set_features(self, features):
+        self._features = features
+
+    def __del_features(self):
+        del self._features
     features = property(__get_features, __set_features, __del_features,
                         "Features")
 
@@ -530,7 +542,11 @@ class DBSeqRecord(SeqRecord):
             if self._division:
                 self._annotations["data_file_division"] = self._division
         return self._annotations
-    def __set_annotations(self, annotations): self._annotations = annotations
-    def __del_annotations(self): del self._annotations
+
+    def __set_annotations(self, annotations):
+        self._annotations = annotations
+
+    def __del_annotations(self):
+        del self._annotations
     annotations = property(__get_annotations, __set_annotations,
                            __del_annotations, "Annotations")

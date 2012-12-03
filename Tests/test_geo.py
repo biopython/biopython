@@ -1,7 +1,8 @@
 """Tests the basic functionality of the GEO parsers.
 """
 
-import os, sys
+import os
+import sys
 
 import Bio.Geo
 

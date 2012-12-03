@@ -4,7 +4,9 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_blast.py
 
-import os, sys, glob
+import glob
+import os
+import sys
 from threading import *
 import commands
 from Tkinter import *

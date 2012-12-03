@@ -73,14 +73,14 @@ class Paml(object):
         adding options that do not exist or mispelling options.
         """
         for option, value in kwargs.items():
-            if not self._options.has_key(option):
+            if not option in self._options:
                 raise KeyError("Invalid option: " + option)
             else:
                 self._options[option] = value
         
     def get_option(self, option):
         """Return the value of an option."""
-        if not self._options.has_key(option):
+        if not option in self._options:
             raise KeyError("Invalid option: " + option)
         else:
             return self._options.get(option)

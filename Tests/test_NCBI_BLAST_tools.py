@@ -7,7 +7,8 @@
 # database, and if it finds them then do some standalone blast searches
 # using Bio.Blast.NCBIStandalone to call the command line tool.
 
-import os, sys
+import os
+import sys
 import subprocess
 import unittest
 

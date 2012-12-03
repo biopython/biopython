@@ -12,7 +12,10 @@ Maddison, Swofford, Maddison. 1997. Syst. Biol. 46(4):590-621
 # For with in Python/Jython 2.5
 from __future__ import with_statement
 
-import sys, math, random, copy
+import copy
+import math
+import random
+import sys
 
 from Bio import File
 from Bio.Alphabet import IUPAC
@@ -733,10 +736,10 @@ class Nexus(object):
 
 
     def _set(self,options):
-        self.set=options;
+        self.set=options
 
     def _options(self,options):
-        self.options=options;
+        self.options=options
 
     def _eliminate(self,options):
         self.eliminate=options

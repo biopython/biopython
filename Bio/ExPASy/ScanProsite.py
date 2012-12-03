@@ -69,7 +69,7 @@ class Parser(ExpatParser):
         # fed to the parser.
         if self.firsttime:
             if data[:5]!="<?xml":
-                raise ValueError, data
+                raise ValueError(data)
         self.firsttime = False 
         return ExpatParser.feed(self, data, isFinal)
 

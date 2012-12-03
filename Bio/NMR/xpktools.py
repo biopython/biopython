@@ -68,7 +68,8 @@ class Peaklist(object):
         # The nucleus should be given as the input argument in the
         # same form as it appears in the xpk label line (H1, 15N for example)
 
-        maxres=-1; minres=-1
+        maxres=-1
+        minres=-1
 
         # Cast the data lines into the xpentry class
         self.dict={}
@@ -104,12 +105,18 @@ class Peaklist(object):
 
     def write_header(self,outfn):
         outfile=_try_open_write(outfn)
-        outfile.write(self.firstline);outfile.write("\012")
-        outfile.write(self.axislabels);outfile.write("\012")
-        outfile.write(self.dataset);outfile.write("\012")
-        outfile.write(self.sw);outfile.write("\012")
-        outfile.write(self.sf);outfile.write("\012")
-        outfile.write(self.datalabels);outfile.write("\012")
+        outfile.write(self.firstline)
+        outfile.write("\012")
+        outfile.write(self.axislabels)
+        outfile.write("\012")
+        outfile.write(self.dataset)
+        outfile.write("\012")
+        outfile.write(self.sw)
+        outfile.write("\012")
+        outfile.write(self.sf)
+        outfile.write("\012")
+        outfile.write(self.datalabels)
+        outfile.write("\012")
         outfile.close() 
 
 def _try_open_read(fn):
@@ -193,7 +200,8 @@ def data_table(fn_list, datalabel, keyatom):
   [dict_list,label_line_list]=_read_dicts(fn_list,keyatom)
 
   # Find global max and min residue numbers
-  minr=dict_list[0]["minres"]; maxr=dict_list[0]["maxres"]
+  minr=dict_list[0]["minres"]
+  maxr=dict_list[0]["maxres"]
  
   for dictionary in dict_list:
     if (maxr < dictionary["maxres"]):
@@ -225,9 +233,11 @@ def _sort_keys(dictionary):
 
 def _read_dicts(fn_list, keyatom):
 # Read multiple files into a list of residue dictionaries
-  dict_list=[]; datalabel_list=[]
+  dict_list=[]
+  datalabel_list=[]
   for fn in fn_list:
-    peaklist=Peaklist(fn); dict=peaklist.residue_dict(keyatom)
+    peaklist=Peaklist(fn)
+    dict=peaklist.residue_dict(keyatom)
     dict_list.append(dict)
     datalabel_list.append(peaklist.datalabels)
 
