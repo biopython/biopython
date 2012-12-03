@@ -30,7 +30,7 @@ class BlastXmlRawCases(unittest.TestCase):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, first (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
         idx = SearchIO.index(filename, self.fmt)
-        raw = """<Iteration>
+        raw = """    <Iteration>
       <Iteration_iter-num>1</Iteration_iter-num>
       <Iteration_query-ID>Query_1</Iteration_query-ID>
       <Iteration_query-def>random_s00</Iteration_query-def>
@@ -56,7 +56,7 @@ class BlastXmlRawCases(unittest.TestCase):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, middle (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
         idx = SearchIO.index(filename, self.fmt)
-        raw = """<Iteration>
+        raw = """    <Iteration>
       <Iteration_iter-num>2</Iteration_iter-num>
       <Iteration_query-ID>Query_2</Iteration_query-ID>
       <Iteration_query-def>gi|16080617|ref|NP_391444.1| membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]</Iteration_query-def>
@@ -222,7 +222,7 @@ class BlastXmlRawCases(unittest.TestCase):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, multiple queries, last (xml_2226_blastp_001.xml)"""
         filename = 'Blast/xml_2226_blastp_001.xml'
         idx = SearchIO.index(filename, self.fmt)
-        raw = """<Iteration>
+        raw = """    <Iteration>
       <Iteration_iter-num>3</Iteration_iter-num>
       <Iteration_query-ID>Query_3</Iteration_query-ID>
       <Iteration_query-def>gi|11464971:4-101 pleckstrin [Mus musculus]</Iteration_query-def>
@@ -483,7 +483,7 @@ class BlastXmlRawCases(unittest.TestCase):
         """Test blast-xml raw string retrieval, BLAST 2.2.26+, single query (xml_2226_blastp_004.xml)"""
         filename = 'Blast/xml_2226_blastp_004.xml'
         idx = SearchIO.index(filename, self.fmt)
-        raw = """<Iteration>
+        raw = """    <Iteration>
       <Iteration_iter-num>1</Iteration_iter-num>
       <Iteration_query-ID>Query_1</Iteration_query-ID>
       <Iteration_query-def>gi|11464971:4-101 pleckstrin [Mus musculus]</Iteration_query-def>

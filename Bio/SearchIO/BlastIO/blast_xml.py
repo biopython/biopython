@@ -171,7 +171,6 @@ _RE_VERSION = re.compile(r'\d+\.\d+\.\d+\+?')
 
 
 class BlastXmlParser(object):
-
     """Parser for the BLAST XML format"""
 
     def __init__(self, handle):
@@ -485,7 +484,6 @@ class BlastXmlParser(object):
 
 
 class BlastXmlIndexer(SearchIndexer):
-
     """Indexer class for BLAST XML output."""
 
     _parser = BlastXmlParser
@@ -513,69 +511,44 @@ class BlastXmlIndexer(SearchIndexer):
         counter = 0
 
         while True:
-            # read file content (every block size) and store into block
-            block = handle.read(block_size)
-            # for each iteration start mark
-            for qstart_idx in self._get_offsets(block, qstart_mark):
-                # get the id of the query (re.search gets the 1st result)
-                regx = re.search(re_desc, block[qstart_idx:])
-                try:
-                    qstart_desc = regx.group(2)
-                    qstart_id = regx.group(1)
-                # handle cases where the iteration query ID tag lies in a block
-                # split
-                except AttributeError:
-                    # if we've found the end of the Iteration_query-def element
-                    # use the fallback values
-                    if re.search(re_desc_end, block[qstart_idx:]):
-                        qstart_desc = _as_bytes(self._fallback['description'])
-                        qstart_id = _as_bytes(self._fallback['id'])
-                    # otherwise, extend the read block and retrieve the ID and
-                    # desc from the extended read
-                    else:
-                        # extend the cached read
-                        block_ext = block + handle.read(block_size)
-                        regx = re.search(re_desc, block_ext[qstart_idx:])
-                        qstart_desc = regx.group(2)
-                        qstart_id = regx.group(1)
-                        # set file pointer to the position before block_ext
-                        handle.seek((counter + 1) * block_size)
-
-                # now for getting the length
-                # try finding it in the block
-                qlen = block[qstart_idx:].find(qend_mark)
-                # if not there, loop until query end is found
-                block_ext = block
-                while qlen < 0:
-                    ext = handle.read(block_size)
-                    if not ext:
-                        raise ValueError("Query end for %r not found" %
-                                qstart_id)
-                    block_ext += ext
-                    qlen = block_ext[qstart_idx:].find(qend_mark)
-
-                # adjust for read blocks
-                qstart_idx = counter * block_size + qstart_idx
-                qlen = len(qend_mark) + qlen
-                # move pointer to original position
-                handle.seek((counter + 1) * block_size)
-                if qstart_id.startswith(blast_id_mark):
-                    qstart_id = qstart_desc.split(_as_bytes(' '), 1)[0]
-                # yield key, offset, length
-                yield _bytes_to_string(qstart_id), qstart_idx, qlen
-
-            counter += 1
-
-            if not block:
+            start_offset = handle.tell()
+            line = handle.readline()
+            if not line:
                 break
-
-    def _get_offsets(self, string, sub, offset=0):
-        """Retrieves the offsets of a given substring in a string."""
-        idx = string.find(sub, offset)
-        # yield offset as long as it's present in the string
-        while idx >= 0:
-            yield idx
-            idx = string.find(sub, idx + 1)
+            if qstart_mark not in line:
+                continue
+            # The following requirements are to make supporting BGZF compressed
+            # BLAST XML files simpler (avoids complex offset manipulations):
+            assert line.count(qstart_mark) == 1, "XML without line breaks?"
+            assert line.lstrip().startswith(qstart_mark), line
+            if qend_mark in line:
+                # Should cope with <Iteration>...</Iteration> on one long line
+                block = line
+            else:
+                # Load the rest of this block up to and including </Iteration>
+                block = [line]
+                while line and qend_mark not in line:
+                    line = handle.readline()
+                    assert qstart_mark not in line, line
+                    block.append(line)
+                assert line.rstrip().endswith(qend_mark), line
+                block = "".join(block)
+            assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
+            assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
+            #Now we have a full <Iteration>...</Iteration> block, find the ID
+            regx = re.search(re_desc, block)
+            try:
+                qstart_desc = regx.group(2)
+                qstart_id = regx.group(1)
+            except AttributeError:
+                # use the fallback values
+                assert re.search(re_desc_end, block)
+                qstart_desc = _as_bytes(self._fallback['description'])
+                qstart_id = _as_bytes(self._fallback['id'])
+            if qstart_id.startswith(blast_id_mark):
+                qstart_id = qstart_desc.split(_as_bytes(' '), 1)[0]
+            yield _bytes_to_string(qstart_id), start_offset, len(block)
+            counter += 1
 
     def _parse(self, handle):
         # overwrites SearchIndexer._parse, since we need to set the meta and
@@ -583,7 +556,6 @@ class BlastXmlIndexer(SearchIndexer):
         generator = self._parser(handle, **self._kwargs)
         generator._meta = self._meta
         generator._fallback = self._fallback
-
         return iter(generator).next()
 
     def get_raw(self, offset):
@@ -612,7 +584,6 @@ class BlastXmlIndexer(SearchIndexer):
 
 
 class _BlastXmlGenerator(XMLGenerator):
-
     """Event-based XML Generator."""
 
     def __init__(self, out, encoding='utf-8', indent=" ", increment=2):
@@ -704,7 +675,6 @@ class _BlastXmlGenerator(XMLGenerator):
 
 
 class BlastXmlWriter(object):
-
     """Stream-based BLAST+ XML Writer."""
 
     def __init__(self, handle):
