@@ -23,8 +23,8 @@ use.
 """
 # For with statement in Python 2.5
 from __future__ import with_statement
+import codecs
 import os
-import sys
 import contextlib
 import StringIO
 import itertools
@@ -75,8 +75,7 @@ def as_handle(handleish, mode='r', **kwargs):
     >>> fp.close()
     """
     if isinstance(handleish, basestring):
-        if sys.version_info[0] < 3:
-            import codecs
+        if 'encoding' in kwargs:
             with codecs.open(handleish, mode, **kwargs) as fp:
                 yield fp
         else:
