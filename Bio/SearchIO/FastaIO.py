@@ -1,4 +1,4 @@
-# Adapted from Bio.AlignIO.FastIO copyright 2008-2011 by Peter Cock.
+# Adapted from Bio.AlignIO.FastaIO copyright 2008-2011 by Peter Cock.
 # Copyright 2012 by Wibowo Arindrarto.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
@@ -30,7 +30,7 @@ Supported Formats
 
 Bio.SearchIO.FastaIO supports parsing and indexing FASTA outputs triggered by
 the -m 10 flag. Other formats that mimic other programs (e.g. the BLAST tabular
-format using the -m 8 flag) may be parseable but using SearchIO's other parser
+format using the -m 8 flag) may be parseable but using SearchIO's other parsers
 (in this case, using the 'blast-tab' parser).
 
 
@@ -241,8 +241,7 @@ def _extract_alignment(parsed_hsp):
 
 
 class FastaM10Parser(object):
-
-    """Parser for the Fasta -m10 output."""
+    """Parser for Bill Pearson's FASTA suite's -m 10 output."""
 
     def __init__(self, handle, __parse_hit_table=False):
         self.handle = UndoHandle(handle)
@@ -486,8 +485,7 @@ class FastaM10Parser(object):
 
 
 class FastaM10Indexer(SearchIndexer):
-
-    """Indexer class for FASTA m10 output."""
+    """Indexer class for Bill Pearson's FASTA suite's -m 10 output."""
 
     _parser = FastaM10Parser
 
