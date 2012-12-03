@@ -505,7 +505,7 @@ def index_db(index_filename, filenames=None, format=None,
 
     The `index_db` function is similar to `index` in that it indexes the start
     position of all queries from search output files. The main difference is
-    instead of storing these indices in-memory, they are written into a flat
+    instead of storing these indices in-memory, they are written to disk as an
     SQLite database file. This allows the indices to persist between Python
     sessions. This enables access to any queries in the file without any
     indexing overhead, provided it has been indexed at least once.
@@ -528,6 +528,12 @@ def index_db(index_filename, filenames=None, format=None,
     ['33211', '33212', '33213', 'gi|156630997:105-1160', ..., 'gi|53729353:216-1313']
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
+
+    One common example where this is helpful is if you had a large set of
+    query sequences (say ten thousand) which you split into ten query files
+    of one thousand sequences each in order to run as ten separate BLAST jobs
+    on a cluster. You could use `index_db` to index the ten BLAST output
+    files together for seamless access to all the results as one dictionary.
 
     Note that ':memory:' rather than an index filename tells SQLite to hold
     the index database in memory. This is useful for quick tests, but using
