@@ -64,4 +64,3 @@ info_content = summary_align.information_content(5, 30,
                                                  freq_table_info)
 
 print "relative info content:", info_content
-

@@ -142,11 +142,10 @@ if __name__=="__main__":
             continue
         try:
             value=mmcif_dict[entry]
-            if type(value)==type([]):
+            if isinstance(value, list):
                 for item in value:
                     print item
             else:
                 print value
         except KeyError:
             print "No such key found."
-

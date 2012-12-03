@@ -972,5 +972,3 @@ class DictionaryBuilder(object):
             t = i.strip().split(' ', 1)
             suppliersdict[t[0]] = (t[1], [])
         return
-
-    

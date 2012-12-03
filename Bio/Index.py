@@ -60,7 +60,7 @@ class _ShelveIndex(dict):
                               % (version, self.__version))
             
     def __del__(self):
-        if self.__dict__.has_key('data'):
+        if 'data' in self.__dict__:
             self.data.close()
 
 class _InMemoryIndex(dict):

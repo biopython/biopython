@@ -61,7 +61,8 @@ def qblast(program, database, sequence,
     http://www.ncbi.nlm.nih.gov/BLAST/blast_overview.html
 
     """
-    import urllib, urllib2
+    import urllib
+    import urllib2
     import time
 
     assert program in ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx']
@@ -243,5 +244,3 @@ def _parse_qblast_ref_page(handle):
     except ValueError:
         raise ValueError("A non-integer RTOE found in " \
                          +"the 'please wait' page, %s" % repr(rtoe))
-
- 

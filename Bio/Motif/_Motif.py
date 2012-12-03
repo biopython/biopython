@@ -554,7 +554,7 @@ class Motif(object):
                 self.counts[k].append(v)
             self.length+=1
         self.set_mask("*"*self.length)
-        if make_instances==True:
+        if make_instances is True:
             self.make_instances_from_counts()
         return self
         
@@ -582,7 +582,7 @@ class Motif(object):
         l = len(self.counts[letters[0]])
         self.length=l
         self.set_mask("*"*l)
-        if make_instances==True:
+        if make_instances is True:
             self.make_instances_from_counts()
         return self
         

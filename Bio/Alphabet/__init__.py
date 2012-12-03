@@ -400,4 +400,3 @@ def _verify_alphabet(sequence):
         if letter not in letters:
             return False
     return True
-

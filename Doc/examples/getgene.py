@@ -29,10 +29,10 @@
     db_index.Get_OS_OC_GN('EFTU_ECOLI')
 """    
     
-
-
-import string, re
-import os, sys
+import os
+import re
+import string
+import sys
 import gdbm
 
 class DB_Index:
@@ -262,6 +262,3 @@ if __name__ == '__main__':
     for id in ids:
         #print db_index.Get(id)
         print func(id)
-        
-
-

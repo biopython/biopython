@@ -1,4 +1,5 @@
 # Copyright 1999 by Jeffrey Chang.  All rights reserved.
+# Copyright 2009-2012 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -16,13 +17,33 @@ StringHandle   Wraps a file object around a string.  This is now DEPRECATED,
 SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
                to be removed in a future release of Biopython.
 
+Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
+files are also defined under Bio.File but these are not intended for direct
+use.
 """
 # For with statement in Python 2.5
 from __future__ import with_statement
-import sys
+import codecs
+import os
 import contextlib
 import StringIO
+import itertools
 
+try:
+    from collections import UserDict as _dict_base
+except ImportError:
+    from UserDict import DictMixin as _dict_base
+
+try:
+    from sqlite3 import dbapi2 as _sqlite
+    from sqlite3 import IntegrityError as _IntegrityError
+    from sqlite3 import OperationalError as _OperationalError
+except ImportError:
+    #Not present on Jython, but should be included in Python 2.5
+    #or later (unless compiled from source without its dependencies)
+    #Still want to offer in-memory indexing.
+    _sqlite = None
+    pass
 
 @contextlib.contextmanager
 def as_handle(handleish, mode='r', **kwargs):
@@ -54,8 +75,7 @@ def as_handle(handleish, mode='r', **kwargs):
     >>> fp.close()
     """
     if isinstance(handleish, basestring):
-        if 'encoding' in kwargs and sys.version_info[0] < 3:
-            import codecs
+        if 'encoding' in kwargs:
             with codecs.open(handleish, mode, **kwargs) as fp:
                 yield fp
         else:
@@ -205,3 +225,490 @@ else:
             return str
 
 
+#The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO
+#for indexing
+
+class _IndexedSeqFileProxy(object):
+    """Base class for file format specific random access (PRIVATE).
+
+    This is subclasses in both Bio.SeqIO for indexing as SeqRecord
+    objects, and in Bio.SearchIO for indexing QueryResult objects.
+
+    Subclasses for each file format should define '__iter__', 'get'
+    and optionally 'get_raw' methods.
+    """
+
+    def __iter__(self):
+        """Returns (identifier, offset, length in bytes) tuples.
+
+        The length can be zero where it is not implemented or not
+        possible for a particular file format.
+        """
+        raise NotImplementedError("Subclass should implement this")
+
+    def get(self, offset):
+        """Returns parsed object for this entry."""
+        #Most file formats with self contained records can be handled by
+        #parsing StringIO(_bytes_to_string(self.get_raw(offset)))
+        raise NotImplementedError("Subclass should implement this")
+
+    def get_raw(self, offset):
+        """Returns bytes string (if implemented for this file format)."""
+        #Should be done by each sub-class (if possible)
+        raise NotImplementedError("Not available for this file format.")
+
+
+class _IndexedSeqFileDict(_dict_base):
+    """Read only dictionary interface to a sequential record file.
+
+    This code is used in both Bio.SeqIO for indexing as SeqRecord
+    objects, and in Bio.SearchIO for indexing QueryResult objects.
+
+    Keeps the keys and associated file offsets in memory, reads the file
+    to access entries as objects parsing them on demand. This approach
+    is memory limited, but will work even with millions of records.
+
+    Note duplicate keys are not allowed. If this happens, a ValueError
+    exception is raised.
+
+    As used in Bio.SeqIO, by default the SeqRecord's id string is used
+    as the dictionary key. In Bio.SearchIO, the query's id string is
+    used. This can be changed by suppling an optional key_function,
+    a callback function which will be given the record id and must
+    return the desired key. For example, this allows you to parse
+    NCBI style FASTA identifiers, and extract the GI number to use
+    as the dictionary key.
+
+    Note that this dictionary is essentially read only. You cannot
+    add or change values, pop values, nor clear the dictionary.
+    """
+    def __init__(self, random_access_proxy, key_function,
+                 repr, obj_repr):
+        #Use key_function=None for default value
+        self._proxy = random_access_proxy
+        self._key_function = key_function
+        self._repr = repr
+        self._obj_repr = obj_repr
+        if key_function:
+            offset_iter = (
+                (key_function(k), o, l) for (k, o, l) in random_access_proxy)
+        else:
+            offset_iter = random_access_proxy
+        offsets = {}
+        for key, offset, length in offset_iter:
+            #Note - we don't store the length because I want to minimise the
+            #memory requirements. With the SQLite backend the length is kept
+            #and is used to speed up the get_raw method (by about 3 times).
+            #The length should be provided by all the current backends except
+            #SFF where there is an existing Roche index we can reuse (very fast
+            #but lacks the record lengths)
+            #assert length or format in ["sff", "sff-trim"], \
+            #       "%s at offset %i given length %r (%s format %s)" \
+            #       % (key, offset, length, filename, format)
+            if key in offsets:
+                self._proxy._handle.close()
+                raise ValueError("Duplicate key '%s'" % key)
+            else:
+                offsets[key] = offset
+        self._offsets = offsets
+
+    def __repr__(self):
+        return self._repr
+
+    def __str__(self):
+        #TODO - How best to handle the __str__ for SeqIO and SearchIO? 
+        if self:
+            return "{%r : %s(...), ...}" % (self.keys()[0], self._obj_repr)
+        else:
+            return "{}"
+
+    def __contains__(self, key):
+        return key in self._offsets
+
+    def __len__(self):
+        """How many records are there?"""
+        return len(self._offsets)
+
+    if hasattr(dict, "iteritems"):
+        #Python 2, use iteritems but not items etc
+        def values(self):
+            """Would be a list of the SeqRecord objects, but not implemented.
+
+            In general you can be indexing very very large files, with millions
+            of sequences. Loading all these into memory at once as SeqRecord
+            objects would (probably) use up all the RAM. Therefore we simply
+            don't support this dictionary method.
+            """
+            raise NotImplementedError("Due to memory concerns, when indexing a "
+                                      "sequence file you cannot access all the "
+                                      "records at once.")
+
+        def items(self):
+            """Would be a list of the (key, SeqRecord) tuples, but not implemented.
+
+            In general you can be indexing very very large files, with millions
+            of sequences. Loading all these into memory at once as SeqRecord
+            objects would (probably) use up all the RAM. Therefore we simply
+            don't support this dictionary method.
+            """
+            raise NotImplementedError("Due to memory concerns, when indexing a "
+                                      "sequence file you cannot access all the "
+                                      "records at once.")
+
+        def keys(self):
+            """Return a list of all the keys (SeqRecord identifiers)."""
+            #TODO - Stick a warning in here for large lists? Or just refuse?
+            return self._offsets.keys()
+
+        def itervalues(self):
+            """Iterate over the SeqRecord) items."""
+            for key in self.__iter__():
+                yield self.__getitem__(key)
+
+        def iteritems(self):
+            """Iterate over the (key, SeqRecord) items."""
+            for key in self.__iter__():
+                yield key, self.__getitem__(key)
+
+        def iterkeys(self):
+            """Iterate over the keys."""
+            return self.__iter__()
+
+    else:
+        #Python 3 - define items and values as iterators
+        def items(self):
+            """Iterate over the (key, SeqRecord) items."""
+            for key in self.__iter__():
+                yield key, self.__getitem__(key)
+
+        def values(self):
+            """Iterate over the SeqRecord items."""
+            for key in self.__iter__():
+                yield self.__getitem__(key)
+
+        def keys(self):
+            """Iterate over the keys."""
+            return self.__iter__()
+
+    def __iter__(self):
+        """Iterate over the keys."""
+        return iter(self._offsets)
+
+    def __getitem__(self, key):
+        """x.__getitem__(y) <==> x[y]"""
+        #Pass the offset to the proxy
+        record = self._proxy.get(self._offsets[key])
+        if self._key_function:
+            key2 = self._key_function(record.id)
+        else:
+            key2 = record.id
+        if key != key2:
+            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+        return record
+
+    def get(self, k, d=None):
+        """D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None."""
+        try:
+            return self.__getitem__(k)
+        except KeyError:
+            return d
+
+    def get_raw(self, key):
+        """Similar to the get method, but returns the record as a raw string.
+
+        If the key is not found, a KeyError exception is raised.
+
+        Note that on Python 3 a bytes string is returned, not a typical
+        unicode string.
+
+        NOTE - This functionality is not supported for every file format.
+        """
+        #Pass the offset to the proxy
+        return self._proxy.get_raw(self._offsets[key])
+
+    def __setitem__(self, key, value):
+        """Would allow setting or replacing records, but not implemented."""
+        raise NotImplementedError("An indexed a sequence file is read only.")
+
+    def update(self, *args, **kwargs):
+        """Would allow adding more values, but not implemented."""
+        raise NotImplementedError("An indexed a sequence file is read only.")
+
+    def pop(self, key, default=None):
+        """Would remove specified record, but not implemented."""
+        raise NotImplementedError("An indexed a sequence file is read only.")
+
+    def popitem(self):
+        """Would remove and return a SeqRecord, but not implemented."""
+        raise NotImplementedError("An indexed a sequence file is read only.")
+
+    def clear(self):
+        """Would clear dictionary, but not implemented."""
+        raise NotImplementedError("An indexed a sequence file is read only.")
+
+    def fromkeys(self, keys, value=None):
+        """A dictionary method which we don't implement."""
+        raise NotImplementedError("An indexed a sequence file doesn't "
+                                  "support this.")
+
+    def copy(self):
+        """A dictionary method which we don't implement."""
+        raise NotImplementedError("An indexed a sequence file doesn't "
+                                  "support this.")
+
+class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
+    """Read only dictionary interface to many sequential record files.
+
+    This code is used in both Bio.SeqIO for indexing as SeqRecord
+    objects, and in Bio.SearchIO for indexing QueryResult objects.
+
+    Keeps the keys, file-numbers and offsets in an SQLite database. To access
+    a record by key, reads from the offset in the appropriate file and then
+    parses the record into an object.
+
+    There are OS limits on the number of files that can be open at once,
+    so a pool are kept. If a record is required from a closed file, then
+    one of the open handles is closed first.
+    """
+    def __init__(self, index_filename, filenames,
+                 proxy_factory, format,
+                 key_function, repr, max_open=10):
+        self._proxy_factory = proxy_factory
+        self._repr = repr
+        random_access_proxies = {}
+        #TODO? - Don't keep filename list in memory (just in DB)?
+        #Should save a chunk of memory if dealing with 1000s of files.
+        #Furthermore could compare a generator to the DB on reloading
+        #(no need to turn it into a list)
+        if not _sqlite:
+            # Hack for Jython (of if Python is compiled without it)
+            from Bio import MissingPythonDependencyError
+            raise MissingPythonDependencyError("Requires sqlite3, which is "
+                                               "included Python 2.5+")
+        if filenames is not None:
+            filenames = list(filenames)  # In case it was a generator
+        if os.path.isfile(index_filename):
+            #Reuse the index.
+            con = _sqlite.connect(index_filename)
+            self._con = con
+            #Check the count...
+            try:
+                count, = con.execute(
+                    "SELECT value FROM meta_data WHERE key=?;",
+                    ("count",)).fetchone()
+                self._length = int(count)
+                if self._length == -1:
+                    con.close()
+                    raise ValueError("Unfinished/partial database")
+                count, = con.execute(
+                    "SELECT COUNT(key) FROM offset_data;").fetchone()
+                if self._length != int(count):
+                    con.close()
+                    raise ValueError("Corrupt database? %i entries not %i"
+                                     % (int(count), self._length))
+                self._format, = con.execute(
+                    "SELECT value FROM meta_data WHERE key=?;",
+                                           ("format",)).fetchone()
+                if format and format != self._format:
+                    con.close()
+                    raise ValueError("Index file says format %s, not %s"
+                                     % (self._format, format))
+                self._filenames = [row[0] for row in
+                                   con.execute("SELECT name FROM file_data "
+                                               "ORDER BY file_number;").fetchall()]
+                if filenames and len(filenames) != len(self._filenames):
+                    con.close()
+                    raise ValueError("Index file says %i files, not %i"
+                                     % (len(self._filenames), len(filenames)))
+                if filenames and filenames != self._filenames:
+                    con.close()
+                    raise ValueError("Index file has different filenames")
+            except _OperationalError, err:
+                con.close()
+                raise ValueError("Not a Biopython index database? %s" % err)
+            #Now we have the format (from the DB if not given to us),
+            if not proxy_factory(self._format):
+                con.close()
+                raise ValueError("Unsupported format '%s'" % self._format)
+        else:
+            self._filenames = filenames
+            self._format = format
+            if not format or not filenames:
+                raise ValueError("Filenames to index and format required")
+            if not proxy_factory(format):
+                raise ValueError("Unsupported format '%s'" % format)
+            #Create the index
+            con = _sqlite.connect(index_filename)
+            self._con = con
+            #print "Creating index"
+            # Sqlite PRAGMA settings for speed
+            con.execute("PRAGMA synchronous=OFF")
+            con.execute("PRAGMA locking_mode=EXCLUSIVE")
+            #Don't index the key column until the end (faster)
+            #con.execute("CREATE TABLE offset_data (key TEXT PRIMARY KEY, "
+            # "offset INTEGER);")
+            con.execute("CREATE TABLE meta_data (key TEXT, value TEXT);")
+            con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                        ("count", -1))
+            con.execute("INSERT INTO meta_data (key, value) VALUES (?,?);",
+                        ("format", format))
+            #TODO - Record the alphabet?
+            #TODO - Record the file size and modified date?
+            con.execute(
+                "CREATE TABLE file_data (file_number INTEGER, name TEXT);")
+            con.execute("CREATE TABLE offset_data (key TEXT, file_number INTEGER, offset INTEGER, length INTEGER);")
+            count = 0
+            for i, filename in enumerate(filenames):
+                con.execute(
+                    "INSERT INTO file_data (file_number, name) VALUES (?,?);",
+                    (i, filename))
+                random_access_proxy = proxy_factory(format, filename)
+                if key_function:
+                    offset_iter = ((key_function(
+                        k), i, o, l) for (k, o, l) in random_access_proxy)
+                else:
+                    offset_iter = (
+                        (k, i, o, l) for (k, o, l) in random_access_proxy)
+                while True:
+                    batch = list(itertools.islice(offset_iter, 100))
+                    if not batch:
+                        break
+                    #print "Inserting batch of %i offsets, %s ... %s" \
+                    # % (len(batch), batch[0][0], batch[-1][0])
+                    con.executemany(
+                        "INSERT INTO offset_data (key,file_number,offset,length) VALUES (?,?,?,?);",
+                        batch)
+                    con.commit()
+                    count += len(batch)
+                if len(random_access_proxies) < max_open:
+                    random_access_proxies[i] = random_access_proxy
+                else:
+                    random_access_proxy._handle.close()
+            self._length = count
+            #print "About to index %i entries" % count
+            try:
+                con.execute("CREATE UNIQUE INDEX IF NOT EXISTS "
+                            "key_index ON offset_data(key);")
+            except _IntegrityError, err:
+                self._proxies = random_access_proxies
+                self.close()
+                con.close()
+                raise ValueError("Duplicate key? %s" % err)
+            con.execute("PRAGMA locking_mode=NORMAL")
+            con.execute("UPDATE meta_data SET value = ? WHERE key = ?;",
+                        (count, "count"))
+            con.commit()
+            #print "Index created"
+        self._proxies = random_access_proxies
+        self._max_open = max_open
+        self._index_filename = index_filename
+        self._key_function = key_function
+
+    def __repr__(self):
+        return self._repr
+
+    def __contains__(self, key):
+        return bool(
+            self._con.execute("SELECT key FROM offset_data WHERE key=?;",
+                   (key,)).fetchone())
+
+    def __len__(self):
+        """How many records are there?"""
+        return self._length
+        #return self._con.execute("SELECT COUNT(key) FROM offset_data;").fetchone()[0]
+
+    def __iter__(self):
+        """Iterate over the keys."""
+        for row in self._con.execute("SELECT key FROM offset_data;"):
+            yield str(row[0])
+
+    if hasattr(dict, "iteritems"):
+        #Python 2, use iteritems but not items etc
+        #Just need to override this...
+        def keys(self):
+            """Return a list of all the keys (SeqRecord identifiers)."""
+            return [str(row[0]) for row in
+                    self._con.execute("SELECT key FROM offset_data;").fetchall()]
+
+    def __getitem__(self, key):
+        """x.__getitem__(y) <==> x[y]"""
+        #Pass the offset to the proxy
+        row = self._con.execute(
+            "SELECT file_number, offset FROM offset_data WHERE key=?;",
+            (key,)).fetchone()
+        if not row:
+            raise KeyError
+        file_number, offset = row
+        proxies = self._proxies
+        if file_number in proxies:
+            record = proxies[file_number].get(offset)
+        else:
+            if len(proxies) >= self._max_open:
+                #Close an old handle...
+                proxies.popitem()[1]._handle.close()
+            #Open a new handle...
+            proxy = self._proxy_factory(self._format, self._filenames[file_number])
+            record = proxy.get(offset)
+            proxies[file_number] = proxy
+        if self._key_function:
+            key2 = self._key_function(record.id)
+        else:
+            key2 = record.id
+        if key != key2:
+            raise ValueError("Key did not match (%s vs %s)" % (key, key2))
+        return record
+
+    def get(self, k, d=None):
+        """D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None."""
+        try:
+            return self.__getitem__(k)
+        except KeyError:
+            return d
+
+    def get_raw(self, key):
+        """Similar to the get method, but returns the record as a raw string.
+
+        If the key is not found, a KeyError exception is raised.
+
+        Note that on Python 3 a bytes string is returned, not a typical
+        unicode string.
+
+        NOTE - This functionality is not supported for every file format.
+        """
+        #Pass the offset to the proxy
+        row = self._con.execute(
+            "SELECT file_number, offset, length FROM offset_data WHERE key=?;",
+            (key,)).fetchone()
+        if not row:
+            raise KeyError
+        file_number, offset, length = row
+        proxies = self._proxies
+        if file_number in proxies:
+            if length:
+                #Shortcut if we have the length
+                h = proxies[file_number]._handle
+                h.seek(offset)
+                return h.read(length)
+            else:
+                return proxies[file_number].get_raw(offset)
+        else:
+            #This code is duplicated from __getitem__ to avoid a function call
+            if len(proxies) >= self._max_open:
+                #Close an old handle...
+                proxies.popitem()[1]._handle.close()
+            #Open a new handle...
+            proxy = self._proxy_factory(self._format, self._filenames[file_number])
+            proxies[file_number] = proxy
+            if length:
+                #Shortcut if we have the length
+                h = proxy._handle
+                h.seek(offset)
+                return h.read(length)
+            else:
+                return proxy.get_raw(offset)
+
+    def close(self):
+        """Close any open file handles."""
+        proxies = self._proxies
+        while proxies:
+            proxies.popitem()[1]._handle.close()

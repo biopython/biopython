@@ -50,8 +50,3 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
             break
 
         cur_position += seq_length
-
-    
-        
-        
-    

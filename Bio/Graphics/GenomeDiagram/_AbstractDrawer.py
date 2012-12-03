@@ -457,9 +457,9 @@ class AbstractDrawer(object):
 
             Set the size of the drawing
         """
-        if type(pagesize) == type('a'):     # A string, so translate
+        if isinstance(pagesize, str):     # A string, so translate
             pagesize = page_sizes(pagesize)
-        elif type(pagesize) == type((1,2)): # A tuple, so don't translate
+        elif isinstance(pagesize, tuple): # A tuple, so don't translate
             pagesize = pagesize
         else:
             raise ValueError("Page size %s not recognised" % pagesize)

@@ -1152,4 +1152,3 @@ class BranchColor(object):
     def __str__(self):
         """Show the color's RGB values."""
         return "(%d, %d, %d)" % (self.red, self.green, self.blue)
-

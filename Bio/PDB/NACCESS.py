@@ -5,7 +5,8 @@
 
 # NACCESS interface adapted from Bio/PDB/DSSP.py
 
-import os, tempfile
+import os
+import tempfile
 from Bio.PDB.PDBIO import PDBIO
 from Bio.PDB.AbstractPropertyMap import AbstractResiduePropertyMap, AbstractAtomPropertyMap
 
@@ -181,4 +182,3 @@ if __name__=="__main__":
     n = NACCESS(model, sys.argv[1])
     for e in n.get_iterator():
         print e
-

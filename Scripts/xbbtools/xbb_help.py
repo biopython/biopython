@@ -64,5 +64,3 @@ as part of this package.\n
                 N: GATC
 
                 """, 'small')
-
-        

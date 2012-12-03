@@ -242,7 +242,7 @@ class GenePopController(object):
         opts["BatchNumber"]=batches
         opts["BatchLength"]=iterations
         if enum_test != None:
-            if enum_test == True:
+            if enum_test is True:
                 opts["HWtests"]="Enumeration"
             else:
                 opts["HWtests"]="MCMC"
@@ -864,5 +864,3 @@ class GenePopController(object):
            the individual name has to be the sample coordinates.
         """
         return self._calc_ibd(fname, 6, stat, scale, min_dist)
-
-

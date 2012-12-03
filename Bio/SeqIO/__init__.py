@@ -796,8 +796,16 @@ def index(filename, format, alphabet=None, key_function=None):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index  # Lazy import
-    return _index._IndexedSeqFileDict(filename, format, alphabet, key_function)
+    from _index import _FormatToRandomAccess # Lazy import
+    from Bio.File import _IndexedSeqFileDict
+    try:
+        proxy_class = _FormatToRandomAccess[format]
+    except KeyError:
+        raise ValueError("Unsupported format %r" % format)
+    repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
+        % (filename, format, alphabet, key_function)
+    return _IndexedSeqFileDict(proxy_class(filename, format, alphabet),
+                               key_function, repr, "SeqRecord")
 
 
 def index_db(index_filename, filenames=None, format=None, alphabet=None,
@@ -866,9 +874,19 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    import _index  # Lazy import
-    return _index._SQLiteManySeqFilesDict(index_filename, filenames, format,
-                                          alphabet, key_function)
+    from _index import _FormatToRandomAccess  # Lazy import
+    from Bio.File import _SQLiteManySeqFilesDict
+    repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
+               % (index_filename, filenames, format, alphabet, key_function)
+    def proxy_factory(format, filename=None):
+        """Given a filename returns proxy object, else boolean if format OK."""
+        if filename:
+            return _FormatToRandomAccess[format](filename, format, alphabet)
+        else:
+            return format in _FormatToRandomAccess
+    return _SQLiteManySeqFilesDict(index_filename, filenames,
+                                   proxy_factory, format,
+                                   key_function, repr)
 
 
 def convert(in_file, in_format, out_file, out_format, alphabet=None):

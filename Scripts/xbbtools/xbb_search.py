@@ -4,8 +4,10 @@
 # thomas@cbs.dtu.dk, http://www.cbs.dtu.dk/thomas
 # File: xbb_search.py
 
+import commands
+import os
 import re
-import os, sys, commands
+import sys
 sys.path.insert(0, '.')
 from Tkinter import *
 from tkColorChooser import askcolor
@@ -166,6 +168,3 @@ if __name__ == '__main__':
     xtest = XDNAsearch(seq = seq, master = win)
 
     win.mainloop()
-    
-    
-        

@@ -655,4 +655,3 @@ class HiddenMarkovModel(object):
                 log_prob[key] = neg_inf
 
         return log_prob
-    

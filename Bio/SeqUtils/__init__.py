@@ -164,7 +164,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
 
 def molecular_weight(seq):
     """Calculate the molecular weight of a DNA sequence."""
-    if type(seq) == type(''): seq = Seq(seq, IUPAC.unambiguous_dna)
+    if isinstance(seq, str): seq = Seq(seq, IUPAC.unambiguous_dna)
     weight_table = IUPACData.unambiguous_dna_weights
     return sum(weight_table[x] for x in seq)
 

@@ -473,4 +473,3 @@ if __name__=="__main__":
         print pp.get_sequence()
     for pp in ppb.build_peptides(s[0]["A"]):
         print pp.get_sequence()
-

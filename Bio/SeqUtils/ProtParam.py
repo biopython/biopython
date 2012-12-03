@@ -291,4 +291,3 @@ class ProteinAnalysis(object):
         sheet = sum([aa_percentages[r] for r in 'EMAL'])
 
         return helix, turn, sheet
-

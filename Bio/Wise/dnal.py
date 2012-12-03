@@ -121,7 +121,8 @@ def main():
     print "coords: %s" % stats.coords
 
 def _test(*args, **keywds):
-    import doctest, sys
+    import doctest
+    import sys
     doctest.testmod(sys.modules[__name__], *args, **keywds)
 
 if __name__ == "__main__":

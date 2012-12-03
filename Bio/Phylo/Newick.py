@@ -29,4 +29,3 @@ class Clade(BaseTree.Clade):
         BaseTree.Clade.__init__(self, branch_length=branch_length,
                 name=name, clades=clades, confidence=confidence)
         self.comment = comment
-

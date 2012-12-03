@@ -195,7 +195,7 @@ class SeqFrame(wx.Frame):
         menu.Append(ID_EXIT, "E&xit", "Terminate the program")
 
         menuBar = wx.MenuBar()
-        menuBar.Append(menu, "&File");
+        menuBar.Append(menu, "&File")
         self.SetMenuBar(menuBar)
 
         params_panel = ParamsPanel(self, -1)

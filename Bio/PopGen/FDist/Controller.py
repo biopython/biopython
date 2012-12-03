@@ -315,4 +315,3 @@ class FDistController(object):
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
         return result
-

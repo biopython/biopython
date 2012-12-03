@@ -6,8 +6,9 @@
 __version__ = "$Revision: 1.11 $"
 
 import cStringIO
-import doctest, unittest
+import doctest
 import sys
+import unittest
 
 if 'requires_wise' in sys.modules:
     del sys.modules['requires_wise']

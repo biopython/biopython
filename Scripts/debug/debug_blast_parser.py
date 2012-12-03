@@ -5,8 +5,9 @@
 # - Let user specify a sequence file to BLAST on the net.
 # - Script should help debug connection to NCBI website.
 
-import os, sys
+import os
 import re
+import sys
 import getopt
 import traceback
 
@@ -242,4 +243,3 @@ if __name__ == '__main__':
         print >>sys.stderr, "-p and -n not implemented yet"
         sys.exit(-1)
     test_blast_output(TESTFILE)
-        

@@ -188,7 +188,3 @@ if __name__=="__main__":
     io.set_structure(s2)
     io.save(fp, write_end=1)
     fp.close()
-
-
-
-

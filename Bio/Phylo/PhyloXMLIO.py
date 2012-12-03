@@ -856,4 +856,3 @@ class Writer(object):
     symbol = _handle_simple('symbol')
     synonym = _handle_simple('synonym')
     type = _handle_simple('type')
-

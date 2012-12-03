@@ -167,7 +167,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
                 ( self.context == 'seq_info' ) ):
                 try:
                     contents = self.queue[ self.master_key ][ self.key_waiting ]
-                    if( type( contents ) == type( [] ) ):
+                    if isinstance(contents, list):
                         contents.append( text )
                     else:
                         self.queue[ self.master_key ][ self.key_waiting ] = \
@@ -196,10 +196,10 @@ class UniGeneParser( sgmllib.SGMLParser ):
         indent = '    '
         for j in range( 0, level ):
             indent = indent + '    '
-        if( type( item ) == type( '' ) ):
+        if isinstance(item, str):
             if( item != '' ):
                 print '%s%s' % ( indent, item )
-        elif( type( item ) == type([])):
+        elif isinstance(item, list):
             for subitem in item:
                 self.print_item( subitem, level + 1 )
         elif( isinstance( item, UserDict.UserDict ) ):
@@ -222,5 +222,3 @@ if( __name__ == '__main__' ):
     unigene_parser = UniGeneParser()
     unigene_parser.parse( handle )
     unigene_parser.print_tags()
-
-

@@ -196,6 +196,7 @@ from __future__ import with_statement
 
 __docformat__ = 'epytext en'
 
+import sys
 import warnings
 
 from Bio import BiopythonExperimentalWarning
@@ -299,8 +300,13 @@ def parse(handle, format=None, **kwargs):
     # get the iterator object and do error checking
     iterator = get_processor(format, _ITERATOR_MAP)
 
+    # HACK: force BLAST XML decoding to use utf-8
+    handle_kwargs = {}
+    if format == 'blast-xml' and sys.version_info[0] > 2:
+        handle_kwargs['encoding'] = 'utf-8'
+
     # and start iterating
-    with as_handle(handle, 'rU') as source_file:
+    with as_handle(handle, 'rU', **handle_kwargs) as source_file:
         generator = iterator(source_file, **kwargs)
 
         for qresult in generator:
@@ -413,11 +419,11 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
     return qdict
 
 
-def index(handle, format=None, key_function=None, **kwargs):
+def index(filename, format=None, key_function=None, **kwargs):
     """Indexes a search output file and returns a dictionary-like object.
 
     Arguments:
-    handle -- Handle to the file, or the filename as a string.
+    filename -- string giving name of file to be indexed
     format -- Lower case string denoting one of the supported formats.
     key_function -- Optional callback function which when given a
                     QueryResult should return a unique key for the dictionary.
@@ -442,6 +448,16 @@ def index(handle, format=None, key_function=None, **kwargs):
     >>> search_idx['gi|195230749:301-1383']
     QueryResult(id='gi|195230749:301-1383', 5 hits)
 
+    If the file is BGZF compressed, this is detected automatically. Ordinary
+    GZIP files are not supported:
+
+    >>> from Bio import SearchIO
+    >>> search_idx = SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml')
+    >>> search_idx
+    SearchIO.index('Blast/wnts.xml.bgz', 'blast-xml', key_function=None)
+    >>> search_idx['gi|195230749:301-1383']
+    QueryResult(id='gi|195230749:301-1383', 5 hits)
+
     You can supply a custom callback function to alter the default identifier
     string. This function should accept as its input the QueryResult ID string
     and return a modified version of it.
@@ -460,12 +476,15 @@ def index(handle, format=None, key_function=None, **kwargs):
     It only changes the key value used to retrieve the associated QueryResult.
 
     """
-    # check if handle type is correct
-    if not isinstance(handle, basestring):
-        raise TypeError("Handle must be a string of filename")
+    if not isinstance(filename, basestring):
+        raise TypeError("Need a filename (not a handle)")
 
-    from Bio.SearchIO._index import _IndexedSearch
-    return _IndexedSearch(handle, format, key_function, **kwargs)
+    from Bio.File import _IndexedSeqFileDict
+    proxy_class = get_processor(format, _INDEXER_MAP)
+    repr = "SearchIO.index(%r, %r, key_function=%r)" \
+        % (filename, format, key_function)
+    return _IndexedSeqFileDict(proxy_class(filename, **kwargs),
+                               key_function, repr, "QueryResult")
 
 
 def index_db(index_filename, filenames=None, format=None,
@@ -510,15 +529,30 @@ def index_db(index_filename, filenames=None, format=None,
     >>> db_idx['33212']
     QueryResult(id='33212', 44 hits)
 
+    Note that ':memory:' rather than an index filename tells SQLite to hold
+    the index database in memory. This is useful for quick tests, but using
+    the Bio.SearchIO.index(...) function instead would use less memory.
+
+    BGZF compressed files are supported, and detected automatically. Ordinary
+    GZIP compressed files are not supported.
     """
     # cast filenames to list if it's a string
     # (can we check if it's a string or a generator?)
     if isinstance(filenames, basestring):
         filenames = [filenames]
 
-    from Bio.SearchIO._index import _DbIndexedSearch
-    return _DbIndexedSearch(index_filename, filenames, format, key_function,
-            **kwargs)
+    from Bio.File import _SQLiteManySeqFilesDict
+    repr = "SearchIO.index_db(%r, filenames=%r, format=%r, key_function=%r, ...)" \
+               % (index_filename, filenames, format, key_function)
+    def proxy_factory(format, filename=None):
+        """Given a filename returns proxy object, else boolean if format OK."""
+        if filename:
+            return get_processor(format, _INDEXER_MAP)(filename, **kwargs)
+        else:
+            return format in _INDEXER_MAP
+    return _SQLiteManySeqFilesDict(index_filename, filenames,
+                                   proxy_factory, format,
+                                   key_function, repr)
 
 
 def write(qresults, handle, format=None, **kwargs):

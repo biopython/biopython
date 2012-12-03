@@ -49,5 +49,3 @@ for alignment in b_record.alignments:
             print hsp.query[0:75] + '...'
             print hsp.match[0:75] + '...'
             print hsp.sbjct[0:75] + '...'
-    
-    

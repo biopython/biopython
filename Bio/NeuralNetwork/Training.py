@@ -83,7 +83,3 @@ class ExampleManager(object):
                 self.validation_examples.append(example)
             else:
                 self.test_examples.append(example)
-        
-                
-        
-        

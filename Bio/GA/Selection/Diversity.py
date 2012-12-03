@@ -94,5 +94,3 @@ class DiversitySelection(AbstractSelection):
         # return the new population, which should have the same number
         # of individuals we started with.
         return new_population[:len(population)]
-            
-    

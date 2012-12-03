@@ -159,4 +159,3 @@ print arac(h, m, contains="RIBOSOMAL PROTEIN")   # 1
 print arac(h, m, start="foobar")                 # 0
 print arac(h, m, blank=1)                        # 0
 print arac(h, m, end="LVSVKEQ")                  # 1
-

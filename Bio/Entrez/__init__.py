@@ -68,7 +68,10 @@ parse        Parses the XML results returned by those of the above functions
 _open        Internally used function.
 
 """
-import urllib, urllib2, time, warnings
+import urllib
+import urllib2
+import time
+import warnings
 import os.path
 
 from Bio._py3k import _binary_to_string_handle
