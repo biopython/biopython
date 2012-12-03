@@ -238,6 +238,10 @@ class BgzfTests(unittest.TestCase):
         """Check random access to SamBam/ex1_header.bam"""
         self.check_random("SamBam/ex1_header.bam")
 
+    def test_random_wnts_xml(self):
+        """Check random access to Blast/wnts.xml.bgz"""
+        self.check_random("Blast/wnts.xml.bgz")
+
     def test_random_example_fastq(self):
         """Check random access to Quality/example.fastq.bgz"""
         self.check_random("Quality/example.fastq.bgz")
@@ -246,9 +250,18 @@ class BgzfTests(unittest.TestCase):
         """Check random access to GenBank/cor6_6.gb.bgz"""
         self.check_random("GenBank/cor6_6.gb.bgz")
 
+    def test_text_wnts_xml(self):
+        """Check text mode access to Blast/wnts.xml.bgz"""
+        self.check_text("Blast/wnts.xml", "Blast/wnts.xml.bgz")
+
     def test_text_example_fastq(self):
         """Check text mode access to Quality/example.fastq.bgz"""
         self.check_text("Quality/example.fastq", "Quality/example.fastq.bgz")
+
+    def test_iter_wnts_xml(self):
+        """Check iteration over Blast/wnts.xml.bgz"""
+        self.check_by_line("Blast/wnts.xml", "Blast/wnts.xml.bgz")
+        self.check_by_char("Blast/wnts.xml", "Blast/wnts.xml.bgz")
 
     def test_iter_example_fastq(self):
         """Check iteration over Quality/example.fastq.bgz"""
@@ -298,6 +311,13 @@ class BgzfTests(unittest.TestCase):
         temp_file = self.temp_file
         self.rewrite("GenBank/cor6_6.gb.bgz", temp_file)
         self.check_blocks("GenBank/cor6_6.gb.bgz", temp_file)
+
+    def test_example_wnts_xml(self):
+        """Reproduce BGZF compression for wnts.xml BLAST file"""
+        temp_file = self.temp_file
+        self.rewrite("Blast/wnts.xml.bgz", temp_file)
+        self.check_blocks("Blast/wnts.xml.bgz", temp_file)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
