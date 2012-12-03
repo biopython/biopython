@@ -329,7 +329,7 @@ class Parser(object):
                                         feature.location = SeqFeature.FeatureLocation(start, end)
                                         #self.ParsedSeqRecord.features.append(feature)
 
-            for ref_element in  element.getchildren():  
+            for ref_element in element.getchildren():  
                 if ref_element.tag == NS + 'property':
                     pass# this data cannot be fitted in a seqrecord object with a simple list. however at least ensembl and EMBL parsing can be improved to add entries in dbxrefs
             
@@ -442,7 +442,7 @@ class Parser(object):
             append_to_annotations('proteinExistence', element.attrib['type'])   
             
         def _parse_evidence(element):
-            for k, v in  element.attrib.items():
+            for k, v in element.attrib.items():
                 ann_key = k
                 append_to_annotations(ann_key, v)   
         
