@@ -733,10 +733,10 @@ class Nexus(object):
 
 
     def _set(self,options):
-        self.set=options;
+        self.set=options
 
     def _options(self,options):
-        self.options=options;
+        self.options=options
 
     def _eliminate(self,options):
         self.eliminate=options

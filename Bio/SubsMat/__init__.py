@@ -536,7 +536,8 @@ def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
    key_list_1 = sorted(mat_1)
    key_list_2 = sorted(mat_2)
    key_list = []
-   sum_ent_1 = 0.; sum_ent_2 = 0.
+   sum_ent_1 = 0.
+   sum_ent_2 = 0.
    for i in key_list_1:
       if i in key_list_2:
          key_list.append(i)
@@ -621,7 +622,8 @@ def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
    for i in alphabet:
       for j in alphabet:
          print_mat[i,j] = -999
-   diag_1 = {}; diag_2 = {}
+   diag_1 = {}
+   diag_2 = {}
    for i in alphabet:
       for j in alphabet[:alphabet.index(i)+1]:
          if i == j:
@@ -636,7 +638,8 @@ def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
             mat_2_key = [alphabet[len_alphabet-alphabet.index(key[0])-1],
                    alphabet[len_alphabet-alphabet.index(key[1])-1]]
             # print mat_2_key
-            mat_2_key.sort(); mat_2_key = tuple(mat_2_key)
+            mat_2_key.sort()
+            mat_2_key = tuple(mat_2_key)
             # print key ,"||",  mat_2_key
             print_mat[key] = mat_2[mat_2_key] 
             print_mat[(key[1],key[0])] = mat_1[key]

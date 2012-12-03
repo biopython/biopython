@@ -121,7 +121,7 @@ class SequenceLine(object):
             self._init_from_text(text)
 
     def _init_from_text(self,text):
-        parts = text.split('; ');
+        parts = text.split('; ')
         for part in parts:
             key, val = part.split("=")
             if key=='CLONE':
@@ -158,7 +158,7 @@ class ProtsimLine(object):
             self._init_from_text(text)
 
     def _init_from_text(self,text):
-        parts = text.split('; ');
+        parts = text.split('; ')
         
         for part in parts:
             key, val = part.split("=")
@@ -187,7 +187,7 @@ class STSLine(object):
             self._init_from_text(text)
 
     def _init_from_text(self,text):
-        parts = text.split(' ');
+        parts = text.split(' ')
         
         for part in parts:
             key, val = part.split("=")
