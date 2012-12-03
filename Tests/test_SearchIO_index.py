@@ -33,7 +33,8 @@ class CheckRaw(unittest.TestCase):
     def check_raw(self, filename, id, raw, **kwargs):
         """Index filename using **kwargs, check get_raw(id)==raw."""
         idx = SearchIO.index(filename, self.fmt, **kwargs)
-        self.assertEqual(_as_bytes(raw), idx.get_raw(id))
+        raw = _as_bytes(raw)
+        self.assertEqual(raw, idx.get_raw(id))
         idx._proxy._handle.close() # To silence a ResourceWarning 
 
         #Now again, but using SQLite backend
@@ -41,15 +42,16 @@ class CheckRaw(unittest.TestCase):
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
             #TODO - Fix mismatch between record length and get_raw behaviour
             raw2 = idx.get_raw(id)
-            if _as_bytes(raw) != raw2:
+            if raw != raw2:
                 print "[WARNING - %s get_raw %i vs %i bytes] " \
                     % (self.fmt, len(raw), len(raw2))
                 self.assertTrue(raw2 in raw or raw in raw2)
-            #self.assertEqual(_as_bytes(raw), idx.get_raw(id))
+            #self.assertEqual(raw, idx.get_raw(id))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
             #Do the tests again with the BGZF compressed file
+            print "[BONUS %s.bgz]" % filename
             self.check_raw(filename + ".bgz", id, raw, **kwargs)
 
 
