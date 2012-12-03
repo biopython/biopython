@@ -43,7 +43,7 @@ class CharBuffer(object):
             self.buffer=list(string)
         else:
             self.buffer=[]
-    
+
     def peek(self):
         if self.buffer:
             return self.buffer[0]
@@ -56,7 +56,7 @@ class CharBuffer(object):
             return b[0]
         else:
             return None
-                
+
     def next(self):
         if self.buffer:
             return self.buffer.pop(0)
@@ -68,14 +68,14 @@ class CharBuffer(object):
             p=self.next()
             if p is None:
                 break
-            if p not in WHITESPACE: 
+            if p not in WHITESPACE:
                 return p
         return None
 
     def skip_whitespace(self):
         while self.buffer[0] in WHITESPACE:
             self.buffer=self.buffer[1:]
-    
+
     def next_until(self,target):
         for t in target:
             try:
@@ -91,7 +91,7 @@ class CharBuffer(object):
 
     def peek_word(self,word):
         return ''.join(self.buffer[:len(word)])==word
-    
+
     def next_word(self):
         """Return the next NEXUS word from a string.
 
@@ -110,22 +110,22 @@ class CharBuffer(object):
             quoted='"'
         elif first in PUNCTUATION:                          # if it's punctuation, return immediately
             return first
-        while True:             
+        while True:
             c=self.peek()
             if c==quoted:                                      # a quote?
-                word.append(self.next())                    # store quote 
+                word.append(self.next())                    # store quote
                 if self.peek()==quoted:                        # double quote
-                    skip=self.next()                        # skip second quote 
+                    skip=self.next()                        # skip second quote
                 elif quoted:                                # second single quote ends word
                     break
             elif quoted:
                 word.append(self.next())                              # if quoted, then add anything
-            elif not c or c in PUNCTUATION or c in WHITESPACE:        # if not quoted and special character, stop 
+            elif not c or c in PUNCTUATION or c in WHITESPACE:        # if not quoted and special character, stop
                 break
             else:
                 word.append(self.next())                    # standard character
         return ''.join(word)
-                
+
     def rest(self):
         """Return the rest of the string without parsing."""
         return ''.join(self.buffer)
@@ -135,7 +135,7 @@ class StepMatrix(object):
 
     See Wheeler (1990), Cladistics 6:269-275.
     """
-    
+
     def __init__(self,symbols,gap):
         self.data={}
         self.symbols=[s for s in symbols]
@@ -157,7 +157,7 @@ class StepMatrix(object):
         self.data[x+y]+=value
 
     def sum(self):
-        return reduce(lambda x,y:x+y,self.data.values()) 
+        return reduce(lambda x,y:x+y,self.data.values())
 
     def transformation(self):
         total=self.sum()
@@ -165,7 +165,7 @@ class StepMatrix(object):
             for k in self.data:
                 self.data[k]=self.data[k]/float(total)
         return self
-    
+
     def weighting(self):
         for k in self.data:
             if self.data[k]!=0:
@@ -192,7 +192,7 @@ class StepMatrix(object):
             matrix+='\n'
         matrix+=';\n'
         return matrix
-    
+
 def safename(name,mrbayes=False):
     """Return a taxon identifier according to NEXUS standard.
 
@@ -236,15 +236,15 @@ def get_start_end(sequence, skiplist=['-','?']):
     if start==length and end==-1: # empty sequence
         return -1,-1
     else:
-        return start,end 
-    
+        return start,end
+
 def _sort_keys_by_values(p):
-    """Returns a sorted list of keys of p sorted by values of p."""     
+    """Returns a sorted list of keys of p sorted by values of p."""
     startpos=[(p[pn],pn) for pn in p if p[pn]]
     startpos.sort()
     # parenthisis added because of py3k
     return (zip(*startpos))[1]
-    
+
 def _make_unique(l):
     """Check that all values in list are unique and return a pruned and sorted list."""
     l=list(set(l))
@@ -268,14 +268,14 @@ def _compact4nexus(orig_list):
     """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
     into '2-4 6-9 13-19\\3 21' (baseindex 1, used in programs like Paup or MrBayes.).
     """
-    
+
     if not orig_list:
         return ''
     orig_list=list(set(orig_list))
     orig_list.sort()
     shortlist=[]
     clist=orig_list[:]
-    clist.append(clist[-1]+.5) # dummy value makes it easier 
+    clist.append(clist[-1]+.5) # dummy value makes it easier
     while len(clist)>1:
         step=1
         for i,x in enumerate(clist):
@@ -283,7 +283,7 @@ def _compact4nexus(orig_list):
                 continue
             elif i==1 and len(clist)>3 and clist[i+1]-x==x-clist[0]:
                 # second element, and possibly at least 3 elements to link,
-                # and the next one is in the right step 
+                # and the next one is in the right step
                 step=x-clist[0]
             else:   # pattern broke, add all values before current position to new list
                 sub=clist[:i]
@@ -303,9 +303,9 @@ def combine(matrices):
 
     combined_matrix=combine([(name1,nexus_instance1),(name2,nexus_instance2),...]
     Character sets, character partitions and taxon sets are prefixed, readjusted
-    and present in the combined matrix. 
+    and present in the combined matrix.
     """
-    
+
     if not matrices:
         return None
     name=matrices[0][0]
@@ -361,7 +361,7 @@ def combine(matrices):
                                             for (i,label) in m.charlabels.iteritems()))
         combined.nchar+=m.nchar # update nchar and ntax
         combined.ntax+=len(m_only)
-        
+
     # some prefer partitions, some charsets:
     # make separate charset for ecah initial dataset
     for c in combined.charpartitions['combined']:
@@ -371,7 +371,7 @@ def combine(matrices):
 
 def _kill_comments_and_break_lines(text):
     """Delete []-delimited comments out of a file and break into lines separated by ';'.
-    
+
     stripped_text=_kill_comments_and_break_lines(text):
     Nested and multiline comments are allowed. [ and ] symbols within single
     or double quotes are ignored, newline ends a quote, all symbols with quotes are
@@ -380,11 +380,11 @@ def _kill_comments_and_break_lines(text):
     Quotes inside special [& and [\ are treated as normal characters,
     but no nesting inside these special comments allowed (like [&   [\   ]]).
     ';' ist deleted from end of line.
-   
+
     NOTE: this function is very slow for large files, and obsolete when using C extension cnexus
     """
     contents=iter(text)
-    newtext=[] 
+    newtext=[]
     newline=[]
     quotelevel=''
     speciallevel=False
@@ -408,14 +408,14 @@ def _kill_comments_and_break_lines(text):
                 speciallevel=True
             else:
                 commlevel+=1
-        elif not quotelevel and t==']':                             # closing bracket ioutside a quote 
+        elif not quotelevel and t==']':                             # closing bracket ioutside a quote
             if speciallevel:
                 speciallevel=False
             else:
                 commlevel-=1
                 if commlevel<0:
                     raise NexusError('Nexus formatting error: unmatched ]')
-                continue 
+                continue
         if commlevel==0:                        # copy if we're not in comment
             if t==';' and not quotelevel:
                 newtext.append(''.join(newline))
@@ -434,10 +434,10 @@ def _adjust_lines(lines):
     """Adjust linebreaks to match ';', strip leading/trailing whitespace.
 
     list_of_commandlines=_adjust_lines(input_text)
-    Lines are adjusted so that no linebreaks occur within a commandline 
+    Lines are adjusted so that no linebreaks occur within a commandline
     (except matrix command line)
     """
-    formatted_lines=[] 
+    formatted_lines=[]
     for l in lines:
         #Convert line endings
         l=l.replace('\r\n','\n').replace('\r','\n').strip()
@@ -448,7 +448,7 @@ def _adjust_lines(lines):
             if l:
                 formatted_lines.append(l)
     return formatted_lines
-    
+
 def _replace_parenthesized_ambigs(seq,rev_ambig_values):
     """Replaces ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
 
@@ -465,13 +465,13 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
         ambig_code=rev_ambig_values[ambig.upper()]
         if ambig!=ambig.upper():
             ambig_code=ambig_code.lower()
-        seq=seq[:opening]+ambig_code+seq[closing+1:]        
+        seq=seq[:opening]+ambig_code+seq[closing+1:]
         opening=seq.find('(')
     return seq
 
 class Commandline(object):
     """Represent a commandline as command and options."""
-    
+
     def __init__(self, line, title):
         self.options={}
         options=[]
@@ -486,9 +486,9 @@ class Commandline(object):
         self.command = self.command.strip().lower()
         if self.command in SPECIAL_COMMANDS:   # special command that need newlines and order of options preserved
             self.options=options.strip()
-        else:    
+        else:
             if len(options) > 0:
-                try: 
+                try:
                     options = options.replace('=', ' = ').split()
                     valued_indices=[(n-1,n,n+1) for n in range(len(options)) if options[n]=='=' and n!=0 and n!=len((options))]
                     indices = []
@@ -502,7 +502,7 @@ class Commandline(object):
                         self.options[options[token].lower()] = None
                 except ValueError:
                     raise NexusError('Incorrect formatting in line: %s' % line)
-                
+
 class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
     def __init__(self,title=None):
@@ -528,8 +528,8 @@ class Nexus(object):
         self.labels=None                # left, right, no
         self.transpose=False            # whether matrix is transposed
         self.interleave=False           # whether matrix is interleaved
-        self.tokens=False               # unsupported          
-        self.eliminate=None             # unsupported 
+        self.tokens=False               # unsupported
+        self.eliminate=None             # unsupported
         self.matrix=None                # ...
         self.unknown_blocks=[]          # blocks we don't care about
         self.taxsets={}
@@ -539,13 +539,13 @@ class Nexus(object):
         self.trees=[]                   # list of Trees (instances of Tree class)
         self.translate=None             # Dict to translate taxon <-> taxon numbers
         self.structured=[]              # structured input representation
-        self.set={}                     # dict of the set command to set various options 
+        self.set={}                     # dict of the set command to set various options
         self.options={}                 # dict of the options command in the data block
         self.codonposset=None           # name of the charpartition that defines codon positions
 
         # some defaults
         self.options['gapmode']='missing'
-        
+
         if input:
             self.read(input)
         else:
@@ -626,7 +626,7 @@ class Nexus(object):
         block = Block()
         block.commandlines.append(contents)
         block.title = title
-        self.unknown_blocks.append(block)        
+        self.unknown_blocks.append(block)
 
     def _parse_nexus_block(self,title, contents):
         """Parse a known Nexus Block (PRIVATE)."""
@@ -634,14 +634,14 @@ class Nexus(object):
         self._apply_block_structure(title, contents)
         #now check for taxa,characters,data blocks. If this stuff is defined more than once
         #the later occurences will override the previous ones.
-        block=self.structured[-1] 
+        block=self.structured[-1]
         for line in block.commandlines:
             try:
                 getattr(self,'_'+line.command)(line.options)
             except AttributeError:
                 raise
                 raise NexusError('Unknown command: %s ' % line.command)
-    
+
     def _title(self,options):
         pass
 
@@ -758,7 +758,7 @@ class Nexus(object):
         #        break
         #    self.taxlabels.append(taxon)
 
-    def _check_taxlabels(self,taxon): 
+    def _check_taxlabels(self,taxon):
         """Check for presence of taxon in self.taxlabels."""
         # According to NEXUS standard, underscores shall be treated as spaces...,
         # so checking for identity is more difficult
@@ -775,7 +775,7 @@ class Nexus(object):
                 w=opts.next_word()
                 if w is None: # McClade saves and reads charlabel-lists with terminal comma?!
                     break
-                identifier=self._resolve(w,set_type=CHARSET) 
+                identifier=self._resolve(w,set_type=CHARSET)
                 state=quotestrip(opts.next_word())
                 self.charlabels[identifier]=state
                 # check for comma or end of command
@@ -804,8 +804,8 @@ class Nexus(object):
         self.matrix={}
         taxcount=0
         first_matrix_block=True
-    
-        #eliminate empty lines and leading/trailing whitespace 
+
+        #eliminate empty lines and leading/trailing whitespace
         lines=[l.strip() for l in options.split('\n') if l.strip()!='']
         lineiter=iter(lines)
         while 1:
@@ -893,7 +893,7 @@ class Nexus(object):
         while True:
             try:
                 # get id and state
-                identifier=int(opts.next_word()) 
+                identifier=int(opts.next_word())
                 label=quotestrip(opts.next_word())
                 self.translate[identifier]=label
                 # check for comma or end of command
@@ -910,7 +910,7 @@ class Nexus(object):
     def _utree(self,options):
         """Some software (clustalx) uses 'utree' to denote an unrooted tree."""
         self._tree(options)
-        
+
     def _tree(self,options):
         opts=CharBuffer(options)
         if opts.peek_nonwhitespace()=='*': # a star can be used to make it the default tree in some software packages
@@ -949,19 +949,19 @@ class Nexus(object):
 
     def _apply_block_structure(self,title,lines):
         block=Block('')
-        block.title = title            
+        block.title = title
         for line in lines:
             block.commandlines.append(Commandline(line, title))
         self.structured.append(block)
-       
+
     def _taxset(self, options):
         name,taxa=self._get_indices(options,set_type=TAXSET)
         self.taxsets[name]=_make_unique(taxa)
-                
+
     def _charset(self, options):
         name,sites=self._get_indices(options,set_type=CHARSET)
         self.charsets[name]=_make_unique(sites)
-        
+
     def _taxpartition(self, options):
         taxpartition={}
         quotelevel=False
@@ -1002,7 +1002,7 @@ class Nexus(object):
             raise NexusError('Formatting Error in codonposset: %s ' % options)
         else:
             self.codonposset=codonname[0]
-  
+
     def _codeset(self,options):
         pass
 
@@ -1066,7 +1066,7 @@ class Nexus(object):
         if opts.next_nonwhitespace()!=separator:
             raise NexusError('Formatting error in line: %s ' % rest)
         return name
-    
+
     def _parse_list(self,options_buffer,set_type):
         """Parse a NEXUS list (PRIVATE).
 
@@ -1091,7 +1091,7 @@ class Nexus(object):
                             if options_buffer.peek_nonwhitespace()=='\\':                           # followd by \
                                 backslash=options_buffer.next_nonwhitespace()
                                 step=int(options_buffer.next_word())         # get backslash and step
-                            plain_list.extend(range(start,end+1,step)) 
+                            plain_list.extend(range(start,end+1,step))
                         else:
                             if type(start)==list or type(end)==list:
                                 raise NexusError('Name if character sets not allowed in range definition: %s'\
@@ -1110,7 +1110,7 @@ class Nexus(object):
             except:
                 return None
         return plain_list
-        
+
     def _resolve(self,identifier,set_type=None):
         """Translate identifier in list into character/taxon index.
 
@@ -1220,7 +1220,7 @@ class Nexus(object):
                     exclude=exclude,delete=delete,comment=comment,append_sets=False,
                     mrbayes=mrbayes)
             return fn
-    
+
     def write_nexus_data(self, filename=None, matrix=None, exclude=[], delete=[],\
             blocksize=None, interleave=False, interleave_by_partition=False,\
             comment=None,omit_NEXUS=False,append_sets=True,mrbayes=False,\
@@ -1368,12 +1368,12 @@ class Nexus(object):
         if not codons_only:
             for n,ns in self.charsets.iteritems():
                 cset=[offlist[c] for c in ns if c not in exclude]
-                if cset: 
-                    setsb.append('charset %s = %s' % (safename(n),_compact4nexus(cset))) 
+                if cset:
+                    setsb.append('charset %s = %s' % (safename(n),_compact4nexus(cset)))
             for n,s in self.taxsets.iteritems():
                 tset=[safename(t,mrbayes=mrbayes) for t in s if t not in delete]
                 if tset:
-                    setsb.append('taxset %s = %s' % (safename(n),' '.join(tset))) 
+                    setsb.append('taxset %s = %s' % (safename(n),' '.join(tset)))
         for n,p in self.charpartitions.iteritems():
             if not include_codons and n==CODONPOSITIONS:
                 continue
@@ -1412,7 +1412,7 @@ class Nexus(object):
                 return ''
         else:
             return ';\n'.join(setsb)
-    
+
     def export_fasta(self, filename=None, width=70):
         """Writes matrix into a fasta file."""
         if not filename:
@@ -1424,7 +1424,7 @@ class Nexus(object):
         for taxon in self.taxlabels:
             fh.write('>'+safename(taxon)+'\n')
             for i in range(0, len(str(self.matrix[taxon])), width):
-                fh.write(str(self.matrix[taxon])[i:i+width] + '\n')    
+                fh.write(str(self.matrix[taxon])[i:i+width] + '\n')
         fh.close()
         return filename
 
@@ -1444,7 +1444,7 @@ class Nexus(object):
             fh.write('%s %s\n' % (safename(taxon), str(self.matrix[taxon])))
         fh.close()
         return filename
-    
+
     def constant(self,matrix=None,delete=[],exclude=[]):
         """Return a list with all constant characters."""
         if not matrix:
@@ -1455,7 +1455,7 @@ class Nexus(object):
         elif len(undelete)==1:
             return [x for x in range(len(matrix[undelete[0]])) if x not in exclude]
         # get the first sequence and expand all ambiguous values
-        constant=[(x,self.ambiguous_values.get(n.upper(),n.upper())) for 
+        constant=[(x,self.ambiguous_values.get(n.upper(),n.upper())) for
                 x,n in enumerate(str(matrix[undelete[0]])) if x not in exclude]
 
         for taxon in undelete[1:]:
@@ -1464,7 +1464,7 @@ class Nexus(object):
                 #print '%d (paup=%d)' % (site[0],site[0]+1),
                 seqsite=matrix[taxon][site[0]].upper()
                 #print seqsite,'checked against',site[1],'\t',
-                if seqsite==self.missing or (seqsite==self.gap and self.options['gapmode'].lower()=='missing') or seqsite==site[1]: 
+                if seqsite==self.missing or (seqsite==self.gap and self.options['gapmode'].lower()=='missing') or seqsite==site[1]:
                     # missing or same as before  -> ok
                     newconstant.append(site)
                 elif seqsite in site[1] or site[1]==self.missing or (self.options['gapmode'].lower()=='missing' and site[1]==self.gap):
@@ -1512,7 +1512,7 @@ class Nexus(object):
 
         See Wheeler (1990), Cladistics 6:269-275 and
         Felsenstein (1981), Biol. J. Linn. Soc. 16:183-196
-        """    
+        """
         m=StepMatrix(self.unambiguous_letters,self.gap)
         for site in [s for s in range(self.nchar) if s not in exclude]:
             cstatus=self.cstatus(site,delete)
@@ -1543,7 +1543,7 @@ class Nexus(object):
                 return dict(zip(undelete,m))
         else:
             return dict([(t,matrix[t]) for t in self.taxlabels if t in matrix and t not in delete])
-           
+
     def bootstrap(self,matrix=None,delete=[],exclude=[]):
         """Return a bootstrapped matrix."""
         if not matrix:
@@ -1554,7 +1554,7 @@ class Nexus(object):
             return {}
         elif len(cm[cm.keys()[0]])==0:                              # everything excluded?
             return cm
-        undelete=[t for t in self.taxlabels if t in cm]  
+        undelete=[t for t in self.taxlabels if t in cm]
         if seqobjects:
             sitesm=zip(*[str(cm[t]) for t in undelete])
             alphabet=matrix[matrix.keys()[0]].alphabet
@@ -1564,11 +1564,11 @@ class Nexus(object):
         bootstrapseqs=map(''.join,zip(*bootstrapsitesm))
         if seqobjects:
             bootstrapseqs=[Seq(s,alphabet) for s in bootstrapseqs]
-        return dict(zip(undelete,bootstrapseqs)) 
+        return dict(zip(undelete,bootstrapseqs))
 
     def add_sequence(self,name,sequence):
         """Adds a sequence (string) to the matrix."""
-        
+
         if not name:
             raise NexusError('New sequence must have a name')
 
@@ -1593,16 +1593,16 @@ class Nexus(object):
 
     def insert_gap(self,pos,n=1,leftgreedy=False):
         """Add a gap into the matrix and adjust charsets and partitions.
-        
+
         pos=0: first position
         pos=nchar: last position
         """
 
         def _adjust(set,x,d,leftgreedy=False):
             """Adjusts character sets if gaps are inserted, taking care of
-            new gaps within a coherent character set.""" 
+            new gaps within a coherent character set."""
             # if 3 gaps are inserted at pos. 9 in a set that looks like 1 2 3  8 9 10 11 13 14 15
-            # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18 
+            # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18
             # but inserting into position 8 it will stay like 1 2 3 11 12 13 14 15 16 17 18
             set.sort()
             addpos=0
@@ -1611,7 +1611,7 @@ class Nexus(object):
                     set[i]=c+d
                 # if we add gaps within a group of characters, we want the gap position included in this group
                 if c==x:
-                    if leftgreedy or (i>0 and set[i-1]==c-1):  
+                    if leftgreedy or (i>0 and set[i-1]==c-1):
                         addpos=i
             if addpos>0:
                 set[addpos:addpos]=range(x,x+d)
@@ -1632,7 +1632,7 @@ class Nexus(object):
         zipped=zip(*sitesm)
         mapped=map(''.join,zipped)
         listed=[(taxon,Seq(mapped[i],self.alphabet)) for i,taxon in enumerate(self.taxlabels)]
-        self.matrix=dict(listed) 
+        self.matrix=dict(listed)
         self.nchar+=n
         # now adjust character sets
         for i,s in self.charsets.iteritems():
@@ -1643,7 +1643,7 @@ class Nexus(object):
         # now adjust character state labels
         self.charlabels=self._adjust_charlabels(insert=[pos]*n)
         return self.charlabels
-      
+
     def _adjust_charlabels(self,exclude=None,insert=None):
         """Return adjusted indices of self.charlabels if characters are excluded or inserted."""
         if exclude and insert:
@@ -1684,13 +1684,13 @@ class Nexus(object):
             gap.add(self.missing)
         sitesm=zip(*[str(self.matrix[t]) for t in self.taxlabels])
         gaponly=[i for i,site in enumerate(sitesm) if set(site).issubset(gap)]
-        return gaponly 
-        
+        return gaponly
+
     def terminal_gap_to_missing(self,missing=None,skip_n=True):
         """Replaces all terminal gaps with missing character.
-        
+
         Mixtures like ???------??------- are properly resolved."""
-        
+
         if not missing:
             missing=self.missing
         replace=[self.missing,self.gap]
