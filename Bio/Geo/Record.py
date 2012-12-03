@@ -42,14 +42,14 @@ class Record(object):
         att_keys.sort()
         for key in att_keys:
             contents = self.entity_attributes[ key ]
-            if( type( contents ) == type( [] ) ):
+            if isinstance(contents, list):
                 for item in contents:
                     try:
                         output = output + '%s: %s\n' % ( key, item[ :40 ] )
                         output = output + out_block( item[ 40: ] )
                     except:
                         pass
-            elif( type( contents ) == type( '' ) ):
+            elif isinstance(contents, str):
                 output = output + '%s: %s\n' % ( key, contents[ :40 ] )
                 output = output + out_block( contents[ 40: ] )
             else:

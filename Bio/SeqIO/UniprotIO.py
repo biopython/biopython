@@ -57,7 +57,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
             raise ValueError("Wrong alphabet %r" % alphabet)
 
     if not hasattr(handle, "read"):
-        if type(handle) == type(''):
+        if isinstance(handle, str):
             handle = StringIO(handle)
         else:
             raise Exception('An XML-containing handler or an XML string must be passed')

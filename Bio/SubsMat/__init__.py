@@ -157,7 +157,7 @@ class SeqMat(dict):
       # matrix after creating the instance. Constructor builds a half matrix
       # filled with zeroes.
 
-      assert type(mat_name) == type('')
+      assert isinstance(mat_name, str)
 
       # "data" may be:
       # 1) None --> then self.data is an empty dictionary
@@ -251,8 +251,8 @@ class SeqMat(dict):
       f = f or sys.stdout 
       # create a temporary dictionary, which holds the full matrix for
       # printing
-      assert non_sym == None or type(non_sym) == type(1.) or \
-      type(non_sym) == type(1)
+      assert non_sym == None or isinstance(non_sym, float) or \
+      isinstance(non_sym, int)
       full_mat = copy.copy(self)
       for i in self:
          if i[0] != i[1]:

@@ -23,7 +23,7 @@ def wrap_line(line):
     return output
 
 def validate_key(key):
-    if type(key) != type(''):
+    if not isinstance(key, str):
         raise CrystalError('chain requires a string label')
     if len(key) != 1:
         raise CrystalError('chain label should contain one letter')
@@ -37,7 +37,7 @@ class Hetero(object):
     """
     def __init__(self, data):
         # Enforce string storage
-        if type(data) != type(""):
+        if not isinstance(data, str):
             raise CrystalError('Hetero data must be an alphameric string')
         if data.isalnum() == 0:
             raise CrystalError('Hetero data must be an alphameric string')
@@ -66,12 +66,12 @@ class Hetero(object):
 class Chain(object):
     def __init__(self, residues = ''):
         self.data = []
-        if type(residues) == type(''):
+        if isinstance(residues, str):
             residues = residues.replace('*', ' ')
             residues = residues.strip()
             elements = residues.split()
             self.data = map(Hetero, elements)
-        elif type(residues) == type([]):
+        elif isinstance(residues, list):
             for element in residues:
                 if not isinstance(element, Hetero):
                     raise CrystalError('Text must be a string')
@@ -185,7 +185,7 @@ class Chain(object):
     def __add__(self, other):
         if isinstance(other, Chain):
             return self.__class__(self.data + other.data)
-        elif type(other) == type(''):
+        elif isinstance(other, str):
             return self.__class__(self.data + Chain(other).data)
         else:
             raise TypeError
@@ -193,7 +193,7 @@ class Chain(object):
     def __radd__(self, other):
         if isinstance(other, Chain):
             return self.__class__(other.data + self.data)
-        elif type(other) == type(''):
+        elif isinstance(other, str):
             return self.__class__(Chain(other).data + self.data)
         else:
             raise TypeError
@@ -201,7 +201,7 @@ class Chain(object):
     def __iadd__(self, other):
         if isinstance(other, Chain):
             self.data += other.data
-        elif type(other) == type(''):
+        elif isinstance(other, str):
             self.data += Chain(other).data
         else:
             raise TypeError
@@ -210,7 +210,7 @@ class Chain(object):
 class Crystal(object):
     def __init__(self, data = {}):
         # Enforcestorage
-        if type(data) != type({}):
+        if not isinstance(data, dict):
             raise CrystalError('Crystal must be a dictionary')
         self.data = data
         self.fix()
@@ -221,7 +221,7 @@ class Crystal(object):
             element = data[key]
             if isinstance(element, Chain):
                 pass
-            elif type(element) == type(''):
+            elif isinstance(element, str):
                 data[key] = Chain(element)
             else:
                 raise TypeError
@@ -250,7 +250,7 @@ class Crystal(object):
     def __setitem__(self, key, item):
         if isinstance(item, Chain):
             self.data[key] = item
-        elif type(item) == type(''):
+        elif isinstance(item, str):
             self.data[ key ] = Chain(item)
         else:
             raise TypeError

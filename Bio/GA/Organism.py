@@ -53,14 +53,14 @@ def random_population(genome_alphabet, genome_size, num_organisms,
     letter_rand = random.Random()
 
     # figure out what type of characters are in the alphabet
-    if type(genome_alphabet.letters[0]) == type("A"):
+    if isinstance(genome_alphabet.letters[0], str):
         if sys.version_info[0] == 3:
             alphabet_type = "u" #Use unicode string on Python 3
         else:
             alphabet_type = "c" #Use byte string on Python 2
-    elif type(genome_alphabet.letters[0]) == type(1):
+    elif isinstance(genome_alphabet.letters[0], int):
         alphabet_type = "i"
-    elif type(genome_alphabet.letters[0]) == type(1.0):
+    elif isinstance(genome_alphabet.letters[0], float):
         alphabet_type = "d"
     else:
         raise ValueError(\

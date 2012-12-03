@@ -87,9 +87,9 @@ class ColorTranslator(object):
         elif isinstance(color, basestring):
             #Assume its a named reportlab color like "red".
             color = colors.toColor(color)
-        elif type(color) == type((1., 2., 3.)) and type(color[0]) == type(1.):
+        elif isinstance(color, tuple) and isinstance(color[0], float):
             color = self.float1_color(color)        
-        elif type(color) == type((1, 2, 3)) and type(color[0]) == type(1):
+        elif isinstance(color, tuple) and isinstance(color[0], int):
             color = self.int255_color(color)
         return color
         
