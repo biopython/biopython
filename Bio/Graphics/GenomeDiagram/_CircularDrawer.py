@@ -231,7 +231,7 @@ class CircularDrawer(AbstractDrawer):
         # Useful measurements on the page
         self.track_size = track_size
         self.circle_core = circle_core
-        if circular == False:   # Determine the proportion of the circumference
+        if not circular:   # Determine the proportion of the circumference
             self.sweep = 0.9    # around which information will be drawn
         else:
             self.sweep = 1

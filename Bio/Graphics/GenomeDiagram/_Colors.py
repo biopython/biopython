@@ -79,7 +79,7 @@ class ColorTranslator(object):
             color = colour
         
         if color is None:
-            raise ValueError, "Passed color (or colour) must be a valid color type"
+            raise ValueError("Passed color (or colour) must be a valid color type")
         elif isinstance(color, int):
             color = self.scheme_color(color)
         elif isinstance(color, colors.Color):

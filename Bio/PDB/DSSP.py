@@ -150,7 +150,7 @@ def make_dssp_dict(filename):
                     phi = float(l[103+shift:109+shift])
                     psi = float(l[109+shift:115+shift])
                 else:
-                    raise ValueError, exc
+                    raise ValueError(exc)
             res_id = (" ", resseq, icode)
             dssp[(chainid, res_id)] = (aa, ss, acc, phi, psi)
             keys.append((chainid, res_id))

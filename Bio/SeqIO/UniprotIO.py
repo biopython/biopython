@@ -51,10 +51,10 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
-        raise ValueError, "Wrong alphabet %r" % alphabet
+        raise ValueError("Wrong alphabet %r" % alphabet)
     if isinstance(alphabet, Alphabet.Gapped):
         if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
-            raise ValueError, "Wrong alphabet %r" % alphabet
+            raise ValueError("Wrong alphabet %r" % alphabet)
 
     if not hasattr(handle, "read"):
         if type(handle) == type(''):
