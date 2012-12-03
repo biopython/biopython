@@ -560,7 +560,7 @@ class Nexus(object):
     original_taxon_order=property(get_original_taxon_order,set_original_taxon_order)
 
     def read(self,input):
-        """Read and parse NEXUS imput (a filename, file-handle, or string)."""
+        """Read and parse NEXUS input (a filename, file-handle, or string)."""
 
         # 1. Assume we have the name of a file in the execution dir or a
         # file-like object.
@@ -879,7 +879,7 @@ class Nexus(object):
         #check all sequences for length according to nchar
         for taxon in self.matrix:
             if len(self.matrix[taxon])!=self.nchar:
-                raise NexusError('Matrx Nchar %d does not match data length (%d) for taxon %s' \
+                raise NexusError('Matrix Nchar %d does not match data length (%d) for taxon %s' \
                                  % (self.nchar, len(self.matrix[taxon]),taxon))
         #check that taxlabels is identical with matrix.keys. If not, it's a problem
         matrixkeys=sorted(self.matrix)
@@ -1414,7 +1414,7 @@ class Nexus(object):
             return ';\n'.join(setsb)
     
     def export_fasta(self, filename=None, width=70):
-        """Writes matrix into a fasta file: (self, filename=None, width=70)."""       
+        """Writes matrix into a fasta file."""
         if not filename:
             if '.' in self.filename and self.filename.split('.')[-1].lower() in ['paup','nexus','nex','dat']:
                 filename='.'.join(self.filename.split('.')[:-1])+'.fas'
@@ -1429,7 +1429,7 @@ class Nexus(object):
         return filename
 
     def export_phylip(self, filename=None):
-        """Writes matrix into a PHYLIP file: (self, filename=None).
+        """Writes matrix into a PHYLIP file.
 
         Note that this writes a relaxed PHYLIP format file, where the names
         are not truncated, nor checked for invalid characters."""
@@ -1599,7 +1599,7 @@ class Nexus(object):
         """
 
         def _adjust(set,x,d,leftgreedy=False):
-            """Adjusts chartacter sets if gaps are inserted, taking care of
+            """Adjusts character sets if gaps are inserted, taking care of
             new gaps within a coherent character set.""" 
             # if 3 gaps are inserted at pos. 9 in a set that looks like 1 2 3  8 9 10 11 13 14 15
             # then the adjusted set will be 1 2 3  8 9 10 11 12 13 14 15 16 17 18 
@@ -1705,7 +1705,7 @@ class Nexus(object):
             else:
                 sequence=sequence[:end+1]+missing*(length-end-1)
                 sequence=start*missing+sequence[start:]
-            assert length==len(sequence), 'Illegal sequence manipulation in Nexus.termial_gap_to_missing in taxon %s' % taxon
+            assert length==len(sequence), 'Illegal sequence manipulation in Nexus.terminal_gap_to_missing in taxon %s' % taxon
             self.matrix[taxon]=Seq(sequence,self.alphabet)
 
 
@@ -1723,7 +1723,7 @@ else:
         if decommented=='[' or decommented==']':
             raise NexusError('Unmatched %s' % decommented)
         # cnexus can't return lists, so in analogy we separate
-        # commandlines with chr(7) (a character that shoudn't be part of a
+        # commandlines with chr(7) (a character that shouldn't be part of a
         # nexus file under normal circumstances)
         commandlines=_adjust_lines(decommented.split(chr(7)))
         return commandlines
