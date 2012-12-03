@@ -150,7 +150,7 @@ class TestReadCorruptFiles(unittest.TestCase):
         """Handling of corrupt files."""        
         for filename in corrupt_files:
             iterator = SeqIO.parse(filename,"seqxml")
-            self.assertRaises(ValueError,iterator.next);
+            self.assertRaises(ValueError,iterator.next)
 
         
 if __name__ == "__main__":

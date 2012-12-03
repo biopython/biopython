@@ -84,9 +84,9 @@ class FileRecord(object):
         more = True
         while more:
             res = self.get_individual()
-            if res == True:
+            if res is True:
                 rep.append('Pop\n')
-            elif res == False:
+            elif res is False:
                 more = False
             else:
                 name, markers = res
@@ -203,7 +203,7 @@ class FileRecord(object):
                 old_rec.skip_population()
                 curr_pop += 1
             else:
-                if l_parser == True:
+                if l_parser is True:
                     curr_pop += 1
                     start_pop = True
                 else:
@@ -242,7 +242,7 @@ class FileRecord(object):
         l_parser = old_rec.get_individual()
         f.write("POP\n")
         while l_parser:
-            if l_parser == True:
+            if l_parser is True:
                 f.write("POP\n")
             else:
                 name, markers = l_parser
@@ -287,7 +287,7 @@ class FileRecord(object):
         l_parser = old_rec.get_individual()
         f.write("POP\n")
         while l_parser:
-            if l_parser == True:
+            if l_parser is True:
                 f.write("POP\n")
             else:
                 name, markers = l_parser

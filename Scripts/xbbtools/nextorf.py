@@ -10,8 +10,10 @@
 # Jan.O.Andersson@home.se
 # File: nextorf.py
 
+import commands
 import re
-import os, sys, commands
+import sys
+import os
 import getopt
 
 from Bio import SeqIO

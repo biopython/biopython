@@ -903,7 +903,8 @@ def _open(cgi, params={}, get=1):
     simple error checking, and will raise an IOError if it encounters one.
 
     """
-    import urllib, urllib2
+    import urllib
+    import urllib2
     # Open a handle to SCOP.
     options = urllib.urlencode(params)
     try:

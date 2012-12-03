@@ -205,15 +205,15 @@ class TestCluster(unittest.TestCase):
 
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c2, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 6.650, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 32.508, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c2, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 15.118, places=3)
 
         # Second data set
@@ -252,15 +252,15 @@ class TestCluster(unittest.TestCase):
 
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c2, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 5.833, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c1, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 3.298, places=3)
         distance = clusterdistance(data, mask=mask, weight=weight,
                                    index1=c2, index2=c3, dist='e',
-                                   method='a', transpose=0);
+                                   method='a', transpose=0)
         self.assertAlmostEqual(distance, 0.360, places=3)
 
 

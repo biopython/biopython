@@ -194,7 +194,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         seq_name = seq_name.replace(" ","_")
 
         if "start" in record.annotations \
-        and  "end" in record.annotations:
+        and "end" in record.annotations:
             suffix = "/%s-%s" % (str(record.annotations["start"]),
                                  str(record.annotations["end"]))
             if seq_name[-len(suffix):] != suffix:

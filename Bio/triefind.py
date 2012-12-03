@@ -26,7 +26,7 @@ def match(string, trie):
         substr = string[:i+1]
         if not trie.has_prefix(substr):
             break
-        if trie.has_key(substr):
+        if substr in trie:
             longest = substr
     return longest
 
@@ -42,7 +42,7 @@ def match_all(string, trie):
         substr = string[:i+1]
         if not trie.has_prefix(substr):
             break
-        if trie.has_key(substr):
+        if substr in trie:
             matches.append(substr)
     return matches
 

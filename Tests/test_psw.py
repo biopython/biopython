@@ -5,7 +5,8 @@
 
 __version__ = "$Revision: 1.6 $"
 
-import doctest, unittest
+import doctest
+import unittest
 import random
 import sys
 

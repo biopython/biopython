@@ -250,7 +250,7 @@ for a in dna + rna + nuc + protein:
     except TypeError:
         pass #Good!
             
-    for chars in  test_chars:
+    for chars in test_chars:
         str_chars = str(chars)
         assert str(a.strip(chars)) == str(a).strip(str_chars)
         assert str(a.lstrip(chars)) == str(a).lstrip(str_chars)

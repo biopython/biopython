@@ -51,13 +51,13 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
-        raise ValueError, "Wrong alphabet %r" % alphabet
+        raise ValueError("Wrong alphabet %r" % alphabet)
     if isinstance(alphabet, Alphabet.Gapped):
         if isinstance(alphabet.alphabet, Alphabet.NucleotideAlphabet):
-            raise ValueError, "Wrong alphabet %r" % alphabet
+            raise ValueError("Wrong alphabet %r" % alphabet)
 
     if not hasattr(handle, "read"):
-        if type(handle) == type(''):
+        if isinstance(handle, str):
             handle = StringIO(handle)
         else:
             raise Exception('An XML-containing handler or an XML string must be passed')
@@ -329,7 +329,7 @@ class Parser(object):
                                         feature.location = SeqFeature.FeatureLocation(start, end)
                                         #self.ParsedSeqRecord.features.append(feature)
 
-            for ref_element in  element.getchildren():  
+            for ref_element in element.getchildren():  
                 if ref_element.tag == NS + 'property':
                     pass# this data cannot be fitted in a seqrecord object with a simple list. however at least ensembl and EMBL parsing can be improved to add entries in dbxrefs
             
@@ -442,7 +442,7 @@ class Parser(object):
             append_to_annotations('proteinExistence', element.attrib['type'])   
             
         def _parse_evidence(element):
-            for k, v in  element.attrib.items():
+            for k, v in element.attrib.items():
                 ann_key = k
                 append_to_annotations(ann_key, v)   
         

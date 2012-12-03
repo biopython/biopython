@@ -172,7 +172,7 @@ class SeqMap(object):
         self.version = line[6:10]
 
         #Raf format versions 0.01 and 0.02 are identical for practical purposes
-        if(self.version != "0.01" and  self.version !="0.02"):
+        if(self.version != "0.01" and self.version !="0.02"):
             raise ValueError("Incompatible RAF version: "+self.version)
 
         self.pdb_datestamp = line[14:20]

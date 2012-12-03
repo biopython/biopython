@@ -97,9 +97,9 @@ class FileParserTest(unittest.TestCase):
             assert isinstance(rec, FileParser.FileRecord)
             assert len(rec.loci_list) == self.num_loci[index]
             for skip in range(self.pops_indivs[index][0]):
-                if rec.skip_population() == False:
+                if rec.skip_population() is False:
                     raise Error("Not enough populations")
-            if rec.skip_population() == True:
+            if rec.skip_population() is True:
                     raise Error("Too much populations")
             for i in range(self.pops_indivs[index][0]):
                 continue
