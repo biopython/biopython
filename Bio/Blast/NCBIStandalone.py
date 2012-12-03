@@ -2083,7 +2083,8 @@ def _invoke_blast(cline):
 
     Expects a command line wrapper object from Bio.Blast.Applications
     """
-    import subprocess, sys
+    import subprocess
+    import sys
     blast_cmd = cline.program_name
     if not os.path.exists(blast_cmd):
         raise ValueError("BLAST executable does not exist at %s" % blast_cmd)

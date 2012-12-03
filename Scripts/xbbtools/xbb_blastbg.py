@@ -4,11 +4,15 @@
 # Thomas.Sicheritz@molbio.uu.se, http://evolution.bmc.uu.se/~thomas
 # File: xbb_blastbg.py
 
-import posixpath, posix
-import os, sys, commands
+import commands
+import posix
+import posixpath
+import os
+import sys
 sys.path.insert(0, '.')
-import Queue, threading
+import Queue
 import tempfile
+import threading
 from Tkinter import *
 from xbb_utils import NotePad
 

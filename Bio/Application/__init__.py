@@ -19,7 +19,8 @@ construct command line strings by setting the values of each parameter.
 The finished command line strings are then normally invoked via the built-in
 Python module subprocess.
 """
-import os, sys
+import os
+import sys
 import StringIO
 import subprocess
 import re

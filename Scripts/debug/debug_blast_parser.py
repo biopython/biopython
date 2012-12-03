@@ -5,8 +5,9 @@
 # - Let user specify a sequence file to BLAST on the net.
 # - Script should help debug connection to NCBI website.
 
-import os, sys
+import os
 import re
+import sys
 import getopt
 import traceback
 
