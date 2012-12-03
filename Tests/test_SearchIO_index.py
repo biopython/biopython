@@ -48,6 +48,10 @@ class CheckRaw(unittest.TestCase):
             #self.assertEqual(_as_bytes(raw), idx.get_raw(id))
             idx.close()
 
+        if os.path.isfile(filename + ".bgz"):
+            #Do the tests again with the BGZF compressed file
+            self.check_raw(filename + ".bgz", id, raw, **kwargs)
+
 
 class BlastXmlRawCases(CheckRaw):
     """Check BLAST XML get_raw method."""
