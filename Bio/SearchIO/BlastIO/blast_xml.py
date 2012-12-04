@@ -15,6 +15,8 @@ except ImportError:
     from xml.etree import ElementTree as ET
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+_empty_bytes_string = _as_bytes("")
+
 from Bio.Alphabet import generic_dna, generic_protein
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
@@ -532,7 +534,7 @@ class BlastXmlIndexer(SearchIndexer):
                     assert qstart_mark not in line, line
                     block.append(line)
                 assert line.rstrip().endswith(qend_mark), line
-                block = "".join(block)
+                block = _empty_bytes_string.join(block)
             assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
             assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
             #Now we have a full <Iteration>...</Iteration> block, find the ID
