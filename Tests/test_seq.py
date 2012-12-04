@@ -12,9 +12,9 @@ from Bio.Data.CodonTable import TranslationError
 
 
 if sys.version_info[0] == 3:
-   array_indicator = "u"
+    array_indicator = "u"
 else:
-   array_indicator = "c"
+    array_indicator = "c"
 
 print
 print "Testing Seq"

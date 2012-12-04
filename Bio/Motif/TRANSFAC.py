@@ -198,17 +198,17 @@ def read(handle):
             if motif is None:
                 motif = Motif()
             if status=="freq":
-               try:
-                   i = int(key)
-               except ValueError:
-                   status = None
-               else:
-                   motif.length+=1
-                   assert i==motif.length
-                   values = value.split()
-                   for c, v in zip("ACGT", values):
-                       motif.counts[c].append(float(v))
-                   continue
+                try:
+                    i = int(key)
+                except ValueError:
+                    status = None
+                else:
+                    motif.length+=1
+                    assert i==motif.length
+                    values = value.split()
+                    for c, v in zip("ACGT", values):
+                        motif.counts[c].append(float(v))
+                    continue
             if key=='P0':
                 assert status!="freq"
                 assert motif.counts is None

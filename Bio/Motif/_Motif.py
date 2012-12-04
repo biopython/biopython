@@ -648,7 +648,7 @@ class Motif(object):
             instance = ""
             for c in line.strip():
                 if c==c.upper():
-                   instance += c
+                    instance += c
             instance = Seq(instance, self.alphabet)
             length = len(instance)
             if self.length is None:

@@ -106,11 +106,11 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         self.assertEqual(len(list(SeqIO.parse(input_file, "fasta"))), 1)
         cline = ClustalOmegaCommandline(clustalo_exe, infile=input_file)
         try:
-           stdout, stderr = cline()
+            stdout, stderr = cline()
         except ApplicationError, err:
-           self.assertTrue("contains 1 sequence, nothing to align" in str(err))
+            self.assertTrue("contains 1 sequence, nothing to align" in str(err))
         else:
-           self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
+            self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
     def test_invalid_format(self):
         """Test an input file in an invalid format."""

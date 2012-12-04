@@ -24,20 +24,20 @@ class XpkEntry(object):
     #   self.field["entrynum"] returns the line number (1st field of line)
 
     def __init__(self,entry,headline):
-       self.fields={}   # Holds all fields from input line in a dictionary
-                        # keys are data labels from the .xpk header
-       datlist = entry.split()
-       headlist = headline.split()
+        self.fields={}   # Holds all fields from input line in a dictionary
+                         # keys are data labels from the .xpk header
+        datlist = entry.split()
+        headlist = headline.split()
 
-       i=0
-       for i in range(len(datlist)-1):
-         self.fields[headlist[i]]=datlist[i+1]
-       i=i+1
+        i=0
+        for i in range(len(datlist)-1):
+            self.fields[headlist[i]]=datlist[i+1]
+        i=i+1
 
-       try:
-           self.fields["entrynum"]=datlist[0]
-       except IndexError, e:
-           pass
+        try:
+            self.fields["entrynum"]=datlist[0]
+        except IndexError, e:
+            pass
 
 class Peaklist(object):
     # This class reads in an entire xpk file and returns
@@ -120,125 +120,125 @@ class Peaklist(object):
         outfile.close()
 
 def _try_open_read(fn):
-# Try to open a file for reading.  Exit on IOError
-  try:
-    infile=open(fn,'r')
-  except IOError, e:
-    print "file", fn, "could not be opened for reading - quitting."
-    sys.exit(0)
-  return infile
+    # Try to open a file for reading.  Exit on IOError
+    try:
+        infile=open(fn,'r')
+    except IOError, e:
+        print "file", fn, "could not be opened for reading - quitting."
+        sys.exit(0)
+    return infile
 
 def _try_open_write(fn):
-# Try to open a file for writing.  Exit on IOError
-  try:
-    infile=open(fn,'w')
-  except IOError, e:
-    print "file", fn, "could not be opened for writing - quitting."
-    sys.exit(0)
-  return infile
+    # Try to open a file for writing.  Exit on IOError
+    try:
+        infile=open(fn,'w')
+    except IOError, e:
+        print "file", fn, "could not be opened for writing - quitting."
+        sys.exit(0)
+    return infile
 
 
 def replace_entry(line,fieldn,newentry):
-        # Replace an entry in a string by the field number
-        # No padding is implemented currently.  Spacing will change if
-        #  the original field entry and the new field entry are of
-        #  different lengths.
-        # This method depends on xpktools._find_start_entry
+    # Replace an entry in a string by the field number
+    # No padding is implemented currently.  Spacing will change if
+    #  the original field entry and the new field entry are of
+    #  different lengths.
+    # This method depends on xpktools._find_start_entry
 
-        start=_find_start_entry(line,fieldn)
-        leng=len(line[start:].split()[0])
-        newline=line[:start]+str(newentry)+line[(start+leng):]
-        return newline
+    start=_find_start_entry(line,fieldn)
+    leng=len(line[start:].split()[0])
+    newline=line[:start]+str(newentry)+line[(start+leng):]
+    return newline
 
 def _find_start_entry(line,n):
-        # find the starting point character for the n'th entry in
-        # a space delimited line.  n is counted starting with 1
-        # The n=1 field by definition begins at the first character
-        # This function is used by replace_entry
+    # find the starting point character for the n'th entry in
+    # a space delimited line.  n is counted starting with 1
+    # The n=1 field by definition begins at the first character
+    # This function is used by replace_entry
 
-        infield=0       # A flag that indicates that the counter is in a field
+    infield=0       # A flag that indicates that the counter is in a field
 
-        if (n==1):
-                return 0        # Special case
+    if (n==1):
+        return 0        # Special case
 
-        # Count the number of fields by counting spaces
-        c=1
-        leng=len(line)
+    # Count the number of fields by counting spaces
+    c=1
+    leng=len(line)
 
-        # Initialize variables according to whether the first character
-        #  is a space or a character
-        if (line[0]==" "):
+    # Initialize variables according to whether the first character
+    #  is a space or a character
+    if (line[0]==" "):
+        infield=0
+        field=0
+    else:
+        infield=1
+        field=1
+
+
+    while (c<leng and field<n):
+        if (infield):
+            if (line[c]==" " and not (line[c-1]==" ")):
                 infield=0
-                field=0
-        else:
-                infield=1
-                field=1
+            else:
+                if (not line[c]==" "):
+                    infield=1
+                    field=field+1
 
+        c=c+1
 
-        while (c<leng and field<n):
-                if (infield):
-                        if (line[c]==" " and not (line[c-1]==" ")):
-                                infield=0
-                else:
-                        if (not line[c]==" "):
-                                infield=1
-                                field=field+1
-
-                c=c+1
-
-        return c-1
+    return c-1
 
 
 def data_table(fn_list, datalabel, keyatom):
-# Generate and generate a data table from a list of
-# input xpk files <fn_list>.  The data element reported is
-# <datalabel> and the index for the data table is by the
-# nucleus indicated by <keyatom>.
+    # Generate and generate a data table from a list of
+    # input xpk files <fn_list>.  The data element reported is
+    # <datalabel> and the index for the data table is by the
+    # nucleus indicated by <keyatom>.
 
-  outlist=[]
+    outlist=[]
 
-  [dict_list,label_line_list]=_read_dicts(fn_list,keyatom)
+    [dict_list,label_line_list]=_read_dicts(fn_list,keyatom)
 
-  # Find global max and min residue numbers
-  minr=dict_list[0]["minres"]
-  maxr=dict_list[0]["maxres"]
+    # Find global max and min residue numbers
+    minr=dict_list[0]["minres"]
+    maxr=dict_list[0]["maxres"]
 
-  for dictionary in dict_list:
-    if (maxr < dictionary["maxres"]):
-      maxr = dictionary["maxres"]
-    if (minr > dictionary["minres"]):
-      minr = dictionary["minres"]
+    for dictionary in dict_list:
+        if (maxr < dictionary["maxres"]):
+            maxr = dictionary["maxres"]
+        if (minr > dictionary["minres"]):
+            minr = dictionary["minres"]
 
-  res=minr
-  while res <= maxr:        # s.t. res numbers
-    count=0
-    line=str(res)
-    for dictionary in dict_list:      # s.t. dictionaries
-      label=label_line_list[count]
-      if str(res) in dictionary:
-        line=line+"\t"+XpkEntry(dictionary[str(res)][0],label).fields[datalabel]
-      else:
-        line=line+"\t"+"*"
-      count=count+1
-    line=line+"\n"
-    outlist.append(line)
-    res=res+1
+    res=minr
+    while res <= maxr:        # s.t. res numbers
+        count=0
+        line=str(res)
+        for dictionary in dict_list:      # s.t. dictionaries
+            label=label_line_list[count]
+            if str(res) in dictionary:
+                line=line+"\t"+XpkEntry(dictionary[str(res)][0],label).fields[datalabel]
+            else:
+                line=line+"\t"+"*"
+            count=count+1
+        line=line+"\n"
+        outlist.append(line)
+        res=res+1
 
-  return outlist
+    return outlist
 
 def _sort_keys(dictionary):
-  keys=dictionary.keys()
-  sorted_keys=keys.sort()
-  return sorted_keys
+    keys=dictionary.keys()
+    sorted_keys=keys.sort()
+    return sorted_keys
 
 def _read_dicts(fn_list, keyatom):
-# Read multiple files into a list of residue dictionaries
-  dict_list=[]
-  datalabel_list=[]
-  for fn in fn_list:
-    peaklist=Peaklist(fn)
-    dict=peaklist.residue_dict(keyatom)
-    dict_list.append(dict)
-    datalabel_list.append(peaklist.datalabels)
+    # Read multiple files into a list of residue dictionaries
+    dict_list=[]
+    datalabel_list=[]
+    for fn in fn_list:
+        peaklist=Peaklist(fn)
+        dict=peaklist.residue_dict(keyatom)
+        dict_list.append(dict)
+        datalabel_list.append(peaklist.datalabels)
 
-  return [dict_list, datalabel_list]
+    return [dict_list, datalabel_list]

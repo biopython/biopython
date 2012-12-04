@@ -23,26 +23,26 @@ from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
 
 class ProteinX(Alphabet.ProteinAlphabet):
-   letters = IUPACData.extended_protein_letters + "X"
+    letters = IUPACData.extended_protein_letters + "X"
 
 proteinX = ProteinX()
 
 class MissingTable:
-  def __init__(self, table):
-    self._table = table
-  def get(self, codon, stop_symbol):
-    try:
-      return self._table.get(codon, stop_symbol)
-    except CodonTable.TranslationError:
-      return 'X'
+    def __init__(self, table):
+        self._table = table
+    def get(self, codon, stop_symbol):
+        try:
+            return self._table.get(codon, stop_symbol)
+        except CodonTable.TranslationError:
+            return 'X'
 
 # Make the codon table given an existing table
 def makeTableX(table):
-  assert table.protein_alphabet == IUPAC.extended_protein
-  return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
-                               MissingTable(table.forward_table),
-                               table.back_table, table.start_codons,
-                               table.stop_codons)
+    assert table.protein_alphabet == IUPAC.extended_protein
+    return CodonTable.CodonTable(table.nucleotide_alphabet, proteinX,
+                                MissingTable(table.forward_table),
+                                table.back_table, table.start_codons,
+                                table.stop_codons)
 
 
 
@@ -66,9 +66,9 @@ class NextOrf:
             start, stop = int(self.options['start']), int(self.options['stop'])
             s = str(record.seq).upper()
             if stop > 0:
-               s = s[start:stop]
+                s = s[start:stop]
             else:
-               s = s[start:]
+                s = s[start:]
             self.seq = Seq(s,IUPAC.ambiguous_dna)
             self.length = len(self.seq)
             self.rseq = None
@@ -81,46 +81,46 @@ class NextOrf:
             self.Output(CDS)
 
     def ToFasta(self, header, seq):
-       seq = re.sub('(............................................................)','\\1\n',seq)
-       return '>%s\n%s' % (header, seq)
+        seq = re.sub('(............................................................)','\\1\n',seq)
+        return '>%s\n%s' % (header, seq)
 
     def Gc(self, seq):
-       d = {}
-       for nt in 'ATGC':
-          d[nt] = seq.count(nt)
-       gc = d['G'] + d['C']
-       if gc == 0: return 0
-       return round(gc*100.0/(d['A'] +d['T'] + gc),1)
+        d = {}
+        for nt in 'ATGC':
+            d[nt] = seq.count(nt)
+        gc = d['G'] + d['C']
+        if gc == 0: return 0
+        return round(gc*100.0/(d['A'] +d['T'] + gc),1)
 
     def Gc2(self,seq):
-       l = len(seq)
-       d= {}
-       for nt in ['A','T','G','C']:
-          d[nt] = [0,0,0]
+        l = len(seq)
+        d= {}
+        for nt in ['A','T','G','C']:
+            d[nt] = [0,0,0]
 
-       for i in range(0,l,3):
-          codon = seq[i:i+3]
-          if len(codon) <3: codon = codon + '  '
-          for pos in range(0,3):
-             for nt in ['A','T','G','C']:
-                if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
+        for i in range(0,l,3):
+            codon = seq[i:i+3]
+            if len(codon) <3: codon = codon + '  '
+            for pos in range(0,3):
+                for nt in ['A','T','G','C']:
+                    if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
 
-       gc = {}
-       gcall = 0
-       nall = 0
-       for i in range(0,3):
-          try:
-             n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
-             gc[i] = (d['G'][i] + d['C'][i])*100.0/n
-          except:
-             gc[i] = 0
+        gc = {}
+        gcall = 0
+        nall = 0
+        for i in range(0,3):
+            try:
+                n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
+                gc[i] = (d['G'][i] + d['C'][i])*100.0/n
+            except:
+                gc[i] = 0
 
-          gcall = gcall + d['G'][i] + d['C'][i]
-          nall = nall + n
+            gcall = gcall + d['G'][i] + d['C'][i]
+            nall = nall + n
 
-       gcall = 100.0*gcall/nall
-       res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
-       return res
+        gcall = 100.0*gcall/nall
+        res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
+        return res
 
     def GetOrfCoordinates(self, seq):
         s = seq.data
@@ -166,15 +166,15 @@ class NextOrf:
                     length = stop - start_site +1
                     if length >= minlength and length <= maxlength:
                         if nostart == '1' and start_site == 1:
-                           start_site = start_site + f - 1
+                            start_site = start_site + f - 1
                         if codon == 'XXX': stop = start_site + 3*((int((stop-1)-start_site)/3))
                         s = seq[start_site -1 : stop]
                         CDS.append((start_site, stop, length, s, strand*f))
                         start_site = 0
                         if nostart == '1': start_site = stop + 1
                     elif length < minlength or length > maxlength:
-                       start_site = 0
-                       if nostart == '1': start_site = stop + 1
+                        start_site = 0
+                        if nostart == '1': start_site = stop + 1
                     del stop
         return CDS
 

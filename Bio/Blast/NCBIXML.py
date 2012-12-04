@@ -560,29 +560,29 @@ class BlastParser(_XMLparser):
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
 
 def read(handle, debug=0):
-   """Returns a single Blast record (assumes just one query).
+    """Returns a single Blast record (assumes just one query).
 
-   This function is for use when there is one and only one BLAST
-   result in your XML file.
+    This function is for use when there is one and only one BLAST
+    result in your XML file.
 
-   Use the Bio.Blast.NCBIXML.parse() function if you expect more than
-   one BLAST record (i.e. if you have more than one query sequence).
+    Use the Bio.Blast.NCBIXML.parse() function if you expect more than
+    one BLAST record (i.e. if you have more than one query sequence).
 
-   """
-   iterator = parse(handle, debug)
-   try:
-       first = iterator.next()
-   except StopIteration:
-       first = None
-   if first is None:
-       raise ValueError("No records found in handle")
-   try:
-       second = iterator.next()
-   except StopIteration:
-       second = None
-   if second is not None:
-       raise ValueError("More than one record found in handle")
-   return first
+    """
+    iterator = parse(handle, debug)
+    try:
+        first = iterator.next()
+    except StopIteration:
+        first = None
+    if first is None:
+        raise ValueError("No records found in handle")
+    try:
+        second = iterator.next()
+    except StopIteration:
+        second = None
+    if second is not None:
+        raise ValueError("More than one record found in handle")
+    return first
 
 
 def parse(handle, debug=0):

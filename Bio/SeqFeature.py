@@ -807,7 +807,7 @@ class FeatureLocation(object):
         if isinstance(parent_sequence, MutableSeq):
             #This avoids complications with reverse complements
             #(the MutableSeq reverse complement acts in situ)
-           parent_sequence = parent_sequence.toseq()
+            parent_sequence = parent_sequence.toseq()
         f_seq = parent_sequence[self.nofuzzy_start:self.nofuzzy_end]
         if self.strand == -1:
             try:

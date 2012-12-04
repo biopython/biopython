@@ -241,7 +241,7 @@ class Record(object):
         # treat circular types differently, since they'll have long residue
         # types
         if "circular" in self.residue_type:
-             output += "%17s" % self.residue_type
+            output += "%17s" % self.residue_type
         # second case: ss-DNA types of records
         elif "-" in self.residue_type:
             output += "%7s" % self.residue_type
