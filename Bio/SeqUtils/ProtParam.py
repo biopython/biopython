@@ -91,7 +91,7 @@ class ProteinAnalysis(object):
 
         return self.amino_acids_percent
 
-    def molecular_weight (self):
+    def molecular_weight(self):
         """Calculate MW from Protein sequence"""
         # make local dictionary for speed
         if self.monoisotopic:
@@ -272,7 +272,7 @@ class ProteinAnalysis(object):
         ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return ie_point.pi()
         
-    def secondary_structure_fraction (self):
+    def secondary_structure_fraction(self):
         """Calculate fraction of helix, turn and sheet.
         
         Returns a list of the fraction of amino acids which tend

@@ -681,7 +681,7 @@ class GenePopController(object):
                     self.stream.readline()
                     fis_table = _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
                     self.stream.readline()
-                    avg_qinter, avg_fis = tuple(map (lambda x: _gp_float(x),
+                    avg_qinter, avg_fis = tuple(map(lambda x: _gp_float(x),
                         filter(lambda y:y != "", self.stream.readline().split(" "))))
                     return locus, fis_table, avg_qinter, avg_fis
                 l = self.stream.readline()

@@ -103,7 +103,7 @@ class FDistController(object):
             sample_line = f.readline().rstrip().split(' ')
             sample = int(sample_line[9])
             F_line = f.readline().rstrip().split(' ')
-            F, obs = my_float(F_line[5]), int (F_line[8])
+            F, obs = my_float(F_line[5]), int(F_line[8])
         f.close()
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)

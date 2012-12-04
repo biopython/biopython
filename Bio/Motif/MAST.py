@@ -19,7 +19,7 @@ class Record(object):
     name.
     """
 
-    def __init__ (self):
+    def __init__(self):
         self.sequences = []
         self.version = ""
         self.database = ""
@@ -27,7 +27,7 @@ class Record(object):
         self.alphabet = None
         self.motifs = []
     
-    def get_motif_by_name (self, name):
+    def get_motif_by_name(self, name):
         for m in self.motifs:
             if m.name == name:
                 return m

@@ -117,7 +117,7 @@ class CodonAdaptationIndex(object):
         if dna_sequence.islower():
             dna_sequence = dna_sequence.upper()
 
-        for i in range (0, len(dna_sequence), 3):
+        for i in range(0, len(dna_sequence), 3):
             codon = dna_sequence[i:i+3]
             if codon in self.index:
                 if codon not in ['ATG', 'TGG']: # these two codons are always one, exclude them

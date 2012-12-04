@@ -74,24 +74,24 @@ class MEMEMotif (Motif):
     add_to_logodds (position): add a new position to the log odds matrix. The position should be a tuple of log odds values for the nucleotide/amino acid at that position.
     compare_motifs (other_motif): returns the maximum correlation between this motif and other_motif
     """
-    def __init__ (self):
+    def __init__(self):
         Motif.__init__(self)
         self.evalue = 0.0
     
-    def _numoccurrences (self, number):
+    def _numoccurrences(self, number):
         if type(number) == int:
             self.num_occurrences = number
         else:
             number = int(number)
             self.num_occurrences = number
 
-    def get_instance_by_name (self,name):
+    def get_instance_by_name(self,name):
         for i in self.instances:
             if i.sequence_name == name:
                 return i
         return None
 
-    def add_instance_from_values (self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
+    def add_instance_from_values(self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
         inst = MEMEInstance(sequence,self.alphabet)
         inst._pvalue(pvalue)
         inst._seqname(name)
@@ -105,7 +105,7 @@ class MEMEMotif (Motif):
             inst._motifname(self.name)
         self.add_instance(inst)
     
-    def _evalue (self, evalue):
+    def _evalue(self, evalue):
         if type(evalue) == float:
             self.evalue = evalue
         else:
@@ -116,7 +116,7 @@ class MEMEMotif (Motif):
 class MEMEInstance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof. 
     """
-    def __init__ (self,*args,**kwds):
+    def __init__(self,*args,**kwds):
         Seq.Seq.__init__(self,*args,**kwds)
         self.sequence_name = ""
         self.start = 0
@@ -126,28 +126,28 @@ class MEMEInstance(Seq.Seq):
         self.motif_name = ""
         
     
-    def _seqname (self, name):
+    def _seqname(self, name):
         self.sequence_name = name
         
-    def _motifname (self, name):
+    def _motifname(self, name):
         self.motif_name = name
     
-    def _start (self,start):
+    def _start(self,start):
         start = int(start)
         self.start = start
     
-    def _pvalue (self,pval):
+    def _pvalue(self,pval):
         pval = float(pval)
         self.pvalue = pval
     
-    def _score (self, score):
+    def _score(self, score):
         score = float(score)
         self.score = score
     
-    def _strand (self, strand):
+    def _strand(self, strand):
         self.strand = strand
     
-    def _length (self, length):
+    def _length(self, length):
         self.length = length
     
 
@@ -158,7 +158,7 @@ class MEMERecord(object):
     MEME. It implements no methods of its own.
         
     """
-    def __init__ (self):
+    def __init__(self):
         """__init__ (self)"""
         self.motifs = []
         self.version = ""
@@ -167,7 +167,7 @@ class MEMERecord(object):
         self.alphabet = None
         self.sequence_names = []
         
-    def get_motif_by_name (self, name):
+    def get_motif_by_name(self, name):
         for m in self.motifs:
             if m.name == name:
                 return m

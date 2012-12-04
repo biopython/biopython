@@ -24,7 +24,7 @@ class SimCoalCache(Cache.SimCoalCache):
         f = inputFiles[parFile]
         text = f.read()
         f.close()
-        w = open (os.sep.join([self.data_dir, 'SimCoal', 'runs', parFile]), 'w')
+        w = open(os.sep.join([self.data_dir, 'SimCoal', 'runs', parFile]), 'w')
         w.write(text)
         w.close()
         self.run_simcoal(parFile, numSims, ploydi)

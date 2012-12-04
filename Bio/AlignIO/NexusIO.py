@@ -52,7 +52,7 @@ def NexusIterator(handle, seq_count=None):
     records = (SeqRecord(n.matrix[new_name], id=new_name, \
                          name=old_name, description="") \
                for old_name, new_name \
-               in zip (n.unaltered_taxlabels, n.taxlabels))
+               in zip(n.unaltered_taxlabels, n.taxlabels))
     #All done
     yield MultipleSeqAlignment(records, n.alphabet)
 
