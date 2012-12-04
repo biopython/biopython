@@ -23,7 +23,7 @@ def SimpleFastaParser(handle):
     line (without the leading '>' character), and the sequence (with any
     whitespace removed). The title line is not divided up into an
     identifier (the first word) and comment or description.
-    
+
     >>> for values in SimpleFastaParser(open("Fasta/dups.fasta")):
     ...     print values
     ('alpha', 'ACGTA')
@@ -103,7 +103,7 @@ def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
 
     """
     if title2ids:
-        for title, sequence in SimpleFastaParser(handle): 
+        for title, sequence in SimpleFastaParser(handle):
             id, name, descr = title2ids(title)
             yield SeqRecord(Seq(sequence, alphabet),
                             id=id, name=name, description=descr)

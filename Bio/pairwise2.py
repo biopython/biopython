@@ -66,7 +66,6 @@ Some examples:
       Score=3
     <BLANKLINE>
 
-    
     # Same thing as before, but with a local alignment.
     >>> for a in pairwise2.align.localxx("ACCGT", "ACG"):
     ...     print format_alignment(*a)
@@ -80,7 +79,7 @@ Some examples:
     A-CG-
       Score=3
     <BLANKLINE>
-    
+
     # Do a global alignment.  Identical characters are given 2 points,
     # 1 point is deducted for each non-identical character.
     >>> for a in pairwise2.align.globalmx("ACCGT", "ACG", 2, -1):
@@ -111,7 +110,7 @@ Some examples:
       Score=5
     <BLANKLINE>
 
-The alignment function can also use known matrices already included in 
+The alignment function can also use known matrices already included in
 Biopython ( Bio.SubsMat -> MatrixInfo ).
 
     >>> from Bio.SubsMat import MatrixInfo as matlist
@@ -153,7 +152,7 @@ MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
 class align(object):
     """This class provides functions that do alignments."""
-    
+
     class alignment_function:
         """This class is callable impersonates an alignment function.
         The constructor takes the name of the function.  This class
@@ -295,11 +294,11 @@ alignment occurs.
             for name, default in default_params:
                 keywds[name] = keywds.get(name, default)
             return keywds
-            
+
         def __call__(self, *args, **keywds):
             keywds = self.decode(*args, **keywds)
             return _align(**keywds)
-        
+
     def __getattr__(self, attr):
         return self.alignment_function(attr)
 align = align()
@@ -329,7 +328,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
 
     #print "SCORE"; print_matrix(score_matrix)
     #print "TRACEBACK"; print_matrix(trace_matrix)
-         
+
     # Look for the proper starting point.  Get a list of all possible
     # starting points.
     starts = _find_start(
@@ -341,7 +340,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     # If they only want the score, then return it.
     if score_only:
         return best_score
-    
+
     tolerance = 0  # XXX do anything with this?
     # Now find all the positions within some tolerance of the best
     # score.
@@ -352,7 +351,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
             del starts[i]
         else:
             i += 1
-    
+
     # Recover the alignments and return them.
     x = _recover_alignments(
         sequenceA, sequenceB, starts, score_matrix, trace_matrix,
@@ -360,12 +359,12 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     return x
 
 def _make_score_matrix_generic(
-    sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn, 
+    sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     penalize_extend_when_opening, penalize_end_gaps, align_globally,
     score_only):
     # This is an implementation of the Needleman-Wunsch dynamic
     # programming algorithm for aligning sequences.
-    
+
     # Create the score and traceback matrices.  These should be in the
     # shape:
     # sequenceA (down) x sequenceB (across)
@@ -421,7 +420,7 @@ def _make_score_matrix_generic(
                 elif score_rint > best_score_rint:
                     best_score, best_score_rint = score, score_rint
                     best_indexes = [(row-1, i)]
-            
+
             # Try to find a better score by opening gaps in sequenceB.
             for i in range(0, row-1):
                 score = score_matrix[i][col-1] + gap_B_fn(i, row-1-i)
@@ -501,14 +500,14 @@ def _make_score_matrix_fast(
     for i in range(lenB-1):
         col_cache_score[i] = score_matrix[0][i] + first_B_gap
         col_cache_index[i] = [(0, i)]
-        
+
     # Fill in the score_matrix.
     for row in range(1, lenA):
         for col in range(1, lenB):
             # Calculate the score that would occur by extending the
             # alignment without gaps.
             nogap_score = score_matrix[row-1][col-1]
-            
+
             # Check the score that would occur if there were a gap in
             # sequence A.
             if col > 1:
@@ -516,7 +515,7 @@ def _make_score_matrix_fast(
             else:
                 row_score = nogap_score - 1   # Make sure it's not the best.
             # Check the score that would occur if there were a gap in
-            # sequence B.  
+            # sequence B.
             if row > 1:
                 col_score = col_cache_score[col-1]
             else:
@@ -575,9 +574,9 @@ def _make_score_matrix_fast(
                 if (row-1, col-1) not in row_cache_index[row-1]:
                     row_cache_index[row-1] = row_cache_index[row-1] + \
                                              [(row-1, col-1)]
-                    
+
     return score_matrix, trace_matrix
-    
+
 def _recover_alignments(sequenceA, sequenceB, starts,
                         score_matrix, trace_matrix, align_globally,
                         penalize_end_gaps, gap_char, one_alignment_only):
@@ -623,7 +622,7 @@ def _recover_alignments(sequenceA, sequenceB, starts,
             seqB = sequenceB[:prevB] + seqB
             # add the rest of the gaps
             seqA, seqB = _lpad_until_equal(seqA, seqB, gap_char)
-            
+
             # Now make sure begin is set.
             if begin is None:
                 if align_globally:
@@ -650,7 +649,7 @@ def _recover_alignments(sequenceA, sequenceB, starts,
                         (seqA, seqB, score, begin, end, prev_pos, next_pos))
                     if one_alignment_only:
                         break
-                    
+
     return _clean_alignments(tracebacks)
 
 def _find_start(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,

@@ -39,9 +39,9 @@ void *Trie_get(const Trie* trie, const char *key);
  * Lookup whether a key exists in the Trie, allowing for mismatches to
  * the dictionary.  Passes back values using a callback function.
  */
-void 
+void
 Trie_get_approximate(const Trie* trie, const char *key, const int k,
-		     void (*callback)(const char *key, 
+		     void (*callback)(const char *key,
 				      const void *value,
 				      const int mismatches,
 				      void *data),
@@ -74,7 +74,7 @@ int Trie_has_prefix(const Trie* trie, const char *prefix);
  * Iterate over all the keys in the trie that start with a prefix.
  */
 void Trie_with_prefix(const Trie* trie, const char *prefix,
-		      void (*callback)(const char *key, 
+		      void (*callback)(const char *key,
 				       const void *value,
 				       void *data),
 		      void *data
@@ -88,8 +88,8 @@ void Trie_with_prefix(const Trie* trie, const char *prefix,
  * in arbitrary order.  data is a pointer to some arbitrary data and
  * gets passed unchanged to the callback.
  */
-void Trie_iterate(const Trie* trie, 
-		  void (*callback)(const char *key, 
+void Trie_iterate(const Trie* trie,
+		  void (*callback)(const char *key,
 				   const void *value,
 				   void *data),
 		  void *data
@@ -108,8 +108,8 @@ void Trie_iterate(const Trie* trie,
  * This function is platform-dependent, so byte streams created on one
  * machine may not necessarily port to another.
  */
-int Trie_serialize(const Trie* trie, 
-		   int (*write)(const void *towrite, const int length, 
+int Trie_serialize(const Trie* trie,
+		   int (*write)(const void *towrite, const int length,
 				void *data),
 		   int (*write_value)(const void *value, void *data),
 		   void *data);

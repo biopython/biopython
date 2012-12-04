@@ -8,10 +8,10 @@
 terms of SCOP unique identifiers (sunid).
 
 The file format is described in the scop
-"release notes.":http://scop.berkeley.edu/release-notes-1.55.html 
+"release notes.":http://scop.berkeley.edu/release-notes-1.55.html
 The latest HIE file can be found
 "elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
-  
+
 "Release 1.55":http://scop.berkeley.edu/parse/dir.hie.scop.txt_1.55 (July 2001)
 """
 
@@ -47,7 +47,7 @@ class Record(object):
         columns = line.split('\t')   # separate the tab-delineated cols
         if len(columns) != 3:
             raise ValueError("I don't understand the format of %s" % line)
-        
+
         sunid, parent, children = columns
 
         if sunid =='-':
@@ -78,7 +78,7 @@ class Record(object):
                 s.append('0')
             else:
                 s.append('-')
-                
+
 
         if self.children:
             child_str = map(str, self.children)

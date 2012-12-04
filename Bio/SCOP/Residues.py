@@ -4,7 +4,7 @@
 # as part of this package.
 
 # Gavin E. Crooks 2001-11-03
-# Minor extensions, some bug fixes, and major changes to the interface 
+# Minor extensions, some bug fixes, and major changes to the interface
 
 import re
 
@@ -30,7 +30,7 @@ class Residues(object):
     pdbid -- An optional PDB id, e.g. "1bba"
 
     fragments -- A sequence of tuples (chainID, startResID, endResID)
-    
+
     """
 
 
@@ -51,7 +51,7 @@ class Residues(object):
 
         if str=='' or str == '-' or str=='(-)':  # no fragments, whole sequence
             return
-    
+
         fragments = []
         for l in str.split(","):
             m = _fragment_re.match(l)
@@ -67,16 +67,16 @@ class Residues(object):
                     raise ValueError("I don't understand the chain in %s" % l)
                 chain = chain[:-1]   # chop off the ':'
             else:
-                chain ="" 
-            
+                chain =""
+
             fragments.append((chain, start, end))
         self.fragments = tuple(fragments)
-            
+
     def __str__(self):
         prefix =""
         if self.pdbid:
             prefix =self.pdbid +' '
-            
+
         if not self.fragments: return prefix+'-'
         strs = []
         for chain, start, end in self.fragments:

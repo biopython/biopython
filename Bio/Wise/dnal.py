@@ -7,7 +7,7 @@
 # some of the models in the Wise2 package by Ewan Birney available from:
 # ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
 # http://www.ebi.ac.uk/Wise2/
-# 
+#
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
@@ -60,7 +60,7 @@ def _get_coords(filename):
 
     if end_line is None: # sequence is too short
         return [(0, 0), (0, 0)]
-        
+
     return zip(*map(_alb_line2coords, [start_line, end_line])) # returns [(start0, end0), (start1, end1)]
 
 def _any(seq, pred=bool):
@@ -80,7 +80,7 @@ class Statistics(object):
             self.extensions = 0
         else:
             self.extensions = _fgrep_count('"INSERT" %s' % extension, filename)
-            
+
         self.score = (match*self.matches +
                       mismatch*self.mismatches +
                       gap*self.gaps +

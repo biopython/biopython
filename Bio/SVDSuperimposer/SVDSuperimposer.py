@@ -9,15 +9,15 @@ from numpy.linalg import svd, det
 class SVDSuperimposer(object):
     """
     SVDSuperimposer finds the best rotation and translation to put
-    two point sets on top of each other (minimizing the RMSD). This is 
-    eg. useful to superimpose crystal structures.  
+    two point sets on top of each other (minimizing the RMSD). This is
+    eg. useful to superimpose crystal structures.
 
     SVD stands for Singular Value Decomposition, which is used to calculate
     the superposition.
 
     Reference:
 
-    Matrix computations, 2nd ed. Golub, G. & Van Loan, CF., The Johns 
+    Matrix computations, 2nd ed. Golub, G. & Van Loan, CF., The Johns
     Hopkins University Press, Baltimore, 1989
     """
     def __init__(self):
@@ -41,7 +41,7 @@ class SVDSuperimposer(object):
         return sqrt(sum(sum(diff*diff))/l)
 
     # Public methods
-    
+
     def set(self, reference_coords, coords):
         """
         Set the coordinates to be superimposed.
@@ -71,8 +71,8 @@ class SVDSuperimposer(object):
         coords=self.coords
         reference_coords=self.reference_coords
         # center on centroid
-        av1=sum(coords)/self.n  
-        av2=sum(reference_coords)/self.n    
+        av1=sum(coords)/self.n
+        av2=sum(reference_coords)/self.n
         coords=coords-av1
         reference_coords=reference_coords-av2
         # correlation matrix

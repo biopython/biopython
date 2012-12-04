@@ -24,7 +24,7 @@ if sys.version_info[0] >= 3:
 
     def _as_bytes(s):
         """Turn byte string or unicode string into a bytes string.
-        
+
         The Python 2 version returns a (byte) string.
         """
         if isinstance(s, bytes):
@@ -33,7 +33,6 @@ if sys.version_info[0] >= 3:
         #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_encode(s)[0]
 
-    
     _as_string = _as_unicode
 
     def _is_int_or_long(i):
@@ -85,11 +84,11 @@ else:
         if isinstance(s, unicode):
             return s
         return s.decode()
-    
+
     def _as_bytes(s):
         """Turn a (byte) string or a unicode string into a (byte) string."""
         return str(s)
-    
+
     _as_string = _as_bytes
 
     def _is_int_or_long(i):

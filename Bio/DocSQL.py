@@ -45,7 +45,7 @@ class NoInsertionError(Exception):
 def _check_is_public(name):
     if name[:6] == "_names":
         raise AttributeError
-    
+
 class QueryRow(list):
     def __init__(self, cursor):
         try:
@@ -56,7 +56,7 @@ class QueryRow(list):
 
         object.__setattr__(self, "_names", [x[0] for x in cursor.description]) # FIXME: legacy
         object.__setattr__(self, "_names_hash", {})
-        
+
         for i, name in enumerate(self._names):
             self._names_hash[name] = i
 
@@ -73,7 +73,7 @@ class QueryRow(list):
             self._names_hash
         except AttributeError:
             return object.__setattr__(self, name, value)
-            
+
         _check_is_public(name)
         try:
             index = self._names_hash[name]
@@ -178,7 +178,7 @@ class Update(Create):
 
 class Insert(Create):
     MSG_INTEGRITY_ERROR = "Couldn't insert: %s. "
-    
+
     def __init__(self, *args, **keywds):
         try:
             Create.__init__(self, *args, **keywds)
@@ -188,9 +188,9 @@ class Insert(Create):
                 self.total_count
             except AttributeError:
                 self.total_count = 0
-            
+
             raise MySQLdb.IntegrityError(self.error_message)
-            
+
         self.id = self.cursor().insert_id()
         try:
             self.total_count += self.cursor().rowcount

@@ -32,11 +32,11 @@ def my_float(f):
 class FDistController(object):
     def __init__(self, fdist_dir = '', ext = None):
         """Initializes the controller.
-        
+
         fdist_dir is the directory where fdist2 is.
-        ext is the extension of binaries (.exe on windows, 
+        ext is the extension of binaries (.exe on windows,
           none on Unix)
-        
+
         """
         self.tmp_idx = 0
         self.fdist_dir = fdist_dir
@@ -73,7 +73,7 @@ class FDistController(object):
     def run_datacal(self, data_dir='.', version=1,
         crit_freq = 0.99, p = 0.5, beta= (0.25, 0.25)):
         """Executes datacal.
-        
+
            data_dir - Where the data is found.
         """
         in_name = self._get_temp_file()
@@ -120,22 +120,22 @@ class FDistController(object):
         """
         inf = open(data_dir + os.sep + 'INTFILE', 'w')
         for i in range(98):
-            inf.write(str(randint(-maxint+1,maxint-1)) + '\n') 
+            inf.write(str(randint(-maxint+1,maxint-1)) + '\n')
         inf.write('8\n')
         inf.close()
-    
+
     def run_fdist(self, npops, nsamples, fst, sample_size,
         mut = 0, num_sims = 50000, data_dir='.',
         is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
         max_freq = 0.99):
         """Executes (d)fdist.
-        
+
         Parameters:
         npops - Number of populations
         nsamples - Number of populations sampled
         fst - expected Fst
         sample_size - Sample size per population
-                For dfdist: if zero a sample size file has to be provided 
+                For dfdist: if zero a sample size file has to be provided
         mut - 1=Stepwise, 0=Infinite allele
         num_sims - number of simulations
         data_dir - Where the data is found
@@ -146,7 +146,7 @@ class FDistController(object):
 
         Returns:
         fst - Average Fst
-        
+
         Important Note: This can take quite a while to run!
         """
         if fst >= 0.9:
@@ -204,7 +204,7 @@ class FDistController(object):
         is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
         max_freq = 0.99):
         """Executes fdist trying to force Fst.
-        
+
         Parameters:
         try_runs - Number of simulations on the part trying to get
                    Fst correct
@@ -287,7 +287,7 @@ class FDistController(object):
             return []
         f.close()
         return conf_lines
-        
+
     def run_pv(self, out_file='probs.dat', data_dir='.',
                version = 1, smooth=0.04):
         """Executes pv.

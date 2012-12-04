@@ -2,7 +2,7 @@
 # Copyright 2008 by Michiel de Hoon.  All rights reserved.
 # Revisions copyright 2009 by Cymon J. Cox.  All rights reserved.
 # Revisions copyright 2009 by Peter Cock.  All rights reserved.
-# 
+#
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -44,7 +44,7 @@ def read(handle):
     for line in handle:
         if line.startswith("BEGIN_SEQUENCE"):
             record = Record()
-            record.file_name = line[15:].rstrip() 
+            record.file_name = line[15:].rstrip()
             break
     else:
         return # No record found
@@ -54,7 +54,7 @@ def read(handle):
             break
     else:
         raise ValueError("Failed to find BEGIN_COMMENT line")
-       
+
     for line in handle:
         line = line.strip()
         if not line:

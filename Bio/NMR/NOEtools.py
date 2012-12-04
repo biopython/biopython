@@ -1,16 +1,16 @@
 # NOEtools.py: A python module for predicting NOE coordinates from
-#                assignment data.  
+#                assignment data.
 #
 #    The input and output are modelled on nmrview peaklists.
 #    This modules is suitable for directly generating an nmrview
 #    peaklist with predicted crosspeaks directly from the
-#    input assignment peaklist. 
+#    input assignment peaklist.
 
 import xpktools
 
 def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
 # Predict the i->j NOE position based on self peak (diagonal) assignments
-# 
+#
 # example predictNOE(peaklist,"N15","H1",10,12)
 #    where peaklist is of the type xpktools.peaklist
 #    would generate a .xpk file entry for a crosspeak

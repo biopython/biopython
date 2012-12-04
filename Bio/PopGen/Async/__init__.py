@@ -36,7 +36,7 @@ class Async(object):
 
     def run_program(self, program, parameters, input_files):
         '''Runs a program.
-        
+
            Real _run_program to be implemented by concrete classes.
 
            parameters:

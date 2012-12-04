@@ -25,11 +25,11 @@ class XpkEntry(object):
 
     def __init__(self,entry,headline):
        self.fields={}   # Holds all fields from input line in a dictionary
-                        # keys are data labels from the .xpk header 
+                        # keys are data labels from the .xpk header
        datlist = entry.split()
        headlist = headline.split()
 
-       i=0  
+       i=0
        for i in range(len(datlist)-1):
          self.fields[headlist[i]]=datlist[i+1]
        i=i+1
@@ -44,7 +44,7 @@ class Peaklist(object):
     # Header file lines are available as attributes
     # The data lines are available as a list
     def __init__(self,infn):
-    
+
         self.data=[]    # init the data line list
 
         infile=open(infn,'r')
@@ -57,7 +57,7 @@ class Peaklist(object):
         self.sf=infile.readline().split("\012")[0]
         self.datalabels=infile.readline().split("\012")[0]
 
-        # Read in the data lines to a list 
+        # Read in the data lines to a list
         line=infile.readline()
         while line:
             self.data.append(line.split("\012")[0])
@@ -117,7 +117,7 @@ class Peaklist(object):
         outfile.write("\012")
         outfile.write(self.datalabels)
         outfile.write("\012")
-        outfile.close() 
+        outfile.close()
 
 def _try_open_read(fn):
 # Try to open a file for reading.  Exit on IOError
@@ -192,7 +192,7 @@ def _find_start_entry(line,n):
 def data_table(fn_list, datalabel, keyatom):
 # Generate and generate a data table from a list of
 # input xpk files <fn_list>.  The data element reported is
-# <datalabel> and the index for the data table is by the 
+# <datalabel> and the index for the data table is by the
 # nucleus indicated by <keyatom>.
 
   outlist=[]
@@ -202,7 +202,7 @@ def data_table(fn_list, datalabel, keyatom):
   # Find global max and min residue numbers
   minr=dict_list[0]["minres"]
   maxr=dict_list[0]["maxres"]
- 
+
   for dictionary in dict_list:
     if (maxr < dictionary["maxres"]):
       maxr = dictionary["maxres"]

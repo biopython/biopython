@@ -92,7 +92,7 @@ def _calc_empirical_expects(xs, ys, classes, features):
     for index, key in enumerate(classes):
         class2index[key] = index
     ys_i = [class2index[y] for y in ys]
-    
+
     expect = []
     N = len(xs)
     for feature in features:
@@ -256,12 +256,12 @@ def train(training_set, results, feature_fns, update_fn=None,
         diff = map(lambda x, y: numpy.fabs(x-y), alphas, nalphas)
         diff = reduce(lambda x, y: x+y, diff, 0)
         alphas = nalphas
-        
+
         me = MaxEntropy()
         me.alphas, me.classes, me.feature_fns = alphas, classes, feature_fns
         if update_fn is not None:
             update_fn(me)
-    
+
         if diff < iis_converge:   # converged
             break
     else:
@@ -319,7 +319,7 @@ if __name__ == "__main__":
         else:
             return 1
 
-    user_functions=[udf1, udf2, udf3] # must be an iterable type 
+    user_functions=[udf1, udf2, udf3] # must be an iterable type
 
     xe=train(xcar, ycar, user_functions)
     for xv,yv in zip(xcar, ycar):

@@ -35,7 +35,7 @@ def _convert_genepop_to_fdist(gp_rec):
        FDist record.
     """
     fd_rec = Bio.PopGen.FDist.Record()
-    
+
     fd_rec.data_org = 0
     fd_rec.num_loci = len(gp_rec.loci_list)
     fd_rec.num_pops = len(gp_rec.populations)
@@ -143,7 +143,6 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
             popCnt += 1
         return popCnt
 
-    
     fd_rec.data_org = 0
     fd_rec.num_loci = len(gp_rec.loci_list)
     work_rec0 = FileParser.read(gp_rec.fname)
@@ -197,7 +196,6 @@ def approximate_fst(desired_fst, simulated_fst, parameter_fst,
            max_run_fst = 1, min_run_fst = 0, limit = 0.005):
     """Calculates the next Fst attempt in order to approximate a
        desired Fst.
-    
     """
     if abs(simulated_fst - desired_fst) < limit:
         return parameter_fst, max_run_fst, min_run_fst

@@ -8,12 +8,12 @@
 """ASTRAL RAF (Rapid Access Format) Sequence Maps.
 
 The ASTRAL RAF Sequence Maps record the relationship between the PDB SEQRES
-records (representing the sequence of the molecule used in an experiment) to 
-the ATOM records (representing the atoms experimentally observed). 
+records (representing the sequence of the molecule used in an experiment) to
+the ATOM records (representing the atoms experimentally observed).
 
 This data is derived from the Protein Data Bank CIF files. Known errors in the
 CIF files are corrected manually, with the original PDB file serving as the
-final arbiter in case of discrepancies. 
+final arbiter in case of discrepancies.
 
 Residues are referenced by residue ID. This consists of a the PDB residue
 sequence number (upto 4 digits) and an optional PDB  insertion code (an
@@ -26,7 +26,7 @@ to_one_letter_code -- A mapping from the 3-letter amino acid codes found
                         include chemically modified residues.
 """
 
-from copy import copy 
+from copy import copy
 
 from Bio.SCOP.Residues import Residues
 
@@ -34,7 +34,7 @@ from three_to_one_dict import to_one_letter_code
 
 def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.
-    
+
     Letters are uppercased, and "." ("Unknown") is converted to "X".
     """
     if one_letter_code == '.':
@@ -50,13 +50,13 @@ class SeqMapIndex(dict):
 
     The index key is a concatenation of the  PDB ID and chain ID. e.g
     "2drcA", "155c_". RAF uses an underscore to indicate blank
-    chain IDs.    
+    chain IDs.
     """
 
     def __init__(self, filename):
         """
         Arguments:
-        
+
           filename  -- The file to index
         """
         dict.__init__(self)
@@ -108,29 +108,28 @@ class SeqMapIndex(dict):
             if chainid=='' or chainid=='-' or chainid==' ' or chainid=='_':
                 chainid = '_'
             id = pdbid + chainid
-            
-            
+
             sm = self[id]
-            
+
             #Cut out fragment of interest
             start = 0
             end = len(sm.res)
             if frag[1] : start = int(sm.index(frag[1], chainid))
             if frag[2] : end = int(sm.index(frag[2], chainid)+1)
-            
+
             sm = sm[start:end]
 
             if seqMap is None:
                 seqMap = sm
             else:
                 seqMap += sm
-                            
+
         return seqMap
 
 
 class SeqMap(object):
     """An ASTRAL RAF (Rapid Access Format) Sequence Map.
-    
+
     This is a list like object; You can find the location of particular residues
     with index(), slice this SeqMap into fragments, and glue fragments back
     together with extend().
@@ -154,21 +153,20 @@ class SeqMap(object):
         self.res = []
         if line:
             self._process(line)
-        
 
     def _process(self, line):
         """Parses a RAF record into a SeqMap object.
         """
         header_len = 38
- 
-        line = line.rstrip()  # no trailing whitespace        
 
-        if len(line)<header_len: 
+        line = line.rstrip()  # no trailing whitespace
+
+        if len(line)<header_len:
             raise ValueError("Incomplete header: "+line)
 
         self.pdbid = line[0:4]
         chainid = line[4:5]
-        
+
         self.version = line[6:10]
 
         #Raf format versions 0.01 and 0.02 are identical for practical purposes
@@ -248,12 +246,12 @@ class SeqMap(object):
         residue subset.
 
         pdb_handle -- A handle to the relevant PDB file.
-        
+
         out_handle -- All output is written to this file like object.
         """
-        #This code should be refactored when (if?) biopython gets a PDB parser 
+        #This code should be refactored when (if?) biopython gets a PDB parser
 
-        #The set of residues that I have to find records for. 
+        #The set of residues that I have to find records for.
         resSet = {}
         for r in self.res:
             if r.atom=='X' : #Unknown residue type
@@ -283,7 +281,7 @@ class SeqMap(object):
             #for k in resFound.keys():
             #    del resSet[k]
             #print resSet
-                                     
+
             raise RuntimeError('I could not find at least one ATOM or HETATM' \
                    +' record for each and every residue in this sequence map.')
 
@@ -293,9 +291,9 @@ class Res(object):
 
     chainid -- A single character chain ID.
 
-    resid   -- The residue ID. 
+    resid   -- The residue ID.
 
-    atom    -- amino acid one-letter code from ATOM records. 
+    atom    -- amino acid one-letter code from ATOM records.
 
     seqres  -- amino acid one-letter code from SEQRES records.
     """
@@ -311,8 +309,8 @@ def parse(handle):
     in the file.
 
     Arguments:
-        
+
         handle -- file-like object.
-    """ 
+    """
     for line in handle:
         yield SeqMap(line)

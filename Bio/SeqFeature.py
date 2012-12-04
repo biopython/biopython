@@ -60,7 +60,7 @@ class SeqFeature(object):
     be related to others. For example, in the example GenBank feature
     shown below, the location_operator would be "join"
     o strand - A value specifying on which strand (of a DNA sequence, for
-    instance) the feature deals with. 1 indicates the plus strand, -1 
+    instance) the feature deals with. 1 indicates the plus strand, -1
     indicates the minus strand, 0 indicates stranded but unknown (? in GFF3),
     while the default of None indicates that strand doesn't apply (dot in GFF3,
     e.g. features on proteins). Note this is a shortcut for accessing the
@@ -92,7 +92,7 @@ class SeqFeature(object):
     method to do this for you.
     """
     def __init__(self, location = None, type = '', location_operator = '',
-                 strand = None, id = "<unknown id>", 
+                 strand = None, id = "<unknown id>",
                  qualifiers = None, sub_features = None,
                  ref = None, ref_db = None):
         """Initialize a SeqFeature on a Sequence.
@@ -241,7 +241,7 @@ class SeqFeature(object):
 
     def _flip(self, length):
         """Returns a copy of the feature with its location flipped (PRIVATE).
-        
+
         The argument length gives the length of the parent sequence. For
         example a location 0..20 (+1 strand) with parent length 30 becomes
         after flipping 10..30 (-1 strand). Strandless (None) or unknown
@@ -302,7 +302,7 @@ class SeqFeature(object):
             return f_seq
         else:
             return self.location.extract(parent_sequence)
-    
+
     def __nonzero__(self):
         """Returns True regardless of the length of the feature.
 
@@ -556,12 +556,12 @@ class FeatureLocation(object):
         to make it easy to deal with non-fuzzy ends.
 
         i.e. Short form:
-        
+
         >>> from Bio.SeqFeature import FeatureLocation
         >>> loc = FeatureLocation(5, 10, strand=-1)
         >>> print loc
         [5:10](-)
-        
+
         Explicit form:
 
         >>> from Bio.SeqFeature import FeatureLocation, ExactPosition
@@ -678,7 +678,7 @@ class FeatureLocation(object):
 
     def __len__(self):
         """Returns the length of the region described by the FeatureLocation.
-        
+
         Note that extra care may be needed for fuzzy locations, e.g.
 
         >>> from Bio.SeqFeature import FeatureLocation
@@ -794,7 +794,7 @@ class FeatureLocation(object):
 
         This is now a alias for int(feature.end), which should be
         used in preference -- unless you are trying to support old
-        versions of Biopython.  
+        versions of Biopython.
         """
         return int(self._end)
 
@@ -888,7 +888,7 @@ class ExactPosition(int, AbstractPosition):
 
 class UncertainPosition(ExactPosition):
     """Specify a specific position which is uncertain.
-    
+
     This is used in UniProt, e.g. ?222 for uncertain position 222, or in the
     XML format explicitly marked as uncertain. Does not apply to GenBank/EMBL.
     """
@@ -922,7 +922,7 @@ class UnknownPosition(AbstractPosition):
 
     def _flip(self, length):
         return self
-        
+
 class WithinPosition(int, AbstractPosition):
     """Specify the position of a boundary within some coordinates.
 
@@ -1005,7 +1005,7 @@ class WithinPosition(int, AbstractPosition):
     True
     >>> p2 == 13
     True
-    
+
     """
     def __new__(cls, position, left, right):
         assert position==left or position==right, \
@@ -1053,7 +1053,7 @@ class BetweenPosition(int, AbstractPosition):
     o left - The start (left) position of the boundary
     o right - The end (right) position of the boundary
 
-    This allows dealing with a position like 123^456. This                                                  
+    This allows dealing with a position like 123^456. This
     indicates that the start of the sequence is somewhere between
     123 and 456. It is up to the parser to set the position argument
     to either boundary point (depending on if this is being used as
@@ -1386,7 +1386,7 @@ class PositionGap(object):
     def __repr__(self):
         """A string representation of the position gap for debugging."""
         return "%s(%s)" % (self.__class__.__name__, repr(self.gap_size))
-    
+
     def __str__(self):
         out = "gap(%s)" % self.gap_size
         return out

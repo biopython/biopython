@@ -31,8 +31,7 @@ def _gp_int(tok):
         return int(tok)
     except ValueError:
         return str(tok)
-    
-    
+
 def _read_allele_freq_table(f):
     l = f.readline()
     while ' --' not in l:
@@ -67,7 +66,7 @@ def _read_table(f, funs):
         l = f.readline().rstrip()
     l = f.readline().rstrip()
     while '===' not in l and '---' not in l and l != "":
-        toks = filter(lambda x: x != "", l.split(" ")) 
+        toks = filter(lambda x: x != "", l.split(" "))
         line = []
         for i in range(len(toks)):
             try:
@@ -107,7 +106,7 @@ def _read_headed_triangle_matrix(f):
             matrix[(line_pop+1, col_pop)] = clean_vals[col_pop]
     return matrix
 
-def _hw_func(stream, is_locus, has_fisher = False): 
+def _hw_func(stream, is_locus, has_fisher = False):
     l = stream.readline()
     if is_locus:
         hook = "Locus "
@@ -210,11 +209,10 @@ class _GenePopCommandline(AbstractCommandline):
 class GenePopController(object):
     def __init__(self, genepop_dir = None):
         """Initializes the controller.
-        
+
         genepop_dir is the directory where GenePop is.
 
         The binary should be called Genepop (capital G)
-        
         """
         self.controller = _GenePopCommandline(genepop_dir)
 
@@ -367,9 +365,9 @@ class GenePopController(object):
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
         self._run_genepop([ext], [1, 3], fname, opts)
-        def hw_prob_loci_func(self): 
+        def hw_prob_loci_func(self):
             return  _hw_func(self.stream, True, True)
-        def hw_prob_pop_func(self): 
+        def hw_prob_pop_func(self):
             return _hw_func(self.stream, False, True)
         shutil.copyfile(fname+".P", fname+".P2")
         f1 = open(fname + ".P")
@@ -517,7 +515,7 @@ class GenePopController(object):
     #5.1
     def calc_allele_genotype_freqs(self, fname):
         """Calculates allele and genotype frequencies per locus and per sample.
-        
+
         Parameters:
         fname - file name
 
@@ -527,7 +525,7 @@ class GenePopController(object):
             Locus dictionary with key = locus name and content tuple as
               Genotype List with
                 (Allele1, Allele2, observed, expected)
-              (expected homozygotes, observed hm, 
+              (expected homozygotes, observed hm,
               expected heterozygotes, observed ht)
               Allele frequency/Fis dictionary with allele as key and
                 (count, frequency, Fis Weir & Cockerham)
@@ -543,7 +541,6 @@ class GenePopController(object):
                list of allele frequencies in the same order as allele list above
                number of genes
 
-        
         Will create a file called fname.INF
         """
         self._run_genepop(["INF"], [5,1], fname)
@@ -669,7 +666,7 @@ class GenePopController(object):
                 avg_Qintra = _read_table(f, [str, _gp_float])
             l = f.readline()
         f.close()
-        def fis_func(self): 
+        def fis_func(self):
             l = self.stream.readline()
             while l != "":
                 l = l.rstrip()
@@ -701,7 +698,7 @@ class GenePopController(object):
     #6.1 Less genotype frequencies
     def calc_fst_all(self, fname):
         """Executes GenePop and gets Fst/Fis/Fit (all populations)
-        
+
         Parameters:
         fname - file name
 
@@ -713,7 +710,6 @@ class GenePopController(object):
         Will create a file called fname.FST .
 
         This does not return the genotype frequencies.
-        
         """
         self._run_genepop([".FST"], [6,1], fname)
         f = open(fname + ".FST")
@@ -736,7 +732,7 @@ class GenePopController(object):
             l = f.readline()
         f.close()
         f = open(fname + ".FST")
-        def proc(self): 
+        def proc(self):
             if hasattr(self, "last_line"):
                 l = self.last_line
                 del self.last_line
@@ -786,7 +782,7 @@ class GenePopController(object):
                 avg_fst = _read_headed_triangle_matrix(f)
             l = f.readline()
         f.close()
-        def loci_func(self): 
+        def loci_func(self):
             l = self.stream.readline()
             while l != "":
                 l = l.rstrip()

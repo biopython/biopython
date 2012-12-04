@@ -397,7 +397,7 @@ def _load_bgzf_block(handle, text_mode=False):
                          % (_bgzf_magic, magic, handle.tell()))
     gzip_mod_time, gzip_extra_flags, gzip_os, extra_len = \
         struct.unpack("<LBBH", handle.read(8))
-        
+
     block_size = None
     x_len = 0
     while x_len < extra_len:
@@ -452,7 +452,7 @@ class BgzfReader(object):
     Raw start 107264, raw length 17292; data start 393216, data length 63398
     Raw start 124556, raw length 28; data start 456614, data length 0
     >>> handle.close()
- 
+
     Now let's see how to use this block information to jump to
     specific parts of the decompressed BAM file:
 
@@ -772,7 +772,7 @@ class BgzfWriter(object):
 
     def tell(self):
         """Returns a BGZF 64-bit virtual offset."""
-        return make_virtual_offset(self.handle.tell(), len(self._buffer)) 
+        return make_virtual_offset(self.handle.tell(), len(self._buffer))
 
     def seekable(self):
         #Not seekable, but we do support tell...

@@ -7,10 +7,10 @@
 """ Handle the SCOP DEScription file.
 
 The file format is described in the scop
-"release notes.":http://scop.berkeley.edu/release-notes-1.55.html 
+"release notes.":http://scop.berkeley.edu/release-notes-1.55.html
 The latest DES file can be found
 "elsewhere at SCOP.":http://scop.mrc-lmb.cam.ac.uk/scop/parse/
-  
+
 "Release 1.55":http://scop.berkeley.edu/parse/des.cla.scop.txt_1.55 (July 2001)
 """
 
@@ -29,8 +29,8 @@ class Record(object):
     name        -- The SCOP ID (sid) for domains (e.g. d1anu1),
                    currently empty for other node types
 
-    description --  e.g. "All beta proteins","Fibronectin type III", 
-    
+    description --  e.g. "All beta proteins","Fibronectin type III",
+
     """
     def __init__(self, line=None):
         self.sunid = ''
@@ -40,10 +40,10 @@ class Record(object):
         self.description =''
         if line:
             self._process(line)
-        
+
     def _process(self, line):
         """Parses DES records.
-    
+
         Records consist of 5 tab deliminated fields,
         sunid, node type, sccs, node name, node description.
         """
@@ -59,7 +59,7 @@ class Record(object):
         columns = line.split("\t")  # separate the tab-delineated cols
         if len(columns) != 5:
             raise ValueError("I don't understand the format of %s" % line)
-        
+
         sunid, self.nodetype, self.sccs, self.name, self.description = columns
         if self.name=='-': self.name =''
         self.sunid = int(sunid)
@@ -68,13 +68,13 @@ class Record(object):
     def __str__(self):
         s = []
         s.append(self.sunid)
-        s.append(self.nodetype)        
-        s.append(self.sccs)        
+        s.append(self.nodetype)
+        s.append(self.sccs)
         if self.name:
             s.append(self.name)
         else:
             s.append("-")
-        s.append(self.description)        
+        s.append(self.description)
         return "\t".join(map(str,s)) + "\n"
 
 

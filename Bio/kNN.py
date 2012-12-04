@@ -10,7 +10,7 @@ a new observation based the classes in its surrounding neighborhood.
 
 Glossary:
 distance   The distance between two points in the feature space.
-weight     The importance given to each point for classification. 
+weight     The importance given to each point for classification.
 
 
 Classes:
@@ -53,13 +53,12 @@ def equal_weight(x, y):
 
 def train(xs, ys, k, typecode=None):
     """train(xs, ys, k) -> kNN
-    
+
     Train a k nearest neighbors classifier on a training set.  xs is a
     list of observations and ys is a list of the class assignments.
     Thus, xs and ys should contain the same number of elements.  k is
     the number of neighbors that should be examined when doing the
     classification.
-    
     """
     knn = kNN()
     knn.classes = set(ys)
@@ -78,7 +77,6 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     distance between them.  If distance_fn is None (the default), the
     Euclidean distance is used.  Returns a dictionary of the class to
     the weight given to the class.
-    
     """
     x = numpy.asarray(x)
 

@@ -78,7 +78,7 @@ class Record(object):
             for col in row:
                 output = output + '%s\t' % col
             output = output + '\n'
-            
+
         return output
 
 def out_block( text, prefix = '' ):

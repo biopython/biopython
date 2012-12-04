@@ -12,7 +12,7 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
     """Print out a state sequence prediction in a nice manner.
 
     Arguments:
-    
+
     o emissions -- The sequence of emissions of the sequence you are
     dealing with.
 
@@ -37,7 +37,7 @@ def pretty_print_prediction(emissions, real_state, predicted_state,
             extension = seq_length
         else:
             extension = len(emissions) - cur_position
-        
+
         print "%s%s" % (emission_title,
                         emissions[cur_position:cur_position + seq_length])
         print "%s%s" % (real_title,

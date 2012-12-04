@@ -177,7 +177,7 @@ class SplitFDist(object):
                'is_dominant' : is_dominant,
                'theta'       : theta,
                'beta'        : beta,
-               'max_freq'    : max_freq 
+               'max_freq'    : max_freq
            }, {})
            self.parts[id] = full_path
         thread.start_new_thread(self.monitor, ())

@@ -32,7 +32,7 @@ static double PyNumber_AsDouble(PyObject *py_num)
 
 /* Functions in this module. */
 
-double calc_affine_penalty(int length, double open, double extend, 
+double calc_affine_penalty(int length, double open, double extend,
     int penalize_extend_when_opening)
 {
     double penalty;
@@ -51,7 +51,7 @@ struct IndexList {
     int *indexes; /* Array of ints.  Even ints are rows, odd ones are cols. */
 };
 
-static void IndexList_init(struct IndexList *il) 
+static void IndexList_init(struct IndexList *il)
 {
     /* il->num_used = 0;
     il->num_allocated = 0;
@@ -59,7 +59,7 @@ static void IndexList_init(struct IndexList *il)
     memset((void *)il, 0, sizeof(struct IndexList));
 }
 
-static void IndexList_free(struct IndexList *il) 
+static void IndexList_free(struct IndexList *il)
 {
     if(il->indexes)
 	free(il->indexes);
@@ -71,8 +71,8 @@ static void IndexList_clear(struct IndexList *il)
     il->num_used = 0;
 }
 
-static int IndexList_contains(struct IndexList *il, 
-			      const int row, const int col) 
+static int IndexList_contains(struct IndexList *il,
+			      const int row, const int col)
 {
     int i;
     int stop;
@@ -99,7 +99,7 @@ static int IndexList__verify_free_index(struct IndexList *il, int num_needed)
        exact amount for these. */
     if(num_needed <= 2)
 	num_to_allocate = num_needed;
-    else 
+    else
 	num_to_allocate = num_needed*2;
     num_bytes = num_to_allocate*sizeof(int)*2;
     if(!(indexes = realloc((void *)il->indexes, num_bytes))) {
@@ -111,8 +111,8 @@ static int IndexList__verify_free_index(struct IndexList *il, int num_needed)
     return 1;
 }
 
-static void IndexList_append(struct IndexList *il, 
-			     const int row, const int col) 
+static void IndexList_append(struct IndexList *il,
+			     const int row, const int col)
 {
     int i;
     if(!IndexList__verify_free_index(il, il->num_used+1))
@@ -123,7 +123,7 @@ static void IndexList_append(struct IndexList *il,
     il->num_used += 1;
 }
 
-static void IndexList_extend(struct IndexList *il1, struct IndexList *il2) 
+static void IndexList_extend(struct IndexList *il1, struct IndexList *il2)
 {
     int i1, i2;
     int stop;
@@ -138,7 +138,7 @@ static void IndexList_extend(struct IndexList *il1, struct IndexList *il2)
     il1->num_used += il2->num_used;
 }
 
-/* static void IndexList_copy(struct IndexList *il1, struct IndexList *il2) 
+/* static void IndexList_copy(struct IndexList *il1, struct IndexList *il2)
 {
     IndexList_clear(il1);
     IndexList_extend(il1, il2);
@@ -154,14 +154,14 @@ static void IndexList_extend(struct IndexList *il1, struct IndexList *il2)
     } */
 
 
-double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB, 
+double _get_match_score(PyObject *py_sequenceA, PyObject *py_sequenceB,
 			PyObject *py_match_fn, int i, int j,
-			char *sequenceA, char *sequenceB, 
+			char *sequenceA, char *sequenceB,
 			int use_sequence_cstring,
-			double match, double mismatch, 
+			double match, double mismatch,
 			int use_match_mismatch_scores)
 {
-    PyObject *py_A=NULL, 
+    PyObject *py_A=NULL,
 	*py_B=NULL;
     PyObject *py_arglist=NULL, *py_result=NULL;
     double score = 0;
@@ -244,9 +244,9 @@ static PyObject *cpairwise2__make_score_matrix_fast(
     struct IndexList *trace_matrix = (struct IndexList *)NULL;
     PyObject *py_score_matrix=NULL, *py_trace_matrix=NULL;
 
-    double *row_cache_score = (double *)NULL, 
+    double *row_cache_score = (double *)NULL,
 	*col_cache_score = (double *)NULL;
-    struct IndexList *row_cache_index = (struct IndexList *)NULL, 
+    struct IndexList *row_cache_index = (struct IndexList *)NULL,
 	*col_cache_index = (struct IndexList *)NULL;
 
     PyObject *py_retval = NULL;
@@ -257,7 +257,7 @@ static PyObject *cpairwise2__make_score_matrix_fast(
 			 &align_globally, &score_only))
 	return NULL;
     if(!PySequence_Check(py_sequenceA) || !PySequence_Check(py_sequenceB)) {
-	PyErr_SetString(PyExc_TypeError, 
+	PyErr_SetString(PyExc_TypeError,
 			"py_sequenceA and py_sequenceB should be sequences.");
 	return NULL;
     }
@@ -318,7 +318,7 @@ cleanup_after_py_match_fn:
     }
 
     /* Cache some commonly used gap penalties */
-    first_A_gap = calc_affine_penalty(1, open_A, extend_A, 
+    first_A_gap = calc_affine_penalty(1, open_A, extend_A,
 				      penalize_extend_when_opening);
     first_B_gap = calc_affine_penalty(1, open_B, extend_B,
 				      penalize_extend_when_opening);
@@ -339,7 +339,7 @@ cleanup_after_py_match_fn:
 
     /* Initialize the first row and col of the score matrix. */
     for(i=0; i<lenA; i++) {
-	double score = _get_match_score(py_sequenceA, py_sequenceB, 
+	double score = _get_match_score(py_sequenceA, py_sequenceB,
 					py_match_fn, i, 0,
 					sequenceA, sequenceB,
 					use_sequence_cstring,
@@ -348,12 +348,12 @@ cleanup_after_py_match_fn:
 	if(PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
 	if(penalize_end_gaps)
-	    score += calc_affine_penalty(i, open_B, extend_B, 
+	    score += calc_affine_penalty(i, open_B, extend_B,
 					 penalize_extend_when_opening);
 	score_matrix[i*lenB] = score;
     }
     for(i=0; i<lenB; i++) {
-	double score = _get_match_score(py_sequenceA, py_sequenceB, 
+	double score = _get_match_score(py_sequenceA, py_sequenceB,
 					py_match_fn, 0, i,
 					sequenceA, sequenceB,
 					use_sequence_cstring,
@@ -362,7 +362,7 @@ cleanup_after_py_match_fn:
 	if(PyErr_Occurred())
 	    goto _cleanup_make_score_matrix_fast;
 	if(penalize_end_gaps)
-	    score += calc_affine_penalty(i, open_A, extend_A, 
+	    score += calc_affine_penalty(i, open_A, extend_A,
 					 penalize_extend_when_opening);
 	score_matrix[i] = score;
     }
@@ -372,7 +372,7 @@ cleanup_after_py_match_fn:
     row_cache_index = malloc((lenA-1)* sizeof(*row_cache_index));
     col_cache_score = malloc((lenB-1)*sizeof(*col_cache_score));
     col_cache_index = malloc((lenB-1)* sizeof(*col_cache_index));
-    if(!row_cache_score || !row_cache_index || 
+    if(!row_cache_score || !row_cache_index ||
        !col_cache_score || !col_cache_index) {
 	PyErr_SetString(PyExc_MemoryError, "Out of memory");
 	goto _cleanup_make_score_matrix_fast;
@@ -419,7 +419,7 @@ cleanup_after_py_match_fn:
 	    best_score_rint = rint(best_score);
 
 	    /* Set the score and traceback matrices. */
-	    score = best_score + _get_match_score(py_sequenceA, py_sequenceB, 
+	    score = best_score + _get_match_score(py_sequenceA, py_sequenceB,
 						  py_match_fn, row, col,
 						  sequenceA, sequenceB,
 						  use_sequence_cstring,
@@ -459,7 +459,7 @@ cleanup_after_py_match_fn:
 		if(!IndexList_contains(&col_cache_index[col-1], row-1, col-1))
 		    IndexList_append(&col_cache_index[col-1], row-1, col-1);
 	    }
-	    
+
 	    /* Update the cached row scores. */
 	    open_score = score_matrix[(row-1)*lenB+col-1] + first_A_gap;
 	    extend_score = row_cache_score[row-1] + extend_A;
@@ -594,7 +594,7 @@ static PyObject *cpairwise2_rint(
 /* Module definition stuff */
 
 static PyMethodDef cpairwise2Methods[] = {
-    {"_make_score_matrix_fast", 
+    {"_make_score_matrix_fast",
      (PyCFunction)cpairwise2__make_score_matrix_fast, METH_VARARGS, ""},
     {"rint", (PyCFunction)cpairwise2_rint, METH_VARARGS|METH_KEYWORDS, ""},
     {NULL, NULL, 0, NULL}

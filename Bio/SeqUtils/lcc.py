@@ -1,5 +1,5 @@
 # Copyright 2003, 2007 by Sebastian Bassi. sbassi@genesdigitales.com
-# All rights reserved.  This code is part of the Biopython 
+# All rights reserved.  This code is part of the Biopython
 # distribution and governed by its license.
 # Please see the LICENSE file that should have been included as part
 # of this package.
@@ -121,7 +121,7 @@ def lcc_simp(seq):
     """Local Composition Complexity (LCC) for a sequence.
 
     seq - an unambiguous DNA sequence (a string or Seq object)
-    
+
     Returns the Local Composition Complexity (LCC) value for the entire
     sequence (as a float).
 

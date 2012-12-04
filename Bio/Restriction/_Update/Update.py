@@ -20,7 +20,7 @@ from Bio.Restriction.RanaConfig import *
 
 
 class RebaseUpdate(FancyURLopener):
-    
+
     def __init__(self, e_mail='', ftpproxy=''):
         """RebaseUpdate([e_mail[, ftpproxy]]) -> new RebaseUpdate instance.
 
@@ -108,7 +108,6 @@ class ConnectionError(IOError):
         \n Use the --proxy switch to enter the address of your proxy\
         \n' % which_server
         sys.exit()
-        
 
 
 __all__ = ['RebaseUpdate', 'FtpNameError', 'FtpPasswordError']

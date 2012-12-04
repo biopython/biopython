@@ -92,16 +92,16 @@ class Record(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).    
-    
+    marker_len         The marker length (2 or 3 digit code per allele).
+
     comment_line       Comment line.
 
     loci_list          List of loci names.
 
     pop_list           List of population names.
-    
+
     populations        List of population data.
-    
+
     In most genepop files, the population name is not trustable.
     It is strongly recommended that populations are referred by index.
 
@@ -118,7 +118,6 @@ class Record(object):
         ]
     ]
 
-    
     """
     def __init__(self):
         self.marker_len = 0
@@ -197,7 +196,7 @@ class Record(object):
         """Removes a population (by position).
         """
         del self.populations[pos]
-    
+
     def remove_locus_by_position(self, pos):
         """Removes a locus by position.
         """

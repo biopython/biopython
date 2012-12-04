@@ -564,7 +564,7 @@ class BlastXmlIndexer(SearchIndexer):
         qend_mark = self.qend_mark
         handle = self._handle
         handle.seek(offset)
-        
+
         qresult_raw = handle.readline()
         assert qresult_raw.lstrip().startswith(self.qstart_mark)
         while qend_mark not in qresult_raw:
@@ -741,7 +741,7 @@ class BlastXmlWriter(object):
                     if elem == 'BlastOutput_query-ID':
                         content = qresult._blast_id
                     elif elem == 'BlastOutput_query-def':
-                        content = ' '.join([qresult.id, 
+                        content = ' '.join([qresult.id,
                             qresult.description]).strip()
                 xml.simpleElement(elem, content)
 

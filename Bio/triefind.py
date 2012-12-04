@@ -72,7 +72,7 @@ def find_words(string, trie):
 
     """
     _boundary_re = re.compile(r"[%s]+" % re.escape(DEFAULT_BOUNDARY_CHARS))
-        
+
     results = []
     start = 0     # index of word boundary
     while start < len(string):

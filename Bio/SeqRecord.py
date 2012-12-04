@@ -44,7 +44,7 @@ class _RestrictedDict(dict):
     In order that the SeqRecord (and other objects using this class) can be
     pickled, for example for use in the multiprocessing library, we need to
     be able to pickle the restricted dictionary objects.
-    
+
     Using the default protocol, which is 0 on Python 2.x,
 
     >>> import pickle
@@ -142,7 +142,7 @@ class SeqRecord(object):
     MKQHKAMIVAIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
     >>> print record.seq
     MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF
-    
+
     """
     def __init__(self, seq, id = "<unknown id>", name = "<unknown name>",
                  description = "<unknown description>", dbxrefs = None,
@@ -174,7 +174,7 @@ class SeqRecord(object):
         then using the UnknownSeq object from Bio.Seq is appropriate.
 
         You can create a 'blank' SeqRecord object, and then populate the
-        attributes later.  
+        attributes later.
         """
         if id is not None and not isinstance(id, basestring):
             #Lots of existing code uses id=None... this may be a bad idea.
@@ -194,7 +194,7 @@ class SeqRecord(object):
         elif not isinstance(dbxrefs, list):
             raise TypeError("dbxrefs argument should be a list (of strings)")
         self.dbxrefs = dbxrefs
-        
+
         # annotations about the whole sequence
         if annotations is None:
             annotations = {}
@@ -218,7 +218,7 @@ class SeqRecord(object):
             #turn this into a _RestrictedDict and thus ensure all the values
             #in the dict are the right length
             self.letter_annotations = letter_annotations
-        
+
         # annotations about parts of the sequence
         if features is None:
             features = []
@@ -430,13 +430,13 @@ class SeqRecord(object):
             #TODO - The desription may no longer apply.
             #It would be safer to change it to something
             #generic like "edited" or the default value.
-            
+
             #Don't copy the annotation dict and dbxefs list,
             #they may not apply to a subsequence.
             #answer.annotations = dict(self.annotations.iteritems())
             #answer.dbxrefs = self.dbxrefs[:]
             #TODO - Review this in light of adding SeqRecord objects?
-            
+
             #TODO - Cope with strides by generating ambiguous locations?
             start, stop, step = index.indices(parent_length)
             if step == 1:
@@ -490,12 +490,12 @@ class SeqRecord(object):
         L
         >>> print record.seq[3]
         L
-        
+
         Note that this does not facilitate iteration together with any
         per-letter-annotation.  However, you can achieve that using the
         python zip function on the record (or its sequence) and the relevant
         per-letter-annotation:
-        
+
         >>> from Bio import SeqIO
         >>> rec = SeqIO.read(open("Quality/solexa_faked.fastq", "rU"),
         ...                  "fastq-solexa")
@@ -546,7 +546,7 @@ class SeqRecord(object):
         True
 
         See also the Seq object's __contains__ method.
-        """        
+        """
         return char in self.seq
 
 
@@ -681,7 +681,7 @@ class SeqRecord(object):
         """
         if not format_spec:
             #Follow python convention and default to using __str__
-            return str(self)    
+            return str(self)
         from Bio import SeqIO
         if format_spec in SeqIO._BinaryFormats:
             #Return bytes on Python 3
@@ -751,7 +751,7 @@ class SeqRecord(object):
         slxa_0001_1_0001_01 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTNNNNNNACT
         >>> print new.letter_annotations.keys()
         []
-        
+
         The new record will attempt to combine the annotation, but for any
         ambiguities (e.g. different names) it defaults to omitting that
         annotation.
@@ -780,7 +780,7 @@ class SeqRecord(object):
 
         When we add the left and right SeqRecord objects, their annotation
         is all consistent, so it is all conserved in the new SeqRecord:
-        
+
         >>> new.id == left.id == right.id == plasmid.id
         True
         >>> new.name == left.name == right.name == plasmid.name
@@ -837,7 +837,7 @@ class SeqRecord(object):
             if k in other.letter_annotations:
                 answer.letter_annotations[k] = v + other.letter_annotations[k]
         return answer
-        
+
     def __radd__(self, other):
         """Add another sequence or string to this sequence (from the left).
 
@@ -892,7 +892,7 @@ class SeqRecord(object):
         <BLANKLINE>
 
         Naturally, there is a matching lower method:
-        
+
         >>> print record.lower().format("fastq")
         @Test Made up for this example
         acgtacgt

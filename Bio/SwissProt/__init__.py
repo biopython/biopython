@@ -56,19 +56,19 @@ class Record(object):
 
     seqinfo           tuple of (length, molecular weight, CRC32 value)
     sequence          The sequence.
-    
+
     """
     def __init__(self):
         self.entry_name = None
         self.data_class = None
         self.molecule_type = None
         self.sequence_length = None
-        
+
         self.accessions = []
         self.created = None
         self.sequence_update = None
         self.annotation_update = None
-        
+
         self.description = []
         self.gene_name = ''
         self.organism = []
@@ -82,7 +82,7 @@ class Record(object):
         self.cross_references = []
         self.keywords = []
         self.features = []
-        
+
         self.seqinfo = None
         self.sequence = ''
 
@@ -98,7 +98,7 @@ class Reference(object):
     authors     The authors of the work.
     title       Title of the work.
     location    A citation for the work.
-    
+
     """
     def __init__(self):
         self.number = None
@@ -128,7 +128,7 @@ def read(handle):
         raise ValueError("More than one SwissProt record found")
     return record
 
- 
+
 # Everything below is considered private
 
 
@@ -554,7 +554,7 @@ if __name__ == "__main__":
         print "Missing test file %s" % example_filename
     else:
         #Try parsing it!
-        
+
         handle = open(example_filename)
         records = parse(handle)
         for record in records:

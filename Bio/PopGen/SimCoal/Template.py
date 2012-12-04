@@ -21,7 +21,6 @@ def exec_template(template):
         match = re.search('!!!(.*?)!!!', executed_template, re.MULTILINE)
         #match = patt.matcher(String(executed_template))
     return executed_template
-    
 
 def process_para(in_string, out_file_prefix, para_list, curr_values):
     if (para_list == []):
@@ -30,7 +29,7 @@ def process_para(in_string, out_file_prefix, para_list, curr_values):
         #f_name += '_' + str(total_size)
         for tup in curr_values:
             name, val = tup
-            f_name += '_' + str(val) 
+            f_name += '_' + str(val)
             #reg = re.compile('\?' + name, re.MULTILINE)
             #template = re.sub(reg, str(val), template)
             template = template.replace('?'+name, str(val))
@@ -66,7 +65,7 @@ def get_xy_from_matrix(x_max, y_max, pos):
 def get_step_2d(x_max, y_max, x, y, mig):
     my_x,    my_y    = get_xy_from_matrix(x_max, y_max, y)
     other_x, other_y = get_xy_from_matrix(x_max, y_max, x)
-        
+
     if (my_x-other_x)**2 + (my_y-other_y)**2 == 1:
         return str(mig) + ' '
     else:
@@ -123,7 +122,6 @@ def process_text(in_string, out_file_prefix, para_list, curr_values,
 #        mkdir(sep.join([Config.dataDir, 'SimCoal', 'runs']))
 #    except OSError:
 #        pass #Its ok if already exists
-    
 
 #sep is because of jython
 def generate_model(par_stream, out_prefix, params,
@@ -137,9 +135,9 @@ def generate_model(par_stream, out_prefix, params,
 def get_demography_template(stream, model, tp_dir = None):
     '''
         Gets a demograpy template.
- 
+
         Most probably this model needs to be sent to GenCases.
- 
+
         stream - Writable stream.
         param  - Template file.
         tp_dir - Directory where to find the template, if None

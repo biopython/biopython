@@ -33,13 +33,13 @@ class LogisticRegression(object):
 
 def train(xs, ys, update_fn=None, typecode=None):
     """train(xs, ys[, update_fn]) -> LogisticRegression
-    
+
     Train a logistic regression classifier on a training set.  xs is a
     list of observations and ys is a list of the class assignments,
     which should be 0 or 1.  xs and ys should contain the same number
     of elements.  update_fn is an optional callback function that
     takes as parameters that iteration number and log likelihood.
-    
+
     """
     if len(xs) != len(ys):
         raise ValueError("xs and ys should be the same length.")
@@ -75,7 +75,7 @@ def train(xs, ys, update_fn=None, typecode=None):
         # Calculate the probabilities.  p = e^(beta X) / (1+e^(beta X))
         ebetaX = numpy.exp(numpy.dot(beta, Xt))
         p = ebetaX / (1+ebetaX)
-        
+
         # Find the log likelihood score and see if I've converged.
         logp = y*numpy.log(p) + (1-y)*numpy.log(1-p)
         llik = sum(logp)
