@@ -175,7 +175,7 @@ class Scop(object):
         self._sidDict = {}
         self._sunidDict = {}
 
-        if all(h is None for h in [cla_handle, des_handle, hie_handle, dir_handle, db_handle]):
+        if all(h is None for h in [cla_handle, des_handle, hie_handle, dir_path, db_handle]):
             return
 
         if dir_path is None and db_handle is None:
