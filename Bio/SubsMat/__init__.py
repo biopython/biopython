@@ -171,7 +171,7 @@ class SeqMat(dict):
               self.update(data)
           except ValueError:
               raise ValueError("Failed to store data in a dictionary")
-      if alphabet == None:
+      if alphabet is None:
          alphabet = Alphabet.Alphabet()
       assert Alphabet.generic_alphabet.contains(alphabet)
       self.alphabet = alphabet
@@ -251,7 +251,7 @@ class SeqMat(dict):
       f = f or sys.stdout 
       # create a temporary dictionary, which holds the full matrix for
       # printing
-      assert non_sym == None or isinstance(non_sym, float) or \
+      assert non_sym is None or isinstance(non_sym, float) or \
       isinstance(non_sym, int)
       full_mat = copy.copy(self)
       for i in self:

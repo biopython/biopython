@@ -423,21 +423,21 @@ class BlastParser(_XMLparser):
         """raw score of HSP
         """
         self._hsp.score = float(self._value)
-        if self._descr.score == None:
+        if self._descr.score is None:
             self._descr.score = float(self._value)
 
     def _end_Hsp_bit_score(self):
         """bit score of HSP
         """
         self._hsp.bits = float(self._value)
-        if self._descr.bits == None:
+        if self._descr.bits is None:
             self._descr.bits = float(self._value)
 
     def _end_Hsp_evalue(self):
         """expect value value of the HSP
         """
         self._hsp.expect = float(self._value)
-        if self._descr.e == None:
+        if self._descr.e is None:
             self._descr.e = float(self._value)
 
     def _end_Hsp_query_from(self):

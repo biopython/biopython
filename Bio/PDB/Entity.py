@@ -139,7 +139,7 @@ class Entity(object):
         (or a water) beacuse it has a blank hetero field, that its sequence 
         identifier is 10 and its insertion code "A".
         """
-        if self.full_id==None:
+        if self.full_id is None:
             entity_id=self.get_id()
             l=[entity_id]   
             parent=self.get_parent()
@@ -289,7 +289,7 @@ class DisorderedEntityWrapper(object):
 
         If id is None, the currently selected child is returned.
         """
-        if id==None:
+        if id is None:
             return self.selected_child
         return self.child_dict[id]
 

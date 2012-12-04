@@ -220,7 +220,7 @@ class GenePopController(object):
 
     def _remove_garbage(self, fname_out):
         try:
-            if fname_out != None: os.remove(fname_out)
+            if fname_out is not None: os.remove(fname_out)
         except OSError:
             pass # safe
         try:
@@ -241,7 +241,7 @@ class GenePopController(object):
         opts["Dememorization"]=dememorization
         opts["BatchNumber"]=batches
         opts["BatchLength"]=iterations
-        if enum_test != None:
+        if enum_test is not None:
             if enum_test is True:
                 opts["HWtests"]="Enumeration"
             else:
@@ -494,22 +494,22 @@ class GenePopController(object):
         f.close()
         for line in lines:
             m = re.search("Mean sample size: ([.0-9]+)", line)
-            if m != None:
+            if m is not None:
                 mean_sample_size = _gp_float(m.group(1))
             m = re.search("Mean frequency of private alleles p\(1\)= ([.0-9]+)", line)
-            if m != None:
+            if m is not None:
                 mean_priv_alleles = _gp_float(m.group(1))
             m = re.search("N=10: ([.0-9]+)", line)
-            if m != None:
+            if m is not None:
                 mig10 = _gp_float(m.group(1))
             m = re.search("N=25: ([.0-9]+)", line)
-            if m != None:
+            if m is not None:
                  mig25 = _gp_float(m.group(1))
             m = re.search("N=50: ([.0-9]+)", line)
-            if m != None:
+            if m is not None:
                  mig50 = _gp_float(m.group(1))
             m = re.search("for size= ([.0-9]+)", line)
-            if m != None:
+            if m is not None:
                  mig_corrected = _gp_float(m.group(1))
         os.remove(fname + ".PRI")
         return mean_sample_size, mean_priv_alleles, mig10, mig25, mig50, mig_corrected
@@ -552,12 +552,12 @@ class GenePopController(object):
         #num_pops = None
         #f = open(fname + ".INF")
         #l = f.readline()
-        #while (num_loci == None or num_pops == None) and l != '':
+        #while (num_loci is None or num_pops is None) and l != '':
         #    m = re.search("Number of populations detected : ([0-9+])", l)
-        #    if m != None:
+        #    if m is not None:
         #        num_pops = _gp_int(m.group(1))
         #    m = re.search("Number of loci detected        : ([0-9+])", l)
-        #    if m != None:
+        #    if m is not None:
         #        num_loci = _gp_int(m.group(1))
         #    l = f.readline()
         #f.close()
@@ -573,7 +573,7 @@ class GenePopController(object):
                 if "Tables of allelic frequencies for each locus" in l:
                     return self.curr_pop, loci_content
                 match = re.match(".*Pop: (.+) Locus: (.+)", l)
-                if match != None:
+                if match is not None:
                     pop = match.group(1)
                     locus = match.group(2)
                     if not hasattr(self, "first_locus"):
@@ -599,7 +599,7 @@ class GenePopController(object):
 
                 while l != "\n":
                     m2 = re.match(" +([0-9]+) , ([0-9]+) *([0-9]+) *(.+)",l)
-                    if m2 != None:
+                    if m2 is not None:
                         geno_list.append((_gp_int(m2.group(1)), _gp_int(m2.group(2)),
                             _gp_int(m2.group(3)), _gp_float(m2.group(4))))
                     else:
@@ -643,7 +643,7 @@ class GenePopController(object):
             while l != "":
                 l = l.rstrip()
                 match = re.match(" Locus: (.+)", l)
-                if match != None:
+                if match is not None:
                     locus = match.group(1)
                     alleles, table = _read_allele_freq_table(self.stream)
                     return locus, alleles, table
@@ -674,7 +674,7 @@ class GenePopController(object):
             while l != "":
                 l = l.rstrip()
                 m = re.search("Locus: (.+)", l)
-                if m != None:
+                if m is not None:
                     locus = m.group(1)
                     self.stream.readline()
                     if "No complete" in self.stream.readline(): return locus, None
@@ -751,7 +751,7 @@ class GenePopController(object):
             while l != '':
                 l = l.rstrip()
                 if l.startswith('  Locus:'):
-                    if locus != None:
+                    if locus is not None:
                         self.last_line = l
                         return locus, fis, fst, fit, qintra, qinter
                     else:
@@ -768,7 +768,7 @@ class GenePopController(object):
                     qinter = _gp_float(l.split(' ')[1])
                     return locus, fis, fst, fit, qintra, qinter
                 l = self.stream.readline()
-            if locus != None:
+            if locus is not None:
                 return locus, fis, fst, fit, qintra, qinter
             self.stream.close()
             self.done = True
@@ -791,7 +791,7 @@ class GenePopController(object):
             while l != "":
                 l = l.rstrip()
                 m = re.search(" Locus: (.+)", l)
-                if m != None:
+                if m is not None:
                     locus = m.group(1)
                     matrix = _read_headed_triangle_matrix(self.stream)
                     return locus, matrix

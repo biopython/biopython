@@ -415,7 +415,7 @@ def _open(cgi, params={}, post=False):
         params["tool"] = tool
     # Tell Entrez who we are
     if not "email" in params:
-        if email!=None:
+        if email is not None:
             params["email"] = email
         else:
             warnings.warn("""

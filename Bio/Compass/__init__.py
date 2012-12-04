@@ -193,12 +193,12 @@ def __read_query_alignment(record, line):
     if m:
         record.query_start = int(m.group(1))
     m = __regex["align"].match(line)
-    assert m!=None, "invalid match"
+    assert m is not None, "invalid match"
     record.query_aln += m.group(1)
 
 def __read_positive_alignment(record, line):
     m = __regex["positive_alignment"].match(line)
-    assert m!=None, "invalid match"
+    assert m is not None, "invalid match"
     record.positives += m.group(1)
 
 def __read_hit_alignment(record, line):
@@ -206,5 +206,5 @@ def __read_hit_alignment(record, line):
     if m:
         record.hit_start = int(m.group(1))
     m = __regex["align"].match(line)
-    assert m!=None, "invalid match"
+    assert m is not None, "invalid match"
     record.hit_aln += m.group(1)

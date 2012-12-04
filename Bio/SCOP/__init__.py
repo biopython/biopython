@@ -175,10 +175,11 @@ class Scop(object):
         self._sidDict = {}
         self._sunidDict = {}
 
-        if cla_handle==des_handle==hie_handle==dir_path==db_handle==None: return 
+        if all(h is None for h in [cla_handle, des_handle, hie_handle, dir_path, db_handle]):
+            return
 
         if dir_path is None and db_handle is None:
-            if cla_handle == None or des_handle==None or hie_handle==None:
+            if cla_handle is None or des_handle is None or hie_handle is None:
                 raise RuntimeError("Need CLA, DES and HIE files to build SCOP")
 
         sunidDict = {}
@@ -337,7 +338,8 @@ class Scop(object):
 
     def getDomainFromSQL(self, sunid=None, sid=None):
         """Load a node from the SQL backend using sunid or sid"""
-        if sunid==sid==None: return None
+        if sunid is None and sid is None:
+            return None
 
         cur = self.db_handle.cursor()
         
@@ -710,7 +712,7 @@ class Astral(object):
                     using writeToSQL.
         """
 
-        if astral_file==dir_path==db_handle==None:
+        if astral_file is None and dir_path is None and db_handle is None:
             raise RuntimeError("Need either file handle, or (dir_path + "\
                        + "version) or database handle to construct Astral")
         if not scop:
@@ -721,7 +723,7 @@ class Astral(object):
 
         
         if not astral_file and not db_handle:
-            if dir_path == None or version == None:
+            if dir_path is None or version is None:
                 raise RuntimeError("must provide dir_path and version")
 
             self.version = version
@@ -777,7 +779,7 @@ class Astral(object):
 
     def getAstralDomainsFromFile(self,filename=None,file_handle=None):
         """Get the scop domains from a file containing a list of sids"""
-        if file_handle == filename == None:
+        if file_handle is None and filename is None:
             raise RuntimeError("You must provide a filename or handle")
         if not file_handle:
             file_handle = open(filename)

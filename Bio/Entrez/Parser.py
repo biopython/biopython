@@ -398,7 +398,7 @@ class DataHandler(object):
         # they raise an exception in Python.
         def count(model):
             quantifier, name, children = model[1:]
-            if name==None:
+            if name is None:
                 if quantifier in (expat.model.XML_CQUANT_PLUS,
                                   expat.model.XML_CQUANT_REP):
                     for child in children:

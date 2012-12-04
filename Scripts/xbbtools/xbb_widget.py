@@ -28,7 +28,7 @@ from Bio.SeqUtils import quick_FASTA_reader
 
 class xbb_widget:
     def __init__(self, parent = None):
-        self.is_a_master = (parent == None)
+        self.is_a_master = (parent is None)
         self.parent = parent
             
         self.init_variables()

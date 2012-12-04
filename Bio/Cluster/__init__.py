@@ -493,15 +493,15 @@ expclusters=None:  For hierarchical clustering results, expclusters
 
 """
         (ngenes,nexps) = numpy.shape(self.data)
-        if self.gorder == None:
+        if self.gorder is None:
             gorder = numpy.arange(ngenes)
         else:
             gorder = self.gorder
-        if self.eorder == None:
+        if self.eorder is None:
             eorder = numpy.arange(nexps)
         else:
             eorder = self.eorder
-        if geneclusters!=None and expclusters!=None and \
+        if geneclusters is not None and expclusters is not None and \
            type(geneclusters) != type(expclusters):
             raise ValueError("found one k-means and one hierarchical "
                            + "clustering solution in geneclusters and "
@@ -514,7 +514,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
             # This is a hierarchical clustering result.
             geneindex = _savetree(jobname, geneclusters, gorder, 0)
             gid = 1
-        elif geneclusters!=None:
+        elif geneclusters is not None:
             # This is a k-means clustering result.
             filename = jobname + "_K"
             k = max(geneclusters+1)
@@ -527,7 +527,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
             # This is a hierarchical clustering result.
             expindex = _savetree(jobname, expclusters, eorder, 1)
             aid = 1
-        elif expclusters!=None:
+        elif expclusters is not None:
             # This is a k-means clustering result.
             filename = jobname + "_K"
             k = max(expclusters+1)
@@ -569,7 +569,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
 
     def _savedata(self, jobname, gid, aid, geneindex, expindex):
         # Save the clustered data.
-        if self.genename == None:
+        if self.genename is None:
             genename = self.geneid
         else:
             genename = self.genename
@@ -578,15 +578,15 @@ expclusters=None:  For hierarchical clustering results, expclusters
             outputfile = open(jobname+'.cdt', 'w')
         except IOError:
             raise IOError("Unable to open output file")
-        if self.mask!=None:
+        if self.mask is not None:
             mask = self.mask
         else:
             mask = numpy.ones((ngenes,nexps), int)
-        if self.gweight!=None:
+        if self.gweight is not None:
             gweight = self.gweight
         else:
             gweight = numpy.ones(ngenes)
-        if self.eweight!=None:
+        if self.eweight is not None:
             eweight = self.eweight
         else:
             eweight = numpy.ones(nexps)

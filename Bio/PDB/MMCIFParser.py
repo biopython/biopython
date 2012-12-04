@@ -135,7 +135,7 @@ class MMCIFParser(object):
             cell=numpy.array((a, b, c, alpha, beta, gamma), 'f')
             spacegroup=mmcif_dict["_symmetry.space_group_name_H-M"]
             spacegroup=spacegroup[1:-1] # get rid of quotes!!
-            if spacegroup==None:
+            if spacegroup is None:
                 raise Exception
             structure_builder.set_symmetry(spacegroup, cell)
         except:

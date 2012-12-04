@@ -727,7 +727,7 @@ class Nexus(object):
             raise NexusError('TRANSPOSE is not supported!')
             self.transpose=True
         if 'interleave' in options:
-            if options['interleave']==None or options['interleave'].lower()=='yes':
+            if options['interleave'] is None or options['interleave'].lower()=='yes':
                 self.interleave=True
         if 'tokens' in options:
             self.tokens=True

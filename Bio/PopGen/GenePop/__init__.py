@@ -141,7 +141,7 @@ class Record(object):
                 for marker in markers:
                     rep.append(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<self.marker_len:

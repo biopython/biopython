@@ -131,7 +131,7 @@ class EasyController(object):
             geno_freqs = self._controller.calc_allele_genotype_freqs(self._fname)
             pop_iter, loc_iter = geno_freqs
             for locus_info in loc_iter:
-                if locus_info[0] == None:
+                if locus_info[0] is None:
                     self.__allele_frequency[locus_info[0]] = None, None
                 else:
                     self.__allele_frequency[locus_info[0]] = locus_info[1:]

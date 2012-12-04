@@ -1041,7 +1041,7 @@ class Sequence(PhyloElement):
     @classmethod
     def from_seqrecord(cls, record, is_aligned=None):
         """Create a new PhyloXML Sequence from a SeqRecord object."""
-        if is_aligned == None:
+        if is_aligned is None:
             is_aligned = isinstance(record.seq.alphabet, Alphabet.Gapped)
         params = {
                 'accession': Accession(record.id, ''),
