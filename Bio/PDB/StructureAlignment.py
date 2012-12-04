@@ -20,7 +20,7 @@ class StructureAlignment(object):
     """
     def __init__(self, fasta_align, m1, m2, si=0, sj=1):
         """
-        fasta_align --- Alignment object 
+        fasta_align --- Alignment object
         m1, m2 --- two models
         si, sj --- the sequences in the Alignment object that
                 correspond to the structures
@@ -85,7 +85,7 @@ class StructureAlignment(object):
 
     def get_maps(self):
         """
-        Return two dictionaries that map a residue in one structure to 
+        Return two dictionaries that map a residue in one structure to
         the equivealent residue in the other structure.
         """
         return self.map12, self.map21

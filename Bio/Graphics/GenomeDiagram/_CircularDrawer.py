@@ -75,7 +75,7 @@ class CircularDrawer(AbstractDrawer):
 
         o set_track_heights(self)   Calculate information about the offset of
                                     each track from the fragment base
-                                    
+
         o draw_test_tracks(self)    Add lines demarcating each track to the
                                     drawing
 
@@ -209,8 +209,8 @@ class CircularDrawer(AbstractDrawer):
             o end       Int, the position to stop drawing the diagram at
 
             o tracklines    Boolean flag to show (or not) lines delineating tracks
-                            on the diagram            
-                            
+                            on the diagram
+
             o track_size    The proportion of the available track height that
                             should be taken up in drawing
 
@@ -288,7 +288,7 @@ class CircularDrawer(AbstractDrawer):
         scale_labels = []               # holds scale axis labels
 
         # Get tracks to be drawn and set track sizes
-        self.drawn_tracks = self._parent.get_drawn_levels()        
+        self.drawn_tracks = self._parent.get_drawn_levels()
         self.set_track_heights()
 
         # Go through each track in the parent (if it is to be drawn) one by
@@ -329,7 +329,7 @@ class CircularDrawer(AbstractDrawer):
         for element_group in element_groups:
             for element_list in element_group:
                 [self.drawing.add(element) for element in element_list]
-            
+
         if self.tracklines:             # Draw test tracks over top of diagram
             self.draw_test_tracks()
 
@@ -339,16 +339,16 @@ class CircularDrawer(AbstractDrawer):
 
             o track     Track object
 
-            Return tuple of (list of track elements, list of track labels)           
+            Return tuple of (list of track elements, list of track labels)
         """
         track_elements = [] # Holds elements for features and graphs
         track_labels = []   # Holds labels for features and graphs
-        
+
         # Distribution dictionary for dealing with different set types
         set_methods = {FeatureSet: self.draw_feature_set,
                        GraphSet: self.draw_graph_set
                        }
-        
+
         for set in track.get_sets():        # Draw the feature or graph sets
             elements, labels = set_methods[set.__class__](set)
             track_elements += elements
@@ -366,7 +366,7 @@ class CircularDrawer(AbstractDrawer):
         """
         #print 'draw feature set'
         feature_elements = []   # Holds diagram elements belonging to the features
-        label_elements = []     # Holds diagram elements belonging to feature labels 
+        label_elements = []     # Holds diagram elements belonging to feature labels
 
         # Collect all the elements for the feature set
         for feature in set.get_features():
@@ -376,7 +376,6 @@ class CircularDrawer(AbstractDrawer):
                 label_elements += labels
 
         return feature_elements, label_elements
-        
 
     def draw_feature(self, feature):
         """ draw_feature(self, feature, parent_feature=None) -> ([element, element,...], [element, element,...])
@@ -385,7 +384,7 @@ class CircularDrawer(AbstractDrawer):
 
             Returns tuple of (list of elements describing single feature, list
             of labels for those elements)
-        """        
+        """
         feature_elements = []   # Holds drawable elements for a single feature
         label_elements = []     # Holds labels for a single feature
 
@@ -424,7 +423,7 @@ class CircularDrawer(AbstractDrawer):
         """
         # Establish the co-ordinates for the sigil
         btm, ctr, top = self.track_radii[self.current_track_level]
-        
+
         startangle, startcos, startsin = self.canvas_angle(locstart)
         endangle, endcos, endsin = self.canvas_angle(locend)
         midangle, midcos, midsin = self.canvas_angle(float(locend+locstart)/2)
@@ -439,11 +438,11 @@ class CircularDrawer(AbstractDrawer):
                         'BIGARROW': self._draw_sigil_big_arrow,
                         }
 
-        # Get sigil for the feature, location dependent on the feature strand        
+        # Get sigil for the feature, location dependent on the feature strand
         method = draw_methods[feature.sigil]
         kwargs['head_length_ratio'] = feature.arrowhead_length
         kwargs['shaft_height_ratio'] = feature.arrowshaft_height
-        
+
         #Support for clickable links... needs ReportLab 2.4 or later
         #which added support for links in SVG output.
         if hasattr(feature, "url") :
@@ -469,7 +468,7 @@ class CircularDrawer(AbstractDrawer):
                     labelgroup.contents[0].textAnchor = 'end'
                 pos = self.xcenter+top*sinval
                 coslabel = cos(label_angle)
-                sinlabel = sin(label_angle)    
+                sinlabel = sin(label_angle)
                 labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
                                         pos, self.ycenter+top*cosval)
             else:
@@ -497,7 +496,7 @@ class CircularDrawer(AbstractDrawer):
         startB = cross_link.startB
         endA = cross_link.endA
         endB = cross_link.endB
-           
+
         if not self.is_in_bounds(startA) \
         and not self.is_in_bounds(endA):
             return None
@@ -563,7 +562,7 @@ class CircularDrawer(AbstractDrawer):
 
     def draw_graph_set(self, set):
         """ draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
-        
+
             o set       GraphSet object
 
             Returns tuple (list of graph elements, list of graph labels)
@@ -605,14 +604,14 @@ class CircularDrawer(AbstractDrawer):
 
         start, end = self._current_track_start_end()
         data = graph[start:end]
-        
+
         if not data:
             return []
 
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
-            midval = (maxval + minval)/2.    
+            midval = (maxval + minval)/2.
         else:
             midval = graph.center
         # Whichever is the greatest difference: max-midval or min-midval, is
@@ -637,7 +636,6 @@ class CircularDrawer(AbstractDrawer):
                                       strokeWidth = graph.linewidth))
             lastx, lasty, = x, y
         return line_elements
-        
 
     def draw_bar_graph(self, graph):
         """ draw_bar_graph(self, graph) -> [element, element,...]
@@ -653,7 +651,7 @@ class CircularDrawer(AbstractDrawer):
         # values go up in one color, negative go down in the alternative
         # color).
         bar_elements = []
-        
+
         # Set the number of pixels per unit for the data
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0],data_quartiles[4]
@@ -666,7 +664,7 @@ class CircularDrawer(AbstractDrawer):
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
-            midval = (maxval + minval)/2.    
+            midval = (maxval + minval)/2.
         else:
             midval = graph.center
 
@@ -702,7 +700,6 @@ class CircularDrawer(AbstractDrawer):
                                               pos1angle, barcolor))
         return bar_elements
 
-    
 
 
     def draw_heat_graph(self, graph):
@@ -741,7 +738,7 @@ class CircularDrawer(AbstractDrawer):
             heat = colors.linearlyInterpolatedColor(graph.poscolor,
                                                     graph.negcolor,
                                                     maxval, minval, val)
-            
+
             # Draw heat box
             heat_elements.append(self._draw_arc(btm, top, pos0angle, pos1angle,
                                                 heat, border=heat))
@@ -765,7 +762,7 @@ class CircularDrawer(AbstractDrawer):
         # Get track locations
         btm, ctr, top = self.track_radii[self.current_track_level]
         trackheight = (top-ctr)
-        
+
         # X-axis
         start, end = self._current_track_start_end()
         if track.start is not None or track.end is not None:
@@ -814,7 +811,7 @@ class CircularDrawer(AbstractDrawer):
 
         start, end = self._current_track_start_end()
         if track.scale_ticks:   # Ticks are required on the scale
-            # Draw large ticks 
+            # Draw large ticks
             #I want the ticks to be consistently positioned relative to
             #the start of the sequence (position 0), not relative to the
             #current viewpoint (self.start and self.end)
@@ -848,7 +845,7 @@ class CircularDrawer(AbstractDrawer):
                 scale_elements.append(tick)
                 if label is not None:   # If there's a label, add it
                     scale_labels.append(label)
-        
+
         # Check to see if the track contains a graph - if it does, get the
         # minimum and maximum values, and put them on the scale Y-axis
         # at 60 degree intervals, ordering the labels by graph_id
@@ -871,7 +868,7 @@ class CircularDrawer(AbstractDrawer):
                         graph_label_min = []
                         graph_label_max = []
                         graph_label_mid = []
-                        for graph in set.get_graphs():                        
+                        for graph in set.get_graphs():
                             quartiles = graph.quartiles()
                             minval, maxval = quartiles[0], quartiles[4]
                             if graph.center is None:
@@ -947,7 +944,7 @@ class CircularDrawer(AbstractDrawer):
                            fillColor=track.scale_color)
             if tickangle > pi:
                 label.textAnchor = 'end'
-            # LP: This label_offset depends on ascent_descent data, which is not available for all 
+            # LP: This label_offset depends on ascent_descent data, which is not available for all
             # fonts, so has been deprecated.
             #if 0.5*pi < tickangle < 1.5*pi:
             #    y1 -= label_offset
@@ -967,7 +964,7 @@ class CircularDrawer(AbstractDrawer):
         #print 'drawing test tracks'
         # Add lines only for drawn tracks
         for track in self.drawn_tracks:
-            btm, ctr, top = self.track_radii[track]            
+            btm, ctr, top = self.track_radii[track]
             self.drawing.add(Circle(self.xcenter, self.ycenter, top,
                                     strokeColor=colors.blue,
                                     fillColor=None))  # top line
@@ -1013,7 +1010,7 @@ class CircularDrawer(AbstractDrawer):
                                  colors.Color(0.96, 0.96, 0.96)))
         else:
             #Make a full circle (using a VERY thick linewidth)
-            greytrack_bgs.append(Circle(self.xcenter, self.ycenter, ctr, 
+            greytrack_bgs.append(Circle(self.xcenter, self.ycenter, ctr,
                                  strokeColor = colors.Color(0.96, 0.96, 0.96),
                                  fillColor=None, strokeWidth=top-btm))
 
@@ -1030,7 +1027,7 @@ class CircularDrawer(AbstractDrawer):
                 x,y = self.xcenter+btm*sintheta, self.ycenter+btm*costheta  # start text halfway up marker
                 labelgroup = Group(label)
                 labelangle = self.sweep*2*pi*(pos-self.start)/self.length - pi/2
-                if theta > pi:  
+                if theta > pi:
                     label.textAnchor = 'end'    # Anchor end of text to inner radius
                     labelangle += pi            # and reorient it
                 cosA, sinA = cos(labelangle), sin(labelangle)
@@ -1155,7 +1152,7 @@ class CircularDrawer(AbstractDrawer):
                        **kwargs):
 
         strokecolor, color = _stroke_and_fill_colors(color, border)
-        
+
         x0, y0 = self.xcenter, self.ycenter      # origin of the circle
         if abs(inner_endangle - outer_startangle)>0.01 \
         or abs(outer_endangle - inner_startangle)>0.01 \
@@ -1338,7 +1335,6 @@ class CircularDrawer(AbstractDrawer):
         assert startangle <= headangle <= endangle \
             or endangle <= headangle <= startangle, \
             (startangle, headangle, endangle, angle)
-        
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
@@ -1457,7 +1453,7 @@ class CircularDrawer(AbstractDrawer):
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         angle = float(endangle - startangle)    # angle subtended by arc
         height = outer_radius - inner_radius
-        
+
         assert startangle <= endangle and angle >= 0
         if head_length_ratio and tail_length_ratio:
             headangle = max(endangle - min(height*head_length_ratio/(center*teeth), angle*0.5), startangle)

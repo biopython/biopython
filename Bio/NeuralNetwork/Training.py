@@ -6,7 +6,7 @@ import random
 class TrainingExample(object):
     """Hold inputs and outputs of a training example.
 
-    XXX Do I really need this? 
+    XXX Do I really need this?
     """
     def __init__(self, inputs, outputs, name = ""):
         self.name = name
@@ -55,7 +55,7 @@ class ExampleManager(object):
         """
         assert training_percent + validation_percent <= 1.0, \
                "Training and validation percentages more than 100 percent"
-        
+
         self.train_examples = []
         self.validation_examples = []
         self.test_examples = []
@@ -71,7 +71,7 @@ class ExampleManager(object):
         o training_examples - A list of TrainingExamples to manage.
         """
         placement_rand = random.Random()
-        
+
         # assign exact example randomly to the example types
         for example in training_examples:
             chance_num = placement_rand.random()

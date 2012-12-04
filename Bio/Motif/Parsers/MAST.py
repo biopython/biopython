@@ -22,10 +22,10 @@ from Bio.Motif.Parsers.MEME import MEMEMotif
 
 class Record(object):
     """The class for holding the results from a MAST run.
-    
+
     A MAST.Record holds data about matches between motifs and sequences.
     The motifs held by the Record are objects of the class MEMEMotif.
-    
+
     Methods:
     get_motif_by_name (motif_name): returns a MEMEMotif with the given
     name.
@@ -38,7 +38,7 @@ class Record(object):
         self.diagrams = {}
         self.alphabet = None
         self.motifs = []
-    
+
     def get_motif_by_name(self, name):
         for m in self.motifs:
             if m.name == name:

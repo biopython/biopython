@@ -110,7 +110,7 @@ class Organism(object):
         using fitness_calculator.
         """
         assert isinstance(genome, MutableSeq), "Genome must be a MutableSeq"
-        
+
         self.genome = genome
         self._fitness_calc = fitness_calculator
 

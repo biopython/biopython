@@ -32,7 +32,7 @@ class MultiGraph(object):
         keys = sorted(self._adjacency_list.keys())
         for key in keys:
             values = sorted(self._adjacency_list[key])
-            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
+            s += "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
         return s + ">"
 
     def __str__(self):
@@ -153,7 +153,7 @@ def df_search(graph, root = None):
             search.append(node)
             seen[node] = 1
             current = graph.children(node) + current
-    return search   
+    return search
 
 def bf_search(graph, root = None):
     """Breadth first search of g.

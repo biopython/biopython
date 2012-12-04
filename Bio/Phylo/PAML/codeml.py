@@ -20,8 +20,8 @@ class Codeml(Paml):
 
     def __init__(self, alignment = None, tree = None, working_dir = None,
                 out_file = None):
-        """Initialize the codeml instance. 
-        
+        """Initialize the codeml instance.
+
         The user may optionally pass in strings specifying the locations
         of the input alignment and tree files, the working directory and
         the final output file. Other options found in the CODEML control
@@ -34,40 +34,40 @@ class Codeml(Paml):
                 raise IOError("The specified tree file does not exist.")
         self.tree = tree
         self.ctl_file = "codeml.ctl"
-        self._options = {"noisy": None, 
-                        "verbose": None, 
+        self._options = {"noisy": None,
+                        "verbose": None,
                         "runmode": None,
-                        "seqtype": None, 
-                        "CodonFreq": None, 
+                        "seqtype": None,
+                        "CodonFreq": None,
                         "ndata": None,
-                        "clock": None, 
+                        "clock": None,
                         "aaDist": None,
-                        "aaRatefile": None, 
+                        "aaRatefile": None,
                         "model": None,
-                        "NSsites": None, 
-                        "icode": None, 
+                        "NSsites": None,
+                        "icode": None,
                         "Mgene": None,
-                        "fix_kappa": None, 
-                        "kappa": None, 
+                        "fix_kappa": None,
+                        "kappa": None,
                         "fix_omega": None,
-                        "omega": None, 
-                        "fix_alpha": None, 
+                        "omega": None,
+                        "fix_alpha": None,
                         "alpha": None,
-                        "Malpha": None, 
-                        "ncatG": None, 
+                        "Malpha": None,
+                        "ncatG": None,
                         "getSE": None,
-                        "RateAncestor": None, 
+                        "RateAncestor": None,
                         "Small_Diff": None,
-                        "cleandata": None, 
-                        "fix_blength": None, 
+                        "cleandata": None,
+                        "fix_blength": None,
                         "method": None,
                         "rho": None,
                         "fix_rho": None}
-        
+
     def write_ctl_file(self):
         """Dynamically build a CODEML control file from the options.
-        
-        The control file is written to the location specified by the 
+
+        The control file is written to the location specified by the
         ctl_file property of the codeml class.
         """
         # Make sure all paths are relative to the working directory
@@ -84,7 +84,7 @@ class Codeml(Paml):
                     # commented out.
                     continue
                 if option[0] == "NSsites":
-                    # NSsites is stored in Python as a list but in the 
+                    # NSsites is stored in Python as a list but in the
                     # control file it is specified as a series of numbers
                     # separated by spaces.
                     NSsites = " ".join([str(site) for site in option[1]])
@@ -92,7 +92,7 @@ class Codeml(Paml):
                 else:
                     ctl_handle.write("%s = %s\n" % (option[0], option[1]))
             ctl_handle.close()
-    
+
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Codeml instance.
         """
@@ -149,38 +149,38 @@ class Codeml(Paml):
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
-                            
+
     def print_options(self):
         """Print out all of the options and their current settings."""
         for option in self._options.items():
             if option[0] == "NSsites" and option[1] is not None:
-                # NSsites is stored in Python as a list but in the 
+                # NSsites is stored in Python as a list but in the
                 # control file it is specified as a series of numbers
                 # separated by spaces.
                 NSsites = " ".join([str(site) for site in option[1]])
                 print "%s = %s" % (option[0], NSsites)
             else:
                 print "%s = %s" % (option[0], option[1])
-        
+
     def _set_rel_paths(self):
         """Convert all file/directory locations to paths relative to the current working directory.
-        
+
         CODEML requires that all paths specified in the control file be
-        relative to the directory from which it is called rather than 
+        relative to the directory from which it is called rather than
         absolute paths.
         """
         Paml._set_rel_paths(self)
         if self.tree is not None:
             self._rel_tree = _relpath(self.tree, self.working_dir)
-        
+
     def run(self, ctl_file = None, verbose = False, command = "codeml",
                 parse = True):
-        """Run codeml using the current configuration and then parse the results. 
-        
+        """Run codeml using the current configuration and then parse the results.
+
         Return a process signal so the user can determine if
         the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either 
-        absolute or relative paths, despite the fact that CODEML 
+        indicates a failure). The arguments may be passed as either
+        absolute or relative paths, despite the fact that CODEML
         requires relative paths.
         """
         if self.tree is None:
@@ -192,7 +192,7 @@ class Codeml(Paml):
             results = read(self.out_file)
         else:
             results = None
-        return results        
+        return results
 
 def read(results_file):
     """Parse a CODEML results file."""
@@ -202,9 +202,9 @@ def read(results_file):
     handle = open(results_file)
     lines = handle.readlines()
     handle.close()
-    (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines, 
+    (results, multi_models, multi_genes) = _parse_codeml.parse_basics(lines,
             results)
-    results = _parse_codeml.parse_nssites(lines, results, multi_models, 
+    results = _parse_codeml.parse_nssites(lines, results, multi_models,
             multi_genes)
     results = _parse_codeml.parse_pairwise(lines, results)
     results = _parse_codeml.parse_distances(lines, results)

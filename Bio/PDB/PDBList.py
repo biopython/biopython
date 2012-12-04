@@ -9,7 +9,7 @@
 # (c) 2003 Kristian Rother
 # This work was supported by the German Ministry of Education
 # and Research (BMBF). Project http://www.bcbio.de
-# 
+#
 # Contact the author
 #    homepage : http://www.rubor.de/bioinf
 #    email    : krother@genesilico.pl
@@ -45,10 +45,10 @@ class PDBList(object):
 
     If You want to use this module from inside a proxy, add
     the proxy variable to Your environment, e.g. in Unix
-    export HTTP_PROXY='http://realproxy.charite.de:888'    
+    export HTTP_PROXY='http://realproxy.charite.de:888'
     (This can also be added to ~/.bashrc)
     """
-    
+
     PDB_REF="""
     The Protein Data Bank: a computer-based archival file for macromolecular structures.
     F.C.Bernstein, T.F.Koetzle, G.J.B.Williams, E.F.Meyer Jr, M.D.Brice, J.R.Rodgers, O.Kennard, T.Shimanouchi, M.Tasumi
@@ -58,7 +58,7 @@ class PDBList(object):
 
     alternative_download_url = "http://www.rcsb.org/pdb/files/"
     # just append PDB code to this, and then it works.
-    
+
     def __init__(self,server='ftp://ftp.wwpdb.org', pdb=os.getcwd(), obsolete_pdb=None):
         """Initialize the class with the default server or a custom one."""
         # remote pdb server
@@ -83,7 +83,7 @@ class PDBList(object):
     def get_status_list(self,url):
         """Retrieves a list of pdb codes in the weekly pdb status file
         from the given URL. Used by get_recent_files.
-        
+
         Typical contents of the list files parsed by this method is now
         very simply one PDB name per line.
         """
@@ -99,18 +99,18 @@ class PDBList(object):
 
     def get_recent_changes(self):
         """Returns three lists of the newest weekly files (added,mod,obsolete).
-        
+
         Reads the directories with changed entries from the PDB server and
         returns a tuple of three URL's to the files of new, modified and
         obsolete entries from the most recent list. The directory with the
         largest numerical name is used.
         Returns None if something goes wrong.
-        
+
         Contents of the data/status dir (20031013 would be used);
         drwxrwxr-x   2 1002     sysadmin     512 Oct  6 18:28 20031006
         drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
         -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
-        """     
+        """
         url = _urlopen(self.pdb_server + '/pub/pdb/data/status/')
         recent = filter(str.isdigit,
                         (x.split()[-1] for x in url.readlines())
@@ -123,8 +123,8 @@ class PDBList(object):
         return [added,modified,obsolete]
 
     def get_all_entries(self):
-        """Retrieves a big file containing all the 
-        PDB entries and some annotation to them. 
+        """Retrieves a big file containing all the
+        PDB entries and some annotation to them.
         Returns a list of PDB codes in the index file.
         """
         print "retrieving index file. Takes about 5 MB."
@@ -137,7 +137,7 @@ class PDBList(object):
 
         Returns a list of all obsolete pdb codes that have ever been
         in the PDB.
-        
+
         Gets and parses the file from the PDB server in the format
         (the first pdb_code column is the one used). The file looks
         like this:
@@ -147,8 +147,8 @@ class PDBList(object):
         ...
         OBSLTE    29-JAN-96 1HFT     2HFT
         OBSLTE    21-SEP-06 1HFV     2J5X
-        OBSLTE    21-NOV-03 1HG6     
-        OBSLTE    18-JUL-84 1HHB     2HHB 3HHB 
+        OBSLTE    21-NOV-03 1HG6
+        OBSLTE    18-JUL-84 1HHB     2HHB 3HHB
         OBSLTE    08-NOV-96 1HID     2HID
         OBSLTE    01-APR-97 1HIU     2HIU
         OBSLTE    14-JAN-04 1HKE     1UUZ
@@ -178,7 +178,7 @@ class PDBList(object):
         archive. Otherwise, Python gzip utility will handle it.
         compression does nothing, as all archives are already in .gz format
 
-        @param pdir: put the file in this directory (default: create a PDB-style directory tree) 
+        @param pdir: put the file in this directory (default: create a PDB-style directory tree)
         @type pdir: string
 
         @return: filename
@@ -205,7 +205,7 @@ class PDBList(object):
             url=(self.pdb_server+
                  '/pub/pdb/data/structures/obsolete/pdb/%s/pdb%s.ent.gz'
                  % (code[1:3],code))
-            
+
         # In which dir to put the pdb file?
         if pdir is None:
             if self.flat_tree:
@@ -222,10 +222,10 @@ class PDBList(object):
         else:
             # Put in specified directory
             path=pdir
-            
+
         if not os.access(path,os.F_OK):
             os.makedirs(path)
-            
+
         filename=os.path.join(path, filename)
         # the final uncompressed file
         final_file=os.path.join(path, "pdb%s.ent" % code)
@@ -250,7 +250,6 @@ class PDBList(object):
         os.remove(filename)
 
         return final_file
-            
 
     def update_pdb(self):
         """
@@ -261,23 +260,23 @@ class PDBList(object):
         """
         assert os.path.isdir(self.local_pdb)
         assert os.path.isdir(self.obsolete_pdb)
-        
+
         new, modified, obsolete = self.get_recent_changes()
-        
+
         for pdb_code in new+modified:
             try:
                 self.retrieve_pdb_file(pdb_code)
             except Exception:
                 print 'error %s\n' % pdb_code
                 # you can insert here some more log notes that
-                # something has gone wrong.            
+                # something has gone wrong.
 
         # Move the obsolete files to a special folder
         for pdb_code in obsolete:
             if self.flat_tree:
                 old_file = os.path.join(self.local_pdb,
                                         'pdb%s.ent' % pdb_code)
-                new_dir = self.obsolete_pdb             
+                new_dir = self.obsolete_pdb
             else:
                 old_file = os.path.join(self.local_pdb, pdb_code[1:3],
                                         'pdb%s.ent' % pdb_code)
@@ -301,7 +300,7 @@ class PDBList(object):
 
         Writes a list file containing all PDB codes (optional, if listfile is
         given).
-        """ 
+        """
         entries = self.get_all_entries()
         for pdb_code in entries:
             self.retrieve_pdb_file(pdb_code)
@@ -317,7 +316,7 @@ class PDBList(object):
 
         Writes a list file containing all PDB codes (optional, if listfile is
         given).
-        """ 
+        """
         entries = self.get_all_obsolete()
         for pdb_code in entries:
             self.retrieve_pdb_file(pdb_code, obsolete=1)
@@ -333,7 +332,7 @@ class PDBList(object):
         and writes it to a file.
         """
         print "retrieving sequence file. Takes about 15 MB."
-        handle = _urlopen(self.pdb_server + 
+        handle = _urlopen(self.pdb_server +
                           '/pub/pdb/derived_data/pdb_seqres.txt')
         lines = handle.readlines()
         outfile = open(savefile, 'w')
@@ -375,12 +374,12 @@ if __name__ == '__main__':
     else:
         pdb_path = os.getcwd()
         pl = PDBList()
-        pl.flat_tree = 1        
+        pl.flat_tree = 1
 
-    if len(sys.argv) > 1:   
+    if len(sys.argv) > 1:
         if sys.argv[1] == 'update':
             # update PDB
-            print "updating local PDB at "+pdb_path 
+            print "updating local PDB at "+pdb_path
             pl.update_pdb()
 
         elif sys.argv[1] == 'all':

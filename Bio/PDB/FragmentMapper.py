@@ -48,8 +48,8 @@ _FRAGMENT_FILE="lib_%s_z_%s.txt"
 
 def _read_fragments(size, length, dir="."):
     """
-    Read a fragment spec file (available from 
-    U{http://csb.stanford.edu/rachel/fragments/} 
+    Read a fragment spec file (available from
+    U{http://csb.stanford.edu/rachel/fragments/}
     and return a list of Fragment objects.
 
     @param size: number of fragments in the library

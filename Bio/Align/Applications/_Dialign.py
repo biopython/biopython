@@ -27,7 +27,7 @@ class DialignCommandline(AbstractCommandline):
 
     You would typically run the command line with dialign_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
-    
+
     Citation:
 
     B. Morgenstern (2004). DIALIGN: Multiple DNA and Protein Sequence

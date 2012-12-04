@@ -53,7 +53,7 @@ static int compare(const void* self, const void* other)
 
     if (a < b) return -1;
     if (a > b) return +1;
-    return 0; 
+    return 0;
 }
 
 static void DataPoint_sort(struct DataPoint* list, int n, int i)
@@ -109,7 +109,7 @@ static int Region_dim=3;
 
 struct Region
 {
-    float *_left; 
+    float *_left;
     float *_right;
 };
 
@@ -329,7 +329,7 @@ static struct Node *KDTree_build_tree(struct KDTree* tree, long int offset_begin
         localdim=depth%tree->dim;
     }
 
-    if ((offset_end-offset_begin)<=tree->_bucket_size) 
+    if ((offset_end-offset_begin)<=tree->_bucket_size)
     {
         /* leaf node */
         return Node_create(-1, localdim, offset_begin, offset_end);
@@ -465,12 +465,12 @@ static int KDTree_report_subtree(struct KDTree* tree, struct Node *node)
 }
 
 long int KDTree_get_count(struct KDTree* tree)
-{       
+{
     return tree->_count;
 }
 
 long int KDTree_neighbor_get_count(struct KDTree* tree)
-{       
+{
     return tree->_neighbor_count;
 }
 
@@ -481,11 +481,11 @@ static int KDTree_test_region(struct KDTree* tree, struct Node *node, struct Reg
     int ok;
     int intersect_flag;
 
-    /* is node region inside, outside or overlapping 
+    /* is node region inside, outside or overlapping
      * with query region? */
     intersect_flag=Region_test_intersection(region, tree->_query_region, 0);
 
-    if (intersect_flag==2)                
+    if (intersect_flag==2)
     {
         /* inside - extract points */
         ok = KDTree_report_subtree(tree, node);
@@ -496,7 +496,7 @@ static int KDTree_test_region(struct KDTree* tree, struct Node *node, struct Reg
     else if (intersect_flag==1)
     {
         /* overlap - recursion */
-        ok = KDTree_search(tree, region, node, depth+1);    
+        ok = KDTree_search(tree, region, node, depth+1);
         /* search does cleanup of region */
         if (!ok) return 0;
     }
@@ -505,7 +505,7 @@ static int KDTree_test_region(struct KDTree* tree, struct Node *node, struct Reg
         /* outside - stop */
 
         /* end of recursion -- get rid of region */
-        Region_destroy(region);    
+        Region_destroy(region);
     }
     return 1;
 }
@@ -518,7 +518,7 @@ static int KDTree_search(struct KDTree* tree, struct Region *region, struct Node
     if(depth==0)
     {
         /* start with [-INF, INF] region */
-        
+
         region = Region_create(NULL, NULL);
         if (region==NULL) return 0;
 
@@ -625,7 +625,7 @@ int KDTree_set_data(struct KDTree* tree, float *coords, long int nr_points)
     tree->_count=0;
     /* keep pointer to coords to delete it */
     tree->_coords=coords;
-        
+
     for (i=0; i<nr_points; i++)
     {
         ok = KDTree_add_point(tree, i, coords+i*tree->dim);
@@ -774,12 +774,12 @@ static int KDTree_neighbor_search_pairs(struct KDTree* tree, struct Node *down, 
     int ok = 1;
 
     /* if regions do not overlap - STOP */
-    if (!down || !up || !down_region || !up_region) 
+    if (!down || !up || !down_region || !up_region)
     {
         /* STOP */
         return ok;
     }
-    
+
     if (Region_test_intersection(down_region, up_region, tree->_neighbor_radius)==0)
     {
         /* regions cannot contain neighbors */
@@ -806,8 +806,8 @@ static int KDTree_neighbor_search_pairs(struct KDTree* tree, struct Node *down, 
         struct Region *up_left_region = NULL;
         struct Region *up_right_region = NULL;
         struct Region *down_left_region = NULL;
-        struct Region *down_right_region = NULL;  
-        
+        struct Region *down_right_region = NULL;
+
         if (down_is_leaf)
         {
             down_left=down;
@@ -844,7 +844,7 @@ static int KDTree_neighbor_search_pairs(struct KDTree* tree, struct Node *down, 
                 down_left_region = NULL;
             }
 
-            intersect=Region_test_intersect_right(down_region, cut_value, localdim); 
+            intersect=Region_test_intersect_right(down_region, cut_value, localdim);
             if(intersect==-1)
             {
                 down_right_region = Region_create(down_region->_left, down_region->_right);
@@ -1021,7 +1021,7 @@ static int KDTree__neighbor_search(struct KDTree* tree, struct Node *node, struc
             ok = KDTree_search_neighbors_in_bucket(tree, left);
         }
     }
-    
+
     if (ok)
     {
         if (!Node_is_leaf(right))

@@ -74,7 +74,7 @@ class LinearDrawer(AbstractDrawer):
 
         o set_track_heights(self)   Calculate information about the offset of
                                     each track from the fragment base
-                                    
+
         o draw_test_tracks(self)    Add lines demarcating each track to the
                                     drawing
 
@@ -173,7 +173,7 @@ class LinearDrawer(AbstractDrawer):
         o track_offsets     Dictionary of number of pixels that each track top,
                             center and bottom is offset from the base of a
                             fragment, keyed by track
-        
+
         o cross_track_links List of tuples each with four entries (track A,
                             feature A, track B, feature B) to be linked.
 
@@ -222,14 +222,14 @@ class LinearDrawer(AbstractDrawer):
             o end       Int, the position to stop drawing the diagram at
 
             o tracklines    Boolean flag to show (or not) lines delineating tracks
-                            on the diagram            
+                            on the diagram
 
             o fragments Int, the number of equal fragments into which the
                         sequence should be divided for drawing
 
             o fragment_size Float(0->1) The proportion of the available height
                             for the fragment that should be taken up in drawing
-                            
+
             o track_size    The proportion of the available track height that
                             should be taken up in drawing
 
@@ -305,7 +305,7 @@ class LinearDrawer(AbstractDrawer):
         for element_group in element_groups:
             for element_list in element_group:
                 [self.drawing.add(element) for element in element_list]
-            
+
         if self.tracklines:             # Draw test tracks over top of diagram
             self.draw_test_tracks()
 
@@ -372,7 +372,7 @@ class LinearDrawer(AbstractDrawer):
             top = trackunits[track][1]*trackunit_height - track_crop  # top offset
             btm = trackunits[track][0]*trackunit_height + track_crop  # bottom offset
             ctr = btm+(top-btm)/2.                          # center offset
-            track_offsets[track] = (btm, ctr, top)          
+            track_offsets[track] = (btm, ctr, top)
         self.track_offsets = track_offsets
 
     def draw_test_tracks(self):
@@ -410,18 +410,17 @@ class LinearDrawer(AbstractDrawer):
         """
         track_elements = []     # Holds elements from features and graphs
         track_labels = []       # Holds labels from features and graphs
-        
+
         # Distribution dictionary for dealing with different set types
         set_methods = {FeatureSet: self.draw_feature_set,
                        GraphSet: self.draw_graph_set
                        }
-        
+
         for set in track.get_sets():        # Draw the feature or graph sets
             elements, labels = set_methods[set.__class__](set)
             track_elements += elements
             track_labels += labels
         return track_elements, track_labels
-        
 
     def draw_tick(self, tickpos, ctr, ticklen, track, draw_label):
         """ draw_tick(self, tickpos, ctr, ticklen) -> (element, element)
@@ -562,7 +561,7 @@ class LinearDrawer(AbstractDrawer):
             for set in track.get_sets():            # Check all sets...
                 if set.__class__ is GraphSet:     # ...for a graph set
                     graph_label_min = []
-                    graph_label_mid = []                    
+                    graph_label_mid = []
                     graph_label_max = []
                     for graph in set.get_graphs():
                         quartiles = graph.quartiles()
@@ -602,8 +601,6 @@ class LinearDrawer(AbstractDrawer):
                             scale_labels.append(labelgroup)
 
         return scale_elements, scale_labels
-        
-        
 
     def draw_greytrack(self, track):
         """ draw_greytrack(self) -> ([element, element,...], [element, element,...])
@@ -612,7 +609,7 @@ class LinearDrawer(AbstractDrawer):
 
             Put in a grey background to the current track in all fragments,
             if track specifies that we should
-        """        
+        """
         greytrack_bgs = []      # Holds grey track backgrounds
         greytrack_labels = []   # Holds grey foreground labels
 
@@ -675,7 +672,7 @@ class LinearDrawer(AbstractDrawer):
         """
         #print 'draw feature set'
         feature_elements = []   # Holds diagram elements belonging to the features
-        label_elements = []     # Holds diagram elements belonging to feature labels 
+        label_elements = []     # Holds diagram elements belonging to feature labels
 
         # Collect all the elements for the feature set
         for feature in set.get_features():
@@ -696,7 +693,7 @@ class LinearDrawer(AbstractDrawer):
         """
         if feature.hide:        # Feature hidden, don't draw it...
             return [], []
-        
+
         feature_elements = []   # Holds diagram elements belonging to the feature
         label_elements = []     # Holds labels belonging to the feature
 
@@ -714,7 +711,7 @@ class LinearDrawer(AbstractDrawer):
                 feature_elements.append(box)
                 if label is not None:
                     label_elements.append(label)
-            
+
         return feature_elements, label_elements
 
     def draw_feature_location(self, feature, locstart, locend):
@@ -732,7 +729,6 @@ class LinearDrawer(AbstractDrawer):
         # end fragments do actually exist in terms of the drawing
         allowed_fragments = self.fragment_limits.keys()
         if start_fragment in allowed_fragments and end_fragment in allowed_fragments:
-            
             #print feature.name, feature.start, feature.end, start_offset, end_offset
             if start_fragment == end_fragment:  # Feature is found on one fragment
                 feature_box, label = self.get_feature_sigil(feature, start_offset,
@@ -740,7 +736,7 @@ class LinearDrawer(AbstractDrawer):
                 feature_boxes.append((feature_box, label))
                 #feature_elements.append(feature_box)
                 #if label is not None:   # There is a label for the feature
-                #    label_elements.append(label)                        
+                #    label_elements.append(label)
             else: # Feature is split over two or more fragments
                 fragment = start_fragment
                 start = start_offset
@@ -751,7 +747,7 @@ class LinearDrawer(AbstractDrawer):
                     feature_box, label = self.get_feature_sigil(feature, start,
                                                                 self.pagewidth,
                                                                 fragment)
-                    
+
                     fragment += 1   # move to next fragment
                     start = 0       # start next sigil from start of fragment
                     feature_boxes.append((feature_box, label))
@@ -773,7 +769,7 @@ class LinearDrawer(AbstractDrawer):
         startB = cross_link.startB
         endA = cross_link.endA
         endB = cross_link.endB
-           
+
         if not self.is_in_bounds(startA) \
         and not self.is_in_bounds(endA):
             return None
@@ -842,12 +838,12 @@ class LinearDrawer(AbstractDrawer):
             btmA += self.fragment_lines[fragment][0]
             ctrA += self.fragment_lines[fragment][0]
             topA += self.fragment_lines[fragment][0]
-    
+
             btmB, ctrB, topB = self.track_offsets[trackB]
             btmB += self.fragment_lines[fragment][0]
             ctrB += self.fragment_lines[fragment][0]
             topB += self.fragment_lines[fragment][0]
-    
+
             if self.fragment_limits[fragment][1] < endA:
                 xAe = self.x0 + self.pagewidth
                 crop_rightA = True
@@ -1031,7 +1027,7 @@ class LinearDrawer(AbstractDrawer):
             labelgroup = Group(label)
             # Feature is on top, or covers both strands (location affects
             # the height and rotation of the label)
-            if feature.strand in (0, 1):    
+            if feature.strand in (0, 1):
                 rotation = angle2trig(feature.label_angle)
                 if feature.label_position in ('start', "5'", 'left'):
                     pos = x0
@@ -1042,7 +1038,7 @@ class LinearDrawer(AbstractDrawer):
                 labelgroup.transform = (rotation[0], rotation[1], rotation[2],
                                         rotation[3], pos, top)
             else:   # Feature on bottom strand
-                rotation = angle2trig(feature.label_angle + 180)                        
+                rotation = angle2trig(feature.label_angle + 180)
                 if feature.label_position in ('start', "5'", 'left'):
                     pos = x1
                 elif feature.label_position in ('middle', 'center', 'centre'):
@@ -1055,7 +1051,6 @@ class LinearDrawer(AbstractDrawer):
             labelgroup = None
         return sigil, labelgroup
 
-                
     def draw_graph_set(self, set):
         """ draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
 
@@ -1083,7 +1078,7 @@ class LinearDrawer(AbstractDrawer):
 
             o graph     Graph object
 
-            Returns a line graph as a list of drawable elements 
+            Returns a line graph as a list of drawable elements
         """
         #print '\tdraw_line_graph'
         line_elements = []                  # Holds drawable elements
@@ -1096,14 +1091,14 @@ class LinearDrawer(AbstractDrawer):
         datarange = maxval - minval
         if datarange == 0:
             datarange = trackheight
-        
+
         start, end = self._current_track_start_end()
         data = graph[start:end]
 
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
-            midval = (maxval + minval)/2.    
+            midval = (maxval + minval)/2.
         else:
             midval = graph.center
         # Whichever is the greatest difference: max-midval or min-midval, is
@@ -1119,7 +1114,7 @@ class LinearDrawer(AbstractDrawer):
                 self.fragment_lines[lastfrag][0] + ctr
         lastval = val
         # Add a series of lines linking consecutive data points
-        for pos, val in data:   
+        for pos, val in data:
             frag, x = self.canvas_location(pos)
             x += self.x0        # next xy co-ords
             y = trackheight*(val-midval)/resolution + \
@@ -1141,7 +1136,7 @@ class LinearDrawer(AbstractDrawer):
                                           strokeColor = graph.poscolor,
                                           strokeWidth = graph.linewidth))
             lastfrag, lastx, lasty, lastval = frag, x, y, val
-            
+
         return line_elements
 
 
@@ -1165,7 +1160,7 @@ class LinearDrawer(AbstractDrawer):
         midval = (maxval + minval)/2.    # mid is the value at the X-axis
         btm, ctr, top = self.track_offsets[self.current_track_level]
         trackheight = (top-btm)
-        
+
         start, end = self._current_track_start_end()
         data = intermediate_points(start, end, graph[start:end])
 
@@ -1181,13 +1176,13 @@ class LinearDrawer(AbstractDrawer):
             fragment1, x1 = self.canvas_location(pos1)
             x0, x1 = self.x0 + x0, self.x0 + x1     # account for margin
             #print 'x1 before:', x1
-            
+
             # Calculate the heat color, based on the differential between
             # the value and the median value
             heat = colors.linearlyInterpolatedColor(graph.poscolor,
                                                     graph.negcolor,
                                                     maxval, minval, val)
-            
+
             # Draw heat box
             if fragment0 == fragment1:  # Box is contiguous on one fragment
                 if pos1 >= self.fragment_limits[fragment0][1]:
@@ -1218,7 +1213,7 @@ class LinearDrawer(AbstractDrawer):
                 # Add the last part of the bar
                 #print 'x1 after:', x1, '\n'
                 heat_elements.append(draw_box((self.x0, tbtm), (x1, ttop),
-                                              color=heat, border=None))                    
+                                              color=heat, border=None))
 
         return heat_elements
 
@@ -1237,7 +1232,7 @@ class LinearDrawer(AbstractDrawer):
         # values go up in one color, negative go down in the alternative
         # color).
         bar_elements = []   # Holds drawable elements for the graph
-        
+
         # Set the number of pixels per unit for the data
         data_quartiles = graph.quartiles()
         minval, maxval = data_quartiles[0],data_quartiles[4]
@@ -1250,7 +1245,7 @@ class LinearDrawer(AbstractDrawer):
         # midval is the value at which the x-axis is plotted, and is the
         # central ring in the track
         if graph.center is None:
-            midval = (maxval + minval)/2.    
+            midval = (maxval + minval)/2.
         else:
             midval = graph.center
 
@@ -1269,7 +1264,7 @@ class LinearDrawer(AbstractDrawer):
         resolution = max((midval-minval), (maxval-midval))
         if resolution == 0:
             resolution = trackheight
-        
+
         # Create elements for the bar graph based on newdata
         for pos0, pos1, val in data:
             fragment0, x0 = self.canvas_location(pos0)
@@ -1286,13 +1281,13 @@ class LinearDrawer(AbstractDrawer):
                 if pos1 >= self.fragment_limits[fragment0][1]:
                     x1 = self.xlim
                 tctr = ctr + self.fragment_lines[fragment0][0]
-                barval += tctr                
+                barval += tctr
                 bar_elements.append(draw_box((x0, tctr), (x1, barval),
                                              color=barcolor))
-            else:   # Box is split over two or more fragments                       
+            else:   # Box is split over two or more fragments
                 fragment = fragment0
                 #if pos0 >= self.fragment_limits[fragment0][0]:
-                #    fragment += 1         
+                #    fragment += 1
                 start = x0
                 while self.fragment_limits[fragment][1] < pos1:
                     tctr = ctr + self.fragment_lines[fragment][0]
@@ -1310,7 +1305,6 @@ class LinearDrawer(AbstractDrawer):
 
         return bar_elements
 
-      
     def canvas_location(self, base):
         """ canvas_location(self, base) -> (int, float)
 
@@ -1333,7 +1327,7 @@ class LinearDrawer(AbstractDrawer):
         # Calculate number of pixels from start of fragment
         x_offset = 1. * self.pagewidth * base_offset / self.fragment_bases
         return fragment, x_offset
-        
+
     def _draw_sigil_box(self, bottom, center, top, x1, x2, strand, **kwargs):
         """Draw BOX sigil."""
         if strand == 1:

@@ -12,9 +12,9 @@ main()
       if(!flag)
 	{
 	  return;
-	}	
+	}
       printf("%d ", flag);
       printf("%s\n", mmcif_get_string());
-    }	
-}	
+    }
+}
 

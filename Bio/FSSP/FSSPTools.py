@@ -8,7 +8,7 @@ class FSSPAlign(Generic.Alignment):
         new_record.annotations['abs2pdb'] = {}
         new_record.annotations['pdb2abs'] = {}
 
-   
+
 class FSSPMultAlign(dict):
     def __init__(self):
         self.abs_res = []
@@ -19,7 +19,7 @@ def mult_align(sum_dict,align_dict):
    mult_align_dict = {}
    for j in align_dict.abs(1).pos_align_dict:
       mult_align_dict[j] = ''
-   
+
    for i in range(1,len(align_dict)+1):
       # loop on positions
       for j in align_dict.abs(i).pos_align_dict:

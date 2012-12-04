@@ -70,7 +70,7 @@ class DiversitySelection(AbstractSelection):
             new_org.recalculate_fitness()
 
         return new_org
-    
+
     def select(self, population):
         """Perform selection on the current population, encouraging diversity.
         """

@@ -24,7 +24,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
                  TrEMBL) accession
     output:      Format of the search results
                  (default: xml)
-    
+
     Further search parameters can be passed as keywords; see the
     documentation for programmatic access to ScanProsite at
     http://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
@@ -70,13 +70,13 @@ class Parser(ExpatParser):
         if self.firsttime:
             if data[:5]!="<?xml":
                 raise ValueError(data)
-        self.firsttime = False 
+        self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)
 
 
 class ContentHandler(handler.ContentHandler):
     integers = ("start", "stop")
-    strings = ("sequence_ac", 
+    strings = ("sequence_ac",
                "sequence_id",
                "sequence_db",
                "signature_ac",

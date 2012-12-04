@@ -37,9 +37,9 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
-           _Switch(["-auto","auto"], 
+           _Switch(["-auto","auto"],
                    """Turn off prompts.
-           
+
                    Automatic mode disables prompting, so we recommend you set
                    this argument all the time when calling an EMBOSS tool from
                    Biopython.
@@ -85,7 +85,7 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine):
 
     This is provided for subclassing, it deals with shared options
     common to all the EMBOSS tools plus:
-    
+
      - outfile            Output filename
 
     """
@@ -122,7 +122,7 @@ class Primer3Commandline(_EmbossCommandLine):
     remain backwards compatible also support the old argument names as well.
 
     e.g. Using EMBOSS 6.1.0 or later,
-    
+
     >>> cline = Primer3Commandline(sequence="mysequence.fas", auto=True, hybridprobe=True)
     >>> cline.explainflag = True
     >>> cline.osizeopt=20
@@ -144,7 +144,7 @@ class Primer3Commandline(_EmbossCommandLine):
     >>> cline.outfile = "myresults.out"
     >>> print cline
     eprimer3 -auto -outfile=myresults.out -sequence=mysequence.fas -hybridprobe=True -productosize=200 -oligosize=20 -explainflag=True
-    
+
     """
     def __init__(self, cmd="eprimer3", **kwargs):
         self.parameters = [
@@ -202,7 +202,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option replaced in EMBOSS 6.1.0 by -psizeopt
                    """),
-           _Option(["-psizeopt", "psizeopt"], 
+           _Option(["-psizeopt", "psizeopt"],
                    """Optimum size for the PCR product.
 
                    Option added in EMBOSS 6.1.0, replacing -productosize
@@ -212,7 +212,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option replaced in EMBOSS 6.1.0 by -prange
                    """),
-           _Option(["-prange", "prange"], 
+           _Option(["-prange", "prange"],
                    """Acceptable range of length for the PCR product.
 
                    Option added in EMBOSS 6.1.0, replacing -productsizerange
@@ -223,7 +223,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option replaced in EMBOSS 6.1.0 by -ptmopt
                    """),
-           _Option(["-ptmopt", "ptmopt"], 
+           _Option(["-ptmopt", "ptmopt"],
                    """Optimum melting temperature for the PCR product.
 
                    Option added in EMBOSS 6.1.0, replacing -productotm
@@ -233,7 +233,7 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option replaced in EMBOSS 6.1.0 by -ptmmin
                    """),
-           _Option(["-ptmmin", "ptmmin"], 
+           _Option(["-ptmmin", "ptmmin"],
                    """Minimum allowed melting temperature for the amplicon."),
 
                    Option added in EMBOSS 6.1.0, replacing -productmintm
@@ -243,13 +243,13 @@ class Primer3Commandline(_EmbossCommandLine):
 
                    Option replaced in EMBOSS 6.1.0 by -ptmmax
                    """),
-           _Option(["-ptmmax", "ptmmax"], 
+           _Option(["-ptmmax", "ptmmax"],
                    """Maximum allowed melting temperature for the amplicon."),
 
                    Option added in EMBOSS 6.1.0, replacing -productmaxtm
                    """),
            #Note to self, should be -oexcludedregion not -oexcluderegion
-           _Option(["-oexcludedregion", "oexcludedregion"], 
+           _Option(["-oexcludedregion", "oexcludedregion"],
                    """Do not pick internal oligos in this region."),
 
                    Option added in EMBOSS 6.1.0, replacing -oligoexcludedregion.
@@ -262,147 +262,147 @@ class Primer3Commandline(_EmbossCommandLine):
            _Option(["-oligoinput","oligoinput"],
                    "Sequence of the internal oligo."),
            #Oligo length:
-           _Option(["-oligosize","oligosize"], 
+           _Option(["-oligosize","oligosize"],
                    """Optimum length of internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -osizeopt.
                    """),
-           _Option(["-osizeopt", "osizeopt"], 
+           _Option(["-osizeopt", "osizeopt"],
                    """Optimum length of internal oligo.
 
                    Option added in EMBOSS 6.1.0, replaces -oligosize
                    """),
-           _Option(["-oligominsize","oligominsize"], 
+           _Option(["-oligominsize","oligominsize"],
                    """Minimum length of internal oligo (OBSOLETE)."),
- 
+
                    Option replaced in EMBOSS 6.1.0 by -ominsize.
                    """),
-           _Option(["-ominsize", "ominsize"], 
+           _Option(["-ominsize", "ominsize"],
                    """Minimum length of internal oligo."
 
                    Option added in EMBOSS 6.1.0, replaces -oligominsize
                    """),
-           _Option(["-oligomaxsize","oligomaxsize"], 
+           _Option(["-oligomaxsize","oligomaxsize"],
                    """Maximum length of internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -omaxsize.
                    """),
-           _Option(["-omaxsize", "omaxsize"], 
+           _Option(["-omaxsize", "omaxsize"],
                    """Maximum length of internal oligo.
 
                    Option added in EMBOSS 6.1.0, replaces -oligomaxsize
                    """),
            #Oligo GC temperature:
-           _Option(["-oligotm","oligotm"], 
+           _Option(["-oligotm","oligotm"],
                    """Optimum melting temperature of internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -otmopt.
                    """),
-           _Option(["-otmopt", "otmopt"], 
+           _Option(["-otmopt", "otmopt"],
                    """Optimum melting temperature of internal oligo.
 
                    Option added in EMBOSS 6.1.0.
                    """),
-           _Option(["-oligomintm","oligomintm"], 
+           _Option(["-oligomintm","oligomintm"],
                    """Minimum melting temperature of internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -otmmin.
                    """),
-           _Option(["-otmmin", "otmmin"], 
+           _Option(["-otmmin", "otmmin"],
                    """Minimum melting temperature of internal oligo.
 
                    Option added in EMBOSS 6.1.0, replacing -oligomintm
                    """),
-           _Option(["-oligomaxtm","oligomaxtm"], 
+           _Option(["-oligomaxtm","oligomaxtm"],
                    """Maximum melting temperature of internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -otmmax.
                    """),
-           _Option(["-otmmax", "otmmax"], 
+           _Option(["-otmmax", "otmmax"],
                    """Maximum melting temperature of internal oligo.
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxtm
                    """),
            #Oligo GC percent:
-           _Option(["-oligoogcpercent","oligoogcpercent"], 
+           _Option(["-oligoogcpercent","oligoogcpercent"],
                    """Optimum GC% for internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -ogcopt.
                    """),
-           _Option(["-ogcopt", "ogcopt"], 
+           _Option(["-ogcopt", "ogcopt"],
                    """Optimum GC% for internal oligo."
 
                    Option added in EMBOSS 6.1.0, replacing -oligoogcpercent
                    """),
-           _Option(["-oligomingc","oligomingc"], 
+           _Option(["-oligomingc","oligomingc"],
                    """Minimum GC% for internal oligo (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -ogcmin.
                    """),
-           _Option(["-ogcmin", "ogcmin"], 
+           _Option(["-ogcmin", "ogcmin"],
                    """Minimum GC% for internal oligo.
 
                    Option added in EMBOSS 6.1.0, replacing -oligomingc
                    """),
-           _Option(["-oligomaxgc","oligomaxgc"], 
+           _Option(["-oligomaxgc","oligomaxgc"],
                    """Maximum GC% for internal oligo.
- 
+
                    Option replaced in EMBOSS 6.1.0 by -ogcmax
                    """),
-           _Option(["-ogcmax", "ogcmax"], 
+           _Option(["-ogcmax", "ogcmax"],
                    """Maximum GC% for internal oligo."),
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxgc
                    """),
            #Oligo salt concentration:
-           _Option(["-oligosaltconc","oligosaltconc"], 
+           _Option(["-oligosaltconc","oligosaltconc"],
                    """Millimolar concentration of salt in the hybridisation."),
- 
+
                    Option replaced in EMBOSS 6.1.0 by -osaltconc
                    """),
-           _Option(["-osaltconc", "osaltconc"], 
+           _Option(["-osaltconc", "osaltconc"],
                    """Millimolar concentration of salt in the hybridisation."),
 
                    Option added in EMBOSS 6.1.0, replacing -oligosaltconc
                    """),
-           _Option(["-oligodnaconc","oligodnaconc"], 
+           _Option(["-oligodnaconc","oligodnaconc"],
                    """Nanomolar concentration of internal oligo in the hybridisation.
- 
+
                    Option replaced in EMBOSS 6.1.0 by -odnaconc
                    """),
-           _Option(["-odnaconc", "odnaconc"], 
+           _Option(["-odnaconc", "odnaconc"],
                    """Nanomolar concentration of internal oligo in the hybridisation.
 
                    Option added in EMBOSS 6.1.0, replacing -oligodnaconc
                    """),
            #Oligo self complementarity
-           _Option(["-oligoselfany","oligoselfany"], 
+           _Option(["-oligoselfany","oligoselfany"],
                    """Maximum allowable alignment score for self-complementarity (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -oanyself
                    """),
-           _Option(["-oanyself", "oanyself"], 
+           _Option(["-oanyself", "oanyself"],
                    """Maximum allowable alignment score for self-complementarity."),
 
                    Option added in EMBOSS 6.1.0, replacing -oligoselfany
                    """),
-           _Option(["-oligoselfend","oligoselfend"], 
+           _Option(["-oligoselfend","oligoselfend"],
                    """Maximum allowable 3`-anchored global alignment score "
                    for self-complementarity (OBSOLETE).
- 
+
                    Option replaced in EMBOSS 6.1.0 by -oendself
                    """),
-           _Option(["-oendself", "oendself"], 
+           _Option(["-oendself", "oendself"],
                    """Max 3`-anchored self-complementarity global alignment score.
 
                    Option added in EMBOSS 6.1.0, replacing -oligoselfend
                    """),
-           _Option(["-oligomaxpolyx","oligomaxpolyx"], 
+           _Option(["-oligomaxpolyx","oligomaxpolyx"],
                    """Maximum length of mononucleotide repeat in internal oligo (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -opolyxmax
                    """),
-           _Option(["-opolyxmax", "opolyxmax"], 
+           _Option(["-opolyxmax", "opolyxmax"],
                    """Maximum length of mononucleotide repeat in internal oligo."),
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxpolyx
@@ -412,20 +412,20 @@ class Primer3Commandline(_EmbossCommandLine):
            _Option(["-maxmispriming","maxmispriming"],
                    "Maximum allowed similarity of primers to sequences in "
                    "library specified by -mispriminglibrary"),
-           _Option(["-oligomaxmishyb","oligomaxmishyb"], 
+           _Option(["-oligomaxmishyb","oligomaxmishyb"],
                    """Maximum alignment score for hybridisation of internal oligo to
                    library specified by -oligomishyblibraryfile (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -omishybmax
                    """),
-           _Option(["-omishybmax", "omishybmax"], 
+           _Option(["-omishybmax", "omishybmax"],
                    """Maximum alignment score for hybridisation of internal oligo to
                    library specified by -mishyblibraryfile.
 
                    Option added in EMBOSS 6.1.0, replacing -oligomaxmishyb
                    """),
            _Option(["-oligomishyblibraryfile", "oligomishyblibraryfile"],
-                  
+
                     """Library file of seqs to avoid internal oligo hybridisation (OBSOLETE).
 
                    Option replaced in EMBOSS 6.1.0 by -mishyblibraryfile
@@ -439,7 +439,7 @@ class Primer3Commandline(_EmbossCommandLine):
                    "Produce output tags with eprimer3 statistics"),
            ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
-        
+
 
 class PrimerSearchCommandline(_EmbossCommandLine):
     """Commandline object for the primersearch program from EMBOSS.
@@ -957,7 +957,7 @@ class Est2GenomeCommandline(_EmbossCommandLine):
          _Option(["-genome","genome"],
                  "Genomic sequence",
                  is_required=True),
-         _Option(["-match","match"], 
+         _Option(["-match","match"],
                  "Score for matching two bases"),
          _Option(["-mismatch","mismatch"],
                  "Cost for mismatching two bases"),
@@ -1130,7 +1130,7 @@ class DiffseqCommandline(_EmbossCommandLine):
 
 class IepCommandline(_EmbossCommandLine):
     """Commandline for EMBOSS iep: calculated isoelectric point and charge.
-    
+
     Example:
 
     >>> from Bio.Emboss.Applications import IepCommandline
@@ -1150,12 +1150,12 @@ class IepCommandline(_EmbossCommandLine):
                  is_required=True),
          _Option(["-amino","amino"],
                  """Number of N-termini
-                 
+
                  Integer 0 (default) or more.
                  """),
          _Option(["-carboxyl","carboxyl"],
                  """Number of C-termini
-                 
+
                  Integer 0 (default) or more.
                  """),
          _Option(["-lysinemodified","lysinemodified"],
@@ -1165,7 +1165,7 @@ class IepCommandline(_EmbossCommandLine):
                  """),
          _Option(["-disulphides","disulphides"],
                  """Number of disulphide bridges
-                 
+
                  Integer 0 (default) or more.
                  """),
          #Should we implement the -termini switch as well?

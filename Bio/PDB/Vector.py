@@ -74,8 +74,8 @@ def rotaxis2m(theta, vector):
     Calculate a left multiplying rotation matrix that rotates
     theta rad around vector.
 
-    Example: 
-    
+    Example:
+
         >>> m=rotaxis(pi, Vector(1,0,0))
         >>> rotated_vector=any_vector.left_multiply(m)
 
@@ -121,7 +121,7 @@ def refmat(p,q):
         >>> print q, qq # q and qq should be the same
 
     @type p,q: L{Vector}
-    @return: The mirror operation, a 3x3 Numeric array. 
+    @return: The mirror operation, a 3x3 Numeric array.
     """
     p.normalize()
     q.normalize()
@@ -162,7 +162,7 @@ def calc_angle(v1, v2, v3):
 
     @param v1, v2, v3: the tree points that define the angle
     @type v1, v2, v3: L{Vector}
-    
+
     @return: angle
     @rtype: float
     """

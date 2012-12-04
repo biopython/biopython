@@ -43,7 +43,7 @@ class Schema(object):
         """Initialize with ambiguity information.
 
         Arguments:
-        
+
         o ambiguity_info - A dictionary which maps letters in the motifs to
         the ambiguous characters which they might represent. For example,
         {'R' : 'AG'} specifies that Rs in the motif can match a A or a G.
@@ -57,11 +57,11 @@ class Schema(object):
 
     def encode_motif(self, motif):
         """Encode the passed motif as a regular expression pattern object.
-        
+
         Arguments:
 
         o motif - The motif we want to encode. This should be a string.
-        
+
         Returns:
         A compiled regular expression pattern object that can be used
         for searching strings.
@@ -163,7 +163,7 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
     o * - Any letter
     """
     letters = ["G", "A", "T", "C", "*"]
-    
+
     alphabet_matches = {"G" : "G",
                         "A" : "A",
                         "T" : "T",
@@ -211,7 +211,7 @@ class GeneticAlgorithmFinder(object):
         this function.
         """
         self.motif_generator = RandomMotifGenerator(self.alphabet)
-        
+
         self.mutator = SinglePositionMutation(mutation_rate = 0.1)
         self.crossover = SinglePointCrossover(crossover_prob = 0.25)
         self.repair = AmbiguousRepair(Schema(self.alphabet.alphabet_matches),
@@ -261,7 +261,7 @@ class DifferentialSchemaFitness(object):
         """Initialize with different sequences to evaluate
 
         Arguments:
-        
+
         o positive_seq - A list of SeqRecord objects which are the 'positive'
         sequences -- the ones we want to select for.
 
@@ -290,7 +290,7 @@ class DifferentialSchemaFitness(object):
         # convert the genome into a string
         seq_motif = genome.toseq()
         motif = str(seq_motif)
-        
+
         # get the counts in the positive examples
         num_pos = 0
         for seq_record in self._pos_seqs:
@@ -316,7 +316,7 @@ class DifferentialSchemaFitness(object):
         motif_size = motif_size * 4.0
 
         discerning_power = num_pos - num_neg
-        
+
         diff = (discerning_power * motif_size) / float(num_ambiguous)
         return diff
 
@@ -330,7 +330,7 @@ class MostCountSchemaFitness(object):
         """Initialize with sequences to evaluate.
 
         Arguments:
-        
+
         o seq_records -- A set of SeqRecord objects which we use to
         calculate the fitness.
 
@@ -350,7 +350,7 @@ class MostCountSchemaFitness(object):
         # convert the genome into a string
         seq_motif = genome.toseq()
         motif = str(seq_motif)
-        
+
         # find the number of times the genome matches
         num_times = 0
         for seq_record in self._records:
@@ -380,7 +380,7 @@ class RandomMotifGenerator(object):
 
     def random_motif(self):
         """Create a random motif within the given parameters.
-        
+
         This returns a single motif string with letters from the given
         alphabet. The size of the motif will be randomly chosen between
         max_size and min_size.
@@ -548,7 +548,7 @@ def matches_schema(pattern, schema, ambiguity_character = '*'):
         if (schema[pos] != ambiguity_character and
             pattern[pos] != ambiguity_character and
             pattern[pos] != schema[pos]):
-            
+
             return 0
 
     return 1
@@ -593,7 +593,6 @@ class SchemaFactory(object):
         matched_count = 0
         assert total_count > 0, "Expected to have motifs to match"
         while (float(matched_count) / float(total_count)) < motif_percent:
-            
             new_schema, matching_motifs = \
                         self._get_unique_schema(schema_info.keys(),
                                                 all_motifs, num_ambiguous)
@@ -640,13 +639,13 @@ class SchemaFactory(object):
         # we'll keep doing this until we get a completely new schema that
         # doesn't match any old schema
         num_tries = 0
-        
+
         while 1:
             # pick a motif to work from and make a schema from it
             cur_motif = random.choice(motif_list)
-            
+
             num_tries += 1
-                
+
             new_schema, matching_motifs = \
                         self._schema_from_motif(cur_motif, motif_list,
                                                 num_ambiguous)
@@ -714,6 +713,6 @@ class SchemaFactory(object):
                 matched_motifs.append(motif)
 
         return new_schema, matched_motifs
-            
+
     def from_signatures(self, signature_repository, num_ambiguous):
         raise NotImplementedError("Still need to code this.")

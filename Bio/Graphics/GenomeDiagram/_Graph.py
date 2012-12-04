@@ -121,7 +121,7 @@ class GraphData(object):
 
         self.id = id            # Unique identifier for the graph
         self.data = {}          # holds values, keyed by sequence position
-        if data is not None:    
+        if data is not None:
             self.set_data(data)
         self.name = name        # Descriptive string
 
@@ -159,7 +159,7 @@ class GraphData(object):
         """
         data = []
         for xval in self.data.keys():
-            yval = self.data[xval]            
+            yval = self.data[xval]
             data.append((xval, yval))
         data.sort()
         return data
@@ -199,7 +199,7 @@ class GraphData(object):
         positions.sort()
         # Return first and last positions in graph
         #print len(self.data)
-        return (positions[0], positions[-1])    
+        return (positions[0], positions[-1])
 
 
     def mean(self):
@@ -227,7 +227,6 @@ class GraphData(object):
         # This is sample standard deviation; population stdev would involve
         # division by len(data), rather than len(data)-1
         return sqrt(runtotal/(len(data)-1))
-        
 
     def __len__(self):
         """ __len__(self) -> Int

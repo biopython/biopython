@@ -25,7 +25,7 @@ ambiguous_dna_by_id = {}
 ambiguous_rna_by_name = {}
 ambiguous_rna_by_id = {}
 ambiguous_generic_by_name = {} # ambiguous DNA or RNA
-ambiguous_generic_by_id = {} # ambiguous DNA or RNA 
+ambiguous_generic_by_id = {} # ambiguous DNA or RNA
 
 # standard IUPAC unambiguous codons
 standard_dna_table = None
@@ -41,7 +41,7 @@ class TranslationError(Exception):
 class CodonTable(object):
     nucleotide_alphabet = Alphabet.generic_nucleotide
     protein_alphabet = Alphabet.generic_protein
-    
+
     forward_table = {}    # only includes codons which actually code
     back_table = {}       # for back translations
     start_codons = []
@@ -111,11 +111,11 @@ class CodonTable(object):
                         else:
                             line = line + " %s   |" % amino
                 line = line + " " + c3
-                answer = answer + "\n"+ line 
+                answer = answer + "\n"+ line
             answer=answer + "\n--+" \
                   + "+".join(["---------" for c2 in letters]) + "+--"
         return answer
-            
+
 def make_back_table(table, default_stop_codon):
     #  ONLY RETURNS A SINGLE CODON
     # Do the sort so changes in the hash implementation won't affect
@@ -130,7 +130,7 @@ def make_back_table(table, default_stop_codon):
 class NCBICodonTable(CodonTable):
     nucleotide_alphabet = Alphabet.generic_nucleotide
     protein_alphabet = IUPAC.protein
-    
+
     def __init__(self, id, names, table, start_codons, stop_codons):
         self.id = id
         self.names = names
@@ -290,7 +290,7 @@ class AmbiguousForwardTable(object):
         for name, val in inverted.iteritems():
             inverted[name] = val.keys()
         self._inverted = inverted
-        
+
         self._cache = {}
 
     def get(self, codon, failobj = None):
@@ -298,7 +298,7 @@ class AmbiguousForwardTable(object):
             return self.__getitem__(codon)
         except KeyError:
             return failobj
-        
+
     def __getitem__(self, codon):
         try:
             x = self._cache[codon]
@@ -365,7 +365,7 @@ class AmbiguousForwardTable(object):
 
         #Sort by key is 2.x and 3.x compatible
         possible.sort(key=lambda x:(len(self.ambiguous_protein[x]), x))
-                          
+
         x = possible[0]
         self._cache[codon] = x
         return x
@@ -377,7 +377,7 @@ def register_ncbi_table(name, alt_name, id,
     #In most cases names are divided by "; ", however there is also
     #'Bacterial and Plant Plastid' (which used to be just 'Bacterial')
     names = [x.strip() for x in name.replace(" and ","; ").split("; ")]
-    
+
     dna = NCBICodonTableDNA(id, names + [alt_name], table, start_codons,
                             stop_codons)
 
@@ -386,7 +386,7 @@ def register_ncbi_table(name, alt_name, id,
                                     IUPACData.ambiguous_dna_values,
                                     IUPAC.extended_protein,
                                     IUPACData.extended_protein_values)
-    
+
     # replace all T's with U's for the RNA tables
     rna_table = {}
     generic_table = {}
@@ -409,7 +409,7 @@ def register_ncbi_table(name, alt_name, id,
         codon = codon.replace("T", "U")
         generic_stop_codons.append(codon)
         rna_stop_codons.append(codon)
-    
+
     generic = NCBICodonTable(id, names + [alt_name], generic_table,
                              generic_start_codons, generic_stop_codons)
 

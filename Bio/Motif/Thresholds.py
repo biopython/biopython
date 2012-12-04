@@ -25,13 +25,13 @@ class ScoreDistribution(object):
         self.ic=motif.ic()
         for lo,mo in zip(motif.log_odds(),motif.pwm()):
             self.modify(lo,mo,motif.background)
-        
+
     def _index_diff(self,x,y=0.0):
         return int((x-y+0.5*self.step)//self.step)
-        
+
     def _add(self,i,j):
         return max(0,min(self.n_points-1,i+j))
-        
+
     def modify(self,scores,mo_probs,bg_probs):
         mo_new=[0.0]*self.n_points
         bg_new=[0.0]*self.n_points
@@ -42,7 +42,7 @@ class ScoreDistribution(object):
                 bg_new[self._add(i,d)]+=self.bg_density[i]*bg_probs[k]
         self.mo_density=mo_new
         self.bg_density=bg_new
-        
+
     def threshold_fpr(self,fpr):
         """
         Approximate the log-odds threshold which makes the type I error (false positive rate).
@@ -53,7 +53,7 @@ class ScoreDistribution(object):
             i-=1
             prob+=self.bg_density[i]
         return self.min_score+i*self.step
-            
+
     def threshold_fnr(self,fnr):
         """
         Approximate the log-odds threshold which makes the type II error (false negative rate).
@@ -64,7 +64,7 @@ class ScoreDistribution(object):
             i+=1
             prob+=self.mo_density[i]
         return self.min_score+i*self.step
-            
+
     def threshold_balanced(self,rate_proportion=1.0,return_rate=False):
         """
         Approximate the log-odds threshold which makes FNR equal to FPR times rate_proportion
@@ -83,7 +83,7 @@ class ScoreDistribution(object):
 
     def threshold_patser(self):
         """Threshold selection mimicking the behaviour of patser (Hertz, Stormo 1999) software.
-        
+
         It selects such a threshold that the log(fpr)=-ic(M)
         note: the actual patser software uses natural logarithms instead of log_2, so the numbers
         are not directly comparable.

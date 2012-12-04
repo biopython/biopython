@@ -49,7 +49,7 @@ class _XMLparser(ContentHandler):
         """
         # Replace '-' with '_' in XML tag names
         return name.replace('-', '_')
-    
+
     def startElement(self, name, attr):
         """Found XML start tag
 
@@ -60,7 +60,7 @@ class _XMLparser(ContentHandler):
         attr -- tag attributes
         """
         self._tag.append(name)
-        
+
         # Try to call a method (defined in subclasses)
         method = self._secure_name('_start_' + name)
 
@@ -96,7 +96,7 @@ class _XMLparser(ContentHandler):
         name -- tag name
         """
         # DON'T strip any white space, we may need it e.g. the hsp-midline
-        
+
         # Try to call a method (defined in subclasses)
         method = self._secure_name('_end_' + name)
         #Note could use try / except AttributeError
@@ -110,10 +110,10 @@ class _XMLparser(ContentHandler):
             if method not in self._debug_ignore_list:
                 print "NCBIXML: Ignored: " + method, self._value
                 self._debug_ignore_list.append(method)
-        
+
         # Reset character buffer
         self._value = ''
-        
+
 class BlastParser(_XMLparser):
     """Parse XML BLAST data into a Record.Blast object
 
@@ -129,10 +129,10 @@ class BlastParser(_XMLparser):
         """
         # Calling superclass method
         _XMLparser.__init__(self, debug)
-        
+
         self._parser = xml.sax.make_parser()
         self._parser.setContentHandler(self)
-        
+
         # To avoid ValueError: unknown url type: NCBI_BlastOutput.dtd
         self._parser.setFeature(xml.sax.handler.feature_validation, 0)
         self._parser.setFeature(xml.sax.handler.feature_namespaces, 0)
@@ -229,7 +229,7 @@ class BlastParser(_XMLparser):
 
         #The version is the second word (field one)
         self._header.version = parts[1]
-        
+
         #Check there is a third word (the date)
         if len(parts) >= 3:
             if parts[2][0] == "[" and parts[2][-1] == "]":
@@ -317,7 +317,7 @@ class BlastParser(_XMLparser):
         """matrix used (-M)
         """
         self._parameters.matrix = self._value
-        
+
     def _end_Parameters_expect(self):
         """expect values cutoff (-e)
         """
@@ -334,7 +334,7 @@ class BlastParser(_XMLparser):
 ##         """inclusion threshold for a psi-blast iteration (-h)
 ##         """
 ##         pass # XXX TODO PSI
-    
+
     def _end_Parameters_sc_match(self):
         """match score for nucleotide-nucleotide comparaison (-r)
         """
@@ -558,7 +558,7 @@ class BlastParser(_XMLparser):
         """Karlin-Altschul parameter H
         """
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
-    
+
 def read(handle, debug=0):
    """Returns a single Blast record (assumes just one query).
 
@@ -613,7 +613,7 @@ def parse(handle, debug=0):
     if not text:
         #NO DATA FOUND!
         raise ValueError("Your XML file was empty")
-    
+
     while text:
         #We are now starting a new XML file
         if not text.startswith(XML_START):
@@ -647,13 +647,13 @@ def parse(handle, debug=0):
 
             if ("\n" + XML_START) not in (text + pending):
                 # Good - still dealing with the same XML file
-                expat_parser.Parse(text, False)        
+                expat_parser.Parse(text, False)
                 while blast_parser._records:
                     yield blast_parser._records.pop(0)
             else:
                 # This is output from pre 2.2.14 BLAST,
                 # one XML file for each query!
-                
+
                 # Finish the old file:
                 text, pending = (text+pending).split("\n" + XML_START,1)
                 pending = XML_START + pending
@@ -661,7 +661,7 @@ def parse(handle, debug=0):
                 expat_parser.Parse(text, True) # End of XML record
                 while blast_parser._records:
                     yield blast_parser._records.pop(0)
-               
+
                 #Now we are going to re-loop, reset the
                 #parsers and start reading the next XML file
                 text, pending = pending, ""
@@ -671,13 +671,13 @@ def parse(handle, debug=0):
         #was adding records later then the Python one
         while blast_parser._records:
             yield blast_parser._records.pop(0)
-            
+
         #At this point we have finished the first XML record.
         #If the file is from an old version of blast, it may
         #contain more XML records (check if text=="").
         assert pending==""
         assert len(blast_parser._records) == 0
-        
+
     #We should have finished the file!
     assert text==""
     assert pending==""

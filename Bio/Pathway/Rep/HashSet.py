@@ -20,11 +20,11 @@ class HashSet(object):
         self._elements = {}
         for e in elements:
             self._elements[e] = 1
-            
+
     def __contains__(self, element):
         """Returns true iff this set contains element."""
         return element in self._elements
-    
+
     def __eq__(self, set):
         """Returns true iff x == y for all elements in self, set."""
         if not isinstance(set, HashSet):
@@ -40,7 +40,7 @@ class HashSet(object):
         return len(self._elements)
 
     def __ne__(self, set):
-        """Returns true iff this set is not equal to set.""" 
+        """Returns true iff this set is not equal to set."""
         return not self.__eq__(set)
 
     def __repr__(self):
@@ -49,7 +49,7 @@ class HashSet(object):
 
     def __str__(self):
         """Returns a string representation of this set."""
-        return "{" + ",".join(map(str, self.list())) + "}" 
+        return "{" + ",".join(map(str, self.list())) + "}"
 
     # Element access:
 

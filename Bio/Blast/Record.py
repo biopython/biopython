@@ -33,7 +33,7 @@ class Header(object):
 
     query               Name of query sequence.
     query_letters       Number of letters in the query sequence.  (int)
-    
+
     database            Name of the database.
     database_sequences  Number of sequences in the database.  (int)
     database_letters    Number of letters in the database.  (int)
@@ -61,7 +61,6 @@ class Description(object):
     bits            Bit score. (float)
     e               E value.  (float)
     num_alignments  Number of alignments for the same subject.  (int)
-    
     """
     def __init__(self):
         self.title = ''
@@ -122,7 +121,7 @@ class HSP(object):
     sbjct           The sbjct sequence.
     sbjct_start     The start residue for the sbjct sequence.  (1-based)
     sbjct_end       The end residue for the sbjct sequence.  (1-based)
-    
+
     Not all flavors of BLAST return values for every attribute:
               score     expect     identities   positives    strand  frame
     BLASTP     X          X            X            X
@@ -152,7 +151,7 @@ class HSP(object):
         self.align_length = None
         self.strand = (None, None)
         self.frame = ()
-        
+
         self.query = ''
         self.query_start = None
         self.query_end = None
@@ -246,7 +245,6 @@ class Round(object):
     new_seqs     Sequences not found, or below threshold.  List of Description.
     alignments          A list of Alignment objects.
     multiple_alignment  A MultipleAlignment object.
-    
     """
     def __init__(self):
         self.number = None
@@ -257,7 +255,7 @@ class Round(object):
 
 class DatabaseReport(object):
     """Holds information about a database report.
-    
+
     Members:
     database_name              List of database names.  (can have multiple dbs)
     num_letters_in_database    Number of letters in the database.  (int)
@@ -340,7 +338,7 @@ class Parameters(object):
         self.gap_trigger = (None, None)
         self.blast_cutoff = (None, None)
 
-#TODO - Add a friendly __str__ method to BLAST results    
+#TODO - Add a friendly __str__ method to BLAST results
 class Blast(Header, DatabaseReport, Parameters):
     """Saves the results from a blast search.
 

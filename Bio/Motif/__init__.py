@@ -30,7 +30,6 @@ _readers={"jaspar-pfm": _from_pfm,
           }
 
 
-          
 def parse(handle,format):
     """Parses an output file of motif finding programs.
 
@@ -70,13 +69,13 @@ def parse(handle,format):
     else:
         try:
             parser=_parsers[format]
-        
+
         except KeyError:
             try: #not a true parser, try reader formats
                 reader=_readers[format]
             except:
                 raise ValueError("Wrong parser format")
-            else: #we have a proper reader 
+            else: #we have a proper reader
                 yield reader(handle)
         else: # we have a proper reader
             for m in parser(handle).motifs:

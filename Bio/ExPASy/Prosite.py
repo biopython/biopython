@@ -61,7 +61,7 @@ class Record(object):
     data_update    Date the 'primary' data was last updated.
     info_update    Date data other than 'primary' data was last updated.
     pdoc           ID of the PROSITE DOCumentation.
-    
+
     description    Free-format description.
     pattern        The PROSITE pattern.  See docs.
     matrix         List of strings that describes a matrix entry.
@@ -110,7 +110,7 @@ class Record(object):
         self.data_update = ''
         self.info_update = ''
         self.pdoc = ''
-    
+
         self.description = ''
         self.pattern = ''
         self.matrix = []

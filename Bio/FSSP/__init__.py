@@ -219,7 +219,7 @@ def read_fssp(fssp_handle):
       # Still in title
       header.fill_header(curline)
       curline = fssp_handle.readline()
-      
+
    if not summary_title.match(curline):
       raise ValueError('Bad FSSP file: no summary record found')
    curline = fssp_handle.readline()  #Read the title line, discard

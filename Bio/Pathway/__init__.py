@@ -7,7 +7,7 @@
 
 Bio.Pathway is a lightweight class library designed to support the following tasks:
 
- - Data interchange and preprocessing between pathway databases and analysis software. 
+ - Data interchange and preprocessing between pathway databases and analysis software.
  - Quick prototyping of pathway analysis algorithms
 
 The basic object in the Bio.Pathway model is Interaction, which represents an arbitrary
@@ -65,7 +65,7 @@ class Reaction(object):
     for all C in catalysts: catalysts[C] != 0
 
     """
-    
+
     def __init__(self, reactants = {}, catalysts = [],
                  reversible = 0, data = None):
         """Initializes a new Reaction object."""
@@ -86,7 +86,7 @@ class Reaction(object):
                self.catalysts == r.catalysts and \
                self.data == r.data and \
                self.reversible == r.reversible
-        
+
     def __ne__(self, r):
         """Returns true iff self is not equal to r."""
         return not self.__eq__(r)
@@ -153,9 +153,9 @@ class System(object):
 
     Attributes:
 
-    None    
+    None
     """
-    
+
     def __init__(self, reactions = []):
         """Initializes a new System object."""
         self.__reactions = set(reactions)
@@ -163,7 +163,7 @@ class System(object):
     def __repr__(self):
         """Returns a debugging string representation of self."""
         return "System(" + ",".join(map(repr,self.__reactions)) + ")"
-    
+
     def __str__(self):
         """Returns a string representation of self."""
         return "System of " + str(len(self.__reactions)) + \
@@ -180,7 +180,7 @@ class System(object):
 
     def reactions(self):
         """Returns a list of the reactions in this system.
-        
+
         Note the order is arbitrary!
         """
         #TODO - Define __lt__ so that Reactions can be sorted on Python?
@@ -237,13 +237,13 @@ class Interaction(object):
         return hash(self.data)
 
     def __repr__(self):
-        """Returns a debugging string representation of self.""" 
+        """Returns a debugging string representation of self."""
         return "Interaction(" + repr(self.data) + ")"
 
     def __str__(self):
         """Returns a string representation of self."""
         return "<" + str(self.data) + ">"
-    
+
 
 class Network(object):
     """A set of species that are explicitly linked by interactions.
@@ -256,7 +256,6 @@ class Network(object):
     Attributes:
 
     None
-    
     """
 
     def __init__(self, species = []):

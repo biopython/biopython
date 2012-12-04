@@ -22,11 +22,11 @@ class Superimposer(object):
 
     def set_atoms(self, fixed, moving):
         """
-        Put (translate/rotate) the atoms in fixed on the atoms in 
+        Put (translate/rotate) the atoms in fixed on the atoms in
         moving, in such a way that the RMSD is minimized.
 
         @param fixed: list of (fixed) atoms
-        @param moving: list of (moving) atoms 
+        @param moving: list of (moving) atoms
         @type fixed,moving: [L{Atom}, L{Atom},...]
         """
         if not (len(fixed)==len(moving)):
@@ -73,7 +73,7 @@ if __name__=="__main__":
 
     for atom in moving:
         atom.transform(rot, tran)
-    
+
     sup=Superimposer()
 
     sup.set_atoms(fixed, moving)

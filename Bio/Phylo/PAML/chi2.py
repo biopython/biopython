@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 #
-# This code is adapted (with permission) from the C source code of chi2.c, 
+# This code is adapted (with permission) from the C source code of chi2.c,
 # written by Ziheng Yang and included in the PAML software package:
 # http://abacus.gene.ucl.ac.uk/software/paml.html
 
@@ -18,12 +18,12 @@ def cdf_chi2(df, stat):
     alpha = df / 2.0
     prob = 1 - _incomplete_gamma(x, alpha)
     return prob
-                      
+
 def _ln_gamma_function(alpha):
     """Compute the log of the gamma function for a given alpha.
-    
+
     Comments from Z. Yang:
-    Returns ln(gamma(alpha)) for alpha>0, accurate to 10 decimal places.  
+    Returns ln(gamma(alpha)) for alpha>0, accurate to 10 decimal places.
     Stirling's formula is used for the central polynomial part of the procedure.
     Pike MC & Hill ID (1966) Algorithm 291: Logarithm of the gamma function.
     Communications of the Association for Computing Machinery, 9:684
@@ -36,7 +36,7 @@ def _ln_gamma_function(alpha):
         f = 1
         z = x
         while z<7:
-            f *= z 
+            f *= z
             z += 1
         x = z
         f = -log(f)
@@ -44,12 +44,12 @@ def _ln_gamma_function(alpha):
     return  f + (x-0.5)*log(x) - x + .918938533204673             \
           + (((-.000595238095238*z+.000793650793651)*z-.002777777777778)*z \
                +.083333333333333)/x
-        
+
 def _incomplete_gamma(x, alpha):
     """Compute an incomplete gamma ratio.
-    
+
     Comments from Z. Yang:
-    Returns the incomplete gamma ratio I(x,alpha) where x is the upper 
+    Returns the incomplete gamma ratio I(x,alpha) where x is the upper
            limit of the integration and alpha is the shape parameter.
     returns (-1) if in error
     ln_gamma_alpha = ln(Gamma(alpha)), is almost redundant.
@@ -74,7 +74,7 @@ def _incomplete_gamma(x, alpha):
        return 0
     if x < 0 or p <= 0:
         return -1
-    factor = exp(p*log(x)-x-g)  
+    factor = exp(p*log(x)-x-g)
     if x > 1 and x >= p:
         a = 1 - p
         b = a + x + 1
@@ -94,7 +94,7 @@ def _incomplete_gamma(x, alpha):
     while True:
         a += 1
         b += 2
-        term += 1   
+        term += 1
         an = a * term
         for i in range(2):
             pn[i + 4] = b * pn[i + 2] - an * pn[i]

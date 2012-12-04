@@ -21,13 +21,13 @@ from Bio.PDB.Polypeptide import is_aa
 
 def run_psea(fname):
     """Run PSEA and return output filename.
-    
+
     Note that this assumes the P-SEA binary is called "psea" and that it is
     on the path.
-    
+
     Note that P-SEA will write an output file in the current directory using
     the input filename with extension ".sea".
-    
+
     Note that P-SEA will write output to the terminal while run.
     """
     os.system("psea "+fname)
@@ -94,7 +94,7 @@ class PSEA(object):
         Return secondary structure string.
         """
         return self.ss_seq
-        
+
 
 if __name__=="__main__":
 

@@ -3,7 +3,7 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""This module provides code to work with the standalone version of AlignACE, 
+"""This module provides code to work with the standalone version of AlignACE,
 for motif search in DNA sequences.
 
 AlignACE homepage:
@@ -12,15 +12,15 @@ http://arep.med.harvard.edu/mrnadata/mrnasoft.html
 
 AlignACE Citations:
 
-Computational identification of cis-regulatory elements associated with 
-groups of functionally related genes in Saccharomyces cerevisiae, 
-Hughes, JD, Estep, PW, Tavazoie S, & GM Church, Journal of Molecular 
+Computational identification of cis-regulatory elements associated with
+groups of functionally related genes in Saccharomyces cerevisiae,
+Hughes, JD, Estep, PW, Tavazoie S, & GM Church, Journal of Molecular
 Biology 2000 Mar 10;296(5):1205-14.
 
-Finding DNA Regulatory Motifs within Unaligned Non-Coding Sequences 
-Clustered by Whole-Genome mRNA Quantitation, 
-Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology 
-1998 Oct;16(10):939-45. 
+Finding DNA Regulatory Motifs within Unaligned Non-Coding Sequences
+Clustered by Whole-Genome mRNA Quantitation,
+Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology
+1998 Oct;16(10):939-45.
 
 """
 from Bio.Application import AbstractCommandline, _Option, _Argument
@@ -36,22 +36,22 @@ class AlignAceCommandline(AbstractCommandline):
           [
             _Option(["-i","input"],["input"],lambda x : isinstance(x, str),1,
                     "Input Sequence file in FASTA format."),
-            
+
             _Option(["-numcols","numcols"],["input"],lambda x : isinstance(x, int),0,
                     "Number of columns to align"),
 
             _Option(["-expect","expect"],["input"],lambda x : isinstance(x, int),0,
                     "number of sites expected in model "),
-            
+
             _Option(["-gcback","gcback"],["input"],lambda x : isinstance(x, float),0,
                     "background fractional GC content of input sequence"),
-            
+
             _Option(["-minpass","minpass"],["input"],lambda x : isinstance(x, int),0,
                     "minimum number of non-improved passes in phase 1"),
-            
+
             _Option(["-seed","seed"],["input"],lambda x : isinstance(x, int),0,
                     "set seed for random number generator (time)"),
-            
+
             _Option(["-undersample","undersample"],["input"],lambda x : isinstance(x, int),0,
                     "possible sites / (expect * numcols * seedings)"),
 

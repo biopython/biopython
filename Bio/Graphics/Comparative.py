@@ -112,7 +112,7 @@ class ComparativeScatterPlot(object):
         scatter_plot.yValueAxis.valueStep = (y_max - y_min) / 10.0
 
         self._set_colors_and_shapes(scatter_plot, self.display_info)
-        
+
         cur_drawing.add(scatter_plot)
 
     def _set_colors_and_shapes(self, scatter_plot, display_info):

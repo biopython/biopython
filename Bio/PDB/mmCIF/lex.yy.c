@@ -397,13 +397,13 @@ static char *yy_last_accepting_cpos;
 char *yytext;
 #line 1 "mmcif.lex"
 #define INITIAL 0
-/* 
+/*
 Number code of the tokens is:
 
 NAME 			(eg. _entity.id)		1
 LOOP 			(loop_)					2
 DATA			(eg. data_something)	3
-SEMICOLON 		(eg. ;value\n;)	 		4	
+SEMICOLON 		(eg. ;value\n;)	 		4
 DOUBLE QUOTE 	(eg. "value")			5
 SINGLE QUOTE 	(eg. 'value')			6
 FREE 			(eg. value )			7
@@ -653,17 +653,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 26 "mmcif.lex"
-/* ignore */			
+/* ignore */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 28 "mmcif.lex"
-{ return 1; }	
+{ return 1; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 30 "mmcif.lex"
-{ return 2; }					
+{ return 2; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -673,22 +673,22 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 34 "mmcif.lex"
-{ return 4; }	
+{ return 4; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 36 "mmcif.lex"
-{ return 5; }	
+{ return 5; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 38 "mmcif.lex"
-{ return 6; }	
+{ return 6; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 40 "mmcif.lex"
-{ return 7; }	
+{ return 7; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
@@ -1595,7 +1595,7 @@ int main()
 void mmcif_set_file(FILE *fp)
 {
 	yyin=fp;
-}	
+}
 
 int mmcif_get_token(void)
 {
@@ -1606,5 +1606,5 @@ int mmcif_get_token(void)
 char *mmcif_get_string(void)
 {
 	return yytext;
-}	
+}
 

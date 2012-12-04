@@ -65,7 +65,7 @@ class DistributionPage(object):
         num_y_rows = math.ceil(float(len(self.distributions))
                                / float(self.number_of_columns))
         y_pos_change = (cur_y_pos - end_y_pos) / num_y_rows
-        
+
         self._draw_distributions(cur_drawing, cur_x_pos, x_pos_change,
                                  cur_y_pos, y_pos_change, num_y_rows)
         self._draw_legend(cur_drawing, 2.5 * inch, width)
@@ -162,7 +162,7 @@ class BarChartDistribution(object):
         # set the position of the bar chart
         x_start, x_end, y_start, y_end = \
            self._determine_position(start_x, start_y, end_x, end_y)
-                                          
+
         bar_chart.x = x_start
         bar_chart.y = y_start
         bar_chart.width = abs(x_start - x_end)
@@ -187,7 +187,6 @@ class BarChartDistribution(object):
             style[0].fillColor = colors.green
 
             bar_chart.bars = style
-        
 
         # set the labels
         # XXX labels don't work yet
@@ -228,7 +227,7 @@ class BarChartDistribution(object):
             new_y_start = start_y - y_padding
 
         new_y_end = end_y + y_padding
-        
+
         return new_x_start, new_x_end, new_y_start, new_y_end
 
 class LineDistribution(object):

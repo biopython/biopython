@@ -23,14 +23,14 @@ use naccess -y, naccess -h or naccess -w to include HETATM records
 
 def run_naccess(model, pdb_file, probe_size = None, z_slice = None, \
                 naccess = 'naccess', temp_path = '/tmp/'):
-    
-    # make temp directory; chdir to temp directory, 
+
+    # make temp directory; chdir to temp directory,
     # as NACCESS writes to current working directory
     tmp_path = tempfile.mktemp(dir = temp_path)
     os.mkdir(tmp_path)
     old_dir = os.getcwd()
     os.chdir(tmp_path)
-    
+
     # file name must end with '.pdb' to work with NACCESS
     # -> create temp file of existing pdb
     #    or write model to temp file
@@ -90,7 +90,7 @@ def process_rsa_data(rsa_data):
                 'non_polar_abs': float(line[55:61]),
                 'non_polar_rel': float(line[62:67]),
                 'all_polar_abs': float(line[68:74]),
-                'all_polar_rel': float(line[75:80]) } 
+                'all_polar_rel': float(line[75:80]) }
     return naccess_rel_dict
 
 def process_asa_data(rsa_data):
@@ -114,7 +114,7 @@ def process_asa_data(rsa_data):
 
 
 class NACCESS(AbstractResiduePropertyMap):
-    
+
     def __init__(self, model, pdb_file = None,
                  naccess_binary = 'naccess', tmp_directory = '/tmp'):
         res_data, atm_data = run_naccess(model, pdb_file, naccess = naccess_binary,
@@ -139,7 +139,7 @@ class NACCESS(AbstractResiduePropertyMap):
                     res.xtra["EXP_NACCESS"]=item
                 else:
                     pass
-        AbstractResiduePropertyMap.__init__(self, property_dict, property_keys, 
+        AbstractResiduePropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 
 class NACCESS_atomic(AbstractAtomPropertyMap):
@@ -167,14 +167,14 @@ class NACCESS_atomic(AbstractAtomPropertyMap):
                         property_keys.append((full_id))
                         property_list.append((atom, asa))
                         atom.xtra['EXP_NACCESS']=asa
-        AbstractAtomPropertyMap.__init__(self, property_dict, property_keys, 
+        AbstractAtomPropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
 
 
 if __name__=="__main__":
     import sys
     from Bio.PDB import PDBParser
-    
+
     p=PDBParser()
     s=p.get_structure('X', sys.argv[1])
     model=s[0]

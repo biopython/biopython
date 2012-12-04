@@ -177,7 +177,7 @@ class Alignment(object):
             return handle.getvalue()
         else:
             #Follow python convention and default to using __str__
-            return str(self)    
+            return str(self)
 
     def get_all_seqs(self):
         """Return all of the sequences involved in the alignment (DEPRECATED).
@@ -217,7 +217,7 @@ class Alignment(object):
         Gamma
         ACTGCTAGATAG
         """
-        return iter(self._records) 
+        return iter(self._records)
 
     def get_seq_by_num(self, number):
         """Retrieve a sequence by row number (DEPRECATED).
@@ -248,7 +248,7 @@ class Alignment(object):
         list of SeqRecord objects.
         """
         return len(self._records)
-    
+
     def get_alignment_length(self):
         """Return the maximum length of the alignment.
 
@@ -269,7 +269,7 @@ class Alignment(object):
 
         >>> len(align)
         3
-        
+
         """
         max_length = 0
 
@@ -329,7 +329,7 @@ class Alignment(object):
         new_record.annotations['weight'] = weight
 
         self._records.append(new_record)
-        
+
     def get_column(self,col):
         """Returns a string containing a given column.
 
@@ -364,7 +364,7 @@ class Alignment(object):
         >>> align.add_sequence("Gamma",  "ACTGCTAGATAG")
         >>> align.add_sequence("Delta",  "ACTGCTTGCTAG")
         >>> align.add_sequence("Epsilon","ACTGCTTGATAG")
-        
+
         You can access a row of the alignment as a SeqRecord using an integer
         index (think of the alignment as a list of SeqRecord objects here):
 

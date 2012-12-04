@@ -39,7 +39,7 @@ def parse(handle):
         if not record:
             return
         yield record
- 
+
 class Record(object):
     """Holds information from a Prodoc record.
 

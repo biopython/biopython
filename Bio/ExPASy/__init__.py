@@ -24,7 +24,7 @@ def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     """get_prodoc_entry(id,
     cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry') -> handle
 
-    Get a handle to a PRODOC entry at ExPASy in HTML format. 
+    Get a handle to a PRODOC entry at ExPASy in HTML format.
 
     For a non-existing key XXX, ExPASy returns an HTML-formatted page
     containing this line:

@@ -10,7 +10,7 @@ Rather than using Bio.GenBank, you are now encouraged to use Bio.SeqIO with
 the "genbank" or "embl" format names to parse GenBank or EMBL files into
 SeqRecord and SeqFeature objects (see the Biopython tutorial for details).
 
-Using Bio.GenBank directly to parse GenBank files is only useful if you want 
+Using Bio.GenBank directly to parse GenBank files is only useful if you want
 to obtain GenBank-specific Record objects, which is a much closer
 representation to the raw file contents that the SeqRecord alternative from
 the FeatureParser (used in Bio.SeqIO).
@@ -140,7 +140,7 @@ assert not _re_simple_location.match("join(complement(149815..150200),complement
 
 def _pos(pos_str, offset=0):
     """Build a Position object (PRIVATE).
-    
+
     For an end position, leave offset as zero (default):
 
     >>> _pos("5")
@@ -226,7 +226,7 @@ def _pos(pos_str, offset=0):
 
 def _loc(loc_str, expected_seq_length, strand):
     """FeatureLocation from non-compound non-complement location (PRIVATE).
-    
+
     Simple examples,
 
     >>> _loc("123..456", 1000, +1)
@@ -245,13 +245,13 @@ def _loc(loc_str, expected_seq_length, strand):
 
     >>> _loc("123^124", 1000, 0)
     FeatureLocation(ExactPosition(123), ExactPosition(123), strand=0)
-    
+
     The expected sequence length is needed for a special case, a between
     position at the start/end of a circular genome:
 
     >>> _loc("1000^1", 1000, 1)
     FeatureLocation(ExactPosition(1000), ExactPosition(1000), strand=1)
-    
+
     Apart from this special case, between positions P^Q must have P+1==Q,
 
     >>> _loc("123^456", 1000, 1)
@@ -287,7 +287,7 @@ def _loc(loc_str, expected_seq_length, strand):
 
 def _split_compound_loc(compound_loc):
     """Split a tricky compound location string (PRIVATE).
-    
+
     >>> list(_split_compound_loc("123..145"))
     ['123..145']
     >>> list(_split_compound_loc("123..145,200..209"))
@@ -403,7 +403,7 @@ class FeatureParser(object):
 
     Please use Bio.SeqIO.parse(...) or Bio.SeqIO.read(...) instead.
     """
-    def __init__(self, debug_level = 0, use_fuzziness = 1, 
+    def __init__(self, debug_level = 0, use_fuzziness = 1,
                  feature_cleaner = FeatureValueCleaner()):
         """Initialize a GenBank parser and Feature consumer.
 
@@ -415,7 +415,7 @@ class FeatureParser(object):
         o use_fuzziness - Specify whether or not to use fuzzy representations.
         The default is 1 (use fuzziness).
         o feature_cleaner - A class which will be used to clean out the
-        values of features. This class must implement the function 
+        values of features. This class must implement the function
         clean_value. GenBank.utils has a "standard" cleaner class, which
         is used by default.
         """
@@ -426,7 +426,7 @@ class FeatureParser(object):
     def parse(self, handle):
         """Parse the specified handle.
         """
-        self._consumer = _FeatureConsumer(self.use_fuzziness, 
+        self._consumer = _FeatureConsumer(self.use_fuzziness,
                                           self._cleaner)
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
@@ -509,7 +509,7 @@ class _BaseGenBankConsumer(object):
         if not taxonomy_string or taxonomy_string==".":
             #Missing data, no taxonomy
             return []
-        
+
         if taxonomy_string[-1] == '.':
             tax_info = taxonomy_string[:-1]
         else:
@@ -566,9 +566,9 @@ class _BaseGenBankConsumer(object):
         where 1 is the first base and [i, j] means to include both i and j.
 
         In python, 0 is the first base and [i, j] means to include i, but
-        not j. 
+        not j.
 
-        So, to convert "biological" to python coordinates, we need to 
+        So, to convert "biological" to python coordinates, we need to
         subtract 1 from the start, and leave the end and things should
         be converted happily.
         """
@@ -620,7 +620,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         self.data.annotations['data_file_division'] = division
 
     def date(self, submit_date):
-        self.data.annotations['date'] = submit_date 
+        self.data.annotations['date'] = submit_date
 
     def definition(self, definition):
         """Set the definition as the description of the sequence.
@@ -705,7 +705,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         This line type is expected to replace the PROJECT line in 2009. e.g.
 
         During transition:
-        
+
         PROJECT     GenomeProject:28471
         DBLINK      Project:28471
                     Trace Assembly Archive:123456
@@ -785,7 +785,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             self.data.annotations['taxonomy'].extend(lineage)
         except KeyError:
             self.data.annotations['taxonomy'] = lineage
-        
+
     def reference_num(self, content):
         """Signal the beginning of a new reference object.
         """
@@ -802,7 +802,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         """Attempt to determine the sequence region the reference entails.
 
         Possible types of information we may have to deal with:
-        
+
         (bases 1 to 86436)
         (sites)
         (bases 1 to 105654; 110423 to 111122)
@@ -839,7 +839,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def _split_reference_locations(self, location_string):
         """Get reference locations out of a string of reference information
-        
+
         The passed string should be of the form:
 
             1 to 20; 20 to 100
@@ -945,7 +945,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if 'replace' in location_line:
             comma_pos = location_line.find(',')
             location_line = location_line[8:comma_pos]
-        
+
         cur_feature = self._cur_feature
 
         #Handle top level complement here for speed
@@ -986,7 +986,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             e = cur_feature.sub_features[-1].location.end
             cur_feature.location = SeqFeature.FeatureLocation(s,e, strand)
             return
-        
+
         #Handle the general case with more complex regular expressions
         if _re_complex_location.match(location_line):
             #e.g. "AL121804.2:41..610"
@@ -1055,7 +1055,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
 
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.
-        
+
         Can receive None, since you can have valueless keys such as /pseudo
         """
         # Hack to try to preserve historical behaviour of /pseudo etc
@@ -1063,7 +1063,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
             if key not in self._cur_feature.qualifiers:
                 self._cur_feature.qualifiers[key] = [""]
                 return
-            
+
         value = value.replace('"', '')
         if self._feature_cleaner is not None:
             value = self._feature_cleaner.clean_value(key, value)
@@ -1074,7 +1074,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         # otherwise start a new list of the key with its values
         else:
             self._cur_feature.qualifiers[key] = [value]
-       
+
     def feature_qualifier_name(self, content_list):
         """Use feature_qualifier instead (OBSOLETE)."""
         raise NotImplementedError("Use the feature_qualifier method instead.")
@@ -1138,7 +1138,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
                 self.data.id+='.%i' % self.data.annotations['sequence_version']
             except KeyError:
                 pass
-        
+
         # add the sequence information
         # first, determine the alphabet
         # we default to an generic alphabet if we don't have a
@@ -1197,7 +1197,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
         self._cur_reference = None
         self._cur_feature = None
         self._cur_qualifier = None
-        
+
     def wgs(self, content):
         self.data.wgs = content.split('-')
 
@@ -1303,13 +1303,13 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def medline_id(self, content):
         self._cur_reference.medline_id = content
-        
+
     def pubmed_id(self, content):
         self._cur_reference.pubmed_id = content
 
     def remark(self, content):
         self._cur_reference.remark = content
-        
+
     def comment(self, content):
         self.data.comment += "\n".join(content)
 
@@ -1319,7 +1319,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def primary(self,content):
         pass
-    
+
     def features_line(self, content):
         """Get ready for the feature table when we reach the FEATURE line.
         """
@@ -1368,7 +1368,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
 
     def feature_qualifier_name(self, content_list):
         """Deal with qualifier names
-        
+
         We receive a list of keys, since you can have valueless keys such as
         /pseudo which would be passed in with the next key (since no other
         tags separate them in the file)
@@ -1406,7 +1406,7 @@ class _RecordConsumer(_BaseGenBankConsumer):
     def contig_location(self, content):
         """Signal that we have contig information to add to the record.
         """
-        self.data.contig = self._clean_location(content) 
+        self.data.contig = self._clean_location(content)
 
     def sequence(self, content):
         """Add sequence information to a list of sequence strings.
@@ -1453,7 +1453,7 @@ def read(handle):
     >>> print record.accession
     ['NC_000932']
     >>> handle.close()
-                       
+
     To get a SeqRecord object use Bio.SeqIO.read(..., format="gb")
     instead.
     """

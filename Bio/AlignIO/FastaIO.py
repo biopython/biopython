@@ -92,7 +92,7 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
     """
     if alphabet is None:
         alphabet = single_letter_alphabet
-    
+
     state_PREAMBLE = -1
     state_NONE = 0
     state_QUERY_HEADER = 1
@@ -138,13 +138,13 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
         #TODO - Introduce an annotated alignment class?
         #For now, store the annotation a new private property:
         alignment._annotations = {}
-        
+
         #Want to record both the query header tags, and the alignment tags.
         for key, value in header_tags.iteritems():
             alignment._annotations[key] = value
         for key, value in align_tags.iteritems():
             alignment._annotations[key] = value
-        
+
         #Query
         #=====
         record = SeqRecord(Seq(q, alphabet),
@@ -589,7 +589,7 @@ QDFAFTRKMRREARQVEQSW
 
 Function used was FASTA [version 34.26 January 12, 2007]
 
-"""                 
+"""
 
 
     from StringIO import StringIO

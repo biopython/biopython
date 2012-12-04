@@ -19,11 +19,11 @@ class Yn00(Paml):
 
     def __init__(self, alignment = None, working_dir = None,
                 out_file = None):
-        """Initialize the Yn00 instance. 
-        
+        """Initialize the Yn00 instance.
+
         The user may optionally pass in strings specifying the locations
         of the input alignment, the working directory and
-        the final output file. 
+        the final output file.
         """
         Paml.__init__(self, alignment, working_dir, out_file)
         self.ctl_file = "yn00.ctl"
@@ -35,8 +35,8 @@ class Yn00(Paml):
 
     def write_ctl_file(self):
         """Dynamically build a yn00 control file from the options.
-        
-        The control file is written to the location specified by the 
+
+        The control file is written to the location specified by the
         ctl_file property of the yn00 class.
         """
         # Make sure all paths are relative to the working directory
@@ -98,7 +98,7 @@ class Yn00(Paml):
                 self._options[option] = temp_options[option]
             else:
                 self._options[option] = None
-                
+
     def run(self, ctl_file = None, verbose = False, command = "yn00",
                 parse = True):
         Paml.run(self, ctl_file, verbose, command)
@@ -119,15 +119,15 @@ def read(results_file):
     for line_num in range(len(lines)):
         line = lines[line_num]
         if "(A) Nei-Gojobori (1986) method" in line:
-            ng86_start = line_num + 1 
+            ng86_start = line_num + 1
         elif "(B) Yang & Nielsen (2000) method" in line:
-            (results, sequences) = _parse_yn00.parse_ng86(lines[ng86_start:line_num], 
+            (results, sequences) = _parse_yn00.parse_ng86(lines[ng86_start:line_num],
                     results)
             yn00_start = line_num + 1
         elif "(C) LWL85, LPB93 & LWLm methods" in line:
-            results = _parse_yn00.parse_yn00(lines[yn00_start:line_num], results, 
+            results = _parse_yn00.parse_yn00(lines[yn00_start:line_num], results,
                     sequences)
-            results = _parse_yn00.parse_others(lines[line_num+1:], results, 
+            results = _parse_yn00.parse_others(lines[line_num+1:], results,
                     sequences)
     if len(results) == 0:
         raise ValueError("Invalid results file.")

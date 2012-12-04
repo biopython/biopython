@@ -20,7 +20,7 @@ class ExtendedIUPACProtein(Alphabet.ProteinAlphabet):
     """Extended uppercase IUPAC protein single letter alphabet including X etc.
 
     In addition to the standard 20 single letter protein codes, this includes:
-    
+
     B = "Asx";  Aspartic acid (R) or Asparagine (N)
     X = "Xxx";  Unknown or 'other' amino acid
     Z = "Glx";  Glutamic acid (E) or Glutamine (Q)

@@ -99,7 +99,7 @@ class PrankCommandline(AbstractCommandline):
             #-gaprate=# [gap opening rate; default: dna 0.025 / prot 0.0025]
             _Option(["-gaprate", "gaprate"],
                     "Gap opening rate. Default: dna 0.025 prot 0.0025",
-                    checker_function=lambda x: isinstance(x, float)), 
+                    checker_function=lambda x: isinstance(x, float)),
             #-gapext=# [gap extension probability; default: dna 0.5 / prot 0.5]
             _Option(["-gapext", "gapext"],
                     "Gap extension probability. Default: dna 0.5 "
@@ -109,15 +109,15 @@ class PrankCommandline(AbstractCommandline):
             _Option(["-dnafreqs", "dnafreqs"],
                     "DNA frequencies - 'A,C,G,T'. eg '25,25,25,25' as a quote "
                     "surrounded string value. Default: empirical",
-                    checker_function=lambda x: isinstance(x, bytes)), 
+                    checker_function=lambda x: isinstance(x, bytes)),
             #-kappa=# [ts/tv rate ratio; default:2]
             _Option(["-kappa", "kappa"],
                     "Transition/transversion ratio. Default: 2",
-                    checker_function=lambda x: isinstance(x, int)), 
+                    checker_function=lambda x: isinstance(x, int)),
             #-rho=# [pur/pyr rate ratio; default:1]
             _Option(["-rho", "rho"],
                     "Purine/pyrimidine ratio. Default: 1",
-                    checker_function=lambda x: isinstance(x, int)), 
+                    checker_function=lambda x: isinstance(x, int)),
             #-codon [for DNA: use empirical codon model]
             #Assuming this is an input file as in -m
             _Option(["-codon", "codon"],
@@ -135,7 +135,7 @@ class PrankCommandline(AbstractCommandline):
                     "Expected pairwise distance for computing guidetree. "
                     "Default: dna 0.25 / prot 0.5",
                     checker_function=lambda x: isinstance(x, float)),
-            _Switch(["-once", "once"], 
+            _Switch(["-once", "once"],
                     "Run only once. Default: twice if no guidetree given"),
             _Switch(["-twice", "twice"],
                     "Always run twice"),

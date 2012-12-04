@@ -38,7 +38,7 @@ class AbstractSelection(object):
 
         If a repair class is available, then the rearranged genomes will
         be repaired to make them feasible.
-        
+
         The newly created individuals are returned.
         """
         # first crossover the two organisms

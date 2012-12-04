@@ -63,7 +63,7 @@ parse        Parses the XML results returned by those of the above functions
              >>> handle.close()
 
              This function is appropriate only if the XML file contains
-             multiple records, and is particular useful for large files. 
+             multiple records, and is particular useful for large files.
 
 _open        Internally used function.
 
@@ -315,12 +315,12 @@ def espell(**keywds):
 
     Short example:
 
-    >>> from Bio import Entrez 
+    >>> from Bio import Entrez
     >>> Entrez.email = "Your.Name.Here@example.org"
     >>> record = Entrez.read(Entrez.espell(term="biopythooon"))
-    >>> print record["Query"] 
+    >>> print record["Query"]
     biopythooon
-    >>> print record["CorrectedQuery"] 
+    >>> print record["CorrectedQuery"]
     biopython
 
     """
@@ -331,7 +331,7 @@ def espell(**keywds):
 
 def read(handle, validate=True):
     """Parses an XML file from the NCBI Entrez Utilities into python objects.
-    
+
     This function parses an XML file created by NCBI's Entrez Utilities,
     returning a multilevel data structure of Python lists and dictionaries.
     Most XML files returned by NCBI's Entrez Utilities can be parsed by
@@ -356,7 +356,7 @@ def read(handle, validate=True):
 
 def parse(handle, validate=True):
     """Parses an XML file from the NCBI Entrez Utilities into python objects.
-    
+
     This function parses an XML file created by NCBI's Entrez Utilities,
     returning a multilevel data structure of Python lists and dictionaries.
     This function is suitable for XML files that (in Python) can be represented

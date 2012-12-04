@@ -112,7 +112,7 @@ class ThreeLetterProtein(Alphabet):
         "Lys", "Leu", "Met", "Asn", "Pro", "Gln", "Arg", "Ser", "Thr",
         "Sec", "Val", "Trp", "Xaa", "Tyr", "Glx",
         ]
-        
+
 ###### Non per-sequence modifications
 
 # (These are Decorator classes)
@@ -149,7 +149,7 @@ class AlphabetEncoder(object):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
         return AlphabetEncoder(self.alphabet._lower(), self.new_letters.lower())
 
-    
+
 class Gapped(AlphabetEncoder):
     def __init__(self, alphabet, gap_char = "-"):
         AlphabetEncoder.__init__(self, alphabet, gap_char)
@@ -173,12 +173,12 @@ class Gapped(AlphabetEncoder):
         """Return a lower case variant of the current alphabet (PRIVATE)."""
         return Gapped(self.alphabet._lower(), self.gap_char.lower())
 
-            
+
 class HasStopCodon(AlphabetEncoder):
     def __init__(self, alphabet, stop_symbol = "*"):
         AlphabetEncoder.__init__(self, alphabet, stop_symbol)
         self.stop_symbol = stop_symbol
-        
+
     def __cmp__(self, other):
         x = cmp(self.alphabet, other.alphabet)
         if x == 0:
@@ -226,7 +226,7 @@ def _ungap(alphabet):
         return AlphabetEncoder(_ungap(alphabet.alphabet), letters=alphabet.letters)
     else:
         raise NotImplementedError
-    
+
 def _consensus_base_alphabet(alphabets):
     """Returns a common but often generic base alphabet object (PRIVATE).
 
@@ -281,7 +281,7 @@ def _consensus_alphabet(alphabets):
     SingleLetterAlphabet()
     >>> _consensus_alphabet([single_letter_alphabet, generic_protein])
     SingleLetterAlphabet()
-    
+
     This is aware of Gapped and HasStopCodon and new letters added by
     other AlphabetEncoders.  This WILL raise an exception if more than
     one gap character or stop symbol is present.
