@@ -23,7 +23,7 @@ class ModTest(unittest.TestCase):
                                places=5)
 
     def testIncompleteGamma(self):
-        self.assertRaises(ValueError, chi2._incomplete_gamma, x = 0.5, 
+        self.assertRaises(ValueError, chi2._incomplete_gamma, x = 0.5,
                           alpha = -1)
         self.assertAlmostEqual(chi2._incomplete_gamma(0.5, 0.5), 0.6826895,
                                places=5)

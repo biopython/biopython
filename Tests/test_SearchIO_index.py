@@ -35,7 +35,7 @@ class CheckRaw(unittest.TestCase):
         idx = SearchIO.index(filename, self.fmt, **kwargs)
         raw = _as_bytes(raw)
         self.assertEqual(raw, idx.get_raw(id))
-        idx._proxy._handle.close() # To silence a ResourceWarning 
+        idx._proxy._handle.close() # To silence a ResourceWarning
 
         #Now again, but using SQLite backend
         if sqlite3:

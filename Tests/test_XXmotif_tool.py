@@ -155,7 +155,7 @@ class XXmotifTestNormalConditions(XXmotifTestCase):
         cline.startmotif = "ACGGGT"
 
         self.standard_test_procedure(cline)
-        
+
     def test_large_fasta_file(self):
         """Test a large fasta input file."""
         input_file = "temp_b_nuc.fasta"

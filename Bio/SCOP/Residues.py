@@ -60,7 +60,7 @@ class Residues(object):
             chain, start, end, postfix = m.groups()
 
             if postfix != "":
-                 raise ValueError("I don't understand the format of %s" % l)
+                raise ValueError("I don't understand the format of %s" % l)
 
             if chain:
                 if chain[-1] != ':':

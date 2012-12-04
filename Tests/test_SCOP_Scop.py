@@ -37,12 +37,11 @@ class ScopTests(unittest.TestCase):
         return True
 
     def testParse(self):
-  
         f = open("./SCOP/dir.cla.scop.txt_test")
         try:
             cla = f.read()
             f.close()
-            
+
             f = open("./SCOP/dir.des.scop.txt_test")
             des = f.read()
             f.close()
@@ -60,7 +59,7 @@ class ScopTests(unittest.TestCase):
                     cla_out.getvalue().rstrip().split('\n'))
         for expected_line, line in lines:
             self.assertTrue(self._compare_cla_lines(expected_line, line))
-        
+
         des_out = StringIO()
         scop.write_des(des_out)
         self.assertEqual(des_out.getvalue(), des)
@@ -81,8 +80,6 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(dom, None)
         dom = scop.getDomainBySid("no such domain")
         self.assertEqual(dom, None)
-                
-
 
     def testSccsOrder(self):
         self.assertEqual(cmp_sccs("a.1.1.1", "a.1.1.1"), 0)
@@ -123,10 +120,10 @@ class ScopTests(unittest.TestCase):
     def testConstructFromDirectory(self):
         scop = Scop(dir_path="SCOP", version="test")
         self.assertTrue(isinstance(scop, Scop))
-         
+
         domain = scop.getDomainBySid("d1hbia_")
         self.assertEqual(domain.sunid, 14996)
-         
+
     def testGetAscendent(self):
         scop = Scop(dir_path="SCOP", version="test")
         domain = scop.getDomainBySid("d1hbia_")
@@ -134,7 +131,7 @@ class ScopTests(unittest.TestCase):
         # get the fold
         fold = domain.getAscendent('cf')
         self.assertEqual(fold.sunid, 46457)
-        
+
         #get the superfamily
         sf = domain.getAscendent('superfamily')
         self.assertEqual(sf.sunid, 46458)
@@ -158,7 +155,7 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(len(domains), 14)
         for d in domains:
             self.assertEqual(d.type, 'px')
-            
+
         sfs = fold.getDescendents('superfamily')
         self.assertEqual(len(sfs), 1)
         for d in sfs:
@@ -167,8 +164,6 @@ class ScopTests(unittest.TestCase):
         # cl has no cl descendent
         cl = fold.getDescendents('cl')
         self.assertEqual(cl, [])
-        
-        
 
 
 if __name__=='__main__':

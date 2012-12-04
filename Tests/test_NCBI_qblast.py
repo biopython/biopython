@@ -15,7 +15,7 @@ Goals:
 import sys
 import requires_internet
 requires_internet.check()
-from Bio import MissingExternalDependencyError 
+from Bio import MissingExternalDependencyError
 from urllib2 import HTTPError
 
 #We want to test these:

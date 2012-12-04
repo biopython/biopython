@@ -58,7 +58,7 @@ if not muscle_exe:
 #################################################################
 
 class MuscleApplication(unittest.TestCase):
-    
+
     def setUp(self):
         self.infile1 = "Fasta/f002"
         self.infile2 = "Fasta/fa01"

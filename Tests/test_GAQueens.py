@@ -108,7 +108,7 @@ def queens_solved(organisms):
 
     # if we got here we didn't do it
     return 0
-     
+
 def queens_fitness(genome):
     """Calculate the fitness of an organization of queens on the chessboard.
 
@@ -130,7 +130,7 @@ def queens_fitness(genome):
                 # get the row for the two queens we are comparing
                 check_queen_row = int(genome[check_queen_col])
                 other_queen_row = int(genome[other_queen_col])
-                
+
                 # a queen is attacked if it is in a row with another queen
                 if check_queen_row == other_queen_row:
                     is_attacked = 1
@@ -233,7 +233,7 @@ class QueensRepair:
                 organism.genome[duplicated_pos] = new_item
 
         return organism
-        
+
 class QueensCrossover:
     """Crossover operation to help in solving the N-Queens problem.
 
@@ -269,7 +269,7 @@ class QueensCrossover:
         """
         new_org_1 = org_1.copy()
         new_org_2 = org_2.copy()
-        
+
         # determine if we have a crossover
         crossover_chance = random.random()
         if crossover_chance <= self._crossover_prob:
@@ -281,7 +281,7 @@ class QueensCrossover:
 
             assert len(best_1) + len(best_2) == len(rest_1) + len(rest_2), \
                    "Did not preserve genome length!"
-            
+
             new_org_1.genome = best_1 + best_2
             new_org_2.genome = rest_1 + rest_2
 
@@ -307,14 +307,14 @@ class QueensCrossover:
         """
         first_region = max(len(genome) / 2, self._max_crossover_size)
         second_region = len(genome) - first_region
-        
+
         if make_best_larger:
             region_size = max(first_region, second_region)
         else:
             region_size = min(first_region, second_region)
 
         # loop through all of the segments and find the best fitness segment
-        
+
         # represent best_fitness as a three tuple with the coordinates of
         # the start and end as the first two elements, and the fitness of
         # the region as the last element. Start with a value that
@@ -333,7 +333,7 @@ class QueensCrossover:
         rest_region = genome[0:best_fitness[0]] + genome[best_fitness[1]:]
 
         return best_region, rest_region
-            
+
 
 class QueensMutation:
     """Mutation operation to help in the N-Queens problem.
@@ -375,7 +375,7 @@ class QueensMutation:
                 # if there are no choices left, we are stuck going for random
                 if len(gene_choices) == 0:
                     gene_choices = list(new_org.genome.alphabet.letters)
-                
+
                 # get a new letter with the left-over choices
                 new_letter = random.choice(gene_choices)
                 new_org.genome[gene_index] = new_letter

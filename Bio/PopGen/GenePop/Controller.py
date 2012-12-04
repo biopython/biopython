@@ -502,13 +502,13 @@ class GenePopController(object):
                 mig10 = _gp_float(m.group(1))
             m = re.search("N=25: ([.0-9]+)", line)
             if m is not None:
-                 mig25 = _gp_float(m.group(1))
+                mig25 = _gp_float(m.group(1))
             m = re.search("N=50: ([.0-9]+)", line)
             if m is not None:
-                 mig50 = _gp_float(m.group(1))
+                mig50 = _gp_float(m.group(1))
             m = re.search("for size= ([.0-9]+)", line)
             if m is not None:
-                 mig_corrected = _gp_float(m.group(1))
+                mig_corrected = _gp_float(m.group(1))
         os.remove(fname + ".PRI")
         return mean_sample_size, mean_priv_alleles, mig10, mig25, mig50, mig_corrected
 

@@ -116,7 +116,7 @@ class ParseReal(unittest.TestCase):
                 self.assertTrue(isinstance(s, Seq))
                 self.assertEqual(s.alphabet, generic_protein)
                 #Here non-standard MSE are shown as M
-                self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR", 
+                self.assertEqual("MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR",
                                  str(s))
                 #==========================================================
                 #Now try strict version with only standard amino acids

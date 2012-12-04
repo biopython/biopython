@@ -6,7 +6,7 @@
 
 """Testing online code for fetching sequences, and parsing them
 
-Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI, 
+Uses Bio.SeqIO to parse files downloaded with Bio.GenBank, Bio.WWW.NCBI,
 Bio.ExPASy etc.
 
 Goals:
@@ -86,7 +86,7 @@ for database, formats, entry, length, checksum in [
         return method
     setattr(EntrezTests, "test_%s_%s" % (database, entry),
             funct(database, formats, entry, length, checksum))
-    del funct        
+    del funct
 del database, formats, entry, length, checksum
 
 if __name__ == "__main__":

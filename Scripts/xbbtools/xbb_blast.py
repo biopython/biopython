@@ -24,7 +24,7 @@ class BlastIt:
         Pmw.initialise(parent)
         self.GetBlasts()
         self.Choices()
-        
+
     def GetBlasts(self):
         pin, nin = [],[]
         try:
@@ -32,7 +32,7 @@ class BlastIt:
         except:
             pass
         pin.extend(glob.glob('*.pin'))
-        
+
         try:
             nin.extend(glob.glob(os.environ['BLASTDB'] + '/*.nin'))
         except:
@@ -68,11 +68,11 @@ class BlastIt:
         self.ok = Button(self.alternative_f, text = 'Run',
                          command = self._Run)
         self.ok.pack(side = RIGHT)
-        
+
         self.dbs.selectitem(0)
         self.blasts.selectitem(0)
         self.Validate()
-        
+
     def Validate(self, *args):
         db = self.dbs.get()
         prog = self.blasts.get()
@@ -85,7 +85,6 @@ class BlastIt:
         self.dbs.component('entry').configure(bg = color)
         self.blasts.component('entry').configure(bg = color)
 
-            
     def _Run(self):
         alternative_command = self.alternative.get()
         if len(alternative_command.strip()):
@@ -101,14 +100,14 @@ class BlastIt:
         self.notepad.update()
         #print '.',
         self.notepad.after(1, self.Update)
-        
+
     def oldRun(self):
         self.notepad = NotePad()
         self.notepad.menubar.configure(bg='red')
         self.notepad.bind('<Destroy>', self.Exit)
 
         self.Update()
-        
+
         print self.command
         self.pipe = posix.popen(self.command)
         while 1:
@@ -116,11 +115,10 @@ class BlastIt:
                 char = self.pipe.read(1)
                 self.notepad.insert(END,char)
                 self.notepad.update()
-                                
             except:
                 break
             if not char: break
-            
+
         try:
             self.notepad.menubar.configure(bg='green')
         except:
@@ -140,8 +138,7 @@ class BlastIt:
             self.notepad.menubar.configure(bg='green4')
         except:
             pass
-        
-        
+
     def Exit(self, *args):
 
         try:
@@ -152,7 +149,6 @@ class BlastIt:
         self.notepad.destroy()
 
         sys.exit(0)
-        
 
 
 

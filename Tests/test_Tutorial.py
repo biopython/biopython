@@ -8,7 +8,7 @@ if sys.version_info[0] >= 3:
     rt = refactor.RefactoringTool(refactor.get_fixers_from_package("lib2to3.fixes"))
     assert rt.refactor_docstring(">>> print 2+2\n4\n", "example") == \
            ">>> print(2+2)\n4\n"
-    
+
 tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../Doc/Tutorial.tex")
 if not os.path.isfile(tutorial) and sys.version_info[0] >= 3:
     tutorial = os.path.join(os.path.dirname(sys.argv[0]), "../../../Doc/Tutorial.tex")
@@ -37,7 +37,7 @@ def _extract(handle):
         else:
             lines.append(line)
     return lines
-    
+
 def extract_doctests(latex_filename):
     """Scans LaTeX file and pulls out marked doctests as strings."""
     handle = open(latex_filename, "rU")

@@ -6157,7 +6157,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertAlmostEqual(record.rounds[1].alignments[25].hsps[0].bits, 28.8)
         self.assertAlmostEqual(record.rounds[1].alignments[25].hsps[0].expect, 8.2)
         self.assertEqual(len(record.rounds[1].alignments[25].hsps), 1)
-        
+
     def _check_text_2011L_psiblast_002_hsps_details(self, record):
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].identities, (200, 200))
         self.assertEqual(record.rounds[0].alignments[0].hsps[0].positives, (200, 200))
@@ -13524,7 +13524,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[0].hsps[0].sbjct_start, 17)
         self.assertEqual(record.alignments[0].hsps[0].sbjct_end, 160)
         self.assertEqual(record.alignments[0].hsps[1].bits,  37.7)
-        self.assertEqual(record.alignments[0].hsps[1].score, 86) 
+        self.assertEqual(record.alignments[0].hsps[1].score, 86)
         self.assertAlmostEqual(record.alignments[0].hsps[1].expect, 0.007)
         self.assertEqual(record.alignments[0].hsps[1].identities, (20, 47))
         self.assertEqual(record.alignments[0].hsps[1].positives, (28, 47))
@@ -13581,7 +13581,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[3].hsps[0].sbjct, "KRMVALRKFKEGAIEVLVATDVAARGLDISGVTHVYNFDVPQDPESYVHRIGRTGRAGKTGMAMTFITPREKSM------LRAIEQTTKRKMDR")
         self.assertEqual(record.alignments[3].hsps[0].query_start, 500)
         self.assertEqual(record.alignments[3].hsps[0].query_end, 592)
-        self.assertEqual(record.alignments[3].hsps[0].sbjct_start, 296) 
+        self.assertEqual(record.alignments[3].hsps[0].sbjct_start, 296)
         self.assertEqual(record.alignments[3].hsps[0].sbjct_end, 383)
         self.assertEqual(record.alignments[4].title, ">gi|16079569|ref|NP_390393.1| hypothetical protein BSU25140 [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[4].length, 438)
@@ -14357,7 +14357,7 @@ class TestNCBITextParser(unittest.TestCase):
 
         self.assertEqual(None, records.next())
         handle.close()
-                
+
     def test_text_2221L_blastp_001(self):
         "Test parsing BLASTP 2.2.21 output with multiple queries (text_2221L_blastp_001)"
 
@@ -14439,7 +14439,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.descriptions), 10) # I used -v 10
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         self.assertEqual(len(record.alignments[0].hsps), 2)
-        
+
         record = records.next()
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22')
@@ -14540,7 +14540,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(len(record.alignments), 1) # I used -b 1
         #Two short HSPs with 2.2.22 (text_2222L_blastx_001.txt), but one with 2.2.22+
         self.assertEqual(len(record.alignments[0].hsps), 1)
-        
+
         record = records.next()
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')

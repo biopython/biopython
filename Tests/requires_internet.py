@@ -9,13 +9,13 @@
 # import statement succeeds.  If it is not, then the statement will
 # result in a MissingExternalDependencyError exception.
 
-from Bio import MissingExternalDependencyError 
+from Bio import MissingExternalDependencyError
 
 def check():
     try:
         check.available
     except AttributeError:
-        # I'm going to check for internet availability 
+        # I'm going to check for internet availability
         RELIABLE_DOMAIN = "biopython.org"
         import socket
         try:

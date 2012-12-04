@@ -117,7 +117,7 @@ def u_crc32(seq):
     #NOTE - On Python 2 crc32 could return a signed int, but on Python 3 it is
     #always unsigned
     #Docs suggest should use crc32(x) & 0xffffffff for consistency.
-    return crc32(seq) & 0xffffffff 
+    return crc32(seq) & 0xffffffff
 
 for i, seq_str in enumerate(examples):
     print "Example %i, length %i, %s..." % (i+1, len(seq_str), seq_str[:10])

@@ -129,7 +129,7 @@ class PatternIOTest(unittest.TestCase):
 
 class PatternRepositoryTest(unittest.TestCase):
     """Tests for retrieving info from a repository of patterns.
-    """ 
+    """
     def setUp(self):
         self.motifs = {"GATC" : 30,
                        "GGGG" : 10,
@@ -171,7 +171,7 @@ class PatternRepositoryTest(unittest.TestCase):
 
             for pattern in patterns:
                 assert pattern in self.motifs.keys(), \
-                       "Got unexpected pattern %s" % pattern      
+                       "Got unexpected pattern %s" % pattern
 
     def test_get_top(self):
         """Retrieve a certain number of the top patterns.
@@ -184,7 +184,7 @@ class PatternRepositoryTest(unittest.TestCase):
 
             for pattern in patterns:
                 assert pattern in self.motifs.keys(), \
-                       "Got unexpected pattern %s" % pattern       
+                       "Got unexpected pattern %s" % pattern
 
     def test_get_differing(self):
         """Retrieve patterns from both sides of the list (top and bottom).
@@ -200,7 +200,7 @@ class PatternRepositoryTest(unittest.TestCase):
         assert len(patterns) == 5, "Unexpected starting: %s" % patterns
 
         self.repository.remove_polyA()
-        
+
         patterns = self.repository.get_all()
         assert len(patterns) == 3, "Unexpected ending: %s" % patterns
         assert patterns == ["GATC", "GGGG", "GTAG"], \
@@ -280,10 +280,9 @@ class MotifCoderTest(unittest.TestCase):
 
         self.match_strings = (("GATCGCC", [0.0, 1.0, 1.0, 0.0]),
                               ("GATGATCGAGCC", [.5, 1.0, .5, 0.0]))
-        
+
         self.coder = Motif.MotifCoder(motifs)
 
-        
     def test_representation(self):
         """Convert a sequence into its motif representation.
         """
@@ -348,7 +347,7 @@ class SchemaTest(unittest.TestCase):
             assert found_positions == expected, \
                    "Expected %s, got %s for %s" % (expected, found_positions,
                                                    motif)
-        
+
     def test_num_ambiguous(self):
         """Find the number of ambiguous items in a sequence.
         """
@@ -429,7 +428,7 @@ class SchemaFinderTest(unittest.TestCase):
             schemas = repository.get_all()
 
             assert len(schemas) >= self.num_schemas, "Got too few schemas."
-        
+
 class SchemaCoderTest(unittest.TestCase):
     """Test encoding sequences as a grouping of motifs.
     """
@@ -459,13 +458,13 @@ class SchemaCoderTest(unittest.TestCase):
             found_rep = self.motif_coder.representation(match_seq)
             assert found_rep == expected, "Got %s, expected %s" % \
                    (found_rep, expected)
-    
+
 class SchemaMatchingTest(unittest.TestCase):
     """Matching schema to strings works correctly.
     """
     def shortDescription(self):
         return "%s:%s" % (self.__class__.__name__, self.__doc__)
-    
+
     def runTest(self):
         match = Schema.matches_schema("GATC", "AAAAA")
         assert match == 0, "Expected no match because of length differences"
@@ -490,7 +489,7 @@ class SchemaFactoryTest(unittest.TestCase):
 
         # a cached schema bank, so we don't have to load it multiple times
         self.schema_bank = None
-    
+
     def setUp(self):
         self.factory = Schema.SchemaFactory()
 
@@ -540,7 +539,7 @@ class SchemaFactoryTest(unittest.TestCase):
         # if we already have a cached repository, return it
         if self.schema_bank is not None:
             return self.schema_bank
-        
+
         # otherwise, we'll read in a new schema bank
 
         # read in the all of the motif records
@@ -554,7 +553,7 @@ class SchemaFactoryTest(unittest.TestCase):
         motif_size = 9
 
         motif_bank = motif_finder.find(seq_records, motif_size)
-        
+
         schema_bank = self.factory.from_motifs(motif_bank, .1, 2)
 
         # cache the repository

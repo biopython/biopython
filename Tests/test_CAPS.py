@@ -12,7 +12,7 @@ def createAlignment(sequences, alphabet):
     return MultipleSeqAlignment((SeqRecord(Seq(s,alphabet), id="sequence%i"%(i+1)) \
                                  for (i,s) in enumerate(sequences)),
                                 alphabet)
-    
+
 class TestCAPS(unittest.TestCase):
 
     def test_trivial(self):
@@ -90,7 +90,6 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
                           CAPS.CAPSMap,
                           align)
 
- 
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

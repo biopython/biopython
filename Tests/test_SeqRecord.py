@@ -187,7 +187,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.features[0].type, "source")
             self.assertEqual(rec.features[0].location.nofuzzy_start, 3)
             self.assertEqual(rec.features[0].location.nofuzzy_end, 26+3)
-            
+
     def test_slice_add_simple(self):
         """Simple slice and add"""
         for cut in range(27) :
@@ -215,7 +215,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(rec.annotations, {}) # May change this...
             self.assertEqual(rec.letter_annotations, {"fake":"X"*26})
             self.assertTrue(len(rec.features) <= len(self.record.features))
-            
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

@@ -108,7 +108,7 @@ def apply_to_window(sequence, window_size, function, step=None):
         # Apply function to sequence fragment
         value = function(fragment)
         results.append((middle, value)) # Add results to list
-        
+
     # Check on last sequence
     #print fragment
     #print seq[-100:]
@@ -189,7 +189,6 @@ def calc_dinucleotide_counts(sequence):
     for letter in "ACTGUactgu":
         total += sequence.count(letter+letter)
     return total
-    
 
 ###############################################################################
 # End of utility functions for graph plotting                                 #
@@ -205,18 +204,18 @@ class ColorsTest(unittest.TestCase):
         """Test color translations.
         """
         translator = ColorTranslator()
-        
+
         # Does the translate method correctly convert the passed argument?
         assert translator.float1_color((0.5, 0.5, 0.5)) == translator.translate((0.5, 0.5, 0.5)), \
             "Did not correctly translate colour from floating point RGB tuple"
         assert translator.int255_color((1, 75, 240)) == translator.translate((1, 75, 240)), \
             "Did not correctly translate colour from integer RGB tuple"
         assert translator.artemis_color(7) == translator.translate(7), \
-            "Did not correctly translate colour from Artemis colour scheme"                        
+            "Did not correctly translate colour from Artemis colour scheme"
         assert translator.scheme_color(2) == translator.translate(2), \
             "Did not correctly translate colour from user-defined colour scheme"
 
-            
+
 class GraphTest(unittest.TestCase):
     def test_limits(self):
         """Check line graphs."""
@@ -226,7 +225,7 @@ class GraphTest(unittest.TestCase):
         data1 = [math.sin(x*scale) for x in range(points)]
         data2 = [math.cos(x*scale) for x in range(points)]
         data3 = [2*math.sin(2*x*scale) for x in range(points)]
-        
+
         gdd = Diagram('Test Diagram', circular=False,
                       y=0.01, yt=0.01, yb=0.01,
                       x=0.01, xl=0.01, xr=0.01)
@@ -252,13 +251,13 @@ class GraphTest(unittest.TestCase):
                  circular=True, #Data designed to be periodic
                  start=0, end=points, circle_core=0.5)
         gdd.write(os.path.join('Graphics', "line_graph_c.pdf"), "pdf")
-        
+
     def test_slicing(self):
         """Check GraphData slicing."""
         gd = GraphData()
         gd.set_data([(1, 10), (5, 15), (20, 40)])
         gd.add_point((10, 20))
-        
+
         assert gd[4:16] == [(5, 15), (10, 20)], \
                 "Unable to insert and retrieve points correctly"
 
@@ -307,7 +306,7 @@ class LabelTest(unittest.TestCase):
                           circle_core=0.5,
                           start=0, end=400)
             self.gdd.write(os.path.join('Graphics', name+"_c.pdf"), "pdf")
-    
+
     def add_track_with_sigils(self, **kwargs):
         self.gdt_features = self.gdd.new_track(1, greytrack=False)
         self.gds_features = self.gdt_features.new_set()
@@ -346,7 +345,7 @@ class SigilsTest(unittest.TestCase):
 
     def add_track_with_sigils(self, track_caption="", **kwargs):
         #Add a track of features,
-        self.gdt_features = self.gdd.new_track(1, 
+        self.gdt_features = self.gdd.new_track(1,
                                                greytrack=(track_caption!=""),
                                                name=track_caption,
                                                greytrack_labels=1)
@@ -395,8 +394,8 @@ class SigilsTest(unittest.TestCase):
     def test_all_sigils(self):
         """All sigils."""
         for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
-             self.add_track_with_sigils(track_caption = '  sigil="%s"' % glyph,
-                                        sigil=glyph)
+            self.add_track_with_sigils(track_caption = '  sigil="%s"' % glyph,
+                                       sigil=glyph)
         self.finish("GD_sigils")
 
     def test_labels(self):
@@ -423,7 +422,7 @@ class SigilsTest(unittest.TestCase):
         self.add_track_with_sigils(sigil="ARROW", color="darkgreen",
                                    arrowshaft_height=0.1)
         self.assertEqual(len(self.gdd.tracks), 4)
-        self.finish("GD_sigil_arrow_shafts")        
+        self.finish("GD_sigil_arrow_shafts")
 
     def test_big_arrow_shafts(self):
         """Feature big-arrow sigils, varying shafts."""
@@ -584,7 +583,7 @@ class DiagramTest(unittest.TestCase):
         genbank_entry = self.record
         start = 6500
         end = 8750
-        
+
         gdd = Diagram('Test Diagram',
                       #For the circular diagram we don't want a closed cirle:
                       circular=False,
@@ -617,7 +616,7 @@ class DiagramTest(unittest.TestCase):
                       "?db=protein&id=%s" % feature.qualifiers["protein_id"][0]
             except KeyError :
                 url = None
-                
+
             #Note that I am using strings for color names, instead
             #of passing in color objects.  This should also work!
             if len(gds_features) % 2 == 0:
@@ -724,14 +723,14 @@ class DiagramTest(unittest.TestCase):
 
         step = len(genbank_entry)//200
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
-                        'GC content', style='line', 
+                        'GC content', style='line',
                         color=colors.lightgreen,
                         altcolor=colors.darkseagreen)
         gds_at_gc.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
-                        'AT content', style='line', 
+                        'AT content', style='line',
                         color=colors.orange,
                         altcolor=colors.red)
-        
+
         #Finally draw it in both formats,
         gdd.draw(format='linear', orientation='landscape',
              tracklines=0, pagesize='A4', fragments=3)
@@ -873,7 +872,7 @@ class DiagramTest(unittest.TestCase):
 
         gdt2.add_set(gdfsB) #Before genes so under them!
         gdt2.add_set(gdfs2)
-                
+
         gdt3 = Track('misc features and repeats', greytrack=1,
                    scale_largetick_interval=1e4)
         gdt3.add_set(gdfs3)
@@ -885,12 +884,12 @@ class DiagramTest(unittest.TestCase):
         #between the bar and line graphs.
         step = len(genbank_entry)//200
         gdgs1 = GraphSet('GC skew')
-        
+
         graphdata1 = apply_to_window(genbank_entry.seq, step, calc_gc_skew, step)
         gdgs1.new_graph(graphdata1, 'GC Skew', style='bar',
                 color=colors.violet,
                 altcolor=colors.purple)
-        
+
         gdt4 = Track(\
                 'GC Skew (bar)',
                 height=1.94, greytrack=1,
@@ -900,14 +899,14 @@ class DiagramTest(unittest.TestCase):
 
         gdgs2 = GraphSet('GC and AT Content')
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),
-                        'GC content', style='line', 
+                        'GC content', style='line',
                         color=colors.lightgreen,
                         altcolor=colors.darkseagreen)
 
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_at_content, step),
-                        'AT content', style='line', 
+                        'AT content', style='line',
                         color=colors.orange,
-                        altcolor=colors.red)    
+                        altcolor=colors.red)
 
         gdt5 = Track(\
                 'GC Content(green line), AT Content(red line)',
@@ -918,7 +917,7 @@ class DiagramTest(unittest.TestCase):
         gdgs3 = GraphSet('Di-nucleotide count')
         step = len(genbank_entry)//400 #smaller step
         gdgs3.new_graph(apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
-                        'Di-nucleotide count', style='heat', 
+                        'Di-nucleotide count', style='heat',
                         color=colors.red, altcolor=colors.orange)
         gdt6 = Track('Di-nucleotide count', height=0.5, greytrack=False, scale=False)
         gdt6.add_set(gdgs3)

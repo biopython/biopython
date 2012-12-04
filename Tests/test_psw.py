@@ -100,7 +100,7 @@ def testing_suite():
     test_loader = unittest.TestLoader()
     test_loader.testMethodPrefix = 'test_'
     tests = [TestPSW]
-    
+
     for test in tests:
         cur_suite = test_loader.loadTestsFromTestCase(test)
         unittest_suite.addTest(cur_suite)

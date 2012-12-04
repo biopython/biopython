@@ -58,7 +58,7 @@ def GC123(seq):
     """
     d= {}
     for nt in ['A','T','G','C']:
-       d[nt] = [0,0,0]
+        d[nt] = [0,0,0]
 
     for i in range(0,len(seq),3):
         codon = seq[i:i+3]

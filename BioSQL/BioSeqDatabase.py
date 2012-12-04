@@ -23,7 +23,7 @@ def open_database(driver = "MySQLdb", **kwargs):
 
     This function is the easiest way to retrieve a connection to a
     database, doing something like:
-        
+
         >>> from BioSeq import BioSeqDatabase
         >>> server = BioSeqDatabase.open_database(user="root", db="minidb")
 
@@ -105,7 +105,7 @@ def open_database(driver = "MySQLdb", **kwargs):
 
 class DBServer:
     """Represents a BioSQL database continaing namespaces (sub-databases).
-    
+
     This acts like a Python dictionary, giving access to each namespace
     (defined by a row in the biodatabase table) as a BioSeqDatabase object.
     """
@@ -115,7 +115,7 @@ class DBServer:
             module_name = module.__name__
         self.adaptor = Adaptor(conn, DBUtils.get_dbutils(module_name))
         self.module_name = module_name
-        
+
     def __repr__(self):
         return self.__class__.__name__ + "(%r)" % self.adaptor.conn
 
@@ -131,14 +131,14 @@ class DBServer:
         """Check if a namespace (sub-database) in this database."""
         sql = "SELECT COUNT(name) FROM biodatabase WHERE name=%s;"
         return bool(self.adaptor.execute_and_fetch_col0(sql, (value,))[0])
-    
+
     def __iter__(self):
         """Iterate over namespaces (sub-databases) in the database."""
         #TODO - Iterate over the cursor, much more efficient
-        return iter(self.adaptor.list_biodatabase_names())        
+        return iter(self.adaptor.list_biodatabase_names())
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems etc    
+        #Python 2, use iteritems etc
         def keys(self):
             """List of namespaces (sub-databases) in the database."""
             return self.adaptor.list_biodatabase_names()
@@ -146,20 +146,20 @@ class DBServer:
         def values(self):
             """List of BioSeqDatabase objects in the database."""
             return [self[key] for key in self.keys()]
-    
+
         def items(self):
             """List of (namespace, BioSeqDatabase) for entries in the database."""
             return [(key, self[key]) for key in self.keys()]
-        
+
         def iterkeys(self):
             """Iterate over namespaces (sub-databases) in the database."""
             return iter(self)
-    
+
         def itervalues(self):
             """Iterate over BioSeqDatabase objects in the database."""
             for key in self:
                 yield self[key]
-            
+
         def iteritems(self):
             """Iterate over (namespace, BioSeqDatabase) in the database."""
             for key in self:
@@ -169,12 +169,12 @@ class DBServer:
         def keys(self):
             """Iterate over namespaces (sub-databases) in the database."""
             return iter(self)
-            
+
         def values(self):
             """Iterate over BioSeqDatabase objects in the database."""
             for key in self:
                 yield self[key]
-    
+
         def items(self):
             """Iterate over (namespace, BioSeqDatabase) in the database."""
             for key in self:
@@ -188,13 +188,13 @@ class DBServer:
 
     def remove_database(self, db_name):
         """Remove a namespace and all its entries (OBSOLETE).
-        
+
         Try to remove all references to items in a database.
-        
+
         server.remove_database(name)
-        
+
         In keeping with the dictionary interface, you can now do this:
-        
+
         del server[name]
         """
         import warnings
@@ -208,7 +208,7 @@ class DBServer:
         """
         # make the database
         sql = r"INSERT INTO biodatabase (name, authority, description)" \
-              r" VALUES (%s, %s, %s)" 
+              r" VALUES (%s, %s, %s)"
         self.adaptor.execute(sql, (db_name, authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
 
@@ -234,7 +234,7 @@ class DBServer:
             elif line.strip(): # only include non-blank lines
                 sql += line.strip()
                 sql += ' '
-        
+
         # two ways to load the SQL
         # 1. PostgreSQL can load it all at once and actually needs to
         # due to FUNCTION defines at the end of the SQL which mess up
@@ -387,7 +387,7 @@ class Adaptor:
 
     def list_any_ids(self, sql, args):
         """Return ids given a SQL statement to select for them.
-        
+
         This assumes that the given SQL does a SELECT statement that
         returns a list of items. This parses them out of the 2D list
         they come as and just returns them in a list.
@@ -413,7 +413,7 @@ class Adaptor:
         #    """select SUBSTRING(seq FROM %s FOR %s)
         #             from biosequence where bioentry_id = %s""",
         #    (start+1, length, seqid))[0]
-        # 
+        #
         # Convert to a string on returning for databases that give back
         # unicode. Shouldn't need unicode for sequences so this seems safe.
         return str(self.execute_one(
@@ -441,7 +441,7 @@ _allowed_lookups = {
 
 class BioSeqDatabase:
     """Represents a namespace (sub-database) within the BioSQL database.
-    
+
     i.e. One row in the biodatabase table, and all all rows in the bioentry
     table associated with it.
     """
@@ -452,12 +452,12 @@ class BioSeqDatabase:
 
     def __repr__(self):
         return "BioSeqDatabase(%r, %r)" % (self.adaptor, self.name)
-        
+
     def get_Seq_by_id(self, name):
         """Gets a DBSeqRecord object by its name
 
         Example: seq_rec = db.get_Seq_by_id('ROA1_HUMAN')
-        
+
         The name of this method is misleading since it returns a DBSeqRecord
         rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
@@ -504,7 +504,7 @@ class BioSeqDatabase:
         These maybe ids (display style) or accession numbers or
         something else completely different - they *are not*
         meaningful outside of this database implementation.
-        
+
         Please use .keys() instead of .get_all_primary_ids()
         """
         import warnings
@@ -543,14 +543,14 @@ class BioSeqDatabase:
             return False
         return bool(self.adaptor.execute_and_fetch_col0(sql,
                                                   (self.dbid, bioentry_id))[0])
-    
+
     def __iter__(self):
         """Iterate over ids (which may not be meaningful outside this database)."""
         #TODO - Iterate over the cursor, much more efficient
-        return iter(self.adaptor.list_bioentry_ids(self.dbid))        
+        return iter(self.adaptor.list_bioentry_ids(self.dbid))
 
     if hasattr(dict, "iteritems"):
-        #Python 2, use iteritems etc    
+        #Python 2, use iteritems etc
         def keys(self):
             """List of ids which may not be meaningful outside this database."""
             return self.adaptor.list_bioentry_ids(self.dbid)
@@ -558,20 +558,20 @@ class BioSeqDatabase:
         def values(self):
             """List of DBSeqRecord objects in the namespace (sub database)."""
             return [self[key] for key in self.keys()]
-    
+
         def items(self):
             """List of (id, DBSeqRecord) for the namespace (sub database)."""
             return [(key, self[key]) for key in self.keys()]
-        
+
         def iterkeys(self):
             """Iterate over ids (which may not be meaningful outside this database)."""
             return iter(self)
-    
+
         def itervalues(self):
             """Iterate over DBSeqRecord objects in the namespace (sub database)."""
             for key in self:
                 yield self[key]
-            
+
         def iteritems(self):
             """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
             for key in self:
@@ -581,12 +581,12 @@ class BioSeqDatabase:
         def keys(self):
             """Iterate over ids (which may not be meaningful outside this database)."""
             return iter(self)
-            
+
         def values(self):
             """Iterate over DBSeqRecord objects in the namespace (sub database)."""
             for key in self:
                 yield self[key]
-    
+
         def items(self):
             """Iterate over (id, DBSeqRecord) for the namespace (sub database)."""
             for key in self:
@@ -603,12 +603,12 @@ class BioSeqDatabase:
         lookup_func = getattr(self.adaptor, lookup_name)
         seqid = lookup_func(self.dbid, v)
         return BioSeq.DBSeqRecord(self.adaptor, seqid)
-        
+
     def get_Seq_by_primary_id(self, seqid):
         """Get a DBSeqRecord by the primary (internal) id (OBSOLETE).
-        
+
         Rather than db.get_Seq_by_primary_id(my_id) use db[my_id]
-        
+
         The name of this method is misleading since it returns a DBSeqRecord
         rather than a DBSeq ojbect, and presumably was to mirror BioPerl.
         """
@@ -663,7 +663,7 @@ class BioSeqDatabase:
                       "'%s' AND version = '%s' AND biodatabase_id = '%s')"
                 self.adaptor.execute(sql % (gi, self.dbid, accession, version, self.dbid))
                 if self.adaptor.cursor.fetchone():
-                    raise self.adaptor.conn.IntegrityError("Duplicate record " 
+                    raise self.adaptor.conn.IntegrityError("Duplicate record "
                                      "detected: record has not been inserted")
             #End of hack
             db_loader.load_seqrecord(cur_record)

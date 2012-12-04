@@ -192,8 +192,8 @@ class FDistController(object):
         lines = f.readlines()
         f.close()
         for line in lines:
-          if line.startswith('average Fst'):
-            fst = my_float(line.rstrip().split(' ')[-1])
+            if line.startswith('average Fst'):
+                fst = my_float(line.rstrip().split(' ')[-1])
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)
         return fst

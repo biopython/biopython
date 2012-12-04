@@ -26,7 +26,6 @@ if not raxml_exe:
     raise MissingExternalDependencyError(\
         "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
 
-                                
 # Example Phylip file with 4 aligned protein sequences
 EX_PHYLIP = 'Phylip/interlaced2.phy'
 

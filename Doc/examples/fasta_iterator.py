@@ -42,7 +42,7 @@ def extract_organisms(file_to_parse):
 
         if cur_record is None:
             break
-        
+
         # extract the info from the title
         new_species = cur_record.title.split()[1]
 

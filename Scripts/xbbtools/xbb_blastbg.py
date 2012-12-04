@@ -20,20 +20,20 @@ class BlastDisplayer:
     def __init__(self, command, text_id = None):
         self.command = command
         self.tid = text_id
-        
+
     def RunCommand(self):
         self.outfile = tempfile.mktemp()
 
         # make sure outfile exists and is empty
         fid = open(self.outfile,'w+')
         fid.close()
-        
+
         com = '%s > %s' % (self.command, self.outfile)
 
         self.worker = BlastWorker(com)
         self.worker.start()
         self.UpdateResults()
-        
+
     def UpdateResults(self):
         # open the oufile and displays new appended text
         fid = open(self.outfile)
@@ -52,8 +52,7 @@ class BlastDisplayer:
                 break
 
         fid.close()
-        self.Exit()            
-        
+        self.Exit()
 
     def Exit(self):
         if os.path.exists(self.outfile):
@@ -62,10 +61,10 @@ class BlastDisplayer:
         # do I need to stop the queue ?
         self.worker.shutdown()
         del self.worker
-        
-        
+
+
 class BlastWorker(threading.Thread):
-  
+
     def __init__(self, command):
         self.com = command
         queue = Queue.Queue(0)
@@ -79,7 +78,7 @@ class BlastWorker(threading.Thread):
         # GRRRR How do I explicitely kill a thread ???????
         #self.queue.put(None)
         del self.queue
-        
+
     def run(self):
         print 'running', self.com
         os.system(self.com)
