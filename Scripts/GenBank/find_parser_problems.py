@@ -27,7 +27,7 @@ iterator = GenBank.Iterator(handle, parser, has_header = 1)
 
 while 1:
     have_record = 0
-    
+
     while have_record == 0:
         try:
             cur_record = iterator.next()
@@ -40,7 +40,7 @@ while 1:
         break
 
     print "Successfully parsed record", cur_record.id
-    
+
     if verbose:
         print "***Record"
         print "Seq:", cur_record.seq
@@ -51,5 +51,5 @@ while 1:
         print "Feaures"
         for feature in cur_record.features:
             print feature
-                
+
 handle.close()

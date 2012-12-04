@@ -73,7 +73,7 @@ def parse_parameter_list(lines, parameters, num_params):
         # best. For this reason, they are grabbed here just as a long
         # string and not as individual numbers.
         if len(line_floats) == num_params:
-           parameters["parameter list"] = line.strip()
+            parameters["parameter list"] = line.strip()
         # Find SEs. The same format as parameters above is maintained
         # since there is a correspondance between the SE format and
         # the parameter format.
@@ -81,8 +81,8 @@ def parse_parameter_list(lines, parameters, num_params):
         # "SEs for parameters:
         # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000
            if "SEs for parameters:" in lines[line_num + 1]:
-                SEs_line = lines[line_num + 2]
-                parameters["SEs"] = SEs_line.strip()
+               SEs_line = lines[line_num + 2]
+               parameters["SEs"] = SEs_line.strip()
            break
     return parameters
 

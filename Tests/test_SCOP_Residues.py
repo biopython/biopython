@@ -60,7 +60,6 @@ class ResiduesTests(unittest.TestCase):
             self.assertEqual(r.pdbid, "104l")
             self.assertEqual(r.fragments, (('A', '112', '113'),))
 
-            
     def testJustPdbId(self):
         r = Residues("1sds")
         self.assertEqual(r.pdbid, "1sds")

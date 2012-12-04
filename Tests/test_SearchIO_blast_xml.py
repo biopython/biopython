@@ -645,7 +645,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('nr', qresult.target)
-        
+
         self.assertEqual('gi|49176427|ref|NP_418280.3|', qresult.id)
         self.assertEqual('component of Sec-independent translocase [Escherichia coli K12]', \
                 qresult.description)
@@ -731,7 +731,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('nr', qresult.target)
-        
+
         self.assertEqual('31493', qresult.id)
         self.assertEqual('unnamed protein product', qresult.description)
         self.assertEqual(70, qresult.seq_len)
@@ -802,13 +802,13 @@ class BlastpXmlCases(unittest.TestCase):
         xml_file = get_file('xml_2218_blastp_002.xml')
         qresults = parse(xml_file, FMT)
         counter = 0
-        
+
         qresult = qresults.next()
         counter += 1
-        
+
         # test meta variables, only for the first one
         self.assertEqual('2.2.18+', qresult.version)
-        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', 
+        self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(0.01, qresult.param_evalue_threshold)
@@ -832,7 +832,7 @@ class BlastpXmlCases(unittest.TestCase):
 
         # second qresult
         qresult = qresults.next()
-        counter += 1        
+        counter += 1
 
         self.assertEqual('gi|129628|sp|P07175.1|PARA_AGRTU', qresult.id)
         self.assertEqual('Protein parA', qresult.description)
@@ -860,7 +860,7 @@ class BlastpXmlCases(unittest.TestCase):
 
         # test meta variables, only for the first one
         self.assertEqual('2.2.18', qresult.version)
-        self.assertEqual('~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.', 
+        self.assertEqual('~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
                         qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
         self.assertEqual(1e-05, qresult.param_evalue_threshold)
@@ -903,7 +903,7 @@ class BlastpXmlCases(unittest.TestCase):
         self.assertEqual(1, qresult.param_gap_extend)
         self.assertEqual('blastp', qresult.program)
         self.assertEqual('nr', qresult.target)
-        
+
         self.assertEqual('1', qresult.id)
         self.assertEqual('gi|3298468|dbj|BAA31520.1| SAMIPF', qresult.description)
         self.assertEqual(107, qresult.seq_len)
@@ -1517,7 +1517,7 @@ class BlastxXmlCases(unittest.TestCase):
 
         qresult = qresults.next()
         counter += 1
-        
+
         self.assertEqual('2.2.12', qresult.version)
         self.assertEqual(u'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Sch\xe4ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
@@ -1598,7 +1598,7 @@ class BlastxXmlCases(unittest.TestCase):
 
         qresult = qresults.next()
         counter += 1
-        
+
         self.assertEqual('2.2.22+', qresult.version)
         self.assertEqual('Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.', qresult.reference)
         self.assertEqual('BLOSUM62', qresult.param_matrix)
@@ -2052,7 +2052,7 @@ class TblastnXmlCases(unittest.TestCase):
         self.assertEqual('L;', qresult.param_filter)
         self.assertEqual('tblastn', qresult.program)
         self.assertEqual('nr', qresult.target)
-        
+
         # test parsed values of qresult
         self.assertEqual('gi|729325|sp|P39483|DHG2_BACME', qresult.id)
         self.assertEqual('Glucose 1-dehydrogenase II (GLCDH-II)', qresult.description)
@@ -2645,7 +2645,7 @@ class TblastxXmlCases(unittest.TestCase):
         xml_file = get_file('xml_2212L_tblastx_001.xml')
         qresults = parse(xml_file, FMT)
         counter = 0
-        
+
         # test the first qresult
         qresult = qresults.next()
         counter += 1
@@ -2672,7 +2672,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertEqual(0.177051, qresult.stat_kappa)
         self.assertEqual(0.342969, qresult.stat_lambda)
         self.assertEqual(0.656794, qresult.stat_entropy)
-        self.assertEqual(10, len(qresult))        
+        self.assertEqual(10, len(qresult))
 
         hit = qresult[0]
         self.assertEqual('gi|18072170|gb|AC010333.7|', hit.id)
@@ -2725,7 +2725,7 @@ class TblastxXmlCases(unittest.TestCase):
         # check if we've finished iteration over qresults
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
-        
+
     def test_xml_2226_tblastx_001(self):
         xml_file = get_file('xml_2226_tblastx_001.xml')
         qresults = parse(xml_file, FMT)

@@ -45,7 +45,7 @@ ks = sum_newnames.keys()
 ks.sort()
 for key in ks:
     f.write("%s : %s\n" % (key, sum_newnames[key]))
-    
+
 dict = align_newnames['0P168'].pos_align_dict
 ks = dict.keys()
 ks.sort()

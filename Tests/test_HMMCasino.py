@@ -111,7 +111,7 @@ def generate_rolls(num_rolls):
                 cur_state = 'F'
 
     return roll_seq.toseq(), state_seq.toseq()
-    
+
 # -- build a MarkovModel
 mm_builder = MarkovModel.MarkovModelBuilder(DiceTypeAlphabet(),
                                             DiceRollAlphabet())

@@ -6,14 +6,14 @@
 
 """ Example code to index a non-reduntant protein database of
     SwissProt + TrEMBL for fast lookup and retrieval.
-    
+
     To build the database and index it:
         cd /opt/bio/data/
         wget -N -nd -r -l1 -A'.dat.Z' ftp://expasy.cbr.nrc.ca/databases/sp_tr_nrdb/
         zcat *.dat.Z > nr.dat
         ./getgene.py --index nr.dat
         setenv PYPHY '/opt/bio/data'
-        
+
     To retrieve entries from the command line:
     ./getgene.py EFTU_ECOLI
 
@@ -27,8 +27,8 @@
 
     # get organism, lineage and gene
     db_index.Get_OS_OC_GN('EFTU_ECOLI')
-"""    
-    
+"""
+
 import os
 import re
 import string
@@ -38,13 +38,13 @@ import gdbm
 class DB_Index:
     def __init__(self, open = 1):
         if open: self.Open()
-            
+
     def Create(self, infile, outfile):
         db = gdbm.open(outfile, 'n')
         fid = open(infile)
 
         db['datafile'] = os.path.abspath(infile)
-        
+
         while 1:
             line = fid.readline()
             if not line or not len(line): break
@@ -67,7 +67,7 @@ class DB_Index:
                 except:
                     print 'AARRGGGG', start, stop, type(start), type(stop)
                     print id, acc
-                    
+
         db.close()
         fid.close()
 
@@ -81,7 +81,7 @@ class DB_Index:
 
     def Close(self):
         self.db.close()
-        
+
     def Get(self, id):
         try:
             values = self.db[id]
@@ -91,7 +91,7 @@ class DB_Index:
         self.fid.seek(start)
         txt = self.fid.read(stop - start)
         return txt
-        
+
     def Get_Organism(self, id):
         entry = self.Get(id)
         if not entry: return None
@@ -107,7 +107,7 @@ class DB_Index:
         os = string.split(os,',')[0]
         os = string.split(os,'(')[0]
         return string.strip(os)
-    
+
     def Get_Taxonomy(self, id):
         entry = self.Get(id)
         if not entry: return None
@@ -118,7 +118,7 @@ class DB_Index:
                 if OC[-1] ==".": OC = OC[0:-1]
             if line[0:2] =="//": break
         return OC
-    
+
     def Get_Kingdom(self, id):
         res = self.Get_Taxonomy(id)
         #print id, res
@@ -131,7 +131,7 @@ class DB_Index:
         else:
             print kd, "UNKNOWN"
             return "U"
-        
+
     def Get_Gene(self, id):
         entry = self.Get(id)
         if not entry: return None
@@ -143,7 +143,6 @@ class DB_Index:
                 return GN
             if line[0:2] =="//": break
         return GN
-
 
     def Get_OS_OC_GN(self, id):
         entry = self.Get(id)
@@ -161,7 +160,7 @@ class DB_Index:
                 if GN[-1] ==".": GN = GN[0:-1]
             if line[0:2] =="//": break
         return OS, OC, GN
-    
+
     def Get_OS_OC_OG(self, id):
         entry = self.Get(id)
         if not entry: return None, None, None
@@ -203,7 +202,7 @@ class DB_Index:
                 if XX[-1] ==".": XX = XX[0:-1]
             if line[0:2] =="//": break
         return XX
-        
+
     def Get_Keywords(self, id):
         entry = self.Get(id)
         if not entry: return []
@@ -252,11 +251,11 @@ if __name__ == '__main__':
         ids = sys.argv[1:]
     else:
         try:
-             db = sys.argv[1]
-             ids = sys.argv[2:]
+            db = sys.argv[1]
+            ids = sys.argv[2:]
         except:
             help(exit = 1)
-        
+
     dbfile = os.path.join(pyphy_home, db + '.indexed')
     db_index.Open(dbfile)
     for id in ids:

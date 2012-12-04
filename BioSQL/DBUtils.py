@@ -26,7 +26,7 @@ class Generic_dbutils:
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
-    
+
     def execute(self, cursor, sql, args=None):
         """Just execute an sql command.
         """
@@ -58,7 +58,7 @@ class Mysql_dbutils(Generic_dbutils):
             #Google suggests this is the new way,
             #same fix also suggested by Eric Gibert:
             return cursor.lastrowid
-        
+
 _dbutils["MySQLdb"] = Mysql_dbutils
 
 
@@ -70,7 +70,7 @@ class _PostgreSQL_dbutils(Generic_dbutils):
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
-        
+
     def last_id(self, cursor, table):
         table = self.tname(table)
         sql = r"select currval('%s_pk_seq')" % table

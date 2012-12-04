@@ -4,8 +4,8 @@
 #
 # This is an example script for using new biopython modules for
 # generating NOE crosspeak peaklists from diagonal peaklist within
-# the framework of nmrview.  
-# nmrview is not required to run this script, only an installed 
+# the framework of nmrview.
+# nmrview is not required to run this script, only an installed
 # version of python.
 
 
@@ -36,7 +36,7 @@
 
 
 # ** Output of this script **
-# 
+#
 # This script generates a human readable standard output version of the
 # NOE coordinates as well as an nmrview peaklist out_example.xpk.
 
@@ -57,7 +57,7 @@ import sys
 #sys.path=[sys.path,"./"]
 #sys.path=[sys.path,"/usr/people/robert/development/xpktools"]
 from Bio.NMR import xpktools # Contains data classes and functions for .xpk files
-from Bio.NMR import NOEtools # A module specific for generate NOE predictions 
+from Bio.NMR import NOEtools # A module specific for generate NOE predictions
 
 # * * * * * * * * * * MAIN * * * * * * * * * *
 
@@ -68,7 +68,7 @@ infn="./noed.xpk"         # Input peaklist
 outfn="./out_example.xpk" # Output peaklist
 detectatom="H1"           # Directly detected atom
 relayatom="N15"           # J-coupling from here to detected atom
-fromatom="15N2"           # The other labelled nucleus 
+fromatom="15N2"           # The other labelled nucleus
 
 
 
@@ -77,7 +77,7 @@ fromatom="15N2"           # The other labelled nucleus
 # *-*-*  that contains methods for easily extracting information from
 # *-*-*  the peaklist file
 
-peaklist=xpktools.Peaklist(infn) # infn is the name of the xpk file 
+peaklist=xpktools.Peaklist(infn) # infn is the name of the xpk file
 
 
 
@@ -86,7 +86,7 @@ peaklist=xpktools.Peaklist(infn) # infn is the name of the xpk file
 # *-*-* to be separated from the header and returned here to
 # *-*-* the dictionary <dict> as a list indexed by the assignment
 # *-*-* of any of the nuclei in the file -- here, the detected atom
-# *-*-* is used 
+# *-*-* is used
 
 dict=peaklist.residue_dict(detectatom)
 
@@ -94,7 +94,7 @@ dict=peaklist.residue_dict(detectatom)
 
 
 # *-*-* As well as the data, the dictionary contains two other entries,
-# *-*-* corresponding to the maximum and minimum residues indexed 
+# *-*-* corresponding to the maximum and minimum residues indexed
 
 MAXRES=dict["maxres"]
 MINRES=dict["minres"]
@@ -116,7 +116,7 @@ peaklist.write_header(outfn) # Write the header to the output file
 # *-*-* Write each one to the output file as they are calculated
 
 count=0 # A counter that number the output data lines in order
-res=MINRES # minimum residue number in the set 
+res=MINRES # minimum residue number in the set
 outlist=[] # Holds the output data
 
 
@@ -128,9 +128,9 @@ while (res<=MAXRES):
 # *-*-* is done by supplying the peaklist to and specifying the label
 # *-*-* of the origin and detected atom in the NOE transfer as well as
 # *-*-* the residues between which the NOE transfer takes places.
- 
-  noe1=NOEtools.predictNOE(peaklist,"15N2","H1",res,res+inc)
-  noe2=NOEtools.predictNOE(peaklist,"15N2","H1",res,res-inc)
+
+    noe1=NOEtools.predictNOE(peaklist,"15N2","H1",res,res+inc)
+    noe2=NOEtools.predictNOE(peaklist,"15N2","H1",res,res-inc)
 
 
 
@@ -139,9 +139,9 @@ while (res<=MAXRES):
 # *-*-* Additionally, it is possible to extract information easily from
 # *-*-* these output lines by using the xpktools.XpkEntry class
 
-  entry1=xpktools.XpkEntry(noe1,peaklist.datalabels)
+    entry1=xpktools.XpkEntry(noe1,peaklist.datalabels)
 
-  if noe1!="":
+    if noe1!="":
 
   # *-*-* Here I'm using the XpkEntry class to gain access to
   # *-*-* specific fields in the that make the information
@@ -150,20 +150,20 @@ while (res<=MAXRES):
   # *-*-* The data table contains the assignment, coordinates and
   # *-*-* intensity of the resonance.
 
-    print string.split(entry1.fields["15N2.L"],".")[0], "-->", string.split(entry1.fields["N15.L"],".")[0], "\t", entry1.fields["H1.P"], entry1.fields["N15.P"], entry1.fields["15N2.P"],entry1.fields["int"]
+        print string.split(entry1.fields["15N2.L"],".")[0], "-->", string.split(entry1.fields["N15.L"],".")[0], "\t", entry1.fields["H1.P"], entry1.fields["N15.P"], entry1.fields["15N2.P"],entry1.fields["int"]
 
 
-    noe1=noe1+"\012"
-    noe1=xpktools.replace_entry(noe1,1,count)
-    outlist.append(noe1)
-    count += 1
+        noe1=noe1+"\012"
+        noe1=xpktools.replace_entry(noe1,1,count)
+        outlist.append(noe1)
+        count += 1
 
-    if noe2!="":
-      noe2=noe2+"\012"
-      noe2=xpktools.replace_entry(noe2,1,count)
-      outlist.append(noe2)
-      count += 1
-  res += 1
+        if noe2!="":
+            noe2=noe2+"\012"
+            noe2=xpktools.replace_entry(noe2,1,count)
+            outlist.append(noe2)
+            count += 1
+    res += 1
 
 # Open the output file and write the data
 outfile=open(outfn,'a')

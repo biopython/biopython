@@ -7,9 +7,9 @@
 import unittest
 import sys
 if sys.version_info[0] == 3:
-   maketrans = str.maketrans
+    maketrans = str.maketrans
 else:
-   from string import maketrans
+    from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna
@@ -44,7 +44,7 @@ special_table = CodonTable(forward_table={
 Chilodonella_uncinata_table = CodonTable(forward_table={
     'TTT': 'F', 'TTC': 'F', 'TTA': 'L', 'TTG': 'L',
     'TCT': 'S', 'TCC': 'S', 'TCA': 'S', 'TCG': 'S',
-    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q', 
+    'TAT': 'Y', 'TAC': 'Y',             'TAG': 'Q',
     'TGT': 'C', 'TGC': 'C', 'TGA': 'W', 'TGG': 'W',
     'CTT': 'L', 'CTC': 'L', 'CTA': 'L', 'CTG': 'L',
     'CCT': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
@@ -153,7 +153,7 @@ class StringMethodTests(unittest.TestCase):
                                                 start,
                                                 i,
                                                 j))
-                        
+
                         for end in self._start_end_values:
                             i = getattr(example1,method_name)(str2, start, end)
                             j = getattr(str1,method_name)(str2, start, end)
@@ -191,7 +191,7 @@ class StringMethodTests(unittest.TestCase):
         except TypeError:
             #Base string only supports this on Python 2.5+, skip this
             return
-        
+
         #Now check with a tuple of sub sequences
         for example1 in self._examples:
             if not hasattr(example1, "startswith"):
@@ -208,7 +208,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).startswith(subs_str,3),
                              example1.startswith(subs,3))
             self.assertEqual(str(example1).startswith(subs_str,2,6),
-                             example1.startswith(subs,2,6))        
+                             example1.startswith(subs,2,6))
 
     def test_str_endswith(self):
         """Check matches the python string endswith method."""
@@ -359,7 +359,7 @@ class StringMethodTests(unittest.TestCase):
                 raise ValueError(example1)
             self.assertEqual(str1.translate(mapping), str(comp))
             self.assertEqual(comp.alphabet, example1.alphabet)
-                
+
     def test_the_reverse_complement(self):
         """Check obj.reverse_complement() method."""
         mapping = ""
@@ -400,7 +400,7 @@ class StringMethodTests(unittest.TestCase):
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
-                self.assertEqual(tran.alphabet, generic_rna) #based on limited examples             
+                self.assertEqual(tran.alphabet, generic_rna) #based on limited examples
 
     def test_the_back_transcription(self):
             """Check obj.back_transcribe() method."""
@@ -415,7 +415,7 @@ class StringMethodTests(unittest.TestCase):
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
-                self.assertEqual(tran.alphabet, generic_dna) #based on limited examples             
+                self.assertEqual(tran.alphabet, generic_dna) #based on limited examples
 
     def test_the_translate(self):
             """Check obj.translate() method."""

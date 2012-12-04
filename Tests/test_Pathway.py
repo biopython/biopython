@@ -145,7 +145,7 @@ class MultiGraphTestCase(unittest.TestCase):
         self.assertEqual(repr(a), repr(b))
         self.assertEqual(a, b)#, "incorrect node removal")
 
-        
+
 class ReactionTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -161,7 +161,7 @@ class ReactionTestCase(unittest.TestCase):
     def testEq(self):
         self.assertEqual(self.r_1, self.r_1i) #, "not equal to similar")
         self.assertNotEqual(self.r_3, self.r_4) #, "equal to different")
-        
+
     def testRev(self):
         self.assertEqual(self.r_empty.reverse(), self.r_empty, "empty reversed not empty")
         self.assertEqual(self.r_prod.reverse(), self.r_dest,
@@ -170,7 +170,7 @@ class ReactionTestCase(unittest.TestCase):
                          "reversed reaction not equal to similar")
         self.assertEqual(self.r_3.reverse().reverse(), self.r_3,
                           "double reversal not identity")
-    
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

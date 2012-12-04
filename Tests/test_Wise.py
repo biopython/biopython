@@ -20,7 +20,7 @@ class TestWiseDryRun(unittest.TestCase):
     def setUp(self):
         self.old_stdout = sys.stdout
         sys.stdout = cStringIO.StringIO()
-        
+
     def test_dnal(self):
         """Call dnal, and do a trivial check on its output."""
         Wise.align(["dnal"], ("seq1.fna", "seq2.fna"), kbyte=100000, dry_run=True)

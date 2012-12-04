@@ -23,18 +23,18 @@ class DomTests(unittest.TestCase):
     def testParse(self):
         """Test if all records in a DOM file are being read"""
         f = open(self.filename)
-        try: 
+        try:
             count = 0
             for record in Dom.parse(f):
                 count +=1
             self.assertEqual(count,10)
         finally:
             f.close()
-    
+
     def testStr(self):
         """Test if we can convert each record to a string correctly"""
         f = open(self.filename)
-        try: 
+        try:
             for line in f:
                 record = Dom.Record(line)
                 #End of line is platform dependent. Strip it off
@@ -55,7 +55,7 @@ class DomTests(unittest.TestCase):
         rec = Dom.Record(recLine)
         self.assertEqual(rec.sid, 'd7hbib_')
         self.assertEqual(rec.residues.pdbid,'7hbi')
-        self.assertEqual(rec.residues.fragments,(('b','',''),) )        
+        self.assertEqual(rec.residues.fragments,(('b','',''),) )
         self.assertEqual(rec.hierarchy,'1.001.001.001.001.001')
 
 

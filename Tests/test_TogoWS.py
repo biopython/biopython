@@ -114,7 +114,7 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
-    
+
     def test_pubmed_16381885_title(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="title")"""
         handle = TogoWS.entry("pubmed", "16381885", field="title")
@@ -122,7 +122,7 @@ class TogoEntry(unittest.TestCase):
         handle.close()
         self.assertEqual(data,
              'From genomics to chemical genomics: new developments in KEGG.')
-    
+
     def test_pubmed_16381885_au(self):
         """Bio.TogoWS.entry("pubmed", "16381885", field="au")"""
         #Gives one name per line (i.e. \n separated), no dots
@@ -263,7 +263,7 @@ class TogoEntry(unittest.TestCase):
         data = handle.read().strip() #ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1")
-        
+
     def test_ddbj_genbank_invalid_field(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="invalid_for_testing")"""
         self.assertRaises(ValueError, TogoWS.entry,

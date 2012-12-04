@@ -7,7 +7,7 @@
 
 """
 Download and parse PDB Chemical Component Dictionary,
-then write out dict for to_one_letter_code. 
+then write out dict for to_one_letter_code.
 """
 
 import gzip
@@ -35,7 +35,7 @@ with open(gzname, 'wb') as gzh:
 
 # size as of 13 April 2012
 if os.path.getsize(gzname) < 29944258:
-    warnings.warn("ERROR: Downloaded file is too small", 
+    warnings.warn("ERROR: Downloaded file is too small",
                   RuntimeWarning)
 
 fh = gzip.open(gzname, 'rb')
@@ -67,7 +67,6 @@ counter_noq = 0
 line = fh.readline()
 
 while line:
-    
     if line.startswith('_chem_comp.one_letter_code'):
         one = line.strip().split()[-1]
         found_one = True
@@ -93,7 +92,6 @@ while line:
 
         found_one = False
         found_three = False
-            
 
     line = fh.readline()
 

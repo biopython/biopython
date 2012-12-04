@@ -25,7 +25,6 @@ class xbbtools_help(Toplevel):
         self.tid.tag_config('title', font = ('Courier', 12, 'bold'))
         self.tid.tag_config('small', font = ('Courier', 6, ''))
         self.tid.tag_config('highlight', background = 'gray')
-        
 
     def Show(self):
         t = self.tid

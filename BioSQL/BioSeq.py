@@ -36,7 +36,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
 
     def __len__(self):
         return self._length
-    
+
     def __getitem__(self, index) :                 # Seq API requirement
         #Note since Python 2.0, __getslice__ is deprecated
         #and __getitem__ is used instead.
@@ -49,7 +49,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
                     raise IndexError(i)
                 i = i + self._length
             elif i >= self._length:
-                raise IndexError(i)            
+                raise IndexError(i)
             return self.adaptor.get_subseq_as_string(self.primary_id,
                                                      self.start + i,
                                                      self.start + i + 1)
@@ -96,7 +96,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
                                                      self.start + i,
                                                      self.start + j)
             return Seq(full[::index.step], self.alphabet)
-        
+
     def tostring(self):
         """Returns the full sequence as a python string.
 
@@ -138,7 +138,7 @@ def _retrieve_seq(adaptor, primary_id):
         "SELECT alphabet, length, length(seq) FROM biosequence" \
         " WHERE bioentry_id = %s", (primary_id,))
     if not seqs : return
-    assert len(seqs) == 1        
+    assert len(seqs) == 1
     moltype, given_length, length = seqs[0]
 
     try:
@@ -158,7 +158,7 @@ def _retrieve_seq(adaptor, primary_id):
         have_seq = False
         del seq
     del given_length
-        
+
     moltype = moltype.lower() #might be upper case in database
     #We have no way of knowing if these sequences will use IUPAC
     #alphabets, and we certainly can't assume they are unambiguous!
@@ -264,7 +264,7 @@ def _retrieve_features(adaptor, primary_id):
             if dbname == "":
                 dbname = None
             lookup[location_id] = (dbname, v)
-        
+
         feature = SeqFeature.SeqFeature(type = seqfeature_type)
         feature._seqfeature_id = seqfeature_id #Store the key as a private property
         feature.qualifiers = qualifiers
@@ -327,7 +327,7 @@ def _retrieve_location_qualifier_value(adaptor, location_id):
         "SELECT value FROM location_qualifier_value" \
         " WHERE location_id = %s", (location_id,))
     try:
-        return value[0] 
+        return value[0]
     except IndexError:
         return ""
 
@@ -371,7 +371,7 @@ def _retrieve_qualifier_value(adaptor, primary_id):
 
 def _retrieve_reference(adaptor, primary_id):
     # XXX dbxref_qualifier_value
- 
+
     refs = adaptor.execute_and_fetchall(
         "SELECT start_pos, end_pos, " \
         " location, title, authors," \
@@ -427,7 +427,7 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
     #relies on the taxon table's parent_taxon_id field only (ignoring the
     #optional left/right values).  This means that it has to make a
     #separate SQL query for each entry in the lineage, but it does still
-    #appear to be *much* faster.  See Bug 2494. 
+    #appear to be *much* faster.  See Bug 2494.
     taxonomy = []
     while taxon_id:
         name, rank, parent_taxon_id = adaptor.execute_one(

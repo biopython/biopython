@@ -30,7 +30,7 @@ while 1:
 
     if not(cur_record):
         break
-    
+
     print "***Record"
     print "Seq:", cur_record.seq
     print "Id:", cur_record.id

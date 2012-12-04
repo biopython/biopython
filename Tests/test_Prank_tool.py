@@ -48,7 +48,7 @@ if not prank_exe:
         "Install PRANK if you want to use the Bio.Align.Applications wrapper.")
 
 class PrankApplication(unittest.TestCase):
-    
+
     def setUp(self):
         self.infile1 = "Fasta/fa01"
 
@@ -173,7 +173,7 @@ class PrankConversion(unittest.TestCase):
             self.assertEqual(old_r.id, new_r.id)
             self.assertEqual(str(old_r.seq), str(new_r.seq))
         os.remove(filename)
-        
+
     def test_convert_to_fasta(self):
         """Convert FASTA to FASTA format."""
         self.conversion(8, "fas", "fasta")

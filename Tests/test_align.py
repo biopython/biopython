@@ -10,7 +10,7 @@ o Reading and Writing fasta format
 o Converting between formats"""
 
 # standard library
-import os 
+import os
 
 # biopython
 from Bio import Alphabet

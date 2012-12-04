@@ -17,7 +17,7 @@ class NotePad(Toplevel):
         self.filemenu.add_command(label = "Save", command = self.save)
         self.filemenu.add_separator()
         self.filemenu.add_command(label = "Dismiss", command = self.destroy)
-    
+
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu = self.menubar)
         self.yscroll = Scrollbar(self,orient=VERTICAL)
@@ -25,12 +25,11 @@ class NotePad(Toplevel):
         self.yscroll.configure(command = self.tid.yview)
         self.tid.pack(side = LEFT, fill = BOTH, expand = 1)
         self.yscroll.pack(side = RIGHT, fill = Y)
-        
 
     def text_id(self): return self.tid
     def insert(self,start, txt):
         self.tid.insert(start, txt)
-        
+
     def save(self):
         fd = SaveFileDialog(self)
         file = fd.go(key="test")

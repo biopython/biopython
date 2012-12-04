@@ -139,7 +139,7 @@ def load_random_chromosome(chr_name):
         # otherwise, they are just regular segments
         else:
             cur_segment = BasicChromosome.ChromosomeSegment()
-            
+
         color_chance = random.random()
         if color_chance <= color_prob:
             fill_color = random.choice(color_choices)
@@ -151,7 +151,7 @@ def load_random_chromosome(chr_name):
             cur_segment.label = id
 
         cur_chromosome.add(cur_segment)
-        
+
     return cur_chromosome, num_segments
 
 
@@ -184,7 +184,7 @@ class OrganismGraphicTest(unittest.TestCase):
             cur_chromosome = load_chromosome(chr_name)
             test_organism.add(cur_chromosome)
         test_organism.draw(test_file, "Test organism")
-        
+
     def test_simple_organism_ps(self):
         """Output a simple organism to a postscript file.
         """
@@ -199,7 +199,7 @@ class OrganismGraphicTest(unittest.TestCase):
         """Output a simple organism to an SVG file.
         """
         self._simple_organism("organism.svg", "svg")
-     
+
     def test_random_organism(self):
         """Generate an organism with random chromosome info.
         """
@@ -208,7 +208,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         all_segs = []
         all_chrs = []
-        
+
         num_chrs = random.randrange(1, 15)
         for chr_name in range(num_chrs):
             cur_chromosome, num_segs = load_random_chromosome(str(chr_name))
@@ -234,7 +234,7 @@ class OrganismGraphicTest(unittest.TestCase):
         save_stdout = sys.stdout
         new_stdout = cStringIO.StringIO()
         sys.stdout = new_stdout
-        
+
         test_widget.dumpProperties()
 
         properties = new_stdout.getvalue()
@@ -244,7 +244,7 @@ class OrganismGraphicTest(unittest.TestCase):
                "Unexpected results from dumpProperties: \n %s" % properties)
 
         properties = test_widget.getProperties()
-        self.assertEqual(properties["label_size"], 6, 
+        self.assertEqual(properties["label_size"], 6,
                "Unexpected results from getProperties: %s" % properties)
 
         test_widget.setProperties({"start_x_position" : 12})
@@ -268,7 +268,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                    ("Chr IV", "NC_003075", 18585042, f4, colors.orange),
                    ("Chr V", "NC_003076", 26992728, f5, colors.purple)]
         max_length = max([row[2] for row in entries])
- 
+
         chr_diagram = BasicChromosome.Organism()
         for name, acc, length, features, color in entries:
             if False:
@@ -337,7 +337,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
             chr_diagram.add(cur_chromosome)
         chr_diagram.draw("Graphics/tRNA_chrom.pdf", "Arabidopsis thaliana tRNA")
 
-        
+
 class ChromosomeCountTest(unittest.TestCase):
     """Test the display representation for simple counts on a chromosome.
     """
@@ -409,17 +409,17 @@ class ChromosomeCountTest(unittest.TestCase):
         """
         test_count_num = 1
         test_count_value = 5
-        
+
         test_label_num = 3
         test_label_value = "BigBird"
-        
+
         self.count_display.add_count(self.names[test_count_num],
                                      test_count_value)
         self.count_display.add_label(self.names[test_label_num],
                                      test_label_value)
 
         seg_info = self.count_display.get_segment_info()
-        
+
         assert seg_info[test_count_num][0] == test_count_value, \
                "Did not set and retrieve counts correctly."
         assert seg_info[test_label_num][1] == test_label_value, \

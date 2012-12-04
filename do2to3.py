@@ -150,7 +150,6 @@ def do_update(py2folder, py3folder, verbose=False):
         print("Have %i python files to convert" % len(to_convert))
         run2to3(to_convert)
 
-            
 def main(python2_source, python3_source,
          children=["Bio", "BioSQL", "Tests", "Scripts", "Doc"]):
     #Note want to use different folders for Python 3.1, 3.2, etc
@@ -165,7 +164,7 @@ def main(python2_source, python3_source,
         do_update(os.path.join(python2_source, child),
                   os.path.join(python3_source, child))
     print("Python 2to3 processing done.")
-              
+
 if __name__ == "__main__":
     python2_source = "."
     python3_source = "build/py%i.%i" % sys.version_info[:2]

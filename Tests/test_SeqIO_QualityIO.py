@@ -193,7 +193,7 @@ for base_name, good_count in tests:
         return f
     setattr(TestFastqErrors, "test_%s" % (base_name),
             funct(base_name, good_count))
-    del funct        
+    del funct
 
 #Now add methods for FASTQ files which will be rejected by the high
 #level SeqRecord parser, but will be accepted by the low level parser:
@@ -211,7 +211,7 @@ for base_name, good_count, full_count in tests:
         return f
     setattr(TestFastqErrors, "test_qual_%s" % (base_name),
             funct(base_name, good_count, full_count))
-    del funct        
+    del funct
 
 
 class TestReferenceSffConversions(unittest.TestCase):
@@ -241,11 +241,11 @@ class TestReferenceSffConversions(unittest.TestCase):
     def test_original(self) :
         """Test converting E3MFGYR02_random_10_reads.sff into FASTA+QUAL"""
         self.check_sff("Roche/E3MFGYR02_random_10_reads.sff")
-        
+
     def test_no_manifest(self) :
         """Test converting E3MFGYR02_no_manifest.sff into FASTA+QUAL"""
         self.check_sff("Roche/E3MFGYR02_no_manifest.sff")
-        
+
     def test_alt_index_at_start(self) :
         """Test converting E3MFGYR02_alt_index_at_start into FASTA+QUAL"""
         self.check_sff("Roche/E3MFGYR02_alt_index_at_start.sff")
@@ -276,7 +276,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
             in_filename = "Quality/%s_original_%s.fastq" \
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
-            #Load the reference output...  
+            #Load the reference output...
             expected = open("Quality/%s_as_%s.fastq" \
                             % (base_name, out_variant),
                             "rU").read()
@@ -309,7 +309,7 @@ for base_name, variant in tests:
         return f
     setattr(TestReferenceFastqConversions, "test_%s_%s" % (base_name, variant),
             funct(base_name, variant))
-    del funct        
+    del funct
 
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
@@ -401,7 +401,7 @@ class TestReadWrite(unittest.TestCase):
 
     def test_fastq_dna(self):
         """Read and write back simple example with ambiguous DNA"""
-        #First in upper case...        
+        #First in upper case...
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here",
                   ambiguous_dna_letters.upper(),
@@ -420,7 +420,7 @@ class TestReadWrite(unittest.TestCase):
 
     def test_fastq_rna(self):
         """Read and write back simple example with ambiguous RNA"""
-        #First in upper case...        
+        #First in upper case...
         data = "@%s\n%s\n+\n%s\n" \
                % ("id descr goes here",
                   ambiguous_rna_letters.upper(),
@@ -471,7 +471,7 @@ class TestWriteRead(unittest.TestCase):
                             list(SeqIO.parse(handle, format)),
                             truncation_expected(format))
         warnings.filters.pop()
-            
+
     def check(self, filename, format, out_formats):
         for f in out_formats:
             write_read(filename, format, f)
@@ -610,7 +610,7 @@ class MappingTests(unittest.TestCase):
         self.assertEqual(8, round(QualityIO.solexa_quality_from_phred(9)))
         for i in range(10,100):
             self.assertEqual(i, round(QualityIO.solexa_quality_from_phred(i)))
-        
+
     def test_phred_quality_from_solexa(self):
         """Mapping check for function phred_quality_from_solexa"""
         self.assertEqual(1, round(QualityIO.phred_quality_from_solexa(-5)))

@@ -83,7 +83,7 @@ class DistanceTests(unittest.TestCase):
     test_taxa = ['Archaeohip', 'Calippus', 'Hypohippus', 'M._secundu',
                  'Merychippu', 'Mesohippus', 'Nannipus', 'Neohippari',
                  'Parahippus', 'Pliohippus']
-    
+
     def distances_from_alignment(self, filename, DNA = True):
         """check we can make distance matrix from a given alignment"""
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
@@ -102,7 +102,7 @@ class DistanceTests(unittest.TestCase):
         stdout, strerr = cline()
         #biopython can't grok distance matrices, so we'll just check it exists
         self.assertTrue(os.path.isfile("test_file"))
-    
+
     def tree_from_distances(self, filename):
         """Check we can estimate a tree from a distance matrix"""
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
@@ -177,7 +177,7 @@ class ParsimonyTests(unittest.TestCase):
         for tree in parse_trees("test_file"):
             t_taxa = [t.replace(" ", "_") for t in tree.get_taxa()]
             self.assertEqual(sorted(a_taxa), sorted(t_taxa))
-    
+
     # fdnapars tests
     #def test_parsimony_tree_from_phylip_DNA(self):
     #    """Make a parsimony tree from a phylip DNA alignment"""
@@ -211,10 +211,10 @@ class BootstrapTests(unittest.TestCase):
 
     def tearDown(self):
         clean_up()
-     
+
     def check_bootstrap(self, filename, format, align_type="d"):
         """Check we can use fseqboot to pseudosample an alignment
-        
+
         The align_type type argument is passed to the commandline object to
         set the output format to use (from [D]na,[p]rotein and [r]na )
         """

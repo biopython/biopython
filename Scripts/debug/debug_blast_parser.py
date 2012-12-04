@@ -71,7 +71,7 @@ def test_blast_output(outfile):
         print "No parser specified.  I'll try to choose one for you based"
         print "on the format of the output file."
         print
-        
+
         parser_class = choose_parser(outfile)
         print "It looks like you have given output that should be parsed"
         print "with %s.%s.  If I'm wrong, you can select the correct parser" %\
@@ -160,7 +160,7 @@ def test_blast_output(outfile):
             prefix = '*'
         else:
             prefix = ' '
-        
+
         s = "%s%*d %s" % (prefix, ndigits, linenum, line)
         s = s[:80]
         print s
@@ -190,7 +190,7 @@ def test_blast_output(outfile):
                 pass
             print "*"*20 + " END SCANNER TRACE " + "*"*20
         print
-            
+
     elif class_found == consumer_class:
         print "Problems in %s can be caused by two things:" % \
               class_found.__name__
@@ -204,7 +204,7 @@ def test_blast_output(outfile):
         print s
         print "If so, debug %s.%s.  Otherwise, debug %s." % \
               (class_found.__name__, err_function, scanner_class.__name__)
-    
+
 
 VERBOSITY = 0
 if __name__ == '__main__':

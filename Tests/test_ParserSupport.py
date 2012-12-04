@@ -22,7 +22,7 @@ print "Running tests on TaggingConsumer"
 class TestHandle:
     def write(self, s):
         print s
-        
+
 h = TestHandle()
 tc = ParserSupport.TaggingConsumer(handle=h, colwidth=5)
 tc.start_section()  # '***** start_section\n'
@@ -110,7 +110,7 @@ rac = ParserSupport.read_and_call
 lines = []
 def m(line):
     lines.append(line)
-    
+
 rac(h, m)
 print lines[-1][:10]   # '>gi|132871'
 rac(h, m, start='MAKLE', end='KEQ', contains='SVIG')
@@ -132,7 +132,6 @@ else: print "ERROR, should have failed"
 try: rac(h, m, blank=0)
 except ValueError: print "correctly failed"
 else: print "ERROR, should have failed"
-        
 
 
 

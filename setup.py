@@ -225,7 +225,7 @@ class test_biopython(Command):
     python setup.py build
     python setup.py install
     python setup.py test
-    
+
     """
     description = "Automatically run the test suite for Biopython."
     user_options = []
@@ -242,7 +242,7 @@ class test_biopython(Command):
         # change to the test dir and run the tests
         os.chdir("Tests")
         sys.path.insert(0, '')
-        import run_tests   
+        import run_tests
         run_tests.main([])
 
         # change back to the current directory

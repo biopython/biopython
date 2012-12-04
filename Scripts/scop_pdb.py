@@ -27,7 +27,7 @@ and the SCOP CLA file at [http://scop.berkeley.edu/parse/index.html].
 
 Note: Errors will occur if the PDB file has been altered since the creation
 of the SCOP CLA and ASTRAL RAF files.
- 
+
 Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
                  raf_url cla_url [sid] [sid] [sid] ...
 
@@ -36,7 +36,7 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
  -i file   -- Input file name. Each line should start with an sid (Scop domain
               identifier). Blank lines, and lines starting with '#' are
               ignored. If file is '-' then data is read from stdin. If not
-              given then sids are taken from the command line. 
+              given then sids are taken from the command line.
 
  -o file   -- Output file name. If '-' then data is written to stdout. If not
               given then data is written to files named sid+'.ent'.
@@ -52,7 +52,7 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
   cla_url  -- The URL or filename of a SCOP parsable CLA file.
               See [http://scop.berkeley.edu/parse/index.html]
 
-  sid      -- A SCOP domain identifier. e.g. d3hbib_ 
+  sid      -- A SCOP domain identifier. e.g. d3hbib_
 """
 
 
@@ -84,7 +84,7 @@ def main():
     pdb_url = None
     cla_url = None
     raf_url = None
-    
+
     for o, a in opts:
         if o in ("-h", "--help","--usage"):
             usage()
@@ -103,7 +103,7 @@ def main():
 
     raf_url = args[0]
     cla_url = args[1]
-    
+
     (raf_filename, headers) = urllib.urlretrieve(raf_url)
     seqMapIndex = Raf.SeqMapIndex(raf_filename)
 
@@ -135,7 +135,7 @@ def main():
                 out_handle = sys.stdout
             else :
                 out_handle = open(output, "w+")
-                
+
             try:
                 try:
                     claRec = claIndex[id]
@@ -143,7 +143,7 @@ def main():
                     seqMap = seqMapIndex.getSeqMap(residues)
                     pdbid = residues.pdbid
 
-                    f = open_pdb(pdbid, pdb_url) 
+                    f = open_pdb(pdbid, pdb_url)
                     try:
                         seqMap.getAtoms(f, out_handle)
                     finally :
@@ -155,7 +155,7 @@ def main():
     finally :
         if in_handle is not None:
             in_handle.close()
-                
-                
+
+
 if __name__ == "__main__":
     main()

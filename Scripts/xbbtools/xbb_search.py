@@ -20,7 +20,7 @@ class DNAsearch:
     def __init__(self):
         self.init_alphabet()
         self.sequence = ''
-        
+
     def init_alphabet(self):
         self.alphabet = ambiguous_dna_values
         other = ''.join(self.alphabet.keys())
@@ -31,12 +31,12 @@ class DNAsearch:
             self.alphabet[key] = self.alphabet[key] + key
 
     def SetSeq(self, seq): self.sequence = seq
-    
+
     def SetPattern(self, pattern):
         self.pattern = pattern
         self.rx_pattern = self.IUPAC2regex(pattern)
         self.rx = re.compile(self.rx_pattern)
-    
+
     def IUPAC2regex(self, s):
         rx = ''
         for i in s:
@@ -46,18 +46,17 @@ class DNAsearch:
             else:
                 rx += r
         return rx
-    
+
     def _Search(self, start = 0):
         pos = self.rx.search(self.sequence, start)
         return pos
-    
+
     def Search(self, start = 0):
         pos = self.rx.search(self.sequence, start)
         if pos:
             return pos.start()
         else:
             return -1
-        
 
     def SearchAll(self):
         pos = -1
@@ -68,11 +67,11 @@ class DNAsearch:
             pos = m.start()
             if pos == -1:
                 break
-            
+
             positions.append(pos)
         return positions
-    
-        
+
+
 class XDNAsearch(Toplevel, DNAsearch):
     def __init__(self, seq= '', master= None, highlight = 0):
         DNAsearch.__init__(self)
@@ -82,7 +81,7 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.init_graphics()
         self.sequence = seq
         self.cur_pos = 0
-        
+
     def init_graphics(self):
         Toplevel.__init__(self, self.master)
         self.frame = Frame(self)
@@ -93,7 +92,7 @@ class XDNAsearch(Toplevel, DNAsearch):
 
         f2 = Frame(self.frame)
         f2.pack(side = TOP, fill = BOTH, expand = 1)
-        
+
         f = f2
         self.forward = Button(f, text = 'Search +', command = self.do_search)
         self.forward.pack(side = LEFT)
@@ -107,9 +106,6 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.colorb.pack(side = LEFT)
         self.config_color(self.current_color)
 
-        
-
-        
     def config_color(self, color = None):
         if not self.highlight: return
         if not color:
@@ -122,16 +118,16 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.master.tag_config(self.current_tag, background=self.current_color)
         self.master.tag_config(self.current_tag+'R', background=self.current_color, underline = 1)
         self.colors.append(color)
-        
+
     def change_color(self):
         self.config_color()
         self.colorb.configure(foreground = self.current_color)
         self.colorb.update()
-            
+
     def get_pattern(self):
         pattern = self.search_entry.get()
         return pattern
-        
+
     def do_search(self, other_strand = 0):
         pattern = self.get_pattern()
         if other_strand: pattern = reverse_complement(pattern)
@@ -148,19 +144,16 @@ class XDNAsearch(Toplevel, DNAsearch):
                     w.tag_add(self.current_tag, '1.%d' % start, '1.%s' % stop)
                 w.see('1.%d' % start)
 
-
-    
     def exit(self):
         for c in self.colors:
             self.master.tag_remove('searched_%s' % c, 1.0, END)
             self.master.tag_remove('searched_%sR' % c, 1.0, END)
         self.destroy()
         del(self)
-    
+
     def showcolor(self):
         pass
 
-    
 
 if __name__ == '__main__':
     seq = 'ATGGTGTGTGTGTACGATCGCCCCCCCCAGTCGATCGATGCATCGTA'

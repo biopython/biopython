@@ -40,7 +40,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual('random_s00', qresult.id)
         self.assertEqual(32, qresult.seq_len)
         self.assertEqual(0, len(qresult))
-        
+
         # test second result
         qresult = qresults.next()
         counter += 1
@@ -63,7 +63,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1.3, hit.domain_exp_num)
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -193,7 +193,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2.8, hit.domain_exp_num)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -256,7 +256,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2.7, hit.domain_exp_num)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -577,7 +577,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1.3, hit.domain_exp_num)
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -729,7 +729,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2.8, hit.domain_exp_num)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -792,7 +792,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2.7, hit.domain_exp_num)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -1288,7 +1288,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2.8, hit.domain_exp_num)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)
@@ -1351,7 +1351,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(2.7, hit.domain_exp_num)
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
-        
+
         hsp = hit.hsps[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertTrue(hsp.is_included)

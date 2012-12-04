@@ -48,10 +48,10 @@ for parser in all_parsers:
         if not os.path.isfile(filename):
             print "Missing test input file: %s" % filename
             continue
-        
+
         handle = open(filename, 'r')
         iterator = GenBank.Iterator(handle, parser)
-        
+
         while 1:
             cur_record = iterator.next()
 
@@ -76,7 +76,7 @@ for parser in all_parsers:
                     else:
                         print "References*"
                         for reference in cur_record.annotations[ann_key]:
-                            print str(reference) 
+                            print str(reference)
                 print "Feaures"
                 for feature in cur_record.features:
                     print feature
@@ -97,9 +97,9 @@ for parser in all_parsers:
                     print "num qualifiers:", len(feature.qualifiers)
                     for qualifier in feature.qualifiers:
                         print "key:", qualifier.key, "value:", qualifier.value
-                         
+
         handle.close()
-        
+
 #The dictionaries code has been deprecated
 #print "Testing dictionaries..."
 #...
@@ -131,7 +131,7 @@ def do_comparison(good_record, test_record):
         assert test_normalized == good_normalized, \
                "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
                (good_line, test_line)
-    
+
 def t_write_format():
     record_parser = GenBank.RecordParser(debug_level = 0)
 
@@ -139,14 +139,14 @@ def t_write_format():
         print "Testing GenBank writing for %s..." % os.path.basename(file)
         cur_handle = open(os.path.join("GenBank", file), "r")
         compare_handle = open(os.path.join("GenBank", file), "r")
-        
+
         iterator = GenBank.Iterator(cur_handle, record_parser)
         compare_iterator = GenBank.Iterator(compare_handle)
-        
+
         while 1:
             cur_record = iterator.next()
             compare_record = compare_iterator.next()
-            
+
             if cur_record is None or compare_record is None:
                 break
 
@@ -169,7 +169,7 @@ def t_cleaning_features():
     iterator = GenBank.Iterator(handle, parser)
 
     first_record = iterator.next()
-    
+
     # test for cleaning of translation
     translation_feature = first_record.features[1]
     test_trans = translation_feature.qualifiers["translation"][0]

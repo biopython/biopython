@@ -29,7 +29,7 @@ class xbb_translations:
 
     def antiparallel(self, seq):
         return reverse_complement(seq)
-    
+
     def frame(self, seq, frame, translation_table = 1):
         if not ((-3 <= frame <= -1) or (1 <= frame <= 3)):
             frame = 1
@@ -47,17 +47,17 @@ class xbb_translations:
             short = '%s ... %s' % (seq[:10], seq[-10:])
         else:
             short = seq
-            
+
         date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
         res = '%s: %s, ' % (txt,date)
 
         for nt in ['a','t','g','c']:
             res += '%s:%d ' % (nt, seq.count(nt.upper()))
 
-        res += '\nSequence: %s, %d nt, %0.2f %%GC\n' % (short.lower(),length, self.gc(seq))       
+        res += '\nSequence: %s, %d nt, %0.2f %%GC\n' % (short.lower(),length, self.gc(seq))
         res += '\n\n'
         return res
-        
+
     def frame_nice(self, seq, frame, translation_table = 1):
         length = len(seq)
         protein = self.frame(seq, frame, translation_table)
@@ -71,11 +71,11 @@ class xbb_translations:
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
 
         return res
-    
+
     def gc(self, seq):
         """Returns a float between 0 and 100."""
         return GC(seq)
-    
+
     def gcframe(self, seq, translation_table = 1):
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
@@ -104,10 +104,9 @@ class xbb_translations:
             res += '  '.join(map(None,frames[-2][p:p+20])) + ' \n'
             res += ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
             res += '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
-            
-            
+
         return res
-        
+
 if __name__ == '__main__':
     #s = 'GCCCTTTCTTATTAGTGCTACCGCTAATAGGTAAATATGAAAAACCTTTG'
     s = 'ATTCCGGTTGATCCTGCCGGACCCGACCGCTATCGGGGTAGGGATAAGCCATGGGAGTCTTACACTCCCGGGTAAGGGAGTGTGGCGGACGGCTGAGTAACACGTGGCTAACCTACCCTCGGGACGGGGATAACCCCGGGAAACTGGGGATAATCCCCGATAGGGAAGGAGTCCTGGAATGGTTCCTTCCCTAAAGGGCTATAGGCTATTTCCCGTTTGTAGCCGCCCGAGGATGGGGCTACGGCCCATCAGGCTGTCGGTGGGGTAAAGGCCCACCGAACCTATAACGGGTAGGGGCCGTGGAAGCGGGAGCCTCCAGTTGGGCACTGAGACAAGGGCCCAGGCCCTACGGGGCGCACCAGGCGCGAAACGTCCCCAATGCGCGAAAGCGTGAGGGCGCTACCCCGAGTGCCTCCGCAAGGAGGCTTTTCCCCGCTCTAAAAAGGCGGGGGAATAAGCGGGGGGCAAGTCTGGTGTCAGCCGCCGCGGTAATACCAGCTCCGCGAGTGGTCGGGGTGATTACTGGGCCTAAAGCGCCTGTAGCCGGCCCACCAAGTCGCCCCTTAAAGTCCCCGGCTCAACCGGGGAACTGGGGGCGATACTGGTGGGCTAGGGGGCGGGAGAGGCGGGGGGTACTCCCGGAGTAGGGGCGAAATCCTTAGATACCGGGAGGACCACCAGTGGCGGAAGCGCCCCGCTA'
@@ -119,6 +118,6 @@ if __name__ == '__main__':
     #print test.complement(s)
     print '============================================================'
     print test.gcframe(s)
-    
+
 #     for i in Translate.unambiguous_dna_by_id.keys():
 #         print Translate.unambiguous_dna_by_id[i].table.names[0]
