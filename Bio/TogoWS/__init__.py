@@ -260,14 +260,14 @@ def search(db, query, offset=None, limit=None, format=None):
 
 def convert(data, in_format, out_format):
     """TogoWS convert (returns a handle).
-    
+
     data - string or handle containing input record(s)
     in_format - string describing the input file format (e.g. "genbank")
     out_format - string describing the requested output format (e.g. "fasta")
 
     For a list of supported conversions (e.g. "genbank" to "fasta"), see
     http://togows.dbcls.jp/convert/
-    
+
     Note that Biopython has built in support for conversion of sequence and
     alignnent file formats (functions Bio.SeqIO.convert and Bio.AlignIO.convert)
     """

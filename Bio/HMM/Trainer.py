@@ -59,12 +59,12 @@ class AbstractTrainer(object):
             total_likelihood += math.log(probability)
 
         return total_likelihood
-                 
+
     def estimate_params(self, transition_counts, emission_counts):
         """Get a maximum likelihood estimation of transition and emmission.
 
         Arguments:
-        
+
         o transition_counts -- A dictionary with the total number of counts
         of transitions between two states.
 
@@ -104,13 +104,13 @@ class AbstractTrainer(object):
         # get an ordered list of all items
         all_ordered = counts.keys()
         all_ordered.sort()
-        
+
         ml_estimation = {}
 
         # the total counts for the current letter we are on
         cur_letter = None
         cur_letter_counts = 0
-        
+
         for cur_item in all_ordered:
             # if we are on a new letter (ie. the first letter of the tuple)
             if cur_item[0] != cur_letter:
@@ -119,7 +119,7 @@ class AbstractTrainer(object):
 
                 # count up the total counts for this letter
                 cur_letter_counts = counts[cur_item]
-                
+
                 # add counts for all other items with the same first letter
                 cur_position = all_ordered.index(cur_item) + 1
 
@@ -138,7 +138,7 @@ class AbstractTrainer(object):
             ml_estimation[cur_item] = cur_ml
 
         return ml_estimation
-            
+
 class BaumWelchTrainer(AbstractTrainer):
     """Trainer that uses the Baum-Welch algorithm to estimate parameters.
 
@@ -158,7 +158,7 @@ class BaumWelchTrainer(AbstractTrainer):
         """Initialize the trainer.
 
         Arguments:
-        
+
         o markov_model - The model we are going to estimate parameters for.
         This should have the parameters with some initial estimates, that
         we can build from.
@@ -171,12 +171,12 @@ class BaumWelchTrainer(AbstractTrainer):
 
         The algorithm for this is taken from Durbin et al. p64, so this
         is a good place to go for a reference on what is going on.
-        
+
         Arguments:
 
         o training_seqs -- A list of TrainingSequence objects to be used
         for estimating the parameters.
-        
+
         o stopping_criteria -- A function, that when passed the change
         in log likelihood and threshold, will indicate if we should stop
         the estimation iterations.
@@ -187,20 +187,20 @@ class BaumWelchTrainer(AbstractTrainer):
         """
         prev_log_likelihood = None
         num_iterations = 1
-        
-        while 1:            
+
+        while 1:
             transition_count = self._markov_model.get_blank_transitions()
             emission_count = self._markov_model.get_blank_emissions()
 
             # remember all of the sequence probabilities
             all_probabilities = []
-            
+
             for training_seq in training_seqs:
                 # calculate the forward and backward variables
                 DP = dp_method(self._markov_model, training_seq)
                 forward_var, seq_prob = DP.forward_algorithm()
                 backward_var = DP.backward_algorithm()
-                
+
                 all_probabilities.append(seq_prob)
 
                 # update the counts for transitions and emissions
@@ -268,7 +268,7 @@ class BaumWelchTrainer(AbstractTrainer):
         # set up the transition and emission probabilities we are using
         transitions = self._markov_model.transition_prob
         emissions = self._markov_model.emission_prob
-        
+
         # loop over the possible combinations of state path letters
         for k in training_seq.states.alphabet.letters:
             for l in self._markov_model.transitions_from(k):
@@ -293,7 +293,7 @@ class BaumWelchTrainer(AbstractTrainer):
                 # update the transition approximation
                 transition_counts[(k, l)] += (float(estimated_counts) /
                                               training_seq_prob)
-                    
+
         return transition_counts
 
     def update_emissions(self, emission_counts, training_seq,

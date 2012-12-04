@@ -36,7 +36,7 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
 
     """
 
-    #Credits: 
+    #Credits:
     #Main author: Sebastian Bassi <sbassi@genesdigitales.com>
     #Overcount function: Greg Singer <singerg@tcd.ie>
     #Based on the work of Nicolas Le Novere <lenov@ebi.ac.uk> Bioinformatics.
@@ -45,14 +45,14 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     #This function returns better results than EMBOSS DAN because it uses
     #updated thermodynamics values and takes into account inicialization
     #parameters from the work of SantaLucia (1998).
-    
+
     #Things to do:
     #+Detect complementary sequences. Change K according to result.
     #+Add support for heteroduplex (see Sugimoto et al. 1995).
     #+Correction for Mg2+. Now supports only monovalent ions.
     #+Put thermodinamics table in a external file for users to change at will
     #+Add support for danglings ends (see Le Novele. 2001) and mismatches.
-    
+
     dh = 0 #DeltaH. Enthalpy
     ds = 0 #deltaS Entropy
 
@@ -117,10 +117,10 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     sup = str(s).upper() #turn any Seq object into a string (need index method)
     vsTC, vh = tercorr(sup)
     vs = vsTC
-    
+
     k = (dnac/4.0)*1e-9
     #With complementary check on, the 4.0 should be changed to a variable.
-    
+
     if rna==0:
         #DNA/DNA
         #Allawi and SantaLucia (1997). Biochemistry 36 : 10581-10594
@@ -141,10 +141,10 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
         vs = vs + (overcount(sup,"CG"))*27.2+(overcount(sup,"GC"))*\
         24.4 + (overcount(sup,"GG"))*19.9 + (overcount(sup,"CC"))*19.9
         ds = vs
-        dh = vh        
+        dh = vh
     elif rna==1:
         #RNA/RNA hybridisation of Xia et al (1998)
-        #Biochemistry 37: 14719-14735         
+        #Biochemistry 37: 14719-14735
         vh = vh+(overcount(sup,"AA"))*6.82+(overcount(sup,"TT"))*6.6+\
         (overcount(sup,"AT"))*9.38 + (overcount(sup,"TA"))*7.69+\
         (overcount(sup,"CA"))*10.44 + (overcount(sup,"TG"))*10.5+\

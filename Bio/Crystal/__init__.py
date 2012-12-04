@@ -120,7 +120,7 @@ class Chain(object):
             return self.__class__(self.data[index])
         else:
             raise TypeError
-            
+
     def __setitem__(self, index, value):
         if isinstance(index, int):
             try:
@@ -139,7 +139,7 @@ class Chain(object):
                 raise TypeError
         else:
             raise TypeError
-    
+
     def __delitem__(self, index):
         del self.data[index]
 

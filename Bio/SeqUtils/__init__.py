@@ -20,7 +20,7 @@ from Bio.Data import IUPACData, CodonTable
 ######################################
 # DNA
 ######################
-# {{{ 
+# {{{
 
 
 def GC(seq):
@@ -28,7 +28,7 @@ def GC(seq):
 
     Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
     when counting the G and C content.  The percentage is calculated against
-    the full length, e.g.: 
+    the full length, e.g.:
 
     >>> from Bio.SeqUtils import GC
     >>> GC("ACTGN")
@@ -41,8 +41,8 @@ def GC(seq):
         return gc*100.0/len(seq)
     except ZeroDivisionError:
         return 0.0
-        
-    
+
+
 def GC123(seq):
     """Calculates total G+C content plus first, second and third positions.
 
@@ -91,7 +91,7 @@ def GC_skew(seq, window = 100):
 
     Does NOT look at any ambiguous nucleotides.
     """
-    # 8/19/03: Iddo: added lowercase 
+    # 8/19/03: Iddo: added lowercase
     values = []
     for i in range(0, len(seq), window):
         s = seq[i: i + window]
@@ -113,7 +113,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
                     xscrollcommand = xscroll.set, background = 'white')
     win = canvas.winfo_toplevel()
     win.geometry('700x700')
-   
+
     yscroll.config(command = canvas.yview)
     xscroll.config(command = canvas.xview)
     yscroll.pack(side = RIGHT, fill = Y)
@@ -123,7 +123,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
 
     X0, Y0 = r + px, r + py
     x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
-   
+
     ty = Y0
     canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
     ty +=20
@@ -195,11 +195,11 @@ def nt_search(seq, subseq):
     return result
 
 # }}}
-   
+
 ######################################
 # Protein
 ######################
-# {{{ 
+# {{{
 
 _THREECODE = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
              'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
@@ -296,9 +296,9 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 # }}}
 
 ######################################
-# Mixed ??? 
+# Mixed ???
 ######################
-# {{{ 
+# {{{
 
 
 def six_frame_translations(seq, genetic_code = 1):
@@ -343,10 +343,10 @@ def six_frame_translations(seq, genetic_code = 1):
     header = 'GC_Frame: '
     for nt in ['a','t','g','c']:
         header += '%s:%d ' % (nt, seq.count(nt.upper()))
-      
-    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),length, GC(seq))       
+
+    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),length, GC(seq))
     res = header
-   
+
     for i in range(0,length,60):
         subseq = seq[i:i+60]
         csubseq = comp[i:i+60]
@@ -369,7 +369,7 @@ def six_frame_translations(seq, genetic_code = 1):
 ######################################
 # FASTA file utilities
 ######################
-# {{{ 
+# {{{
 
 
 def quick_FASTA_reader(file):

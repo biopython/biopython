@@ -316,7 +316,7 @@ class _IndexedSeqFileDict(_dict_base):
         return self._repr
 
     def __str__(self):
-        #TODO - How best to handle the __str__ for SeqIO and SearchIO? 
+        #TODO - How best to handle the __str__ for SeqIO and SearchIO?
         if self:
             return "{%r : %s(...), ...}" % (self.keys()[0], self._obj_repr)
         else:

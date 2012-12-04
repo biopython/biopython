@@ -143,7 +143,7 @@ def _augment_blast_hsp(hsp, attr):
         else:
             func = _compute_gapopen_num
 
-    # set the num values 
+    # set the num values
     # requires the endswith check, since we only want to set 'num' or 'span'
     # attributes here
     if not hasattr(hsp, attr) and not attr.endswith('_pct'):

@@ -315,7 +315,7 @@ blast-text
 ==========
 The BLAST plain text output format has been known to change considerably between
 BLAST versions. NCBI itself has recommended that users not rely on the plain
-text output for parsing-related work. 
+text output for parsing-related work.
 
 However, in some cases parsing the plain text output may still be useful.
 SearchIO provides parsing support for the plain text output, but guarantees only

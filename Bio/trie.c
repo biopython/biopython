@@ -133,9 +133,9 @@ int Trie_set(Trie* trie, const char *key, const void *value) {
 	    if(new_suffix) free(new_suffix);
 	    return 1;
 	}
-    } 
+    }
     /* There are three cases where the key and suffix share some
-       letters. 
+       letters.
        1.  suffix is proper substring of key.
        2.  key is proper substring of suffix.
        3.  neither is proper substring of other.
@@ -239,25 +239,25 @@ void *Trie_get(const Trie* trie, const char *key) {
 /* Mutually recursive, so need to make a forward declaration. */
 static void
 _get_approximate_trie(const Trie* trie, const char *key, const int k,
-		      void (*callback)(const char *key, 
+		      void (*callback)(const char *key,
 				       const void *value,
 				       const int mismatches,
 				       void *data),
-		      void *data, 
+		      void *data,
 		      const int mismatches,
 		      char *current_key, const int max_key
 		      );
 
-static void 
-_get_approximate_transition(const char *key, 
+static void
+_get_approximate_transition(const char *key,
 			    const int k,
-			    const Transition* transition, 
+			    const Transition* transition,
 			    const char *suffix,
-			    void (*callback)(const char *key, 
+			    void (*callback)(const char *key,
 					     const void *value,
 					     const int mismatches,
 					     void *data),
-			    void *data, 
+			    void *data,
 			    const int mismatches,
 			    char *current_key, const int max_key
 			    )
@@ -305,7 +305,7 @@ _get_approximate_transition(const char *key,
 
 	/* Insertion in key, skip the next letter in the key. */
 	if(key[i]) {
-	    _get_approximate_transition(&key[i+1], k-1, 
+	    _get_approximate_transition(&key[i+1], k-1,
 					transition, &suffix[i],
 					callback, data,
 					mismatches+1, current_key, max_key);
@@ -327,11 +327,11 @@ _get_approximate_transition(const char *key,
 
 static void
 _get_approximate_trie(const Trie* trie, const char *key, const int k,
-		      void (*callback)(const char *key, 
+		      void (*callback)(const char *key,
 				       const void *value,
 				       const int mismatches,
 				       void *data),
-		      void *data, 
+		      void *data,
 		      const int mismatches,
 		      char *current_key, const int max_key
 		      )
@@ -363,7 +363,7 @@ _get_approximate_trie(const Trie* trie, const char *key, const int k,
        in the key are mismatches. */
     else if(!trie->num_transitions) {
 	if(trie->value && (strlen(key) <= k)) {
-	    (*callback)(current_key, trie->value, 
+	    (*callback)(current_key, trie->value,
 			mismatches+strlen(key), data);
 	}
     }
@@ -373,7 +373,7 @@ _get_approximate_trie(const Trie* trie, const char *key, const int k,
 	    Transition* transition = &trie->transitions[i];
 	    const char *suffix = transition->suffix;
 	    _get_approximate_transition(key, k, transition, suffix,
-					callback, data, 
+					callback, data,
 					mismatches, current_key, max_key);
 	}
     }
@@ -381,9 +381,9 @@ _get_approximate_trie(const Trie* trie, const char *key, const int k,
 }
 
 
-void 
+void
 Trie_get_approximate(const Trie* trie, const char *key, const int k,
-		     void (*callback)(const char *key, 
+		     void (*callback)(const char *key,
 				      const void *value,
 				      const int mismatches,
 				      void *data),
@@ -394,11 +394,11 @@ Trie_get_approximate(const Trie* trie, const char *key, const int k,
     _get_approximate_trie(trie, key, k, callback, data, 0, KEY,MAX_KEY_LENGTH);
 }
 
-int Trie_len(const Trie* trie) 
+int Trie_len(const Trie* trie)
 {
     int i;
     int length = 0;
-    
+
     if(!trie)
 	return 0;
     if(trie->value)
@@ -409,12 +409,12 @@ int Trie_len(const Trie* trie)
     return length;
 }
 
-int Trie_has_key(const Trie* trie, const char *key) 
+int Trie_has_key(const Trie* trie, const char *key)
 {
     return Trie_get(trie, key) != NULL;
 }
 
-int Trie_has_prefix(const Trie* trie, const char *prefix) 
+int Trie_has_prefix(const Trie* trie, const char *prefix)
 {
     int first, last, mid;
 
@@ -449,9 +449,9 @@ int Trie_has_prefix(const Trie* trie, const char *prefix)
     return 0;
 }
 
-static void 
-_iterate_helper(const Trie* trie, 
-		void (*callback)(const char *key, 
+static void
+_iterate_helper(const Trie* trie,
+		void (*callback)(const char *key,
 				 const void *value,
 				 void *data),
 		void *data,
@@ -471,15 +471,15 @@ _iterate_helper(const Trie* trie,
 	    continue;
 	}
 	strcat(current_key, suffix);
-	_iterate_helper(transition->next, callback, data, 
+	_iterate_helper(transition->next, callback, data,
 			current_key, max_key);
 	current_key[keylen] = 0;
     }
 }
 
-void 
-Trie_iterate(const Trie* trie, 
-	     void (*callback)(const char *key, 
+void
+Trie_iterate(const Trie* trie,
+	     void (*callback)(const char *key,
 			      const void *value,
 			      void *data),
 	     void *data)
@@ -490,7 +490,7 @@ Trie_iterate(const Trie* trie,
 
 static void
 _with_prefix_helper(const Trie* trie, const char *prefix,
-		    void (*callback)(const char *key, 
+		    void (*callback)(const char *key,
 				     const void *value,
 				     void *data),
 		    void *data,
@@ -540,9 +540,9 @@ _with_prefix_helper(const Trie* trie, const char *prefix,
     }
 }
 
-void 
+void
 Trie_with_prefix(const Trie* trie, const char *prefix,
-		 void (*callback)(const char *key, 
+		 void (*callback)(const char *key,
 				  const void *value,
 				  void *data),
 		 void *data
@@ -556,7 +556,7 @@ Trie_with_prefix(const Trie* trie, const char *prefix,
 
 /* Need to declare _serialize_transition here so it can be called from
    _serialize_trie. */
-static int _serialize_transition(const Transition* transition, 
+static int _serialize_transition(const Transition* transition,
 			  int (*write)(const void *towrite, const int length,
 				       void *data),
 			  int (*write_value)(const void *value, void *data),
@@ -574,13 +574,13 @@ static int _serialize_transition(const Transition* transition,
  *   suffix    variable  the suffix for this transition
  *   byte      1         Whether or not there is a trie
  *   trie      variable  Recursively points to another trie.
- * 
+ *
  * The number of bytes and the endian may vary from platform to
  * platform.
  */
 
 static
-int _serialize_trie(const Trie* trie, 
+int _serialize_trie(const Trie* trie,
 		    int (*write)(const void *towrite, const int length,
 				 void *data),
 		    int (*write_value)(const void *value, void *data),
@@ -600,7 +600,7 @@ int _serialize_trie(const Trie* trie,
     if(!(*write)(&trie->num_transitions, sizeof(trie->num_transitions), data))
 	return 0;
     for(i=0; i<trie->num_transitions; i++) {
-	if(!_serialize_transition(&trie->transitions[i], 
+	if(!_serialize_transition(&trie->transitions[i],
 				  write, write_value, data))
 	    return 0;
     }
@@ -609,7 +609,7 @@ int _serialize_trie(const Trie* trie,
 }
 
 static
-int _serialize_transition(const Transition* transition, 
+int _serialize_transition(const Transition* transition,
 			  int (*write)(const void *towrite, const int length,
 				       void *data),
 			  int (*write_value)(const void *value, void *data),
@@ -634,8 +634,8 @@ int _serialize_transition(const Transition* transition,
     return 1;
 }
 
-int Trie_serialize(const Trie* trie, 
-		   int (*write)(const void *towrite, const int length, 
+int Trie_serialize(const Trie* trie,
+		   int (*write)(const void *towrite, const int length,
 				void *data),
 		   int (*write_value)(const void *value, void *data),
 		   void *data)
@@ -647,13 +647,13 @@ int Trie_serialize(const Trie* trie,
 
 static
 int _deserialize_transition(Transition* transition,
-			    int (*read)(void *wasread, const int length, 
+			    int (*read)(void *wasread, const int length,
 					void *data),
 			    void *(*read_value)(void *data),
 			    void *data);
 
 static
-int _deserialize_trie(Trie* trie, 
+int _deserialize_trie(Trie* trie,
 		      int (*read)(void *wasread, const int length, void *data),
 		      void *(*read_value)(void *data),
 		      void *data)
@@ -671,16 +671,16 @@ int _deserialize_trie(Trie* trie,
     }
     if(!(*read)(&trie->num_transitions, sizeof(trie->num_transitions), data))
 	goto _deserialize_trie_error;
-    if(!(trie->transitions = 
+    if(!(trie->transitions =
 	 malloc(trie->num_transitions*sizeof(Transition))))
 	goto _deserialize_trie_error;
     for(i=0; i<trie->num_transitions; i++) {
-	if(!_deserialize_transition(&trie->transitions[i], 
+	if(!_deserialize_transition(&trie->transitions[i],
 				    read, read_value, data))
 	    goto _deserialize_trie_error;
     }
     return 1;
-   
+
  _deserialize_trie_error:
     trie->num_transitions = 0;
     if(trie->transitions) {
@@ -693,14 +693,14 @@ int _deserialize_trie(Trie* trie,
 
 static
 int _deserialize_transition(Transition* transition,
-			    int (*read)(void *wasread, const int length, 
+			    int (*read)(void *wasread, const int length,
 					void *data),
 			    void *(*read_value)(void *data),
 			    void *data)
 {
     int suffixlen;
     unsigned char has_trie;
-    
+
     if(!(*read)(&suffixlen, sizeof(suffixlen), data))
 	goto _deserialize_transition_error;
     if(suffixlen < 0 || suffixlen >= MAX_KEY_LENGTH)

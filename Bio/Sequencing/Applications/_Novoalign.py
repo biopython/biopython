@@ -36,11 +36,11 @@ class NovoalignCommandline(AbstractCommandline):
     Last checked against version: 2.05.04
     """
     def __init__(self, cmd="novoalign", **kwargs):
-        
+
         READ_FORMAT = ['FA', 'SLXFQ', 'STDFQ', 'ILMFQ', 'PRB', 'PRBnSEQ']
         REPORT_FORMAT = ['Native', 'Pairwise', 'SAM']
         REPEAT_METHOD = ['None', 'Random', 'All', 'Exhaustive', '0.99']
-        
+
         self.parameters = \
            [
             _Option(["-d", "database"],
@@ -56,7 +56,7 @@ class NovoalignCommandline(AbstractCommandline):
                     % ", ".join(READ_FORMAT),
                     checker_function=lambda x: x in READ_FORMAT,
                     equate=False),
-            
+
             # Alignment scoring options
             _Option(["-t", "threshold"],
                     "Threshold for alignment score",
@@ -75,7 +75,7 @@ class NovoalignCommandline(AbstractCommandline):
                     "Default: no penalty",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Quality control and read filtering
             _Option(["-l", "good_bases"],
                     "Minimum number of good quality bases [default: log(N_g, 4) + 5]",
@@ -85,7 +85,7 @@ class NovoalignCommandline(AbstractCommandline):
                     "Homopolymer read filter [default: 20; disable: negative value]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Read preprocessing options
             _Option(["-a", "adapter3"],
                     "Strips a 3' adapter sequence prior to alignment.\n\n"
@@ -147,19 +147,19 @@ class NovoalignCommandline(AbstractCommandline):
                     "Structural variation penalty [default: 70]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # miRNA mode
             _Option(["-m", "miRNA"],
                     "Sets miRNA mode and optionally sets a value for the region scanned [default: off]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Multithreading
             _Option(["-c", "cores"],
                     "Number of threads, disabled on free versions [default: number of cores]",
                     checker_function=lambda x: isinstance(x, types.IntType),
                     equate=False),
-            
+
             # Quality calibrations
             _Option(["-k", "read_cal"],
                     "Read quality calibration from file (mismatch counts)",

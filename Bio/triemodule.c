@@ -21,7 +21,7 @@ trie_trie(PyObject* self, PyObject* args)
     trieobject* trieobj;
     Trie* trie;
 
-    if (!PyArg_ParseTuple(args,":trie")) 
+    if (!PyArg_ParseTuple(args,":trie"))
         return NULL;
     if(!(trie = Trie_new()))
 	return PyErr_NoMemory();
@@ -31,8 +31,8 @@ trie_trie(PyObject* self, PyObject* args)
     return (PyObject*)trieobj;
 }
 
-static void 
-_decref_objects(const char *key, const void *value, void *data) 
+static void
+_decref_objects(const char *key, const void *value, void *data)
 {
     Py_DECREF((PyObject *)value);
 }
@@ -84,7 +84,7 @@ trie_ass_sub(trieobject *mp, PyObject *py_key, PyObject *py_value)
 	return -1;
     }
     key = PyString_AS_STRING(py_key);
-    
+
     /* Check to see whether something already exists at that key.  If
        there's already an object there, then I will have to remove it.
     */
@@ -176,8 +176,8 @@ trie_has_prefix_onearg(trieobject *mp, PyObject *py_args)
 static char with_prefix__doc__[] =
 "D.with_prefix(prefix) -> list of D's keys that begins with prefix";
 
-static void 
-_trie_with_prefix_helper(const char *key, const void *value, void *data) 
+static void
+_trie_with_prefix_helper(const char *key, const void *value, void *data)
 {
     PyObject *py_list = (PyObject *)data;
     PyObject *py_key;
@@ -206,7 +206,7 @@ trie_with_prefix(trieobject *mp, PyObject *py_prefix)
 
     if(!(py_list = PyList_New(0)))
 	return NULL;
-    Trie_with_prefix(mp->trie, prefix, 
+    Trie_with_prefix(mp->trie, prefix,
 		     _trie_with_prefix_helper, (void *)py_list);
     if(PyErr_Occurred()) {
 	Py_DECREF(py_list);
@@ -228,8 +228,8 @@ trie_with_prefix_onearg(trieobject *mp, PyObject *py_args)
 static char keys__doc__[] =
 "D.keys() -> list of D's keys";
 
-static void 
-_trie_keys_helper(const char *key, const void *value, void *data) 
+static void
+_trie_keys_helper(const char *key, const void *value, void *data)
 {
     PyObject *py_list = (PyObject *)data;
     PyObject *py_key;
@@ -271,8 +271,8 @@ trie_keys_noargs(trieobject *mp, PyObject *py_args)
 static char values__doc__[] =
 "D.values() -> list of D's values";
 
-static void 
-_trie_values_helper(const char *key, const void *value, void *data) 
+static void
+_trie_values_helper(const char *key, const void *value, void *data)
 {
     PyObject *py_list = (PyObject *)data;
     if(PyErr_Occurred())
@@ -327,8 +327,8 @@ trie_get(trieobject *mp, PyObject *args)
 static char get_approximate__doc__[] =
 "D.get_approximate(key, k) -> List of (key, value, mismatches) in D, allowing up to k mismatches in key.";
 
-static void 
-_trie_get_approximate_helper(const char *key, const void *value, 
+static void
+_trie_get_approximate_helper(const char *key, const void *value,
 			     const int mismatches, void *data)
 {
     /* Append a tuple of (key, value) to data, which is a PyList. */
@@ -374,7 +374,7 @@ trie_get_approximate(trieobject *mp, PyObject *args)
 
     if(!(py_list = PyList_New(0)))
 	return NULL;
-    Trie_get_approximate(mp->trie, key, k, 
+    Trie_get_approximate(mp->trie, key, k,
 			 _trie_get_approximate_helper, (void *)py_list);
     if(PyErr_Occurred()) {
 	Py_DECREF(py_list);
@@ -467,7 +467,7 @@ _write_to_handle(const void *towrite, const int length, void *handle)
     if(!length)
 	return 1;
 
-    if(!(py_retval = PyObject_CallMethod(py_handle, "write", "s#", 
+    if(!(py_retval = PyObject_CallMethod(py_handle, "write", "s#",
 					 towrite, length)))
 	goto _write_to_handle_cleanup;
     success = 1;
@@ -487,14 +487,14 @@ static int _write_value_to_handle(const void *value, void *handle)
     Py_ssize_t length;
     int success = 0;
 
-#ifdef Py_MARSHAL_VERSION  
-    if(!(py_marshalled =   
-	 PyMarshal_WriteObjectToString(py_value, Py_MARSHAL_VERSION)))  
-        goto _write_value_to_handle_cleanup;  
-#else  
-    if(!(py_marshalled = PyMarshal_WriteObjectToString(py_value)))  
-        goto _write_value_to_handle_cleanup;  
-#endif  
+#ifdef Py_MARSHAL_VERSION
+    if(!(py_marshalled =
+	 PyMarshal_WriteObjectToString(py_value, Py_MARSHAL_VERSION)))
+        goto _write_value_to_handle_cleanup;
+#else
+    if(!(py_marshalled = PyMarshal_WriteObjectToString(py_value)))
+        goto _write_value_to_handle_cleanup;
+#endif
     if(PyString_AsStringAndSize(py_marshalled, &marshalled, &length) == -1)
 	goto _write_value_to_handle_cleanup;
     if(!_write_to_handle(&length, sizeof(length), handle))
@@ -523,7 +523,7 @@ trie_save(PyObject *self, PyObject *args)
     if(!PyArg_ParseTuple(args, "OO:save", &py_handle, &py_trie))
         return NULL;
     mp = (trieobject *)py_trie;
-    if(!Trie_serialize(mp->trie, _write_to_handle, _write_value_to_handle, 
+    if(!Trie_serialize(mp->trie, _write_to_handle, _write_value_to_handle,
 		       (void *)py_handle)) {
 	if(!PyErr_Occurred())
 	    PyErr_SetString(PyExc_RuntimeError,
@@ -534,7 +534,7 @@ trie_save(PyObject *self, PyObject *args)
     return Py_None;
 }
 
-static int 
+static int
 _read_from_handle(void *wasread, const int length, void *handle)
 {
     PyObject *py_handle = (PyObject *)handle,
@@ -544,7 +544,7 @@ _read_from_handle(void *wasread, const int length, void *handle)
     PyBufferProcs *buffer;
     int segment;
     int bytes_read, bytes_left;
-    
+
     if(!length)
 	return 1;
 
@@ -567,9 +567,9 @@ _read_from_handle(void *wasread, const int length, void *handle)
     bytes_left = length;
     segment = 0;
     while(bytes_left > 0) {
-	if((bytes_read = buffer->bf_getreadbuffer(py_retval, 
+	if((bytes_read = buffer->bf_getreadbuffer(py_retval,
 						  segment, &retval)) == -1)
-	    goto _read_from_handle_cleanup; 
+	    goto _read_from_handle_cleanup;
 	memcpy(wasread, retval, bytes_read);
 	wasread = (void *)((char *)wasread + bytes_read);
 	bytes_left -= bytes_read;
@@ -577,7 +577,7 @@ _read_from_handle(void *wasread, const int length, void *handle)
     }
 
     success = 1;
-    
+
  _read_from_handle_cleanup:
     if(py_retval) {
 	Py_DECREF(py_retval);
@@ -612,14 +612,14 @@ trie_load(PyObject *self, PyObject *args)
     if(!PyArg_ParseTuple(args, "O:load", &py_handle))
 	return NULL;
 
-    if(!(trie = Trie_deserialize(_read_from_handle, _read_value_from_handle, 
+    if(!(trie = Trie_deserialize(_read_from_handle, _read_value_from_handle,
 				 py_handle))) {
 	if(!PyErr_Occurred())
-	    PyErr_SetString(PyExc_RuntimeError, 
+	    PyErr_SetString(PyExc_RuntimeError,
 			    "loading failed for some reason");
 	return NULL;
     }
-	
+
     if(!(trieobj = PyObject_New(trieobject, &Trie_Type))) {
 	Trie_del(trie);
 	return NULL;
@@ -629,11 +629,11 @@ trie_load(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef trie_methods[] = {
-    {"trie", trie_trie, METH_VARARGS, 
+    {"trie", trie_trie, METH_VARARGS,
      "trie() -> new Trie object."},
-    {"load", trie_load, METH_VARARGS, 
+    {"load", trie_load, METH_VARARGS,
      "load(handle) -> trie object"},
-    {"save", trie_save, METH_VARARGS, 
+    {"save", trie_save, METH_VARARGS,
      "save(handle, trie), save a trie object to a handle"},
     {NULL, NULL, 0, NULL}
 };
@@ -652,7 +652,7 @@ load    Load a trie from a handle.\n\
 ";
 
 DL_EXPORT(void)
-inittrie(void) 
+inittrie(void)
 {
     Trie_Type.ob_type = &PyType_Type;
 

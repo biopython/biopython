@@ -7,7 +7,7 @@
 # some of the models in the Wise2 package by Ewan Birney available from:
 # ftp://ftp.ebi.ac.uk/pub/software/unix/wise2/
 # http://www.ebi.ac.uk/Wise2/
-# 
+#
 # Bio.Wise.psw is for protein Smith-Waterman alignments
 # Bio.Wise.dnal is for Smith-Waterman DNA alignments
 
@@ -57,7 +57,7 @@ class AlignmentColumn(list):
 
         self._set_kind(column_unit)
         self[1] = column_unit.column
-        
+
 class ColumnUnit(object):
     def __init__(self, unit, column, kind):
         self.unit = unit
@@ -85,7 +85,7 @@ def parse_line(line):
         return
 
     return ColumnUnit(int(match.group(1)), int(match.group(3)), match.group(4))
-    
+
 def parse(iterable):
     """
     format
@@ -104,7 +104,7 @@ def parse(iterable):
                 print line,
         except KeyError:
             pass
-            
+
         column_unit = parse_line(line)
         if column_unit:
             alignment.append(column_unit)
@@ -116,7 +116,7 @@ def align(pair,
           gap_start=None,
           gap_extension=None,
           *args, **keywds):
-    
+
     cmdline = _CMDLINE_PSW[:]
     if scores:
         cmdline.extend((_OPTION_SCORES, scores))

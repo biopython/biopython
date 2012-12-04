@@ -14,9 +14,9 @@ import sys
 class SimCoalController(object):
     def __init__(self, simcoal_dir):
         """Initializes the controller.
-        
+
         simcoal_dir is the directory where simcoal is.
-        
+
         The initializer checks for existance and executability of binaries.
         """
         self.simcoal_dir = simcoal_dir

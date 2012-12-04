@@ -55,7 +55,7 @@ class AbstractDPAlgorithms(object):
         """
         # all of the different letters that the state path can be in
         state_letters = self._seq.states.alphabet.letters
-        
+
         # -- initialize the algorithm
         #
         # NOTE: My index numbers are one less than what is given in Durbin
@@ -63,7 +63,7 @@ class AbstractDPAlgorithms(object):
         # (Length - 1) not 1 to Length, like in Durbin et al.
         #
         forward_var = {}
-        # f_{0}(0) = 1 
+        # f_{0}(0) = 1
         forward_var[(state_letters[0], -1)] = 1
         # f_{k}(0) = 0, for k > 0
         for k in range(1, len(state_letters)):
@@ -82,7 +82,7 @@ class AbstractDPAlgorithms(object):
 
                 if forward_value is not None:
                     forward_var[(main_state, i)] = forward_value
-                
+
         # -- termination step - calculate the probability of the sequence
         first_state = state_letters[0]
         seq_prob = 0
@@ -118,7 +118,7 @@ class AbstractDPAlgorithms(object):
         """
         # all of the different letters that the state path can be in
         state_letters = self._seq.states.alphabet.letters
-        
+
         # -- initialize the algorithm
         #
         # NOTE: My index numbers are one less than what is given in Durbin
@@ -126,7 +126,7 @@ class AbstractDPAlgorithms(object):
         # (Length - 1) not 1 to Length, like in Durbin et al.
         #
         backward_var = {}
-        
+
         first_letter = state_letters[0]
         # b_{k}(L) = a_{k0} for all k
         for state in state_letters:
@@ -153,7 +153,7 @@ class AbstractDPAlgorithms(object):
         # get sequence probabilities using the forward algorithm
 
         return backward_var
-        
+
 class ScaledDPAlgorithms(AbstractDPAlgorithms):
     """Implement forward and backward algorithms using a rescaling approach.
 
@@ -244,13 +244,13 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # divide by the scaling value
         scale_emission_prob = (float(cur_emission_prob) /
                                float(self._s_values[sequence_pos]))
-        
+
         # loop over all of the possible states at the position
         state_pos_sum = 0
         have_transition = 0
         for second_state in self._mm.transitions_from(cur_state):
             have_transition = 1
-            
+
             # get the previous forward_var values
             # f_{k}(i - 1)
             prev_forward = forward_vars[(second_state, sequence_pos - 1)]
@@ -312,7 +312,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # and return None
         else:
             return None
-            
+
 class LogDPAlgorithms(AbstractDPAlgorithms):
     """Implement forward and backward algorithms using a log approach.
 

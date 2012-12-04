@@ -19,11 +19,10 @@ from Bio.PopGen import GenePop
 class EasyController(object):
     def __init__(self, fname, genepop_dir = None):
         """Initializes the controller.
-        
+
         genepop_dir is the directory where GenePop is.
 
         The binary should be called Genepop (capital G)
-        
         """
         self._fname = fname
         self._controller = GenePopController(genepop_dir)
@@ -93,7 +92,7 @@ class EasyController(object):
     def get_fis(self, pop_pos, locus_name):
         """Returns the Fis for a certain population and locus
 
-           Below CW means Cockerham and Weir and RH means Robertson and Hill. 
+           Below CW means Cockerham and Weir and RH means Robertson and Hill.
 
            Returns a pair:
            dictionary [allele] = (repetition count, frequency, Fis CW )

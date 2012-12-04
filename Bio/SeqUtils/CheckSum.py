@@ -81,10 +81,10 @@ def gcg(seq):
 
 def seguid(seq):
     """Returns the SEGUID (string) for a sequence (string or Seq object).
-    
+
     Given a nucleotide or amino-acid secuence (or any string),
     returns the SEGUID string (A SEquence Globally Unique IDentifier).
-    seq type = str. 
+    seq type = str.
     For more information about SEGUID, see:
     http://bioinformatics.anl.gov/seguid/
     DOI: 10.1002/pmic.200600032 """
@@ -123,5 +123,5 @@ if __name__ == "__main__":
 
     assert 'BpBeDdcNUYNsdk46JoJdw7Pd3BI' == seguid(str_light_chain_one)
     assert 'X5XEaayob1nZLOc7eVT9qyczarY' == seguid(str_light_chain_two)
-    
+
     print "Done"

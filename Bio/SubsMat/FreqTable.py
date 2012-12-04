@@ -21,7 +21,7 @@ FREQ = 2
 # C 0.2202
 # G 0.1369
 # T 0.3452
-# 
+#
 # Functions:
 #   read_count(f): read a count file from stream f. Then convert to
 #   frequencies
@@ -44,10 +44,10 @@ FREQ = 2
 #   >>> ftab = FreqTable.FreqTable(my_count_dictionary,FreqTable.COUNT)
 #   >>> ftab = FreqTable.read_count(open('myDNACountFile'))
 #
-#  
+#
 ##################################################################
 class FreqTable(dict):
-    
+
     def _freq_from_count(self):
         total = float(sum(self.count.values()))
         for i, v in self.count.iteritems():
@@ -85,5 +85,5 @@ def read_freq(f):
     freq_dict = {}
     for line in f:
         key, value = line.strip().split()
-        freq_dict[key] = float(value) 
+        freq_dict[key] = float(value)
     return FreqTable(freq_dict,FREQ)

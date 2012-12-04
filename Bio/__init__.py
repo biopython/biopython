@@ -4,7 +4,7 @@
 # as part of this package.
 """Collection of modules for dealing with biological data in Python.
 
-The Biopython Project is an international association of developers 
+The Biopython Project is an international association of developers
 of freely available Python tools for computational molecular biology.
 
 http://biopython.org
@@ -34,7 +34,7 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
 
 class BiopythonWarning(Warning):
     """Biopython warning.
-    
+
     Biopython should use this warning (or subclasses of it), making it easy to
     silence all our warning messages should you wish to:
 
@@ -48,7 +48,7 @@ class BiopythonWarning(Warning):
 
 class BiopythonParserWarning(BiopythonWarning):
     """Biopython parser warning.
-    
+
     Some in-valid data files cannot be parsed and will trigger an exception.
     Where a reasonable interpretation is possible, Biopython will issue this
     warning to indicate a potential problem. To silence these warnings, use:
@@ -63,7 +63,7 @@ class BiopythonParserWarning(BiopythonWarning):
 
 class BiopythonDeprecationWarning(BiopythonWarning):
     """Biopython deprecation warning.
-    
+
     Biopython uses this warning instead of the built in DeprecationWarning
     since those are ignored by default since Python 2.7.
 

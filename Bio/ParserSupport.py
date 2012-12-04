@@ -74,7 +74,7 @@ class AbstractConsumer(object):
 
     Derive Consumers from this class and implement appropriate
     methods for each event that you want to receive.
-    
+
     """
     def _unhandled_section(self):
         pass
@@ -179,7 +179,7 @@ if xml_support:
 
             Arguments:
             o consumer - The consumer that we'll send Biopython events to.
-            
+
             o interest_tags - A listing of all the tags we are interested in.
 
             o callback_finalizer - A function to deal with the collected
@@ -194,7 +194,7 @@ if xml_support:
             In this case the list of information would be:
 
             ['Spam', 'More Spam']
-            
+
             This list of lines will be passed to the callback finalizer if
             it is present. Otherwise the consumer will be called with the
             list of content information.
@@ -258,7 +258,7 @@ if xml_support:
                 # reset our information and flags
                 self._cur_content = []
                 self._collect_characters = 0
-                
+
                 # if we are at a new tag, pass on the info from the last tag
                 if self._previous_tag and self._previous_tag != name:
                     self._make_callback(self._previous_tag)
@@ -279,7 +279,7 @@ if xml_support:
             # otherwise pass back the entire list of information
             else:
                 info_to_pass = self.info[name]
-            
+
             callback_function(info_to_pass)
 
             # reset the information for the tag
@@ -321,7 +321,7 @@ def read_and_call_while(uhandle, method, **keywds):
     some condition is true.  Returns the number of lines that were read.
 
     See the docstring for read_and_call for a description of the parameters.
-    
+
     """
     nlines = 0
     while 1:
@@ -335,14 +335,14 @@ def read_and_call_while(uhandle, method, **keywds):
     return nlines
 
 def read_and_call_until(uhandle, method, **keywds):
-    """read_and_call_until(uhandle, method, 
+    """read_and_call_until(uhandle, method,
     start=None, end=None, contains=None, blank=None) -> number of lines
 
     Read a line from uhandle and pass it to the method until
     some condition is true.  Returns the number of lines that were read.
 
     See the docstring for read_and_call for a description of the parameters.
-    
+
     """
     nlines = 0
     while 1:
@@ -430,7 +430,7 @@ def safe_peekline(handle):
 
     Peek at the next line in an UndoHandle and return it.  If there are no
     more lines to peek, I will raise a ValueError.
-    
+
     """
     line = handle.peekline()
     if not line:

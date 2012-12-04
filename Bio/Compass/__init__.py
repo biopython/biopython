@@ -146,7 +146,7 @@ def __read_names(record, line):
     """
     Ali1: 60456.blo.gz.aln  Ali2: allscop//14984.blo.gz.aln
           ------query-----        -------hit-------------
-    """        
+    """
     if not "Ali1:" in line:
         raise ValueError("Line does not contain 'Ali1:':\n%s" % line)
     m = __regex["names"].search(line)

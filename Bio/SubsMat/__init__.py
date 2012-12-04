@@ -19,7 +19,7 @@ Matrices are implemented as a dictionary. Each index contains a 2-tuple,
 which are the two residue/nucleotide types replaced. The value differs
 according to the matrix's purpose: e.g in a log-odds frequency matrix, the
 value would be log(Pij/(Pi*Pj)) where:
-Pij: frequency of substitution of letter (residue/nucleotide) i by j 
+Pij: frequency of substitution of letter (residue/nucleotide) i by j
 Pi, Pj: expected frequencies of i and j, respectively.
 
 Usage:
@@ -40,7 +40,7 @@ ARM entries would be:
 ['A','C']: 10,
 ['C','A'] 12
 As order doesn't matter, user can already provide only one entry:
-['A','C']: 22 
+['A','C']: 22
 A SeqMat instance may be initialized with either a full (first
 method of counting: 10, 12) or half (the latter method, 22) matrix. A
 Full protein alphabet matrix would be of the size 20x20 = 400. A Half
@@ -49,11 +49,11 @@ same-letter entries don't change. (The matrix diagonal). Given an
 alphabet size of N:
 Full matrix size:N*N
 Half matrix size: N(N+1)/2
- 
+
 If you provide a full matrix, the constructor will create a half-matrix
 automatically.
 If you provide a half-matrix, make sure of a (low, high) sorted order in
-the keys: there should only be 
+the keys: there should only be
 a ('A','C') not a ('C','A').
 
 Internal functions:
@@ -75,7 +75,7 @@ Generating a substitution frequency matrix (SFM):
 ------------------------------------------------
 Use: SFM = _build_subs_mat(OFM,EFM)
 Accepts an OFM, EFM. Provides the division product of the corresponding
-values. 
+values.
 
 Generating a log-odds matrix (LOM):
 ----------------------------------
@@ -273,10 +273,10 @@ class SeqMat(dict):
                val = full_mat[i,j]
                val *= factor
             if val <= -999:
-               cur_str = '  ND' 
+               cur_str = '  ND'
             else:
                cur_str = format % val
-            
+
             outline = outline+cur_str
          outline = outline+'\n'
          f.write(outline)
@@ -287,7 +287,7 @@ class SeqMat(dict):
       User may pass own alphabet, which should contain all letters in the
       alphabet of the matrix, but may be in a different order. This
       order will be the order of the letters on the axes"""
-      
+
       f = f or sys.stdout
       if not alphabet:
          alphabet = self.ab_list
@@ -304,10 +304,10 @@ class SeqMat(dict):
                val = self[i,j]
             val *= factor
             if val == -999:
-               cur_str = '  ND' 
+               cur_str = '  ND'
             else:
                cur_str = format % val
-            
+
             outline = outline+cur_str
          outline = outline+'\n'
          f.write(outline)
@@ -328,7 +328,7 @@ class SeqMat(dict):
             except KeyError:
                val = self[c1,c2]
             if val == -999:
-               output += '  ND' 
+               output += '  ND'
             else:
                output += "%4d" % val
          output += '\n'
@@ -494,7 +494,7 @@ def read_text_matrix(data_file):
    matrix = {}
    tmp = data_file.read().split("\n")
    table=[]
-   for i in tmp: 
+   for i in tmp:
       table.append(i.split())
    # remove records beginning with ``#''
    for rec in table[:]:
@@ -553,7 +553,7 @@ def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
       if mat_1[key] > EPSILON and mat_2[key] > EPSILON:
          sum_ent_1 += mat_1[key]
          sum_ent_2 += mat_2[key]
-         
+
    for key in key_list:
       if diag == diagNO and key[0] == key[1]:
          continue
@@ -599,7 +599,7 @@ def two_mat_DJS(mat_1,mat_2,pi_1=0.5,pi_2=0.5):
    # print mat_1.entropy, mat_2.entropy
    dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 *mat_2.entropy
    return dJS
-      
+
 """
 This isn't working yet. Boo hoo!
 def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
@@ -627,7 +627,7 @@ def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
    for i in alphabet:
       for j in alphabet[:alphabet.index(i)+1]:
          if i == j:
-            diag_1[i] = mat_1[(i,i)] 
+            diag_1[i] = mat_1[(i,i)]
             diag_2[i] = mat_2[(alphabet[len_alphabet-alphabet.index(i)-1],
                    alphabet[len_alphabet-alphabet.index(i)-1])]
          else:
@@ -641,7 +641,7 @@ def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
             mat_2_key.sort()
             mat_2_key = tuple(mat_2_key)
             # print key ,"||",  mat_2_key
-            print_mat[key] = mat_2[mat_2_key] 
+            print_mat[key] = mat_2[mat_2_key]
             print_mat[(key[1],key[0])] = mat_1[key]
    for i in alphabet:
       outline = i

@@ -127,7 +127,7 @@ class Hmmer3TextParser(object):
                 'version': self._meta.get('version'),
                 'target': self._meta.get('target'),
             }
-            
+
             # get description and accession, if they exist
             desc = '' # placeholder
             while not self.line.startswith('Scores for '):

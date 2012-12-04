@@ -63,12 +63,12 @@ class Hit(object):
 
 
 
-# >GB_PL:ATF18F4 AL021637 Arabidopsis thaliana DNA chromosome 4, BAC clone 
+# >GB_PL:ATF18F4 AL021637 Arabidopsis thaliana DNA chromosome 4, BAC clone
 #           F18F4 (ESSAII project). 2/98
 #             Length = 93,646
-#  
+#
 #   Minus Strand HSPs:
-#  
+#
 #  Score = 226 (33.9 bits), Expect = 0.80, P = 0.55
 #  Identities = 98/142 (69%), Positives = 98/142 (69%), Strand = Minus / Plus
 #    [...lines deleted...]
@@ -104,7 +104,7 @@ class HSPSeq(_SeqLength):
         self.name = name
         self.seq = seq
         self.location = location
-        
+
 
 class HSP(_SeqLength):
     def __init__(self,
@@ -135,7 +135,7 @@ class HSP(_SeqLength):
         identical = info["identical"]
         # bioperl calls this 'conserved'
         positives = info.get("positives", identical)
-        
+
         _SeqLength.__init__(self, len(query_seq), identical,
                             positives, homology_gaps)
 

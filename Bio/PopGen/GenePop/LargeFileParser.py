@@ -51,7 +51,7 @@ def read(handle):
     while line!="":
         line = line.rstrip()
         if line.upper()=="POP":
-            record.stack.append("POP")            
+            record.stack.append("POP")
             break
         record.loci_list.append(line)
         line = handle.readline()
@@ -65,8 +65,8 @@ class Record(object):
     """Holds information from a GenePop record.
 
     Members:
-    marker_len         The marker length (2 or 3 digit code per allele).    
-    
+    marker_len         The marker length (2 or 3 digit code per allele).
+
     comment_line       Comment line.
 
     loci_list          List of loci names.
@@ -83,7 +83,6 @@ class Record(object):
     has three diploid loci. For the second loci, one of the alleles
     is unknown.
 
-    
     """
     def __init__(self, handle):
         self.handle = handle

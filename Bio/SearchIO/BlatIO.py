@@ -13,7 +13,7 @@ Bio.SearchIO.BlastIO was tested using standalone BLAT version 34, psLayout
 version 3. It should be able to parse psLayout version 4 without problems.
 
 More information on BLAT is available from these sites:
-  
+
   - Publication: http://genome.cshlp.org/content/12/4/656
   - User guide: http://genome.ucsc.edu/goldenPath/help/blatSpec.html
   - Source download: http://www.soe.ucsc.edu/~kent/src

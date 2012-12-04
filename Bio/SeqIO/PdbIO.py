@@ -58,7 +58,7 @@ def PdbSeqresIterator(handle):
             # seq_end = int(line[20:24])
             # Ending insertion code of the PDB sequence segment.
             # icode_end = line[24]
-            # Sequence database name. 
+            # Sequence database name.
             database = line[26:32].strip()
             # Sequence database accession code.
             db_acc = line[33:41].strip()
@@ -120,7 +120,7 @@ def PdbAtomIterator(handle):
 
     This function uses the Bio.PDB module to do most of the hard work. The
     annotation information could be improved but this extra parsing should be
-    done in parse_pdb_header, not this module. 
+    done in parse_pdb_header, not this module.
     """
     # Only import PDB when needed, to avoid/delay NumPy dependency in SeqIO
     from Bio.PDB import PDBParser
