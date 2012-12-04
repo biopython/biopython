@@ -582,7 +582,7 @@ class Node(object):
         if self.scop is None:
             return self.children
         else:
-            return map ( self.scop.getNodeBySunid, self.children )
+            return map( self.scop.getNodeBySunid, self.children )
 
     def getParent(self):
         """Return the parent of this Node"""
@@ -729,7 +729,7 @@ class Astral(object):
             self.version = version
             self.path = os.path.join( dir_path, "scopseq-%s" % version)
             astral_file = "astral-scopdom-seqres-all-%s.fa" % self.version
-            astral_file = os.path.join (self.path, astral_file)
+            astral_file = os.path.join(self.path, astral_file)
 
         if astral_file:
             #Build a dictionary of SeqRecord objects in the FASTA file, IN MEMORY

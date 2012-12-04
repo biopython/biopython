@@ -42,7 +42,7 @@ def lcc_mult(seq,wsize):
     term_g = compone[cant_g]
     lccsal.append(-(term_a+term_c+term_t+term_g))
     tail = seq[0]
-    for x in range (tamseq-wsize):
+    for x in range(tamseq-wsize):
         window = upper[x+1:wsize+x+1]
         if tail==window[-1]:
             lccsal.append(lccsal[-1])

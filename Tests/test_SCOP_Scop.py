@@ -121,14 +121,14 @@ class ScopTests(unittest.TestCase):
         self.assertRaises(ValueError, parse_domain, "Totally wrong")
 
     def testConstructFromDirectory(self):
-        scop = Scop (dir_path="SCOP", version="test")
+        scop = Scop(dir_path="SCOP", version="test")
         self.assertTrue(isinstance(scop, Scop))
          
         domain = scop.getDomainBySid("d1hbia_")
         self.assertEqual(domain.sunid, 14996)
          
     def testGetAscendent(self):
-        scop = Scop (dir_path="SCOP", version="test")
+        scop = Scop(dir_path="SCOP", version="test")
         domain = scop.getDomainBySid("d1hbia_")
 
         # get the fold
@@ -150,7 +150,7 @@ class ScopTests(unittest.TestCase):
 
     def test_get_descendents(self):
         """Test getDescendents method"""
-        scop = Scop (dir_path="SCOP", version="test")
+        scop = Scop(dir_path="SCOP", version="test")
         fold = scop.getNodeBySunid(46457)
 
         # get px descendents

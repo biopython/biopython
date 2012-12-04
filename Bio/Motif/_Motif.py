@@ -245,7 +245,7 @@ class Motif(object):
         a generator function, returning found positions of instances of the motif in a given sequence
         """
         if self.instances is None:
-            raise ValueError ("This motif has no instances")
+            raise ValueError("This motif has no instances")
         for pos in xrange(0,len(sequence)-self.length+1):
             for instance in self.instances:
                 if str(instance) == str(sequence[pos:pos+self.length]):
@@ -406,7 +406,7 @@ class Motif(object):
 
         offset should satisfy 0<=offset<=len(self)
         """
-        def dpq (f1,f2,alpha):
+        def dpq(f1,f2,alpha):
             s=0
             for n in alpha.letters:
                 avg=(f1[n]+f2[n])/2

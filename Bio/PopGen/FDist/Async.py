@@ -119,7 +119,7 @@ class SplitFDist(object):
                 out_dat.close()
                 self.async.access_ds.release()
                 for file in os.listdir(self.parts[done]):
-                    os.remove (self.parts[done] + os.sep + file)
+                    os.remove(self.parts[done] + os.sep + file)
                 os.rmdir(self.parts[done])
                 #print fst, out_dat
                 if self.report_fun:

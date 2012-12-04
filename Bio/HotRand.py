@@ -66,7 +66,7 @@ class HotRandom(object):
 
 if( __name__ == '__main__' ):
     hot_random = HotRandom()
-    for j in range ( 0, 130 ):
+    for j in range( 0, 130 ):
         print hot_random.hot_rand( 25 )
     nums = [ '0000', 'abcd', '1234', '5555', '4321', 'aaaa', 'ffff' ]
     for num in nums:
