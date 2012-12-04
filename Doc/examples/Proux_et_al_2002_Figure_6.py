@@ -103,7 +103,7 @@ def get_feature(features, id, tags=["locus_tag", "gene"]):
             #tag may not be present in this feature
             for x in f.qualifiers.get(key, []):
                 if x == id:
-                     return f
+                    return f
     raise KeyError(id)
 
 gd_diagram = GenomeDiagram.Diagram(name)

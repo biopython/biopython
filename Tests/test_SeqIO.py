@@ -309,9 +309,9 @@ def check_simple_write_read(records, indent=" "):
         if format not in possible_unknown_seq_formats \
         and isinstance(records[0].seq, UnknownSeq) \
         and len(records[0].seq) > 100:
-           #Skipping for speed.  Some of the unknown sequences are
-           #rather long, and it seems a bit pointless to record them.
-           continue
+            #Skipping for speed.  Some of the unknown sequences are
+            #rather long, and it seems a bit pointless to record them.
+            continue
         print indent+"Checking can write/read as '%s' format" % format
 
         #Going to write to a handle...

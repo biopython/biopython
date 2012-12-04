@@ -27,7 +27,7 @@ def read(handle, format):
             instance = ""
             for c in line.strip():
                 if c==c.upper():
-                   instance += c
+                    instance += c
             instance = Seq(instance, alphabet)
             instances.append(instance)
         motif = Motif(alphabet, instances=instances)

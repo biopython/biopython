@@ -394,8 +394,8 @@ class SigilsTest(unittest.TestCase):
     def test_all_sigils(self):
         """All sigils."""
         for glyph in ["BOX", "OCTO", "JAGGY", "ARROW", "BIGARROW"]:
-             self.add_track_with_sigils(track_caption = '  sigil="%s"' % glyph,
-                                        sigil=glyph)
+            self.add_track_with_sigils(track_caption = '  sigil="%s"' % glyph,
+                                       sigil=glyph)
         self.finish("GD_sigils")
 
     def test_labels(self):

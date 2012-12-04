@@ -251,8 +251,8 @@ if __name__ == '__main__':
         ids = sys.argv[1:]
     else:
         try:
-             db = sys.argv[1]
-             ids = sys.argv[2:]
+            db = sys.argv[1]
+            ids = sys.argv[2:]
         except:
             help(exit = 1)
 

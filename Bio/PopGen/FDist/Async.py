@@ -159,25 +159,25 @@ class SplitFDist(object):
         self.parts = {}
         self.data_dir = data_dir
         for directory in range(num_parts):
-           full_path = data_dir + os.sep + str(directory)
-           try:
-               os.mkdir(full_path)
-           except OSError:
-               pass #Its ok, if it is already there
-           if "ss_file" in os.listdir(data_dir):
-               shutil.copy(data_dir + os.sep + "ss_file", full_path)
-           id = self.async.run_program('fdist', {
-               'npops'       : npops,
-               'nsamples'    : nsamples,
-               'fst'         : fst,
-               'sample_size' : sample_size,
-               'mut'         : mut,
-               'num_sims'    : self.split_size,
-               'data_dir'    : full_path,
-               'is_dominant' : is_dominant,
-               'theta'       : theta,
-               'beta'        : beta,
-               'max_freq'    : max_freq
-           }, {})
-           self.parts[id] = full_path
+            full_path = data_dir + os.sep + str(directory)
+            try:
+                os.mkdir(full_path)
+            except OSError:
+                pass #Its ok, if it is already there
+            if "ss_file" in os.listdir(data_dir):
+                shutil.copy(data_dir + os.sep + "ss_file", full_path)
+            id = self.async.run_program('fdist', {
+                'npops'       : npops,
+                'nsamples'    : nsamples,
+                'fst'         : fst,
+                'sample_size' : sample_size,
+                'mut'         : mut,
+                'num_sims'    : self.split_size,
+                'data_dir'    : full_path,
+                'is_dominant' : is_dominant,
+                'theta'       : theta,
+                'beta'        : beta,
+                'max_freq'    : max_freq
+            }, {})
+            self.parts[id] = full_path
         thread.start_new_thread(self.monitor, ())

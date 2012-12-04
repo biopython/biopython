@@ -7,9 +7,9 @@
 import unittest
 import sys
 if sys.version_info[0] == 3:
-   maketrans = str.maketrans
+    maketrans = str.maketrans
 else:
-   from string import maketrans
+    from string import maketrans
 
 from Bio.Alphabet import generic_protein, generic_nucleotide, \
                          generic_dna, generic_rna

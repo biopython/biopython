@@ -219,16 +219,16 @@ check_phylip_reject_duplicate()
 
 #Check parsers can cope with an empty file
 for t_format in AlignIO._FormatToIterator:
-     handle = StringIO()
-     alignments = list(AlignIO.parse(handle, t_format))
-     assert len(alignments) == 0
+    handle = StringIO()
+    alignments = list(AlignIO.parse(handle, t_format))
+    assert len(alignments) == 0
 
 #Check writers can cope with no alignments
 for t_format in list(AlignIO._FormatToWriter)+list(SeqIO._FormatToWriter):
-     handle = StringIO()
-     assert 0 == AlignIO.write([], handle, t_format), \
-            "Writing no alignments to %s format should work!" \
-            % t_format
+    handle = StringIO()
+    assert 0 == AlignIO.write([], handle, t_format), \
+           "Writing no alignments to %s format should work!" \
+           % t_format
 
 #Check writers reject non-alignments
 list_of_records = list(AlignIO.read(open("Clustalw/opuntia.aln"),"clustal"))
