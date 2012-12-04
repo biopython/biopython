@@ -14,7 +14,7 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from Bio.SeqRecord import SeqRecord  
+from Bio.SeqRecord import SeqRecord
 from Bio.Nexus import Nexus
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentWriter
@@ -22,7 +22,7 @@ from Bio import Alphabet
 
 #You can get a couple of example files here:
 #http://www.molecularevolution.org/resources/fileformats/
-    
+
 #This is a generator function!
 def NexusIterator(handle, seq_count=None):
     """Returns SeqRecord objects from a Nexus file.
@@ -43,7 +43,7 @@ def NexusIterator(handle, seq_count=None):
     #Bio.Nexus deals with duplicated names by adding a '.copy' suffix.
     #The original names and the modified names are kept in these two lists:
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
-    
+
     if seq_count and seq_count != len(n.unaltered_taxlabels):
         raise ValueError("Found %i sequences, but seq_count=%i" \
                % (len(n.unaltered_taxlabels), seq_count))
@@ -79,7 +79,7 @@ class NexusWriter(AlignmentWriter):
         if first_alignment is None:
             #Nothing to write!
             return 0
-        
+
         #Check there is only one alignment...
         try:
             second_alignment = align_iter.next()
@@ -107,7 +107,7 @@ class NexusWriter(AlignmentWriter):
         for record in alignment:
             n.add_sequence(record.id, str(record.seq))
         n.write_nexus_data(self.handle)
-    
+
     def _classify_alphabet_for_nexus(self, alphabet):
         """Returns 'protein', 'dna', 'rna' based on the alphabet (PRIVATE).
 
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     print "Done"
     print
     print "Writing..."
-    
+
     handle = StringIO()
     NexusWriter(handle).write_file([a])
     handle.seek(0)

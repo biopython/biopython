@@ -34,7 +34,7 @@ class Record(object):
     Members:
     entry       The entry identifier.
     name        A list of the compund names.
-    formula     The chemical formula for the compound 
+    formula     The chemical formula for the compound
     mass        The molecular weight for the compound
     pathway     A list of 3-tuples: (database, id, pathway)
     enzyme      A list of 2-tuples: (enzyme id, role)
@@ -83,7 +83,7 @@ class Record(object):
     def _mass(self):
         return _write_kegg("MASS",
                            [self.mass])
-    
+
     def _pathway(self):
         s = []
         for entry in self.pathway:
@@ -192,7 +192,7 @@ def parse(handle):
 
 def _test():
     """Run the Bio.KEGG.Compound module's doctests.
-    
+
     This will try and locate the unit tests directory, and run the doctests
     from there in order that the relative paths used in the examples work.
     """

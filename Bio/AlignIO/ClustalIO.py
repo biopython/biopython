@@ -23,7 +23,7 @@ class ClustalWriter(SequentialAlignmentWriter):
         if len(alignment) == 0:
             raise ValueError("Must have at least one sequence")
         if alignment.get_alignment_length() == 0:
-            #This doubles as a check for an alignment object    
+            #This doubles as a check for an alignment object
             raise ValueError("Non-empty sequences are required")
 
         #Old versions of the parser in Bio.Clustalw used a ._version property,
@@ -39,7 +39,7 @@ class ClustalWriter(SequentialAlignmentWriter):
         else:
             #e.g. 1.81 or 1.83
             output = "CLUSTAL X (%s) multiple sequence alignment\n\n\n" % version
-        
+
         cur_char = 0
         max_length = len(alignment[0])
 
@@ -88,7 +88,7 @@ class ClustalIterator(AlignmentIterator):
             #the previous alignment.
             line = self._header
             del self._header
-        except AttributeError:      
+        except AttributeError:
             line = handle.readline()
         if not line:
             raise StopIteration
@@ -199,7 +199,7 @@ class ClustalIterator(AlignmentIterator):
             for i in range(len(ids)):
                 assert line[0] != " ", "Unexpected line:\n%s" % repr(line)
                 fields = line.rstrip().split()
-                
+
                 #We expect there to be two fields, there can be an optional
                 #"sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
@@ -241,7 +241,6 @@ class ClustalIterator(AlignmentIterator):
                 assert not line[seq_cols.stop:].strip()
                 #Read in the next line
                 line = handle.readline()
-            
 
         assert len(ids) == len(seqs)
         if len(seqs) == 0 or len(seqs[0]) == 0:
@@ -253,7 +252,7 @@ class ClustalIterator(AlignmentIterator):
                              % (len(ids), self.records_per_alignment))
 
         records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i) \
-                   for (i,s) in zip(ids, seqs)) 
+                   for (i,s) in zip(ids, seqs))
         alignment = MultipleSeqAlignment(records, self.alphabet)
         #TODO - Handle alignment annotation better, for now
         #mimic the old parser in Bio.Clustalw
@@ -266,7 +265,7 @@ class ClustalIterator(AlignmentIterator):
                    % (alignment_length, len(consensus), consensus)
             alignment._star_info = consensus
         return alignment
-    
+
 if __name__ == "__main__":
     print "Running a quick self-test"
 
@@ -295,8 +294,7 @@ gi|671626|emb|CAA85685.1|           -EKDQCICYVAYPLDLFEEGSVTNMFTSIVGNVFGFKALRALRL
 gi|4959044|gb|AAD34209.1|AF069      VPTTRAQRRA 210
 gi|671626|emb|CAA85685.1|           VAYVKTFQGP 151
                                     *. .:: : .
-                                     
-"""                 
+"""
 
     #This example is a truncated version of the dataset used here:
     #http://virgil.ruc.dk/kurser/Sekvens/Treedraw.htm

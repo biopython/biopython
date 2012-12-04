@@ -166,7 +166,7 @@ def _get_children_as(parent, tag, construct):
 
     Returns an empty list if no matching child is found.
     """
-    return [construct(child) for child in 
+    return [construct(child) for child in
             parent.findall(_ns(tag))]
 
 def _get_children_text(parent, tag, construct=unicode):
@@ -174,7 +174,7 @@ def _get_children_text(parent, tag, construct=unicode):
 
     Returns an empty list if no matching child is found.
     """
-    return [construct(child.text) for child in 
+    return [construct(child.text) for child in
             parent.findall(_ns(tag))
             if child.text]
 
@@ -430,7 +430,7 @@ class Parser(object):
                     setattr(sequence, tag, getattr(self, tag)(elem))
                 elif tag == 'annotation':
                     sequence.annotations.append(self.annotation(elem))
-                elif tag == 'name': 
+                elif tag == 'name':
                     sequence.name = _collapse_wspace(elem.text)
                 elif tag in ('symbol', 'location'):
                     setattr(sequence, tag, elem.text)

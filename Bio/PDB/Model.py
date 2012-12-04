@@ -1,7 +1,7 @@
 # Copyright (C) 2002, Thomas Hamelryck (thamelry@binf.ku.dk)
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
-# as part of this package.  
+# as part of this package.
 
 """Model class, used in Structure objects."""
 
@@ -11,9 +11,9 @@ from Bio.PDB.Entity import Entity
 class Model(Entity):
     """
     The object representing a model in a structure. In a structure
-    derived from an X-ray crystallography experiment, only a single 
-    model will be present (with some exceptions). NMR structures 
-    normally contain many different models. 
+    derived from an X-ray crystallography experiment, only a single
+    model will be present (with some exceptions). NMR structures
+    normally contain many different models.
     """
 
     def __init__(self, id, serial_num = None):

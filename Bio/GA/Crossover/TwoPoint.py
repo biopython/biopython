@@ -23,7 +23,7 @@ class TwoPointCrossover(TwoCrossover):
 
     This performs a crossover between two genomes at some defined frequency.
     The location of the points of crossover are chosen randomly if the
-    crossover meets the probability to occur.  
+    crossover meets the probability to occur.
     """
     def __init__(self, crossover_prob = .1):
         """Initialize to do crossovers at the specified probability.

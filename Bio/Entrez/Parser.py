@@ -23,7 +23,7 @@ be used directly.
 # preserved on the Python side. So a subelement of a subelement of an element
 # is a value in a dictionary that is stored in a list which is a value in
 # some other dictionary (or a value in a list which itself belongs to a list
-# which is a value in a dictionary, and so on). Attributes encountered in 
+# which is a value in a dictionary, and so on). Attributes encountered in
 # the XML are stored as a dictionary in a member .attributes of each element,
 # and the tag name is saved in a member .tag.
 #
@@ -219,7 +219,7 @@ class DataHandler(object):
                 return
 
             try:
-                self.parser.Parse(text, False)        
+                self.parser.Parse(text, False)
             except expat.ExpatError, e:
                 if self.parser.StartElementHandler:
                     # We saw the initial <!xml declaration, so we can be sure

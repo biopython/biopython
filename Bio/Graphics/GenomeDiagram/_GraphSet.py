@@ -101,7 +101,7 @@ class GraphSet(object):
             o altcolor  colors.Color describing the color to draw 'low' (some
                         styles) data (overridden by backwards compatible argument
                         with UK spelling, colour).
-            
+
             o linewidth     Float describing linewidth for graph
 
             o center        Float setting the value at which the x-axis
@@ -235,7 +235,7 @@ class GraphSet(object):
 
 if __name__ == '__main__':
 
-    # Test code    
+    # Test code
     gdgs = GraphSet(0, 'test data')
 
     testdata1 = [(1, 10), (5, 15), (10, 20), (20, 40)]

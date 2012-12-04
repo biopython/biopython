@@ -11,14 +11,14 @@ static PyObject *MMCIFlex_open_file(PyObject *self, PyObject *args)
 	if (!PyArg_ParseTuple(args, "s", &filename))
 		return NULL;
 
-	fp=fopen(filename, "r");	
+	fp=fopen(filename, "r");
 
 	mmcif_set_file(fp);
 
 	Py_INCREF(Py_None);
 
 	return Py_None;
-}	
+}
 
 
 static PyObject *MMCIFlex_close_file(PyObject *self, PyObject *args)
@@ -32,7 +32,7 @@ static PyObject *MMCIFlex_close_file(PyObject *self, PyObject *args)
 	Py_INCREF(Py_None);
 
 	return Py_None;
-}	
+}
 
 
 static PyObject *MMCIFlex_get_token(PyObject *self, PyObject *args)
@@ -47,7 +47,7 @@ static PyObject *MMCIFlex_get_token(PyObject *self, PyObject *args)
 	if(flag)
 	{
 		value=mmcif_get_string();
-	}	
+	}
 
 	/* return the (tokennumber, string) tuple */
 	return Py_BuildValue("(is)", flag, value);

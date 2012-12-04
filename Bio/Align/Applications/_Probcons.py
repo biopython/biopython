@@ -44,12 +44,12 @@ class ProbconsCommandline(AbstractCommandline):
         from StringIO import StringIO
         from Bio import AlignIO
         align = AlignIO.read(StringIO(stdout), "clustalw")
-    
+
     Citations:
 
     Do, C.B., Mahabhashyam, M.S.P., Brudno, M., and Batzoglou, S. 2005.
     PROBCONS: Probabilistic Consistency-based Multiple Sequence Alignment.
-    Genome Research 15: 330-340. 
+    Genome Research 15: 330-340.
 
     Last checked agains version: 1.12
     """

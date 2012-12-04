@@ -348,7 +348,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             # notes in the SequentialPhylipIterator docstring
             handle.write(sequence)
             handle.write("\n")
-        
+
 
 class SequentialPhylipIterator(PhylipIterator):
     """
@@ -426,7 +426,7 @@ class SequentialPhylipIterator(PhylipIterator):
                              id=i, name=i, description=i) \
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
-        
+
 
 if __name__=="__main__":
     print "Running short mini-test"

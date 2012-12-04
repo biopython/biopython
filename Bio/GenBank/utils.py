@@ -4,17 +4,17 @@ class FeatureValueCleaner(object):
     """Provide specialized capabilities for cleaning up values in features.
 
     This class is designed to provide a mechanism to clean up and process
-    values in the key/value pairs of GenBank features. This is useful 
+    values in the key/value pairs of GenBank features. This is useful
     because in cases like:
-        
+
          /translation="MED
          YDPWNLRFQSKYKSRDA"
 
     you'll end up with a value with \012s and spaces in it like:
         "MED\012 YDPWEL..."
 
-    which you probably don't want. 
-    
+    which you probably don't want.
+
     This cleaning needs to be done on a case by case basis since it is
     impossible to interpret whether you should be concatenating everything
     (as in translations), or combining things with spaces (as might be
@@ -37,7 +37,7 @@ class FeatureValueCleaner(object):
                 cleaner = getattr(self, "_clean_%s" % key_name)
                 value = cleaner(value)
             except AttributeError:
-                raise AssertionError("No function to clean key: %s" 
+                raise AssertionError("No function to clean key: %s"
                                      % key_name)
         return value
 

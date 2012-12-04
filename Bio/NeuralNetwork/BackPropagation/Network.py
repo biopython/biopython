@@ -70,7 +70,7 @@ class BasicNetwork(object):
                 # calculate the error via back propogation
                 self._input.backpropagate(example.outputs,
                                           learning_rate, momentum)
-            
+
                 # get the errors in our predictions
                 for node in range(len(example.outputs)):
                     training_error += \

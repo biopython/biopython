@@ -12,16 +12,16 @@ from Bio.Motif import Motif
 
 def read(handle):
     """Parses the text output of the MEME program into MEME.Record object.
-    
+
     Example:
-    
+
     >>> f = open("meme.output.txt")
     >>> from Bio.Motif import MEME
     >>> record = MEME.read(f)
     >>> for motif in record.motifs:
     ...     for instance in motif.instances:
     ...         print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
-    
+
     """
     record = MEMERecord()
     __read_version(record, handle)
@@ -60,10 +60,10 @@ def read(handle):
 
 class MEMEMotif(Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
-    
-    This subclass defines functions and data specific to MEME motifs. 
+
+    This subclass defines functions and data specific to MEME motifs.
     This includes the evalue for a motif and the PSSM of the motif.
-    
+
     Methods:
     add_instance_from_values (name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = +): create a new instance of the motif with the specified values.
        (DEPRECATION PENDING)
@@ -71,7 +71,7 @@ class MEMEMotif(Motif):
     def __init__(self, alphabet=None, instances=None):
         Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
-    
+
     def _numoccurrences(self, number):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
@@ -104,7 +104,7 @@ class MEMEMotif(Motif):
         if self.name:
             inst._motifname(self.name)
         self.add_instance(inst)
-    
+
     def _evalue(self, evalue):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
@@ -114,10 +114,10 @@ class MEMEMotif(Motif):
         else:
             evalue = float(evalue)
             self.evalue = evalue
-    
+
 
 class MEMEInstance(Seq.Seq):
-    """A class describing the instances of a MEME motif, and the data thereof. 
+    """A class describing the instances of a MEME motif, and the data thereof.
     """
     def __init__(self,*args,**kwds):
         Seq.Seq.__init__(self,*args,**kwds)
@@ -127,60 +127,58 @@ class MEMEInstance(Seq.Seq):
         self.strand = 0
         self.length = 0
         self.motif_name = ""
-        
-    
+
     def _seqname(self, name):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         self.sequence_name = name
-        
+
     def _motifname(self, name):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         self.motif_name = name
-    
+
     def _start(self,start):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         start = int(start)
         self.start = start
-    
+
     def _pvalue(self,pval):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         pval = float(pval)
         self.pvalue = pval
-    
+
     def _score(self, score):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         score = float(score)
         self.score = score
-    
+
     def _strand(self, strand):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         self.strand = strand
-    
+
     def _length(self, length):
         import warnings
         warnings.warn("This function is now obsolete, and will be deprecated and removed "
                       "in a future release of Biopython.", PendingDeprecationWarning)
         self.length = length
-    
+
 
 class MEMERecord(object):
     """A class for holding the results of a MEME run.
-    
+
     A MEMERecord is an object that holds the results from running
     MEME. It implements no methods of its own.
-        
     """
     def __init__(self):
         """__init__ (self)"""
@@ -190,7 +188,7 @@ class MEMERecord(object):
         self.command = ""
         self.alphabet = None
         self.sequences = []
-        
+
     def get_motif_by_name(self, name):
         for m in self.motifs:
             if m.name == name:

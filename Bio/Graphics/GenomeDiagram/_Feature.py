@@ -73,7 +73,7 @@ class Feature(object):
         o arrowshaft_height  Float denoting length of the representative arrow
                              shaft to be drawn, relative to the bounding box height.
                              The arrow head takes the full height of the bound box.
-         
+
         o name_qualifiers   List of Strings, describes the qualifiers that may
                     contain feature names in the wrapped Bio.SeqFeature object
 
@@ -127,10 +127,10 @@ class Feature(object):
             color = colour
 
         self._colortranslator = ColorTranslator()
-        
+
         # Initialise attributes
         self.parent = parent
-        self.id = feature_id        
+        self.id = feature_id
         self.color = color            # default color to draw the feature
         self.border = border
         self._feature = None            # Bio.SeqFeature object to wrap
@@ -145,7 +145,7 @@ class Feature(object):
         self.label_color = colors.black
         self.label_angle = 45
         self.label_position = 'start'
-        
+
         if feature is not None:
             self.set_feature(feature)
 
@@ -181,7 +181,7 @@ class Feature(object):
                 end = subfeature.location.nofuzzy_end
                 #if start > end and self.strand == -1:
                 #    start, end = end, start
-                self.locations.append((start, end))                
+                self.locations.append((start, end))
                 bounds += [start, end]
         self.type = str(self._feature.type)                     # Feature type
         #TODO - Strand can vary with subfeatures (e.g. mixed strand tRNA)
@@ -195,11 +195,11 @@ class Feature(object):
             self.color = self._colortranslator.artemis_color( \
                                          self._feature.qualifiers['color'][0])
         self.name = self.type
-        for qualifier in self.name_qualifiers:            
+        for qualifier in self.name_qualifiers:
             if qualifier in self._feature.qualifiers:
                 self.name = self._feature.qualifiers[qualifier][0]
                 break
-        #Note will be 0 to N for origin wrapping feature on genome of length N 
+        #Note will be 0 to N for origin wrapping feature on genome of length N
         self.start, self.end = min(bounds), max(bounds)
 
 
@@ -221,7 +221,7 @@ class Feature(object):
             o color    The color to draw the feature - either a colors.Color
                        object, an RGB tuple of floats, or an integer
                        corresponding to colors in colors.txt
-                           
+
             Set the color in which the feature will be drawn
         """
         #TODO - Make this into the set method for a color property?
@@ -237,7 +237,6 @@ class Feature(object):
         return getattr(self._feature, name) # try to get the attribute from the feature
 
 
-    
 ################################################################################
 # RUN AS SCRIPT
 ################################################################################

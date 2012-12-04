@@ -27,7 +27,7 @@
 
     o intermediate_points - Method that returns a list of values intermediate
                             between the points in a passed dataset
-    
+
     For drawing capabilities, this module uses reportlab to draw and write
     the diagram:
 
@@ -108,14 +108,14 @@ def draw_box(point1, point2,
 
         o point1, point2 Co-ordinates for opposite corners of the box
                          (x,y tuples)
-        
+
         o color /colour       The color for the box
                               (colour takes priority over color)
-                              
+
         o border              Border color for the box
 
         Returns a closed path object, beginning at (x1,y1) going round
-        the four points in order, and filling with the passed color.            
+        the four points in order, and filling with the passed color.
     """
     x1, y1 = point1
     x2, y2 = point2
@@ -172,11 +172,11 @@ def draw_polygon(list_of_points,
               colour=colors.lightgreen)
 
         o list_of_point = list of (x,y) tuples for the corner coordinates
-        
+
         o colour              The colour for the box
 
         Returns a closed path object, beginning at (x1,y1) going round
-        the four points in order, and filling with the passed colour.          
+        the four points in order, and filling with the passed colour.
     """
     #Let the UK spelling (colour) override the USA spelling (color)
     if colour is not None:
@@ -208,7 +208,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     """
     x1, y1 = point1
     x2, y2 = point2
-    
+
     if shaft_height_ratio < 0 or 1 < shaft_height_ratio:
         raise ValueError("Arrow shaft height ratio should be in range 0 to 1")
     if head_length_ratio < 0:
@@ -365,7 +365,7 @@ class AbstractDrawer(object):
         o end           Int, base to stop drawing at
 
         o length        Size of sequence to be drawn
-        
+
         o cross_track_links List of tuples each with four entries (track A,
                             feature A, track B, feature B) to be linked.
     """
@@ -411,7 +411,7 @@ class AbstractDrawer(object):
             o end       Int, the position to stop drawing the diagram at
 
             o tracklines    Boolean flag to show (or not) lines delineating tracks
-                            on the diagram            
+                            on the diagram
 
             o cross_track_links List of tuples each with four entries (track A,
                                 feature A, track B, feature B) to be linked.
@@ -427,7 +427,7 @@ class AbstractDrawer(object):
             cross_track_links = []
         else:
             self.cross_track_links = cross_track_links
-        
+
     def _set_xcentre(self, value):
         import warnings
         import Bio
@@ -498,7 +498,7 @@ class AbstractDrawer(object):
         xmargin_r = xr or x
         ymargin_top = yt or y
         ymargin_btm = yb or y
-        
+
         # Set page limits, center and height/width
         self.x0, self.y0 = self.pagesize[0]*xmargin_l, self.pagesize[1]*ymargin_btm
         self.xlim, self.ylim = self.pagesize[0]*(1-xmargin_r), self.pagesize[1]*(1-ymargin_top)
@@ -506,7 +506,6 @@ class AbstractDrawer(object):
         self.pageheight = self.ylim-self.y0
         self.xcenter, self.ycenter = self.x0+self.pagewidth/2., self.y0+self.pageheight/2.
 
-            
     def set_bounds(self, start, end):
         """ set_bounds(self, start, end)
 
@@ -521,11 +520,11 @@ class AbstractDrawer(object):
         if start is not None and end is not None and start > end:
             start, end = end, start
 
-        if start is None or start < 0:  # Check validity of passed args and 
+        if start is None or start < 0:  # Check validity of passed args and
             start = 0   # default to 0
         if end is None or end < 0:
             end = high + 1  # default to track range top limit
-        
+
         self.start, self.end = int(start), int(end)
         self.length = self.end - self.start + 1
 
@@ -548,8 +547,8 @@ class AbstractDrawer(object):
             Returns the length of the region to be drawn
         """
         return self.length
-        
-    def _current_track_start_end(self):        
+
+    def _current_track_start_end(self):
         track = self._parent[self.current_track_level]
         if track.start is None:
             start = self.start

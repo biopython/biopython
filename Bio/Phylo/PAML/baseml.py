@@ -20,11 +20,11 @@ class Baseml(Paml):
 
     def __init__(self, alignment = None, tree = None, working_dir = None,
                 out_file = None):
-        """Initialize the Baseml instance. 
-        
+        """Initialize the Baseml instance.
+
         The user may optionally pass in strings specifying the locations
         of the input alignment and tree files, the working directory and
-        the final output file. 
+        the final output file.
         """
         Paml.__init__(self, alignment, working_dir, out_file)
         if tree is not None:
@@ -61,7 +61,7 @@ class Baseml(Paml):
     def write_ctl_file(self):
         """Dynamically build a BASEML control file from the options.
 
-        The control file is written to the location specified by the 
+        The control file is written to the location specified by the
         ctl_file property of the baseml class.
         """
         # Make sure all paths are relative to the working directory
@@ -153,7 +153,7 @@ class Baseml(Paml):
         """Convert all file/directory locations to paths relative to the current working directory.
 
         BASEML requires that all paths specified in the control file be
-        relative to the directory from which it is called rather than 
+        relative to the directory from which it is called rather than
         absolute paths.
         """
         Paml._set_rel_paths(self)
@@ -162,12 +162,12 @@ class Baseml(Paml):
 
     def run(self, ctl_file = None, verbose = False, command = "baseml",
                 parse = True):
-        """Run baseml using the current configuration and then parse the results. 
+        """Run baseml using the current configuration and then parse the results.
 
         Return a process signal so the user can determine if
         the execution was successful (return code 0 is successful, -N
-        indicates a failure). The arguments may be passed as either 
-        absolute or relative paths, despite the fact that BASEML 
+        indicates a failure). The arguments may be passed as either
+        absolute or relative paths, despite the fact that BASEML
         requires relative paths.
         """
         if self.tree is None:

@@ -130,7 +130,7 @@ class MotifFinder(object):
             motif_diffs[cur_key] = 0 - second_motifs[cur_key]
 
         return PatternRepository(motif_diffs)
-                
+
     def _add_motif(self, motif_dict, motif_to_add):
         """Add a motif to the given dictionary.
         """
@@ -142,7 +142,7 @@ class MotifFinder(object):
             motif_dict[motif_to_add] = 1
 
         return motif_dict
-    
+
 class MotifCoder(object):
     """Convert motifs and a sequence into neural network representations.
 
@@ -184,7 +184,7 @@ class MotifCoder(object):
         seq_motifs = {}
         for motif in self._motifs:
             seq_motifs[motif] = 0
-        
+
         # count all of the motifs we are looking for in the sequence
         for start in range(len(sequence) - (self._motif_size - 1)):
             motif = str(sequence[start:start + self._motif_size])
@@ -197,7 +197,7 @@ class MotifCoder(object):
         max_count = max(seq_motifs.values())
 
         # as long as we have some motifs present, normalize them
-        # otherwise we'll just return 0 for everything 
+        # otherwise we'll just return 0 for everything
         if max_count > 0:
             for motif in seq_motifs.keys():
                 seq_motifs[motif] = (float(seq_motifs[motif] - min_count)

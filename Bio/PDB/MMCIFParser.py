@@ -72,7 +72,7 @@ class MMCIFParser(object):
         # Historically, Biopython PDB parser uses model_id to mean array index
         # so serial_id means the Model ID specified in the file
         current_model_id = 0
-        current_serial_id = 0 
+        current_serial_id = 0
         for i in xrange(0, len(atom_id_list)):
             x=x_list[i]
             y=y_list[i]
@@ -107,17 +107,17 @@ class MMCIFParser(object):
                 structure_builder.init_chain(current_chain_id)
                 current_residue_id=resseq
                 icode, int_resseq=self._get_icode(resseq)
-                structure_builder.init_residue(resname, hetatm_flag, int_resseq, 
+                structure_builder.init_residue(resname, hetatm_flag, int_resseq,
                     icode)
             elif current_residue_id!=resseq:
                 current_residue_id=resseq
                 icode, int_resseq=self._get_icode(resseq)
-                structure_builder.init_residue(resname, hetatm_flag, int_resseq, 
+                structure_builder.init_residue(resname, hetatm_flag, int_resseq,
                     icode)
-            coord=numpy.array((x, y, z), 'f')  
+            coord=numpy.array((x, y, z), 'f')
             element = element_list[i] if element_list else None
             structure_builder.init_atom(name, coord, tempfactor, occupancy, altloc,
-                name, element=element)   
+                name, element=element)
             if aniso_flag==1:
                 u=(aniso_u11[i], aniso_u12[i], aniso_u13[i],
                     aniso_u22[i], aniso_u23[i], aniso_u33[i])
@@ -141,7 +141,7 @@ class MMCIFParser(object):
         except:
             pass    # no cell found, so just ignore
 
-    def _get_icode(self, resseq):           
+    def _get_icode(self, resseq):
         """Tries to return the icode. In MMCIF files this is just part of
         resseq! In PDB files, it's a separate field."""
         last_resseq_char=resseq[-1]
@@ -151,7 +151,7 @@ class MMCIFParser(object):
         else:
             icode=" "
             int_resseq=int(resseq)
-        return icode, int_resseq    
+        return icode, int_resseq
 
 
 if __name__=="__main__":

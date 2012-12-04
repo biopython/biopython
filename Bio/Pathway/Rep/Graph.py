@@ -36,7 +36,7 @@ class Graph(object):
             values = [(x,self._edge_map[(key,x)]) \
                       for x in self._adjacency_list[key].list()]
             values.sort()
-            s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")" 
+            s = s + "(" + repr(key) + ": " + ",".join(map(repr, values)) + ")"
         return s + ">"
 
     def __str__(self):
@@ -132,7 +132,7 @@ class Graph(object):
         for edge in self._edge_map.keys():
             if edge[0] is node or edge[1] is node:
                 del self._edge_map[edge]
-        
+
     def remove_edge(self, parent, child, label):
         """Removes edge. -- NOT IMPLEMENTED"""
         # hm , this is a multigraph - how should this be implemented?

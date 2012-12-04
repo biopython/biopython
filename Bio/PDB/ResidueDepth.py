@@ -9,7 +9,7 @@ This module uses Michel Sanner's MSMS program for the surface calculation
 (specifically commands msms and pdb_to_xyzr). See:
 http://mgltools.scripps.edu/packages/MSMS
 
-Residue depth is the average distance of the atoms of a residue from 
+Residue depth is the average distance of the atoms of a residue from
 the solvent accessible surface.
 
 Residue Depth:
@@ -23,8 +23,8 @@ Direct MSMS interface:
 
         >>> surface = get_surface("1FAT.pdb")
 
-    Surface is a Numeric array with all the surface 
-    vertices.  
+    Surface is a Numeric array with all the surface
+    vertices.
 
     Distance to surface:
 
@@ -67,7 +67,7 @@ def _read_vertex_array(filename):
 
 def get_surface(pdb_file, PDB_TO_XYZR="pdb_to_xyzr", MSMS="msms"):
     """
-    Return a Numeric array that represents 
+    Return a Numeric array that represents
     the vertex list of the molecular surface.
 
     PDB_TO_XYZR --- pdb_to_xyzr executable (arg. to os.system)

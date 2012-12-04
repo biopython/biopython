@@ -50,26 +50,26 @@ _local_reserved_names = ["set_parameter"]
 
 class ApplicationError(_ProcessCalledError):
     """Raised when an application returns a non-zero exit status.
-    
+
     The exit status will be stored in the returncode attribute, similarly
     the command line string used in the cmd attribute, and (if captured)
     stdout and stderr as strings.
-    
+
     This exception is a subclass of subprocess.CalledProcessError.
-    
+
     >>> err = ApplicationError(-11, "helloworld", "", "Some error text")
     >>> err.returncode, err.cmd, err.stdout, err.stderr
     (-11, 'helloworld', '', 'Some error text')
     >>> print err
     Command 'helloworld' returned non-zero exit status -11, 'Some error text'
-    
+
     """
     def __init__(self, returncode, cmd, stdout="", stderr=""):
         self.returncode = returncode
         self.cmd = cmd
         self.stdout = stdout
         self.stderr = stderr
-    
+
     def __str__(self):
         #get first line of any stderr message
         try:
@@ -82,7 +82,7 @@ class ApplicationError(_ProcessCalledError):
         else:
             return "Command '%s' returned non-zero exit status %d" \
                    % (self.cmd, self.returncode)
-    
+
     def __repr__(self):
         return "ApplicationError(%i, %s, %s, %s)" \
                % (self.returncode, self.cmd, self.stdout, self.stderr)
@@ -150,19 +150,19 @@ class AbstractCommandline(object):
     def __init__(self, cmd, **kwargs):
         """Create a new instance of a command line wrapper object."""
         # Init method - should be subclassed!
-        # 
+        #
         # The subclass methods should look like this:
-        # 
+        #
         # def __init__(self, cmd="muscle", **kwargs):
         #     self.parameters = [...]
         #     AbstractCommandline.__init__(self, cmd, **kwargs)
-        # 
+        #
         # i.e. There should have an optional argument "cmd" to set the location
         # of the executable (with a sensible default which should work if the
         # command is on the path on Unix), and keyword arguments.  It should
         # then define a list of parameters, all objects derived from the base
         # class _AbstractParameter.
-        # 
+        #
         # The keyword arguments should be any valid parameter name, and will
         # be used to set the associated parameter.
         self.program_name = cmd
@@ -211,7 +211,7 @@ class AbstractCommandline(object):
             setattr(self.__class__, name, prop) #magic!
         for key, value in kwargs.iteritems():
             self.set_parameter(key, value)
-    
+
     def _validate(self):
         """Make sure the required parameters have been set (PRIVATE).
 
@@ -294,7 +294,7 @@ class AbstractCommandline(object):
                 cleared_option = True
         if not cleared_option:
             raise ValueError("Option name %s was not found." % name)
-        
+
     def set_parameter(self, name, value = None):
         """Set a commandline option for a program.
         """
@@ -343,7 +343,7 @@ class AbstractCommandline(object):
         will silently accept invalid parameters, leading to known instances
         of the user assuming that parameters for the application are set,
         when they are not.
-        
+
         >>> from Bio.Emboss.Applications import WaterCommandline
         >>> cline = WaterCommandline(gapopen=10, gapextend=0.5, stdout=True)
         >>> cline.asequence = "a.fasta"
@@ -364,15 +364,15 @@ class AbstractCommandline(object):
             self.__dict__[name] = value
         else:
             self.set_parameter(name, value)  # treat as a parameter
-    
+
     def __call__(self, stdin=None, stdout=True, stderr=True,
                  cwd=None, env=None):
         """Executes the command, waits for it to finish, and returns output.
-        
+
         Runs the command line tool and waits for it to finish. If it returns
         a non-zero error level, an exception is raised. Otherwise two strings
         are returned containing stdout and stderr.
-        
+
         The optional stdin argument should be a string of data which will be
         passed to the tool as standard input.
 
@@ -402,7 +402,7 @@ class AbstractCommandline(object):
         This functionality is similar to subprocess.check_output() added in
         Python 2.7. In general if you require more control over running the
         command, use subprocess directly.
-        
+
         As of Biopython 1.56, when the program called returns a non-zero error
         level, a custom ApplicationError exception is raised. This includes
         any stdout and stderr strings captured as attributes of the exception
@@ -585,7 +585,7 @@ def _escape_filename(filename):
     """Escape filenames with spaces by adding quotes (PRIVATE).
 
     Note this will not add quotes if they are already included:
-    
+
     >>> print _escape_filename('example with spaces')
     "example with spaces"
     >>> print _escape_filename('"example with spaces"')

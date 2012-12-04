@@ -9,7 +9,7 @@ This module provides code to work with data from the KEGG database.
 References:
 
 Kanehisa, M. and Goto, S.; KEGG: Kyoto Encyclopedia of Genes and Genomes.
-Nucleic Acids Res. 28, 29-34 (2000). 
+Nucleic Acids Res. 28, 29-34 (2000).
 
 URL: http://www.genome.ad.jp/kegg/
 """
@@ -24,7 +24,7 @@ def _wrap_kegg(line, max_width = KEGG_DATA_LENGTH, wrap_rule = _default_wrap):
     """Wraps the input line  for KEGG output.
 
     Arguments:
-    
+
     o info - String holding the information we want wrapped
     for KEGG output.
     o max_width - Maximum width of a line.
@@ -65,9 +65,9 @@ def _wrap_kegg(line, max_width = KEGG_DATA_LENGTH, wrap_rule = _default_wrap):
 
 def _write_kegg(item, info, indent = KEGG_ITEM_LENGTH):
     """Write a indented KEGG record item.
-    
+
     Arguments:
-    
+
     o item - The name of the item to be written.
     o info - The (wrapped) information to write.
     o indent - Width of item field.

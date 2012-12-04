@@ -39,7 +39,7 @@ class AmbiguousRepair(object):
         """Perform a repair to remove excess ambiguous genes.
         """
         new_org = organism.copy()
-        
+
         # start getting rid of ambiguous items
         while 1:
             # first find all of the ambigous items

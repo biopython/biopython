@@ -17,10 +17,10 @@ class NeighborSearch(object):
     """
     This class can be used for two related purposes:
 
-    1. To find all atoms/residues/chains/models/structures within radius 
-    of a given query position. 
+    1. To find all atoms/residues/chains/models/structures within radius
+    of a given query position.
 
-    2. To find all atoms/residues/chains/models/structures that are within 
+    2. To find all atoms/residues/chains/models/structures that are within
     a fixed radius of each other.
 
     NeighborSearch makes use of the Bio.KDTree C++ module, so it's fast.
@@ -29,7 +29,7 @@ class NeighborSearch(object):
         """
         o atom_list - list of atoms. This list is used in the queries.
         It can contain atoms from different structures.
-        o bucket_size - bucket size of KD tree. You can play around 
+        o bucket_size - bucket size of KD tree. You can play around
         with this to optimize speed if you feel like it.
         """
         self.atom_list=atom_list
@@ -45,7 +45,7 @@ class NeighborSearch(object):
     # Private
 
     def _get_unique_parent_pairs(self, pair_list):
-        # translate a list of (entity, entity) tuples to 
+        # translate a list of (entity, entity) tuples to
         # a list of (parent entity, parent entity) tuples,
         # thereby removing duplicate (parent entity, parent entity)
         # pairs.
@@ -73,7 +73,7 @@ class NeighborSearch(object):
         is determined by level (A=atoms, R=residues, C=chains,
         M=models, S=structures).
 
-        o center - Numeric array 
+        o center - Numeric array
         o radius - float
         o level - char (A, R, C, M, S)
         """
@@ -90,12 +90,12 @@ class NeighborSearch(object):
             return n_atom_list
         else:
             return unfold_entities(n_atom_list, level)
-            
+
     def search_all(self, radius, level="A"):
         """All neighbor search.
 
         Search all entities that have atoms pairs within
-        radius. 
+        radius.
 
         o radius - float
         o level - char (A, R, C, M, S)
@@ -117,7 +117,7 @@ class NeighborSearch(object):
         for l in ["R", "C", "M", "S"]:
             next_level_pair_list=self._get_unique_parent_pairs(next_level_pair_list)
             if level==l:
-                return next_level_pair_list 
+                return next_level_pair_list
 
 if __name__=="__main__":
 

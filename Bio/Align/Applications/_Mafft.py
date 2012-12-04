@@ -191,16 +191,16 @@ class MafftCommandline(AbstractCommandline):
             _Switch(["--groupsize", "groupsize"],
                     "Do not make alignment larger than number sequences. "
                     "Default: the number of input sequences"),
-            #Adjust direction according to the first sequence 
+            #Adjust direction according to the first sequence
             #Mafft V6 beta function
             _Switch(["--adjustdirection", "adjustdirection"],
                     "Adjust direction according to the first sequence. "
                     "Default off."),
-            #Adjust direction according to the first sequence 
+            #Adjust direction according to the first sequence
             #for highly diverged data; very slow
             #Mafft V6 beta function
             _Switch(["--adjustdirectionaccurately", "adjustdirectionaccurately"],
-                    "Adjust direction according to the first sequence," 
+                    "Adjust direction according to the first sequence,"
                     "for highly diverged data; very slow"
                     "Default off."),
             #**** Parameter ****

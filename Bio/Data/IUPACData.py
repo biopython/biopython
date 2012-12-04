@@ -236,7 +236,7 @@ extended_protein_values = {
     "Y": "Y",
     "Z": "QE",
 }
-    
+
 protein_weight_ranges = _make_ranges(protein_weights)
 
 extended_protein_weight_ranges, avg_extended_protein_weights = \
@@ -281,7 +281,7 @@ atom_weights = {
     'Ge' :  72.64,
     'As' :  74.92160,
     'Se' :  78.96,
-    'Br' :  79.904,   
+    'Br' :  79.904,
     'Kr' :  83.80,
     'Rb' :  85.4678,
     'Sr' :  87.62,
@@ -355,5 +355,5 @@ atom_weights = {
     'Sg' : 266.12,
     'Bh' : 264.12,
     'Hs' : 269.13,
-    'Mt' : 268.14,    
+    'Mt' : 268.14,
 }

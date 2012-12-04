@@ -72,52 +72,52 @@ class _BlastCommandLine(AbstractCommandline):
                    filename=True,
                    is_required=True,
                    equate=False),
-           _Option(["-e", "expectation"], 
+           _Option(["-e", "expectation"],
                    "Expectation value cutoff.",
                    equate=False),
-           _Option(["-m", "align_view"], 
+           _Option(["-m", "align_view"],
                    "Alignment view.  Integer 0-11.  Use 7 for XML output.",
                    equate=False),
            _Option(["-o", "align_outfile", "outfile"],
                    "Output file for alignment.",
                    filename=True,
                    equate=False),
-           _Option(["-y", "xdrop_extension"], 
+           _Option(["-y", "xdrop_extension"],
                    "Dropoff for blast extensions.",
                    equate=False),
            _Option(["-F", "filter"],
                    "Filter query sequence with SEG?  T/F",
                    equate=False),
-           _Option(["-X", "xdrop"], 
+           _Option(["-X", "xdrop"],
                    "Dropoff value (bits) for gapped alignments.",
                    equate=False),
-           _Option(["-I", "show_gi"], 
+           _Option(["-I", "show_gi"],
                    "Show GI's in deflines?  T/F",
                    equate=False),
-           _Option(["-J", "believe_query"], 
+           _Option(["-J", "believe_query"],
                    "Believe the query defline?  T/F",
                    equate=False),
-           _Option(["-Z", "xdrop_final"], 
+           _Option(["-Z", "xdrop_final"],
                    "X dropoff for final gapped alignment.",
                    equate=False),
-           _Option(["-z", "db_length"], 
+           _Option(["-z", "db_length"],
                    "Effective database length.",
                    equate=False),
            _Option(["-O", "seqalign_file"],
                    "seqalign file to output.",
                    filename=True,
                    equate=False),
-           _Option(["-v", "descriptions"], 
+           _Option(["-v", "descriptions"],
                    "Number of one-line descriptions.",
                    equate=False),
-           _Option(["-b", "alignments"], 
+           _Option(["-b", "alignments"],
                    "Number of alignments.",
                    equate=False),
-           _Option(["-Y", "search_length"], 
+           _Option(["-Y", "search_length"],
                    "Effective length of search space (use zero for the "
                    "real size).",
                    equate=False),
-           _Option(["-T", "html"], 
+           _Option(["-T", "html"],
                    "Produce HTML output?  T/F",
                    equate=False),
            _Option(["-U", "case_filter"],
@@ -126,7 +126,7 @@ class _BlastCommandLine(AbstractCommandline):
            _Option(["-a", "nprocessors"],
                    "Number of processors to use.",
                    equate=False),
-           _Option(["-g", "gapped"], 
+           _Option(["-g", "gapped"],
                    "Whether to do a gapped alignment.  T/F",
                    equate=False),
         ]
@@ -155,22 +155,22 @@ class _BlastAllOrPgpCommandLine(_BlastCommandLine):
     def __init__(self, cmd=None, **kwargs):
         assert cmd is not None
         extra_parameters = [
-           _Option(["-G", "gap_open"], 
+           _Option(["-G", "gap_open"],
                    "Gap open penalty",
                    equate=False),
-           _Option(["-E", "gap_extend"], 
+           _Option(["-E", "gap_extend"],
                     "Gap extension penalty",
                    equate=False),
            _Option(["-A", "window_size"],
                     "Multiple hits window size",
                    equate=False),
-           _Option(["-f", "hit_extend"], 
+           _Option(["-f", "hit_extend"],
                    "Threshold for extending hits.",
                    equate=False),
            _Option(["-K", "keep_hits"],
                    " Number of best hits from a region to keep.",
                    equate=False),
-           _Option(["-W", "wordsize"], 
+           _Option(["-W", "wordsize"],
                    "Word size",
                    equate=False),
            _Option(["-P", "passes"],
@@ -221,10 +221,10 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                    "The blast program to use (e.g. blastp, blastn).",
                    is_required=True,
                    equate=False),
-           _Option(["-q", "nuc_mismatch"], 
+           _Option(["-q", "nuc_mismatch"],
                    "Penalty for a nucleotide mismatch (blastn only).",
                    equate=False),
-           _Option(["-r", "nuc_match"], 
+           _Option(["-r", "nuc_match"],
                    "Reward for a nucleotide match (blastn only).",
                    equate=False),
            _Option(["-Q", "query_genetic_code"],
@@ -233,10 +233,10 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
            _Option(["-D", "db_genetic_code"],
                    "DB Genetic code (for tblast[nx] only).",
                    equate=False),
-           _Option(["-M", "matrix"], 
+           _Option(["-M", "matrix"],
                    "Matrix to use",
                    equate=False),
-           _Option(["-S", "strands"], 
+           _Option(["-S", "strands"],
                    "Query strands to search against database (for blast[nx], "
                    "and tblastx). 3 is both, 1 is top, 2 is bottom.",
                    equate=False),
@@ -289,7 +289,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                    "Compute locally optimal Smith-Waterman alignments (This "
                    "option is only available for gapped tblastn.) T/F",
                    equate=False),
-        ] 
+        ]
         _BlastAllOrPgpCommandLine.__init__(self, cmd, **kwargs)
 
 
@@ -299,7 +299,7 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
     With the release of BLAST+ (BLAST rewritten in C++ instead of C), the NCBI
     are replacing blastpgp with a renamed tool psiblast. This module provides
     NcbipsiblastCommandline as a wrapper for the new tool psiblast.
-    
+
     Like blastpgp (and blastall), this wrapper is now obsolete, and will be
     deprecated and removed in a future release of Biopython.
 
@@ -337,7 +337,7 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
                    "Input alignment file for PSI-BLAST restart.",
                    filename=True,
                    equate=False),
-           _Option(["-S", "required_start"], 
+           _Option(["-S", "required_start"],
                    "Start of required region in query.",
                    equate=False),
            _Option(["-H", "required_end"],
@@ -346,27 +346,27 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
            _Option(["-j", "npasses"],
                    "Number of passes",
                    equate=False),
-           _Option(["-N", "nbits_gapping"], 
+           _Option(["-N", "nbits_gapping"],
                    "Number of bits to trigger gapping.",
                    equate=False),
            _Option(["-c", "pseudocounts"],
                    "Pseudocounts constants for multiple passes.",
                    equate=False),
-           _Option(["-h", "model_threshold"], 
+           _Option(["-h", "model_threshold"],
                    "E-value threshold to include in multipass model.",
                    equate=False),
            #Does the old name "region_length" for -L make sense?
-           _Option(["-L", "region_length"], 
+           _Option(["-L", "region_length"],
                    "Cost to decline alignment (disabled when zero).",
                    equate=False),
-           _Option(["-M", "matrix"], 
+           _Option(["-M", "matrix"],
                    "Matrix (string, default BLOSUM62).",
                    equate=False),
            _Option(["-p", "program"],
                    "The blast program to use (e.g blastpgp, patseedp or seedp).",
                    is_required=True,
                    equate=False),
-        ] 
+        ]
         _BlastAllOrPgpCommandLine.__init__(self, cmd, **kwargs)
 
 
@@ -378,7 +378,7 @@ class RpsBlastCommandline(_BlastCommandLine):
     second tool rpstblastn, both taking different command line arguments. This
     module provides NcbirpsblastCommandline and NcbirpsblasntCommandline as
     wrappers for the new tools.
-    
+
     Like the old rpsblast (and blastall), this wrapper is now obsolete, and will
     be deprecated and removed in a future release of Biopython.
 
@@ -397,7 +397,7 @@ class RpsBlastCommandline(_BlastCommandLine):
         warnings.warn("Like the old rpsblast (and blastall), this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         self.parameters = [
            #Note -N is also in blastpgp, but not blastall
-           _Option(["-N", "nbits_gapping"], 
+           _Option(["-N", "nbits_gapping"],
                    "Number of bits to trigger gapping.",
                    equate=False),
            #Note blastall and blastpgp wrappers have -P with name "passes".
@@ -409,13 +409,13 @@ class RpsBlastCommandline(_BlastCommandLine):
                    "Logfile name.",
                    filename=True,
                    equate=False),
-           _Option(["-p", "protein"], 
+           _Option(["-p", "protein"],
                    "Query sequence is protein. T/F",
                    equate=False),
-           _Option(["-L", "range_restriction"], 
+           _Option(["-L", "range_restriction"],
                    "Location on query sequence (string format start,end).",
                    equate=False),
-        ] 
+        ]
         _BlastCommandLine.__init__(self, cmd, **kwargs)
 
 ##############################################################################
@@ -446,7 +446,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                     filename=True,
                     equate=False),
             #Formatting options:
-            _Option(["-outfmt", "outfmt"], 
+            _Option(["-outfmt", "outfmt"],
                     "Alignment view.  Integer 0-11.  Use 5 for XML output "
                     "(differs from classic BLAST which used 7 for XML).",
                     equate=False),
@@ -489,7 +489,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
                         raise ValueError("Options %s and %s are incompatible." \
                                          % (a,b))
 
-        
+
 class _NcbiblastCommandline(_NcbibaseblastCommandline):
     """Base Commandline object for (new) NCBI BLAST+ wrappers (PRIVATE).
 
@@ -511,7 +511,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-db", "db"],
                     "The database to BLAST against.",
                     equate=False),
-            _Option(["-evalue", "evalue"], 
+            _Option(["-evalue", "evalue"],
                     "Expectation value cutoff.",
                     equate=False),
             _Option(["-word_size","word_size"],
@@ -532,19 +532,19 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             #Restrict search or results
             _Option(["-gilist", "gilist"],
                     """Restrict search of database to list of GI's.
- 
+
                     Incompatible with: negative_gilist, seqidlist, remote, subject, subject_loc""",
                     filename=True,
                     equate=False),
             _Option(["-negative_gilist", "negative_gilist"],
                     """Restrict search of database to everything except the listed GIs.
- 
+
                     Incompatible with: gilist, seqidlist, remote, subject, subject_loc""",
                     filename=True,
                     equate=False),
             _Option(["-seqidlist", "seqidlist"],
                     """Restrict search of database to list of SeqID's.
- 
+
                     Incompatible with: gilist, negative_gilist, remote, subject, subject_loc""",
                     filename=True,
                     equate=False),
@@ -654,7 +654,7 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
 
                     Incompatible with: db, gilist, seqidlist, negative_gilist,
                     db_soft_mask, db_hard_mask, remote.
-                    
+
                     See also subject.""",
                     equate=False),
             #Restrict search or results:
@@ -891,7 +891,7 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     """Discontiguous MegaBLAST template length (integer).
 
                     Allowed values: 16, 18, 21
-                    
+
                     Requires: template_type.""",
                     checker_function=lambda value : value in [16,18,21,'16','18','21'],
                     equate=False),
@@ -906,9 +906,9 @@ class NcbiblastnCommandline(_NcbiblastMain2SeqCommandline):
                     "Perform ungapped alignment only?"),
             _Option(["-off_diagonal_range", "off_diagonal_range"],
                     """Number of off-diagonals to search for the 2nd hit (integer).
-                    
+
                     Expects a positive integer, or 0 (default) to turn off.
-                    
+
                     Added in BLAST 2.2.23+
                     """,
                     equate=False),
@@ -1359,7 +1359,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
 
     The blast_formatter command allows you to convert the ASN.1 output into
     the other output formats (XML, tabular, plain text, HTML).
-    
+
     >>> from Bio.Blast.Applications import NcbiblastformatterCommandline
     >>> cline = NcbiblastformatterCommandline(archive="example.asn", outfmt=5, out="example.xml")
     >>> cline
@@ -1399,7 +1399,6 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
         incompatibles = {"rid":["archive"]}
         self._validate_incompatibilities(incompatibles)
         _NcbibaseblastCommandline._validate(self)
-        
 
 def _test():
     """Run the Bio.Blast.Applications module's doctests."""

@@ -32,7 +32,7 @@ class ColorTranslator(object):
             o filename      Location of a file containing colorscheme
                             information
 
-            Optional parameters set the color scheme 
+            Optional parameters set the color scheme
         """
         self._artemis_colorscheme = {0: (colors.Color(1, 1, 1,), "pathogenicity, adaptation, chaperones"),
                1: (colors.Color(0.39, 0.39, 0.39), "energy metabolism"),
@@ -52,7 +52,7 @@ class ColorTranslator(object):
                15: (colors.Color(1, 0.25, 0.25), "secondary metabolism"),
                16: (colors.Color(1, 0.5, 0.5), ""),
                17: (colors.Color(1, 0.75, 0.75), "")
-                }      # Hardwired Artemis color scheme                                                                        
+                }      # Hardwired Artemis color scheme
         self._colorscheme = {}
         if filename is not None:
             self.read_colorscheme(filename)# Imported color scheme
@@ -77,7 +77,7 @@ class ColorTranslator(object):
         #Let the UK spelling (colour) override the USA spelling (color)
         if colour is not None:
             color = colour
-        
+
         if color is None:
             raise ValueError("Passed color (or colour) must be a valid color type")
         elif isinstance(color, int):
@@ -88,11 +88,10 @@ class ColorTranslator(object):
             #Assume its a named reportlab color like "red".
             color = colors.toColor(color)
         elif isinstance(color, tuple) and isinstance(color[0], float):
-            color = self.float1_color(color)        
+            color = self.float1_color(color)
         elif isinstance(color, tuple) and isinstance(color[0], int):
             color = self.int255_color(color)
         return color
-        
 
     def read_colorscheme(self, filename):
         """ read_colorscheme(self, filename)
@@ -129,7 +128,6 @@ class ColorTranslator(object):
             Return the Artemis color scheme as a dictionary
         """
         return self._artemis_colorscheme
-        
 
     def artemis_color(self, value):
         """ artemis_color(self, value)

@@ -13,7 +13,7 @@ class TCoffeeCommandline(AbstractCommandline):
     """Commandline object for the TCoffee alignment program.
 
     http://www.tcoffee.org/Projects_home_page/t_coffee_home_page.html
-    
+
     The T-Coffee command line tool has a lot of switches and options.
     This wrapper implements a VERY limited number of options - if you
     would like to help improve it please get in touch.
@@ -32,7 +32,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
     You would typically run the command line with tcoffee_cline() or via
     the Python subprocess module, as described in the Biopython tutorial.
-    
+
     Citation:
 
     T-Coffee: A novel method for multiple sequence alignments.
@@ -96,7 +96,7 @@ class TCoffeeCommandline(AbstractCommandline):
                    "Specifies a special mode: genome, quickaln, dali, 3dcoffee",
                    equate=False),
            ]
-        AbstractCommandline.__init__(self, cmd, **kwargs)           
+        AbstractCommandline.__init__(self, cmd, **kwargs)
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

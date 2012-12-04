@@ -40,7 +40,7 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle = self.handle
         handle.write("#---------------------------------------\n")
         handle.write("#---------------------------------------\n")
-        
+
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file."""
         handle = self.handle
@@ -63,7 +63,7 @@ class EmbossIterator(AlignmentIterator):
     For reading the (pairwise) alignments from EMBOSS tools in what they
     call the "pairs" and "simple" formats.
     """
-    
+
     def next(self):
 
         handle = self.handle
@@ -73,7 +73,7 @@ class EmbossIterator(AlignmentIterator):
             #the previous alignment.
             line = self._header
             del self._header
-        except AttributeError:      
+        except AttributeError:
             line = handle.readline()
         if not line:
             raise StopIteration
@@ -167,7 +167,7 @@ class EmbossIterator(AlignmentIterator):
                         "Found %i chars so far for sequence %i (%s, %s), line says start %i:\n%s" \
                             % (len(seqs[index].replace("-","")), index, id, repr(seqs[index]),
                                start, line)
-                    
+
                     seqs[index] += seq
 
                     #Check the end ...
@@ -272,7 +272,7 @@ IXI_237           94 SRPNRFAPTLMSSCLTSTTGPPAYAGDRSHE    124
 #---------------------------------------
 
 """
-    
+
     #http://emboss.sourceforge.net/docs/themes/alnformats/align.pair
     pair_example = \
 """########################################
@@ -585,15 +585,15 @@ asis             311 -----------------    311
     assert len(alignments[0]) == 2
     assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235"]
-    
+
     alignments = list(EmbossIterator(StringIO(simple_example)))
-    assert len(alignments) == 1    
+    assert len(alignments) == 1
     assert len(alignments[0]) == 4
     assert [r.id for r in alignments[0]] \
            == ["IXI_234", "IXI_235", "IXI_236", "IXI_237"]
 
     alignments = list(EmbossIterator(StringIO(pair_example + simple_example)))
-    assert len(alignments) == 2    
+    assert len(alignments) == 2
     assert len(alignments[0]) == 2
     assert len(alignments[1]) == 4
     assert [r.id for r in alignments[0]] \

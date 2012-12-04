@@ -18,11 +18,11 @@ try:
     # Get a Structure object from an mmCIF file
     from MMCIFParser import MMCIFParser
 except:
-    # Not compiled I guess 
+    # Not compiled I guess
     pass
 
 # Download from the PDB
-from PDBList import PDBList 
+from PDBList import PDBList
 
 # Parse PDB header directly
 from parse_pdb_header import parse_pdb_header
@@ -49,11 +49,11 @@ from Vector import vector_to_axis, m2rotaxis, rotaxis2m
 # Alignment module
 from StructureAlignment import StructureAlignment
 
-# DSSP handle 
+# DSSP handle
 # (secondary structure and solvent accessible area calculation)
 from DSSP import DSSP, make_dssp_dict
 
-# Residue depth: 
+# Residue depth:
 # distance of residue atoms from solvent accessible surface
 from ResidueDepth import ResidueDepth, get_surface
 

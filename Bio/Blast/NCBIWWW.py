@@ -122,7 +122,7 @@ def qblast(program, database, sequence,
     handle = urllib2.urlopen(request)
 
     # Format the "Get" command, which gets the formatted results from qblast
-    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007	
+    # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
     rid, rtoe = _parse_qblast_ref_page(handle)
     parameters = [
         ('ALIGNMENTS',alignments),

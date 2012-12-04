@@ -67,10 +67,10 @@ class FeatureSet(object):
                         passed value in all features in the set
 
         o get_features(self)    Returns a list of Features from the set
-    
+
         o get_ids(self)     Returns a list of unique ids for features in the set
 
-        o range(self)       Returns the range of bases covered by features in 
+        o range(self)       Returns the range of bases covered by features in
                             the set
 
         o to_string(self, verbose=0)    Returns a string describing the set
@@ -108,7 +108,6 @@ class FeatureSet(object):
 
             o **kwargs      Keyword arguments for Feature.  Named attributes
                             of the Feature
-                                                        
 
             Add a Bio.SeqFeature object to the diagram (will be stored
             internally in a Feature wrapper
@@ -152,7 +151,7 @@ class FeatureSet(object):
         changed = 0
         for feature in self.features.values():
             # If the feature has the attribute, and the value should change
-            if hasattr(feature, attr):    
+            if hasattr(feature, attr):
                 if getattr(feature, attr) != value:
                     setattr(feature, attr, value) # set it to the passed value
 
@@ -172,7 +171,7 @@ class FeatureSet(object):
 
             o comparator       String, how to compare the Feature attribute to the
                                passed value
-            
+
             If no attribute or value is given, return a list of all features in the
             feature set.  If both an attribute and value are given, then depending
             on the comparator, then a list of all features in the FeatureSet
@@ -228,7 +227,7 @@ class FeatureSet(object):
             for start, end in feature.locations:
                 lows.append(start)
                 highs.append(end)
-        if len(lows) != 0 and len(highs) != 0:      # Default in case there is 
+        if len(lows) != 0 and len(highs) != 0:      # Default in case there is
             return (min(lows), max(highs))          # nothing in the set
         return 0, 0
 
@@ -236,7 +235,7 @@ class FeatureSet(object):
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""
 
-            o verbose       Boolean indicating whether a short or complete 
+            o verbose       Boolean indicating whether a short or complete
                             account of the set is required
 
             Returns a formatted string with information about the set
@@ -271,7 +270,7 @@ class FeatureSet(object):
 
             Returns a formatted string with information about the feature set
         """
-        outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name, 
+        outstr = ["\n<%s: %s %d features>" % (self.__class__, self.name,
                                               len(self.features))]
         return "\n".join(outstr)
 
@@ -281,7 +280,7 @@ class FeatureSet(object):
 
 if __name__ == '__main__':
     from Bio import SeqIO
-    
+
     genbank_entry = SeqIO.read('/data/Genomes/Bacteria/Nanoarchaeum_equitans/NC_005213.gbk', 'gb')
 
     # Test code
@@ -297,4 +296,4 @@ if __name__ == '__main__':
     #print gdfs.get_features()
     #for feature in gdfs.get_features():
     #    print feature.id, feature.start, feature.end
-    #print gdfs[500]   
+    #print gdfs[500]

@@ -21,7 +21,7 @@ class BlastTableEntry(object):
       self.s_bounds = (int(bt_fields[8]), int(bt_fields[9]))
       self.e_value = float(bt_fields[10])
       self.bit_score = float(bt_fields[11])
-      
+
 class BlastTableRec(object):
    def __init__(self):
       self.program = None
@@ -69,7 +69,7 @@ class BlastTableReader(object):
       self._lookahead = inline
       self._in_header = 1
       return self.table_record
-         
+
    def _consume_entry(self, inline):
       current_entry = BlastTableEntry(inline)
       self.table_record.add_entry(current_entry)

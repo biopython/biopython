@@ -248,7 +248,7 @@ class SeqMat(dict):
 
    def print_full_mat(self,f=None,format="%4d",topformat="%4s",
               alphabet=None,factor=1,non_sym=None):
-      f = f or sys.stdout 
+      f = f or sys.stdout
       # create a temporary dictionary, which holds the full matrix for
       # printing
       assert non_sym is None or isinstance(non_sym, float) or \

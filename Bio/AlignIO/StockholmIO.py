@@ -100,7 +100,7 @@ Stockholm file:
 Note that when writing Stockholm files, AlignIO does not break long sequences
 up and interleave them (as in the input file shown above).  The standard
 allows this simpler layout, and it is more likely to be understood by other
-tools. 
+tools.
 
 Finally, as an aside, it can sometimes be useful to use Bio.SeqIO.parse() to
 iterate over the alignment rows as SeqRecord objects - rather than working
@@ -154,19 +154,19 @@ class StockholmWriter(SequentialAlignmentWriter):
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
-        
+
         Note that sequences and their annotation are recorded
         together (rather than having a block of annotation followed
         by a block of aligned sequences).
         """
         count = len(alignment)
-        
+
         self._length_of_sequences = alignment.get_alignment_length()
         self._ids_written = []
-        
+
         #NOTE - For now, the alignment object does not hold any per column
         #or per alignment annotation - only per sequence.
-        
+
         if count == 0:
             raise ValueError("Must have at least one sequence")
         if self._length_of_sequences == 0:
@@ -225,7 +225,7 @@ class StockholmWriter(SequentialAlignmentWriter):
         elif record.id:
             self.handle.write("#=GS %s AC %s\n" \
                 % (seq_name, self.clean(record.id)))
-        
+
         #DE = description
         if record.description:
             self.handle.write("#=GS %s DE %s\n" \
@@ -263,7 +263,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?
                 pass
-        
+
 class StockholmIterator(AlignmentIterator):
     """Loads a Stockholm file from PFAM into MultipleSeqAlignment objects.
 
@@ -273,7 +273,7 @@ class StockholmIterator(AlignmentIterator):
     This parser will detect if the Stockholm file follows the PFAM
     conventions for sequence specific meta-data (lines starting #=GS
     and #=GR) and populates the SeqRecord fields accordingly.
-    
+
     Any annotation which does not follow the PFAM conventions is currently
     ignored.
 
@@ -403,7 +403,7 @@ class StockholmIterator(AlignmentIterator):
                     #TODO - Should we check the length matches the alignment length?
                     #       For iterlaced sequences the GR data can be split over
                     #       multiple lines
-            #Next line...            
+            #Next line...
 
 
         assert len(seqs) <= len(ids)
@@ -466,7 +466,7 @@ class StockholmIterator(AlignmentIterator):
                     # Non-integers after final '/' - fall through
                     pass
         return (identifier, None, None)
-    
+
     def _get_meta_data(self, identifier, meta_dict):
         """Takes an itentifier and returns dict of all meta-data matching it.
 
@@ -483,7 +483,7 @@ class StockholmIterator(AlignmentIterator):
             Q9PN73_CAMJE/149-220               NKA...
             ...
             #=GS Q9PN73_CAMJE OS Campylobacter jejuni
-            #=GS Q9PN73_CAMJE OC Bacteria 
+            #=GS Q9PN73_CAMJE OC Bacteria
 
         This function will return an empty dictionary if no data is found."""
         name, start, end = self._identifier_split(identifier)
@@ -531,7 +531,7 @@ class StockholmIterator(AlignmentIterator):
             else:
                 #Ignore it?
                 record.letter_annotations["GR:" + feature] = seq_col_data[feature]
-    
+
 def _test():
     """Run the Bio.SeqIO module's doctests.
 
@@ -549,6 +549,6 @@ def _test():
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
-        
+
 if __name__ == "__main__":
     _test()

@@ -31,7 +31,7 @@ class ClustalwCommandline(AbstractCommandline):
     Larkin MA, Blackshields G, Brown NP, Chenna R, McGettigan PA,
     McWilliam H, Valentin F, Wallace IM, Wilm A, Lopez R, Thompson JD,
     Gibson TJ, Higgins DG. (2007). Clustal W and Clustal X version 2.0.
-    Bioinformatics, 23, 2947-2948. 
+    Bioinformatics, 23, 2947-2948.
 
     Last checked against versions: 1.83 and 2.1
     """

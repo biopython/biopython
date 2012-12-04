@@ -18,7 +18,7 @@ def parse_basics(lines, results):
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
         # Find the version number
-        # Example match: 
+        # Example match:
         # "BASEML (in paml version 4.3, August 2009)  alignment.phylip"
         version_res = version_re.match(line)
         if version_res is not None:
@@ -47,7 +47,7 @@ def parse_basics(lines, results):
                 results["tree"] = line.strip()
     return (results, num_params)
 
-def parse_parameters(lines, results, num_params): 
+def parse_parameters(lines, results, num_params):
     """Parse the various parameters from the file.
     """
     parameters = {}
@@ -79,7 +79,7 @@ def parse_parameter_list(lines, parameters, num_params):
         # the parameter format.
         # Example match:
         # "SEs for parameters:
-        # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000 
+        # -1.00000 -1.00000 -1.00000 801727.63247 730462.67590 -1.00000
            if "SEs for parameters:" in lines[line_num + 1]:
                 SEs_line = lines[line_num + 2]
                 parameters["SEs"] = SEs_line.strip()
@@ -136,12 +136,12 @@ def parse_rates(lines, parameters):
         line_floats_res = line_floats_re.findall(line)
         line_floats = [float(val) for val in line_floats_res]
         # Find rate parameters
-        # Example match: 
+        # Example match:
         # "Rate parameters:   999.00000 145.59775  0.00001  0.00001  0.00001"
         if "Rate parameters:" in line and len(line_floats) > 0:
             parameters["rate parameters"] = line_floats
         # Find rates
-        # Example match: 
+        # Example match:
         # "rate:   0.90121  0.96051  0.99831  1.03711  1.10287"
         elif "rate: " in line and len(line_floats) > 0:
             parameters["rates"] = line_floats
@@ -190,7 +190,7 @@ def parse_freqs(lines, parameters):
         line_floats = [float(val) for val in line_floats_res]
         # Find base frequencies from baseml 4.3
         # Example match:
-        # "Base frequencies:   0.20090  0.16306  0.37027  0.26577"  
+        # "Base frequencies:   0.20090  0.16306  0.37027  0.26577"
         if "Base frequencies" in line and len(line_floats) > 0:
             base_frequencies = {}
             base_frequencies["T"] = line_floats[0]
@@ -215,15 +215,15 @@ def parse_freqs(lines, parameters):
             base_frequencies["A"] = line_floats[2]
             base_frequencies["G"] = line_floats[3]
             parameters["base frequencies"] = base_frequencies
-            base_freqs_found = False            
+            base_freqs_found = False
         # Find frequencies
-        # Example match: 
+        # Example match:
         # "freq:   0.90121  0.96051  0.99831  1.03711  1.10287"
         elif "freq: " in line and len(line_floats) > 0:
             parameters["rate frequencies"] = line_floats
         # Find branch-specific frequency parameters
         # Example match (note: I think it's possible to have 4 more
-        # values per line, enclosed in brackets, so I'll account for 
+        # values per line, enclosed in brackets, so I'll account for
         # this):
         # (frequency parameters for branches)  [frequencies at nodes] (see Yang & Roberts 1995 fig 1)
         #

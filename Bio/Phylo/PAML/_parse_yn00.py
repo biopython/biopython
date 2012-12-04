@@ -7,7 +7,7 @@ import re
 
 def parse_ng86(lines, results):
     """ Parse the Nei & Gojobori (1986) section of the resuls.
-    Nei_Gojobori results are organized in a lower 
+    Nei_Gojobori results are organized in a lower
     triangular mattrix, with the sequence names labeling
     the rows and statistics in the format:
     w (dN dS) per column
@@ -17,7 +17,7 @@ def parse_ng86(lines, results):
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = re.findall("-*\d+\.\d+", line)
-        line_floats = [float(val) for val in line_floats_res] 
+        line_floats = [float(val) for val in line_floats_res]
         matrix_row_res = re.match("(.+)\s{5,15}",line)
         if matrix_row_res is not None:
             seq_name = matrix_row_res.group(1).strip()
@@ -31,14 +31,14 @@ def parse_ng86(lines, results):
                 results[seq_name][sequences[i//3]] = {"NG86":NG86}
                 results[sequences[i//3]][seq_name] = {"NG86":NG86}
     return (results, sequences)
- 
+
 def parse_yn00(lines, results, sequences):
     """ Parse the Yang & Nielsen (2000) part of the results.
     Yang & Nielsen results are organized in a table with
     each row comprising one pairwise species comparison.
     Rows are labeled by spequence number rather than by
     sequence name."""
-    
+
     # Example (header row and first table row):
     # seq. seq.     S       N        t   kappa   omega     dN +- SE    dS +- SE
     # 2    1    67.3   154.7   0.0136  3.6564  0.0000 -0.0000 +- 0.0000  0.0150
@@ -46,7 +46,7 @@ def parse_yn00(lines, results, sequences):
     for line in lines:
         # Find all floating point numbers in this line
         line_floats_res = re.findall("-*\d+\.\d+", line)
-        line_floats = [float(val) for val in line_floats_res] 
+        line_floats = [float(val) for val in line_floats_res]
         row_res = re.match("\s+(\d+)\s+(\d+)", line)
         if row_res is not None:
             seq1 = int(row_res.group(1))
@@ -73,7 +73,7 @@ def parse_others(lines, results, sequences):
     """Parse the results from the other methods.
 
     The remaining methods are grouped together. Statistics
-    for all three are listed for each of the pairwise 
+    for all three are listed for each of the pairwise
     species comparisons, with each method's results on its
     own line.
     The stats in this section must be handled differently
@@ -109,7 +109,7 @@ def parse_others(lines, results, sequences):
                 # NaNs take on weird values like -1.#IND, which might fill the
                 # entire fixed column width.
                 res_matches = re.findall("[dSNwrho]{1,3} =.{7,8}?",
-                                         line_stats)             
+                                         line_stats)
                 for stat_pair in res_matches:
                     stat = stat_pair.split('=')[0].strip()
                     value = stat_pair.split('=')[1].strip()

@@ -222,7 +222,7 @@ class Writer(object):
                 if terminal:
                     # terminal branches have 100% support
                     return ':' + format_confidence % max_confidence
-                else:      
+                else:
                     return ':' + format_confidence % clade.confidence
 
         elif branch_length_only:

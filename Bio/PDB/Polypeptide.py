@@ -57,7 +57,7 @@ from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Vector import calc_dihedral, calc_angle
 
 
-standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS", 
+standard_aa_names=["ALA", "CYS", "ASP", "GLU", "PHE", "GLY", "HIS", "ILE", "LYS",
                    "LEU", "MET", "ASN", "PRO", "GLN", "ARG", "SER", "THR", "VAL",
                    "TRP", "TYR"]
 
@@ -81,7 +81,7 @@ for i in range(0, 20):
 
 def index_to_one(index):
     """Index to corresponding one letter amino acid name.
-    
+
     >>> index_to_one(0)
     'A'
     >>> index_to_one(19)
@@ -91,7 +91,7 @@ def index_to_one(index):
 
 def one_to_index(s):
     """One letter code to index.
-    
+
     >>> one_to_index('A')
     0
     >>> one_to_index('Y')
@@ -101,7 +101,7 @@ def one_to_index(s):
 
 def index_to_three(i):
     """Index to corresponding three letter amino acid name.
-    
+
     >>> index_to_three(0)
     'ALA'
     >>> index_to_three(19)
@@ -111,7 +111,7 @@ def index_to_three(i):
 
 def three_to_index(s):
     """Three letter code to index.
-    
+
     >>> three_to_index('ALA')
     0
     >>> three_to_index('TYR')
@@ -121,7 +121,7 @@ def three_to_index(s):
 
 def three_to_one(s):
     """Three letter code to one letter code.
-    
+
     >>> three_to_one('ALA')
     'A'
     >>> three_to_one('TYR')
@@ -139,7 +139,7 @@ def three_to_one(s):
 
 def one_to_three(s):
     """One letter code to three letter code.
-    
+
     >>> one_to_three('A')
     'ALA'
     >>> one_to_three('Y')
@@ -154,7 +154,7 @@ def is_aa(residue, standard=False):
     @param residue: a L{Residue} object OR a three letter amino acid code
     @type residue: L{Residue} or string
 
-    @param standard: flag to check for the 20 AA (default false) 
+    @param standard: flag to check for the 20 AA (default false)
     @type standard: boolean
 
     >>> is_aa('ALA')
@@ -181,7 +181,7 @@ class Polypeptide(list):
     """A polypeptide is simply a list of L{Residue} objects."""
     def get_ca_list(self):
         """Get list of C-alpha atoms in the polypeptide.
-        
+
         @return: the list of C-alpha atoms
         @rtype: [L{Atom}, L{Atom}, ...]
         """
@@ -267,7 +267,7 @@ class Polypeptide(list):
     def get_sequence(self):
         """Return the AA sequence as a Seq object.
 
-        @return: polypeptide sequence 
+        @return: polypeptide sequence
         @rtype: L{Seq}
         """
         s=""
@@ -278,7 +278,7 @@ class Polypeptide(list):
 
     def __repr__(self):
         """Return string representation of the polypeptide.
-        
+
         Return <Polypeptide start=START end=END>, where START
         and END are sequence identifiers of the outer residues.
         """
@@ -289,10 +289,10 @@ class Polypeptide(list):
 
 class _PPBuilder:
     """Base class to extract polypeptides.
-    
+
     It checks if two consecutive residues in a chain are connected.
     The connectivity test is implemented by a subclass.
-    
+
     This assumes you want both standard and non-standard amino acids.
     """
     def __init__(self, radius):
@@ -316,7 +316,7 @@ class _PPBuilder:
         else:
             # not a standard AA so skip
             return False
-    
+
     def build_peptides(self, entity, aa_only=1):
         """Build and return a list of Polypeptide objects.
 
@@ -418,12 +418,12 @@ class PPBuilder(_PPBuilder):
             nlist=[n]
         for nn in nlist:
             for cc in clist:
-                # To form a peptide bond, N and C must be 
+                # To form a peptide bond, N and C must be
                 # within radius and have the same altloc
                 # identifier or one altloc blank
                 n_altloc=nn.get_altloc()
                 c_altloc=cc.get_altloc()
-                if n_altloc==c_altloc or n_altloc==" " or c_altloc==" ": 
+                if n_altloc==c_altloc or n_altloc==" " or c_altloc==" ":
                     if test_dist(nn, cc):
                         # Select the disordered atoms that
                         # are indeed bonded
@@ -440,7 +440,7 @@ class PPBuilder(_PPBuilder):
             return 1
         else:
             return 0
-    
+
 
 if __name__=="__main__":
     import sys

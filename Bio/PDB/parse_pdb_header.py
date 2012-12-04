@@ -3,15 +3,15 @@
 # parse_pdb_header.py
 # parses header of PDB files into a python dictionary.
 # emerged from the Columba database project www.columba-db.de.
-# 
+#
 # author: Kristian Rother
-# 
+#
 # license: same as BioPython, read LICENSE.TXT from current BioPython release.
-# 
+#
 # last modified: 9.2.2004
 #
 # Added some small changes: the whole PDB file is not read in anymore, but just
-# until the first ATOM record (faster). I also split parse_pdb_header into 
+# until the first ATOM record (faster). I also split parse_pdb_header into
 # parse_pdb_header and parse_pdb_header_list, because parse_pdb_header_list
 # can be more easily reused in PDBParser.
 #
@@ -43,7 +43,7 @@ def _get_references(inl):
     # REMARK   1  AUTH   W.BODE,E.PAPAMOKOS,D.MUSIL                           1CSE  12
     references=[]
     actref=""
-    for l in inl:        
+    for l in inl:
         if re.search("\AREMARK   1",l):
             if re.search("\AREMARK   1 REFERENCE",l):
                 if actref!="":
@@ -59,8 +59,7 @@ def _get_references(inl):
         if actref!=" ":
             references.append(actref)
     return references
-    
-      
+
 # bring dates to format: 1909-01-08
 def _format_date(pdb_date):
     """Converts dates from DD-Mon-YY to YYYY-MM-DD format."""
@@ -69,10 +68,10 @@ def _format_date(pdb_date):
     if year<50:
         century=2000
     else:
-        century=1900            
+        century=1900
     date=str(century+year)+"-"
     all_months=['xxx','Jan','Feb','Mar','Apr','May','Jun','Jul',\
-    'Aug','Sep','Oct','Nov','Dec']        
+    'Aug','Sep','Oct','Nov','Dec']
     month=str(all_months.index(pdb_date[3:6]))
     if len(month)==1:
         month = '0'+month
@@ -101,7 +100,7 @@ def _nice_case(line):
             nextCap=0
         elif c==' ' or c=='.' or c==',' or c==';' or c==':' or c=='\t' or\
             c=='-' or c=='_':
-            nextCap=1            
+            nextCap=1
         s+=c
         i+=1
     return s
@@ -152,7 +151,7 @@ def _parse_pdb_header_list(header):
         #tail=re.sub("\A\w+\s+\d*\s*","",h)
         tail = h[10:].strip()
         # print key+":"+tail
-        
+
         # From here, all the keys from the header are being parsed
         if key=="TITLE":
             name=_chop_end_codes(tail).lower()
@@ -160,13 +159,13 @@ def _parse_pdb_header_list(header):
                 dict['name'] += " "+name
             else:
                 dict['name']=name
-        elif key=="HEADER":            
+        elif key=="HEADER":
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
             if rr is not None:
                 dict['deposition_date']=_format_date(_nice_case(rr.group()))
             head=_chop_end_misc(tail).lower()
             dict['head']=head
-        elif key=="COMPND":            
+        elif key=="COMPND":
             tt=re.sub("\;\s*\Z","",_chop_end_codes(tail)).lower()
             # look for E.C. numbers in COMPND lines
             rec = re.search('\d+\.\d+\.\d+\.\d+',tt)
@@ -182,7 +181,7 @@ def _parse_pdb_header_list(header):
                     comp_molid=cval
                     last_comp_key="misc"
                 else:
-                    dict['compound'][comp_molid][ckey]=cval            
+                    dict['compound'][comp_molid][ckey]=cval
                     last_comp_key=ckey
             else:
                 dict['compound'][comp_molid][last_comp_key]+=tok[0]+" "
@@ -198,7 +197,7 @@ def _parse_pdb_header_list(header):
                     comp_molid=cval
                     last_src_key="misc"
                 else:
-                    dict['source'][comp_molid][ckey]=cval            
+                    dict['source'][comp_molid][ckey]=cval
                     last_src_key=ckey
             else:
                 dict['source'][comp_molid][last_src_key]+=tok[0]+" "
@@ -246,7 +245,7 @@ def _parse_pdb_header_list(header):
         else:
             # print key
             pass
-    if dict['structure_method']=='unknown': 
+    if dict['structure_method']=='unknown':
         if dict['resolution']>0.0: dict['structure_method']='x-ray diffraction'
     return dict
 
