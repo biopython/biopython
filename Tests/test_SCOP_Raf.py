@@ -23,7 +23,7 @@ class RafTests(unittest.TestCase):
         self.assertEqual(r.pdbid, "101m")
         self.assertEqual(r.pdb_datestamp, "010301")
         self.assertEqual(r.flags, "111011")
-      
+
         i = r.index("143")
         res = r.res[i]
         self.assertEqual(res.chainid, "_")
@@ -31,7 +31,7 @@ class RafTests(unittest.TestCase):
         self.assertEqual(res.seqres, "A")
         self.assertEqual(res.atom, "A")
 
-        r = Raf.SeqMap(self.rafLine2)   
+        r = Raf.SeqMap(self.rafLine2)
         res = r.res[r.index("6A", chainid="A")]
         self.assertEqual(res.resid, "6A")
         self.assertEqual(res.atom, "E")
@@ -53,7 +53,6 @@ class RafTests(unittest.TestCase):
 
         r4.append(Raf.Res())
         self.assertEqual(len(r4.res), (l*4)+1)
-        
 
     def testSeqMapSlice(self):
         r = Raf.SeqMap(self.rafLine)
@@ -63,7 +62,7 @@ class RafTests(unittest.TestCase):
 
     def testSeqMapIndex(self):
         filename = ("./SCOP/raftest.txt")
-        
+
         index = Raf.SeqMapIndex(filename)
         r = index.getSeqMap("103m")
         self.assertEqual(r.pdbid, "103m")
@@ -88,7 +87,7 @@ class RafTests(unittest.TestCase):
         self.assertEqual(r.pdbid, "104l")
         self.assertEqual(len(r.res), 5)
 
-        
+
 if __name__=='__main__':
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

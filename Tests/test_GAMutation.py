@@ -123,9 +123,9 @@ class TestMutator:
     def mutate(self, org):
         org_genome_seq = org.genome.toseq()
         old_org_genome = str(org_genome_seq)
-        
+
         new_org = org.copy()
-        
+
         if self.type == "same":
             return new_org
         elif self.type == "lower":
@@ -149,7 +149,7 @@ class SafeFitnessTest(unittest.TestCase):
 
         self.test_mutator = TestMutator()
 
-    def test_keep_higher(self): 
+    def test_keep_higher(self):
         """Make sure we always keep the higher fitness.
         """
         mutator = SafeFitnessMutation(self.test_mutator)

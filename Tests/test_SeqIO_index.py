@@ -153,7 +153,7 @@ class IndexDictTests(unittest.TestCase):
         rec_dict._con.close() #hack for PyPy
         del rec_dict
         os.remove(index_tmp)
-    
+
     def key_check(self, filename, format, alphabet, comp):
         """Check indexing with a key function."""
         if comp:
@@ -214,7 +214,7 @@ class IndexDictTests(unittest.TestCase):
         del rec_dict
         os.remove(index_tmp)
         #Done
-    
+
     def check_dict_methods(self, rec_dict, keys, ids):
         self.assertEqual(set(keys), set(rec_dict.keys()))
         #This is redundant, I just want to make sure len works:

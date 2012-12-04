@@ -163,7 +163,7 @@ def main(argv):
     # HOWEVER, we do not want to change the default encoding which is
     # rather important on Python 3 with unicode.
     #lang = os.environ['LANG']
-    
+
     # get the command line options
     try:
         opts, args = getopt.getopt(argv, 'gv', ["generate", "verbose",

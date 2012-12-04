@@ -41,8 +41,8 @@ class TestUniprot(unittest.TestCase):
         # self.assertEqual(seq_record.accessions, ['Q91G55']) #seq_record.accessions does not exist
         # self.assertEqual(seq_record.organism_classification, ['Eukaryota', 'Metazoa', 'Chordata', 'Craniata', 'Vertebrata', 'Mammalia', 'Eutheria', 'Primates', 'Catarrhini', 'Hominidae', 'Homo'])
         # self.assertEqual(record.seqinfo, (348, 39676, '75818910'))
-    
-        self.assertEqual(len(seq_record.features), 1)           
+
+        self.assertEqual(len(seq_record.features), 1)
         self.assertEqual(repr(seq_record.features[0]), "SeqFeature(FeatureLocation(ExactPosition(0), ExactPosition(116)), type='chain', id='PRO_0000377969')")
 
         self.assertEqual(len(seq_record.annotations['references']), 2)
@@ -135,7 +135,7 @@ class TestUniprot(unittest.TestCase):
         old = SeqIO.read("SwissProt/Q13639.txt", "swiss")
         new = SeqIO.read("SwissProt/Q13639.xml", "uniprot-xml")
         self.compare_txt_xml(old, new)
-    
+
     def test_multi_ex(self):
         """Compare SwissProt text and uniprot XML versions of several examples."""
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))
@@ -150,7 +150,7 @@ class TestUniprot(unittest.TestCase):
             self.assertTrue(txt.id in fas.id.split("|"))
             self.assertEqual(str(txt.seq), str(fas.seq))
             self.compare_txt_xml(txt, xml)
-    
+
     def test_multi_ex_index(self):
         """Index SwissProt text and uniprot XML versions of several examples."""
         txt_list = list(SeqIO.parse("SwissProt/multi_ex.txt", "swiss"))
@@ -168,7 +168,7 @@ class TestUniprot(unittest.TestCase):
         for old in xml_list:
             new = xml_index[old.id]
             compare_record(old, new)
-        
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

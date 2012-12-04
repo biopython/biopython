@@ -12,7 +12,6 @@ from Bio.Seq import MutableSeq
 # local stuff
 from Bio.GA import Organism
 
-    
 
 # -- utility functions
 class TestAlphabet(Alphabet.Alphabet):
@@ -130,7 +129,7 @@ class OrganismTest(unittest.TestCase):
         """
         assert self.organism.fitness == 1234, \
                "Unexpected fitness %s" % self.organism.fitness
-        
+
         new_genome = MutableSeq("1111", self.alphabet)
         self.organism.genome = new_genome
         self.organism.recalculate_fitness()

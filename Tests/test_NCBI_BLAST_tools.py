@@ -92,10 +92,10 @@ class Pairwise(unittest.TestCase):
             pass
         else:
             self.assertEqual(9, stdoutdata.count("***** No hits found *****"))
-        
+
         #TODO - Parse it? I think we'd need to update this obsole code :(
         #records = list(NCBIStandalone.Iterator(StringIO(stdoutdata),
-        #                                       NCBIStandalone.BlastParser()))   
+        #                                       NCBIStandalone.BlastParser()))
 
     def test_blastn(self):
         """Pairwise BLASTN search"""
@@ -143,7 +143,7 @@ class Pairwise(unittest.TestCase):
         self.assertEqual(0, stdoutdata.count("***** No hits found *****"))
         #TODO - Parse it?
 
-   
+
 class CheckCompleteArgList(unittest.TestCase):
     def check(self, exe_name, wrapper) :
         global exe_names
@@ -152,7 +152,7 @@ class CheckCompleteArgList(unittest.TestCase):
 
         names = set(parameter.names[0] \
                     for parameter in cline.parameters)
-        
+
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
@@ -172,7 +172,7 @@ class CheckCompleteArgList(unittest.TestCase):
             if " " in name : name = name.split(None,1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index+1:]
-                
+
         extra = names.difference(names_in_tool)
         missing = names_in_tool.difference(names)
         if "-soft_masking" in missing :
@@ -244,7 +244,7 @@ class CheckCompleteArgList(unittest.TestCase):
     def test_blastx(self):
         """Check all blastx arguments are supported"""
         self.check("blastx", Applications.NcbiblastxCommandline)
-        
+
     def test_blastp(self):
         """Check all blastp arguments are supported"""
         self.check("blastp", Applications.NcbiblastpCommandline)
@@ -256,11 +256,11 @@ class CheckCompleteArgList(unittest.TestCase):
     def test_tblastx(self):
         """Check all tblastx arguments are supported"""
         self.check("tblastx", Applications.NcbitblastxCommandline)
-        
+
     def test_tblastn(self):
         """Check all tblastn arguments are supported"""
         self.check("tblastn", Applications.NcbitblastnCommandline)
-        
+
     def test_psiblast(self):
         """Check all psiblast arguments are supported"""
         self.check("psiblast", Applications.NcbipsiblastCommandline)

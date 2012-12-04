@@ -29,7 +29,7 @@ def main():
     output = Layer.OutputLayer(1)
     hidden = Layer.HiddenLayer(3, output)
     input = Layer.InputLayer(2, hidden)
-    
+
     network = BasicNetwork(input, hidden, output)
 
     print "Training the network..."

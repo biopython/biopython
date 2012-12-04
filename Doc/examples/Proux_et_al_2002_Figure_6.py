@@ -74,10 +74,10 @@ A_vs_B = [
     (19, "Tuc2009_46", "orf52"),
     (77, "Tuc2009_48", "orf54"),
     (91, "Tuc2009_49", "orf55"),
-    (95, "Tuc2009_52", "orf60"), 
+    (95, "Tuc2009_52", "orf60"),
 ]
 
-#bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)  
+#bIL285 (AF323668) vs Listeria innocua prophage 5 (in NC_003212)
 B_vs_C = [
     (42, "orf39", "lin2581"),
     (31, "orf40", "lin2580"),

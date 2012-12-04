@@ -25,7 +25,7 @@ class TestAlphabet(Alphabet):
                         "2": "2",
                         "3": "3",
                         "*": "123"}
-                        
+
     letters = ["1", "2", "3", "*"]
 
 def test_fitness(genome):
@@ -40,7 +40,6 @@ class AmbiguousRepairTest(unittest.TestCase):
         alphabet = TestAlphabet()
         test_genome = MutableSeq("11*22*33*", alphabet)
         self.organism = Organism(test_genome, test_fitness)
-        
         self.ambig_info = Schema(alphabet.alphabet_matches)
 
     def test_single_repair(self):

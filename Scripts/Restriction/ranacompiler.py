@@ -13,7 +13,7 @@ from Bio.Restriction._Update.RestrictionCompiler import DictionaryBuilder
 
 
 def standalone() :
-    parser = optparse.OptionParser() 
+    parser = optparse.OptionParser()
     add = parser.add_option
 
     add('-i', '--install',

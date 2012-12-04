@@ -3,7 +3,7 @@
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
-# 
+#
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -86,7 +86,7 @@ class A_ExceptionTest(unittest.TestCase):
                    parser.get_structure, "example", "PDB/a_structure.pdb")
         finally:
             warnings.filters.pop()
-     
+
     def test_3_bad_xyz(self):
         """Check error: Parse an entry with bad x,y,z value."""
         data = "ATOM      9  N   ASP A 152      21.554  34.953  27.691  1.00 19.26           N\n"
@@ -94,7 +94,7 @@ class A_ExceptionTest(unittest.TestCase):
         s = parser.get_structure("example", StringIO(data))
         data = "ATOM      9  N   ASP A 152      21.ish  34.953  27.691  1.00 19.26           N\n"
         self.assertRaises(PDBConstructionException,
-                parser.get_structure, "example", StringIO(data))       
+                parser.get_structure, "example", StringIO(data))
 
 
 class HeaderTests(unittest.TestCase):
@@ -370,7 +370,7 @@ class ParseTest(unittest.TestCase):
                         (('W', 77, ' '), 1),
                         ])
                         ]
- 
+
         for c_idx, chn in enumerate(chain_data):
             # Check chain ID and length
             chain = m1.get_list()[c_idx]
@@ -782,7 +782,7 @@ class Atom_Element(unittest.TestCase):
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
 
-class IterationTests(unittest.TestCase):        
+class IterationTests(unittest.TestCase):
 
     def setUp(self):
         self.struc = PDBParser(PERMISSIVE=True).get_structure('X', "PDB/a_structure.pdb")
@@ -805,22 +805,22 @@ class IterationTests(unittest.TestCase):
 
 #class RenumberTests(unittest.TestCase):
 #    """Tests renumbering of structures."""
-#    
+#
 #    def setUp(self):
 #        warnings.simplefilter('ignore', PDBConstructionWarning)
 #        pdb_filename = "PDB/1A8O.pdb"
 #        self.structure=PDBParser(PERMISSIVE=True).get_structure('X', pdb_filename)
 #        warnings.filters.pop()
-#        
+#
 #    def test_renumber_residues(self):
 #        """Residues in a structure are renumbered."""
 #        self.structure.renumber_residues()
 #        nums = [resi.id[1] for resi in self.structure[0]['A'].child_list]
 #        print nums
-# 
+#
 # -------------------------------------------------------------
 
-class TransformTests(unittest.TestCase):        
+class TransformTests(unittest.TestCase):
 
     def setUp(self):
         self.s = PDBParser(PERMISSIVE=True).get_structure(
@@ -865,7 +865,7 @@ class TransformTests(unittest.TestCase):
                 self.assertAlmostEqual(newpos[i], newpos_check[i])
 
 
-class CopyTests(unittest.TestCase):        
+class CopyTests(unittest.TestCase):
 
     def setUp(self):
         self.s = PDBParser(PERMISSIVE=True).get_structure(

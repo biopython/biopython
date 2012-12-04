@@ -86,7 +86,7 @@ class AppTest(unittest.TestCase):
         litr = list(itr)
         assert not type(allFst) == int
         assert len(litr) == 37
-        assert litr[36][0] == "Locus37" 
+        assert litr[36][0] == "Locus37"
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

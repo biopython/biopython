@@ -24,7 +24,7 @@ from Bio.GA.Selection.RouletteWheel import RouletteWheelSelection
 
 class TestAlphabet(SingleLetterAlphabet):
     """Simple test alphabet.
-    """                        
+    """
     letters = ["0", "1", "2", "3"]
 
 def test_fitness(genome):
@@ -134,7 +134,7 @@ class TournamentSelectionTest(unittest.TestCase):
         if org_2.fitness > org_1.fitness:
             org_1, org_2 = org_2, org_1
         self.assertTrue(org_1.fitness > org_2.fitness)
-        
+
         pop = [org_1, org_2]
         new_pop = self.selector.select(pop)
         for org in new_pop:
@@ -189,7 +189,7 @@ class RouletteWheelSelectionTest(unittest.TestCase):
         self.assertEqual(len(new_pop), len(pop),
                          "Did not maintain population size.")
 
-        
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

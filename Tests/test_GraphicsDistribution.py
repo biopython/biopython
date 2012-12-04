@@ -47,7 +47,7 @@ class BarChartTest(unittest.TestCase):
         self.multi_page = os.path.join(os.getcwd(), "Graphics", "multi_bar.pdf")
 
         self.num_multi = 5
-    
+
     def test_simple_page(self):
         """Test displaying a page with single distribution.
         """
@@ -67,7 +67,7 @@ class BarChartTest(unittest.TestCase):
         dist_page = DistributionPage()
 
         dist_page.number_of_columns = 3
-        
+
         for multi in range(self.num_multi):
             dist_info = []
             new_info = random_distribution()

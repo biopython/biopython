@@ -72,7 +72,7 @@ def real_test():
             y_point = random.randrange(min_point_num, max_point_num)
             cur_list.append((x_point, y_point))
         plot_info.append(cur_list)
-    
+
     compare_plot = ComparativeScatterPlot("png")
     compare_plot.display_info = plot_info
 
@@ -98,12 +98,12 @@ def real_test():
                 "bitmaps from Bio.Graphics\n" + str(err))
         else :
             raise err
-    
+
     return True
 
 #Run the actual test BEFORE the unittest stuff gets called
 real_test()
-               
+
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""
     def test_simple_scatter_plot(self):

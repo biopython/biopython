@@ -94,7 +94,7 @@ class TestPdbAtom(unittest.TestCase):
         self.assertEqual(len(chains), 1)
         self.assertEqual(str(chains[0].seq), 'APARVGLGITTVLTMTTQSSGSRASLPK')
 
-        
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

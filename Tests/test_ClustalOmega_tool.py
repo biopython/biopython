@@ -146,7 +146,7 @@ class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
         """Test setting options via properties."""
         input_file = "Registry/seqs.fasta"
         output_file = "temp_test.aln"
-        
+
         cline = ClustalOmegaCommandline(clustalo_exe)
         cline.infile = input_file
         cline.outfile = output_file

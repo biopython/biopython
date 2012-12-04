@@ -54,7 +54,7 @@ class NextOrf:
         self.table = makeTableX(CodonTable.ambiguous_dna_by_id[self.genetic_code])
         self.counter = 0
         self.ReadFile()
-        
+
     def ReadFile(self):
         handle = open(self.file)
         for record in SeqIO.parse(handle, "fasta"):
@@ -97,7 +97,7 @@ class NextOrf:
        d= {}
        for nt in ['A','T','G','C']:
           d[nt] = [0,0,0]
-          
+
        for i in range(0,l,3):
           codon = seq[i:i+3]
           if len(codon) <3: codon = codon + '  '
@@ -175,7 +175,7 @@ class NextOrf:
                     elif length < minlength or length > maxlength:
                        start_site = 0
                        if nostart == '1': start_site = stop + 1
-                    del stop   
+                    del stop
         return CDS
 
     def Output(self, CDS):
@@ -188,7 +188,7 @@ class NextOrf:
             if strand < 0: head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1,n-start+1)
             if self.options['gc']:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
-                
+
             if out == 'aa':
                 orf = subs.translate(table=self.genetic_code)
                 print self.ToFasta(head, orf.data)
@@ -196,13 +196,12 @@ class NextOrf:
                 print self.ToFasta(head, subs.data)
             elif out == 'pos':
                 print head
-                
-        
-    
+
+
 def help():
     global options
     print 'Usage:', sys.argv[0], '(<options>) <FASTA file>'
-    
+
     print 'Options:                                                       default'
     print '--start       Start position in sequence                             0'
     print '--stop        Stop position in sequence            (end of seqence)'
@@ -210,11 +209,11 @@ def help():
     print '--maxlength   Maximum length of orf in bp, default           100000000'
     print '--strand      Strand to analyse [both, plus, minus]               both'
     print '--frame       Frame to analyse [1 2 3]                             all'
-    print '--noframe     Ignore start codons [0 1]                              0'  
+    print '--noframe     Ignore start codons [0 1]                              0'
     print '--output      Output to generate [aa nt pos]                        aa'
     print '--gc          Creates GC statistics of ORF [0 1]                     0'
     print '--table       Genetic code to use (see below)                        1'
-    
+
 #    for a,b in options.items(): print '\t', a,b
 #    print ''
     print "\nNCBI's Codon Tables:"
@@ -222,7 +221,7 @@ def help():
         print '\t',key, table._codon_table.names[0]
     print '\ne.g.\n./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas'
     sys.exit(0)
-    
+
 
 options = {
     'start': 0,
@@ -255,7 +254,7 @@ if __name__ == '__main__':
             if arg[1].lower() == 'no': arg[1] = 0
             elif arg[1].lower() == 'yes': arg[1] = 1
             if arg[0][2:] == key: options[key] = arg[1]
-            
+
         if arg[0] == '-v':print 'OPTIONS', options
 
     file = args[0]

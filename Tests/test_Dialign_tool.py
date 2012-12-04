@@ -33,7 +33,7 @@ else:
             raise MissingExternalDependencyError(\
                 "Environment variable DIALIGN2_DIR directory missing BLOSUM file.")
         #TODO - check for tp400_dna, tp400_prot and tp400_trans too?
-        
+
 if not dialign_exe:
     raise MissingExternalDependencyError(\
         "Install DIALIGN2-2 if you want to use the Bio.Align.Applications wrapper.")
@@ -41,7 +41,7 @@ if not dialign_exe:
 class DialignApplication(unittest.TestCase):
 
     def setUp(self):
-        self.infile1 = "Fasta/f002" 
+        self.infile1 = "Fasta/f002"
         #Standard output file
         self.outfile1 = "Fasta/f002.ali"
         #MSF output

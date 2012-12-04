@@ -23,7 +23,7 @@ class MotifTestsBasic(unittest.TestCase):
         instance = Seq("ATATA")
         instances = [instance]
         self.m=Motif.Motif(instances=instances)
-        
+
     def tearDown(self):
         self.PFMin.close()
         self.SITESin.close()
@@ -398,7 +398,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.assertEqual(str(record.motifs[15].instances[20]), "AGCCTCCAGGTCGCATGG")
         self.assertEqual(record.motifs[15].mask, [1,1,0,1,0,1,0,0,1,1,0,1,1,0,0,0,1,1])
         self.assertAlmostEqual(record.motifs[15].score, 1.0395)
- 
+
     def test_pfm_parsing(self):
         """Test to be sure that Motif can parse pfm  files.
         """
@@ -437,10 +437,10 @@ class MotifTestsBasic(unittest.TestCase):
         output_handle = open(self.PFMout, "w")
         output_handle.write(self.m.format("jaspar-pfm"))
         output_handle.close()
-        
-        
+
+
 class TestMEME(unittest.TestCase):
-        
+
     def test_meme_parser_1(self):
         """Test if Motif can parse MEME output files (first test)
         """
@@ -1362,7 +1362,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[20]), "IDRKGIYQWLISLK")
         handle.close()
 
- 
+
 class TestMAST(unittest.TestCase):
 
     def test_mast_parser_1(self):

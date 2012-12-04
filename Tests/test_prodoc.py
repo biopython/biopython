@@ -837,7 +837,7 @@ PubMed=10903511""")
 class TestProdocParse(unittest.TestCase):
 
     def test_parse_pdoc(self):
-        "Parsing an excerpt of prosite.doc" 
+        "Parsing an excerpt of prosite.doc"
         filename = os.path.join( 'Prosite', 'Doc', 'prosite.excerpt.doc')
         handle = open(filename)
         records = Prodoc.parse(handle)
@@ -968,7 +968,7 @@ asparagine-X-cysteine sites."
 J. Biol. Chem. 265:11397-11404(1990).
 PubMed=1694179""")
 
-        # Testing the third parsed record" 
+        # Testing the third parsed record"
         record = records.next()
         self.assertEqual(record.accession, "PDOC00004")
         self.assertEqual(len(record.prosite_refs), 1)

@@ -3,7 +3,7 @@
 #
 # Converted by Eric Talevich from an older unit test copyright 2002
 # by Thomas Hamelryck.
-# 
+#
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
@@ -31,7 +31,7 @@ from Bio.PDB.NeighborSearch import NeighborSearch
 class NeighborTest(unittest.TestCase):
     def test_neighbor_search(self):
         """NeighborSearch: Find nearby randomly generated coordinates.
-         
+
         Based on the self test in Bio.PDB.NeighborSearch.
         """
         class RandomAtom:

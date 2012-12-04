@@ -34,7 +34,7 @@ def test_assertion(name, result, expected):
     """
     assert result == expected, "Expected %s, got %s for %s" \
            % (expected, result, name)
-    
+
 class MarkovModelBuilderTest(unittest.TestCase):
     def setUp(self):
         self.mm_builder = MarkovModel.MarkovModelBuilder(NumberAlphabet(),
@@ -76,7 +76,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         test_assertion("Probabilities", self.mm_builder.transition_prob,
                        expected_prob)
-        
+
         test_assertion("Pseudo counts",  self.mm_builder.transition_pseudo,
                        expected_pseudo)
 
@@ -237,7 +237,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         prob_initial = [0.4, 0.6]
         self.mm_builder.set_initial_probabilities(
                 {'1': prob_initial[0], '2': prob_initial[1]})
-        
+
         # set transition probabilities
         prob_transition = [[0.35, 0.65], [0.45, 0.55]]
         self.mm_builder.allow_transition('1', '1', prob_transition[0][0])
@@ -339,8 +339,8 @@ class HiddenMarkovModelTest(unittest.TestCase):
         # the most probable path must be from state 1 to state 2
         test_assertion("most probable path", str(seq), '12')
 
-        # The probability of that path is the probability of starting in 
-        # state 1, then emitting an A, then transitioning 1 -> 2, then 
+        # The probability of that path is the probability of starting in
+        # state 1, then emitting an A, then transitioning 1 -> 2, then
         # emitting a B.
         # Note that probabilities are converted into log space.
         expected_prob = math.log(prob_1_initial)\
@@ -367,7 +367,7 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
 
         # finally set up the DP
         self.dp = DynamicProgramming.ScaledDPAlgorithms(mm, training_seq)
-        
+
     def test_calculate_s_value(self):
         """Testing the calculation of s values.
         """
@@ -382,7 +382,7 @@ class AbstractTrainerTest(unittest.TestCase):
         # set up a bogus HMM and our trainer
         hmm = MarkovModel.HiddenMarkovModel({}, {}, {}, {}, {})
         self.test_trainer = Trainer.AbstractTrainer(hmm)
-    
+
     def test_ml_estimator(self):
         """Test the maximum likelihood estimator for simple cases.
         """

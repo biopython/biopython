@@ -1630,7 +1630,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(len(record.alignments[0].hsps), 2)
         self.assertEqual(len(record.alignments[1].hsps), 2)
         self.assertEqual(len(record.alignments[9].hsps), 2)
-        
+
         record = records.next()
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.22+')
