@@ -75,8 +75,8 @@ class Reaction(object):
         for r, value in reactants.iteritems():
             if value == 0:
                 del self.reactants[r]
-        self.catalysts  = sorted(set(catalysts))
-        self.data       = data
+        self.catalysts = sorted(set(catalysts))
+        self.data = data
         self.reversible = reversible
 
     def __eq__(self, r):
@@ -107,7 +107,7 @@ class Reaction(object):
     def __str__(self):
         """Returns a string representation of self."""
         substrates = ""
-        products   = ""
+        products = ""
         all_species = sorted(self.reactants)
         for species in all_species:
             stoch = self.reactants[species]

@@ -609,13 +609,13 @@ class GenePopController(object):
 
                 while "Expected number of ho" not in l:
                     l = self.stream.readline()
-                expHo =  _gp_float(l[38:])
+                expHo = _gp_float(l[38:])
                 l = self.stream.readline()
-                obsHo =  _gp_int(l[38:])
+                obsHo = _gp_int(l[38:])
                 l = self.stream.readline()
-                expHe =  _gp_float(l[38:])
+                expHe = _gp_float(l[38:])
                 l = self.stream.readline()
-                obsHe =  _gp_int(l[38:])
+                obsHe = _gp_int(l[38:])
                 l = self.stream.readline()
 
                 while "Sample count" not in l:

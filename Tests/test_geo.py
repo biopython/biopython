@@ -6,7 +6,7 @@ import sys
 
 import Bio.Geo
 
-testfiles   = [  'GSE16.txt', 'GSM645.txt', 'GSM691.txt', 'GSM700.txt', 'GSM804.txt'  ]
+testfiles = ['GSE16.txt', 'GSM645.txt', 'GSM691.txt', 'GSM700.txt', 'GSM804.txt']
 
 #Five additional files from the NCBI to document the GEO SOFT file format
 #changes made in 2005.  Note the new table_begin and table_end lines.

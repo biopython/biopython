@@ -122,7 +122,7 @@ class GraphSet(object):
         id = self._next_id                              # get id number
         graph = GraphData(id, data, name, style, color, altcolor, center)
         graph.linewidth = linewidth
-        self._graphs[id] =  graph                       # add graph data
+        self._graphs[id] = graph                        # add graph data
         self._next_id += 1                              # increment next id
         return graph
 

@@ -179,7 +179,7 @@ class SummaryInfo(object):
         #Now check its compatible with all the rest of the sequences
         for record in self.alignment:
             #Get the (un-gapped version of) the sequence's alphabet
-            alt =  Alphabet._get_base_alphabet(record.seq.alphabet)
+            alt = Alphabet._get_base_alphabet(record.seq.alphabet)
             if not isinstance(alt, a.__class__):
                 raise ValueError("Alignment contains a sequence with \
                                 an incompatible alphabet.")

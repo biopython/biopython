@@ -60,9 +60,9 @@ if not muscle_exe:
 class MuscleApplication(unittest.TestCase):
     
     def setUp(self):
-        self.infile1  = "Fasta/f002"
-        self.infile2  = "Fasta/fa01"
-        self.infile3  = "Fasta/f001"
+        self.infile1 = "Fasta/f002"
+        self.infile2 = "Fasta/fa01"
+        self.infile3 = "Fasta/f001"
         self.outfile1 = "Fasta/temp align out1.fa" #with spaces!
         self.outfile2 = "Fasta/temp_align_out2.fa"
         self.outfile3 = "Fasta/temp_align_out3.fa"

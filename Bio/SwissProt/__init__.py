@@ -234,7 +234,7 @@ def _read(handle):
             # Join multiline data into one string
             record.description = " ".join(record.description)
             record.organism = " ".join(record.organism)
-            record.organelle   = record.organelle.rstrip()
+            record.organelle = record.organelle.rstrip()
             for reference in record.references:
                 reference.authors = " ".join(reference.authors).rstrip(";")
                 reference.title = " ".join(reference.title).rstrip(";")

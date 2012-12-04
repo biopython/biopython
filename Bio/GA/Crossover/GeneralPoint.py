@@ -49,7 +49,7 @@ class GeneralPointCrossover(object):
         """
         self._crossover_prob = crossover_prob
 
-        self._sym     = points % 2 # odd n, gets a symmetry flag
+        self._sym = points % 2 # odd n, gets a symmetry flag
         self._npoints = (points + self._sym)//2 # (N or N+1)//2
     
     def do_crossover(self, org_1, org_2):
@@ -62,7 +62,7 @@ class GeneralPointCrossover(object):
         if crossover_chance <= self._crossover_prob:
             
             # pre-compute bounds (len(genome))
-            bound  = (len(new_org[0].genome), len(new_org[1].genome))
+            bound = (len(new_org[0].genome), len(new_org[1].genome))
             
             mbound = min(bound)
             # can't have more than 0,x_0...x_n,bound locations
@@ -82,7 +82,7 @@ class GeneralPointCrossover(object):
                     y_locs = self._generate_locs( bound[1] )
                 else:
                     y_locs = x_locs
-                    xlocs  = self._generate_locs( bound[0] )
+                    xlocs = self._generate_locs( bound[0] )
               
             # copy new genome strings over
             tmp = self._crossover(0, new_org, (x_locs,y_locs))

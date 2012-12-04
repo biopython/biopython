@@ -79,7 +79,7 @@ class Murphy10(Alphabet.ProteinAlphabet):
    size = 10
 murphy_10 = Murphy10()
 
-murphy_8_tab  = {"L": "L",
+murphy_8_tab = {"L": "L",
              "V": "L",
              "I": "L",
              "M": "L",
@@ -105,7 +105,7 @@ class Murphy8(Alphabet.ProteinAlphabet):
    size = 8
 murphy_8 = Murphy8()
 
-murphy_4_tab  = {"L": "L",
+murphy_4_tab = {"L": "L",
              "V": "L",
              "I": "L",
              "M": "L",
@@ -157,7 +157,7 @@ class HPModel(Alphabet.ProteinAlphabet):
    size = 2
 hp_model = HPModel()
 
-pc_5_table  = {"I": "A", # Aliphatic
+pc_5_table = {"I": "A", # Aliphatic
          "V": "A",
          "L": "A",
          "F": "R", # Aromatic

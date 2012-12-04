@@ -37,9 +37,9 @@ def _maketrans(complement_mapping):
     For internal use only.
     """
     before = ''.join(complement_mapping.keys())
-    after  = ''.join(complement_mapping.values())
+    after = ''.join(complement_mapping.values())
     before = before + before.lower()
-    after  = after + after.lower()
+    after = after + after.lower()
     if sys.version_info[0] == 3 :
         return str.maketrans(before, after)
     else:

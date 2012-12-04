@@ -2,7 +2,7 @@ from Bio.Seq import translate, transcribe, back_transcribe
 import wx
 
 ID_APPLY = 101
-ID_CLEAR  = 102
+ID_CLEAR = 102
 ID_EXIT = 103
 ID_CLOSE = 104
 ID_ABOUT = 105

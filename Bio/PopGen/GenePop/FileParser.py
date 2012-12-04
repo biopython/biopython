@@ -62,9 +62,9 @@ class FileRecord(object):
 
     """
     def __init__(self, fname):
-        self.comment_line    = ""
-        self.loci_list       = []
-        self.fname           = fname
+        self.comment_line = ""
+        self.loci_list = []
+        self.fname = fname
         self.start_read()
 
     def __str__(self):
@@ -74,7 +74,7 @@ class FileRecord(object):
            Marker length will be 3.
         """
         marker_len = 3
-        rep  = [self.comment_line + '\n']
+        rep = [self.comment_line + '\n']
         rep.append('\n'.join(self.loci_list) + '\n')
         current_pop = self.current_pop
         current_ind = self.current_ind

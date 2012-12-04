@@ -261,7 +261,7 @@ class _BaseExonerateParser(object):
         for line in aln_header:
             # query line
             if line.startswith('Query:'):
-                qresult['id'], qresult['description']  = \
+                qresult['id'], qresult['description'] = \
                         _parse_hit_or_query_line(line)
             # target line
             elif line.startswith('Target:'):

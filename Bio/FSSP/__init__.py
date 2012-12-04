@@ -80,7 +80,7 @@ class PosAlign(object):
          outstring = self.aa+self.ss.lower()
       return outstring
 
-   __str__  = __repr__
+   __str__ = __repr__
 
 
 
@@ -129,7 +129,7 @@ class FSSPAlignRec(object):
       # print in_fff_rec
       self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
       self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
-      self.chain_id  = in_fff_rec[fssp_rec.align.chain_id]
+      self.chain_id = in_fff_rec[fssp_rec.align.chain_id]
       if self.chain_id == ' ':
          self.chain_id = '0'
       self.res_name = in_fff_rec[fssp_rec.align.res_name]

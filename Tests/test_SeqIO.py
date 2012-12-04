@@ -430,9 +430,9 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
 
     #Try as an iterator using handle
     h = open(t_filename,mode)
-    records  = list(SeqIO.parse(handle=h, format=t_format))
+    records = list(SeqIO.parse(handle=h, format=t_format))
     h.close()
-    assert len(records)  == t_count, \
+    assert len(records) == t_count, \
          "Found %i records but expected %i" % (len(records), t_count)
 
     #Try using the iterator with a for loop, and a filename not handle

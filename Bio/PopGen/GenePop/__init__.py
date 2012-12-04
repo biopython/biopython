@@ -121,11 +121,11 @@ class Record(object):
     
     """
     def __init__(self):
-        self.marker_len      = 0
-        self.comment_line    = ""
-        self.loci_list       = []
-        self.pop_list        = []
-        self.populations     = []
+        self.marker_len = 0
+        self.comment_line = ""
+        self.loci_list = []
+        self.pop_list = []
+        self.populations = []
 
     def __str__(self):
         """Returns (reconstructs) a GenePop textual representation.

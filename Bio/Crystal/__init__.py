@@ -231,7 +231,7 @@ class Crystal(object):
         keys = self.data.keys()
         keys.sort()
         for key in keys:
-            output = output +  '%s : %s\n' % (key, self.data[ key ])
+            output = output + '%s : %s\n' % (key, self.data[ key ])
         return output
 
     def __str__(self):
@@ -239,7 +239,7 @@ class Crystal(object):
         keys = self.data.keys()
         keys.sort()
         for key in keys:
-            output = output +  '%s : %s\n' % (key, self.data[ key ])
+            output = output + '%s : %s\n' % (key, self.data[ key ])
         return output
 
     def tostring(self):

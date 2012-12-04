@@ -295,10 +295,10 @@ class HSP(_BaseHSP):
         statline = []
         # evalue
         evalue = getattr_str(self, 'evalue', fmt='%.2g')
-        statline.append('evalue ' +  evalue)
+        statline.append('evalue ' + evalue)
         # bitscore
         bitscore = getattr_str(self, 'bitscore', fmt='%.2f')
-        statline.append('bitscore ' +  bitscore)
+        statline.append('bitscore ' + bitscore)
         lines.append('Quick stats: ' + '; '.join(statline))
 
         if len(self.fragments) == 1:

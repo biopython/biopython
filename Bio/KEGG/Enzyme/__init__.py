@@ -80,7 +80,7 @@ class Record(object):
         Returns a string representation of this Record.
         """
         return self._entry() + \
-               self._name()  + \
+               self._name() + \
                self._classname() + \
                self._sysname() + \
                self._reaction() + \
