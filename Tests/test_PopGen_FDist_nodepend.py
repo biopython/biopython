@@ -20,10 +20,10 @@ class RecordTest(unittest.TestCase):
         """
 
         r = FDist.Record()
-        assert type(r.data_org)  == int
-        assert type(r.num_pops)  == int
-        assert type(r.num_loci)  == int
-        assert type(r.loci_data) == list
+        assert isinstance(r.data_org, int)
+        assert isinstance(r.num_pops, int)
+        assert isinstance(r.num_loci, int)
+        assert isinstance(r.loci_data, list)
 
 class ParserTest(unittest.TestCase):
     def setUp(self):
