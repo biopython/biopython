@@ -208,7 +208,7 @@ class TogoEntry(unittest.TestCase):
     def test_nucleotide_genbank(self):
         """Bio.TogoWS.entry("nucleotide", "X52960")"""
         handle = TogoWS.entry("nucleotide", "X52960") #Returns "genbank" format
-        record  = SeqIO.read(handle, "gb")
+        record = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
         self.assertEqual(record.name, "X52960")
@@ -335,7 +335,7 @@ class TogoEntry(unittest.TestCase):
         """Bio.TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])"""
         #Returns "swiss" format:
         handle = TogoWS.entry("uniprot", ["A1AG1_HUMAN","A1AG1_MOUSE"])
-        record1, record2  = SeqIO.parse(handle, "swiss")
+        record1, record2 = SeqIO.parse(handle, "swiss")
         handle.close()
 
         self.assertEqual(record1.id, "P02763")
@@ -351,7 +351,7 @@ class TogoEntry(unittest.TestCase):
     def test_nucleotide_fasta(self):
         """Bio.TogoWS.entry("nucleotide", "6273291", "fasta")"""
         handle = TogoWS.entry("nucleotide", "6273291", "fasta")
-        record  = SeqIO.read(handle, "fasta")
+        record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("6273291" in record.id, record.id)
         self.assert_("6273291" in record.name, record.name)
@@ -361,7 +361,7 @@ class TogoEntry(unittest.TestCase):
     def test_protein_fasta(self):
         """Bio.TogoWS.entry("protein", "16130152", "fasta")"""
         handle = TogoWS.entry("protein", "16130152", "fasta")
-        record  = SeqIO.read(handle, "fasta")
+        record = SeqIO.read(handle, "fasta")
         handle.close()
         #Could use assertIn but requires Python 2.7+
         self.assert_("16130152" in record.id, record.id)

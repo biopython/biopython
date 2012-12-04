@@ -260,7 +260,7 @@ class PrintFormat(object):
             return title
         ls.sort(lambda x,y : cmp(len(x[1]), len(y[1])))
         iterator = iter(ls)
-        cur_len  = 1
+        cur_len = 1
         new_sect = []
         for name, sites in iterator:
             l = len(sites)

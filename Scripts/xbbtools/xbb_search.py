@@ -63,7 +63,7 @@ class DNAsearch:
         pos = -1
         positions = []
         while 1:
-            m   = self._Search(pos+1)
+            m = self._Search(pos+1)
             if not m: break
             pos = m.start()
             if pos == -1:

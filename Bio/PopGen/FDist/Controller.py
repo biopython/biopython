@@ -269,7 +269,7 @@ class FDistController(object):
             cplot_name = "cplot"
         else:
             cplot_name = "cplot2"
-        os.system('cd ' + data_dir + ' && '  +
+        os.system('cd ' + data_dir + ' && ' +
             self._get_path(cplot_name) + ' < ' + in_name + ' > ' + out_name)
         os.remove(data_dir + os.sep + in_name)
         os.remove(data_dir + os.sep + out_name)

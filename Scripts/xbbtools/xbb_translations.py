@@ -83,7 +83,7 @@ class xbb_translations:
         length = len(seq)
         frames = {}
         for i in range(0,3):
-            frames[i+1]  = self.frame1(seq[i:], translation_table)
+            frames[i+1] = self.frame1(seq[i:], translation_table)
             frames[-(i+1)] = self.reverse(self.frame1(anti[i:], translation_table))
 
         res = self.header_nice('GCFrame', seq)
@@ -101,7 +101,7 @@ class xbb_translations:
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
             res += csubseq.lower() + '\n'
             # - frames
-            res += '  '.join(map(None,frames[-2][p:p+20]))  +' \n'
+            res += '  '.join(map(None,frames[-2][p:p+20])) + ' \n'
             res += ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
             res += '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
             

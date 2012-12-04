@@ -93,7 +93,7 @@ except NameError:
         functionality, you could use the expression (a > b) -  (a < b)
         as the equivalent for cmp(a, b)
         """
-        return (a > b) -  (a < b)
+        return (a > b) - (a < b)
 
 def cmp_sccs(sccs1, sccs2):
     """Order SCOP concise classification strings (sccs).

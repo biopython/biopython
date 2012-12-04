@@ -334,7 +334,7 @@ class Record(object):
         """
         output = ""
         if len(self.keywords) >= 0:
-            output +=  Record.BASE_FORMAT % "KEYWORDS"
+            output += Record.BASE_FORMAT % "KEYWORDS"
             keyword_info = ""
             for keyword in self.keywords:
                 keyword_info += "%s; " % keyword

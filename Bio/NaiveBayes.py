@@ -72,7 +72,7 @@ def calculate(nb, observation, scale=0):
                          % (len(observation), nb.dimensionality))
 
     # Calculate log P(observation|class) for every class.
-    n  = len(nb.classes)
+    n = len(nb.classes)
     lp_observation_class = numpy.zeros(n)   # array of log P(observation|class)
     for i in range(n):
         # log P(observation|class) = SUM_i log P(observation_i|class)

@@ -27,7 +27,7 @@ class UniformCrossover(object):
         """Initialize to do uniform crossover at the specified probability and frequency.
         """
         self._crossover_prob = crossover_prob
-        self._uniform_prob   = uniform_prob
+        self._uniform_prob = uniform_prob
         return
         
     def do_crossover(self, org_1, org_2):

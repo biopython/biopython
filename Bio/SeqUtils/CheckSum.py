@@ -50,7 +50,7 @@ def crc64(s):
         shr = (crch & 0xFF) << 24
         temp1h = crch >> 8
         temp1l = (crcl >> 8) | shr
-        idx  = (crcl ^ ord(c)) & 0xFF
+        idx = (crcl ^ ord(c)) & 0xFF
         crch = temp1h ^ _table_h[idx]
         crcl = temp1l
 

@@ -43,7 +43,7 @@ class SinglePointTest(unittest.TestCase):
         genome_2 = MutableSeq("22222", self.alphabet)
         self.org_2 = Organism(genome_2, test_fitness)
         
-        self.crossover  = SinglePointCrossover(1.0)
+        self.crossover = SinglePointCrossover(1.0)
 
     def test_basic_crossover(self):
         """Test basic point crossover functionality.
@@ -147,7 +147,7 @@ class InterleaveTest(unittest.TestCase):
         genome_3 = MutableSeq("333333333", self.alphabet)
         self.org_3 = Organism(genome_3, test_fitness)
         
-        self._crossover  = InterleaveCrossover(1.0)
+        self._crossover = InterleaveCrossover(1.0)
 
     def test_basic_crossover(self):
         """Test basic interleave crossover functionality.

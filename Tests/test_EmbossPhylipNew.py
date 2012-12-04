@@ -88,7 +88,7 @@ class DistanceTests(unittest.TestCase):
         """check we can make distance matrix from a given alignment"""
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         if DNA:
-            cline =  FDNADistCommandline(exes["fdnadist"],
+            cline = FDNADistCommandline(exes["fdnadist"],
                                          method = 'j',
                                          sequence= filename,
                                          outfile = "test_file",
@@ -221,7 +221,7 @@ class BootstrapTests(unittest.TestCase):
         self.assertTrue(os.path.isfile(filename), "Missing %s" % filename)
         cline = FSeqBootCommandline(exes["fseqboot"],
                                     sequence = filename,
-                                    outfile =  "test_file",
+                                    outfile = "test_file",
                                     seqtype = align_type,
                                     reps = 2,
                                     auto = True, filter = True)

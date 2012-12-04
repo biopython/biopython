@@ -98,7 +98,7 @@ class SeqMapIndex(dict):
         if isinstance(residues, basestring):
             residues = Residues(residues)
 
-        pdbid  = residues.pdbid
+        pdbid = residues.pdbid
         frags = residues.fragments
         if not frags: frags =(('_','',''),) # All residues of unnamed chain
 
@@ -184,7 +184,7 @@ class SeqMap(object):
                 raise ValueError("Corrupt Field: ("+f+")")
             r = Res()
             r.chainid = chainid
-            r.resid =  f[0:5].strip()
+            r.resid = f[0:5].strip()
             r.atom = normalize_letters(f[5:6])
             r.seqres = normalize_letters(f[6:7])
 

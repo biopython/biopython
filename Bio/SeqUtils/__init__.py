@@ -121,7 +121,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
     canvas.pack(fill=BOTH, side = LEFT, expand = 1)
     canvas.update()
 
-    X0, Y0  = r + px, r + py
+    X0, Y0 = r + px, r + py
     x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
    
     ty = Y0
@@ -332,7 +332,7 @@ def six_frame_translations(seq, genetic_code = 1):
     length = len(seq)
     frames = {}
     for i in range(0,3):
-        frames[i+1]  = translate(seq[i:], genetic_code)
+        frames[i+1] = translate(seq[i:], genetic_code)
         frames[-(i+1)] = translate(anti[i:], genetic_code)[::-1]
 
     # create header
@@ -359,7 +359,7 @@ def six_frame_translations(seq, genetic_code = 1):
         res = res + subseq.lower() + '%5d %%\n' % int(GC(subseq))
         res = res + csubseq.lower() + '\n'
         # - frames
-        res = res + '  '.join(map(None,frames[-2][p:p+20]))  +' \n'
+        res = res + '  '.join(map(None,frames[-2][p:p+20])) +' \n'
         res = res + ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
         res = res + '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
     return res

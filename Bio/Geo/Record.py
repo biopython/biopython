@@ -84,6 +84,6 @@ class Record(object):
 def out_block( text, prefix = '' ):
     output = ''
     for j in range( 0, len( text ), 80 ):
-        output = output + '%s%s\n'  % ( prefix, text[ j: j + 80 ] )
+        output = output + '%s%s\n' % ( prefix, text[ j: j + 80 ] )
     output = output + '\n'
     return output

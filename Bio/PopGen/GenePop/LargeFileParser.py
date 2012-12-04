@@ -86,13 +86,13 @@ class Record(object):
     
     """
     def __init__(self, handle):
-        self.handle          = handle
-        self.marker_len      = 0
-        self.comment_line    = ""
-        self.loci_list       = []
-        self.populations     = []
-        self.data_generator  = None
-        self.stack           = [] 
+        self.handle = handle
+        self.marker_len = 0
+        self.comment_line = ""
+        self.loci_list = []
+        self.populations = []
+        self.data_generator = None
+        self.stack = []
 
     def data_generator(self):
         for handle in [self.stack, self.handle]:

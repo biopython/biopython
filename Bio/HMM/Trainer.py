@@ -199,7 +199,7 @@ class BaumWelchTrainer(AbstractTrainer):
                 # calculate the forward and backward variables
                 DP = dp_method(self._markov_model, training_seq)
                 forward_var, seq_prob = DP.forward_algorithm()
-                backward_var =  DP.backward_algorithm()
+                backward_var = DP.backward_algorithm()
                 
                 all_probabilities.append(seq_prob)
 
@@ -221,7 +221,7 @@ class BaumWelchTrainer(AbstractTrainer):
             self._markov_model.transition_prob = ml_transitions
             self._markov_model.emission_prob = ml_emissions
 
-            cur_log_likelihood =  self.log_likelihood(all_probabilities)
+            cur_log_likelihood = self.log_likelihood(all_probabilities)
 
             # if we have previously calculated the log likelihood (ie.
             # not the first round), see if we can finish

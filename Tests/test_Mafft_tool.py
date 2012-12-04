@@ -65,7 +65,7 @@ check_mafft_version(mafft_exe)
 class MafftApplication(unittest.TestCase):
 
     def setUp(self):
-        self.infile1  = "Fasta/f002"
+        self.infile1 = "Fasta/f002"
 
     def tearDown(self):
         if os.path.isfile("Fasta/f002.tree"):

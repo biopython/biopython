@@ -58,7 +58,7 @@ three_to_one_buf_noq = []  # only those with non-'?' one-letter codes
 current_line = 'to_one_letter_code = {'
 current_line_noq = 'to_one_letter_code = {'
 
-found_one   = False  # found one-letter code
+found_one = False    # found one-letter code
 found_three = False  # found three-letter code
 
 counter = 0

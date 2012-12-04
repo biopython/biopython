@@ -1433,15 +1433,15 @@ class Defined(AbstractCut):
         f5 = self.fst5
         f3 = self.fst3
         site = self.site
-        if self.cut_twice() : re =  'cut twice, not yet implemented sorry.'
+        if self.cut_twice() : re = 'cut twice, not yet implemented sorry.'
         elif self.is_5overhang():
             if f5 == f3 == 0 : re = 'N^'+ self.site + '_N'
             elif f3 == 0 : re = site[:f5] + '^' + site[f5:] + '_N'
             else : re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
         elif self.is_blunt():
-            re =  site[:f5] + '^_' + site[f5:]
+            re = site[:f5] + '^_' + site[f5:]
         else:
-            if f5 == f3 == 0 : re = 'N_'+  site + '^N'
+            if f5 == f3 == 0 : re = 'N_'+ site + '^N'
             else : re = site[:f3] + '_' + site[f3:f5] +'^'+ site[f5:]
         return re
 
@@ -2148,8 +2148,8 @@ class Analysis(RestrictionBatch, PrintFormat):
         for k,v in what.iteritems():
             if k in ('NameWidth', 'ConsoleWidth'):
                 setattr(self, k, v)
-                self.Cmodulo    = self.ConsoleWidth % self.NameWidth
-                self.PrefWidth  = self.ConsoleWidth - self.Cmodulo
+                self.Cmodulo   = self.ConsoleWidth % self.NameWidth
+                self.PrefWidth = self.ConsoleWidth - self.Cmodulo
             elif k is 'sequence':
                 setattr(self, 'sequence', v) 
                 self.search(self.sequence, self.linear)
@@ -2381,8 +2381,8 @@ class Analysis(RestrictionBatch, PrintFormat):
 #   It is essential to run Restriction with doc string optimisation (-OO switch)
 #   as the doc string of 660 classes take a lot of processing.
 #
-CommOnly    = RestrictionBatch()    # commercial enzymes
-NonComm     = RestrictionBatch()    # not available commercially
+CommOnly = RestrictionBatch()    # commercial enzymes
+NonComm = RestrictionBatch()     # not available commercially
 for TYPE, (bases, enzymes) in typedict.iteritems():
     #
     #   The keys are the pseudo-types TYPE (stored as type1, type2...)

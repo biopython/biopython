@@ -42,7 +42,7 @@ def read(handle):
             section = "HEADER"
         elif line[:11]=="[INTENSITY]":
             section = "INTENSITY"
-            record.intensities  = numpy.zeros((record.nrows, record.ncols))
+            record.intensities = numpy.zeros((record.nrows, record.ncols))
             record.stdevs = numpy.zeros((record.nrows, record.ncols))
             record.npix = numpy.zeros((record.nrows, record.ncols), int)
         elif line[0]=="[":
@@ -58,7 +58,7 @@ def read(handle):
                 continue
             words = line.split()
             y, x = map(int, words[:2])
-            record.intensities[x,y]  = float(words[2])
+            record.intensities[x,y] = float(words[2])
             record.stdevs[x,y] = float(words[3])
-            record.npix[x,y]  = int(words[4])
+            record.npix[x,y] = int(words[4])
     return record

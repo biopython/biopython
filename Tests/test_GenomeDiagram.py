@@ -693,7 +693,7 @@ class DiagramTest(unittest.TestCase):
                                   ("GGATCC","BamHI","purple")]:
             index = 0
             while True:
-                index  = genbank_entry.seq.find(site, start=index)
+                index = genbank_entry.seq.find(site, start=index)
                 if index == -1 : break
                 feature = SeqFeature(FeatureLocation(index, index+6), strand=None)
 
