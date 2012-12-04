@@ -45,7 +45,7 @@ class FDistController(object):
             py_ext = '.exe'
         else:
             py_ext = ''
-        if ext == None:
+        if ext is None:
             self.ext = py_ext
         else:
             self.ext = ext

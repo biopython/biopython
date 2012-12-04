@@ -28,7 +28,7 @@ class SimCoalCache(object):
 
 
     def run_simcoal(self, par_file, num_sims, ploydi = '1', parDir = None):
-        if parDir == None:
+        if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         par_file_root = par_file[:-4]
         tar_name = os.sep.join([self.cacheDir, ploydi, par_file_root + 
@@ -72,7 +72,7 @@ class SimCoalCache(object):
 
            This mainly means untaring a file.
         '''
-        if parDir == None:
+        if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])
         tar_name = os.sep.join([self.cacheDir, ploidy, sim_name + 
             '.tar.bz2'])

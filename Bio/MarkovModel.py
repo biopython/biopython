@@ -151,16 +151,16 @@ def train_bw(states, alphabet, training_data,
     N, M = len(states), len(alphabet)
     if not training_data:
         raise ValueError("No training data given.")
-    if pseudo_initial!=None:
+    if pseudo_initial is not None:
         pseudo_initial = numpy.asarray(pseudo_initial)
         if pseudo_initial.shape != (N,):
             raise ValueError("pseudo_initial not shape len(states)")
-    if pseudo_transition!=None:
+    if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N,N):
             raise ValueError("pseudo_transition not shape " + \
                              "len(states) X len(states)")
-    if pseudo_emission!=None:
+    if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N,M):
             raise ValueError("pseudo_emission not shape " + \
@@ -194,16 +194,16 @@ def _baum_welch(N, M, training_outputs,
                 pseudo_initial=None, pseudo_transition=None,
                 pseudo_emission=None, update_fn=None):
     # Returns (p_initial, p_transition, p_emission)
-    if p_initial==None:
+    if p_initial is None:
         p_initial = _random_norm(N)
     else:
         p_initial = _copy_and_check(p_initial, (N,))
 
-    if p_transition==None:
+    if p_transition is None:
         p_transition = _random_norm((N,N))
     else:
         p_transition = _copy_and_check(p_transition, (N,N))
-    if p_emission==None:
+    if p_emission is None:
         p_emission = _random_norm((N,M))
     else:
         p_emission = _copy_and_check(p_emission, (N,M))
@@ -211,15 +211,15 @@ def _baum_welch(N, M, training_outputs,
     # Do all the calculations in log space to avoid underflows.
     lp_initial, lp_transition, lp_emission = map(
         numpy.log, (p_initial, p_transition, p_emission))
-    if pseudo_initial!=None:
+    if pseudo_initial is not None:
         lpseudo_initial = numpy.log(pseudo_initial)
     else:
         lpseudo_initial = None
-    if pseudo_transition!=None:
+    if pseudo_transition is not None:
         lpseudo_transition = numpy.log(pseudo_transition)
     else:
         lpseudo_transition = None
-    if pseudo_emission!=None:
+    if pseudo_emission is not None:
         lpseudo_emission = numpy.log(pseudo_emission)
     else:
         lpseudo_emission = None
@@ -292,7 +292,7 @@ def _baum_welch_one(N, M, outputs,
 
     # UPDATE P_INITIAL.
     lp_initial = lp_arcout_t[:,0]
-    if lpseudo_initial!=None:
+    if lpseudo_initial is not None:
         lp_initial = _logvecadd(lp_initial, lpseudo_initial)
         lp_initial = lp_initial - _logsum(lp_initial)
     
@@ -302,7 +302,7 @@ def _baum_welch_one(N, M, outputs,
     for i in range(N):
         for j in range(N):
             lp_transition[i][j] = _logsum(lp_arc[i,j,:]) - lp_arcout[i]
-        if lpseudo_transition!=None:
+        if lpseudo_transition is not None:
             lp_transition[i] = _logvecadd(lp_transition[i], lpseudo_transition)
             lp_transition[i] = lp_transition[i] - _logsum(lp_transition[i])
             
@@ -316,7 +316,7 @@ def _baum_welch_one(N, M, outputs,
             for j in range(N):
                 ksum[k] = logaddexp(ksum[k], lp_arc[i,j,t])
         ksum = ksum - _logsum(ksum)      # Normalize
-        if lpseudo_emission!=None:
+        if lpseudo_emission is not None:
             ksum = _logvecadd(ksum, lpseudo_emission[i])
             ksum = ksum - _logsum(ksum)  # Renormalize
         lp_emission[i,:] = ksum
@@ -390,16 +390,16 @@ def train_visible(states, alphabet, training_data,
 
     """
     N, M = len(states), len(alphabet)
-    if pseudo_initial!=None:
+    if pseudo_initial is not None:
         pseudo_initial = numpy.asarray(pseudo_initial)
         if pseudo_initial.shape != (N,):
             raise ValueError("pseudo_initial not shape len(states)")
-    if pseudo_transition!=None:
+    if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N,N):
             raise ValueError("pseudo_transition not shape " + \
                              "len(states) X len(states)")
-    if pseudo_emission!=None:
+    if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N,M):
             raise ValueError("pseudo_emission not shape " + \

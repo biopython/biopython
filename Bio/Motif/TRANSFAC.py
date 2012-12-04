@@ -118,7 +118,7 @@ For more information, see the TRANSFAC documentation.
                     blank = True
                 else:
                     value = self.get(key)
-                    if value!=None:
+                    if value is not None:
                         if key in Motif._multiple_value_keys:
                             for v in value:
                                 line = "%s  %s" % (key, v)
@@ -133,7 +133,7 @@ For more information, see the TRANSFAC documentation.
                     for reference in self.references:
                         for key in keys:
                             value = reference.get(key)
-                            if value==None:
+                            if value is None:
                                 continue
                             line = "%s  %s" % (key, value)
                             lines.append(line)
@@ -163,7 +163,7 @@ Attributes:
 
     def __str__(self):
         blocks = []
-        if self.version!=None:
+        if self.version is not None:
             block = """\
 VV  %s
 XX
@@ -184,7 +184,7 @@ def read(handle):
     for line in handle:
         line = line.strip()
         if line=='//':
-            if motif!=None:
+            if motif is not None:
                 record.motifs.append(motif)
             motif = None
             status = None
@@ -195,7 +195,7 @@ def read(handle):
             if key=='VV':
                 record.version = value
                 continue
-            if motif==None:
+            if motif is None:
                 motif = Motif()
             if status=="freq":
                try:
@@ -211,7 +211,7 @@ def read(handle):
                    continue
             if key=='P0':
                 assert status!="freq"
-                assert motif.counts==None
+                assert motif.counts is None
                 motif.counts = {}
                 assert value.split()[:4]==['A','C','G','T']
                 motif.length = 0

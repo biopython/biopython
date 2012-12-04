@@ -113,7 +113,7 @@ class MMCIF2Dict(dict):
                 mmcif_dict[None].append(value)
                 # get next token
                 token=None
-            if token==None:
+            if token is None:
                 token, value=get_token()
                 # print token, value
         return mmcif_dict

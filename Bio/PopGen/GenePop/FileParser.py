@@ -95,7 +95,7 @@ class FileRecord(object):
                 for marker in markers:
                     rep.append(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<marker_len:
@@ -215,7 +215,7 @@ class FileRecord(object):
                     for marker in markers:
                         f.write(' ')
                         for al in marker:
-                            if al == None:
+                            if al is None:
                                 al = '0'
                             aStr = str(al)
                             while len(aStr)<3:
@@ -255,7 +255,7 @@ class FileRecord(object):
                     marker_pos += 1
                     f.write(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<3:
@@ -300,7 +300,7 @@ class FileRecord(object):
                     marker_pos += 1
                     f.write(' ')
                     for al in marker:
-                        if al == None:
+                        if al is None:
                             al = '0'
                         aStr = str(al)
                         while len(aStr)<3:

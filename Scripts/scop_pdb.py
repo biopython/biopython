@@ -62,7 +62,8 @@ default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
 #default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"
 
 def open_pdb(pdbid, pdb_url=None) :
-    if pdb_url ==None: pdb_url = default_pdb_url
+    if pdb_url is None:
+        pdb_url = default_pdb_url
     url = pdb_url % pdbid
     fn, header = urllib.urlretrieve(url)
     return open(fn)
@@ -109,7 +110,7 @@ def main():
     (cla_filename, headers) = urllib.urlretrieve(cla_url)
     claIndex = Cla.Index(cla_filename)
 
-    if input == None :
+    if input is None :
         sids = args[2:]
     elif input == '-' :
         sids = sys.stdin.xreadlines()
@@ -127,7 +128,7 @@ def main():
                 print >>sys.stderr,"No coordinates for domain "+id
                 continue
 
-            if output == None :
+            if output is None:
                 filename = id+".ent"
                 out_handle = open(filename, "w+")
             elif output == '-' :
@@ -152,7 +153,7 @@ def main():
             finally :
                 out_handle.close()
     finally :
-        if in_handle != None :
+        if in_handle is not None:
             in_handle.close()
                 
                 

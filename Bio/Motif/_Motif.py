@@ -40,36 +40,36 @@ class Motif(object):
         self.length=None
         self.info=None
         self.name=""
-        if counts!=None and instances!=None:
+        if counts is not None and instances is not None:
             raise Exception(ValueError,
                 "Specify either instances or counts, don't specify both")
-        elif counts!=None:
+        elif counts is not None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
-            if alphabet==None:
+            if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
             for letter in counts:
                 length = len(counts[letter])
-                if self.length==None:
+                if self.length is None:
                     self.length = length
                 elif self.length!=length:
                     raise Exception("counts matrix has inconsistent lengths")
             self.instances = None
             self.counts = counts
-        elif instances!=None:
+        elif instances is not None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
             for instance in instances:
-                if alphabet==None:
+                if alphabet is None:
                     alphabet=instance.alphabet
                 elif alphabet != instance.alphabet:
                     raise ValueError("Alphabets are inconsistent")
-                if self.length==None:
+                if self.length is None:
                     self.length = len(instance)
                 elif self.length != len(instance):
                     message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
                     raise ValueError(message)
                 self.instances.append(instance)
-            if alphabet.letters==None:
+            if alphabet.letters is None:
                 # If we didn't get a meaningful alphabet from the instances,
                 # assume it is DNA.
                 alphabet = IUPAC.unambiguous_dna
@@ -82,7 +82,7 @@ class Motif(object):
         else:
             self.counts = None
             self.instances = None
-            if alphabet==None:
+            if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
         self.alphabet = alphabet
         self.background=dict((n, 1.0/len(self.alphabet.letters)) \
@@ -106,14 +106,14 @@ class Motif(object):
         return self.counts is not None
 
     def _check_length(self, len):
-        if self.length==None:
+        if self.length is None:
             self.length = len
         elif self.length != len:
             print "len",self.length,self.instances, len
             raise ValueError("You can't change the length of the motif")
 
     def _check_alphabet(self,alphabet):
-        if self.alphabet==None:
+        if self.alphabet is None:
             self.alphabet=alphabet
         elif self.alphabet != alphabet:
                 raise ValueError("Wrong Alphabet")
@@ -124,13 +124,13 @@ class Motif(object):
         """
         self._check_alphabet(instance.alphabet)
         self._check_length(len(instance))
-        if self.counts!=None:
+        if self.counts is not None:
             for i in range(self.length):
                 let=instance[i]
                 self.counts[let][i]+=1
 
-        if self.instances!=None or self.counts==None:
-            if self.instances==None:
+        if self.instances is not None or self.counts is None:
+            if self.instances is None:
                 self.instances = []
             self.instances.append(instance)
             
@@ -173,11 +173,11 @@ class Motif(object):
                     dict[letter]=self.beta*self.background[letter]
                 else:
                     dict[letter]=0.0
-            if self.counts!=None:
+            if self.counts is not None:
                 #taking the raw counts
                 for letter in self.alphabet.letters:
                     dict[letter]+=self.counts[letter][i]
-            elif self.instances!=None:
+            elif self.instances is not None:
                 #counting the occurences of letters in instances
                 for seq in self.instances:
                     #dict[seq[i]]=dict[seq[i]]+1
@@ -244,7 +244,7 @@ class Motif(object):
         """
         a generator function, returning found positions of instances of the motif in a given sequence
         """
-        if self.instances==None:
+        if self.instances is None:
             raise ValueError ("This motif has no instances")
         for pos in xrange(0,len(sequence)-self.length+1):
             for instance in self.instances:
@@ -439,7 +439,7 @@ class Motif(object):
         """ string representation of a motif.
         """
         string = ""
-        if self.instances!=None:
+        if self.instances is not None:
             for inst in self.instances:
                 string += str(inst) + "\n"
 
@@ -457,7 +457,7 @@ class Motif(object):
 
         Please use this method (i.e. invoke len(m)) instead of refering to the m.length directly.
         """
-        if self.length==None:
+        if self.length is None:
             return 0
         else:
             return self.length
@@ -475,7 +475,7 @@ class Motif(object):
         """
         FASTA representation of motif
         """
-        if self.instances==None:
+        if self.instances is None:
             alpha="".join(self.alphabet.letters)
             #col[i] is a column taken from aligned motif instances
             col=[]
@@ -507,7 +507,7 @@ class Motif(object):
         Gives the reverse complement of the motif
         """
         alphabet = self.alphabet
-        if self.instances!=None:
+        if self.instances is not None:
             instances = []
             for instance in self.instances:
                 instance = instance.reverse_complement()
@@ -543,7 +543,7 @@ class Motif(object):
         """
         warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
         self.counts = {}
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         self.length=0
         for i in letters:
@@ -562,7 +562,7 @@ class Motif(object):
         """reads a horizontal count matrix from stream and fill in the counts.
         """
         warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         self.counts = {}
 
@@ -657,7 +657,7 @@ class Motif(object):
                    instance += c
             instance = Seq(instance, self.alphabet)
             length = len(instance)
-            if self.length==None:
+            if self.length is None:
                 self.length = length
             elif length!=self.length:
                 raise ValueError("Inconsistent motif lengths found")
@@ -887,7 +887,7 @@ The same rules are used by TRANSFAC."""
         for a in self.alphabet.letters:
             res+=" %s"%a
         res+="\n"
-        if self.counts==None:
+        if self.counts is None:
             self.make_counts_from_instances()
         for i in range(self.length):
             if i<9:
@@ -904,7 +904,7 @@ The same rules are used by TRANSFAC."""
         """Return string representation of the motif as  a matrix.
         
         """
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         self._pwm_is_current=False
         pwm=self.pwm(laplace=False)
@@ -918,7 +918,7 @@ The same rules are used by TRANSFAC."""
         """Return string representation of the motif as  a matrix.
         
         """
-        if letters==None:
+        if letters is None:
             letters=self.alphabet.letters
         res=""
         if normalized: #output PWM
@@ -928,7 +928,7 @@ The same rules are used by TRANSFAC."""
                 res+="\t".join([str(mat[i][a]) for i in range(self.length)])
                 res+="\n"
         else: #output counts
-            if self.counts==None:
+            if self.counts is None:
                 self.make_counts_from_instances()
             mat=self.counts
             for a in letters:
@@ -1001,7 +1001,7 @@ The same rules are used by TRANSFAC."""
             for j in xrange(m):
                 c = sequence[i+j]
                 temp = logodds[j].get(c)
-                if temp==None:
+                if temp is None:
                     break
                 score += temp
             else:

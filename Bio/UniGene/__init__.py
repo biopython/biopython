@@ -116,7 +116,7 @@ class SequenceLine(object):
         self.mgc = ''
         self.seqtype = ''
         self.trace = ''
-        if not text==None:
+        if text is not None:
             self.text=text
             self._init_from_text(text)
 
@@ -153,7 +153,7 @@ class ProtsimLine(object):
         self.protid = ''
         self.pct = ''
         self.aln = ''
-        if not text==None:
+        if text is not None:
             self.text=text
             self._init_from_text(text)
 
@@ -182,7 +182,7 @@ class STSLine(object):
     def __init__(self,text=None):
         self.acc = ''
         self.unists = ''
-        if not text==None:
+        if text is not None:
             self.text=text
             self._init_from_text(text)
 

@@ -162,7 +162,7 @@ def _parse_pdb_header_list(header):
                 dict['name']=name
         elif key=="HEADER":            
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
-            if rr!=None:
+            if rr is not None:
                 dict['deposition_date']=_format_date(_nice_case(rr.group()))
             head=_chop_end_misc(tail).lower()
             dict['head']=head
@@ -220,7 +220,7 @@ def _parse_pdb_header_list(header):
             pass
         elif key=="REVDAT":
             rr=re.search("\d\d-\w\w\w-\d\d",tail)
-            if rr!=None:
+            if rr is not None:
                 dict['release_date']=_format_date(_nice_case(rr.group()))
         elif key=="JRNL":
             # print key,tail

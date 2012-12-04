@@ -40,7 +40,7 @@ class SimCoalController(object):
     def run_simcoal(self, par_file, num_sims, ploydi = '1', par_dir = '.'):
         """Executes SimCoal.
         """
-        if par_dir == None:
+        if par_dir is None:
             par_dir = os.sep.join([".", 'SimCoal', 'runs'])
         curr_dir = os.getcwd()
         #TODO - Make sure we change drive on Windows as well?

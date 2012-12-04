@@ -145,7 +145,7 @@ def get_demography_template(stream, model, tp_dir = None):
         tp_dir - Directory where to find the template, if None
                  use an internal template
     '''
-    if tp_dir == None:
+    if tp_dir is None:
         #Internal Template
         f = open(sep.join([builtin_tpl_dir, model + '.par']), 'r')
     else:

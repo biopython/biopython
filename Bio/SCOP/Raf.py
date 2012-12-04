@@ -69,7 +69,7 @@ class SeqMapIndex(dict):
                 line = f.readline()
                 if not line: break
                 key = line[0:5]
-                if key != None:
+                if key is not None:
                     self[key]=position
                 position = f.tell()
         finally:
@@ -120,7 +120,7 @@ class SeqMapIndex(dict):
             
             sm = sm[start:end]
 
-            if seqMap == None:
+            if seqMap is None:
                 seqMap = sm
             else:
                 seqMap += sm

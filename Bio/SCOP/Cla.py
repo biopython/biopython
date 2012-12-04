@@ -111,7 +111,7 @@ class Index(dict):
                     continue
                 record = Record(line)
                 key = record.sid
-                if key != None:
+                if key is not None:
                     self[key] = position
                 position = f.tell()
         finally:
