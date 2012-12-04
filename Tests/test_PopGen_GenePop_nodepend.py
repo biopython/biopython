@@ -16,10 +16,10 @@ class RecordTest(unittest.TestCase):
         """
 
         r = GenePop.Record()
-        assert type(r.marker_len)   == int
-        assert type(r.comment_line) == str
-        assert type(r.loci_list)    == list
-        assert type(r.populations)  == list
+        assert isinstance(r.marker_len, int)
+        assert isinstance(r.comment_line, str)
+        assert isinstance(r.loci_list, list)
+        assert isinstance(r.populations, list)
 
 
 class ParserTest(unittest.TestCase):
