@@ -30,9 +30,11 @@ class HashSet(object):
         if not isinstance(set, HashSet):
             return 0
         for x in self.list():
-            if not (x in set): return 0
+            if not (x in set):
+                return 0
         for x in set.list():
-            if not (x in self): return 0
+            if not (x in self):
+                return 0
         return 1
 
     def __len__(self):

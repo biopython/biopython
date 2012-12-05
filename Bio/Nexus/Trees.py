@@ -21,7 +21,8 @@ PRECISION_SUPPORT=6
 NODECOMMENT_START='[&'
 NODECOMMENT_END=']'
 
-class TreeError(Exception): pass
+class TreeError(Exception):
+    pass
 
 class NodeData(object):
     """Stores tree-relevant data associated with nodes (e.g. branches or otus)."""

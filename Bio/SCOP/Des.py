@@ -61,7 +61,8 @@ class Record(object):
             raise ValueError("I don't understand the format of %s" % line)
 
         sunid, self.nodetype, self.sccs, self.name, self.description = columns
-        if self.name=='-': self.name =''
+        if self.name == '-':
+            self.name = ''
         self.sunid = int(sunid)
 
 

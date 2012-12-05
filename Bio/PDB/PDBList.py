@@ -161,7 +161,8 @@ class PDBList(object):
         # to include an assert to check for mis-reading the data.
         obsolete = []
         for line in handle:
-            if not line.startswith("OBSLTE ") : continue
+            if not line.startswith("OBSLTE "):
+                continue
             pdb = line.split()[2]
             assert len(pdb)==4
             obsolete.append(pdb)
@@ -368,8 +369,10 @@ if __name__ == '__main__':
         pl = PDBList(pdb=pdb_path)
         if len(sys.argv)>3:
             for option in sys.argv[3:]:
-                if option == '-d': pl.flat_tree = 1
-                elif option == '-o': pl.overwrite = 1
+                if option == '-d':
+                    pl.flat_tree = 1
+                elif option == '-o':
+                    pl.overwrite = 1
 
     else:
         pdb_path = os.getcwd()

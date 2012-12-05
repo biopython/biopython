@@ -89,7 +89,8 @@ class NextOrf:
         for nt in 'ATGC':
             d[nt] = seq.count(nt)
         gc = d['G'] + d['C']
-        if gc == 0: return 0
+        if gc == 0:
+            return 0
         return round(gc*100.0/(d['A'] +d['T'] + gc),1)
 
     def Gc2(self,seq):
@@ -100,10 +101,12 @@ class NextOrf:
 
         for i in range(0,l,3):
             codon = seq[i:i+3]
-            if len(codon) <3: codon = codon + '  '
+            if len(codon) < 3:
+                codon = codon + '  '
             for pos in range(0,3):
                 for nt in ['A','T','G','C']:
-                    if codon[pos] == nt: d[nt][pos] = d[nt][pos] +1
+                    if codon[pos] == nt:
+                        d[nt][pos] = d[nt][pos] +1
 
         gc = {}
         gcall = 0
@@ -137,8 +140,10 @@ class NextOrf:
             coordinates = []
             for i in range(0+frame, n-n%3, 3):
                 codon = s[i:i+3]
-                if codon in start_codons: coordinates.append((i+1,1,codon))
-                elif codon in stop_codons: coordinates.append((i+1,0,codon))
+                if codon in start_codons:
+                    coordinates.append((i+1,1,codon))
+                elif codon in stop_codons:
+                    coordinates.append((i+1,0,codon))
             frame_coordinates.append(coordinates)
         return frame_coordinates
 
@@ -153,13 +158,16 @@ class NextOrf:
         for frame in frame_coordinates:
             f+=1
             start_site = 0
-            if nostart == '1': start_site = 1
+            if nostart == '1':
+                start_site = 1
             frame.append((self.length, 0, 'XXX'))
             for pos, codon_type, codon in frame:
                 if codon_type == START:
-                    if start_site == 0: start_site = pos
+                    if start_site == 0:
+                        start_site = pos
                 elif codon_type == STOP:
-                    if start_site == 0: continue
+                    if start_site == 0:
+                        continue
 #                    if codon == 'XXX': print 'do something'
                     stop = pos + 2
 #                    print stop
@@ -167,14 +175,17 @@ class NextOrf:
                     if length >= minlength and length <= maxlength:
                         if nostart == '1' and start_site == 1:
                             start_site = start_site + f - 1
-                        if codon == 'XXX': stop = start_site + 3*((int((stop-1)-start_site)/3))
+                        if codon == 'XXX':
+                            stop = start_site + 3*((int((stop-1)-start_site)/3))
                         s = seq[start_site -1 : stop]
                         CDS.append((start_site, stop, length, s, strand*f))
                         start_site = 0
-                        if nostart == '1': start_site = stop + 1
+                        if nostart == '1':
+                            start_site = stop + 1
                     elif length < minlength or length > maxlength:
                         start_site = 0
-                        if nostart == '1': start_site = stop + 1
+                        if nostart == '1':
+                            start_site = stop + 1
                     del stop
         return CDS
 
@@ -184,8 +195,10 @@ class NextOrf:
         n = len(self.seq)
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
-            if strand > 0: head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start,stop)
-            if strand < 0: head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1,n-start+1)
+            if strand > 0:
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start,stop)
+            if strand < 0:
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1,n-start+1)
             if self.options['gc']:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
 
@@ -244,18 +257,24 @@ if __name__ == '__main__':
     longs = map(lambda x: x +'=', options.keys()) + ['help']
 
     optlist, args = getopt.getopt(args,shorts, longs)
-    if show_help: help()
+    if show_help:
+        help()
 
     for arg in optlist:
         if arg[0] == '-h' or arg[0] == '--help':
             help()
             sys.exit(0)
         for key in options.keys():
-            if arg[1].lower() == 'no': arg[1] = 0
-            elif arg[1].lower() == 'yes': arg[1] = 1
-            if arg[0][2:] == key: options[key] = arg[1]
+            if arg[1].lower() == 'no':
+                arg[1] = 0
+            elif arg[1].lower() == 'yes':
+                arg[1] = 1
 
-        if arg[0] == '-v':print 'OPTIONS', options
+            if arg[0][2:] == key:
+                options[key] = arg[1]
+
+        if arg[0] == '-v':
+            print 'OPTIONS', options
 
     file = args[0]
     nextorf = NextOrf(file, options)

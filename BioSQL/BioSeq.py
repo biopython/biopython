@@ -137,7 +137,8 @@ def _retrieve_seq(adaptor, primary_id):
     seqs = adaptor.execute_and_fetchall(
         "SELECT alphabet, length, length(seq) FROM biosequence" \
         " WHERE bioentry_id = %s", (primary_id,))
-    if not seqs : return
+    if not seqs:
+        return
     assert len(seqs) == 1
     moltype, given_length, length = seqs[0]
 
@@ -362,10 +363,13 @@ def _retrieve_qualifier_value(adaptor, primary_id):
         " ORDER BY rank", (primary_id,))
     qualifiers = {}
     for name, value in qvs:
-        if name == "keyword": name = "keywords"
+        if name == "keyword":
+            name = "keywords"
         #See handling of "date" in Loader.py
-        elif name == "date_changed": name = "date"
-        elif name == "secondary_accession": name = "accessions"
+        elif name == "date_changed":
+            name = "date"
+        elif name == "secondary_accession":
+            name = "accessions"
         qualifiers.setdefault(name, []).append(value)
     return qualifiers
 
@@ -386,11 +390,14 @@ def _retrieve_reference(adaptor, primary_id):
         reference = SeqFeature.Reference()
         #If the start/end are missing, reference.location is an empty list
         if (start is not None) or (end is not None):
-            if start is not None: start -= 1 #python counting
+            if start is not None:
+                start -= 1 #python counting
             reference.location = [SeqFeature.FeatureLocation(start, end)]
         #Don't replace the default "" with None.
-        if authors : reference.authors = authors
-        if title : reference.title = title
+        if authors:
+            reference.authors = authors
+        if title:
+            reference.title = title
         reference.journal = location
         if dbname == 'PUBMED':
             reference.pubmed_id = accession

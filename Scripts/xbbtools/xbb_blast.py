@@ -117,7 +117,8 @@ class BlastIt:
                 self.notepad.update()
             except:
                 break
-            if not char: break
+            if not char:
+                break
 
         try:
             self.notepad.menubar.configure(bg='green')

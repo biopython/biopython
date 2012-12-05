@@ -523,7 +523,8 @@ def read_text_matrix(data_file):
         j += 1
     # delete entries with an asterisk
     for i in matrix.keys():
-        if '*' in i: del(matrix[i])
+        if '*' in i:
+            del(matrix[i])
     ret_mat = SeqMat(matrix)
     return ret_mat
 

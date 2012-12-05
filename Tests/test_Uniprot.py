@@ -91,7 +91,8 @@ class TestUniprot(unittest.TestCase):
                     #Lots of extra comments in UniProt XML
                     r1.comment = ""
                     r2.comment = ""
-                    if not r2.journal: r1.journal = ""
+                    if not r2.journal:
+                        r1.journal = ""
                     compare_reference(r1, r2)
             elif old.annotations[key] == new.annotations[key]:
                 pass

@@ -131,10 +131,12 @@ class PhylipWriter(SequentialAlignmentWriter):
                     #alphabet...
                     #TODO - How to cope with '?' or '.' in the sequence?
                     handle.write(" %s" % seq_segment)
-                    if i+10 > length_of_seqs : break
+                    if i+10 > length_of_seqs:
+                        break
                 handle.write("\n")
             block=block+1
-            if block*50 > length_of_seqs : break
+            if block*50 > length_of_seqs:
+                break
             handle.write("\n")
 
 class PhylipIterator(AlignmentIterator):
@@ -228,8 +230,10 @@ class PhylipIterator(AlignmentIterator):
             #Skip any blank lines between blocks...
             while ""==line.strip():
                 line = handle.readline()
-                if not line : break #end of file
-            if not line : break #end of file
+                if not line:
+                    break #end of file
+            if not line:
+                break #end of file
 
             if self._is_header(line):
                 #Looks like the start of a concatenated alignment
@@ -245,7 +249,8 @@ class PhylipIterator(AlignmentIterator):
                 line = handle.readline()
                 if (not line) and i+1 < number_of_seqs:
                     raise ValueError("End of file mid-block")
-            if not line : break #end of file
+            if not line:
+                break #end of file
 
         records = (SeqRecord(Seq("".join(s), self.alphabet), \
                              id=i, name=i, description=i) \

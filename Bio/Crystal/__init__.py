@@ -61,7 +61,8 @@ class Hetero(object):
     def __str__(self):
         return "%s" % self.data
 
-    def __len__(self): return len(self.data)
+    def __len__(self):
+        return len(self.data)
 
 class Chain(object):
     def __init__(self, residues = ''):
@@ -111,7 +112,8 @@ class Chain(object):
         """Returns true iff self is not equal to other."""
         return not self.__eq__(other)
 
-    def __len__(self): return len(self.data)
+    def __len__(self):
+        return len(self.data)
 
     def __getitem__(self, index):
         if isinstance(index, int):
@@ -245,8 +247,12 @@ class Crystal(object):
     def tostring(self):
         return self.data
 
-    def __len__(self): return len(self.data)
-    def __getitem__(self, key): return self.data[key]
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, key):
+        return self.data[key]
+
     def __setitem__(self, key, item):
         if isinstance(item, Chain):
             self.data[key] = item
@@ -255,20 +261,37 @@ class Crystal(object):
         else:
             raise TypeError
 
-    def __delitem__(self, key): del self.data[key]
-    def clear(self): self.data.clear()
+    def __delitem__(self, key):
+        del self.data[key]
+
+    def clear(self):
+        self.data.clear()
+
     def copy(self):
         return copy.copy(self)
-    def keys(self): return self.data.keys()
-    def items(self): return self.data.items()
-    def values(self): return self.data.values()
-    def __contains__(self, value): return value in self.data
-    def has_key(self, key): return key in self.data
+
+    def keys(self):
+        return self.data.keys()
+
+    def items(self):
+        return self.data.items()
+
+    def values(self):
+        return self.data.values()
+
+    def __contains__(self, value):
+        return value in self.data
+
+    def has_key(self, key):
+        return key in self.data
+
     def get(self, key, failobj=None):
         return self.data.get(key, failobj)
+
     def setdefault(self, key, failobj=None):
         if key not in self.data:
             self.data[key] = failobj
         return self.data[key]
+
     def popitem(self):
         return self.data.popitem()

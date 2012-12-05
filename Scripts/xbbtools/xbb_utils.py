@@ -26,7 +26,9 @@ class NotePad(Toplevel):
         self.tid.pack(side = LEFT, fill = BOTH, expand = 1)
         self.yscroll.pack(side = RIGHT, fill = Y)
 
-    def text_id(self): return self.tid
+    def text_id(self):
+        return self.tid
+
     def insert(self,start, txt):
         self.tid.insert(start, txt)
 

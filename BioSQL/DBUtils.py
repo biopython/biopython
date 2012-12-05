@@ -16,8 +16,10 @@ class Generic_dbutils:
         pass
 
     def tname(self, table):
-        if table != 'biosequence': return table
-        else: return 'bioentry'
+        if table != 'biosequence':
+            return table
+        else:
+            return 'bioentry'
 
     def last_id(self, cursor, table):
         # XXX: Unsafe without transactions isolation

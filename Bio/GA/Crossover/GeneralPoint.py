@@ -130,8 +130,10 @@ class GeneralPointCrossover(object):
             # _generate_locs gives us [0, +n points+, bound]
             #  so we can iterate: { 0:loc(1) ... loc(n):bound }
             t = no[ mode ].genome[ locs[mode][n]:locs[mode][n+1] ]
-            if (s): s = s + t
-            else:   s = t
+            if (s):
+                s = s + t
+            else:
+                s = t
         return s
 
 

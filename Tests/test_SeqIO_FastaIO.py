@@ -56,7 +56,8 @@ def read_title_and_seq(filename):
     assert title.startswith(">")
     seq = ""
     for line in handle:
-        if line.startswith(">") : break
+        if line.startswith(">"):
+            break
         seq += line.strip()
     handle.close()
     return title[1:], seq

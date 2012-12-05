@@ -333,7 +333,8 @@ class xbb_widget:
     def open(self, file = None):
         if not file:
             file = askopenfilename()
-        if not file: return
+        if not file:
+            return
         genes = quick_FASTA_reader(file)
         self.insert_sequence(genes[0])
 
@@ -361,21 +362,24 @@ class xbb_widget:
 
     def gcframe(self):
         seq = self.get_selection_or_sequence()
-        if not seq: return
+        if not seq:
+            return
         np = NotePad()
         tid = np.text_id()
         tid.insert(END, self.translator.gcframe(seq, self.current_codon_table_id))
 
     def translate(self, frame = 1):
         seq = self.get_selection_or_sequence()
-        if not seq: return
+        if not seq:
+            return
         np = NotePad()
         tid = np.text_id()
         tid.insert(END, self.translator.frame_nice(seq, frame, self.current_codon_table_id))
 
     def extract(self, frame = 1):
         seq = self.get_selection_or_sequence()
-        if not seq: return
+        if not seq:
+            return
         aa_seq = self.translator.frame(seq, frame, self.current_codon_table_id)
         print '>%s<' % aa_seq
         aa_seq = re.sub('(.{50})','\\1\n',str(aa_seq))
@@ -385,11 +389,13 @@ class xbb_widget:
 
     def statistics(self):
         seq = self.get_selection_or_sequence()
-        if not seq: return
+        if not seq:
+            return
         seq = seq.upper()
         aa = {'A':0,'C':0,'G':0,'T':0,'N':0}
         for nt in seq:
-            if nt not in aa: nt = 'N'
+            if nt not in aa:
+                nt = 'N'
             aa[nt] = aa[nt] + 1
 
         GC = (100.0*(aa['G'] + aa['C']))/len(seq)

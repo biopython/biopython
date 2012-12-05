@@ -125,7 +125,8 @@ def _hw_func(stream, is_locus, has_fisher = False):
                     loci[entry[0]] = None
                 else:
                     locus, p, se, fis_wc, fis_rh, steps = entry[:-1]
-                    if se == "-": se = None
+                    if se == "-":
+                        se = None
                     loci[locus] = p, se, fis_wc, fis_rh, steps
             return loci
         l = stream.readline()
@@ -218,7 +219,8 @@ class GenePopController(object):
 
     def _remove_garbage(self, fname_out):
         try:
-            if fname_out is not None: os.remove(fname_out)
+            if fname_out is not None:
+                os.remove(fname_out)
         except OSError:
             pass # safe
         try:
@@ -589,7 +591,8 @@ class GenePopController(object):
                     continue
                 geno_list = []
                 l = self.stream.readline()
-                if "No data" in l: continue
+                if "No data" in l:
+                    continue
 
                 while "Genotypes  Obs." not in l:
                     l = self.stream.readline()
@@ -674,7 +677,8 @@ class GenePopController(object):
                 if m is not None:
                     locus = m.group(1)
                     self.stream.readline()
-                    if "No complete" in self.stream.readline(): return locus, None
+                    if "No complete" in self.stream.readline():
+                        return locus, None
                     self.stream.readline()
                     fis_table = _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
                     self.stream.readline()

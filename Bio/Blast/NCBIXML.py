@@ -206,7 +206,8 @@ class BlastParser(_XMLparser):
         #Clear the object (a new empty one is create in _start_Iteration)
         self._blast = None
 
-        if self._debug : "NCBIXML: Added Blast record to results"
+        if self._debug:
+            "NCBIXML: Added Blast record to results"
 
     # Header
     def _end_BlastOutput_program(self):

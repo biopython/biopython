@@ -246,7 +246,8 @@ def _parse_pdb_header_list(header):
             # print key
             pass
     if dict['structure_method']=='unknown':
-        if dict['resolution']>0.0: dict['structure_method']='x-ray diffraction'
+        if dict['resolution']>0.0:
+            dict['structure_method']='x-ray diffraction'
     return dict
 
 if __name__=='__main__':

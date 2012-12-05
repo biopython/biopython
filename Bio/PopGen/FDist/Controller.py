@@ -26,7 +26,8 @@ else:
 
 def my_float(f):
     #Because of Jython, mostly
-    if f=="-nan": f="nan"
+    if f=="-nan":
+        f="nan"
     return float(f)
 
 class FDistController(object):

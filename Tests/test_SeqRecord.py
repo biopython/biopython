@@ -80,7 +80,8 @@ class SeqRecordMethods(unittest.TestCase):
         """Simple slices using different start/end values"""
         for start in range(-30,30)+[None] :
             for end in range(-30,30)+[None] :
-                if start is None and end is None : continue
+                if start is None and end is None:
+                    continue
                 rec = self.record[start:end]
                 seq = self.record.seq[start:end]
                 seq_str = str(self.record.seq)[start:end]

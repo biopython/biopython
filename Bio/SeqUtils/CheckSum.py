@@ -33,9 +33,11 @@ def _init_table_h():
         for j in range(8):
             rflag = l & 1
             l >>= 1
-            if part_h & 1: l |= (1L << 31)
+            if part_h & 1:
+                l |= (1L << 31)
             part_h >>= 1L
-            if rflag: part_h ^= 0xd8000000L
+            if rflag:
+                part_h ^= 0xd8000000L
         _table_h.append(part_h)
     return _table_h
 
@@ -76,7 +78,8 @@ def gcg(seq):
     for char in seq:
         index += 1
         checksum += index * ord(char.upper())
-        if index == 57: index = 0
+        if index == 57:
+            index = 0
     return checksum % 10000
 
 def seguid(seq):

@@ -26,11 +26,14 @@ class DNAsearch:
         other = ''.join(self.alphabet.keys())
         self.alphabet['N'] = self.alphabet['N'] + other
         for key in self.alphabet.keys():
-            if key == 'N': continue
-            if key in self.alphabet[key]: continue
+            if key == 'N':
+                continue
+            if key in self.alphabet[key]:
+                continue
             self.alphabet[key] = self.alphabet[key] + key
 
-    def SetSeq(self, seq): self.sequence = seq
+    def SetSeq(self, seq):
+        self.sequence = seq
 
     def SetPattern(self, pattern):
         self.pattern = pattern
@@ -63,7 +66,8 @@ class DNAsearch:
         positions = []
         while 1:
             m = self._Search(pos+1)
-            if not m: break
+            if not m:
+                break
             pos = m.start()
             if pos == -1:
                 break
@@ -107,7 +111,8 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.config_color(self.current_color)
 
     def config_color(self, color = None):
-        if not self.highlight: return
+        if not self.highlight:
+            return
         if not color:
             try:
                 color = askcolor()[1]
@@ -130,7 +135,8 @@ class XDNAsearch(Toplevel, DNAsearch):
 
     def do_search(self, other_strand = 0):
         pattern = self.get_pattern()
-        if other_strand: pattern = reverse_complement(pattern)
+        if other_strand:
+            pattern = reverse_complement(pattern)
         self.SetPattern(pattern)
         pos = self.Search(self.cur_pos)
         self.cur_pos = pos +1

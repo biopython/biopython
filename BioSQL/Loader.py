@@ -167,7 +167,8 @@ class DatabaseLoader:
                             if db_xref.startswith("taxon:"):
                                 ncbi_taxon_id = int(db_xref[6:])
                                 break
-                if ncbi_taxon_id: break
+                if ncbi_taxon_id:
+                    break
 
         try:
             scientific_name = record.annotations["organism"][:255]
@@ -572,7 +573,8 @@ class DatabaseLoader:
         # 14-SEP-2000
         date = record.annotations.get("date",
                                       strftime("%d-%b-%Y", gmtime()).upper())
-        if isinstance(date, list) : date = date[0]
+        if isinstance(date, list):
+            date = date[0]
         annotation_tags_id = self._get_ontology_id("Annotation Tags")
         date_id = self._get_term_id("date_changed", annotation_tags_id)
         sql = r"INSERT INTO bioentry_qualifier_value" \

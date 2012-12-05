@@ -221,7 +221,8 @@ print
 print "Testing Seq string methods"
 print "=========================="
 for a in dna + rna + nuc + protein:
-    if not isinstance(a, Seq.Seq) : continue
+    if not isinstance(a, Seq.Seq):
+        continue
     assert str(a.strip()) == str(a).strip()
     assert str(a.lstrip()) == str(a).lstrip()
     assert str(a.rstrip()) == str(a).rstrip()
@@ -396,7 +397,8 @@ for s in protein_seqs:
         assert False, "Transcription shouldn't work on a protein!"
     except ValueError:
         pass
-    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    if not isinstance(s, Seq.Seq):
+        continue #Only Seq has this method
     try:
         print s.transcribe()
         assert False, "Transcription shouldn't work on a protein!"
@@ -429,7 +431,8 @@ for s in protein_seqs:
         assert False, "Back transcription shouldn't work on a protein!"
     except ValueError:
         pass
-    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    if not isinstance(s, Seq.Seq):
+        continue #Only Seq has this method
     try:
         print s.back_transcribe()
         assert False, "Back transcription shouldn't work on a protein!"
@@ -513,7 +516,8 @@ for s in protein_seqs:
         assert False, "Translation shouldn't work on a protein!"
     except ValueError:
         pass
-    if not isinstance(s, Seq.Seq) : continue #Only Seq has this method
+    if not isinstance(s, Seq.Seq):
+        continue #Only Seq has this method
     try:
         print s.translate()
         assert False, "Translation shouldn't work on a protein!"

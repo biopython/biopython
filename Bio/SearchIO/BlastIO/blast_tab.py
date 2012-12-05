@@ -138,7 +138,8 @@ def _augment_blast_hsp(hsp, attr):
         if not hasattr(hsp, 'query') or not hasattr(hsp, 'hit'):
             # mock function so that the except clause below is triggered
             # as both the query and hit are required to compute gapopen
-            def mock(hsp): raise AttributeError
+            def mock(hsp):
+                raise AttributeError
             func = mock
         else:
             func = _compute_gapopen_num
@@ -228,7 +229,8 @@ class BlastTabParser(object):
                         setattr(qresult, key, value)
                     yield qresult
 
-            else: break
+            else:
+                break
 
     def _parse_comments(self):
         """Returns a dictionary containing tab file comments."""
@@ -554,7 +556,8 @@ class BlastTabIndexer(SearchIndexer):
                     start_offset = end_offset
 
             # break if we've reached EOF
-            if not line: break
+            if not line:
+                break
 
     def get_raw(self, offset):
         """Returns the raw string of a QueryResult object from the given offset."""
@@ -609,11 +612,13 @@ class BlastTabIndexer(SearchIndexer):
             # if we've encountered another query mark, it's the start of
             # another query
             # if 'BLAST processed' is in line, it's one line before EOF
-            elif line == query_mark: break
+            elif line == query_mark:
+                break
             # append to the raw string as long as qresult is the same
             qresult_raw += line
 
-            if line.startswith(end_mark): break
+            if line.startswith(end_mark):
+                break
 
         return qresult_raw
 

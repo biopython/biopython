@@ -122,7 +122,8 @@ class BgzfTests(unittest.TestCase):
                 temp = []
                 while True:
                     char = h.read(1)
-                    if not char: break
+                    if not char:
+                        break
                     temp.append(char)
                 if "b" in mode:
                     new = _empty_bytes_string.join(temp)

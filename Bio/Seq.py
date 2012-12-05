@@ -1607,7 +1607,8 @@ class MutableSeq(object):
         else:
             raise TypeError
 
-    def __len__(self): return len(self.data)
+    def __len__(self):
+        return len(self.data)
 
     def __getitem__(self, index):
         #Note since Python 2.0, __getslice__ is deprecated
@@ -1761,7 +1762,8 @@ class MutableSeq(object):
             #Try and be efficient and work directly from the array.
             count = 0
             for c in self.data[start:end]:
-                if c == search: count += 1
+                if c == search:
+                    count += 1
             return count
         else:
             #TODO - Can we do this more efficiently?
@@ -1990,7 +1992,8 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                 if cds:
                     raise CodonTable.TranslationError(\
                         "Extra in frame stop codon found.")
-                if to_stop : break
+                if to_stop:
+                    break
                 amino_acids.append(stop_symbol)
             elif valid_letters.issuperset(set(codon)):
                 #Possible stop codon (e.g. NNN or TAN)

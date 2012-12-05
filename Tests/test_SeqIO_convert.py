@@ -178,7 +178,8 @@ tests = [
     ]
 for filename, format, alphabet in tests:
     for (in_format, out_format) in converter_dict:
-        if in_format != format : continue
+        if in_format != format:
+            continue
         def funct(fn,fmt1, fmt2, alpha):
             f = lambda x : x.simple_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
@@ -215,7 +216,8 @@ tests = [
     ]
 for filename, format, alphabet in tests:
     for (in_format, out_format) in converter_dict:
-        if in_format != format : continue
+        if in_format != format:
+            continue
         if in_format in ["fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"] \
         and out_format in ["fasta", "tab"] and filename.startswith("Quality/error_qual_"):
             #TODO? These conversions don't check for bad characters in the quality,

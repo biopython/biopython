@@ -373,9 +373,11 @@ class Iterator(object):
             lines = []
             while True:
                 line = self.handle.readline()
-                if not line : return None #Premature end of file?
+                if not line:
+                    return None #Premature end of file?
                 lines.append(line)
-                if line.rstrip() == "//" : break
+                if line.rstrip() == "//":
+                    break
             return "".join(lines)
         try:
             return self._parser.parse(self.handle)

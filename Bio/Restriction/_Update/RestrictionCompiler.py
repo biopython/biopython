@@ -135,7 +135,8 @@ def LocalTime():
     t = time.gmtime()
     year = str(t.tm_year)[-1]
     month = str(t.tm_mon)
-    if len(month) == 1 : month = '0'+month
+    if len(month) == 1:
+        month = '0' + month
     return year+month
 
 
@@ -160,8 +161,10 @@ class newenzyme(object):
         #   Non Palindromic needs to be search for on the reverse complement
         #   as well.
         #
-        if target[10] : cls.bases += ('Palindromic',)
-        else : cls.bases += ('NonPalindromic',)
+        if target[10]:
+            cls.bases += ('Palindromic',)
+        else:
+            cls.bases += ('NonPalindromic',)
         #
         #   Number of cut the enzyme produce.
         #   0 => unknown, the enzyme has not been fully characterised.
@@ -657,15 +660,19 @@ class DictionaryBuilder(object):
             fs = file.split('.')
             try:
                 if fs[0] in embossnames and int(fs[1]) > int(last[-1]):
-                    if last[0] : last.append(fs[1])
-                    else : last[0] = fs[1]
+                    if last[0]:
+                        last.append(fs[1])
+                    else:
+                        last[0] = fs[1]
                 else:
                     continue
             except ValueError:
                 continue
         last.sort()
         last = last[::-1]
-        if int(last[-1]) < 100 : last[0], last[-1] = last[-1], last[0]
+        if int(last[-1]) < 100:
+            last[0], last[-1] = last[-1], last[0]
+
         for number in last:
             files = [(name, name+'.%s'%number) for name in embossnames]
             strmess = '\nLast EMBOSS files found are :\n'
@@ -709,10 +716,14 @@ class DictionaryBuilder(object):
         #   We will deal with the record later.
         #
 
-        if fst5 < 0 : fst5 += 1
-        if fst3 < 0 : fst3 += 1
-        if scd5 < 0 : scd5 += 1
-        if scd3 < 0 : scd3 += 1
+        if fst5 < 0:
+            fst5 += 1
+        if fst3 < 0:
+            fst3 += 1
+        if scd5 < 0:
+            scd5 += 1
+        if scd3 < 0:
+            scd3 += 1
 
         if ovhg2 != 0 and ovhg1 != ovhg2:
             #
@@ -755,8 +766,10 @@ class DictionaryBuilder(object):
                     #   site and overhang degenerated
                     #
                     ovhgseq = ovhg1
-                    if fst5 < fst3 :  ovhg1 = - len(ovhg1)
-                    else : ovhg1 = len(ovhg1)
+                    if fst5 < fst3:
+                        ovhg1 = - len(ovhg1)
+                    else:
+                        ovhg1 = len(ovhg1)
                     break
                 else:
                     continue
@@ -833,10 +846,13 @@ class DictionaryBuilder(object):
         #   length of the site to compensate (+1 if they are negative).
         #
         for x in (5, 7):
-            if line[x] < 0 : line[x] += 1
+            if line[x] < 0:
+                line[x] += 1
         for x in (6, 8):
-            if line[x] > 0 : line[x] -= size
-            elif line[x] < 0 : line[x] = line[x] - size + 1
+            if line[x] > 0:
+                line[x] -= size
+            elif line[x] < 0:
+                line[x] = line[x] - size + 1
         #
         #   now is the site palindromic?
         #   produce the regular expression which correspond to the site.
@@ -893,7 +909,8 @@ class DictionaryBuilder(object):
         #   block[5] => suppliers (as a string of single letter)
         #
         bl3 = block[3].strip()
-        if not bl3 : bl3 = False #  site is not methylable
+        if not bl3:
+            bl3 = False #  site is not methylable
         return (block[0].strip(), bl3, block[5].strip())
 
     def information_mixer(self, file1, file2, file3):

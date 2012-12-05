@@ -109,7 +109,8 @@ def cmp_sccs(sccs1, sccs2):
     s1 = sccs1.split(".")
     s2 = sccs2.split(".")
 
-    if s1[0] != s2[0]: return _cmp(s1[0], s2[0])
+    if s1[0] != s2[0]:
+        return _cmp(s1[0], s2[0])
 
     s1 = list(map(int, s1[1:]))
     s2 = list(map(int, s2[1:]))
@@ -134,7 +135,8 @@ def parse_domain(str):
     """
 
     m = _domain_re.match(str)
-    if (not m) : raise ValueError("Domain: "+ str)
+    if (not m):
+        raise ValueError("Domain: "+ str)
 
     dom = Domain()
     dom.sid = m.group(1)
@@ -263,9 +265,12 @@ class Scop(object):
         finally:
             if dir_path:
                 # If we opened the files, we close the files
-                if cla_handle : cla_handle.close()
-                if des_handle : des_handle.close()
-                if hie_handle : hie_handle.close()
+                if cla_handle:
+                    cla_handle.close()
+                if des_handle:
+                    des_handle.close()
+                if hie_handle:
+                    hie_handle.close()
 
     def getRoot(self):
         return self.getNodeBySunid(0)
@@ -380,7 +385,8 @@ class Scop(object):
 
     def getAscendentFromSQL(self, node, type):
         """Get ascendents using SQL backend"""
-        if nodeCodeOrder.index(type) >= nodeCodeOrder.index(node.type): return None
+        if nodeCodeOrder.index(type) >= nodeCodeOrder.index(node.type):
+            return None
 
         cur = self.db_handle.cursor()
         cur.execute("SELECT "+type+" from cla WHERE "+node.type+"=%s", (node.sunid))
@@ -395,7 +401,8 @@ class Scop(object):
         repeated iteration of SQL calls and is therefore much quicker than
         repeatedly calling node.getChildren().
         """
-        if nodeCodeOrder.index(type) <= nodeCodeOrder.index(node.type): return []
+        if nodeCodeOrder.index(type) <= nodeCodeOrder.index(node.type):
+            return []
 
         des_list = []
 
@@ -583,7 +590,8 @@ class Node(object):
         if self.scop:
             return self.scop.getDescendentsFromSQL(self,node_type)
         while nodes[0].type != node_type:
-            if nodes[0].type == 'px' : return [] # Fell of the bottom of the hierarchy
+            if nodes[0].type == 'px':
+                return [] # Fell of the bottom of the hierarchy
             child_list = []
             for n in nodes:
                 for child in n.getChildren():
@@ -602,9 +610,12 @@ class Node(object):
             return self.scop.getAscendentFromSQL(self,node_type)
         else:
             n = self
-            if n.type == node_type: return None
+            if n.type == node_type:
+                return None
+
             while n.type != node_type:
-                if n.type == 'ro': return None # Fell of the top of the hierarchy
+                if n.type == 'ro':
+                    return None # Fell of the top of the hierarchy
                 n = n.getParent()
 
             return n
