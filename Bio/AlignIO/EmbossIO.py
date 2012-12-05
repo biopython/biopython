@@ -18,6 +18,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+
 class EmbossWriter(SequentialAlignmentWriter):
     """Emboss alignment writer (WORK IN PROGRESS).
 
@@ -56,6 +57,7 @@ class EmbossWriter(SequentialAlignmentWriter):
         handle.write("\n")
         #...
         assert False
+
 
 class EmbossIterator(AlignmentIterator):
     """Emboss alignment iterator.

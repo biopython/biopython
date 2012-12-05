@@ -39,6 +39,7 @@ from _GraphSet import GraphSet
 
 from math import ceil
 
+
 class LinearDrawer(AbstractDrawer):
     """ LinearDrawer(AbstractDrawer)
 

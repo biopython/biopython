@@ -23,6 +23,7 @@ from Bio import Alphabet
 #You can get a couple of example files here:
 #http://www.molecularevolution.org/resources/fileformats/
 
+
 #This is a generator function!
 def NexusIterator(handle, seq_count=None):
     """Returns SeqRecord objects from a Nexus file.
@@ -55,6 +56,7 @@ def NexusIterator(handle, seq_count=None):
                in zip(n.unaltered_taxlabels, n.taxlabels))
     #All done
     yield MultipleSeqAlignment(records, n.alphabet)
+
 
 class NexusWriter(AlignmentWriter):
     """Nexus alignment writer.

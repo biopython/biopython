@@ -20,6 +20,7 @@ class fff_rec:
         else:
             return self.data[index]
 
+
 # Definition of the align section in a FSSP file
 class align(object):
     abs_res_num = (0,4)

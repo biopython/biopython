@@ -11,6 +11,7 @@ use this module.  It provides base classes to try and simplify things.
 
 from Bio.Alphabet import single_letter_alphabet
 
+
 class AlignmentIterator(object):
     """Base class for building MultipleSeqAlignment iterators.
 
@@ -68,6 +69,7 @@ class AlignmentIterator(object):
         myFile.close()"""
         return iter(self.next, None)
 
+
 class AlignmentWriter(object):
     """Base class for building MultipleSeqAlignment writers.
 
@@ -95,6 +97,7 @@ class AlignmentWriter(object):
     def clean(self, text):
         """Use this to avoid getting newlines in the output."""
         return text.replace("\n", " ").replace("\r", " ").replace("  ", " ")
+
 
 class SequentialAlignmentWriter(AlignmentWriter):
     """Base class for building MultipleSeqAlignment writers.

@@ -59,6 +59,7 @@ Usage:
     class.
 """
 
+
 class PrintFormat(object):
     """PrintFormat allow the printing of results of restriction analysis."""
 

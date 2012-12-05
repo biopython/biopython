@@ -10,6 +10,7 @@ import os
 import tarfile
 from Controller import SimCoalController
 
+
 class SimCoalCache(object):
     def __init__(self, data_dir, simcoal_dir):
         """Initializes the cache.

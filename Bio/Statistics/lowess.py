@@ -30,6 +30,7 @@ except ImportError, x:
     # Use the median function in NumPy if Bio.Cluster is not available
     from numpy import median
 
+
 def lowess(x, y, f=2./3., iter=3):
     """lowess(x, y, f=2./3., iter=3) -> yest
 
@@ -90,6 +91,7 @@ def lowess(x, y, f=2./3., iter=3):
         delta[:] = 1-delta*delta
         delta[:] = delta*delta
     return yest
+
 
 def _test():
     """Run the Bio.Statistics.lowess module's doctests."""

@@ -18,6 +18,7 @@ import colorsys    # colour format conversions
 from math import log, exp, floor, pi
 import random      # for jitter values
 
+
 class ColorSpiral(object):
     """Implement a spiral path through HSV colour space.
 
@@ -156,6 +157,7 @@ class ColorSpiral(object):
     jitter = property(_get_jitter, _set_jitter,
                       doc="Degree of V (brightness) jitter to add to each color (range 0 to 1)")
 
+
 # Convenience functions for those who don't want to bother with a
 # ColorSpiral object
 def get_colors(k, **kwargs):
@@ -169,6 +171,7 @@ def get_colors(k, **kwargs):
     """
     cs = ColorSpiral(**kwargs)
     return cs.get_colors(k)
+
 
 def get_color_dict(l, **kwargs):
     """Returns a dictionary of colours using the provided values as keys.

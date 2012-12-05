@@ -18,6 +18,7 @@ import math
 # local stuff
 from DynamicProgramming import ScaledDPAlgorithms
 
+
 class TrainingSequence(object):
     """Hold a training sequence with emissions and optionally, a state path.
     """
@@ -38,6 +39,7 @@ class TrainingSequence(object):
                    "State path does not match associated emissions."
         self.emissions = emissions
         self.states = state_path
+
 
 class AbstractTrainer(object):
     """Provide generic functionality needed in all trainers.
@@ -138,6 +140,7 @@ class AbstractTrainer(object):
             ml_estimation[cur_item] = cur_ml
 
         return ml_estimation
+
 
 class BaumWelchTrainer(AbstractTrainer):
     """Trainer that uses the Baum-Welch algorithm to estimate parameters.
@@ -337,6 +340,7 @@ class BaumWelchTrainer(AbstractTrainer):
                                             training_seq_prob)
 
         return emission_counts
+
 
 class KnownStateTrainer(AbstractTrainer):
     """Estimate probabilities with known state sequences.

@@ -17,6 +17,7 @@ import gzip
 # biopython
 from Bio import GenBank
 
+
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
 
@@ -44,6 +45,7 @@ def do_comparison(good_record, test_record):
         assert test_line == good_line, \
                "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
                (good_line, test_line)
+
 
 def write_format(file):
     record_parser = GenBank.RecordParser(debug_level = 2)

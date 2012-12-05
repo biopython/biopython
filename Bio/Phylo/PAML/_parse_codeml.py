@@ -22,6 +22,7 @@ except ValueError:
             else:
                 raise
 
+
 def parse_basics(lines, results):
     """Parse the basic information that should be present in most codeml output files.
     """
@@ -82,6 +83,7 @@ def parse_basics(lines, results):
         if "ln Lmax" in line and len(line_floats) > 0:
             results["lnL max"] = line_floats[0]
     return (results, multi_models, multi_genes)
+
 
 def parse_nssites(lines, results, multi_models, multi_genes):
     """Determine which NSsites models are present and parse them.
@@ -158,6 +160,7 @@ def parse_nssites(lines, results, multi_models, multi_genes):
     elif len(ns_sites) > 1:
         results["NSsites"] = ns_sites
     return results
+
 
 def parse_model(lines, results):
     """Parse an individual NSsites model's results.
@@ -339,6 +342,7 @@ def parse_model(lines, results):
         results["parameters"] = parameters
     return results
 
+
 def parse_siteclass_proportions(line_floats):
     """For models which have multiple site classes, find the proportion of the alignment assigned to each class.
     """
@@ -347,6 +351,7 @@ def parse_siteclass_proportions(line_floats):
         for n in range(len(line_floats)):
             site_classes[n] = {"proportion" : line_floats[n]}
     return site_classes
+
 
 def parse_siteclass_omegas(line, site_classes):
     """For models which have multiple site classes, find the omega estimated for each class.
@@ -363,6 +368,7 @@ def parse_siteclass_omegas(line, site_classes):
         site_classes[n]["omega"] = line_floats[n]
     return site_classes
 
+
 def parse_clademodelc(branch_type_no, line_floats, site_classes):
     """Parse results specific to the clade model C.
     """
@@ -373,6 +379,7 @@ def parse_clademodelc(branch_type_no, line_floats, site_classes):
             site_classes[n]["branch types"] = {}
         site_classes[n]["branch types"][branch_type_no] = line_floats[n]
     return site_classes
+
 
 def parse_branch_site_a(foreground, line_floats, site_classes):
     """Parse results specific to the branch site A model.
@@ -389,6 +396,7 @@ def parse_branch_site_a(foreground, line_floats, site_classes):
             site_classes[n]["branch types"]["background"] =\
                     line_floats[n]
     return site_classes
+
 
 def parse_pairwise(lines, results):
     """Parse results from pairwise comparisons.
@@ -428,6 +436,7 @@ def parse_pairwise(lines, results):
     if len(pairwise) > 0:
         results["pairwise"] = pairwise
     return results
+
 
 def parse_distances(lines, results):
     """Parse amino acid sequence distance results.

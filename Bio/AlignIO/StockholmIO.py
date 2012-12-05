@@ -135,6 +135,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+
 class StockholmWriter(SequentialAlignmentWriter):
     """Stockholm/PFAM alignment writer."""
 
@@ -263,6 +264,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                 #It doesn't follow the PFAM standards, but should we record
                 #this data anyway?
                 pass
+
 
 class StockholmIterator(AlignmentIterator):
     """Loads a Stockholm file from PFAM into MultipleSeqAlignment objects.
@@ -530,6 +532,7 @@ class StockholmIterator(AlignmentIterator):
             else:
                 #Ignore it?
                 record.letter_annotations["GR:" + feature] = seq_col_data[feature]
+
 
 def _test():
     """Run the Bio.SeqIO module's doctests.

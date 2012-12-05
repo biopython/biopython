@@ -13,6 +13,7 @@ from Bio._py3k import _bytes_to_string
 from Bio import bgzf
 from Bio.File import _IndexedSeqFileProxy
 
+
 class SearchIndexer(_IndexedSeqFileProxy):
     """Base class for file format specific random access.
 

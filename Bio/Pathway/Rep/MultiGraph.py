@@ -5,6 +5,7 @@
 
 # get set abstraction for graph representation
 
+
 #TODO - Subclass graph?
 class MultiGraph(object):
     """A directed multigraph abstraction with labeled edges."""
@@ -129,6 +130,7 @@ class MultiGraph(object):
 
 # auxilliary graph functions
 
+
 def df_search(graph, root = None):
     """Depth first search of g.
 
@@ -154,6 +156,7 @@ def df_search(graph, root = None):
             seen[node] = 1
             current = graph.children(node) + current
     return search
+
 
 def bf_search(graph, root = None):
     """Breadth first search of g.

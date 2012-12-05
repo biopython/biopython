@@ -7,6 +7,7 @@ hidden layers and the output layer).
 import math
 import random
 
+
 def logistic_function(value):
     """Transform the value with the logistic function.
 
@@ -14,6 +15,7 @@ def logistic_function(value):
     that makes sense.
     """
     return 1.0 / (1.0 + math.exp(-value))
+
 
 class AbstractLayer(object):
     """Abstract base class for all layers.
@@ -54,6 +56,7 @@ class AbstractLayer(object):
             raise ValueError("Invalid node values passed.")
 
         self.weights[(this_node, next_node)] = value
+
 
 class InputLayer(AbstractLayer):
     def __init__(self, num_nodes, next_layer):
@@ -140,6 +143,7 @@ class InputLayer(AbstractLayer):
 
                 # remember the weight change for next time
                 self.weight_changes[(this_node, next_node)] = delta
+
 
 class HiddenLayer(AbstractLayer):
     def __init__(self, num_nodes, next_layer, activation = logistic_function):
@@ -251,6 +255,7 @@ class HiddenLayer(AbstractLayer):
             errors[error_node] = previous_error * corr_factor
 
         return errors
+
 
 class OutputLayer(AbstractLayer):
     def __init__(self, num_nodes, activation = logistic_function):

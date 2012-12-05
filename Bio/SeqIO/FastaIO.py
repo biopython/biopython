@@ -16,6 +16,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqIO.Interfaces import SequentialSequenceWriter
 
+
 def SimpleFastaParser(handle):
     """Generator function to iterator over Fasta records (as string tuples).
 
@@ -65,6 +66,7 @@ def SimpleFastaParser(handle):
             return  # StopIteration
 
     assert False, "Should not reach this line"
+
 
 def FastaIterator(handle, alphabet=single_letter_alphabet, title2ids=None):
     """Generator function to iterate over Fasta records (as SeqRecord objects).

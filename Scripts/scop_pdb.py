@@ -13,6 +13,7 @@ import urllib
 
 from Bio.SCOP import *
 
+
 def usage() :
     print \
 """Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
@@ -58,6 +59,7 @@ Usage: scop_pdb [-h] [-i file] [-o file] [-p pdb_url_prefix]
 default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
                       "format=PDB&pdbId=%s&compression=None"
 #default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"
+
 
 def open_pdb(pdbid, pdb_url=None) :
     if pdb_url is None:

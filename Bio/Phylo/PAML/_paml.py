@@ -37,9 +37,11 @@ except ImportError:
             return posixpath.curdir.replace(posixpath.sep, os.path.sep)
         return posixpath.join(*rel_list).replace(posixpath.sep, os.path.sep)
 
+
 class PamlError(EnvironmentError):
     """paml has failed. Run with verbose = True to view the error
 message"""
+
 
 class Paml(object):
 

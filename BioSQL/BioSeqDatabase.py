@@ -18,6 +18,7 @@ import DBUtils
 
 _POSTGRES_RULES_PRESENT = False # Hack for BioSQL Bug 2839
 
+
 def open_database(driver = "MySQLdb", **kwargs):
     """Main interface for loading a existing BioSQL-style database.
 
@@ -102,6 +103,7 @@ def open_database(driver = "MySQLdb", **kwargs):
             _POSTGRES_RULES_PRESENT = True
 
     return server
+
 
 class DBServer:
     """Represents a BioSQL database continaing namespaces (sub-databases).
@@ -262,6 +264,7 @@ class DBServer:
     def close(self):
         """Close the connection. No further activity possible."""
         return self.adaptor.close()
+
 
 class Adaptor:
     def __init__(self, conn, dbutils):
@@ -438,6 +441,7 @@ _allowed_lookups = {
     'accession':  "fetch_seqid_by_accession",
     'version':    "fetch_seqid_by_version",
     }
+
 
 class BioSeqDatabase:
     """Represents a namespace (sub-database) within the BioSQL database.

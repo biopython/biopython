@@ -11,9 +11,11 @@ import _parse_codeml
 #TODO - Restore use of with statement for closing handles automatically
 #after dropping Python 2.4
 
+
 class CodemlError(EnvironmentError):
     """CODEML has failed. Run with verbose = True to view CODEML's error
 message"""
+
 
 class Codeml(Paml):
     """This class implements an interface to CODEML, part of the PAML package."""
@@ -193,6 +195,7 @@ class Codeml(Paml):
         else:
             results = None
         return results
+
 
 def read(results_file):
     """Parse a CODEML results file."""

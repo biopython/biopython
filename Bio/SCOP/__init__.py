@@ -14,6 +14,7 @@
 # Code written by Jeffrey Chang to access SCOP over the internet, which
 # was previously in Bio.WWW.SCOP, has now been merged into this module.
 
+
 """ SCOP: Structural Classification of Proteins.
 
 The SCOP database aims to provide a manually constructed classification of
@@ -95,6 +96,7 @@ except NameError:
         """
         return (a > b) - (a < b)
 
+
 def cmp_sccs(sccs1, sccs2):
     """Order SCOP concise classification strings (sccs).
 
@@ -119,6 +121,7 @@ def cmp_sccs(sccs1, sccs2):
 
 
 _domain_re = re.compile(r">?([\w_\.]*)\s+([\w\.]*)\s+\(([^)]*)\) (.*)")
+
 
 def parse_domain(str):
     """Convert an ASTRAL header string into a Scop domain.
@@ -147,6 +150,7 @@ def parse_domain(str):
     dom.description = m.group(4).strip()
 
     return dom
+
 
 def _open_scop_file(scop_dir_path, version, filetype):
     filename = "dir.%s.scop.txt_%s" % (filetype,version)
@@ -668,6 +672,7 @@ class Domain(Node):
 
         return rec
 
+
 class Astral(object):
     """Abstraction of the ASTRAL database, which has sequences for all the SCOP domains,
     as well as clusterings by percent id or evalue.
@@ -847,6 +852,7 @@ class Astral(object):
                 cur.execute("UPDATE astral SET "+astralEv_to_sql[ev]+"=1  WHERE sid=%s",
                             d.sid)
 
+
 def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
            cgi='http://scop.mrc-lmb.cam.ac.uk/scop/search.cgi', **keywds):
     """search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
@@ -867,6 +873,7 @@ def search(pdb=None, key=None, sid=None, disp=None, dir=None, loc=None,
             variables[k] = v
     variables.update(keywds)
     return _open(cgi, variables)
+
 
 def _open(cgi, params={}, get=1):
     """_open(cgi, params={}, get=1) -> UndoHandle

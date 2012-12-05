@@ -10,6 +10,7 @@
 This is used by sequences which contain a finite number of similar words.
 """
 
+
 class Alphabet(object):
     size = None     # default to no fixed size for words
     letters = None  # default to no fixed alphabet
@@ -66,6 +67,7 @@ class Alphabet(object):
 
 generic_alphabet = Alphabet()
 
+
 class SingleLetterAlphabet(Alphabet):
     size = 1
     letters = None   # string of all letters in the alphabet
@@ -74,16 +76,20 @@ single_letter_alphabet = SingleLetterAlphabet()
 
 ########### Protein
 
+
 class ProteinAlphabet(SingleLetterAlphabet):
     pass
 
 generic_protein = ProteinAlphabet()
 
 ########### DNA
+
+
 class NucleotideAlphabet(SingleLetterAlphabet):
     pass
 
 generic_nucleotide = NucleotideAlphabet()
+
 
 class DNAAlphabet(NucleotideAlphabet):
     pass
@@ -93,6 +99,7 @@ generic_dna = DNAAlphabet()
 
 ########### RNA
 
+
 class RNAAlphabet(NucleotideAlphabet):
     pass
 
@@ -100,8 +107,10 @@ generic_rna = RNAAlphabet()
 
 ########### Other per-sequence encodings
 
+
 class SecondaryStructure(SingleLetterAlphabet):
     letters = "HSTC"
+
 
 class ThreeLetterProtein(Alphabet):
     size = 3
@@ -114,6 +123,7 @@ class ThreeLetterProtein(Alphabet):
 ###### Non per-sequence modifications
 
 # (These are Decorator classes)
+
 
 class AlphabetEncoder(object):
     def __init__(self, alphabet, new_letters):
@@ -212,6 +222,7 @@ def _get_base_alphabet(alphabet):
            "Invalid alphabet found, %s" % repr(a)
     return a
 
+
 def _ungap(alphabet):
     """Returns the alphabet without any gap encoder (PRIVATE)."""
     #TODO - Handle via method of the objects?
@@ -225,6 +236,7 @@ def _ungap(alphabet):
         return AlphabetEncoder(_ungap(alphabet.alphabet), letters=alphabet.letters)
     else:
         raise NotImplementedError
+
 
 def _consensus_base_alphabet(alphabets):
     """Returns a common but often generic base alphabet object (PRIVATE).
@@ -259,6 +271,7 @@ def _consensus_base_alphabet(alphabets):
         #Given NO alphabets!
         return generic_alphabet
     return common
+
 
 def _consensus_alphabet(alphabets):
     """Returns a common but often generic alphabet object (PRIVATE).
@@ -336,6 +349,7 @@ def _consensus_alphabet(alphabets):
         alpha = HasStopCodon(alpha, stop_symbol=stop)
     return alpha
 
+
 def _check_type_compatible(alphabets):
     """Returns True except for DNA+RNA or Nucleotide+Protein (PRIVATE).
 
@@ -372,6 +386,7 @@ def _check_type_compatible(alphabets):
             if nucl:
                 return False
     return True
+
 
 def _verify_alphabet(sequence):
     """Check all letters in sequence are in the alphabet (PRIVATE).

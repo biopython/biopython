@@ -7,6 +7,7 @@ import re
 
 line_floats_re = re.compile("-*\d+\.\d+")
 
+
 def parse_basics(lines, results):
     """Parse the basics that should be present in most baseml results files.
     """
@@ -47,6 +48,7 @@ def parse_basics(lines, results):
                 results["tree"] = line.strip()
     return (results, num_params)
 
+
 def parse_parameters(lines, results, num_params):
     """Parse the various parameters from the file.
     """
@@ -57,6 +59,7 @@ def parse_parameters(lines, results, num_params):
     parameters = parse_freqs(lines, parameters)
     results["parameters"] = parameters
     return results
+
 
 def parse_parameter_list(lines, parameters, num_params):
     """ Parse the parameters list, which is just an unlabeled list of numeric values.
@@ -85,6 +88,7 @@ def parse_parameter_list(lines, parameters, num_params):
                 parameters["SEs"] = SEs_line.strip()
             break
     return parameters
+
 
 def parse_kappas(lines, parameters):
     """Parse out the kappa parameters.
@@ -125,6 +129,7 @@ def parse_kappas(lines, parameters):
             else:
                 parameters["kappa"] = line_floats
     return parameters
+
 
 def parse_rates(lines, parameters):
     """Parse the rate parameters.
@@ -177,6 +182,7 @@ def parse_rates(lines, parameters):
             if len(parameters["transition probs."]) == len(parameters["rates"]):
                 trans_probs_found = False
     return parameters
+
 
 def parse_freqs(lines, parameters):
     """Parse the basepair frequencies.

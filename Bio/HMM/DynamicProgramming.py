@@ -4,6 +4,7 @@ This module contains classes which implement Dynamic Programming
 algorithms that can be used generally.
 """
 
+
 class AbstractDPAlgorithms(object):
     """An abstract class to calculate forward and backward probabilities.
 
@@ -153,6 +154,7 @@ class AbstractDPAlgorithms(object):
         # get sequence probabilities using the forward algorithm
 
         return backward_var
+
 
 class ScaledDPAlgorithms(AbstractDPAlgorithms):
     """Implement forward and backward algorithms using a rescaling approach.
@@ -312,6 +314,7 @@ class ScaledDPAlgorithms(AbstractDPAlgorithms):
         # and return None
         else:
             return None
+
 
 class LogDPAlgorithms(AbstractDPAlgorithms):
     """Implement forward and backward algorithms using a log approach.

@@ -40,6 +40,7 @@ except ImportError:
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 
+
 def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
     """Generator function to parse UniProt XML as SeqRecord objects.
 
@@ -74,6 +75,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
         if event == "end" and elem.tag == NS + "entry":
             yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
             elem.clear()
+
 
 class Parser(object):
     """Parse a UniProt XML entry to a SeqRecord.

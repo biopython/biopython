@@ -45,6 +45,7 @@ _entry_db_fields = {}
 _entry_db_formats = {}
 _convert_formats = []
 
+
 def _get_fields(url):
     """Queries a TogoWS URL for a plain text list of values (PRIVATE)."""
     handle = _open(url)
@@ -52,18 +53,23 @@ def _get_fields(url):
     handle.close()
     return fields
 
+
 def _get_entry_dbs():
     return _get_fields(_BASE_URL + "/entry")
+
 
 def _get_entry_fields(db):
     return _get_fields(_BASE_URL + "/entry/%s?fields" % db)
 
+
 def _get_entry_formats(db):
     return _get_fields(_BASE_URL + "/entry/%s?formats" % db)
+
 
 def _get_convert_formats():
     return [pair.split(".") for pair in
             _get_fields(_BASE_URL + "/convert/")]
+
 
 def entry(db, id, format=None, field=None):
     """TogoWS fetch entry (returns a handle).
@@ -127,6 +133,7 @@ def entry(db, id, format=None, field=None):
         url += "." + format
     return _open(url)
 
+
 def search_count(db, query):
     """TogoWS search count (returns an integer).
 
@@ -151,6 +158,7 @@ def search_count(db, query):
     count = int(handle.read().strip())
     handle.close()
     return count
+
 
 def search_iter(db, query, limit=None, batch=100):
     """TogoWS search iteratating over the results (generator function).
@@ -195,6 +203,7 @@ def search_iter(db, query, limit=None, batch=100):
         offset += batch
         remain -= batch
         prev_ids = ids
+
 
 def search(db, query, offset=None, limit=None, format=None):
     """TogoWS search (returns a handle).
@@ -258,6 +267,7 @@ def search(db, query, offset=None, limit=None, format=None):
     #print url
     return _open(url)
 
+
 def convert(data, in_format, out_format):
     """TogoWS convert (returns a handle).
 
@@ -285,6 +295,7 @@ def convert(data, in_format, out_format):
     else:
         #String
         return _open(url, post={"data":data})
+
 
 def _open(url, post=None):
     """Helper function to build the URL and open a handle to it (PRIVATE).

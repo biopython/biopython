@@ -9,6 +9,7 @@ warnings.warn("The module Bio.Pathway.Rep.HashSet is now deprecated, "
               "Use Python's built in set object instead.",
               DeprecationWarning)
 
+
 class HashSet(object):
     """A set abstraction supporting the basic set operations.
 

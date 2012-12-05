@@ -6,6 +6,7 @@
 from numpy import dot, transpose, sqrt, array
 from numpy.linalg import svd, det
 
+
 class SVDSuperimposer(object):
     """
     SVDSuperimposer finds the best rotation and translation to put

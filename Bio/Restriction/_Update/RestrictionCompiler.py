@@ -83,6 +83,7 @@ class OverhangError(ValueError):
     """Exception for dealing with overhang."""
     pass
 
+
 def BaseExpand(base):
     """BaseExpand(base) -> string.
 
@@ -94,6 +95,7 @@ def BaseExpand(base):
         etc..."""
     base = base.upper()
     return dna_alphabet[base]
+
 
 def regex(site):
     """regex(site) -> string.
@@ -113,6 +115,7 @@ def regex(site):
             reg_ex = expand.join(reg_ex.split(base))
     return reg_ex
 
+
 def Antiparallel(sequence):
     """Antiparallel(sequence) -> string.
 
@@ -120,12 +123,14 @@ def Antiparallel(sequence):
     a DNA sequence."""
     return antiparallel(str(sequence))
 
+
 def is_palindrom(sequence):
     """is_palindrom(sequence) -> bool.
 
     True is the sequence is a palindrom.
     sequence is a DNA object."""
     return sequence == DNA(Antiparallel(sequence))
+
 
 def LocalTime():
     """LocalTime() -> string.
@@ -362,6 +367,7 @@ start = '\n\
 # not work on Jython due to JVM limitations. Therefore we break this up\n\
 # into steps, using temporary functions to avoid the JVM limits.\n\
 \n\n'
+
 
 class DictionaryBuilder(object):
 

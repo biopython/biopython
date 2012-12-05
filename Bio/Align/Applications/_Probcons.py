@@ -9,6 +9,7 @@ __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, _Argument, AbstractCommandline
 
+
 class ProbconsCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program PROBCONS.
 
@@ -106,6 +107,7 @@ class ProbconsCommandline(AbstractCommandline):
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

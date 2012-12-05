@@ -39,12 +39,15 @@ except:
 
 connection = None
 
+
 class NoInsertionError(Exception):
     pass
+
 
 def _check_is_public(name):
     if name[:6] == "_names":
         raise AttributeError
+
 
 class QueryRow(list):
     def __init__(self, cursor):
@@ -80,6 +83,7 @@ class QueryRow(list):
             self[index] = value
         except KeyError:
             return object.__setattr__(self, name, value)
+
 
 class Query(object):
     """
@@ -119,10 +123,12 @@ class Query(object):
         for item in self:
             print item
 
+
 class QueryGeneric(Query):
     def __init__(self, statement, *args, **keywds):
         Query.__init__(self, *args, **keywds)
         self.statement = statement,
+
 
 class IterationCursor(object):
     def __init__(self, query, connection=connection):
@@ -137,6 +143,7 @@ class IterationCursor(object):
 
     def next(self):
         return self.row_class(self.cursor)
+
 
 class QuerySingle(Query, QueryRow):
     ignore_warnings = 0
@@ -155,6 +162,7 @@ class QuerySingle(Query, QueryRow):
     def cursor(self):
         return self.single_cursor
 
+
 class QueryAll(list, Query):
     def __init__(self, *args, **keywds):
         Query.__init__(self, *args, **keywds)
@@ -163,9 +171,11 @@ class QueryAll(list, Query):
     def process_row(self, row):
         return row
 
+
 class QueryAllFirstItem(QueryAll):
     def process_row(self, row):
         return row[0]
+
 
 class Create(QuerySingle):
     def __init__(self, *args, **keywds):
@@ -174,8 +184,10 @@ class Create(QuerySingle):
         except StopIteration:
             self.message = self.MSG_SUCCESS
 
+
 class Update(Create):
     pass
+
 
 class Insert(Create):
     MSG_INTEGRITY_ERROR = "Couldn't insert: %s. "
@@ -200,6 +212,7 @@ class Insert(Create):
 
         if self.cursor().rowcount == 0:
             raise NoInsertionError
+
 
 def _test(*args, **keywds):
     import doctest

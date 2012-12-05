@@ -356,11 +356,14 @@ class SeqMat(dict):
             new_mat[i] += other[i]
         return new_mat
 
+
 class AcceptedReplacementsMatrix(SeqMat):
     """Accepted replacements matrix"""
 
+
 class ObservedFrequencyMatrix(SeqMat):
     """Observed frequency matrix"""
+
 
 class ExpectedFrequencyMatrix(SeqMat):
     """Expected frequency matrix"""
@@ -406,6 +409,7 @@ def _build_obs_freq_mat(acc_rep_mat):
         obs_freq_mat[i] = acc_rep_mat[i]/total
     return obs_freq_mat
 
+
 def _exp_freq_table_from_obs_freq(obs_freq_mat):
     exp_freq_table = {}
     for i in obs_freq_mat.alphabet.letters:
@@ -417,6 +421,7 @@ def _exp_freq_table_from_obs_freq(obs_freq_mat):
             exp_freq_table[i[0]] += obs_freq_mat[i] / 2.
             exp_freq_table[i[1]] += obs_freq_mat[i] / 2.
     return FreqTable.FreqTable(exp_freq_table,FreqTable.FREQ)
+
 
 def _build_exp_freq_mat(exp_freq_table):
     """Build an expected frequency matrix
@@ -430,6 +435,8 @@ def _build_exp_freq_mat(exp_freq_table):
         else:
             exp_freq_mat[i] = 2.0*exp_freq_table[i[0]]*exp_freq_table[i[1]]
     return exp_freq_mat
+
+
 #
 # Build the substitution matrix
 #
@@ -441,6 +448,7 @@ def _build_subs_mat(obs_freq_mat,exp_freq_mat):
     for i in obs_freq_mat:
         subs_mat[i] = obs_freq_mat[i]/exp_freq_mat[i]
     return subs_mat
+
 
 #
 # Build a log-odds matrix
@@ -468,6 +476,7 @@ def _build_log_odds_mat(subs_mat,logbase=2,factor=10.0,round_digit=0,keep_nd=0):
                 lo_mat[i] = mat_min
     return lo_mat
 
+
 #
 # External function. User provides an accepted replacement matrix, and,
 # optionally the following: expected frequency table, log base, mult. factor,
@@ -484,11 +493,13 @@ def make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=2,
     lo_mat = _build_log_odds_mat(subs_mat,logbase,factor,round_digit,keep_nd)
     return lo_mat
 
+
 def observed_frequency_to_substitution_matrix(obs_freq_mat):
     exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
     exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
     subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
     return subs_mat
+
 
 def read_text_matrix(data_file):
     matrix = {}
@@ -532,6 +543,7 @@ diagNO = 1
 diagONLY = 2
 diagALL = 3
 
+
 def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
     rel_ent = 0.
     key_list_1 = sorted(mat_1)
@@ -567,6 +579,7 @@ def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
             rel_ent += val_1 * log(val_1/val_2)/log(logbase)
     return rel_ent
 
+
 ## Gives the linear correlation coefficient between two matrices
 def two_mat_correlation(mat_1, mat_2):
     try:
@@ -583,6 +596,7 @@ def two_mat_correlation(mat_1, mat_2):
     correlation_matrix = numpy.corrcoef(values, rowvar=0)
     correlation = correlation_matrix[0,1]
     return correlation
+
 
 # Jensen-Shannon Distance
 # Need to input observed frequency matrices

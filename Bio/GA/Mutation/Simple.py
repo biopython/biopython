@@ -3,6 +3,7 @@
 # standard modules
 import random
 
+
 class SinglePositionMutation(object):
     """Perform a conversion mutation, but only at a single point in the genome.
 
@@ -43,6 +44,7 @@ class SinglePositionMutation(object):
             mutated_org.genome[mutation_pos] = new_letter
 
         return mutated_org
+
 
 class ConversionMutation(object):
     """Potentially mutate any item to another in the alphabet.

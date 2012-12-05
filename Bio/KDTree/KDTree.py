@@ -19,9 +19,11 @@ from numpy.random import random
 
 from Bio.KDTree import _CKDTree
 
+
 def _dist(p, q):
     diff=p-q
     return sqrt(sum(diff*diff))
+
 
 def _neighbor_test(nr_points, dim, bucket_size, radius):
     """ Test all fixed radius neighbor search.
@@ -56,6 +58,7 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     else:
         print "Not passed: %i != %i." % (l1, l2)
 
+
 def _test(nr_points, dim, bucket_size, radius):
     """Test neighbor search.
 
@@ -87,6 +90,7 @@ def _test(nr_points, dim, bucket_size, radius):
         print "Passed."
     else:
         print "Not passed: %i != %i." % (l1, l2)
+
 
 class KDTree(object):
     """

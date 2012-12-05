@@ -10,6 +10,7 @@ o Qualifier - Qualifiers on a Feature.
 # local stuff
 import Bio.GenBank
 
+
 def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
     """Write a line of GenBank info that can wrap over multiple lines.
 
@@ -72,6 +73,7 @@ def _wrapped_genbank(information, indent, wrap_space = 1, split_char = " "):
 
     return output_info
 
+
 def _indent_genbank(information, indent):
     """Write out information with the specified indent.
 
@@ -89,6 +91,7 @@ def _indent_genbank(information, indent):
         output_info += " " * indent + info_part + "\n"
 
     return output_info
+
 
 class Record(object):
     """Hold GenBank information in a format similar to the original record.
@@ -611,6 +614,7 @@ class Reference(object):
             output += _wrapped_genbank(self.remark, Record.GB_BASE_INDENT)
         return output
 
+
 class Feature(object):
     """Hold information about a Feature in the Feature Table of GenBank record.
 
@@ -641,6 +645,7 @@ class Feature(object):
             output += _wrapped_genbank(qualifier.key + qualifier.value,
                                        Record.GB_FEATURE_INDENT, space_wrap)
         return output
+
 
 class Qualifier(object):
     """Hold information about a qualifier in a GenBank feature.

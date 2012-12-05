@@ -23,6 +23,7 @@ parse              Read multiple SwissProt records
 
 from Bio._py3k import _as_string
 
+
 class Record(object):
     """Holds information from a SwissProt record.
 
@@ -473,6 +474,7 @@ def _read_rx(reference, value):
         from Bio import BiopythonParserWarning
         warnings.warn("Possibly corrupt RX line %r" % value,
                       BiopythonParserWarning)
+
 
 def _read_cc(record, line):
     key, value = line[5:8], line[9:].rstrip()

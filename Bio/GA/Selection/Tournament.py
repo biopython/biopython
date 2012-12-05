@@ -11,6 +11,7 @@ import random
 # local modules
 from Abstract import AbstractSelection
 
+
 class TournamentSelection(AbstractSelection):
     """Implement tournament style selection.
     """

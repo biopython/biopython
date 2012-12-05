@@ -14,6 +14,7 @@ __docformat__ = "epytext en" #not just plaintext
 
 __version__ = "1.60+"
 
+
 class MissingExternalDependencyError(Exception):
     """Missing an external dependency.
 
@@ -21,6 +22,7 @@ class MissingExternalDependencyError(Exception):
     tests to allow skipping tests with missing external dependencies.
     """
     pass
+
 
 class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     """Missing an external python dependency (subclass of ImportError).
@@ -31,6 +33,7 @@ class MissingPythonDependencyError(MissingExternalDependencyError, ImportError):
     ImportError.
     """
     pass
+
 
 class BiopythonWarning(Warning):
     """Biopython warning.
@@ -46,6 +49,7 @@ class BiopythonWarning(Warning):
     """
     pass
 
+
 class BiopythonParserWarning(BiopythonWarning):
     """Biopython parser warning.
 
@@ -60,6 +64,7 @@ class BiopythonParserWarning(BiopythonWarning):
     Consult the warnings module documentation for more details.
     """
     pass
+
 
 class BiopythonDeprecationWarning(BiopythonWarning):
     """Biopython deprecation warning.
@@ -78,6 +83,7 @@ class BiopythonDeprecationWarning(BiopythonWarning):
     developers by sending an email to biopython-dev@biopython.org.
     """
     pass
+
 
 class BiopythonExperimentalWarning(BiopythonWarning):
     """Biopython experimental code warning.

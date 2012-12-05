@@ -13,6 +13,7 @@ o Record - All of the information in an GEO record.
 See http://www.ncbi.nlm.nih.gov/geo/
 """
 
+
 class Record(object):
     """Hold GEO information in a format similar to the original record.
 
@@ -80,6 +81,7 @@ class Record(object):
             output = output + '\n'
 
         return output
+
 
 def out_block( text, prefix = '' ):
     output = ''

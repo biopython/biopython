@@ -8,6 +8,7 @@ import array
 # Sequence objects from Biopython
 from Bio.Seq import MutableSeq
 
+
 def function_population(new_genome, num_organisms, fitness_calculator):
     """Generate a population given a function to create genomes
 
@@ -29,6 +30,7 @@ def function_population(new_genome, num_organisms, fitness_calculator):
         all_orgs.append(Organism(cur_genome, fitness_calculator))
 
     return all_orgs
+
 
 def random_population(genome_alphabet, genome_size, num_organisms,
                       fitness_calculator):
@@ -78,6 +80,7 @@ def random_population(genome_alphabet, genome_size, num_organisms,
         all_orgs.append(Organism(new_genome, fitness_calculator))
 
     return all_orgs
+
 
 class Organism(object):
     """Represent a single individual in a population.

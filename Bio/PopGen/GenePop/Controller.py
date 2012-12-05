@@ -14,6 +14,7 @@ import shutil
 
 from Bio.Application import AbstractCommandline, _Argument
 
+
 def _gp_float(tok):
     """Gets a float from a token, if it fails, returns the string.
     """
@@ -22,6 +23,7 @@ def _gp_float(tok):
     except ValueError:
         return str(tok)
 
+
 def _gp_int(tok):
     """Gets a int from a token, if it fails, returns the string.
     """
@@ -29,6 +31,7 @@ def _gp_int(tok):
         return int(tok)
     except ValueError:
         return str(tok)
+
 
 def _read_allele_freq_table(f):
     l = f.readline()
@@ -57,6 +60,7 @@ def _read_allele_freq_table(f):
         l = f.readline().rstrip()
     return alleles, table
 
+
 def _read_table(f, funs):
     table = []
     l = f.readline().rstrip()
@@ -75,6 +79,7 @@ def _read_table(f, funs):
         l = f.readline().rstrip()
     return table
 
+
 def _read_triangle_matrix(f):
     matrix = []
     l = f.readline().rstrip()
@@ -84,6 +89,7 @@ def _read_triangle_matrix(f):
                 filter(lambda y: y != "", l.split(" "))))
         l = f.readline().rstrip()
     return matrix
+
 
 def _read_headed_triangle_matrix(f):
     matrix = {}
@@ -103,6 +109,7 @@ def _read_headed_triangle_matrix(f):
         for col_pop in range(len(clean_vals)):
             matrix[(line_pop+1, col_pop)] = clean_vals[col_pop]
     return matrix
+
 
 def _hw_func(stream, is_locus, has_fisher = False):
     l = stream.readline()
@@ -130,6 +137,7 @@ def _hw_func(stream, is_locus, has_fisher = False):
         l = stream.readline()
     #self.done = True
     raise StopIteration
+
 
 class _FileIterator:
     """Iterator which crawls over a stream of lines with a function.
@@ -159,6 +167,7 @@ class _FileIterator:
         except OSError:
             #Jython seems to call the iterator twice
             pass
+
 
 class _GenePopCommandline(AbstractCommandline):
     """ Command Line Wrapper for GenePop.
@@ -204,6 +213,7 @@ class _GenePopCommandline(AbstractCommandline):
         """Sets the input file name.
         """
         self.set_parameter("input", "InputFile="+fname)
+
 
 class GenePopController(object):
     def __init__(self, genepop_dir = None):

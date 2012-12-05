@@ -13,6 +13,7 @@ from Tkinter import *
 from Bio.Seq import reverse_complement, translate
 from Bio.SeqUtils import GC
 
+
 class xbb_translations:
     def __init__(self):
         ""

@@ -10,6 +10,7 @@ __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 import os
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+
 class ClustalwCommandline(AbstractCommandline):
     """Command line wrapper for clustalw (version one or two).
 
@@ -323,6 +324,7 @@ class ClustalwCommandline(AbstractCommandline):
                     checker_function=lambda x: x in ["NJ", "UPGMA", "nj", "upgma"])
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

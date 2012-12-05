@@ -20,6 +20,7 @@ KEGG_DATA_LENGTH = KEGG_LINE_LENGTH - KEGG_ITEM_LENGTH
 # wrap rule = [indent, connect, (splitstr, connect, splitafter, keep), ...]
 _default_wrap = lambda indent: [indent, "", (" ", "", 1, 0)]
 
+
 def _wrap_kegg(line, max_width = KEGG_DATA_LENGTH, wrap_rule = _default_wrap):
     """Wraps the input line  for KEGG output.
 

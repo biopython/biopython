@@ -22,10 +22,12 @@ from Bio import Alphabet
 from Bio.Alphabet import IUPAC
 from Bio.Data import IUPACData, CodonTable
 
+
 class ProteinX(Alphabet.ProteinAlphabet):
     letters = IUPACData.extended_protein_letters + "X"
 
 proteinX = ProteinX()
+
 
 class MissingTable:
     def __init__(self, table):
@@ -36,6 +38,7 @@ class MissingTable:
             return self._table.get(codon, stop_symbol)
         except CodonTable.TranslationError:
             return 'X'
+
 
 # Make the codon table given an existing table
 def makeTableX(table):

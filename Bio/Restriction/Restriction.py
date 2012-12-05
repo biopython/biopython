@@ -91,6 +91,7 @@ from Bio.Restriction.Restriction_Dictionary import suppliers as suppliers_dict
 from Bio.Restriction.RanaConfig import *
 from Bio.Restriction.PrintFormat import PrintFormat
 
+
 #Used to use Bio.Restriction.DNAUtils.check_bases (and expose it under this
 #namespace), but have deprecated that module.
 def _check_bases(seq_string):
@@ -124,6 +125,7 @@ matching = {'A' : 'ARWMHVDN', 'C' : 'CYSMHBVN', 'G' : 'GRSKBVDN',
             'D' : 'ABDGHKMNSRTWVY', 'N' : 'ACBDGHKMNSRTWVY'}
 
 DNA = Seq
+
 
 class FormattedSeq(object):
     """FormattedSeq(seq, [linear=True])-> new FormattedSeq.
@@ -2071,6 +2073,7 @@ class RestrictionBatch(set):
 #                       Restriction Analysis                                  #
 #                                                                             #
 ###############################################################################
+
 
 class Analysis(RestrictionBatch, PrintFormat):
 

@@ -13,6 +13,7 @@ from Bio.PopGen.Async import Async
 
 import thread
 
+
 class Local(Async):
     '''Execution on Local machine.
     '''

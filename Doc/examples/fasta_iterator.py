@@ -4,6 +4,7 @@
 
 from Bio import SeqIO
 
+
 def extract_organisms(file_to_parse, format):
     all_species = []
     for cur_record in SeqIO.parse(open(file_to_parse), format) :
@@ -28,6 +29,7 @@ if __name__ == "__main__":
 # This next bit of code still works fine, it uses Bio.Fasta instead
 
 from Bio import Fasta
+
 
 def extract_organisms(file_to_parse):
     # set up the parser and iterator

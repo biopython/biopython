@@ -14,6 +14,7 @@ programs.
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+
 class _EmbossMinimalCommandLine(AbstractCommandline):
     """Base Commandline object for EMBOSS wrappers (PRIVATE).
 
@@ -80,6 +81,7 @@ class _EmbossMinimalCommandLine(AbstractCommandline):
             self.parameters = extra_parameters
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
+
 class _EmbossCommandLine(_EmbossMinimalCommandLine):
     """Base Commandline object for EMBOSS wrappers (PRIVATE).
 
@@ -113,6 +115,7 @@ class _EmbossCommandLine(_EmbossMinimalCommandLine):
             raise ValueError("You must either set outfile (output filename), "
                              "or enable filter or stdout (output to stdout).")
         return _EmbossMinimalCommandLine._validate(self)
+
 
 class Primer3Commandline(_EmbossCommandLine):
     """Commandline object for the Primer3 interface from EMBOSS.
@@ -1214,6 +1217,7 @@ class SeqretCommandline(_EmbossMinimalCommandLine):
                              "or enable filter or stdin (input from stdin).")
         return _EmbossMinimalCommandLine._validate(self)
 
+
 class SeqmatchallCommandline(_EmbossCommandLine):
     """ Commandline object for the seqmatchall program from EMBOSS
 
@@ -1238,6 +1242,7 @@ class SeqmatchallCommandline(_EmbossCommandLine):
                   "Display output in a different specified output format"),
         ]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the Bio.Emboss.Applications module doctests."""

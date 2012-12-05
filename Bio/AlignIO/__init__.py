@@ -175,6 +175,7 @@ _FormatToWriter = {#"fasta" is done via Bio.SeqIO
                    "clustal" : ClustalIO.ClustalWriter,
                    }
 
+
 def write(alignments, handle, format):
     """Write complete set of alignments to a file.
 
@@ -231,6 +232,7 @@ def write(alignments, handle, format):
 
     return count
 
+
 #This is a generator function!
 def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     """Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
@@ -270,6 +272,7 @@ def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
             yield MultipleSeqAlignment(records, alphabet)
     raise StopIteration
 
+
 def _force_alphabet(alignment_iterator, alphabet):
     """Iterate over alignments, over-riding the alphabet (PRIVATE)."""
     #Assume the alphabet argument has been pre-validated
@@ -289,6 +292,7 @@ def _force_alphabet(alignment_iterator, alphabet):
             record.seq.alphabet = alphabet
         align._alphabet = alphabet
         yield align
+
 
 def parse(handle, format, seq_count=None, alphabet=None):
     """Iterate over an alignment file as MultipleSeqAlignment objects.
@@ -366,6 +370,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
         for a in i:
             yield a
 
+
 def read(handle, format, seq_count=None, alphabet=None):
     """Turns an alignment file into a single MultipleSeqAlignment object.
 
@@ -430,6 +435,7 @@ def read(handle, format, seq_count=None, alphabet=None):
         assert len(first)==seq_count
     return first
 
+
 def convert(in_file, in_format, out_file, out_format, alphabet=None):
     """Convert between two alignment files, returns number of alignments.
 
@@ -455,6 +461,7 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
             count = write(alignments, out_handle, out_format)
 
     return count
+
 
 def _test():
     """Run the Bio.AlignIO module's doctests.

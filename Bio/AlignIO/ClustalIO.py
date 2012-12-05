@@ -15,6 +15,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Interfaces import AlignmentIterator, SequentialAlignmentWriter
 
+
 class ClustalWriter(SequentialAlignmentWriter):
     """Clustalw alignment writer."""
     def write_alignment(self, alignment):
@@ -77,6 +78,7 @@ class ClustalWriter(SequentialAlignmentWriter):
 
         # Want a trailing blank new line in case the output is concatenated
         self.handle.write(output + "\n")
+
 
 class ClustalIterator(AlignmentIterator):
     """Clustalw alignment iterator."""

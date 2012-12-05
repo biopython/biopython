@@ -15,6 +15,7 @@ XXX ref
 
 import numpy
 
+
 class MaxEntropy(object):
     """Holds information for a Maximum Entropy classifier.
 
@@ -28,6 +29,7 @@ class MaxEntropy(object):
         self.classes = []
         self.alphas = []
         self.feature_fns = []
+
 
 def calculate(me, observation):
     """calculate(me, observation) -> list of log probs
@@ -47,6 +49,7 @@ def calculate(me, observation):
         scores.append(lprob)
     return scores
 
+
 def classify(me, observation):
     """classify(me, observation) -> class
 
@@ -59,6 +62,7 @@ def classify(me, observation):
         if scores[i] > max_score:
             max_score, klass = scores[i], me.classes[i]
     return klass
+
 
 def _eval_feature_fn(fn, xs, classes):
     """_eval_feature_fn(fn, xs, classes) -> dict of values
@@ -77,6 +81,7 @@ def _eval_feature_fn(fn, xs, classes):
             if f != 0:
                 values[(i, j)] = f
     return values
+
 
 def _calc_empirical_expects(xs, ys, classes, features):
     """_calc_empirical_expects(xs, ys, classes, features) -> list of expectations
@@ -102,6 +107,7 @@ def _calc_empirical_expects(xs, ys, classes, features):
         expect.append(float(s) / N)
     return expect
 
+
 def _calc_model_expects(xs, classes, features, alphas):
     """_calc_model_expects(xs, classes, features, alphas) -> list of expectations.
 
@@ -121,6 +127,7 @@ def _calc_model_expects(xs, classes, features, alphas):
             sum += p_yx[i][j] * f
         expects.append(sum/len(xs))
     return expects
+
 
 def _calc_p_class_given_x(xs, classes, features, alphas):
     """_calc_p_class_given_x(xs, classes, features, alphas) -> matrix
@@ -158,6 +165,7 @@ def _calc_p_class_given_x(xs, classes, features, alphas):
     #    prob_yx.append(probs)
     return prob_yx
 
+
 def _calc_f_sharp(N, nclasses, features):
     """_calc_f_sharp(N, nclasses, features) -> matrix of f sharp values."""
     # f#(x, y) = SUM_i feature(x, y)
@@ -166,6 +174,7 @@ def _calc_f_sharp(N, nclasses, features):
         for (i, j), f in feature.iteritems():
             f_sharp[i][j] += f
     return f_sharp
+
 
 def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
                      max_newton_iterations, newton_converge):
@@ -189,6 +198,7 @@ def _iis_solve_delta(N, feature, f_sharp, empirical, prob_yx,
     else:
         raise RuntimeError("Newton's method did not converge")
     return delta
+
 
 def _train_iis(xs, classes, features, f_sharp, alphas, e_empirical,
                max_newton_iterations, newton_converge):

@@ -8,6 +8,7 @@ from Bio.Alphabet import IUPAC
 from Bio import Seq
 from Bio.Motif import Motif
 
+
 def read(handle):
     """Parses the text output of the MEME program into MEME.Record object.
 

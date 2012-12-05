@@ -59,6 +59,7 @@ def _extract_alignment_region(alignment_seq_with_flanking, annotation):
            % (alignment_seq_with_flanking, start, end, annotation)
     return align_stripped[start:end]
 
+
 def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
     """Alignment iterator for the FASTA tool's pairwise alignment output.
 

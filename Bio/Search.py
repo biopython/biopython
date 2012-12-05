@@ -3,6 +3,7 @@ from Bio import BiopythonDeprecationWarning
 warnings.warn("Long obsolete module Bio/Search.py is deprecated.",
               BiopythonDeprecationWarning)
 
+
 # BLASTN 2.0a19MP-WashU [05-Feb-1998] [Build decunix3.2 01:53:29 05-Feb-1998]
 # BLASTP 2.0.4 [Feb-24-1998]
 class Algorithm(object):
@@ -10,6 +11,7 @@ class Algorithm(object):
         self.name = name                 # 'blastx', 'blastn', etc.
         self.version = version           # '2.1.2' or '2.0a19MP-WashU'
         self.description = description   # '[05-Feb-1998] [Build dec ...1998]'
+
 
 # Query=  YAL001C YAL001C, Chr I from 147596 to 147665, and 147756 to 151168,
 #     reverse complement
@@ -21,6 +23,7 @@ class Query(object):
         self.description = description  # 'YAL001C, Chr I from 147596 to ... '
         self.length = length            # 3483
 
+
 # Database:  ArabidopsisN
 #            66,211 sequences; 69,074,155 total letters.
 class Database(object):
@@ -28,6 +31,7 @@ class Database(object):
         self.name = name            # ArabidopsisN
         self.letters = letters      # 69074155
         self.entries = entries      # 66211
+
 
 class TableInfo(object):
     def __init__(self, full_description, info):
@@ -45,6 +49,7 @@ class Search(object):
         self.hits = hits
         self.parameters = parameters
         self.statistics = statistics
+
 
 class Hit(object):
     def __init__(self, name, description, accession, length,
@@ -98,6 +103,7 @@ class HomologySeq(_SeqLength):
     def __init__(self, seq, identical, positives, gaps):
         _SeqLength.__init__(self, len(seq), identical, positives, gaps)
         self.seq = seq
+
 
 class HSPSeq(_SeqLength):
     def __init__(self, name, seq, location, identical, positives, gaps):

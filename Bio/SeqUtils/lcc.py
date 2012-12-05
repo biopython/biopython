@@ -6,6 +6,7 @@
 
 import math
 
+
 def lcc_mult(seq,wsize):
     """Local Composition Complexity (LCC) values over sliding window.
 
@@ -116,6 +117,7 @@ def lcc_mult(seq,wsize):
                 lccsal.append(-(term_a+term_c+term_t+term_g))
         tail = window[0]
     return lccsal
+
 
 def lcc_simp(seq):
     """Local Composition Complexity (LCC) for a sequence.

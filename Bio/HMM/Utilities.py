@@ -4,6 +4,7 @@ This just collects general functions which you might like to use in
 dealing with HMMs.
 """
 
+
 def pretty_print_prediction(emissions, real_state, predicted_state,
                             emission_title = "Emissions",
                             real_title = "Real State",

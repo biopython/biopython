@@ -32,6 +32,7 @@ alignments_title= re.compile('## +ALIGNMENTS')
 alignments_rec = re.compile(' *[0-9]+ +-{0,1}[0-9]+')
 equiv_title = re.compile('## +EQUIVALENCES')
 
+
 class FSSPHeader(object):
     def __init__(self):
         self.database = None
@@ -55,6 +56,7 @@ class FSSPHeader(object):
                     setattr(self,i,attr)
                 else:
                     setattr(self,i,inline.split()[1])
+
 
 class PosAlign(object):
     def __init__(self,inStr):
@@ -122,6 +124,7 @@ class FSSPSumRec(object):
     def __repr__(self):
         return self.raw
     __str__ = __repr__
+
 
 class FSSPAlignRec(object):
     def __init__(self,in_fff_rec):
@@ -206,8 +209,10 @@ class FSSPAlignDict(dict):
             out_str += '\n'
         return out_str
 
+
 class FSSPSumDict(dict):
     pass
+
 
 #
 # Process a fssp file into its constituents. Return a 2-tuple containing

@@ -9,6 +9,7 @@ __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+
 class MuscleCommandline(AbstractCommandline):
     r"""Command line wrapper for the multiple alignment program MUSCLE.
 
@@ -462,6 +463,7 @@ class MuscleCommandline(AbstractCommandline):
                     "Write version string to stdout and exit"),
            ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

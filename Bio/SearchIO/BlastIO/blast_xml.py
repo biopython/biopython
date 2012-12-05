@@ -585,6 +585,7 @@ class BlastXmlIndexer(SearchIndexer):
         # general expecting "    <Iteration>\n...\n    </Iteration>\n"
         return qresult_raw
 
+
 class _BlastXmlGenerator(XMLGenerator):
     """Event-based XML Generator."""
 

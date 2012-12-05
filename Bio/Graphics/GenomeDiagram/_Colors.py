@@ -23,6 +23,7 @@
 # ReportLab imports
 from reportlab.lib import colors
 
+
 class ColorTranslator(object):
     """ Class providing methods for translating representations of color into
     """

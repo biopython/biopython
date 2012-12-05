@@ -22,6 +22,7 @@ Classes:
 Record                Holds Prosite data.
 """
 
+
 def parse(handle):
     """Parse Prosite records.
 
@@ -34,6 +35,7 @@ def parse(handle):
         if not record:
             break
         yield record
+
 
 def read(handle):
     """Read one Prosite record.
@@ -49,6 +51,7 @@ def read(handle):
     if remainder:
         raise ValueError("More than one Prosite record found")
     return record
+
 
 class Record(object):
     """Holds information from a Prosite record.

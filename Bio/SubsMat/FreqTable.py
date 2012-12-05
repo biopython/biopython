@@ -46,6 +46,8 @@ FREQ = 2
 #
 #
 ##################################################################
+
+
 class FreqTable(dict):
 
     def _freq_from_count(self):
@@ -73,6 +75,7 @@ class FreqTable(dict):
             self.alphabet = Alphabet.Alphabet()
             self.alphabet.letters = self._alphabet_from_input()
 
+
 def read_count(f):
     count = {}
     for line in f:
@@ -80,6 +83,7 @@ def read_count(f):
         count[key] = int(value)
     freq_table = FreqTable(count,COUNT)
     return freq_table
+
 
 def read_freq(f):
     freq_dict = {}

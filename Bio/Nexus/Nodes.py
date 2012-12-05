@@ -14,11 +14,14 @@
 # Bug reports to Frank Kauff (fkauff@biologie.uni-kl.de)
 #
 
+
 class ChainException(Exception):
     pass
 
+
 class NodeException(Exception):
     pass
+
 
 class Chain(object):
     """Stores a list of nodes that are linked together."""
@@ -113,6 +116,7 @@ class Chain(object):
         for sn in self.chain[start].get_succ():
             if self.is_parent_of(sn,finish):
                 return [sn]+self.trace(sn,finish)
+
 
 class Node(object):
     """A single node."""

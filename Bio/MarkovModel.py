@@ -36,6 +36,7 @@ except AttributeError:
         minxy = min(logx, logy)
         return minxy + numpy.log(numpy.exp(logx-minxy) + numpy.exp(logy-minxy))
 
+
 def itemindex(values):
     d = {}
     entries = enumerate(values[::-1])
@@ -48,6 +49,7 @@ numpy.random.seed()
 
 VERY_SMALL_NUMBER = 1E-300
 LOG0 = numpy.log(VERY_SMALL_NUMBER)
+
 
 class MarkovModel(object):
     def __init__(self, states, alphabet,
@@ -65,11 +67,13 @@ class MarkovModel(object):
         handle.seek(0)
         return handle.read()
 
+
 def _readline_and_check_start(handle, start):
     line = handle.readline()
     if not line.startswith(start):
         raise ValueError("I expected %r but got %r" % (start, line))
     return line
+
 
 def load(handle):
     """load(handle) -> MarkovModel()"""
@@ -107,6 +111,7 @@ def load(handle):
 
     return mm
 
+
 def save(mm, handle):
     """save(mm, handle)"""
     # This will fail if there are spaces in the states or alphabet.
@@ -124,6 +129,7 @@ def save(mm, handle):
     for i in range(len(mm.p_emission)):
         x = map(str, mm.p_emission[i])
         w("  %s: %s\n" % (mm.states[i], ' '.join(x)))
+
 
 # XXX allow them to specify starting points
 def train_bw(states, alphabet, training_data,
@@ -190,6 +196,8 @@ def train_bw(states, alphabet, training_data,
     return MarkovModel(states, alphabet, p_initial, p_transition, p_emission)
 
 MAX_ITERATIONS = 1000
+
+
 def _baum_welch(N, M, training_outputs,
                 p_initial=None, p_transition=None, p_emission=None,
                 pseudo_initial=None, pseudo_transition=None,
@@ -248,6 +256,7 @@ def _baum_welch(N, M, training_outputs,
 
     # Return everything back in normal space.
     return map(numpy.exp, (lp_initial, lp_transition, lp_emission))
+
 
 def _baum_welch_one(N, M, outputs,
                     lp_initial, lp_transition, lp_emission,
@@ -330,6 +339,7 @@ def _baum_welch_one(N, M, outputs,
     # step.
     return _logsum(fmat[:,T])
 
+
 def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
     # Implement the forward algorithm.  This actually calculates a
     # Nx(T+1) matrix, where the last column is the total probability
@@ -353,6 +363,7 @@ def _forward(N, T, lp_initial, lp_transition, lp_emission, outputs):
             matrix[j][t] = lprob
     return matrix
 
+
 def _backward(N, T, lp_transition, lp_emission, outputs):
     matrix = numpy.zeros((N, T+1))
     for t in range(T-1, -1, -1):
@@ -368,6 +379,7 @@ def _backward(N, T, lp_transition, lp_emission, outputs):
                 lprob = logaddexp(lprob, lp)
             matrix[i][t] = lprob
     return matrix
+
 
 def train_visible(states, alphabet, training_data,
                   pseudo_initial=None, pseudo_transition=None,
@@ -423,6 +435,7 @@ def train_visible(states, alphabet, training_data,
 
     return MarkovModel(states, alphabet, p_initial, p_transition, p_emission)
 
+
 def _mle(N, M, training_outputs, training_states, pseudo_initial,
          pseudo_transition, pseudo_emission):
     # p_initial is the probability that a sequence of states starts
@@ -460,8 +473,10 @@ def _mle(N, M, training_outputs, training_states, pseudo_initial,
 
     return p_initial, p_transition, p_emission
 
+
 def _argmaxes(vector, allowance=None):
     return [numpy.argmax(vector)]
+
 
 def find_states(markov_model, output):
     """find_states(markov_model, output) -> list of (states, score)"""
@@ -485,6 +500,7 @@ def find_states(markov_model, output):
         states, score = results[i]
         results[i] = [mm.states[x] for x in states], numpy.exp(score)
     return results
+
 
 def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
     # The Viterbi algorithm finds the most likely set of states for a
@@ -530,6 +546,7 @@ def _viterbi(N, lp_initial, lp_transition, lp_emission, output):
                 in_process.append((t-1, [i]+states, score))
     return results
 
+
 def _normalize(matrix):
     # Make sure numbers add up to 1.0
     if len(matrix.shape) == 1:
@@ -542,13 +559,16 @@ def _normalize(matrix):
         raise ValueError("I cannot handle matrixes of that shape")
     return matrix
 
+
 def _uniform_norm(shape):
     matrix = numpy.ones(shape)
     return _normalize(matrix)
 
+
 def _random_norm(shape):
     matrix = numpy.random.random(shape)
     return _normalize(matrix)
+
 
 def _copy_and_check(matrix, desired_shape):
     # Copy the matrix.
@@ -568,6 +588,7 @@ def _copy_and_check(matrix, desired_shape):
         raise ValueError("I don't handle matrices > 2 dimensions")
     return matrix
 
+
 def _logsum(matrix):
     if len(matrix.shape) > 1:
         vec = numpy.reshape(matrix, (numpy.product(matrix.shape),))
@@ -578,12 +599,14 @@ def _logsum(matrix):
         sum = logaddexp(sum, num)
     return sum
 
+
 def _logvecadd(logvec1, logvec2):
     assert len(logvec1) == len(logvec2), "vectors aren't the same length"
     sumvec = numpy.zeros(len(logvec1))
     for i in range(len(logvec1)):
         sumvec[i] = logaddexp(logvec1[i], logvec2[i])
     return sumvec
+
 
 def _exp_logsum(numbers):
     sum = _logsum(numbers)

@@ -8,6 +8,7 @@ check.
 # standard library
 import random
 
+
 class AmbiguousRepair(object):
     """Perform repair to reduce the number of Ambiguous genes in a genome.
 

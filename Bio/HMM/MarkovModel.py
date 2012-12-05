@@ -11,6 +11,7 @@ import random
 # biopython
 from Bio.Seq import MutableSeq
 
+
 def _gen_random_array(n):
     """ Return an array of n random numbers, where the elements of the array sum
     to 1.0"""
@@ -19,6 +20,7 @@ def _gen_random_array(n):
     normalizedRandArray = [x/total for x in randArray]
 
     return normalizedRandArray
+
 
 def _calculate_emissions(emission_probs):
     """Calculate which symbols can be emitted in each state
@@ -33,6 +35,7 @@ def _calculate_emissions(emission_probs):
             emissions[state] = [symbol]
 
     return emissions
+
 
 def _calculate_from_transitions(trans_probs):
     """Calculate which 'from transitions' are allowed for each state
@@ -52,6 +55,7 @@ def _calculate_from_transitions(trans_probs):
 
     return transitions
 
+
 def _calculate_to_transitions(trans_probs):
     """Calculate which 'to transitions' are allowed for each state
 
@@ -69,6 +73,7 @@ def _calculate_to_transitions(trans_probs):
             transitions[to_state] = [from_state]
 
     return transitions
+
 
 class MarkovModelBuilder(object):
     """Interface to build up a Markov Model.
@@ -429,6 +434,7 @@ class MarkovModelBuilder(object):
         else:
             raise KeyError("Emission of %s from %s is not allowed."
                            % (emission_state, seq_state))
+
 
 class HiddenMarkovModel(object):
     """Represent a hidden markov model that can be used for state estimation.

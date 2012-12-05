@@ -12,6 +12,7 @@ import os
 
 import Cache
 
+
 class SimCoalCache(Cache.SimCoalCache):
     def __init__(self, data_dir, simcoal_dir):
         self.data_dir = data_dir

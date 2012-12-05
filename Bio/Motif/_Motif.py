@@ -27,6 +27,7 @@ yourmotif.anticonsensus instead of yourmotif.anticonsensus()""",
         return self
 ConsensusSeq.__name__ = Seq.__name__
 
+
 class Motif(object):
     """
     A class representing sequence motifs.

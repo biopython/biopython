@@ -46,6 +46,7 @@ from reportlab.graphics.shapes import *
 
 from math import pi
 
+
 ################################################################################
 # METHODS
 ################################################################################
@@ -100,6 +101,7 @@ def _stroke_and_fill_colors(color, border):
 
     return strokecolor, color
 
+
 def draw_box(point1, point2,
              color=colors.lightgreen, border=None, colour=None,
              **kwargs):
@@ -134,6 +136,7 @@ def draw_box(point1, point2,
                    strokewidth=0,
                    **kwargs)
 
+
 def draw_cut_corner_box(point1, point2, corner=0.5,
                         color=colors.lightgreen, border=None, **kwargs):
     """Draw a box with the corners cut off."""
@@ -164,6 +167,7 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
                    strokeLineJoin=1, #1=round
                    fillColor=color,
                    **kwargs)
+
 
 def draw_polygon(list_of_points,
                  color=colors.lightgreen, border=None, colour=None,
@@ -263,6 +267,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                    fillColor=color,
                    **kwargs)
 
+
 def angle2trig(theta):
     """ angle2trig(angle)
 
@@ -275,6 +280,7 @@ def angle2trig(theta):
     c = cos(theta * pi / 180)
     s = sin(theta * pi / 180)
     return(c, s, -s, c)         # Vector for rotating point around an origin
+
 
 def intermediate_points(start, end, graph_data):
     """ intermediate_points(start, end, graph_data)
@@ -310,6 +316,7 @@ def intermediate_points(start, end, graph_data):
 ################################################################################
 # CLASSES
 ################################################################################
+
 
 class AbstractDrawer(object):
     """ AbstractDrawer

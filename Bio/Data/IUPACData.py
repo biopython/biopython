@@ -136,6 +136,7 @@ unambiguous_rna_weights = {
 }
 unambiguous_rna_weight_ranges = _make_ranges(unambiguous_rna_weights)
 
+
 def _make_ambiguous_ranges(mydict, weight_table):
     range_d = {}
     avg_d = {}
