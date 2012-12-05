@@ -481,22 +481,22 @@ class GenePopController(object):
 
     #3.1 PR/GE files
     def test_genic_diff_all(self, fname,
-        dememorization = 10000, batches = 20, iterations = 5000):
+            dememorization = 10000, batches = 20, iterations = 5000):
         raise NotImplementedError
 
     #3.2 PR2/GE2 files
     def test_genic_diff_pair(self, fname,
-        dememorization = 10000, batches = 20, iterations = 5000):
+            dememorization = 10000, batches = 20, iterations = 5000):
         raise NotImplementedError
 
     #3.3 G files
     def test_genotypic_diff_all(self, fname,
-        dememorization = 10000, batches = 20, iterations = 5000):
+            dememorization = 10000, batches = 20, iterations = 5000):
         raise NotImplementedError
 
     #3.4 2G2 files
     def test_genotypic_diff_pair(self, fname,
-        dememorization = 10000, batches = 20, iterations = 5000):
+            dememorization = 10000, batches = 20, iterations = 5000):
         raise NotImplementedError
 
     #4
