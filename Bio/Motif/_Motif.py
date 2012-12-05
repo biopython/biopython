@@ -32,7 +32,6 @@ class Motif(object):
     A class representing sequence motifs.
     """
     def __init__(self, alphabet=None, instances=None, counts=None):
-        self.mask = []
         self._pwm_is_current = False
         self._pwm = []
         self._log_odds_is_current = False
@@ -85,6 +84,10 @@ class Motif(object):
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
         self.alphabet = alphabet
+        if self.length==None:
+            self.__mask = ()
+        else:
+            self.__mask = (1,) * self.length
         self.background=dict((n, 1.0/len(self.alphabet.letters))
                              for n in self.alphabet.letters)
         self.beta=1.0
@@ -143,15 +146,47 @@ class Motif(object):
 
         The mask should be a string containing asterisks in the position of significant columns and spaces in other columns
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.set_mask(mask)
+please use
+>>> motif.mask = mask
+instead.
+""", PendingDeprecationWarning)
         self._check_length(len(mask))
-        self.mask=[]
+        self.__mask=[]
         for char in mask:
             if char=="*":
-                self.mask.append(1)
+                self.__mask.append(1)
             elif char==" ":
-                self.mask.append(0)
+                self.__mask.append(0)
             else:
                 raise ValueError("Mask should contain only '*' or ' ' and not a '%s'"%char)
+        self.__mask = tuple(self.__mask)
+
+    def __get_mask(self):
+        return self.__mask
+
+    def __set_mask(self, mask):
+        if len(mask)!=self.length:
+            raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
+        if isinstance(mask, str):
+            self.__mask=[]
+            for char in mask:
+                if char=="*":
+                    self.__mask.append(1)
+                elif char==" ":
+                    self.__mask.append(0)
+                else:
+                    raise ValueError("Mask should contain only '*' or ' ' and not a '%s'"%char)
+            self.__mask = tuple(self.__mask)
+        else:
+            self.__mask = tuple(int(bool(c)) for c in mask)
+
+    mask = property(__get_mask, __set_mask)
+    del __get_mask
+    del __set_mask
 
     def pwm(self,laplace=True):
         """
@@ -274,7 +309,7 @@ under the background distribution.
         score = 0.0
         for pos in xrange(self.length):
             a = sequence[position+pos]
-            if not masked or self.mask[pos]:
+            if not masked or self.__mask[pos]:
                 try:
                     score += lo[pos][a]
                 except:
@@ -283,7 +318,7 @@ under the background distribution.
             if not masked:
                 score/=self.length
             else:
-                score/=len([x for x in self.mask if x])
+                score/=len([x for x in self.__mask if x])
         return score
 
     def search_pwm(self,sequence,normalized=0,masked=0,threshold=0.0,both=True):
@@ -459,7 +494,7 @@ under the background distribution.
 
         if masked:
             for i in xrange(self.length):
-                if self.mask[i]:
+                if self.__mask[i]:
                     string += "*"
                 else:
                     string += " "
@@ -521,7 +556,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
         """
         Gives the reverse complement of the motif
         """
-        alphabet = self.alphabet
+        alphabet = IUPAC.unambiguous_dna
         if self.instances is not None:
             instances = []
             for instance in self.instances:
@@ -540,7 +575,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
             res.counts["G"].reverse()
             res.counts["T"].reverse()
             res.length=self.length
-        res.mask = self.mask
+        res.__mask = self.__mask[::-1]
         return res
 
     def _from_jaspar_pfm(self,stream,make_instances=False):
@@ -567,7 +602,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
             for k,v in zip(letters,rec):
                 self.counts[k].append(v)
             self.length+=1
-        self.set_mask("*"*self.length)
+        self.__mask = (1,) * self.length
         if make_instances is True:
             self.make_instances_from_counts()
         return self
@@ -595,7 +630,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
         s = sum(self.counts[nuc][0] for nuc in letters)
         l = len(self.counts[letters[0]])
         self.length=l
-        self.set_mask("*"*l)
+        self.__mask = (1,) * l
         if make_instances is True:
             self.make_instances_from_counts()
         return self
@@ -677,7 +712,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
             self.instances.append(instance)
         self._pwm_is_current = False
         self._log_odds_is_current = False
-        self.set_mask("*"*len(instance))
+        self.__mask = (1,) * length
         return self
 
     def __getitem__(self,index):

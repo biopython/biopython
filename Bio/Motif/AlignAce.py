@@ -49,7 +49,7 @@ def read(handle):
             motif = Motif(IUPAC.unambiguous_dna, instances)
             motif.score = float(line.split()[-1])
             motif.number = number
-            motif.set_mask(mask)
+            motif.mask = mask
             record.motifs.append(motif)
         elif len(line.split("\t"))==4:
             seq = Seq(line.split("\t")[0],IUPAC.unambiguous_dna)

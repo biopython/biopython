@@ -33,5 +33,5 @@ def read(handle, format):
         motif = Motif(alphabet, instances=instances)
     else:
         raise ValueError("Unknown format %s" % format)
-    motif.set_mask("*"*motif.length)
+    motif.mask = "*"*motif.length
     return motif
