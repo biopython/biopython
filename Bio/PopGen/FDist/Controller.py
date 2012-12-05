@@ -70,7 +70,7 @@ class FDistController(object):
         return strftime("%H%M%S") + str(int(clock()*100)) + str(randint(0,1000)) + str(self.tmp_idx)
 
     def run_datacal(self, data_dir='.', version=1,
-        crit_freq = 0.99, p = 0.5, beta= (0.25, 0.25)):
+                    crit_freq = 0.99, p = 0.5, beta= (0.25, 0.25)):
         """Executes datacal.
 
            data_dir - Where the data is found.
@@ -124,9 +124,9 @@ class FDistController(object):
         inf.close()
 
     def run_fdist(self, npops, nsamples, fst, sample_size,
-        mut = 0, num_sims = 50000, data_dir='.',
-        is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
-        max_freq = 0.99):
+                  mut = 0, num_sims = 50000, data_dir='.',
+                  is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
+                  max_freq = 0.99):
         """Executes (d)fdist.
 
         Parameters:
@@ -198,10 +198,10 @@ class FDistController(object):
         return fst
 
     def run_fdist_force_fst(self, npops, nsamples, fst, sample_size,
-        mut = 0, num_sims = 50000, data_dir='.',
-        try_runs = 5000, limit=0.001,
-        is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
-        max_freq = 0.99):
+                            mut = 0, num_sims = 50000, data_dir='.',
+                            try_runs = 5000, limit=0.001,is_dominant = False,
+                            theta = 0.06, beta = (0.25, 0.25),
+                            max_freq = 0.99):
         """Executes fdist trying to force Fst.
 
         Parameters:

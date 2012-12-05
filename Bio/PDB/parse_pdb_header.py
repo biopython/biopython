@@ -99,7 +99,7 @@ def _nice_case(line):
             c=c.upper()
             nextCap=0
         elif c==' ' or c=='.' or c==',' or c==';' or c==':' or c=='\t' or\
-            c=='-' or c=='_':
+             c=='-' or c=='_':
             nextCap=1
         s+=c
         i+=1

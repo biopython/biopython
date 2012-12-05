@@ -60,8 +60,7 @@ def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
    # new_align_dict = copy.copy(align_dict)
     for prot_num in sum_dict:
         attr_value = getattr(sum_dict[prot_num],filter_attribute)
-        if (attr_value >= low_bound and
-            attr_value <= high_bound):
+        if attr_value >= low_bound and attr_value <= high_bound:
             new_sum_dict[prot_num] = sum_dict[prot_num]
     prot_numbers = new_sum_dict.keys()
     prot_numbers.sort()

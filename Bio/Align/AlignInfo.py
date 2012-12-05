@@ -345,8 +345,8 @@ class SummaryInfo(object):
         # now create the dictionary
         for first_letter in all_letters:
             for second_letter in all_letters:
-                if (first_letter not in skip_items and
-                    second_letter not in skip_items):
+                if first_letter not in skip_items and \
+                   second_letter not in skip_items:
                     base_dictionary[(first_letter, second_letter)] = 0
 
         return base_dictionary, skip_items

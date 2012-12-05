@@ -192,13 +192,13 @@ class _Scanner(object):
         # blastpgp may have a reference for compositional score matrix
         # adjustment (see Bug 2502):
         if attempt_read_and_call(
-            uhandle, consumer.reference, start="Reference"):
+           uhandle, consumer.reference, start="Reference"):
             read_and_call_until(uhandle, consumer.reference, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
         # blastpgp has a Reference for composition-based statistics.
         if attempt_read_and_call(
-            uhandle, consumer.reference, start="Reference"):
+           uhandle, consumer.reference, start="Reference"):
             read_and_call_until(uhandle, consumer.reference, blank=1)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
 
@@ -253,10 +253,10 @@ class _Scanner(object):
 
         while not self._eof(uhandle):
             line = safe_peekline(uhandle)
-            if (not line.startswith('Searching') and
-                not line.startswith('Results from round') and
-                re.search(r"Score +E", line) is None and
-                'No hits found' not in line):
+            if not line.startswith('Searching') and \
+               not line.startswith('Results from round') and \
+               re.search(r"Score +E", line) is None and \
+               'No hits found' not in line:
                 break
             self._scan_descriptions(uhandle, consumer)
             self._scan_alignments(uhandle, consumer)
@@ -334,8 +334,8 @@ class _Scanner(object):
         # indicates that no descriptions follow, and we should go straight
         # to the alignments.
         if not attempt_read_and_call(
-            uhandle, consumer.description_header,
-            has_re=re.compile(r'Score +E')):
+           uhandle, consumer.description_header,
+           has_re=re.compile(r'Score +E')):
             # Either case 2 or 3.  Look for "No hits found".
             attempt_read_and_call(uhandle, consumer.no_hits,
                                   contains='No hits found')

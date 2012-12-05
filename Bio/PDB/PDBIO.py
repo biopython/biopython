@@ -66,7 +66,7 @@ class PDBIO(object):
     # private mathods
 
     def _get_atom_line(self, atom, hetfield, segid, atom_number, resname,
-        resseq, icode, chain_id, charge="  "):
+                       resseq, icode, chain_id, charge="  "):
         """Returns an ATOM PDB string (PRIVATE)."""
         if hetfield!=" ":
             record_type="HETATM"

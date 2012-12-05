@@ -125,7 +125,7 @@ def process_text(in_string, out_file_prefix, para_list, curr_values,
 
 #sep is because of jython
 def generate_model(par_stream, out_prefix, params,
-    specific_processor = no_processor, out_dir = '.'):
+                   specific_processor = no_processor, out_dir = '.'):
     #prepare_dir()
     text = par_stream.read()
     out_file_prefix = sep.join([out_dir, out_prefix])

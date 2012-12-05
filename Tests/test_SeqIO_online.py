@@ -73,17 +73,19 @@ class EntrezTests(unittest.TestCase):
             self.assertEqual(seguid(record.seq), checksum)
 
 for database, formats, entry, length, checksum in [
-    ("nuccore", ["fasta", "gb"], "X52960", 248,
-     "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
-    ("nucleotide", ["fasta", "gb"], "6273291", 902,
-     "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
-    ("protein", ["fasta", "gb"], "16130152", 367,
-     "fCjcjMFeGIrilHAn6h+yju267lg"),
-    ]:
+        ("nuccore", ["fasta", "gb"], "X52960", 248,
+         "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU"),
+        ("nucleotide", ["fasta", "gb"], "6273291", 902,
+         "bLhlq4mEFJOoS9PieOx4nhGnjAQ"),
+        ("protein", ["fasta", "gb"], "16130152", 367,
+         "fCjcjMFeGIrilHAn6h+yju267lg"),
+        ]:
+
     def funct(d, f, e, l, c):
         method = lambda x : x.simple(d, f, e, l, c)
         method.__doc__ = "Bio.Entrez.efetch(%s, %s, ...)" % (d, e)
         return method
+
     setattr(EntrezTests, "test_%s_%s" % (database, entry),
             funct(database, formats, entry, length, checksum))
     del funct

@@ -93,7 +93,7 @@ def compare_feature(old_f, new_f):
            "%s -> %s" % (str(old_f.location), str(new_f.location))
     except AssertionError, e:
         if isinstance(old_f.location.start, ExactPosition) and \
-            isinstance(old_f.location.end, ExactPosition):
+           isinstance(old_f.location.end, ExactPosition):
             # Its not a problem with fuzzy locations, re-raise
             raise e
         else:
@@ -141,7 +141,7 @@ def compare_feature(old_f, new_f):
                "%s -> %s" % (str(old_sub.location), str(new_sub.location))
         except AssertionError, e:
             if isinstance(old_sub.location.start, ExactPosition) and \
-                isinstance(old_sub.location.end, ExactPosition):
+               isinstance(old_sub.location.end, ExactPosition):
                 # Its not a problem with fuzzy locations, re-raise
                 raise e
             else:

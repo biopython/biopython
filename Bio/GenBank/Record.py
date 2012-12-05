@@ -634,7 +634,7 @@ class Feature(object):
             # determine whether we can wrap on spaces
             space_wrap = 1
             for no_space_key in \
-                Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
+                    Bio.GenBank._BaseGenBankConsumer.remove_space_keys:
                 if no_space_key in qualifier.key:
                     space_wrap = 0
 

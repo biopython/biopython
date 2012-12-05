@@ -242,9 +242,9 @@ class Hmmer3TextParser(object):
                 # break out of hsp parsing if there are no hits, it's the last hsp
                 # or it's the start of a new hit
                 if self.line.startswith('   [No targets detected that satisfy') or \
-                    self.line.startswith('Internal pipeline statistics summary:') or \
-                    self.line.startswith('  Alignments for each domain:') or \
-                    self.line.startswith('>>'):
+                   self.line.startswith('Internal pipeline statistics summary:') or \
+                   self.line.startswith('  Alignments for each domain:') or \
+                   self.line.startswith('>>'):
 
                     hit_attr = hit_attrs.pop(0)
                     hit = Hit(hsp_list)
