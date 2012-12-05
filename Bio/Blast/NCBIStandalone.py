@@ -233,9 +233,7 @@ class _Scanner(object):
             read_and_call_until(uhandle, consumer.query_info, start='Length=')
             while True:
                 line = uhandle.peekline()
-                if not line.strip():
-                    break
-                if "Score     E" in line:
+                if not line.strip() or "Score     E" in line:
                     break
                 #It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
