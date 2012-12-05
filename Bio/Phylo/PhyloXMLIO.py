@@ -22,16 +22,16 @@ import sys
 
 from Bio.Phylo import PhyloXML as PX
 
-if (3, 0, 0) <= sys.version_info[:3] <= (3, 1, 3):
-    # Workaround for cElementTree regression in python 3.0--3.1.3
-    # See http://bugs.python.org/issue9257
-    from xml.etree import ElementTree
-else:
-    try:
-        from xml.etree import cElementTree as ElementTree
-    except ImportError:
-        # Alternative Python implementation, perhaps?
+#For speed try to use cElementTree rather than ElementTree
+try:
+    if (3, 0) <= sys.version_info[:2] <= (3, 1):
+        # Workaround for bug in python 3.0 and 3.1,
+        # see http://bugs.python.org/issue9257
         from xml.etree import ElementTree as ElementTree
+    else:
+        from xml.etree import cElementTree as ElementTree
+except ImportError:
+    from xml.etree import ElementTree as ElementTree
 
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
