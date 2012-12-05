@@ -87,7 +87,7 @@ assert _re_oneof_position.match("one-of(3,6,9)")
 
 _simple_location = r"\d+\.\.\d+"
 _re_simple_location = re.compile(r"^%s$" % _simple_location)
-_re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
+_re_simple_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
                                  % (_simple_location, _simple_location))
 _complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s)" \
                     % (_pair_location, _solo_location, _between_location,
@@ -95,7 +95,7 @@ _complex_location = r"([a-zA-z][a-zA-Z0-9_]*(\.[a-zA-Z0-9]+)?\:)?(%s|%s|%s|%s|%s
 _re_complex_location = re.compile(r"^%s$" % _complex_location)
 _possibly_complemented_complex_location = r"(%s|complement\(%s\))" \
                                           % (_complex_location, _complex_location)
-_re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$" \
+_re_complex_compound = re.compile(r"^(join|order|bond)\(%s(,%s)*\)$"
                                  % (_possibly_complemented_complex_location,
                                     _possibly_complemented_complex_location))
 
@@ -214,7 +214,7 @@ def _pos(pos_str, offset=0):
     elif _re_oneof_position.match(pos_str):
         assert pos_str.startswith("one-of(")
         assert pos_str[-1]==")"
-        parts = [SeqFeature.ExactPosition(int(pos)+offset) \
+        parts = [SeqFeature.ExactPosition(int(pos)+offset)
                  for pos in pos_str[7:-1].split(",")]
         if offset == -1:
             default = min(int(pos) for pos in parts)
@@ -1051,7 +1051,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         cur_feature.location = None
         import warnings
         from Bio import BiopythonParserWarning
-        warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r" \
+        warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r"
                                              % (location_line)))
 
     def feature_qualifier(self, key, value):
@@ -1154,7 +1154,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         and self._expected_size != len(sequence):
             import warnings
             from Bio import BiopythonParserWarning
-            warnings.warn("Expected sequence length %i, found %i (%s)." \
+            warnings.warn("Expected sequence length %i, found %i (%s)."
                           % (self._expected_size, len(sequence), self.data.id),
                           BiopythonParserWarning)
 

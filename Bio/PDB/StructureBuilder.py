@@ -142,8 +142,8 @@ class StructureBuilder(object):
                     if not self._is_completely_disordered(duplicate_residue):
                         # if this exception is ignored, a residue will be missing
                         self.residue=None
-                        raise PDBConstructionException(\
-                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')" \
+                        raise PDBConstructionException(
+                            "Blank altlocs in duplicate residue %s ('%s', %i, '%s')"
                             % (resname, field, resseq, icode))
                     self.chain.detach_child(res_id)
                     new_residue=Residue(res_id, resname, self.segid)

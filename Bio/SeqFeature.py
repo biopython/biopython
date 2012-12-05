@@ -298,7 +298,7 @@ class SeqFeature(object):
                     parts.append(f_sub.location.extract(parent_sequence))
             else:
                 #This copes with mixed strand features:
-                parts = [f_sub.location.extract(parent_sequence) \
+                parts = [f_sub.location.extract(parent_sequence)
                          for f_sub in self.sub_features]
             #We use addition rather than a join to avoid alphabet issues:
             f_seq = parts[0]
@@ -626,7 +626,7 @@ class FeatureLocation(object):
 
     def _set_strand(self, value):
         if value not in [+1, -1, 0, None]:
-            raise ValueError("Strand should be +1, -1, 0 or None, not %r" \
+            raise ValueError("Strand should be +1, -1, 0 or None, not %r"
                              % value)
         self._strand = value
 
@@ -1360,7 +1360,7 @@ class OneOfPosition(int, AbstractPosition):
 
     def __repr__(self):
         """String representation of the OneOfPosition location for debugging."""
-        return "%s(%i, choices=%r)" % (self.__class__.__name__, \
+        return "%s(%i, choices=%r)" % (self.__class__.__name__,
                                        int(self), self.position_choices)
 
     def __str__(self):

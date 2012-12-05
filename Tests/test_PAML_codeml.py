@@ -188,8 +188,8 @@ class ModTest(unittest.TestCase):
         self.cml.read_ctl_file(self.ctl_file)
         self.assertEqual(sorted(self.cml._options.keys()), sorted(target_options.keys()))
         for key in target_options:
-            self.assertEqual(self.cml._options[key], target_options[key], \
-                             "%s: %r vs %r" \
+            self.assertEqual(self.cml._options[key], target_options[key],
+                             "%s: %r vs %r"
                              % (key, self.cml._options[key], target_options[key]))
 
     def testCtlFileExistsOnRead(self):

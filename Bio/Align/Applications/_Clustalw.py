@@ -124,19 +124,19 @@ class ClustalwCommandline(AbstractCommandline):
             # ***Fast Pairwise Alignments:***
             _Option(["-ktuple", "-KTUPLE", "KTUPLE", "ktuple"],
                     "Word size",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-topdiags", "-TOPDIAGS", "TOPDIAGS", "topdiags"],
                     "Number of best diags.",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-window", "-WINDOW", "WINDOW", "window"],
                     "Window around best diags.",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-pairgap", "-PAIRGAP", "PAIRGAP", "pairgap"],
                     "Gap penalty",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-score", "-SCORE", "SCORE", "score"],
                     "Either: PERCENT or ABSOLUTE",
@@ -148,22 +148,22 @@ class ClustalwCommandline(AbstractCommandline):
                     checker_function=lambda x: x in ["BLOSUM", "PAM",
                                                      "GONNET", "ID",
                                                      "blosum", "pam",
-                                                     "gonnet", "id"] or \
+                                                     "gonnet", "id"] or
                                                 os.path.exists(x),
                     filename=True),
             _Option(["-pwdnamatrix", "-PWDNAMATRIX", "PWDNAMATRIX", "pwdnamatrix"],
                     "DNA weight matrix=IUB, CLUSTALW or filename",
                     checker_function=lambda x: x in ["IUB", "CLUSTALW",
-                                                     "iub", "clustalw"] or \
+                                                     "iub", "clustalw"] or
                                                os.path.exists(x),
                     filename=True),
             _Option(["-pwgapopen", "-PWGAPOPEN", "PWGAPOPEN", "pwgapopen"],
                     "Gap opening penalty",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-pwgapext", "-PWGAPEXT", "PWGAPEXT", "pwgapext"],
                     "Gap extension penalty",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             # ***Multiple Alignments:***
             _Option(["-newtree", "-NEWTREE", "NEWTREE", "newtree"],
@@ -178,28 +178,28 @@ class ClustalwCommandline(AbstractCommandline):
                     checker_function=lambda x: x in ["BLOSUM", "PAM",
                                                      "GONNET", "ID",
                                                      "blosum", "pam",
-                                                     "gonnet", "id"] or \
+                                                     "gonnet", "id"] or
                                                os.path.exists(x),
                     filename=True),
             _Option(["-dnamatrix", "-DNAMATRIX", "DNAMATRIX", "dnamatrix"],
                     "DNA weight matrix=IUB, CLUSTALW or filename",
                     checker_function=lambda x: x in ["IUB", "CLUSTALW",
-                                                     "iub", "clustalw"] or \
+                                                     "iub", "clustalw"] or
                                                os.path.exists(x),
                     filename=True),
             _Option(["-gapopen", "-GAPOPEN", "GAPOPEN", "gapopen"],
                     "Gap opening penalty",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-gapext", "-GAPEXT", "GAPEXT", "gapext"],
                     "Gap extension penalty",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Switch(["-endgaps", "-ENDGAPS", "ENDGAPS", "endgaps"],
                     "No end gap separation pen."),
             _Option(["-gapdist", "-GAPDIST", "GAPDIST", "gapdist"],
                     "Gap separation pen. range",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Switch(["-nopgap", "-NOPGAP", "NOPGAP", "nopgap"],
                     "Residue-specific gaps off"),
@@ -209,7 +209,7 @@ class ClustalwCommandline(AbstractCommandline):
                     "List hydrophilic res."),
             _Option(["-maxdiv", "-MAXDIV", "MAXDIV", "maxdiv"],
                     "% ident. for delay",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             # Already handled in General Settings section, but appears a second
             # time under Multiple Alignments in the help
@@ -219,7 +219,7 @@ class ClustalwCommandline(AbstractCommandline):
             #                                         "protein", "dna"]),
             _Option(["-transweight", "-TRANSWEIGHT", "TRANSWEIGHT", "transweight"],
                     "Transitions weighting",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-iteration", "-ITERATION", "ITERATION", "iteration"],
                     "NONE or TREE or ALIGNMENT",
@@ -274,19 +274,19 @@ class ClustalwCommandline(AbstractCommandline):
                                                      "both", "none"]),
             _Option(["-helixgap", "-HELIXGAP", "HELIXGAP", "helixgap"],
                     "Gap penalty for helix core residues",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-strandgap", "-STRANDGAP", "STRANDGAP", "strandgap"],
                     "gap penalty for strand core residues",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-loopgap", "-LOOPGAP", "LOOPGAP", "loopgap"],
                     "Gap penalty for loop regions",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-terminalgap", "-TERMINALGAP", "TERMINALGAP", "terminalgap"],
                     "Gap penalty for structure termini",
-                    checker_function=lambda x: isinstance(x, int) or \
+                    checker_function=lambda x: isinstance(x, int) or
                                                isinstance(x, float)),
             _Option(["-helixendin", "-HELIXENDIN", "HELIXENDIN", "helixendin"],
                     "Number of residues inside helix to be treated as terminal",

@@ -220,20 +220,20 @@ class StockholmWriter(SequentialAlignmentWriter):
 
         #AC = Accession
         if "accession" in record.annotations:
-            self.handle.write("#=GS %s AC %s\n" \
+            self.handle.write("#=GS %s AC %s\n"
                 % (seq_name, self.clean(record.annotations["accession"])))
         elif record.id:
-            self.handle.write("#=GS %s AC %s\n" \
+            self.handle.write("#=GS %s AC %s\n"
                 % (seq_name, self.clean(record.id)))
 
         #DE = description
         if record.description:
-            self.handle.write("#=GS %s DE %s\n" \
+            self.handle.write("#=GS %s DE %s\n"
                 % (seq_name, self.clean(record.description)))
 
         #DE = database links
         for xref in record.dbxrefs:
-            self.handle.write("#=GS %s DR %s\n" \
+            self.handle.write("#=GS %s DR %s\n"
                 % (seq_name, self.clean(xref)))
 
         #GS = other per sequence annotation
@@ -241,7 +241,7 @@ class StockholmWriter(SequentialAlignmentWriter):
             if key in self.pfam_gs_mapping:
                 data = self.clean(str(value))
                 if data:
-                    self.handle.write("#=GS %s %s %s\n" \
+                    self.handle.write("#=GS %s %s %s\n"
                                       % (seq_name,
                                          self.clean(self.pfam_gs_mapping[key]),
                                          data))
@@ -255,7 +255,7 @@ class StockholmWriter(SequentialAlignmentWriter):
             if key in self.pfam_gr_mapping and len(str(value))==len(record.seq):
                 data = self.clean(str(value))
                 if data:
-                    self.handle.write("#=GR %s %s %s\n" \
+                    self.handle.write("#=GR %s %s %s\n"
                                       % (seq_name,
                                          self.clean(self.pfam_gr_mapping[key]),
                                          data))
@@ -355,7 +355,7 @@ class StockholmIterator(AlignmentIterator):
                 parts = [x.strip() for x in line.split(" ",1)]
                 if len(parts) != 2:
                     #This might be someone attempting to store a zero length sequence?
-                    raise ValueError("Could not split line into identifier " \
+                    raise ValueError("Could not split line into identifier "
                                       + "and sequence:\n" + line)
                 id, seq = parts
                 if id not in ids:
@@ -419,7 +419,7 @@ class StockholmIterator(AlignmentIterator):
 
             if self.records_per_alignment is not None \
             and self.records_per_alignment != len(ids):
-                raise ValueError("Found %i records in this alignment, told to expect %i" \
+                raise ValueError("Found %i records in this alignment, told to expect %i"
                                  % (len(ids), self.records_per_alignment))
 
             alignment_length = len(seqs.values()[0])

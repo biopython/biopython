@@ -63,7 +63,7 @@ def random_population(genome_alphabet, genome_size, num_organisms,
     elif isinstance(genome_alphabet.letters[0], float):
         alphabet_type = "d"
     else:
-        raise ValueError(\
+        raise ValueError(
             "Alphabet type is unsupported: %s" % genome_alphabet.letters)
 
     for org_num in range(num_organisms):

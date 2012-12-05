@@ -333,7 +333,7 @@ class FastaM10Parser(object):
                     qresult.seq_len = int(seq_len)
                     # get target from the next line
                     self.line = self.handle.readline()
-                    qresult.target = list(filter(None, \
+                    qresult.target = list(filter(None,
                             self.line.split(' ')))[1].strip()
                     if desc is not None:
                         qresult.description = desc
@@ -511,7 +511,7 @@ class FastaM10Indexer(SearchIndexer):
                 start_offset = end_offset - len(line)
             # yield whenever we encounter a new query or at the end of the file
             if qresult_key is not None:
-                if (not peekline.startswith(query_mark) \
+                if (not peekline.startswith(query_mark)
                         and query_mark in peekline) or not line:
                     yield qresult_key, start_offset, end_offset - start_offset
                     if not line:

@@ -30,7 +30,7 @@ else:
         xxmotif_exe = "XXmotif"
 
 if not xxmotif_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install XXmotif if you want to use XXmotif from Biopython.")
 
 

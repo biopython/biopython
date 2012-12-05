@@ -75,7 +75,7 @@ else:
             clustalw_exe = "clustalw"
 
 if not clustalw_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install clustalw or clustalw2 if you want to use it from Biopython.")
 
 class ClustalWTestCase(unittest.TestCase):
@@ -118,7 +118,7 @@ class ClustalWTestCase(unittest.TestCase):
         self.assertTrue(set(input_records.keys()) == set(output_records.keys()))
         for record in align:
             self.assertTrue(str(record.seq) == str(output_records[record.id].seq))
-            self.assertTrue(str(record.seq).replace("-", "") == \
+            self.assertTrue(str(record.seq).replace("-", "") ==
                    str(input_records[record.id].seq))
 
         #Check the DND file was created.
@@ -142,8 +142,8 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError, err:
-            self.assertTrue("Cannot open sequence file" in str(err) or \
-                            "Cannot open input file" in str(err) or \
+            self.assertTrue("Cannot open sequence file" in str(err) or
+                            "Cannot open input file" in str(err) or
                             "non-zero exit status" in str(err))
         else:
             self.fail("expected an ApplicationError")
@@ -179,9 +179,9 @@ class ClustalWTestErrorConditions(ClustalWTestCase):
             #Note:
             #Python 2.3 on Windows gave (0, 'Error')
             #Python 2.5 on Windows gives [Errno 0] Error
-            self.assertTrue("invalid format" in str(err) or \
-                            "not produced" in str(err) or \
-                            "No sequences in file" in str(err) or\
+            self.assertTrue("invalid format" in str(err) or
+                            "not produced" in str(err) or
+                            "No sequences in file" in str(err) or
                             "non-zero exit status " in str(err))
         else:
             self.fail("expected an ApplicationError")

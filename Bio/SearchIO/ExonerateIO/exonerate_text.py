@@ -218,7 +218,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
     # "ATGTT{TT}  >>>> Target Intron 1 >>>>  {G}TGTGTGTACATT"
     # and sets the opposing sequence type's intron (since this
     # line is present on the opposite sequence type line)
-    has_intron_after = ['Intron' in x[seq_type] for x in \
+    has_intron_after = ['Intron' in x[seq_type] for x in
             inter_blocks]
     assert len(has_intron_after) == len(raw_inter_lens)
     # create list containing coord adjustments incorporating
@@ -235,7 +235,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
             elif parsed_len[2]:
                 intron_len = int(parsed_len[2])
             else:
-                raise ValueError("Unexpected intron parsing " \
+                raise ValueError("Unexpected intron parsing "
                         "result: %r" % parsed_len)
         else:
             intron_len = 0
@@ -252,8 +252,8 @@ def _comp_coords(hsp, seq_type, inter_lens):
     seq_step = 1 if hsp['%s_strand' % seq_type] >= 0 else -1
     fstart = hsp['%s_start' % seq_type]
     # fend is fstart + number of residues in the sequence, minus gaps
-    fend = fstart + len(\
-            hsp[seq_type][0].replace('-','').replace('>', \
+    fend = fstart + len(
+            hsp[seq_type][0].replace('-','').replace('>',
             '').replace('<', '')) * seq_step
     coords = [(fstart, fend)]
     # and start from the second block, after the first inter seq
@@ -311,7 +311,7 @@ class ExonerateTextParser(_BaseExonerateParser):
         hit = header['hit']
         hsp = header['hsp']
         # check for values that must have been set by previous methods
-        for val_name in ('query_start', 'query_end' ,'hit_start', 'hit_end', \
+        for val_name in ('query_start', 'query_end' ,'hit_start', 'hit_end',
                 'query_strand', 'hit_strand'):
             assert val_name in hsp, hsp
 
@@ -374,7 +374,7 @@ class ExonerateTextParser(_BaseExonerateParser):
             # returns a three-component tuple of intron lengths
             # first two component filled == intron in hit and query
             # last component filled == intron in hit or query
-            raw_inter_lens = re.findall(_RE_EXON_LEN, \
+            raw_inter_lens = re.findall(_RE_EXON_LEN,
                     cmbn_rows[row_dict['midline']])
 
         # compute start and end coords for each block
@@ -389,7 +389,7 @@ class ExonerateTextParser(_BaseExonerateParser):
                 # for NER blocks, the length of the inter-fragment gaps is
                 # written on the same strand, so opp_type is seq_type
                 opp_type = seq_type
-                inter_lens = [int(x) for x in \
+                inter_lens = [int(x) for x in
                         re.findall(_RE_NER_LEN, cmbn_rows[row_dict[seq_type]])]
 
             # check that inter_lens's length is len opp_type block - 1

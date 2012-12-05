@@ -87,8 +87,8 @@ class CodonTable(object):
             letters = "UCAG"
 
         #Build the table...
-        answer=answer + "\n\n  |" + "|".join( \
-            ["  %s      " % c2 for c2 in letters] \
+        answer=answer + "\n\n  |" + "|".join(
+            ["  %s      " % c2 for c2 in letters]
             ) + "|"
         answer=answer + "\n--+" \
                + "+".join(["---------" for c2 in letters]) + "+--"
@@ -195,7 +195,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
                         stops.append(y1+y2+y3)
         if stops:
             if possible:
-                raise TranslationError("ambiguous codon '%s' codes " % codon \
+                raise TranslationError("ambiguous codon '%s' codes " % codon
                                        + "for both proteins and stop codons")
             # This is a true stop codon - tell the caller about it
             raise KeyError(codon)
@@ -218,14 +218,14 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     #Note ambiguous_nucleotide_values['R'] = 'AG' (etc)
     #This will generate things like 'TRR' from ['TAG', 'TGA'], which
     #we don't want to include:
-    c1_list = sorted(letter for (letter, meanings) \
-               in ambiguous_nucleotide_values.iteritems() \
+    c1_list = sorted(letter for (letter, meanings)
+               in ambiguous_nucleotide_values.iteritems()
                if set([codon[0] for codon in codons]).issuperset(set(meanings)))
-    c2_list = sorted(letter for (letter, meanings) \
-               in ambiguous_nucleotide_values.iteritems() \
+    c2_list = sorted(letter for (letter, meanings)
+               in ambiguous_nucleotide_values.iteritems()
                if set([codon[1] for codon in codons]).issuperset(set(meanings)))
-    c3_list = sorted(letter for (letter, meanings) \
-               in ambiguous_nucleotide_values.iteritems() \
+    c3_list = sorted(letter for (letter, meanings)
+               in ambiguous_nucleotide_values.iteritems()
                if set([codon[2] for codon in codons]).issuperset(set(meanings)))
     #candidates is a list (not a set) to preserve the iteration order
     candidates = []
@@ -240,9 +240,9 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     for ambig_codon in candidates:
         wanted = True
         #e.g. 'TRR' -> 'TAA', 'TAG', 'TGA', 'TGG'
-        for codon in [c1+c2+c3 \
-                      for c1 in ambiguous_nucleotide_values[ambig_codon[0]] \
-                      for c2 in ambiguous_nucleotide_values[ambig_codon[1]] \
+        for codon in [c1+c2+c3
+                      for c1 in ambiguous_nucleotide_values[ambig_codon[0]]
+                      for c2 in ambiguous_nucleotide_values[ambig_codon[1]]
                       for c3 in ambiguous_nucleotide_values[ambig_codon[2]]]:
             if codon not in codons:
                 #This ambiguous codon can code for a non-stop, exclude it!
@@ -257,7 +257,7 @@ assert list_ambiguous_codons(['TGA', 'TAA'], IUPACData.ambiguous_dna_values) == 
 assert list_ambiguous_codons(['TAG', 'TGA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TGA']
 assert list_ambiguous_codons(['TAG', 'TAA'], IUPACData.ambiguous_dna_values) == ['TAG', 'TAA', 'TAR']
 assert list_ambiguous_codons(['UAG', 'UAA'], IUPACData.ambiguous_rna_values) == ['UAG', 'UAA', 'UAR']
-assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'], \
+assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
                                  IUPACData.ambiguous_dna_values) == ['TGA', 'TAA', 'TAG', 'TAR', 'TRA']
 
 # Forward translation is "onto", that is, any given codon always maps

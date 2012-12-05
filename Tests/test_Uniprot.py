@@ -100,7 +100,7 @@ class TestUniprot(unittest.TestCase):
                 #TODO - Why is this a list vs str?
                 pass
             elif type(old.annotations[key]) != type(new.annotations[key]):
-                raise TypeError("%s gives %s vs %s" % \
+                raise TypeError("%s gives %s vs %s" %
                                  (key, old.annotations[key], new.annotations[key]))
             elif key in ["organism"]:
                 if old.annotations[key] == new.annotations[key]:
@@ -113,7 +113,7 @@ class TestUniprot(unittest.TestCase):
             and sorted(old.annotations[key]) == sorted(new.annotations[key]):
                 pass
             else:
-                raise ValueError("%s gives %s vs %s" % \
+                raise ValueError("%s gives %s vs %s" %
                                  (key, old.annotations[key], new.annotations[key]))
         self.assertEqual(len(old.features), len(new.features),
                          "Features in %s, %i vs %i" %

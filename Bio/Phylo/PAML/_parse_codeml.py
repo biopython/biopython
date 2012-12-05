@@ -451,7 +451,7 @@ def parse_distances(lines, results):
             raw_aa_distances_flag = False
         # Parse AA distances (raw or ML), in a lower diagonal matrix
         matrix_row_res = matrix_row_re.match(line)
-        if matrix_row_res and (raw_aa_distances_flag or \
+        if matrix_row_res and (raw_aa_distances_flag or
                 ml_aa_distances_flag):
             seq_name = matrix_row_res.group(1).strip()
             if seq_name not in sequences:

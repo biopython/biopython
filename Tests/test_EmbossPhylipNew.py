@@ -44,8 +44,8 @@ if sys.platform!="win32":
     del name
 
 if len(exes) < len(exes_wanted):
-    raise MissingExternalDependencyError(\
-          "Install the Emboss package 'PhylipNew' if you want to use the "+\
+    raise MissingExternalDependencyError(
+          "Install the Emboss package 'PhylipNew' if you want to use the "+
           "Bio.Emboss.Applications wrappers for phylogenetic tools.")
 
  ###########################################################################

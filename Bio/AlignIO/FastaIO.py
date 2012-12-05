@@ -103,7 +103,7 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
 
     def build_hsp():
         if not query_tags and not match_tags:
-            raise ValueError("No data for query %r, match %r" \
+            raise ValueError("No data for query %r, match %r"
                              % (query_id, match_id))
         assert query_tags, query_tags
         assert match_tags, match_tags

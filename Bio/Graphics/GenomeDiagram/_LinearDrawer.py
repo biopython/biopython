@@ -928,7 +928,7 @@ class LinearDrawer(AbstractDrawer):
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
-            elif cross_link.flip and ((crop_leftA and not crop_rightA) or \
+            elif cross_link.flip and ((crop_leftA and not crop_rightA) or
                                     (crop_leftB and not crop_rightB)):
                 #On left end of fragment... force "crossing" to margin
                 answer.append(Polygon([xAs, yA, xAe, yA,
@@ -939,7 +939,7 @@ class LinearDrawer(AbstractDrawer):
                                #default is mitre/miter which can stick out too much:
                                strokeLineJoin=1, #1=round
                                strokewidth=0))
-            elif cross_link.flip and ((crop_rightA and not crop_leftA) or \
+            elif cross_link.flip and ((crop_rightA and not crop_leftA) or
                                       (crop_rightB and not crop_leftB)):
                 #On right end... force "crossing" to margin
                 answer.append(Polygon([xAs, yA, xAe, yA,

@@ -21,7 +21,7 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
-def run_naccess(model, pdb_file, probe_size = None, z_slice = None, \
+def run_naccess(model, pdb_file, probe_size = None, z_slice = None,
                 naccess = 'naccess', temp_path = '/tmp/'):
 
     # make temp directory; chdir to temp directory,
@@ -79,7 +79,7 @@ def process_rsa_data(rsa_data):
             resseq = int(line[9:13])
             icode = line[13]
             res_id = (' ', resseq, icode)
-            naccess_rel_dict[(chain_id, res_id)] = { \
+            naccess_rel_dict[(chain_id, res_id)] = {
                 'res_name': res_name,
                 'all_atoms_abs': float(line[16:22]),
                 'all_atoms_rel': float(line[23:28]),

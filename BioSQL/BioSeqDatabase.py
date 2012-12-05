@@ -597,7 +597,7 @@ class BioSeqDatabase:
             raise TypeError("single key/value parameter expected")
         k, v = kwargs.items()[0]
         if k not in _allowed_lookups:
-            raise TypeError("lookup() expects one of %s, not %r" % \
+            raise TypeError("lookup() expects one of %s, not %r" %
                             (repr(_allowed_lookups.keys())[1:-1], repr(k)))
         lookup_name = _allowed_lookups[k]
         lookup_func = getattr(self.adaptor, lookup_name)
@@ -637,7 +637,7 @@ class BioSeqDatabase:
 
         Returns the number of records loaded.
         """
-        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid, \
+        db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid,
                                           fetch_NCBI_taxonomy)
         num_records = 0
         global _POSTGRES_RULES_PRESENT

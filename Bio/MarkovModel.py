@@ -159,12 +159,12 @@ def train_bw(states, alphabet, training_data,
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N,N):
-            raise ValueError("pseudo_transition not shape " + \
+            raise ValueError("pseudo_transition not shape " +
                              "len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N,M):
-            raise ValueError("pseudo_emission not shape " + \
+            raise ValueError("pseudo_emission not shape " +
                              "len(states) X len(alphabet)")
 
     # Training data is given as a list of members of the alphabet.
@@ -243,7 +243,7 @@ def _baum_welch(N, M, training_outputs,
             break
         prev_llik = llik
     else:
-        raise RuntimeError("HMM did not converge in %d iterations" \
+        raise RuntimeError("HMM did not converge in %d iterations"
                            % MAX_ITERATIONS)
 
     # Return everything back in normal space.
@@ -397,12 +397,12 @@ def train_visible(states, alphabet, training_data,
     if pseudo_transition is not None:
         pseudo_transition = numpy.asarray(pseudo_transition)
         if pseudo_transition.shape != (N,N):
-            raise ValueError("pseudo_transition not shape " + \
+            raise ValueError("pseudo_transition not shape " +
                              "len(states) X len(states)")
     if pseudo_emission is not None:
         pseudo_emission = numpy.asarray(pseudo_emission)
         if pseudo_emission.shape != (N,M):
-            raise ValueError("pseudo_emission not shape " + \
+            raise ValueError("pseudo_emission not shape " +
                              "len(states) X len(alphabet)")
 
     # Training data is given as a list of members of the alphabet.

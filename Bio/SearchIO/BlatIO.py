@@ -232,7 +232,7 @@ def _reorient_starts(starts, blksizes, seqlen, strand):
     else:
         # the plus-oriented coordinate is calculated by this:
         # plus_coord = length - minus_coord - block_size
-        return [seqlen - start - blksize for \
+        return [seqlen - start - blksize for
                 start, blksize in zip(starts, blksizes)]
 
 
@@ -267,7 +267,7 @@ def _calc_millibad(psl, is_protein):
 
     total = size_mul * (psl['matches'] + psl['repmatches'] + psl['mismatches'])
     if total != 0:
-        millibad = (1000 * (psl['mismatches'] * size_mul + psl['qnuminsert'] + \
+        millibad = (1000 * (psl['mismatches'] * size_mul + psl['qnuminsert'] +
                 round(3 * log(1 + size_dif)))) / total
 
     return millibad
@@ -297,20 +297,20 @@ def _create_hsp(hid, qid, psl):
         hstrand = 1  # hit strand defaults to plus
 
     # query block starts
-    qstarts = _reorient_starts(psl['qstarts'], \
+    qstarts = _reorient_starts(psl['qstarts'],
             psl['blocksizes'], psl['qsize'], qstrand)
     # hit block starts
     if len(psl['strand']) == 2:
-        hstarts = _reorient_starts(psl['tstarts'], \
+        hstarts = _reorient_starts(psl['tstarts'],
                 psl['blocksizes'], psl['tsize'], hstrand)
     else:
         hstarts = psl['tstarts']
     # set query and hit coords
     # this assumes each block has no gaps (which seems to be the case)
     assert len(qstarts) == len(hstarts) == len(psl['blocksizes'])
-    query_range_all = zip(qstarts, [x + y for x, y in \
+    query_range_all = zip(qstarts, [x + y for x, y in
             zip(qstarts, psl['blocksizes'])])
-    hit_range_all = zip(hstarts, [x + y for x, y in \
+    hit_range_all = zip(hstarts, [x + y for x, y in
             zip(hstarts, psl['blocksizes'])])
     # check length of sequences and coordinates, all must match
     if 'tseqs' in psl and 'qseqs' in psl:

@@ -65,7 +65,7 @@ class QueryRow(list):
         try:
             return self[self._names_hash[name]]
         except (KeyError, AttributeError):
-            raise AttributeError("'%s' object has no attribute '%s'" \
+            raise AttributeError("'%s' object has no attribute '%s'"
                                  % (self.__class__.__name__, name))
 
     def __setattr__(self, name, value):

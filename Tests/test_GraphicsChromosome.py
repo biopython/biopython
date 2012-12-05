@@ -248,7 +248,7 @@ class OrganismGraphicTest(unittest.TestCase):
 
         test_widget.setProperties({"start_x_position" : 12})
         self.assertEqual(test_widget.start_x_position, 12,
-               "setProperties doesn't seem to work right: %s" \
+               "setProperties doesn't seem to work right: %s"
                % test_widget.start_x_position)
 
 
@@ -282,8 +282,8 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 features = [f for f in record.features if f.type=="tRNA"]
                 print name
                 #Strip of the first three chars, AT# where # is the chr
-                print [(int(f.location.start), int(f.location.end), \
-                        f.strand, f.qualifiers['locus_tag'][0][3:]) \
+                print [(int(f.location.start), int(f.location.end),
+                        f.strand, f.qualifiers['locus_tag'][0][3:])
                        for f in features]
                 #Output was copy and pasted to the script, see above.
                 #Continue test using SeqFeature objects!
@@ -291,7 +291,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 for i,f in enumerate(features):
                     f.qualifiers['color'] = [str(i % 16)]
             else:
-                features = [(start,end,strand,label,color) \
+                features = [(start,end,strand,label,color)
                             for (start,end,strand,label) in features]
             #I haven't found a nice source of data for real Arabidopsis
             #cytobands, so these three are made up at random!

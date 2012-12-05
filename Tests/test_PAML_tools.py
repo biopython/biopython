@@ -46,7 +46,7 @@ else:
     binaries = ["codeml", "baseml", "yn00"]
 for binary in binaries:
     if which(binary) is None:
-        raise MissingExternalDependencyError(\
+        raise MissingExternalDependencyError(
             "Install PAML if you want to use the Bio.Phylo.PAML wrapper.")
 
 

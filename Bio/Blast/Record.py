@@ -163,27 +163,27 @@ class HSP(object):
         self.sbjct_end = None
 
     def __str__(self):
-        lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i" \
+        lines = ["Score %i (%i bits), expectation %0.1e, alignment length %i"
                  % (self.score, self.bits, self.expect, self.align_length)]
         if self.align_length < 50:
             lines.append("Query:%s %s %s" % (str(self.query_start).rjust(8),
                                        str(self.query),
                                        str(self.query_end)))
-            lines.append("               %s" \
+            lines.append("               %s"
                          % (str(self.match)))
             lines.append("Sbjct:%s %s %s" % (str(self.sbjct_start).rjust(8),
                                        str(self.sbjct),
                                        str(self.sbjct_end)))
         else:
-            lines.append("Query:%s %s...%s %s" \
+            lines.append("Query:%s %s...%s %s"
                          % (str(self.query_start).rjust(8),
                             str(self.query)[:45],
                             str(self.query)[-3:],
                             str(self.query_end)))
-            lines.append("               %s...%s" \
+            lines.append("               %s...%s"
                          % (str(self.match)[:45],
                             str(self.match)[-3:]))
-            lines.append("Sbjct:%s %s...%s %s" \
+            lines.append("Sbjct:%s %s...%s %s"
                          % (str(self.sbjct_start).rjust(8),
                             str(self.sbjct)[:45],
                             str(self.sbjct)[-3:],

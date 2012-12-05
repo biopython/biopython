@@ -30,7 +30,7 @@ try:
     # Skip the test if reportlab is not installed
     from reportlab.graphics import renderPM
 except:
-    raise MissingPythonDependencyError(\
+    raise MissingPythonDependencyError(
         "Install ReportLab's renderPM module if you want to create "
         "bitmaps with Bio.Graphics.")
 try:
@@ -38,7 +38,7 @@ try:
     import Image as i
     del i
 except:
-    raise MissingPythonDependencyError(\
+    raise MissingPythonDependencyError(
         "Install PIL (Python Imaging Library) if you want to create "
         "bitmaps with Bio.Graphics.")
 
@@ -93,7 +93,7 @@ def real_test():
         if str(err).startswith("Can't setFont(") :
             #TODO - can we raise the error BEFORE the unit test function
             #is run? That way it can be skipped in run_tests.py
-            raise MissingExternalDependencyError(\
+            raise MissingExternalDependencyError(
                 "Check the fonts needed by ReportLab if you want "
                 "bitmaps from Bio.Graphics\n" + str(err))
         else :

@@ -223,7 +223,7 @@ class BlastXmlParser(object):
 
         # we only want the version number, sans the program name or date
         if meta.get('version') is not None:
-            meta['version'] = re.search(_RE_VERSION, \
+            meta['version'] = re.search(_RE_VERSION,
                     meta['version']).group(0)
 
         return meta, fallback
@@ -275,7 +275,7 @@ class BlastXmlParser(object):
                     blast_query_id = ''
 
                 hit_list, key_list = [], []
-                for hit in self._parse_hit(qresult_elem.find('Iteration_hits'), \
+                for hit in self._parse_hit(qresult_elem.find('Iteration_hits'),
                         query_id):
                     if hit:
                         # need to keep track of hit IDs, since there could be duplicates,
@@ -368,7 +368,7 @@ class BlastXmlParser(object):
             else:
                 blast_hit_id = ''
 
-            hsps = [hsp for hsp in \
+            hsps = [hsp for hsp in
                     self._parse_hsp(hit_elem.find('Hit_hsps'),
                         query_id, hit_id)]
 
@@ -765,7 +765,7 @@ class BlastXmlWriter(object):
             if qresult._blast_id:
                 opt_dict = {
                     'Iteration_query-ID': qresult._blast_id,
-                    'Iteration_query-def': ' '.join([qresult.id, \
+                    'Iteration_query-def': ' '.join([qresult.id,
                             qresult.description]).strip(),
                 }
             self._write_elem_block('Iteration_', 'qresult', qresult, opt_dict)
@@ -833,7 +833,7 @@ class BlastXmlWriter(object):
         """Adjusts output to mimic native BLAST+ XML as much as possible."""
 
         # adjust coordinates
-        if attr in ('query_start' ,'query_end' ,'hit_start', 'hit_end', \
+        if attr in ('query_start' ,'query_end' ,'hit_start', 'hit_end',
                 'pattern_start', 'pattern_end'):
             content = getattr(hsp, attr) + 1
             if '_start' in attr:

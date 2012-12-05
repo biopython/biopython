@@ -99,7 +99,7 @@ class PhylipWriter(SequentialAlignmentWriter):
             name = name[:id_width]
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation" \
+                                 "possibly due to truncation"
                                  % (name, record.id))
             names.append(name)
 
@@ -208,7 +208,7 @@ class PhylipIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         ids = []
@@ -252,8 +252,8 @@ class PhylipIterator(AlignmentIterator):
             if not line:
                 break #end of file
 
-        records = (SeqRecord(Seq("".join(s), self.alphabet), \
-                             id=i, name=i, description=i) \
+        records = (SeqRecord(Seq("".join(s), self.alphabet),
+                             id=i, name=i, description=i)
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
 
@@ -333,7 +333,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
             name = name[:id_width]
             if name in names:
                 raise ValueError("Repeated name %r (originally %r), "
-                                 "possibly due to truncation" \
+                                 "possibly due to truncation"
                                  % (name, record.id))
             names.append(name)
 
@@ -392,7 +392,7 @@ class SequentialPhylipIterator(PhylipIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         ids = []
@@ -413,7 +413,7 @@ class SequentialPhylipIterator(PhylipIterator):
                     continue
                 s = "".join([s, line.strip().replace(" ", "")])
                 if len(s) > length_of_seqs:
-                    raise ValueError("Found a record of length %i, should be %i" \
+                    raise ValueError("Found a record of length %i, should be %i"
                             % (len(s), length_of_seqs))
             if "." in s:
                 raise ValueError("PHYLIP format no longer allows dots in sequence")
@@ -427,8 +427,8 @@ class SequentialPhylipIterator(PhylipIterator):
                 self._header = line
                 break
 
-        records = (SeqRecord(Seq(s, self.alphabet), \
-                             id=i, name=i, description=i) \
+        records = (SeqRecord(Seq(s, self.alphabet),
+                             id=i, name=i, description=i)
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
 

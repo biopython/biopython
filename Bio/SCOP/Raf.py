@@ -284,7 +284,7 @@ class SeqMap(object):
             #    del resSet[k]
             #print resSet
 
-            raise RuntimeError('I could not find at least one ATOM or HETATM' \
+            raise RuntimeError('I could not find at least one ATOM or HETATM'
                    +' record for each and every residue in this sequence map.')
 
 

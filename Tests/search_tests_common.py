@@ -29,7 +29,7 @@ def compare_search_obj(obj_a, obj_b):
     # compare objects recursively if it's not an HSPFragment
     if not isinstance(obj_a, HSPFragment):
         # check the number of hits contained
-        assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a), \
+        assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a),
                 len(obj_b), obj_a, obj_b)
         for item_a, item_b in zip(obj_a, obj_b):
             assert compare_search_obj(item_a, item_b)
@@ -50,7 +50,7 @@ def compare_attrs(obj_a, obj_b, attrs):
         # special case for HSP and HSPFragment {hit,query}
         # since they are seqrecords, we compare the strings only
         # comparing using compare_record is too slow
-        if attr in ('_hit', '_query') and (val_a is not None and val_b is \
+        if attr in ('_hit', '_query') and (val_a is not None and val_b is
                 not None):
             # compare seq directly if it's a contiguous hsp
             if isinstance(val_a, SeqRecord) and isinstance(val_b, SeqRecord):
@@ -68,7 +68,7 @@ def compare_attrs(obj_a, obj_b, attrs):
             # sort all values and keys
             [x.sort() for x in (keys_a, values_a, keys_b, values_b)]
             assert keys_a == keys_b, "%s: %r vs %r" % (attr, keys_a, keys_b)
-            assert values_a == values_b, "%s: %r vs %r" % (attr, values_a, \
+            assert values_a == values_b, "%s: %r vs %r" % (attr, values_a,
                     values_b)
         # if it's an alphabet, check the class names as alphabets are instances
         elif attr == '_alphabet':

@@ -261,7 +261,7 @@ class ComparisonTestCase(unittest.TestCase):
 
         if expected_test != self.name:
             expected.close()
-            raise ValueError("\nOutput:   %s\nExpected: %s" \
+            raise ValueError("\nOutput:   %s\nExpected: %s"
                   % (self.name, expected_test))
 
         # now loop through the output and compare it to the expected file
@@ -288,7 +288,7 @@ class ComparisonTestCase(unittest.TestCase):
             # otherwise make sure the two lines are the same
             elif expected_line != output_line:
                 expected.close()
-                raise ValueError("\nOutput  : %s\nExpected: %s" \
+                raise ValueError("\nOutput  : %s\nExpected: %s"
                       % (repr(output_line), repr(expected_line)))
         expected.close()
 

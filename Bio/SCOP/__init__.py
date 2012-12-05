@@ -696,7 +696,7 @@ class Astral(object):
         """
 
         if astral_file is None and dir_path is None and db_handle is None:
-            raise RuntimeError("Need either file handle, or (dir_path + "\
+            raise RuntimeError("Need either file handle, or (dir_path + "
                        + "version) or database handle to construct Astral")
         if not scop:
             raise RuntimeError("Must provide a Scop instance to construct")

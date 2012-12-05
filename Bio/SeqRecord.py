@@ -238,7 +238,7 @@ class SeqRecord(object):
             #e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
         self._per_letter_annotations.update(value)
-    letter_annotations = property( \
+    letter_annotations = property(
         fget=lambda self : self._per_letter_annotations,
         fset=_set_per_letter_annotations,
         doc="""Dictionary of per-letter-annotation for the sequence.
@@ -589,13 +589,13 @@ class SeqRecord(object):
         if self.description:
             lines.append("Description: %s" % self.description)
         if self.dbxrefs:
-            lines.append("Database cross-references: " \
+            lines.append("Database cross-references: "
                          + ", ".join(self.dbxrefs))
         lines.append("Number of features: %i" % len(self.features))
         for a in self.annotations:
             lines.append("/%s=%s" % (a, str(self.annotations[a])))
         if self.letter_annotations:
-            lines.append("Per letter annotation for: " \
+            lines.append("Per letter annotation for: "
                          + ", ".join(self.letter_annotations.keys()))
         #Don't want to include the entire sequence,
         #and showing the alphabet is useful:

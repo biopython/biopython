@@ -154,7 +154,7 @@ class MultipleSeqAlignment(_Alignment):
             else :
                 raise ValueError("Invalid records argument")
         if alphabet is not None :
-            if not (isinstance(alphabet, Alphabet.Alphabet) \
+            if not (isinstance(alphabet, Alphabet.Alphabet)
             or isinstance(alphabet, Alphabet.AlphabetEncoder)):
                 raise ValueError("Invalid alphabet argument")
             self._alphabet = alphabet
@@ -167,8 +167,8 @@ class MultipleSeqAlignment(_Alignment):
             self.extend(records)
             if alphabet is None:
                 #No alphabet was given, take a consensus alphabet
-                self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for \
-                                                              rec in self._records \
+                self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for
+                                                              rec in self._records
                                                               if rec.seq is not None)
 
     def extend(self, records):

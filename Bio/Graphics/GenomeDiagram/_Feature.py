@@ -191,7 +191,7 @@ class Feature(object):
         else:
             self.strand = int(self._feature.strand)                 # Feature strand
         if 'color' in self._feature.qualifiers:                # Artemis color (if present)
-            self.color = self._colortranslator.artemis_color( \
+            self.color = self._colortranslator.artemis_color(
                                          self._feature.qualifiers['color'][0])
         self.name = self.type
         for qualifier in self.name_qualifiers:

@@ -268,7 +268,7 @@ class Seq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatible alphabets %s and %s" \
+                raise TypeError("Incompatible alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -299,7 +299,7 @@ class Seq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s" \
+                raise TypeError("Incompatable alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -355,7 +355,7 @@ class Seq(object):
 
         #Other should be a Seq or a MutableSeq
         if not Alphabet._check_type_compatible([self.alphabet, other_alpha]):
-            raise TypeError("Incompatable alphabets %s and %s" \
+            raise TypeError("Incompatable alphabets %s and %s"
                             % (repr(self.alphabet), repr(other_alpha)))
         #Return as a string
         return str(other_sequence)
@@ -514,7 +514,7 @@ class Seq(object):
             #TODO - Once we drop support for Python 2.4, instead of this
             #loop offload to the string method (requires Python 2.5+).
             #Check all the alphabets first...
-            prefix_strings = [self._get_seq_str_and_check_alphabet(p) \
+            prefix_strings = [self._get_seq_str_and_check_alphabet(p)
                               for p in prefix]
             for prefix_str in prefix_strings:
                 if str(self).startswith(prefix_str, start, end):
@@ -551,7 +551,7 @@ class Seq(object):
             #TODO - Once we drop support for Python 2.4, instead of this
             #loop offload to the string method (requires Python 2.5+).
             #Check all the alphabets first...
-            suffix_strings = [self._get_seq_str_and_check_alphabet(p) \
+            suffix_strings = [self._get_seq_str_and_check_alphabet(p)
                               for p in suffix]
             for suffix_str in suffix_strings:
                 if str(self).endswith(suffix_str, start, end):
@@ -596,7 +596,7 @@ class Seq(object):
         sep_str = self._get_seq_str_and_check_alphabet(sep)
         #TODO - If the sep is the defined stop symbol, or gap char,
         #should we adjust the alphabet?
-        return [Seq(part, self.alphabet) \
+        return [Seq(part, self.alphabet)
                 for part in str(self).split(sep_str, maxsplit)]
 
     def rsplit(self, sep=None, maxsplit=-1):
@@ -619,7 +619,7 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         sep_str = self._get_seq_str_and_check_alphabet(sep)
-        return [Seq(part, self.alphabet) \
+        return [Seq(part, self.alphabet)
                 for part in str(self).rsplit(sep_str, maxsplit)]
 
     def strip(self, chars=None):
@@ -951,9 +951,9 @@ class Seq(object):
         method.  For that use str(my_seq).translate(...) instead.
         """
         if isinstance(table, str) and len(table)==256:
-            raise ValueError("The Seq object translate method DOES NOT take " \
-                             + "a 256 character string mapping table like " \
-                             + "the python string object's translate method. " \
+            raise ValueError("The Seq object translate method DOES NOT take "
+                             + "a 256 character string mapping table like "
+                             + "the python string object's translate method. "
                              + "Use str(my_seq).translate(...) instead.")
         if isinstance(Alphabet._get_base_alphabet(self.alphabet),
                       Alphabet.ProteinAlphabet):
@@ -992,7 +992,7 @@ class Seq(object):
                 #The same table can be used for RNA or DNA (we use this for
                 #translating strings).
                 codon_table = CodonTable.ambiguous_generic_by_id[table_id]
-        protein = _translate_str(str(self), codon_table, \
+        protein = _translate_str(str(self), codon_table,
                                  stop_symbol, to_stop, cds)
         if stop_symbol in protein:
             alphabet = Alphabet.HasStopCodon(codon_table.protein_alphabet,
@@ -1073,7 +1073,7 @@ class Seq(object):
             if not gap:
                 gap = self.alphabet.gap_char
             elif gap != self.alphabet.gap_char:
-                raise ValueError("Gap %s does not match %s from alphabet" \
+                raise ValueError("Gap %s does not match %s from alphabet"
                                  % (repr(gap), repr(self.alphabet.gap_char)))
             alpha = Alphabet._ungap(self.alphabet)
         elif not gap:
@@ -1593,7 +1593,7 @@ class MutableSeq(object):
                           "and to avoid this warning.", FutureWarning)
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s" \
+                raise TypeError("Incompatable alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             if isinstance(other, MutableSeq):
@@ -1654,7 +1654,7 @@ class MutableSeq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s" \
+                raise TypeError("Incompatable alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -1675,7 +1675,7 @@ class MutableSeq(object):
             #other should be a Seq or a MutableSeq
             if not Alphabet._check_type_compatible([self.alphabet,
                                                     other.alphabet]):
-                raise TypeError("Incompatable alphabets %s and %s" \
+                raise TypeError("Incompatable alphabets %s and %s"
                                 % (repr(self.alphabet), repr(other.alphabet)))
             #They should be the same sequence type (or one of them is generic)
             a = Alphabet._consensus_alphabet([self.alphabet, other.alphabet])
@@ -1966,17 +1966,17 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         valid_letters = set(table.nucleotide_alphabet.letters.upper())
     else:
         #Assume the worst case, ambiguous DNA or RNA:
-        valid_letters = set(IUPAC.ambiguous_dna.letters.upper() + \
+        valid_letters = set(IUPAC.ambiguous_dna.letters.upper() +
                             IUPAC.ambiguous_rna.letters.upper())
     if cds:
         if str(sequence[:3]).upper() not in table.start_codons:
-            raise CodonTable.TranslationError(\
+            raise CodonTable.TranslationError(
                 "First codon '%s' is not a start codon" % sequence[:3])
         if len(sequence) % 3 != 0:
-            raise CodonTable.TranslationError(\
+            raise CodonTable.TranslationError(
                 "Sequence length %i is not a multiple of three" % len(sequence))
         if str(sequence[-3:]).upper() not in stop_codons:
-            raise CodonTable.TranslationError(\
+            raise CodonTable.TranslationError(
                 "Final codon '%s' is not a stop codon" % sequence[-3:])
         #Don't translate the stop symbol, and manually translate the M
         sequence = sequence[3:-3]
@@ -1990,7 +1990,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
             #Todo? Treat "---" as a special case (gapped translation)
             if codon in table.stop_codons:
                 if cds:
-                    raise CodonTable.TranslationError(\
+                    raise CodonTable.TranslationError(
                         "Extra in frame stop codon found.")
                 if to_stop:
                     break
@@ -1999,7 +1999,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                 #Possible stop codon (e.g. NNN or TAN)
                 amino_acids.append(pos_stop)
             else:
-                raise CodonTable.TranslationError(\
+                raise CodonTable.TranslationError(
                     "Codon '%s' is invalid" % codon)
     return "".join(amino_acids)
 

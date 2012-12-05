@@ -110,7 +110,7 @@ class Parser(object):
                 if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:#recommendedName tag are parsed before
                     #use protein fields for name and description
                     for rec_name in protein_element.getchildren():
-                        ann_key = '%s_%s' % (protein_element.tag.replace(NS, ''), \
+                        ann_key = '%s_%s' % (protein_element.tag.replace(NS, ''),
                                              rec_name.tag.replace(NS, ''))
                         append_to_annotations(ann_key, rec_name.text)
                         if (rec_name.tag == NS + 'fullName') and not descr_set:
@@ -124,7 +124,7 @@ class Parser(object):
         def _parse_gene(element):
             for genename_element in element.getchildren():
                 if 'type' in genename_element.attrib:
-                    ann_key = 'gene_%s_%s' % (genename_element.tag.replace(NS, ''), \
+                    ann_key = 'gene_%s_%s' % (genename_element.tag.replace(NS, ''),
                                               genename_element.attrib['type'])
                     if genename_element.attrib['type'] == 'primary':
                         self.ParsedSeqRecord.annotations[ann_key] = genename_element.text
@@ -284,7 +284,7 @@ class Parser(object):
                 for link_element in element.getiterator(NS + 'link'):
                     ann_key = 'comment_%s' % element.attrib['type'].replace(' ', '')
                     for id_element in link_element.getiterator(NS + 'link'):
-                        append_to_annotations(ann_key, \
+                        append_to_annotations(ann_key,
                                               '%s@%s' % (element.attrib['name'], link_element.attrib['uri']))
 
             #return raw XML comments if needed
@@ -358,7 +358,7 @@ class Parser(object):
                             for person_element in cit_element.getchildren():
                                 authors.append(person_element.attrib['name'])
                         elif cit_element.tag == NS + 'dbReference':
-                            self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type'] \
+                            self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type']
                                                                 + ':' + cit_element.attrib['id'])
                             if cit_element.attrib['type'] == 'PubMed':
                                 reference.pubmed_id = cit_element.attrib['id']

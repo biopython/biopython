@@ -174,7 +174,7 @@ class TogoEntry(unittest.TestCase):
                                             'Katayama T', 'Araki M',
                                             'Hirakawa M'])
         self.assertEqual(records[1]["TI"],
-             'DDBJ launches a new archive database with analytical tools ' + \
+             'DDBJ launches a new archive database with analytical tools ' +
              'for next-generation sequence data.')
         self.assertEqual(records[1]["AU"], ['Kaminuma E', 'Mashima J',
                                             'Kodama Y', 'Gojobori T',
@@ -449,7 +449,7 @@ class TogoSearch(unittest.TestCase):
             raise ValueError("Bad test - TogoWS makes no promises about order")
         search_count = TogoWS.search_count(database, search_term)
         if expected_matches and search_count < len(expected_matches):
-            raise ValueError("Only %i matches, expected at least %i" \
+            raise ValueError("Only %i matches, expected at least %i"
                              % (search_count, len(expected_matches)))
         if search_count > 5000 and not limit:
             print "%i results, skipping" % search_count

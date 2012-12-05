@@ -52,7 +52,7 @@ class NovoalignCommandline(AbstractCommandline):
                     filename=True,
                     equate=False),
             _Option(["-F", "format"],
-                    "Format of read files.\n\nAllowed values: %s" \
+                    "Format of read files.\n\nAllowed values: %s"
                     % ", ".join(READ_FORMAT),
                     checker_function=lambda x: x in READ_FORMAT,
                     equate=False),
@@ -108,7 +108,7 @@ class NovoalignCommandline(AbstractCommandline):
                     equate=False),
             # Reporting options
             _Option(["-o", "report"],
-                    "Specifies the report format.\n\nAllowed values: %s\nDefault: Native" \
+                    "Specifies the report format.\n\nAllowed values: %s\nDefault: Native"
                     % ", ".join(REPORT_FORMAT),
                     checker_function=lambda x: x in REPORT_FORMAT,
                     equate=False),
@@ -124,7 +124,7 @@ class NovoalignCommandline(AbstractCommandline):
             _Option(["-r", "r_method"],
                     "Methods to report reads with multiple matches.\n\n"
                     "Allowed values: %s\n"
-                    "'All' and 'Exhaustive' accept limits." \
+                    "'All' and 'Exhaustive' accept limits."
                     % ", ".join(REPEAT_METHOD),
                     checker_function=lambda x: x.split()[0] in REPEAT_METHOD,
                     equate=False),

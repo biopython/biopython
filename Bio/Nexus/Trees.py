@@ -154,7 +154,7 @@ class Tree(Nodes.Chain):
             nc_start=text.find(NODECOMMENT_START)
             nc_end=text.find(NODECOMMENT_END)
             if nc_end==-1:
-                raise TreeError('Error in tree description: Found %s without matching %s' \
+                raise TreeError('Error in tree description: Found %s without matching %s'
                                 % (NODECOMMENT_START, NODECOMMENT_END))
             nodecomment=text[nc_start:nc_end+1]
             text=text[:nc_start]+text[nc_end+1:]
@@ -385,11 +385,11 @@ class Tree(Nodes.Chain):
             if missing2:
                 print 'Taxon/taxa %s is/are missing in tree %s' % (','.join(missing2) , tree2.name)
             raise TreeError('Can\'t compare trees with different taxon compositions.')
-        t1=[(set(self.get_taxa(n)),self.node(n).data.support) for n in self.all_ids() if \
-            self.node(n).succ and\
+        t1=[(set(self.get_taxa(n)),self.node(n).data.support) for n in self.all_ids() if
+            self.node(n).succ and
             (self.node(n).data and self.node(n).data.support and self.node(n).data.support>=threshold)]
-        t2=[(set(tree2.get_taxa(n)),tree2.node(n).data.support) for n in tree2.all_ids() if \
-            tree2.node(n).succ and\
+        t2=[(set(tree2.get_taxa(n)),tree2.node(n).data.support) for n in tree2.all_ids() if
+            tree2.node(n).succ and
             (tree2.node(n).data and tree2.node(n).data.support and tree2.node(n).data.support>=threshold)]
         conflict=[]
         for (st1,sup1) in t1:
@@ -670,7 +670,7 @@ class Tree(Nodes.Chain):
             elif b1[3]==0 or b2[3]==0:
                 newbranch.append(b1[3]+b2[3]) # one is 0, take the other
             else:
-                raise TreeError('Support mismatch in bifurcating root: %f, %f' \
+                raise TreeError('Support mismatch in bifurcating root: %f, %f'
                                 % (float(b1[3]),float(b2[3])))
             self.unrooted.append(newbranch)
 
@@ -683,7 +683,7 @@ class Tree(Nodes.Chain):
                     branch=self.unrooted.pop(i)
                     break
             else:
-                raise TreeError('Unable to connect nodes for rooting: nodes %d and %d are not connected' \
+                raise TreeError('Unable to connect nodes for rooting: nodes %d and %d are not connected'
                                 % (parent,child))
             self.link(parent,child)
             self.node(child).data.branchlength=branch[2]
@@ -736,7 +736,7 @@ class Tree(Nodes.Chain):
         # if theres still a lonely node in self.chain, then it's the old root, and we delete it
         oldroot=[i for i in self.all_ids() if self.node(i).prev is None and i!=self.root]
         if len(oldroot)>1:
-            raise TreeError('Isolated nodes in tree description: %s' \
+            raise TreeError('Isolated nodes in tree description: %s'
                             % ','.join(oldroot))
         elif len(oldroot)==1:
             self.kill(oldroot[0])

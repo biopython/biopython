@@ -891,7 +891,7 @@ class DiagramTest(unittest.TestCase):
                 color=colors.violet,
                 altcolor=colors.purple)
 
-        gdt4 = Track(\
+        gdt4 = Track(
                 'GC Skew (bar)',
                 height=1.94, greytrack=1,
                 scale_largetick_interval=1e4)
@@ -908,7 +908,7 @@ class DiagramTest(unittest.TestCase):
                         color=colors.orange,
                         altcolor=colors.red)
 
-        gdt5 = Track(\
+        gdt5 = Track(
                 'GC Content(green line), AT Content(red line)',
                 height=1.94, greytrack=1,
                 scale_largetick_interval=1e4)

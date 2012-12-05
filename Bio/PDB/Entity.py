@@ -82,7 +82,7 @@ class Entity(object):
         "Add a child to the Entity."
         entity_id=entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException( \
+            raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list.append(entity)
@@ -92,7 +92,7 @@ class Entity(object):
         "Add a child to the Entity at a specified position."
         entity_id=entity.get_id()
         if self.has_id(entity_id):
-            raise PDBConstructionException( \
+            raise PDBConstructionException(
                 "%s defined twice" % str(entity_id))
         entity.set_parent(self)
         self.child_list[pos:pos] = [entity]

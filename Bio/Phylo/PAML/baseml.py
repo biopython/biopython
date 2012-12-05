@@ -107,7 +107,7 @@ class Baseml(Paml):
                 if uncommented != "":
                     if "=" not in uncommented:
                         ctl_handle.close()
-                        raise AttributeError( \
+                        raise AttributeError(
                             "Malformed line in control file:\n%r" % line)
                     (option, value) = uncommented.split("=")
                     option = option.strip()

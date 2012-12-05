@@ -38,7 +38,7 @@ def compare_record(old, new, expect_minor_diffs=False):
     and old.id != new.id and old.name != new.name \
     and (old.id not in new.id) and (new.id not in old.id) \
     and (old.id.replace(" ","_") != new.id.replace(" ","_")):
-        raise ValueError("'%s' or '%s' vs '%s' or '%s' records" \
+        raise ValueError("'%s' or '%s' vs '%s' or '%s' records"
                          % (old.id, old.name, new.id, new.name))
     if len(old.seq) != len(new.seq):
         raise ValueError("%i vs %i" % (len(old.seq), len(new.seq)))
@@ -59,7 +59,7 @@ def compare_record(old, new, expect_minor_diffs=False):
     #Just insist on at least one word in common:
     if (old.description or new.description) \
     and not set(old.description.split()).intersection(new.description.split()):
-        raise ValueError("%s versus %s" \
+        raise ValueError("%s versus %s"
                          % (repr(old.description), repr(new.description)))
     #This only checks common annotation
     #Would a white list be easier?
@@ -72,7 +72,7 @@ def compare_record(old, new, expect_minor_diffs=False):
         if key == "comment":
             #Ignore whitespace
             if old.annotations[key].split() != new.annotations[key].split():
-                raise ValueError("Annotation mis-match for comment:\n%s\n%s" \
+                raise ValueError("Annotation mis-match for comment:\n%s\n%s"
                                 % (old.annotations[key], new.annotations[key]))
             continue
         if key == "references":
@@ -94,7 +94,7 @@ def compare_record(old, new, expect_minor_diffs=False):
                 assert r1.pubmed_id == r2.pubmed_id
             continue
         if repr(old.annotations[key]) != repr(new.annotations[key]):
-            raise ValueError("Annotation mis-match for %s:\n%s\n%s" \
+            raise ValueError("Annotation mis-match for %s:\n%s\n%s"
                              % (key, old.annotations[key], new.annotations[key]))
     return True
 
@@ -113,7 +113,7 @@ def compare_feature(old, new, ignore_sub_features=False):
         raise ValueError("Type %s versus %s" % (repr(old.type), repr(new.type)))
     if old.location.nofuzzy_start != new.location.nofuzzy_start \
     or old.location.nofuzzy_end != new.location.nofuzzy_end:
-        raise ValueError("%s versus %s:\n%s\nvs:\n%s" \
+        raise ValueError("%s versus %s:\n%s\nvs:\n%s"
                          % (old.location, new.location, repr(old), repr(new)))
     if old.strand != new.strand:
         raise ValueError("Different strand:\n%s\nvs:\n%s" % (repr(old), repr(new)))
@@ -125,11 +125,11 @@ def compare_feature(old, new, ignore_sub_features=False):
         raise ValueError("Different location_operator:\n%s\nvs:\n%s" % (repr(old), repr(new)))
     if old.location.start != new.location.start \
     or str(old.location.start) != str(new.location.start):
-        raise ValueError("Start %s versus %s:\n%s\nvs:\n%s" \
+        raise ValueError("Start %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.start, new.location.start, repr(old), repr(new)))
     if old.location.end != new.location.end \
     or str(old.location.end) != str(new.location.end):
-        raise ValueError("End %s versus %s:\n%s\nvs:\n%s" \
+        raise ValueError("End %s versus %s:\n%s\nvs:\n%s"
                          % (old.location.end, new.location.end, repr(old), repr(new)))
     if not ignore_sub_features:
         if len(old.sub_features) != len(new.sub_features):
@@ -145,7 +145,7 @@ def compare_feature(old, new, ignore_sub_features=False):
             #EMBL and GenBank files are use different references/notes/etc
             continue
         if old.qualifiers[key] != new.qualifiers[key]:
-            raise ValueError("Qualifier mis-match for %s:\n%s\n%s" \
+            raise ValueError("Qualifier mis-match for %s:\n%s\n%s"
                              % (key, old.qualifiers[key], new.qualifiers[key]))
     return True
 
@@ -492,7 +492,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)), \
+        f = SeqFeature(FeatureLocation(ExactPosition(50),ExactPosition(60)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "51..60")
@@ -663,7 +663,7 @@ class FeatureWriting(unittest.TestCase):
     def test_before(self):
         """Features: write/read simple before locations."""
         s = "N"*200
-        f = SeqFeature(FeatureLocation(BeforePosition(5),10), \
+        f = SeqFeature(FeatureLocation(BeforePosition(5),10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "<6..10")
@@ -674,7 +674,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)), \
+        f = SeqFeature(FeatureLocation(BeforePosition(15),BeforePosition(20)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "<16..<20")
@@ -685,7 +685,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(25,BeforePosition(30)), \
+        f = SeqFeature(FeatureLocation(25,BeforePosition(30)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..<30")
@@ -696,7 +696,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(BeforePosition(35),40), \
+        f = SeqFeature(FeatureLocation(BeforePosition(35),40),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(<36..40)")
@@ -707,7 +707,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)), \
+        f = SeqFeature(FeatureLocation(BeforePosition(45),BeforePosition(50)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(<46..<50)")
@@ -718,7 +718,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(55,BeforePosition(60)), \
+        f = SeqFeature(FeatureLocation(55,BeforePosition(60)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..<60)")
@@ -734,7 +734,7 @@ class FeatureWriting(unittest.TestCase):
     def test_after(self):
         """Features: write/read simple after locations."""
         s = "N" * 200
-        f = SeqFeature(FeatureLocation(AfterPosition(5),10), \
+        f = SeqFeature(FeatureLocation(AfterPosition(5),10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          ">6..10")
@@ -745,7 +745,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)), \
+        f = SeqFeature(FeatureLocation(AfterPosition(15),AfterPosition(20)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          ">16..>20")
@@ -756,7 +756,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(25,AfterPosition(30)), \
+        f = SeqFeature(FeatureLocation(25,AfterPosition(30)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..>30")
@@ -767,7 +767,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(AfterPosition(35),40), \
+        f = SeqFeature(FeatureLocation(AfterPosition(35),40),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(>36..40)")
@@ -778,7 +778,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)), \
+        f = SeqFeature(FeatureLocation(AfterPosition(45),AfterPosition(50)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(>46..>50)")
@@ -789,7 +789,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(55,AfterPosition(60)), \
+        f = SeqFeature(FeatureLocation(55,AfterPosition(60)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..>60)")
@@ -878,7 +878,7 @@ class FeatureWriting(unittest.TestCase):
     def test_within(self):
         """Features: write/read simple within locations."""
         s = "N" * 100
-        f = SeqFeature(FeatureLocation(WithinPosition(2, left=2, right=8),10), \
+        f = SeqFeature(FeatureLocation(WithinPosition(2, left=2, right=8),10),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "(3.9)..10")
@@ -890,7 +890,7 @@ class FeatureWriting(unittest.TestCase):
         self.record.features.append(f)
 
         f = SeqFeature(FeatureLocation(WithinPosition(12, left=12, right=18),
-                                       WithinPosition(28, left=20, right=28)), \
+                                       WithinPosition(28, left=20, right=28)),
                        strand=+1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "(13.19)..(20.28)")
@@ -901,7 +901,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(25,WithinPosition(33, left=30, right=33)), \
+        f = SeqFeature(FeatureLocation(25,WithinPosition(33, left=30, right=33)),
                        strand=+1, type="misc_feature")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "26..(30.33)")
@@ -912,7 +912,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, -1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(WithinPosition(35, left=35, right=39),40), \
+        f = SeqFeature(FeatureLocation(WithinPosition(35, left=35, right=39),40),
                        strand=-1, type="rRNA")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement((36.40)..40)")
@@ -923,7 +923,7 @@ class FeatureWriting(unittest.TestCase):
         self.record.features.append(f)
 
         f = SeqFeature(FeatureLocation(WithinPosition(45, left=45, right=47),
-                                       WithinPosition(53, left=50, right=53)), \
+                                       WithinPosition(53, left=50, right=53)),
                        strand=-1, type="repeat_region")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement((46.48)..(50.53))")
@@ -934,7 +934,7 @@ class FeatureWriting(unittest.TestCase):
         self.assertEqual(f._flip(100).strand, +1)
         self.record.features.append(f)
 
-        f = SeqFeature(FeatureLocation(55,WithinPosition(65, left=60, right=65)), \
+        f = SeqFeature(FeatureLocation(55,WithinPosition(65, left=60, right=65)),
                        strand=-1, type="CDS")
         self.assertEqual(_insdc_feature_location_string(f,100),
                          "complement(56..(60.65))")
@@ -1005,9 +1005,9 @@ class NC_005816(NC_000932):
         if len(embl_record.features) < len(gb_record.features):
             #Used to match, but I've update the GenBank files
             #which now has lots of misc_feature entries not in EMBL
-            embl_record.features = [f for f in embl_record.features \
+            embl_record.features = [f for f in embl_record.features
                                     if f.type != "misc_feature"]
-            gb_record.features = [f for f in gb_record.features \
+            gb_record.features = [f for f in gb_record.features
                                   if f.type != "misc_feature"]
         return compare_record(gb_record, embl_record, expect_minor_diffs=True)
 
@@ -1024,7 +1024,7 @@ class NC_005816(NC_000932):
             and (str(translation) != str(faa.seq)+"*"):
                 t = SeqRecord(translation, id="Translation",
                               description="Table %s" % self.table)
-                raise ValueError("FAA vs FNA translation problem:\n%s\n%s\n%s\n" \
+                raise ValueError("FAA vs FNA translation problem:\n%s\n%s\n%s\n"
                                  % (fna.format("fasta"),
                                     t.format("fasta"),
                                     faa.format("fasta")))
@@ -1039,9 +1039,9 @@ class NC_005816(NC_000932):
         embl_record = SeqIO.read(open(self.embl_filename),"embl")
         if len(embl_record.features) < len(gb_record.features):
             #Hack since now out of sync for NC_005816
-            embl_record.features = [f for f in embl_record.features \
+            embl_record.features = [f for f in embl_record.features
                                     if f.type != "misc_feature"]
-            gb_record.features = [f for f in gb_record.features \
+            gb_record.features = [f for f in gb_record.features
                                   if f.type != "misc_feature"]
         compare_record(gb_record, embl_record, expect_minor_diffs=True)
 

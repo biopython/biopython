@@ -45,7 +45,7 @@ else:
     if "not found" not in output and "prank" in output.lower():
         prank_exe = "prank"
 if not prank_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install PRANK if you want to use the Bio.Align.Applications wrapper.")
 
 class PrankApplication(unittest.TestCase):
@@ -97,7 +97,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.d = self.infile1
         cmdline.f = 17 # NEXUS format
         cmdline.set_parameter("notree", True)
-        self.assertEqual(str(cmdline), prank_exe + \
+        self.assertEqual(str(cmdline), prank_exe +
                          " -d=Fasta/fa01 -f=17 -noxml -notree")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
@@ -130,8 +130,8 @@ class PrankApplication(unittest.TestCase):
         cmdline.skipins = True
         cmdline.set_parameter("-once", True)
         cmdline.realbranches = True
-        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" + \
-                         " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" + \
+        self.assertEqual(str(cmdline), prank_exe + " -d=Fasta/fa01 -noxml" +
+                         " -notree -dots -gaprate=0.321 -gapext=0.6 -kappa=3" +
                          " -once -skipins -realbranches")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         stdout, stderr = cmdline()
@@ -152,14 +152,14 @@ class PrankConversion(unittest.TestCase):
         cmdline = PrankCommandline(prank_exe, d=self.input,
                                    convert=True, f=prank_number,
                                    o='"%s"' % self.output)
-        self.assertEqual(str(cmdline), prank_exe \
-                         + ' -d=%s' % self.input \
-                         + ' -o="%s"' % self.output \
-                         + ' -f=%i' % prank_number \
+        self.assertEqual(str(cmdline), prank_exe
+                         + ' -d=%s' % self.input
+                         + ' -o="%s"' % self.output
+                         + ' -f=%i' % prank_number
                          + ' -convert')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         message, error = cmdline()
-        self.assertTrue(("PRANK: converting '%s' to '%s'" % (self.input, filename)) \
+        self.assertTrue(("PRANK: converting '%s' to '%s'" % (self.input, filename))
                         in message, message)
         self.assertEqual(error, "")
         self.assertTrue(os.path.isfile(filename))

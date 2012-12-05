@@ -96,12 +96,12 @@ _COLUMN_FRAG = {
     'qseq': ('query', str),
     'sseq': ('hit', str),
 }
-_SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() + \
+_SUPPORTED_FIELDS = set(_COLUMN_QRESULT.keys() + _COLUMN_HIT.keys() +
         _COLUMN_HSP.keys() + _COLUMN_FRAG.keys())
 
 # column order in the non-commented tabular output variant
 # values must be keys inside the column-attribute maps above
-_DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch', \
+_DEFAULT_FIELDS = ['qseqid', 'sseqid', 'pident', 'length', 'mismatch',
         'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore']
 # one field from each of the following sets must exist in order for the
 # parser to work
@@ -769,7 +769,7 @@ class BlastTabWriter(object):
         comments = []
         # inverse mapping of the long-short name map, required
         # for writing comments
-        inv_field_map = dict((value, key) for key, value in \
+        inv_field_map = dict((value, key) for key, value in
                 _LONG_SHORT_MAP.items())
 
         # try to anticipate qress without version
@@ -791,7 +791,7 @@ class BlastTabWriter(object):
         comments.append('# Database: %s' % qres.target)
         # qresults without hits don't show the Fields comment
         if qres:
-            comments.append('# Fields: %s' % \
+            comments.append('# Fields: %s' %
                     ', '.join([inv_field_map[field] for field in self.fields]))
         comments.append('# %i hits found' % len(qres))
 

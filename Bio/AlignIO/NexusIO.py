@@ -45,13 +45,13 @@ def NexusIterator(handle, seq_count=None):
     assert len(n.unaltered_taxlabels) == len(n.taxlabels)
 
     if seq_count and seq_count != len(n.unaltered_taxlabels):
-        raise ValueError("Found %i sequences, but seq_count=%i" \
+        raise ValueError("Found %i sequences, but seq_count=%i"
                % (len(n.unaltered_taxlabels), seq_count))
 
     #ToDo - Can we extract any annotation too?
-    records = (SeqRecord(n.matrix[new_name], id=new_name, \
-                         name=old_name, description="") \
-               for old_name, new_name \
+    records = (SeqRecord(n.matrix[new_name], id=new_name,
+                         name=old_name, description="")
+               for old_name, new_name
                in zip(n.unaltered_taxlabels, n.taxlabels))
     #All done
     yield MultipleSeqAlignment(records, n.alphabet)

@@ -82,18 +82,18 @@ def alignment_summary(alignment, index="  ", vertical_threshold=5):
     if rec_count < vertical_threshold:
         #Show each sequence row horizontally
         for record in alignment:
-            answer.append("%s%s %s" \
+            answer.append("%s%s %s"
             % (index,str_summary(str(record.seq)),record.id))
     else:
         #Show each sequence row vertically
         for i in range(min(5,alignment_len)):
-            answer.append(index + str_summary(alignment[:,i]) \
+            answer.append(index + str_summary(alignment[:,i])
                                 + " alignment column %i" % i)
         if alignment_len > 5:
             i = alignment_len - 1
-            answer.append(index + str_summary("|" * rec_count) \
+            answer.append(index + str_summary("|" * rec_count)
                                 + " ...")
-            answer.append(index + str_summary(alignment[:,i]) \
+            answer.append(index + str_summary(alignment[:,i])
                                 + " alignment column %i" % i)
     return "\n".join(answer)
 
@@ -130,14 +130,14 @@ def check_simple_write_read(alignments, indent=" "):
             handle.flush()
             handle.seek(0)
             try:
-                alignments2 = list(AlignIO.parse(handle=handle, format=format, \
+                alignments2 = list(AlignIO.parse(handle=handle, format=format,
                                                  seq_count=records_per_alignment))
             except ValueError, e:
                 #This is BAD.  We can't read our own output.
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError("%s\n\n%s\n\n%s" \
+                raise ValueError("%s\n\n%s\n\n%s"
                                   % (str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 
@@ -152,7 +152,7 @@ def check_simple_write_read(alignments, indent=" "):
                 #I want to see the output when called from the test harness,
                 #run_tests.py (which can be funny about new lines on Windows)
                 handle.seek(0)
-                raise ValueError("%s\n\n%s\n\n%s" \
+                raise ValueError("%s\n\n%s\n\n%s"
                                   % (str(e), repr(handle.read()), repr(alignments2)))
             simple_alignment_comparison(alignments, alignments2, format)
 

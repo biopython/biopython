@@ -122,7 +122,7 @@ class DatabaseLoader:
         """Insert a dbxref and return its id."""
 
         self.adaptor.execute(
-            "INSERT INTO dbxref(dbname, accession, version)" \
+            "INSERT INTO dbxref(dbname, accession, version)"
             " VALUES (%s, %s, %s)", (dbname, accession, version))
         return self.adaptor.last_id("dbxref")
 
@@ -200,7 +200,7 @@ class DatabaseLoader:
         # (stored in GenBank files as the organism and/or the source).
         if scientific_name:
             taxa = self.adaptor.execute_and_fetch_col0(
-                "SELECT taxon_id FROM taxon_name" \
+                "SELECT taxon_id FROM taxon_name"
                 " WHERE name_class = 'scientific name' AND name = %s",
                 (scientific_name,))
             if taxa:
@@ -210,7 +210,7 @@ class DatabaseLoader:
         # Last chance...
         if common_name:
             taxa = self.adaptor.execute_and_fetch_col0(
-                "SELECT DISTINCT taxon_id FROM taxon_name" \
+                "SELECT DISTINCT taxon_id FROM taxon_name"
                 " WHERE name = %s",
                 (common_name,))
             #Its natural that several distinct taxa will have the same common
@@ -269,8 +269,8 @@ class DatabaseLoader:
         parent_taxon_id = None
         for taxon in lineage:
             self.adaptor.execute(
-                "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"\
-                " left_value, right_value)" \
+                "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"
+                " left_value, right_value)"
                 " VALUES (%s, %s, %s, %s, %s)", (parent_taxon_id,
                                                  taxon[0],
                                                  taxon[1],
@@ -278,7 +278,7 @@ class DatabaseLoader:
                                                  right_value))
             taxon_id = self.adaptor.last_id("taxon")
             self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "INSERT INTO taxon_name(taxon_id, name, name_class)"
                 "VALUES (%s, %s, 'scientific name')", (taxon_id, taxon[2][:255]))
             #Note the name field is limited to 255, some SwissProt files
             #have a multi-species name which can be longer.  So truncate this.
@@ -287,7 +287,7 @@ class DatabaseLoader:
             parent_taxon_id = taxon_id
         if common_name:
             self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "INSERT INTO taxon_name(taxon_id, name, name_class)"
                 "VALUES (%s, %s, 'common name')", (
                 taxon_id, common_name))
 
@@ -380,7 +380,7 @@ class DatabaseLoader:
                 assert taxonomic_record[0]["TaxId"] == str(ncbi_taxon_id), \
                        "%s versus %s" % (taxonomic_record[0]["TaxId"],
                                          ncbi_taxon_id)
-                parent_taxon_id = self._get_taxon_id_from_ncbi_lineage( \
+                parent_taxon_id = self._get_taxon_id_from_ncbi_lineage(
                                             taxonomic_record[0]["LineageEx"])
                 rank = taxonomic_record[0]["Rank"]
                 genetic_code = taxonomic_record[0]["GeneticCode"]["GCId"]
@@ -414,8 +414,8 @@ class DatabaseLoader:
             # know the NCBI taxon IDs for these parent nodes.
 
         self.adaptor.execute(
-            "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"\
-            " genetic_code, mito_genetic_code, left_value, right_value)" \
+            "INSERT INTO taxon(parent_taxon_id, ncbi_taxon_id, node_rank,"
+            " genetic_code, mito_genetic_code, left_value, right_value)"
             " VALUES (%s, %s, %s, %s, %s, %s, %s)", (parent_taxon_id,
                                                      ncbi_taxon_id,
                                                      rank,
@@ -428,7 +428,7 @@ class DatabaseLoader:
         #Record the scientific name, common name, etc
         for name_class, name in species_names:
             self.adaptor.execute(
-                "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                "INSERT INTO taxon_name(taxon_id, name, name_class)"
                 " VALUES (%s, %s, %s)", (taxon_id,
                                          name[:255],
                                          name_class))
@@ -453,7 +453,7 @@ class DatabaseLoader:
 
         #Is this in the database already?  Check the taxon table...
         taxon_id = self.adaptor.execute_and_fetch_col0(
-            "SELECT taxon_id FROM taxon" \
+            "SELECT taxon_id FROM taxon"
             " WHERE ncbi_taxon_id=%s" % ncbi_taxon_id)
         if taxon_id:
             # we could verify that the Scientific Name etc in the database
@@ -475,7 +475,7 @@ class DatabaseLoader:
         # INSERT new taxon
         rank = taxonomic_lineage[-1].get("Rank", None)
         self.adaptor.execute(
-                "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"\
+                "INSERT INTO taxon(ncbi_taxon_id, parent_taxon_id, node_rank)"
                 " VALUES (%s, %s, %s)", (ncbi_taxon_id, parent_taxon_id, rank))
         taxon_id = self.adaptor.last_id("taxon")
         assert isinstance(taxon_id, int) or isinstance(taxon_id, long), repr(taxon_id)
@@ -483,7 +483,7 @@ class DatabaseLoader:
         scientific_name = taxonomic_lineage[-1].get("ScientificName", None)
         if scientific_name:
             self.adaptor.execute(
-                    "INSERT INTO taxon_name(taxon_id, name, name_class)" \
+                    "INSERT INTO taxon_name(taxon_id, name, name_class)"
                     " VALUES (%s, %s, 'scientific name')", (taxon_id,
                                                             scientific_name[:255]))
         return taxon_id
@@ -663,7 +663,7 @@ class DatabaseLoader:
                     if isinstance(entry, str) or isinstance(entry, int):
                         #Easy case
                         rank += 1
-                        self.adaptor.execute(many_sql, \
+                        self.adaptor.execute(many_sql,
                                      (bioentry_id, term_id, str(entry), rank))
                     else:
                         pass
@@ -671,7 +671,7 @@ class DatabaseLoader:
                         #      % (key, str(type(entry)))
             elif isinstance(value, str) or isinstance(value, int):
                 #Have a simple single entry, leave rank as the DB default
-                self.adaptor.execute(mono_sql, \
+                self.adaptor.execute(mono_sql,
                                      (bioentry_id, term_id, str(value)))
             else:
                 pass
@@ -688,14 +688,14 @@ class DatabaseLoader:
         refs = None
         if reference.medline_id:
             refs = self.adaptor.execute_and_fetch_col0(
-                "SELECT reference_id" \
-                "  FROM reference JOIN dbxref USING (dbxref_id)" \
+                "SELECT reference_id"
+                "  FROM reference JOIN dbxref USING (dbxref_id)"
                 " WHERE dbname = 'MEDLINE' AND accession = %s",
                 (reference.medline_id,))
         if not refs and reference.pubmed_id:
             refs = self.adaptor.execute_and_fetch_col0(
-                "SELECT reference_id" \
-                "  FROM reference JOIN dbxref USING (dbxref_id)" \
+                "SELECT reference_id"
+                "  FROM reference JOIN dbxref USING (dbxref_id)"
                 " WHERE dbname = 'PUBMED' AND accession = %s",
                 (reference.pubmed_id,))
         if not refs:
@@ -704,7 +704,7 @@ class DatabaseLoader:
                 s.append(f or "<undef>")
             crc = crc64("".join(s))
             refs = self.adaptor.execute_and_fetch_col0(
-                "SELECT reference_id FROM reference" \
+                "SELECT reference_id FROM reference"
                   r" WHERE crc = %s", (crc,))
         if not refs:
             if reference.medline_id:
@@ -721,8 +721,8 @@ class DatabaseLoader:
             #to an empty string rather than None:
             journal = reference.journal or ""
             self.adaptor.execute(
-                "INSERT INTO reference (dbxref_id, location," \
-                " title, authors, crc)" \
+                "INSERT INTO reference (dbxref_id, location,"
+                " title, authors, crc)"
                 " VALUES (%s, %s, %s, %s, %s)",
                 (dbxref_id, journal, title,
                  authors, crc))
@@ -794,7 +794,7 @@ class DatabaseLoader:
             # e.g. order locations... we don't record "order" so it
             # will become a "join" on reloading. What does BioPerl do?
             import warnings
-            warnings.warn("%s location operators are not fully supported" \
+            warnings.warn("%s location operators are not fully supported"
                           % feature.location_operator)
 
         # two cases, a simple location or a split location

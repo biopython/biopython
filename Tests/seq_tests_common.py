@@ -99,11 +99,11 @@ def compare_feature(old_f, new_f):
         else:
             assert old_f.location.nofuzzy_start == \
                     new_f.location.nofuzzy_start, \
-                    "%s -> %s" % (old_f.location.nofuzzy_start, \
+                    "%s -> %s" % (old_f.location.nofuzzy_start,
                                   new_f.location.nofuzzy_start)
             assert old_f.location.nofuzzy_end == \
                     new_f.location.nofuzzy_end, \
-                    "%s -> %s" % (old_f.location.nofuzzy_end, \
+                    "%s -> %s" % (old_f.location.nofuzzy_end,
                                   new_f.location.nofuzzy_end)
 
     assert len(old_f.sub_features) == len(new_f.sub_features), \
@@ -148,11 +148,11 @@ def compare_feature(old_f, new_f):
                 #At least one of the locations is fuzzy
                 assert old_sub.location.nofuzzy_start == \
                        new_sub.location.nofuzzy_start, \
-                       "%s -> %s" % (old_sub.location.nofuzzy_start, \
+                       "%s -> %s" % (old_sub.location.nofuzzy_start,
                                      new_sub.location.nofuzzy_start)
                 assert old_sub.location.nofuzzy_end == \
                        new_sub.location.nofuzzy_end, \
-                       "%s -> %s" % (old_sub.location.nofuzzy_end, \
+                       "%s -> %s" % (old_sub.location.nofuzzy_end,
                                      new_sub.location.nofuzzy_end)
 
     assert len(old_f.qualifiers) == len(new_f.qualifiers)

@@ -62,7 +62,7 @@ def _get_entry_formats(db):
     return _get_fields(_BASE_URL + "/entry/%s?formats" % db)
 
 def _get_convert_formats():
-    return [pair.split(".") for pair in \
+    return [pair.split(".") for pair in
             _get_fields(_BASE_URL + "/convert/")]
 
 def entry(db, id, format=None, field=None):
@@ -105,7 +105,7 @@ def entry(db, id, format=None, field=None):
             _entry_db_fields[db] = fields
         if field not in fields:
             raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "field '%s' for database '%s'. Only: %s" \
+                             "field '%s' for database '%s'. Only: %s"
                              % (field, db, ", ".join(sorted(fields))))
     if format:
         try:
@@ -115,7 +115,7 @@ def entry(db, id, format=None, field=None):
             _entry_db_formats[db] = formats
         if format not in formats:
             raise ValueError("TogoWS entry fetch does not explicitly support "
-                             "format '%s' for database '%s'. Only: %s" \
+                             "format '%s' for database '%s'. Only: %s"
                              % (format, db, ", ".join(sorted(formats))))
 
     if isinstance(id, list):
@@ -146,7 +146,7 @@ def search_count(db, query):
         import warnings
         warnings.warn("TogoWS search does not officially support database '%s'. "
                       "See %s/search/ for options." % (db, _BASE_URL))
-    handle = _open(_BASE_URL + "/search/%s/%s/count" \
+    handle = _open(_BASE_URL + "/search/%s/%s/count"
                    % (db, urllib.quote(query)))
     count = int(handle.read().strip())
     handle.close()
@@ -189,7 +189,7 @@ def search_iter(db, query, limit=None, batch=100):
             raise RuntimeError("Same search results for previous offset")
         for identifier in ids:
             if identifier in prev_ids:
-                raise RuntimeError("Result %s was in previous batch" \
+                raise RuntimeError("Result %s was in previous batch"
                                    % identifier)
             yield identifier
         offset += batch

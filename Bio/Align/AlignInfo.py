@@ -304,7 +304,7 @@ class SummaryInfo(object):
         """Returns a string containing the expected letters in the alignment."""
         all_letters = self.alignment._alphabet.letters
         if all_letters is None \
-        or (isinstance(self.alignment._alphabet, Alphabet.Gapped) \
+        or (isinstance(self.alignment._alphabet, Alphabet.Gapped)
         and all_letters == self.alignment._alphabet.gap_char):
             #We are dealing with a generic alphabet class where the
             #letters are not defined!  We must build a list of the
@@ -572,7 +572,7 @@ class SummaryInfo(object):
             for key in obs_freq:
                 if (key != gap_char and key not in e_freq_table):
                     raise ValueError("Expected frequency letters %s "
-                                     "do not match observed %s" \
+                                     "do not match observed %s"
                                      % (e_freq_table.keys(),
                                         obs_freq.keys() - [gap_char]))
 
