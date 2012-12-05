@@ -471,6 +471,9 @@ class Motif(object):
         """
         FASTA representation of motif
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed in
+a future release of Biopython.""", PendingDeprecationWarning)
         if self.instances is None:
             alpha="".join(self.alphabet.letters)
             #col[i] is a column taken from aligned motif instances
@@ -770,15 +773,102 @@ The same rules are used by TRANSFAC."""
 
     def weblogo(self,fname,format="PNG",version="2.8.2", **kwds):
         """
-        uses the Berkeley weblogo service to download and save a weblogo of itself
+        uses the Berkeley weblogo service to download and save a weblogo of
+        itself
 
         requires an internet connection.
         The parameters from **kwds are passed directly to the weblogo server.
+
+        Currently, this method uses WebLogo 2.8.2 by default. This is likely
+        to change in a future release of Biopython in favor of WebLogo 3.3.
+        To use WebLogo 3.3 now, use the 'version="3"' argument when calling
+        this method.
+
+        These are the arguments and their default values passed to
+        WebLogo 2.8.2; see their website at http://weblogo.berkeley.edu
+        for more information:
+
+            'logowidth' : '18',
+            'logoheight' : '5',
+            'logounits' : 'cm',
+            'kind' : 'AUTO',
+            'firstnum' : "1",
+            'command' : 'Create Logo',
+            'smallsamplecorrection' : "on",
+            'symbolsperline' : 32,
+            'res' : '96',
+            'res_units' : 'ppi',
+            'antialias' : 'on',
+            'title' : '',
+            'barbits' : '',
+            'xaxis': 'on',
+            'xaxis_label' : '',
+            'yaxis': 'on',
+            'yaxis_label' : '',
+            'showends' : 'on',
+            'shrink' : '0.5',
+            'fineprint' : 'on',
+            'ticbits' : '1',
+            'colorscheme' : 'DEFAULT',
+            'color1' : 'black',
+            'color2' : 'blue',
+            'color3' : 'red',
+            'color4' : 'black',
+            'color5' : 'purple',
+            'color6' : 'orange',
+
+        These are the arguments and their default values passed to
+        WebLogo 3.3; see their website at http://weblogo.threeplusone.com
+        for more information:
+
+            'stack_width' : 'medium',
+            'stack_per_line' : '40',
+            'alphabet' : 'alphabet_dna',
+            'ignore_lower_case' : True,
+            'unit_name' : "bits",
+            'first_index' : '1',
+            'logo_start' : '1',
+            'logo_end': str(self.length),
+            'composition' : "comp_auto",
+            'percentCG' : '',
+            'scale_width' : True,
+            'show_errorbars' : True,
+            'logo_title' : '',
+            'logo_label' : '',
+            'show_xaxis': True,
+            'xaxis_label': '',
+            'show_yaxis': True,
+            'yaxis_label': '',
+            'yaxis_scale': 'auto',
+            'yaxis_tic_interval' : '1.0',
+            'show_ends' : True,
+            'show_fineprint' : True,
+            'symbols0': '',
+            'symbols1': '',
+            'symbols2': '',
+            'symbols3': '',
+            'symbols4': '',
+            'color0': '',
+            'color1': '',
+            'color2': '',
+            'color3': '',
+            'color4': '',
+
         """
         import urllib
         import urllib2
         version = str(version)
         if version.startswith("2"):
+            warnings.warn("""\
+Please use WebLogo 3 instead of the older WebLogo 2.8.2.
+To use WebLogo 3, use the 'version="3"' argument when calling this method.
+By default, this method uses WebLogo 2.8.2; this default will be changed
+to WebLogo 3 in a future release of Biopython.
+Note that the arguments to WebLogo 3 can be different from those to
+WebLogo 2.8.2. See the WebLogo website (http://weblogo.threeplusone.com)
+for more information. You can also use help() on this method to see the
+arguments to WebLogo 2.8.2 and WebLogo 3.""",
+                PendingDeprecationWarning)
             al= self._to_fasta()
             url = 'http://weblogo.berkeley.edu/logo.cgi'
             values = {'sequence' : al,
@@ -805,13 +895,12 @@ The same rules are used by TRANSFAC."""
                       'fineprint' : 'on',
                       'ticbits' : '1',
                       'colorscheme' : 'DEFAULT',
-                      'color1' : 'green',
+                      'color1' : 'black',
                       'color2' : 'blue',
                       'color3' : 'red',
                       'color4' : 'black',
                       'color5' : 'purple',
                       'color6' : 'orange',
-                      'color1' : 'black',
                       }
             for k,v in kwds.iteritems():
                 values[k]=str(v)
