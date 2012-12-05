@@ -328,14 +328,16 @@ class PrintFormat(object):
             for key in cutloc[counter]:
                 s = ''
                 if key == base:
-                    for n in enzymemap[key] : s = ' '.join((s,n))
+                    for n in enzymemap[key]:
+                        s = ' '.join((s,n))
                     l = line[0:59]
                     lineo = Join((l, str(key), s, '\n'))
                     line2 = Join((l, a, '\n'))
                     linetot = Join((lineo, line2))
                     map = Join((map, linetot))
                     break
-                for n in enzymemap[key] : s = ' '.join((s,n))
+                for n in enzymemap[key]:
+                    s = ' '.join((s,n))
                 k = key%60
                 lineo = Join((line[0:(k-1)], str(key), s, '\n'))
                 line = Join((line[0:(k-1)], a, line[k:]))
@@ -360,7 +362,8 @@ class PrintFormat(object):
                 linetot = Join((lineo, line2))
                 map = Join((map, linetot))
                 break
-            for n in enzymemap[key] : s = Join((s,' ',n))
+            for n in enzymemap[key]:
+                s = Join((s,' ',n))
             k = key%60
             lineo = Join((line[0:(k-1)],str(key),s,'\n'))
             line = Join((line[0:(k-1)],a,line[k:]))

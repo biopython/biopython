@@ -357,17 +357,21 @@ def _check_type_compatible(alphabets):
         if isinstance(a, DNAAlphabet):
             dna = True
             nucl = True
-            if rna or protein : return False
+            if rna or protein:
+                return False
         elif isinstance(a, RNAAlphabet):
             rna = True
             nucl = True
-            if dna or protein : return False
+            if dna or protein:
+                return False
         elif isinstance(a, NucleotideAlphabet):
             nucl = True
-            if protein : return False
+            if protein:
+                return False
         elif isinstance(a, ProteinAlphabet):
             protein = True
-            if nucl : return False
+            if nucl:
+                return False
     return True
 
 def _verify_alphabet(sequence):

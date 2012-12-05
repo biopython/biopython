@@ -37,7 +37,8 @@ CHARSET='chars'
 TAXSET='taxa'
 CODONPOSITIONS='codonpositions'
 DEFAULTNEXUS='#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=dna; end; '
-class NexusError(Exception): pass
+class NexusError(Exception):
+    pass
 
 class CharBuffer(object):
     """Helps reading NEXUS-words and characters from a buffer."""

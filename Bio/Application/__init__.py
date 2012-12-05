@@ -430,8 +430,10 @@ class AbstractCommandline(object):
                                          shell=(sys.platform!="win32"))
         #Use .communicate as can get deadlocks with .wait(), see Bug 2804
         stdout_str, stderr_str = child_process.communicate(stdin)
-        if not stdout: assert not stdout_str
-        if not stderr: assert not stderr_str
+        if not stdout:
+            assert not stdout_str
+        if not stderr:
+            assert not stderr_str
         return_code = child_process.returncode
         if return_code:
             raise ApplicationError(return_code, str(self),

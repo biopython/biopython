@@ -39,7 +39,8 @@ class BlastDisplayer:
         fid = open(self.outfile)
         size = 0
         while 1:
-            if self.worker.finished: break
+            if self.worker.finished:
+                break
             fid.seek(size)
             txt = fid.read()
             size = os.stat(self.outfile)[6]

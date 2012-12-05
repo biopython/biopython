@@ -335,7 +335,8 @@ class StockholmIterator(AlignmentIterator):
         passed_end_alignment = False
         while 1:
             line = self.handle.readline()
-            if not line: break #end of file
+            if not line:
+                break #end of file
             line = line.strip() #remove trailing \n
             if line == '# STOCKHOLM 1.0':
                 self._header = line

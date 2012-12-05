@@ -65,7 +65,8 @@ class RebaseUpdate(FancyURLopener):
         t = time.gmtime()
         year = str(t.tm_year)[-1]
         month = str(t.tm_mon)
-        if len(month) == 1 : month = '0'+month
+        if len(month) == 1:
+            month = '0' + month
         return year+month
 
     def update(self, *files):
@@ -74,7 +75,8 @@ class RebaseUpdate(FancyURLopener):
         return [x.replace('###', self.localtime()) for x in files]
 
     def __del__(self):
-        if hasattr(self, 'tmpcache') : self.close()
+        if hasattr(self, 'tmpcache'):
+            self.close()
         #
         #   self.tmpcache is created by URLopener.__init__ method.
         #

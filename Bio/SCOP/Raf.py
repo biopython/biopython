@@ -67,7 +67,8 @@ class SeqMapIndex(dict):
             position = 0
             while True:
                 line = f.readline()
-                if not line: break
+                if not line:
+                    break
                 key = line[0:5]
                 if key is not None:
                     self[key]=position
@@ -100,7 +101,8 @@ class SeqMapIndex(dict):
 
         pdbid = residues.pdbid
         frags = residues.fragments
-        if not frags: frags =(('_','',''),) # All residues of unnamed chain
+        if not frags:
+            frags =(('_','',''),) # All residues of unnamed chain
 
         seqMap = None
         for frag in frags:
@@ -114,8 +116,10 @@ class SeqMapIndex(dict):
             #Cut out fragment of interest
             start = 0
             end = len(sm.res)
-            if frag[1] : start = int(sm.index(frag[1], chainid))
-            if frag[2] : end = int(sm.index(frag[2], chainid)+1)
+            if frag[1]:
+                start = int(sm.index(frag[1], chainid))
+            if frag[2]:
+                end = int(sm.index(frag[2], chainid)+1)
 
             sm = sm[start:end]
 

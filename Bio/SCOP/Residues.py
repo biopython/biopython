@@ -37,7 +37,8 @@ class Residues(object):
     def __init__(self, str=None):
         self.pdbid = ''
         self.fragments = ()
-        if str is not None : self._parse(str)
+        if str is not None:
+            self._parse(str)
 
 
     def _parse(self, str):
@@ -77,11 +78,14 @@ class Residues(object):
         if self.pdbid:
             prefix =self.pdbid +' '
 
-        if not self.fragments: return prefix+'-'
+        if not self.fragments:
+            return prefix+'-'
         strs = []
         for chain, start, end in self.fragments:
             s = []
-            if chain: s.append("%s:" % chain)
-            if start: s.append("%s-%s" % (start, end))
+            if chain:
+                s.append("%s:" % chain)
+            if start:
+                s.append("%s-%s" % (start, end))
             strs.append("".join(s))
         return prefix+ ",".join(strs)

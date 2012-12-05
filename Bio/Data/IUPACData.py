@@ -141,7 +141,9 @@ def _make_ambiguous_ranges(mydict, weight_table):
     avg_d = {}
     for letter, values in mydict.iteritems():
         #Following line is a quick hack to skip undefined weights for U and O
-        if len(values)==1 and values[0] not in weight_table : continue
+        if len(values) == 1 and values[0] not in weight_table:
+            continue
+
         weights = map(weight_table.get, values)
         range_d[letter] = (min(weights), max(weights))
         total_w = 0.0

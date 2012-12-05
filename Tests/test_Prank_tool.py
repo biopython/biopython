@@ -37,7 +37,8 @@ if sys.platform=="win32":
             if os.path.isfile(os.path.join(folder, "prank.exe")):
                 prank_exe = os.path.join(folder, "prank.exe")
                 break
-        if prank_exe : break
+        if prank_exe:
+            break
 else:
     import commands
     output = commands.getoutput("prank")

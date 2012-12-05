@@ -41,7 +41,8 @@ def itemindex(values):
     d = {}
     entries = enumerate(values[::-1])
     n = len(values)-1
-    for index, key in entries: d[key] = n-index
+    for index, key in entries:
+        d[key] = n-index
     return d
 
 numpy.random.seed()

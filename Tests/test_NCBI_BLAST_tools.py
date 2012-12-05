@@ -32,7 +32,8 @@ else :
     likely_dirs = os.environ.get("PATH", "").split(":")
 
 for folder in likely_dirs:
-    if not os.path.isdir(folder): continue
+    if not os.path.isdir(folder):
+        continue
     for name in wanted :
         if sys.platform=="win32":
             exe_name = os.path.join(folder, name+".exe")
@@ -164,12 +165,14 @@ class CheckCompleteArgList(unittest.TestCase):
         names_in_tool = set()
         while stdoutdata :
             index = stdoutdata.find("[")
-            if index == -1 : break
+            if index == -1:
+                break
             stdoutdata = stdoutdata[index+1:]
             index = stdoutdata.find("]")
             assert index != -1
             name = stdoutdata[:index]
-            if " " in name : name = name.split(None,1)[0]
+            if " " in name:
+                name = name.split(None,1)[0]
             names_in_tool.add(name)
             stdoutdata = stdoutdata[index+1:]
 

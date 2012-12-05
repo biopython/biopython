@@ -108,7 +108,8 @@ def _check_bases(seq_string):
     #Remove white space and make upper case:
     seq_string = "".join(seq_string.split()).upper()
     #Remove digits
-    for c in "0123456789" : seq_string = seq_string.replace(c,"")
+    for c in "0123456789":
+        seq_string = seq_string.replace(c, "")
     #Check only allowed IUPAC letters
     if not set(seq_string).issubset(set("ABCDGHKMNRSTVWY")) :
         raise TypeError("Invalid character found in %s" % repr(seq_string))
@@ -513,7 +514,8 @@ class AbstractCut(RestrictionType):
         if batch is supplied it is used instead of the default AllEnzymes.
 
         equischizomer <=> same site, same position of restriction."""
-        if not batch : batch = AllEnzymes
+        if not batch:
+            batch = AllEnzymes
         r = [x for x in batch if not self != x]
         i = r.index(self)
         del r[i]
@@ -528,7 +530,8 @@ class AbstractCut(RestrictionType):
         if batch is supplied it is used instead of the default AllEnzymes.
 
         neoschizomer <=> same site, different position of restriction."""
-        if not batch : batch = AllEnzymes
+        if not batch:
+            batch = AllEnzymes
         r = [x for x in batch if self >> x]
         r.sort()
         return r
@@ -539,7 +542,8 @@ class AbstractCut(RestrictionType):
 
         return a tuple of all the equischizomers and neoschizomers of RE.
         if batch is supplied it is used instead of the default AllEnzymes."""
-        if not batch : batch = AllEnzymes
+        if not batch:
+            batch = AllEnzymes
         r = [x for x in batch if (self >> x) or (not self != x)]
         i = r.index(self)
         del r[i]
@@ -829,7 +833,8 @@ class Palindromic(AbstractCut):
         """
         siteloc = self.dna.finditer(self.compsite,self.size)
         self.results = [r for s,g in siteloc for r in self._modify(s)]
-        if self.results : self._drop()
+        if self.results:
+            self._drop()
         return self.results
 
     @classmethod
@@ -988,7 +993,8 @@ class Blunt(AbstractCut):
         output will be modified accordingly."""
         r = self.search(dna, linear)
         d = self.dna
-        if not r : return d[1:],
+        if not r:
+            return d[1:],
         fragments = []
         length = len(r)-1
         if d.is_linear():
@@ -1070,7 +1076,8 @@ class Blunt(AbstractCut):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE."""
-        if not batch : batch = AllEnzymes
+        if not batch:
+            batch = AllEnzymes
         r = [x for x in iter(AllEnzymes) if x.is_blunt()]
         r.sort()
         return r
@@ -1107,7 +1114,8 @@ class Ov5(AbstractCut):
         output will be modified accordingly."""
         r = self.search(dna, linear)
         d = self.dna
-        if not r : return d[1:],
+        if not r:
+            return d[1:],
         length = len(r)-1
         fragments = []
         if d.is_linear():
@@ -1189,7 +1197,8 @@ class Ov5(AbstractCut):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE."""
-        if not batch : batch = AllEnzymes
+        if not batch:
+            batch = AllEnzymes
         r = [x for x in iter(AllEnzymes) if x.is_5overhang() and x % self]
         r.sort()
         return r
@@ -1201,8 +1210,10 @@ class Ov5(AbstractCut):
         for internal use only
 
         test for the compatibility of restriction ending of RE and other."""
-        if issubclass(other, Ov5) : return self._mod2(other)
-        else : return False
+        if issubclass(other, Ov5):
+            return self._mod2(other)
+        else:
+            return False
 
 
 class Ov3(AbstractCut):
@@ -1227,7 +1238,8 @@ class Ov3(AbstractCut):
         output will be modified accordingly."""
         r = self.search(dna, linear)
         d = self.dna
-        if not r : return d[1:],
+        if not r:
+            return d[1:],
         fragments = []
         length = len(r)-1
         if d.is_linear():
@@ -1309,7 +1321,8 @@ class Ov3(AbstractCut):
         """RE.compatible_end() -> list.
 
         list of all the enzymes that share compatible end with RE."""
-        if not batch : batch = AllEnzymes
+        if not batch:
+            batch = AllEnzymes
         r = [x for x in iter(AllEnzymes) if x.is_3overhang() and x % self]
         r.sort()
         return r
@@ -1324,8 +1337,10 @@ class Ov3(AbstractCut):
         #
         #   called by RE._mod1(other) when the one of the enzyme is ambiguous
         #
-        if issubclass(other, Ov3) : return self._mod2(other)
-        else : return False
+        if issubclass(other, Ov3):
+            return self._mod2(other)
+        else:
+            return False
 
 
 class Defined(AbstractCut):
@@ -1433,16 +1448,22 @@ class Defined(AbstractCut):
         f5 = self.fst5
         f3 = self.fst3
         site = self.site
-        if self.cut_twice() : re = 'cut twice, not yet implemented sorry.'
+        if self.cut_twice():
+            re = 'cut twice, not yet implemented sorry.'
         elif self.is_5overhang():
-            if f5 == f3 == 0 : re = 'N^'+ self.site + '_N'
-            elif f3 == 0 : re = site[:f5] + '^' + site[f5:] + '_N'
-            else : re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
+            if f5 == f3 == 0:
+                re = 'N^'+ self.site + '_N'
+            elif f3 == 0:
+                re = site[:f5] + '^' + site[f5:] + '_N'
+            else:
+                re = site[:f5] + '^' + site[f5:f3] + '_' + site[f3:]
         elif self.is_blunt():
             re = site[:f5] + '^_' + site[f5:]
         else:
-            if f5 == f3 == 0 : re = 'N_'+ site + '^N'
-            else : re = site[:f3] + '_' + site[f3:f5] +'^'+ site[f5:]
+            if f5 == f3 == 0:
+                re = 'N_'+ site + '^N'
+            else:
+                re = site[:f3] + '_' + site[f3:f5] +'^'+ site[f5:]
         return re
 
     @classmethod
@@ -1588,7 +1609,8 @@ class Ambiguous(AbstractCut):
         f3 = self.fst3
         length = len(self)
         site = self.site
-        if self.cut_twice() : re = 'cut twice, not yet implemented sorry.'
+        if self.cut_twice():
+            re = 'cut twice, not yet implemented sorry.'
         elif self.is_5overhang():
             if f3 == f5 == 0:
                 re = 'N^' + site +'_N'
@@ -1614,8 +1636,10 @@ class Ambiguous(AbstractCut):
                                  % (self.name,f5))
         else:
             if f3 == 0:
-                if f5 == 0 : re = 'N_' + site + '^N'
-                else : re = site + '_' + (f5-length)*'N' + '^N'
+                if f5 == 0:
+                    re = 'N_' + site + '^N'
+                else:
+                    re = site + '_' + (f5-length)*'N' + '^N'
             elif 0 < f3+length <= length and 0 <= f5 <= length:
                 re = site[:f3] + '_' + site[f3:f5] + '^' + site[f5:]
             elif 0 < f3+length <= length:
@@ -2311,7 +2335,8 @@ class Analysis(RestrictionBatch, PrintFormat):
         Enzymes that cut the sequence outside of the region
         in between start and end but do not cut inside."""
         start, end, test = self._boundaries(start, end)
-        if not dct : dct = self.mapping
+        if not dct:
+            dct = self.mapping
         d = dict(dct)
         for key, sites in dct.iteritems():
             if not sites:
@@ -2413,8 +2438,10 @@ for TYPE, (bases, enzymes) in typedict.iteritems():
         #
         #   No need to verify the enzyme is a RestrictionType -> add_nocheck
         #
-        if newenz.is_comm() : CommOnly.add_nocheck(newenz)
-        else : NonComm.add_nocheck(newenz)
+        if newenz.is_comm():
+            CommOnly.add_nocheck(newenz)
+        else:
+            NonComm.add_nocheck(newenz)
 #
 #   AllEnzymes is a RestrictionBatch with all the enzymes from Rebase.
 #

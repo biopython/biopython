@@ -41,7 +41,8 @@ if sys.platform=="win32":
             if os.path.isfile(os.path.join(folder, "muscle.exe")):
                 muscle_exe = os.path.join(folder, "muscle.exe")
                 break
-        if muscle_exe : break
+        if muscle_exe:
+            break
 else:
     import commands
     output = commands.getoutput("muscle -version")

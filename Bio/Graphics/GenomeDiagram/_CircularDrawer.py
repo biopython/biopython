@@ -504,16 +504,21 @@ class CircularDrawer(AbstractDrawer):
         and not self.is_in_bounds(endB):
             return None
 
-        if startA < self.start: startA = self.start
-        if startB < self.start: startB = self.start
-        if self.end < endA: endA = self.end
-        if self.end < endB: endB = self.end
+        if startA < self.start:
+            startA = self.start
+        if startB < self.start:
+            startB = self.start
+        if self.end < endA:
+            endA = self.end
+        if self.end < endB:
+            endB = self.end
 
         trackobjA = cross_link._trackA(self._parent.tracks.values())
         trackobjB = cross_link._trackB(self._parent.tracks.values())
         assert trackobjA is not None
         assert trackobjB is not None
-        if trackobjA == trackobjB: raise NotImplementedError()
+        if trackobjA == trackobjB:
+            raise NotImplementedError()
 
         if trackobjA.start is not None:
             if endA < trackobjA.start:
@@ -538,7 +543,8 @@ class CircularDrawer(AbstractDrawer):
                 trackA = track_level
             if track == trackobjB:
                 trackB = track_level
-        if trackA == trackB: raise NotImplementedError()
+        if trackA == trackB:
+            raise NotImplementedError()
 
         startangleA, startcosA, startsinA = self.canvas_angle(startA)
         startangleB, startcosB, startsinB = self.canvas_angle(startB)

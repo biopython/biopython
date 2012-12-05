@@ -99,7 +99,8 @@ def do_update(py2folder, py3folder, verbose=False):
     #so that 2to3 can detect local imports successfully.
     to_convert = []
     for dirpath, dirnames, filenames in os.walk(py2folder):
-        if verbose: print("Processing %s" % dirpath)
+        if verbose:
+            print("Processing %s" % dirpath)
         relpath = os.path.relpath(dirpath, py2folder)
         #This is just to give cleaner filenames
         if relpath[:2] == "/.":
@@ -132,7 +133,8 @@ def do_update(py2folder, py3folder, verbose=False):
             if os.path.isfile(new) \
             and round(os.stat(new).st_mtime*1000) >= \
                 round(os.stat(old).st_mtime*1000):
-                if verbose: print("Current: %s" % new)
+                if verbose:
+                    print("Current: %s" % new)
                 continue
             #Python, C code, data files, etc - copy with date stamp etc
             shutil.copy2(old, new)
@@ -143,9 +145,11 @@ def do_update(py2folder, py3folder, verbose=False):
             if f.endswith(".py"):
                 #Also run 2to3 on it
                 to_convert.append(new)
-                if verbose: print("Will convert %s" % new)
+                if verbose:
+                    print("Will convert %s" % new)
             else:
-                if verbose: print("Updated %s" % new)
+                if verbose:
+                    print("Updated %s" % new)
     if to_convert:
         print("Have %i python files to convert" % len(to_convert))
         run2to3(to_convert)

@@ -168,7 +168,8 @@ class ClustalIterator(AlignmentIterator):
                 #No consensus
                 break
             line = handle.readline()
-            if not line : break #end of file
+            if not line:
+                break #end of file
 
         assert line.strip() == ""
         assert seq_cols is not None
@@ -187,8 +188,10 @@ class ClustalIterator(AlignmentIterator):
             #previous block.
             while (not line) or line.strip() == "":
                 line = handle.readline()
-                if not line : break # end of file
-            if not line : break # end of file
+                if not line:
+                    break # end of file
+            if not line:
+                break # end of file
 
             if line.split(None,1)[0] in known_headers:
                 #Found concatenated alignment.

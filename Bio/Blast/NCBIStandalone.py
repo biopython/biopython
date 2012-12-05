@@ -231,8 +231,10 @@ class _Scanner(object):
             read_and_call_until(uhandle, consumer.query_info, start='Length=')
             while True:
                 line = uhandle.peekline()
-                if not line.strip() : break
-                if "Score     E" in line : break
+                if not line.strip():
+                    break
+                if "Score     E" in line:
+                    break
                 #It is more of the query (and its length)
                 read_and_call(uhandle, consumer.query_info)
             read_and_call_while(uhandle, consumer.noevent, blank=1)
@@ -340,7 +342,8 @@ class _Scanner(object):
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError, err:
-                if str(err) != "Unexpected end of stream." : raise err
+                if str(err) != "Unexpected end of stream.":
+                    raise err
 
             consumer.end_descriptions()
             # Stop processing.
@@ -393,7 +396,8 @@ class _Scanner(object):
         consumer.end_descriptions()
 
     def _scan_alignments(self, uhandle, consumer):
-        if self._eof(uhandle) : return
+        if self._eof(uhandle):
+            return
 
         # qblast inserts a helpful line here.
         attempt_read_and_call(uhandle, consumer.noevent, start="ALIGNMENTS")
@@ -422,7 +426,8 @@ class _Scanner(object):
             self._scan_one_pairwise_alignment(uhandle, consumer)
 
     def _scan_one_pairwise_alignment(self, uhandle, consumer):
-        if self._eof(uhandle) : return
+        if self._eof(uhandle):
+            return
         consumer.start_alignment()
 
         self._scan_alignment_header(uhandle, consumer)
@@ -507,7 +512,8 @@ class _Scanner(object):
             try:
                 read_and_call_while(uhandle, consumer.noevent, blank=1)
             except ValueError, err:
-                if str(err) != "Unexpected end of stream." : raise err
+                if str(err) != "Unexpected end of stream.":
+                    raise err
                 # End of File (well, it looks like it with recent versions
                 # of BLAST for multiple queries after the Iterator class
                 # has broken up the whole file into chunks).
@@ -544,7 +550,8 @@ class _Scanner(object):
         try:
             line = safe_peekline(uhandle)
         except ValueError, err:
-            if str(err) != "Unexpected end of stream." : raise err
+            if str(err) != "Unexpected end of stream.":
+                raise err
             line = ""
         return not line
 
@@ -575,7 +582,8 @@ class _Scanner(object):
         # Lambda     K      H
         #    0.267   0.0410    0.140
 
-        if self._eof(uhandle) : return
+        if self._eof(uhandle):
+            return
 
         consumer.start_database_report()
 
@@ -617,7 +625,8 @@ class _Scanner(object):
         try:
             read_and_call(uhandle, consumer.noevent, start='Lambda')
             read_and_call(uhandle, consumer.ka_params)
-        except: pass
+        except:
+            pass
 
         #This blank line is optional:
         attempt_read_and_call(uhandle, consumer.noevent, blank=1)

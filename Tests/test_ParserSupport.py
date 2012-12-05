@@ -64,9 +64,12 @@ h = File.UndoHandle(File.StringHandle(data))
 safe_readline = ParserSupport.safe_readline
 print safe_readline(h)    # "This"
 print safe_readline(h)    # "file"
-try: safe_readline(h)
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
+try:
+    safe_readline(h)
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
 
 
 ### safe_peekline
@@ -83,9 +86,12 @@ print safe_peekline(h) # "This"
 h.readline()
 print safe_peekline(h) # "file"
 h.readline()
-try: safe_peekline(h)
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
+try:
+    safe_peekline(h)
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
 h.saveline('hello')
 print safe_peekline(h) # 'hello'
 
@@ -117,21 +123,40 @@ rac(h, m, start='MAKLE', end='KEQ', contains='SVIG')
 rac(h, m, blank=0)
 
 # These should be errors.  If they're not, then complain.
-try: rac(h, m, blank=1)
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, start='foobar')
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, end='foobar')
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, contains='foobar')
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
-try: rac(h, m, blank=0)
-except ValueError: print "correctly failed"
-else: print "ERROR, should have failed"
+try:
+    rac(h, m, blank=1)
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
+
+try:
+    rac(h, m, start='foobar')
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
+
+try:
+    rac(h, m, end='foobar')
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
+
+try:
+    rac(h, m, contains='foobar')
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
+
+try:
+    rac(h, m, blank=0)
+except ValueError:
+    print "correctly failed"
+else:
+    print "ERROR, should have failed"
 
 
 

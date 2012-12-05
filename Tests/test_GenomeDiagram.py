@@ -126,7 +126,8 @@ def calc_gc_content(sequence):
         d[nt] = sequence.count(nt) + sequence.count(nt.lower())
     gc = d.get('G',0) + d.get('C',0)
 
-    if gc == 0: return 0
+    if gc == 0:
+        return 0
     #print gc*100.0/(d['A'] +d['T'] + gc)
     return gc*1./(d['A'] +d['T'] + gc)
 
@@ -143,7 +144,8 @@ def calc_at_content(sequence):
         d[nt] = sequence.count(nt) + sequence.count(nt.lower())
     at = d.get('A',0) + d.get('T',0)
 
-    if at == 0: return 0
+    if at == 0:
+        return 0
     return at*1./(d['G'] +d['G'] + at)
 
 
@@ -693,7 +695,8 @@ class DiagramTest(unittest.TestCase):
             index = 0
             while True:
                 index = genbank_entry.seq.find(site, start=index)
-                if index == -1 : break
+                if index == -1:
+                    break
                 feature = SeqFeature(FeatureLocation(index, index+6), strand=None)
 
                 #This URL should work in SVG output from recent versions

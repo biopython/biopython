@@ -273,14 +273,16 @@ class StringMethodTests(unittest.TestCase):
     def test_str_upper(self):
         """Check matches the python string upper method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             str1 = str(example1)
             self.assertEqual(str(example1.upper()), str1.upper())
 
     def test_str_upper(self):
         """Check matches the python string lower method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             str1 = str(example1)
             self.assertEqual(str(example1.lower()), str1.lower())
 
@@ -315,7 +317,8 @@ class StringMethodTests(unittest.TestCase):
     def test_tomutable(self):
         """Check obj.tomutable() method."""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             mut = example1.tomutable()
             self.assertTrue(isinstance(mut, MutableSeq))
             self.assertEqual(str(mut), str(example1))
@@ -337,7 +340,8 @@ class StringMethodTests(unittest.TestCase):
         """Check obj.complement() method."""
         mapping = ""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             try :
                 comp = example1.complement()
             except ValueError, e:
@@ -364,7 +368,8 @@ class StringMethodTests(unittest.TestCase):
         """Check obj.reverse_complement() method."""
         mapping = ""
         for example1 in self._examples:
-            if isinstance(example1, MutableSeq) : continue
+            if isinstance(example1, MutableSeq):
+                continue
             try :
                 comp = example1.reverse_complement()
             except ValueError, e:
@@ -391,12 +396,15 @@ class StringMethodTests(unittest.TestCase):
             """Check obj.transcribe() method."""
             mapping = ""
             for example1 in self._examples:
-                if isinstance(example1, MutableSeq) : continue
+                if isinstance(example1, MutableSeq):
+                    continue
                 try :
                     tran = example1.transcribe()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be transcribed!" : continue
-                    if str(e) == "RNA cannot be transcribed!" : continue
+                    if str(e) == "Proteins cannot be transcribed!":
+                        continue
+                    if str(e) == "RNA cannot be transcribed!":
+                        continue
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
@@ -406,12 +414,15 @@ class StringMethodTests(unittest.TestCase):
             """Check obj.back_transcribe() method."""
             mapping = ""
             for example1 in self._examples:
-                if isinstance(example1, MutableSeq) : continue
+                if isinstance(example1, MutableSeq):
+                    continue
                 try :
                     tran = example1.back_transcribe()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be back transcribed!" : continue
-                    if str(e) == "DNA cannot be back transcribed!" : continue
+                    if str(e) == "Proteins cannot be back transcribed!":
+                        continue
+                    if str(e) == "DNA cannot be back transcribed!":
+                        continue
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
@@ -421,11 +432,13 @@ class StringMethodTests(unittest.TestCase):
             """Check obj.translate() method."""
             mapping = ""
             for example1 in self._examples:
-                if isinstance(example1, MutableSeq) : continue
+                if isinstance(example1, MutableSeq):
+                    continue
                 try :
                     tran = example1.translate()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be translated!" : continue
+                    if str(e) == "Proteins cannot be translated!":
+                        continue
                     raise e
                 #This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:

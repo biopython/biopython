@@ -131,7 +131,8 @@ def get_install_requires():
         is_automated = True
     if is_automated:
         global _CHECKED
-        if _CHECKED is None: _CHECKED = True
+        if _CHECKED is None:
+            _CHECKED = True
         install_requires.append("numpy >= 1.5.1")
     return install_requires
 
@@ -146,7 +147,8 @@ def check_dependencies():
     # forced an installation, should we also ignore dependencies?
 
     # We only check for NumPy, as this is a compile time dependency
-    if is_Numpy_installed() : return True
+    if is_Numpy_installed():
+        return True
 
     if os.name=='java':
         return True #NumPy is not avaliable for Jython (for now)

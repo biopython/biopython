@@ -62,7 +62,8 @@ def GC123(seq):
 
     for i in range(0,len(seq),3):
         codon = seq[i:i+3]
-        if len(codon) <3: codon += '  '
+        if len(codon) < 3:
+            codon += '  '
         for pos in range(0,3):
             for nt in ['A','T','G','C']:
                 if codon[pos] == nt or codon[pos] == nt.lower():
@@ -164,7 +165,8 @@ def xGC_skew(seq, window = 1000, zoom = 100,
 
 def molecular_weight(seq):
     """Calculate the molecular weight of a DNA sequence."""
-    if isinstance(seq, str): seq = Seq(seq, IUPAC.unambiguous_dna)
+    if isinstance(seq, str):
+        seq = Seq(seq, IUPAC.unambiguous_dna)
     weight_table = IUPACData.unambiguous_dna_weights
     return sum(weight_table[x] for x in seq)
 
@@ -189,7 +191,8 @@ def nt_search(seq, subseq):
         pos+=1
         s = seq[pos:]
         m = re.search(pattern, s)
-        if not m: break
+        if not m:
+            break
         pos += int(m.start(0))
         result.append(pos)
     return result

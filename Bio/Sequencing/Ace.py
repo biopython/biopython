@@ -400,7 +400,8 @@ def parse(handle):
                         record.reads[-1].wr=[]
                     for line in handle:
                         line=line.strip()
-                        if line=='}': break
+                        if line=='}':
+                            break
                         record.reads[-1].wr.append(wr(line))
                     line = ""
                 elif line.startswith("WA{"):
@@ -413,7 +414,8 @@ def parse(handle):
                     record.wa.append(wa(line))
                     for line in handle:
                         line=line.strip()
-                        if line=='}': break
+                        if line=='}':
+                            break
                         record.wa[-1].info.append(line)
                     line = ""
                 elif line.startswith("CT{"):
