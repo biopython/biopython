@@ -661,7 +661,6 @@ class Motif(object):
         self.set_mask("*"*len(instance))
         return self
 
-
     def __getitem__(self,index):
         """Returns the probability distribution over symbols at a given position, padding with background.
 

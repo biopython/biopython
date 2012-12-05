@@ -346,7 +346,6 @@ class Chromosome(_ChromosomeComponent):
             cur_drawing.add(label_string)
 
 
-
 class ChromosomeSegment(_ChromosomeComponent):
     """Draw a segment of a chromosome.
 

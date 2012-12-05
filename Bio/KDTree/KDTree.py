@@ -185,7 +185,6 @@ class KDTree(object):
 
     # Fixed radius search for all points
 
-
     def all_search(self, radius):
         """All fixed neighbor search.
 

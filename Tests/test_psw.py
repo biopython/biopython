@@ -71,7 +71,6 @@ class TestPSW(unittest.TestCase):
         ac = psw.AlignmentColumn(psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
         self.assertRaises(AssertionError, ac.append, psw.ColumnUnit(0, random.randint(0, 9999), "SEQUENCE"))
 
-
     def test_ColumnUnit(self):
         self.assertEqual(repr(psw.ColumnUnit(0, 33, "SEQUENCE")),
                          "ColumnUnit(unit=0, column=33, SEQUENCE)")

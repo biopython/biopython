@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-
 """
 This module allows to control GenePop.
 
@@ -259,7 +257,6 @@ class GenePopController(object):
         self._remove_garbage(None)
         return
 
-
     def _test_pop_hz_both(self, fname, type, ext, enum_test = True,
         dememorization = 10000, batches = 20, iterations = 5000):
         """Hardy-Weinberg test for heterozygote deficiency/excess.
@@ -401,7 +398,6 @@ class GenePopController(object):
         """
         return self._test_global_hz_both(fname, 4, ".DG", enum_test,
             dememorization, batches, iterations)
-
 
     #1.5
     def test_global_hz_excess(self, fname, enum_test = True,

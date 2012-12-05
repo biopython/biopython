@@ -236,7 +236,6 @@ class CircularDrawer(AbstractDrawer):
         else:
             self.sweep = 1
 
-
     def set_track_heights(self):
         """ set_track_heights(self)
 
@@ -333,7 +332,6 @@ class CircularDrawer(AbstractDrawer):
         if self.tracklines:             # Draw test tracks over top of diagram
             self.draw_test_tracks()
 
-
     def draw_track(self, track):
         """ draw_track(self, track) -> ([element, element,...], [element, element,...])
 
@@ -354,7 +352,6 @@ class CircularDrawer(AbstractDrawer):
             track_elements += elements
             track_labels += labels
         return track_elements, track_labels
-
 
     def draw_feature_set(self, set):
         """ draw_feature_set(self, set) -> ([element, element,...], [element, element,...])
@@ -407,7 +404,6 @@ class CircularDrawer(AbstractDrawer):
                 label_elements.append(label)
 
         return feature_elements, label_elements
-
 
     def get_feature_sigil(self, feature, locstart, locend, **kwargs):
         """ get_feature_sigil(self, feature, x0, x1, fragment) -> (element, element)
@@ -565,7 +561,6 @@ class CircularDrawer(AbstractDrawer):
                            startangleB, endangleB,
                            cross_link.color, cross_link.border, cross_link.flip)]
 
-
     def draw_graph_set(self, set):
         """ draw_graph_set(self, set) -> ([element, element,...], [element, element,...])
 
@@ -587,7 +582,6 @@ class CircularDrawer(AbstractDrawer):
             elements += style_methods[graph.style](graph)
 
         return elements, []
-
 
     def draw_line_graph(self, graph):
         """ draw_line_graph(self, graph, center) -> [element, element,...]
@@ -706,8 +700,6 @@ class CircularDrawer(AbstractDrawer):
                                               pos1angle, barcolor))
         return bar_elements
 
-
-
     def draw_heat_graph(self, graph):
         """ draw_heat_graph(self, graph) -> [element, element,...]
 
@@ -749,7 +741,6 @@ class CircularDrawer(AbstractDrawer):
             heat_elements.append(self._draw_arc(btm, top, pos0angle, pos1angle,
                                                 heat, border=heat))
         return heat_elements
-
 
     def draw_scale(self, track):
         """ draw_scale(self, track) -> ([element, element,...], [element, element,...])
@@ -908,7 +899,6 @@ class CircularDrawer(AbstractDrawer):
 
         return scale_elements, scale_labels
 
-
     def draw_tick(self, tickpos, ctr, ticklen, track, draw_label):
         """ draw_tick(self, tickpos, ctr, ticklen) -> (element, element)
 
@@ -960,7 +950,6 @@ class CircularDrawer(AbstractDrawer):
             labelgroup = None
         return tick, labelgroup
 
-
     def draw_test_tracks(self):
         """ draw_test_tracks(self)
 
@@ -980,7 +969,6 @@ class CircularDrawer(AbstractDrawer):
             self.drawing.add(Circle(self.xcenter, self.ycenter, btm,
                                     strokeColor=colors.blue,
                                     fillColor=None))  # bottom line
-
 
     def draw_greytrack(self, track):
         """ draw_greytrack(self)
@@ -1043,7 +1031,6 @@ class CircularDrawer(AbstractDrawer):
                     greytrack_labels.append(labelgroup)
 
         return greytrack_bgs, greytrack_labels
-
 
     def canvas_angle(self, base):
         """ canvas_angle(self, base) -> (float, float, float)
@@ -1268,7 +1255,6 @@ class CircularDrawer(AbstractDrawer):
         p.lineTo(x0+shaft_inner_radius*endsin, y0+shaft_inner_radius*endcos)
         p.closePath()
         return p
-
 
     def _draw_sigil_arrow(self, bottom, center, top,
                           startangle, endangle, strand,

@@ -238,7 +238,6 @@ class MarkovModelBuilder(object):
         for key in self.emission_prob:
             self.emission_prob[key] = new_emission_prob
 
-
     def set_random_initial_probabilities(self):
         """Set all initial state probabilities to a randomly generated distribution.
         Returns the dictionary containing the initial probabilities.
@@ -477,7 +476,6 @@ class HiddenMarkovModel(object):
         # from which the destination is reachable via a transition
         self._transitions_to = \
            _calculate_to_transitions(self.transition_prob)
-
 
     def get_blank_transitions(self):
         """Get the default transitions for the model.

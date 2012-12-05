@@ -328,7 +328,6 @@ if __name__=="__main__":
     m=s[0]
     fm=FragmentMapper(m, 10, 5, "levitt_data")
 
-
     for r in Selection.unfold_entities(m, "R"):
 
         print r,

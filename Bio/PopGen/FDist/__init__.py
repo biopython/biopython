@@ -18,9 +18,6 @@ read             Parses a FDist record (file) into a Record object.
 
 """
 
-
-
-
 def read(handle):
     """Parses FDist data into a Record object.
 

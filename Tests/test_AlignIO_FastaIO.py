@@ -46,7 +46,6 @@ for (t_format, t_per, t_count, t_filename) in test_files:
             "Expected %i records per alignment, got %i" \
             % (t_per, len(alignment))
 
-
     #Print the alignment
     for i,alignment in enumerate(alignments):
         print "="*78

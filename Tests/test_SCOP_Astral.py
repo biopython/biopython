@@ -9,9 +9,7 @@ import unittest
 from Bio.SCOP import *
 
 
-
 class AstralTests(unittest.TestCase):
-
 
     def setUp(self):
         self.scop = Scop(dir_path="SCOP", version="test")

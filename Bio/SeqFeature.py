@@ -804,7 +804,6 @@ class FeatureLocation(object):
         """
         return int(self._end)
 
-
     def extract(self, parent_sequence):
         """Extract feature sequence from the supplied parent sequence."""
         if self.ref or self.ref_db:

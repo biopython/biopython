@@ -101,7 +101,6 @@ class CodonAdaptationIndex(object):
             for i in range(len(codons)):
                 self.index[codons[i]] = rcsu[i] / rcsu_max
 
-
     def cai_for_gene(self, dna_sequence):
         """Calculate the CAI (float) for the provided DNA sequence (string).
 
@@ -127,7 +126,6 @@ class CodonAdaptationIndex(object):
                 raise TypeError("illegal codon in sequence: %s.\n%s" % (codon, self.index))
 
         return math.exp(cai_value / (cai_length - 1.0))
-
 
     def _count_codons(self, fasta_file):
         handle = open(fasta_file, 'r')

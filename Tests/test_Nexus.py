@@ -303,7 +303,6 @@ usertype matrix_test stepmatrix=5
 ;
 """)
 
-
     def test_TreeTest1(self):
         """Test Tree module."""
         n=Nexus.Nexus(self.handle)

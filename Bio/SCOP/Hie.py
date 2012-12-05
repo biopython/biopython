@@ -66,7 +66,6 @@ class Record(object):
             children = children.split(',')
             self.children = map(int, children)
 
-
     def __str__(self):
         s = []
         s.append(str(self.sunid))
@@ -78,7 +77,6 @@ class Record(object):
                 s.append('0')
             else:
                 s.append('-')
-
 
         if self.children:
             child_str = map(str, self.children)

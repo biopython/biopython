@@ -9,7 +9,6 @@ from Bio import SwissProt
 from Bio.SeqRecord import SeqRecord
 
 
-
 class TestSwissProt(unittest.TestCase):
 
     def test_sp001(self):
@@ -90,7 +89,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
-
 
     def test_sp002(self):
         "Parsing SwissProt file sp002"
@@ -298,7 +296,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
 
-
     def test_sp004(self):
         "Parsing SwissProt file sp004"
 
@@ -474,7 +471,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
 
-
     def test_sp006(self):
         "Parsing SwissProt file sp006"
 
@@ -548,7 +544,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
-
 
     def test_sp007(self):
         "Parsing SwissProt file sp007"
@@ -632,7 +627,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
-
 
     def test_sp008(self):
         "Parsing SwissProt file sp008"
@@ -916,7 +910,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(record.references[0].authors, "Liew C.F., Lim S.H., Loh C.S., Goh C.J.")
         self.assertEqual(record.references[0].title, "Molecular cloning and sequence analysis of chalcone synthase cDNAs of Bromheadia finlaysoniana.")
         self.assertEqual(len(record.references[0].references), 0)
-
 
         #Check the two parsers agree on the essentials
         self.assertEqual(str(seq_record.seq), record.sequence)
@@ -1233,7 +1226,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
 
-
     def test_sp012(self):
         "Parsing SwissProt file sp012"
 
@@ -1310,7 +1302,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
 
-
     def test_sp013(self):
         "Parsing SwissProt file sp013"
 
@@ -1386,7 +1377,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
-
 
     def test_sp014(self):
         "Parsing SwissProt file sp014"
@@ -1555,7 +1545,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
 
-
     def test_sp015(self):
         "Parsing SwissProt file sp015"
 
@@ -1624,7 +1613,6 @@ class TestSwissProt(unittest.TestCase):
         self.assertEqual(records[0].description, record.description)
         self.assertEqual(records[0].entry_name, record.entry_name)
         self.assertEqual(records[0].accessions, record.accessions)
-
 
 
 if __name__ == "__main__":

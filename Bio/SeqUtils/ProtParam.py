@@ -178,7 +178,6 @@ class ProteinAnalysis(object):
 
         return total_gravy / self.length
 
-
     def _weight_list(self, window, edge):
         """Makes a list of relative weight of the
         window edges compared to the window center. The weights are linear.

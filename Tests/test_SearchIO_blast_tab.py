@@ -541,7 +541,6 @@ class BlastnTabCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(2, counter)
 
-
     def test_tab_2226_tblastn_010(self):
         "Test parsing TBLASTN 2.2.26+ tabular output with comments (tab_2226_tblastn_010)"
 

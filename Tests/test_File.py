@@ -11,16 +11,13 @@ import shutil
 from StringIO import StringIO
 import tempfile
 
-
 from Bio import File
-
 
 
 data = """This
 is
 a multi-line
 file"""
-
 
 
 ### StringHandle
@@ -30,7 +27,6 @@ print repr(h.readline())  # 'This'
 print len(h.readlines())  # 3
 print repr(h.readline())  # ''
 h.close()
-
 
 
 ### UndoHandle

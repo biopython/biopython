@@ -383,14 +383,12 @@ class Diagram(object):
         """
         del self.tracks[track_level]
 
-
     def get_tracks(self):
         """ get_tracks(self) -> list
 
             Returns a list of the tracks contained in the diagram
         """
         return self.tracks.values()
-
 
     def move_track(self, from_level, to_level):
         """ move_track(self, from_level, to_level)
@@ -405,7 +403,6 @@ class Diagram(object):
         aux = self.tracks[from_level]
         del self.tracks[from_level]
         self.add_track(aux, to_level)
-
 
     def renumber_tracks(self, low=1, step=1):
         """ renumber_tracks(self, low=1, step=1)
@@ -436,7 +433,6 @@ class Diagram(object):
         levels.sort()
         return levels
 
-
     def get_drawn_levels(self):
         """ get_drawn_levels(self) -> [int, int, ...]
 
@@ -447,7 +443,6 @@ class Diagram(object):
                         not self.tracks[key].hide] # get list of shown levels
         drawn_levels.sort()
         return drawn_levels
-
 
     def range(self):
         """ range(self) -> (int, int)

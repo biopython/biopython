@@ -59,7 +59,6 @@ class ColorTranslator(object):
         else:
             self._colorscheme = self._artemis_colorscheme
 
-
     def translate(self, color=None, colour=None):
         """ translate(self, color)
 
@@ -153,14 +152,12 @@ class ColorTranslator(object):
         else:
             raise ValueError("Artemis color out of range: %d" % value)
 
-
     def get_colorscheme(self):
         """ get_colorscheme(self)
 
             Return the user-defined color scheme as a dictionary
         """
         return self._colorscheme
-
 
     def scheme_color(self, value):
         """ scheme_color(self, value)
@@ -176,7 +173,6 @@ class ColorTranslator(object):
         else:
             raise ValueError("Scheme color out of range: %d" % value)
 
-
     def int255_color(self, values):
         """ int255_color(self, values)
 
@@ -190,7 +186,6 @@ class ColorTranslator(object):
         factor = 1/255.
         red, green, blue = red * factor, green * factor, blue * factor
         return colors.Color(red, green, blue)
-
 
     def float1_color(self, values):
         """ float1_color(self, values)

@@ -84,8 +84,6 @@ class PosAlign(object):
     __str__ = __repr__
 
 
-
-
 class FSSPSumRec(object):
     """ Contains info from an FSSP summary record"""
     def __init__(self,in_str):

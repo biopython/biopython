@@ -262,7 +262,6 @@ class TestCluster(unittest.TestCase):
                                    method='a', transpose=0)
         self.assertAlmostEqual(distance, 0.360, places=3)
 
-
     def test_treecluster(self):
         if TestCluster.module=='Bio.Cluster':
             from Bio.Cluster import treecluster

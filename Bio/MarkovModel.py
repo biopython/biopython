@@ -36,8 +36,6 @@ except AttributeError:
         minxy = min(logx, logy)
         return minxy + numpy.log(numpy.exp(logx-minxy) + numpy.exp(logy-minxy))
 
-
-
 def itemindex(values):
     d = {}
     entries = enumerate(values[::-1])
@@ -280,7 +278,6 @@ def _baum_welch_one(N, M, outputs,
                 lp_traverse[i][j] = lp
         # Normalize the probability for this time step.
         lp_arc[:,:,t] = lp_traverse - _logsum(lp_traverse)
-
 
     # Sum of all the transitions out of state i at time t.
     lp_arcout_t = numpy.zeros((N, T))

@@ -88,7 +88,6 @@ class EmbossIterator(AlignmentIterator):
         ids = []
         seqs = []
 
-
         while line[0] == "#":
             #Read in the rest of this alignment header,
             #try and discover the number of records expected
@@ -608,7 +607,6 @@ asis             311 -----------------    311
            == ["ref_rec", "gi|94968718|receiver"]
     assert [r.id for r in alignments[4]] \
            == ["ref_rec", "gi|94970041|receiver"]
-
 
     alignments = list(EmbossIterator(StringIO(pair_example3)))
     assert len(alignments) == 1

@@ -29,7 +29,6 @@ class TestCAPS(unittest.TestCase):
         self.assertEqual(map.dcuts[0].cuts_in, [0])
         self.assertEqual(map.dcuts[0].blocked_in, [1])
 
-
     def test(self):
         alignment = [
 """\
@@ -68,7 +67,6 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
         self.assertEqual(map.dcuts[1].cuts_in, [1,2])
         self.assertEqual(map.dcuts[1].blocked_in, [0])
 
-
     def testNoCAPS(self):
         alignment = ["aaaaaaaaaaaaaaaaaaaa",
                      "aaaaaaaaaaaaaaaaaaaa",
@@ -77,7 +75,6 @@ AGCGAGGTCAACATCTGTAGCTACGATCCTTGGAACTTGCGCTGTAAGTTCCGAATTTTC
         align = createAlignment(alignment, Alphabet.generic_nucleotide)
         map = CAPS.CAPSMap(align, enzymes)
         self.assertEqual(map.dcuts, [])
-
 
     def test_uneven(self):
         alignment = ["aaaaaaaaaaaaaa",

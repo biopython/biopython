@@ -105,7 +105,6 @@ class FileRecord(object):
         self.seek_position(current_pop, current_ind)
         return "".join(rep)
 
-
     def start_read(self):
         """Starts parsing a file containing a GenePop file.
         """

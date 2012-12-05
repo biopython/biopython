@@ -50,7 +50,6 @@ class HotCache(object):
         return byte_concat( hexdigits )
 
 
-
 class HotRandom(object):
 
     def __init__( self ):

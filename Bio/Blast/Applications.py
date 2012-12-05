@@ -691,7 +691,6 @@ class _Ncbiblast2SeqCommandline(_NcbiblastCommandline):
             self.parameters = extra_parameters
         _NcbiblastCommandline.__init__(self, cmd, **kwargs)
 
-
     def _validate(self):
         incompatibles = {"subject_loc":["db", "gilist", "negative_gilist", "seqidlist", "remote"],
                          "culling_limit":["best_hit_overhang","best_hit_score_edge"],

@@ -106,7 +106,6 @@ class Atom(object):
         else:
             return float('NaN')
 
-
     # Special methods
 
     def __repr__(self):
@@ -173,7 +172,6 @@ class Atom(object):
         @type anisou_array: Numeric array (length 6)
         """
         self.anisou_array=anisou_array
-
 
     # Public methods
 

@@ -30,7 +30,6 @@ import UserDict
 import Bio.File
 
 
-
 class UniGeneParser( sgmllib.SGMLParser ):
 
     def reset( self ):
@@ -70,8 +69,6 @@ class UniGeneParser( sgmllib.SGMLParser ):
             text = text + ' ' + line
 
         sgmllib.SGMLParser.feed( self, text )
-
-
 
     def handle_data(self, newtext ):
         newtext = string.strip( newtext )
@@ -134,8 +131,6 @@ class UniGeneParser( sgmllib.SGMLParser ):
             self.queue[ key ] = UserDict.UserDict()
             self.master_key = key
 
-
-
     def start_table( self, attrs ):
         self.open_tag_stack.append( self.open_tag )
         self.open_tag = 'open_table'
@@ -175,10 +170,7 @@ class UniGeneParser( sgmllib.SGMLParser ):
                 except:
                     self.queue[ self.master_key ][ self.key_waiting ] = text
 
-
                 self.key_waiting = ''
-
-
 
     def start_td( self, attrs ):
         self.open_tag_stack.append( self.open_tag )
@@ -213,7 +205,6 @@ class UniGeneParser( sgmllib.SGMLParser ):
         for key in self.queue:
             print 'key %s' % key
             self.print_item( self.queue[ key ] )
-
 
 
 if( __name__ == '__main__' ):

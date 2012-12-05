@@ -13,8 +13,6 @@ import unittest
 from Bio.SCOP import Cla
 
 
-
-
 class ClaTests(unittest.TestCase):
 
     def setUp(self):
@@ -89,7 +87,6 @@ class ClaTests(unittest.TestCase):
 
         rec = index['d1hbia_']
         self.assertEqual(rec.sunid, 14996)
-
 
 
 if __name__=='__main__':

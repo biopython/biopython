@@ -126,7 +126,6 @@ class UtilsTest(unittest.TestCase):
         for filename in files:
             self.handles.append(open(os.path.join("PopGen", filename)))
 
-
     def tearDown(self):
         for handle in self.handles:
             handle.close()

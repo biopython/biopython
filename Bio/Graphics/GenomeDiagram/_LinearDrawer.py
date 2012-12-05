@@ -246,7 +246,6 @@ class LinearDrawer(AbstractDrawer):
         self.fragment_size = fragment_size
         self.track_size = track_size
 
-
     def draw(self):
         """ draw(self)
 
@@ -309,7 +308,6 @@ class LinearDrawer(AbstractDrawer):
         if self.tracklines:             # Draw test tracks over top of diagram
             self.draw_test_tracks()
 
-
     def init_fragments(self):
         """ init_fragments(self)
 
@@ -338,7 +336,6 @@ class LinearDrawer(AbstractDrawer):
         for marker in range(int(self.start), int(self.end), int(fragment_step)):
             self.fragment_limits[fragment_count] = (marker, marker+fragment_step)
             fragment_count += 1
-
 
     def set_track_heights(self):
         """ set_track_heights(self)
@@ -660,7 +657,6 @@ class LinearDrawer(AbstractDrawer):
                         greytrack_labels.append(labelgroup)
 
         return greytrack_bgs, greytrack_labels
-
 
     def draw_feature_set(self, set):
         """ draw_feature_set(self, set) -> ([element, element,...], [element, element,...])
@@ -1078,7 +1074,6 @@ class LinearDrawer(AbstractDrawer):
 
         return elements, []
 
-
     def draw_line_graph(self, graph):
         """ draw_line_graph(self, graph) -> [element, element,...]
 
@@ -1144,7 +1139,6 @@ class LinearDrawer(AbstractDrawer):
             lastfrag, lastx, lasty, lastval = frag, x, y, val
 
         return line_elements
-
 
     def draw_heat_graph(self, graph):
         """ draw_heat_graph(self, graph) -> [element, element,...]
@@ -1222,7 +1216,6 @@ class LinearDrawer(AbstractDrawer):
                                               color=heat, border=None))
 
         return heat_elements
-
 
     def draw_bar_graph(self, graph):
         """ draw_bar_graph(self, graph) -> [element, element,...]

@@ -100,7 +100,6 @@ class xbb_widget:
             'ComboBox.Label':'lightblue',
             }
 
-
     def init_optionsdb(self):
         # does anybody know a better way of defining colors ?
         # how would one implement Tk's -class ?
@@ -162,7 +161,6 @@ class xbb_widget:
             menu.add_radiobutton(label=table, command = self.set_codon_table, variable = self.current_codon_table)
         self.translation_menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
 
-
         self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
 
         # Tools menu
@@ -205,7 +203,6 @@ class xbb_widget:
         d['label'] = Label(self.seq_info1, width = 10)
         for i in ['id', 'from_id', 'to_id', 'length_id', 'label']:
             d[i].pack(side = LEFT, fill = BOTH, expand = 1)
-
 
         self.seq_info2 = Frame(parent, relief = RIDGE,
                                borderwidth = 5, height = 30)

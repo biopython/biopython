@@ -174,7 +174,6 @@ def _find_start_entry(line,n):
         infield=1
         field=1
 
-
     while (c<leng and field<n):
         if (infield):
             if (line[c]==" " and not (line[c-1]==" ")):

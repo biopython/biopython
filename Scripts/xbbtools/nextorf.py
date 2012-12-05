@@ -46,7 +46,6 @@ def makeTableX(table):
                                 table.stop_codons)
 
 
-
 class NextOrf:
     def __init__(self, file, options):
         self.options = options

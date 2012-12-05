@@ -182,7 +182,6 @@ class DatabaseLoader:
         # Cropping it now should help in getting a match when searching,
         # and avoids an error if we try and add these to the database.
 
-
         if ncbi_taxon_id:
             #Good, we have the NCBI taxon to go on - this is unambiguous :)
             #Note that the scientific name and common name will only be
@@ -489,7 +488,6 @@ class DatabaseLoader:
                                                             scientific_name[:255]))
         return taxon_id
 
-
     def _load_bioentry_table(self, record):
         """Fill the bioentry table with sequence information (PRIVATE).
 
@@ -679,7 +677,6 @@ class DatabaseLoader:
                 pass
                 #print "Ignoring annotation '%s' entry of type '%s'" \
                 #      % (key, type(value))
-
 
     def _load_reference(self, reference, rank, bioentry_id):
         """Record a SeqRecord's annotated references in the database (PRIVATE).
@@ -902,7 +899,6 @@ class DatabaseLoader:
                 # table as seqfeature_id, dbxref_id, and rank tuples
                 self._load_seqfeature_dbxref(qualifiers[qualifier_key],
                                              seqfeature_id)
-
 
     def _load_seqfeature_dbxref(self, dbxrefs, seqfeature_id):
         """Add database crossreferences of a SeqFeature to the database (PRIVATE).

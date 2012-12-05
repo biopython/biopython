@@ -89,7 +89,6 @@ class SeqMapIndex(dict):
             f.close()
         return record
 
-
     def getSeqMap(self, residues):
         """Get the sequence map for a collection of residues.
 
@@ -191,7 +190,6 @@ class SeqMap(object):
             r.seqres = normalize_letters(f[6:7])
 
             self.res.append(r)
-
 
     def index(self, resid, chainid="_"):
         for i in range(0, len(self.res)):

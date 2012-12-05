@@ -519,7 +519,6 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         assert len(record.dbxrefs) == len(record.dbxrefs), \
                "Repeated cross reference in dbxrefs: %s" % repr(record.dbxrefs)
 
-
         #Check the lists obtained by the different methods agree
         assert compare_record(record, records2[i])
         assert compare_record(record, records3[i])

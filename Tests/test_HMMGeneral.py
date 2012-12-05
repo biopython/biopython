@@ -62,7 +62,6 @@ class MarkovModelBuilderTest(unittest.TestCase):
         test_assertion("Emission pseudo", self.mm_builder.emission_pseudo,
                            expected_emission_pseudo)
 
-
     def test_allow_all_transitions(self):
         """Testing allow_all_transitions.
         """
@@ -79,7 +78,6 @@ class MarkovModelBuilderTest(unittest.TestCase):
 
         test_assertion("Pseudo counts",  self.mm_builder.transition_pseudo,
                        expected_pseudo)
-
 
     def test_set_initial_probabilities(self):
         self.mm_builder.set_initial_probabilities({})

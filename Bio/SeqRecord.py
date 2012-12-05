@@ -549,7 +549,6 @@ class SeqRecord(object):
         """
         return char in self.seq
 
-
     def __str__(self):
         """A human readable summary of the record and its annotation (string).
 

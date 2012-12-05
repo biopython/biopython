@@ -7,10 +7,8 @@
 import os
 import unittest
 
-
 from Bio import Motif
 from Bio.Seq import Seq
-
 
 
 class MotifTestsBasic(unittest.TestCase):
