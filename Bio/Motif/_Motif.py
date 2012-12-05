@@ -205,17 +205,33 @@ class Motif(object):
         self._log_odds_is_current=1
         return self._log_odds
 
-    def ic(self):
-        """Method returning the information content of a motif.
+    def ic(self, background=None):
+        """\
+Returns the information content of a motif.
+
+By default, a uniform background is used. To specify a non-uniform
+background, use the 'background' argument to pass a dictionary containing
+the probability of each letter in the alphabet associated with the motif
+under the background distribution.
         """
-        res=0
+        result=0
+        if background==None:
+            background = {}
+            for a in self.alphabet.letters:
+                background[a] = 1.0
+        total = sum(background.values())
+        for a in self.alphabet.letters:
+            background[a] /= total
+        for a in self.alphabet.letters:
+            if background[a]!=0:
+                result-=background[a]*math.log(background[a],2)
+        result *= self.length
         pwm=self.pwm()
         for i in range(self.length):
-            res+=2
             for a in self.alphabet.letters:
                 if pwm[i][a]!=0:
-                    res+=pwm[i][a]*math.log(pwm[i][a],2)
-        return res
+                    result+=pwm[i][a]*math.log(pwm[i][a],2)
+        return result
 
     def exp_score(self,st_dev=False):
         """
