@@ -404,8 +404,7 @@ class Hmmer3TextIndexer(SearchIndexer):
                 # (starts with the start mark)
                 start_offset = end_offset - len(line)
             elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, \
-                        end_offset - start_offset
+                yield _bytes_to_string(qresult_key), start_offset, 0
                 start_offset = end_offset
             elif not line:
                 break
