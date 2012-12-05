@@ -61,6 +61,7 @@ from Bio.ParserSupport import *
 from Bio.Blast import Record
 from Bio.Application import _escape_filename
 
+
 class LowQualityBlastError(Exception):
     """Error caused by running a low quality sequence through BLAST.
 
@@ -71,6 +72,7 @@ class LowQualityBlastError(Exception):
     in this case.
     """
     pass
+
 
 class ShortQueryBlastError(Exception):
     """Error caused by running a short query sequence through BLAST.
@@ -817,6 +819,7 @@ class _Scanner(object):
 
         consumer.end_parameters()
 
+
 class BlastParser(AbstractParser):
     """Parses BLAST data into a Record.Blast object.
 
@@ -831,6 +834,7 @@ class BlastParser(AbstractParser):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
+
 class PSIBlastParser(AbstractParser):
     """Parses BLAST data into a Record.PSIBlast object.
 
@@ -844,6 +848,7 @@ class PSIBlastParser(AbstractParser):
         """parse(self, handle)"""
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
+
 
 class _HeaderConsumer(object):
     def start_header(self):
@@ -900,6 +905,7 @@ class _HeaderConsumer(object):
         # Get rid of the trailing newlines
         self._header.reference = self._header.reference.rstrip()
         self._header.query = self._header.query.rstrip()
+
 
 class _DescriptionConsumer(object):
     def start_descriptions(self):
@@ -979,6 +985,7 @@ class _DescriptionConsumer(object):
         dh.score = _safe_int(dh.score)
         dh.e = _safe_float(dh.e)
         return dh
+
 
 class _AlignmentConsumer(object):
     # This is a little bit tricky.  An alignment can either be a
@@ -1144,6 +1151,7 @@ class _AlignmentConsumer(object):
         except AttributeError:
             pass
 
+
 class _HSPConsumer(object):
     def start_hsp(self):
         self._hsp = Record.HSP()
@@ -1271,6 +1279,7 @@ class _HSPConsumer(object):
     def end_hsp(self):
         pass
 
+
 class _DatabaseReportConsumer(object):
 
     def start_database_report(self):
@@ -1313,6 +1322,7 @@ class _DatabaseReportConsumer(object):
 
     def end_database_report(self):
         pass
+
 
 class _ParametersConsumer(object):
     def start_parameters(self):
@@ -1544,6 +1554,7 @@ class _BlastConsumer(AbstractConsumer,
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
 
+
 class _PSIBlastConsumer(AbstractConsumer,
                         _HeaderConsumer,
                         _DescriptionConsumer,
@@ -1599,6 +1610,7 @@ class _PSIBlastConsumer(AbstractConsumer,
     def end_parameters(self):
         _ParametersConsumer.end_parameters(self)
         self.data.__dict__.update(self._params.__dict__)
+
 
 class Iterator(object):
     """Iterates over a file of multiple BLAST results.
@@ -1675,6 +1687,7 @@ class Iterator(object):
 
     def __iter__(self):
         return iter(self.next, None)
+
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
     """Execute and retrieve data from standalone BLASTPALL as handles (OBSOLETE).
@@ -2026,6 +2039,7 @@ def _re_search(regex, line, error_msg):
         raise ValueError(error_msg)
     return m.groups()
 
+
 def _get_cols(line, cols_to_get, ncols=None, expected={}):
     cols = line.split()
 
@@ -2124,6 +2138,7 @@ def _security_check_parameters(param_dict):
             if bad_str in str_value:
                 raise ValueError("Rejecting suspicious argument for %s" % key)
 
+
 class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
         _BlastConsumer.__init__(self)
@@ -2135,6 +2150,7 @@ class _BlastErrorConsumer(_BlastConsumer):
         method = getattr(_BlastConsumer, 'noevent',
                          _BlastConsumer.__getattr__(self, 'noevent'))
         method(line)
+
 
 class BlastErrorParser(AbstractParser):
     """Attempt to catch and diagnose BLAST errors while parsing.

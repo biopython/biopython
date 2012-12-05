@@ -44,6 +44,7 @@ def get_indiv(line):
                    for marker in markers]
     return indiv_name, allele_list, marker_len
 
+
 def read(handle):
     """Parses a handle containing a GenePop file.
 

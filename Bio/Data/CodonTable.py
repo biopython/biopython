@@ -35,8 +35,10 @@ standard_rna_table = None
 # appropriate distribution of codons, so do not cache the results of
 # back_table lookups!
 
+
 class TranslationError(Exception):
     pass
+
 
 class CodonTable(object):
     nucleotide_alphabet = Alphabet.generic_nucleotide
@@ -117,6 +119,7 @@ class CodonTable(object):
                   + "+".join(["---------" for c2 in letters]) + "+--"
         return answer
 
+
 def make_back_table(table, default_stop_codon):
     #  ONLY RETURNS A SINGLE CODON
     # Do the sort so changes in the hash implementation won't affect
@@ -143,6 +146,7 @@ class NCBICodonTable(CodonTable):
 
 class NCBICodonTableDNA(NCBICodonTable):
     nucleotide_alphabet = IUPAC.unambiguous_dna
+
 
 class NCBICodonTableRNA(NCBICodonTable):
     nucleotide_alphabet = IUPAC.unambiguous_rna
@@ -178,6 +182,7 @@ class AmbiguousCodonTable(CodonTable):
     def __getattr__(self, name):
         return getattr(self._codon_table, name)
 
+
 def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
         c1, c2, c3 = codon
         x1 = ambiguous_nucleotide_values[c1]
@@ -200,6 +205,7 @@ def list_possible_proteins(codon, forward_table, ambiguous_nucleotide_values):
             # This is a true stop codon - tell the caller about it
             raise KeyError(codon)
         return possible.keys()
+
 
 def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
     """Extends a codon list to include all possible ambigous codons.
@@ -274,6 +280,7 @@ assert list_ambiguous_codons(['TGA', 'TAA', 'TAG'],
 #  'B'
 #  >>> t.forward_table["YTA"]
 #  'L'
+
 
 class AmbiguousForwardTable(object):
     def __init__(self, forward_table, ambiguous_nucleotide, ambiguous_protein):

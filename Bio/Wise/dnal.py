@@ -26,6 +26,7 @@ _SCORE_GAP_EXTENSION = -1
 
 _CMDLINE_DNAL = ["dnal", "-alb", "-nopretty"]
 
+
 def _build_dnal_cmdline(match, mismatch, gap, extension):
     res = _CMDLINE_DNAL[:]
     res.extend(["-match", str(match)])
@@ -36,14 +37,19 @@ def _build_dnal_cmdline(match, mismatch, gap, extension):
     return res
 
 _CMDLINE_FGREP_COUNT = "fgrep -c '%s' %s"
+
+
 def _fgrep_count(pattern, file):
     return int(commands.getoutput(_CMDLINE_FGREP_COUNT % (pattern, file)))
 
 _re_alb_line2coords = re.compile(r"^\[([^:]+):[^\[]+\[([^:]+):")
+
+
 def _alb_line2coords(line):
     return tuple([int(coord)+1 # one-based -> zero-based
                   for coord
                   in _re_alb_line2coords.match(line).groups()])
+
 
 def _get_coords(filename):
     alb = file(filename)
@@ -63,9 +69,11 @@ def _get_coords(filename):
 
     return zip(*map(_alb_line2coords, [start_line, end_line])) # returns [(start0, end0), (start1, end1)]
 
+
 def _any(seq, pred=bool):
     "Returns True if pred(x) is True at least one element in the iterable"
     return True in itertools.imap(pred, seq)
+
 
 class Statistics(object):
     """
@@ -99,6 +107,7 @@ class Statistics(object):
     def __str__(self):
         return "\t".join([str(x) for x in (self.identity_fraction(), self.matches, self.mismatches, self.gaps, self.extensions)])
 
+
 def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_START, extension=_SCORE_GAP_EXTENSION, **keywds):
     cmdline = _build_dnal_cmdline(match, mismatch, gap, extension)
     temp_file = Wise.align(cmdline, pair, **keywds)
@@ -111,6 +120,7 @@ def align(pair, match=_SCORE_MATCH, mismatch=_SCORE_MISMATCH, gap=_SCORE_GAP_STA
         except KeyError:
             raise
 
+
 def main():
     import sys
     stats = align(sys.argv[1:3])
@@ -119,6 +129,7 @@ def main():
                      ("matches", "mismatches", "gaps", "extensions")])
     print "identity_fraction: %s" % stats.identity_fraction()
     print "coords: %s" % stats.coords
+
 
 def _test(*args, **keywds):
     import doctest

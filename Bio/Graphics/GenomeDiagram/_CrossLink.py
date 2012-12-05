@@ -9,6 +9,7 @@
 
 from reportlab.lib import colors
 
+
 class CrossLink(object):
     """Hold information for drawing a cross link between features.
     """

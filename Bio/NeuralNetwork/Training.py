@@ -3,6 +3,7 @@
 # standard modules
 import random
 
+
 class TrainingExample(object):
     """Hold inputs and outputs of a training example.
 
@@ -12,6 +13,7 @@ class TrainingExample(object):
         self.name = name
         self.inputs = inputs
         self.outputs = outputs
+
 
 class ExampleManager(object):
     """Manage a grouping of Training Examples.

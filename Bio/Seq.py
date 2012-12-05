@@ -22,6 +22,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Data.IUPACData import ambiguous_dna_complement, ambiguous_rna_complement
 from Bio.Data import CodonTable
 
+
 def _maketrans(complement_mapping):
     """Makes a python string translation table (PRIVATE).
 
@@ -47,6 +48,7 @@ def _maketrans(complement_mapping):
 
 _dna_complement_table = _maketrans(ambiguous_dna_complement)
 _rna_complement_table = _maketrans(ambiguous_rna_complement)
+
 
 class Seq(object):
     """A read-only sequence object (essentially a string with an alphabet).
@@ -1084,6 +1086,7 @@ class Seq(object):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return Seq(str(self).replace(gap, ""), alpha)
 
+
 class UnknownSeq(Seq):
     """A read-only sequence object of known length but unknown contents.
 
@@ -1495,6 +1498,7 @@ class UnknownSeq(Seq):
         else :
             return Seq("", s.alphabet)
 
+
 class MutableSeq(object):
     """An editable sequence object (with an alphabet).
 
@@ -1862,6 +1866,7 @@ class MutableSeq(object):
         """
         return Seq("".join(self.data), self.alphabet)
 
+
 # The transcribe, backward_transcribe, and translate functions are
 # user-friendly versions of the corresponding functions in Bio.Transcribe
 # and Bio.Translate. The functions work both on Seq objects, and on strings.
@@ -1887,6 +1892,7 @@ def transcribe(dna):
     else:
         return dna.replace('T','U').replace('t','u')
 
+
 def back_transcribe(rna):
     """Back-transcribes an RNA sequence into DNA.
 
@@ -1907,6 +1913,7 @@ def back_transcribe(rna):
         return rna.toseq().back_transcribe()
     else:
         return rna.replace('U','T').replace('u','t')
+
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                    cds=False, pos_stop="X"):
@@ -2003,6 +2010,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
                     "Codon '%s' is invalid" % codon)
     return "".join(amino_acids)
 
+
 def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
               cds=False):
     """Translate a nucleotide sequence into amino acids.
@@ -2090,6 +2098,7 @@ def translate(sequence, table="Standard", stop_symbol="*", to_stop=False,
                 raise ValueError('Bad table argument')
         return _translate_str(sequence, codon_table, stop_symbol, to_stop, cds)
 
+
 def reverse_complement(sequence):
     """Returns the reverse complement sequence of a nucleotide string.
 
@@ -2123,6 +2132,7 @@ def reverse_complement(sequence):
     else:
         ttable = _dna_complement_table
     return sequence.translate(ttable)[::-1]
+
 
 def _test():
     """Run the Bio.Seq module's doctests (PRIVATE)."""

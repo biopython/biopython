@@ -246,6 +246,7 @@ class Record(object):
         return "<%s> %s %s\n%s" % (self.__class__.__name__,
                           self.ID, self.symbol, self.title)
 
+
 def parse(handle):
     while True:
         record = _read(handle)

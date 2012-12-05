@@ -17,6 +17,8 @@ from Bio import Alphabet
 
 #We only import this and subclass it for some limited backward compatibilty.
 from Bio.Align.Generic import Alignment as _Alignment
+
+
 class MultipleSeqAlignment(_Alignment):
     """Represents a classical multiple sequence alignment (MSA).
 

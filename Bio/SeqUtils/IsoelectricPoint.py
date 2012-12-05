@@ -26,6 +26,7 @@ pKcterminal= {'D':4.55, 'E':4.75}
 pKnterminal = {'A':7.59, 'M':7.0, 'S':6.93, 'P':8.36, 'T':6.82, 'V':7.44, 'E':7.7}
 charged_aas = ('K', 'R', 'H', 'D', 'E', 'C', 'Y')
 
+
 # access this module through ProtParam.ProteinAnalysis class.
 # first make a ProteinAnalysis object and then call its isoelectric_point method.
 class IsoelectricPoint(object):

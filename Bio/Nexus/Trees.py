@@ -21,8 +21,10 @@ PRECISION_SUPPORT=6
 NODECOMMENT_START='[&'
 NODECOMMENT_END=']'
 
+
 class TreeError(Exception):
     pass
+
 
 class NodeData(object):
     """Stores tree-relevant data associated with nodes (e.g. branches or otus)."""
@@ -31,6 +33,7 @@ class NodeData(object):
         self.branchlength=branchlength
         self.support=support
         self.comment=comment
+
 
 class Tree(Nodes.Chain):
     """Represents a tree using a chain of nodes with on predecessor (=ancestor)

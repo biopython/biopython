@@ -22,11 +22,13 @@ if sys.version_info[0] == 3:
 else:
     maxint = sys.maxint
 
+
 def my_float(f):
     #Because of Jython, mostly
     if f=="-nan":
         f="nan"
     return float(f)
+
 
 class FDistController(object):
     def __init__(self, fdist_dir = '', ext = None):

@@ -84,6 +84,7 @@ def GC123(seq):
     gcall = 100.0*gcall/nall
     return gcall, gc[0], gc[1], gc[2]
 
+
 def GC_skew(seq, window = 100):
     """Calculates GC skew (G-C)/(G+C) for multuple windows along the sequence.
 
@@ -103,6 +104,8 @@ def GC_skew(seq, window = 100):
     return values
 
 from math import pi, sin, cos, log
+
+
 def xGC_skew(seq, window = 1000, zoom = 100,
                          r = 300, px = 100, py = 100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
@@ -163,12 +166,14 @@ def xGC_skew(seq, window = 1000, zoom = 100,
 
     canvas.configure(scrollregion = canvas.bbox(ALL))
 
+
 def molecular_weight(seq):
     """Calculate the molecular weight of a DNA sequence."""
     if isinstance(seq, str):
         seq = Seq(seq, IUPAC.unambiguous_dna)
     weight_table = IUPACData.unambiguous_dna_weights
     return sum(weight_table[x] for x in seq)
+
 
 def nt_search(seq, subseq):
     """Search for a DNA subseq in sequence.
@@ -212,6 +217,7 @@ _THREECODE = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
              'Y':'Tyr', 'Z':'Glx', 'X':'Xaa',
              'U':'Sel', 'O':'Pyl', 'J':'Xle',
              }
+
 
 def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     """Turn a one letter code protein sequence into one with three letter codes.

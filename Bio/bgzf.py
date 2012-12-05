@@ -248,6 +248,7 @@ def open(filename, mode="rb"):
     else:
         raise ValueError("Bad mode %r" % mode)
 
+
 def make_virtual_offset(block_start_offset, within_block_offset):
     """Compute a BGZF virtual offset from block start and within block offsets.
 
@@ -298,6 +299,7 @@ def make_virtual_offset(block_start_offset, within_block_offset):
         raise ValueError("Require 0 <= block_start_offset < 2**48, got %i" % block_start_offset)
     return (block_start_offset<<16) | within_block_offset
 
+
 def split_virtual_offset(virtual_offset):
     """Divides a 64-bit BGZF virtual offset into block start & within block offsets.
 
@@ -309,6 +311,7 @@ def split_virtual_offset(virtual_offset):
     """
     start = virtual_offset>>16
     return start, virtual_offset ^ (start<<16)
+
 
 def BgzfBlocks(handle):
     """Low level debugging function to inspect BGZF blocks.

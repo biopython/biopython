@@ -96,6 +96,7 @@ B_vs_C = [
     (28, "orf54", "lin2566"),
 ]
 
+
 def get_feature(features, id, tags=["locus_tag", "gene"]):
     """Search list of SeqFeature objects for an identifier under the given tags."""
     for f in features:

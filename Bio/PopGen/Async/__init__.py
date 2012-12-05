@@ -90,6 +90,7 @@ class Async(object):
             self.access_ds.release()
             return None
 
+
 class FileRetriever(object):
     '''An Abstract Support class to retrieve files.
     '''
@@ -104,6 +105,7 @@ class FileRetriever(object):
 
     def get_file(self, name):
         raise NotImplementedError('Abstract method')
+
 
 class DirectoryRetriever(FileRetriever):
     '''Retrieves a directory content.

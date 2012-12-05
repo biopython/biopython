@@ -34,6 +34,7 @@ def get_prodoc_entry(id, cgi='http://www.expasy.ch/cgi-bin/get-prodoc-entry'):
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
 
+
 def get_prosite_entry(id,
                       cgi='http://www.expasy.ch/cgi-bin/get-prosite-entry'):
     """get_prosite_entry(id,
@@ -48,6 +49,7 @@ def get_prosite_entry(id,
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
 
+
 def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
     """get_prosite_raw(id,
                        cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl')
@@ -60,6 +62,7 @@ def get_prosite_raw(id, cgi='http://www.expasy.ch/cgi-bin/get-prosite-raw.pl'):
     handle = urllib.urlopen("%s?%s" % (cgi, id))
     return handle
 
+
 def get_sprot_raw(id):
     """Get a handle to a raw SwissProt entry at ExPASy.
 
@@ -67,6 +70,7 @@ def get_sprot_raw(id):
     (as per the http://www.expasy.ch/expasy_urls.html documentation).
     """
     return urllib.urlopen("http://www.uniprot.org/uniprot/%s.txt" % id)
+
 
 def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
                      cgi='http://www.expasy.ch/cgi-bin/sprot-search-ful'):
@@ -87,6 +91,7 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
     fullcgi = "%s?%s" % (cgi, options)
     handle = urllib.urlopen(fullcgi)
     return handle
+
 
 def sprot_search_de(text, swissprot=1, trembl=None,
                     cgi='http://www.expasy.ch/cgi-bin/sprot-search-de'):

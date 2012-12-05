@@ -19,6 +19,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
+
 class Alignment(object):
     """Represent a set of alignments (DEPRECATED).
 
@@ -425,6 +426,7 @@ class Alignment(object):
                             +"but may be in future.")
         else:
             raise TypeError("Invalid index type.")
+
 
 def _test():
     """Run the Bio.Align.Generic module's doctests."""

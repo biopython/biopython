@@ -11,6 +11,7 @@ This module allows you to control Simcoal2.
 import os
 import sys
 
+
 class SimCoalController(object):
     def __init__(self, simcoal_dir):
         """Initializes the controller.

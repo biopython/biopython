@@ -19,6 +19,7 @@ import array
 import cPickle
 import shelve
 
+
 class _ShelveIndex(dict):
     """An index file wrapped around shelve.
 
@@ -62,6 +63,7 @@ class _ShelveIndex(dict):
     def __del__(self):
         if 'data' in self.__dict__:
             self.data.close()
+
 
 class _InMemoryIndex(dict):
     """This creates an in-memory index file.

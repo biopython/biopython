@@ -79,6 +79,7 @@ for i in range(0, 20):
     d3_to_index[n3]=i
     dindex_to_3[i]=n3
 
+
 def index_to_one(index):
     """Index to corresponding one letter amino acid name.
 
@@ -88,6 +89,7 @@ def index_to_one(index):
     'Y'
     """
     return dindex_to_1[index]
+
 
 def one_to_index(s):
     """One letter code to index.
@@ -99,6 +101,7 @@ def one_to_index(s):
     """
     return d1_to_index[s]
 
+
 def index_to_three(i):
     """Index to corresponding three letter amino acid name.
 
@@ -109,6 +112,7 @@ def index_to_three(i):
     """
     return dindex_to_3[i]
 
+
 def three_to_index(s):
     """Three letter code to index.
 
@@ -118,6 +122,7 @@ def three_to_index(s):
     19
     """
     return d3_to_index[s]
+
 
 def three_to_one(s):
     """Three letter code to one letter code.
@@ -137,6 +142,7 @@ def three_to_one(s):
     i=d3_to_index[s]
     return dindex_to_1[i]
 
+
 def one_to_three(s):
     """One letter code to three letter code.
 
@@ -147,6 +153,7 @@ def one_to_three(s):
     """
     i=d1_to_index[s]
     return dindex_to_3[i]
+
 
 def is_aa(residue, standard=False):
     """Return True if residue object/string is an amino acid.
@@ -286,6 +293,7 @@ class Polypeptide(list):
         end=self[-1].get_id()[1]
         s="<Polypeptide start=%s end=%s>" % (start, end)
         return s
+
 
 class _PPBuilder:
     """Base class to extract polypeptides.

@@ -24,8 +24,10 @@ _OPTION_GAP_START = "-g"
 _OPTION_GAP_EXTENSION = "-e"
 _OPTION_SCORES = "-m"
 
+
 class AlignmentColumnFullException(Exception):
     pass
+
 
 class Alignment(list):
     def append(self, column_unit):
@@ -35,6 +37,7 @@ class Alignment(list):
             list.append(self, AlignmentColumn(column_unit))
         except IndexError:
             list.append(self, AlignmentColumn(column_unit))
+
 
 class AlignmentColumn(list):
     def _set_kind(self, column_unit):
@@ -58,6 +61,7 @@ class AlignmentColumn(list):
         self._set_kind(column_unit)
         self[1] = column_unit.column
 
+
 class ColumnUnit(object):
     def __init__(self, unit, column, kind):
         self.unit = unit
@@ -70,6 +74,8 @@ class ColumnUnit(object):
     __repr__ = __str__
 
 _re_unit = re.compile(r"^Unit +([01])- \[ *(-?\d+)- *(-?\d+)\] \[(\w+)\]$")
+
+
 def parse_line(line):
     """
     >>> print parse_line("Column 0:")
@@ -85,6 +91,7 @@ def parse_line(line):
         return
 
     return ColumnUnit(int(match.group(1)), int(match.group(3)), match.group(4))
+
 
 def parse(iterable):
     """
@@ -111,6 +118,7 @@ def parse(iterable):
 
     return alignment
 
+
 def align(pair,
           scores=None,
           gap_start=None,
@@ -127,8 +135,10 @@ def align(pair,
     temp_file = Wise.align(cmdline, pair, *args, **keywds)
     return parse(temp_file)
 
+
 def main():
     print align(sys.argv[1:3])
+
 
 def _test(*args, **keywds):
     import doctest

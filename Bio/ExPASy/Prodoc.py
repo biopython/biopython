@@ -33,12 +33,14 @@ def read(handle):
         raise ValueError("More than one Prodoc record found")
     return record
 
+
 def parse(handle):
     while True:
         record = __read(handle)
         if not record:
             return
         yield record
+
 
 class Record(object):
     """Holds information from a Prodoc record.
@@ -73,6 +75,7 @@ class Reference(object):
 
 # Below are private functions
 
+
 def __read_prosite_reference_line(record, line):
     line = line.rstrip()
     if line[-1] != '}':
@@ -80,9 +83,11 @@ def __read_prosite_reference_line(record, line):
     acc, name = line[1:-1].split('; ')
     record.prosite_refs.append((acc, name))
 
+
 def __read_text_line(record, line):
     record.text += line
     return True
+
 
 def __read_reference_start(record, line):
     # Read the references
@@ -96,6 +101,7 @@ def __read_reference_start(record, line):
         reference.authors = line[4:].strip()
     record.references.append(reference)
 
+
 def __read_reference_line(record, line):
     if not line.strip():
         return False
@@ -108,11 +114,13 @@ def __read_reference_line(record, line):
         return True
     raise Exception("I don't understand the reference line\n%s" % line)
 
+
 def __read_copyright_line(record, line):
     # Skip the copyright statement
     if line.startswith('+----'):
         return False
     return True
+
 
 def __read(handle):
     # Skip blank lines between records

@@ -16,6 +16,7 @@ import re
 
 from Bio.Seq import reverse_complement
 
+
 class DNAsearch:
     def __init__(self):
         self.init_alphabet()

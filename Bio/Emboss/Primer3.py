@@ -19,6 +19,7 @@ function to iterate over the retsults.
 
 # --- primer3
 
+
 class Record(object):
     """Represent information from a primer3 run finding primers.
 
@@ -31,6 +32,7 @@ class Record(object):
     def __init__(self):
         self.comments = ""
         self.primers = []
+
 
 class Primers(object):
     """A primer set designed by Primer3.

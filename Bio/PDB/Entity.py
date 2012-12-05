@@ -182,6 +182,7 @@ class Entity(object):
             shallow.add(child.copy())
         return shallow
 
+
 class DisorderedEntityWrapper(object):
     """
     This class is a simple wrapper class that groups a number of equivalent

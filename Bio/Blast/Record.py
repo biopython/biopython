@@ -22,6 +22,7 @@ Parameters         Holds information from the parameters.
 
 from Bio.Align import Generic
 
+
 class Header(object):
     """Saves information from a blast header.
 
@@ -52,6 +53,7 @@ class Header(object):
         self.database_sequences = None
         self.database_letters = None
 
+
 class Description(object):
     """Stores information about one hit in the descriptions section.
 
@@ -71,6 +73,7 @@ class Description(object):
 
     def __str__(self):
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
+
 
 class Alignment(object):
     """Stores information about one hit in the alignments section.
@@ -94,6 +97,7 @@ class Alignment(object):
         lines = self.title.split('\n')
         lines.append("Length = %s\n" % self.length)
         return '\n           '.join(lines)
+
 
 class HSP(object):
     """Stores information about one hsp in an alignment hit.
@@ -190,6 +194,7 @@ class HSP(object):
                             str(self.sbjct_end)))
         return "\n".join(lines)
 
+
 class MultipleAlignment(object):
     """Holds information about a multiple alignment.
 
@@ -238,6 +243,7 @@ class MultipleAlignment(object):
 
         return generic
 
+
 class Round(object):
     """Holds information from a PSI-BLAST round.
 
@@ -254,6 +260,7 @@ class Round(object):
         self.new_seqs = []
         self.alignments = []
         self.multiple_alignment = None
+
 
 class DatabaseReport(object):
     """Holds information about a database report.
@@ -276,6 +283,7 @@ class DatabaseReport(object):
         self.ka_params = (None, None, None)
         self.gapped = 0
         self.ka_params_gap = (None, None, None)
+
 
 class Parameters(object):
     """Holds information about the parameters.
@@ -340,6 +348,7 @@ class Parameters(object):
         self.gap_trigger = (None, None)
         self.blast_cutoff = (None, None)
 
+
 #TODO - Add a friendly __str__ method to BLAST results
 class Blast(Header, DatabaseReport, Parameters):
     """Saves the results from a blast search.
@@ -358,6 +367,7 @@ class Blast(Header, DatabaseReport, Parameters):
         self.descriptions = []
         self.alignments = []
         self.multiple_alignment = None
+
 
 class PSIBlast(Header, DatabaseReport, Parameters):
     """Saves the results from a blastpgp search.

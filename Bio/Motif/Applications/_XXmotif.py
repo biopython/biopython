@@ -9,6 +9,7 @@
 import os
 from Bio.Application import AbstractCommandline, _Option, _Switch, _Argument
 
+
 class XXmotifCommandline(AbstractCommandline):
     """Command line wrapper for XXmotif.
 

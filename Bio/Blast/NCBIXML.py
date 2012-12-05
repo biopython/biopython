@@ -25,6 +25,7 @@ from Bio.Blast import Record
 import xml.sax
 from xml.sax.handler import ContentHandler
 
+
 class _XMLparser(ContentHandler):
     """Generic SAX Parser
 
@@ -113,6 +114,7 @@ class _XMLparser(ContentHandler):
 
         # Reset character buffer
         self._value = ''
+
 
 class BlastParser(_XMLparser):
     """Parse XML BLAST data into a Record.Blast object
@@ -559,6 +561,7 @@ class BlastParser(_XMLparser):
         """Karlin-Altschul parameter H
         """
         self._blast.ka_params = self._blast.ka_params + (float(self._value),)
+
 
 def read(handle, debug=0):
     """Returns a single Blast record (assumes just one query).

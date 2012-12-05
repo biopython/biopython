@@ -150,6 +150,7 @@ type help(pairwise2.align.localds) at the Python prompt.
 
 MAX_ALIGNMENTS = 1000   # maximum alignments recovered in traceback
 
+
 class align(object):
     """This class provides functions that do alignments."""
 
@@ -358,6 +359,7 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         align_globally, penalize_end_gaps, gap_char, one_alignment_only)
     return x
 
+
 def _make_score_matrix_generic(
         sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
         penalize_extend_when_opening, penalize_end_gaps, align_globally,
@@ -438,6 +440,7 @@ def _make_score_matrix_generic(
                 score_matrix[row][col] = 0
             trace_matrix[row][col] = best_indexes
     return score_matrix, trace_matrix
+
 
 def _make_score_matrix_fast(
         sequenceA, sequenceB, match_fn, open_A, extend_A, open_B, extend_B,
@@ -577,6 +580,7 @@ def _make_score_matrix_fast(
 
     return score_matrix, trace_matrix
 
+
 def _recover_alignments(sequenceA, sequenceB, starts,
                         score_matrix, trace_matrix, align_globally,
                         penalize_end_gaps, gap_char, one_alignment_only):
@@ -652,6 +656,7 @@ def _recover_alignments(sequenceA, sequenceB, starts,
 
     return _clean_alignments(tracebacks)
 
+
 def _find_start(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
                 penalize_end_gaps, align_globally):
     # Return a list of (score, (row, col)) indicating every possible
@@ -666,6 +671,7 @@ def _find_start(score_matrix, sequenceA, sequenceB, gap_A_fn, gap_B_fn,
     else:
         starts = _find_local_start(score_matrix)
     return starts
+
 
 def _find_global_start(sequenceA, sequenceB,
                        score_matrix, gap_A_fn, gap_B_fn, penalize_end_gaps):
@@ -688,6 +694,7 @@ def _find_global_start(sequenceA, sequenceB,
         positions.append((score, (nrows-1, col)))
     return positions
 
+
 def _find_local_start(score_matrix):
     # Return every position in the matrix.
     positions = []
@@ -697,6 +704,7 @@ def _find_local_start(score_matrix):
             score = score_matrix[row][col]
             positions.append((score, (row, col)))
     return positions
+
 
 def _clean_alignments(alignments):
     # Take a list of alignments and return a cleaned version.  Remove
@@ -722,6 +730,7 @@ def _clean_alignments(alignments):
         i += 1
     return unique_alignments
 
+
 def _pad_until_equal(s1, s2, char):
     # Add char to the end of s1 or s2 until they are equal length.
     ls1, ls2 = len(s1), len(s2)
@@ -730,6 +739,7 @@ def _pad_until_equal(s1, s2, char):
     elif ls2 < ls1:
         s2 = _pad(s2, char, ls1-ls2)
     return s1, s2
+
 
 def _lpad_until_equal(s1, s2, char):
     # Add char to the beginning of s1 or s2 until they are equal
@@ -741,17 +751,22 @@ def _lpad_until_equal(s1, s2, char):
         s2 = _lpad(s2, char, ls1-ls2)
     return s1, s2
 
+
 def _pad(s, char, n):
     # Append n chars to the end of s.
     return s + char*n
+
 
 def _lpad(s, char, n):
     # Prepend n chars to the beginning of s.
     return char*n + s
 
 _PRECISION = 1000
+
+
 def rint(x, precision=_PRECISION):
     return int(x * precision + 0.5)
+
 
 class identity_match:
     """identity_match([match][, mismatch]) -> match_fn
@@ -769,6 +784,7 @@ class identity_match:
         if charA == charB:
             return self.match
         return self.mismatch
+
 
 class dictionary_match:
     """dictionary_match(score_dict[, symmetric]) -> match_fn
@@ -792,6 +808,7 @@ class dictionary_match:
             charB, charA = charA, charB
         return self.score_dict[(charA, charB)]
 
+
 class affine_penalty:
     """affine_penalty(open, extend[, penalize_extend_when_opening]) -> gap_fn
 
@@ -808,6 +825,7 @@ class affine_penalty:
         return calc_affine_penalty(
             length, self.open, self.extend, self.penalize_extend_when_opening)
 
+
 def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
     if length <= 0:
         return 0
@@ -815,6 +833,7 @@ def calc_affine_penalty(length, open, extend, penalize_extend_when_opening):
     if not penalize_extend_when_opening:
         penalty -= extend
     return penalty
+
 
 def print_matrix(matrix):
     """print_matrix(matrix)
@@ -832,6 +851,7 @@ def print_matrix(matrix):
         #Using string formatting trick to add leading spaces,
         print " ".join("%*s " % (ndigits[j], matrix[i][j])
                        for j in range(len(matrix[i])))
+
 
 def format_alignment(align1, align2, score, begin, end):
     """format_alignment(align1, align2, score, begin, end) -> string

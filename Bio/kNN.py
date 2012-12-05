@@ -29,6 +29,7 @@ equal_weight    Every example is given a weight of 1.
 
 import numpy
 
+
 class kNN(object):
     """Holds information necessary to do nearest neighbors classification.
 
@@ -46,10 +47,12 @@ class kNN(object):
         self.ys = []
         self.k = None
 
+
 def equal_weight(x, y):
     """equal_weight(x, y) -> 1"""
     # everything gets 1 vote
     return 1
+
 
 def train(xs, ys, k, typecode=None):
     """train(xs, ys, k) -> kNN
@@ -66,6 +69,7 @@ def train(xs, ys, k, typecode=None):
     knn.ys = ys
     knn.k = k
     return knn
+
 
 def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
     """calculate(knn, x[, weight_fn][, distance_fn]) -> weight dict
@@ -105,6 +109,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
         weights[klass] = weights[klass] + weight_fn(x, knn.xs[i])
 
     return weights
+
 
 def classify(knn, x, weight_fn=equal_weight, distance_fn=None):
     """classify(knn, x[, weight_fn][, distance_fn]) -> class

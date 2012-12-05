@@ -11,9 +11,11 @@ import _parse_baseml
 #TODO - Restore use of with statement for closing handles automatically
 #after dropping Python 2.4
 
+
 class BasemlError(EnvironmentError):
     """BASEML has failed. Run with verbose = True to view BASEML's error
 message"""
+
 
 class Baseml(Paml):
     """This class implements an interface to BASEML, part of the PAML package."""
@@ -180,6 +182,7 @@ class Baseml(Paml):
         else:
             results = None
         return results
+
 
 def read(results_file):
     results = {}

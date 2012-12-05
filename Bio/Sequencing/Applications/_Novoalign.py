@@ -7,6 +7,7 @@
 import types
 from Bio.Application import _Option, AbstractCommandline
 
+
 class NovoalignCommandline(AbstractCommandline):
     """Command line wrapper for novoalign by Novocraft.
 
@@ -171,6 +172,7 @@ class NovoalignCommandline(AbstractCommandline):
                     equate=False),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

@@ -35,6 +35,7 @@ def parse(handle, **kwargs):
     """
     return Parser(handle).parse(**kwargs)
 
+
 def write(trees, handle, plain=False, **kwargs):
     """Write a trees in Newick format to the given file handle.
 

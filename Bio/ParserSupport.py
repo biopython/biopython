@@ -51,6 +51,7 @@ except ImportError:
                      "This causes problems with some ParserSupport modules\n")
     xml_support = 0
 
+
 class AbstractParser(object):
     """Base class for other parsers.
 
@@ -68,6 +69,7 @@ class AbstractParser(object):
         finally:
             h.close()
         return retval
+
 
 class AbstractConsumer(object):
     """Base class for other Consumers.
@@ -88,6 +90,7 @@ class AbstractConsumer(object):
         else:
             method = self._unhandled
         return method
+
 
 class TaggingConsumer(AbstractConsumer):
     """A Consumer that tags the data stream with the event and
@@ -129,6 +132,7 @@ class TaggingConsumer(AbstractConsumer):
         else:
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
+
 
 class SGMLStrippingConsumer(object):
     """A consumer that strips off SGML tags.
@@ -295,6 +299,7 @@ if xml_support:
             if self._previous_tag:
                 self._make_callback(self._previous_tag)
 
+
 def read_and_call(uhandle, method, **keywds):
     """read_and_call(uhandle, method[, start][, end][, contains][, blank][, has_re])
 
@@ -316,6 +321,7 @@ def read_and_call(uhandle, method, **keywds):
         raise ValueError(errmsg)
     method(line)
 
+
 def read_and_call_while(uhandle, method, **keywds):
     """read_and_call_while(uhandle, method[, start][, end][, contains][, blank][, has_re]) -> number of lines
 
@@ -335,6 +341,7 @@ def read_and_call_while(uhandle, method, **keywds):
         method(line)
         nlines = nlines + 1
     return nlines
+
 
 def read_and_call_until(uhandle, method, **keywds):
     """read_and_call_until(uhandle, method,
@@ -357,6 +364,7 @@ def read_and_call_until(uhandle, method, **keywds):
         nlines = nlines + 1
     return nlines
 
+
 def attempt_read_and_call(uhandle, method, **keywds):
     """attempt_read_and_call(uhandle, method, **keywds) -> boolean
 
@@ -375,6 +383,7 @@ def attempt_read_and_call(uhandle, method, **keywds):
     else:
         uhandle.saveline(line)
     return passed
+
 
 def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                       has_re=None):
@@ -400,6 +409,7 @@ def _fails_conditions(line, start=None, end=None, contains=None, blank=None,
                 has_re.pattern, line)
     return None
 
+
 def is_blank_line(line, allow_spaces=0):
     """is_blank_line(line, allow_spaces=0) -> boolean
 
@@ -415,6 +425,7 @@ def is_blank_line(line, allow_spaces=0):
         return line.rstrip() == ''
     return line[0] == '\n' or line[0] == '\r'
 
+
 def safe_readline(handle):
     """safe_readline(handle) -> line
 
@@ -426,6 +437,7 @@ def safe_readline(handle):
     if not line:
         raise ValueError("Unexpected end of stream.")
     return line
+
 
 def safe_peekline(handle):
     """safe_peekline(handle) -> line

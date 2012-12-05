@@ -90,6 +90,7 @@ class FtpNameError(ValueError):
         \n Please edit Bio.Restriction.RanaConfig\n" % which_server
         sys.exit()
 
+
 class FtpPasswordError(ValueError):
 
     def __init__(self, which_server):

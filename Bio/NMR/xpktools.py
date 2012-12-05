@@ -14,6 +14,7 @@ import sys
 HEADERLEN=6
 # * * * * * _______________ * * * * *
 
+
 class XpkEntry(object):
     # Usage: XpkEntry(xpkentry,xpkheadline) where xpkentry is the line
     #        from an nmrview .xpk file and xpkheadline is the line from
@@ -38,6 +39,7 @@ class XpkEntry(object):
             self.fields["entrynum"]=datlist[0]
         except IndexError, e:
             pass
+
 
 class Peaklist(object):
     # This class reads in an entire xpk file and returns
@@ -119,6 +121,7 @@ class Peaklist(object):
         outfile.write("\012")
         outfile.close()
 
+
 def _try_open_read(fn):
     # Try to open a file for reading.  Exit on IOError
     try:
@@ -127,6 +130,7 @@ def _try_open_read(fn):
         print "file", fn, "could not be opened for reading - quitting."
         sys.exit(0)
     return infile
+
 
 def _try_open_write(fn):
     # Try to open a file for writing.  Exit on IOError
@@ -149,6 +153,7 @@ def replace_entry(line,fieldn,newentry):
     leng=len(line[start:].split()[0])
     newline=line[:start]+str(newentry)+line[(start+leng):]
     return newline
+
 
 def _find_start_entry(line,n):
     # find the starting point character for the n'th entry in
@@ -225,10 +230,12 @@ def data_table(fn_list, datalabel, keyatom):
 
     return outlist
 
+
 def _sort_keys(dictionary):
     keys=dictionary.keys()
     sorted_keys=keys.sort()
     return sorted_keys
+
 
 def _read_dicts(fn_list, keyatom):
     # Read multiple files into a list of residue dictionaries

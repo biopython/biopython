@@ -24,6 +24,7 @@ class InputRecord(object):
         self.primer_info.append((primer_name, first_primer_seq,
                                  second_primer_seq))
 
+
 class OutputRecord(object):
     """Represent the information from a primersearch job.
 
@@ -33,12 +34,14 @@ class OutputRecord(object):
     def __init__(self):
         self.amplifiers = {}
 
+
 class Amplifier(object):
     """Represent a single amplification from a primer.
     """
     def __init__(self):
         self.hit_info = ""
         self.length = 0
+
 
 def read(handle):
     """Get output from primersearch into a PrimerSearchOutputRecord

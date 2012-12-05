@@ -12,6 +12,7 @@ import random
 from Bio.Alphabet import _verify_alphabet
 from Bio.Seq import Seq, MutableSeq
 
+
 class PatternIO(object):
     """Allow reading and writing of patterns to files.
 
@@ -102,6 +103,7 @@ class PatternIO(object):
             all_patterns.append(cur_pattern)
 
         return all_patterns
+
 
 class PatternRepository(object):
     """This holds a list of specific patterns found in sequences.

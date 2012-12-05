@@ -10,6 +10,7 @@
 
 _dbutils = {}
 
+
 class Generic_dbutils:
     """Default database utilities."""
     def __init__(self):
@@ -79,6 +80,7 @@ class _PostgreSQL_dbutils(Generic_dbutils):
         cursor.execute(sql)
         rv = cursor.fetchone()
         return rv[0]
+
 
 class Psycopg2_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Psycopg2 (PostgreSQL)."""

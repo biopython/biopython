@@ -9,6 +9,7 @@ sys.path.insert(0, '.')
 from Tkinter import *
 from FileDialog import SaveFileDialog
 
+
 class NotePad(Toplevel):
     def __init__(self, master= None):
         Toplevel.__init__(self, master)

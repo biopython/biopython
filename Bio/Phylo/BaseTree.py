@@ -18,6 +18,7 @@ import re
 
 from Bio.Phylo import _sugar
 
+
 # General tree-traversal algorithms
 
 def _level_traverse(root, get_children):
@@ -28,6 +29,7 @@ def _level_traverse(root, get_children):
         yield v
         Q.extend(get_children(v))
 
+
 def _preorder_traverse(root, get_children):
     """Traverse a tree in depth-first pre-order (parent before children)."""
     def dfs(elem):
@@ -37,6 +39,7 @@ def _preorder_traverse(root, get_children):
                 yield u
     for elem in dfs(root):
         yield elem
+
 
 def _postorder_traverse(root, get_children):
     """Traverse a tree in depth-first post-order (children before parent)."""
@@ -74,16 +77,19 @@ def _identity_matcher(target):
         return (node is target)
     return match
 
+
 def _class_matcher(target_cls):
     """Match a node if it's an instance of the given class."""
     def match(node):
         return isinstance(node, target_cls)
     return match
 
+
 def _string_matcher(target):
     def match(node):
         return unicode(node) == target
     return match
+
 
 def _attribute_matcher(kwargs):
     """Match a node by specified attribute values.
@@ -127,6 +133,7 @@ def _attribute_matcher(kwargs):
         return True
     return match
 
+
 def _function_matcher(matcher_func):
     """Safer attribute lookup -- returns False instead of raising an error."""
     def match(node):
@@ -135,6 +142,7 @@ def _function_matcher(matcher_func):
         except (LookupError, AttributeError, ValueError, TypeError):
             return False
     return match
+
 
 def _object_matcher(obj):
     """Retrieve a matcher function by passing an arbitrary object.

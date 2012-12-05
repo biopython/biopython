@@ -9,6 +9,7 @@ __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+
 class PrankCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program PRANK.
 
@@ -194,6 +195,7 @@ class PrankCommandline(AbstractCommandline):
                     "not perform alignment")
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

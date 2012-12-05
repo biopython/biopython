@@ -76,6 +76,7 @@ def _adjust_aa_seq(fraglist):
 
     return fraglist
 
+
 def _split_fragment(frag):
     """Splits one HSPFragment containing frame-shifted alignment into two."""
     # given an HSPFragment object with frameshift(s), this method splits it

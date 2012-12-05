@@ -32,6 +32,7 @@ from reportlab.lib import colors
 
 from math import sqrt
 
+
 class GraphData(object):
     """ GraphData
 

@@ -24,6 +24,7 @@ available_matrices = ['benner6', 'benner22', 'benner74', 'blosum100',
 #have an underscore to indicate they are private, and are in any case
 #deleted after use (partly to ensure we don't use any of them twice).
 
+
 # http://www.embl-heidelberg.de/~vogt/matrices/benner6.cmp
 def _temp():
     return {
@@ -82,6 +83,7 @@ def _temp():
 ('D', 'G') : 0.8, ('F', 'L') : 2.4
 }
 benner6 = _temp()
+
 
 # http://www.embl-heidelberg.de/~vogt/matrices/benner22.cmp
 def _temp():
@@ -143,6 +145,7 @@ def _temp():
 benner22 = _temp()
 del _temp
 assert benner6 != benner22
+
 
 # http://www.embl-heidelberg.de/~vogt/matrices/benner74.cmp
 def _temp():
@@ -2035,6 +2038,7 @@ def _temp():
 }
 miyata = _temp()
 del _temp
+
 
 # http://www.embl-heidelberg.de/~vogt/matrices/nwsgappep.cmp
 def _temp():

@@ -44,6 +44,7 @@ from xml.parsers import expat
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
 
+
 class IntegerElement(int):
     def __repr__(self):
         text = int.__repr__(self)
@@ -52,6 +53,7 @@ class IntegerElement(int):
         except AttributeError:
             return text
         return "IntegerElement(%s, attributes=%s)" % (text, repr(attributes))
+
 
 class StringElement(str):
     def __repr__(self):
@@ -62,6 +64,7 @@ class StringElement(str):
             return text
         return "StringElement(%s, attributes=%s)" % (text, repr(attributes))
 
+
 class UnicodeElement(unicode):
     def __repr__(self):
         text = unicode.__repr__(self)
@@ -70,6 +73,7 @@ class UnicodeElement(unicode):
         except AttributeError:
             return text
         return "UnicodeElement(%s, attributes=%s)" % (text, repr(attributes))
+
 
 class ListElement(list):
     def __repr__(self):
@@ -80,6 +84,7 @@ class ListElement(list):
             return text
         return "ListElement(%s, attributes=%s)" % (text, repr(attributes))
 
+
 class DictionaryElement(dict):
     def __repr__(self):
         text = dict.__repr__(self)
@@ -88,6 +93,7 @@ class DictionaryElement(dict):
         except AttributeError:
             return text
         return "DictElement(%s, attributes=%s)" % (text, repr(attributes))
+
 
 # A StructureElement is like a dictionary, but some of its keys can have
 # multiple values associated with it. These values are stored in a list

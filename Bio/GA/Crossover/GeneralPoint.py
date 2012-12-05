@@ -31,6 +31,7 @@ and for the drastic (n can be arbitrary to the length of the genome!):
 # standard modules
 import random
 
+
 class GeneralPointCrossover(object):
     """Perform n-point crossover between genomes at some defined rates.
 
@@ -157,6 +158,7 @@ class TwoCrossover(GeneralPointCrossover):
         """
         y = (x+1)%2
         return no[x].genome[ : locs[x][1] ] + no[y].genome[ locs[y][1] : ]
+
 
 class InterleaveCrossover(GeneralPointCrossover):
     """Demonstration class for Interleaving crossover.

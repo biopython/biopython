@@ -43,6 +43,7 @@ from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator as _ColorTranslat
 
 _color_trans = _ColorTranslator()
 
+
 class _ChromosomeComponent(Widget):
     """Base class specifying the interface for a component of the system.
 
@@ -84,6 +85,7 @@ class _ChromosomeComponent(Widget):
         """Draw the specified component.
         """
         raise AssertionError("Subclasses must implement.")
+
 
 class Organism(_ChromosomeComponent):
     """Top level class for drawing chromosomes.
@@ -165,6 +167,7 @@ class Organism(_ChromosomeComponent):
         provide specialized legends.
         """
         pass
+
 
 class Chromosome(_ChromosomeComponent):
     """Class for drawing a chromosome of an organism.
@@ -476,6 +479,7 @@ class ChromosomeSegment(_ChromosomeComponent):
 
             cur_drawing.add(label_string)
 
+
 def _spring_layout(desired, minimum, maximum, gap=0):
     """Function to try and layout label co-ordinates (or other floats, PRIVATE).
 
@@ -565,6 +569,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
 #assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.125, 0.25, 0.375, 0.5, 0.75, 1.0]
 #assert _spring_layout([0.10,0.12,0.13,0.14,0.5,0.75, 1.0], 0, 1, 0.1) == [0.0, 0.16666666666666666, 0.33333333333333331, 0.5, 0.66666666666666663, 0.83333333333333326, 1.0]
 
+
 def _place_labels(desired_etc, minimum, maximum, gap=0):
     desired_etc.sort()
     placed = _spring_layout([row[0] for row in desired_etc],
@@ -572,6 +577,7 @@ def _place_labels(desired_etc, minimum, maximum, gap=0):
     for old,y2 in zip(desired_etc, placed):
         y1, color, name = old
         yield (y1, y2, color, name)
+
 
 class AnnotatedChromosomeSegment(ChromosomeSegment):
     def __init__(self, bp_length, features,
@@ -731,6 +737,7 @@ class TelomereSegment(ChromosomeSegment):
         cap_arc.addArc(center_x, center_y, width / 2,
                        start_angle, end_angle, height)
         cur_drawing.add(cap_arc)
+
 
 class SpacerSegment(ChromosomeSegment):
     """A segment that is located at the end of a linear chromosome.

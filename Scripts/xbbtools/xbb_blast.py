@@ -16,6 +16,7 @@ sys.path.insert(0, '.')
 from xbb_utils import NotePad
 import xbb_blastbg
 
+
 class BlastIt:
     def __init__(self, seq, parent = None):
         self.seq = seq

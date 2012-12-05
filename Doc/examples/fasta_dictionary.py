@@ -7,6 +7,7 @@
 from Bio.Alphabet import generic_dna
 from Bio import SeqIO
 
+
 def get_accession_num(seq_record):
     accession_atoms = seq_record.id.split('|')
     gb_name = accession_atoms[3]
@@ -30,6 +31,7 @@ for id_num in orchid_dict:
 
 from Bio.Alphabet import generic_dna
 from Bio import SeqIO
+
 
 def get_accession_num(record_id):
     accession_atoms = record_id.split('|')

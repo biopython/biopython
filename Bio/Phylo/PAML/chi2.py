@@ -9,6 +9,7 @@
 
 from math import log, exp
 
+
 def cdf_chi2(df, stat):
     if df < 1:
         raise ValueError("df must be at least 1")
@@ -18,6 +19,7 @@ def cdf_chi2(df, stat):
     alpha = df / 2.0
     prob = 1 - _incomplete_gamma(x, alpha)
     return prob
+
 
 def _ln_gamma_function(alpha):
     """Compute the log of the gamma function for a given alpha.
@@ -44,6 +46,7 @@ def _ln_gamma_function(alpha):
     return  f + (x-0.5)*log(x) - x + .918938533204673             \
           + (((-.000595238095238*z+.000793650793651)*z-.002777777777778)*z
                +.083333333333333)/x
+
 
 def _incomplete_gamma(x, alpha):
     """Compute an incomplete gamma ratio.

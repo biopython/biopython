@@ -17,6 +17,7 @@ read             Parses a GenePop record (file) into a Record object.
 
 """
 
+
 def get_indiv(line):
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
@@ -33,6 +34,7 @@ def get_indiv(line):
         allele_list = [(int(marker[0:marker_len]),)
                    for marker in markers]
     return indiv_name, allele_list, marker_len
+
 
 def read(handle):
     """Parses a handle containing a GenePop file.

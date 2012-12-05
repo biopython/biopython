@@ -63,6 +63,7 @@ def _build_align_cmdline(cmdline, pair, output_filename, kbyte=None, force_type=
 
     return cmdline_str
 
+
 def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False, debug=False):
     """
     Returns a filehandle
@@ -112,6 +113,7 @@ def align(cmdline, pair, kbyte=None, force_type=None, dry_run=False, quiet=False
 
     return output_file
 
+
 def all_pairs(singles):
     """
     Generate pairs list for all-against-all alignments
@@ -128,8 +130,10 @@ def all_pairs(singles):
 
     return pairs
 
+
 def main():
     pass
+
 
 def _test(*args, **keywds):
     import doctest

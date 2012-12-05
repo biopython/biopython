@@ -14,6 +14,7 @@ and my apologies for anything I mangled.
 # standard library
 import math
 
+
 class BasicNetwork(object):
     """Represent a Basic Neural Network with three layers.
 

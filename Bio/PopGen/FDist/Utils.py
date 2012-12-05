@@ -11,6 +11,7 @@ import Bio.PopGen.FDist
 # add locus, etc...). The recommended strategy is convert back
 # and forth from/to GenePop and use GenePop Utils
 
+
 def convert_genepop_to_fdist(gp_rec, report_pops = None):
     """Converts a GenePop record to a FDist one.
 
@@ -24,6 +25,7 @@ def convert_genepop_to_fdist(gp_rec, report_pops = None):
         return _convert_genepop_to_fdist(gp_rec)
     else:
         return _convert_genepop_to_fdist_big(gp_rec, report_pops)
+
 
 def _convert_genepop_to_fdist(gp_rec):
     """Converts a standard GenePop record to a FDist one.
@@ -65,6 +67,7 @@ def _convert_genepop_to_fdist(gp_rec):
             #    print alleles, allele_counts#, pop_data
         fd_rec.loci_data.append((len(alleles), pop_data))
     return fd_rec
+
 
 def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
     """Converts a big GenePop record to a FDist one.

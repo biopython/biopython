@@ -28,6 +28,7 @@ id_wrap = lambda indent : [indent, "",
 struct_wrap = lambda indent : [indent, "",
                                ("  ","",1,1)]
 
+
 class Record(object):
     """Holds info from a KEGG Ligand/Compound record.
 
@@ -196,6 +197,7 @@ def parse(handle):
                 values.extend(data.split())
                 row = key, values
                 record.dblinks[-1] = row
+
 
 def _test():
     """Run the Bio.KEGG.Compound module's doctests.
