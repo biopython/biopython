@@ -456,6 +456,7 @@ class _AbstractParameter:
     def __str__(self):
         raise NotImplementedError
 
+
 class _Option(_AbstractParameter):
     """Represent an option that can be set for a program.
 
@@ -527,6 +528,7 @@ class _Option(_AbstractParameter):
         else:
             return "%s %s " % (self.names[0], v)
 
+
 class _Switch(_AbstractParameter):
     """Represent an optional argument switch for a program.
 
@@ -564,6 +566,7 @@ class _Switch(_AbstractParameter):
         else:
             return ""
 
+
 class _Argument(_AbstractParameter):
     """Represent an argument on a commandline.
     """
@@ -586,6 +589,7 @@ class _Argument(_AbstractParameter):
             return "%s " % _escape_filename(self.value)
         else:
             return "%s " % self.value
+
 
 def _escape_filename(filename):
     """Escape filenames with spaces by adding quotes (PRIVATE).
@@ -618,6 +622,7 @@ def _escape_filename(filename):
         return filename
     else:
         return '"%s"' % filename
+
 
 def _test():
     """Run the Bio.Application module's doctests."""

@@ -45,6 +45,7 @@ except ImportError:
     _sqlite = None
     pass
 
+
 @contextlib.contextmanager
 def as_handle(handleish, mode='r', **kwargs):
     """
@@ -456,6 +457,7 @@ class _IndexedSeqFileDict(_dict_base):
         """A dictionary method which we don't implement."""
         raise NotImplementedError("An indexed a sequence file doesn't "
                                   "support this.")
+
 
 class _SQLiteManySeqFilesDict(_IndexedSeqFileDict):
     """Read only dictionary interface to many sequential record files.

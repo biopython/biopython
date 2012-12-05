@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 26 November 2012 (Biopython 1.60+)}
+\date{Last Update -- 5 December 2012 (Biopython 1.60+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -4295,7 +4295,8 @@ object into an array of letters -- and you can do this with NumPy:
 
 \begin{verbatim}
 >>> import numpy as np
->>> from Bio import AlignIO>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
+>>> from Bio import AlignIO
+>>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
 >>> print align_array
 [['A' 'E' 'P' 'N' 'A' 'A' 'T' 'N' 'Y' 'A' 'T' 'E' 'A' 'M' 'D' 'S' 'L' 'K'
@@ -12866,7 +12867,7 @@ gds_features = gdt_features.new_set()
 feature = SeqFeature(FeatureLocation(25, 125), strand=+1)
 gds_features.add_feature(feature, name="Forward", label=True)
 feature = SeqFeature(FeatureLocation(150, 250), strand=None)
-gds_features.add_feature(feature, name="Standless", label=True)
+gds_features.add_feature(feature, name="Strandless", label=True)
 feature = SeqFeature(FeatureLocation(275, 375), strand=-1)
 gds_features.add_feature(feature, name="Reverse", label=True)
 

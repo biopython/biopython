@@ -6,13 +6,23 @@
 """Bio.SearchIO parser for BLAST+ XML output formats."""
 # for more info: http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd
 
+import sys
 import re
 from itertools import chain
 from xml.sax.saxutils import XMLGenerator, escape
+
+
+#For speed try to use cElementTree rather than ElementTree
 try:
-    from xml.etree import cElementTree as ET
+    if (3, 0) <= sys.version_info[:2] <= (3, 1):
+        # Workaround for bug in python 3.0 and 3.1,
+        # see http://bugs.python.org/issue9257
+        from xml.etree import ElementTree as ElementTree
+    else:
+        from xml.etree import cElementTree as ElementTree
 except ImportError:
-    from xml.etree import ElementTree as ET
+    from xml.etree import ElementTree as ElementTree
+
 
 from Bio._py3k import _as_bytes, _bytes_to_string
 _empty_bytes_string = _as_bytes("")
@@ -176,7 +186,7 @@ class BlastXmlParser(object):
     """Parser for the BLAST XML format"""
 
     def __init__(self, handle):
-        self.xml_iter = iter(ET.iterparse(handle, events=('start', 'end')))
+        self.xml_iter = iter(ElementTree.iterparse(handle, events=('start', 'end')))
         self._meta, self._fallback = self._parse_preamble()
 
     def __iter__(self):
@@ -574,6 +584,7 @@ class BlastXmlIndexer(SearchIndexer):
         # Note this will include any leading and trailing whitespace, in
         # general expecting "    <Iteration>\n...\n    </Iteration>\n"
         return qresult_raw
+
 
 class _BlastXmlGenerator(XMLGenerator):
     """Event-based XML Generator."""

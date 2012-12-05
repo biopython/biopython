@@ -65,6 +65,7 @@ def _read_vertex_array(filename):
     fp.close()
     return numpy.array(vertex_list)
 
+
 def get_surface(pdb_file, PDB_TO_XYZR="pdb_to_xyzr", MSMS="msms"):
     """
     Return a Numeric array that represents
@@ -107,6 +108,7 @@ def min_dist(coord, surface):
     d2=numpy.sum(d*d, 1)
     return numpy.sqrt(min(d2))
 
+
 def residue_depth(residue, surface):
     """
     Return average distance to surface for all
@@ -120,12 +122,14 @@ def residue_depth(residue, surface):
         d=d+min_dist(coord, surface)
     return d/length
 
+
 def ca_depth(residue, surface):
     if not residue.has_id("CA"):
         return None
     ca=residue["CA"]
     coord=ca.get_coord()
     return min_dist(coord, surface)
+
 
 class ResidueDepth(AbstractPropertyMap):
     """

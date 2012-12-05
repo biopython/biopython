@@ -23,6 +23,8 @@ from Bio.SubsMat import FreqTable
 # for 4-letter nucleotide alphabets
 Protein20Random = 0.05
 Nucleotide4Random = 0.25
+
+
 class SummaryInfo(object):
     """Calculate summary info about the alignment.
 
@@ -598,6 +600,7 @@ class SummaryInfo(object):
 
     def get_column(self,col):
         return self.alignment.get_column(col)
+
 
 class PSSM(object):
     """Represent a position specific score matrix.

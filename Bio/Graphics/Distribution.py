@@ -24,6 +24,7 @@ from reportlab.graphics import renderPDF, renderPS
 
 from Bio.Graphics import _write
 
+
 class DistributionPage(object):
     """Display a grouping of distributions on a page.
 
@@ -131,6 +132,7 @@ class DistributionPage(object):
         """
         pass
 
+
 class BarChartDistribution(object):
     """Display the distribution of values as a bunch of bars.
     """
@@ -229,6 +231,7 @@ class BarChartDistribution(object):
         new_y_end = end_y + y_padding
 
         return new_x_start, new_x_end, new_y_start, new_y_end
+
 
 class LineDistribution(object):
     """Display the distribution of values as connected lines.

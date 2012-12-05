@@ -7,6 +7,8 @@
 """Calculate the thermodynamic melting temperatures of nucleotide sequences."""
 
 import math
+
+
 def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     """Returns DNA/DNA tm using nearest neighbor thermodynamics.
 

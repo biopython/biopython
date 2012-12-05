@@ -53,6 +53,7 @@ from Bio.Graphics import _write
 #------------------------------------------------------------
 # Diagram
 
+
 class Diagram(object):
     """ Diagram
 

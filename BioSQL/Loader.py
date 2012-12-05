@@ -26,6 +26,7 @@ from Bio.Seq import UnknownSeq
 
 from Bio._py3k import _is_int_or_long
 
+
 class DatabaseLoader:
     """Object used to load SeqRecord objects into a BioSQL database."""
     def __init__(self, adaptor, dbid, fetch_NCBI_taxonomy=False):
@@ -1036,6 +1037,7 @@ class DatabaseLoader:
               '(%s, %s, %s)'
         self.adaptor.execute(sql, (bioentry_id, dbxref_id, rank))
         return (bioentry_id, dbxref_id)
+
 
 class DatabaseRemover:
     """Complement the Loader functionality by fully removing a database.

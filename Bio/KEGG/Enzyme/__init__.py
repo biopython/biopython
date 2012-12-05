@@ -32,6 +32,7 @@ id_wrap = lambda indent : [indent, "",
 struct_wrap = lambda indent : [indent, "",
                                ("  ","",1,1)]
 
+
 class Record(object):
     """Holds info from a KEGG Enzyme record.
 
@@ -305,6 +306,7 @@ def parse(handle):
             record.substrate.append(data.strip(";"))
         elif keyword=="SYSNAME     ":
             record.sysname.append(data.strip(";"))
+
 
 def _test():
     """Run the Bio.KEGG.Enzyme module's doctests.

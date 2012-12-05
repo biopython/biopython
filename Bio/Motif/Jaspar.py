@@ -2,6 +2,7 @@ from Bio.Motif import Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
+
 def read(handle, format):
     alphabet = IUPAC.unambiguous_dna
     counts = {}

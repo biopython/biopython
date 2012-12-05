@@ -224,6 +224,7 @@ def _pos(pos_str, offset=0):
     else:
         return SeqFeature.ExactPosition(int(pos_str)+offset)
 
+
 def _loc(loc_str, expected_seq_length, strand):
     """FeatureLocation from non-compound non-complement location (PRIVATE).
 
@@ -284,6 +285,7 @@ def _loc(loc_str, expected_seq_length, strand):
             s = loc_str
             e = loc_str
     return SeqFeature.FeatureLocation(_pos(s,-1), _pos(e), strand)
+
 
 def _split_compound_loc(compound_loc):
     """Split a tricky compound location string (PRIVATE).
@@ -346,6 +348,7 @@ def _split_compound_loc(compound_loc):
         for part in compound_loc.split(","):
             yield part
 
+
 class Iterator(object):
     """Iterator interface to move over a file of GenBank entries one at a time (OBSOLETE).
 
@@ -387,15 +390,18 @@ class Iterator(object):
     def __iter__(self):
         return iter(self.next, None)
 
+
 class ParserFailureError(Exception):
     """Failure caused by some kind of problem in the parser.
     """
     pass
 
+
 class LocationParserError(Exception):
     """Could not Properly parse out a location from a GenBank file.
     """
     pass
+
 
 class FeatureParser(object):
     """Parse GenBank files into Seq + Feature objects (OBSOLETE).
@@ -433,6 +439,7 @@ class FeatureParser(object):
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
 
+
 class RecordParser(object):
     """Parse GenBank files into Record objects (OBSOLETE).
 
@@ -460,6 +467,7 @@ class RecordParser(object):
 
         self._scanner.feed(handle, self._consumer)
         return self._consumer.data
+
 
 class _BaseGenBankConsumer(object):
     """Abstract GenBank consumer providing useful general functions (PRIVATE).
@@ -578,6 +586,7 @@ class _BaseGenBankConsumer(object):
         new_end = end
 
         return new_start, new_end
+
 
 class _FeatureConsumer(_BaseGenBankConsumer):
     """Create a SeqRecord object with Features to return (PRIVATE).
@@ -1186,6 +1195,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         else:
             self.data.seq = Seq(sequence, seq_alphabet)
 
+
 class _RecordConsumer(_BaseGenBankConsumer):
     """Create a GenBank Record object from scanner generated information (PRIVATE).
     """
@@ -1445,6 +1455,7 @@ def parse(handle):
     """
     return iter(Iterator(handle, RecordParser()))
 
+
 def read(handle):
     """Read a handle containing a single GenBank entry as a Record object.
 
@@ -1472,6 +1483,7 @@ def read(handle):
     if second is not None:
         raise ValueError("More than one record found in handle")
     return first
+
 
 def _test():
     """Run the Bio.GenBank module's doctests."""

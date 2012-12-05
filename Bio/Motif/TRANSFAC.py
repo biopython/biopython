@@ -14,6 +14,7 @@ warnings.warn("Bio.Motif.TRANSFAC is experimental code. While it is usable, the 
 import string
 from Bio.Motif import Motif as BaseMotif
 
+
 class Motif(BaseMotif, dict):
     """A Bio.Motif.TRANSFAC.Motif stores the information in one TRANSFAC
 motif. This class inherits from the Bio.Motif.Motif base class, as well
@@ -175,6 +176,7 @@ XX
             blocks.append(block)
         text = "".join(blocks)
         return text
+
 
 def read(handle):
     """record = read(handle)"""

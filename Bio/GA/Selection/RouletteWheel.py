@@ -11,6 +11,7 @@ import copy
 # local modules
 from Abstract import AbstractSelection
 
+
 class RouletteWheelSelection(AbstractSelection):
     """Roulette wheel selection proportional to individuals fitness.
 

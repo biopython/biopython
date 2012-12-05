@@ -13,8 +13,10 @@ The NDB web interface is located at http://ndbserver.rutgers.edu/NDB/index.html
 
 import copy
 
+
 class CrystalError(Exception):
     pass
+
 
 def wrap_line(line):
     output = ''
@@ -22,11 +24,13 @@ def wrap_line(line):
         output = output + '%s\n' % line[ i: i + 80 ]
     return output
 
+
 def validate_key(key):
     if not isinstance(key, str):
         raise CrystalError('chain requires a string label')
     if len(key) != 1:
         raise CrystalError('chain label should contain one letter')
+
 
 class Hetero(object):
     """
@@ -63,6 +67,7 @@ class Hetero(object):
 
     def __len__(self):
         return len(self.data)
+
 
 class Chain(object):
     def __init__(self, residues = ''):
@@ -207,6 +212,7 @@ class Chain(object):
         else:
             raise TypeError
         return self
+
 
 class Crystal(object):
     def __init__(self, data = {}):

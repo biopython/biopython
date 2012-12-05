@@ -139,6 +139,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                 break
             handle.write("\n")
 
+
 class PhylipIterator(AlignmentIterator):
     """Reads a Phylip alignment file returning a MultipleSeqAlignment iterator.
 
@@ -256,6 +257,7 @@ class PhylipIterator(AlignmentIterator):
                              id=i, name=i, description=i)
                    for (i,s) in zip(ids, seqs))
         return MultipleSeqAlignment(records, self.alphabet)
+
 
 # Relaxed Phylip
 class RelaxedPhylipWriter(PhylipWriter):

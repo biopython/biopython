@@ -37,8 +37,11 @@ CHARSET='chars'
 TAXSET='taxa'
 CODONPOSITIONS='codonpositions'
 DEFAULTNEXUS='#NEXUS\nbegin data; dimensions ntax=0 nchar=0; format datatype=dna; end; '
+
+
 class NexusError(Exception):
     pass
+
 
 class CharBuffer(object):
     """Helps reading NEXUS-words and characters from a buffer."""
@@ -134,6 +137,7 @@ class CharBuffer(object):
         """Return the rest of the string without parsing."""
         return ''.join(self.buffer)
 
+
 class StepMatrix(object):
     """Calculate a stepmatrix for weighted parsimony.
 
@@ -197,6 +201,7 @@ class StepMatrix(object):
         matrix+=';\n'
         return matrix
 
+
 def safename(name,mrbayes=False):
     """Return a taxon identifier according to NEXUS standard.
 
@@ -215,6 +220,7 @@ def safename(name,mrbayes=False):
             safe="'"+safe+"'"
     return safe
 
+
 def quotestrip(word):
     """Remove quotes and/or double quotes around identifiers."""
     if not word:
@@ -222,6 +228,7 @@ def quotestrip(word):
     while (word.startswith("'") and word.endswith("'")) or (word.startswith('"') and word.endswith('"')):
         word=word[1:-1]
     return word
+
 
 def get_start_end(sequence, skiplist=['-','?']):
     """Return position of first and last character which is not in skiplist.
@@ -242,6 +249,7 @@ def get_start_end(sequence, skiplist=['-','?']):
     else:
         return start,end
 
+
 def _sort_keys_by_values(p):
     """Returns a sorted list of keys of p sorted by values of p."""
     startpos=[(p[pn],pn) for pn in p if p[pn]]
@@ -249,11 +257,13 @@ def _sort_keys_by_values(p):
     # parenthisis added because of py3k
     return (zip(*startpos))[1]
 
+
 def _make_unique(l):
     """Check that all values in list are unique and return a pruned and sorted list."""
     l=list(set(l))
     l.sort()
     return l
+
 
 def _unique_label(previous_labels,label):
     """Returns a unique name if label is already in previous_labels."""
@@ -264,9 +274,11 @@ def _unique_label(previous_labels,label):
             label+='.copy'
     return label
 
+
 def _seqmatrix2strmatrix(matrix):
     """Converts a Seq-object matrix to a plain sequence-string matrix."""
     return dict([(t, str(matrix[t])) for t in matrix])
+
 
 def _compact4nexus(orig_list):
     """Transform [1 2 3 5 6 7 8 12 15 18 20] (baseindex 0, used in the Nexus class)
@@ -301,6 +313,7 @@ def _compact4nexus(orig_list):
                 clist=clist[i:]
                 break
     return ' '.join(shortlist)
+
 
 def combine(matrices):
     """Combine matrices in [(name,nexus-instance),...] and return new nexus instance.
@@ -372,6 +385,7 @@ def combine(matrices):
         combined.charsets[c]=combined.charpartitions['combined'][c]
 
     return combined
+
 
 def _kill_comments_and_break_lines(text):
     """Delete []-delimited comments out of a file and break into lines separated by ';'.
@@ -453,6 +467,7 @@ def _adjust_lines(lines):
                 formatted_lines.append(l)
     return formatted_lines
 
+
 def _replace_parenthesized_ambigs(seq,rev_ambig_values):
     """Replaces ambigs in xxx(ACG)xxx format by IUPAC ambiguity code."""
 
@@ -472,6 +487,7 @@ def _replace_parenthesized_ambigs(seq,rev_ambig_values):
         seq=seq[:opening]+ambig_code+seq[closing+1:]
         opening=seq.find('(')
     return seq
+
 
 class Commandline(object):
     """Represent a commandline as command and options."""
@@ -507,11 +523,13 @@ class Commandline(object):
                 except ValueError:
                     raise NexusError('Incorrect formatting in line: %s' % line)
 
+
 class Block(object):
     """Represent a NEXUS block with block name and list of commandlines."""
     def __init__(self,title=None):
         self.title=title
         self.commandlines=[]
+
 
 class Nexus(object):
 

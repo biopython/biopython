@@ -26,10 +26,11 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-#For speed try to use cElementTree rather than ElemenTree
+#For speed try to use cElementTree rather than ElementTree
 try:
-    if (3, 0, 0) <= sys.version_info[:3] <= (3, 1, 3):
-        #workaround for bug in python 3 to 3.1.3  see http://bugs.python.org/issue9257
+    if (3, 0) <= sys.version_info[:2] <= (3, 1):
+        # Workaround for bug in python 3.0 and 3.1,
+        # see http://bugs.python.org/issue9257
         from xml.etree import ElementTree as ElementTree
     else:
         from xml.etree import cElementTree as ElementTree
@@ -38,6 +39,7 @@ except ImportError:
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
+
 
 def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comments=False):
     """Generator function to parse UniProt XML as SeqRecord objects.
@@ -73,6 +75,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
         if event == "end" and elem.tag == NS + "entry":
             yield Parser(elem, alphabet=alphabet, return_raw_comments=return_raw_comments).parse()
             elem.clear()
+
 
 class Parser(object):
     """Parse a UniProt XML entry to a SeqRecord.

@@ -13,6 +13,7 @@
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
+
 class ClustalOmegaCommandline(AbstractCommandline):
     """Command line wrapper for clustal omega
 
@@ -172,6 +173,7 @@ class ClustalOmegaCommandline(AbstractCommandline):
 
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

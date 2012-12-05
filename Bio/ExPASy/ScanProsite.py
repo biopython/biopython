@@ -2,6 +2,7 @@ import urllib
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 
+
 class Record(list):
     """\
 This record is a list containing the search results returned by
@@ -44,6 +45,7 @@ def scan(seq="", mirror='http://www.expasy.org', output='xml', **keywords):
     handle = urllib.urlopen(url)
     return handle
 
+
 def read(handle):
     "Parse search results returned by ScanProsite into a Python object"
     content_handler = ContentHandler()
@@ -54,6 +56,7 @@ def read(handle):
     return record
 
 # The functions below are considered private
+
 
 class Parser(ExpatParser):
 

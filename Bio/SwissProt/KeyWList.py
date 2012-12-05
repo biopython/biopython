@@ -44,6 +44,7 @@ class Record(dict):
         for keyword in ("DE", "SY", "GO", "HI", "WW"):
             self[keyword] = []
 
+
 def parse(handle):
     record = Record()
     # First, skip the header - look for start of a record

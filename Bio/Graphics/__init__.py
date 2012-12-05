@@ -17,6 +17,7 @@ except ImportError:
         "to use Bio.Graphics. You can find ReportLab at "
         "http://www.reportlab.org/downloads.html")
 
+
 # The following code is to allow all the Bio.Graphics
 # code to deal with the different ReportLab renderers
 # and the API quirks consistently.

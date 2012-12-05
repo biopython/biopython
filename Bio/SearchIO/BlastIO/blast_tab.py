@@ -114,6 +114,7 @@ _MIN_HIT_FIELDS = set(['sseqid', 'sacc', 'saccver'])
 
 _RE_GAPOPEN = re.compile(r'\w-')
 
+
 def _compute_gapopen_num(hsp):
     """Returns the number of gap openings in the given HSP."""
     gapopen = 0
@@ -121,6 +122,7 @@ def _compute_gapopen_num(hsp):
         seq = str(getattr(hsp, seq_type).seq)
         gapopen += len(re.findall(_RE_GAPOPEN, seq))
     return gapopen
+
 
 def _augment_blast_hsp(hsp, attr):
     """Calculates the given HSP attribute, for writing."""

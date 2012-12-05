@@ -7,6 +7,7 @@
 from Tkinter import *
 from ScrolledText import ScrolledText
 
+
 class xbbtools_help(Toplevel):
     def __init__(self, *args):
         Toplevel.__init__(self)

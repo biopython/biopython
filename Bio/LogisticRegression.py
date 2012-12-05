@@ -19,6 +19,7 @@ classify     Classify an observation into a class.
 import numpy
 import numpy.linalg
 
+
 class LogisticRegression(object):
     """Holds information necessary to do logistic regression
     classification.
@@ -30,6 +31,7 @@ class LogisticRegression(object):
     def __init__(self):
         """LogisticRegression()"""
         self.beta = []
+
 
 def train(xs, ys, update_fn=None, typecode=None):
     """train(xs, ys[, update_fn]) -> LogisticRegression
@@ -110,6 +112,7 @@ def train(xs, ys, update_fn=None, typecode=None):
     lr.beta = map(float, beta)   # Convert back to regular array.
     return lr
 
+
 def calculate(lr, x):
     """calculate(lr, x) -> list of probabilities
 
@@ -124,6 +127,7 @@ def calculate(lr, x):
     ebetaX = numpy.exp(numpy.dot(lr.beta, x))
     p = ebetaX / (1+ebetaX)
     return [1-p, p]
+
 
 def classify(lr, x):
     """classify(lr, x) -> 1 or 0

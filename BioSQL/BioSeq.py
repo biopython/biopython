@@ -21,6 +21,7 @@ from Bio.Seq import Seq, UnknownSeq
 from Bio.SeqRecord import SeqRecord, _RestrictedDict
 from Bio import SeqFeature
 
+
 class DBSeq(Seq):  # This implements the biopython Seq interface
     def __init__(self, primary_id, adaptor, alphabet, start, length):
         """Create a new DBSeq object referring to a BioSQL entry.
@@ -182,6 +183,7 @@ def _retrieve_seq(adaptor, primary_id):
     else:
         return UnknownSeq(length, alphabet)
 
+
 def _retrieve_dbxrefs(adaptor, primary_id):
     """Retrieve the database cross references for the sequence."""
     _dbxrefs = []
@@ -197,6 +199,7 @@ def _retrieve_dbxrefs(adaptor, primary_id):
             v = accession
         _dbxrefs.append("%s:%s" % (dbname, v))
     return _dbxrefs
+
 
 def _retrieve_features(adaptor, primary_id):
     sql = "SELECT seqfeature_id, type.name, rank" \
@@ -324,6 +327,7 @@ def _retrieve_features(adaptor, primary_id):
 
     return seq_feature_list
 
+
 def _retrieve_location_qualifier_value(adaptor, location_id):
     value = adaptor.execute_and_fetch_col0(
         "SELECT value FROM location_qualifier_value"
@@ -332,6 +336,7 @@ def _retrieve_location_qualifier_value(adaptor, location_id):
         return value[0]
     except IndexError:
         return ""
+
 
 def _retrieve_annotations(adaptor, primary_id, taxon_id):
     annotations = {}
@@ -350,11 +355,13 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
         str_anns[key] = val
     return str_anns
 
+
 def _make_unicode_into_string(text):
     if isinstance(text, unicode):
         return str(text)
     else :
         return text
+
 
 def _retrieve_qualifier_value(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
@@ -373,6 +380,7 @@ def _retrieve_qualifier_value(adaptor, primary_id):
             name = "accessions"
         qualifiers.setdefault(name, []).append(value)
     return qualifiers
+
 
 def _retrieve_reference(adaptor, primary_id):
     # XXX dbxref_qualifier_value
@@ -409,6 +417,7 @@ def _retrieve_reference(adaptor, primary_id):
         return {'references': references}
     else:
         return {}
+
 
 def _retrieve_taxon(adaptor, primary_id, taxon_id):
     a = {}
@@ -460,6 +469,7 @@ def _retrieve_taxon(adaptor, primary_id, taxon_id):
         a['taxonomy'] = taxonomy
     return a
 
+
 def _retrieve_comment(adaptor, primary_id):
     qvs = adaptor.execute_and_fetchall(
         "SELECT comment_text FROM comment"
@@ -471,6 +481,7 @@ def _retrieve_comment(adaptor, primary_id):
         return {"comment": comments}
     else:
         return {}
+
 
 class DBSeqRecord(SeqRecord):
     """BioSQL equivalent of the biopython SeqRecord object.

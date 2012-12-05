@@ -22,6 +22,7 @@ except ImportError:
 
 from Bio._py3k import _as_string, _as_bytes
 
+
 def qblast(program, database, sequence,
            auto_format=None,composition_based_statistics=None,
            db_genetic_code=None,endpoints=None,entrez_query='(none)',
@@ -176,6 +177,7 @@ def qblast(program, database, sequence,
             break
 
     return StringIO(results)
+
 
 def _parse_qblast_ref_page(handle):
     """Extract a tuple of RID, RTOE from the 'please wait' page (PRIVATE).

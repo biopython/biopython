@@ -13,6 +13,7 @@ from Bio.Seq import Seq
 # local stuff
 from Pattern import PatternRepository
 
+
 class SignatureFinder(object):
     """Find Signatures in a group of sequence records.
 
@@ -109,6 +110,7 @@ class SignatureFinder(object):
             sig_dict[sig_to_add] = 1
 
         return sig_dict
+
 
 class SignatureCoder(object):
     """Convert a Sequence into its signature representatives.

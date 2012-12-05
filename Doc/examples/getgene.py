@@ -35,6 +35,7 @@ import string
 import sys
 import gdbm
 
+
 class DB_Index:
     def __init__(self, open = 1):
         if open:
@@ -256,6 +257,7 @@ class DB_Index:
             if line[0:2] =="//":
                 break
         return keywords
+
 
 def help(exit = 0):
     name = os.path.basename(sys.argv[0])

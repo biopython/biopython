@@ -16,6 +16,7 @@ import threading
 from Tkinter import *
 from xbb_utils import NotePad
 
+
 class BlastDisplayer:
     def __init__(self, command, text_id = None):
         self.command = command

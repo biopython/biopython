@@ -14,6 +14,7 @@ from Bio.Seq import MutableSeq
 from Abstract import AbstractSelection
 from Tournament import TournamentSelection
 
+
 class DiversitySelection(AbstractSelection):
     """Implement diversity selection.
 

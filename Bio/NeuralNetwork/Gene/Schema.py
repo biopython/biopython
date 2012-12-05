@@ -30,6 +30,7 @@ from Bio.GA.Repair.Stabilizing import AmbiguousRepair
 from Bio.GA.Selection.Tournament import TournamentSelection
 from Bio.GA.Selection.Diversity import DiversitySelection
 
+
 class Schema(object):
     """Deal with motifs that have ambiguity characters in it.
 
@@ -152,6 +153,7 @@ class Schema(object):
 
 # -- Alphabets
 
+
 class SchemaDNAAlphabet(Alphabet.Alphabet):
     """Alphabet of a simple Schema for DNA sequences.
 
@@ -171,6 +173,7 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
                         "*" : "GATC"}
 
 # -- GA schema finder
+
 
 class GeneticAlgorithmFinder(object):
     """Find schemas using a genetic algorithm approach.
@@ -254,6 +257,7 @@ class GeneticAlgorithmFinder(object):
 
 # -- fitness classes
 
+
 class DifferentialSchemaFitness(object):
     """Calculate fitness for schemas that differentiate between sequences.
     """
@@ -320,6 +324,7 @@ class DifferentialSchemaFitness(object):
         diff = (discerning_power * motif_size) / float(num_ambiguous)
         return diff
 
+
 class MostCountSchemaFitness(object):
     """Calculate a fitness giving weight to schemas that match many times.
 
@@ -360,6 +365,7 @@ class MostCountSchemaFitness(object):
 
         return num_times
 
+
 # -- Helper classes
 class RandomMotifGenerator(object):
     """Generate a random motif within given parameters.
@@ -393,6 +399,7 @@ class RandomMotifGenerator(object):
             motif += cur_letter
 
         return MutableSeq(motif, self._alphabet)
+
 
 class SimpleFinisher(object):
     """Determine when we are done evolving motifs.
@@ -436,6 +443,7 @@ class SimpleFinisher(object):
         return 0
 # ---
 
+
 class SchemaFinder(object):
     """Find schema in a set of sequences using a genetic algorithm approach.
 
@@ -473,6 +481,7 @@ class SchemaFinder(object):
 
         return self._finder.find_schemas(fitness_evaluator.calculate_fitness,
                                          self.num_schemas)
+
 
 class SchemaCoder(object):
     """Convert a sequence into a representation of ambiguous motifs (schemas).
@@ -526,6 +535,7 @@ class SchemaCoder(object):
 
         return schema_counts
 
+
 def matches_schema(pattern, schema, ambiguity_character = '*'):
     """Determine whether or not the given pattern matches the schema.
 
@@ -552,6 +562,7 @@ def matches_schema(pattern, schema, ambiguity_character = '*'):
             return 0
 
     return 1
+
 
 class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures.

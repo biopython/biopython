@@ -34,6 +34,7 @@ OPTIONS:
 
 """ % sys.argv[0]
 
+
 class DebuggingConsumer:
     def __init__(self, decorated=None):
         self.linenum = 0
@@ -56,8 +57,10 @@ class DebuggingConsumer:
         else:
             return self._decorated
 
+
 def chomp(line):
     return re.sub(r"[\r\n]*$", "", line)
+
 
 def choose_parser(outfile):
     data = open(outfile).read()
@@ -67,6 +70,7 @@ def choose_parser(outfile):
     if "results from round)" in ldata or "converged!" in ldata:
         return NCBIStandalone.PSIBlastParser
     return NCBIStandalone.BlastParser
+
 
 def test_blast_output(outfile):
     # Try to auto-detect the format

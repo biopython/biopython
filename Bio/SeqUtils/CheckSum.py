@@ -13,6 +13,7 @@
 from binascii import crc32 as _crc32
 from Bio._py3k import _as_bytes
 
+
 def crc32(seq):
     """Returns the crc32 checksum for a sequence (string or Seq object)."""
     #NOTE - On Python 2 returns a signed int, on Python 3 it is unsigned
@@ -24,6 +25,7 @@ def crc32(seq):
     except AttributeError:
         #Assume its a string/unicode
         return _crc32(_as_bytes(seq))
+
 
 def _init_table_h():
     _table_h = []
@@ -43,6 +45,7 @@ def _init_table_h():
 
 # Initialisation
 _table_h = _init_table_h()
+
 
 def crc64(s):
     """Returns the crc64 checksum for a sequence (string or Seq object)."""
@@ -81,6 +84,7 @@ def gcg(seq):
         if index == 57:
             index = 0
     return checksum % 10000
+
 
 def seguid(seq):
     """Returns the SEGUID (string) for a sequence (string or Seq object).

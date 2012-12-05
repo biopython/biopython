@@ -50,6 +50,7 @@ o UnknownPosition - Represents missing information like '?' in UniProt.
 
 from Bio.Seq import MutableSeq, reverse_complement
 
+
 class SeqFeature(object):
     """Represent a Sequence Feature on an object.
 
@@ -438,6 +439,7 @@ class SeqFeature(object):
 
 # --- References
 
+
 # TODO -- Will this hold PubMed and Medline information decently?
 class Reference(object):
     """Represent a Generic Reference object.
@@ -484,6 +486,7 @@ class Reference(object):
         #TODO - Update this is __init__ later accpets values
         return "%s(title=%s, ...)" % (self.__class__.__name__,
                                       repr(self.title))
+
 
 # --- Handling feature locations
 
@@ -822,6 +825,7 @@ class FeatureLocation(object):
                 f_seq = reverse_complement(f_seq)
         return f_seq
 
+
 class AbstractPosition(object):
     """Abstract base class representing a position.
     """
@@ -829,6 +833,7 @@ class AbstractPosition(object):
     def __repr__(self):
         """String representation of the location for debugging."""
         return "%s(...)" % (self.__class__.__name__)
+
 
 class ExactPosition(int, AbstractPosition):
     """Specify the specific position of a boundary.
@@ -891,6 +896,7 @@ class ExactPosition(int, AbstractPosition):
         #By default perserve any subclass
         return self.__class__(length - int(self))
 
+
 class UncertainPosition(ExactPosition):
     """Specify a specific position which is uncertain.
 
@@ -898,6 +904,7 @@ class UncertainPosition(ExactPosition):
     XML format explicitly marked as uncertain. Does not apply to GenBank/EMBL.
     """
     pass
+
 
 class UnknownPosition(AbstractPosition):
     """Specify a specific position which is unknown (has no position).
@@ -927,6 +934,7 @@ class UnknownPosition(AbstractPosition):
 
     def _flip(self, length):
         return self
+
 
 class WithinPosition(int, AbstractPosition):
     """Specify the position of a boundary within some coordinates.
@@ -1050,6 +1058,7 @@ class WithinPosition(int, AbstractPosition):
                               length - self._right,
                               length - self._left)
 
+
 class BetweenPosition(int, AbstractPosition):
     """Specify the position of a boundary between two coordinates (OBSOLETE?).
 
@@ -1151,6 +1160,7 @@ class BetweenPosition(int, AbstractPosition):
                               length - self._right,
                               length - self._left)
 
+
 class BeforePosition(int, AbstractPosition):
     """Specify a position where the actual location occurs before it.
 
@@ -1212,6 +1222,7 @@ class BeforePosition(int, AbstractPosition):
 
     def _flip(self, length):
         return AfterPosition(length - int(self))
+
 
 class AfterPosition(int, AbstractPosition):
     """Specify a position where the actual location is found after it.
@@ -1395,6 +1406,7 @@ class PositionGap(object):
     def __str__(self):
         out = "gap(%s)" % self.gap_size
         return out
+
 
 def _test():
     """Run the Bio.SeqFeature module's doctests (PRIVATE).

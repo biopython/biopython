@@ -29,6 +29,7 @@ import re
 
 from Bio import File
 
+
 def _get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal=""
@@ -37,6 +38,7 @@ def _get_journal(inl):
             journal+=l[19:72].lower()
     journal=re.sub("\s\s+"," ",journal)
     return journal
+
 
 def _get_references(inl):
     # REMARK   1 REFERENCE 1                                                  1CSE  11
@@ -59,6 +61,7 @@ def _get_references(inl):
         if actref!=" ":
             references.append(actref)
     return references
+
 
 # bring dates to format: 1909-01-08
 def _format_date(pdb_date):
@@ -83,9 +86,11 @@ def _chop_end_codes(line):
     """Chops lines ending with  '     1CSA  14' and the like."""
     return re.sub("\s\s\s\s+[\w]{4}.\s+\d*\Z","",line)
 
+
 def _chop_end_misc(line):
     """Chops lines ending with  '     14-JUL-97  1CSA' and the like."""
     return re.sub("\s\s\s\s+.*\Z","",line)
+
 
 def _nice_case(line):
     """Makes A Lowercase String With Capitals."""
@@ -105,6 +110,7 @@ def _nice_case(line):
         i+=1
     return s
 
+
 def parse_pdb_header(infile):
     """
     Returns the header lines of a pdb file as a dictionary.
@@ -123,6 +129,7 @@ def parse_pdb_header(infile):
             else:
                 header.append(l)
     return _parse_pdb_header_list(header)
+
 
 def _parse_pdb_header_list(header):
     # database fields

@@ -21,6 +21,7 @@ default values are often due to low default settings in accall.pars
 use naccess -y, naccess -h or naccess -w to include HETATM records
 """
 
+
 def run_naccess(model, pdb_file, probe_size = None, z_slice = None,
                 naccess = 'naccess', temp_path = '/tmp/'):
 
@@ -69,6 +70,7 @@ def run_naccess(model, pdb_file, probe_size = None, z_slice = None,
     os.system('rm -rf %s >& /dev/null' % tmp_path)
     return rsa_data, asa_data
 
+
 def process_rsa_data(rsa_data):
     # process the .rsa output file: residue level SASA data
     naccess_rel_dict = {}
@@ -92,6 +94,7 @@ def process_rsa_data(rsa_data):
                 'all_polar_abs': float(line[68:74]),
                 'all_polar_rel': float(line[75:80]) }
     return naccess_rel_dict
+
 
 def process_asa_data(rsa_data):
     # process the .asa output file: atomic level SASA data
@@ -141,6 +144,7 @@ class NACCESS(AbstractResiduePropertyMap):
                     pass
         AbstractResiduePropertyMap.__init__(self, property_dict, property_keys,
                 property_list)
+
 
 class NACCESS_atomic(AbstractAtomPropertyMap):
 

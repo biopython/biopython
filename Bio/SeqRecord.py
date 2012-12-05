@@ -13,6 +13,7 @@ __docformat__ = "epytext en" #Simple markup to show doctests nicely
 # need to be in sync (this is the BioSQL "Database SeqRecord", see
 # also BioSQL.BioSeq.DBSeq which is the "Database Seq" class)
 
+
 class _RestrictedDict(dict):
     """Dict which only allows sequences of given length as values (PRIVATE).
 
@@ -1121,6 +1122,7 @@ class SeqRecord(object):
             for key, value in self.letter_annotations.iteritems():
                 answer._per_letter_annotations[key] = value[::-1]
         return answer
+
 
 def _test():
     """Run the Bio.SeqRecord module's doctests (PRIVATE).

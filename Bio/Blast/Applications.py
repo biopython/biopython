@@ -34,6 +34,7 @@ doi:10.1186/1471-2105-10-421
 """
 from Bio.Application import _Option, AbstractCommandline, _Switch
 
+
 class FastacmdCommandline(AbstractCommandline):
     """Create a commandline for the fasta program from NCBI (OBSOLETE).
 
@@ -422,6 +423,7 @@ class RpsBlastCommandline(_BlastCommandLine):
 # Legacy BLAST wrappers above, (new) BLAST+ wrappers below
 ##############################################################################
 
+
 class _NcbibaseblastCommandline(AbstractCommandline):
     """Base Commandline object for (new) NCBI BLAST+ wrappers (PRIVATE).
 
@@ -739,6 +741,7 @@ class _NcbiblastMain2SeqCommandline(_Ncbiblast2SeqCommandline):
                          "db_hard_mask":["db_soft_mask", "subject", "subject_loc"]}
         self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
+
 
 class NcbiblastpCommandline(_NcbiblastMain2SeqCommandline):
     """Create a commandline for the NCBI BLAST+ program blastp (for proteins).
@@ -1398,6 +1401,7 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
         incompatibles = {"rid":["archive"]}
         self._validate_incompatibilities(incompatibles)
         _NcbibaseblastCommandline._validate(self)
+
 
 def _test():
     """Run the Bio.Blast.Applications module's doctests."""

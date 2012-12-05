@@ -20,6 +20,7 @@ Record     Holds ENZYME data.
 
 """
 
+
 def parse(handle):
     """Parse ENZYME records.
 
@@ -33,6 +34,7 @@ def parse(handle):
         if not record:
             break
         yield record
+
 
 def read(handle):
     """Read one ENZYME record.
@@ -101,6 +103,7 @@ Each record contains the following keys:
         return output
 
 # Everything below is private
+
 
 def __read(handle):
     record = None

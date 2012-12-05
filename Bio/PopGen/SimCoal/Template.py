@@ -22,6 +22,7 @@ def exec_template(template):
         #match = patt.matcher(String(executed_template))
     return executed_template
 
+
 def process_para(in_string, out_file_prefix, para_list, curr_values):
     if (para_list == []):
         template = in_string
@@ -57,10 +58,12 @@ def dupe(motif, times):
         ret_str += motif + '\r\n'
     return ret_str
 
+
 def get_xy_from_matrix(x_max, y_max, pos):
     y = (pos-1) / x_max
     x = (pos-1) % x_max
     return x, y
+
 
 def get_step_2d(x_max, y_max, x, y, mig):
     my_x,    my_y    = get_xy_from_matrix(x_max, y_max, y)
@@ -71,6 +74,7 @@ def get_step_2d(x_max, y_max, x, y, mig):
     else:
         return '0 '
 
+
 def generate_ssm2d_mat(x_max, y_max, mig):
     mig_mat = ''
     for x in range(1, x_max*y_max + 1):
@@ -78,6 +82,7 @@ def generate_ssm2d_mat(x_max, y_max, mig):
             mig_mat += get_step_2d(x_max, y_max, x, y, mig)
         mig_mat += "\r\n"
     return mig_mat
+
 
 def generate_island_mat(total_size, mig):
     mig_mat = ''
@@ -90,6 +95,7 @@ def generate_island_mat(total_size, mig):
         mig_mat += "\r\n"
     return mig_mat
 
+
 def generate_null_mat(total_size):
     null_mat = ''
     for x in range(1, total_size + 1):
@@ -98,6 +104,7 @@ def generate_null_mat(total_size):
         null_mat += '\r\n'
     return null_mat
 
+
 def generate_join_events(t, total_size, join_size, orig_size):
     events = ''
     for i in range(1, total_size-1):
@@ -105,13 +112,16 @@ def generate_join_events(t, total_size, join_size, orig_size):
     events += str(t) + ' ' + str(total_size-1) + ' 0 1 ' + str(1.0*total_size*join_size/orig_size) + ' 0 1\r\n'
     return events
 
+
 def no_processor(in_string):
     return in_string
+
 
 def process_text(in_string, out_file_prefix, para_list, curr_values,
                  specific_processor):
     text = specific_processor(in_string)
     return process_para(text, out_file_prefix, para_list, [])
+
 
 #def prepare_dir():
 #    try:
@@ -122,6 +132,7 @@ def process_text(in_string, out_file_prefix, para_list, curr_values,
 #        mkdir(sep.join([Config.dataDir, 'SimCoal', 'runs']))
 #    except OSError:
 #        pass #Its ok if already exists
+
 
 #sep is because of jython
 def generate_model(par_stream, out_prefix, params,
@@ -155,6 +166,7 @@ def get_demography_template(stream, model, tp_dir = None):
         l = f.readline()
     f.close()
 
+
 def _gen_loci(stream, loci):
     stream.write('//Number of contiguous linkage blocks in chromosome\n')
     stream.write(str(len(loci)) + '\n')
@@ -163,6 +175,7 @@ def _gen_loci(stream, loci):
         stream.write(' '.join([locus[0]] +
             map(lambda x: str(x), list(locus[1])
         )) + '\n')
+
 
 def get_chr_template(stream, chrs):
     '''
@@ -192,6 +205,7 @@ def get_chr_template(stream, chrs):
         else:
             for i in range(repeats):
                 _gen_loci(stream, loci)
+
 
 def generate_simcoal_from_template(model, chrs, params, out_dir = '.', tp_dir=None):
     '''

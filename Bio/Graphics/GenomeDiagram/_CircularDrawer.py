@@ -40,6 +40,7 @@ from _GraphSet import GraphSet
 
 from math import ceil, pi, cos, sin, asin
 
+
 class CircularDrawer(AbstractDrawer):
     """ CircularDrawer(AbstractDrawer)
 

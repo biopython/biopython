@@ -111,6 +111,7 @@ def rotaxis2m(theta, vector):
 
 rotaxis=rotaxis2m
 
+
 def refmat(p,q):
     """
     Return a (left multiplying) matrix that mirrors p onto q.
@@ -135,6 +136,7 @@ def refmat(p,q):
     ref=i-2*numpy.dot(b, numpy.transpose(b))
     return ref
 
+
 def rotmat(p,q):
     """
     Return a (left multiplying) matrix that rotates p onto q.
@@ -155,6 +157,7 @@ def rotmat(p,q):
     rot=numpy.dot(refmat(q, -p), refmat(p, -p))
     return rot
 
+
 def calc_angle(v1, v2, v3):
     """
     Calculate the angle between 3 vectors
@@ -169,6 +172,7 @@ def calc_angle(v1, v2, v3):
     v1=v1-v2
     v3=v3-v2
     return v1.angle(v3)
+
 
 def calc_dihedral(v1, v2, v3, v4):
     """
@@ -194,6 +198,7 @@ def calc_dihedral(v1, v2, v3, v4):
         # dihedral=pi
         pass
     return angle
+
 
 class Vector(object):
     "3D vector"

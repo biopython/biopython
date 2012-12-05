@@ -15,6 +15,7 @@ Record    Contains the information from a cel file
 
 import numpy
 
+
 class Record(object):
     """
     Stores the information in a cel file

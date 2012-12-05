@@ -28,12 +28,14 @@ classify       Classify an observation into a class.
 
 import numpy
 
+
 def _contents(items):
     term = 1.0/len(items)
     counts = {}
     for item in items:
         counts[item] = counts.get(item,0) + term
     return counts
+
 
 class NaiveBayes(object):
     """Holds information for a NaiveBayes classifier.
@@ -50,6 +52,7 @@ class NaiveBayes(object):
         self.p_conditional = None
         self.p_prior = []
         self.dimensionality = None
+
 
 def calculate(nb, observation, scale=0):
     """calculate(nb, observation[, scale]) -> probability dict
@@ -100,6 +103,7 @@ def calculate(nb, observation, scale=0):
 
     return lp_class_observation
 
+
 def classify(nb, observation):
     """classify(nb, observation) -> class
 
@@ -113,6 +117,7 @@ def classify(nb, observation):
         if max_prob is None or probs[klass] > max_prob:
             max_prob, max_class = probs[klass], klass
     return max_class
+
 
 def train(training_set, results, priors=None, typecode=None):
     """train(training_set, results[, priors]) -> NaiveBayes

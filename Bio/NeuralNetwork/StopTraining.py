@@ -12,6 +12,7 @@ in this module should be instaniated, and then the stop_training function
 of the classes passed to the network.
 """
 
+
 class ValidationIncreaseStop(object):
     """Class to stop training on a network when the validation error increases.
 

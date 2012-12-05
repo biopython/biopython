@@ -9,6 +9,7 @@ __docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Argument, _Switch, AbstractCommandline
 
+
 class DialignCommandline(AbstractCommandline):
     """Command line wrapper for the multiple alignment program DIALIGN2-2.
 
@@ -177,6 +178,7 @@ class DialignCommandline(AbstractCommandline):
                       is_required=True),
             ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
 
 def _test():
     """Run the module's doctests (PRIVATE)."""

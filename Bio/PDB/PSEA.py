@@ -35,6 +35,7 @@ def run_psea(fname):
     base=last.split(".")[0]
     return base+".sea"
 
+
 def psea(pname):
     """Parse PSEA output file."""
     fname=run_psea(pname)
@@ -53,6 +54,7 @@ def psea(pname):
     fp.close()
     return ss
 
+
 def psea2HEC(pseq):
     """Translate PSEA secondary structure string into HEC."""
     seq=[]
@@ -65,6 +67,7 @@ def psea2HEC(pseq):
             n="C"
         seq.append(n)
     return seq
+
 
 def annotate(m, ss_seq):
     """Apply seconardary structure information to residues in model."""
@@ -81,6 +84,7 @@ def annotate(m, ss_seq):
     for i in range(0, L):
         residues[i].xtra["SS_PSEA"]=ss_seq[i]
     #os.system("rm "+fname)
+
 
 class PSEA(object):
     def __init__(self, model, filename):

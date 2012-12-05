@@ -10,9 +10,11 @@ import _parse_yn00
 #TODO - Restore use of with statement for closing handles automatically
 #after dropping Python 2.4
 
+
 class Yn00Error(EnvironmentError):
     """yn00 has failed. Run with verbose = True to view yn00's error
 message"""
+
 
 class Yn00(Paml):
     """This class implements an interface to yn00, part of the PAML package."""
@@ -107,6 +109,7 @@ class Yn00(Paml):
         else:
             results = None
         return results
+
 
 def read(results_file):
     """Parse a yn00 results file."""

@@ -49,6 +49,7 @@ murphy_15_tab = {"L": "L",
              "R": "K",
              "H": "H"}
 
+
 class Murphy15(Alphabet.ProteinAlphabet):
     letters = "LCAGSTPFWEDNQKH"
     size = 15
@@ -74,6 +75,8 @@ murphy_10_tab = {"L": "L",
              "K": "K",
              "R": "K",
              "H": "H"}
+
+
 class Murphy10(Alphabet.ProteinAlphabet):
     letters = "LCAGSPFEKH"
     size = 10
@@ -99,6 +102,7 @@ murphy_8_tab = {"L": "L",
              "K": "K",
              "R": "K",
              "H": "H"}
+
 
 class Murphy8(Alphabet.ProteinAlphabet):
     letters = "LASPFEKH"
@@ -126,6 +130,7 @@ murphy_4_tab = {"L": "L",
              "R": "E",
              "H": "E"}
 
+
 class Murphy4(Alphabet.ProteinAlphabet):
     letters = "LAFE"
     size = 4
@@ -152,6 +157,7 @@ hp_model_tab = {"A": "P",   # Hydrophilic
             "W": "H",
             "Y": "H"}
 
+
 class HPModel(Alphabet.ProteinAlphabet):
     letters = "HP"
     size = 2
@@ -177,6 +183,7 @@ pc_5_table = {"I": "A", # Aliphatic
          "Q": "D",
          "N": "D",
          "P": "D"}
+
 
 class PC5(Alphabet.ProteinAlphabet):
     letters = "ARCTD"

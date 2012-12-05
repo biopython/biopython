@@ -5,6 +5,7 @@
 
 import re
 
+
 def parse_ng86(lines, results):
     """ Parse the Nei & Gojobori (1986) section of the resuls.
     Nei_Gojobori results are organized in a lower
@@ -31,6 +32,7 @@ def parse_ng86(lines, results):
                 results[seq_name][sequences[i//3]] = {"NG86":NG86}
                 results[sequences[i//3]][seq_name] = {"NG86":NG86}
     return (results, sequences)
+
 
 def parse_yn00(lines, results, sequences):
     """ Parse the Yang & Nielsen (2000) part of the results.
@@ -68,6 +70,7 @@ def parse_yn00(lines, results, sequences):
             seq_name1 = None
             seq_name2 = None
     return results
+
 
 def parse_others(lines, results, sequences):
     """Parse the results from the other methods.

@@ -22,6 +22,7 @@ from time import sleep
 from Bio.PopGen.Async import Local
 from Bio.PopGen.FDist.Controller import FDistController
 
+
 class FDistAsync(FDistController):
     """Asynchronous FDist execution.
     """
@@ -62,6 +63,7 @@ class FDistAsync(FDistController):
         output_files = {}
         output_files['out.dat'] = open(data_dir + os.sep + 'out.dat', 'r')
         return fst, output_files
+
 
 class SplitFDist(object):
     """Splits a FDist run.

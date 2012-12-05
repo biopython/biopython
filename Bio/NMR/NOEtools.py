@@ -8,6 +8,7 @@
 
 import xpktools
 
+
 def predictNOE(peaklist,originNuc,detectedNuc,originResNum,toResNum):
 # Predict the i->j NOE position based on self peak (diagonal) assignments
 #
@@ -62,6 +63,7 @@ def _data_map(labelline):
         datamap[labelList[i]] = i
 
     return datamap
+
 
 def _col_ave(list,col):
     # Compute average values from a particular column in a string list

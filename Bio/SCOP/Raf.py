@@ -32,6 +32,7 @@ from Bio.SCOP.Residues import Residues
 
 from three_to_one_dict import to_one_letter_code
 
+
 def normalize_letters(one_letter_code):
     """Convert RAF one-letter amino acid codes into IUPAC standard codes.
 
@@ -41,6 +42,7 @@ def normalize_letters(one_letter_code):
         return 'X'
     else:
         return one_letter_code.upper()
+
 
 class SeqMapIndex(dict):
     """An RAF file index.

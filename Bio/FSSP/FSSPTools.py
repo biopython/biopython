@@ -3,6 +3,7 @@ import copy
 from Bio.Align import Generic
 from Bio import Alphabet
 
+
 class FSSPAlign(Generic.Alignment):
     def _add_numbering_table(self, new_record):
         new_record.annotations['abs2pdb'] = {}
@@ -14,6 +15,8 @@ class FSSPMultAlign(dict):
         self.abs_res = []
         self.pdb_res = []
         self.data = {}
+
+
 def mult_align(sum_dict,align_dict):
     """Returns a biopython multiple alignment instance (Bio.Align.Generic)"""
     mult_align_dict = {}
@@ -70,6 +73,7 @@ def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
             new_align_dict.abs(pos_num).pos_align_dict[prot_num] = \
                     align_dict.abs(pos_num).pos_align_dict[prot_num]
     return new_sum_dict, new_align_dict
+
 
 def name_filter(sum_dict, align_dict, name_list):
     """ Accepts a list of names. Returns a new Summary block and Alignment block which

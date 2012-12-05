@@ -55,6 +55,7 @@ def parse(handle):
         yield Newick.Tree(root=newroot, rooted=nxtree.rooted, name=nxtree.name,
                           weight=nxtree.weight)
 
+
 def write(obj, handle, **kwargs):
     """Write a new Nexus file containing the given trees.
 

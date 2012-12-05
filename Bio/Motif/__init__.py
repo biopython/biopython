@@ -19,8 +19,10 @@ _parsers={"AlignAce" : _AlignAce_read,
           "MEME" : _MEME_read,
           }
 
+
 def _from_pfm(handle):
     return Motif()._from_jaspar_pfm(handle)
+
 
 def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
@@ -80,6 +82,7 @@ def parse(handle,format):
         else: # we have a proper reader
             for m in parser(handle).motifs:
                 yield m
+
 
 def read(handle,format):
     """Reads a motif from a handle using a specified file-format.

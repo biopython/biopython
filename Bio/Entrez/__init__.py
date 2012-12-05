@@ -99,6 +99,7 @@ def epost(db, **keywds):
     variables.update(keywds)
     return _open(cgi, variables, post=True)
 
+
 def efetch(db, **keywds):
     """Fetches Entrez results which are returned as a handle.
 
@@ -137,6 +138,7 @@ def efetch(db, **keywds):
     variables.update(keywords)
     return _open(cgi, variables)
 
+
 def esearch(db, term, **keywds):
     """ESearch runs an Entrez search and returns a handle to the results.
 
@@ -171,6 +173,7 @@ def esearch(db, term, **keywds):
                  'term' : term}
     variables.update(keywds)
     return _open(cgi, variables)
+
 
 def elink(**keywds):
     """ELink checks for linked external articles and returns a handle.
@@ -210,6 +213,7 @@ def elink(**keywds):
     variables.update(keywds)
     return _open(cgi, variables)
 
+
 def einfo(**keywds):
     """EInfo returns a summary of the Entez databases as a results handle.
 
@@ -236,6 +240,7 @@ def einfo(**keywds):
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
+
 
 def esummary(**keywds):
     """ESummary retrieves document summaries as a results handle.
@@ -267,6 +272,7 @@ def esummary(**keywds):
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
+
 
 def egquery(**keywds):
     """EGQuery provides Entrez database counts for a global search.
@@ -301,6 +307,7 @@ def egquery(**keywds):
     variables.update(keywds)
     return _open(cgi, variables)
 
+
 def espell(**keywds):
     """ESpell retrieves spelling suggestions, returned in a results handle.
 
@@ -329,6 +336,7 @@ def espell(**keywds):
     variables.update(keywds)
     return _open(cgi, variables)
 
+
 def read(handle, validate=True):
     """Parses an XML file from the NCBI Entrez Utilities into python objects.
 
@@ -353,6 +361,7 @@ def read(handle, validate=True):
     handler = DataHandler(validate)
     record = handler.read(handle)
     return record
+
 
 def parse(handle, validate=True):
     """Parses an XML file from the NCBI Entrez Utilities into python objects.
@@ -384,6 +393,7 @@ def parse(handle, validate=True):
     handler = DataHandler(validate)
     records = handler.parse(handle)
     return records
+
 
 def _open(cgi, params={}, post=False):
     """Helper function to build the URL and open a handle to it (PRIVATE).
