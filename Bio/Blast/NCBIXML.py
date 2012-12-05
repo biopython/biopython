@@ -209,7 +209,7 @@ class BlastParser(_XMLparser):
         self._blast = None
 
         if self._debug:
-            "NCBIXML: Added Blast record to results"
+            print "NCBIXML: Added Blast record to results"
 
     # Header
     def _end_BlastOutput_program(self):
