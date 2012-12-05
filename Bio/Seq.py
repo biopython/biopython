@@ -146,6 +146,7 @@ class Seq(object):
             return "%s(%s, %s)" % (self.__class__.__name__,
                                   repr(self._data),
                                    repr(self.alphabet))
+
     def __str__(self):
         """Returns the full sequence as a python string, use str(my_seq).
 

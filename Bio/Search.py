@@ -83,8 +83,10 @@ class _SeqLength:
         self.identical = identical
         self.positives = positives
         self.gaps = gaps
+
     def __len__(self):
         return self.length
+
     def __getattr__(self, name):
         if name == "frac_identical":
             return float(self.identical) / self.length

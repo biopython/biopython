@@ -30,6 +30,7 @@ proteinX = ProteinX()
 class MissingTable:
     def __init__(self, table):
         self._table = table
+
     def get(self, codon, stop_symbol):
         try:
             return self._table.get(codon, stop_symbol)

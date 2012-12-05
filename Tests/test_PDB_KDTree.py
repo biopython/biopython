@@ -37,8 +37,10 @@ class NeighborTest(unittest.TestCase):
         class RandomAtom:
             def __init__(self):
                 self.coord = 100 * random(3)
+
             def get_coord(self):
                 return self.coord
+
         for i in range(0, 20):
             atoms = [RandomAtom() for j in range(100)]
             ns = NeighborSearch(atoms)

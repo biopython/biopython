@@ -192,13 +192,17 @@ class AbstractCommandline(object):
                                  "an argument or property name due to the "
                                  "way the AbstractCommandline class works"
                                  % repr(name))
+
             #Beware of binding-versus-assignment confusion issues
             def getter(name):
                 return lambda x : x._get_parameter(name)
+
             def setter(name):
                 return lambda x, value : x.set_parameter(name, value)
+
             def deleter(name):
                 return lambda x : x._clear_parameter(name)
+
             doc = p.description
             if isinstance(p, _Switch):
                 doc += "\n\nThis property controls the addition of the %s " \

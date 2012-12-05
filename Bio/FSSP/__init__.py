@@ -42,6 +42,7 @@ class FSSPHeader(object):
         self.author = []
         self.seqlength = 0
         self.nalign = 0
+
     def fill_header(self,inline):
         for i in header_records:
             if header_records[i].match(inline):
@@ -141,9 +142,11 @@ class FSSPAlignRec(object):
         self.turn5 = in_fff_rec[fssp_rec.align.turn5]
         self.pos_align_dict = {}
         self.PosAlignList = []
+
     def add_align_list(self,align_list):
         for i in align_list:
             self.PosAlignList.append(PosAlign(i))
+
     def pos_align_list2dict(self):
         j = 1
         for i in self.PosAlignList:
@@ -159,20 +162,23 @@ class FSSPAlignDict(dict):
         self.pdb_res_dict = {}
         self.abs_res_dict = {}
         self.data = {}
+
     def build_resnum_list(self):
         for i in self:
             self.abs_res_dict[self[i].abs_res_num] = i
             self.pdb_res_dict[self[i].pdb_res_num] = i
+
     # Given an absolute residue number & chain, returns the relevant fssp
     # record
     def abs(self,num):
         return self[self.abs_res_dict[num]]
+
     # Given an PDB residue number & chain, returns the relevant fssp
     # record
     def pdb(self,num):
         return self[self.pdb_res_dict[num]]
-   # Returns a sequence string
 
+    # Returns a sequence string
     def sequence(self,num):
         s = ''
         sorted_pos_nums = self.abs_res_dict.keys()

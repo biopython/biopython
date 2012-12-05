@@ -2,6 +2,7 @@
 class fff_rec:
     def __init__(self,inrec=''):
         self.data = inrec
+
     def __repr__(self):
         return str(self.data)
     __str__ = __repr__

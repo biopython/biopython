@@ -352,9 +352,11 @@ class QueryResultCases(unittest.TestCase):
         # deepcopy the qresult since we'll change the objects within
         qresult = deepcopy(self.qresult)
         # map func: capitalize hit IDs
+
         def map_func(hit):
             hit.id = hit.id.upper()
             return hit
+
         # test before mapping
         self.assertEqual('hit1', qresult[0].id)
         self.assertEqual('hit2', qresult[1].id)
@@ -426,10 +428,12 @@ class QueryResultCases(unittest.TestCase):
         for hit in qresult:
             for hsp in hit:
                 setattr(hsp, 'mock', 13)
+
         # map func: remove first letter of all HSP.aln
         def map_func(hsp):
             mapped_frags = [x[1:] for x in hsp]
             return HSP(mapped_frags)
+
         mapped = qresult.hsp_map(map_func)
         # make sure old hsp attributes is not transferred to mapped hsps
         for hit in mapped:
@@ -770,10 +774,12 @@ class HitCases(unittest.TestCase):
         # apply mock attributes to hsp, for testing mapped hsp attributes
         for hsp in hit:
             setattr(hsp, 'mock', 13)
+
         # map func: remove first letter of all HSP.alignment
         def map_func(hsp):
             mapped_frags = [x[1:] for x in hsp]
             return HSP(mapped_frags)
+
         mapped = hit.map(map_func)
         # make sure old hsp attributes is not transferred to mapped hsps
         for hsp in mapped:

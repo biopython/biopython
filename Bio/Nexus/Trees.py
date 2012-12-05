@@ -292,6 +292,7 @@ class Tree(Nodes.Chain):
             return False not in [self.is_terminal(n) for n in self.node(node).succ]
         else:
             return False
+
     def count_terminals(self,node=None):
         """Counts the number of terminal nodes that are attached to a node."""
         if node is None:

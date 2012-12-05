@@ -78,8 +78,10 @@ class AbstractConsumer(object):
     """
     def _unhandled_section(self):
         pass
+
     def _unhandled(self, data):
         pass
+
     def __getattr__(self, attr):
         if attr[:6] == 'start_' or attr[:4] == 'end_':
             method = self._unhandled_section

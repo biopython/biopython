@@ -41,11 +41,14 @@ class DebuggingConsumer:
             decorated = ParserSupport.AbstractConsumer()
         self.decorated = decorated
         self._prev_attr = None
+
     def _decorated_section(self):
         getattr(self.decorated, self._prev_attr)()
+
     def _decorated(self, data):
         getattr(self.decorated, self._prev_attr)(data)
         self.linenum += 1
+
     def __getattr__(self, attr):
         self._prev_attr = attr
         if attr.startswith('start_') or attr.startswith('end_'):

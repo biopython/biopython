@@ -303,10 +303,12 @@ tests = [("illumina_full_range", "illumina"),
          ("misc_rna", "sanger")]
 for base_name, variant in tests:
     assert variant in ["sanger", "solexa", "illumina"]
+
     def funct(bn,var):
         f = lambda x : x.simple_check(bn,var)
         f.__doc__ = "Reference conversions of %s file %s" % (var, bn)
         return f
+
     setattr(TestReferenceFastqConversions, "test_%s_%s" % (base_name, variant),
             funct(base_name, variant))
     del funct

@@ -37,6 +37,7 @@ def parse(handle):
     eventually change Nexus to use the new NewickIO parser directly.)
     """
     nex = Nexus.Nexus(handle)
+
     # NB: Once Nexus.Trees is modified to use Tree.Newick objects, do this:
     # return iter(nex.trees)
     # Until then, convert the Nexus.Trees.Tree object hierarchy:

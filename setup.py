@@ -192,6 +192,7 @@ class install_biopython(install):
     boolean_options = install.boolean_options + [
         'single-version-externally-managed',
     ]
+
     def initialize_options(self):
         install.initialize_options(self)
         self.single_version_externally_managed = None

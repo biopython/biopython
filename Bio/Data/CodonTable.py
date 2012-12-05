@@ -46,6 +46,7 @@ class CodonTable(object):
     back_table = {}       # for back translations
     start_codons = []
     stop_codons = []
+
     # Not always called from derived classes!
     def __init__(self, nucleotide_alphabet = nucleotide_alphabet,
                  protein_alphabet = protein_alphabet,

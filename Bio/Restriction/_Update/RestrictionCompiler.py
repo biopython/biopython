@@ -333,11 +333,14 @@ class TypeCompiler(object):
                                 'ovhg':None,'ovhgseq':None})
                 elif t == OneCut:
                     dct.update({'scd5':None, 'scd3':None})
+
             class klass(type):
                 def __new__(cls):
                     return type.__new__(cls, 'type%i'%n,ty,dct)
+
                 def __init__(cls):
                     super(klass, cls).__init__('type%i'%n,ty,dct)
+
             yield klass()
             n+=1
 

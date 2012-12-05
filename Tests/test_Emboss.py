@@ -321,6 +321,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         #Skip GenBank, EMBOSS 6.0.1 on Windows won't output proteins as GenBank
         self.check_SeqIO_with_EMBOSS("NBRF/DMB_prot.pir", "pir",
                                skip_formats=["embl","genbank"])
+
     def test_clustalw(self):
         """SeqIO & EMBOSS reading each other's conversions of a Clustalw file."""
         self.check_SeqIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal",

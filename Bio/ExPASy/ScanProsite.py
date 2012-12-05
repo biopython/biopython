@@ -82,8 +82,10 @@ class ContentHandler(handler.ContentHandler):
                "signature_ac",
                "level",
                "level_tag")
+
     def __init__(self):
         self.element = []
+
     def startElement(self, name, attrs):
         self.element.append(name)
         self.content = ""
@@ -94,6 +96,7 @@ class ContentHandler(handler.ContentHandler):
         elif self.element==["matchset", "match"]:
             match = {}
             self.record.append(match)
+
     def endElement(self, name):
         assert name==self.element.pop()
         name = str(name)
@@ -106,5 +109,6 @@ class ContentHandler(handler.ContentHandler):
             else:
                 # Unknown type, treat it as a string
                 match[name] = self.content
+
     def characters(self, content):
         self.content += content

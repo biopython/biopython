@@ -126,37 +126,45 @@ multi_amino_files = ['Fasta/f002', 'Fasta/fa01']
 
 for filename in single_nucleic_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.simple_check(fn, generic_nucleotide)
         f.__doc__ = "Checking nucleotide file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_nuc_%s"%name, funct(filename))
     del funct
 
 for filename in multi_dna_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.multi_check(fn, generic_dna)
         f.__doc__ = "Checking multi DNA file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_mutli_dna_%s"%name, funct(filename))
     del funct
 
 for filename in single_amino_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.simple_check(fn, generic_nucleotide)
         f.__doc__ = "Checking protein file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_pro_%s"%name, funct(filename))
     del funct
 
 for filename in multi_amino_files:
     name = filename.split(".")[0]
+
     def funct(fn):
         f = lambda x : x.multi_check(fn, generic_dna)
         f.__doc__ = "Checking multi protein file %s" % fn
         return f
+
     setattr(TitleFunctions, "test_mutli_pro_%s"%name, funct(filename))
     del funct
 

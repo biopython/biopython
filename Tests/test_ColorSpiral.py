@@ -13,6 +13,7 @@ try:
 except ImportError:
     #This was added in Python 2.6, fallback for Python 2.5:
     from math import sin, cos
+
     def rect(r, phi):
         return r * (cos(phi) + sin(phi)*1j)
 

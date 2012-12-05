@@ -125,6 +125,7 @@ class AlphabetEncoder(object):
             self.letters = alphabet.letters + new_letters
         else:
             self.letters = None
+
     def __getattr__(self, key):
         if key[:2] == "__" and key[-2:] == "__":
             raise AttributeError(key)

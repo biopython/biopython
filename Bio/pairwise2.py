@@ -764,6 +764,7 @@ class identity_match:
     def __init__(self, match=1, mismatch=0):
         self.match = match
         self.mismatch = mismatch
+
     def __call__(self, charA, charB):
         if charA == charB:
             return self.match
@@ -783,6 +784,7 @@ class dictionary_match:
     def __init__(self, score_dict, symmetric=1):
         self.score_dict = score_dict
         self.symmetric = symmetric
+
     def __call__(self, charA, charB):
         if self.symmetric and (charA, charB) not in self.score_dict:
             # If the score dictionary is symmetric, then look up the
@@ -801,6 +803,7 @@ class affine_penalty:
             raise ValueError("Gap penalties should be non-positive.")
         self.open, self.extend = open, extend
         self.penalize_extend_when_opening = penalize_extend_when_opening
+
     def __call__(self, index, length):
         return calc_affine_penalty(
             length, self.open, self.extend, self.penalize_extend_when_opening)
