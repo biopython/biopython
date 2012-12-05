@@ -1054,7 +1054,6 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         warnings.warn(BiopythonParserWarning("Couldn't parse feature location: %r" \
                                              % (location_line)))
 
-
     def feature_qualifier(self, key, value):
         """When we get a qualifier key and its value.
 

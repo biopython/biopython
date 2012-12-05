@@ -132,7 +132,6 @@ class _AbstractHSExposure(AbstractPropertyMap):
         return cb_at_origin_v
 
 
-
 class HSExposureCA(_AbstractHSExposure):
     """
     Class to calculate HSE based on the approximate CA-CB vectors,

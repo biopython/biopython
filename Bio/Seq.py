@@ -561,7 +561,6 @@ class Seq(object):
             suffix_str = self._get_seq_str_and_check_alphabet(suffix)
             return str(self).endswith(suffix_str, start, end)
 
-
     def split(self, sep=None, maxsplit=-1):
         """Split method, like that of a python string.
 

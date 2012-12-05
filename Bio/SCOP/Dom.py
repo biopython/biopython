@@ -55,7 +55,6 @@ class Record(object):
         self.residues = Residues(res)
         self.residues.pdbid =pdbid
 
-
     def __str__(self):
         s = []
         s.append(self.sid)

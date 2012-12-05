@@ -700,7 +700,6 @@ class _Scanner(object):
         # S1: 41 (21.7 bits)
         # S2: 32 (16.9 bits)
 
-
         # Blast 2.2.4 can sometimes skip the whole parameter section.
         # BLAT also skips the whole parameter section.
         # Thus, check to make sure that the parameter section really

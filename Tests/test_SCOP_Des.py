@@ -11,7 +11,6 @@ import unittest
 from Bio.SCOP import Des
 
 
-
 class DesTests(unittest.TestCase):
 
     def setUp(self):
@@ -56,7 +55,6 @@ class DesTests(unittest.TestCase):
         self.assertEqual(record.sccs, recFields[2])
         self.assertEqual(record.name, recFields[3])
         self.assertEqual(record.description, recFields[4])
-
 
 
 if __name__=='__main__':

@@ -161,7 +161,6 @@ class Alignment(object):
         #See also the SeqRecord class and its format() method using Bio.SeqIO
         return self.__format__(format)
 
-
     def __format__(self, format_spec):
         """Returns the alignment as a string in the specified file format.
 

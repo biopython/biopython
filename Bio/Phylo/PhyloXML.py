@@ -508,7 +508,6 @@ class BinaryCharacters(PhyloElement):
         self.absent=absent or []
 
 
-
 class CladeRelation(PhyloElement):
     """Expresses a typed relationship between two clades.
 

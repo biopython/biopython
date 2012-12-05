@@ -268,7 +268,6 @@ class Track(object):
         self._sets[self._next_id] = set # Add set, keyed by unique id
         self._next_id += 1              # Increment unique set ids
 
-
     def new_set(self, type='feature', **args):
         """ new_set(self, type='feature') -> FeatureSet or GraphSet
 
@@ -287,7 +286,6 @@ class Track(object):
         self._next_id += 1              # Increment unique set ids
         return set
 
-
     def del_set(self, set_id):
         """ del_set(self, set_id)
 
@@ -297,7 +295,6 @@ class Track(object):
         """
         del self._sets[set_id]
 
-
     def get_sets(self):
         """ get_sets(self) -> FeatureSet or GraphSet
 
@@ -305,14 +302,12 @@ class Track(object):
         """
         return self._sets.values()
 
-
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return the ids of all sets contained in this track
         """
         return self._sets.keys()
-
 
     def range(self):
         """ range(self) -> (int, int)
@@ -355,7 +350,6 @@ class Track(object):
                 outstr.append("set: %s" % self._sets[key])
             return "\n".join(outstr)
 
-
     def __getitem__(self, key):
         """ __getitem__(self, key) -> int
 
@@ -364,7 +358,6 @@ class Track(object):
             Return the set with the passed id
         """
         return self._sets[key]
-
 
     def __str__(self):
         """ __str__(self) -> ""

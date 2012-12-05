@@ -13,7 +13,6 @@ from StringIO import *
 from Bio.SCOP import *
 
 
-
 class ScopTests(unittest.TestCase):
 
     def _compare_cla_lines(self, cla_line_1, cla_line_2):
@@ -75,7 +74,6 @@ class ScopTests(unittest.TestCase):
         self.assertEqual(len(domains), 14)
         self.assertEqual(domains[4].sunid, 14988)
 
-
         dom = scop.getNodeBySunid(-111)
         self.assertEqual(dom, None)
         dom = scop.getDomainBySid("no such domain")
@@ -101,8 +99,6 @@ class ScopTests(unittest.TestCase):
 
         s2="d1tpt_1 a.46.2.1 (1tpt 1-70) Thymidine phosphorylase {E. coli}"
         self.assertEqual(s2, str(parse_domain(s2)))
-
-
 
         #Genetic domains (See Astral release notes)
         s3="g1cph.1 g.1.1.1 (1cph B:,A:) Insulin {Cow (Bos taurus)}"
@@ -143,7 +139,6 @@ class ScopTests(unittest.TestCase):
         # an sf has no px ascendent
         px2 = sf.getAscendent('px')
         self.assertEqual(px2, None)
-
 
     def test_get_descendents(self):
         """Test getDescendents method"""

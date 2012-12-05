@@ -328,7 +328,6 @@ class Tree(Nodes.Chain):
             else: # for loop exhausted: no genera to collapse left
                 break # while
 
-
     def sum_branchlength(self,root=None,node=None):
         """Adds up the branchlengths from root (default self.root) to node.
 
@@ -411,7 +410,6 @@ class Tree(Nodes.Chain):
         l1=[self.root]+self.trace(self.root,node1)
         l2=[self.root]+self.trace(self.root,node2)
         return [n for n in l1 if n in l2][-1]
-
 
     def distance(self,node1,node2):
         """Add and return the sum of the branchlengths between two nodes.

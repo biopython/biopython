@@ -3,8 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-
 """
 This module allows to control GenePop through an easier interface.
 
@@ -141,7 +139,6 @@ class EasyController(object):
         for i in range(len(alleles)):
             allele_freq[alleles[i]] = freqs[i]
         return total, allele_freq
-
 
     def get_multilocus_f_stats(self):
         """ Returns the multilocus F stats

@@ -30,8 +30,6 @@ tc.test1('myline')  # 'test1: myline\n'
 tc.end_section()    # '***** end_section\n'
 
 
-
-
 ### is_blank_line
 
 print "Running tests on is_blank_line"
@@ -157,7 +155,6 @@ except ValueError:
     print "correctly failed"
 else:
     print "ERROR, should have failed"
-
 
 
 ### attempt_read_and_call

@@ -591,7 +591,6 @@ Function used was FASTA [version 34.26 January 12, 2007]
 
 """
 
-
     from StringIO import StringIO
 
     alignments = list(FastaM10Iterator(StringIO(simple_example)))

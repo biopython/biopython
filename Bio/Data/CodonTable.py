@@ -855,8 +855,6 @@ register_ncbi_table(name = 'Thraustochytrium Mitochondrial',
                     start_codons = [ 'ATT', 'ATG', 'GTG', ]
                     )
 
-
-
 #Basic sanity test,
 for key, val in generic_by_name.iteritems():
     assert key in ambiguous_generic_by_name[key].names

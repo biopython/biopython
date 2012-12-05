@@ -608,7 +608,6 @@ class SchemaFactory(object):
                 # represented by this schema
                 all_motifs.remove(motif)
 
-
             # all the schema info
             schema_info[new_schema] = schema_counts
 

@@ -101,7 +101,6 @@ class Chain(object):
         output = wrap_line(output)
         return output
 
-
     def __eq__(self, other):
         if len(self.data) != len(other.data):
             return 0

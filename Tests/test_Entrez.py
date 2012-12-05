@@ -3166,7 +3166,6 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdUrlList"][0]["ObjUrl"][0]["Provider"]["Url"], "http://highwire.stanford.edu")
         self.assertEqual(record[0]["IdUrlList"][0]["ObjUrl"][0]["Provider"]["IconUrl"], "http://highwire.stanford.edu/icons/externalservices/pubmed/highwirepress.jpg")
 
-
     def test_pubmed4(self):
         '''Test parsing pubmed links returned by ELink (fourth test)
         '''
@@ -3402,7 +3401,6 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["MenuTag"], "LinkOut")
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["HtmlTag"], "LinkOut")
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["Priority"], "255")
-
 
     def test_pubmed6(self):
         '''Test parsing pubmed links returned by ELink (sixth test)
@@ -3972,7 +3970,6 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(len(record[1]["PubmedData"]["ArticleIdList"]), 1)
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0], "9997")
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0].attributes["IdType"], "pubmed")
-
 
     def test_pubmed2(self):
         '''Test parsing XML returned by EFetch, PubMed database (second test)

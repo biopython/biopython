@@ -219,7 +219,6 @@ class MixinTests(unittest.TestCase):
         dee = self.phylogenies[10].find_clades('D').next()
         self.assertEqual(dee.name, 'D')
 
-
     def test_find_terminal(self):
         """TreeMixin: find_elements() with terminal argument."""
         for tree, total, extern, intern in zip(

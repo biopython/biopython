@@ -137,7 +137,6 @@ class Primer3ParseTest(unittest.TestCase):
         self.assertEqual(targets[15].primers[4].forward_seq,
                          "TATCGCAACCACTGAGCAAG")
 
-
     def test_mutli_record_full(self):
         """Test parsing multiple primer sets (NirK full)"""
         h = open(os.path.join("Emboss", "NirK_full.primer3"))

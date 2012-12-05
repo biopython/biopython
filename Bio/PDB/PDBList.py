@@ -79,7 +79,6 @@ class PDBList(object):
         self.overwrite = 0
         self.flat_tree = 0
 
-
     def get_status_list(self,url):
         """Retrieves a list of pdb codes in the weekly pdb status file
         from the given URL. Used by get_recent_files.
@@ -95,7 +94,6 @@ class PDBList(object):
             answer.append(pdb)
         handle.close()
         return answer
-
 
     def get_recent_changes(self):
         """Returns three lists of the newest weekly files (added,mod,obsolete).
@@ -294,7 +292,6 @@ class PDBList(object):
                 print "Obsolete file %s already moved" % old_file
             else:
                 print "Obsolete file %s is missing" % old_file
-
 
     def download_entire_pdb(self, listfile=None):
         """Retrieve all PDB entries not present in the local PDB copy.

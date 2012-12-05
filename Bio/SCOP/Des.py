@@ -65,7 +65,6 @@ class Record(object):
             self.name = ''
         self.sunid = int(sunid)
 
-
     def __str__(self):
         s = []
         s.append(self.sunid)

@@ -100,7 +100,6 @@ class FeatureSet(object):
         self.features = {}     # Holds features, keyed by ID
         self.name = name        # String describing the set
 
-
     def add_feature(self, feature, **kwargs):
         """ add_feature(self, feature, **args)
 
@@ -137,7 +136,6 @@ class FeatureSet(object):
         """
         del self.features[feature_id]
 
-
     def set_all_features(self, attr, value):
         """ set_all_features(self, attr, value)
 
@@ -159,7 +157,6 @@ class FeatureSet(object):
         #As a quick hack, make "colour" set both "colour" and "color".
         #if attr=="colour":
         #    self.set_all_feature("color",value)
-
 
     def get_features(self, attribute=None, value=None, comparator=None):
         """ get_features(self, attribute=None, value=None, comparator=None) ->
@@ -207,15 +204,12 @@ class FeatureSet(object):
         # As a final option, just return an empty list
         return []
 
-
-
     def get_ids(self):
         """ get_ids(self) -> [int, int, ...]
 
             Return a list of all ids for the feature set
         """
         return self.features.keys()
-
 
     def range(self):
         """ range(self)
@@ -230,7 +224,6 @@ class FeatureSet(object):
         if len(lows) != 0 and len(highs) != 0:      # Default in case there is
             return (min(lows), max(highs))          # nothing in the set
         return 0, 0
-
 
     def to_string(self, verbose=0):
         """ to_string(self, verbose=0) -> ""
@@ -256,14 +249,12 @@ class FeatureSet(object):
         """
         return len(self.features)
 
-
     def __getitem__(self, key):
         """ __getitem__(self, key) -> Feature
 
             Return a feature, keyed by id
         """
         return self.features[key]
-
 
     def __str__(self):
         """ __str__(self) -> ""

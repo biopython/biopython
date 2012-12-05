@@ -275,7 +275,6 @@ class Scop(object):
     def getRoot(self):
         return self.getNodeBySunid(0)
 
-
     def getDomainBySid(self, sid):
         """Return a domain from its sid"""
         if sid in self._sidDict:
@@ -286,7 +285,6 @@ class Scop(object):
                 return self._sidDict[sid]
         else:
             return None
-
 
     def getNodeBySunid(self, sunid):
         """Return a node from its sunid"""
@@ -314,7 +312,6 @@ class Scop(object):
         for n in nodes:
             handle.write(str(n.toHieRecord()))
 
-
     def write_des(self, handle):
         """Build a DES SCOP parsable file from this object"""
         nodes = self._sunidDict.values()
@@ -324,7 +321,6 @@ class Scop(object):
             if n != self.root:
                 handle.write(str(n.toDesRecord()))
 
-
     def write_cla(self, handle):
         """Build a CLA SCOP parsable file from this object"""
         nodes = self._sidDict.values()
@@ -332,7 +328,6 @@ class Scop(object):
         nodes.sort(key = lambda n: n.sunid)
         for n in nodes:
             handle.write(str(n.toClaRecord()))
-
 
     def getDomainFromSQL(self, sunid=None, sid=None):
         """Load a node from the SQL backend using sunid or sid"""
@@ -406,7 +401,6 @@ class Scop(object):
 
         des_list = []
 
-
         # SQL cla table knows nothing about 'ro'
         if node.type == 'ro':
             for c in node.getChildren():
@@ -472,7 +466,6 @@ class Scop(object):
         for p in self._sunidDict.itervalues():
             for c in p.children:
                 cur.execute("INSERT INTO hie VALUES (%s,%s)" % (p.sunid, c.sunid))
-
 
     def write_cla_sql(self, handle):
         """Write CLA data to SQL database"""
@@ -747,7 +740,6 @@ class Astral(object):
                 self.EvDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.EvDatasets[id]
 
-
     def domainsClusteredById(self,id):
         """get domains clustered by percent id"""
         if id not in self.IdDatasets:
@@ -762,7 +754,6 @@ class Astral(object):
                 filename = os.path.join(self.path,filename)
                 self.IdDatasets[id] = self.getAstralDomainsFromFile(filename)
         return self.IdDatasets[id]
-
 
     def getAstralDomainsFromFile(self,filename=None,file_handle=None):
         """Get the scop domains from a file containing a list of sids"""
@@ -806,7 +797,6 @@ class Astral(object):
     def getSeq(self,domain):
         """Return seq associated with domain"""
         return self.getSeqBySid(domain.sid)
-
 
     def hashedDomainsById(self,id):
         """Get domains clustered by sequence identity in a dict"""

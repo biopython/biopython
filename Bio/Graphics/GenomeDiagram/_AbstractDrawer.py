@@ -244,7 +244,6 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     if boxwidth < 0:
         headlength *= -1 #reverse it
 
-
     shafttop = 0.5*(boxheight+shaftheight)
     shaftbase = boxheight-shafttop
     headbase = boxwidth-headlength
@@ -276,7 +275,6 @@ def angle2trig(theta):
     c = cos(theta * pi / 180)
     s = sin(theta * pi / 180)
     return(c, s, -s, c)         # Vector for rotating point around an origin
-
 
 def intermediate_points(start, end, graph_data):
     """ intermediate_points(start, end, graph_data)
@@ -473,7 +471,6 @@ class AbstractDrawer(object):
         else:
             self.pagesize = (shortside, longside)
 
-
     def set_margins(self, x, y, xl, xr, yt, yb):
         """ set_margins(self, x, y, xl, xr, yt, yb)
 
@@ -528,7 +525,6 @@ class AbstractDrawer(object):
         self.start, self.end = int(start), int(end)
         self.length = self.end - self.start + 1
 
-
     def is_in_bounds(self, value):
         """ is_in_bounds(self, value)
 
@@ -539,7 +535,6 @@ class AbstractDrawer(object):
         if value >= self.start and value <= self.end:
             return 1
         return 0
-
 
     def __len__(self):
         """ __len__(self)

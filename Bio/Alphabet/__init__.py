@@ -98,8 +98,6 @@ class RNAAlphabet(NucleotideAlphabet):
 
 generic_rna = RNAAlphabet()
 
-
-
 ########### Other per-sequence encodings
 
 class SecondaryStructure(SingleLetterAlphabet):

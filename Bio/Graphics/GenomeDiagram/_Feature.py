@@ -159,7 +159,6 @@ class Feature(object):
         self._feature = feature
         self.__process_feature()
 
-
     def __process_feature(self):
         """ __process_feature(self)
 
@@ -201,7 +200,6 @@ class Feature(object):
                 break
         #Note will be 0 to N for origin wrapping feature on genome of length N
         self.start, self.end = min(bounds), max(bounds)
-
 
     def get_feature(self):
         """ get_feature(self) -> Bio.SeqFeature

@@ -406,7 +406,6 @@ class StockholmIterator(AlignmentIterator):
                     #       multiple lines
             #Next line...
 
-
         assert len(seqs) <= len(ids)
         #assert len(gs)   <= len(ids)
         #assert len(gr)   <= len(ids)
@@ -453,7 +452,6 @@ class StockholmIterator(AlignmentIterator):
             return alignment
         else:
             raise StopIteration
-
 
     def _identifier_split(self, identifier):
         """Returns (name,start,end) string tuple from an identier."""

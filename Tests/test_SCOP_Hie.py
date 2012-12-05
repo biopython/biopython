@@ -11,8 +11,6 @@ import unittest
 from Bio.SCOP import Hie
 
 
-
-
 class HieTests(unittest.TestCase):
 
     def setUp(self):

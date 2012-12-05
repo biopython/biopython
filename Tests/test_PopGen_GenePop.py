@@ -67,7 +67,6 @@ class AppTest(unittest.TestCase):
         assert (mean_sample_size, mean_priv_alleles, mig10, mig25, mig50, mig_corrected) == \
                (28.0, 0.016129, 52.5578, 15.3006, 8.94583, 13.6612)
 
-
     def test_fst_all(self):
         """Test genepop execution on all fst.
         """

@@ -131,7 +131,6 @@ class ProtParamTest(unittest.TestCase):
             # Expected values have 4 decimal places, so restrict to that exactness
             self.assertAlmostEqual(i, e, places=4)
 
-
     def test_gravy(self):
         "Test calculating gravy"
         self.assertAlmostEqual(self.analysis.gravy(), -0.5974, places=4)

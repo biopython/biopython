@@ -119,7 +119,6 @@ class Record(object):
         self.hit_aln=''
         self.positives=''
 
-
     def query_coverage(self):
         """Return the length of the query covered in the alignment."""
         s = self.query_aln.replace("=", "")

@@ -21,7 +21,6 @@ if sys.version_info[0] >= 3:
         #Note ISO-8859-1 aka Latin-1 preserves first 256 chars
         return codecs.latin_1_decode(s)[0]
 
-
     def _as_bytes(s):
         """Turn byte string or unicode string into a bytes string.
 

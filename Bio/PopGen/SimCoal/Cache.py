@@ -26,7 +26,6 @@ class SimCoalCache(object):
         self.cacheDir = os.sep.join([data_dir, 'SimCoal', 'cache'])
         self.simcoalDir = simcoal_dir
 
-
     def run_simcoal(self, par_file, num_sims, ploydi = '1', parDir = None):
         if parDir is None:
             parDir = os.sep.join([self.dataDir, 'SimCoal', 'runs'])

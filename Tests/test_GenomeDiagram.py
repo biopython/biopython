@@ -763,7 +763,6 @@ class DiagramTest(unittest.TestCase):
         gdfsA = FeatureSet(name='CDS backgrounds')
         gdfsB = FeatureSet(name='gene background')
 
-
         gdfs1 = FeatureSet(name='CDS features')
         gdfs2 = FeatureSet(name='gene features')
         gdfs3 = FeatureSet(name='misc_features')
@@ -837,7 +836,6 @@ class DiagramTest(unittest.TestCase):
         b = gdfsB.add_feature(SeqFeature(FeatureLocation(6275,6375)), color=f, border=c)
         gdd.cross_track_links.append(CrossLink(a, b, color=f, border=c, flip=True))
 
-
         cds_count = 0
         for feature in genbank_entry.features:
             if feature.type == 'CDS':
@@ -898,7 +896,6 @@ class DiagramTest(unittest.TestCase):
                 height=1.94, greytrack=1,
                 scale_largetick_interval=1e4)
         gdt4.add_set(gdgs1)
-
 
         gdgs2 = GraphSet('GC and AT Content')
         gdgs2.new_graph(apply_to_window(genbank_entry.seq, step, calc_gc_content, step),

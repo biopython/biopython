@@ -151,7 +151,6 @@ class GraphData(object):
         for (pos, val) in data:     # Fill data dictionary
             self.data[pos] = val
 
-
     def get_data(self):
         """ get_data(self) -> [(int, float), (int, float), ...]
 
@@ -164,7 +163,6 @@ class GraphData(object):
         data.sort()
         return data
 
-
     def add_point(self, point):
         """ add_point(self, point)
 
@@ -174,7 +172,6 @@ class GraphData(object):
         """
         pos, val = point
         self.data[pos] = val
-
 
     def quartiles(self):
         """ quartiles(self) -> (float, float, float, float, float)
@@ -188,7 +185,6 @@ class GraphData(object):
         return(data[0], data[datalen//4], data[datalen//2],
                data[3*datalen//4], data[-1])
 
-
     def range(self):
         """ range(self) -> (int, int)
 
@@ -201,7 +197,6 @@ class GraphData(object):
         #print len(self.data)
         return (positions[0], positions[-1])
 
-
     def mean(self):
         """ mean(self) -> Float
 
@@ -212,7 +207,6 @@ class GraphData(object):
         for item in data:
             sum += float(item)
         return sum/len(data)
-
 
     def stdev(self):
         """ stdev(self) -> Float
@@ -234,7 +228,6 @@ class GraphData(object):
             Returns the number of points in the data set
         """
         return len(self.data)
-
 
     def __getitem__(self, index):
         """ __getitem__(self, index) -> Float or list of tuples
@@ -265,7 +258,6 @@ class GraphData(object):
             return outlist
         else:
             raise TypeError("Need an integer or a slice")
-
 
     def __str__(self):
         """ __str__(self) -> ""

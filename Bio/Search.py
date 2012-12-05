@@ -62,7 +62,6 @@ class Hit(object):
         return self.length
 
 
-
 # >GB_PL:ATF18F4 AL021637 Arabidopsis thaliana DNA chromosome 4, BAC clone
 #           F18F4 (ESSAII project). 2/98
 #             Length = 93,646

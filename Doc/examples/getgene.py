@@ -257,8 +257,6 @@ class DB_Index:
                 break
         return keywords
 
-
-
 def help(exit = 0):
     name = os.path.basename(sys.argv[0])
     print 'Usage: %s <db> <gene ID>' % name

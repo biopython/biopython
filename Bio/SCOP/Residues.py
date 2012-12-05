@@ -33,13 +33,11 @@ class Residues(object):
 
     """
 
-
     def __init__(self, str=None):
         self.pdbid = ''
         self.fragments = ()
         if str is not None:
             self._parse(str)
-
 
     def _parse(self, str):
         str = str.strip()

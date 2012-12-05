@@ -382,7 +382,6 @@ BB!!!<!!21!=9,!'!!!>!)>9!!))!5!.!!).!=+9!+!!!%!!('
 """)
 
 
-
 class TestReadWrite(unittest.TestCase):
     """Test can read and write back files."""
     def test_fastq_2000(self):

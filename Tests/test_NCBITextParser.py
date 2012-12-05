@@ -8,7 +8,6 @@ import unittest
 from Bio.Blast import NCBIStandalone
 
 
-
 class TestBlastRecord(unittest.TestCase):
 
     # - incredibly incomplete. Just testing what I'm adding -- Brad.
@@ -10046,7 +10045,6 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 63)
         self.assertAlmostEqual(record.blast_cutoff[1], 29.0)
 
-
     def test_text_2012L_psiblast_001(self):
         "Test parsing BLASTP 2.0.12 output (text_2012L_psiblast_001)"
 
@@ -12785,7 +12783,6 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.blast_cutoff[0], 15)
         self.assertAlmostEqual(record.blast_cutoff[1], 30.2)
 
-
     def test_text_2014L_psiblast_001(self):
         "Test parsing BLASTP 2.0.14 output (text_2014L_psiblast_001)"
 
@@ -13630,7 +13627,6 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.alignments[6].hsps[0].query_end, 565)
         self.assertEqual(record.alignments[6].hsps[0].sbjct_start, 486)
         self.assertEqual(record.alignments[6].hsps[0].sbjct_end, 554)
-
 
         self.assertEqual(record.alignments[7].title, ">gi|16080600|ref|NP_391427.1| late competence protein [Bacillus subtilis subsp. subtilis str. 168]")
         self.assertEqual(record.alignments[7].length, 463)

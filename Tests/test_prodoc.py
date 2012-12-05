@@ -9,8 +9,6 @@ import unittest
 from Bio.ExPASy import Prodoc
 
 
-
-
 class TestProdocRead(unittest.TestCase):
 
     def test_read_pdoc00100(self):

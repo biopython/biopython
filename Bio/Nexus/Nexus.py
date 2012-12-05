@@ -737,7 +737,6 @@ class Nexus(object):
         if 'notokens' in options:
             self.tokens=False
 
-
     def _set(self,options):
         self.set=options
 
@@ -1348,7 +1347,6 @@ class Nexus(object):
                 else:
                     fh.write(self.append_sets(exclude=exclude,delete=delete,mrbayes=mrbayes))
         return filename
-
 
     def append_sets(self,exclude=[],delete=[],mrbayes=False,include_codons=True,codons_only=False):
         """Returns a sets block."""

@@ -92,7 +92,6 @@ class StringMethodTests(unittest.TestCase):
             _examples.append(seq.tomutable())
     _start_end_values = [0, 1, 2, 1000, -1, -2, -999]
 
-
     def _test_method(self, method_name, pre_comp_function=None, start_end=False):
         """Check this method matches the plain string's method."""
         self.assertTrue(isinstance(method_name, str))
@@ -487,7 +486,6 @@ class StringMethodTests(unittest.TestCase):
         self.assertEqual(str(Seq("tar").translate()), "*")
         self.assertEqual(str(Seq("tan").translate()), "X")
         self.assertEqual(str(Seq("nnn").translate()), "X")
-
 
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""

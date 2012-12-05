@@ -292,7 +292,6 @@ class Parser(object):
                 ann_key = 'comment_%s_xml' % element.attrib['type'].replace(' ', '')
                 append_to_annotations(ann_key, ElementTree.tostring(element))
 
-
         def _parse_dbReference(element):
             self.ParsedSeqRecord.dbxrefs.append(element.attrib['type'] + ':' + element.attrib['id'])
             #e.g.

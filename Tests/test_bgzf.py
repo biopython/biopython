@@ -226,7 +226,6 @@ class BgzfTests(unittest.TestCase):
             self.assertEqual(h.tell(), voffset)
         h.close()
 
-
     def test_random_bam_ex1(self):
         """Check random access to SamBam/ex1.bam"""
         self.check_random("SamBam/ex1.bam")

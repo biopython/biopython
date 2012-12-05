@@ -2211,7 +2211,6 @@ class Analysis(RestrictionBatch, PrintFormat):
             dct = self.mapping
         return dict([(k,v) for k,v in dct.iteritems() if k.is_5overhang()])
 
-
     def overhang3(self, dct=None):
         """A.Overhang3([dct]) -> dict.
 

@@ -104,7 +104,6 @@ class UniformTest(unittest.TestCase):
         new_org_1, new_org_2 = self.crossover.do_crossover(self.org_1,
                                                            self.org_3)
 
-
         self.assertTrue(len(new_org_1.genome) > len(new_org_2.genome),
                      "Strings are of wrong sizes after uniform crossover.")
 

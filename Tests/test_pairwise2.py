@@ -244,7 +244,6 @@ G-TCT
 """)
 
 
-
 class TestPairwiseSeparateGapPenaltiesWithExtension(unittest.TestCase):
 
     def test_separate_gap_penalties_with_extension(self):

@@ -173,7 +173,6 @@ class OrganismGraphicTest(unittest.TestCase):
 
         pdf_organism.draw(self.test_file, "Test organism")
 
-
     def _simple_organism(self, filename, format):
         """Output a simple organism to given format."""
         test_organism = BasicChromosome.Organism(format)

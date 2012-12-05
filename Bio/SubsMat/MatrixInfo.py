@@ -1854,7 +1854,6 @@ johnson = _temp()
 del _temp
 
 
-
 # http://www.embl-heidelberg.de/~vogt/matrices/levin.cmp
 def _temp():
     return {

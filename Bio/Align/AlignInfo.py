@@ -300,7 +300,6 @@ class SummaryInfo(object):
 
         return start_dict
 
-
     def _get_all_letters(self):
         """Returns a string containing the expected letters in the alignment."""
         all_letters = self.alignment._alphabet.letters
@@ -351,7 +350,6 @@ class SummaryInfo(object):
                     base_dictionary[(first_letter, second_letter)] = 0
 
         return base_dictionary, skip_items
-
 
     def pos_specific_score_matrix(self, axis_seq = None,
                                   chars_to_ignore = []):
@@ -416,7 +414,6 @@ class SummaryInfo(object):
 
             pssm_info.append((left_seq[residue_num],
                               score_dict))
-
 
         return PSSM(pssm_info)
 
