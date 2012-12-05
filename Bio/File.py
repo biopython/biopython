@@ -190,6 +190,7 @@ else:
             def __init__(self):
                 sgmllib.SGMLParser.__init__(self)
                 self.data = ''
+
             def handle_data(self, data):
                 self.data = self.data + data
 

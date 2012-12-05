@@ -352,6 +352,7 @@ class TreeMixin(object):
         # Only one path will work -- ignore weights and visits
         path = []
         match = _combine_matchers(target, kwargs, True)
+
         def check_in_path(v):
             if match(v):
                 path.append(v)
@@ -363,6 +364,7 @@ class TreeMixin(object):
                     path.append(v)
                     return True
             return False
+
         if not check_in_path(self.root):
             return None
         return path[-2::-1]
@@ -435,11 +437,13 @@ class TreeMixin(object):
         else:
             depth_of = lambda c: c.branch_length or 0
         depths = {}
+
         def update_depths(node, curr_depth):
             depths[node] = curr_depth
             for child in node.clades:
                 new_depth = curr_depth + depth_of(child)
                 update_depths(child, new_depth)
+
         update_depths(self.root, self.root.branch_length or 0)
         return depths
 
@@ -925,6 +929,7 @@ class Tree(TreeElement, TreeMixin):
         """
         TAB = '    '
         textlines = []
+
         def print_tree(obj, indent):
             """Recursively serialize sub-elements.
 
@@ -940,6 +945,7 @@ class Tree(TreeElement, TreeMixin):
                     for elem in child:
                         if isinstance(elem, TreeElement):
                             print_tree(elem, indent)
+
         print_tree(self, 0)
         return '\n'.join(textlines)
 
@@ -1106,8 +1112,10 @@ class BranchColor(object):
                 hexstr.startswith('#') and
                 len(hexstr) == 7
                 ), "need a 24-bit hexadecimal string, e.g. #000000"
+
         def unpack(cc):
             return int('0x'+cc, base=16)
+
         RGB = hexstr[1:3], hexstr[3:5], hexstr[5:]
         return cls(*map(unpack, RGB))
 

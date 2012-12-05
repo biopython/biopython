@@ -272,8 +272,10 @@ class GenePopController(object):
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
         self._run_genepop([ext], [1, type], fname, opts)
         f = open(fname + ext)
+
         def hw_func(self):
             return _hw_func(self.stream, False)
+
         return _FileIterator(hw_func, f, fname + ext)
 
     def _test_global_hz_both(self, fname, type, ext, enum_test = True,
@@ -294,8 +296,10 @@ class GenePopController(object):
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
         self._run_genepop([ext], [1, type], fname, opts)
+
         def hw_pop_func(self):
             return _read_table(self.stream, [str, _gp_float, _gp_float, _gp_float])
+
         f1 = open(fname + ext)
         l = f1.readline()
         while "by population" not in l:
@@ -367,10 +371,13 @@ class GenePopController(object):
         """
         opts = self._get_opts(dememorization, batches, iterations, enum_test)
         self._run_genepop([ext], [1, 3], fname, opts)
+
         def hw_prob_loci_func(self):
             return  _hw_func(self.stream, True, True)
+
         def hw_prob_pop_func(self):
             return _hw_func(self.stream, False, True)
+
         shutil.copyfile(fname+".P", fname+".P2")
         f1 = open(fname + ".P")
         f2 = open(fname + ".P2")
@@ -420,6 +427,7 @@ class GenePopController(object):
         dememorization = 10000, batches = 20, iterations = 5000):
         opts = self._get_opts(dememorization, batches, iterations)
         self._run_genepop([".DIS"], [2, 1], fname, opts)
+
         def ld_pop_func(self):
             current_pop = None
             l = self.stream.readline().rstrip()
@@ -437,6 +445,7 @@ class GenePopController(object):
                 return current_pop, pop, (locus1, locus2), None
             p, se, switches = _gp_float(toks[3]), _gp_float(toks[4]), _gp_int(toks[5])
             return current_pop, pop, (locus1, locus2), (p, se, switches)
+
         def ld_func(self):
             l = self.stream.readline().rstrip()
             if l == "":
@@ -449,6 +458,7 @@ class GenePopController(object):
             except ValueError:
                 return (locus1, locus2), None
             return (locus1, locus2), (chi2, df, p)
+
         f1 = open(fname + ".DIS")
         l = f1.readline()
         while "----" not in l:
@@ -560,6 +570,7 @@ class GenePopController(object):
         #        num_loci = _gp_int(m.group(1))
         #    l = f.readline()
         #f.close()
+
         def pop_parser(self):
             if hasattr(self, "old_line"):
                 l = self.old_line
@@ -638,6 +649,7 @@ class GenePopController(object):
                         freq_fis, overall_fis
             self.done = True
             raise StopIteration
+
         def locus_parser(self):
             l = self.stream.readline()
             while l != "":
@@ -669,6 +681,7 @@ class GenePopController(object):
                 avg_Qintra = _read_table(f, [str, _gp_float])
             l = f.readline()
         f.close()
+
         def fis_func(self):
             l = self.stream.readline()
             while l != "":
@@ -688,6 +701,7 @@ class GenePopController(object):
                 l = self.stream.readline()
             self.done = True
             raise StopIteration
+
         dvf = open(fname + ext)
         return _FileIterator(fis_func, dvf, fname + ext), avg_fis, avg_Qintra
 
@@ -736,6 +750,7 @@ class GenePopController(object):
             l = f.readline()
         f.close()
         f = open(fname + ".FST")
+
         def proc(self):
             if hasattr(self, "last_line"):
                 l = self.last_line
@@ -786,6 +801,7 @@ class GenePopController(object):
                 avg_fst = _read_headed_triangle_matrix(f)
             l = f.readline()
         f.close()
+
         def loci_func(self):
             l = self.stream.readline()
             while l != "":
@@ -798,6 +814,7 @@ class GenePopController(object):
                 l = self.stream.readline()
             self.done = True
             raise StopIteration
+
         stf = open(fname + ".ST2")
         os.remove(fname + ".MIG")
         return _FileIterator(loci_func, stf, fname + ".ST2"), avg_fst

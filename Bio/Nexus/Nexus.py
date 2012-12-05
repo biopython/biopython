@@ -558,9 +558,11 @@ class Nexus(object):
     def get_original_taxon_order(self):
         """Included for backwards compatibility (DEPRECATED)."""
         return self.taxlabels
+
     def set_original_taxon_order(self,value):
         """Included for backwards compatibility (DEPRECATED)."""
         self.taxlabels=value
+
     original_taxon_order=property(get_original_taxon_order,set_original_taxon_order)
 
     def read(self,input):

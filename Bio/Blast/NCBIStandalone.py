@@ -1210,6 +1210,7 @@ class _HSPConsumer(object):
     # line below modified by Yair Benita, Sep 2004
     # Note that the colon is not always present. 2006
     _query_re = re.compile(r"Query(:?) \s*(\d+)\s*(.+) (\d+)")
+
     def query(self, line):
         m = self._query_re.search(line)
         if m is None:
@@ -1243,6 +1244,7 @@ class _HSPConsumer(object):
     # To match how we do the query, cache the regular expression.
     # Note that the colon is not always present.
     _sbjct_re = re.compile(r"Sbjct(:?) \s*(\d+)\s*(.+) (\d+)")
+
     def sbjct(self, line):
         m = self._sbjct_re.search(line)
         if m is None:
@@ -2126,6 +2128,7 @@ def _security_check_parameters(param_dict):
 class _BlastErrorConsumer(_BlastConsumer):
     def __init__(self):
         _BlastConsumer.__init__(self)
+
     def noevent(self, line):
         if 'Query must be at least wordsize' in line:
             raise ShortQueryBlastError("Query must be at least wordsize")

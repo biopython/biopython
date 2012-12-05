@@ -105,6 +105,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
         return self.adaptor.get_subseq_as_string(self.primary_id,
                                                  self.start,
                                                  self.start + self._length)
+
     def __str__(self):
         """Returns the full sequence as a python string."""
         return self.adaptor.get_subseq_as_string(self.primary_id,

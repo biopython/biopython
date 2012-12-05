@@ -209,12 +209,14 @@ def draw_ascii(tree, file=sys.stdout, column_width=80):
 
     def get_row_positions(tree):
         positions = dict((taxon, 2*idx) for idx, taxon in enumerate(taxa))
+
         def calc_row(clade):
             for subclade in clade:
                 if subclade not in positions:
                     calc_row(subclade)
             positions[clade] = (positions[clade.clades[0]] +
                                 positions[clade.clades[-1]]) / 2
+
         calc_row(tree.root)
         return positions
 
@@ -347,6 +349,7 @@ def draw(tree, label_func=str, do_show=True, show_confidence=True,
         # Rows are defined by the tips
         heights = dict((tip, maxheight - i)
                 for i, tip in enumerate(reversed(tree.get_terminals())))
+
         # Internal nodes: place at midpoint of children
         def calc_row(clade):
             for subclade in clade:

@@ -27,6 +27,7 @@ except AttributeError:
     # this module.
     import warnings
     warnings.warn("For optimal speed, please update to Numpy version 1.3 or later (current version is %s)" % numpy.__version__)
+
     def logaddexp(logx, logy):
         if logy - logx > 100:
             return logy
@@ -58,6 +59,7 @@ class MarkovModel(object):
         self.p_initial = p_initial
         self.p_transition = p_transition
         self.p_emission = p_emission
+
     def __str__(self):
         import StringIO
         handle = StringIO.StringIO()

@@ -74,6 +74,7 @@ class Record(object):
         self.disease    = []
         self.structures = []
         self.dblinks    = []
+
     def __str__(self):
         """__str__(self)
 
@@ -96,48 +97,60 @@ class Record(object):
                self._structures() + \
                self._dblinks() + \
                "///"
+
     def _entry(self):
         return _write_kegg("ENTRY",
                            ["EC " + self.entry])
+
     def _name(self):
         return _write_kegg("NAME",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.name])
+
     def _classname(self):
         return _write_kegg("CLASS",
                            self.classname)
+
     def _sysname(self):
         return _write_kegg("SYSNAME",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.sysname])
+
     def _reaction(self):
         return _write_kegg("REACTION",
                            [_wrap_kegg(l, wrap_rule = rxn_wrap) \
                             for l in self.reaction])
+
     def _substrate(self):
         return _write_kegg("SUBSTRATE",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.substrate])
+
     def _product(self):
         return _write_kegg("PRODUCT",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.product])
+
     def _inhibitor(self):
         return _write_kegg("INHIBITOR",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.inhibitor])
+
     def _cofactor(self):
         return _write_kegg("COFACTOR",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.cofactor])
+
     def _effector(self):
         return _write_kegg("EFFECTOR",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.effector])
+
     def _comment(self):
         return _write_kegg("COMMENT",
                            [_wrap_kegg(l, wrap_rule = id_wrap(0)) \
                             for l in self.comment])
+
     def _pathway(self):
         s = []
         for entry in self.pathway:
@@ -145,6 +158,7 @@ class Record(object):
         return _write_kegg("PATHWAY",
                            [_wrap_kegg(l, wrap_rule = id_wrap(16)) \
                             for l in s])
+
     def _genes(self):
         s = []
         for entry in self.genes:
@@ -152,6 +166,7 @@ class Record(object):
         return _write_kegg("GENES",
                            [_wrap_kegg(l, wrap_rule = id_wrap(5)) \
                             for l in s])
+
     def _disease(self):
         s = []
         for entry in self.disease:
@@ -159,6 +174,7 @@ class Record(object):
         return _write_kegg("DISEASE",
                            [_wrap_kegg(l, wrap_rule = id_wrap(13)) \
                             for l in s])
+
     def _structures(self):
         s = []
         for entry in self.structures:
@@ -166,6 +182,7 @@ class Record(object):
         return _write_kegg("STRUCTURES",
                            [_wrap_kegg(l, wrap_rule = struct_wrap(5)) \
                             for l in s])
+
     def _dblinks(self):
         # This is a bit of a cheat that won't work if enzyme entries
         # have more than one link id per db id. For now, that's not

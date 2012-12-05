@@ -84,6 +84,7 @@ class TutorialDocTestHolder(object):
 for name, example, folder in extract_doctests(tutorial):
     if sys.version_info[0] >= 3:
         example = rt.refactor_docstring(example, name)
+
     def funct(n, d, f):
         global tutorial_base
         method = lambda x : None
@@ -95,6 +96,7 @@ for name, example, folder in extract_doctests(tutorial):
             method.__doc__ = "%s\n\n%s\n" % (n, d)
         method._folder = f
         return method
+
     setattr(TutorialDocTestHolder,
             "doctest_%s" % name.replace(" ","_"),
             funct(name, example, folder))

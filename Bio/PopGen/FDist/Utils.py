@@ -86,11 +86,13 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
     pops = []
     work_rec = FileParser.read(gp_rec.fname)
     lParser = work_rec.get_individual()
+
     def init_pop():
         my_pop = []
         for i in range(num_loci):
             my_pop.append({})
         return my_pop
+
     curr_pop = init_pop()
     num_pops = 1
     if report_pops:
@@ -166,11 +168,13 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
             lParser = work_rec.get_individual()
         #here we go again (necessary...)
         alleles.sort()
+
         def process_pop(pop_data, alleles, allele_counts):
             allele_array = [] #We need the same order as in alleles
             for allele in alleles:
                 allele_array.append(allele_counts.get(allele, 0))
             pop_data.append(allele_array)
+
         lParser = work_rec2.get_individual()
         allele_counts = {}
         for allele in alleles:

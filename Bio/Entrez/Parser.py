@@ -98,11 +98,13 @@ class StructureElement(dict):
         for key in keys:
             dict.__setitem__(self, key, [])
         self.listkeys = keys
+
     def __setitem__(self, key, value):
         if key in self.listkeys:
             self[key].append(value)
         else:
             dict.__setitem__(self, key, value)
+
     def __repr__(self):
         text = dict.__repr__(self)
         try:
@@ -115,6 +117,7 @@ class StructureElement(dict):
 class NotXMLError(ValueError):
     def __init__(self, message):
         self.msg = message
+
     def __str__(self):
         return "Failed to parse the XML data (%s). Please make sure that the input data are in XML format." % self.msg
 
@@ -122,6 +125,7 @@ class NotXMLError(ValueError):
 class CorruptedXMLError(ValueError):
     def __init__(self, message):
         self.msg = message
+
     def __str__(self):
         return "Failed to parse the XML data (%s). Please make sure that the input data are not corrupted." % self.msg
 
@@ -130,6 +134,7 @@ class ValidationError(ValueError):
     """Validating parsers raise this error if the parser finds a tag in the XML that is not defined in the DTD. Non-validating parsers do not raise this error. The Bio.Entrez.read and Bio.Entrez.parse functions use validating parsers by default (see those functions for more information)"""
     def __init__(self, name):
         self.name = name
+
     def __str__(self):
         return "Failed to find tag '%s' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False." % self.name
 
@@ -396,6 +401,7 @@ class DataHandler(object):
         # The 'count' function is called recursively to make sure all the
         # children in this model are counted. Error keys are ignored;
         # they raise an exception in Python.
+
         def count(model):
             quantifier, name, children = model[1:]
             if name is None:

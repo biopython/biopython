@@ -456,6 +456,7 @@ class FeatureWriting(unittest.TestCase):
     def setUp(self):
         self.record = SeqRecord(Seq("ACGT"*100, generic_dna),
                                 id="Test", name="Test", description="Test")
+
     def write_read_check(self, format):
         handle = StringIO()
         SeqIO.write([self.record], handle, format)

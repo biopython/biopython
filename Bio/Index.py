@@ -101,12 +101,15 @@ class _InMemoryIndex(dict):
     def update(self, dict):
         self.__changed = 1
         dict.update(self, dict)
+
     def __setitem__(self, key, value):
         self.__changed = 1
         dict.__setitem__(self, key, value)
+
     def __delitem__(self, key):
         self.__changed = 1
         dict.__delitem__(self, key)
+
     def clear(self):
         self.__changed = 1
         dict.clear(self)

@@ -55,6 +55,7 @@ class Record(object):
         self.enzyme     = []
         self.structures = []
         self.dblinks    = []
+
     def __str__(self):
         """__str__(self)
 
@@ -69,13 +70,16 @@ class Record(object):
                self._structures() + \
                self._dblinks() + \
                "///"
+
     def _entry(self):
         return _write_kegg("ENTRY",
                            [self.entry])
+
     def _name(self):
         return _write_kegg("NAME",
                            [_wrap_kegg(l, wrap_rule = name_wrap) \
                             for l in self.name])
+
     def _formula(self):
         return _write_kegg("FORMULA",
                            [self.formula])
@@ -91,6 +95,7 @@ class Record(object):
         return _write_kegg("PATHWAY",
                            [_wrap_kegg(l, wrap_rule = id_wrap(16)) \
                             for l in s])
+
     def _enzyme(self):
         s = ""
         for entry in self.enzyme:
@@ -101,6 +106,7 @@ class Record(object):
             s = s + t.ljust(16)
         return _write_kegg("ENZYME",
                             [_wrap_kegg(s, wrap_rule = id_wrap(0))])
+
     def _structures(self):
         s = []
         for entry in self.structures:
@@ -108,6 +114,7 @@ class Record(object):
         return _write_kegg("STRUCTURES",
                            [_wrap_kegg(l, wrap_rule = struct_wrap(5)) \
                             for l in s])
+
     def _dblinks(self):
         s = []
         for entry in self.dblinks:

@@ -140,6 +140,7 @@ class IterationCursor(object):
 
 class QuerySingle(Query, QueryRow):
     ignore_warnings = 0
+
     def __init__(self, *args, **keywds):
         message = self.MSG_FAILURE
         Query.__init__(self, *args, **keywds)

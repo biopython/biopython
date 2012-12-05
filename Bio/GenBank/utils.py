@@ -21,6 +21,7 @@ class FeatureValueCleaner(object):
     the case with /notes).
     """
     keys_to_process = ["translation"]
+
     def __init__(self, to_process = keys_to_process):
         """Initialize with the keys we should deal with.
         """

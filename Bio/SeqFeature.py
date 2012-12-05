@@ -153,6 +153,7 @@ class SeqFeature(object):
 
     def _get_strand(self):
         return self.location.strand
+
     def _set_strand(self, value):
         try:
             self.location.strand = value
@@ -162,6 +163,7 @@ class SeqFeature(object):
                     raise ValueError("Can't set strand without a location.")
             else:
                 raise
+
     strand = property(fget = _get_strand, fset = _set_strand,
                       doc = """Feature's strand
 
@@ -170,6 +172,7 @@ class SeqFeature(object):
 
     def _get_ref(self):
         return self.location.ref
+
     def _set_ref(self, value):
         try:
             self.location.ref = value
@@ -187,6 +190,7 @@ class SeqFeature(object):
 
     def _get_ref_db(self):
         return self.location.ref_db
+
     def _set_ref_db(self, value):
         self.location.ref_db = value
     ref_db = property(fget = _get_ref_db, fset = _set_ref_db,
@@ -619,11 +623,13 @@ class FeatureLocation(object):
 
     def _get_strand(self):
         return self._strand
+
     def _set_strand(self, value):
         if value not in [+1, -1, 0, None]:
             raise ValueError("Strand should be +1, -1, 0 or None, not %r" \
                              % value)
         self._strand = value
+
     strand = property(fget = _get_strand, fset = _set_strand,
                       doc = "Strand of the location (+1, -1, 0 or None).")
 

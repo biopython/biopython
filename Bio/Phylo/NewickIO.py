@@ -179,6 +179,7 @@ class Writer(object):
         make_info_string = self._info_factory(plain,
                 confidence_as_branch_length, branch_length_only, max_confidence,
                 format_confidence, format_branch_length)
+
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
             if clade.is_terminal():    #terminal

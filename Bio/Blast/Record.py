@@ -68,6 +68,7 @@ class Description(object):
         self.bits = None
         self.e = None
         self.num_alignments = None
+
     def __str__(self):
         return "%-66s %5s  %s" % (self.title, self.score, self.e)
 
@@ -88,6 +89,7 @@ class Alignment(object):
         self.hit_def = ''
         self.length = None
         self.hsps = []
+
     def __str__(self):
         lines = self.title.split('\n')
         lines.append("Length = %s\n" % self.length)

@@ -31,6 +31,7 @@ class BlastTableRec(object):
         self.query = None
         self.database = None
         self.entries = []
+
     def add_entry(self, entry):
         self.entries.append(entry)
 
@@ -49,6 +50,7 @@ class BlastTableReader(object):
         self._lookahead = inline
         self._n = 0
         self._in_header = 1
+
     def next(self):
         self.table_record = BlastTableRec()
         self._n += 1
@@ -73,28 +75,35 @@ class BlastTableReader(object):
     def _consume_entry(self, inline):
         current_entry = BlastTableEntry(inline)
         self.table_record.add_entry(current_entry)
+
     def _consume_header(self, inline):
         for keyword in reader_keywords:
             if keyword in inline:
                 in_header = self._Parse('_parse_%s' % reader_keywords[keyword],inline)
                 break
         return in_header
+
     def _parse_version(self, inline):
         program, version, date = inline.split()[1:]
         self.table_record.program = program
         self.table_record.version = version
         self.table_record.date = date
         return 1
+
     def _parse_iteration(self, inline):
         self.table_record.iteration = int(inline.split()[2])
         return 1
+
     def _parse_query(self, inline):
         self.table_record.query = inline.split()[2:]
         return 1
+
     def _parse_database(self, inline):
         self.table_record.database = inline.split()[2]
         return 1
+
     def _parse_fields(self, inline):
         return 0
+
     def _Parse(self, method_name, inline):
         return getattr(self,method_name)(inline)
