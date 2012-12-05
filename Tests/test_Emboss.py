@@ -133,7 +133,7 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     SeqIO.write(records, child.stdin, old_format)
     child.stdin.close()
     child.stderr.close()
-    #TODO - Is there a nice way to return an interator AND
+    #TODO - Is there a nice way to return an iterator AND
     #automatically close the handle?
     records = list(SeqIO.parse(child.stdout, new_format))
     child.stdout.close()
@@ -165,7 +165,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
         raise
     child.stdin.close()
     child.stderr.close()
-    #TODO - Is there a nice way to return an interator AND
+    #TODO - Is there a nice way to return an iterator AND
     #automatically close the handle?
     try:
         aligns = list(AlignIO.parse(child.stdout, new_format))

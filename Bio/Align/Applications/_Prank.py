@@ -42,7 +42,7 @@ class PrankCommandline(AbstractCommandline):
     prevents errors in sequence alignment and evolutionary analysis.
     Science, 320: 1632.
 
-    Last checked agains version: 081202
+    Last checked against version: 081202
     """
     def __init__(self, cmd="prank", **kwargs):
         OUTPUT_FORMAT_VALUES = list(range(1,18))
