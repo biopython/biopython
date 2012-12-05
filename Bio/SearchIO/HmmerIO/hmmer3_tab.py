@@ -181,10 +181,11 @@ class Hmmer3TabIndexer(SearchIndexer):
                 curr_key = list(filter(None, cols))[query_id_idx]
 
                 if curr_key != qresult_key:
+                    adj_end = end_offset - len(line)
                     yield _bytes_to_string(qresult_key), start_offset, \
-                            end_offset - start_offset
+                            adj_end - start_offset
                     qresult_key = curr_key
-                    start_offset = end_offset - len(line)
+                    start_offset = adj_end
 
             line = handle.readline()
             if not line:
