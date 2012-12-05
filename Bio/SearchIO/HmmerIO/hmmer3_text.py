@@ -31,7 +31,7 @@ _QRE_ID_LEN_IDX = re.compile(_as_bytes(_QRE_ID_LEN_PTN))
 _HRE_VALIDATE = re.compile(r'score:\s(-?\d+\.?\d+)\sbits.*value:\s(.*)')
 # regexes for parsing hsp alignment blocks
 _HRE_ANNOT_LINE = re.compile(r'^(\s+)(.+)\s(\w+)')
-_HRE_ID_LINE = re.compile(r'^(\s+\S+\s+\d+ )(.+) (\d+)')
+_HRE_ID_LINE = re.compile(r'^(\s+\S+\s+[0-9-]+ )(.+?)(\s+[0-9-]+)')
 
 
 def _read_forward(handle):

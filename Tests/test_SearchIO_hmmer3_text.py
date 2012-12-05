@@ -1408,6 +1408,20 @@ class HmmerscanCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(1, counter)
 
+
+    def test_30_hmmscan_bug3399(self):
+        "Test parsing alignment lines that don't align with the query seq"
+        hmmer_file = get_file('text_30_hmmscan_bug3399.out')
+        qresults = parse(hmmer_file, FMT)
+        counter = 0
+
+        # test first qresult
+        qresult = qresults.next()
+        counter += 1
+        self.assertEqual('SCO3574', qresult.id)
+        self.assertEqual(5, len(qresult.hits))
+        self.assertEqual('Esterase', qresult.hits[3].id)
+
 class HmmersearchCases(unittest.TestCase):
 
     def test_30_hmmsearch_001(self):
