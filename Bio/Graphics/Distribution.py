@@ -104,8 +104,8 @@ class DistributionPage(object):
         for y_drawing in range(int(num_y_drawings)):
             # if we are on the last y position, we may not be able
             # to fill all of the x columns
-            if ((y_drawing + 1) * self.number_of_columns >
-                len(self.distributions)):
+            if (y_drawing + 1) * self.number_of_columns >
+               len(self.distributions):
                 num_x_drawings = len(self.distributions) - \
                                  y_drawing * self.number_of_columns
             else:

@@ -246,8 +246,8 @@ alignment occurs.
             i = 0
             while i < len(self.param_names):
                 if self.param_names[i] in [
-                    'sequenceA', 'sequenceB',
-                    'gap_A_fn', 'gap_B_fn', 'match_fn']:
+                   'sequenceA', 'sequenceB',
+                   'gap_A_fn', 'gap_B_fn', 'match_fn']:
                     keywds[self.param_names[i]] = args[i]
                     i += 1
                 elif self.param_names[i] == 'match':
@@ -359,9 +359,9 @@ def _align(sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
     return x
 
 def _make_score_matrix_generic(
-    sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
-    penalize_extend_when_opening, penalize_end_gaps, align_globally,
-    score_only):
+        sequenceA, sequenceB, match_fn, gap_A_fn, gap_B_fn,
+        penalize_extend_when_opening, penalize_end_gaps, align_globally,
+        score_only):
     # This is an implementation of the Needleman-Wunsch dynamic
     # programming algorithm for aligning sequences.
 
@@ -440,9 +440,9 @@ def _make_score_matrix_generic(
     return score_matrix, trace_matrix
 
 def _make_score_matrix_fast(
-    sequenceA, sequenceB, match_fn, open_A, extend_A, open_B, extend_B,
-    penalize_extend_when_opening, penalize_end_gaps,
-    align_globally, score_only):
+        sequenceA, sequenceB, match_fn, open_A, extend_A, open_B, extend_B,
+        penalize_extend_when_opening, penalize_end_gaps,
+        align_globally, score_only):
     first_A_gap = calc_affine_penalty(1, open_A, extend_A,
                                       penalize_extend_when_opening)
     first_B_gap = calc_affine_penalty(1, open_B, extend_B,

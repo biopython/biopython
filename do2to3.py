@@ -130,9 +130,9 @@ def do_update(py2folder, py3folder, verbose=False):
             #Compare modified times down to milliseconds only. In theory
             #might able to use times down to microseconds (10^-6), but
             #that doesn't work on this Windows machine I'm testing on.
-            if os.path.isfile(new) \
-            and round(os.stat(new).st_mtime*1000) >= \
-                round(os.stat(old).st_mtime*1000):
+            if os.path.isfile(new) and\
+               round(os.stat(new).st_mtime*1000) >= \
+               round(os.stat(old).st_mtime*1000):
                 if verbose:
                     print("Current: %s" % new)
                 continue

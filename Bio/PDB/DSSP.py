@@ -266,8 +266,8 @@ class DSSP(AbstractResiduePropertyMap):
                     res_seq_icode = resid2code(res_id)
                     for r in chain:
                         if r.id[0] not in (' ', 'W'):
-                            if (resid2code(r.id) == res_seq_icode and
-                                r.get_list()[0].get_altloc() in tuple('A1 ')):
+                            if resid2code(r.id) == res_seq_icode and
+                               r.get_list()[0].get_altloc() in tuple('A1 '):
                                 res = r
                                 break
 

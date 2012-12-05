@@ -173,8 +173,8 @@ def _create_hsp(hid, qid, hspd):
                 continue
         # try to set frame if there are translation in the alignment
         if len(frag.aln_annotation) > 1 or \
-            frag.query_strand == 0 or \
-            ('vulgar_comp' in hspd and re.search(_RE_TRANS, hspd['vulgar_comp'])):
+           frag.query_strand == 0 or \
+           ('vulgar_comp' in hspd and re.search(_RE_TRANS, hspd['vulgar_comp'])):
             _set_frame(frag)
 
         frags.append(frag)

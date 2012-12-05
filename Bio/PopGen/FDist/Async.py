@@ -75,7 +75,7 @@ class SplitFDist(object):
        simulation.
     """
     def __init__(self, report_fun = None,
-        num_thr = 2, split_size = 1000, fdist_dir = '', ext = None):
+                 num_thr = 2, split_size = 1000, fdist_dir = '', ext = None):
         """Constructor.
 
            Parameters:
@@ -145,9 +145,9 @@ class SplitFDist(object):
 
     #You can only run a fdist case at a time
     def run_fdist(self, npops, nsamples, fst, sample_size,
-        mut = 0, num_sims = 20000, data_dir='.',
-        is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
-        max_freq = 0.99):
+                  mut = 0, num_sims = 20000, data_dir='.',
+                  is_dominant = False, theta = 0.06, beta = (0.25, 0.25),
+                  max_freq = 0.99):
         """Runs FDist.
 
            Parameters can be seen on FDistController.run_fdist.

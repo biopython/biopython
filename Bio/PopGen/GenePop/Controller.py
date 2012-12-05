@@ -258,7 +258,8 @@ class GenePopController(object):
         return
 
     def _test_pop_hz_both(self, fname, type, ext, enum_test = True,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                          dememorization = 10000, batches = 20,
+                          iterations = 5000):
         """Hardy-Weinberg test for heterozygote deficiency/excess.
 
            Returns a population iterator containg
@@ -276,7 +277,8 @@ class GenePopController(object):
         return _FileIterator(hw_func, f, fname + ext)
 
     def _test_global_hz_both(self, fname, type, ext, enum_test = True,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                             dememorization = 10000, batches = 20,
+                             iterations = 5000):
         """Global Hardy-Weinberg test for heterozygote deficiency/excess.
 
            Returns a triple with:
@@ -323,7 +325,8 @@ class GenePopController(object):
 
     #1.1
     def test_pop_hz_deficiency(self, fname, enum_test = True,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                               dememorization = 10000, batches = 20,
+                               iterations = 5000):
         """Hardy-Weinberg test for heterozygote deficiency.
 
            Returns a population iterator containg
@@ -336,7 +339,8 @@ class GenePopController(object):
 
     #1.2
     def test_pop_hz_excess(self, fname, enum_test = True,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                           dememorization = 10000, batches = 20,
+                           iterations = 5000):
         """Hardy-Weinberg test for heterozygote deficiency.
 
            Returns a population iterator containg
@@ -349,7 +353,8 @@ class GenePopController(object):
 
     #1.3 P file
     def test_pop_hz_prob(self, fname, ext, enum_test = False,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                         dememorization = 10000, batches = 20,
+                         iterations = 5000):
         """Hardy-Weinberg test based on probability.
 
            Returns 2 iterators and a final tuple:
@@ -382,7 +387,8 @@ class GenePopController(object):
 
     #1.4
     def test_global_hz_deficiency(self, fname, enum_test = True,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                                  dememorization = 10000, batches = 20,
+                                  iterations = 5000):
         """Global Hardy-Weinberg test for heterozygote deficiency.
 
            Returns a triple with:
@@ -401,7 +407,8 @@ class GenePopController(object):
 
     #1.5
     def test_global_hz_excess(self, fname, enum_test = True,
-        dememorization = 10000, batches = 20, iterations = 5000):
+                              dememorization = 10000, batches = 20,
+                              iterations = 5000):
         """Global Hardy-Weinberg test for heterozygote excess.
 
            Returns a triple with:
@@ -420,9 +427,9 @@ class GenePopController(object):
 
     #2.1
     def test_ld(self, fname,
-        dememorization = 10000, batches = 20, iterations = 5000):
-        opts = self._get_opts(dememorization, batches, iterations)
-        self._run_genepop([".DIS"], [2, 1], fname, opts)
+                dememorization = 10000, batches = 20, iterations = 5000):
+                opts = self._get_opts(dememorization, batches, iterations)
+                self._run_genepop([".DIS"], [2, 1], fname, opts)
 
         def ld_pop_func(self):
             current_pop = None

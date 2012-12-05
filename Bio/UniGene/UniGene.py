@@ -158,8 +158,8 @@ class UniGeneParser( sgmllib.SGMLParser ):
             if( text[ 0 ] == ':' ):
                 text = text[ 1: ]
             text = string.join( string.split( text ) )
-            if( ( self.context == 'general_info' ) or \
-                ( self.context == 'seq_info' ) ):
+            if self.context == 'general_info' or \
+               self.context == 'seq_info':
                 try:
                     contents = self.queue[ self.master_key ][ self.key_waiting ]
                     if isinstance(contents, list):
