@@ -133,8 +133,7 @@ if sys.version_info[0] == 3:
 
 #HACK: Since Python2.5 under Windows have slightly different str(float) output,
 #we're removing doctests that may fail because of this
-if sys.version_info[0] == 2 and sys.version_info[1] == 5 and \
-        sys.platform == 'nt':
+if sys.platform == "win32" and sys.version_info < (2,6):
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hit")
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hsp")
 
