@@ -125,9 +125,9 @@ def get_install_requires():
             is_automated = True
     # pip -- calls from python directly with "-c"
     if sys.argv in [["-c", "develop", "--no-deps"],
-                     ["--no-deps", "-c", "develop"],
-                     ["-c", "egg_info"]]
-       or "pip-egg-info" in sys.argv:
+                    ["--no-deps", "-c", "develop"],
+                    ["-c", "egg_info"]] \
+                    or "pip-egg-info" in sys.argv:
         is_automated = True
     if is_automated:
         global _CHECKED

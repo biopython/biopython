@@ -42,8 +42,7 @@ class PatternIO(object):
         """
         for pattern in pattern_list:
             # deal with signatures, concatentate them with the separator
-            if isinstance(pattern, list) or
-               isinstance(pattern, tuple):
+            if isinstance(pattern, list) or isinstance(pattern, tuple):
                 string_pattern = self.separator.join(pattern)
             # deal with the normal cases
             else:

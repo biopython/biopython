@@ -42,7 +42,7 @@ def codeml(vers=None, verbose=False):
         cml.tree = tree
         for version in versions:
             print "\t{0}".format(version.replace('_', '.'))
-            if test[0] in ["ngene2_mgene02", "ngene2_mgene34"] and
+            if test[0] in ["ngene2_mgene02", "ngene2_mgene34"] and \
                version == "4_6":
                 cml.tree = ".".join([cml.tree, "4.6"])
             out_file = '.'.join(['-'.join([test[0], version]), "out"])

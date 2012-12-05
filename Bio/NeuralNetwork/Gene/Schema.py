@@ -545,8 +545,8 @@ def matches_schema(pattern, schema, ambiguity_character = '*'):
     # check each position, and return a non match if the schema and pattern
     # are non ambiguous and don't match
     for pos in range(len(pattern)):
-        if schema[pos] != ambiguity_character and
-           pattern[pos] != ambiguity_character and
+        if schema[pos] != ambiguity_character and \
+           pattern[pos] != ambiguity_character and \
            pattern[pos] != schema[pos]:
 
             return 0

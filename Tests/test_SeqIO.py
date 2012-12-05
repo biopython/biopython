@@ -411,7 +411,7 @@ def check_simple_write_read(records, indent=" "):
 
 #Check parsers can cope with an empty file
 for t_format in SeqIO._FormatToIterator:
-    if t_format in SeqIO._BinaryFormats or
+    if t_format in SeqIO._BinaryFormats or \
        t_format in ("uniprot-xml", "pdb-seqres", "pdb-atom"):
         #Not allowed empty SFF files.
         continue

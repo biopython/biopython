@@ -253,9 +253,9 @@ class _Scanner(object):
 
         while not self._eof(uhandle):
             line = safe_peekline(uhandle)
-            if not line.startswith('Searching') and
-               not line.startswith('Results from round') and
-               re.search(r"Score +E", line) is None and
+            if not line.startswith('Searching') and \
+               not line.startswith('Results from round') and \
+               re.search(r"Score +E", line) is None and \
                'No hits found' not in line:
                 break
             self._scan_descriptions(uhandle, consumer)
