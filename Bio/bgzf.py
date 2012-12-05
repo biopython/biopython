@@ -232,7 +232,7 @@ from Bio._py3k import _as_bytes, _as_string
 _bgzf_magic = _as_bytes("\x1f\x8b\x08\x04")
 _bgzf_header = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00"
                          "\x00\xff\x06\x00\x42\x43\x02\x00")
-_bgzf_eof = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" + \
+_bgzf_eof = _as_bytes("\x1f\x8b\x08\x04\x00\x00\x00\x00\x00\xff\x06\x00BC" +
                       "\x02\x00\x1b\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00")
 _bytes_BC = _as_bytes("BC")
 _empty_bytes_string = _as_bytes("")
@@ -593,7 +593,7 @@ class BgzfReader(object):
             assert start_offset == self._block_start_offset
         if within_block >= len(self._buffer) \
         and not (within_block == 0 and len(self._buffer)==0):
-            raise ValueError("Within offset %i but block size only %i" \
+            raise ValueError("Within offset %i but block size only %i"
                              % (within_block, len(self._buffer)))
         self._within_block_offset = within_block
         #assert virtual_offset == self.tell(), \

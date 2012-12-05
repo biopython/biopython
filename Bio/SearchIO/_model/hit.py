@@ -111,7 +111,7 @@ class Hit(_BaseSearchObject):
         `hit_description` properties.
 
         """
-        for attr in ('query_id', 'query_description', 'hit_id', \
+        for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description'):
             # HACK: setting the if clause to '> 1' allows for empty hit objects.
             # This makes it easier to work with file formats with unpredictable
@@ -167,7 +167,7 @@ class Hit(_BaseSearchObject):
         if not self.hsps:
             lines.append(' HSPs: ?')
         else:
-            lines.append(' HSPs: %s  %s  %s  %s  %s  %s' % \
+            lines.append(' HSPs: %s  %s  %s  %s  %s  %s' %
                     ('-'*4, '-'*8, '-'*9, '-'*6, '-'*15, '-'*21))
             pattern = '%11s  %8s  %9s  %6s  %15s  %21s'
             lines.append(pattern % ('#', 'E-value', 'Bit score', 'Span',
@@ -231,10 +231,10 @@ class Hit(_BaseSearchObject):
         # HACK: to make validation during __init__ work
         if self._items:
             if hsp.hit_id != self.id:
-                raise ValueError("Expected HSP with hit ID %r, " \
+                raise ValueError("Expected HSP with hit ID %r, "
                         "found %r instead." % (self.id, hsp.hit_id))
             if hsp.query_id != self.query_id:
-                raise ValueError("Expected HSP with query ID %r, " \
+                raise ValueError("Expected HSP with query ID %r, "
                         "found %r instead." % (self.query_id, hsp.query_id))
 
     ## properties ##

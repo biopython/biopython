@@ -19,17 +19,17 @@ class WriteCases(unittest.TestCase):
         if os.path.exists(self.out):
             os.remove(self.out)
 
-    def parse_write_and_compare(self, source_file, source_format, out_file, \
+    def parse_write_and_compare(self, source_file, source_format, out_file,
             out_format, **kwargs):
         """Compares parsed QueryResults after they have been written to a file."""
-        source_qresults = list(SearchIO.parse(source_file, source_format, \
+        source_qresults = list(SearchIO.parse(source_file, source_format,
                 **kwargs))
         SearchIO.write(source_qresults, out_file, out_format, **kwargs)
         out_qresults = list(SearchIO.parse(out_file, out_format, **kwargs))
         for source, out in zip(source_qresults, out_qresults):
             self.assertTrue(compare_search_obj(source, out))
 
-    def read_write_and_compare(self, source_file, source_format, out_file, \
+    def read_write_and_compare(self, source_file, source_format, out_file,
             out_format, **kwargs):
         """Compares read QueryResults after it has been written to a file."""
         source_qresult = SearchIO.read(source_file, source_format, **kwargs)

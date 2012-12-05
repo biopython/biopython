@@ -364,7 +364,7 @@ class HSP(_BaseHSP):
         # query / hit length
         return sum([frg.aln_span for frg in self.fragments])
 
-    aln_span = property(fget=_aln_span_get, \
+    aln_span = property(fget=_aln_span_get,
             doc="""Total number of columns in all HSPFragment objects.""")
 
     ## coordinate properties ##
@@ -381,25 +381,25 @@ class HSP(_BaseHSP):
     def _hit_start_get(self):
         return min(self._get_coords('hit', 'start'))
 
-    hit_start = property(fget=_hit_start_get, \
+    hit_start = property(fget=_hit_start_get,
             doc="""Smallest coordinate value of all hit fragments""")
 
     def _query_start_get(self):
         return min(self._get_coords('query', 'start'))
 
-    query_start = property(fget=_query_start_get, \
+    query_start = property(fget=_query_start_get,
             doc="""Smallest coordinate value of all query fragments""")
 
     def _hit_end_get(self):
         return max(self._get_coords('hit', 'end'))
 
-    hit_end = property(fget=_hit_end_get, \
+    hit_end = property(fget=_hit_end_get,
             doc="""Largest coordinate value of all hit fragments""")
 
     def _query_end_get(self):
         return max(self._get_coords('query', 'end'))
 
-    query_end = property(fget=_query_end_get, \
+    query_end = property(fget=_query_end_get,
             doc="""Largest coordinate value of all hit fragments""")
 
     ## coordinate-dependent properties ##
@@ -409,7 +409,7 @@ class HSP(_BaseHSP):
         except TypeError:  # triggered if any of the coordinates are None
             return None
 
-    hit_span = property(fget=_hit_span_get, \
+    hit_span = property(fget=_hit_span_get,
             doc="""The number of hit residues covered by the HSP.""")
 
     def _query_span_get(self):
@@ -418,19 +418,19 @@ class HSP(_BaseHSP):
         except TypeError:  # triggered if any of the coordinates are None
             return None
 
-    query_span = property(fget=_query_span_get, \
+    query_span = property(fget=_query_span_get,
             doc="""The number of query residues covered by the HSP.""")
 
     def _hit_range_get(self):
         return (self.hit_start, self.hit_end)
 
-    hit_range = property(fget=_hit_range_get, \
+    hit_range = property(fget=_hit_range_get,
             doc="""Tuple of HSP hit start and end coordinates.""")
 
     def _query_range_get(self):
         return (self.query_start, self.query_end)
 
-    query_range = property(fget=_query_range_get, \
+    query_range = property(fget=_query_range_get,
             doc="""Tuple of HSP query start and end coordinates.""")
 
     def _inter_ranges_get(self, seq_type):
@@ -505,7 +505,7 @@ class HSP(_BaseHSP):
             doc="""Alphabet used in hit and query SeqRecord objects""")
 
     # properties for single-fragment HSPs
-    fragment = singleitem(\
+    fragment = singleitem(
             doc="""HSPFragment object, first fragment""")
 
     hit = singleitem('hit',

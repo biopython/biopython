@@ -60,7 +60,7 @@ freq_table_info = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
 
 info_content = summary_align.information_content(5, 30,
                                                  chars_to_ignore = ['N'],
-                                                 e_freq_table = \
+                                                 e_freq_table =
                                                  freq_table_info)
 
 print "relative info content:", info_content

@@ -64,9 +64,9 @@ class EntrezTests(unittest.TestCase):
             except IOError:
                 raise MissingExternalDependencyError(
                       "internet (or maybe just NCBI) not available")
-            self.assertTrue((entry in record.name) or \
-                         (entry in record.id) or \
-                         ("gi" in record.annotations \
+            self.assertTrue((entry in record.name) or
+                         (entry in record.id) or
+                         ("gi" in record.annotations
                           and record.annotations["gi"]==entry),
                          "%s got %s, %s" % (entry, record.name, record.id))
             self.assertEqual(len(record), length)

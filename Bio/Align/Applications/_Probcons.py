@@ -100,7 +100,7 @@ class ProbconsCommandline(AbstractCommandline):
                     "order (default: off)"),
             #Input file name
             _Argument(["input"],
-                      "Input file name. Must be multiple FASTA alignment "+ \
+                      "Input file name. Must be multiple FASTA alignment "+
                       "(MFA) format",
                       filename=True,
                       is_required=True),

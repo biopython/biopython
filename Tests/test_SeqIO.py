@@ -59,7 +59,7 @@ test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
 # - string:  relative filename
 # - integer: number of sequences
 
-test_files = [ \
+test_files = [
     ("sff",    False, 'Roche/E3MFGYR02_random_10_reads.sff', 10),
 #Following examples are also used in test_Clustalw.py
     ("clustal",True,  'Clustalw/cw02.aln', 2),
@@ -257,7 +257,7 @@ def compare_record(record_one, record_two):
     elif str(record_one.seq) != str(record_two.seq):
         return False
     #TODO - check features and annotation (see code for BioSQL tests)
-    for key in set(record_one.letter_annotations).intersection( \
+    for key in set(record_one.letter_annotations).intersection(
                    record_two.letter_annotations):
         if record_one.letter_annotations[key] != \
            record_two.letter_annotations[key]:
@@ -292,13 +292,13 @@ def alignment_summary(alignment, index=" "):
     alignment_len = alignment.get_alignment_length()
     rec_count = len(alignment)
     for i in range(min(5,alignment_len)):
-        answer.append(index + col_summary(alignment.get_column(i)) \
+        answer.append(index + col_summary(alignment.get_column(i))
                             + " alignment column %i" % i)
     if alignment_len > 5:
         i = alignment_len - 1
-        answer.append(index + col_summary("|" * rec_count) \
+        answer.append(index + col_summary("|" * rec_count)
                             + " ...")
-        answer.append(index + col_summary(alignment.get_column(i)) \
+        answer.append(index + col_summary(alignment.get_column(i))
                             + " alignment column %i" % i)
     return "\n".join(answer)
 
@@ -355,7 +355,7 @@ def check_simple_write_read(records, indent=" "):
             #I want to see the output when called from the test harness,
             #run_tests.py (which can be funny about new lines on Windows)
             handle.seek(0)
-            raise ValueError("%s\n\n%s\n\n%s" \
+            raise ValueError("%s\n\n%s\n\n%s"
                               % (str(e), repr(handle.read()), repr(records)))
 
         assert len(records2) == t_count
@@ -605,7 +605,7 @@ for (t_format, t_alignment, t_filename, t_count) in test_files:
         print "Testing reading %s format file %s as an alignment" \
               % (t_format, t_filename)
 
-        alignment = MultipleSeqAlignment(SeqIO.parse( \
+        alignment = MultipleSeqAlignment(SeqIO.parse(
                     handle=t_filename, format=t_format))
         assert len(alignment) == t_count
 

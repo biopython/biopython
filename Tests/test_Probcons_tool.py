@@ -25,7 +25,7 @@ else:
         probcons_exe = "probcons"
 
 if not probcons_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install PROBCONS if you want to use the Bio.Align.Applications wrapper.")
 
 class ProbconsApplication(unittest.TestCase):

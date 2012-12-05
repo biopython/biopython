@@ -52,7 +52,7 @@ class Alignment(object):
         import warnings
         import Bio
         warnings.warn("With the introduction of the MultipleSeqAlignment class in Bio.Align, this base class is deprecated and is likely to be removed in a future release of Biopython.", Bio.BiopythonDeprecationWarning)
-        if not (isinstance(alphabet, Alphabet.Alphabet) \
+        if not (isinstance(alphabet, Alphabet.Alphabet)
         or isinstance(alphabet, Alphabet.AlphabetEncoder)):
             raise ValueError("Invalid alphabet argument")
         self._alphabet = alphabet
@@ -92,7 +92,7 @@ class Alignment(object):
         See also the alignment's format method.
         """
         rows = len(self._records)
-        lines = ["%s alignment with %i rows and %i columns" \
+        lines = ["%s alignment with %i rows and %i columns"
                  % (str(self._alphabet), rows, self.get_alignment_length())]
         if rows <= 20:
             lines.extend([self._str_line(rec) for rec in self._records])
@@ -421,7 +421,7 @@ class Alignment(object):
             sub_align._records = self._records[index]
             return sub_align
         elif len(index)==2:
-            raise TypeError("Row and Column indexing is not currently supported,"\
+            raise TypeError("Row and Column indexing is not currently supported,"
                             +"but may be in future.")
         else:
             raise TypeError("Invalid index type.")

@@ -15,7 +15,7 @@ from Bio import MissingExternalDependencyError
 
 raxml_exe = None
 if sys.platform=="win32":
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
           "Testing RAxML on Windows not supported yet")
 else:
     import commands
@@ -23,7 +23,7 @@ else:
     if "not found" not in output and "This is RAxML" in output:
         raxml_exe = "raxmlHPC"
 if not raxml_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install RAxML (binary raxmlHPC) if you want to test the Bio.Phylo.Applications wrapper.")
 
 # Example Phylip file with 4 aligned protein sequences

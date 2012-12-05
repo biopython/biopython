@@ -31,7 +31,7 @@ else:
         clustalo_exe = "clustalo"
 
 if not clustalo_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install clustalo if you want to use Clustal Omega from Biopython.")
 
 
@@ -62,7 +62,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
         self.assertTrue(not output or output.strip().startswith("CLUSTAL"))
 
         # Test if ClustalOmega executed successfully.
-        self.assertTrue(error.strip() == "" or \
+        self.assertTrue(error.strip() == "" or
                error.startswith("WARNING: Sequence type is DNA.") or
                error.startswith("WARNING: DNA alignment is still experimental."))
 
@@ -93,8 +93,8 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
         try:
             stdout, stderr = cline()
         except ApplicationError, err:
-            self.assertTrue("Cannot open sequence file" in str(err) or \
-                            "Cannot open input file" in str(err) or \
+            self.assertTrue("Cannot open sequence file" in str(err) or
+                            "Cannot open input file" in str(err) or
                             "non-zero exit status" in str(err))
         else:
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))

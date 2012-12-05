@@ -43,7 +43,7 @@ class SpiralTest(unittest.TestCase):
         """Get set of eight colours, no jitter, using ColorSpiral."""
         cs = ColorSpiral(a = 4, b = 0.33, jitter = 0)
         colours = list(cs.get_colors(8))
-        cstr = ["(%.2f, %.2f, %.2f)" % (r, g, b) \
+        cstr = ["(%.2f, %.2f, %.2f)" % (r, g, b)
                     for r, g, b in colours]
         expected = \
             ['(0.64, 0.74, 0.81)', '(0.68, 0.52, 0.76)', '(0.72, 0.41, 0.55)',
@@ -102,7 +102,7 @@ class DictTest(unittest.TestCase):
         """get_color_dict() for classes A-D, no jitter."""
         classes = ['A', 'B', 'C', 'D']
         colors = get_color_dict(classes, jitter=0)
-        cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b) \
+        cstr = ["%s: (%.2f, %.2f, %.2f)" % (c, r, g, b)
                     for c, (r, g, b) in colors.items()]
         expected = ['A: (0.52, 0.76, 0.69)', 'C: (0.59, 0.13, 0.47)',
                     'B: (0.40, 0.31, 0.68)', 'D: (0.50, 0.00, 0.00)']

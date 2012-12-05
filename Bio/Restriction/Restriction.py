@@ -238,7 +238,7 @@ class RestrictionType(type):
 
         see below."""
         if "-" in name :
-            raise ValueError("Problem with hyphen in %s as enzyme name" \
+            raise ValueError("Problem with hyphen in %s as enzyme name"
                              % repr(name))
         # 2011/11/26 - Nobody knows what this call was supposed to accomplish,
         # but all unit tests seem to pass without it.
@@ -246,7 +246,7 @@ class RestrictionType(type):
         try :
             cls.compsite = re.compile(cls.compsite)
         except Exception, err :
-            raise ValueError("Problem with regular expression, re.compiled(%s)" \
+            raise ValueError("Problem with regular expression, re.compiled(%s)"
                              % repr(cls.compsite))
 
     def __add__(cls, other):
@@ -368,7 +368,7 @@ class RestrictionType(type):
         Test compatibility of the overhang of a and b.
         True if a and b have compatible overhang."""
         if not isinstance(other, RestrictionType):
-            raise TypeError( \
+            raise TypeError(
                   'expected RestrictionType, got %s instead' % type(other))
         return cls._mod1(other)
 
@@ -906,7 +906,7 @@ class Unknown(AbstractCut):
 
         if linear is False, the sequence is considered to be circular and the
         output will be modified accordingly."""
-        raise NotImplementedError('%s restriction is unknown.' \
+        raise NotImplementedError('%s restriction is unknown.'
                                   % self.__name__)
     catalyze = catalyse
 
@@ -1632,7 +1632,7 @@ class Ambiguous(AbstractCut):
             elif f5 > length:
                 re = site + (f5-length)*'N' + '^_N'
             else:
-                raise ValueError('%s.easyrepr() : error f5=%i' \
+                raise ValueError('%s.easyrepr() : error f5=%i'
                                  % (self.name,f5))
         else:
             if f3 == 0:
@@ -1738,7 +1738,7 @@ class NotDefined(AbstractCut):
         #   could raise an Error may be rather than return quietly.
         #
         #return False
-        raise ValueError("%s.mod2(%s), %s : NotDefined. pas glop pas glop!" \
+        raise ValueError("%s.mod2(%s), %s : NotDefined. pas glop pas glop!"
                          % (str(self), str(other), str(self)))
 
     @classmethod
@@ -1856,7 +1856,7 @@ class RestrictionBatch(set):
         if len(self) < 5:
             return '+'.join(self.elements())
         else:
-            return '...'.join(('+'.join(self.elements()[:2]),\
+            return '...'.join(('+'.join(self.elements()[:2]),
                                '+'.join(self.elements()[-2:])))
 
     def __repr__(self):
@@ -1889,7 +1889,7 @@ class RestrictionBatch(set):
             self.add(e)
             return e
         else:
-            raise ValueError('enzyme %s is not in RestrictionBatch' \
+            raise ValueError('enzyme %s is not in RestrictionBatch'
                              % e.__name__)
 
     def lambdasplit(self, func):
@@ -2063,7 +2063,7 @@ class RestrictionBatch(set):
                 self.already_mapped = str(dna), dna.linear
                 self.mapping = dict([(x, x.search(dna)) for x in self])
                 return self.mapping
-        raise TypeError("Expected Seq or MutableSeq instance, got %s instead"\
+        raise TypeError("Expected Seq or MutableSeq instance, got %s instead"
                         %type(dna))
 
 ###############################################################################
@@ -2181,11 +2181,11 @@ class Analysis(RestrictionBatch, PrintFormat):
             elif k in ('Indent', 'Maxsize'):
                 setattr(self, k, v)
             elif k in ('Cmodulo', 'PrefWidth'):
-                raise AttributeError( \
-                    'To change %s, change NameWidth and/or ConsoleWidth' \
+                raise AttributeError(
+                    'To change %s, change NameWidth and/or ConsoleWidth'
                     % name)
             else:
-                raise AttributeError( \
+                raise AttributeError(
                     'Analysis has no attribute %s' % name)
         return
 

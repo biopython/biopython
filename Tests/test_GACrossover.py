@@ -389,7 +389,7 @@ class SafeFitnessTest(unittest.TestCase):
         self.test_crossover.type = "higher"
         new_org_1, new_org_2 = crossover.do_crossover(self.org_1, self.org_2)
 
-        self.assertTrue(new_org_1.fitness > self.org_1.fitness and \
+        self.assertTrue(new_org_1.fitness > self.org_1.fitness and
                      new_org_2.fitness > self.org_2.fitness,
                      "Did not get new organism when it had higher fitness.")
 
@@ -417,7 +417,7 @@ class SafeFitnessTest(unittest.TestCase):
         self.test_crossover.type = "higher"
         new_org_1, new_org_2 = crossover.do_crossover(self.org_1, self.org_2)
 
-        self.assertTrue(new_org_1.fitness > self.org_1.fitness and \
+        self.assertTrue(new_org_1.fitness > self.org_1.fitness and
                      new_org_2.fitness > self.org_2.fitness,
                      "Did not get new organism under higher fitness conditions.")
 

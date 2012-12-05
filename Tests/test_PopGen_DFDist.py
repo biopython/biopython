@@ -26,7 +26,7 @@ for path in os.environ['PATH'].split(os.pathsep):
     except os.error:
         pass #Path doesn't exist - correct to pass
 if len(wanted) != 4:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install Dfdist, Ddatacal, pv2 and cplot2 if you want to use DFDist with Bio.PopGen.FDist.")
 del wanted
 

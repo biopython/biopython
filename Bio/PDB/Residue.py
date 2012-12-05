@@ -78,7 +78,7 @@ class Residue(Entity):
         """
         atom_id=atom.get_id()
         if self.has_id(atom_id):
-            raise PDBConstructionException( \
+            raise PDBConstructionException(
                 "Atom %s defined twice in residue %s" % (atom_id, self))
         Entity.add(self, atom)
 
@@ -137,8 +137,8 @@ class DisorderedResidue(DisorderedEntityWrapper):
             het, resseq, icode=residue.get_id()
             # add atom anyway, if PDBParser ignores exception the atom will be part of the residue
             residue.add(atom)
-            raise PDBConstructionException( \
-                "Blank altlocs in duplicate residue %s (%s, %i, %s)" \
+            raise PDBConstructionException(
+                "Blank altlocs in duplicate residue %s (%s, %i, %s)"
                 % (resname, het, resseq, icode) )
         residue.add(atom)
 

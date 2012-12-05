@@ -79,7 +79,7 @@ class _XMLparser(ContentHandler):
         #We don't care about white space in parent tags like Hsp,
         #but that white space doesn't belong to child tags like Hsp_midline
         if self._value.strip():
-            raise ValueError("What should we do with %s before the %s tag?" \
+            raise ValueError("What should we do with %s before the %s tag?"
                              % (repr(self._value), name))
         self._value = ""
 
@@ -619,7 +619,7 @@ def parse(handle, debug=0):
         #We are now starting a new XML file
         if not text.startswith(XML_START):
             raise ValueError("Your XML file did not start with %s... "
-                             "but instead %s" \
+                             "but instead %s"
                              % (XML_START, repr(text[:20])))
 
         expat_parser = expat.ParserCreate()

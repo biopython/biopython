@@ -163,7 +163,7 @@ t_write_format()
 def t_cleaning_features():
     """Test the ability to clean up feature values.
     """
-    parser = GenBank.FeatureParser(feature_cleaner = \
+    parser = GenBank.FeatureParser(feature_cleaner =
                                    utils.FeatureValueCleaner())
     handle = open(os.path.join("GenBank", "arab1.gb"))
     iterator = GenBank.Iterator(handle, parser)

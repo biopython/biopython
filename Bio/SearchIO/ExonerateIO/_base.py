@@ -187,7 +187,7 @@ def _create_hsp(hid, qid, hspd):
 
     hsp = HSP(frags)
     # set hsp-specific attributes
-    for attr in ('score', 'hit_split_codons', 'query_split_codons', \
+    for attr in ('score', 'hit_split_codons', 'query_split_codons',
             'model', 'vulgar_comp', 'cigar_comp', 'alphabet'):
         if attr in hspd:
             setattr(hsp, attr, hspd[attr])
@@ -333,7 +333,7 @@ class _BaseExonerateParser(object):
                 header = {'qresult': {}, 'hit': {}, 'hsp': {}}
                 # if the file has c4 alignments, try to parse the header
                 if self.has_c4_alignment:
-                    self.read_until(lambda line: \
+                    self.read_until(lambda line:
                             line.strip().startswith('Query:'))
                     header = self._parse_alignment_header()
                 # parse the block contents

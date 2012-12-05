@@ -240,23 +240,23 @@ class Hmmer3DomtabHmmhitWriter(object):
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
         header = "#%*s %22s %40s %11s %11s %11s\n" % \
-                (tnamew+qnamew-1+15+taccw+qaccw, "", "--- full sequence ---", \
-                "-------------- this domain -------------", "hmm coord", \
+                (tnamew+qnamew-1+15+taccw+qaccw, "", "--- full sequence ---",
+                "-------------- this domain -------------", "hmm coord",
                 "ali coord", "env coord")
         header += "#%-*s %-*s %5s %-*s %-*s %5s %9s %6s %5s %3s %3s %9s " \
-                "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1, \
-                " target name", taccw, "accession", "tlen", qnamew, \
-                "query name", qaccw, "accession", "qlen", "E-value", "score", \
-                "bias", "#", "of", "c-Evalue", "i-Evalue", "score", "bias", \
-                "from", "to", "from", "to", "from", "to", "acc", \
+                "%9s %6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1,
+                " target name", taccw, "accession", "tlen", qnamew,
+                "query name", qaccw, "accession", "qlen", "E-value", "score",
+                "bias", "#", "of", "c-Evalue", "i-Evalue", "score", "bias",
+                "from", "to", "from", "to", "from", "to", "acc",
                 "description of target")
         header += "#%*s %*s %5s %*s %*s %5s %9s %6s %5s %3s %3s %9s %9s " \
-                "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1, \
-                "-------------------", taccw, "----------", "-----", \
-                qnamew, "--------------------", qaccw, "----------", \
-                "-----", "---------", "------", "-----", "---", "---", \
-                "---------", "---------", "------", "-----", "-----", "-----", \
-                "-----", "-----", "-----", "-----", "----", \
+                "%6s %5s %5s %5s %5s %5s %5s %5s %4s %s\n" % (tnamew-1,
+                "-------------------", taccw, "----------", "-----",
+                qnamew, "--------------------", qaccw, "----------",
+                "-----", "---------", "------", "-----", "---", "---",
+                "---------", "---------", "------", "-----", "-----", "-----",
+                "-----", "-----", "-----", "-----", "----",
                 "---------------------")
 
         return header
@@ -299,10 +299,10 @@ class Hmmer3DomtabHmmhitWriter(object):
 
                 rows += "%-*s %-*s %5d %-*s %-*s %5d %9.2g %6.1f %5.1f %3d %3d" \
                 " %9.2g %9.2g %6.1f %5.1f %5d %5d %5ld %5ld %5d %5d %4.2f %s\n" % \
-                (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew, qresult.id, \
-                qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore, \
-                hit.bias, hsp.domain_index, len(hit.hsps), hsp.evalue_cond, hsp.evalue, \
-                hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to, \
+                (tnamew, hit.id, taccw, hit_acc, hit.seq_len, qnamew, qresult.id,
+                qaccw, qresult_acc, qresult.seq_len, hit.evalue, hit.bitscore,
+                hit.bias, hsp.domain_index, len(hit.hsps), hsp.evalue_cond, hsp.evalue,
+                hsp.bitscore, hsp.bias, hmm_from, hmm_to, ali_from, ali_to,
                 hsp.env_start + 1, hsp.env_end, hsp.acc_avg, hit.description)
 
         return rows

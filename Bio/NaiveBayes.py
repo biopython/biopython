@@ -68,7 +68,7 @@ def calculate(nb, observation, scale=0):
 
     # Make sure the observation has the right dimensionality.
     if len(observation) != nb.dimensionality:
-        raise ValueError("observation in %d dimension, but classifier in %d" \
+        raise ValueError("observation in %d dimension, but classifier in %d"
                          % (len(observation), nb.dimensionality))
 
     # Calculate log P(observation|class) for every class.

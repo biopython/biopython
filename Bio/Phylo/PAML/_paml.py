@@ -148,10 +148,10 @@ class Paml(object):
         os.chdir(cwd)
         if result_code > 0:
             # If the program fails for any reason
-            raise PamlError( \
-            "%s has failed (return code %i). Run with verbose = True to view error message" \
+            raise PamlError(
+            "%s has failed (return code %i). Run with verbose = True to view error message"
             % (command, result_code))
         if result_code < 0:
             # If the paml process is killed by a signal somehow
-            raise EnvironmentError("The %s process was killed (return code %i)." \
+            raise EnvironmentError("The %s process was killed (return code %i)."
                   % (command, result_code))

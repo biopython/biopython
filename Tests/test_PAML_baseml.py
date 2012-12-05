@@ -174,8 +174,8 @@ class ModTest(unittest.TestCase):
         self.bml.read_ctl_file(self.ctl_file)
         self.assertEqual(sorted(self.bml._options.keys()), sorted(target_options.keys()))
         for key in target_options:
-            self.assertEqual(self.bml._options[key], target_options[key], \
-                             "%s: %r vs %r" \
+            self.assertEqual(self.bml._options[key], target_options[key],
+                             "%s: %r vs %r"
                              % (key, self.bml._options[key], target_options[key]))
 
     def testCtlFileExistsOnRead(self):

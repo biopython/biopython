@@ -418,9 +418,9 @@ class CrystalTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.crystal = Crystal({ 'a' : 'T T G A C T C T C T T A A', \
-                             'b' : Chain('G A G A G T C A'), \
-                             'c' : 'T T G A C T C T C T T A A', \
+        self.crystal = Crystal({ 'a' : 'T T G A C T C T C T T A A',
+                             'b' : Chain('G A G A G T C A'),
+                             'c' : 'T T G A C T C T C T T A A',
                              'd' : Chain('G A G A G T C A')
                             })
 

@@ -289,7 +289,7 @@ def complement(sequence):
 
 def sorted_dict(d):
     """A sorted repr of a dictionary."""
-    return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v)) \
+    return "{%s}" % ", ".join("%s: %s" % (repr(k),repr(v))
                               for k,v in sorted(d.iteritems()))
 
 print
@@ -534,11 +534,11 @@ for nucleotide_seq in [misc_stops, Seq.Seq(misc_stops),
     assert "***RR" == str(Seq.translate(nucleotide_seq, table=1))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table="SGC0"))
     assert "**W**" == str(Seq.translate(nucleotide_seq, table=2))
-    assert "**WRR" == str(Seq.translate(nucleotide_seq, \
+    assert "**WRR" == str(Seq.translate(nucleotide_seq,
                                         table='Yeast Mitochondrial'))
     assert "**WSS" == str(Seq.translate(nucleotide_seq, table=5))
     assert "**WSS" == str(Seq.translate(nucleotide_seq, table=9))
-    assert "**CRR" == str(Seq.translate(nucleotide_seq, \
+    assert "**CRR" == str(Seq.translate(nucleotide_seq,
                                         table='Euplotid Nuclear'))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table=11))
     assert "***RR" == str(Seq.translate(nucleotide_seq, table='Bacterial'))
@@ -577,9 +577,9 @@ ambig = set(IUPAC.IUPACAmbiguousDNA.letters)
 for c1 in ambig:
     for c2 in ambig:
         for c3 in ambig:
-            values = set([Seq.translate(a+b+c, table=1) \
-                          for a in ambiguous_dna_values[c1] \
-                          for b in ambiguous_dna_values[c2] \
+            values = set([Seq.translate(a+b+c, table=1)
+                          for a in ambiguous_dna_values[c1]
+                          for b in ambiguous_dna_values[c2]
                           for c in ambiguous_dna_values[c3]])
             t = Seq.translate(c1+c2+c3)
             if t=="*":

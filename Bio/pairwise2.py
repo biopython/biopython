@@ -241,7 +241,7 @@ alignment occurs.
             # this function into forms appropriate for _align.
             keywds = keywds.copy()
             if len(args) != len(self.param_names):
-                raise TypeError("%s takes exactly %d argument (%d given)" \
+                raise TypeError("%s takes exactly %d argument (%d given)"
                     % (self.function_name, len(self.param_names), len(args)))
             i = 0
             while i < len(self.param_names):
@@ -273,7 +273,7 @@ alignment occurs.
                     keywds['gap_B_fn'] = affine_penalty(openB, extendB, pe)
                     i += 4
                 else:
-                    raise ValueError("unknown parameter %r" \
+                    raise ValueError("unknown parameter %r"
                                      % self.param_names[i])
 
             # Here are the default parameters for _align.  Assign
@@ -830,7 +830,7 @@ def print_matrix(matrix):
     ndigits = map(max, matrixT)
     for i in range(len(matrix)):
         #Using string formatting trick to add leading spaces,
-        print " ".join("%*s " % (ndigits[j], matrix[i][j]) \
+        print " ".join("%*s " % (ndigits[j], matrix[i][j])
                        for j in range(len(matrix[i])))
 
 def format_alignment(align1, align2, score, begin, end):

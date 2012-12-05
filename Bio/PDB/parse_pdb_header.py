@@ -70,7 +70,7 @@ def _format_date(pdb_date):
     else:
         century=1900
     date=str(century+year)+"-"
-    all_months=['xxx','Jan','Feb','Mar','Apr','May','Jun','Jul',\
+    all_months=['xxx','Jan','Feb','Mar','Apr','May','Jun','Jul',
     'Aug','Sep','Oct','Nov','Dec']
     month=str(all_months.index(pdb_date[3:6]))
     if len(month)==1:

@@ -28,7 +28,7 @@ try:
     import reportlab as r
     del r
 except:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install reportlab if you want to use Bio.Graphics.")
 
 # the stuff we're testing

@@ -231,7 +231,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     elif orientation == 'left':
         x1, x2, y1, y2 = xmax, xmin, ymin, ymax
     else:
-        raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
+        raise ValueError("Invalid orientation %s, should be 'left' or 'right'"
                          % repr(orientation))
 
     # We define boxheight and boxwidth accordingly, and calculate the shaft

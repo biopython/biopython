@@ -85,7 +85,7 @@ class Motif(object):
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
         self.alphabet = alphabet
-        self.background=dict((n, 1.0/len(self.alphabet.letters)) \
+        self.background=dict((n, 1.0/len(self.alphabet.letters))
                              for n in self.alphabet.letters)
         self.beta=1.0
 

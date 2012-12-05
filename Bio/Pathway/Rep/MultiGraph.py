@@ -110,11 +110,11 @@ class MultiGraph(object):
         del self._adjacency_list[node]
         # remove all in-edges from adjacency list
         for n in self._adjacency_list:
-            self._adjacency_list[n] = set(x for x in self._adjacency_list[n] \
+            self._adjacency_list[n] = set(x for x in self._adjacency_list[n]
                                           if x[0] is not node)
         # remove all refering pairs in label map
         for label in self._label_map.keys():
-            lm = set(x for x in self._label_map[label] \
+            lm = set(x for x in self._label_map[label]
                      if (x[0] is not node) and (x[1] is not node))
             # remove the entry completely if the label is now unused
             if lm:

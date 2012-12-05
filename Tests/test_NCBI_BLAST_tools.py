@@ -75,8 +75,8 @@ class Pairwise(unittest.TestCase):
                         query="Fasta/rose.pro",
                         subject="GenBank/NC_005816.faa",
                         evalue=1)
-        self.assertEqual(str(cline), exe_names["blastp"] \
-                         + " -query Fasta/rose.pro -evalue 1" \
+        self.assertEqual(str(cline), exe_names["blastp"]
+                         + " -query Fasta/rose.pro -evalue 1"
                          + " -subject GenBank/NC_005816.faa")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
@@ -105,8 +105,8 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.ffn",
                         subject="GenBank/NC_005816.fna",
                         evalue="0.000001")
-        self.assertEqual(str(cline), exe_names["blastn"] \
-                         + " -query GenBank/NC_005816.ffn -evalue 0.000001" \
+        self.assertEqual(str(cline), exe_names["blastn"]
+                         + " -query GenBank/NC_005816.ffn -evalue 0.000001"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
@@ -128,8 +128,8 @@ class Pairwise(unittest.TestCase):
                         query="GenBank/NC_005816.faa",
                         subject="GenBank/NC_005816.fna",
                         evalue="1e-6")
-        self.assertEqual(str(cline), exe_names["tblastn"] \
-                         + " -query GenBank/NC_005816.faa -evalue 1e-6" \
+        self.assertEqual(str(cline), exe_names["tblastn"]
+                         + " -query GenBank/NC_005816.faa -evalue 1e-6"
                          + " -subject GenBank/NC_005816.fna")
         child = subprocess.Popen(str(cline),
                                  stdout=subprocess.PIPE,
@@ -151,7 +151,7 @@ class CheckCompleteArgList(unittest.TestCase):
         exe = exe_names[exe_name]
         cline = wrapper(exe, h=True)
 
-        names = set(parameter.names[0] \
+        names = set(parameter.names[0]
                     for parameter in cline.parameters)
 
         child = subprocess.Popen(str(cline),

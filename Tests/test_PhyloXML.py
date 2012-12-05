@@ -437,7 +437,7 @@ class TreeTests(unittest.TestCase):
                 ('ADHX', 'RT4I1', 'ADHB'),
                 ('P81431', 'Q54II4', 'Q04945'),
                 ('Alcohol dehydrogenase class-3',
-                 'Reticulon-4-interacting protein 1 homolog, ' \
+                 'Reticulon-4-interacting protein 1 homolog, '
                          'mitochondrial precursor',
                  'NADH-dependent butanol dehydrogenase B'),
                 ('TDATGKPIKCMAAIAWEAKKPLSIEEVEVAPPKSGEVRIKILHSGVCHTD',

@@ -271,12 +271,12 @@ def _read_id(record, line):
     # check if the data class is one of the allowed values
     allowed = ('STANDARD', 'PRELIMINARY', 'IPI', 'Reviewed', 'Unreviewed')
     if record.data_class not in allowed:
-        raise ValueError("Unrecognized data class %s in line\n%s" % \
+        raise ValueError("Unrecognized data class %s in line\n%s" %
               (record.data_class, line))
     # molecule_type should be 'PRT' for PRoTein
     # Note that has been removed in recent releases (set to None)
     if record.molecule_type not in (None, 'PRT'):
-        raise ValueError("Unrecognized molecule type %s in line\n%s" % \
+        raise ValueError("Unrecognized molecule type %s in line\n%s" %
               (record.molecule_type, line))
 
 

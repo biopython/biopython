@@ -107,7 +107,7 @@ class Codeml(Paml):
                 if uncommented != "":
                     if "=" not in uncommented:
                         ctl_handle.close()
-                        raise AttributeError( \
+                        raise AttributeError(
                             "Malformed line in control file:\n%r" % line)
                     (option, value) = uncommented.split("=")
                     option = option.strip()
@@ -125,7 +125,7 @@ class Codeml(Paml):
                                 site_classes[n] = int(site_classes[n])
                             except:
                                 ctl_handle.close()
-                                raise TypeError( \
+                                raise TypeError(
                                     "Invalid site class: %s" % site_classes[n])
                         temp_options["NSsites"] = site_classes
                     elif option not in self._options:

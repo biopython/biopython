@@ -96,7 +96,7 @@ class ClustalIterator(AlignmentIterator):
         #Whitelisted headers we know about
         known_headers = ['CLUSTAL', 'PROBCONS', 'MUSCLE']
         if line.strip().split()[0] not in known_headers:
-            raise ValueError("%s is not a known CLUSTAL header: %s" % \
+            raise ValueError("%s is not a known CLUSTAL header: %s" %
                              (line.strip().split()[0],
                               ", ".join(known_headers)))
 
@@ -209,7 +209,7 @@ class ClustalIterator(AlignmentIterator):
                     raise ValueError("Could not parse line:\n%s" % repr(line))
 
                 if fields[0] != ids[i]:
-                    raise ValueError("Identifiers out of order? Got '%s' but expected '%s'" \
+                    raise ValueError("Identifiers out of order? Got '%s' but expected '%s'"
                                       % (fields[0], ids[i]))
 
                 if fields[1] != line[seq_cols]:
@@ -251,10 +251,10 @@ class ClustalIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != len(ids):
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (len(ids), self.records_per_alignment))
 
-        records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i) \
+        records = (SeqRecord(Seq(s, self.alphabet), id=i, description=i)
                    for (i,s) in zip(ids, seqs))
         alignment = MultipleSeqAlignment(records, self.alphabet)
         #TODO - Handle alignment annotation better, for now

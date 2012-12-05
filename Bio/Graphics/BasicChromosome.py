@@ -501,7 +501,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     if minimum >= maximum:
         raise ValueError("Bad min/max %f and %f" % (minimum, maximum))
     if min(desired) < minimum or max(desired) > maximum:
-        raise ValueError("Data %f to %f out of bounds (%f to %f)" \
+        raise ValueError("Data %f to %f out of bounds (%f to %f)"
                          % (min(desired), max(desired), minimum, maximum))
     equal_step = float(maximum - minimum) / (count - 1)
 
@@ -638,7 +638,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
                 strand = f.strand
                 try:
                     #Mimic the GenomeDiagram code
-                    color = _color_trans.artemis_color( \
+                    color = _color_trans.artemis_color(
                                              f.qualifiers['color'][0])
                 except:
                     color = self.default_feature_color

@@ -53,7 +53,7 @@ else:
         muscle_exe = "muscle"
 
 if not muscle_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install MUSCLE if you want to use the Bio.Align.Applications wrapper.")
 
 #################################################################
@@ -84,7 +84,7 @@ class MuscleApplication(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe,
                                     input=self.infile1,
                                     out=self.outfile1)
-        self.assertEqual(str(cmdline), muscle_exe \
+        self.assertEqual(str(cmdline), muscle_exe
                          + ' -in Fasta/f002 -out "Fasta/temp align out1.fa"')
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -99,9 +99,9 @@ class MuscleApplication(unittest.TestCase):
         #Use property:
         cmdline.objscore = "sp"
         cmdline.noanchors = True
-        self.assertEqual(str(cmdline), muscle_exe +\
-                         " -in Fasta/f002" + \
-                         " -out Fasta/temp_align_out2.fa" + \
+        self.assertEqual(str(cmdline), muscle_exe +
+                         " -in Fasta/f002" +
+                         " -out Fasta/temp_align_out2.fa" +
                          " -objscore sp -noanchors")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -116,8 +116,8 @@ class MuscleApplication(unittest.TestCase):
         cmdline.set_parameter("profile", True)
         cmdline.set_parameter("in1", self.infile2)
         cmdline.set_parameter("in2", self.infile3)
-        self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out3.fa" + \
+        self.assertEqual(str(cmdline), muscle_exe +
+                         " -out Fasta/temp_align_out3.fa" +
                          " -profile -in1 Fasta/fa01 -in2 Fasta/f001")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         output, error = cmdline()
@@ -132,9 +132,9 @@ class MuscleApplication(unittest.TestCase):
                                     in1=self.infile2, in2=self.infile3,
                                     profile=True, stable=True,
                                     cluster1="neighborjoining")
-        self.assertEqual(str(cmdline), muscle_exe + \
-                         " -out Fasta/temp_align_out4.fa" + \
-                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" + \
+        self.assertEqual(str(cmdline), muscle_exe +
+                         " -out Fasta/temp_align_out4.fa" +
+                         " -profile -in1 Fasta/fa01 -in2 Fasta/f001" +
                          " -cluster1 neighborjoining -stable")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         """
@@ -184,7 +184,7 @@ class SimpleAlignTest(unittest.TestCase):
         records.sort(key = lambda rec: rec.id)
         #Prepare the command... use Clustal output (with a MUSCLE header)
         cmdline = MuscleCommandline(muscle_exe, input=input_file, clw = True)
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
                          " -in Fasta/f002 -clw")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
@@ -217,7 +217,7 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("in", input_file)
         #Use clustal output (with a CLUSTAL header)
         cmdline.set_parameter("clwstrict", True) #Default None treated as False!
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
                          " -in Fasta/f002 -clwstrict")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
@@ -257,8 +257,8 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline.set_parameter("maxhours", 0.1)
         #No progress reports to stderr
         cmdline.set_parameter("quiet", True) #Default None treated as False!
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
-                         " -in temp_cw_prot.fasta -diags -maxhours 0.1" + \
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
+                         " -in temp_cw_prot.fasta -diags -maxhours 0.1" +
                          " -maxiters 1 -clwstrict -quiet")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),
@@ -324,8 +324,8 @@ class SimpleAlignTest(unittest.TestCase):
         cmdline = MuscleCommandline(muscle_exe, input=input_file,
                                     clw=True, htmlout = output_html,
                                     clwstrictout = output_clwstrict)
-        self.assertEqual(str(cmdline).rstrip(), muscle_exe + \
-                         " -in Fasta/f002 -clw -htmlout temp_f002.html" +\
+        self.assertEqual(str(cmdline).rstrip(), muscle_exe +
+                         " -in Fasta/f002 -clw -htmlout temp_f002.html" +
                          " -clwstrictout temp_f002.clw")
         self.assertEqual(str(eval(repr(cmdline))), str(cmdline))
         child = subprocess.Popen(str(cmdline),

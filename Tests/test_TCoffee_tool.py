@@ -17,7 +17,7 @@ os.environ['LANG'] = 'C'
 
 t_coffee_exe = None
 if sys.platform=="win32":
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Testing TCOFFEE on Windows not supported yet")
 else:
     import commands
@@ -27,7 +27,7 @@ else:
         t_coffee_exe = "t_coffee"
 
 if not t_coffee_exe:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install TCOFFEE if you want to use the Bio.Align.Applications wrapper.")
 
 class TCoffeeApplication(unittest.TestCase):

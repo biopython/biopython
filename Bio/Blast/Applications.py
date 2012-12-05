@@ -486,7 +486,7 @@ class _NcbibaseblastCommandline(AbstractCommandline):
             if self._get_parameter(a):
                 for b in incompatibles[a]:
                     if self._get_parameter(b):
-                        raise ValueError("Options %s and %s are incompatible." \
+                        raise ValueError("Options %s and %s are incompatible."
                                          % (a,b))
 
 

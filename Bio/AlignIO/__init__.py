@@ -215,12 +215,12 @@ def write(alignments, handle, format):
             count = 0
             for alignment in alignments:
                 if not isinstance(alignment, Alignment):
-                    raise TypeError(\
+                    raise TypeError(
                         "Expect a list or iterator of Alignment objects.")
                 SeqIO.write(alignment, fp, format)
                 count += 1
         elif format in _FormatToIterator or format in SeqIO._FormatToIterator:
-            raise ValueError("Reading format '%s' is supported, but not writing" \
+            raise ValueError("Reading format '%s' is supported, but not writing"
                              % format)
         else:
             raise ValueError("Unknown format '%s'" % format)
@@ -277,14 +277,14 @@ def _force_alphabet(alignment_iterator, alphabet):
     for align in alignment_iterator:
         if not isinstance(_get_base_alphabet(align._alphabet),
                           given_base_class):
-            raise ValueError("Specified alphabet %s clashes with "\
-                             "that determined from the file, %s" \
+            raise ValueError("Specified alphabet %s clashes with "
+                             "that determined from the file, %s"
                              % (repr(alphabet), repr(align._alphabet)))
         for record in align:
             if not isinstance(_get_base_alphabet(record.seq.alphabet),
                               given_base_class):
-                raise ValueError("Specified alphabet %s clashes with "\
-                                 "that determined from the file, %s" \
+                raise ValueError("Specified alphabet %s clashes with "
+                                 "that determined from the file, %s"
                            % (repr(alphabet), repr(record.seq.alphabet)))
             record.seq.alphabet = alphabet
         align._alphabet = alphabet
@@ -333,7 +333,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
         raise ValueError("Format required (lower case string)")
     if format != format.lower():
         raise ValueError("Format string '%s' should be lower case" % format)
-    if alphabet is not None and not (isinstance(alphabet, Alphabet) or \
+    if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
     if seq_count is not None and not isinstance(seq_count, int):

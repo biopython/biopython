@@ -266,21 +266,21 @@ class Hmmer3TabWriter(object):
             qnamew, tnamew, qaccw, taccw = 20, 20, 10, 10
 
         header = "#%*s %22s %22s %33s\n" % \
-                (tnamew + qnamew + taccw + qaccw + 2, "", \
-                "--- full sequence ----", "--- best 1 domain ----", \
+                (tnamew + qnamew + taccw + qaccw + 2, "",
+                "--- full sequence ----", "--- best 1 domain ----",
                 "--- domain number estimation ----")
         header += "#%-*s %-*s %-*s %-*s %9s %6s %5s %9s %6s %5s %5s %3s " \
-                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew-1, " target name", \
-                        taccw, "accession",  qnamew, "query name", qaccw, \
-                        "accession",  "  E-value", " score", " bias", \
-                        "  E-value", " score", " bias", "exp", \
-                        "reg", "clu", " ov", "env", "dom", "rep", \
+                "%3s %3s %3s %3s %3s %3s %s\n" % (tnamew-1, " target name",
+                        taccw, "accession",  qnamew, "query name", qaccw,
+                        "accession",  "  E-value", " score", " bias",
+                        "  E-value", " score", " bias", "exp",
+                        "reg", "clu", " ov", "env", "dom", "rep",
                         "inc", "description of target")
         header += "#%*s %*s %*s %*s %9s %6s %5s %9s %6s %5s %5s %3s %3s " \
-                "%3s %3s %3s %3s %3s %s\n" % (tnamew-1, "-------------------", \
-                taccw, "----------", qnamew, "--------------------", qaccw, \
-                "----------", "---------", "------", "-----", "---------", \
-                "------", "-----", "---", "---", "---", "---", "---", "---", \
+                "%3s %3s %3s %3s %3s %s\n" % (tnamew-1, "-------------------",
+                taccw, "----------", qnamew, "--------------------", qaccw,
+                "----------", "---------", "------", "-----", "---------",
+                "------", "-----", "---", "---", "---", "---", "---", "---",
                 "---", "---", "---------------------")
 
         return header
@@ -298,11 +298,11 @@ class Hmmer3TabWriter(object):
 
         for hit in qresult:
             rows += "%-*s %-*s %-*s %-*s %9.2g %6.1f %5.1f %9.2g %6.1f %5.1f " \
-            "%5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % (tnamew, hit.id, taccw, \
-            hit.acc, qnamew, qresult.id, qaccw, qresult.acc, hit.evalue, \
-            hit.bitscore, hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore, \
-            hit.hsps[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num, \
-            hit.overlap_num, hit.env_num, hit.domain_obs_num, \
+            "%5.1f %3d %3d %3d %3d %3d %3d %3d %s\n" % (tnamew, hit.id, taccw,
+            hit.acc, qnamew, qresult.id, qaccw, qresult.acc, hit.evalue,
+            hit.bitscore, hit.bias, hit.hsps[0].evalue, hit.hsps[0].bitscore,
+            hit.hsps[0].bias, hit.domain_exp_num, hit.region_num, hit.cluster_num,
+            hit.overlap_num, hit.env_num, hit.domain_obs_num,
             hit.domain_reported_num, hit.domain_included_num, hit.description)
 
         return rows

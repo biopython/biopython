@@ -63,8 +63,8 @@ def simple_matrix_print(matrix):
     #If and when Biopython requires Python 2.4 or later,
     #it would be slightly nicer to use generator expressions.
     return "[" \
-    + "\n ".join(["[" \
-                 + " ".join(["% 1.4f" % val for val in row]) \
+    + "\n ".join(["["
+                 + " ".join(["% 1.4f" % val for val in row])
                  + "]" for row in matrix]) \
     + "]"
 

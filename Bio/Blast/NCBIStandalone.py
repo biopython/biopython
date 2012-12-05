@@ -293,7 +293,7 @@ class _Scanner(object):
         # blastpgp 2.0.10 from NCBI 9/19/99 for Solaris sometimes crashes here.
         # If this happens, the handle will yield no more information.
         if not uhandle.peekline():
-            raise ValueError("Unexpected end of blast report.  " + \
+            raise ValueError("Unexpected end of blast report.  " +
                   "Looks suspiciously like a PSI-BLAST crash.")
 
         # BLASTN 2.2.3 sometimes spews a bunch of warnings and errors here:
@@ -960,7 +960,7 @@ class _DescriptionConsumer(object):
         #   - sometimes there's an "N" score of '1'.
         cols = line.split()
         if len(cols) < 3:
-            raise ValueError( \
+            raise ValueError(
                   "Line does not appear to contain description:\n%s" % line)
         if self.__has_n:
             i = line.rfind(cols[-1])        # find start of N
@@ -1236,7 +1236,7 @@ class _HSPConsumer(object):
             # Make sure the alignment is the same length as the query
             seq = seq + ' ' * (self._query_len-len(seq))
         elif len(seq) < self._query_len:
-            raise ValueError("Match is longer than the query in line\n%s" \
+            raise ValueError("Match is longer than the query in line\n%s"
                              % line)
         self._hsp.match = self._hsp.match + seq
 
@@ -1261,8 +1261,8 @@ class _HSPConsumer(object):
 
         self._hsp.sbjct_end = _safe_int(end)
         if len(seq) != self._query_len:
-            raise ValueError( \
-                  "QUERY and SBJCT sequence lengths don't match in line\n%s" \
+            raise ValueError(
+                  "QUERY and SBJCT sequence lengths don't match in line\n%s"
                   % line)
 
         del self._query_start_index   # clean up unused variables
@@ -2031,13 +2031,13 @@ def _get_cols(line, cols_to_get, ncols=None, expected={}):
 
     # Check to make sure number of columns is correct
     if ncols is not None and len(cols) != ncols:
-        raise ValueError("I expected %d columns (got %d) in line\n%s" \
+        raise ValueError("I expected %d columns (got %d) in line\n%s"
                          % (ncols, len(cols), line))
 
     # Check to make sure columns contain the correct data
     for k in expected:
         if cols[k] != expected[k]:
-            raise ValueError("I expected '%s' in column %d in line\n%s" \
+            raise ValueError("I expected '%s' in column %d in line\n%s"
                              % (expected[k], k, line))
 
     # Construct the answer tuple

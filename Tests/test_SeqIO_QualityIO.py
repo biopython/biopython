@@ -92,7 +92,7 @@ def compare_record(old, new, truncate=None):
     and "solexa_quality" in new.letter_annotations:
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
-        converted = [round(QualityIO.solexa_quality_from_phred(q)) \
+        converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
             converted = [min(q,truncate) for q in converted]
@@ -106,7 +106,7 @@ def compare_record(old, new, truncate=None):
     and "phred_quality" in new.letter_annotations:
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
-        converted = [round(QualityIO.phred_quality_from_solexa(q)) \
+        converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
             converted = [min(q,truncate) for q in converted]
@@ -277,7 +277,7 @@ class TestReferenceFastqConversions(unittest.TestCase):
                           % (base_name, in_variant)
             self.assertTrue(os.path.isfile(in_filename))
             #Load the reference output...
-            expected = open("Quality/%s_as_%s.fastq" \
+            expected = open("Quality/%s_as_%s.fastq"
                             % (base_name, out_variant),
                             "rU").read()
             #Check matches using convert...
@@ -317,7 +317,7 @@ class TestQual(unittest.TestCase):
     """Tests with QUAL files."""
     def test_paired(self):
         """Check FASTQ parsing matches FASTA+QUAL parsing"""
-        records1 = list(\
+        records1 = list(
             QualityIO.PairedFastaQualIterator(open("Quality/example.fasta"),
                                               open("Quality/example.qual")))
         records2 = list(SeqIO.parse(open("Quality/example.fastq"),"fastq"))
@@ -639,7 +639,7 @@ class MappingTests(unittest.TestCase):
         #cached dictionary of the mappings.
         seq = "N"*94
         qual = "".join(chr(33+q) for q in range(0,94))
-        expected_sol = [min(62,int(round(QualityIO.solexa_quality_from_phred(q)))) \
+        expected_sol = [min(62,int(round(QualityIO.solexa_quality_from_phred(q))))
                         for q in range(0,94)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
         out_handle = StringIO("")
@@ -662,7 +662,7 @@ class MappingTests(unittest.TestCase):
         #cached dictionary of the mappings.
         seq = "N"*68
         qual = "".join(chr(64+q) for q in range(-5,63))
-        expected_phred = [round(QualityIO.phred_quality_from_solexa(q)) \
+        expected_phred = [round(QualityIO.phred_quality_from_solexa(q))
                           for q in range(-5,63)]
         in_handle = StringIO("@Test\n%s\n+\n%s" % (seq,qual))
         out_handle = StringIO("")

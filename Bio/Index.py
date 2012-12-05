@@ -56,7 +56,7 @@ class _ShelveIndex(dict):
             if version is None:
                 raise IOError("Unrecognized index format")
             elif version != self.__version:
-                raise IOError("Version %s doesn't match my version %s" \
+                raise IOError("Version %s doesn't match my version %s"
                               % (version, self.__version))
 
     def __del__(self):
@@ -90,7 +90,7 @@ class _InMemoryIndex(dict):
             handle = open(indexname)
             version = self._toobj(handle.readline().rstrip())
             if version != self.__version:
-                raise IOError("Version %s doesn't match my version %s" \
+                raise IOError("Version %s doesn't match my version %s"
                               % (version, self.__version))
             for line in handle:
                 key, value = line.split()

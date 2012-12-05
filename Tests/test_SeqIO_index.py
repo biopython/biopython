@@ -270,14 +270,14 @@ class IndexDictTests(unittest.TestCase):
             raw_file = h.read()
             h.close()
             h = gzip_open(filename, format)
-            id_list = [rec.id.lower() for rec in \
+            id_list = [rec.id.lower() for rec in
                        SeqIO.parse(h, format, alphabet)]
             h.close()
         else:
             h = open(filename, "rb")
             raw_file = h.read()
             h.close()
-            id_list = [rec.id.lower() for rec in \
+            id_list = [rec.id.lower() for rec in
                        SeqIO.parse(filename, format, alphabet)]
         rec_dict = SeqIO.index(filename, format, alphabet,
                                key_function = lambda x : x.lower())
@@ -412,7 +412,7 @@ for filename, format, alphabet in tests:
             f = lambda x : x.simple_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s defaults" % (fmt, fn)
             return f
-        setattr(IndexDictTests, "test_%s_%s_simple" \
+        setattr(IndexDictTests, "test_%s_%s_simple"
                     % (format, filename.replace("/","_").replace(".","_")),
                 funct(filename, format, alphabet, comp))
         del funct
@@ -421,7 +421,7 @@ for filename, format, alphabet in tests:
             f = lambda x : x.key_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s with key function" % (fmt, fn)
             return f
-        setattr(IndexDictTests, "test_%s_%s_keyf" \
+        setattr(IndexDictTests, "test_%s_%s_keyf"
                     % (format, filename.replace("/","_").replace(".","_")),
                 funct(filename, format, alphabet, comp))
         del funct
@@ -430,7 +430,7 @@ for filename, format, alphabet in tests:
             f = lambda x : x.get_raw_check(fn, fmt, alpha, c)
             f.__doc__ = "Index %s file %s get_raw" % (fmt, fn)
             return f
-        setattr(IndexDictTests, "test_%s_%s_get_raw" \
+        setattr(IndexDictTests, "test_%s_%s_get_raw"
                     % (format, filename.replace("/","_").replace(".","_")),
                 funct(filename, format, alphabet, comp))
         del funct

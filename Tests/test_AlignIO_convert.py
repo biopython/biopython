@@ -62,7 +62,7 @@ for filename, in_format, alphabet in tests:
             f = lambda x : x.simple_check(fn, fmt1, fmt2, alpha)
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
-        setattr(ConvertTests, "test_%s_%s_to_%s" \
+        setattr(ConvertTests, "test_%s_%s_to_%s"
                 % (filename.replace("/","_").replace(".","_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
     del funct

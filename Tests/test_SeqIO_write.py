@@ -67,7 +67,7 @@ test_records = [
 # Meddle with the annotation too:
 assert test_records[4][1] == "3 DNA seq alignment with CR/LF in name/descr"
 # Add a list of strings,
-test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep \
+test_records[4][0][2].annotations["note"] = ["Note%salso" % os.linesep
                                     + "\r\nhas\n evil line\rbreaks!", "Wow"]
 # Add a simple string
 test_records[4][0][2].annotations["comment"] = "More%sof" % os.linesep \
@@ -120,7 +120,7 @@ class WriterTests(unittest.TestCase):
             #Using compare_record(record, new_record) is too strict
             if format == "nexus":
                 #The nexus parser will dis-ambiguate repeated record ids.
-                self.assertTrue(record.id == new_record.id or \
+                self.assertTrue(record.id == new_record.id or
                                 new_record.id.startswith(record.id+".copy"))
             else:
                 self.assertEqual(record.id, new_record.id)

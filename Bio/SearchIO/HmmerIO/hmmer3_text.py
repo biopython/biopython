@@ -159,7 +159,7 @@ class Hmmer3TextParser(object):
     def _parse_hit(self, qid):
         """Parses a HMMER3 hit block, beginning with the hit table."""
         # get to the end of the hit table delimiter and read one more line
-        self._read_until(lambda line: \
+        self._read_until(lambda line:
                 line.startswith('    ------- ------ -----'))
         self.line = _read_forward(self.handle)
 
@@ -218,7 +218,7 @@ class Hmmer3TextParser(object):
     def _create_hits(self, hit_attrs, qid):
         """Parses a HMMER3 hsp block, beginning with the hsp table."""
         # read through until the beginning of the hsp block
-        self._read_until(lambda line: line.startswith('Internal pipeline') \
+        self._read_until(lambda line: line.startswith('Internal pipeline')
                 or line.startswith('>>'))
 
         # start parsing the hsp block
@@ -232,7 +232,7 @@ class Hmmer3TextParser(object):
             hid, hdesc = self.line[len('>> '):].split('  ', 1)
 
             # read through the hsp table header and move one more line
-            self._read_until(lambda line: \
+            self._read_until(lambda line:
                     line.startswith(' ---   ------ ----- --------'))
             self.line = _read_forward(self.handle)
 

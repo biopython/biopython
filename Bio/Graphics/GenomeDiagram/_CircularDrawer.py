@@ -1304,7 +1304,7 @@ class CircularDrawer(AbstractDrawer):
         #else:
         startangle, endangle = min(startangle, endangle), max(startangle, endangle)
         if orientation != "left" and orientation != "right":
-            raise ValueError("Invalid orientation %s, should be 'left' or 'right'" \
+            raise ValueError("Invalid orientation %s, should be 'left' or 'right'"
                              % repr(orientation))
 
         angle = float(endangle - startangle)    # angle subtended by arc

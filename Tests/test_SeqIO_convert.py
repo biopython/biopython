@@ -122,7 +122,7 @@ def compare_record(old, new, truncate=None):
     and "solexa_quality" in new.letter_annotations:
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
-        converted = [round(QualityIO.solexa_quality_from_phred(q)) \
+        converted = [round(QualityIO.solexa_quality_from_phred(q))
                      for q in old.letter_annotations["phred_quality"]]
         if truncate:
             converted = [min(q,truncate) for q in converted]
@@ -136,7 +136,7 @@ def compare_record(old, new, truncate=None):
     and "phred_quality" in new.letter_annotations:
         #Mapping from Solexa to PHRED is lossy, but so is PHRED to Solexa.
         #Assume "old" is the original, and "new" has been converted.
-        converted = [round(QualityIO.phred_quality_from_solexa(q)) \
+        converted = [round(QualityIO.phred_quality_from_solexa(q))
                      for q in old.letter_annotations["solexa_quality"]]
         if truncate:
             converted = [min(q,truncate) for q in converted]
@@ -187,7 +187,7 @@ for filename, format, alphabet in tests:
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
 
-        setattr(ConvertTests, "test_%s_%s_to_%s" \
+        setattr(ConvertTests, "test_%s_%s_to_%s"
                 % (filename.replace("/","_").replace(".","_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
         del funct
@@ -232,7 +232,7 @@ for filename, format, alphabet in tests:
             f.__doc__ = "Convert %s from %s to %s" % (fn, fmt1, fmt2)
             return f
 
-        setattr(ConvertTests, "test_%s_%s_to_%s" \
+        setattr(ConvertTests, "test_%s_%s_to_%s"
                 % (filename.replace("/","_").replace(".","_"), in_format, out_format),
                 funct(filename, in_format, out_format, alphabet))
     del funct

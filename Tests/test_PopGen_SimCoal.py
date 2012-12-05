@@ -23,7 +23,7 @@ for path in os.environ['PATH'].split(os.pathsep):
     except os.error:
         pass #Path doesn't exist - correct to pass
 if not found:
-    raise MissingExternalDependencyError(\
+    raise MissingExternalDependencyError(
         "Install SIMCOAL2 if you want to use Bio.PopGen.SimCoal.")
 
 

@@ -175,7 +175,7 @@ class AbstractCommandline(object):
         for p in parameters:
             for name in p.names:
                 if name in aliases:
-                    raise ValueError("Parameter alias %s multiply defined" \
+                    raise ValueError("Parameter alias %s multiply defined"
                                      % name)
                 aliases.add(name)
             name = p.names[-1]
@@ -227,7 +227,7 @@ class AbstractCommandline(object):
         for p in self.parameters:
             #Check for missing required parameters:
             if p.is_required and not(p.is_set):
-                raise ValueError("Parameter %s is not set." \
+                raise ValueError("Parameter %s is not set."
                                  % p.names[-1])
             #Also repeat the parameter validation here, just in case?
 
@@ -336,7 +336,7 @@ class AbstractCommandline(object):
             is_good = check_function(value) #May raise an exception
             assert is_good in [0,1,True,False]
             if not is_good:
-                raise ValueError("Invalid parameter value %r for parameter %s" \
+                raise ValueError("Invalid parameter value %r for parameter %s"
                                  % (value, name))
 
     def __setattr__(self, name, value):

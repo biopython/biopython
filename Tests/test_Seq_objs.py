@@ -62,7 +62,7 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
     stop_codons = ['TAA' ])
 
 class StringMethodTests(unittest.TestCase):
-    _examples = [ \
+    _examples = [
         Seq("ACGTGGGGT", generic_protein),
         Seq("ACGTGGGGT", generic_nucleotide),
         Seq("ACGTGGGGT", generic_dna),
@@ -113,7 +113,7 @@ class StringMethodTests(unittest.TestCase):
                     i = pre_comp_function(i)
                     j = pre_comp_function(j)
                 if i != j:
-                    raise ValueError("%s.%s(%s) = %i, not %i" \
+                    raise ValueError("%s.%s(%s) = %i, not %i"
                                      % (repr(example1),
                                         method_name,
                                         repr(str2),
@@ -127,7 +127,7 @@ class StringMethodTests(unittest.TestCase):
                         i = pre_comp_function(i)
                         j = pre_comp_function(j)
                     if i != j:
-                        raise ValueError("%s.%s(%s) = %i, not %i" \
+                        raise ValueError("%s.%s(%s) = %i, not %i"
                                          % (repr(example1),
                                             method_name,
                                             repr(example2),
@@ -145,7 +145,7 @@ class StringMethodTests(unittest.TestCase):
                             i = pre_comp_function(i)
                             j = pre_comp_function(j)
                         if i != j:
-                            raise ValueError("%s.%s(%s, %i) = %i, not %i" \
+                            raise ValueError("%s.%s(%s, %i) = %i, not %i"
                                              % (repr(example1),
                                                 method_name,
                                                 repr(str2),
@@ -160,7 +160,7 @@ class StringMethodTests(unittest.TestCase):
                                 i = pre_comp_function(i)
                                 j = pre_comp_function(j)
                             if i != j:
-                                raise ValueError("%s.%s(%s, %i, %i) = %i, not %i" \
+                                raise ValueError("%s.%s(%s, %i, %i) = %i, not %i"
                                                  % (repr(example1),
                                                     method_name,
                                                     repr(str2),
@@ -196,7 +196,7 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "startswith"):
                 #e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start+2] for start \
+            subs = tuple([example1[start:start+2] for start
                           in range(0, len(example1)-2,3)])
             subs_str = tuple([str(s) for s in subs])
 
@@ -224,7 +224,7 @@ class StringMethodTests(unittest.TestCase):
             if not hasattr(example1, "endswith"):
                 #e.g. MutableSeq does not support this
                 continue
-            subs = tuple([example1[start:start+2] for start \
+            subs = tuple([example1[start:start+2] for start
                           in range(0, len(example1)-2,3)])
             subs_str = tuple([str(s) for s in subs])
 
@@ -304,7 +304,7 @@ class StringMethodTests(unittest.TestCase):
                             except ValueError:
                                 pass
                         else:
-                            self.assertEqual(str(example1[i:j:step]), \
+                            self.assertEqual(str(example1[i:j:step]),
                                              str1[i:j:step])
 
     def test_tostring(self):
@@ -508,16 +508,16 @@ class StringMethodTests(unittest.TestCase):
             for c1 in ambig:
                 for c2 in ambig:
                     for c3 in ambig:
-                        values = set([str(Seq(a+b+c).translate()) \
-                                      for a in ambig_values[c1] \
-                                      for b in ambig_values[c2] \
+                        values = set([str(Seq(a+b+c).translate())
+                                      for a in ambig_values[c1]
+                                      for b in ambig_values[c2]
                                       for c in ambig_values[c3]])
                         t = str(Seq(c1+c2+c3).translate())
                         if t=="*":
                             self.assertEqual(values, set("*"))
                         elif t=="X":
-                            self.assertTrue(len(values) > 1, \
-                                "translate('%s') = '%s' not '%s'" \
+                            self.assertTrue(len(values) > 1,
+                                "translate('%s') = '%s' not '%s'"
                                 % (c1+c2+c3, t, ",".join(values)))
                         elif t=="Z":
                             self.assertEqual(values, set("EQ"))

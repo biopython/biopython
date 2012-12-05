@@ -7,7 +7,7 @@ try:
     from numpy import random #missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
-    raise MissingPythonDependencyError(\
+    raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.MarkovModel.")
 
 import unittest

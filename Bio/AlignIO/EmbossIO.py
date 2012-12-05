@@ -117,7 +117,7 @@ class EmbossIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != number_of_seqs:
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (number_of_seqs, self.records_per_alignment))
 
         seqs = ["" for id in ids]
@@ -200,7 +200,7 @@ class EmbossIterator(AlignmentIterator):
 
         if self.records_per_alignment is not None \
         and self.records_per_alignment != len(ids):
-            raise ValueError("Found %i records in this alignment, told to expect %i" \
+            raise ValueError("Found %i records in this alignment, told to expect %i"
                              % (len(ids), self.records_per_alignment))
 
         records = []
@@ -213,7 +213,7 @@ class EmbossIterator(AlignmentIterator):
                 raise ValueError("Error parsing alignment - sequences of "
                                  "different length? You could be using an "
                                  "old version of EMBOSS.")
-            records.append(SeqRecord(Seq(seq, self.alphabet), \
+            records.append(SeqRecord(Seq(seq, self.alphabet),
                                      id=id, description=id))
         return MultipleSeqAlignment(records, self.alphabet)
 
