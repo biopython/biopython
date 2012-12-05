@@ -340,8 +340,8 @@ class MarkovModelBuilder(object):
                    "State %s was not found in the sequence alphabet" % state
 
         # ensure that the states are not already set
-        if from_state, to_state not in self.transition_prob and \
-           from_state, to_state not in self.transition_pseudo:
+        if (from_state, to_state) not in self.transition_prob and \
+           (from_state, to_state) not in self.transition_pseudo:
             # set the initial probability
             if probability is None:
                 probability = 0
