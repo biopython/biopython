@@ -40,13 +40,7 @@ class CheckRaw(unittest.TestCase):
         #Now again, but using SQLite backend
         if sqlite3:
             idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
-            #TODO - Fix mismatch between record length and get_raw behaviour
-            raw2 = idx.get_raw(id)
-            if raw != raw2:
-                print "[WARNING - %s get_raw %i vs %i bytes] " \
-                    % (self.fmt, len(raw), len(raw2))
-                self.assertTrue(raw2 in raw or raw in raw2)
-            #self.assertEqual(raw, idx.get_raw(id))
+            self.assertEqual(raw, idx.get_raw(id))
             idx.close()
 
         if os.path.isfile(filename + ".bgz"):
