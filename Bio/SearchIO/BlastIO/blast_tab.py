@@ -267,7 +267,7 @@ class BlastTabParser(object):
             self.line = self.handle.readline()
 
             if not self.line:
-                return
+                return comments
             else:
                 self.line = self.line.strip()
 
@@ -602,18 +602,18 @@ class BlastTabIndexer(SearchIndexer):
         # query mark is the line marking a new query
         # something like '# TBLASTN 2.2.25+'
         query_mark = None
-        while True:
-            line = handle.readline()
+        line = handle.readline()
+        while line:
+            # since query_mark depends on the BLAST search, we need to obtain it
+            # first
             if query_mark is None:
                 query_mark = line
-            # if we've encountered another query mark, it's the start of
-            # another query
-            # if 'BLAST processed' is in line, it's one line before EOF
-            elif line == query_mark: break
-            # append to the raw string as long as qresult is the same
-            qresult_raw += line
+            # break when we've reached the next qresult or the search ends
+            elif line == query_mark or line.startswith(end_mark):
+                break
 
-            if line.startswith(end_mark): break
+            qresult_raw += line
+            line = handle.readline()
 
         return qresult_raw
 
