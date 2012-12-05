@@ -428,8 +428,8 @@ class GenePopController(object):
     #2.1
     def test_ld(self, fname,
                 dememorization = 10000, batches = 20, iterations = 5000):
-                opts = self._get_opts(dememorization, batches, iterations)
-                self._run_genepop([".DIS"], [2, 1], fname, opts)
+        opts = self._get_opts(dememorization, batches, iterations)
+        self._run_genepop([".DIS"], [2, 1], fname, opts)
 
         def ld_pop_func(self):
             current_pop = None
