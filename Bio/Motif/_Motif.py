@@ -169,9 +169,11 @@ instead.
         return self.__mask
 
     def __set_mask(self, mask):
-        if len(mask)!=self.length:
+        if mask==None:
+            self.__mask = (1,) * self.length
+        elif len(mask)!=self.length:
             raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
-        if isinstance(mask, str):
+        elif isinstance(mask, str):
             self.__mask=[]
             for char in mask:
                 if char=="*":
