@@ -236,6 +236,7 @@ class CircularDrawer(AbstractDrawer):
             self.sweep = 0.9    # around which information will be drawn
         else:
             self.sweep = 1
+        self.scale=scale
 
     def set_track_heights(self):
         """ set_track_heights(self)
@@ -417,6 +418,13 @@ class CircularDrawer(AbstractDrawer):
 
             Returns a drawable indicator of the feature, and any required label
             for it
+
+            DMAM: Adding use for: 
+                label_position=start|middle|end
+                label_placement=inside|over|outside|auto
+                # position the label on the inside of the track, centered on the feature track, outside the track or outside(forward), inside (reverse), over(strandless or both)
+                label_orientation=upright|circular
+                # orient the label so they are as upright as possible, or circular (in teh same oreintation as the feature)
         """
         # Establish the co-ordinates for the sigil
         btm, ctr, top = self.track_radii[self.current_track_level]
@@ -457,30 +465,80 @@ class CircularDrawer(AbstractDrawer):
             labelgroup = Group(label)
             label_angle = startangle + 0.5 * pi     # Make text radial
             sinval, cosval = startsin, startcos
-            if feature.strand != -1:
-                # Feature is on top, or covers both strands
-                if startangle < pi: # Turn text round and anchor end to inner radius
+            try:
+                if feature.label_position=="middle":
+                    label_angle = midangle + 0.5 * pi     # Make text radial
+                    sinval, cosval = midsin, midcos
+                elif (feature.label_position=="end" and feature.strand != '-1') or (feature.label_position=='start' and feature.strand =='-1'):
+                    label_angle = endangle + 0.5 * pi     # Make text radial
                     sinval, cosval = endsin, endcos
-                    label_angle = endangle - 0.5 * pi
-                    labelgroup.contents[0].textAnchor = 'end'
-                pos = self.xcenter+top*sinval
+            except:
+                pass
+            
+            # now check label placement:
+            anchors={'clock': {'inside': 'end',
+                               'outside': 'start',
+                               'overlap': 'start'},
+                     'anti': {'inside':'start',
+                              'outside':'end',
+                              'overlap':'end'}
+                     }
+
+                            
+            orient='anti'
+            label_orientation='upright'
+            if hasattr(feature, 'label_orientation'):
+                label_orientation=feature.label_orientation
+            label_placement='overlap'
+            if hasattr(feature, 'label_placement'):
+                label_placement=feature.label_placement
+            offset=(top-btm)/10
+            if feature.strand != -1:
+                orient='clock'
+                label_angle=label_angle - pi
+                if label_placement=='strand':
+                    label_placement='outside'
+                # Feature is on top, or covers both strands
+                if label_orientation != 'circular':
+                    if label_angle < pi: # Turn text round and anchor end to inner radius
+                        label_angle=label_angle - pi
+                        orient='anti'
+                rad=top + offset
+                if label_placement=='inside':
+                    rad=btm - offset
+                if label_placement=='overlap':
+                    rad=btm + offset
+                pos = self.xcenter+rad*sinval
                 coslabel = cos(label_angle)
                 sinlabel = sin(label_angle)
-                labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
-                                        pos, self.ycenter+top*cosval)
+                labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,                                        pos, self.ycenter+rad*cosval)
             else:
                 # Feature on bottom strand
-                if startangle < pi: # Turn text round and anchor end to inner radius
-                    sinval, cosval = endsin, endcos
-                    label_angle = endangle - 0.5 * pi
+#                label_angle = label_angle 
+                if label_placement=='strand':
+                    label_placement='inside'                
+                if label_orientation !='circular':
+                    if label_angle < pi: # Turn text round and anchor end to inner radius
+                        orient='clock'
+ #                   sinval, cosval = endsin, endcos
+                        label_angle = label_angle + pi
+                    
                 else:
-                    labelgroup.contents[0].textAnchor = 'end'
-                pos = self.xcenter+btm*sinval
+                    orient='anti'
+                rad= btm - offset
+                if label_placement== 'outside':
+                    rad=top + offset
+                if label_placement=='overlap':
+                    rad=top - offset
+                pos = self.xcenter+rad*sinval
                 coslabel = cos(label_angle)
                 sinlabel = sin(label_angle)
                 labelgroup.transform = (coslabel,-sinlabel,sinlabel,coslabel,
-                                        pos, self.ycenter+btm*cosval)
-
+                                        pos, self.ycenter+rad*cosval)
+            try:
+                labelgroup.contents[0].textAnchor = anchors[orient][feature.label_placement]
+            except:
+                pass
         else:
             labelgroup = None
         #if locstart > locend:
