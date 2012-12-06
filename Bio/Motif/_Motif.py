@@ -85,7 +85,7 @@ class Motif(object):
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
         self.alphabet = alphabet
-        if self.length==None:
+        if self.length is None:
             self.__mask = ()
         else:
             self.__mask = (1,) * self.length
@@ -170,7 +170,7 @@ instead.
         return self.__mask
 
     def __set_mask(self, mask):
-        if mask==None:
+        if mask is None:
             self.__mask = (1,) * self.length
         elif len(mask)!=self.length:
             raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
@@ -253,7 +253,7 @@ the probability of each letter in the alphabet associated with the motif
 under the background distribution.
         """
         result=0
-        if background==None:
+        if background is None:
             background = {}
             for a in self.alphabet.letters:
                 background[a] = 1.0
