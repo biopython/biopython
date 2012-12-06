@@ -47,7 +47,7 @@ def run2to3(filenames):
             if e != 0:
                 sys.stderr = stderr
                 sys.stderr.write(handle.getvalue())
-                os.remove(filename) #Don't want a half edited file!
+                os.remove(filename)  # Don't want a half edited file!
                 raise RuntimeError("Error %i from 2to3 on %s"
                                    % (e, filename))
             #And again for any doctests,
@@ -55,13 +55,13 @@ def run2to3(filenames):
             if e != 0:
                 sys.stderr = stderr
                 sys.stderr.write(handle.getvalue())
-                os.remove(filename) #Don't want a half edited file!
+                os.remove(filename)  # Don't want a half edited file!
                 raise RuntimeError("Error %i from 2to3 (doctests) on %s"
                                    % (e, filename))
     except KeyboardInterrupt:
         sys.stderr = stderr
         sys.stderr.write("Interrupted during %s\n" % filename)
-        os.remove(filename) #Don't want a half edited file!
+        os.remove(filename)  # Don't want a half edited file!
         for filename in filenames:
             if os.path.isfile(filename):
                 #Don't want uncoverted files left behind:
@@ -116,7 +116,7 @@ def do_update(py2folder, py3folder, verbose=False):
                 #Ignore hidden files
                 continue
             elif f.endswith("~") or f.endswith(".bak") \
-            or f.endswith(".swp"):
+                    or f.endswith(".swp"):
                 #Ignore backup files
                 continue
             elif f.endswith(".pyc") or f.endswith("$py.class"):
@@ -131,17 +131,17 @@ def do_update(py2folder, py3folder, verbose=False):
             #might able to use times down to microseconds (10^-6), but
             #that doesn't work on this Windows machine I'm testing on.
             if os.path.isfile(new) and\
-               round(os.stat(new).st_mtime*1000) >= \
-               round(os.stat(old).st_mtime*1000):
+               round(os.stat(new).st_mtime * 1000) >= \
+               round(os.stat(old).st_mtime * 1000):
                 if verbose:
                     print("Current: %s" % new)
                 continue
             #Python, C code, data files, etc - copy with date stamp etc
             shutil.copy2(old, new)
-            assert abs(os.stat(old).st_mtime-os.stat(new).st_mtime)<0.0001, \
+            assert abs(os.stat(old).st_mtime - os.stat(new).st_mtime) < 0.0001, \
                    "Modified time not copied! %0.8f vs %0.8f, diff %f" \
                    % (os.stat(old).st_mtime, os.stat(new).st_mtime,
-                      abs(os.stat(old).st_mtime-os.stat(new).st_mtime))
+                      abs(os.stat(old).st_mtime - os.stat(new).st_mtime))
             if f.endswith(".py"):
                 #Also run 2to3 on it
                 to_convert.append(new)

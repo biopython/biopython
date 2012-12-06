@@ -29,7 +29,7 @@ import shutil
 def is_pypy():
     import platform
     try:
-        if platform.python_implementation()=='PyPy':
+        if platform.python_implementation() == 'PyPy':
             return True
     except AttributeError:
         #New in Python 2.6, not in Jython yet either
@@ -75,7 +75,7 @@ elif sys.version_info[0] == 3:
     if "clean" in sys.argv:
         if os.path.isdir(python3_source):
             shutil.rmtree(python3_source)
-        del python3_source #so we don't try to change to it below
+        del python3_source  # so we don't try to change to it below
     else:
         if not os.path.isdir("build"):
             os.mkdir("build")
@@ -116,7 +116,7 @@ def get_install_requires():
     if not _SETUPTOOLS:
         return []
     # skip this with jython and pypy and ironpython
-    if os.name=="java" or is_pypy() or is_ironpython():
+    if os.name == "java" or is_pypy() or is_ironpython():
         return []
     # check for easy_install and pip
     is_automated = False
@@ -126,7 +126,7 @@ def get_install_requires():
     except ValueError:
         dist_dir_i = None
     if dist_dir_i is not None:
-        dist_dir = sys.argv[dist_dir_i+1]
+        dist_dir = sys.argv[dist_dir_i + 1]
         if "egg-dist-tmp" in dist_dir:
             is_automated = True
     # pip -- calls from python directly with "-c"
@@ -157,12 +157,12 @@ def check_dependencies():
     if is_Numpy_installed():
         return True
 
-    if os.name=='java':
-        return True #NumPy is not avaliable for Jython (for now)
+    if os.name == 'java':
+        return True  # NumPy is not avaliable for Jython (for now)
     if is_pypy():
-        return True #Full NumPy not available for PyPy (for now)
+        return True  # Full NumPy not available for PyPy (for now)
     if is_ironpython():
-        return True #We're ignoring NumPy under IronPython (for now)
+        return True  # We're ignoring NumPy under IronPython (for now)
 
     print ("""
 Numerical Python (NumPy) is not installed.
@@ -176,7 +176,7 @@ You can find NumPy at http://numpy.scipy.org
 """)
     # exit automatically if running as part of some script
     # (e.g. PyPM, ActiveState's Python Package Manager)
-    if not sys.stdout.isatty() :
+    if not sys.stdout.isatty():
         sys.exit(-1)
     # We can ask the user
     return get_yes_or_no("Do you want to continue this installation?", False)
@@ -358,7 +358,7 @@ NUMPY_PACKAGES = [
     'Bio.KDTree',
 ]
 
-if os.name == 'java' :
+if os.name == 'java':
     # Jython doesn't support C extensions
     EXTENSIONS = []
 elif is_pypy() or is_ironpython():
@@ -375,7 +375,7 @@ elif sys.version_info[0] == 3:
               ['Bio/Nexus/cnexus.c']
               ),
     ]
-else :
+else:
     EXTENSIONS = [
     Extension('Bio.cpairwise2',
               ['Bio/cpairwise2module.c'],
@@ -440,22 +440,22 @@ os.chdir(src_path)
 sys.path.insert(0, src_path)
 
 setup_args = {
-    "name" : 'biopython',
-    "version" : __version__,
-    "author" : 'The Biopython Consortium',
-    "author_email" : 'biopython@biopython.org',
-    "url" : 'http://www.biopython.org/',
-    "description" : 'Freely available tools for computational molecular biology.',
-    "download_url" : 'http://biopython.org/DIST/',
-    "cmdclass" : {
-        "install" : install_biopython,
-        "build_py" : build_py_biopython,
-        "build_ext" : build_ext_biopython,
-        "test" : test_biopython,
+    "name": 'biopython',
+    "version": __version__,
+    "author": 'The Biopython Consortium',
+    "author_email": 'biopython@biopython.org',
+    "url": 'http://www.biopython.org/',
+    "description": 'Freely available tools for computational molecular biology.',
+    "download_url": 'http://biopython.org/DIST/',
+    "cmdclass": {
+        "install": install_biopython,
+        "build_py": build_py_biopython,
+        "build_ext": build_ext_biopython,
+        "test": test_biopython,
         },
-    "packages" : PACKAGES,
-    "ext_modules" : EXTENSIONS,
-    "package_data" : {
+    "packages": PACKAGES,
+    "ext_modules": EXTENSIONS,
+    "package_data": {
         'Bio.Entrez': ['DTDs/*.dtd', 'DTDs/*.ent', 'DTDs/*.mod'],
         'Bio.PopGen': ['SimCoal/data/*.par'],
          },
