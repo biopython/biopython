@@ -23,6 +23,7 @@ from Bio import Medline
 
 #####################################################################
 
+
 class TogoFields(unittest.TestCase):
     def test_invalid_database(self):
         """Check asking for fields of invalid database fails"""
@@ -207,7 +208,7 @@ class TogoEntry(unittest.TestCase):
 
     def test_nucleotide_genbank(self):
         """Bio.TogoWS.entry("nucleotide", "X52960")"""
-        handle = TogoWS.entry("nucleotide", "X52960") #Returns "genbank" format
+        handle = TogoWS.entry("nucleotide", "X52960")  # Returns "genbank" format
         record = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
@@ -218,49 +219,49 @@ class TogoEntry(unittest.TestCase):
     def test_nucleotide_genbank_length(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="length")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="length")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "248")
 
     def test_nucleotide_genbank_seq(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="seq")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="seq")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(seguid(data), "Ktxz0HgMlhQmrKTuZpOxPZJ6zGU")
 
     def test_nucleotide_genbank_definition(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="definition")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="definition")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1 (CbVd) RNA.")
 
     def test_nucleotide_genbank_accession(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="accession")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="accession")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960")
 
     def test_nucleotide_genbank_accession(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="version")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="version")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "1")
 
     def test_nucleotide_genbank_acc_version(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="acc_version")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="acc_version")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "X52960.1")
 
     def test_nucleotide_genbank_organism(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", field="organism")"""
         handle = TogoWS.entry("nucleotide", "X52960", field="organism")
-        data = handle.read().strip() #ignore trailing \n
+        data = handle.read().strip()  # ignore trailing \n
         handle.close()
         self.assertEqual(data, "Coleus blumei viroid 1")
 
@@ -299,14 +300,14 @@ class TogoEntry(unittest.TestCase):
     def test_embl_AM905444_seq(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="seq")"""
         handle = TogoWS.entry("embl", "AM905444", field="seq")
-        data = handle.read().strip() #ignore any trailing \n
+        data = handle.read().strip()  # ignore any trailing \n
         handle.close()
         self.assertEqual(seguid(data), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
     def test_embl_AM905444_definition(self):
         """Bio.TogoWS.entry("embl", "AM905444", field="definition")"""
         handle = TogoWS.entry("embl", "AM905444", field="definition")
-        data = handle.read().strip() #ignore any trailing \n
+        data = handle.read().strip()  # ignore any trailing \n
         handle.close()
         self.assertEqual(data, "Herbaspirillum seropedicae locus tag HS193.0074 for porin")
 
@@ -369,6 +370,7 @@ class TogoEntry(unittest.TestCase):
         self.assert_("porin protein" in record.description, record.description)
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
+
 
 class TogoSearch(unittest.TestCase):
     """Search tests."""

@@ -30,6 +30,7 @@ except ImportError:
 # Biopython Bio.Graphics.ColorSpiral
 from Bio.Graphics.ColorSpiral import ColorSpiral, get_colors, get_color_dict
 
+
 class SpiralTest(unittest.TestCase):
     """Construct and draw ColorSpiral colours placed on HSV spiral."""
     def setUp(self):

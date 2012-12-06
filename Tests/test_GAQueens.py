@@ -95,6 +95,7 @@ def display_board(genome):
 
     print '+-' + '--'*len(genome) + '+'
 
+
 def queens_solved(organisms):
     """Determine if we have solved the problem.
 
@@ -108,6 +109,7 @@ def queens_solved(organisms):
 
     # if we got here we didn't do it
     return 0
+
 
 def queens_fitness(genome):
     """Calculate the fitness of an organization of queens on the chessboard.
@@ -146,6 +148,7 @@ def queens_fitness(genome):
 
     return fitness
 
+
 class QueensAlphabet(Alphabet.Alphabet):
     def __init__(self, num_queens):
         """Initialize with the number of queens we are calculating for.
@@ -153,6 +156,7 @@ class QueensAlphabet(Alphabet.Alphabet):
         # set up the letters for the alphabet
         assert 0 < num_queens <= 9
         self.letters = "".join(str(i) for i in range(num_queens))
+
 
 # --- Problem specific crossover, mutation and repair operations
 class QueensRepair:
@@ -233,6 +237,7 @@ class QueensRepair:
                 organism.genome[duplicated_pos] = new_item
 
         return organism
+
 
 class QueensCrossover:
     """Crossover operation to help in solving the N-Queens problem.
@@ -383,6 +388,7 @@ class QueensMutation:
         return new_org
 
 num_queens = 5
+
 
 #Class defined for use via run_tests.py
 class QueensTest(unittest.TestCase):

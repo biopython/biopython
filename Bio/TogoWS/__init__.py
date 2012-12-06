@@ -185,8 +185,8 @@ def search_iter(db, query, limit=None, batch=100):
     remain = count
     if limit is not None:
         remain = min(remain, limit)
-    offset = 1 #They don't use zero based counting
-    prev_ids = [] #Just cache the last batch for error checking
+    offset = 1  # They don't use zero based counting
+    prev_ids = []  # Just cache the last batch for error checking
     while remain:
         batch = min(batch, remain)
         #print "%r left, asking for %r" % (remain, batch)
@@ -305,7 +305,7 @@ def _open(url, post=None):
     In the absense of clear guidelines, this function enforces a limit of
     "up to three queries per second" to avoid abusing the TogoWS servers.
     """
-    delay = 0.333333333 #one third of a second
+    delay = 0.333333333  # one third of a second
     current = time.time()
     wait = _open.previous + delay - current
     if wait > 0:

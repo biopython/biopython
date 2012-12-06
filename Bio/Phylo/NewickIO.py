@@ -183,7 +183,7 @@ class Writer(object):
 
         def newickize(clade):
             """Convert a node tree to a Newick tree string, recursively."""
-            if clade.is_terminal():    #terminal
+            if clade.is_terminal():    # terminal
                 return ((clade.name or '')
                         + make_info_string(clade, terminal=True))
             else:

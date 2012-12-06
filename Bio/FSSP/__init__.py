@@ -231,8 +231,8 @@ def read_fssp(fssp_handle):
 
     if not summary_title.match(curline):
         raise ValueError('Bad FSSP file: no summary record found')
-    curline = fssp_handle.readline()  #Read the title line, discard
-    curline = fssp_handle.readline()  #Read the next line
+    curline = fssp_handle.readline()  # Read the title line, discard
+    curline = fssp_handle.readline()  # Read the next line
     # Process the summary records into a list
     while summary_rec.match(curline):
         cur_sum_rec = FSSPSumRec(curline)
@@ -255,8 +255,8 @@ def read_fssp(fssp_handle):
             break
         # If we got to this point, this means that we have matched an
         # alignments title. Parse the alignment records in a loop.
-        curline = fssp_handle.readline()  #Read the title line, discard
-        curline = fssp_handle.readline()  #Read the next line
+        curline = fssp_handle.readline()  # Read the title line, discard
+        curline = fssp_handle.readline()  # Read the next line
         while alignments_rec.match(curline):
             align_rec = FSSPAlignRec(fff_rec(curline))
             key = align_rec.chain_id+align_rec.res_name+str(align_rec.pdb_res_num)

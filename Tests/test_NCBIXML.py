@@ -9,6 +9,7 @@ from Bio.Blast import NCBIXML
 
 E_VALUE_THRESH = 1e-10
 
+
 class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastp_001(self):
@@ -1608,7 +1609,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 1)
         self.assertEqual(len(record.alignments), 1)
         self.assertEqual(len(record.alignments[0].hsps), 1)
@@ -1623,7 +1624,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         # I used -num_descriptions 10 and -num_alignments 1
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
@@ -1641,7 +1642,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
 
@@ -1655,7 +1656,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
         self.assertEqual(len(record.alignments[0].hsps), 1)
@@ -1671,7 +1672,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
         self.assertEqual(len(record.alignments[0].hsps), 2)
@@ -1687,7 +1688,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
         self.assertEqual(len(record.alignments[0].hsps), 1)
@@ -1703,7 +1704,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
         self.assertEqual(len(record.alignments[0].hsps), 1)
@@ -1732,7 +1733,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.num_sequences_in_database, 8994603)
         self.assertEqual(record.database_sequences, 8994603)
         #self.assertEqual(record.database_length, 3078807967)
-        self.assertEqual(record.database_length, -1216159329) #NCBI bug!
+        self.assertEqual(record.database_length, -1216159329)  # NCBI bug!
         self.assertEqual(len(record.descriptions), 10)
         self.assertEqual(len(record.alignments), 10)
         self.assertEqual(len(record.alignments[0].hsps), 1)

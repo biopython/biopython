@@ -9,9 +9,11 @@ import sys
 from Bio.Phylo.PAML import codeml, baseml, yn00
 from Bio import MissingExternalDependencyError
 
+
 def is_exe(filepath):
     """Test if a file is an executable."""
     return os.path.exists(filepath) and os.access(filepath, os.X_OK)
+
 
 def which(program):
     """Find the path to an executable."""
@@ -26,7 +28,7 @@ def which(program):
         #For Windows, the user is instructed to move the programs to a folder
         #and then to add the folder to the system path. Just in case they didn't
         #do that, we can check for it in Program Files.
-        likely_dirs = ["", #Current dir
+        likely_dirs = ["",  # Current dir
                        prog_files,
                        os.path.join(prog_files, "paml41"),
                        os.path.join(prog_files, "paml43"),

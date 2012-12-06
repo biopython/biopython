@@ -46,7 +46,7 @@ class SimCoalCache(object):
             try:
                 tf.close()
             except NameError:
-                pass #not opened in the first place, OK.
+                pass  # not opened in the first place, OK.
         scc = SimCoalController(self.simcoalDir)
         scc.run_simcoal(par_file, num_sims, ploydi, parDir)
         tf = tarfile.open(tar_name, 'w:bz2')

@@ -30,10 +30,10 @@ test_files = [
     ("clustal", 7, 1, 'Clustalw/opuntia.aln'),
     ("clustal", 5, 1, 'Clustalw/hedgehog.aln'),
     ("clustal", 2, 1, 'Clustalw/odd_consensus.aln'),
-    ("clustal",20, 1, 'Clustalw/protein.aln'), #Used in the tutorial
-    ("clustal",20, 1, 'Clustalw/promals3d.aln'), #Nonstandard header
+    ("clustal",20, 1, 'Clustalw/protein.aln'),  # Used in the tutorial
+    ("clustal",20, 1, 'Clustalw/promals3d.aln'),  # Nonstandard header
 #Following examples are also used in test_GFF.py
-    ("fasta", 3, 1, 'GFF/multi.fna'), #Trivial nucleotide alignment
+    ("fasta", 3, 1, 'GFF/multi.fna'),  # Trivial nucleotide alignment
 #Following example is also used in test_Nexus.py
     ("nexus", 9, 1, 'Nexus/test_Nexus_input.nex'),
     ("nexus", 2, 1, 'Nexus/codonposset.nex'),
@@ -68,11 +68,13 @@ test_files = [
     ("pir", 2, 1,  'NBRF/clustalw.pir'),
     ]
 
+
 def str_summary(text, max_len=40):
     if len(text) <= max_len:
         return text
     else:
         return text[:max_len-4] + "..." + text[-3:]
+
 
 def alignment_summary(alignment, index="  ", vertical_threshold=5):
     """Returns a concise summary of an Alignment object as a string."""
@@ -162,6 +164,7 @@ def check_simple_write_read(alignments, indent=" "):
             SeqIO.write(alignments[0], handle, format)
             assert handle.getvalue() == alignments[0].format(format)
 
+
 def simple_alignment_comparison(alignments, alignments2, format):
     assert len(alignments) == len(alignments2)
     for a1, a2 in zip(alignments, alignments2):
@@ -194,6 +197,7 @@ def simple_alignment_comparison(alignments, alignments2, format):
                 assert r1.id == r2.id, \
                        "'%s' vs '%s'" % (r1.id, r2.id)
     return True
+
 
 #Check Phylip files reject duplicate identifiers.
 def check_phylip_reject_duplicate():

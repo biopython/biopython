@@ -47,6 +47,7 @@ from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
+
 def fill_and_border(base_color, alpha=0.5):
     try:
         c = base_color.clone()
@@ -60,6 +61,8 @@ def fill_and_border(base_color, alpha=0.5):
 # Utility functions for graph plotting, originally in GenomeDiagram.Utilities #
 # See Bug 2705 for discussion on where to put these functions in Biopython... #
 ###############################################################################
+
+
 def apply_to_window(sequence, window_size, function, step=None):
     """ apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
 
@@ -114,6 +117,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     #print seq[-100:]
     return results      # Return the list of (position, value) results
 
+
 def calc_gc_content(sequence):
     """ calc_gc_content(sequence)
 
@@ -159,7 +163,7 @@ def calc_gc_skew(sequence):
     g = sequence.count('G') + sequence.count('g')
     c = sequence.count('C') + sequence.count('c')
     if g+c == 0:
-        return 0.0 #TODO - return NaN or None here?
+        return 0.0  # TODO - return NaN or None here?
     else:
         return (g-c)/float(g+c)
 
@@ -174,9 +178,10 @@ def calc_at_skew(sequence):
     a = sequence.count('A') + sequence.count('a')
     t = sequence.count('T') + sequence.count('t')
     if a+t == 0:
-        return 0.0 #TODO - return NaN or None here?
+        return 0.0  # TODO - return NaN or None here?
     else:
         return (a-t)/float(a+t)
+
 
 def calc_dinucleotide_counts(sequence):
     """Returns the total count of di-nucleotides repeats (e.g. "AA", "CC").
@@ -196,10 +201,12 @@ def calc_dinucleotide_counts(sequence):
 # End of utility functions for graph plotting                                 #
 ###############################################################################
 
+
 # Tests
 class TrackTest(unittest.TestCase):
     # TODO Bring code from Track.py, unsure about what test does
     pass
+
 
 class ColorsTest(unittest.TestCase):
     def test_color_conversions(self):
@@ -250,7 +257,7 @@ class GraphTest(unittest.TestCase):
         #Circular diagram
         gdd.draw(tracklines=False,
                  pagesize=(15*cm,15*cm),
-                 circular=True, #Data designed to be periodic
+                 circular=True,  # Data designed to be periodic
                  start=0, end=points, circle_core=0.5)
         gdd.write(os.path.join('Graphics', "line_graph_c.pdf"), "pdf")
 
@@ -335,6 +342,7 @@ class LabelTest(unittest.TestCase):
         """Feature labels - default."""
         self.add_track_with_sigils()
         self.finish("labels_default")
+
 
 class SigilsTest(unittest.TestCase):
     """Check the different feature sigils.
@@ -446,7 +454,7 @@ class SigilsTest(unittest.TestCase):
         self.add_track_with_sigils(sigil="ARROW", color="orange",
                                    arrowhead_length=1)
         self.add_track_with_sigils(sigil="ARROW", color="red",
-                                   arrowhead_length=10000) #Triangles
+                                   arrowhead_length=10000)  # Triangles
         self.assertEqual(len(self.gdd.tracks), 4)
         self.finish("GD_sigil_arrows")
 
@@ -550,6 +558,7 @@ class SigilsTest(unittest.TestCase):
         """Feature JAGGY sigil heads within bounding box."""
         self.long_sigils("JAGGY")
 
+
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
     def setUp(self):
@@ -561,7 +570,7 @@ class DiagramTest(unittest.TestCase):
     def test_write_arguments(self):
         """Check how the write methods respond to output format arguments."""
         gdd = Diagram('Test Diagram')
-        gdd.drawing = None #Hack - need the ReportLab drawing object to be created.
+        gdd.drawing = None  # Hack - need the ReportLab drawing object to be created.
         filename = os.path.join("Graphics","error.txt")
         #We (now) allow valid formats in any case.
         for output in ["XXX","xxx",None,123,5.9]:
@@ -622,7 +631,7 @@ class DiagramTest(unittest.TestCase):
             #Note that I am using strings for color names, instead
             #of passing in color objects.  This should also work!
             if len(gds_features) % 2 == 0:
-                color = "white" #for testing the automatic black border!
+                color = "white"  # for testing the automatic black border!
             else:
                 color = "red"
             #Checking it can cope with the old UK spelling colour.
@@ -868,10 +877,10 @@ class DiagramTest(unittest.TestCase):
         #gdfs1.set_all_features('color', colors.red)
         gdfs2.set_all_features('color', colors.blue)
 
-        gdt1.add_set(gdfsA) #Before CDS so under them!
+        gdt1.add_set(gdfsA)  # Before CDS so under them!
         gdt1.add_set(gdfs1)
 
-        gdt2.add_set(gdfsB) #Before genes so under them!
+        gdt2.add_set(gdfsB)  # Before genes so under them!
         gdt2.add_set(gdfs2)
 
         gdt3 = Track('misc features and repeats', greytrack=1,
@@ -915,7 +924,7 @@ class DiagramTest(unittest.TestCase):
         gdt5.add_set(gdgs2)
 
         gdgs3 = GraphSet('Di-nucleotide count')
-        step = len(genbank_entry)//400 #smaller step
+        step = len(genbank_entry) // 400  # smaller step
         gdgs3.new_graph(apply_to_window(genbank_entry.seq, step, calc_dinucleotide_counts, step),
                         'Di-nucleotide count', style='heat',
                         color=colors.red, altcolor=colors.orange)
@@ -924,12 +933,12 @@ class DiagramTest(unittest.TestCase):
 
         #Add the tracks (from both features and graphs)
         #Leave some white space in the middle/bottom
-        gdd.add_track(gdt4, 3) # GC skew
-        gdd.add_track(gdt5, 4) # GC and AT content
-        gdd.add_track(gdt1, 5) # CDS features
-        gdd.add_track(gdt2, 6) # Gene features
-        gdd.add_track(gdt3, 7) # Misc features and repeat feature
-        gdd.add_track(gdt6, 8) # Feature depth
+        gdd.add_track(gdt4, 3)  # GC skew
+        gdd.add_track(gdt5, 4)  # GC and AT content
+        gdd.add_track(gdt1, 5)  # CDS features
+        gdd.add_track(gdt2, 6)  # Gene features
+        gdd.add_track(gdt3, 7)  # Misc features and repeat feature
+        gdd.add_track(gdt6, 8)  # Feature depth
 
         #Finally draw it in both formats, and full view and partial
         gdd.draw(format='circular', orientation='landscape',

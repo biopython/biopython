@@ -16,6 +16,7 @@ import requires_wise
 
 from Bio.Wise import psw
 
+
 class TestPSW(unittest.TestCase):
     def test_Alignment_normal(self):
         a = psw.Alignment()
@@ -86,10 +87,12 @@ class TestPSW(unittest.TestCase):
 #    def test_align(self):
 #        self.assertEqual(repr(psw.align(("Wise/human_114_g01_exons.fna_01", "Wise/human_114_g02_exons.fna_01"), "introns.bla", 23, 5, quiet=True)), self.PARSED)
 
+
 def run_tests(argv):
     test_suite = testing_suite()
     runner = unittest.TextTestRunner(sys.stdout, verbosity = 2)
     runner.run(test_suite)
+
 
 def testing_suite():
     """Generate the suite of tests.

@@ -24,6 +24,7 @@ def are_items_in_range( a, high, low ):
             return 0
     return 1
 
+
 # --- the actual test classes
 
 class RandomSequenceTest(unittest.TestCase):

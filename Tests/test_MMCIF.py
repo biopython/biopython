@@ -16,7 +16,7 @@ import warnings
 
 try:
     import numpy
-    from numpy import dot #Missing on PyPy's micronumpy
+    from numpy import dot  # Missing on PyPy's micronumpy
     del dot
 except ImportError:
     from Bio import MissingPythonDependencyError
@@ -35,6 +35,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser
+
 
 class ParseReal(unittest.TestCase):
     """Testing with real CIF file(s)."""

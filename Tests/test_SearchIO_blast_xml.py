@@ -3109,6 +3109,7 @@ class TblastxXmlCases(unittest.TestCase):
         self.assertRaises(StopIteration, qresults.next, )
         self.assertEqual(2, counter)
 
+
 class BlastXmlSpecialCases(unittest.TestCase):
 
     def test_xml_2226_blastn_006(self):

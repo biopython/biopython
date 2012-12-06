@@ -162,7 +162,7 @@ def _retrieve_seq(adaptor, primary_id):
         del seq
     del given_length
 
-    moltype = moltype.lower() #might be upper case in database
+    moltype = moltype.lower()  # might be upper case in database
     #We have no way of knowing if these sequences will use IUPAC
     #alphabets, and we certainly can't assume they are unambiguous!
     if moltype == "dna":
@@ -271,7 +271,7 @@ def _retrieve_features(adaptor, primary_id):
             lookup[location_id] = (dbname, v)
 
         feature = SeqFeature.SeqFeature(type = seqfeature_type)
-        feature._seqfeature_id = seqfeature_id #Store the key as a private property
+        feature._seqfeature_id = seqfeature_id  # Store the key as a private property
         feature.qualifiers = qualifiers
         if len(locations) == 0:
             pass
@@ -400,7 +400,7 @@ def _retrieve_reference(adaptor, primary_id):
         #If the start/end are missing, reference.location is an empty list
         if (start is not None) or (end is not None):
             if start is not None:
-                start -= 1 #python counting
+                start -= 1  # python counting
             reference.location = [SeqFeature.FeatureLocation(start, end)]
         #Don't replace the default "" with None.
         if authors:

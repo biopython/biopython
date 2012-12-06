@@ -123,7 +123,7 @@ same length.
 # For using with statement in Python 2.5 or Jython
 from __future__ import with_statement
 
-__docformat__ = "epytext en" #not just plaintext
+__docformat__ = "epytext en"  # not just plaintext
 
 #TODO
 # - define policy on reading aligned sequences with gaps in
@@ -154,7 +154,7 @@ import FastaIO
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
-_FormatToIterator = {#"fasta" is done via Bio.SeqIO
+_FormatToIterator = {  # "fasta" is done via Bio.SeqIO
                      "clustal" : ClustalIO.ClustalIterator,
                      "emboss" : EmbossIO.EmbossIterator,
                      "fasta-m10" : FastaIO.FastaM10Iterator,
@@ -165,8 +165,8 @@ _FormatToIterator = {#"fasta" is done via Bio.SeqIO
                      "stockholm" : StockholmIO.StockholmIterator,
                      }
 
-_FormatToWriter = {#"fasta" is done via Bio.SeqIO
-                   #"emboss" : EmbossIO.EmbossWriter, (unfinished)
+_FormatToWriter = {  # "fasta" is done via Bio.SeqIO
+                     # "emboss" : EmbossIO.EmbossWriter, (unfinished)
                    "nexus" : NexusIO.NexusWriter,
                    "phylip" : PhylipIO.PhylipWriter,
                    "phylip-sequential" : PhylipIO.SequentialPhylipWriter,

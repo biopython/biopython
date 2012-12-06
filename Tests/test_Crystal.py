@@ -11,6 +11,7 @@ import sys
 # modules to be tested
 from Bio.Crystal import Hetero, Chain, Crystal, CrystalError
 
+
 class ChainTestCase(unittest.TestCase):
 
     def setUp(self):

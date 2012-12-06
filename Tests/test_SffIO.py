@@ -45,6 +45,7 @@ test_data = """
   Region #:     2
   XY Location:  2434_1658"""
 
+
 class TestUAN(unittest.TestCase):
     def setUp(self):
         self.records = [record for record in SeqIO.parse('Roche/E3MFGYR02_random_10_reads.sff', 'sff')]

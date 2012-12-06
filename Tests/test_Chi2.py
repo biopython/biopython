@@ -9,6 +9,7 @@ import os.path
 import sys
 from Bio.Phylo.PAML import chi2
 
+
 class ModTest(unittest.TestCase):
 
     def testCdfChi2(self):

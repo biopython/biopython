@@ -10,6 +10,7 @@ import sys
 from Bio.Phylo.PAML import baseml
 from Bio.Phylo.PAML._paml import PamlError
 
+
 class ModTest(unittest.TestCase):
     align_dir = os.path.join("PAML", "Alignments")
     tree_dir = os.path.join("PAML", "Trees")

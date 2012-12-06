@@ -17,16 +17,19 @@ from Bio.HMM import MarkovModel
 from Bio.HMM import DynamicProgramming
 from Bio.HMM import Trainer
 
+
 # create some simple alphabets
 class NumberAlphabet(Alphabet.Alphabet):
     """Numbers as the states of the model.
     """
     letters = ['1', '2']
 
+
 class LetterAlphabet(Alphabet.Alphabet):
     """Letters as the emissions of the model.
     """
     letters = ['A', 'B']
+
 
 # -- helper functions
 def test_assertion(name, result, expected):
@@ -34,6 +37,7 @@ def test_assertion(name, result, expected):
     """
     assert result == expected, "Expected %s, got %s for %s" \
            % (expected, result, name)
+
 
 class MarkovModelBuilderTest(unittest.TestCase):
     def setUp(self):
@@ -130,6 +134,7 @@ class MarkovModelBuilderTest(unittest.TestCase):
                        len(self.mm_builder._state_alphabet.letters))
         # To test this more thoroughly, perhaps mock random.random() and
         # verify that it's being called as expected?
+
 
 class HiddenMarkovModelTest(unittest.TestCase):
     def setUp(self):
@@ -348,6 +353,7 @@ class HiddenMarkovModelTest(unittest.TestCase):
         test_assertion("log probability of most probable path",
                        prob, expected_prob)
 
+
 class ScaledDPAlgorithmsTest(unittest.TestCase):
     def setUp(self):
         # set up our Markov Model
@@ -374,6 +380,7 @@ class ScaledDPAlgorithmsTest(unittest.TestCase):
         s_value = self.dp._calculate_s_value(1, previous_vars)
 
         # print s_value
+
 
 class AbstractTrainerTest(unittest.TestCase):
     def setUp(self):

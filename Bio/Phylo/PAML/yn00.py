@@ -43,7 +43,7 @@ class Yn00(Paml):
         """
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
-        if True: #Dummy statement to preserve indentation for diff
+        if True:  # Dummy statement to preserve indentation for diff
             ctl_handle = open(self.ctl_file, 'w')
             ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
             ctl_handle.write("outfile = %s\n" % self._rel_out_file)

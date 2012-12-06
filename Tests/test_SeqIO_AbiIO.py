@@ -73,17 +73,21 @@ test_data_fake = {
              }
 }
 
+
 def open_files(test_array):
     for trace in test_array:
         test_array[trace]['handle'] = open(join(*test_array[trace]['path']), 'rb')
+
 
 def open_files_wrong_mode(test_array):
     for trace in test_array:
         test_array[trace]['handle'] = open(join(*test_array[trace]['path']))
 
+
 def close_files(test_array):
     for trace in test_array:
         test_array[trace]['handle'].close()
+
 
 class TestAbi(unittest.TestCase):
 

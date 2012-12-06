@@ -702,16 +702,16 @@ class DictionaryBuilder(object):
     def parseline(self, line):
         line = [line[0]]+[line[1].upper()]+[int(i) for i in line[2:9]]+line[9:]
         name = line[0].replace("-","_")
-        site = line[1]          #   sequence of the recognition site
+        site = line[1]  # sequence of the recognition site
         dna = DNA(site)
-        size = line[2]          #   size of the recognition site
+        size = line[2]  # size of the recognition site
         #
         #   Calculate the overhang.
         #
-        fst5 = line[5]  #   first site sense strand
-        fst3 = line[6]  #   first site antisense strand
-        scd5 = line[7]  #   second site sense strand
-        scd3 = line[8]  #   second site antisense strand
+        fst5 = line[5]  # first site sense strand
+        fst3 = line[6]  # first site antisense strand
+        scd5 = line[7]  # second site sense strand
+        scd3 = line[8]  # second site antisense strand
 
         #
         #   the overhang is the difference between the two cut
@@ -919,7 +919,7 @@ class DictionaryBuilder(object):
         #
         bl3 = block[3].strip()
         if not bl3:
-            bl3 = False #  site is not methylable
+            bl3 = False  # site is not methylable
         return (block[0].strip(), bl3, block[5].strip())
 
     def information_mixer(self, file1, file2, file3):
@@ -939,8 +939,8 @@ class DictionaryBuilder(object):
                 line = (sitefile[i2].strip()).split()
                 name = line[0]
                 if name == bl[0]:
-                    line.append(bl[1])  #   -> methylation
-                    line.append(bl[2])  #   -> suppliers
+                    line.append(bl[1])  # -> methylation
+                    line.append(bl[2])  # -> suppliers
                 else:
                     bl = self.get(oldblock)
                     if line[0] == bl[0]:
@@ -953,8 +953,8 @@ class DictionaryBuilder(object):
                 i2 += 1
                 try:
                     line = self.parseline(line)
-                except OverhangError :          #   overhang error
-                    n = name                    #   do not include the enzyme
+                except OverhangError:   # overhang error
+                    n = name            # do not include the enzyme
                     if not bl[2]:
                         print 'Anyway, %s is not commercially available.\n' %n
                     else:
@@ -986,7 +986,7 @@ class DictionaryBuilder(object):
                 #   the data to produce the enzyme class are then stored in
                 #   enzymedict.
                 #
-                enzymedict[name] = line[1:] #element zero was the name
+                enzymedict[name] = line[1:]  # element zero was the name
         except IndexError:
             pass
         for i in supplier:

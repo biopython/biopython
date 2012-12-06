@@ -499,7 +499,7 @@ class Commandline(object):
         try:
             #Assume matrix (all other command lines have been stripped of \n)
             self.command, options = line.strip().split('\n', 1)
-        except ValueError: #Not matrix
+        except ValueError:  # Not matrix
             #self.command,options=line.split(' ',1)  #no: could be tab or spaces (translate...)
             self.command=line.split()[0]
             options=' '.join(line.split()[1:])
@@ -703,8 +703,8 @@ class Nexus(object):
                 self.unambiguous_letters=copy.deepcopy(IUPACData.unambiguous_rna_letters)
             elif self.datatype=='protein':
                 self.alphabet=copy.deepcopy(IUPAC.protein)
-                self.ambiguous_values={'B':'DN','Z':'EQ','X':copy.deepcopy(IUPACData.protein_letters)} # that's how PAUP handles it
-                self.unambiguous_letters=copy.deepcopy(IUPACData.protein_letters)+'*' # stop-codon
+                self.ambiguous_values={'B':'DN','Z':'EQ','X':copy.deepcopy(IUPACData.protein_letters)}  # that's how PAUP handles it
+                self.unambiguous_letters=copy.deepcopy(IUPACData.protein_letters)+'*'  # stop-codon
             elif self.datatype=='standard':
                 raise NexusError('Datatype standard is not yet supported.')
                 #self.alphabet=None

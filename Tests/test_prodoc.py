@@ -832,6 +832,7 @@ Synechocystis PCC6803 reveal a unique distal heme pocket."
 Eur. J. Biochem. 267:4770-4780(2000).
 PubMed=10903511""")
 
+
 class TestProdocParse(unittest.TestCase):
 
     def test_parse_pdoc(self):

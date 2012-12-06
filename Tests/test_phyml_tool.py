@@ -34,6 +34,7 @@ if not phyml_exe:
 # Example Phylip file with 4 aligned protein sequences
 EX_PHYLIP = 'Phylip/interlaced2.phy'
 
+
 class AppTests(unittest.TestCase):
     """Tests for application wrappers."""
 

@@ -68,7 +68,7 @@ class Record(object):
         self.loci_data   = []
 
     def __str__(self):
-        rep  = ['0\n'] #We only export in 0 format, even if originally was 1
+        rep  = ['0\n']  # We only export in 0 format, even if originally was 1
         rep.append(str(self.num_pops) + '\n')
         rep.append(str(self.num_loci) + '\n')
         rep.append('\n')

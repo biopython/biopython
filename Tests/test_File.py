@@ -61,6 +61,7 @@ h = File.UndoHandle(File.StringHandle("some text"))
 h.saveline("more text")
 print h.read()                 # 'more textsome text'
 
+
 class AsHandleTestCase(unittest.TestCase):
 
     def setUp(self):

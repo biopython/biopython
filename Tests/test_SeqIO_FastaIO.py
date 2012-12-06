@@ -11,6 +11,7 @@ from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaIterator
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
+
 def title_to_ids(title):
     """Function to convert a title into the id, name, and description.
 
@@ -38,6 +39,7 @@ def title_to_ids(title):
 
     return id, name, descr
 
+
 def read_single_with_titles(filename, alphabet):
     global title_to_ids
     iterator = FastaIterator(open(filename), alphabet, title_to_ids)
@@ -48,6 +50,7 @@ def read_single_with_titles(filename, alphabet):
         second = None
     assert record is not None and second is None
     return record
+
 
 def read_title_and_seq(filename):
     """Crude parser that gets the first record from a FASTA file."""
@@ -67,7 +70,7 @@ class TitleFunctions(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""
     def simple_check(self, filename, alphabet):
         """Basic test for parsing single record FASTA files."""
-        title, seq = read_title_and_seq(filename) #crude parser
+        title, seq = read_title_and_seq(filename)  # crude parser
         #First check using Bio.SeqIO.FastaIO directly with title function,
         record = read_single_with_titles(filename, alphabet)
         idn, name, descr = title_to_ids(title)

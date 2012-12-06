@@ -148,7 +148,7 @@ class BlastParser(_XMLparser):
         self._records = []
         self._header = Record.Header()
         self._parameters = Record.Parameters()
-        self._parameters.filter = None #Maybe I should update the class?
+        self._parameters.filter = None  # Maybe I should update the class?
 
     def _start_Iteration(self):
         self._blast = Record.Blast()

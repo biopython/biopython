@@ -14192,7 +14192,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, '2.2.15')
         self.assertEqual(record.date, "Oct-15-2006")
-        self.assertEqual(record.query, "66118") #Odd name for a query sequence, but valid!
+        self.assertEqual(record.query, "66118")  # Odd name for a query sequence, but valid!
         self.assertEqual(record.query_letters, 662)
         self.assertEqual(record.database, "Leigo")
         self.assertEqual(record.database_sequences, 4535438)

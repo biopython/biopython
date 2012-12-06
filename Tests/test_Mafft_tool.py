@@ -31,6 +31,7 @@ if not mafft_exe:
     raise MissingExternalDependencyError(
         "Install MAFFT if you want to use the Bio.Align.Applications wrapper.")
 
+
 def check_mafft_version(mafft_exe):
     child = subprocess.Popen("%s --help" % mafft_exe,
                              stdout=subprocess.PIPE,
@@ -61,6 +62,7 @@ def check_mafft_version(mafft_exe):
 
 #This also checks it actually runs!
 check_mafft_version(mafft_exe)
+
 
 class MafftApplication(unittest.TestCase):
 

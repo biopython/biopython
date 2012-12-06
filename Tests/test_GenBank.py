@@ -107,6 +107,7 @@ for parser in all_parsers:
 # test writing GenBank format
 print "Testing writing GenBank format..."
 
+
 def do_comparison(good_record, test_record):
     """Compare two records to see if they are the same.
 
@@ -131,6 +132,7 @@ def do_comparison(good_record, test_record):
         assert test_normalized == good_normalized, \
                "Expected does not match Test.\nExpect:`%s`\nTest  :`%s`\n" % \
                (good_line, test_line)
+
 
 def t_write_format():
     record_parser = GenBank.RecordParser(debug_level = 0)
@@ -160,6 +162,7 @@ def t_write_format():
 
 t_write_format()
 
+
 def t_cleaning_features():
     """Test the ability to clean up feature values.
     """
@@ -182,6 +185,7 @@ def t_cleaning_features():
 
 print "Testing feature cleaning..."
 t_cleaning_features()
+
 
 def t_ensembl_locus():
     line = "LOCUS       HG531_PATCH 1000000 bp DNA HTG 18-JUN-2011\n"
@@ -213,5 +217,6 @@ def t_ensembl_locus():
     assert c._expected_size == 1219964, c._expected_size
 
     print "Done"
+
 print "Testing EnsEMBL LOCUS lines..."
 t_ensembl_locus()

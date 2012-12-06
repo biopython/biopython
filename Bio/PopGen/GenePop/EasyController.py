@@ -24,8 +24,8 @@ class EasyController(object):
         """
         self._fname = fname
         self._controller = GenePopController(genepop_dir)
-        self.__fst_pair_locus = {} #More caches like this needed!
-        self.__allele_frequency = {} #More caches like this needed!
+        self.__fst_pair_locus = {}    # More caches like this needed!
+        self.__allele_frequency = {}  # More caches like this needed!
 
     def get_basic_info(self):
         f=open(self._fname)

@@ -119,7 +119,7 @@ assert not _re_simple_compound.match("(1..69)")
 assert _re_complex_location.match("(3.9)..10")
 assert _re_complex_location.match("26..(30.33)")
 assert _re_complex_location.match("(13.19)..(20.28)")
-assert _re_complex_location.match("41^42") #between
+assert _re_complex_location.match("41^42")  # between
 assert _re_complex_location.match("AL121804:41^42")
 assert _re_complex_location.match("AL121804:41..610")
 assert _re_complex_location.match("AL121804.2:41..610")
@@ -318,7 +318,7 @@ def _split_compound_loc(compound_loc):
             assert compound_loc[0:2] != ".."
             i = compound_loc.find(",")
             part = compound_loc[:i]
-            compound_loc = compound_loc[i:] #includes the comma
+            compound_loc = compound_loc[i:]  # includes the comma
             while part.count("(") > part.count(")"):
                 assert "one-of(" in part, (part, compound_loc)
                 i = compound_loc.find(")")
@@ -331,7 +331,7 @@ def _split_compound_loc(compound_loc):
                     compound_loc = ""
                 else:
                     part += compound_loc[:i]
-                    compound_loc = compound_loc[i:] #includes the comma
+                    compound_loc = compound_loc[i:]  # includes the comma
             while part.count("(") > part.count(")"):
                 assert part.count("one-of(") == 2
                 i = compound_loc.find(")")
@@ -377,7 +377,7 @@ class Iterator(object):
             while True:
                 line = self.handle.readline()
                 if not line:
-                    return None #Premature end of file?
+                    return None  # Premature end of file?
                 lines.append(line)
                 if line.rstrip() == "//":
                     break
@@ -1142,7 +1142,7 @@ class _FeatureConsumer(_BaseGenBankConsumer):
         if not self.data.id:
             assert 'accessions' not in self.data.annotations, \
                    self.data.annotations['accessions']
-            self.data.id = self.data.name #Good fall back?
+            self.data.id = self.data.name  # Good fall back?
         elif self.data.id.count('.') == 0:
             try:
                 self.data.id+='.%i' % self.data.annotations['sequence_version']

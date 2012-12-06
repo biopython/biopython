@@ -232,9 +232,9 @@ class PhylipIterator(AlignmentIterator):
             while ""==line.strip():
                 line = handle.readline()
                 if not line:
-                    break #end of file
+                    break  # end of file
             if not line:
-                break #end of file
+                break  # end of file
 
             if self._is_header(line):
                 #Looks like the start of a concatenated alignment
@@ -251,7 +251,7 @@ class PhylipIterator(AlignmentIterator):
                 if (not line) and i+1 < number_of_seqs:
                     raise ValueError("End of file mid-block")
             if not line:
-                break #end of file
+                break  # end of file
 
         records = (SeqRecord(Seq("".join(s), self.alphabet),
                              id=i, name=i, description=i)

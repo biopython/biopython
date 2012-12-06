@@ -27,11 +27,13 @@ class TestAlphabet(SingleLetterAlphabet):
     """
     letters = ["0", "1", "2", "3"]
 
+
 def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     genome_seq = genome.toseq()
     return int(str(genome_seq))
+
 
 class NoSelection:
     """A simple 'selection' class that just returns the generated population.
@@ -39,11 +41,13 @@ class NoSelection:
     def select(self, population):
         return population
 
+
 class NoMutation:
     """Simple 'mutation' class that doesn't do anything.
     """
     def mutate(self, org):
         return org.copy()
+
 
 class NoCrossover:
     """Simple 'crossover' class that doesn't do anything.
@@ -51,11 +55,13 @@ class NoCrossover:
     def do_crossover(self, org_1, org_2):
         return org_1.copy(), org_2.copy()
 
+
 class NoRepair:
     """Simple 'repair' class that doesn't do anything.
     """
     def repair(self, org):
         return org.copy()
+
 
 def random_genome():
     """Return a random genome string.
@@ -68,11 +74,13 @@ def random_genome():
 
     return MutableSeq(new_genome, alphabet)
 
+
 def random_organism():
     """Generate a random organism.
     """
     genome = random_genome()
     return Organism(genome, test_fitness)
+
 
 # --- the actual test classes
 
@@ -113,6 +121,7 @@ class DiversitySelectionTest(unittest.TestCase):
 
         self.assertEqual(len(new_pop), len(pop),
                          "Did not maintain population size.")
+
 
 class TournamentSelectionTest(unittest.TestCase):
     """Test selection based on a tournament style scheme.

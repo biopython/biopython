@@ -55,8 +55,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     #+Put thermodinamics table in a external file for users to change at will
     #+Add support for danglings ends (see Le Novele. 2001) and mismatches.
 
-    dh = 0 #DeltaH. Enthalpy
-    ds = 0 #deltaS Entropy
+    dh = 0  # DeltaH. Enthalpy
+    ds = 0  # deltaS Entropy
 
     def tercorr(stri):
         deltah = 0
@@ -115,8 +115,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
             x = i + 1
         return ocu
 
-    R = 1.987 # universal gas constant in Cal/degrees C*Mol
-    sup = str(s).upper() #turn any Seq object into a string (need index method)
+    R = 1.987  # universal gas constant in Cal/degrees C*Mol
+    sup = str(s).upper()  # turn any Seq object into a string (need index method)
     vsTC, vh = tercorr(sup)
     vs = vsTC
 

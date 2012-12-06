@@ -11,9 +11,9 @@ See also U{http://biopython.org/wiki/Seq} and the chapter in our tutorial:
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.html}
  - U{http://biopython.org/DIST/docs/tutorial/Tutorial.pdf}
 """
-__docformat__ ="epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ ="epytext en"  # Don't just use plain text in epydoc API pages!
 
-import string #for maketrans only
+import string  # for maketrans only
 import array
 import sys
 
@@ -164,7 +164,7 @@ class Seq(object):
 
         See the __cmp__ documentation - we plan to change this!
         """
-        return id(self) #Currently use object identity for equality testing
+        return id(self)  # Currently use object identity for equality testing
 
     def __cmp__(self, other):
         """Compare the sequence to another sequence or a string (README).
@@ -278,7 +278,7 @@ class Seq(object):
         elif isinstance(other, basestring):
             #other is a plain string - use the current alphabet
             return self.__class__(str(self) + other, self.alphabet)
-        from Bio.SeqRecord import SeqRecord #Lazy to avoid circular imports
+        from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
         if isinstance(other, SeqRecord):
             #Get the SeqRecord's __radd__ to handle this
             return NotImplemented
@@ -1081,7 +1081,7 @@ class Seq(object):
         elif not gap:
             raise ValueError("Gap character not given and not defined in alphabet")
         else:
-            alpha = self.alphabet #modify!
+            alpha = self.alphabet  # modify!
         if len(gap)!=1 or not isinstance(gap, str):
             raise ValueError("Unexpected gap character, %s" % repr(gap))
         return Seq(str(self).replace(gap, ""), alpha)
@@ -1532,7 +1532,7 @@ class MutableSeq(object):
             self.array_indicator = "u"
         else:
             self.array_indicator = "c"
-        if isinstance(data, str): #TODO - What about unicode?
+        if isinstance(data, str):  # TODO - What about unicode?
             self.data = array.array(self.array_indicator, data)
         else:
             self.data = data   # assumes the input is an array

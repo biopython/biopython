@@ -1422,6 +1422,7 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(5, len(qresult.hits))
         self.assertEqual('Esterase', qresult.hits[3].id)
 
+
 class HmmersearchCases(unittest.TestCase):
 
     def test_30_hmmsearch_001(self):

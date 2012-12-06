@@ -21,7 +21,7 @@ class SimCoalController(object):
         The initializer checks for existance and executability of binaries.
         """
         self.simcoal_dir = simcoal_dir
-        self.os_name = os.name #remove this?
+        self.os_name = os.name  # remove this?
         dir_contents = os.listdir(self.simcoal_dir)
         #We expect the tool to be installed as simcoal2(.exe)
         #without any trailing version number.

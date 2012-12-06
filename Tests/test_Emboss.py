@@ -27,7 +27,7 @@ os.environ['LANG'] = 'C'
 
 exes_wanted = ["water", "needle", "seqret", "transeq", "seqmatchall",
                "embossversion"]
-exes = dict() #Dictionary mapping from names to exe locations
+exes = dict()  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
     #Windows default installation path is C:\mEMBOSS which contains the exes.
@@ -52,6 +52,7 @@ if len(exes) < len(exes_wanted):
     raise MissingExternalDependencyError(
         "Install EMBOSS if you want to use Bio.Emboss.")
 
+
 def get_emboss_version():
     """Returns a tuple of three ints, e.g. (6,1,0)"""
     #Windows and Unix versions of EMBOSS seem to differ in
@@ -62,9 +63,9 @@ def get_emboss_version():
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
-    child.stdout.close() #This is both stdout and stderr
+    child.stdout.close()  # This is both stdout and stderr
     del child
-    assert stderr is None #Send to stdout instead
+    assert stderr is None  # Send to stdout instead
     for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
             pass
@@ -91,6 +92,7 @@ if emboss_version < (6,1,0):
 
 #################################################################
 
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_convert(filename, old_format, new_format):
     """Run seqret, returns handle."""
@@ -100,7 +102,7 @@ def emboss_convert(filename, old_format, new_format):
                               sequence = filename,
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               stdout = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -113,6 +115,7 @@ def emboss_convert(filename, old_format, new_format):
     child.stderr.close()
     return child.stdout
 
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_piped_SeqIO_convert(records, old_format, new_format):
     """Run seqret, returns records (as a generator)."""
@@ -121,7 +124,7 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     cline = SeqretCommandline(exes["seqret"],
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               filter = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -139,6 +142,7 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     child.stdout.close()
     return records
 
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     """Run seqret, returns alignments (as a generator)."""
@@ -147,7 +151,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     cline = SeqretCommandline(exes["seqret"],
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               filter = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -207,6 +211,7 @@ def compare_records(old_list, new_list):
         #TODO - check annotation
     return True
 
+
 #Top level function as this makes it easier to use for debugging:
 def compare_alignments(old_list, new_list):
     """Check two lists of Alignments agree, raises a ValueError if mismatch."""
@@ -218,6 +223,7 @@ def compare_alignments(old_list, new_list):
                              % (len(old), len(new)))
         compare_records(old,new)
     return True
+
 
 class SeqRetSeqIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
@@ -329,6 +335,7 @@ class SeqRetSeqIOTests(unittest.TestCase):
         self.check_SeqIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal",
                                    skip_formats=["embl","genbank"])
 
+
 class SeqRetAlignIOTests(unittest.TestCase):
     """Check EMBOSS seqret against Bio.SeqIO for converting files."""
 
@@ -403,7 +410,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/odd_consensus.aln", "clustal",
-                               skip_formats=["nexus"]) #TODO - why not nexus?
+                               skip_formats=["nexus"])  # TODO - why not nexus?
         self.check_AlignIO_with_EMBOSS("Clustalw/protein.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
@@ -669,8 +676,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline = exes["needle"]
         cline += " -asequence asis:" + query
         cline += " -bsequence Fasta/f002"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        cline += " -auto"  # no prompting
+        cline += " -filter"  # use stdout
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -746,6 +753,7 @@ class PairwiseAlignmentTests(unittest.TestCase):
         child.stdout.close()
         child.stderr.close()
 
+
 #Top level function as this makes it easier to use for debugging:
 def emboss_translate(sequence, table=None, frame=None):
     """Call transeq, returns protein sequence as string."""
@@ -768,8 +776,8 @@ def emboss_translate(sequence, table=None, frame=None):
         SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
         cline += " -sequence %s" % filename
 
-    cline += " -auto" #no prompting
-    cline += " -filter" #use stdout
+    cline += " -auto"  # no prompting
+    cline += " -filter"  # use stdout
     if table is not None:
         cline += " -table %s" % str(table)
     if frame is not None:
@@ -801,6 +809,7 @@ def emboss_translate(sequence, table=None, frame=None):
             raise ValueError(str(cline))
     return str(record.seq)
 
+
 #Top level function as this makes it easier to use for debugging:
 def check_translation(sequence, translation, table=None):
     if table is None:
@@ -820,6 +829,7 @@ def check_translation(sequence, translation, table=None):
         raise ValueError("%s -> %s (table %s)"
                          % (sequence, translation, t))
     return True
+
 
 class TranslationTests(unittest.TestCase):
     """Run pairwise alignments with water and needle, and parse them."""
@@ -897,6 +907,7 @@ class TranslationTests(unittest.TestCase):
     def test_mixed_unambig_rna_codons(self):
         """transeq vs Bio.Seq on unambiguous DNA/RNA codons (inc. alt tables)."""
         self.translate_all_codons("ATUCGatucg")
+
 
 def clean_up():
     """Fallback clean up method to remove temp files."""

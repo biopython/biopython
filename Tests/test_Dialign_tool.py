@@ -38,6 +38,7 @@ if not dialign_exe:
     raise MissingExternalDependencyError(
         "Install DIALIGN2-2 if you want to use the Bio.Align.Applications wrapper.")
 
+
 class DialignApplication(unittest.TestCase):
 
     def setUp(self):

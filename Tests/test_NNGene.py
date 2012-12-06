@@ -127,6 +127,7 @@ class PatternIOTest(unittest.TestCase):
                "Got back unexpected signatures %s, wanted %s" \
                % (read_sigs, signatures)
 
+
 class PatternRepositoryTest(unittest.TestCase):
     """Tests for retrieving info from a repository of patterns.
     """
@@ -217,6 +218,7 @@ class PatternRepositoryTest(unittest.TestCase):
         assert num_times == 0, \
                "Counted items not in repository: %s" % num_times
 
+
 # --- Tests for motifs
 
 class MotifFinderTest(unittest.TestCase):
@@ -272,6 +274,7 @@ class MotifFinderTest(unittest.TestCase):
         assert top == "TTGGAAAG", "Got unexpected top motif %s" % top
         assert bottom == "AATGGCAT", "Got unexpected bottom motif %s" % bottom
 
+
 class MotifCoderTest(unittest.TestCase):
     """Test the ability to encode sequences as a set of motifs.
     """
@@ -293,6 +296,7 @@ class MotifCoderTest(unittest.TestCase):
             assert matches == expected, \
                    "Did not match representation, expected %s, got %s" \
                    % (expected, matches)
+
 
 # --- Tests for schemas
 
@@ -383,6 +387,7 @@ class SchemaTest(unittest.TestCase):
         assert found_unambig == expected, \
                "Got %s, expected %s" % (found_unambig, expected)
 
+
 class SchemaFinderTest(unittest.TestCase):
     """Test finding schemas from a set of sequences.
     """
@@ -429,6 +434,7 @@ class SchemaFinderTest(unittest.TestCase):
 
             assert len(schemas) >= self.num_schemas, "Got too few schemas."
 
+
 class SchemaCoderTest(unittest.TestCase):
     """Test encoding sequences as a grouping of motifs.
     """
@@ -459,6 +465,7 @@ class SchemaCoderTest(unittest.TestCase):
             assert found_rep == expected, "Got %s, expected %s" % \
                    (found_rep, expected)
 
+
 class SchemaMatchingTest(unittest.TestCase):
     """Matching schema to strings works correctly.
     """
@@ -480,6 +487,7 @@ class SchemaMatchingTest(unittest.TestCase):
 
         match = Schema.matches_schema("G*TC", "*TTC")
         assert match == 1, "Expected match because of ambiguity."
+
 
 class SchemaFactoryTest(unittest.TestCase):
     """Test the SchemaFactory for generating Schemas.
@@ -578,6 +586,7 @@ class SchemaFactoryTest(unittest.TestCase):
                 print "Schema values:", schema_values
         fasta_handle.close()
 
+
 # --- Tests for Signatures
 class SignatureFinderTest(unittest.TestCase):
     """Test the ability to find signatures in a set of sequences.
@@ -603,6 +612,7 @@ class SignatureFinderTest(unittest.TestCase):
 
         assert top_sig[0] == ('TTGGAA', 'TGGAAA'), \
                "Unexpected signature %s" % top_sig[0]
+
 
 class SignatureCoderTest(unittest.TestCase):
     """Test the ability to encode sequences as a set of signatures.

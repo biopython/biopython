@@ -19,10 +19,12 @@ class TestAlphabet(Alphabet.Alphabet):
     """
     letters = ["1", "2", "3", "4"]
 
+
 def genome_generator():
     """Generate a genome for testing purposes.
     """
     return MutableSeq("1234", TestAlphabet())
+
 
 def fitness_calculator(genome):
     """Calculate fitness for testing purposes.
@@ -31,6 +33,7 @@ def fitness_calculator(genome):
 
     regular_seq = genome.toseq()
     return int(str(regular_seq))
+
 
 class CreatePopulationTest(unittest.TestCase):
     """Tests for utility functions for creating populations.
@@ -100,6 +103,7 @@ class CreatePopulationTest(unittest.TestCase):
         for alphabet in all_alphabets:
             new_pop = Organism.random_population(alphabet, 5, 10,
                                                  test_fitness)
+
 
 class OrganismTest(unittest.TestCase):
     """Tests for an organism in a GA population.

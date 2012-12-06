@@ -83,6 +83,7 @@ class ClustalOmegaTestCase(unittest.TestCase):
 
 #################################################################
 
+
 class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
 
     def test_empty_file(self):
@@ -127,6 +128,7 @@ class ClustalOmegaTestErrorConditions(ClustalOmegaTestCase):
             self.fail("Should have failed, returned:\n%s\n%s" % (stdout, stderr))
 
 #################################################################
+
 
 class ClustalOmegaTestNormalConditions(ClustalOmegaTestCase):
 

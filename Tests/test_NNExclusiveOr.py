@@ -46,6 +46,7 @@ def main():
         if VERBOSE:
             print "%s;%s=> %s" % (example.inputs, example.outputs, prediction)
 
+
 def stopping_criteria(num_iterations, validation_error, training_error):
     """Define when to stop iterating.
     """

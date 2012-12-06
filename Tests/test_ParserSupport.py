@@ -10,6 +10,7 @@ from Bio import ParserSupport
 
 # pyUnit
 
+
 def pb(b):
     if b:
         return 1
@@ -18,6 +19,7 @@ def pb(b):
 ### TaggingConsumer
 
 print "Running tests on TaggingConsumer"
+
 
 class TestHandle:
     def write(self, s):
@@ -112,6 +114,8 @@ h = File.UndoHandle(File.StringHandle(data))
 
 rac = ParserSupport.read_and_call
 lines = []
+
+
 def m(line):
     lines.append(line)
 
@@ -173,6 +177,8 @@ h = File.UndoHandle(File.StringHandle(data))
 arac = lambda *args, **keywds: \
        pb(ParserSupport.attempt_read_and_call(*args, **keywds))
 lines = []
+
+
 def m(line):
     lines.append(line)
 

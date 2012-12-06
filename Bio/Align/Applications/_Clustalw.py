@@ -5,7 +5,7 @@
 """Command line wrapper for the multiple alignment program Clustal W.
 """
 
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 import os
 from Bio.Application import _Option, _Switch, AbstractCommandline

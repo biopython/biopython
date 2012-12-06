@@ -258,7 +258,7 @@ class SeqMap(object):
         #The set of residues that I have to find records for.
         resSet = {}
         for r in self.res:
-            if r.atom=='X' : #Unknown residue type
+            if r.atom=='X':  # Unknown residue type
                 continue
             chainid = r.chainid
             if chainid == '_':

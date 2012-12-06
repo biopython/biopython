@@ -505,7 +505,7 @@ class _NcbiblastCommandline(_NcbibaseblastCommandline):
             _Option(["-query", "query"],
                     "The sequence to search with.",
                     filename=True,
-                    equate=False), #Should this be required?
+                    equate=False),  # Should this be required?
             _Option(["-query_loc", "query_loc"],
                     "Location on the query sequence (Format: start-stop)",
                     equate=False),

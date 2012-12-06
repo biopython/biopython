@@ -22,7 +22,7 @@ os.environ['LANG'] = 'C'
 
 exes_wanted = ['fdnadist', 'fneighbor', 'fprotdist','fprotpars','fconsense',
                'fseqboot', 'ftreedist', 'fdnapars']
-exes = dict() #Dictionary mapping from names to exe locations
+exes = dict()  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
     #Windows default installation path is C:\mEMBOSS which contains the exes.
@@ -50,16 +50,19 @@ if len(exes) < len(exes_wanted):
 
  ###########################################################################
 
+
 # A few top level functions that are called repeatedly in the test cases
 def write_AlignIO_dna():
     """Convert opuntia.aln to a phylip file"""
     assert 1 == AlignIO.convert("Clustalw/opuntia.aln", "clustal",
                                 "Phylip/opuntia.phy", "phylip")
 
+
 def write_AlignIO_protein():
     """Convert hedgehog.aln to a phylip file"""
     assert 1 == AlignIO.convert("Clustalw/hedgehog.aln", "clustal",
                                 "Phylip/hedgehog.phy", "phylip")
+
 
 def clean_up():
     """Delete tests files (to be used as tearDown() function in test fixtures)"""
@@ -67,12 +70,14 @@ def clean_up():
         if os.path.isfile(filename):
             os.remove(filename)
 
+
 def parse_trees(filename):
     """Helper function until we have Bio.Phylo on trunk."""
     data = open("test_file", "r").read()
     for tree_str in data.split(";\n"):
         if tree_str:
             yield Trees.Tree(tree_str+";")
+
 
 class DistanceTests(unittest.TestCase):
     """Tests for calculating distance based phylogenetic trees with phylip"""
@@ -152,6 +157,7 @@ class DistanceTests(unittest.TestCase):
     #    """Estimate tree from bootstrapped distance matrix and parse it"""
     #    self.tree_from_distances("Phylip/bs_horses.fdnadist")
 
+
 class ParsimonyTests(unittest.TestCase):
     """Tests for estimating parsimony based phylogenetic trees with phylip"""
 
@@ -206,6 +212,7 @@ class ParsimonyTests(unittest.TestCase):
     #    """Make a parsimony tree from a phylip DNA alignment"""
     #    self.parsimony_tree("Phylip/bs_interlaced.phy", "phylip", DNA=False)
 
+
 class BootstrapTests(unittest.TestCase):
     """Tests for pseudosampling alignments with fseqboot"""
 
@@ -253,6 +260,7 @@ class BootstrapTests(unittest.TestCase):
         """Pseudosample a phylip protein alignment written with AlignIO"""
         write_AlignIO_protein()
         self.check_bootstrap("Phylip/hedgehog.phy", "phylip", "p")
+
 
 class TreeComparisonTests(unittest.TestCase):
     """Tests for comparing phylogenetic trees with phylip tools"""

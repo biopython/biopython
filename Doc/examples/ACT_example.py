@@ -48,8 +48,8 @@ for f, format in genomes:
 
 print "Drawing matches..."
 for i, crunch_file in enumerate(comparisons):
-    q = genomes[i+1][0] #query file
-    s = genomes[i][0] #subject file
+    q = genomes[i+1][0]  # query file
+    s = genomes[i][0]  # subject file
     q_set = feature_sets[q]
     s_set = feature_sets[s]
     handle = open(crunch_file)

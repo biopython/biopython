@@ -5,7 +5,7 @@
 #TODO - Don't use "from XXX import *"
 try:
     from numpy import *
-    from numpy import dot #missing in PyPy's micronumpy
+    from numpy import dot  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(
@@ -45,6 +45,7 @@ y_on_x1=dot(y, rot)+tran
 
 # same thing
 y_on_x2=sup.get_transformed()
+
 
 def simple_matrix_print(matrix):
     """Simple string to display a floating point matrix

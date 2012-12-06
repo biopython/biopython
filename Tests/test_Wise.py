@@ -16,6 +16,7 @@ import requires_wise
 
 from Bio import Wise
 
+
 class TestWiseDryRun(unittest.TestCase):
     def setUp(self):
         self.old_stdout = sys.stdout
@@ -37,6 +38,7 @@ class TestWiseDryRun(unittest.TestCase):
 
     def tearDown(self):
         sys.stdout = self.old_stdout
+
 
 class TestWise(unittest.TestCase):
     def test_align(self):

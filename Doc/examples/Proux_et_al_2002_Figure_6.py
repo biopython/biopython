@@ -81,10 +81,10 @@ A_vs_B = [
 B_vs_C = [
     (42, "orf39", "lin2581"),
     (31, "orf40", "lin2580"),
-    (49, "orf41", "lin2579"), #terL
-    (54, "orf42", "lin2578"), #portal
-    (55, "orf43", "lin2577"), #protease
-    (33, "orf44", "lin2576"), #mhp
+    (49, "orf41", "lin2579"),  # terL
+    (54, "orf42", "lin2578"),  # portal
+    (55, "orf43", "lin2577"),  # protease
+    (33, "orf44", "lin2576"),  # mhp
     (51, "orf46", "lin2575"),
     (33, "orf47", "lin2574"),
     (40, "orf48", "lin2573"),

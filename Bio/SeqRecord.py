@@ -6,7 +6,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Represent a Sequence Record, a sequence with annotation."""
-__docformat__ = "epytext en" #Simple markup to show doctests nicely
+__docformat__ = "epytext en"  # Simple markup to show doctests nicely
 
 # NEEDS TO BE SYNCH WITH THE REST OF BIOPYTHON AND BIOPERL
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
@@ -1075,7 +1075,7 @@ class SeqRecord(object):
         >>> print rc.id, rc.seq
         Test ACGA
         """
-        from Bio.Seq import MutableSeq #Lazy to avoid circular imports
+        from Bio.Seq import MutableSeq  # Lazy to avoid circular imports
         if isinstance(self.seq, MutableSeq):
             #Currently the MutableSeq reverse complement is in situ
             answer = SeqRecord(self.seq.toseq().reverse_complement())

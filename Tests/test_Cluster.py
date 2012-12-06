@@ -19,6 +19,7 @@ except ImportError:
     raise MissingPythonDependencyError(
         "Install NumPy if you want to use Bio.Cluster")
 
+
 class TestCluster(unittest.TestCase):
 
     module = 'Bio.Cluster'

@@ -30,12 +30,13 @@ if not t_coffee_exe:
     raise MissingExternalDependencyError(
         "Install TCOFFEE if you want to use the Bio.Align.Applications wrapper.")
 
+
 class TCoffeeApplication(unittest.TestCase):
 
     def setUp(self):
         self.infile1 = "Fasta/fa01"
         self.outfile1 = "fa01.aln"
-        self.outfile2 = "fa01.html" #Written by default when no output set
+        self.outfile2 = "fa01.html"  # Written by default when no output set
         self.outfile3 = "Fasta/tc_out.pir"
         self.outfile4 = "Fasta/tc_out.phy"
 

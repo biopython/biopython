@@ -35,6 +35,7 @@ del expat
 
 from Bio import Entrez
 
+
 class GeneralTests(unittest.TestCase):
     '''General tests for Bio.Entrez'''
     def test_closed_handle(self):
@@ -803,6 +804,7 @@ class EInfoTest(unittest.TestCase):
         self.assertRaises(Parser.CorruptedXMLError, Entrez.read, handle)
         handle.close()
 
+
 class ESearchTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESearch
     '''
@@ -1260,6 +1262,7 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(len(record['WarningList']["QuotedPhraseNotFound"]), 0)
         self.assertEqual(len(record['WarningList']["OutputMessage"]), 1)
         self.assertEqual(record['WarningList']["OutputMessage"][0], "No items found.")
+
 
 class EPostTest(unittest.TestCase):
     '''Tests for parsing XML output returned by EPost
@@ -3744,6 +3747,7 @@ class EGQueryTest(unittest.TestCase):
         self.assertEqual(record["eGQueryResult"][34]["MenuName"], "Protein Clusters")
         self.assertEqual(record["eGQueryResult"][34]["Count"], "0")
         self.assertEqual(record["eGQueryResult"][34]["Status"], "Term or Database is not found")
+
 
 class ESpellTest(unittest.TestCase):
     '''Tests for parsing XML output returned by ESpell

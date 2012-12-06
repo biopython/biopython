@@ -85,7 +85,7 @@ class Motif(object):
             if alphabet is None:
                 alphabet = IUPAC.unambiguous_dna
         self.alphabet = alphabet
-        if self.length==None:
+        if self.length is None:
             self.__mask = ()
         else:
             self.__mask = (1,) * self.length
@@ -170,7 +170,7 @@ instead.
         return self.__mask
 
     def __set_mask(self, mask):
-        if mask==None:
+        if mask is None:
             self.__mask = (1,) * self.length
         elif len(mask)!=self.length:
             raise ValueError("The length (%d) of the mask is inconsistent with the length (%d) of the motif", (len(mask), self.length))
@@ -220,7 +220,7 @@ instead.
                     #dict[seq[i]]=dict[seq[i]]+1
                     try:
                         dict[seq[i]]+=1
-                    except KeyError: #we need to ignore non-alphabet letters
+                    except KeyError:  # we need to ignore non-alphabet letters
                         pass
             self._pwm.append(FreqTable.FreqTable(dict,FreqTable.COUNT,self.alphabet))
         self._pwm_is_current=1
@@ -253,7 +253,7 @@ the probability of each letter in the alphabet associated with the motif
 under the background distribution.
         """
         result=0
-        if background==None:
+        if background is None:
             background = {}
             for a in self.alphabet.letters:
                 background[a] = 1.0
@@ -356,7 +356,7 @@ under the background distribution.
         for offset in range(-self.length+1,motif.length):
             if offset<0:
                 p = self.dist_pearson_at(motif,-offset)
-            else: #offset>=0
+            else:  # offset>=0
                 p = motif.dist_pearson_at(self,offset)
 
             if max_p<p:
@@ -365,11 +365,11 @@ under the background distribution.
         return 1-max_p,max_o
 
     def dist_pearson_at(self,motif,offset):
-        sxx = 0 # \sum x^2
-        sxy = 0 # \sum x \cdot y
-        sx = 0  # \sum x
-        sy = 0  # \sum y
-        syy = 0 # \sum x^2
+        sxx = 0  # \sum x^2
+        sxy = 0  # \sum x \cdot y
+        sx = 0   # \sum x
+        sy = 0   # \sum y
+        syy = 0  # \sum x^2
         norm=max(self.length,offset+motif.length)
 
         for pos in range(max(self.length,offset+motif.length)):
@@ -395,7 +395,7 @@ under the background distribution.
         for offset in range(-self.length+1,other.length):
             if offset<0:
                 p = self.dist_product_at(other,-offset)
-            else: #offset>=0
+            else:  # offset>=0
                 p = other.dist_product_at(self,offset)
             if max_p<p:
                 max_p=p
@@ -437,7 +437,7 @@ under the background distribution.
             if offset<0:
                 d = self.dist_dpq_at(other,-offset)
                 overlap = self.length+offset
-            else: #offset>=0
+            else:  # offset>=0
                 d = other.dist_dpq_at(self,offset)
                 overlap = other.length-offset
             overlap = min(self.length,other.length,overlap)
@@ -450,7 +450,7 @@ under the background distribution.
             if min_d> d:
                 min_d=d
                 min_o=-offset
-        return min_d,min_o#,d_s
+        return min_d,min_o  # ,d_s
 
     def dist_dpq_at(self,other,offset):
         """
@@ -543,8 +543,8 @@ a future release of Biopython.""", PendingDeprecationWarning)
                     col[i]+=(alpha*s)[:(s-len(col[i]))]
             #iterate over instances
             for i in range(s):
-                instance="" #start with empty seq
-                for j in range(self.length): #iterate over positions
+                instance = ""  # start with empty seq
+                for j in range(self.length):  # iterate over positions
                     instance+=col[j][i]
                 instance = Seq(instance, self.alphabet)
                 instances.append(instance)
@@ -566,7 +566,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
                 instance = instance.reverse_complement()
                 instances.append(instance)
             res = Motif(alphabet, instances)
-        else: # has counts
+        else:  # has counts
             res = Motif(alphabet)
             res.counts={}
             res.counts["A"]=self.counts["T"][:]
@@ -626,8 +626,8 @@ a future release of Biopython.""", PendingDeprecationWarning)
             #print ln
             try:
                 self.counts[i]=map(int,ln)
-            except ValueError: #not integers
-                self.counts[i]=map(float,ln) #map(lambda s: int(100*float(s)),ln)
+            except ValueError:  # not integers
+                self.counts[i]=map(float,ln)  # map(lambda s: int(100*float(s)),ln)
             #print counts[i]
 
         s = sum(self.counts[nuc][0] for nuc in letters)
@@ -660,8 +660,8 @@ a future release of Biopython.""", PendingDeprecationWarning)
             #print i,col[i]
         #iterate over instances
         for i in range(s):
-            inst="" #start with empty seq
-            for j in range(self.length): #iterate over positions
+            inst=""  # start with empty seq
+            for j in range(self.length):  # iterate over positions
                 inst+=col[j][i]
             #print i,inst
             inst=Seq(inst,self.alphabet)
@@ -1013,7 +1013,7 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
     def _to_transfac(self):
         """Write the representation of a motif in TRANSFAC format
         """
-        res="XX\nTY Motif\n" #header
+        res="XX\nTY Motif\n"  # header
         try:
             res+="ID %s\n"%self.name
         except:
@@ -1054,13 +1054,13 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
         if letters is None:
             letters=self.alphabet.letters
         res=""
-        if normalized: #output PWM
+        if normalized:  # output PWM
             self._pwm_is_current=False
             mat=self.pwm(laplace=False)
             for a in letters:
                 res+="\t".join([str(mat[i][a]) for i in range(self.length)])
                 res+="\n"
-        else: #output counts
+        else:  # output counts
             if self.counts is None:
                 self.make_counts_from_instances()
             mat=self.counts
