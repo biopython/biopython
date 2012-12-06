@@ -20,7 +20,7 @@ from Bio.Phylo import (
                        PhyloXMLIO,
                        NeXMLIO,
                        )
-from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, CdaoIO
+from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, CDAOIO
 
 
 supported_formats = {
