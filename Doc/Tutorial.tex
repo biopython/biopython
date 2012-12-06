@@ -10770,24 +10770,24 @@ the Motif library:
 \begin{verbatim}
 >>> from Bio import Motif
 \end{verbatim}
-and we can start creating our first motif objects. Let's create a DNA motif:
-%cont-doctest
-\begin{verbatim}
->>> from Bio.Alphabet import IUPAC
->>> m = Motif.Motif(alphabet=IUPAC.unambiguous_dna)
-\end{verbatim}
-This is for now just an empty container, so let's add some sequences to our newly created motif:
+and we can start creating our first motif objects.
+Suppose we have these instances of a DNA motif:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
->>> m.add_instance(Seq("TATAA",m.alphabet))
->>> m.add_instance(Seq("TATTA",m.alphabet))
->>> m.add_instance(Seq("TATAA",m.alphabet))
->>> m.add_instance(Seq("TATAA",m.alphabet))
+>>> instances = [Seq("TATAA"),
+...              Seq("TATTA"),
+...              Seq("TATAA"),
+...              Seq("TATAA"),
+...             ]
 \end{verbatim}
-Now we have a full \verb|Motif| instance, so we can try to get some
-basic information about it. Let's start with length and consensus
-sequence:
+then we can create a Motif object as follows:
+%cont-doctest
+\begin{verbatim}
+>>> m = Motif.Motif(instances=instances)
+\end{verbatim}
+Now we can try to get some basic information about it.
+Let's start with length and consensus sequence:
 %cont-doctest
 \begin{verbatim}
 >>> len(m)
@@ -10813,20 +10813,22 @@ TTATA
 We can also calculate the information content of a motif with a simple call:
 %cont-doctest
 \begin{verbatim}
->>> print "%0.2f" % m.ic()
+>>> pwm = m.make_pwm(pseudocounts=0.25)
+>>> print "%0.2f" % pwm.ic()
 5.27
 \end{verbatim}
 This gives us a number of bits of information provided by the motif,
-which tells us how much the motif differs from background. By default,
-the information content is calculated with respect to a uniform background,
-in which all letters in the alphabet of the motif are assigend an equal
-probability. To specify a non-uniform background, pass a dictionary with
+which tells us how much the motif differs from background.
+
+By default, the information content is calculated with respect to a uniform
+background, in which all letters in the alphabet of the motif are assigend an
+equal probability. To specify a non-uniform background, pass a dictionary with
 the background probabilities when calling this method. For example, the GC
 content for human is approximately 40\%. To calculate the information
 content of a motif with respect to this background, use
 %cont-doctest
 \begin{verbatim}
->>> print "%0.2f" % m.ic(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
+>>> print "%0.2f" % pwm.ic(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
 5.13
 \end{verbatim}
 

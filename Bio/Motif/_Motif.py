@@ -153,7 +153,6 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.set_mask(mask)
 please use
 >>> motif.mask = mask
-instead.
 """, PendingDeprecationWarning)
         self._check_length(len(mask))
         self.__mask=[]
@@ -226,6 +225,34 @@ instead.
         self._pwm_is_current=1
         return self._pwm
 
+    def make_pwm(self, pseudocounts=None):
+        """
+        return the position-weight matrix (calculated from the counts
+        matrix).
+
+        If pseudocounts is None (default), no pseudocounts are added
+        to the counts.
+        If pseudocounts is a number, it is added to the counts before
+        calculating the position-weight matrix.
+        Alternatively, the pseudocounts can be a dictionary with a key
+        for each letter in the alphabet associated with the motif.
+        """
+
+        counts = {}
+        if pseudocounts==None:
+            for letter in self.alphabet.letters:
+                counts[letter] = [0.0] * self.length
+        elif isinstance(pseudocounts, dict):
+            for letter in self.alphabet.letters:
+                counts[letter] = [float(pseudocounts[letter])] * self.length
+        else:
+            for letter in self.alphabet.letters:
+                counts[letter] = [float(pseudocounts)] * self.length
+        for i in xrange(self.length):
+            for letter in self.alphabet.letters:
+                counts[letter][i] += self.counts[letter][i]
+        return PositionWeightMatrix(self.alphabet, counts)
+
     def log_odds(self,laplace=True):
         """
         returns the logg odds matrix computed for the set of instances
@@ -243,33 +270,28 @@ instead.
         self._log_odds_is_current=1
         return self._log_odds
 
-    def ic(self, background=None):
-        """\
-Returns the information content of a motif.
-
-By default, a uniform background is used. To specify a non-uniform
-background, use the 'background' argument to pass a dictionary containing
-the probability of each letter in the alphabet associated with the motif
-under the background distribution.
+    def ic(self):
+        """Method returning the information content of a motif.
         """
-        result=0
-        if background is None:
-            background = {}
-            for a in self.alphabet.letters:
-                background[a] = 1.0
-        total = sum(background.values())
-        for a in self.alphabet.letters:
-            background[a] /= total
-        for a in self.alphabet.letters:
-            if background[a]!=0:
-                result-=background[a]*math.log(background[a],2)
-        result *= self.length
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.ic()
+please use
+>>> pwm = motif.make_pwm()
+>>> pwm.ic()
+Please be aware though that by default, motif.make_pwm() does not
+use psuedocounts, while motif.ic() does. See the documentation of
+motif.make_pwm for more details.
+""", PendingDeprecationWarning)
+        res=0
         pwm=self.pwm()
         for i in range(self.length):
+            res+=2
             for a in self.alphabet.letters:
                 if pwm[i][a]!=0:
-                    result+=pwm[i][a]*math.log(pwm[i][a],2)
-        return result
+                    res+=pwm[i][a]*math.log(pwm[i][a],2)
+        return res
 
     def exp_score(self,st_dev=False):
         """
@@ -559,14 +581,14 @@ a future release of Biopython.""", PendingDeprecationWarning)
         """
         Gives the reverse complement of the motif
         """
-        alphabet = IUPAC.unambiguous_dna
         if self.instances is not None:
             instances = []
             for instance in self.instances:
                 instance = instance.reverse_complement()
                 instances.append(instance)
-            res = Motif(alphabet, instances)
+            res = Motif(instances=instances)
         else:  # has counts
+            alphabet = self.alphabet
             res = Motif(alphabet)
             res.counts={}
             res.counts["A"]=self.counts["T"][:]
@@ -1139,4 +1161,52 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
                 score += temp
             else:
                 result[i] = score
+        return result
+
+
+class PositionWeightMatrix(dict):
+
+    def __init__(self, alphabet, counts):
+        self.alphabet = alphabet
+        self.length = None
+        for letter in alphabet.letters:
+            if self.length==None:
+                self.length = len(counts[letter])
+            elif len(counts[letter])!=self.length:
+                raise Exception("Inconsistent size found for the counts")
+            self[letter] = list(counts[letter])
+        for i in xrange(self.length):
+            total = sum([float(self[letter][i]) for letter in alphabet.letters])
+            for letter in self.alphabet.letters:
+                self[letter][i] /= total
+        for letter in self.alphabet.letters:
+            self[letter] = tuple(self[letter])
+
+    def ic(self, background=None):
+        """\
+Returns the information content of a motif.
+
+By default, a uniform background is used. To specify a non-uniform
+background, use the 'background' argument to pass a dictionary containing
+the probability of each letter in the alphabet associated with the motif
+under the background distribution.
+        """
+        result=0
+        if background is None:
+            background = {}
+            for a in self.alphabet.letters:
+                background[a] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for a in self.alphabet.letters:
+            background[a] /= total
+        for a in self.alphabet.letters:
+            if background[a]!=0:
+                result-=background[a]*math.log(background[a],2)
+        result *= self.length
+        for i in range(self.length):
+            for a in self.alphabet.letters:
+                if self[a][i]!=0:
+                    result+=self[a][i]*math.log(self[a][i],2)
         return result
