@@ -28,7 +28,7 @@ def which(program):
         #For Windows, the user is instructed to move the programs to a folder
         #and then to add the folder to the system path. Just in case they didn't
         #do that, we can check for it in Program Files.
-        likely_dirs = ["", #Current dir
+        likely_dirs = ["",  # Current dir
                        prog_files,
                        os.path.join(prog_files, "paml41"),
                        os.path.join(prog_files, "paml43"),

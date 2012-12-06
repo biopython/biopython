@@ -19,7 +19,7 @@ for path in os.environ['PATH'].split(os.pathsep):
             if filename.startswith('Genepop'):
                 found = True
     except os.error:
-        pass #Path doesn't exist - correct to pass
+        pass  # Path doesn't exist - correct to pass
 if not found:
     raise MissingExternalDependencyError(
         "Install GenePop if you want to use Bio.PopGen.GenePop.")

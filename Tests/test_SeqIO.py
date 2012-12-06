@@ -52,8 +52,8 @@ for format in sorted(SeqIO._FormatToWriter):
 for format in sorted(AlignIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
         test_write_read_alignment_formats.append(format)
-test_write_read_alignment_formats.remove("gb") #an alias for genbank
-test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
+test_write_read_alignment_formats.remove("gb")  # an alias for genbank
+test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 # test_files is a list of tuples containing:
 # - string:  file format
@@ -82,22 +82,22 @@ test_files = [
     ("fasta",  False, 'Fasta/rose.pro', 1),
     ("fasta",  False, 'Fasta/rosemary.pro', 1),
 #Following examples are also used in test_BioSQL_SeqIO.py
-    ("fasta",  False, 'Fasta/f001', 1), #Protein
-    ("fasta",  False, 'Fasta/f002', 3), #DNA
-    #("fasta", False, 'Fasta/f003', 2), #Protein with comments
-    ("fasta",  False, 'Fasta/fa01', 2), #Protein with gaps
+    ("fasta",  False, 'Fasta/f001', 1),  # Protein
+    ("fasta",  False, 'Fasta/f002', 3),  # DNA
+    #("fasta", False, 'Fasta/f003', 2),  # Protein with comments
+    ("fasta",  False, 'Fasta/fa01', 2),  # Protein with gaps
 #Following are also used in test_SeqIO_features.py, see also NC_005816.gb
     ("fasta",  False, 'GenBank/NC_005816.fna', 1),
     ("fasta",  False, 'GenBank/NC_005816.ffn', 10),
     ("fasta",  False, 'GenBank/NC_005816.faa', 10),
     ("fasta",  False, 'GenBank/NC_000932.faa', 85),
-    ("tab",  False, 'GenBank/NC_005816.tsv', 10), # FASTA -> Tabbed
+    ("tab",  False, 'GenBank/NC_005816.tsv', 10),  # FASTA -> Tabbed
 #Following examples are also used in test_GFF.py
-    ("fasta",  False, 'GFF/NC_001802.fna', 1), #upper case
-    ("fasta",  False, 'GFF/NC_001802lc.fna', 1), #lower case
-    ("fasta",  True,  'GFF/multi.fna', 3), #Trivial nucleotide alignment
+    ("fasta",  False, 'GFF/NC_001802.fna', 1),  # upper case
+    ("fasta",  False, 'GFF/NC_001802lc.fna', 1),  # lower case
+    ("fasta",  True,  'GFF/multi.fna', 3),  # Trivial nucleotide alignment
 #Following example is also used in test_registry.py
-    ("fasta",  False, 'Registry/seqs.fasta', 2), #contains blank line
+    ("fasta",  False, 'Registry/seqs.fasta', 2),  # contains blank line
 #Following example is also used in test_Nexus.py
     ("nexus",  True,  'Nexus/test_Nexus_input.nex', 9),
 #Following examples are also used in test_SwissProt.py
@@ -130,17 +130,17 @@ test_files = [
     ("genbank",False, 'GenBank/iro.gb', 1),
     ("genbank",False, 'GenBank/pri1.gb', 1),
     ("genbank",False, 'GenBank/arab1.gb', 1),
-    ("genbank",False, 'GenBank/protein_refseq.gb', 1), #Old version
-    ("genbank",False, 'GenBank/protein_refseq2.gb', 1), #Revised version
+    ("genbank",False, 'GenBank/protein_refseq.gb', 1),  # Old version
+    ("genbank",False, 'GenBank/protein_refseq2.gb', 1),  # Revised version
     ("genbank",False, 'GenBank/extra_keywords.gb', 1),
     ("genbank",False, 'GenBank/one_of.gb', 1),
-    ("genbank",False, 'GenBank/NT_019265.gb', 1), #contig, no sequence
+    ("genbank",False, 'GenBank/NT_019265.gb', 1),  # contig, no sequence
     ("genbank",False, 'GenBank/origin_line.gb', 1),
     ("genbank",False, 'GenBank/blank_seq.gb', 1),
     ("genbank",False, 'GenBank/dbsource_wrap.gb', 1),
-    ("genbank",False, 'GenBank/NC_005816.gb', 1), #See also AE017046.embl
+    ("genbank",False, 'GenBank/NC_005816.gb', 1),  # See also AE017046.embl
     ("genbank",False, 'GenBank/NC_000932.gb', 1),
-    ("genbank",False, 'GenBank/pBAD30.gb', 1), #Odd LOCUS line from Vector NTI
+    ("genbank",False, 'GenBank/pBAD30.gb', 1),  # Odd LOCUS line from Vector NTI
 # The next example is a truncated copy of gbvrl1.seq from
 # ftp://ftp.ncbi.nih.gov/genbank/gbvrl1.seq.gz
 # This includes an NCBI header, and the first three records:
@@ -148,17 +148,17 @@ test_files = [
 #Following files are also used in test_GFF.py
     ("genbank",False, 'GFF/NC_001422.gbk', 1),
 #Following files are currently only used here or in test_SeqIO_index.py:
-    ("embl",   False, 'EMBL/epo_prt_selection.embl', 9), #proteins
+    ("embl",   False, 'EMBL/epo_prt_selection.embl', 9),  # proteins
     ("embl",   False, 'EMBL/TRBG361.embl', 1),
     ("embl",   False, 'EMBL/DD231055_edited.embl', 1),
-    ("embl",   False, 'EMBL/SC10H5.embl', 1), # Pre 2006 style ID line
-    ("embl",   False, 'EMBL/U87107.embl', 1), # Old ID line with SV line
-    ("embl",   False, 'EMBL/AAA03323.embl', 1), # 2008, PA line but no AC
-    ("embl",   False, 'EMBL/AE017046.embl', 1), #See also NC_005816.gb
-    ("embl",   False, 'EMBL/Human_contigs.embl', 2), #contigs, no sequences
-    ("embl",   False, 'EMBL/location_wrap.embl', 1), #wrapped locations and unspecified type
-    ("embl",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
-    ("imgt",   False, 'EMBL/A04195.imgt', 1), # features over indented for EMBL
+    ("embl",   False, 'EMBL/SC10H5.embl', 1),  # Pre 2006 style ID line
+    ("embl",   False, 'EMBL/U87107.embl', 1),  # Old ID line with SV line
+    ("embl",   False, 'EMBL/AAA03323.embl', 1),  # 2008, PA line but no AC
+    ("embl",   False, 'EMBL/AE017046.embl', 1),  # See also NC_005816.gb
+    ("embl",   False, 'EMBL/Human_contigs.embl', 2),  # contigs, no sequences
+    ("embl",   False, 'EMBL/location_wrap.embl', 1),  # wrapped locations and unspecified type
+    ("embl",   False, 'EMBL/A04195.imgt', 1),  # features over indented for EMBL
+    ("imgt",   False, 'EMBL/A04195.imgt', 1),  # features over indented for EMBL
     ("stockholm", True,  'Stockholm/simple.sth', 2),
     ("stockholm", True,  'Stockholm/funny.sth', 6),
 #Following PHYLIP files are currently only used here and in test_AlignIO.py,

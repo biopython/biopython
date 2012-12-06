@@ -248,7 +248,7 @@ for a in dna + rna + nuc + protein:
         print str(a.strip(b))
         assert False, "Alphabet should have clashed!"
     except TypeError:
-        pass #Good!
+        pass  # Good!
 
     for chars in test_chars:
         str_chars = str(chars)
@@ -307,7 +307,7 @@ print
 print "RNA Ambiguity mapping:", sorted_dict(ambiguous_rna_values)
 print "RNA Complement mapping:", sorted_dict(ambiguous_rna_complement)
 for ambig_char, values in sorted(ambiguous_rna_values.iteritems()):
-    compl_values = complement(values).replace("T","U") #need to help as no alphabet
+    compl_values = complement(values).replace("T","U")  # need to help as no alphabet
     print "%s={%s} --> {%s}=%s" % \
         (ambig_char, values, compl_values, ambiguous_rna_complement[ambig_char])
     assert set(compl_values) == set(ambiguous_rna_values[ambiguous_rna_complement[ambig_char]])
@@ -352,7 +352,7 @@ test_seqs = [s,t,u,
              Seq.Seq("AUGAAACUG", IUPAC.unambiguous_rna),
              Seq.Seq("AUGAAACUGWN", IUPAC.ambiguous_rna),
              Seq.Seq("ATGAAACTG", Alphabet.generic_nucleotide),
-             Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide), #U and T
+             Seq.Seq("AUGAAACTG", Alphabet.generic_nucleotide),  # U and T
              Seq.MutableSeq("ATGAAACTG", Alphabet.generic_dna),
              Seq.MutableSeq("AUGaaaCUG", IUPAC.unambiguous_rna),
              Seq.Seq("ACTGTCGTCT", Alphabet.generic_protein)]
@@ -400,7 +400,7 @@ for s in protein_seqs:
     except ValueError:
         pass
     if not isinstance(s, Seq.Seq):
-        continue #Only Seq has this method
+        continue  # Only Seq has this method
     try:
         print s.transcribe()
         assert False, "Transcription shouldn't work on a protein!"
@@ -434,7 +434,7 @@ for s in protein_seqs:
     except ValueError:
         pass
     if not isinstance(s, Seq.Seq):
-        continue #Only Seq has this method
+        continue  # Only Seq has this method
     try:
         print s.back_transcribe()
         assert False, "Back transcription shouldn't work on a protein!"
@@ -519,7 +519,7 @@ for s in protein_seqs:
     except ValueError:
         pass
     if not isinstance(s, Seq.Seq):
-        continue #Only Seq has this method
+        continue  # Only Seq has this method
     try:
         print s.translate()
         assert False, "Translation shouldn't work on a protein!"

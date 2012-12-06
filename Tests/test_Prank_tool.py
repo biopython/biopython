@@ -29,7 +29,7 @@ if sys.platform=="win32":
     #For Windows, PRANK just comes as a zip file which contains the
     #prank.exe file which the user could put anywhere.  We'll try a few
     #sensible locations under Program Files... and then the full path.
-    likely_dirs = ["", #Current dir
+    likely_dirs = ["",  # Current dir
                    prog_files,
                    os.path.join(prog_files,"Prank")] + sys.path
     for folder in likely_dirs:
@@ -125,7 +125,7 @@ class PrankApplication(unittest.TestCase):
         cmdline.set_parameter("notree", True)
         cmdline.set_parameter("-gaprate", 0.321)
         cmdline.set_parameter("gapext", 0.6)
-        cmdline.set_parameter("-dots", 1) #i.e. True
+        cmdline.set_parameter("-dots", 1)  # i.e. True
         #Try using a property:
         cmdline.kappa = 3
         cmdline.skipins = True
@@ -143,7 +143,7 @@ class PrankConversion(unittest.TestCase):
     def setUp(self):
         #As these reads are all 36, it can be seen as pre-aligned:
         self.input = "Quality/example.fasta"
-        self.output = 'temp with space' #prefix, PRANK will pick extensions
+        self.output = 'temp with space'  # prefix, PRANK will pick extensions
 
     def conversion(self, prank_number, prank_ext, format):
         """Get PRANK to do a conversion, and check it with SeqIO."""

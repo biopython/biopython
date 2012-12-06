@@ -39,7 +39,7 @@ class BgzfTests(unittest.TestCase):
         self.assertFalse(h.seekable())
         self.assertFalse(h.isatty())
         self.assertEqual(h.fileno(), h._handle.fileno())
-        h.close() #Gives empty BGZF block as BAM EOF marker
+        h.close()  # Gives empty BGZF block as BAM EOF marker
 
         h = gzip.open(output_file)
         new_data = h.read()
@@ -61,12 +61,12 @@ class BgzfTests(unittest.TestCase):
         self.assertEqual(old, new)
 
     def check_text(self, old_file, new_file):
-        h = open(old_file) #text mode!
+        h = open(old_file)  # text mode!
         old_line = h.readline()
         old = old_line + h.read()
         h.close()
 
-        h = bgzf.BgzfReader(new_file, "r") #Text mode!
+        h = bgzf.BgzfReader(new_file, "r")  # Text mode!
         new_line = h.readline()
         new = new_line + h.read(len(old))
         h.close()

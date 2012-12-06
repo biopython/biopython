@@ -139,7 +139,7 @@ if sys.platform == "win32" and sys.version_info < (2,6):
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hit")
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hsp")
 
-system_lang = os.environ.get('LANG', 'C') #Cache this
+system_lang = os.environ.get('LANG', 'C')  # Cache this
 
 
 def main(argv):

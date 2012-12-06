@@ -209,8 +209,8 @@ def compare_sequence(old, new):
         assert expected == new[i]
 
     #Test slices
-    indices.append(ln) #check copes with overflows
-    indices.append(ln+1000) #check copes with overflows
+    indices.append(ln)  # check copes with overflows
+    indices.append(ln + 1000)  # check copes with overflows
     for i in indices:
         for j in indices:
             expected = s[i:j]

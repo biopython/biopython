@@ -87,8 +87,8 @@ class TestUniprot(unittest.TestCase):
                     #Tweak for line breaks in plain text SwissProt
                     r1.title = r1.title.replace("- ", "-")
                     r2.title = r2.title.replace("- ", "-")
-                    r1.journal = r1.journal.rstrip(".") #Should parser do this?
-                    r1.medline_id = "" #Missing in UniPort MXL? TODO - check
+                    r1.journal = r1.journal.rstrip(".")  # Should parser do this?
+                    r1.medline_id = ""  # Missing in UniPort MXL? TODO - check
                     #Lots of extra comments in UniProt XML
                     r1.comment = ""
                     r2.comment = ""

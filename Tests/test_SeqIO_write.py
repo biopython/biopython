@@ -27,8 +27,8 @@ test_write_read_alignment_formats = sorted(SeqIO._FormatToWriter.keys())
 for format in sorted(AlignIO._FormatToWriter):
     if format not in test_write_read_alignment_formats:
         test_write_read_alignment_formats.append(format)
-test_write_read_alignment_formats.remove("gb") #an alias for genbank
-test_write_read_alignment_formats.remove("fastq-sanger") #an alias for fastq
+test_write_read_alignment_formats.remove("gb")  # an alias for genbank
+test_write_read_alignment_formats.remove("fastq-sanger")  # an alias for fastq
 
 
 # This is a list of three-tuples.  Each tuple contains a

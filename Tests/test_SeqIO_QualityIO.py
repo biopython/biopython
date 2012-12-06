@@ -140,7 +140,7 @@ class TestFastqErrors(unittest.TestCase):
             handle = open(filename, "rU")
             records = SeqIO.parse(handle, format)
             for i in range(good_count):
-                record = records.next() #Make sure no errors!
+                record = records.next()  # Make sure no errors!
                 self.assertTrue(isinstance(record, SeqRecord))
             self.assertRaises(ValueError, records.next)
             handle.close()
@@ -149,7 +149,7 @@ class TestFastqErrors(unittest.TestCase):
         handle = open(filename, "rU")
         tuples = QualityIO.FastqGeneralIterator(handle)
         for i in range(good_count):
-            title, seq, qual = tuples.next() #Make sure no errors!
+            title, seq, qual = tuples.next()  # Make sure no errors!
         self.assertRaises(ValueError, tuples.next)
         handle.close()
 
@@ -599,7 +599,7 @@ class TestWriteRead(unittest.TestCase):
         """Write and read back E3MFGYR02_random_10_reads.sff (trimmed)"""
         self.check(os.path.join("Roche", "E3MFGYR02_random_10_reads.sff"), "sff-trim",
                    ["fastq", "fastq-sanger", "fastq-illumina", "fastq-solexa",
-                    "fasta", "qual", "phd"]) #not sff as output
+                    "fasta", "qual", "phd"])  # not sff as output
 
 
 class MappingTests(unittest.TestCase):

@@ -226,7 +226,7 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         self.assertEqual(new, answer_str)
 
         new = feature.extract(parent_seq.tomutable())
-        self.assertTrue(isinstance(new, Seq)) #Not MutableSeq!
+        self.assertTrue(isinstance(new, Seq))  # Not MutableSeq!
         self.assertEqual(str(new), answer_str)
 
         new = feature.extract(UnknownSeq(len(parent_seq), parent_seq.alphabet))
@@ -253,14 +253,14 @@ class SeqFeatureExtractionWritingReading(unittest.TestCase):
         #unit test have mostly defaulted to strand None.
         self.assertEqual(len(feature.sub_features), len(new_f.sub_features))
         for f1, f2 in zip(feature.sub_features, new_f.sub_features):
-            f1.type = "misc_feature" #hack as may not be misc_feature
+            f1.type = "misc_feature"  # hack as may not be misc_feature
             if f1.strand is None:
-                f1.strand = f2.strand #hack as described above
+                f1.strand = f2.strand  # hack as described above
             self.assertEqual(f1.strand, f2.strand)
             self.assertTrue(compare_feature(f1,f2))
-        feature.type = "misc_feature" #hack as may not be misc_feature
+        feature.type = "misc_feature"  # hack as may not be misc_feature
         if not feature.strand:
-            feature.strand = new_f.strand #hack as above
+            feature.strand = new_f.strand  # hack as above
         self.assertEqual(feature.strand, new_f.strand)
         self.assertTrue(compare_feature(feature, new_f))
 
@@ -959,11 +959,11 @@ class FeatureWriting(unittest.TestCase):
 class NC_000932(unittest.TestCase):
     #This includes an evil dual strand gene
     basename = "NC_000932"
-    emblname = None # "AP000423" has different annotation (e.g. more CDS)
+    emblname = None  # "AP000423" has different annotation (e.g. more CDS)
     table = 11
-    skip_trans_test = ["gi|7525080|ref|NP_051037.1|", #dual-strand
-                       "gi|7525057|ref|NP_051038.1|", #dual-strand
-                       "gi|90110725|ref|NP_051109.2|", #Invalid annotation? No start codon
+    skip_trans_test = ["gi|7525080|ref|NP_051037.1|",  # dual-strand
+                       "gi|7525057|ref|NP_051038.1|",  # dual-strand
+                       "gi|90110725|ref|NP_051109.2|",  # Invalid annotation? No start codon
                        ]
     __doc__ = "Tests using %s GenBank and FASTA files from the NCBI" % basename
     #TODO - neat way to change the docstrings...

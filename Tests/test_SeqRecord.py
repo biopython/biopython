@@ -149,7 +149,7 @@ class SeqRecordMethods(unittest.TestCase):
             self.assertEqual(len(rec.features), len(self.record.features))
             self.assertEqual(rec.features[0].type, "source")
             self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-            self.assertEqual(rec.features[0].location.nofuzzy_end, 26) #not +3
+            self.assertEqual(rec.features[0].location.nofuzzy_end, 26)  # not +3
 
     def test_add_seqrecord(self):
         """Simple left addition of SeqRecord from genbank file."""
@@ -168,7 +168,7 @@ class SeqRecordMethods(unittest.TestCase):
                          len(self.record.features) + len(other.features))
         self.assertEqual(rec.features[0].type, "source")
         self.assertEqual(rec.features[0].location.nofuzzy_start, 0)
-        self.assertEqual(rec.features[0].location.nofuzzy_end, len(self.record)) #not +3
+        self.assertEqual(rec.features[0].location.nofuzzy_end, len(self.record))  # not +3
         i = len(self.record.features)
         self.assertEqual(rec.features[i].type, "source")
         self.assertEqual(rec.features[i].location.nofuzzy_start, len(self.record))

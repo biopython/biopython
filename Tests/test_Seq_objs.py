@@ -204,7 +204,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).startswith(subs_str),
                              example1.startswith(subs))
             self.assertEqual(str(example1).startswith(subs_str),
-                             example1.startswith(subs_str)) #strings!
+                             example1.startswith(subs_str))  # strings!
             self.assertEqual(str(example1).startswith(subs_str,3),
                              example1.startswith(subs,3))
             self.assertEqual(str(example1).startswith(subs_str,2,6),
@@ -232,7 +232,7 @@ class StringMethodTests(unittest.TestCase):
             self.assertEqual(str(example1).endswith(subs_str),
                              example1.endswith(subs))
             self.assertEqual(str(example1).startswith(subs_str),
-                             example1.startswith(subs_str)) #strings!
+                             example1.startswith(subs_str))  # strings!
             self.assertEqual(str(example1).endswith(subs_str,3),
                              example1.endswith(subs,3))
             self.assertEqual(str(example1).endswith(subs_str,2,6),
@@ -301,7 +301,7 @@ class StringMethodTests(unittest.TestCase):
                         if step == 0:
                             try:
                                 print example1[i:j:step]
-                                self._assert(False) #Should fail!
+                                self._assert(False)  # Should fail!
                             except ValueError:
                                 pass
                         else:
@@ -408,7 +408,7 @@ class StringMethodTests(unittest.TestCase):
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("T","U").replace("t","u"), str(tran))
-                self.assertEqual(tran.alphabet, generic_rna) #based on limited examples
+                self.assertEqual(tran.alphabet, generic_rna)  # based on limited examples
 
     def test_the_back_transcription(self):
             """Check obj.back_transcribe() method."""
@@ -426,7 +426,7 @@ class StringMethodTests(unittest.TestCase):
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
-                self.assertEqual(tran.alphabet, generic_dna) #based on limited examples
+                self.assertEqual(tran.alphabet, generic_dna)  # based on limited examples
 
     def test_the_translate(self):
             """Check obj.translate() method."""

@@ -45,7 +45,7 @@ def gzip_open(filename, format):
     if sys.version_info[0] < 3 or format in SeqIO._BinaryFormats:
         return gzip.open(filename)
     handle = gzip.open(filename)
-    data = handle.read() #bytes!
+    data = handle.read()  # bytes!
     handle.close()
     return StringIO(_bytes_to_string(data))
 
@@ -105,7 +105,7 @@ class IndexDictTests(unittest.TestCase):
 
         rec_dict = SeqIO.index(filename, format, alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
-        rec_dict._proxy._handle.close() #TODO - Better solution
+        rec_dict._proxy._handle.close()  # TODO - Better solution
         del rec_dict
 
         if not sqlite3:
@@ -137,7 +137,7 @@ class IndexDictTests(unittest.TestCase):
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload it...
@@ -145,14 +145,14 @@ class IndexDictTests(unittest.TestCase):
                                   alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
         rec_dict = SeqIO.index_db(index_tmp, alphabet=alphabet)
         self.check_dict_methods(rec_dict, id_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
         os.remove(index_tmp)
 
@@ -168,7 +168,7 @@ class IndexDictTests(unittest.TestCase):
         key_list = [add_prefix(id) for id in id_list]
         rec_dict = SeqIO.index(filename, format, alphabet, add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
-        rec_dict._proxy._handle.close() #TODO - Better solution
+        rec_dict._proxy._handle.close()  # TODO - Better solution
         del rec_dict
 
         if not sqlite3:
@@ -196,7 +196,7 @@ class IndexDictTests(unittest.TestCase):
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload it...
@@ -204,7 +204,7 @@ class IndexDictTests(unittest.TestCase):
                                   add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
 
         #Now reload without passing filenames and format
@@ -212,7 +212,7 @@ class IndexDictTests(unittest.TestCase):
                                   key_function=add_prefix)
         self.check_dict_methods(rec_dict, key_list, id_list)
         rec_dict.close()
-        rec_dict._con.close() #hack for PyPy
+        rec_dict._con.close()  # hack for PyPy
         del rec_dict
         os.remove(index_tmp)
         #Done
@@ -331,7 +331,7 @@ class IndexDictTests(unittest.TestCase):
             else:
                 rec2 = SeqIO.read(handle, format, alphabet)
             self.assertEqual(True, compare_record(rec1, rec2))
-        rec_dict._proxy._handle.close() #TODO - Better solution
+        rec_dict._proxy._handle.close()  # TODO - Better solution
         del rec_dict
 
     if sqlite3:
@@ -365,7 +365,7 @@ tests = [
     ("EMBL/epo_prt_selection.embl", "embl", None),
     ("EMBL/U87107.embl", "embl", None),
     ("EMBL/TRBG361.embl", "embl", None),
-    ("EMBL/A04195.imgt", "embl", None), #Not a proper EMBL file, an IMGT file
+    ("EMBL/A04195.imgt", "embl", None),  # Not a proper EMBL file, an IMGT file
     ("EMBL/A04195.imgt", "imgt", None),
     ("GenBank/NC_000932.faa", "fasta", generic_protein),
     ("GenBank/NC_005816.faa", "fasta", generic_protein),

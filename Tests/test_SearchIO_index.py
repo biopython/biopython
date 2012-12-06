@@ -1273,7 +1273,7 @@ class SearchIndexCases(unittest.TestCase):
                 self.assertNotEqual(id(qres), id(dbidx_qres))
                 self.assertTrue(compare_search_obj(qres, dbidx_qres))
 
-        indexed._proxy._handle.close() #TODO - Better solution
+        indexed._proxy._handle.close()  # TODO - Better solution
         if sqlite3 is not None:
             db_indexed.close()
             db_indexed._con.close()

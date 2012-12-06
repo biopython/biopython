@@ -58,7 +58,7 @@ class ParserTest(unittest.TestCase):
             handle = self.handles[index]
             rec = FDist.read(handle)
             assert isinstance(rec, FDist.Record)
-            assert rec.data_org == 0 #We don't support any other
+            assert rec.data_org == 0  # We don't support any other
             assert rec.num_pops, rec.num_loci == self.pops_loci[index]
             for i in range(len(self.num_markers[index])):
                 assert rec.loci_data[i][0] == \
@@ -97,7 +97,7 @@ class ConversionTest(unittest.TestCase):
             fd_rec = convert_genepop_to_fdist(gp_rec)
             assert(fd_rec.num_loci == 3)
             assert(fd_rec.num_pops == 3)
-            gp_rec._handle.close() #TODO - Needs a proper fix
+            gp_rec._handle.close()  # TODO - Needs a proper fix
 
     def tearDown(self):
         for handle in self.handles:

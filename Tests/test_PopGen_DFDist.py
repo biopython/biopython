@@ -24,7 +24,7 @@ for path in os.environ['PATH'].split(os.pathsep):
                 if file == f or file.lower() == f.lower()+".exe":
                     wanted[f] = file
     except os.error:
-        pass #Path doesn't exist - correct to pass
+        pass  # Path doesn't exist - correct to pass
 if len(wanted) != 4:
     raise MissingExternalDependencyError(
         "Install Dfdist, Ddatacal, pv2 and cplot2 if you want to use DFDist with Bio.PopGen.FDist.")

@@ -4,7 +4,7 @@
 
 try:
     from numpy import array
-    from numpy import random #missing in PyPy's micronumpy
+    from numpy import random  # missing in PyPy's micronumpy
 except ImportError:
     from Bio import MissingPythonDependencyError
     raise MissingPythonDependencyError(

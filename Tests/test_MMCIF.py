@@ -16,7 +16,7 @@ import warnings
 
 try:
     import numpy
-    from numpy import dot #Missing on PyPy's micronumpy
+    from numpy import dot  # Missing on PyPy's micronumpy
     del dot
 except ImportError:
     from Bio import MissingPythonDependencyError

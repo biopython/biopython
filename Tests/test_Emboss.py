@@ -27,7 +27,7 @@ os.environ['LANG'] = 'C'
 
 exes_wanted = ["water", "needle", "seqret", "transeq", "seqmatchall",
                "embossversion"]
-exes = dict() #Dictionary mapping from names to exe locations
+exes = dict()  # Dictionary mapping from names to exe locations
 
 if "EMBOSS_ROOT" in os.environ:
     #Windows default installation path is C:\mEMBOSS which contains the exes.
@@ -63,9 +63,9 @@ def get_emboss_version():
                              universal_newlines=True,
                              shell=(sys.platform!="win32"))
     stdout, stderr = child.communicate()
-    child.stdout.close() #This is both stdout and stderr
+    child.stdout.close()  # This is both stdout and stderr
     del child
-    assert stderr is None #Send to stdout instead
+    assert stderr is None  # Send to stdout instead
     for line in stdout.split("\n"):
         if line.strip()=="Reports the current EMBOSS version number":
             pass
@@ -102,7 +102,7 @@ def emboss_convert(filename, old_format, new_format):
                               sequence = filename,
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               stdout = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -124,7 +124,7 @@ def emboss_piped_SeqIO_convert(records, old_format, new_format):
     cline = SeqretCommandline(exes["seqret"],
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               filter = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -151,7 +151,7 @@ def emboss_piped_AlignIO_convert(alignments, old_format, new_format):
     cline = SeqretCommandline(exes["seqret"],
                               sformat = old_format,
                               osformat = new_format,
-                              auto = True, #no prompting
+                              auto = True,  # no prompting
                               filter = True)
     #Run the tool,
     child = subprocess.Popen(str(cline),
@@ -410,7 +410,7 @@ class SeqRetAlignIOTests(unittest.TestCase):
         self.check_AlignIO_with_EMBOSS("Clustalw/hedgehog.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/opuntia.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/odd_consensus.aln", "clustal",
-                               skip_formats=["nexus"]) #TODO - why not nexus?
+                               skip_formats=["nexus"])  # TODO - why not nexus?
         self.check_AlignIO_with_EMBOSS("Clustalw/protein.aln", "clustal")
         self.check_AlignIO_with_EMBOSS("Clustalw/promals3d.aln", "clustal")
 
@@ -676,8 +676,8 @@ class PairwiseAlignmentTests(unittest.TestCase):
         cline = exes["needle"]
         cline += " -asequence asis:" + query
         cline += " -bsequence Fasta/f002"
-        cline += " -auto" #no prompting
-        cline += " -filter" #use stdout
+        cline += " -auto"  # no prompting
+        cline += " -filter"  # use stdout
         #Run the tool,
         child = subprocess.Popen(str(cline),
                                  stdin=subprocess.PIPE,
@@ -776,8 +776,8 @@ def emboss_translate(sequence, table=None, frame=None):
         SeqIO.write(SeqRecord(sequence, id="Test"), filename, "fasta")
         cline += " -sequence %s" % filename
 
-    cline += " -auto" #no prompting
-    cline += " -filter" #use stdout
+    cline += " -auto"  # no prompting
+    cline += " -filter"  # use stdout
     if table is not None:
         cline += " -table %s" % str(table)
     if frame is not None:
