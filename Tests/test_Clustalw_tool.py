@@ -78,6 +78,7 @@ if not clustalw_exe:
     raise MissingExternalDependencyError(
         "Install clustalw or clustalw2 if you want to use it from Biopython.")
 
+
 class ClustalWTestCase(unittest.TestCase):
     """Class implementing common functions for ClustalW tests."""
 

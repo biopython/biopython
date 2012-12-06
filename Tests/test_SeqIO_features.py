@@ -20,6 +20,7 @@ from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition, \
 from StringIO import StringIO
 from Bio.SeqIO.InsdcIO import _insdc_feature_location_string
 
+
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format="gb", out_formats=["gb", "embl", "imgt"]):
     for out_format in out_formats:
@@ -31,6 +32,7 @@ def write_read(filename, in_format="gb", out_formats=["gb", "embl", "imgt"]):
         #Now load it back and check it agrees,
         gb_records2 = list(SeqIO.parse(handle,out_format))
         compare_records(gb_records, gb_records2)
+
 
 def compare_record(old, new, expect_minor_diffs=False):
     #Note the name matching is a bit fuzzy
@@ -98,6 +100,7 @@ def compare_record(old, new, expect_minor_diffs=False):
                              % (key, old.annotations[key], new.annotations[key]))
     return True
 
+
 def compare_records(old_list, new_list, expect_minor_diffs=False):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list):
@@ -106,6 +109,7 @@ def compare_records(old_list, new_list, expect_minor_diffs=False):
         if not compare_record(old,new,expect_minor_diffs):
             return False
     return True
+
 
 def compare_feature(old, new, ignore_sub_features=False):
     """Check two SeqFeatures agree."""
@@ -149,6 +153,7 @@ def compare_feature(old, new, ignore_sub_features=False):
                              % (key, old.qualifiers[key], new.qualifiers[key]))
     return True
 
+
 def compare_features(old_list, new_list, ignore_sub_features=False):
     """Check two lists of SeqFeatures agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list):
@@ -158,6 +163,7 @@ def compare_features(old_list, new_list, ignore_sub_features=False):
         if not compare_feature(old,new,ignore_sub_features):
             return False
     return True
+
 
 def make_join_feature(f_list, ftype="misc_feature"):
     #NOTE - Does NOT reorder the sub-features (which you may
@@ -196,6 +202,7 @@ gbk_template = gbk_template.replace('     exon            618..756\n'
                                     '                     /number=2\n', '')
 assert len(gbk_template)==4445
 assert gbk_template.count("%") == 1, gbk_template
+
 
 class SeqFeatureExtractionWritingReading(unittest.TestCase):
     """Tests for SeqFeature sequence extract method, writing, and reading."""
@@ -451,6 +458,7 @@ class SeqFeatureCreation(unittest.TestCase):
         f = SeqFeature(FeatureLocation(10,20), strand=+1, type="CDS",
                 qualifiers={"test": ["a test"]})
         self.assertEqual(f.qualifiers["test"], ["a test"])
+
 
 class FeatureWriting(unittest.TestCase):
     def setUp(self):
@@ -947,6 +955,7 @@ class FeatureWriting(unittest.TestCase):
 
         self.write_read_checks()
 
+
 class NC_000932(unittest.TestCase):
     #This includes an evil dual strand gene
     basename = "NC_000932"
@@ -989,6 +998,7 @@ class NC_000932(unittest.TestCase):
                 self.assertEqual(str(pro)[:-1], str(r.seq))
             else:
                 self.assertEqual(str(pro), str(r.seq))
+
 
 class NC_005816(NC_000932):
     basename = "NC_005816"

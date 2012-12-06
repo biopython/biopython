@@ -12,6 +12,7 @@ except ImportError:
 from Bio.Statistics.lowess import lowess
 import unittest
 
+
 class test_lowess(unittest.TestCase):
 
     def test_Precomputed(self):

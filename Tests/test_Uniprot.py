@@ -17,6 +17,7 @@ if SeqIO.UniprotIO.ElementTree is None:
 
 from seq_tests_common import compare_reference, compare_record
 
+
 class TestUniprot(unittest.TestCase):
 
     def test_uni001(self):

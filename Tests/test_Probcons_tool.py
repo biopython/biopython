@@ -28,6 +28,7 @@ if not probcons_exe:
     raise MissingExternalDependencyError(
         "Install PROBCONS if you want to use the Bio.Align.Applications wrapper.")
 
+
 class ProbconsApplication(unittest.TestCase):
 
     def setUp(self):

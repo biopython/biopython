@@ -46,6 +46,7 @@ y_on_x1=dot(y, rot)+tran
 # same thing
 y_on_x2=sup.get_transformed()
 
+
 def simple_matrix_print(matrix):
     """Simple string to display a floating point matrix
 

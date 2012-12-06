@@ -19,6 +19,7 @@ if not os.path.isfile(tutorial):
 tutorial_base = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), "../Doc/"))
 original_path = os.path.abspath(".")
 
+
 def _extract(handle):
     line = handle.readline()
     if line != "\\begin{verbatim}\n":
@@ -37,6 +38,7 @@ def _extract(handle):
         else:
             lines.append(line)
     return lines
+
 
 def extract_doctests(latex_filename):
     """Scans LaTeX file and pulls out marked doctests as strings."""
@@ -74,6 +76,7 @@ def extract_doctests(latex_filename):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
         yield name, "".join(lines), folder
     #yield "dummy", ">>> 2 + 2\n5\n"
+
 
 class TutorialDocTestHolder(object):
     """Python doctests extracted from the Biopython Tutorial."""

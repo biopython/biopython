@@ -35,6 +35,7 @@ from Bio._py3k import _as_string
 #This lets us set the email address to be sent to NCBI Entrez:
 Entrez.email = "biopython-dev@biopython.org"
 
+
 class ExPASyTests(unittest.TestCase):
     """Tests for Bio.ExPASy module."""
     def test_get_sprot_raw(self):
@@ -53,6 +54,7 @@ class ExPASyTests(unittest.TestCase):
         self.assertEqual(record.id, identifier)
         self.assertEqual(len(record), 394)
         self.assertEqual(seguid(record.seq), "5Y08l+HJRDIlhLKzFEfkcKd1dkM")
+
 
 class EntrezTests(unittest.TestCase):
     def simple(self, database, formats, entry, length, checksum):

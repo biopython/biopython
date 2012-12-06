@@ -10,6 +10,7 @@ import unittest
 
 from Bio.ExPASy import Prosite
 
+
 class TestPrositeRead(unittest.TestCase):
 
     def test_read4(self):

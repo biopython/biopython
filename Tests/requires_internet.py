@@ -11,6 +11,7 @@
 
 from Bio import MissingExternalDependencyError
 
+
 def check():
     try:
         check.available

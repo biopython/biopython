@@ -39,6 +39,7 @@ class TestSimpleRead(unittest.TestCase):
             records = list(SeqIO.parse(test_files[key][0],"seqxml"))
             self.assertEqual(len(records),test_files[key][1])
 
+
 class TestDetailedRead(unittest.TestCase):
 
     records = {}

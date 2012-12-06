@@ -58,6 +58,7 @@ if not muscle_exe:
 
 #################################################################
 
+
 class MuscleApplication(unittest.TestCase):
 
     def setUp(self):
@@ -147,6 +148,7 @@ class MuscleApplication(unittest.TestCase):
         self.assertTrue("ERROR" not in stderr.read())
         self.assertEqual(str(result._cl), str(cmdline))
         """
+
 
 class SimpleAlignTest(unittest.TestCase):
     """Simple MUSCLE tests"""

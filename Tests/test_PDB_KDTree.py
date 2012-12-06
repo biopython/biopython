@@ -28,6 +28,7 @@ except ImportError:
 
 from Bio.PDB.NeighborSearch import NeighborSearch
 
+
 class NeighborTest(unittest.TestCase):
     def test_neighbor_search(self):
         """NeighborSearch: Find nearby randomly generated coordinates.

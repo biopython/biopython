@@ -27,10 +27,12 @@ class TestAlphabet(Alphabet):
 
     letters = ["1", "2", "3", "*"]
 
+
 def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     return 1
+
 
 class AmbiguousRepairTest(unittest.TestCase):
     """Test for the ability to repair too many ambiguous genes in a genome.

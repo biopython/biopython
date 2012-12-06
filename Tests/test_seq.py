@@ -282,10 +282,12 @@ print "=============================="
 assert "-" not in ambiguous_dna_values
 assert "?" not in ambiguous_dna_values
 
+
 def complement(sequence):
     #TODO - Add a complement function to Bio/Seq.py?
     #There is already a complement method on the Seq and MutableSeq objects.
     return Seq.reverse_complement(sequence)[::-1]
+
 
 def sorted_dict(d):
     """A sorted repr of a dictionary."""

@@ -154,6 +154,7 @@ def do_update(py2folder, py3folder, verbose=False):
         print("Have %i python files to convert" % len(to_convert))
         run2to3(to_convert)
 
+
 def main(python2_source, python3_source,
          children=["Bio", "BioSQL", "Tests", "Scripts", "Doc"]):
     #Note want to use different folders for Python 3.1, 3.2, etc

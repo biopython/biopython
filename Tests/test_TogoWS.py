@@ -23,6 +23,7 @@ from Bio import Medline
 
 #####################################################################
 
+
 class TogoFields(unittest.TestCase):
     def test_invalid_database(self):
         """Check asking for fields of invalid database fails"""
@@ -369,6 +370,7 @@ class TogoEntry(unittest.TestCase):
         self.assert_("porin protein" in record.description, record.description)
         self.assertEqual(len(record), 367)
         self.assertEqual(seguid(record.seq), "fCjcjMFeGIrilHAn6h+yju267lg")
+
 
 class TogoSearch(unittest.TestCase):
     """Search tests."""

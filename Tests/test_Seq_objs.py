@@ -61,6 +61,7 @@ Chilodonella_uncinata_table = CodonTable(forward_table={
     start_codons = [ 'ATG'],
     stop_codons = ['TAA' ])
 
+
 class StringMethodTests(unittest.TestCase):
     _examples = [
         Seq("ACGTGGGGT", generic_protein),

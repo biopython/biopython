@@ -36,6 +36,7 @@ from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarni
 from Bio.PDB import PPBuilder, CaPPBuilder
 from Bio.PDB.MMCIFParser import MMCIFParser
 
+
 class ParseReal(unittest.TestCase):
     """Testing with real CIF file(s)."""
 

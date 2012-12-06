@@ -9,6 +9,7 @@ from Bio.Blast import NCBIXML
 
 E_VALUE_THRESH = 1e-10
 
+
 class TestNCBIXML(unittest.TestCase):
 
     def test_xml_2212L_blastp_001(self):

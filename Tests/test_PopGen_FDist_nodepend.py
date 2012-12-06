@@ -25,6 +25,7 @@ class RecordTest(unittest.TestCase):
         assert isinstance(r.num_loci, int)
         assert isinstance(r.loci_data, list)
 
+
 class ParserTest(unittest.TestCase):
     def setUp(self):
         files = ["fdist1"]
@@ -67,6 +68,7 @@ class ParserTest(unittest.TestCase):
                 for test in my_test_pos:
                     locus, pop, pos, value = test
                     assert(rec.loci_data[locus][1][pop][pos] == value)
+
 
 class ConversionTest(unittest.TestCase):
     def setUp(self):

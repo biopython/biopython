@@ -9,9 +9,11 @@ import sys
 from Bio.Phylo.PAML import codeml, baseml, yn00
 from Bio import MissingExternalDependencyError
 
+
 def is_exe(filepath):
     """Test if a file is an executable."""
     return os.path.exists(filepath) and os.access(filepath, os.X_OK)
+
 
 def which(program):
     """Find the path to an executable."""

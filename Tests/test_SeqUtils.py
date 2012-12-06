@@ -113,6 +113,7 @@ assert seguid(str_light_chain_one) != seguid(str_light_chain_two)
 examples = [str_light_chain_one, str_light_chain_two,
             "ATGCGTATCGATCGCGATACGATTAGGCGGAT"]
 
+
 def u_crc32(seq):
     #NOTE - On Python 2 crc32 could return a signed int, but on Python 3 it is
     #always unsigned

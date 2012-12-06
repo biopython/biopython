@@ -20,6 +20,8 @@ except ImportError:
     BytesIO = StringIO
 
 import warnings
+
+
 def send_warnings_to_stdout(message, category, filename, lineno,
                                 file=None, line=None):
     #TODO - Have Biopython DataLossWarning?
@@ -214,6 +216,7 @@ test_files = [
     ("abi", False, 'Abi/3730.ab1', 1),
     ]
 
+
 class ForwardOnlyHandle(object):
     """Mimic a network handle without seek and tell methods etc."""
     def __init__(self, handle):
@@ -233,6 +236,7 @@ class ForwardOnlyHandle(object):
 
     def close(self):
         return self._handle.close()
+
 
 def compare_record(record_one, record_two):
     """This is meant to be a strict comparison for exact agreement..."""
@@ -264,6 +268,7 @@ def compare_record(record_one, record_two):
             return False
     return True
 
+
 def record_summary(record, indent=" "):
     """Returns a concise summary of a SeqRecord object as a string"""
     if record.id == record.name:
@@ -280,11 +285,13 @@ def record_summary(record, indent=" "):
         answer += "', length=%i" % (len(record.seq))
     return answer
 
+
 def col_summary(col_text):
     if len(col_text) < 65:
         return col_text
     else:
         return col_text[:60] + "..." + col_text[-5:]
+
 
 def alignment_summary(alignment, index=" "):
     """Returns a concise summary of an Alignment object as a string"""

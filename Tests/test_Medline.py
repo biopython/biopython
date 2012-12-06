@@ -8,6 +8,7 @@ import unittest
 
 from Bio import Medline
 
+
 class TestMedline(unittest.TestCase):
 
     def test_read(self):

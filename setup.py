@@ -25,6 +25,7 @@ import sys
 import os
 import shutil
 
+
 def is_pypy():
     import platform
     try:
@@ -35,9 +36,11 @@ def is_pypy():
         pass
     return False
 
+
 def is_ironpython():
     return sys.platform == "cli"
     #TODO - Use platform as in Pypy test?
+
 
 def get_yes_or_no(question, default):
     if default:
@@ -96,6 +99,8 @@ except ImportError:
     _SETUPTOOLS = False
 
 _CHECKED = None
+
+
 def check_dependencies_once():
     # Call check_dependencies, but cache the result for subsequent
     # calls.
@@ -103,6 +108,7 @@ def check_dependencies_once():
     if _CHECKED is None:
         _CHECKED = check_dependencies()
     return _CHECKED
+
 
 def get_install_requires():
     install_requires = []
@@ -135,6 +141,7 @@ def get_install_requires():
             _CHECKED = True
         install_requires.append("numpy >= 1.5.1")
     return install_requires
+
 
 def check_dependencies():
     """Return whether the installation should continue."""
@@ -174,6 +181,7 @@ You can find NumPy at http://numpy.scipy.org
     # We can ask the user
     return get_yes_or_no("Do you want to continue this installation?", False)
 
+
 class install_biopython(install):
     """Override the standard install to check for dependencies.
 
@@ -201,6 +209,7 @@ class install_biopython(install):
         if check_dependencies_once():
             # Run the normal install.
             install.run(self)
+
 
 class build_py_biopython(build_py):
     def run(self):
@@ -251,12 +260,14 @@ class test_biopython(Command):
         # change back to the current directory
         os.chdir(this_dir)
 
+
 def can_import(module_name):
     """can_import(module_name) -> module or None"""
     try:
         return __import__(module_name)
     except ImportError:
         return None
+
 
 def is_Numpy_installed():
     if is_pypy():

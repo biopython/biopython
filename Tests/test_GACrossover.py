@@ -26,11 +26,13 @@ class TestAlphabet(SingleLetterAlphabet):
     def contains(self, oalpha):
         return True
 
+
 def test_fitness(genome):
     """Simple class for calculating fitnesses.
     """
     seq_genome = genome.toseq()
     return int(str(seq_genome))
+
 
 class SinglePointTest(unittest.TestCase):
     """Test simple point crossovers.
@@ -62,6 +64,7 @@ class SinglePointTest(unittest.TestCase):
                             "Returned an exact copy of the original organism.")
         self.assertNotEqual(str(new_org_2), str(self.org_2),
                             "Returned an exact copy of the original organism.")
+
 
 class UniformTest(unittest.TestCase):
     """Test simple point crossovers.
@@ -210,6 +213,7 @@ class InterleaveTest(unittest.TestCase):
         self.assertEqual(str(new_org_3.genome), "31313333",
                          "Did not interleave with growth.")
 
+
 class FourPointTest(unittest.TestCase):
     """Test 'simple' 4-point crossovers.
     """
@@ -351,6 +355,7 @@ class TestCrossover:
                                       org_2.genome.alphabet)
 
         return new_org_1, new_org_2
+
 
 class SafeFitnessTest(unittest.TestCase):
     """Tests for crossovers which do not reduce fitness.

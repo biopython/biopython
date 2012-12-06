@@ -39,6 +39,7 @@ import doctest
 import distutils.util
 import gc
 
+
 def is_pypy():
     import platform
     try:
@@ -48,6 +49,7 @@ def is_pypy():
         #New in Python 2.6, not in Jython yet either
         pass
     return False
+
 
 def is_numpy():
     if is_pypy():
@@ -138,6 +140,7 @@ if sys.platform == "win32" and sys.version_info < (2,6):
     DOCTEST_MODULES.remove("Bio.SearchIO._model.hsp")
 
 system_lang = os.environ.get('LANG', 'C') #Cache this
+
 
 def main(argv):
     """Run tests, return number of failures (integer)."""

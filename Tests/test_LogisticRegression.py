@@ -55,6 +55,7 @@ ys = [1,
       0,
       0]
 
+
 class TestLogisticRegression(unittest.TestCase):
 
     def test_calculate_model(self):

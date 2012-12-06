@@ -48,6 +48,7 @@ if not prank_exe:
     raise MissingExternalDependencyError(
         "Install PRANK if you want to use the Bio.Align.Applications wrapper.")
 
+
 class PrankApplication(unittest.TestCase):
 
     def setUp(self):

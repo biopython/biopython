@@ -6,6 +6,7 @@ from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqFeature import ExactPosition, FeatureLocation, SeqFeature
 from Bio.SeqRecord import SeqRecord
 
+
 def checksum_summary(record):
     if isinstance(record.seq, UnknownSeq):
         return repr(record.seq)
@@ -16,6 +17,7 @@ def checksum_summary(record):
               + "..." + str(record.seq)[-3:]
     return "%s [%s] len %i" \
            % (short, seguid(record.seq), len(record.seq))
+
 
 def compare_reference(old_r, new_r):
     """Compare two Reference objects
@@ -61,6 +63,7 @@ def compare_reference(old_r, new_r):
                old_r.location[0].end == new_r.location[0].end
 
     return True
+
 
 def compare_feature(old_f, new_f):
     """Compare two SeqFeature objects"""
@@ -175,6 +178,7 @@ def compare_feature(old_f, new_f):
                 "%s -> %s" % (old_f.qualifiers[key], new_f.qualifiers[key])
     return True
 
+
 def compare_sequence(old, new):
     """Compare two Seq or DBSeq objects"""
     assert len(old) == len(new), "%i vs %i" % (len(old), len(new))
@@ -235,6 +239,7 @@ def compare_sequence(old, new):
     assert s == str(new[:])
     return True
 
+
 def compare_features(old_list, new_list):
     assert isinstance(old_list, list)
     assert isinstance(new_list, list)
@@ -243,6 +248,7 @@ def compare_features(old_list, new_list):
         if not compare_feature(old_f, new_f):
             return False
     return True
+
 
 def compare_record(old, new):
     """Compare two SeqRecord or DBSeqRecord objects"""
@@ -324,6 +330,7 @@ def compare_record(old, new):
                 "Annotation '%s' changed by load/retrieve\nWas:%s\nNow:%s" \
                 % (key, old.annotations[key], new.annotations[key])
     return True
+
 
 def compare_records(old_list, new_list):
     assert isinstance(old_list, list)

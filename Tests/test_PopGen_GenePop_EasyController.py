@@ -27,6 +27,7 @@ if not found:
 
 cur_dir = os.path.abspath(".") #Tests directory
 
+
 class AppTest(unittest.TestCase):
     """Tests genepop execution via biopython using EasyController.
     """

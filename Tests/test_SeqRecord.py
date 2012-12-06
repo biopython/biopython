@@ -16,6 +16,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqFeature import SeqFeature, FeatureLocation, ExactPosition
 from Bio.SeqFeature import WithinPosition, BeforePosition, AfterPosition, OneOfPosition
 
+
 class SeqRecordCreation(unittest.TestCase):
     """Test basic creation of SeqRecords."""
     def test_annotations(self):
@@ -59,6 +60,7 @@ class SeqRecordCreation(unittest.TestCase):
             self.assertTrue(False, "Wrong length letter_annotations should fail!")
         except (TypeError, ValueError), e:
             pass
+
 
 class SeqRecordMethods(unittest.TestCase):
     """Test SeqRecord methods."""

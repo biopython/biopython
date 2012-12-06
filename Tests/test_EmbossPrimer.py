@@ -216,6 +216,7 @@ class PrimersearchParseTest(unittest.TestCase):
           "\tTCACATTCCCAAATGTAGATCG hits reverse strand at [114] with "
           "0 mismatches")
 
+
 class PrimerSearchInputTest(unittest.TestCase):
     """Test creating input files for primersearch.
     """

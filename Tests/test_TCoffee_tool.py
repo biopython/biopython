@@ -30,6 +30,7 @@ if not t_coffee_exe:
     raise MissingExternalDependencyError(
         "Install TCOFFEE if you want to use the Bio.Align.Applications wrapper.")
 
+
 class TCoffeeApplication(unittest.TestCase):
 
     def setUp(self):

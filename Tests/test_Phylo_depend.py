@@ -52,6 +52,7 @@ from Bio import Phylo
 EX_DOLLO = 'PhyloXML/o_tol_332_d_dollo.xml'
 EX_APAF = 'PhyloXML/apaf.xml'
 
+
 class UtilTests(unittest.TestCase):
     """Tests for various utility functions."""
 

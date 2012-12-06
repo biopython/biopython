@@ -31,6 +31,7 @@ from Bio.PDB import HSExposureCA, HSExposureCB, ExposureCN
 from Bio.PDB.PDBExceptions import PDBConstructionException, PDBConstructionWarning
 from Bio.PDB import rotmat, Vector
 
+
 # NB: the 'A_' prefix ensures this test case is run first
 class A_ExceptionTest(unittest.TestCase):
     """Errors and warnings while parsing of flawed PDB files.
@@ -759,6 +760,7 @@ class Exposure(unittest.TestCase):
         self.assertEqual(1, len(residues[-1].xtra))
         self.assertEqual(38, residues[-1].xtra["EXP_CN"])
 
+
 class Atom_Element(unittest.TestCase):
     """induces Atom Element from Atom Name"""
 
@@ -783,6 +785,7 @@ class Atom_Element(unittest.TestCase):
         # check magnesium atom
         atoms = structure[0]['A'][('H_ MG', 1, ' ')].child_list
         self.assertEqual('MG', atoms[0].element)
+
 
 class IterationTests(unittest.TestCase):
 

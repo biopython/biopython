@@ -18,6 +18,7 @@ _empty_bytes_string = _as_bytes("")
 
 from Bio import bgzf
 
+
 class BgzfTests(unittest.TestCase):
     def setUp(self):
         self.temp_file = "temp.bgzf"

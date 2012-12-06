@@ -25,6 +25,7 @@ from Bio.Data.IUPACData import ambiguous_dna_letters, ambiguous_rna_letters
 
 BINARY_FORMATS = ["sff", "sff-trim"]
 
+
 def truncation_expected(format):
     if format in ["fastq-solexa", "fastq-illumina"] :
         return 62
@@ -33,6 +34,7 @@ def truncation_expected(format):
     else:
         assert format in ["fasta", "qual", "phd", "sff"]
         return None
+
 
 #Top level function as this makes it easier to use for debugging:
 def write_read(filename, in_format, out_format):
@@ -51,6 +53,7 @@ def write_read(filename, in_format, out_format):
     #Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle,out_format))
     compare_records(records, records2, truncation_expected(out_format))
+
 
 def compare_record(old, new, truncate=None):
     """Quality aware SeqRecord comparision.
@@ -116,6 +119,7 @@ def compare_record(old, new, truncate=None):
             print new.letter_annotations["phred_quality"]
             raise ValueError("Mismatch in solexa_quality vs phred_quality")
     return True
+
 
 def compare_records(old_list, new_list, truncate_qual=None):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
@@ -266,6 +270,7 @@ class TestReferenceSffConversions(unittest.TestCase):
         """Test converting E3MFGYR02_index_in_middle into FASTA+QUAL"""
         self.check_sff("Roche/E3MFGYR02_index_in_middle.sff")
 
+
 class TestReferenceFastqConversions(unittest.TestCase):
     """Tests where we have reference output."""
     def simple_check(self, base_name, in_variant):
@@ -312,6 +317,7 @@ for base_name, variant in tests:
     setattr(TestReferenceFastqConversions, "test_%s_%s" % (base_name, variant),
             funct(base_name, variant))
     del funct
+
 
 class TestQual(unittest.TestCase):
     """Tests with QUAL files."""

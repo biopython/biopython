@@ -76,6 +76,7 @@ all_chr_info = {"I" : chr1_info,
                 "III" : chr3_info,
                 "IV" : chr4_info}
 
+
 def load_chromosome(chr_name):
     """Load a chromosome and all of its segments.
     """
@@ -114,6 +115,7 @@ num_possible_segments = 500
 color_prob = .3
 id_prob = .025
 
+
 def get_random_id():
     """Generate a random id number.
     """
@@ -123,6 +125,7 @@ def get_random_id():
         id += letter
 
     return id
+
 
 def load_random_chromosome(chr_name):
     """Generate a chromosome with random information about it.

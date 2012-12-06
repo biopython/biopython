@@ -51,6 +51,7 @@ from Bio.Graphics.Comparative import ComparativeScatterPlot
 # raise the dependency error BEFORE the invidual tests in order that
 # this be skipped by run_tests.py
 
+
 def real_test():
     min_two_d_lists = 1
     max_two_d_lists = 7
@@ -103,6 +104,7 @@ def real_test():
 
 #Run the actual test BEFORE the unittest stuff gets called
 real_test()
+
 
 class ComparativeTest(unittest.TestCase):
     """Do tests for modules involved with comparing data."""

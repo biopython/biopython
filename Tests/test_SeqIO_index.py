@@ -32,9 +32,11 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
 
+
 def add_prefix(key):
     """Dummy key_function for testing index code."""
     return "id_" + key
+
 
 def gzip_open(filename, format):
     #At time of writing, under Python 3.2.2 seems gzip.open(filename, mode)

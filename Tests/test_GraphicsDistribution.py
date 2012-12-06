@@ -39,6 +39,7 @@ def random_distribution(min = -5.0, max = 5.0, total_items = 50):
 
     return all_info
 
+
 class BarChartTest(unittest.TestCase):
     """Test display of BarChart distributions on a page.
     """

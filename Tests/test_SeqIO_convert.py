@@ -14,6 +14,7 @@ from Bio.SeqIO._convert import _converter as converter_dict
 from StringIO import StringIO
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
+
 #TODO - share this with the QualityIO tests...
 def truncation_expected(format):
     if format in ["fastq-solexa", "fastq-illumina"]:
@@ -22,6 +23,7 @@ def truncation_expected(format):
         return 93
     else:
         return None
+
 
 #Top level function as this makes it easier to use for debugging:
 def check_convert(in_filename, in_format, out_format, alphabet=None):
@@ -47,6 +49,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
         warnings.filters.pop()
     #We could re-parse this, but it is simpler and stricter:
     assert handle.getvalue() == handle2.getvalue()
+
 
 def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
     qual_truncate = truncation_expected(out_format)
@@ -78,6 +81,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
                "Different failures, parse/write:\n%s\nconvert:\n%s" \
                % (err1, err2)
     #print err
+
 
 #TODO - move this to a shared test module...
 def compare_record(old, new, truncate=None):
@@ -147,6 +151,7 @@ def compare_record(old, new, truncate=None):
             raise ValueError("Mismatch in solexa_quality vs phred_quality")
     return True
 
+
 def compare_records(old_list, new_list, truncate_qual=None):
     """Check two lists of SeqRecords agree, raises a ValueError if mismatch."""
     if len(old_list) != len(new_list):
@@ -155,6 +160,7 @@ def compare_records(old_list, new_list, truncate_qual=None):
         if not compare_record(old,new,truncate_qual):
             return False
     return True
+
 
 class ConvertTests(unittest.TestCase):
     """Cunning unit test where methods are added at run time."""

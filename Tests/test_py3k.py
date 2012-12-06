@@ -7,6 +7,7 @@
 
 import unittest
 
+
 class ODTest(unittest.TestCase):
     def test_od(self):
         """Quick test OrderedDict works."""

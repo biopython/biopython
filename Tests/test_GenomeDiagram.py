@@ -47,6 +47,7 @@ from Bio.Graphics.GenomeDiagram import CrossLink
 from Bio.Graphics.GenomeDiagram._Graph import GraphData
 from Bio.Graphics.GenomeDiagram._Colors import ColorTranslator
 
+
 def fill_and_border(base_color, alpha=0.5):
     try:
         c = base_color.clone()
@@ -60,6 +61,8 @@ def fill_and_border(base_color, alpha=0.5):
 # Utility functions for graph plotting, originally in GenomeDiagram.Utilities #
 # See Bug 2705 for discussion on where to put these functions in Biopython... #
 ###############################################################################
+
+
 def apply_to_window(sequence, window_size, function, step=None):
     """ apply_to_window(sequence, window_size, function) -> [(int, float),(int, float),...]
 
@@ -113,6 +116,7 @@ def apply_to_window(sequence, window_size, function, step=None):
     #print fragment
     #print seq[-100:]
     return results      # Return the list of (position, value) results
+
 
 def calc_gc_content(sequence):
     """ calc_gc_content(sequence)
@@ -178,6 +182,7 @@ def calc_at_skew(sequence):
     else:
         return (a-t)/float(a+t)
 
+
 def calc_dinucleotide_counts(sequence):
     """Returns the total count of di-nucleotides repeats (e.g. "AA", "CC").
 
@@ -196,10 +201,12 @@ def calc_dinucleotide_counts(sequence):
 # End of utility functions for graph plotting                                 #
 ###############################################################################
 
+
 # Tests
 class TrackTest(unittest.TestCase):
     # TODO Bring code from Track.py, unsure about what test does
     pass
+
 
 class ColorsTest(unittest.TestCase):
     def test_color_conversions(self):
@@ -335,6 +342,7 @@ class LabelTest(unittest.TestCase):
         """Feature labels - default."""
         self.add_track_with_sigils()
         self.finish("labels_default")
+
 
 class SigilsTest(unittest.TestCase):
     """Check the different feature sigils.
@@ -549,6 +557,7 @@ class SigilsTest(unittest.TestCase):
     def test_long_jaggy(self):
         """Feature JAGGY sigil heads within bounding box."""
         self.long_sigils("JAGGY")
+
 
 class DiagramTest(unittest.TestCase):
     """Creating feature sets, graph sets, tracks etc individually for the diagram."""
