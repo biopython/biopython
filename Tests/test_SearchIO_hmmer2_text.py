@@ -139,6 +139,18 @@ class HmmpfamTests(unittest.TestCase):
         self.assertAlmostEqual(857.3, hsp.bitscore)
         self.assertAlmostEqual(9e-255, hsp.evalue)
 
+    def test_hmmpfam_23_no_match(self):
+        results = parse(path.join("Hmmer", "text_23_hmmpfam_002.out"), "hmmer2-text")
+        res = results.next()
+
+        self.assertEqual('SEQ0001', res.id)
+        self.assertEqual(0, len(res.hits))
+
+        res = results.next()
+
+        self.assertEqual('SEQ0002', res.id)
+        self.assertEqual(0, len(res.hits))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
