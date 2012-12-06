@@ -109,8 +109,9 @@ class Hmmer2TextParser(object):
                     description = self.parse_key_value()[1]
 
             hit_placeholders = self.parse_hits()
-            self.parse_hsps(hit_placeholders)
-            self.parse_hsp_alignments()
+            if len(hit_placeholders) > 0:
+                self.parse_hsps(hit_placeholders)
+                self.parse_hsp_alignments()
 
             while self.read_next() and self.line != '//':
                 pass
@@ -125,6 +126,8 @@ class Hmmer2TextParser(object):
         hit_placeholders = []
         while self.read_next():
             if self.line.startswith('Parsed'):
+                break
+            if self.line.find('no hits') > -1:
                 break
 
             if self.line.startswith('Sequence') or \
