@@ -110,7 +110,7 @@ class Parser(object):
             """Parse protein names (PRIVATE)."""
             descr_set = False
             for protein_element in element.getchildren():
-                if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:#recommendedName tag are parsed before
+                if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
                     #use protein fields for name and description
                     for rec_name in protein_element.getchildren():
                         ann_key = '%s_%s' % (protein_element.tag.replace(NS, ''),
@@ -120,9 +120,9 @@ class Parser(object):
                             self.ParsedSeqRecord.description = rec_name.text
                             descr_set = True
                 elif protein_element.tag == NS + 'component':
-                    pass #not parsed
+                    pass  # not parsed
                 elif protein_element.tag == NS + 'domain':
-                    pass #not parsed
+                    pass  # not parsed
 
         def _parse_gene(element):
             for genename_element in element.getchildren():
@@ -232,7 +232,7 @@ class Parser(object):
                                "pharmaceutical",
                                "polymorphism",
                                "PTM",
-                               "RNA editing",#positions not parsed
+                               "RNA editing",  # positions not parsed
                                "similarity",
                                "subunit",
                                "tissue specificity",
@@ -273,16 +273,16 @@ class Parser(object):
                         else:
                             start = int(loc_element.getiterator(NS +'begin')[0].attrib['position']) - 1
                             end = int(loc_element.getiterator(NS +'end')[0].attrib['position'])
-                    except :#undefined positions or erroneusly mapped
+                    except:  # undefined positions or erroneusly mapped
                         pass
                 mass = element.attrib['mass']
-                method = element.attrib['mass'] #TODO - Check this, looks wrong!
+                method = element.attrib['mass']  # TODO - Check this, looks wrong!
                 if start == end == 0:
                     append_to_annotations(ann_key, 'undefined:%s|%s' % (mass, method))
                 else:
                     append_to_annotations(ann_key, '%s..%s:%s|%s' % (start, end, mass, method))
             elif element.attrib['type'] == 'sequence caution':
-                pass#not parsed: few information, complex structure
+                pass  # not parsed: few information, complex structure
             elif element.attrib['type'] == 'online information':
                 for link_element in element.getiterator(NS + 'link'):
                     ann_key = 'comment_%s' % element.attrib['type'].replace(' ', '')
@@ -382,7 +382,10 @@ class Parser(object):
             else:
                 tissues_str = ''
 
-            reference.location = [] #locations cannot be parsed since they are actually written in free text inside scopes so all the references are put in the annotation.
+            # locations cannot be parsed since they are actually written in
+            # free text inside scopes so all the references are put in the
+            # annotation.
+            reference.location = []
             reference.authors = ', '.join(authors)
             if journal_name:
                 if pub_date and j_volume and j_first and j_last:
@@ -437,7 +440,7 @@ class Parser(object):
                     try:
                         feature.qualifiers[feature_element.tag.replace(NS, '')] = feature_element.text
                     except:
-                        pass#skip unparsable tag
+                        pass  # skip unparsable tag
             self.ParsedSeqRecord.features.append(feature)
 
         def _parse_proteinExistence(element):

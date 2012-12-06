@@ -31,7 +31,7 @@ def get_indiv(line):
     indiv_name, marker_line = line.split(',')
     markers = marker_line.replace('\t', ' ').split(' ')
     markers = [marker for marker in markers if marker!='']
-    if len(markers[0]) in [2, 4]: #2 digits per allele
+    if len(markers[0]) in [2, 4]:  # 2 digits per allele
         marker_len = 2
     else:
         marker_len = 3
@@ -39,7 +39,7 @@ def get_indiv(line):
         allele_list = [(int_no_zero(marker[0:marker_len]),
                        int_no_zero(marker[marker_len:]))
                    for marker in markers]
-    except ValueError: #Haploid
+    except ValueError:  # Haploid
         allele_list = [(int_no_zero(marker[0:marker_len]),)
                    for marker in markers]
     return indiv_name, allele_list, marker_len

@@ -1,7 +1,7 @@
 """Deal with an Organism in a Genetic Algorithm population.
 """
 # standard modules
-import sys #for Python 3 hack
+import sys  # for Python 3 hack
 import random
 import array
 
@@ -57,9 +57,9 @@ def random_population(genome_alphabet, genome_size, num_organisms,
     # figure out what type of characters are in the alphabet
     if isinstance(genome_alphabet.letters[0], str):
         if sys.version_info[0] == 3:
-            alphabet_type = "u" #Use unicode string on Python 3
+            alphabet_type = "u"  # Use unicode string on Python 3
         else:
-            alphabet_type = "c" #Use byte string on Python 2
+            alphabet_type = "c"  # Use byte string on Python 2
     elif isinstance(genome_alphabet.letters[0], int):
         alphabet_type = "i"
     elif isinstance(genome_alphabet.letters[0], float):

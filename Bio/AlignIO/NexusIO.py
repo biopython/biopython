@@ -73,7 +73,7 @@ class NexusWriter(AlignmentWriter):
         alignments - A list or iterator returning MultipleSeqAlignment objects.
                      This should hold ONE and only one alignment.
         """
-        align_iter = iter(alignments) #Could have been a list
+        align_iter = iter(alignments)  # Could have been a list
         try:
             first_alignment = align_iter.next()
         except StopIteration:
@@ -92,7 +92,7 @@ class NexusWriter(AlignmentWriter):
 
         #Good.  Actually write the single alignment,
         self.write_alignment(first_alignment)
-        return 1 #we only support writing one alignment!
+        return 1  # we only support writing one alignment!
 
     def write_alignment(self, alignment):
         #Creates an empty Nexus object, adds the sequences,

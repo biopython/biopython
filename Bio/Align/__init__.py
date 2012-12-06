@@ -9,7 +9,7 @@ One of the most important things in this module is the MultipleSeqAlignment
 class, used in the Bio.AlignIO module.
 
 """
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -218,7 +218,7 @@ class MultipleSeqAlignment(_Alignment):
             expected_length = self.get_alignment_length()
         else:
             #Take the first record's length
-            records = iter(records) #records arg could be list or iterator
+            records = iter(records)  # records arg could be list or iterator
             try:
                 rec = records.next()
             except StopIteration:

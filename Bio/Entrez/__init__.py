@@ -133,7 +133,7 @@ def efetch(db, **keywds):
         #a list of ID strings now gives HTTP Error 500: Internal server error
         #This was turned into ...&id=22307645&id=22303114&... which used to work
         #while now the NCBI appear to insist on ...&id=22301129,22299544,...
-        keywords = keywds.copy() #Don't alter input dict!
+        keywords = keywds.copy()  # Don't alter input dict!
         keywords["id"] = ",".join(keywds["id"])
     variables.update(keywords)
     return _open(cgi, variables)

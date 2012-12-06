@@ -565,7 +565,7 @@ class SummaryInfo(object):
         except AttributeError:
             #The alphabet doesn't declare a gap - there could be none
             #in the sequence... or just a vague alphabet.
-            gap_char = "-" #Safe?
+            gap_char = "-"  # Safe?
 
         if e_freq_table:
             if not isinstance(e_freq_table, FreqTable.FreqTable):

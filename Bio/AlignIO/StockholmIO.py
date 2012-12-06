@@ -129,7 +129,7 @@ secondary structure string here, are also sliced:
     >>> print sub_record.letter_annotations['secondary_structure']
     -------<<<
 """
-__docformat__ = "epytext en" #not just plaintext
+__docformat__ = "epytext en"  # not just plaintext
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -338,8 +338,8 @@ class StockholmIterator(AlignmentIterator):
         while 1:
             line = self.handle.readline()
             if not line:
-                break #end of file
-            line = line.strip() #remove trailing \n
+                break  # end of file
+            line = line.strip()  # remove trailing \n
             if line == '# STOCKHOLM 1.0':
                 self._header = line
                 break
@@ -425,7 +425,7 @@ class StockholmIterator(AlignmentIterator):
                                  % (len(ids), self.records_per_alignment))
 
             alignment_length = len(seqs.values()[0])
-            records = [] #Alignment obj will put them all in a list anyway
+            records = []  # Alignment obj will put them all in a list anyway
             for id in ids:
                 seq = seqs[id]
                 if alignment_length != len(seq):
@@ -509,12 +509,12 @@ class StockholmIterator(AlignmentIterator):
         seq_data = self._get_meta_data(identifier, self.seq_annotation)
         for feature in seq_data:
             #Note this dictionary contains lists!
-            if feature=="AC" : #ACcession number
+            if feature=="AC":  # ACcession number
                 assert len(seq_data[feature])==1
                 record.annotations["accession"]=seq_data[feature][0]
-            elif feature=="DE" : #DEscription
+            elif feature=="DE":  # DEscription
                 record.description = "\n".join(seq_data[feature])
-            elif feature=="DR" : #Database Reference
+            elif feature=="DR":  # Database Reference
                 #Should we try and parse the strings?
                 record.dbxrefs = seq_data[feature]
             elif feature in self.pfam_gs_mapping:

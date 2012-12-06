@@ -5,7 +5,7 @@
 """Command line wrapper for the multiple alignment program TCOFFEE.
 """
 
-__docformat__ = "epytext en" #Don't just use plain text in epydoc API pages!
+__docformat__ = "epytext en"  # Don't just use plain text in epydoc API pages!
 
 from Bio.Application import _Option, _Switch, AbstractCommandline
 
@@ -53,7 +53,7 @@ class TCoffeeCommandline(AbstractCommandline):
 
                    Note that of these Biopython's AlignIO module will only
                    read clustalw, pir, and fasta.
-                   """, #TODO - Can we read the PHYLIP output?
+                   """,  # TODO - Can we read the PHYLIP output?
                    equate=False),
            _Option(["-infile", "infile"],
                    "Specify the input file.",

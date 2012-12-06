@@ -49,7 +49,7 @@ def _convert_genepop_to_fdist(gp_rec):
                 for al in indiv[1][lc_i]:
                     if al is not None and al not in alleles:
                         alleles.append(al)
-        alleles.sort() #Dominance requires this
+        alleles.sort()  # Dominance requires this
 
         #here we go again (necessary...)
         for pop_i in range(len(gp_rec.populations)):
@@ -59,7 +59,7 @@ def _convert_genepop_to_fdist(gp_rec):
                     if al is not None:
                         count = allele_counts.get(al, 0)
                         allele_counts[al] = count + 1
-            allele_array = [] #We need the same order as in alleles
+            allele_array = []  # We need the same order as in alleles
             for allele in alleles:
                 allele_array.append(allele_counts.get(allele, 0))
             pop_data.append(allele_array)
@@ -114,7 +114,7 @@ def _convert_genepop_to_fdist_big(gp_rec, report_pops = None):
                 report_pops(num_pops)
             curr_pop = init_pop()
         lParser = work_rec.get_individual()
-    work_rec._handle.close() #TODO - Needs a proper fix
+    work_rec._handle.close()  # TODO - Needs a proper fix
     pops.append(curr_pop)
     fd_rec.num_pops = num_pops
     for loci_pos in range(num_loci):
@@ -173,7 +173,7 @@ def _convert_genepop_to_fdist_big_old(gp_rec, report_loci = None):
         alleles.sort()
 
         def process_pop(pop_data, alleles, allele_counts):
-            allele_array = [] #We need the same order as in alleles
+            allele_array = []  # We need the same order as in alleles
             for allele in alleles:
                 allele_array.append(allele_counts.get(allele, 0))
             pop_data.append(allele_array)

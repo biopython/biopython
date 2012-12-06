@@ -407,9 +407,9 @@ class ChromosomeSegment(_ChromosomeComponent):
                          self.start_y_position, self.end_y_position):
             assert position != -1, "Need to set drawing coordinates."
 
-        self._draw_subcomponents(cur_drawing) #Anything behind
+        self._draw_subcomponents(cur_drawing)  # Anything behind
         self._draw_segment(cur_drawing)
-        self._overdraw_subcomponents(cur_drawing) #Anything on top
+        self._overdraw_subcomponents(cur_drawing)  # Anything on top
         self._draw_label(cur_drawing)
 
     def _draw_subcomponents(self, cur_drawing):
@@ -501,7 +501,7 @@ def _spring_layout(desired, minimum, maximum, gap=0):
     """
     count = len(desired)
     if count <= 1:
-        return desired #Easy!
+        return desired  # Easy!
     if minimum >= maximum:
         raise ValueError("Bad min/max %f and %f" % (minimum, maximum))
     if min(desired) < minimum or max(desired) > maximum:

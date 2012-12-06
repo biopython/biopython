@@ -122,7 +122,7 @@ class ClustalIterator(AlignmentIterator):
         ids = []
         seqs = []
         consensus = ""
-        seq_cols = None #: Used to extract the consensus
+        seq_cols = None  # Used to extract the consensus
 
         #Use the first block to get the sequence identifiers
         while True:
@@ -171,7 +171,7 @@ class ClustalIterator(AlignmentIterator):
                 break
             line = handle.readline()
             if not line:
-                break #end of file
+                break  # end of file
 
         assert line.strip() == ""
         assert seq_cols is not None

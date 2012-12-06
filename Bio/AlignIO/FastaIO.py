@@ -109,8 +109,8 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
         assert query_tags, query_tags
         assert match_tags, match_tags
         evalue = align_tags.get("fa_expect", None)
-        q = "?" #Just for printing len(q) in debug below
-        m = "?" #Just for printing len(m) in debug below
+        q = "?"  # Just for printing len(q) in debug below
+        m = "?"  # Just for printing len(m) in debug below
         tool = global_tags.get("tool", "").upper()
         try:
             q = _extract_alignment_region(query_seq, query_tags)

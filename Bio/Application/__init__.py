@@ -212,7 +212,7 @@ class AbstractCommandline(object):
                        "and its associated value.  Set this property to the " \
                        "argument value required." % p.names[0]
             prop = property(getter(name), setter(name), deleter(name), doc)
-            setattr(self.__class__, name, prop) #magic!
+            setattr(self.__class__, name, prop)  # magic!
         for key, value in kwargs.iteritems():
             self.set_parameter(key, value)
 
@@ -333,7 +333,7 @@ class AbstractCommandline(object):
         finish silently otherwise.
         """
         if check_function is not None:
-            is_good = check_function(value) #May raise an exception
+            is_good = check_function(value)  # May raise an exception
             assert is_good in [0,1,True,False]
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s"
@@ -364,7 +364,7 @@ class AbstractCommandline(object):
         assumed to be parameters, and passed to the self.set_parameter method
         for validation and assignment.
         """
-        if name in ['parameters', 'program_name']: # Allowed attributes
+        if name in ['parameters', 'program_name']:  # Allowed attributes
             self.__dict__[name] = value
         else:
             self.set_parameter(name, value)  # treat as a parameter

@@ -241,7 +241,7 @@ def list_ambiguous_codons(codons, ambiguous_nucleotide_values):
                 codon = c1+c2+c3
                 if codon not in candidates and codon not in codons:
                     candidates.append(codon)
-    answer = codons[:] #copy
+    answer = codons[:]  # copy
     #print "Have %i new candidates" % len(candidates)
     for ambig_codon in candidates:
         wanted = True
@@ -874,7 +874,7 @@ for n in ambiguous_generic_by_id:
     assert ambiguous_rna_by_id[n].forward_table["GUN"] == "V"
     if n != 23 :
         #For table 23, UUN = F, L or stop.
-        assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X" #F or L
+        assert ambiguous_rna_by_id[n].forward_table["UUN"] == "X"  # F or L
     #R = A or G, so URR = UAA or UGA / TRA = TAA or TGA = stop codons
     if "UAA" in unambiguous_rna_by_id[n].stop_codons \
     and "UGA" in unambiguous_rna_by_id[n].stop_codons:

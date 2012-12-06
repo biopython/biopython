@@ -165,7 +165,7 @@ class SplitFDist(object):
             try:
                 os.mkdir(full_path)
             except OSError:
-                pass #Its ok, if it is already there
+                pass  # Its ok, if it is already there
             if "ss_file" in os.listdir(data_dir):
                 shutil.copy(data_dir + os.sep + "ss_file", full_path)
             id = self.async.run_program('fdist', {

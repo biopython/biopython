@@ -223,7 +223,7 @@ NC_000932.1
 
 import zlib
 import struct
-import __builtin__ #to access the usual open function
+import __builtin__  # to access the usual open function
 
 from Bio._py3k import _as_bytes, _as_string
 
@@ -405,18 +405,18 @@ def _load_bgzf_block(handle, text_mode=False):
     x_len = 0
     while x_len < extra_len:
         subfield_id = handle.read(2)
-        subfield_len = struct.unpack("<H", handle.read(2))[0] #uint16_t
+        subfield_len = struct.unpack("<H", handle.read(2))[0]  # uint16_t
         subfield_data = handle.read(subfield_len)
         x_len += subfield_len + 4
         if subfield_id == _bytes_BC:
             assert subfield_len == 2, "Wrong BC payload length"
             assert block_size is None, "Two BC subfields?"
-            block_size = struct.unpack("<H", subfield_data)[0]+1 #uint16_t
+            block_size = struct.unpack("<H", subfield_data)[0] + 1  # uint16_t
     assert x_len == extra_len, (x_len, extra_len)
     assert block_size is not None, "Missing BC, this isn't a BGZF file!"
     #Now comes the compressed data, CRC, and length of uncompressed data.
     deflate_size = block_size - 1 - extra_len - 19
-    d = zlib.decompressobj(-15) #Negative window size means no headers
+    d = zlib.decompressobj(-15)  # Negative window size means no headers
     data = d.decompress(handle.read(deflate_size)) + d.flush()
     expected_crc = handle.read(4)
     expected_size = struct.unpack("<I", handle.read(4))[0]
@@ -618,16 +618,16 @@ class BgzfReader(object):
             #(lazy loading, don't load the next block unless we have too)
             data = self._buffer[self._within_block_offset:self._within_block_offset + size]
             self._within_block_offset += size
-            assert data #Must be at least 1 byte
+            assert data  # Must be at least 1 byte
             return data
         else:
             data = self._buffer[self._within_block_offset:]
             size -= len(data)
-            self._load_block() #will reset offsets
+            self._load_block()  # will reset offsets
             #TODO - Test with corner case of an empty block followed by
             #a non-empty block
             if not self._buffer:
-                return data #EOF
+                return data  # EOF
             elif size:
                 #TODO - Avoid recursion
                 return data + self.read(size)
@@ -641,9 +641,9 @@ class BgzfReader(object):
         if i==-1:
             #No newline, need to read in more data
             data = self._buffer[self._within_block_offset:]
-            self._load_block() #will reset offsets
+            self._load_block()  # will reset offsets
             if not self._buffer:
-                return data #EOF
+                return data  # EOF
             else:
                 #TODO - Avoid recursion
                 return data + self.readline()
@@ -651,7 +651,7 @@ class BgzfReader(object):
             #Found new line, but right at end of block (SPECIAL)
             data = self._buffer[self._within_block_offset:]
             #Must now load the next block to ensure tell() works
-            self._load_block() #will reset offsets
+            self._load_block()  # will reset offsets
             assert data
             return data
         else:
@@ -724,7 +724,7 @@ class BgzfWriter(object):
             crc = struct.pack("<i", crc)
         else:
             crc = struct.pack("<I", crc)
-        bsize = struct.pack("<H", len(compressed)+25) #includes -1
+        bsize = struct.pack("<H", len(compressed)+25)  # includes -1
         crc = struct.pack("<I", zlib.crc32(block) & 0xffffffffL)
         uncompressed_length = struct.pack("<I", len(block))
         #Fixed 16 bytes,

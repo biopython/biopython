@@ -1122,7 +1122,7 @@ class CircularDrawer(AbstractDrawer):
         x0, y0 = self.xcenter, self.ycenter      # origin of the circle
         radius_diff = end_radius - start_radius
         angle_diff = end_angle - start_angle
-        dx = 0.01 #heuristic
+        dx = 0.01  # heuristic
         a = start_angle*pi/180
         if move:
             path.moveTo(x0+start_radius*cos(a), y0+start_radius*sin(a))
@@ -1132,7 +1132,7 @@ class CircularDrawer(AbstractDrawer):
         if 0.01 <= abs(dx):
             while x < 1:
                 r = start_radius + x*radius_diff
-                a = (start_angle + x*(angle_diff))*pi/180 #to radians for sin/cos
+                a = (start_angle + x * (angle_diff)) * pi / 180  # to radians for sin/cos
                 #print x0+r*cos(a), y0+r*sin(a)
                 path.lineTo(x0+r*cos(a), y0+r*sin(a))
                 x += dx
@@ -1156,7 +1156,7 @@ class CircularDrawer(AbstractDrawer):
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
-                        strokeLineJoin=1, #1=round
+                        strokeLineJoin=1,  # 1=round
                         strokewidth=0)
             #Note reportlab counts angles anti-clockwise from the horizontal
             #(as in mathematics, e.g. complex numbers and polar coordinates)
@@ -1194,7 +1194,7 @@ class CircularDrawer(AbstractDrawer):
             x4,y4 = (x0+outer_radius*outer_startsin, y0+outer_radius*outer_startcos)
             return draw_polygon([(x1,y1),(x2,y2),(x3,y3),(x4,y4)], color, border,
                                 #default is mitre/miter which can stick out too much:
-                                strokeLineJoin=1, #1=round
+                                strokeLineJoin=1,  # 1=round
                                 )
 
     def _draw_sigil_cut_corner_box(self, bottom, center, top,
@@ -1226,7 +1226,7 @@ class CircularDrawer(AbstractDrawer):
 
         cornerangle_delta = max(0.0,min(abs(boxheight)*0.5*corner/middle_radius, abs(angle*0.5)))
         if angle < 0:
-            cornerangle_delta *= -1 #reverse it
+            cornerangle_delta *= -1  # reverse it
 
         # Calculate trig values for angle and coordinates
         startcos, startsin = cos(startangle), sin(startangle)
@@ -1234,7 +1234,7 @@ class CircularDrawer(AbstractDrawer):
         x0, y0 = self.xcenter, self.ycenter      # origin of the circle
         p = ArcPath(strokeColor=strokecolor,
                     fillColor=color,
-                    strokeLineJoin=1, #1=round
+                    strokeLineJoin=1,  # 1=round
                     strokewidth=0,
                     **kwargs)
         #Inner curved edge
@@ -1272,7 +1272,7 @@ class CircularDrawer(AbstractDrawer):
         else:
             inner_radius = bottom
             outer_radius = top
-            orientation = "right" #backwards compatibility
+            orientation = "right"  # backwards compatibility
         return self._draw_arc_arrow(inner_radius, outer_radius, startangle, endangle,
                                     orientation=orientation, **kwargs)
 
@@ -1316,7 +1316,7 @@ class CircularDrawer(AbstractDrawer):
         shaft_outer_radius = middle_radius + 0.5*shaft_height
         headangle_delta = max(0.0,min(abs(boxheight)*head_length_ratio/middle_radius, abs(angle)))
         if angle < 0:
-            headangle_delta *= -1 #reverse it
+            headangle_delta *= -1  # reverse it
         if orientation=="right":
             headangle = endangle-headangle_delta
         else:
@@ -1350,13 +1350,13 @@ class CircularDrawer(AbstractDrawer):
             return Polygon([x1,y1,x2,y2,x3,y3],
                            strokeColor=border or color,
                            fillColor=color,
-                           strokeLineJoin=1, #1=round, not mitre!
+                           strokeLineJoin=1,  # 1=round, not mitre!
                            strokewidth=0)
         elif orientation=="right":
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
-                        strokeLineJoin=1, #1=round
+                        strokeLineJoin=1,  # 1=round
                         strokewidth=0,
                         **kwargs)
             #Note reportlab counts angles anti-clockwise from the horizontal
@@ -1386,7 +1386,7 @@ class CircularDrawer(AbstractDrawer):
             p = ArcPath(strokeColor=strokecolor,
                         fillColor=color,
                         #default is mitre/miter which can stick out too much:
-                        strokeLineJoin=1, #1=round
+                        strokeLineJoin=1,  # 1=round
                         strokewidth=0,
                         **kwargs)
             #Note reportlab counts angles anti-clockwise from the horizontal
@@ -1470,7 +1470,7 @@ class CircularDrawer(AbstractDrawer):
         p = ArcPath(strokeColor=strokecolor,
                     fillColor=color,
                     #default is mitre/miter which can stick out too much:
-                    strokeLineJoin=1, #1=round
+                    strokeLineJoin=1,  # 1=round
                     strokewidth=0,
                     **kwargs)
         #Note reportlab counts angles anti-clockwise from the horizontal

@@ -545,7 +545,7 @@ class Node(object):
         """Return an Hie.Record"""
         rec = Hie.Record()
         rec.sunid = str(self.sunid)
-        if self.getParent() : #Not root node
+        if self.getParent():  # Not root node
             rec.parent = str(self.getParent().sunid)
         else:
             rec.parent = '-'
@@ -662,7 +662,7 @@ class Domain(Node):
         rec.sunid = self.sunid
 
         n = self
-        while n.sunid != 0: #Not root node
+        while n.sunid != 0:  # Not root node
             rec.hierarchy[n.type] = str(n.sunid)
             n = n.getParent()
 

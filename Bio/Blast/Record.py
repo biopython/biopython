@@ -226,11 +226,11 @@ class MultipleAlignment(object):
         parse_number = 0
         n = 0
         for name, start, seq, end in self.alignment:
-            if name == 'QUERY': #QUERY is the first in each alignment block
+            if name == 'QUERY':  # QUERY is the first in each alignment block
                 parse_number += 1
                 n = 0
 
-            if parse_number == 1: # create on first_parse, append on all others
+            if parse_number == 1:  # create on first_parse, append on all others
                 seq_parts.append(seq)
                 seq_names.append(name)
             else:

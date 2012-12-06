@@ -73,13 +73,13 @@ def parse(handle,format):
             parser=_parsers[format]
 
         except KeyError:
-            try: #not a true parser, try reader formats
+            try:  # not a true parser, try reader formats
                 reader=_readers[format]
             except:
                 raise ValueError("Wrong parser format")
-            else: #we have a proper reader
+            else:  # we have a proper reader
                 yield reader(handle)
-        else: # we have a proper reader
+        else:  # we have a proper reader
             for m in parser(handle).motifs:
                 yield m
 

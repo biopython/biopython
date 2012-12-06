@@ -416,11 +416,11 @@ class Diagram(object):
             value (low)
         """
         track = low                 # Start numbering from here
-        levels = self.get_levels()  #
+        levels = self.get_levels()
 
         conversion = {}             # Holds new set of levels
         for level in levels:        # Starting at low...
-            conversion[track] = self.tracks[level] # Add old tracks to new set
+            conversion[track] = self.tracks[level]  # Add old tracks to new set
             conversion[track].track_level = track
             track += step                           # step interval
         self.tracks = conversion   # Replace old set of levels with new set

@@ -162,20 +162,20 @@ class SeqPanel(wx.Panel):
         self.dest_text.Clear()
 
     def translate(self, codon_table):
-        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
         print seq
         self.dest_text.Clear()
         self.dest_text.SetValue(translate(seq, table=codon_table,
                                           to_stop=True))
 
     def transcribe(self):
-        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
         print seq
         self.dest_text.Clear()
         self.dest_text.SetValue(transcribe(seq))
 
     def back_transcribe(self):
-        seq = "".join(self.src_text.GetValue().split()) #remove whitespace
+        seq = "".join(self.src_text.GetValue().split())  # remove whitespace
         print seq
         self.dest_text.Clear()
         self.dest_text.SetValue(back_transcribe(seq))

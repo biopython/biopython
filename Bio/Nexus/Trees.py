@@ -448,7 +448,7 @@ class Tree(Nodes.Chain):
         """Return True if tree downstream of node is strictly bifurcating."""
         if node is None:
             node=self.root
-        if node==self.root and len(self.node(node).succ)==3: #root can be trifurcating, because it has no ancestor
+        if node==self.root and len(self.node(node).succ)==3:  # root can be trifurcating, because it has no ancestor
             return self.is_bifurcating(self.node(node).succ[0]) and \
                     self.is_bifurcating(self.node(node).succ[1]) and \
                     self.is_bifurcating(self.node(node).succ[2])
@@ -613,7 +613,7 @@ class Tree(Nodes.Chain):
         def newickize(node,ladderize=None):
             """Convert a node tree to a newick tree recursively."""
 
-            if not self.node(node).succ:    #terminal
+            if not self.node(node).succ:    # terminal
                 return self.node(node).data.taxon+make_info_string(self.node(node).data,terminal=True)
             else:
                 succnodes=ladderize_nodes(self.node(node).succ,ladderize=ladderize)

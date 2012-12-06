@@ -907,7 +907,7 @@ class LinearDrawer(AbstractDrawer):
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1, #1=round
+                               strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             elif fragment < start_fragmentA or end_fragmentA < fragment:
                 if cross_link.flip:
@@ -927,7 +927,7 @@ class LinearDrawer(AbstractDrawer):
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1, #1=round
+                               strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             elif cross_link.flip and ((crop_leftA and not crop_rightA) or
                                     (crop_leftB and not crop_rightB)):
@@ -938,7 +938,7 @@ class LinearDrawer(AbstractDrawer):
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1, #1=round
+                               strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             elif cross_link.flip and ((crop_rightA and not crop_leftA) or
                                       (crop_rightB and not crop_leftB)):
@@ -949,21 +949,21 @@ class LinearDrawer(AbstractDrawer):
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1, #1=round
+                               strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             elif cross_link.flip:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBs, yB, xBe, yB],
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1, #1=round
+                               strokeLineJoin=1,  # 1=round
                                strokewidth=0))
             else:
                 answer.append(Polygon([xAs, yA, xAe, yA, xBe, yB, xBs, yB],
                                strokeColor=strokecolor,
                                fillColor=fillcolor,
                                #default is mitre/miter which can stick out too much:
-                               strokeLineJoin=1, #1=round
+                               strokeLineJoin=1,  # 1=round
                                strokewidth=0))
         return answer
 
@@ -1396,7 +1396,7 @@ class LinearDrawer(AbstractDrawer):
         return Polygon(points,
                        strokeColor=strokecolor,
                        strokeWidth=1,
-                       strokeLineJoin=1, #1=round
+                       strokeLineJoin=1,  # 1=round
                        fillColor=color,
                        **kwargs)
 
@@ -1413,7 +1413,7 @@ class LinearDrawer(AbstractDrawer):
         else:
             y1 = bottom
             y2 = top
-            orientation = "right" #backward compatibility
+            orientation = "right"  # backward compatibility
         return draw_arrow((x1,y1), (x2,y2), orientation=orientation, **kwargs)
 
     def _draw_sigil_big_arrow(self, bottom, center, top, x1, x2, strand, **kwargs):

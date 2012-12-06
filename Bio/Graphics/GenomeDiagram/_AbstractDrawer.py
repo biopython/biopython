@@ -164,7 +164,7 @@ def draw_cut_corner_box(point1, point2, corner=0.5,
                     x1+corner, y1],
                    strokeColor=strokecolor,
                    strokeWidth=1,
-                   strokeLineJoin=1, #1=round
+                   strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
 
@@ -246,7 +246,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
     shaftheight = boxheight*shaft_height_ratio
     headlength = min(abs(boxheight)*head_length_ratio, abs(boxwidth))
     if boxwidth < 0:
-        headlength *= -1 #reverse it
+        headlength *= -1  # reverse it
 
     shafttop = 0.5*(boxheight+shaftheight)
     shaftbase = boxheight-shafttop
@@ -263,7 +263,7 @@ def draw_arrow(point1, point2, color=colors.lightgreen, border=None,
                    #strokeWidth=max(1, int(boxheight/40.)),
                    strokeWidth=1,
                    #default is mitre/miter which can stick out too much:
-                   strokeLineJoin=1, #1=round
+                   strokeLineJoin=1,  # 1=round
                    fillColor=color,
                    **kwargs)
 
@@ -426,7 +426,7 @@ class AbstractDrawer(object):
         # Perform 'administrative' tasks of setting up the page
         self.set_page_size(pagesize, orientation)   # Set drawing size
         self.set_margins(x, y, xl, xr, yt, yb)      # Set page margins
-        self.set_bounds(start, end) # Set limits on what will be drawn
+        self.set_bounds(start, end)  # Set limits on what will be drawn
         self.tracklines = tracklines    # Set flags
         if cross_track_links is None:
             cross_track_links = []

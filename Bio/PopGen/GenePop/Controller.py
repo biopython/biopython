@@ -263,7 +263,7 @@ class GenePopController(object):
         self.controller.set_input(fname)
         for opt in opts:
             self.controller.set_parameter(opt, opt+"="+str(opts[opt]))
-        self.controller() #checks error level is zero
+        self.controller()  # checks error level is zero
         self._remove_garbage(None)
         return
 
