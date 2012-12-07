@@ -518,7 +518,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
         elif geneclusters is not None:
             # This is a k-means clustering result.
             filename = jobname + "_K"
-            k = max(geneclusters+1)
+            k = max(geneclusters) + 1
             kggfilename = "%s_K_G%d.kgg" % (jobname, k)
             geneindex = self._savekmeans(kggfilename, geneclusters, gorder, 0)
             postfix = "_G%d" % k
@@ -531,7 +531,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
         elif expclusters is not None:
             # This is a k-means clustering result.
             filename = jobname + "_K"
-            k = max(expclusters+1)
+            k = max(expclusters) + 1
             kagfilename = "%s_K_A%d.kag" % (jobname, k)
             expindex = self._savekmeans(kagfilename, expclusters, eorder, 1)
             postfix += "_A%d" % k
