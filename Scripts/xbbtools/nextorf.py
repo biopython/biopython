@@ -72,7 +72,7 @@ class NextOrf:
                 s = s[start:stop]
             else:
                 s = s[start:]
-            self.seq = Seq(s,IUPAC.ambiguous_dna)
+            self.seq = Seq(s, IUPAC.ambiguous_dna)
             self.length = len(self.seq)
             self.rseq = None
             CDS = []
@@ -84,7 +84,7 @@ class NextOrf:
             self.Output(CDS)
 
     def ToFasta(self, header, seq):
-        seq = re.sub('(............................................................)','\\1\n',seq)
+        seq = re.sub('(............................................................)', '\\1\n', seq)
         return '>%s\n%s' % (header, seq)
 
     def Gc(self, seq):
@@ -94,37 +94,37 @@ class NextOrf:
         gc = d['G'] + d['C']
         if gc == 0:
             return 0
-        return round(gc*100.0/(d['A'] +d['T'] + gc),1)
+        return round(gc * 100.0 / (d['A'] + d['T'] + gc), 1)
 
-    def Gc2(self,seq):
+    def Gc2(self, seq):
         l = len(seq)
         d= {}
-        for nt in ['A','T','G','C']:
-            d[nt] = [0,0,0]
+        for nt in ['A', 'T', 'G', 'C']:
+            d[nt] = [0, 0, 0]
 
-        for i in range(0,l,3):
+        for i in range(0, l, 3):
             codon = seq[i:i+3]
             if len(codon) < 3:
                 codon = codon + '  '
-            for pos in range(0,3):
-                for nt in ['A','T','G','C']:
+            for pos in range(0, 3):
+                for nt in ['A', 'T', 'G', 'C']:
                     if codon[pos] == nt:
-                        d[nt][pos] = d[nt][pos] +1
+                        d[nt][pos] = d[nt][pos] + 1
 
         gc = {}
         gcall = 0
         nall = 0
-        for i in range(0,3):
+        for i in range(0, 3):
             try:
-                n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
-                gc[i] = (d['G'][i] + d['C'][i])*100.0/n
+                n = d['G'][i] + d['C'][i] + d['T'][i] + d['A'][i]
+                gc[i] = (d['G'][i] + d['C'][i]) * 100.0 / n
             except:
                 gc[i] = 0
 
             gcall = gcall + d['G'][i] + d['C'][i]
             nall = nall + n
 
-        gcall = 100.0*gcall/nall
+        gcall = 100.0 * gcall / nall
         res = '%.1f%%, %.1f%%, %.1f%%, %.1f%%' % (gcall, gc[0], gc[1], gc[2])
         return res
 
@@ -139,20 +139,20 @@ class NextOrf:
 #        print 'Start codons', start_codons
 #        print 'Stop codons', stop_codons
         frame_coordinates = []
-        for frame in range(0,3):
+        for frame in range(0, 3):
             coordinates = []
-            for i in range(0+frame, n-n%3, 3):
+            for i in range(0 + frame, n - n % 3, 3):
                 codon = s[i:i+3]
                 if codon in start_codons:
-                    coordinates.append((i+1,1,codon))
+                    coordinates.append((i + 1, 1, codon))
                 elif codon in stop_codons:
-                    coordinates.append((i+1,0,codon))
+                    coordinates.append((i + 1, 0, codon))
             frame_coordinates.append(coordinates)
         return frame_coordinates
 
     def GetCDS(self, seq, strand = 1):
         frame_coordinates = self.GetOrfCoordinates(seq)
-        START, STOP = 1,0
+        START, STOP = 1, 0
         so = self.options
         nostart = so['nostart']
         minlength, maxlength = int(so['minlength']), int(so['maxlength'])
@@ -174,7 +174,7 @@ class NextOrf:
 #                    if codon == 'XXX': print 'do something'
                     stop = pos + 2
 #                    print stop
-                    length = stop - start_site +1
+                    length = stop - start_site + 1
                     if length >= minlength and length <= maxlength:
                         if nostart == '1' and start_site == 1:
                             start_site = start_site + f - 1
@@ -199,9 +199,9 @@ class NextOrf:
         for start, stop, length, subs, strand in CDS:
             self.counter += 1
             if strand > 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start,stop)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, start, stop)
             if strand < 0:
-                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1,n-start+1)
+                head = 'orf_%s:%s:%d:%d:%d' % (self.counter, self.header, strand, n-stop+1, n-start+1)
             if self.options['gc']:
                 head = '%s:%s' % (head, self.Gc2(subs.data))
 
@@ -234,7 +234,7 @@ def help():
 #    print ''
     print "\nNCBI's Codon Tables:"
     for key, table in CodonTable.ambiguous_dna_by_id.items():
-        print '\t',key, table._codon_table.names[0]
+        print '\t', key, table._codon_table.names[0]
     print '\ne.g.\n./nextorf.py --minlength 5 --strand plus --output nt --gc 1 testjan.fas'
     sys.exit(0)
 
@@ -246,7 +246,7 @@ options = {
     'maxlength': 100000000,
     'strand': 'both',
     'output': 'aa',
-    'frames': [1,2,3],
+    'frames': [1, 2, 3],
     'gc': 0,
     'nostart': 0,
     'table': 1,
@@ -254,12 +254,12 @@ options = {
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    show_help = len(sys.argv)<=1
+    show_help = len(sys.argv) <= 1
 
     shorts = 'hv'
-    longs = map(lambda x: x +'=', options.keys()) + ['help']
+    longs = map(lambda x: x + '=', options.keys()) + ['help']
 
-    optlist, args = getopt.getopt(args,shorts, longs)
+    optlist, args = getopt.getopt(args, shorts, longs)
     if show_help:
         help()
 

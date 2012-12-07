@@ -21,7 +21,7 @@ class NotePad(Toplevel):
 
         self.menubar.add_cascade(label="File", menu=self.filemenu)
         self.configure(menu = self.menubar)
-        self.yscroll = Scrollbar(self,orient=VERTICAL)
+        self.yscroll = Scrollbar(self, orient=VERTICAL)
         self.tid = Text(self, yscrollcommand = self.yscroll.set)
         self.yscroll.configure(command = self.tid.yview)
         self.tid.pack(side = LEFT, fill = BOTH, expand = 1)
@@ -30,7 +30,7 @@ class NotePad(Toplevel):
     def text_id(self):
         return self.tid
 
-    def insert(self,start, txt):
+    def insert(self, start, txt):
         self.tid.insert(start, txt)
 
     def save(self):
@@ -38,5 +38,5 @@ class NotePad(Toplevel):
         file = fd.go(key="test")
         if file:
             fid = open(file, 'w')
-            fid.write(self.tid.get(0.0,END))
+            fid.write(self.tid.get(0.0, END))
             fid.close()
