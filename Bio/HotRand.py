@@ -29,7 +29,7 @@ class HotCache(object):
     def __init__( self  ):
 #        self.url = 'http://www.fourmilab.ch/cgi-bin/uncgi/Hotbits?num=5000&min=1&max=6&col=1'
         self.url = 'http://www.random.org/cgi-bin/randbyte?'
-        self.query = { 'nbytes' : 128, 'fmt' : 'h' }
+        self.query = { 'nbytes': 128, 'fmt': 'h' }
         self.fill_hot_cache()
 
     def fill_hot_cache( self ):

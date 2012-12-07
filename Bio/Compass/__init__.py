@@ -157,7 +157,7 @@ def __read_names(record, line):
     record.hit = m.group(2)
 
 
-def __read_threshold(record,line):
+def __read_threshold(record, line):
     if not line.startswith("Threshold"):
         raise ValueError("Line does not start with 'Threshold':\n%s" % line)
     m = __regex["threshold"].search(line)

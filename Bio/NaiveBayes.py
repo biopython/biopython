@@ -33,7 +33,7 @@ def _contents(items):
     term = 1.0/len(items)
     counts = {}
     for item in items:
-        counts[item] = counts.get(item,0) + term
+        counts[item] = counts.get(item, 0) + term
     return counts
 
 
@@ -92,7 +92,7 @@ def calculate(nb, observation, scale=0):
     lp_observation = 0.0          # P(observation)
     if scale:   # Only calculate this if requested.
         # log P(observation) = log SUM_i P(observation|class_i)P(class_i)
-        obs = numpy.exp(numpy.clip(lp_prior+lp_observation_class,-700,+700))
+        obs = numpy.exp(numpy.clip(lp_prior+lp_observation_class, -700, +700))
         lp_observation = numpy.log(sum(obs))
 
     # Calculate log P(class|observation).

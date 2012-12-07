@@ -200,7 +200,7 @@ class SeqMat(dict):
         keylist = self.keys()
         for key in keylist:
             if key[0] > key[1]:
-                self[(key[1],key[0])] = self[key]
+                self[(key[1], key[0])] = self[key]
                 del self[key]
 
     def _full_to_half(self):
@@ -218,13 +218,13 @@ class SeqMat(dict):
         for i in self.ab_list:
             for j in self.ab_list[:self.ab_list.index(i)+1]:
                 if i != j:
-                    self[j,i] = self[j,i] + self[i,j]
-                    del self[i,j]
+                    self[j, i] = self[j, i] + self[i, j]
+                    del self[i, j]
 
     def _init_zero(self):
         for i in self.ab_list:
             for j in self.ab_list[:self.ab_list.index(i)+1]:
-                self[j,i] = 0.
+                self[j, i] = 0.
 
     def make_entropy(self):
         self.entropy = 0
@@ -239,15 +239,15 @@ class SeqMat(dict):
             result[letter] = 0.0
         for pair, value in self.iteritems():
             i1, i2 = pair
-            if i1==i2:
+            if i1 == i2:
                 result[i1] += value
             else:
                 result[i1] += value / 2
                 result[i2] += value / 2
         return result
 
-    def print_full_mat(self,f=None,format="%4d",topformat="%4s",
-                alphabet=None,factor=1,non_sym=None):
+    def print_full_mat(self, f=None, format="%4d", topformat="%4s",
+                alphabet=None, factor=1, non_sym=None):
         f = f or sys.stdout
         # create a temporary dictionary, which holds the full matrix for
         # printing
@@ -256,7 +256,7 @@ class SeqMat(dict):
         full_mat = copy.copy(self)
         for i in self:
             if i[0] != i[1]:
-                full_mat[(i[1],i[0])] = full_mat[i]
+                full_mat[(i[1], i[0])] = full_mat[i]
         if not alphabet:
             alphabet = self.ab_list
         topline = ''
@@ -270,7 +270,7 @@ class SeqMat(dict):
                 if alphabet.index(j) > alphabet.index(i) and non_sym is not None:
                     val = non_sym
                 else:
-                    val = full_mat[i,j]
+                    val = full_mat[i, j]
                     val *= factor
                 if val <= -999:
                     cur_str = '  ND'
@@ -278,11 +278,11 @@ class SeqMat(dict):
                     cur_str = format % val
 
                 outline = outline+cur_str
-            outline = outline+'\n'
+            outline = outline + '\n'
             f.write(outline)
 
-    def print_mat(self,f=None,format="%4d",bottomformat="%4s",
-                alphabet=None,factor=1):
+    def print_mat(self, f=None, format="%4d", bottomformat="%4s",
+                alphabet=None, factor=1):
         """Print a nice half-matrix. f=sys.stdout to see on the screen
         User may pass own alphabet, which should contain all letters in the
         alphabet of the matrix, but may be in a different order. This
@@ -299,17 +299,17 @@ class SeqMat(dict):
             outline = i
             for j in alphabet[:alphabet.index(i)+1]:
                 try:
-                    val = self[j,i]
+                    val = self[j, i]
                 except KeyError:
-                    val = self[i,j]
+                    val = self[i, j]
                 val *= factor
                 if val == -999:
                     cur_str = '  ND'
                 else:
                     cur_str = format % val
 
-                outline = outline+cur_str
-            outline = outline+'\n'
+                outline = outline + cur_str
+            outline = outline + '\n'
             f.write(outline)
         f.write(bottomline)
 
@@ -324,9 +324,9 @@ class SeqMat(dict):
             for j in range(i+1):
                 c2 = alphabet[j]
                 try:
-                    val = self[c2,c1]
+                    val = self[c2, c1]
                 except KeyError:
-                    val = self[c1,c2]
+                    val = self[c1, c2]
                 if val == -999:
                     output += '  ND'
                 else:
@@ -335,14 +335,14 @@ class SeqMat(dict):
         output += '%4s' * n % tuple(alphabet) + "\n"
         return output
 
-    def __sub__(self,other):
+    def __sub__(self, other):
         """ returns a number which is the subtraction product of the two matrices"""
         mat_diff = 0
         for i in self:
             mat_diff += (self[i] - other[i])
         return mat_diff
 
-    def __mul__(self,other):
+    def __mul__(self, other):
         """ returns a matrix for which each entry is the multiplication product of the
         two matrices passed"""
         new_mat = copy.copy(self)
@@ -378,7 +378,7 @@ class SubstitutionMatrix(SeqMat):
         relative_entropy = 0.
         for key, value in self.iteritems():
             if value > EPSILON:
-                relative_entropy += obs_freq_mat[key]*log(value)
+                relative_entropy += obs_freq_mat[key] * log(value)
         relative_entropy /= log(2)
         return relative_entropy
 
@@ -386,12 +386,12 @@ class SubstitutionMatrix(SeqMat):
 class LogOddsMatrix(SeqMat):
     """Log odds matrix"""
 
-    def calculate_relative_entropy(self,obs_freq_mat):
+    def calculate_relative_entropy(self, obs_freq_mat):
         """Calculate and return the relative entropy with respect to an
         observed frequency matrix"""
         relative_entropy = 0.
         for key, value in self.iteritems():
-            relative_entropy += obs_freq_mat[key]*value/log(2)
+            relative_entropy += obs_freq_mat[key] * value / log(2)
         return relative_entropy
 
 
@@ -406,7 +406,7 @@ def _build_obs_freq_mat(acc_rep_mat):
     obs_freq_mat = ObservedFrequencyMatrix(alphabet=acc_rep_mat.alphabet,
                                            build_later=1)
     for i in acc_rep_mat:
-        obs_freq_mat[i] = acc_rep_mat[i]/total
+        obs_freq_mat[i] = acc_rep_mat[i] / total
     return obs_freq_mat
 
 
@@ -420,7 +420,7 @@ def _exp_freq_table_from_obs_freq(obs_freq_mat):
         else:
             exp_freq_table[i[0]] += obs_freq_mat[i] / 2.
             exp_freq_table[i[1]] += obs_freq_mat[i] / 2.
-    return FreqTable.FreqTable(exp_freq_table,FreqTable.FREQ)
+    return FreqTable.FreqTable(exp_freq_table, FreqTable.FREQ)
 
 
 def _build_exp_freq_mat(exp_freq_table):
@@ -440,7 +440,7 @@ def _build_exp_freq_mat(exp_freq_table):
 #
 # Build the substitution matrix
 #
-def _build_subs_mat(obs_freq_mat,exp_freq_mat):
+def _build_subs_mat(obs_freq_mat, exp_freq_mat):
     """ Build the substitution matrix """
     if obs_freq_mat.ab_list != exp_freq_mat.ab_list:
         raise ValueError("Alphabet mismatch in passed matrices")
@@ -453,7 +453,7 @@ def _build_subs_mat(obs_freq_mat,exp_freq_mat):
 #
 # Build a log-odds matrix
 #
-def _build_log_odds_mat(subs_mat,logbase=2,factor=10.0,round_digit=0,keep_nd=0):
+def _build_log_odds_mat(subs_mat, logbase=2, factor=10.0, round_digit=0, keep_nd=0):
     """_build_log_odds_mat(subs_mat,logbase=10,factor=10.0,round_digit=1):
     Build a log-odds matrix
     logbase=2: base of logarithm used to build (default 2)
@@ -468,7 +468,7 @@ def _build_log_odds_mat(subs_mat,logbase=2,factor=10.0,round_digit=0,keep_nd=0):
         if value < EPSILON:
             lo_mat[key] = -999
         else:
-            lo_mat[key] = round(factor*log(value)/log(logbase),round_digit)
+            lo_mat[key] = round(factor*log(value)/log(logbase), round_digit)
     mat_min = min(lo_mat.values())
     if not keep_nd:
         for i in lo_mat:
@@ -483,14 +483,14 @@ def _build_log_odds_mat(subs_mat,logbase=2,factor=10.0,round_digit=0,keep_nd=0):
 # and rounding factor. Generates a log-odds matrix, calling internal SubsMat
 # functions.
 #
-def make_log_odds_matrix(acc_rep_mat,exp_freq_table=None,logbase=2,
-                         factor=1.,round_digit=9,keep_nd=0):
+def make_log_odds_matrix(acc_rep_mat, exp_freq_table=None, logbase=2,
+                         factor=1., round_digit=9, keep_nd=0):
     obs_freq_mat = _build_obs_freq_mat(acc_rep_mat)
     if not exp_freq_table:
         exp_freq_table = _exp_freq_table_from_obs_freq(obs_freq_mat)
     exp_freq_mat = _build_exp_freq_mat(exp_freq_table)
     subs_mat = _build_subs_mat(obs_freq_mat, exp_freq_mat)
-    lo_mat = _build_log_odds_mat(subs_mat,logbase,factor,round_digit,keep_nd)
+    lo_mat = _build_log_odds_mat(subs_mat, logbase, factor, round_digit, keep_nd)
     return lo_mat
 
 
@@ -529,7 +529,7 @@ def read_text_matrix(data_file):
         i = 0
         for field in rec[first_col:]:
             col = alphabet[i]
-            matrix[(row,col)] = float(field)
+            matrix[(row, col)] = float(field)
             i += 1
         j += 1
     # delete entries with an asterisk
@@ -544,7 +544,7 @@ diagONLY = 2
 diagALL = 3
 
 
-def two_mat_relative_entropy(mat_1,mat_2,logbase=2,diag=diagALL):
+def two_mat_relative_entropy(mat_1, mat_2, logbase=2, diag=diagALL):
     rel_ent = 0.
     key_list_1 = sorted(mat_1)
     key_list_2 = sorted(mat_2)
@@ -594,13 +594,13 @@ def two_mat_correlation(mat_1, mat_2):
         except KeyError:
             raise ValueError("%s is not a common key" % ab_pair)
     correlation_matrix = numpy.corrcoef(values, rowvar=0)
-    correlation = correlation_matrix[0,1]
+    correlation = correlation_matrix[0, 1]
     return correlation
 
 
 # Jensen-Shannon Distance
 # Need to input observed frequency matrices
-def two_mat_DJS(mat_1,mat_2,pi_1=0.5,pi_2=0.5):
+def two_mat_DJS(mat_1, mat_2, pi_1=0.5, pi_2=0.5):
     assert mat_1.ab_list == mat_2.ab_list
     assert pi_1 > 0 and pi_2 > 0 and pi_1< 1 and pi_2 <1
     assert not (pi_1 + pi_2 - 1.0 > EPSILON)
@@ -612,13 +612,13 @@ def two_mat_DJS(mat_1,mat_2,pi_1=0.5,pi_2=0.5):
     mat_1.make_entropy()
     mat_2.make_entropy()
     # print mat_1.entropy, mat_2.entropy
-    dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 *mat_2.entropy
+    dJS = sum_mat.entropy - pi_1 * mat_1.entropy - pi_2 * mat_2.entropy
     return dJS
 
 """
 This isn't working yet. Boo hoo!
-def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
-                  format="%4d",bottomformat="%4s",topformat="%4s",
+def two_mat_print(mat_1, mat_2, f=None, alphabet=None, factor_1=1, factor_2=1,
+                  format="%4d", bottomformat="%4s", topformat="%4s",
                   topindent=7*" ", bottomindent=1*" "):
     f = f or sys.stdout
     if not alphabet:
@@ -636,28 +636,28 @@ def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
     f.write(topline)
     for i in alphabet:
         for j in alphabet:
-            print_mat[i,j] = -999
+            print_mat[i, j] = -999
     diag_1 = {}
     diag_2 = {}
     for i in alphabet:
         for j in alphabet[:alphabet.index(i)+1]:
             if i == j:
-                diag_1[i] = mat_1[(i,i)]
+                diag_1[i] = mat_1[(i, i)]
                 diag_2[i] = mat_2[(alphabet[len_alphabet-alphabet.index(i)-1],
                     alphabet[len_alphabet-alphabet.index(i)-1])]
             else:
                 if i > j:
-                    key = (j,i)
+                    key = (j, i)
                 else:
-                    key = (i,j)
+                    key = (i, j)
                 mat_2_key = [alphabet[len_alphabet-alphabet.index(key[0])-1],
                     alphabet[len_alphabet-alphabet.index(key[1])-1]]
                 # print mat_2_key
                 mat_2_key.sort()
                 mat_2_key = tuple(mat_2_key)
-                # print key ,"||",  mat_2_key
+                # print key, "||",  mat_2_key
                 print_mat[key] = mat_2[mat_2_key]
-                print_mat[(key[1],key[0])] = mat_1[key]
+                print_mat[(key[1], key[0])] = mat_1[key]
     for i in alphabet:
         outline = i
         for j in alphabet:
@@ -672,12 +672,12 @@ def two_mat_print(mat_1, mat_2, f=None,alphabet=None,factor_1=1, factor_2=1,
                     val_2 = format % (diag_2[i]*factor_2)
                 cur_str = val_1 + "  " + val_2
             else:
-                if print_mat[(i,j)] == -999:
+                if print_mat[(i, j)] == -999:
                     val = ' ND'
                 elif alphabet.index(i) > alphabet.index(j):
-                    val = format % (print_mat[(i,j)]*factor_1)
+                    val = format % (print_mat[(i, j)]*factor_1)
                 else:
-                    val = format % (print_mat[(i,j)]*factor_2)
+                    val = format % (print_mat[(i, j)]*factor_2)
                 cur_str = val
             outline += cur_str
         outline += bottomformat % (alphabet[len_alphabet-alphabet.index(i)-1] +

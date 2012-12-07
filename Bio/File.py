@@ -110,7 +110,7 @@ class UndoHandle(object):
         return next
 
     def readlines(self, *args, **keywds):
-        lines = self._saved + self._handle.readlines(*args,**keywds)
+        lines = self._saved + self._handle.readlines(*args, **keywds)
         self._saved = []
         return lines
 
@@ -118,7 +118,7 @@ class UndoHandle(object):
         if self._saved:
             line = self._saved.pop(0)
         else:
-            line = self._handle.readline(*args,**keywds)
+            line = self._handle.readline(*args, **keywds)
         return line
 
     def read(self, size=-1):

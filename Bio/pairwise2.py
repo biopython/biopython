@@ -163,27 +163,27 @@ class align(object):
         """
         # match code -> tuple of (parameters, docstring)
         match2args = {
-            'x' : ([], ''),
-            'm' : (['match', 'mismatch'],
+            'x': ([], ''),
+            'm': (['match', 'mismatch'],
 """match is the score to given to identical characters.  mismatch is
 the score given to non-identical ones."""),
-            'd' : (['match_dict'],
+            'd': (['match_dict'],
 """match_dict is a dictionary where the keys are tuples of pairs of
 characters and the values are the scores, e.g. ("A", "C") : 2.5."""),
-            'c' : (['match_fn'],
+            'c': (['match_fn'],
 """match_fn is a callback function that takes two characters and
 returns the score between them."""),
             }
         # penalty code -> tuple of (parameters, docstring)
         penalty2args = {
-            'x' : ([], ''),
-            's' : (['open', 'extend'],
+            'x': ([], ''),
+            's': (['open', 'extend'],
 """open and extend are the gap penalties when a gap is opened and
 extended.  They should be negative."""),
-            'd' : (['openA', 'extendA', 'openB', 'extendB'],
+            'd': (['openA', 'extendA', 'openB', 'extendB'],
 """openA and extendA are the gap penalties for sequenceA, and openB
 and extendB for sequeneB.  The penalties should be negative."""),
-            'c' : (['gap_A_fn', 'gap_B_fn'],
+            'c': (['gap_A_fn', 'gap_B_fn'],
 """gap_A_fn and gap_B_fn are callback functions that takes 1) the
 index where the gap is opened, and 2) the length of the gap.  They
 should return a gap penalty."""),
@@ -711,8 +711,8 @@ def _clean_alignments(alignments):
     # duplicates, make sure begin and end are set correctly, remove
     # empty alignments.
     unique_alignments = []
-    for align in alignments :
-        if align not in unique_alignments :
+    for align in alignments:
+        if align not in unique_alignments:
             unique_alignments.append(align)
     i = 0
     while i < len(unique_alignments):
