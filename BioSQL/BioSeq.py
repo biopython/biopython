@@ -525,7 +525,7 @@ class DBSeqRecord(SeqRecord):
     seq = property(__get_seq, __set_seq, __del_seq, "Seq object")
 
     def __get_dbxrefs(self):
-        if not hasattr(self,"_dbxrefs"):
+        if not hasattr(self, "_dbxrefs"):
             self._dbxrefs = _retrieve_dbxrefs(self._adaptor, self._primary_id)
         return self._dbxrefs
 

@@ -80,7 +80,7 @@ def sprot_search_ful(text, make_wild=None, swissprot=1, trembl=None,
     Search SwissProt by full text.
 
     """
-    variables = {'SEARCH' : text}
+    variables = {'SEARCH': text}
     if make_wild:
         variables['makeWild'] = 'on'
     if swissprot:
@@ -102,7 +102,7 @@ def sprot_search_de(text, swissprot=1, trembl=None,
     organelle.
 
     """
-    variables = {'SEARCH' : text}
+    variables = {'SEARCH': text}
     if swissprot:
         variables['S'] = 'on'
     if trembl:

@@ -26,7 +26,7 @@ class BlastDisplayer:
         self.outfile = tempfile.mktemp()
 
         # make sure outfile exists and is empty
-        fid = open(self.outfile,'w+')
+        fid = open(self.outfile, 'w+')
         fid.close()
 
         com = '%s > %s' % (self.command, self.outfile)

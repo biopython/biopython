@@ -14,7 +14,7 @@ import urllib
 from Bio.SCOP import *
 
 
-def usage() :
+def usage():
     print \
 """Extract a SCOP domain's ATOM and HETATOM records from the relevant PDB file.
 
@@ -61,7 +61,7 @@ default_pdb_url = "http://www.rcsb.org/pdb/cgi/export.cgi/somefile.pdb?" \
 #default_pdb_url = "file://usr/local/db/pdb/data/010331/snapshot/all/pdb%s.ent"
 
 
-def open_pdb(pdbid, pdb_url=None) :
+def open_pdb(pdbid, pdb_url=None):
     if pdb_url is None:
         pdb_url = default_pdb_url
     url = pdb_url % pdbid
@@ -72,13 +72,13 @@ def open_pdb(pdbid, pdb_url=None) :
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hp:o:i:",
-             ["help", "usage","pdb=","output=","input="])
+             ["help", "usage", "pdb=", "output=", "input="])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
         sys.exit(2)
 
-    input= None
+    input = None
     in_handle = None
     output = None
     pdb_url = None
@@ -86,7 +86,7 @@ def main():
     raf_url = None
 
     for o, a in opts:
-        if o in ("-h", "--help","--usage"):
+        if o in ("-h", "--help", "--usage"):
             usage()
             sys.exit()
         elif o in ("-o", "--output"):
@@ -96,8 +96,8 @@ def main():
         elif o in ("-p", "--pdb"):
             pdb_url = a
 
-    if len(args) <2 :
-        print >>sys.stderr, \
+    if len(args) < 2:
+        print >> sys.stderr, \
              "Not enough arguments. Try --help for more details."
         sys.exit(2)
 
@@ -110,30 +110,31 @@ def main():
     (cla_filename, headers) = urllib.urlretrieve(cla_url)
     claIndex = Cla.Index(cla_filename)
 
-    if input is None :
+    if input is None:
         sids = args[2:]
-    elif input == '-' :
+    elif input == '-':
         sids = sys.stdin.xreadlines()
     else :
         in_handle = open(input)
         sids = in_handle.xreadlines()
 
     try:
-        for sid in sids :
-            if not sid or sid[0:1]=='#': continue
+        for sid in sids:
+            if not sid or sid[0:1] == '#':
+                continue
             id = sid[0:7]
-            pdbid=id[1:5]
+            pdbid = id[1:5]
             s = pdbid[0:1]
-            if s=='0' or s=='s' :
-                print >>sys.stderr,"No coordinates for domain "+id
+            if s == '0' or s == 's':
+                print >> sys.stderr, "No coordinates for domain " + id
                 continue
 
             if output is None:
-                filename = id+".ent"
+                filename = id + ".ent"
                 out_handle = open(filename, "w+")
-            elif output == '-' :
+            elif output == '-':
                 out_handle = sys.stdout
-            else :
+            else:
                 out_handle = open(output, "w+")
 
             try:
@@ -146,13 +147,13 @@ def main():
                     f = open_pdb(pdbid, pdb_url)
                     try:
                         seqMap.getAtoms(f, out_handle)
-                    finally :
+                    finally:
                         f.close()
                 except (IOError, KeyError, RuntimeError), e:
-                    print >>sys.stderr, "I cannot do SCOP domain ",id,":",e
-            finally :
+                    print >> sys.stderr, "I cannot do SCOP domain ", id, ":", e
+            finally:
                 out_handle.close()
-    finally :
+    finally:
         if in_handle is not None:
             in_handle.close()
 

@@ -17,13 +17,13 @@ class FSSPMultAlign(dict):
         self.data = {}
 
 
-def mult_align(sum_dict,align_dict):
+def mult_align(sum_dict, align_dict):
     """Returns a biopython multiple alignment instance (Bio.Align.Generic)"""
     mult_align_dict = {}
     for j in align_dict.abs(1).pos_align_dict:
         mult_align_dict[j] = ''
 
-    for i in range(1,len(align_dict)+1):
+    for i in range(1, len(align_dict)+1):
         # loop on positions
         for j in align_dict.abs(i).pos_align_dict:
             # loop within a position
@@ -53,7 +53,7 @@ def mult_align(sum_dict,align_dict):
 # Took me ~160 seconds for the largest FSSP file (1reqA.fssp)
 #
 
-def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
+def filter(sum_dict, align_dict, filter_attribute, low_bound, high_bound):
     """filters a passed summary section and alignment section according to a numeric
     attribute in the summary section. Returns new summary and alignment sections"""
     new_sum_dict = FSSP.FSSPSumDict()
@@ -62,7 +62,7 @@ def filter(sum_dict,align_dict,filter_attribute,low_bound, high_bound):
 #        new_align_dict[i]  = copy.copy(align_dict[i])
    # new_align_dict = copy.copy(align_dict)
     for prot_num in sum_dict:
-        attr_value = getattr(sum_dict[prot_num],filter_attribute)
+        attr_value = getattr(sum_dict[prot_num], filter_attribute)
         if attr_value >= low_bound and attr_value <= high_bound:
             new_sum_dict[prot_num] = sum_dict[prot_num]
     prot_numbers = new_sum_dict.keys()

@@ -422,7 +422,7 @@ class Adaptor:
         return str(self.execute_one(
             """select SUBSTR(seq, %s, %s)
                      from biosequence where bioentry_id = %s""",
-            (start+1, length, seqid))[0])
+            (start + 1, length, seqid))[0])
 
     def execute_and_fetch_col0(self, sql, args=None):
         self.execute(sql, args or ())

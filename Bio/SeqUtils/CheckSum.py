@@ -107,7 +107,7 @@ def seguid(seq):
     m.update(_as_bytes(seq.upper()))
     try:
         #For Python 3+
-        return base64.encodebytes(m.digest()).decode().replace("\n","").rstrip("=")
+        return base64.encodebytes(m.digest()).decode().replace("\n", "").rstrip("=")
     except AttributeError:
         pass
     # For all other Pythons

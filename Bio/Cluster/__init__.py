@@ -83,7 +83,7 @@ def _savetree(jobname, tree, order, transpose):
             order1 = nodeorder[index1]
             counts1 = nodecounts[index1]
             outputfile.write(nodeID[index1]+"\t")
-            nodedist[nodeindex] = max(nodedist[nodeindex],nodedist[index1])
+            nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index1])
         else:
             order1 = order[min1]
             counts1 = 1
@@ -93,7 +93,7 @@ def _savetree(jobname, tree, order, transpose):
             order2 = nodeorder[index2]
             counts2 = nodecounts[index2]
             outputfile.write(nodeID[index2]+"\t")
-            nodedist[nodeindex] = max(nodedist[nodeindex],nodedist[index2])
+            nodedist[nodeindex] = max(nodedist[nodeindex], nodedist[index2])
         else:
             order2 = order[min2]
             counts2 = 1
@@ -493,7 +493,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
            calculated by kcluster.
 
 """
-        (ngenes,nexps) = numpy.shape(self.data)
+        (ngenes, nexps) = numpy.shape(self.data)
         if self.gorder is None:
             gorder = numpy.arange(ngenes)
         else:
@@ -538,7 +538,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
         else:
             expindex = numpy.argsort(eorder)
         filename = filename + postfix
-        self._savedata(filename,gid,aid,geneindex,expindex)
+        self._savedata(filename, gid, aid, geneindex, expindex)
 
     def _savekmeans(self, filename, clusterids, order, transpose):
         # Save a k-means clustering solution
@@ -582,7 +582,7 @@ expclusters=None:  For hierarchical clustering results, expclusters
         if self.mask is not None:
             mask = self.mask
         else:
-            mask = numpy.ones((ngenes,nexps), int)
+            mask = numpy.ones((ngenes, nexps), int)
         if self.gweight is not None:
             gweight = self.gweight
         else:
@@ -621,8 +621,8 @@ expclusters=None:  For hierarchical clustering results, expclusters
                              (self.geneid[i], genename[i], gweight[i]))
             for j in expindex:
                 outputfile.write('\t')
-                if mask[i,j]:
-                    outputfile.write(str(self.data[i,j]))
+                if mask[i, j]:
+                    outputfile.write(str(self.data[i, j]))
             outputfile.write('\n')
         outputfile.close()
 

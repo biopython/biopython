@@ -73,7 +73,7 @@ class ApplicationError(_ProcessCalledError):
     def __str__(self):
         #get first line of any stderr message
         try:
-            msg = self.stderr.lstrip().split("\n",1)[0].rstrip()
+            msg = self.stderr.lstrip().split("\n", 1)[0].rstrip()
         except:
             msg = ""
         if msg:
@@ -195,13 +195,13 @@ class AbstractCommandline(object):
 
             #Beware of binding-versus-assignment confusion issues
             def getter(name):
-                return lambda x : x._get_parameter(name)
+                return lambda x: x._get_parameter(name)
 
             def setter(name):
-                return lambda x, value : x.set_parameter(name, value)
+                return lambda x, value: x.set_parameter(name, value)
 
             def deleter(name):
-                return lambda x : x._clear_parameter(name)
+                return lambda x: x._clear_parameter(name)
 
             doc = p.description
             if isinstance(p, _Switch):
@@ -334,7 +334,7 @@ class AbstractCommandline(object):
         """
         if check_function is not None:
             is_good = check_function(value)  # May raise an exception
-            assert is_good in [0,1,True,False]
+            assert is_good in [0, 1, True, False]
             if not is_good:
                 raise ValueError("Invalid parameter value %r for parameter %s"
                                  % (value, name))

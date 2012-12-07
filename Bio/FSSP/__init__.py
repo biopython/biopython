@@ -16,7 +16,7 @@ from Bio.Align import Generic
 from Bio import Alphabet
 fff_rec = fssp_rec.fff_rec
 header_records = {
-    'database' : re.compile('^DATABASE'),
+    'database': re.compile('^DATABASE'),
     'pdbid': re.compile('^PDBID'),
     'header': re.compile('^HEADER'),
     'compnd': re.compile('^COMPND'),
@@ -44,24 +44,24 @@ class FSSPHeader(object):
         self.seqlength = 0
         self.nalign = 0
 
-    def fill_header(self,inline):
+    def fill_header(self, inline):
         for i in header_records:
             if header_records[i].match(inline):
                 if i == 'database' or i == 'seqlength' or i == 'nalign':
-                    setattr(self,i,int(inline.split()[1]))
+                    setattr(self, i, int(inline.split()[1]))
                 elif i == 'compnd' or i == 'author':
-                    setattr(self,i,inline.split()[1:])
+                    setattr(self, i, inline.split()[1:])
                 elif i == 'source' or i == 'header':
                     attr = inline[inline.find(' ')+1:].strip()
-                    setattr(self,i,attr)
+                    setattr(self, i, attr)
                 else:
-                    setattr(self,i,inline.split()[1])
+                    setattr(self, i, inline.split()[1])
 
 
 class PosAlign(object):
-    def __init__(self,inStr):
+    def __init__(self, inStr):
         inStr = inStr.strip()
-        if len(inStr) != 1 and len(inStr)!= 2:
+        if len(inStr) != 1 and len(inStr) != 2:
             raise ValueError('PosAlign: length not 2 chars' + inStr)
         if inStr == '..':
             self.aa = '-'
@@ -88,7 +88,7 @@ class PosAlign(object):
 
 class FSSPSumRec(object):
     """ Contains info from an FSSP summary record"""
-    def __init__(self,in_str):
+    def __init__(self, in_str):
         self.raw = in_str
         in_rec = in_str.strip().split()
         # print in_rec
@@ -127,7 +127,7 @@ class FSSPSumRec(object):
 
 
 class FSSPAlignRec(object):
-    def __init__(self,in_fff_rec):
+    def __init__(self, in_fff_rec):
         # print in_fff_rec
         self.abs_res_num = int(in_fff_rec[fssp_rec.align.abs_res_num])
         self.pdb_res_num = in_fff_rec[fssp_rec.align.pdb_res_num].strip()
@@ -144,7 +144,7 @@ class FSSPAlignRec(object):
         self.pos_align_dict = {}
         self.PosAlignList = []
 
-    def add_align_list(self,align_list):
+    def add_align_list(self, align_list):
         for i in align_list:
             self.PosAlignList.append(PosAlign(i))
 
@@ -171,16 +171,16 @@ class FSSPAlignDict(dict):
 
     # Given an absolute residue number & chain, returns the relevant fssp
     # record
-    def abs(self,num):
+    def abs(self, num):
         return self[self.abs_res_dict[num]]
 
     # Given an PDB residue number & chain, returns the relevant fssp
     # record
-    def pdb(self,num):
+    def pdb(self, num):
         return self[self.pdb_res_dict[num]]
 
     # Returns a sequence string
-    def sequence(self,num):
+    def sequence(self, num):
         s = ''
         sorted_pos_nums = self.abs_res_dict.keys()
         sorted_pos_nums.sort()
@@ -259,7 +259,7 @@ def read_fssp(fssp_handle):
         curline = fssp_handle.readline()  # Read the next line
         while alignments_rec.match(curline):
             align_rec = FSSPAlignRec(fff_rec(curline))
-            key = align_rec.chain_id+align_rec.res_name+str(align_rec.pdb_res_num)
+            key = align_rec.chain_id + align_rec.res_name + str(align_rec.pdb_res_num)
             align_list = curline[fssp_rec.align.start_aa_list:].strip().split()
             if key not in align_dict:
                 align_dict[key] = align_rec

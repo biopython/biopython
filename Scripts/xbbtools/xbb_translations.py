@@ -34,7 +34,7 @@ class xbb_translations:
     def frame(self, seq, frame, translation_table = 1):
         if not ((-3 <= frame <= -1) or (1 <= frame <= 3)):
             frame = 1
-        if frame != 1 :
+        if frame != 1:
             raise NotImplementedError
             #TODO - Support the frame argument
             #The old code didn't, but I can guess from
@@ -50,24 +50,24 @@ class xbb_translations:
             short = seq
 
         date = time.strftime('%y %b %d, %X', time.localtime(time.time()))
-        res = '%s: %s, ' % (txt,date)
+        res = '%s: %s, ' % (txt, date)
 
-        for nt in ['a','t','g','c']:
+        for nt in ['a', 't', 'g', 'c']:
             res += '%s:%d ' % (nt, seq.count(nt.upper()))
 
-        res += '\nSequence: %s, %d nt, %0.2f %%GC\n' % (short.lower(),length, self.gc(seq))
+        res += '\nSequence: %s, %d nt, %0.2f %%GC\n' % (short.lower(), length, self.gc(seq))
         res += '\n\n'
         return res
 
     def frame_nice(self, seq, frame, translation_table = 1):
         length = len(seq)
         protein = self.frame(seq, frame, translation_table)
-        res = self.header_nice('Plus one frame translation',seq)
-        for i in range(0,length,60):
+        res = self.header_nice('Plus one frame translation', seq)
+        for i in range(0, length, 60):
             subseq = seq[i:i+60]
             p = i/3
             res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  '.join(map(None,protein[p:p+20])) + '\n'
+            res += '  '.join(map(None, protein[p:p+20])) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
 
@@ -83,28 +83,28 @@ class xbb_translations:
         anti = self.reverse(comp)
         length = len(seq)
         frames = {}
-        for i in range(0,3):
+        for i in range(0, 3):
             frames[i+1] = self.frame1(seq[i:], translation_table)
             frames[-(i+1)] = self.reverse(self.frame1(anti[i:], translation_table))
 
         res = self.header_nice('GCFrame', seq)
 
-        for i in range(0,length,60):
+        for i in range(0, length, 60):
             subseq = seq[i:i+60]
             csubseq = comp[i:i+60]
             p = i/3
             # + frames
             res += '%d/%d\n' % (i+1, i/3+1)
-            res += '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
-            res += ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'
-            res += '  '.join(map(None,frames[1][p:p+20])) + '\n'
+            res += '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
+            res += ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
+            res += '  '.join(map(None, frames[1][p:p+20])) + '\n'
             # seq
             res += subseq.lower() + '%5d %%\n' % int(self.gc(subseq))
             res += csubseq.lower() + '\n'
             # - frames
-            res += '  '.join(map(None,frames[-2][p:p+20])) + ' \n'
-            res += ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
-            res += '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
+            res += '  '.join(map(None, frames[-2][p:p+20])) + ' \n'
+            res += ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
+            res += '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
 
         return res
 
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     s = 'ATTCCGGTTGATCCTGCCGGACCCGACCGCTATCGGGGTAGGGATAAGCCATGGGAGTCTTACACTCCCGGGTAAGGGAGTGTGGCGGACGGCTGAGTAACACGTGGCTAACCTACCCTCGGGACGGGGATAACCCCGGGAAACTGGGGATAATCCCCGATAGGGAAGGAGTCCTGGAATGGTTCCTTCCCTAAAGGGCTATAGGCTATTTCCCGTTTGTAGCCGCCCGAGGATGGGGCTACGGCCCATCAGGCTGTCGGTGGGGTAAAGGCCCACCGAACCTATAACGGGTAGGGGCCGTGGAAGCGGGAGCCTCCAGTTGGGCACTGAGACAAGGGCCCAGGCCCTACGGGGCGCACCAGGCGCGAAACGTCCCCAATGCGCGAAAGCGTGAGGGCGCTACCCCGAGTGCCTCCGCAAGGAGGCTTTTCCCCGCTCTAAAAAGGCGGGGGAATAAGCGGGGGGCAAGTCTGGTGTCAGCCGCCGCGGTAATACCAGCTCCGCGAGTGGTCGGGGTGATTACTGGGCCTAAAGCGCCTGTAGCCGGCCCACCAAGTCGCCCCTTAAAGTCCCCGGCTCAACCGGGGAACTGGGGGCGATACTGGTGGGCTAGGGGGCGGGAGAGGCGGGGGGTACTCCCGGAGTAGGGGCGAAATCCTTAGATACCGGGAGGACCACCAGTGGCGGAAGCGCCCCGCTA'
 
     test = xbb_translations()
-#     for i in range(0,4):
+#     for i in range(0, 4):
 #         print test.frame1(s[i:])
     #print s
     #print test.complement(s)

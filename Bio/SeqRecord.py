@@ -73,7 +73,7 @@ class _RestrictedDict(dict):
     def __setitem__(self, key, value):
         #The check hasattr(self, "_length") is to cope with pickle protocol 2
         #I couldn't seem to avoid this with __getstate__ and __setstate__
-        if not hasattr(value,"__len__") or not hasattr(value,"__getitem__") \
+        if not hasattr(value, "__len__") or not hasattr(value, "__getitem__") \
         or (hasattr(self, "_length") and len(value) != self._length):
             raise TypeError("We only allow python sequences (lists, tuples or "
                             "strings) of length %i." % self._length)
@@ -240,7 +240,7 @@ class SeqRecord(object):
             self._per_letter_annotations = _RestrictedDict(length=0)
         self._per_letter_annotations.update(value)
     letter_annotations = property(
-        fget=lambda self : self._per_letter_annotations,
+        fget=lambda self: self._per_letter_annotations,
         fset=_set_per_letter_annotations,
         doc="""Dictionary of per-letter-annotation for the sequence.
 
@@ -303,7 +303,7 @@ class SeqRecord(object):
             #e.g. seq is None
             self._per_letter_annotations = _RestrictedDict(length=0)
 
-    seq = property(fget=lambda self : self._seq,
+    seq = property(fget=lambda self: self._seq,
                    fset=_set_seq,
                    doc="The sequence itself, as a Seq or MutableSeq object.")
 
@@ -829,11 +829,11 @@ class SeqRecord(object):
             answer.name = self.name
         if self.description == other.description:
             answer.description = self.description
-        for k,v in self.annotations.iteritems():
+        for k, v in self.annotations.iteritems():
             if k in other.annotations and other.annotations[k] == v:
                 answer.annotations[k] = v
         #Can append matching per-letter-annotation
-        for k,v in self.letter_annotations.iteritems():
+        for k, v in self.letter_annotations.iteritems():
             if k in other.letter_annotations:
                 answer.letter_annotations[k] = v + other.letter_annotations[k]
         return answer
@@ -1109,7 +1109,7 @@ class SeqRecord(object):
             #so we need to resort in case of overlapping features.
             #NOTE - In the common case of gene before CDS (and similar) with
             #the exact same locations, this will still maintain gene before CDS
-            answer.features.sort(key=lambda x : x.location.start.position)
+            answer.features.sort(key=lambda x: x.location.start.position)
         if isinstance(annotations, dict):
             answer.annotations = annotations
         elif annotations:
@@ -1132,10 +1132,10 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","Tests")):
+    if os.path.isdir(os.path.join("..", "Tests")):
         print "Running doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","Tests"))
+        os.chdir(os.path.join("..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir

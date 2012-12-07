@@ -7,7 +7,7 @@
 import math
 
 
-def lcc_mult(seq,wsize):
+def lcc_mult(seq, wsize):
     """Local Composition Complexity (LCC) values over sliding window.
 
     Returns a list of floats, the LCC values for a sliding window over
@@ -45,9 +45,9 @@ def lcc_mult(seq,wsize):
     tail = seq[0]
     for x in range(tamseq-wsize):
         window = upper[x+1:wsize+x+1]
-        if tail==window[-1]:
+        if tail == window[-1]:
             lccsal.append(lccsal[-1])
-        elif tail=='A':
+        elif tail == 'A':
             cant_a -= 1
             if window.endswith('C'):
                 cant_c += 1
@@ -64,7 +64,7 @@ def lcc_mult(seq,wsize):
                 term_a = compone[cant_a]
                 term_g = compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-        elif tail=='C':
+        elif tail == 'C':
             cant_c -= 1
             if window.endswith('A'):
                 cant_a += 1
@@ -81,7 +81,7 @@ def lcc_mult(seq,wsize):
                 term_c = compone[cant_c]
                 term_g = compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-        elif tail=='T':
+        elif tail == 'T':
             cant_t -= 1
             if window.endswith('A'):
                 cant_a += 1
@@ -98,7 +98,7 @@ def lcc_mult(seq,wsize):
                 term_t = compone[cant_t]
                 term_g = compone[cant_g]
                 lccsal.append(-(term_a+term_c+term_t+term_g))
-        elif tail=='G':
+        elif tail == 'G':
             cant_g -= 1
             if window.endswith('A'):
                 cant_a += 1

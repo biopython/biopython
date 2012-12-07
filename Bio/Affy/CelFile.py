@@ -39,27 +39,27 @@ def read(handle):
     for line in handle:
         if not line.strip():
             continue
-        if line[:8]=="[HEADER]":
+        if line[:8] == "[HEADER]":
             section = "HEADER"
-        elif line[:11]=="[INTENSITY]":
+        elif line[:11] == "[INTENSITY]":
             section = "INTENSITY"
             record.intensities = numpy.zeros((record.nrows, record.ncols))
             record.stdevs = numpy.zeros((record.nrows, record.ncols))
             record.npix = numpy.zeros((record.nrows, record.ncols), int)
-        elif line[0]=="[":
+        elif line[0] == "[":
             section = ""
-        elif section=="HEADER":
+        elif section == "HEADER":
             keyword, value = line.split("=", 1)
-            if keyword=="Cols":
+            if keyword == "Cols":
                 record.ncols = int(value)
-            elif keyword=="Rows":
+            elif keyword == "Rows":
                 record.nrows = int(value)
-        elif section=="INTENSITY":
+        elif section == "INTENSITY":
             if "=" in line:
                 continue
             words = line.split()
             y, x = map(int, words[:2])
-            record.intensities[x,y] = float(words[2])
-            record.stdevs[x,y] = float(words[3])
-            record.npix[x,y] = int(words[4])
+            record.intensities[x, y] = float(words[2])
+            record.stdevs[x, y] = float(words[3])
+            record.npix[x, y] = int(words[4])
     return record

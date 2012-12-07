@@ -66,57 +66,57 @@ class xbb_widget:
         self.translator = xbb_translations()
 
     def init_colors(self):
-        self.colorsbg = {'frame':'brown',
-                         'canvas':'brown',
-                         'button':'darkgreen',
-                         'radiobutton':'darkgrey',
-                         'checkbutton':'darkgrey',
-                         'label':'dimgrey',
-                         'text':'bisque1',
-                         'entry':'bisque1',
-                         'menu':'darkgreen',
-                         'menubutton':'darkgreen',
-                         'seqinfo':'dimgrey'}
-        self.colorsfg = {'button':'lightblue',
-                         'radiobutton':'lightblue',
-                         'checkbutton':'lightblue',
-                         'label':'green3',
-                         'text':'black',
-                         'entry':'black',
-                         'menu':'black',
-                         'menubutton':'lightblue'}
-        self.colorsNT = {'A':'green',
-                         'C':'lightblue',
-                         'G':'orange',
-                         'T':'tomato'
+        self.colorsbg = {'frame': 'brown',
+                         'canvas': 'brown',
+                         'button': 'darkgreen',
+                         'radiobutton': 'darkgrey',
+                         'checkbutton': 'darkgrey',
+                         'label': 'dimgrey',
+                         'text': 'bisque1',
+                         'entry': 'bisque1',
+                         'menu': 'darkgreen',
+                         'menubutton': 'darkgreen',
+                         'seqinfo': 'dimgrey'}
+        self.colorsfg = {'button': 'lightblue',
+                         'radiobutton': 'lightblue',
+                         'checkbutton': 'lightblue',
+                         'label': 'green3',
+                         'text': 'black',
+                         'entry': 'black',
+                         'menu': 'black',
+                         'menubutton': 'lightblue'}
+        self.colorsNT = {'A': 'green',
+                         'C': 'lightblue',
+                         'G': 'orange',
+                         'T': 'tomato'
                          }
 
         self.colorsPMWbg = {
-            'ComboBox':'darkgreen',
-            'ComboBox.Label':'darkgreen',
+            'ComboBox': 'darkgreen',
+            'ComboBox.Label': 'darkgreen',
             }
 
         self.colorsPMWfg = {
-            'ComboBox.Label':'lightblue',
+            'ComboBox.Label': 'lightblue',
             }
 
     def init_optionsdb(self):
         # does anybody know a better way of defining colors ?
         # how would one implement Tk's -class ?
         tk = self.main_frame.master
-        for k,v in self.colorsbg.items():
+        for k, v in self.colorsbg.items():
             name = '*' + k[0].upper() + k[1:] + '.background'
             tk.option_add(name, v)
 
-        for k,v in self.colorsfg.items():
+        for k, v in self.colorsfg.items():
             name = '*' + k[0].upper() + k[1:] + '.foreground'
             tk.option_add(name, v)
 
-        for k,v in self.colorsPMWbg.items():
+        for k, v in self.colorsPMWbg.items():
             name = '*' + k[0].upper() + k[1:] + '.background'
             tk.option_add(name, v)
 
-        for k,v in self.colorsPMWfg.items():
+        for k, v in self.colorsPMWfg.items():
             name = '*' + k[0].upper() + k[1:] + '.foreground'
             tk.option_add(name, v)
 
@@ -211,7 +211,7 @@ class xbb_widget:
         d = self.statistics_ids
         d['length_id'] = Label(self.seq_info2, width = 10)
         d['length_id'].pack(side = LEFT, fill = BOTH, expand = 1)
-        for nt in ['A','C','G','T']:
+        for nt in ['A', 'C', 'G', 'T']:
             d[nt] = Label(self.seq_info2, width = 10, fg = self.colorsNT[nt])
             d[nt].pack(side = LEFT, fill = BOTH, expand = 1)
 
@@ -246,7 +246,7 @@ class xbb_widget:
 
     def create_bindings(self):
         self.sequence_id.bind('<Motion>', self.position)
-        self.sequence_id.bind('<Leave>', lambda x,s = self:
+        self.sequence_id.bind('<Leave>', lambda x, s = self:
                               s.position_ids['id'].configure(text = ''))
         self.sequence_id.bind('<1>', self.zero)
         self.sequence_id.bind('<B1-Motion>', self.count_selection)
@@ -258,7 +258,7 @@ class xbb_widget:
             self.position_ids[i].configure(text = '')
 
     def get_length(self):
-        self.sequence_length = len(self.sequence_id.get(1.0,END))
+        self.sequence_length = len(self.sequence_id.get(1.0, END))
         return self.sequence_length
 
     def select_all(self, event):
@@ -275,9 +275,9 @@ class xbb_widget:
         w = self.sequence_id
         seq = self.get_selection()
         if not len(seq):
-            seq = self.sequence_id.get(1.0,END)
+            seq = self.sequence_id.get(1.0, END)
 
-        seq = re.sub('[^A-Z]','',seq)
+        seq = re.sub('[^A-Z]', '', seq)
         return seq
 
     def get_selection(self):
@@ -304,26 +304,26 @@ class xbb_widget:
         w = self.sequence_id
         w.selection_own()
         try:
-            a = int(w.index('sel.first').split('.')[1]) +1
+            a = int(w.index('sel.first').split('.')[1]) + 1
             b = int(w.index('sel.last').split('.')[1])
             length = b - a + 1
 
-            self.position_ids['from_id'].configure(text = 'Start:%d'% a)
-            self.position_ids['to_id'].configure(text = 'Stop:%d'% b)
+            self.position_ids['from_id'].configure(text = 'Start:%d' % a)
+            self.position_ids['to_id'].configure(text = 'Stop:%d' % b)
             self.position_ids['length_id'].configure(text = '%d nt' % length)
 
             self.statistics_ids['length_id'].configure(text = 'Length=%d' % length)
             seq = self.get_self_selection()
-            for nt in ['A','C','G','T']:
+            for nt in ['A', 'C', 'G', 'T']:
                 n = seq.count(nt)
-                self.statistics_ids[nt].configure(text = '%s=%d' % (nt,n))
+                self.statistics_ids[nt].configure(text = '%s=%d' % (nt, n))
         except:
             pass
 
     def position(self, event):
         x = event.x
         y = event.y
-        pos = self.sequence_id.index('@%d,%d' % (x,y)).split('.')
+        pos = self.sequence_id.index('@%d,%d' % (x, y)).split('.')
         pos = int(pos[1]) + 1
         self.position_ids['id'].configure(text = str(pos))
 
@@ -342,10 +342,10 @@ class xbb_widget:
         self.update_label(name)
 
     def fix_sequence(self):
-        seq = self.sequence_id.get(1.0,END)
+        seq = self.sequence_id.get(1.0, END)
         seq = seq.upper()
-        seq = re.sub('[^A-Z]','',seq)
-        self.sequence_id.delete(0.0,END)
+        seq = re.sub('[^A-Z]', '', seq)
+        self.sequence_id.delete(0.0, END)
         self.sequence_id.insert(END, seq)
 
     def update_label(self, header):
@@ -379,28 +379,28 @@ class xbb_widget:
             return
         aa_seq = self.translator.frame(seq, frame, self.current_codon_table_id)
         print '>%s<' % aa_seq
-        aa_seq = re.sub('(.{50})','\\1\n',str(aa_seq))
+        aa_seq = re.sub('(.{50})', '\\1\n', str(aa_seq))
         np = NotePad()
         tid = np.text_id()
-        tid.insert(END,'>frame%d\n%s' % (frame,aa_seq))
+        tid.insert(END, '>frame%d\n%s' % (frame, aa_seq))
 
     def statistics(self):
         seq = self.get_selection_or_sequence()
         if not seq:
             return
         seq = seq.upper()
-        aa = {'A':0,'C':0,'G':0,'T':0,'N':0}
+        aa = {'A': 0, 'C': 0, 'G': 0, 'T': 0, 'N': 0}
         for nt in seq:
             if nt not in aa:
                 nt = 'N'
             aa[nt] = aa[nt] + 1
 
-        GC = (100.0*(aa['G'] + aa['C']))/len(seq)
+        GC = (100.0 * (aa['G'] + aa['C'])) / len(seq)
 
         np = NotePad()
         tid = np.text_id()
 
-        tid.insert(END,"""%s
+        tid.insert(END, """%s
 
 Length = %d
 A=%d C=%d G=%d T=%d other=%d
@@ -423,7 +423,7 @@ GC=%f
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
-        seq = map(None,re.sub('[^A-Z]','',seq))
+        seq = map(None, re.sub('[^A-Z]', '', seq))
         seq.reverse()
         seq = ''.join(seq)
 
@@ -442,7 +442,7 @@ GC=%f
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
-        seq = re.sub('[^A-Z]','',seq)
+        seq = re.sub('[^A-Z]', '', seq)
 
         #print 'seq >%s<' % seq
         complementary = self.translator.complement(seq)
@@ -461,7 +461,7 @@ GC=%f
             start, stop = 1.0, self.sequence_id.index(END)
 
         seq = w.get(start, stop)
-        seq = re.sub('[^A-Z]','',seq)
+        seq = re.sub('[^A-Z]', '', seq)
 
         antip = self.translator.antiparallel(seq)
         w.delete(start, stop)
@@ -477,11 +477,11 @@ GC=%f
     def goto(self, *args):
         pos = self.goto_entry.get()
         try:
-            pos = int(pos) -1
+            pos = int(pos) - 1
         except:
             try:
                 start, stop = pos.split(':')
-                start = int(start)-1
+                start = int(start) - 1
                 stop = int(stop)
                 self.mark(start, stop)
                 return
@@ -489,15 +489,15 @@ GC=%f
                 import traceback
                 traceback.print_exc()
 
-                self.goto_entry.delete(0,END)
+                self.goto_entry.delete(0, END)
                 return
 
         self.sequence_id.focus()
-        self.sequence_id.mark_set('insert','1.%d' % pos)
+        self.sequence_id.mark_set('insert', '1.%d' % pos)
 
     def mark(self, start, stop):
         self.sequence_id.focus()
-        self.sequence_id.mark_set('insert','1.%d' % start)
+        self.sequence_id.mark_set('insert', '1.%d' % start)
         self.sequence_id.tag_add(SEL, '1.%d' % start, '1.%d' % stop)
 
 if __name__ == '__main__':

@@ -61,7 +61,7 @@ class FreqTable(dict):
             s += i
         return s
 
-    def __init__(self,in_dict,dict_type,alphabet=None):
+    def __init__(self, in_dict, dict_type, alphabet=None):
         self.alphabet = alphabet
         if dict_type == COUNT:
             self.count = in_dict
@@ -81,7 +81,7 @@ def read_count(f):
     for line in f:
         key, value = line.strip().split()
         count[key] = int(value)
-    freq_table = FreqTable(count,COUNT)
+    freq_table = FreqTable(count, COUNT)
     return freq_table
 
 
@@ -90,4 +90,4 @@ def read_freq(f):
     for line in f:
         key, value = line.strip().split()
         freq_dict[key] = float(value)
-    return FreqTable(freq_dict,FREQ)
+    return FreqTable(freq_dict, FREQ)
