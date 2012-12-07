@@ -27,7 +27,7 @@ class BlastIt:
         self.Choices()
 
     def GetBlasts(self):
-        pin, nin = [],[]
+        pin, nin = [], []
         try:
             pin.extend(glob.glob(os.environ['BLASTDB'] + '/*.pin'))
         except:
@@ -40,8 +40,8 @@ class BlastIt:
             pass
         nin.extend(glob.glob('*.nin'))
 
-        self.pin = map(lambda x: os.path.splitext(x)[0],pin)
-        self.nin = map(lambda x: os.path.splitext(x)[0],nin)
+        self.pin = map(lambda x: os.path.splitext(x)[0], pin)
+        self.nin = map(lambda x: os.path.splitext(x)[0], nin)
 
     def Choices(self):
         self.GetBlasts()
@@ -114,7 +114,7 @@ class BlastIt:
         while 1:
             try:
                 char = self.pipe.read(1)
-                self.notepad.insert(END,char)
+                self.notepad.insert(END, char)
                 self.notepad.update()
             except:
                 break

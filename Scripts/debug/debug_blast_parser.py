@@ -155,7 +155,7 @@ def test_blast_output(outfile):
         return 3
     print "It's caused by line %d:" % consumer.linenum
     lines = open(outfile).readlines()
-    start, end = consumer.linenum-CONTEXT, consumer.linenum+CONTEXT+1
+    start, end = consumer.linenum - CONTEXT, consumer.linenum + CONTEXT + 1
     if start < 0:
         start = 0
     if end > len(lines):
@@ -189,13 +189,13 @@ def test_blast_output(outfile):
         else:
             print "OK, let's see what the scanner's doing!"
             print
-            print "*"*20 + " BEGIN SCANNER TRACE " + "*"*20
+            print "*" * 20 + " BEGIN SCANNER TRACE " + "*" * 20
             try:
                 parser_class()._scanner.feed(
                     open(outfile), ParserSupport.TaggingConsumer())
             except etype, x:
                 pass
-            print "*"*20 + " END SCANNER TRACE " + "*"*20
+            print "*" * 20 + " END SCANNER TRACE " + "*" * 20
         print
 
     elif class_found == consumer_class:

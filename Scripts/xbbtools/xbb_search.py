@@ -44,7 +44,7 @@ class DNAsearch:
     def IUPAC2regex(self, s):
         rx = ''
         for i in s:
-            r = self.alphabet.get(i,i)
+            r = self.alphabet.get(i, i)
             if len(r) > 1:
                 rx = '%s[%s]' % (rx, r)
             else:
@@ -66,7 +66,7 @@ class DNAsearch:
         pos = -1
         positions = []
         while 1:
-            m = self._Search(pos+1)
+            m = self._Search(pos + 1)
             if not m:
                 break
             pos = m.start()
@@ -122,7 +122,7 @@ class XDNAsearch(Toplevel, DNAsearch):
         self.current_color = color
         self.current_tag = 'searched_%s' % self.current_color
         self.master.tag_config(self.current_tag, background=self.current_color)
-        self.master.tag_config(self.current_tag+'R', background=self.current_color, underline = 1)
+        self.master.tag_config(self.current_tag + 'R', background=self.current_color, underline = 1)
         self.colors.append(color)
 
     def change_color(self):
@@ -140,13 +140,13 @@ class XDNAsearch(Toplevel, DNAsearch):
             pattern = reverse_complement(pattern)
         self.SetPattern(pattern)
         pos = self.Search(self.cur_pos)
-        self.cur_pos = pos +1
+        self.cur_pos = pos + 1
         w = self.master
         if pos != -1:
             if self.highlight:
                 start, stop = pos, pos + len(self.pattern)
                 if other_strand:
-                    w.tag_add(self.current_tag+'R', '1.%d' % start, '1.%s' % stop)
+                    w.tag_add(self.current_tag + 'R', '1.%d' % start, '1.%s' % stop)
                 else:
                     w.tag_add(self.current_tag, '1.%d' % start, '1.%s' % stop)
                 w.see('1.%d' % start)

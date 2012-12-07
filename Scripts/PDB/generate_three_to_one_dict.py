@@ -75,7 +75,7 @@ while line:
         found_three = True
 
     if found_one and found_three:
-        if counter%5 == 0:
+        if counter % 5 == 0:
             three_to_one_buf.append('%s\n' % (current_line,))
             current_line = '    '
 
@@ -83,8 +83,8 @@ while line:
         counter += 1
 
         if one != '?':
-            if counter_noq%5 == 0:
-                three_to_one_buf_noq.append('%s\n'% (current_line_noq,))
+            if counter_noq % 5 == 0:
+                three_to_one_buf_noq.append('%s\n' % (current_line_noq,))
                 current_line_noq = '    '
 
             current_line_noq = '%s\'%s\':\'%s\',' % (current_line_noq, three, one)
