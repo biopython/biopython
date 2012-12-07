@@ -49,7 +49,7 @@ def UniprotIterator(handle, alphabet=Alphabet.ProteinAlphabet(), return_raw_comm
 
     This generator can be used in Bio.SeqIO
 
-    return_raw_comments = True --> comment fields are returned as complete xml to allow further processing
+    return_raw_comments = True --> comment fields are returned as complete XML to allow further processing
     skip_parsing_errors = True --> if parsing errors are found, skip to next entry
     """
     if isinstance(alphabet, Alphabet.NucleotideAlphabet):
@@ -176,13 +176,13 @@ class Parser(object):
 
             Comment fields are very heterogeneus. each type has his own (frequently mutated) schema.
             To store all the contained data, more complex data structures are needed, such as
-            annidated dictionaries. This is left to end user, by optionally setting:
+            annotated dictionaries. This is left to end user, by optionally setting:
 
             return_raw_comments=True
 
-            the orginal XMLs is returned in the annotation fields.
+            The original XML is returned in the annotation fields.
 
-            available comment types at december 2009:
+            Available comment types at december 2009:
                 "allergen"
                 "alternative products"
                 "biotechnology"
@@ -265,7 +265,7 @@ class Parser(object):
                 for loc_element in element.getiterator(NS +'location'):
                     pos_els = loc_element.getiterator(NS +'position')
                     pos_els = list(pos_els)
-                    # this try should be avoided, maybe it is safer to skip postion parsing for mass spectrometry
+                    # this try should be avoided, maybe it is safer to skip position parsing for mass spectrometry
                     try:
                         if pos_els:
                             end = int(pos_els[0].attrib['position'])
@@ -273,7 +273,7 @@ class Parser(object):
                         else:
                             start = int(loc_element.getiterator(NS +'begin')[0].attrib['position']) - 1
                             end = int(loc_element.getiterator(NS +'end')[0].attrib['position'])
-                    except:  # undefined positions or erroneusly mapped
+                    except:  # undefined positions or erroneously mapped
                         pass
                 mass = element.attrib['mass']
                 method = element.attrib['method']
