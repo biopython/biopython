@@ -5,7 +5,7 @@
  * Human Genome Center, Institute of Medical Science, University of Tokyo,
  * 4-6-1 Shirokanedai, Minato-ku, Tokyo 108-8639, Japan.
  * Contact: mdehoon 'AT' gsc.riken.jp
- * 
+ *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation with or without modifications and for any purpose and
  * without fee is hereby granted, provided that any copyright notices
@@ -14,7 +14,7 @@
  * names of the contributors or copyright holders not be used in
  * advertising or publicity pertaining to distribution of the software
  * without specific prior permission.
- * 
+ *
  * THE CONTRIBUTORS AND COPYRIGHT HOLDERS OF THIS SOFTWARE DISCLAIM ALL
  * WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL THE
@@ -23,7 +23,7 @@
  * OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
  * OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE
  * OR PERFORMANCE OF THIS SOFTWARE.
- * 
+ *
  */
 
 #include <time.h>
@@ -334,7 +334,7 @@ static int svd(int m, int n, double** u, double w[], double** vt)
  *   A=usv  of a real m by n rectangular matrix, where m is greater
  *   than or equal to n.  Householder bidiagonalization and a variant
  *   of the QR algorithm are used.
- *  
+ *
  *
  *   On input.
  *
@@ -932,7 +932,7 @@ positive integer if the singular value decomposition fails to converge.
 static
 double euclid (int n, double** data1, double** data2, int** mask1, int** mask2,
   const double weight[], int index1, int index2, int transpose)
- 
+
 /*
 Purpose
 =======
@@ -1708,7 +1708,7 @@ Otherwise, the distance between two columns in the matrix is calculated.
 
 /* *********************************************************************  */
 
-static double(*setmetric(char dist)) 
+static double(*setmetric(char dist))
   (int, double**, double**, int**, int**, const double[], int, int, int)
 { switch(dist)
   { case 'e': return &euclid;
@@ -2203,7 +2203,7 @@ calculating the medians.
     }
   }
 }
- 
+
 /* ********************************************************************* */
 
 int getclustercentroids(int nclusters, int nrows, int ncolumns,
@@ -2427,7 +2427,7 @@ kmeans(int nclusters, int nrows, int ncolumns, double** data, int** mask,
         break; /* Identical solution found; break out of this loop */
     }
 
-    if (npass<=1) 
+    if (npass<=1)
     { *error = total;
       break;
     }
@@ -2532,7 +2532,7 @@ kmedians(int nclusters, int nrows, int ncolumns, double** data, int** mask,
         break; /* Identical solution found; break out of this loop */
     }
 
-    if (npass<=1) 
+    if (npass<=1)
     { *error = total;
       break;
     }
@@ -2603,7 +2603,7 @@ of the matrix are clustered.
 
 npass      (input) int
 The number of times clustering is performed. Clustering is performed npass
-times, each time starting from a different (random) initial assignment of 
+times, each time starting from a different (random) initial assignment of
 genes to clusters. The clustering solution with the lowest within-cluster sum
 of distances is chosen.
 If npass==0, then the clustering algorithm will be run once, where the initial
@@ -2697,7 +2697,7 @@ number of clusters is larger than the number of elements being clustered,
       return;
     }
   }
-  
+
   if (method=='m')
   { double* cache = malloc(nelements*sizeof(double));
     if(cache)
@@ -3105,7 +3105,7 @@ weights array, the function returns NULL.
 
 /* ******************************************************************** */
 
-void cuttree (int nelements, Node* tree, int nclusters, int clusterid[]) 
+void cuttree (int nelements, Node* tree, int nclusters, int clusterid[])
 
 /*
 Purpose
@@ -3160,7 +3160,7 @@ error occured, all elements in clusterid are set to -1.
   }
   for (i = 0; i < n; i++) nodeid[i] = -1;
   for (i = n-1; i >= 0; i--)
-  { if(nodeid[i]<0) 
+  { if(nodeid[i]<0)
     { j = icluster;
       nodeid[i] = j;
       icluster++;
@@ -3269,7 +3269,7 @@ If a memory error occurs, pclcluster returns NULL.
   if(!makedatamask(nelements, ndata, &newdata, &newmask))
   { free(result);
     free(distid);
-    return NULL; 
+    return NULL;
   }
 
   for (i = 0; i < nelements; i++) distid[i] = i;
@@ -3313,7 +3313,7 @@ If a memory error occurs, pclcluster returns NULL.
     free(mask[is]);
     data[is] = data[nnodes-inode];
     mask[is] = mask[nnodes-inode];
-  
+
     /* Fix the distances */
     distid[is] = distid[nnodes-inode];
     for (i = 0; i < is; i++)
@@ -3334,7 +3334,7 @@ If a memory error occurs, pclcluster returns NULL.
   free(data);
   free(mask);
   free(distid);
- 
+
   return result;
 }
 
@@ -3829,7 +3829,7 @@ If a memory error occurs, treecluster returns NULL.
     for (i = 1; i < nelements; i++) free(distmatrix[i]);
     free (distmatrix);
   }
- 
+
   return result;
 }
 
@@ -4235,7 +4235,7 @@ somcluster.
 double clusterdistance (int nrows, int ncolumns, double** data,
   int** mask, double weight[], int n1, int n2, int index1[], int index2[],
   char dist, char method, int transpose)
-              
+
 /*
 Purpose
 =======
