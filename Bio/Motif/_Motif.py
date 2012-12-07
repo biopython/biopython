@@ -13,19 +13,129 @@ import warnings
 from Bio import BiopythonExperimentalWarning
 
 
-class ConsensusSeq(Seq):
-    # This is an ugly hack that allows us raise a warning if a user attempts
-    # to call the method motif.consensus() instead of accessing the property
-    # motif.consensus. It can be removed after consensus() as a method has
-    # been removed from Biopython. Same thing for motif.anticonsensus.
-    def __call__(self):
-        warnings.warn("""\
-Motif.consensus and Motif.anticonsensus are now properties instead of methods.
-Please use yourmotif.consensus instead of yourmotif.consensus(), and
-yourmotif.anticonsensus instead of yourmotif.anticonsensus()""",
-            PendingDeprecationWarning)
-        return self
-ConsensusSeq.__name__ = Seq.__name__
+class GenericPositionMatrix(dict):
+
+    def __init__(self, alphabet, values):
+        self.length = None
+        for letter in alphabet.letters:
+            if self.length is None:
+                self.length = len(values[letter])
+            elif self.length!=len(values[letter]):
+                raise Exception("Inconsistent lengths found in dictionary")
+            self[letter] = list(values[letter])
+        self.alphabet = alphabet
+
+    @property
+    def consensus(self):
+        """Returns the consensus sequence.
+        """
+        sequence = ""
+        for i in range(self.length):
+            maximum = float("-inf")
+            for letter in self:
+                count = self[letter][i]
+                if count > maximum:
+                    maximum = count
+                    sequence_letter = letter
+            sequence += sequence_letter
+        return Seq(sequence, self.alphabet)
+
+    @property
+    def anticonsensus(self):
+        sequence = ""
+        for i in range(self.length):
+            minimum = float("+inf")
+            for letter in self.counts:
+                count = self.counts[letter][i]
+                if count < minimum:
+                    minimum = count
+                    sequence_letter = letter
+            sequence += sequence_letter
+        return Seq(sequence, self.alphabet)
+
+    @property
+    def degenerate_consensus(self):
+        # Following the rules adapted from
+        # D. R. Cavener: "Comparison of the consensus sequence flanking
+        # translational start sites in Drosophila and vertebrates."
+        # Nucleic Acids Research 15(4): 1353-1361. (1987).
+        # The same rules are used by TRANSFAC.
+        degenerate_nucleotide = {
+            'A': 'A',
+            'C': 'C',
+            'G': 'G',
+            'T': 'T',
+            'AC': 'M',
+            'AG': 'R',
+            'AT': 'W',
+            'CG': 'S',
+            'CT': 'Y',
+            'GT': 'K',
+            'ACG': 'V',
+            'ACT': 'H',
+            'AGT': 'D',
+            'CGT': 'B',
+            'ACGT': 'N',
+        }
+        sequence = ""
+        for i in range(length):
+            def get(nucleotide):
+                return counts[nucleotide][i]
+            nucleotides = sorted(counts, key=get, reverse=True)
+            counts = [counts[c][i] for c in nucleotides]
+            # Follow the Cavener rules:
+            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
+                key = nucleotides[0]
+            elif 4*sum(counts[:2]) > 3*sum(counts):
+                key = "".join(sorted(nucleotides[:2]))
+            elif counts[3]==0:
+                key = "".join(sorted(nucleotides[:3]))
+            else:
+                key = "ACGT"
+            nucleotide = degenerate_nucleotide[key]
+            sequence += nucleotide
+        return Seq(sequence, alphabet = IUPAC.ambiguous_dna)
+
+
+class PositionWeightMatrix(GenericPositionMatrix):
+
+    def __init__(self, alphabet, counts):
+        GenericPositionMatrix.__init__(self, alphabet, counts)
+        for i in xrange(self.length):
+            total = sum([float(self[letter][i]) for letter in alphabet.letters])
+            for letter in alphabet.letters:
+                self[letter][i] /= total
+        for letter in alphabet.letters:
+            self[letter] = tuple(self[letter])
+
+    def ic(self, background=None):
+        """\
+Returns the information content of a motif.
+
+By default, a uniform background is used. To specify a non-uniform
+background, use the 'background' argument to pass a dictionary containing
+the probability of each letter in the alphabet associated with the motif
+under the background distribution.
+        """
+        result=0
+        if background is None:
+            background = {}
+            for a in self.alphabet.letters:
+                background[a] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for a in self.alphabet.letters:
+            background[a] /= total
+        for a in self.alphabet.letters:
+            if background[a]!=0:
+                result-=background[a]*math.log(background[a],2)
+        result *= self.length
+        for i in range(self.length):
+            for a in self.alphabet.letters:
+                if self[a][i]!=0:
+                    result+=self[a][i]*math.log(self[a][i],2)
+        return result
 
 
 class Motif(object):
@@ -54,7 +164,7 @@ class Motif(object):
                 elif self.length!=length:
                     raise Exception("counts matrix has inconsistent lengths")
             self.instances = None
-            self.counts = counts
+            self.counts = GenericPositionMatrix(alphabet, counts)
         elif instances is not None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
@@ -73,12 +183,13 @@ class Motif(object):
                 # If we didn't get a meaningful alphabet from the instances,
                 # assume it is DNA.
                 alphabet = IUPAC.unambiguous_dna
-            self.counts = {}
+            counts = {}
             for letter in alphabet.letters:
-                self.counts[letter] = [0] * self.length
+                counts[letter] = [0] * self.length
             for instance in self.instances:
                 for position, letter in enumerate(instance):
-                    self.counts[letter][position] += 1
+                    counts[letter][position] += 1
+            self.counts = GenericPositionMatrix(alphabet, counts)
         else:
             self.counts = None
             self.instances = None
@@ -239,7 +350,7 @@ please use
         """
 
         counts = {}
-        if pseudocounts==None:
+        if pseudocounts is None:
             for letter in self.alphabet.letters:
                 counts[letter] = [0.0] * self.length
         elif isinstance(pseudocounts, dict):
@@ -750,43 +861,33 @@ a future release of Biopython.""", PendingDeprecationWarning)
         else:
             return self.background
 
+    class ConsensusSeq(Seq):
+        # This is an ugly hack that allows us raise a warning if a user attempts
+        # to call the method motif.consensus() instead of accessing the property
+        # motif.consensus. It can be removed after consensus() as a method has
+        # been removed from Biopython. Same thing for motif.anticonsensus.
+        def __call__(self):
+            warnings.warn("""\
+Motif.consensus and Motif.anticonsensus are now properties instead of methods.
+Please use yourmotif.consensus instead of yourmotif.consensus(), and
+yourmotif.anticonsensus instead of yourmotif.anticonsensus()""",
+                PendingDeprecationWarning)
+            return self
+    ConsensusSeq.__name__ = Seq.__name__
+
     @property
     def consensus(self):
-        """Returns the consensus sequence of a motif.
+        """Returns the consensus sequence.
         """
-        res=""
-        for i in range(self.length):
-            max_f=0
-            max_n="X"
-            for n in sorted(self[i]):
-                if self[i][n]>max_f:
-                    max_f=self[i][n]
-                    max_n=n
-            res+=max_n
-        sequence = ConsensusSeq(res,self.alphabet)
-        # This is an ugly hack that allows us raise a warning if a user
-        # attempts to call the method motif.consensus() instead of accessing
-        # the property motif.consensus.
-        return sequence
+        sequence = self.counts.consensus
+        return Motif.ConsensusSeq(str(sequence), sequence.alphabet)
 
     @property
     def anticonsensus(self):
         """returns the least probable pattern to be generated from this motif.
         """
-        res=""
-        for i in range(self.length):
-            min_f=10.0
-            min_n="X"
-            for n in sorted(self[i]):
-                if self[i][n]<min_f:
-                    min_f=self[i][n]
-                    min_n=n
-            res+=min_n
-        sequence = ConsensusSeq(res,self.alphabet)
-        # This is an ugly hack that allows us raise a warning if a user
-        # attempts to call the method motif.anticonsensus() instead of
-        # accessing the property motif.anticonsensus.
-        return sequence
+        sequence = self.counts.anticonsensus
+        return Motif.ConsensusSeq(str(sequence), sequence.alphabet)
 
     @property
     def degenerate_consensus(self):
@@ -795,42 +896,7 @@ D. R. Cavener: "Comparison of the consensus sequence flanking
 translational start sites in Drosophila and vertebrates."
 Nucleic Acids Research 15(4): 1353-1361. (1987).
 The same rules are used by TRANSFAC."""
-        degenerate_nucleotide = {
-            'A': 'A',
-            'C': 'C',
-            'G': 'G',
-            'T': 'T',
-            'AC': 'M',
-            'AG': 'R',
-            'AT': 'W',
-            'CG': 'S',
-            'CT': 'Y',
-            'GT': 'K',
-            'ACG': 'V',
-            'ACT': 'H',
-            'AGT': 'D',
-            'CGT': 'B',
-            'ACGT': 'N',
-        }
-        res = ""
-        for i in range(self.length):
-            def get(nucleotide):
-                return self.counts[nucleotide][i]
-            nucleotides = sorted(self.counts, key=get, reverse=True)
-            counts = [self.counts[c][i] for c in nucleotides]
-            # Follow the Cavener rules:
-            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
-                key = nucleotides[0]
-            elif 4*sum(counts[:2]) > 3*sum(counts):
-                key = "".join(sorted(nucleotides[:2]))
-            elif counts[3]==0:
-                key = "".join(sorted(nucleotides[:3]))
-            else:
-                key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
-            res += nucleotide
-        sequence = Seq(res, alphabet = IUPAC.ambiguous_dna)
-        return sequence
+        return self.counts.degenerate_consensus
 
     def max_score(self):
         """Maximal possible score for this motif.
@@ -1161,52 +1227,4 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
                 score += temp
             else:
                 result[i] = score
-        return result
-
-
-class PositionWeightMatrix(dict):
-
-    def __init__(self, alphabet, counts):
-        self.alphabet = alphabet
-        self.length = None
-        for letter in alphabet.letters:
-            if self.length==None:
-                self.length = len(counts[letter])
-            elif len(counts[letter])!=self.length:
-                raise Exception("Inconsistent size found for the counts")
-            self[letter] = list(counts[letter])
-        for i in xrange(self.length):
-            total = sum([float(self[letter][i]) for letter in alphabet.letters])
-            for letter in self.alphabet.letters:
-                self[letter][i] /= total
-        for letter in self.alphabet.letters:
-            self[letter] = tuple(self[letter])
-
-    def ic(self, background=None):
-        """\
-Returns the information content of a motif.
-
-By default, a uniform background is used. To specify a non-uniform
-background, use the 'background' argument to pass a dictionary containing
-the probability of each letter in the alphabet associated with the motif
-under the background distribution.
-        """
-        result=0
-        if background is None:
-            background = {}
-            for a in self.alphabet.letters:
-                background[a] = 1.0
-        else:
-            background = dict(background)
-        total = sum(background.values())
-        for a in self.alphabet.letters:
-            background[a] /= total
-        for a in self.alphabet.letters:
-            if background[a]!=0:
-                result-=background[a]*math.log(background[a],2)
-        result *= self.length
-        for i in range(self.length):
-            for a in self.alphabet.letters:
-                if self[a][i]!=0:
-                    result+=self[a][i]*math.log(self[a][i],2)
         return result
