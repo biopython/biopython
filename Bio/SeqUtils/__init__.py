@@ -360,17 +360,17 @@ def six_frame_translations(seq, genetic_code = 1):
         subseq = seq[i:i+60]
         csubseq = comp[i:i+60]
         p = i//3
-        res = res + '%d/%d\n' % (i+1, i/3+1)
-        res = res + '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
-        res = res + ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
-        res = res + '  '.join(map(None, frames[1][p:p+20])) + '\n'
+        res += '%d/%d\n' % (i+1, i/3+1)
+        res += '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
+        res += ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
+        res += '  '.join(map(None, frames[1][p:p+20])) + '\n'
         # seq
-        res = res + subseq.lower() + '%5d %%\n' % int(GC(subseq))
-        res = res + csubseq.lower() + '\n'
+        res += subseq.lower() + '%5d %%\n' % int(GC(subseq))
+        res += csubseq.lower() + '\n'
         # - frames
-        res = res + '  '.join(map(None, frames[-2][p:p+20])) +' \n'
-        res = res + ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
-        res = res + '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
+        res += '  '.join(map(None, frames[-2][p:p+20])) +' \n'
+        res += ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
+        res += '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
     return res
 
 # }}}
