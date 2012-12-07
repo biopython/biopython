@@ -15,6 +15,7 @@ text_30_hmmscan_005.out      single query, multiple matches, multiple hsps per m
 text_30_hmmscan_006.out      single query, multiple matches, multiple hsps per match, inclusion threshold present
 text_30_hmmscan_007.out      single query, one match, no alignment
 text_30_hmmscan_008.out      single query, multiple matches, no alignment width
+text_30_hmmscan_009.out      single query, alignment block(s) with large gaps (bug 3399 in Redmine)
 text_30_hmmsearch_001.out    single query, no match
 text_30_hmmsearch_002.out    single query, multiple matches, multiple hsps per match
 text_30_hmmsearch_003.out    single query, multiple matches, multiple hsps per match, no alignment
