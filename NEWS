@@ -30,6 +30,10 @@ so NumPy is currently required for this). Alternatively, you can use the
 "pdb-seqres" format to read the complete protein sequence as it is listed in
 the the PDB header, if available.
 
+The Bio.SeqUtils module how has a seq1 function to turn a sequence using three
+letter amino acid codes into one using the more common one letter codes. This
+acts as the inverse of the existing seq3 function.
+
 A new warning, Bio.BiopythonExperimentalWarning, has been introduced. This
 marks any experimental code included in the otherwise stable release. Such
 'beta' level code is ready for wider testing, but still likely to change and
