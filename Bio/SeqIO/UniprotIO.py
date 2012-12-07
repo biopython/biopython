@@ -103,7 +103,7 @@ class Parser(object):
             self.ParsedSeqRecord.dbxrefs.append(self.dbname + ':' + element.text)
 
         def _parse_accession(element):
-            append_to_annotations('accessions', element.text)# to cope with SwissProt plain text parser
+            append_to_annotations('accessions', element.text)  # to cope with SwissProt plain text parser
             self.ParsedSeqRecord.dbxrefs.append(self.dbname + ':' + element.text)
 
         def _parse_protein(element):
@@ -150,7 +150,7 @@ class Parser(object):
                             #e.g. synonym
                             append_to_annotations("organism_name", organism_element.text)
                 elif organism_element.tag == NS + 'dbReference':
-                    self.ParsedSeqRecord.dbxrefs.append(organism_element.attrib['type']+':'+organism_element.attrib['id'])
+                    self.ParsedSeqRecord.dbxrefs.append(organism_element.attrib['type'] + ':' + organism_element.attrib['id'])
                 elif organism_element.tag == NS + 'lineage':
                     for taxon_element in organism_element.getchildren():
                         if taxon_element.tag == NS + 'taxon':
@@ -251,7 +251,7 @@ class Parser(object):
                             ann_key = 'comment_%s_%s' % (element.attrib['type'].replace(' ', ''), el.tag.replace(NS, ''))
                             append_to_annotations(ann_key, el.text)
             elif element.attrib['type'] == 'interaction':
-                for interact_element in element.getiterator(NS +'interactant'):
+                for interact_element in element.getiterator(NS + 'interactant'):
                     ann_key = 'comment_%s_intactId' % element.attrib['type']
                     append_to_annotations(ann_key, interact_element.attrib['intactId'])
             elif element.attrib['type'] == 'alternative products':
@@ -262,8 +262,8 @@ class Parser(object):
             elif element.attrib['type'] == 'mass spectrometry':
                 ann_key = 'comment_%s' % element.attrib['type'].replace(' ', '')
                 start = end = 0
-                for loc_element in element.getiterator(NS +'location'):
-                    pos_els = loc_element.getiterator(NS +'position')
+                for loc_element in element.getiterator(NS + 'location'):
+                    pos_els = loc_element.getiterator(NS + 'position')
                     pos_els = list(pos_els)
                     # this try should be avoided, maybe it is safer to skip position parsing for mass spectrometry
                     try:
@@ -271,8 +271,8 @@ class Parser(object):
                             end = int(pos_els[0].attrib['position'])
                             start = end - 1
                         else:
-                            start = int(loc_element.getiterator(NS +'begin')[0].attrib['position']) - 1
-                            end = int(loc_element.getiterator(NS +'end')[0].attrib['position'])
+                            start = int(loc_element.getiterator(NS + 'begin')[0].attrib['position']) - 1
+                            end = int(loc_element.getiterator(NS + 'end')[0].attrib['position'])
                     except:  # undefined positions or erroneously mapped
                         pass
                 mass = element.attrib['mass']
@@ -326,14 +326,14 @@ class Parser(object):
                                         feature.qualifiers['method'] = method
                                         feature.qualifiers['resolution'] = resolution
                                         feature.qualifiers['chains'] = pair[0].split('/')
-                                        start = int(pair[1].split('-')[0])-1
+                                        start = int(pair[1].split('-')[0]) - 1
                                         end = int(pair[1].split('-')[1])
                                         feature.location = SeqFeature.FeatureLocation(start, end)
                                         #self.ParsedSeqRecord.features.append(feature)
 
             for ref_element in element.getchildren():
                 if ref_element.tag == NS + 'property':
-                    pass# this data cannot be fitted in a seqrecord object with a simple list. however at least ensembl and EMBL parsing can be improved to add entries in dbxrefs
+                    pass  # this data cannot be fitted in a seqrecord object with a simple list. however at least ensembl and EMBL parsing can be improved to add entries in dbxrefs
 
         def _parse_reference(element):
             reference = SeqFeature.Reference()
@@ -347,7 +347,7 @@ class Parser(object):
                 if ref_element.tag == NS + 'citation':
                     pub_type = ref_element.attrib['type']
                     if pub_type == 'submission':
-                        pub_type += ' to the '+ref_element.attrib['db']
+                        pub_type += ' to the ' + ref_element.attrib['db']
                     if 'name' in ref_element.attrib:
                         journal_name = ref_element.attrib['name']
                     pub_date = ref_element.attrib.get('date', '')
@@ -477,7 +477,7 @@ class Parser(object):
                 self.ParsedSeqRecord.annotations[k] = int(v)
             else:
                 #self.ParsedSeqRecord.annotations["entry_%s" % k] = v
-                self.ParsedSeqRecord.annotations[k] = v # to cope with swissProt plain text parser
+                self.ParsedSeqRecord.annotations[k] = v  # to cope with swissProt plain text parser
 
         #Top-to-bottom entry children parsing
         for element in self.entry.getchildren():
