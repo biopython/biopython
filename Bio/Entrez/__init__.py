@@ -94,8 +94,8 @@ def epost(db, **keywds):
 
     Raises an IOError exception if there's a network error.
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
-    variables = {'db' : db}
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/epost.fcgi'
+    variables = {'db': db}
     variables.update(keywds)
     return _open(cgi, variables, post=True)
 
@@ -125,8 +125,8 @@ def efetch(db, **keywds):
     Warning: The NCBI changed the default retmode in Feb 2012, so many
     databases which previously returned text output now give XML.
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-    variables = {'db' : db}
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
+    variables = {'db': db}
     keywords = keywds
     if "id" in keywds and isinstance(keywds["id"], list):
         #Fix for NCBI change (probably part of EFetch 2,0, Feb 2012) where
@@ -168,9 +168,9 @@ def esearch(db, term, **keywds):
     True
 
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
-    variables = {'db' : db,
-                 'term' : term}
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
+    variables = {'db': db,
+                 'term': term}
     variables.update(keywds)
     return _open(cgi, variables)
 
@@ -208,7 +208,7 @@ def elink(**keywds):
 
     This is explained in much more detail in the Biopython Tutorial.
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -236,7 +236,7 @@ def einfo(**keywds):
     True
 
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -268,7 +268,7 @@ def esummary(**keywds):
     Computational biology and chemistry
 
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -302,7 +302,7 @@ def egquery(**keywds):
     True
 
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)
@@ -331,7 +331,7 @@ def espell(**keywds):
     biopython
 
     """
-    cgi='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
+    cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/espell.fcgi'
     variables = {}
     variables.update(keywds)
     return _open(cgi, variables)

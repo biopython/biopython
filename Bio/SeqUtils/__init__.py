@@ -37,7 +37,7 @@ def GC(seq):
     Note that this will return zero for an empty sequence.
     """
     try:
-        gc = sum(map(seq.count,['G','C','g','c','S','s']))
+        gc = sum(map(seq.count, ['G', 'C', 'g', 'c', 'S', 's']))
         return gc*100.0/len(seq)
     except ZeroDivisionError:
         return 0.0
@@ -57,21 +57,21 @@ def GC123(seq):
     nucleotides.
     """
     d= {}
-    for nt in ['A','T','G','C']:
-        d[nt] = [0,0,0]
+    for nt in ['A', 'T', 'G', 'C']:
+        d[nt] = [0, 0, 0]
 
-    for i in range(0,len(seq),3):
+    for i in range(0, len(seq), 3):
         codon = seq[i:i+3]
         if len(codon) < 3:
             codon += '  '
-        for pos in range(0,3):
-            for nt in ['A','T','G','C']:
+        for pos in range(0, 3):
+            for nt in ['A', 'T', 'G', 'C']:
                 if codon[pos] == nt or codon[pos] == nt.lower():
                     d[nt][pos] += 1
     gc = {}
     gcall = 0
     nall = 0
-    for i in range(0,3):
+    for i in range(0, 3):
         try:
             n = d['G'][i] + d['C'][i] +d['T'][i] + d['A'][i]
             gc[i] = (d['G'][i] + d['C'][i])*100.0/n
@@ -137,7 +137,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
     ty +=20
     canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
     ty +=20
-    canvas.create_oval(x1,y1, x2, y2)
+    canvas.create_oval(x1, y1, x2, y2)
 
     acc = 0
     start = 0
@@ -151,7 +151,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1,y1,x2,y2, fill = 'blue')
+        canvas.create_line(x1, y1, x2, y2, fill = 'blue')
         # accumulated GC skew
         r1 = r - 50
         r2 = r1 - acc
@@ -159,7 +159,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1,y1,x2,y2, fill = 'magenta')
+        canvas.create_line(x1, y1, x2, y2, fill = 'magenta')
 
         canvas.update()
         start += window
@@ -209,13 +209,13 @@ def nt_search(seq, subseq):
 ######################
 # {{{
 
-_THREECODE = {'A':'Ala', 'B':'Asx', 'C':'Cys', 'D':'Asp',
-             'E':'Glu', 'F':'Phe', 'G':'Gly', 'H':'His',
-             'I':'Ile', 'K':'Lys', 'L':'Leu', 'M':'Met',
-             'N':'Asn', 'P':'Pro', 'Q':'Gln', 'R':'Arg',
-             'S':'Ser', 'T':'Thr', 'V':'Val', 'W':'Trp',
-             'Y':'Tyr', 'Z':'Glx', 'X':'Xaa',
-             'U':'Sel', 'O':'Pyl', 'J':'Xle',
+_THREECODE = {'A': 'Ala', 'B': 'Asx', 'C': 'Cys', 'D': 'Asp',
+             'E': 'Glu', 'F': 'Phe', 'G': 'Gly', 'H': 'His',
+             'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met',
+             'N': 'Asn', 'P': 'Pro', 'Q': 'Gln', 'R': 'Arg',
+             'S': 'Ser', 'T': 'Thr', 'V': 'Val', 'W': 'Trp',
+             'Y': 'Tyr', 'Z': 'Glx', 'X': 'Xaa',
+             'U': 'Sel', 'O': 'Pyl', 'J': 'Xle',
              }
 
 
@@ -340,7 +340,7 @@ def six_frame_translations(seq, genetic_code = 1):
     comp = anti[::-1]
     length = len(seq)
     frames = {}
-    for i in range(0,3):
+    for i in range(0, 3):
         frames[i+1] = translate(seq[i:], genetic_code)
         frames[-(i+1)] = translate(anti[i:], genetic_code)[::-1]
 
@@ -350,27 +350,27 @@ def six_frame_translations(seq, genetic_code = 1):
     else:
         short = seq
     header = 'GC_Frame: '
-    for nt in ['a','t','g','c']:
+    for nt in ['a', 't', 'g', 'c']:
         header += '%s:%d ' % (nt, seq.count(nt.upper()))
 
-    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(),length, GC(seq))
+    header += '\nSequence: %s, %d nt, %0.2f %%GC\n\n\n' % (short.lower(), length, GC(seq))
     res = header
 
-    for i in range(0,length,60):
+    for i in range(0, length, 60):
         subseq = seq[i:i+60]
         csubseq = comp[i:i+60]
         p = i//3
         res = res + '%d/%d\n' % (i+1, i/3+1)
-        res = res + '  ' + '  '.join(map(None,frames[3][p:p+20])) + '\n'
-        res = res + ' ' + '  '.join(map(None,frames[2][p:p+20])) + '\n'
-        res = res + '  '.join(map(None,frames[1][p:p+20])) + '\n'
+        res = res + '  ' + '  '.join(map(None, frames[3][p:p+20])) + '\n'
+        res = res + ' ' + '  '.join(map(None, frames[2][p:p+20])) + '\n'
+        res = res + '  '.join(map(None, frames[1][p:p+20])) + '\n'
         # seq
         res = res + subseq.lower() + '%5d %%\n' % int(GC(subseq))
         res = res + csubseq.lower() + '\n'
         # - frames
-        res = res + '  '.join(map(None,frames[-2][p:p+20])) +' \n'
-        res = res + ' ' + '  '.join(map(None,frames[-1][p:p+20])) + '\n'
-        res = res + '  ' + '  '.join(map(None,frames[-3][p:p+20])) + '\n\n'
+        res = res + '  '.join(map(None, frames[-2][p:p+20])) +' \n'
+        res = res + ' ' + '  '.join(map(None, frames[-1][p:p+20])) + '\n'
+        res = res + '  ' + '  '.join(map(None, frames[-3][p:p+20])) + '\n\n'
     return res
 
 # }}}
@@ -427,10 +427,10 @@ def _test():
     """Run the module's doctests (PRIVATE)."""
     import os
     import doctest
-    if os.path.isdir(os.path.join("..","Tests")):
+    if os.path.isdir(os.path.join("..", "Tests")):
         print "Running doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","Tests"))
+        os.chdir(os.path.join("..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir

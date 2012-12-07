@@ -9,7 +9,7 @@
 import math
 
 
-def Tm_staluc(s,dnac=50,saltc=50,rna=0):
+def Tm_staluc(s, dnac=50, saltc=50, rna=0):
     """Returns DNA/DNA tm using nearest neighbor thermodynamics.
 
     dnac is DNA concentration [nM]
@@ -61,7 +61,7 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     def tercorr(stri):
         deltah = 0
         deltas = 0
-        if rna==0:
+        if rna == 0:
             #DNA/DNA
             #Allawi and SantaLucia (1997). Biochemistry 36 : 10581-10594
             if stri.startswith('G') or stri.startswith('C'):
@@ -78,8 +78,8 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
                 deltas -= 4.1
             dhL = dh + deltah
             dsL = ds + deltas
-            return dsL,dhL
-        elif rna==1:
+            return dsL, dhL
+        elif rna == 1:
             #RNA
             if stri.startswith('G') or stri.startswith('C'):
                 deltah -= 3.61
@@ -98,17 +98,17 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
             dhL = dh + deltah
             dsL = ds + deltas
             # print "delta h=",dhL
-            return dsL,dhL
+            return dsL, dhL
         else:
             raise ValueError("rna = %r not supported" % rna)
 
-    def overcount(st,p):
+    def overcount(st, p):
         """Returns how many p are on st, works even for overlapping"""
         ocu = 0
         x = 0
         while True:
             try:
-                i = st.index(p,x)
+                i = st.index(p, x)
             except ValueError:
                 break
             ocu += 1
@@ -123,46 +123,46 @@ def Tm_staluc(s,dnac=50,saltc=50,rna=0):
     k = (dnac/4.0)*1e-9
     #With complementary check on, the 4.0 should be changed to a variable.
 
-    if rna==0:
+    if rna == 0:
         #DNA/DNA
         #Allawi and SantaLucia (1997). Biochemistry 36 : 10581-10594
-        vh = vh + (overcount(sup,"AA"))*7.9 + (overcount(sup,"TT"))*\
-        7.9 + (overcount(sup,"AT"))*7.2 + (overcount(sup,"TA"))*7.2 \
-        + (overcount(sup,"CA"))*8.5 + (overcount(sup,"TG"))*8.5 + \
-        (overcount(sup,"GT"))*8.4 + (overcount(sup,"AC"))*8.4
-        vh = vh + (overcount(sup,"CT"))*7.8+(overcount(sup,"AG"))*\
-        7.8 + (overcount(sup,"GA"))*8.2 + (overcount(sup,"TC"))*8.2
-        vh = vh + (overcount(sup,"CG"))*10.6+(overcount(sup,"GC"))*\
-        9.8 + (overcount(sup,"GG"))*8 + (overcount(sup,"CC"))*8
-        vs = vs + (overcount(sup,"AA"))*22.2+(overcount(sup,"TT"))*\
-        22.2 + (overcount(sup,"AT"))*20.4 + (overcount(sup,"TA"))*21.3
-        vs = vs + (overcount(sup,"CA"))*22.7+(overcount(sup,"TG"))*\
-        22.7 + (overcount(sup,"GT"))*22.4 + (overcount(sup,"AC"))*22.4
-        vs = vs + (overcount(sup,"CT"))*21.0+(overcount(sup,"AG"))*\
-        21.0 + (overcount(sup,"GA"))*22.2 + (overcount(sup,"TC"))*22.2
-        vs = vs + (overcount(sup,"CG"))*27.2+(overcount(sup,"GC"))*\
-        24.4 + (overcount(sup,"GG"))*19.9 + (overcount(sup,"CC"))*19.9
+        vh = vh + (overcount(sup, "AA"))*7.9 + (overcount(sup, "TT"))*\
+        7.9 + (overcount(sup, "AT"))*7.2 + (overcount(sup, "TA"))*7.2 \
+        + (overcount(sup, "CA"))*8.5 + (overcount(sup, "TG"))*8.5 + \
+        (overcount(sup, "GT"))*8.4 + (overcount(sup, "AC"))*8.4
+        vh = vh + (overcount(sup, "CT"))*7.8+(overcount(sup, "AG"))*\
+        7.8 + (overcount(sup, "GA"))*8.2 + (overcount(sup, "TC"))*8.2
+        vh = vh + (overcount(sup, "CG"))*10.6+(overcount(sup, "GC"))*\
+        9.8 + (overcount(sup, "GG"))*8 + (overcount(sup, "CC"))*8
+        vs = vs + (overcount(sup, "AA"))*22.2+(overcount(sup, "TT"))*\
+        22.2 + (overcount(sup, "AT"))*20.4 + (overcount(sup, "TA"))*21.3
+        vs = vs + (overcount(sup, "CA"))*22.7+(overcount(sup, "TG"))*\
+        22.7 + (overcount(sup, "GT"))*22.4 + (overcount(sup, "AC"))*22.4
+        vs = vs + (overcount(sup, "CT"))*21.0+(overcount(sup, "AG"))*\
+        21.0 + (overcount(sup, "GA"))*22.2 + (overcount(sup, "TC"))*22.2
+        vs = vs + (overcount(sup, "CG"))*27.2+(overcount(sup, "GC"))*\
+        24.4 + (overcount(sup, "GG"))*19.9 + (overcount(sup, "CC"))*19.9
         ds = vs
         dh = vh
-    elif rna==1:
+    elif rna == 1:
         #RNA/RNA hybridisation of Xia et al (1998)
         #Biochemistry 37: 14719-14735
-        vh = vh+(overcount(sup,"AA"))*6.82+(overcount(sup,"TT"))*6.6+\
-        (overcount(sup,"AT"))*9.38 + (overcount(sup,"TA"))*7.69+\
-        (overcount(sup,"CA"))*10.44 + (overcount(sup,"TG"))*10.5+\
-        (overcount(sup,"GT"))*11.4 + (overcount(sup,"AC"))*10.2
-        vh = vh + (overcount(sup,"CT"))*10.48 + (overcount(sup,"AG"))\
-        *7.6+(overcount(sup,"GA"))*12.44+(overcount(sup,"TC"))*13.3
-        vh = vh + (overcount(sup,"CG"))*10.64 + (overcount(sup,"GC"))\
-        *14.88+(overcount(sup,"GG"))*13.39+(overcount(sup,"CC"))*12.2
-        vs = vs + (overcount(sup,"AA"))*19.0 + (overcount(sup,"TT"))*\
-        18.4+(overcount(sup,"AT"))*26.7+(overcount(sup,"TA"))*20.5
-        vs = vs + (overcount(sup,"CA"))*26.9 + (overcount(sup,"TG"))*\
-        27.8 + (overcount(sup,"GT"))*29.5 + (overcount(sup,"AC"))*26.2
-        vs = vs + (overcount(sup,"CT"))*27.1 + (overcount(sup,"AG"))*\
-        19.2 + (overcount(sup,"GA"))*32.5 + (overcount(sup,"TC"))*35.5
-        vs = vs + (overcount(sup,"CG"))*26.7 + (overcount(sup,"GC"))\
-        *36.9 + (overcount(sup,"GG"))*32.7 + (overcount(sup,"CC"))*29.7
+        vh = vh+(overcount(sup, "AA"))*6.82+(overcount(sup, "TT"))*6.6+\
+        (overcount(sup, "AT"))*9.38 + (overcount(sup, "TA"))*7.69+\
+        (overcount(sup, "CA"))*10.44 + (overcount(sup, "TG"))*10.5+\
+        (overcount(sup, "GT"))*11.4 + (overcount(sup, "AC"))*10.2
+        vh = vh + (overcount(sup, "CT"))*10.48 + (overcount(sup, "AG"))\
+        *7.6+(overcount(sup, "GA"))*12.44+(overcount(sup, "TC"))*13.3
+        vh = vh + (overcount(sup, "CG"))*10.64 + (overcount(sup, "GC"))\
+        *14.88+(overcount(sup, "GG"))*13.39+(overcount(sup, "CC"))*12.2
+        vs = vs + (overcount(sup, "AA"))*19.0 + (overcount(sup, "TT"))*\
+        18.4+(overcount(sup, "AT"))*26.7+(overcount(sup, "TA"))*20.5
+        vs = vs + (overcount(sup, "CA"))*26.9 + (overcount(sup, "TG"))*\
+        27.8 + (overcount(sup, "GT"))*29.5 + (overcount(sup, "AC"))*26.2
+        vs = vs + (overcount(sup, "CT"))*27.1 + (overcount(sup, "AG"))*\
+        19.2 + (overcount(sup, "GA"))*32.5 + (overcount(sup, "TC"))*35.5
+        vs = vs + (overcount(sup, "CG"))*26.7 + (overcount(sup, "GC"))\
+        *36.9 + (overcount(sup, "GG"))*32.7 + (overcount(sup, "CC"))*29.7
         ds = vs
         dh = vh
     else:

@@ -41,7 +41,7 @@ def _maketrans(complement_mapping):
     after = ''.join(complement_mapping.values())
     before = before + before.lower()
     after = after + after.lower()
-    if sys.version_info[0] == 3 :
+    if sys.version_info[0] == 3:
         return str.maketrans(before, after)
     else:
         return string.maketrans(before, after)
@@ -105,7 +105,7 @@ class Seq(object):
     # A data property is/was a Seq API requirement
     # Note this is read only since the Seq object is meant to be imutable
     @property
-    def data(self) :
+    def data(self):
         """Sequence as a string (DEPRECATED).
 
         This is a read only property provided for backwards compatility with
@@ -204,7 +204,7 @@ class Seq(object):
         """Returns the length of the sequence, use len(my_seq)."""
         return len(self._data)       # Seq API requirement
 
-    def __getitem__(self, index) :                 # Seq API requirement
+    def __getitem__(self, index):                 # Seq API requirement
         """Returns a subsequence of single letter, use my_seq[index]."""
         #Note since Python 2.0, __getslice__ is deprecated
         #and __getitem__ is used instead.
@@ -282,7 +282,7 @@ class Seq(object):
         if isinstance(other, SeqRecord):
             #Get the SeqRecord's __radd__ to handle this
             return NotImplemented
-        else :
+        else:
             raise TypeError
 
     def __radd__(self, other):
@@ -837,7 +837,7 @@ class Seq(object):
             alphabet = IUPAC.ambiguous_rna
         else:
             alphabet = Alphabet.generic_rna
-        return Seq(str(self).replace('T','U').replace('t','u'), alphabet)
+        return Seq(str(self).replace('T', 'U').replace('t', 'u'), alphabet)
 
     def back_transcribe(self):
         """Returns the DNA sequence from an RNA sequence. New Seq object.
@@ -1493,9 +1493,9 @@ class UnknownSeq(Seq):
         """
         #Offload the alphabet stuff
         s = Seq(self._character, self.alphabet).ungap()
-        if s :
+        if s:
             return UnknownSeq(self._length, s.alphabet, self._character)
-        else :
+        else:
             return Seq("", s.alphabet)
 
 
@@ -1807,7 +1807,7 @@ class MutableSeq(object):
             d = ambiguous_rna_complement
         else:
             d = ambiguous_dna_complement
-        c = dict([(x.lower(), y.lower()) for x,y in d.iteritems()])
+        c = dict([(x.lower(), y.lower()) for x, y in d.iteritems()])
         d.update(c)
         self.data = map(lambda c: d[c], self.data)
         self.data = array.array(self.array_indicator, self.data)
@@ -1890,7 +1890,7 @@ def transcribe(dna):
     elif isinstance(dna, MutableSeq):
         return dna.toseq().transcribe()
     else:
-        return dna.replace('T','U').replace('t','u')
+        return dna.replace('T', 'U').replace('t', 'u')
 
 
 def back_transcribe(rna):
@@ -1912,7 +1912,7 @@ def back_transcribe(rna):
     elif isinstance(rna, MutableSeq):
         return rna.toseq().back_transcribe()
     else:
-        return rna.replace('U','T').replace('u','t')
+        return rna.replace('U', 'T').replace('u', 't')
 
 
 def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
@@ -1989,7 +1989,7 @@ def _translate_str(sequence, table, stop_symbol="*", to_stop=False,
         sequence = sequence[3:-3]
         amino_acids = ["M"]
     n = len(sequence)
-    for i in xrange(0,n-n%3,3):
+    for i in xrange(0, n-n%3, 3):
         codon = sequence[i:i+3]
         try:
             amino_acids.append(forward_table[codon])
@@ -2136,7 +2136,7 @@ def reverse_complement(sequence):
 
 def _test():
     """Run the Bio.Seq module's doctests (PRIVATE)."""
-    if sys.version_info[0:2] == (3,1):
+    if sys.version_info[0:2] == (3, 1):
         print "Not running Bio.Seq doctest on Python 3.1"
         print "See http://bugs.python.org/issue7490"
     else:

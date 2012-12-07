@@ -288,14 +288,14 @@ class SeqFeature(object):
             #(the MutableSeq reverse complement acts in situ)
             parent_sequence = parent_sequence.toseq()
         if self.sub_features:
-            if self.location_operator!="join":
+            if self.location_operator != "join":
                 raise ValueError(self.location_operator)
             if self.location.strand == -1:
                 #This is a special case given how the GenBank parser works.
                 #Must avoid doing the reverse complement twice.
                 parts = []
                 for f_sub in self.sub_features[::-1]:
-                    assert f_sub.location.strand==-1
+                    assert f_sub.location.strand == -1
                     parts.append(f_sub.location.extract(parent_sequence))
             else:
                 #This copes with mixed strand features:
@@ -303,7 +303,8 @@ class SeqFeature(object):
                          for f_sub in self.sub_features]
             #We use addition rather than a join to avoid alphabet issues:
             f_seq = parts[0]
-            for part in parts[1:] : f_seq += part
+            for part in parts[1:]:
+                f_seq += part
             return f_seq
         else:
             return self.location.extract(parent_sequence)
@@ -1416,15 +1417,15 @@ def _test():
     """
     import doctest
     import os
-    if os.path.isdir(os.path.join("..","Tests")):
+    if os.path.isdir(os.path.join("..", "Tests")):
         print "Running doctests..."
         cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","Tests"))
+        os.chdir(os.path.join("..", "Tests"))
         doctest.testmod()
         os.chdir(cur_dir)
         del cur_dir
         print "Done"
-    elif os.path.isdir(os.path.join("Tests")) :
+    elif os.path.isdir(os.path.join("Tests")):
         print "Running doctests..."
         cur_dir = os.path.abspath(os.curdir)
         os.chdir(os.path.join("Tests"))

@@ -332,6 +332,6 @@ if __name__ == "__main__":
     user_functions=[udf1, udf2, udf3] # must be an iterable type
 
     xe=train(xcar, ycar, user_functions)
-    for xv,yv in zip(xcar, ycar):
+    for xv, yv in zip(xcar, ycar):
         xc=classify(xe, xv)
         print 'Pred:', xv, 'gives', xc, 'y is', yv

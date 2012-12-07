@@ -460,7 +460,7 @@ class DatabaseLoader:
             # we could verify that the Scientific Name etc in the database
             # is the same and update it or print a warning if not...
             if isinstance(taxon_id, list):
-                assert len(taxon_id)==1
+                assert len(taxon_id) == 1
                 return taxon_id[0]
             else:
                 return taxon_id
@@ -509,7 +509,7 @@ class DatabaseLoader:
             version = 0
 
         if "accessions" in record.annotations \
-        and isinstance(record.annotations["accessions"],list) \
+        and isinstance(record.annotations["accessions"], list) \
         and record.annotations["accessions"]:
             #Take the first accession (one if there is more than one)
             accession = record.annotations["accessions"][0]
@@ -634,7 +634,7 @@ class DatabaseLoader:
             #the newlines, but we should check BioPerl etc to be consistent.
             sql = "INSERT INTO comment (bioentry_id, comment_text, rank)" \
                   " VALUES (%s, %s, %s)"
-            self.adaptor.execute(sql, (bioentry_id, comment, index+1))
+            self.adaptor.execute(sql, (bioentry_id, comment, index + 1))
 
     def _load_annotations(self, record, bioentry_id):
         """Record a SeqRecord's misc annotations in the database (PRIVATE).
@@ -925,7 +925,7 @@ class DatabaseLoader:
             # Split the DB:accession format string at colons.  We have to
             # account for multiple-line and multiple-accession entries
             try:
-                dbxref_data = value.replace(' ','').replace('\n','').split(':')
+                dbxref_data = value.replace(' ', '').replace('\n', '').split(':')
                 db = dbxref_data[0]
                 accessions = dbxref_data[1:]
             except:
@@ -936,7 +936,7 @@ class DatabaseLoader:
                 # Get the dbxref_id value for the dbxref data
                 dbxref_id = self._get_dbxref_id(db, accession)
                 # Insert the seqfeature_dbxref data
-                self._get_seqfeature_dbxref(seqfeature_id, dbxref_id, rank+1)
+                self._get_seqfeature_dbxref(seqfeature_id, dbxref_id, rank + 1)
 
     def _get_dbxref_id(self, db, accession):
         """ _get_dbxref_id(self, db, accession) -> Int

@@ -96,7 +96,7 @@ def calculate(knn, x, weight_fn=equal_weight, distance_fn=None):
         # function about twice as fast.
         for i in range(len(knn.xs)):
             temp[:] = x - knn.xs[i]
-            dist = numpy.sqrt(numpy.dot(temp,temp))
+            dist = numpy.sqrt(numpy.dot(temp, temp))
             order.append((dist, i))
     order.sort()
 
