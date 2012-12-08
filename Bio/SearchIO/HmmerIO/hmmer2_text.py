@@ -179,10 +179,10 @@ class Hmmer2TextParser(object):
                 frag.query_start = int(seq_f) - 1
                 frag.query_end = int(seq_t)
             elif self._meta['program'] == 'hmmsearch':
-                frag.query_start = int(seq_f) - 1
-                frag.query_end = int(seq_t)
-                frag.hit_start = int(hmm_f) - 1
-                frag.hit_end = int(hmm_t)
+                frag.query_start = int(hmm_f) - 1
+                frag.query_end = int(hmm_t)
+                frag.hit_start = int(seq_f) - 1
+                frag.hit_end = int(seq_t)
 
             hsp = HSP([frag])
             hsp.evalue = float(evalue)
