@@ -5,7 +5,7 @@ This directory contains various data files for testing the
 HMMER-related code in Biopython.
 
 
-HMMER OUTPUT FILES (plain text)
+HMMER3 OUTPUT FILES (plain text)
 -------------------------------
 text_30_hmmscan_001.out      multiple queries
 text_30_hmmscan_002.out      single query, no match
@@ -34,9 +34,11 @@ domtab_30_hmmscan_004.out   single query, multiple matches, one hsp per match, h
 domtab_30_hmmsearch_001.out single query, multiple matches, hmm as query
 
 
+HMMER2 OUTPUT FILES (plain text)
+--------------------------------
 text_21_hmmpfam_001.out     single query, two matches, bioperl's hmmpfam.out file
 text_22_hmmpfam_001.out     single query, one match, bioperl's L77119.hmmer file
-text_23_hmmpfam_001.out     multiple queries, multiple matches, bioperl's hmmpfam_cs.out file
+text_23_hmmpfam_001.out     single query, multiple matches, bioperl's hmmpfam_cs.out file
 text_23_hmmpfam_002.out     single query, no match
 text_20_hmmsearch_001.out   single query, multiple matches, bioperl's hmmsearch.out file
 text_22_hmmsearch_001.out   single query, multiple matches, bioperl's cysprot1b.hmmsearch file
