@@ -40,5 +40,6 @@ text_21_hmmpfam_001.out     single query, two matches, bioperl's hmmpfam.out fil
 text_22_hmmpfam_001.out     single query, one match, bioperl's L77119.hmmer file
 text_23_hmmpfam_001.out     single query, multiple matches, bioperl's hmmpfam_cs.out file
 text_23_hmmpfam_002.out     single query, no match
+text_24_hmmpfam_001.out     multiple queries
 text_20_hmmsearch_001.out   single query, multiple matches, bioperl's hmmsearch.out file
 text_22_hmmsearch_001.out   single query, multiple matches, bioperl's cysprot1b.hmmsearch file
