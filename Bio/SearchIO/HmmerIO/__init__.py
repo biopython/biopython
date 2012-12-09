@@ -27,6 +27,7 @@ Bio.SearchIO.HmmerIO supports the following HMMER output formats:
     - Plain text, v3.0   - 'hmmer3-text'    - parsing, indexing
     - Table, v3.0        - 'hmmer3-tab'     - parsing, indexing, writing
     - Domain table, v3.0 - 'hmmer3-domtab'* - parsing, indexing, writing
+    - Plain text, v2.x   - 'hmmer2-text'    - parsing, indexing
 
 * For the domain table output, due to the way HMMER outputs the sequence
   coordinates, you have to specify what HMMER flavor produced the output as the

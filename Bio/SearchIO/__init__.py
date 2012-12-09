@@ -178,8 +178,10 @@ Support for parsing and indexing:
  - exonerate-vulgar - Exonerate vulgar line.
  - exonerate-text   - Exonerate cigar line.
  - fasta-m10        - Bill Pearson's FASTA -m 10 output.
- - hmmer3-text      - HMMER regular text output format. Supported HMMER
+ - hmmer3-text      - HMMER3 regular text output format. Supported HMMER3
                       subprograms are hmmscan, hmmsearch, and phmmer.
+ - hmmer2-text      - HMMER2 regular text output format. Supported HMMER2
+                      subprograms are hmmpfam, hmmsearch.
 
 Support for parsing:
 
@@ -242,6 +244,7 @@ _INDEXER_MAP = {
         'exonerate-text': ('ExonerateIO', 'ExonerateTextIndexer'),
         'exonerate-vulgar': ('ExonerateIO', 'ExonerateVulgarIndexer'),
         'fasta-m10': ('FastaIO', 'FastaM10Indexer'),
+        'hmmer2-text': ('HmmerIO', 'Hmmer2TextIndexer'),
         'hmmer3-text': ('HmmerIO', 'Hmmer3TextIndexer'),
         'hmmer3-tab': ('HmmerIO', 'Hmmer3TabIndexer'),
         'hmmscan3-domtab': ('HmmerIO', 'Hmmer3DomtabHmmhitIndexer'),

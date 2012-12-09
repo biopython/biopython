@@ -2,13 +2,21 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
 """Bio.SearchIO parser for HMMER 2 text output."""
 
 import re
+
+from Bio._py3k import _as_bytes
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
+from _base import _BaseHmmerTextIndexer
+
+__all__ = ['Hmmer2TextParser', 'Hmmer2TextIndexer']
+
 _HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')
+
 
 class _HitPlaceholder(object):
     def createHit(self, hsp_list):
@@ -273,3 +281,19 @@ class Hmmer2TextParser(object):
             else:
                 frag.hit = otherseq
                 frag.query = hmmseq
+
+
+class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
+
+    """Indexer for hmmer2-text format."""
+
+    _parser = Hmmer2TextParser
+    qresult_start = _as_bytes('Query ')
+    qresult_end = _as_bytes('//')
+    regex_id = re.compile(_as_bytes(r'Query (?:sequence|HMM):\s*(.*)'))
+
+
+# if not used as a module, run the doctest
+if __name__ == "__main__":
+    from Bio.SearchIO._utils import run_doctest
+    run_doctest()
