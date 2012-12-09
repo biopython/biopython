@@ -13,17 +13,24 @@ class _BaseHmmerTextIndexer(SearchIndexer):
 
     """Base indexer class for HMMER plain text output."""
 
+    def __init__(self, *args, **kwargs):
+        super(_BaseHmmerTextIndexer, self).__init__(*args, **kwargs)
+        self._preamble = _as_bytes('')
+
     def get_raw(self, offset):
         handle = self._handle
         qresult_raw = _as_bytes('')
 
         # read header first
-        handle.seek(0)
-        while True:
-            line = handle.readline()
-            if line.startswith(self.qresult_start):
-                break
-            qresult_raw += line
+        if not self._preamble:
+            handle.seek(0)
+            while True:
+                line = handle.readline()
+                if line.startswith(self.qresult_start):
+                    break
+                qresult_raw += line
+        else:
+            qresult_raw += self._preamble
 
         # and read the qresult raw string
         handle.seek(offset)
