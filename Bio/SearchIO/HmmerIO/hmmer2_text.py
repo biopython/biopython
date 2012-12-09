@@ -63,7 +63,7 @@ class Hmmer2TextParser(object):
 
     def parse_key_value(self):
         """Parse key-value pair separated by colon (:)"""
-        key, value = self.line.split(':')
+        key, value = self.line.split(':', 1)
         return key.strip(), value.strip()
 
     def parse_preamble(self):
@@ -122,8 +122,11 @@ class Hmmer2TextParser(object):
                 self.parse_hsps(hit_placeholders)
                 self.parse_hsp_alignments()
 
-            while self.read_next() and self.line != '//':
-                pass
+            while not self.line.startswith('Query'):
+                self.read_next()
+                if not self.line:
+                    break
+            self.buf.append(self.line)
 
             if description is not None:
                 self.qresult.description = description
