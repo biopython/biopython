@@ -161,7 +161,7 @@ class HmmpfamTests(unittest.TestCase):
     def test_hmmpfam_24(self):
         """Test parsing hmmpfam 2.4 file (text_24_hmmpfam_001.out)"""
         results = list(parse(path.join("Hmmer", "text_24_hmmpfam_001.out"), self.fmt))
-        self.assertEqual(3, len(results))
+        self.assertEqual(5, len(results))
 
         # first qresult
         res = results[0]
@@ -173,8 +173,8 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam_fs', res.target)
         self.assertEqual(0, len(res))
 
-        # last qresult
-        res = results[-1]
+        # fourth qresult
+        res = results[3]
         self.assertEqual('gi|22748937|ref|NP_065801.1|', res.id)
         self.assertEqual('[none]', res.accession)
         self.assertEqual('exportin-5 [Homo sapiens]', res.description)
@@ -183,7 +183,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('/home/bow/db/hmmer/Pfam_fs', res.target)
         self.assertEqual(33, len(res))
 
-        # last qresult, first hit
+        # fourth qresult, first hit
         hit = res[0]
         self.assertEqual('Xpo1', hit.id)
         self.assertEqual('Exportin 1-like protein', hit.description)
@@ -192,7 +192,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(1, hit.domain_obs_num)
         self.assertEqual(1, len(hit))
 
-        # last qresult, first hit, first hsp
+        # fourth qresult, first hit, first hsp
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertAlmostEqual(170.1, hsp.bitscore)
@@ -212,7 +212,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('Wipiglianvnpi.llnllfslLsgpesdpdlreaAveCL',
                 str(hsp.hit.seq)[-40:])
 
-        # last qresult, second from last hit
+        # fourth qresult, second from last hit
         hit = res[-2]
         self.assertEqual('Rad50_zn_hook', hit.id)
         self.assertEqual('Rad50 zinc hook motif', hit.description)
@@ -221,7 +221,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual(2, hit.domain_obs_num)
         self.assertEqual(2, len(hit))
 
-        # last qresult, second from last hit, first hsp
+        # fourth qresult, second from last hit, first hsp
         hsp = hit[0]
         self.assertEqual(1, hsp.domain_index)
         self.assertAlmostEqual(0.8, hsp.bitscore)
@@ -235,7 +235,7 @@ class HmmpfamTests(unittest.TestCase):
         self.assertEqual('[.', hsp.hit_endtype)
         self.assertEqual('galesekaelkkaieeleeeesscCPvC', str(hsp.hit.seq))
 
-        # last qresult, second from last hit, last hsp
+        # fourth qresult, second from last hit, last hsp
         hsp = hit[-1]
         self.assertEqual(2, hsp.domain_index)
         self.assertAlmostEqual(1.3, hsp.bitscore)
