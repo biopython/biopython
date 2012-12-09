@@ -46,7 +46,7 @@ class Hmmer2TextParser(object):
             qresult.version = self._meta.get('version')
             yield qresult
 
-    def read_next(self):
+    def read_next(self, rstrip=True):
         """Return the next non-empty line, trailing whitespace removed"""
         if len(self.buf) > 0:
             return self.buf.pop()
@@ -54,7 +54,8 @@ class Hmmer2TextParser(object):
         while self.line and not self.line.strip():
             self.line = self.handle.readline()
         if self.line:
-            self.line = self.line.rstrip()
+            if rstrip:
+                self.line = self.line.rstrip()
         return self.line
 
     def push_back(self, line):
@@ -248,6 +249,7 @@ class Hmmer2TextParser(object):
             consensus = ''
             otherseq = ''
             structureseq = ''
+            pad = 0
             while self.read_next() and self.line.startswith(' '):
                 # if there's structure information, parse that
                 if self.line[16:18] == 'CS':
@@ -258,13 +260,21 @@ class Hmmer2TextParser(object):
 
                 # skip the *-> start marker if it exists
                 if self.line[19] == '*':
-                    hmmseq += self.line[22:]
+                    seq = self.line[22:]
+                    pad = 3
                 else:
-                    hmmseq += self.line[19:]
+                    seq = self.line[19:]
+                    pad = 0
 
-                if not self.read_next():
+                # get rid of the end marker
+                if seq.endswith('<-*'):
+                    seq = seq[:-3]
+
+                hmmseq += seq
+                line_len = len(seq)
+                if not self.read_next(rstrip=False):
                     break
-                consensus += self.line[19:].strip()
+                consensus += self.line[19+pad:19+pad+line_len]
 
                 if not self.read_next():
                     break
@@ -272,8 +282,8 @@ class Hmmer2TextParser(object):
 
             self.push_back(self.line)
 
-            # get rid of the end marker
-            hmmseq = hmmseq[:-3]
+            # add homology sequence to annotation
+            frag.aln_annotation['homology'] = consensus
 
             # if there's structure information, add it to the fragment
             if structureseq:
