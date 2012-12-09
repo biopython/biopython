@@ -9,10 +9,10 @@ This module adds support for parsing HMMER outputs. HMMER is a
 suite of programs implementing the profile hidden Markov models to find
 homology across protein sequences.
 
-Bio.SearchIO.HmmerIO was tested on the following HMMER flavors and versions:
+Bio.SearchIO.HmmerIO was tested on the following HMMER versions and flavors:
 
-    - flavors: hmmscan, hmmsearch, phmmer
-    - version: 3.0
+    - HMMER3 flavors: hmmscan, hmmsearch, phmmer
+    - HMMER2 flavors: hmmpfam, hmmsearch
 
 More information on HMMER are available through these links:
   - Web page: http://hmmer.janelia.org/
@@ -57,15 +57,16 @@ naming convention ('hmm' and 'ali') so the files you write will be similar to
 files written by a real HMMER program.
 
 
-hmmer3-text
-===========
+hmmer2-text and hmmer3-text
+===========================
 
 The parser for HMMER 3.0 plain text output can parse output files with alignment
 blocks (default) or without (with the '--noali' flag). If the alignment blocks
 are present, you can also parse files with variable alignment width (using the
 '--notextw' or '--textw' flag).
 
-The following SearchIO objects attributes are provided:
+The following SearchIO objects attributes are provided. Rows marked with '*'
+denotes attributes not available in the hmmer2-text format:
 
 +-----------------+-------------------------+----------------------------------+
 | Object          | Attribute               | Value                            |
@@ -78,19 +79,19 @@ The following SearchIO objects attributes are provided:
 |                 +-------------------------+----------------------------------+
 |                 | program                 | HMMER flavor                     |
 |                 +-------------------------+----------------------------------+
-|                 | seq_len                 | full length of query sequence    |
+|                 | seq_len*                | full length of query sequence    |
 |                 +-------------------------+----------------------------------+
 |                 | target                  | target search database           |
 |                 +-------------------------+----------------------------------+
 |                 | version                 | BLAST version                    |
 +-----------------+-------------------------+----------------------------------+
-| Hit             | bias                    | hit-level bias                   |
+| Hit             | bias*                   | hit-level bias                   |
 |                 +-------------------------+----------------------------------+
 |                 | bitscore                | hit-level score                  |
 |                 +-------------------------+----------------------------------+
 |                 | description             | hit sequence description         |
 |                 +-------------------------+----------------------------------+
-|                 | domain_exp_num          | expected number of domains in    |
+|                 | domain_exp_num*         | expected number of domains in    |
 |                 |                         | the hit (exp column)             |
 |                 +-------------------------+----------------------------------+
 |                 | domain_obs_num          | observed number of domains in    |
@@ -100,32 +101,32 @@ The following SearchIO objects attributes are provided:
 |                 +-------------------------+----------------------------------+
 |                 | id                      | hit sequence ID                  |
 |                 +-------------------------+----------------------------------+
-|                 | is_included             | boolean, whether the hit is in   |
+|                 | is_included*            | boolean, whether the hit is in   |
 |                 |                         | the inclusion threshold or not   |
 +-----------------+-------------------------+----------------------------------+
-| HSP             | acc_avg                 | expected accuracy per alignment  |
+| HSP             | acc_avg*                | expected accuracy per alignment  |
 |                 |                         | residue (acc column)             |
 |                 +-------------------------+----------------------------------+
-|                 | bias                    | hsp-level bias                   |
+|                 | bias*                   | hsp-level bias                   |
 |                 +-------------------------+----------------------------------+
 |                 | bitscore                | hsp-level score                  |
 |                 +-------------------------+----------------------------------+
 |                 | domain_index            | the domain index set by HMMER    |
 |                 +-------------------------+----------------------------------+
-|                 | env_end                 | end coordinate of the envelope   |
+|                 | env_end*                | end coordinate of the envelope   |
 |                 +-------------------------+----------------------------------+
-|                 | env_endtype             | envelope end types (e.g. '[]',   |
+|                 | env_endtype*            | envelope end types (e.g. '[]',   |
 |                 |                         | '..', '[.', etc.)                |
 |                 +-------------------------+----------------------------------+
-|                 | env_start               | start coordinate of the envelope |
+|                 | env_start*              | start coordinate of the envelope |
 |                 +-------------------------+----------------------------------+
 |                 | evalue                  | hsp-level independent e-value    |
 |                 +-------------------------+----------------------------------+
-|                 | evalue_cond             | hsp-level conditional e-value    |
+|                 | evalue_cond*            | hsp-level conditional e-value    |
 |                 +-------------------------+----------------------------------+
 |                 | hit_endtype             | hit sequence end types           |
 |                 +-------------------------+----------------------------------+
-|                 | is_included             | boolean, whether the hit of the  |
+|                 | is_included*            | boolean, whether the hit of the  |
 |                 |                         | hsp is in the inclusion          |
 |                 |                         | threshold                        |
 |                 +-------------------------+----------------------------------+
