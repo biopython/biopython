@@ -7,9 +7,10 @@
 
 import re
 
-from Bio._py3k import _as_bytes
+from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._utils import read_forward
 
 from _base import _BaseHmmerTextIndexer
 
@@ -289,9 +290,41 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
 
     _parser = Hmmer2TextParser
     qresult_start = _as_bytes('Query ')
+    # qresults_ends for hmmpfam and hmmsearch
+    # need to anticipate both since hmmsearch have different query end mark
     qresult_end = _as_bytes('//')
-    regex_id = re.compile(_as_bytes(r'Query (?:sequence|HMM):\s*(.*)'))
 
+    def __iter__(self):
+        handle = self._handle
+        handle.seek(0)
+        start_offset = handle.tell()
+        regex_id = re.compile(_as_bytes(r'Query (?:sequence|HMM):\s*(.*)'))
+
+        # determine flag for hmmsearch
+        is_hmmsearch = False
+        line = read_forward(handle)
+        if line.startswith('hmmsearch'):
+            is_hmmsearch = True
+
+        while True:
+            end_offset = handle.tell()
+
+            if line.startswith(self.qresult_start):
+                regx = re.search(regex_id, line)
+                qresult_key = regx.group(1).strip()
+                # qresult start offset is the offset of this line
+                # (starts with the start mark)
+                start_offset = end_offset - len(line)
+            elif line.startswith(self.qresult_end):
+                yield _bytes_to_string(qresult_key), start_offset, 0
+                start_offset = end_offset
+            elif not line:
+                # HACK: since hmmsearch can only have one query result
+                if is_hmmsearch:
+                    yield _bytes_to_string(qresult_key), start_offset, 0
+                break
+
+            line = read_forward(handle)
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

@@ -374,8 +374,28 @@ class Hmmer3TextIndexer(_BaseHmmerTextIndexer):
     _parser = Hmmer3TextParser
     qresult_start = _as_bytes('Query: ')
     qresult_end = _as_bytes('//')
-    regex_id = re.compile(_as_bytes(_QRE_ID_LEN_PTN))
 
+    def __iter__(self):
+        handle = self._handle
+        handle.seek(0)
+        start_offset = handle.tell()
+        regex_id = re.compile(_as_bytes(_QRE_ID_LEN_PTN))
+
+        while True:
+            line = read_forward(handle)
+            end_offset = handle.tell()
+
+            if line.startswith(self.qresult_start):
+                regx = re.search(regex_id, line)
+                qresult_key = regx.group(1).strip()
+                # qresult start offset is the offset of this line
+                # (starts with the start mark)
+                start_offset = end_offset - len(line)
+            elif line.startswith(self.qresult_end):
+                yield _bytes_to_string(qresult_key), start_offset, 0
+                start_offset = end_offset
+            elif not line:
+                break
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

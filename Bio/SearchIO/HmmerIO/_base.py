@@ -5,37 +5,13 @@
 
 """Bio.SearchIO base classes for HMMER-related code."""
 
-import re
-
-from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._py3k import _as_bytes
 from Bio.SearchIO._index import SearchIndexer
-from Bio.SearchIO._utils import read_forward
 
 
 class _BaseHmmerTextIndexer(SearchIndexer):
 
     """Base indexer class for HMMER plain text output."""
-
-    def __iter__(self):
-        handle = self._handle
-        handle.seek(0)
-        start_offset = handle.tell()
-
-        while True:
-            line = read_forward(handle)
-            end_offset = handle.tell()
-
-            if line.startswith(self.qresult_start):
-                regx = re.search(self.regex_id, line)
-                qresult_key = regx.group(1).strip()
-                # qresult start offset is the offset of this line
-                # (starts with the start mark)
-                start_offset = end_offset - len(line)
-            elif line.startswith(self.qresult_end):
-                yield _bytes_to_string(qresult_key), start_offset, 0
-                start_offset = end_offset
-            elif not line:
-                break
 
     def get_raw(self, offset):
         handle = self._handle
@@ -57,7 +33,7 @@ class _BaseHmmerTextIndexer(SearchIndexer):
             qresult_raw += line
 
             # break when we've reached qresult end
-            if line.startswith(self.qresult_end):
+            if line.startswith(self.qresult_end) or not line:
                 break
 
         return qresult_raw
