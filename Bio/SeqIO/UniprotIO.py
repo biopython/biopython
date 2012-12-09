@@ -271,8 +271,8 @@ class Parser(object):
                             end = int(pos_els[0].attrib['position'])
                             start = end - 1
                         else:
-                            start = int(loc_element.getiterator(NS + 'begin')[0].attrib['position']) - 1
-                            end = int(loc_element.getiterator(NS + 'end')[0].attrib['position'])
+                            start =  int(list(loc_element.getiterator(NS + 'begin'))[0].attrib['position']) - 1
+                            end = int(list(loc_element.getiterator(NS + 'end'))[0].attrib['position'])
                     except:  # undefined positions or erroneously mapped
                         pass
                 mass = element.attrib['mass']
