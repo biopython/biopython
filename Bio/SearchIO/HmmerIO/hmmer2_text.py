@@ -316,7 +316,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
         # determine flag for hmmsearch
         is_hmmsearch = False
         line = read_forward(handle)
-        if line.startswith('hmmsearch'):
+        if line.startswith(_as_bytes('hmmsearch')):
             is_hmmsearch = True
 
         while True:
