@@ -74,6 +74,175 @@ class TestUniprot(unittest.TestCase):
         self.assertEqual(seq_record.annotations['sequence_version'], 1)
         self.assertEqual(seq_record.annotations['proteinExistence'], ['Predicted'])
 
+    def test_uni003(self):
+        "Parsing Uniprot file uni003"
+        filename = 'uni003'
+        # test the record parser
+
+        datafile = os.path.join('SwissProt', filename)
+
+        test_handle = open(datafile)
+        seq_record = SeqIO.read(test_handle, "uniprot-xml")
+        test_handle.close()
+
+        self.assertTrue(isinstance(seq_record, SeqRecord))
+
+        # test general record entries
+        self.assertEqual(seq_record.id, "O44185")
+        self.assertEqual(seq_record.name, "FLP13_CAEEL")
+        self.assertEqual(seq_record.description,
+                "FMRFamide-like neuropeptides 13")
+        self.assertEqual(repr(seq_record.seq),
+                "Seq('MMTSLLTISMFVVAIQAFDSSEIRMLDEQYDTKNPFFQFLENSKRSDRPTRAMD...GRK', ProteinAlphabet())")
+
+        self.assertEqual(len(seq_record.annotations['references']), 7)
+        self.assertEqual(seq_record.annotations['references'][5].authors,
+                'Kim K., Li C.')
+        self.assertEqual(seq_record.annotations['references'][5].title,
+                'Expression and regulation of an FMRFamide-related '
+                'neuropeptide gene family in Caenorhabditis elegans.')
+        self.assertEqual(seq_record.annotations['references'][5].journal,
+                'J. Comp. Neurol. 475:540-550(2004)')
+        self.assertEqual(seq_record.annotations['references'][5].comment,
+                'journal article | 2004 | Scope: TISSUE SPECIFICITY, '
+                'DEVELOPMENTAL STAGE | ')
+
+        self.assertEqual(seq_record.annotations["accessions"], ['O44185'])
+        self.assertEqual(seq_record.annotations["created"], "2004-05-10")
+        self.assertEqual(seq_record.annotations["dataset"], "Swiss-Prot")
+        self.assertEqual(seq_record.annotations["gene_name_ORF"], ['F33D4.3'])
+        self.assertEqual(seq_record.annotations["gene_name_primary"], "flp-13")
+        self.assertEqual(seq_record.annotations["keywords"],
+                ['Amidation', 'Cleavage on pair of basic residues',
+                'Complete proteome', 'Direct protein sequencing',
+                'Neuropeptide', 'Reference proteome', 'Repeat',
+                'Secreted', 'Signal'])
+        self.assertEqual(seq_record.annotations["modified"], "2012-11-28")
+        self.assertEqual(seq_record.annotations["organism"],
+                "Caenorhabditis elegans")
+        self.assertEqual(seq_record.annotations["proteinExistence"],
+                ['evidence at protein level'])
+        self.assertEqual(seq_record.annotations["recommendedName_fullName"],
+                ['FMRFamide-like neuropeptides 13'])
+        self.assertEqual(seq_record.annotations["sequence_length"], 160)
+        self.assertEqual(seq_record.annotations["sequence_checksum"],
+                "BE4C24E9B85FCD11")
+        self.assertEqual(seq_record.annotations["sequence_mass"], 17736)
+        self.assertEqual(seq_record.annotations["sequence_modified"], "1998-06-01")
+        self.assertEqual(seq_record.annotations["sequence_precursor"], "true")
+        self.assertEqual(seq_record.annotations["sequence_version"], 1)
+        self.assertEqual(seq_record.annotations["taxonomy"],
+                ['Eukaryota', 'Metazoa', 'Ecdysozoa', 'Nematoda',
+                'Chromadorea', 'Rhabditida', 'Rhabditoidea', 'Rhabditidae',
+                'Peloderinae', 'Caenorhabditis'])
+        self.assertEqual(seq_record.annotations["type"],
+                ['ECO:0000006', 'ECO:0000001'])
+        self.assertEqual(seq_record.annotations["version"], 74)
+
+        # test comment entries
+        self.assertEqual(seq_record.annotations["comment_allergen"],
+                ['Causes an allergic reaction in human.'])
+        self.assertEqual(seq_record.annotations["comment_alternativeproducts_isoform"],
+                ['Q8W1X2-1', 'Q8W1X2-2'])
+        self.assertEqual(seq_record.annotations["comment_biotechnology"],
+                ['Green fluorescent protein has been engineered to produce a '
+                'vast number of variously colored mutants, fusion proteins, '
+                'and biosensors. Fluorescent proteins and its mutated allelic '
+                'forms, blue, cyan and yellow have become a useful and '
+                'ubiquitous tool for making chimeric proteins, where they '
+                'function as a fluorescent protein tag. Typically they '
+                'tolerate N- and C-terminal fusion to a broad variety of '
+                'proteins. They have been expressed in most known cell types '
+                'and are used as a noninvasive fluorescent marker in living '
+                'cells and organisms. They enable a wide range of applications '
+                'where they have functioned as a cell lineage tracer, reporter '
+                'of gene expression, or as a measure of protein-protein '
+                'interactions.', 'Can also be used as a molecular thermometer, '
+                'allowing accurate temperature measurements in fluids. The '
+                'measurement process relies on the detection of the blinking '
+                'of GFP using fluorescence correlation spectroscopy.'])
+        self.assertEqual(seq_record.annotations["comment_catalyticactivity"],
+                ['ATP + acetyl-CoA + HCO(3)(-) = ADP + phosphate + malonyl-CoA.',
+                'ATP + biotin-[carboxyl-carrier-protein] + CO(2) = ADP + '
+                'phosphate + carboxy-biotin-[carboxyl-carrier-protein].'])
+        self.assertEqual(seq_record.annotations["comment_caution"],
+                ['Could be the product of a pseudogene. The existence of a '
+                'transcript at this locus is supported by only one sequence '
+                'submission (PubMed:2174397).'])
+        self.assertEqual(seq_record.annotations["comment_cofactor"],
+                ['Biotin (By similarity).', 'Binds 2 manganese ions per '
+                'subunit (By similarity).'])
+        self.assertEqual(seq_record.annotations["comment_developmentalstage"],
+                ['Expressed from the comma stage of embryogenesis, during all '
+                'larval stages, and in low levels in adults.'])
+        self.assertEqual(seq_record.annotations["comment_disease"],
+                ['Defects in MC2R are the cause of glucocorticoid deficiency '
+                'type 1 (GCCD1) [MIM:202200]; also known as familial '
+                'glucocorticoid deficiency type 1 (FGD1). GCCD1 is an '
+                'autosomal recessive disorder due to congenital '
+                'insensitivity or resistance to adrenocorticotropin (ACTH). '
+                'It is characterized by progressive primary adrenal '
+                'insufficiency, without mineralocorticoid deficiency.'])
+        self.assertEqual(seq_record.annotations["comment_disruptionphenotype"],
+                ['Mice display impaired B-cell development which does not '
+                'progress pass the progenitor stage.'])
+        self.assertEqual(seq_record.annotations["comment_domain"],
+                ['Two regions, an N-terminal (aa 96-107) and a C-terminal '
+                '(aa 274-311) are required for binding FGF2.'])
+        self.assertEqual(seq_record.annotations["comment_enzymeregulation"],
+                ['By phosphorylation. The catalytic activity is inhibited by '
+                'soraphen A, a polyketide isolated from the myxobacterium '
+                'Sorangium cellulosum and a potent inhibitor of fungal growth.'])
+        self.assertEqual(seq_record.annotations["comment_function"],
+                ['FMRFamides and FMRFamide-like peptides are neuropeptides. '
+                'AADGAPLIRF-amide and APEASPFIRF-amide inhibit muscle tension '
+                'in somatic muscle. APEASPFIRF-amide is a potent inhibitor of '
+                'the activity of dissected pharyngeal myogenic muscle system.'])
+        self.assertEqual(seq_record.annotations["comment_induction"],
+                ['Repressed in presence of fatty acids. Repressed 3-fold by '
+                'lipid precursors, inositol and choline, and also controlled '
+                'by regulatory factors INO2, INO4 and OPI1.'])
+        self.assertEqual(seq_record.annotations["comment_interaction_intactId"],
+                ['EBI-356720', 'EBI-746969', 'EBI-720116'])
+        self.assertEqual(seq_record.annotations["comment_massspectrometry"],
+                ['88..98:1032|MALDI', '100..110:1133.7|MALDI'])
+        self.assertEqual(seq_record.annotations["comment_miscellaneous"],
+                ['Present with 20200 molecules/cell in log phase SD medium.'])
+        self.assertEqual(seq_record.annotations["comment_onlineinformation"],
+                ['NIEHS-SNPs@http://egp.gs.washington.edu/data/api5/'])
+        self.assertEqual(seq_record.annotations["comment_pathway"],
+                ['Lipid metabolism; malonyl-CoA biosynthesis; malonyl-CoA '
+                'from acetyl-CoA: step 1/1.'])
+        self.assertEqual(seq_record.annotations["comment_RNAediting"],
+                ['Partially edited. RNA editing generates receptor isoforms '
+                'that differ in their ability to interact with the '
+                'phospholipase C signaling cascade in a transfected cell '
+                'line, suggesting that this RNA processing event may '
+                'contribute to the modulation of serotonergic '
+                'neurotransmission in the central nervous system.'])
+        self.assertEqual(seq_record.annotations["comment_PTM"],
+                ['Acetylation at Lys-251 impairs antiapoptotic function.'])
+        self.assertEqual(seq_record.annotations["comment_pharmaceutical"],
+                ['Could be used as a possible therapeutic agent for treating '
+                'rheumatoid arthritis.'])
+        self.assertEqual(seq_record.annotations["comment_polymorphism"],
+                ['Position 23 is polymorphic; the frequencies in unrelated '
+                'Caucasians are 0.87 for Cys and 0.13 for Ser.'])
+        self.assertEqual(seq_record.annotations["comment_similarity"],
+                ['Belongs to the FARP (FMRFamide related peptide) family.'])
+        self.assertEqual(seq_record.annotations["comment_subcellularlocation_location"],
+                ['Secreted'])
+        self.assertEqual(seq_record.annotations["comment_subunit"],
+                ['Homodimer.'])
+        self.assertEqual(seq_record.annotations["comment_tissuespecificity"],
+                ['Each flp gene is expressed in a distinct set of neurons. '
+                'Flp-13 is expressed in the ASE sensory neurons, the DD motor '
+                'neurons, the 15, M3 and M5 cholinergic pharyngeal '
+                'motoneurons, and the ASG, ASK and BAG neurons.'])
+        self.assertEqual(seq_record.annotations["comment_toxicdose"],
+                ['LD(50) is 50 ug/kg in mouse by intracerebroventricular '
+                'injection and 600 ng/g in Blatella germanica.'])
+
     def compare_txt_xml(self, old, new):
         self.assertEqual(old.id, new.id)
         self.assertEqual(old.name, new.name)
