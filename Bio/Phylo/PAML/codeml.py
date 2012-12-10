@@ -3,13 +3,13 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
+
 import os
 import os.path
 from _paml import Paml, _relpath
 import _parse_codeml
-
-#TODO - Restore use of with statement for closing handles automatically
-#after dropping Python 2.4
 
 
 class CodemlError(EnvironmentError):
@@ -75,25 +75,24 @@ class Codeml(Paml):
         # Make sure all paths are relative to the working directory
         self._set_rel_paths()
         if True:  # Dummy statement to preserve indentation for diff
-            ctl_handle = open(self.ctl_file, 'w')
-            ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
-            ctl_handle.write("outfile = %s\n" % self._rel_out_file)
-            ctl_handle.write("treefile = %s\n" % self._rel_tree)
-            for option in self._options.items():
-                if option[1] is None:
-                    # If an option has a value of None, there's no need
-                    # to write it in the control file; it's normally just
-                    # commented out.
-                    continue
-                if option[0] == "NSsites":
-                    # NSsites is stored in Python as a list but in the
-                    # control file it is specified as a series of numbers
-                    # separated by spaces.
-                    NSsites = " ".join([str(site) for site in option[1]])
-                    ctl_handle.write("%s = %s\n" % (option[0], NSsites))
-                else:
-                    ctl_handle.write("%s = %s\n" % (option[0], option[1]))
-            ctl_handle.close()
+            with open(self.ctl_file, 'w') as ctl_handle:
+                ctl_handle.write("seqfile = %s\n" % self._rel_alignment)
+                ctl_handle.write("outfile = %s\n" % self._rel_out_file)
+                ctl_handle.write("treefile = %s\n" % self._rel_tree)
+                for option in self._options.items():
+                    if option[1] is None:
+                        # If an option has a value of None, there's no need
+                        # to write it in the control file; it's normally just
+                        # commented out.
+                        continue
+                    if option[0] == "NSsites":
+                        # NSsites is stored in Python as a list but in the
+                        # control file it is specified as a series of numbers
+                        # separated by spaces.
+                        NSsites = " ".join([str(site) for site in option[1]])
+                        ctl_handle.write("%s = %s\n" % (option[0], NSsites))
+                    else:
+                        ctl_handle.write("%s = %s\n" % (option[0], option[1]))
 
     def read_ctl_file(self, ctl_file):
         """Parse a control file and load the options into the Codeml instance.
@@ -102,50 +101,46 @@ class Codeml(Paml):
         if not os.path.isfile(ctl_file):
             raise IOError("File not found: %r" % ctl_file)
         else:
-            ctl_handle = open(ctl_file)
-            for line in ctl_handle:
-                line = line.strip()
-                uncommented = line.split("*",1)[0]
-                if uncommented != "":
-                    if "=" not in uncommented:
-                        ctl_handle.close()
-                        raise AttributeError(
-                            "Malformed line in control file:\n%r" % line)
-                    (option, value) = uncommented.split("=")
-                    option = option.strip()
-                    value = value.strip()
-                    if option == "seqfile":
-                        self.alignment = value
-                    elif option == "treefile":
-                        self.tree = value
-                    elif option == "outfile":
-                        self.out_file = value
-                    elif option == "NSsites":
-                        site_classes = value.split(" ")
-                        for n in range(len(site_classes)):
-                            try:
-                                site_classes[n] = int(site_classes[n])
-                            except:
-                                ctl_handle.close()
-                                raise TypeError(
-                                    "Invalid site class: %s" % site_classes[n])
-                        temp_options["NSsites"] = site_classes
-                    elif option not in self._options:
-                        ctl_handle.close()
-                        raise KeyError("Invalid option: %s" % option)
-                    else:
-                        if "." in value:
-                            try:
-                                converted_value = float(value)
-                            except:
-                                converted_value = value
+            with open(ctl_file) as ctl_handle:
+                for line in ctl_handle:
+                    line = line.strip()
+                    uncommented = line.split("*",1)[0]
+                    if uncommented != "":
+                        if "=" not in uncommented:
+                            raise AttributeError(
+                                "Malformed line in control file:\n%r" % line)
+                        (option, value) = uncommented.split("=")
+                        option = option.strip()
+                        value = value.strip()
+                        if option == "seqfile":
+                            self.alignment = value
+                        elif option == "treefile":
+                            self.tree = value
+                        elif option == "outfile":
+                            self.out_file = value
+                        elif option == "NSsites":
+                            site_classes = value.split(" ")
+                            for n in range(len(site_classes)):
+                                try:
+                                    site_classes[n] = int(site_classes[n])
+                                except:
+                                    raise TypeError(
+                                        "Invalid site class: %s" % site_classes[n])
+                            temp_options["NSsites"] = site_classes
+                        elif option not in self._options:
+                            raise KeyError("Invalid option: %s" % option)
                         else:
-                            try:
-                                converted_value = int(value)
-                            except:
-                                converted_value = value
-                        temp_options[option] = converted_value
-            ctl_handle.close()
+                            if "." in value:
+                                try:
+                                    converted_value = float(value)
+                                except:
+                                    converted_value = value
+                            else:
+                                try:
+                                    converted_value = int(value)
+                                except:
+                                    converted_value = value
+                            temp_options[option] = converted_value
         for option in self._options.keys():
             if option in temp_options.keys():
                 self._options[option] = temp_options[option]
