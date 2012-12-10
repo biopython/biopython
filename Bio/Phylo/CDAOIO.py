@@ -155,6 +155,8 @@ class Writer(object):
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle."""
+        import RDF
+
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
