@@ -277,6 +277,11 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer")
     'MAIVMGRWKGAR*'
 
+    The input is case insensitive, e.g.
+    >>> from Bio.SeqUtils import seq3
+    >>> seq1("METalaIlEValMetGLYArgtRplysGlyAlaARGTer")
+    'MAIVMGRWKGAR*'
+
     You can set a custom translation of the codon termination code using the
     "custom_map" argument, e.g.
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
@@ -293,11 +298,11 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 
     """
     # reverse map of threecode
-    onecode = dict([(x[1], x[0]) for x in _THREECODE.items()])
+    onecode = dict([(x[1].upper(), x[0]) for x in _THREECODE.items()])
     # add the given termination codon code and custom maps
-    onecode.update(custom_map)
+    onecode.update((k.upper(), v) for (k, v) in custom_map.iteritems())
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
-    return ''.join([onecode.get(aa, undef_code) for aa in seqlist])
+    return ''.join([onecode.get(aa.upper(), undef_code) for aa in seqlist])
 
 
 # }}}
