@@ -267,10 +267,10 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     The single input argument 'seq' should be a protein sequence using three-
     letter codes, either as a python string or as a Seq or MutableSeq object.
 
-    This function returns the amino acid sequence as a string using the three
+    This function returns the amino acid sequence as a string using the one
     letter amino acid codes. Output follows the IUPAC standard (including
-    ambiguous characters "Asx" for "B", "Xle" for "J", "Xaa" for "X", "Sel" for
-    "U", and "Pyl" for "O") plus "*" for a terminator given the "Ter" code.
+    ambiguous characters "B" for "Asx", "J" for "Xle", "X" for "Xaa", "U" for
+    "Sel", and "O" for "Pyl") plus "*" for a terminator given the "Ter" code.
     Any unknown character (including possible gap characters), is changed into
     '-'.
 
