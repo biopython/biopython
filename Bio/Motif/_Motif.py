@@ -32,7 +32,7 @@ class GenericPositionMatrix(dict):
         sequence = ""
         for i in range(self.length):
             maximum = float("-inf")
-            for letter in self:
+            for letter in self.alphabet.letters:
                 count = self[letter][i]
                 if count > maximum:
                     maximum = count
@@ -45,7 +45,7 @@ class GenericPositionMatrix(dict):
         sequence = ""
         for i in range(self.length):
             minimum = float("+inf")
-            for letter in self.counts:
+            for letter in self.alphabet.letters:
                 count = self.counts[letter][i]
                 if count < minimum:
                     minimum = count
