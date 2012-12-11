@@ -176,13 +176,15 @@ class Writer(object):
         if model is None:
           raise CDAOError("new RDF.model failed")
         
-        def process_clade(clade, model):
+        def process_clade(clade, model, parent=None):
             # TODO: add model statements for this clade
             
+            if not parent is None:
+                # TODO: link parent to child
             
             if not clade.is_terminal():
                 for new_clade in clade.clades:
-                    process_clade(new_clade, model)
+                    process_clade(new_clade, model, parent=clade)
         
         count = 0
         for tree in self.trees:
