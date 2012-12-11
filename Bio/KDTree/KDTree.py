@@ -21,8 +21,8 @@ from Bio.KDTree import _CKDTree
 
 
 def _dist(p, q):
-    diff=p-q
-    return sqrt(sum(diff*diff))
+    diff = p - q
+    return sqrt(sum(diff * diff))
 
 
 def _neighbor_test(nr_points, dim, bucket_size, radius):
@@ -37,23 +37,23 @@ def _neighbor_test(nr_points, dim, bucket_size, radius):
     o radius - radius of search (typically 0.05 or so)
     """
     # KD tree search
-    kdt=_CKDTree.KDTree(dim, bucket_size)
-    coords=random((nr_points, dim))
+    kdt = _CKDTree.KDTree(dim, bucket_size)
+    coords = random((nr_points, dim))
     kdt.set_data(coords)
     neighbors = kdt.neighbor_search(radius)
     r = [neighbor.radius for neighbor in neighbors]
     if r is None:
-        l1=0
+        l1 = 0
     else:
-        l1=len(r)
+        l1 = len(r)
     # now do a slow search to compare results
     neighbors = kdt.neighbor_simple_search(radius)
     r = [neighbor.radius for neighbor in neighbors]
     if r is None:
-        l2=0
+        l2 = 0
     else:
-        l2=len(r)
-    if l1==l2:
+        l2 = len(r)
+    if l1 == l2:
         print "Passed."
     else:
         print "Not passed: %i != %i." % (l1, l2)
@@ -70,23 +70,23 @@ def _test(nr_points, dim, bucket_size, radius):
     o radius - radius of search (typically 0.05 or so)
     """
     # kd tree search
-    kdt=_CKDTree.KDTree(dim, bucket_size)
-    coords=random((nr_points, dim))
-    center=coords[0]
+    kdt = _CKDTree.KDTree(dim, bucket_size)
+    coords = random((nr_points, dim))
+    center = coords[0]
     kdt.set_data(coords)
     kdt.search_center_radius(center, radius)
-    r=kdt.get_indices()
+    r = kdt.get_indices()
     if r is None:
-        l1=0
+        l1 = 0
     else:
-        l1=len(r)
-    l2=0
+        l1 = len(r)
+    l2 = 0
     # now do a manual search to compare results
     for i in range(0, nr_points):
-        p=coords[i]
-        if _dist(p, center)<=radius:
-            l2=l2+1
-    if l1==l2:
+        p = coords[i]
+        if _dist(p, center) <= radius:
+            l2 = l2 + 1
+    if l1 == l2:
         print "Passed."
     else:
         print "Not passed: %i != %i." % (l1, l2)
@@ -126,9 +126,9 @@ class KDTree(object):
     """
 
     def __init__(self, dim, bucket_size=1):
-        self.dim=dim
-        self.kdt=_CKDTree.KDTree(dim, bucket_size)
-        self.built=0
+        self.dim = dim
+        self.kdt = _CKDTree.KDTree(dim, bucket_size)
+        self.built = 0
 
     # Set data
 
@@ -139,12 +139,12 @@ class KDTree(object):
         have dimensionality D and there are N points, the coords
         array should be NxD dimensional.
         """
-        if coords.min()<=-1e6 or coords.max()>=1e6:
+        if coords.min() <= -1e6 or coords.max() >= 1e6:
                 raise Exception("Points should lie between -1e6 and 1e6")
-        if len(coords.shape)!=2 or coords.shape[1]!=self.dim:
+        if len(coords.shape) != 2 or coords.shape[1] != self.dim:
                 raise Exception("Expected a Nx%i NumPy array" % self.dim)
         self.kdt.set_data(coords)
-        self.built=1
+        self.built = 1
 
     # Fixed radius search for a point
 
@@ -157,7 +157,7 @@ class KDTree(object):
         """
         if not self.built:
                 raise Exception("No point set specified")
-        if center.shape!=(self.dim,):
+        if center.shape != (self.dim,):
                 raise Exception("Expected a %i-dimensional NumPy array"
                                 % self.dim)
         self.kdt.search_center_radius(center, radius)
@@ -168,7 +168,7 @@ class KDTree(object):
         Return the list of distances from center after
         a neighbor search.
         """
-        a=self.kdt.get_radii()
+        a = self.kdt.get_radii()
         if a is None:
             return []
         return a
@@ -182,7 +182,7 @@ class KDTree(object):
 
         For an index pair, the first index<second index.
         """
-        a=self.kdt.get_indices()
+        a = self.kdt.get_indices()
         if a is None:
             return []
         return a
@@ -219,16 +219,16 @@ class KDTree(object):
         """
         return [neighbor.radius for neighbor in self.neighbors]
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
-    nr_points=100000
-    dim=3
-    bucket_size=10
-    query_radius=10
+    nr_points = 100000
+    dim = 3
+    bucket_size = 10
+    query_radius = 10
 
-    coords=(200*random((nr_points, dim)))
+    coords = (200 * random((nr_points, dim)))
 
-    kdtree=KDTree(dim, bucket_size)
+    kdtree = KDTree(dim, bucket_size)
 
     # enter coords
     kdtree.set_coords(coords)
@@ -242,8 +242,8 @@ if __name__=="__main__":
     # indices is a list of tuples. Each tuple contains the
     # two indices of a point pair within query_radius of
     # each other.
-    indices=kdtree.all_get_indices()
-    radii=kdtree.all_get_radii()
+    indices = kdtree.all_get_indices()
+    radii = kdtree.all_get_radii()
 
     print "Found %i point pairs within radius %f." % (len(indices), query_radius)
 
@@ -251,14 +251,14 @@ if __name__=="__main__":
 
     for i in range(0, 10):
         # pick a random center
-        center=random(dim)
+        center = random(dim)
 
         # search neighbors
         kdtree.search(center, query_radius)
 
         # get indices & radii of points
-        indices=kdtree.get_indices()
-        radii=kdtree.get_radii()
+        indices = kdtree.get_indices()
+        radii = kdtree.get_radii()
 
-        x, y, z=center
+        x, y, z = center
         print "Found %i points in radius %f around center (%.2f, %.2f, %.2f)." % (len(indices), query_radius, x, y, z)

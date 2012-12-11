@@ -127,7 +127,7 @@ def parse(handle):
     record = Record()
     finished = False
     while not finished:
-        if line[:6]=="      ": # continuation line
+        if line[:6] == "      ":  # continuation line
             record[key].append(line[6:])
         elif line:
             key = line[:4].rstrip()

@@ -9,7 +9,7 @@ class TrainingExample(object):
 
     XXX Do I really need this?
     """
-    def __init__(self, inputs, outputs, name = ""):
+    def __init__(self, inputs, outputs, name=""):
         self.name = name
         self.inputs = inputs
         self.outputs = outputs
@@ -34,7 +34,7 @@ class ExampleManager(object):
     provide a completely independent method of testing how well a network
     performs.
     """
-    def __init__(self, training_percent = .4, validation_percent = .4):
+    def __init__(self, training_percent=.4, validation_percent=.4):
         """Initialize the manager with the training examples.
 
         Arguments:
@@ -56,7 +56,7 @@ class ExampleManager(object):
         o test_examples - Examples for training purposes.
         """
         assert training_percent + validation_percent <= 1.0, \
-               "Training and validation percentages more than 100 percent"
+            "Training and validation percentages more than 100 percent"
 
         self.train_examples = []
         self.validation_examples = []
