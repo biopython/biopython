@@ -21,8 +21,8 @@ from Bio.SubsMat import FreqTable
 cline = ClustalwCommandline(infile='opuntia.fasta', outfile='test.aln')
 
 # actually perform the alignment
-return_code = subprocess.call(str(cline), shell=(sys.platform!="win32"))
-assert return_code==0, "Calling ClustalW failed"
+return_code = subprocess.call(str(cline), shell=(sys.platform != "win32"))
+assert return_code == 0, "Calling ClustalW failed"
 
 # Parse the output
 alignment = AlignIO.read("test.aln", "clustal",
@@ -45,22 +45,21 @@ consensus = summary_align.dumb_consensus()
 print 'consensus', consensus
 
 my_pssm = summary_align.pos_specific_score_matrix(consensus,
-                                                  chars_to_ignore = ['N'])
+                                                  chars_to_ignore=['N'])
 
 print my_pssm
 
 expect_freq = {
-    'A' : .3,
-    'G' : .2,
-    'T' : .3,
-    'C' : .2}
+    'A': .3,
+    'G': .2,
+    'T': .3,
+    'C': .2}
 
 freq_table_info = FreqTable.FreqTable(expect_freq, FreqTable.FREQ,
                                       IUPAC.unambiguous_dna)
 
 info_content = summary_align.information_content(5, 30,
-                                                 chars_to_ignore = ['N'],
-                                                 e_freq_table =
-                                                 freq_table_info)
+                                                 chars_to_ignore=['N'],
+                                                 e_freq_table=freq_table_info)
 
 print "relative info content:", info_content
