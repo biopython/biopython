@@ -137,6 +137,55 @@ under the background distribution.
                     result+=self[a][i]*math.log(self[a][i],2)
         return result
 
+    def make_pssm(self, background=None):
+        """
+        returns the Position-Specific Scoring Matrix.
+
+        The Position-Specific Scoring Matrix (PSSM) contains the log-odds
+        scores computed from the probability matrix and the background
+        probabilities. If the background is None, a uniform background
+        distribution is assumed.
+        """
+        return PositionSpecificScoringMatrix(self.alphabet, self, background)
+
+
+class PositionSpecificScoringMatrix(GenericPositionMatrix):
+
+    def __init__(self, alphabet, probabilities, background=None):
+        GenericPositionMatrix.__init__(self, alphabet, counts)
+        result = 0.0
+        if background is None:
+            background = {}
+            for letter in self.alphabet.letters:
+                background[letter] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in self.alphabet.letters:
+            background[letter] /= total
+        for letter in self.alphabet.letters:
+            self[letter] = []
+            b = background[letter]
+            if b > 0:
+                for i in range(self.length):
+                    p = probabilities[letter][i]
+                    if p > 0:
+                        logodds = math.log(p/b, 2)
+                        self[letter].append(logodds)
+                    else:
+                        logodds = float("-inf")
+                        self[letter].append(logodds)
+            else:
+                for i in range(self.length):
+                    p = probabilities[letter][i]
+                    if p > 0:
+                        logodds = float("inf")
+                        self[letter].append(logodds)
+                    else:
+                        logodds = float("nan")
+                        self[letter].append(logodds)
+            self[letter] = tuple(self[letter])
+
 
 class Motif(object):
     """
