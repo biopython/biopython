@@ -113,7 +113,7 @@ def main():
         sids = args[2:]
     elif input == '-':
         sids = sys.stdin.xreadlines()
-    else :
+    else:
         in_handle = open(input)
         sids = in_handle.xreadlines()
 

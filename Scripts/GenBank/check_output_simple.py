@@ -19,7 +19,7 @@ if len(sys.argv) != 2:
     print "Usage ./check_output.py <GenBank file to parse>"
     sys.exit()
 
-parser = GenBank.FeatureParser(debug_level = 2)
+parser = GenBank.FeatureParser(debug_level=2)
 
 handle = open(sys.argv[1], 'r')
 

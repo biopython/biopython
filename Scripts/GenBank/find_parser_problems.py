@@ -19,11 +19,11 @@ if len(sys.argv) != 2:
     print "Usage ./find_parser_problems <GenBank file to parse>"
     sys.exit()
 
-feature_parser = GenBank.FeatureParser(debug_level = 0)
+feature_parser = GenBank.FeatureParser(debug_level=0)
 parser = GenBank.ErrorParser(feature_parser)
 
 handle = open(sys.argv[1], 'r')
-iterator = GenBank.Iterator(handle, parser, has_header = 1)
+iterator = GenBank.Iterator(handle, parser, has_header=1)
 
 while 1:
     have_record = 0

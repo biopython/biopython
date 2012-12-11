@@ -11,21 +11,21 @@ from FileDialog import SaveFileDialog
 
 
 class NotePad(Toplevel):
-    def __init__(self, master= None):
+    def __init__(self, master=None):
         Toplevel.__init__(self, master)
         self.menubar = Menu(self)
         self.filemenu = Menu(self.menubar)
-        self.filemenu.add_command(label = "Save", command = self.save)
+        self.filemenu.add_command(label="Save", command=self.save)
         self.filemenu.add_separator()
-        self.filemenu.add_command(label = "Dismiss", command = self.destroy)
+        self.filemenu.add_command(label="Dismiss", command=self.destroy)
 
         self.menubar.add_cascade(label="File", menu=self.filemenu)
-        self.configure(menu = self.menubar)
+        self.configure(menu=self.menubar)
         self.yscroll = Scrollbar(self, orient=VERTICAL)
-        self.tid = Text(self, yscrollcommand = self.yscroll.set)
-        self.yscroll.configure(command = self.tid.yview)
-        self.tid.pack(side = LEFT, fill = BOTH, expand = 1)
-        self.yscroll.pack(side = RIGHT, fill = Y)
+        self.tid = Text(self, yscrollcommand=self.yscroll.set)
+        self.yscroll.configure(command=self.tid.yview)
+        self.tid.pack(side=LEFT, fill=BOTH, expand=1)
+        self.yscroll.pack(side=RIGHT, fill=Y)
 
     def text_id(self):
         return self.tid
