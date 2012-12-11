@@ -325,8 +325,8 @@ class DatabaseLoader:
         return answer
 
     def _get_taxon_id_from_ncbi_taxon_id(self, ncbi_taxon_id,
-                                         scientific_name = None,
-                                         common_name = None):
+                                         scientific_name=None,
+                                         common_name=None):
         """Get the taxon id for this record from the NCBI taxon ID (PRIVATE).
 
         ncbi_taxon_id - string containing an NCBI taxon id
@@ -496,7 +496,7 @@ class DatabaseLoader:
         """
         # get the pertinent info and insert it
 
-        if record.id.count(".") == 1: # try to get a version from the id
+        if record.id.count(".") == 1:  # try to get a version from the id
             #This assumes the string is something like "XXXXXXXX.123"
             accession, version = record.id.split('.')
             try:
@@ -504,7 +504,7 @@ class DatabaseLoader:
             except ValueError:
                 accession = record.id
                 version = 0
-        else: # otherwise just use a version of 0
+        else:  # otherwise just use a version of 0
             accession = record.id
             version = 0
 
@@ -706,7 +706,7 @@ class DatabaseLoader:
             crc = crc64("".join(s))
             refs = self.adaptor.execute_and_fetch_col0(
                 "SELECT reference_id FROM reference"
-                  r" WHERE crc = %s", (crc,))
+                    r" WHERE crc = %s", (crc,))
         if not refs:
             if reference.medline_id:
                 dbxref_id = self._add_dbxref("MEDLINE",
@@ -760,12 +760,12 @@ class DatabaseLoader:
         """
         ontology_id = self._get_ontology_id('SeqFeature Keys')
         seqfeature_key_id = self._get_term_id(feature_type,
-                                              ontology_id = ontology_id)
+                                              ontology_id=ontology_id)
         # XXX source is always EMBL/GenBank/SwissProt here; it should depend on
         # the record (how?)
         source_cat_id = self._get_ontology_id('SeqFeature Sources')
         source_term_id = self._get_term_id('EMBL/GenBank/SwissProt',
-                                      ontology_id = source_cat_id)
+                                      ontology_id=source_cat_id)
 
         sql = r"INSERT INTO seqfeature (bioentry_id, type_term_id, " \
               r"source_term_id, rank) VALUES (%s, %s, %s, %s)"
@@ -801,7 +801,7 @@ class DatabaseLoader:
         # two cases, a simple location or a split location
         if not feature.sub_features:    # simple location
             self._insert_seqfeature_location(feature, 1, seqfeature_id)
-        else: # split location
+        else:  # split location
             for rank, cur_feature in enumerate(feature.sub_features):
                 self._insert_seqfeature_location(cur_feature,
                                                  rank + 1,
