@@ -19,7 +19,7 @@ class PatternIO(object):
     This just defines a simple persistance class for patterns, making
     it easy to write them to a file and read 'em back.
     """
-    def __init__(self, alphabet = None):
+    def __init__(self, alphabet=None):
         """Intialize the reader and writer class.
 
         Arguments:
@@ -218,7 +218,7 @@ class PatternRepository(object):
 
         return all_patterns
 
-    def remove_polyA(self, at_percentage = .9):
+    def remove_polyA(self, at_percentage=.9):
         """Remove patterns which are likely due to polyA tails from the lists.
 
         This is just a helper function to remove pattenrs which are likely

@@ -166,11 +166,11 @@ class SchemaDNAAlphabet(Alphabet.Alphabet):
     """
     letters = ["G", "A", "T", "C", "*"]
 
-    alphabet_matches = {"G" : "G",
-                        "A" : "A",
-                        "T" : "T",
-                        "C" : "C",
-                        "*" : "GATC"}
+    alphabet_matches = {"G": "G",
+                        "A": "A",
+                        "T": "T",
+                        "C": "C",
+                        "*": "GATC"}
 
 # -- GA schema finder
 
@@ -186,7 +186,7 @@ class GeneticAlgorithmFinder(object):
     can be overridden easily by creating a GeneticAlgorithmFinder
     with a different alphabet.
     """
-    def __init__(self, alphabet = SchemaDNAAlphabet()):
+    def __init__(self, alphabet=SchemaDNAAlphabet()):
         """Initialize a finder to get schemas using Genetic Algorithms.
 
         Arguments:
@@ -215,8 +215,8 @@ class GeneticAlgorithmFinder(object):
         """
         self.motif_generator = RandomMotifGenerator(self.alphabet)
 
-        self.mutator = SinglePositionMutation(mutation_rate = 0.1)
-        self.crossover = SinglePointCrossover(crossover_prob = 0.25)
+        self.mutator = SinglePositionMutation(mutation_rate=0.1)
+        self.crossover = SinglePointCrossover(crossover_prob=0.25)
         self.repair = AmbiguousRepair(Schema(self.alphabet.alphabet_matches),
                                       4)
         self.base_selector = TournamentSelection(self.mutator, self.crossover,
@@ -370,7 +370,7 @@ class MostCountSchemaFitness(object):
 class RandomMotifGenerator(object):
     """Generate a random motif within given parameters.
     """
-    def __init__(self, alphabet, min_size = 12, max_size = 17):
+    def __init__(self, alphabet, min_size=12, max_size=17):
         """Initialize with the motif parameters.
 
         Arguments:
@@ -408,7 +408,7 @@ class SimpleFinisher(object):
     GA has proceeded for a specified number of generations and has
     a given number of unique schema with positive fitness.
     """
-    def __init__(self, num_schemas, min_generations = 100):
+    def __init__(self, num_schemas, min_generations=100):
         """Initialize the finisher with its parameters.
 
         Arguments:
@@ -456,8 +456,8 @@ class SchemaFinder(object):
     in a set of DNA sequences, but the finder can be customized to deal
     with any type of data.
     """
-    def __init__(self, num_schemas = 100,
-                 schema_finder = GeneticAlgorithmFinder()):
+    def __init__(self, num_schemas=100,
+                 schema_finder=GeneticAlgorithmFinder()):
         self.num_schemas = num_schemas
         self._finder = schema_finder
 
@@ -536,7 +536,7 @@ class SchemaCoder(object):
         return schema_counts
 
 
-def matches_schema(pattern, schema, ambiguity_character = '*'):
+def matches_schema(pattern, schema, ambiguity_character='*'):
     """Determine whether or not the given pattern matches the schema.
 
     Arguments:
@@ -567,7 +567,7 @@ def matches_schema(pattern, schema, ambiguity_character = '*'):
 class SchemaFactory(object):
     """Generate Schema from inputs of Motifs or Signatures.
     """
-    def __init__(self, ambiguity_symbol = '*'):
+    def __init__(self, ambiguity_symbol='*'):
         """Initialize the SchemaFactory
 
         Arguments:

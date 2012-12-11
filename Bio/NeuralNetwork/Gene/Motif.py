@@ -18,7 +18,7 @@ from Pattern import PatternRepository
 class MotifFinder(object):
     """Find motifs in a set of Sequence Records.
     """
-    def __init__(self, alphabet_strict = 1):
+    def __init__(self, alphabet_strict=1):
         """Initialize a finder to get motifs.
 
         Arguments:
