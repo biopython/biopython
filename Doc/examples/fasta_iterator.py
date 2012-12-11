@@ -7,7 +7,7 @@ from Bio import SeqIO
 
 def extract_organisms(file_to_parse, format):
     all_species = []
-    for cur_record in SeqIO.parse(open(file_to_parse), format) :
+    for cur_record in SeqIO.parse(open(file_to_parse), format):
         # extract the info from the description
         new_species = cur_record.description.split()[1]
 

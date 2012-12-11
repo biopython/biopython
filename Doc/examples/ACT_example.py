@@ -56,7 +56,7 @@ for i, crunch_file in enumerate(comparisons):
     for line in handle:
         if line[0]=="#":
             continue
-        parts = line.rstrip("\n").split(None,7)
+        parts = line.rstrip("\n").split(None, 7)
         #0 = score
         #1 = id
         #2 = S1
@@ -109,9 +109,9 @@ for f, format in genomes:
                                 border=colors.blue)
 
 gd_diagram.draw(format="linear", fragments=3,
-                orientation="landscape", pagesize=(20*cm,10*cm))
+                orientation="landscape", pagesize=(20*cm, 10*cm))
 gd_diagram.write(name + ".pdf", "PDF")
 
 gd_diagram.draw(format="circular",
-                orientation="landscape", pagesize=(20*cm,20*cm))
+                orientation="landscape", pagesize=(20*cm, 20*cm))
 gd_diagram.write(name + "_c.pdf", "PDF")
