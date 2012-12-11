@@ -35,7 +35,7 @@ class Generic_dbutils:
         """
         cursor.execute(sql, args or ())
 
-    def autocommit(self, conn, y = 1):
+    def autocommit(self, conn, y=1):
         # Let's hope it was not really needed
         pass
 
@@ -84,7 +84,7 @@ class _PostgreSQL_dbutils(Generic_dbutils):
 
 class Psycopg2_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Psycopg2 (PostgreSQL)."""
-    def autocommit(self, conn, y = True):
+    def autocommit(self, conn, y=True):
         if y:
             conn.set_isolation_level(0)
         else:
@@ -95,7 +95,7 @@ _dbutils["psycopg2"] = Psycopg2_dbutils
 
 class Pgdb_dbutils(_PostgreSQL_dbutils):
     """Custom database utilities for Pgdb (aka PyGreSQL, for PostgreSQL)."""
-    def autocommit(self, conn, y = True):
+    def autocommit(self, conn, y=True):
         raise NotImplementedError("pgdb does not support this!")
 
 _dbutils["pgdb"] = Pgdb_dbutils

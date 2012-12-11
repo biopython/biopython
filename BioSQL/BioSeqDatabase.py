@@ -16,10 +16,10 @@ import BioSeq
 import Loader
 import DBUtils
 
-_POSTGRES_RULES_PRESENT = False # Hack for BioSQL Bug 2839
+_POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
 
-def open_database(driver = "MySQLdb", **kwargs):
+def open_database(driver="MySQLdb", **kwargs):
     """Main interface for loading a existing BioSQL-style database.
 
     This function is the easiest way to retrieve a connection to a
@@ -229,11 +229,11 @@ class DBServer:
         sql_handle = open(sql_file, "rU")
         sql = r""
         for line in sql_handle:
-            if line.startswith("--"): # don't include comment lines
+            if line.startswith("--"):  # don't include comment lines
                 pass
-            elif line.startswith("#"): # ditto for MySQL comments
+            elif line.startswith("#"):  # ditto for MySQL comments
                 pass
-            elif line.strip(): # only include non-blank lines
+            elif line.strip():  # only include non-blank lines
                 sql += line.strip()
                 sql += ' '
 
@@ -246,8 +246,8 @@ class DBServer:
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
         elif self.module_name in ["MySQLdb", "sqlite3"]:
-            sql_parts = sql.split(";") # one line per sql command
-            for sql_line in sql_parts[:-1]: # don't use the last item, it's blank
+            sql_parts = sql.split(";")  # one line per sql command
+            for sql_line in sql_parts[:-1]:  # don't use the last item, it's blank
                 self.adaptor.cursor.execute(sql_line)
         else:
             raise ValueError("Module %s not supported by the loader." %
