@@ -27,7 +27,7 @@ from Bio.SeqUtils import quick_FASTA_reader
 
 
 class xbb_widget:
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.is_a_master = (parent is None)
         self.parent = parent
 
@@ -39,18 +39,18 @@ class xbb_widget:
             self.init_optionsdb()
             self.parent = self.main_frame.master
 
-        self.main_frame.pack(fill = BOTH, expand = 1)
+        self.main_frame.pack(fill=BOTH, expand=1)
 
         # sequence info (GC%, positins etc.)
         self.info_frame = Frame(self.main_frame)
-        self.info_frame.pack(fill = BOTH, expand = 1)
+        self.info_frame.pack(fill=BOTH, expand=1)
 
         self.create_menu(self.info_frame)
         self.create_seqinfo(self.info_frame)
 
         # sequence field and fast buttons
         self.seq_frame = Frame(self.main_frame)
-        self.seq_frame.pack(fill = BOTH, expand = 1)
+        self.seq_frame.pack(fill=BOTH, expand=1)
 
         self.create_buttons(self.seq_frame)
         self.create_seqfield(self.seq_frame)
@@ -126,25 +126,25 @@ class xbb_widget:
         # File menu
         self.file_menu = Menu(self.menubar)
         menu = self.file_menu
-        menu.add_command(label='Exit', command = self.exit)
+        menu.add_command(label='Exit', command=self.exit)
         self.menubar.add_cascade(label="File", menu=self.file_menu)
 
         # Edit menu
         self.edit_menu = Menu(self.menubar)
         menu = self.edit_menu
-        menu.add_command(label='Complement', command = self.complement)
-        menu.add_command(label='Antiparallel', command = self.antiparallel)
-        menu.add_command(label='Reverse', command = self.reverse)
-        menu.add_command(label='Fix sequence', command = self.fix_sequence)
-        menu.add_command(label='Search', command = self.search)
+        menu.add_command(label='Complement', command=self.complement)
+        menu.add_command(label='Antiparallel', command=self.antiparallel)
+        menu.add_command(label='Reverse', command=self.reverse)
+        menu.add_command(label='Fix sequence', command=self.fix_sequence)
+        menu.add_command(label='Search', command=self.search)
         self.menubar.add_cascade(label="Edit", menu=self.edit_menu)
 
         # Translation menu
         self.translation_menu = Menu(self.menubar)
         menu = self.translation_menu
-        menu.add_command(label='+1 Frame', command = self.translate)
-        menu.add_command(label='6 Frames', command = self.gcframe)
-        menu.add_command(label='Extract to FASTA', command = self.extract)
+        menu.add_command(label='+1 Frame', command=self.translate)
+        menu.add_command(label='6 Frames', command=self.gcframe)
+        menu.add_command(label='Extract to FASTA', command=self.extract)
 
         self.current_codon_table = StringVar()
         self.current_codon_table.set('Standard')
@@ -158,7 +158,7 @@ class xbb_widget:
         self.gencode_menu = Menu(self.translation_menu)
         menu = self.gencode_menu
         for table in keys:
-            menu.add_radiobutton(label=table, command = self.set_codon_table, variable = self.current_codon_table)
+            menu.add_radiobutton(label=table, command=self.set_codon_table, variable=self.current_codon_table)
         self.translation_menu.add_cascade(label="Genetic Codes", menu=self.gencode_menu)
 
         self.menubar.add_cascade(label="Translations", menu=self.translation_menu)
@@ -166,17 +166,17 @@ class xbb_widget:
         # Tools menu
         self.tools_menu = Menu(self.menubar)
         menu = self.tools_menu
-        menu.add_command(label='Blast', command = self.blast)
-        menu.add_command(label='Stats', command = self.statistics)
+        menu.add_command(label='Blast', command=self.blast)
+        menu.add_command(label='Stats', command=self.statistics)
         self.menubar.add_cascade(label="Tools", menu=self.tools_menu)
 
         # Help menu
-        self.help_menu = Menu(self.menubar, name = 'help')
+        self.help_menu = Menu(self.menubar, name='help')
         menu = self.help_menu
-        menu.add_command(label='Help', command = xbbtools_help)
+        menu.add_command(label='Help', command=xbbtools_help)
         self.menubar.add_cascade(label="Help", menu=self.help_menu)
 
-        self.parent.config(menu = self.menubar)
+        self.parent.config(menu=self.menubar)
 
     def set_codon_table(self):
         self.current_codon_table_id = self.translation_tables[self.current_codon_table.get()]
@@ -190,64 +190,64 @@ class xbb_widget:
 
     def create_seqinfo(self, parent):
         # all the sequence information in the top labels
-        self.seq_info1 = Frame(parent, relief = RIDGE,
-                               borderwidth = 5, height = 30)
-        self.seq_info1.pack(fill = BOTH, expand = 1, side = TOP)
+        self.seq_info1 = Frame(parent, relief=RIDGE,
+                               borderwidth=5, height=30)
+        self.seq_info1.pack(fill=BOTH, expand=1, side=TOP)
 
         self.position_ids = {}
         d = self.position_ids
-        d['id'] = Label(self.seq_info1, width = 10)
-        d['from_id'] = Label(self.seq_info1, width = 10)
-        d['to_id'] = Label(self.seq_info1, width = 10)
-        d['length_id'] = Label(self.seq_info1, width = 10)
-        d['label'] = Label(self.seq_info1, width = 10)
+        d['id'] = Label(self.seq_info1, width=10)
+        d['from_id'] = Label(self.seq_info1, width=10)
+        d['to_id'] = Label(self.seq_info1, width=10)
+        d['length_id'] = Label(self.seq_info1, width=10)
+        d['label'] = Label(self.seq_info1, width=10)
         for i in ['id', 'from_id', 'to_id', 'length_id', 'label']:
-            d[i].pack(side = LEFT, fill = BOTH, expand = 1)
+            d[i].pack(side=LEFT, fill=BOTH, expand=1)
 
-        self.seq_info2 = Frame(parent, relief = RIDGE,
-                               borderwidth = 5, height = 30)
-        self.seq_info2.pack(fill = BOTH, expand = 1, side = TOP)
+        self.seq_info2 = Frame(parent, relief=RIDGE,
+                               borderwidth=5, height=30)
+        self.seq_info2.pack(fill=BOTH, expand=1, side=TOP)
         self.statistics_ids = {}
         d = self.statistics_ids
-        d['length_id'] = Label(self.seq_info2, width = 10)
-        d['length_id'].pack(side = LEFT, fill = BOTH, expand = 1)
+        d['length_id'] = Label(self.seq_info2, width=10)
+        d['length_id'].pack(side=LEFT, fill=BOTH, expand=1)
         for nt in ['A', 'C', 'G', 'T']:
-            d[nt] = Label(self.seq_info2, width = 10, fg = self.colorsNT[nt])
-            d[nt].pack(side = LEFT, fill = BOTH, expand = 1)
+            d[nt] = Label(self.seq_info2, width=10, fg=self.colorsNT[nt])
+            d[nt].pack(side=LEFT, fill=BOTH, expand=1)
 
     def create_buttons(self, parent):
         self.button_frame = Frame(parent)
-        self.button_frame.pack(fill = Y, side = LEFT)
+        self.button_frame.pack(fill=Y, side=LEFT)
         self.buttons = {}
         for text, func in [('Open', self.open),
                            ('Export', self.export),
                            ('GC Frame', self.gcframe),
                            ('Blast', self.blast),
                            ('Exit', self.exit)]:
-            b_id = Button(self.button_frame, text = text,
-                          command = func, width = 7)
-            b_id.pack(side = TOP, pady = 5, padx = 10)
+            b_id = Button(self.button_frame, text=text,
+                          command=func, width=7)
+            b_id.pack(side=TOP, pady=5, padx=10)
             self.buttons[text] = b_id
 
         f = Frame(self.button_frame)
-        l = Label(f, text = 'Goto:', bg = self.colorsbg['frame'], fg = self.colorsfg['button'])
-        l.pack(side = LEFT)
+        l = Label(f, text='Goto:', bg=self.colorsbg['frame'], fg=self.colorsfg['button'])
+        l.pack(side=LEFT)
         l.bind('<Button-1>', self.goto)
 
-        self.goto_entry = Entry(f, width = 5)
-        self.goto_entry.pack(side = RIGHT, pady = 5, padx = 4)
+        self.goto_entry = Entry(f, width=5)
+        self.goto_entry.pack(side=RIGHT, pady=5, padx=4)
         self.goto_entry.bind('<Return>', self.goto)
-        f.pack(side = BOTTOM)
+        f.pack(side=BOTTOM)
 
     def create_seqfield(self, parent):
-        self.sequence_id = Text(parent, wrap = 'char',
-                                width = self.seqwidth)
-        self.sequence_id.pack(fill = BOTH, expand = 1, side = RIGHT)
+        self.sequence_id = Text(parent, wrap='char',
+                                width=self.seqwidth)
+        self.sequence_id.pack(fill=BOTH, expand=1, side=RIGHT)
 
     def create_bindings(self):
         self.sequence_id.bind('<Motion>', self.position)
-        self.sequence_id.bind('<Leave>', lambda x, s = self:
-                              s.position_ids['id'].configure(text = ''))
+        self.sequence_id.bind('<Leave>', lambda x, s=self:
+                              s.position_ids['id'].configure(text=''))
         self.sequence_id.bind('<1>', self.zero)
         self.sequence_id.bind('<B1-Motion>', self.count_selection)
         self.sequence_id.bind('<Double-Button-1>', self.select_all)
@@ -255,7 +255,7 @@ class xbb_widget:
     def zero(self, event):
         p = self.position_ids
         for i in ['from_id', 'to_id', 'length_id']:
-            self.position_ids[i].configure(text = '')
+            self.position_ids[i].configure(text='')
 
     def get_length(self):
         self.sequence_length = len(self.sequence_id.get(1.0, END))
@@ -308,15 +308,15 @@ class xbb_widget:
             b = int(w.index('sel.last').split('.')[1])
             length = b - a + 1
 
-            self.position_ids['from_id'].configure(text = 'Start:%d' % a)
-            self.position_ids['to_id'].configure(text = 'Stop:%d' % b)
-            self.position_ids['length_id'].configure(text = '%d nt' % length)
+            self.position_ids['from_id'].configure(text='Start:%d' % a)
+            self.position_ids['to_id'].configure(text='Stop:%d' % b)
+            self.position_ids['length_id'].configure(text='%d nt' % length)
 
-            self.statistics_ids['length_id'].configure(text = 'Length=%d' % length)
+            self.statistics_ids['length_id'].configure(text='Length=%d' % length)
             seq = self.get_self_selection()
             for nt in ['A', 'C', 'G', 'T']:
                 n = seq.count(nt)
-                self.statistics_ids[nt].configure(text = '%s=%d' % (nt, n))
+                self.statistics_ids[nt].configure(text='%s=%d' % (nt, n))
         except:
             pass
 
@@ -325,9 +325,9 @@ class xbb_widget:
         y = event.y
         pos = self.sequence_id.index('@%d,%d' % (x, y)).split('.')
         pos = int(pos[1]) + 1
-        self.position_ids['id'].configure(text = str(pos))
+        self.position_ids['id'].configure(text=str(pos))
 
-    def open(self, file = None):
+    def open(self, file=None):
         if not file:
             file = askopenfilename()
         if not file:
@@ -351,7 +351,7 @@ class xbb_widget:
     def update_label(self, header):
         name = header.split(' ')[0]
         name = name.split(',')[0]
-        self.position_ids['label'].configure(text = name)
+        self.position_ids['label'].configure(text=name)
 
     def export(self):
         seq = self.get_self_selection()
@@ -365,7 +365,7 @@ class xbb_widget:
         tid = np.text_id()
         tid.insert(END, self.translator.gcframe(seq, self.current_codon_table_id))
 
-    def translate(self, frame = 1):
+    def translate(self, frame=1):
         seq = self.get_selection_or_sequence()
         if not seq:
             return
@@ -373,7 +373,7 @@ class xbb_widget:
         tid = np.text_id()
         tid.insert(END, self.translator.frame_nice(seq, frame, self.current_codon_table_id))
 
-    def extract(self, frame = 1):
+    def extract(self, frame=1):
         seq = self.get_selection_or_sequence()
         if not seq:
             return
@@ -472,7 +472,7 @@ GC=%f
 
     def search(self):
         seq = self.get_selection_or_sequence()
-        searcher = XDNAsearch(seq, master = self.sequence_id, highlight = 1)
+        searcher = XDNAsearch(seq, master=self.sequence_id, highlight=1)
 
     def goto(self, *args):
         pos = self.goto_entry.get()

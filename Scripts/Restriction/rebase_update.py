@@ -11,7 +11,7 @@ import sys
 import optparse
 from Bio.Restriction._Update.Update import *
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     parser = optparse.OptionParser()
     add = parser.add_option
 

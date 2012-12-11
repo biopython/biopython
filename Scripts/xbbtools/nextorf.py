@@ -80,7 +80,7 @@ class NextOrf:
                 CDS.extend(self.GetCDS(self.seq))
             if minus:
                 self.rseq = self.seq.reverse_complement()
-                CDS.extend(self.GetCDS(self.rseq, strand = -1))
+                CDS.extend(self.GetCDS(self.rseq, strand=-1))
             self.Output(CDS)
 
     def ToFasta(self, header, seq):
@@ -98,7 +98,7 @@ class NextOrf:
 
     def Gc2(self, seq):
         l = len(seq)
-        d= {}
+        d = {}
         for nt in ['A', 'T', 'G', 'C']:
             d[nt] = [0, 0, 0]
 
@@ -150,7 +150,7 @@ class NextOrf:
             frame_coordinates.append(coordinates)
         return frame_coordinates
 
-    def GetCDS(self, seq, strand = 1):
+    def GetCDS(self, seq, strand=1):
         frame_coordinates = self.GetOrfCoordinates(seq)
         START, STOP = 1, 0
         so = self.options
@@ -180,7 +180,7 @@ class NextOrf:
                             start_site = start_site + f - 1
                         if codon == 'XXX':
                             stop = start_site + 3*((int((stop-1)-start_site)/3))
-                        s = seq[start_site -1 : stop]
+                        s = seq[start_site-1:stop]
                         CDS.append((start_site, stop, length, s, strand*f))
                         start_site = 0
                         if nostart == '1':

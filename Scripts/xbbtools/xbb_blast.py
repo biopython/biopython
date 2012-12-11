@@ -18,7 +18,7 @@ import xbb_blastbg
 
 
 class BlastIt:
-    def __init__(self, seq, parent = None):
+    def __init__(self, seq, parent=None):
         self.seq = seq
         self.parent = parent
         self.toplevel = Toplevel(parent)
@@ -46,29 +46,29 @@ class BlastIt:
     def Choices(self):
         self.GetBlasts()
         self.cf = Frame(self.toplevel)
-        self.cf.pack(side = TOP, expand = 1, fill = X)
+        self.cf.pack(side=TOP, expand=1, fill=X)
         self.dbs = Pmw.ComboBox(self.cf,
-                                label_text = 'Blast Databases:',
-                                labelpos = 'nw',
-                                scrolledlist_items = self.nin + self.pin,
-                                selectioncommand = self.Validate
+                                label_text='Blast Databases:',
+                                labelpos='nw',
+                                scrolledlist_items=self.nin + self.pin,
+                                selectioncommand=self.Validate
                                 )
         self.blasts = Pmw.ComboBox(self.cf,
-                                   label_text = 'Blast Programs:',
-                                   labelpos = 'nw',
-                                   scrolledlist_items = ['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'],
-                                   selectioncommand = self.Validate
+                                   label_text='Blast Programs:',
+                                   labelpos='nw',
+                                   scrolledlist_items=['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'],
+                                   selectioncommand=self.Validate
                                    )
-        self.dbs.pack(side = LEFT, expand = 1, fill = X)
-        self.blasts.pack(side = LEFT, expand = 1, fill = X)
+        self.dbs.pack(side=LEFT, expand=1, fill=X)
+        self.blasts.pack(side=LEFT, expand=1, fill=X)
 
         self.alternative_f = Frame(self.cf)
         self.alternative = Entry(self.alternative_f)
-        self.alternative_f.pack(side = TOP, fill = X, expand = 1)
-        self.alternative.pack(side = LEFT, fill = X, expand = 1)
-        self.ok = Button(self.alternative_f, text = 'Run',
-                         command = self._Run)
-        self.ok.pack(side = RIGHT)
+        self.alternative_f.pack(side=TOP, fill=X, expand=1)
+        self.alternative.pack(side=LEFT, fill=X, expand=1)
+        self.ok = Button(self.alternative_f, text='Run',
+                         command=self._Run)
+        self.ok.pack(side=RIGHT)
 
         self.dbs.selectitem(0)
         self.blasts.selectitem(0)
@@ -83,8 +83,8 @@ class BlastIt:
         elif (prog in ['blastp', 'blastx']) == (db in self.pin):
             color = 'green'
 
-        self.dbs.component('entry').configure(bg = color)
-        self.blasts.component('entry').configure(bg = color)
+        self.dbs.component('entry').configure(bg=color)
+        self.blasts.component('entry').configure(bg=color)
 
     def _Run(self):
         alternative_command = self.alternative.get()
