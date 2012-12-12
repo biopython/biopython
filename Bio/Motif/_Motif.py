@@ -146,6 +146,34 @@ under the background distribution.
                     result+=self[a][i]*math.log(self[a][i],2)
         return result
 
+    def exp_score(self, background=None):
+        """
+        Computes expected score of motif's instance and its standard deviation
+        """
+        exs = 0.0
+        var = 0.0
+        if background is None:
+            background = {}
+            for letter in self.alphabet.letters:
+                background[letter] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in self.alphabet.letters:
+            background[a] /= total
+        for i in range(self.length):
+            ex1 = 0.0
+            ex2 = 0.0
+            for letter in self.alphabet.letters:
+                p = self[i][letter]
+                if p!=0:
+                    term = p*(math.log(p,2)-math.log(background[a],2))
+                    ex1 += term
+                    ex2 += term**2
+            exs += ex1
+            var += ex2-ex1**2
+        return exs, math.sqrt(var)
+
     def make_pssm(self, background=None):
         """
         returns the Position-Specific Scoring Matrix.
@@ -217,6 +245,28 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 score = rc.calculate(s)
                 if score > threshold:
                     yield (position-n, score)
+
+    def max_score(self):
+        """Maximal possible score for this motif.
+
+        returns the score computed for the consensus sequence.
+        """
+        score = 0.0
+        letters = self.alphabet
+        for position in xrange(0,self.length):
+            score += max([self[letter][position] for letter in letters])
+        return score
+
+    def min_score(self):
+        """Minimal possible score for this motif.
+
+        returns the score computed for the anticonsensus sequence.
+        """
+        score = 0.0
+        letters = self.alphabet
+        for position in xrange(0,self.length):
+            score += min([self[letter][position] for letter in letters])
+        return score
 
 
 class Motif(object):
