@@ -247,7 +247,7 @@ class Writer(object):
             
         model.sync()
             
-    def serialize_model(self, handle, mime_type='text_turtle'):
+    def serialize_model(self, handle, mime_type='text/turtle'):
         """Serialize RDF model to file handle"""
         import RDF
         
