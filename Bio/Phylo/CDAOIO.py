@@ -158,6 +158,7 @@ class Writer(object):
 
     def __init__(self, trees):
         self.trees = trees
+        self.model = None
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle.
@@ -169,8 +170,8 @@ class Writer(object):
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
-        model = self.add_trees_to_model()
-        return self.serialize_model(model, mime_type=mime_type)
+        self.add_trees_to_model()
+        self.serialize_model(handle, mime_type=mime_type)
         
     def add_trees_to_model(self, storage=None):
         import RDF
@@ -191,9 +192,11 @@ class Writer(object):
             if storage is None:
                 raise CDAOError("new RDF.Storage failed")
 
-        model = RDF.Model(storage)
-        if model is None:
-            raise CDAOError("new RDF.model failed")
+        if self.model is None:
+            self.model = RDF.Model(storage)
+            if self.model is None:
+                raise CDAOError("new RDF.model failed")
+        model = self.model
         
         def add_statements(statements):
             for stmt in statements:
@@ -238,7 +241,7 @@ class Writer(object):
             
             self.count += 1
             
-    def serialize_model(self, model, mime_type='text_turtle'):
+    def serialize_model(self, handle, mime_type='text_turtle'):
         import RDF
         
         # serialize RDF model to output file
@@ -249,7 +252,7 @@ class Writer(object):
         # TODO: this is going to be too memory intensive for large trees;
         # come up with something better
         print "Writing..."
-        handle.write(serializer.serialize_model_to_string(model))
+        handle.write(serializer.serialize_model_to_string(self.model))
         print "Done."
         
         return self.count
