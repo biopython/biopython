@@ -12,6 +12,17 @@ import os
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
     pass
+    
+    
+def new_storage():
+    import RDF
+    
+    storage = RDF.Storage(storage_name="hashes",
+                          name="serializer",
+                          options_string="new='yes',hash-type='memory',dir='.'")
+    if storage is None:
+        raise CDAOError("new RDF.Storage failed")
+    return storage
 
 
 # ---------------------------------------------------------
@@ -59,11 +70,7 @@ class Parser(object):
 
         if storage is None:
             # store RDF model in memory for now
-            storage = RDF.Storage(storage_name="hashes",
-                                  name="serializer",
-                                  options_string="new='yes',hash-type='memory',dir='.'")
-            if storage is None:
-                raise CDAOError("new RDF.Storage failed")
+            storage = new_storage()
 
         if self.model is None:
             self.model = RDF.Model(storage)
@@ -135,11 +142,7 @@ class Writer(object):
         
         if storage is None:
             # store RDF model in memory for now
-            storage = RDF.Storage(storage_name="hashes",
-                                  name="serializer",
-                                  options_string="new='yes',hash-type='memory',dir='.'")
-            if storage is None:
-                raise CDAOError("new RDF.Storage failed")
+            storage = new_storage()
 
         if self.model is None:
             self.model = RDF.Model(storage)
@@ -154,7 +157,8 @@ class Writer(object):
         def process_clade(clade, parent=None):
             # TODO: what uri to use for clades?
             # currently, non-terminal nodes are all just "clade"
-            clade.uri = (str(clade))
+            import uuid
+            clade.uri = clade.name if clade.name else uuid.uuid4().hex
             statements = [
                           (Uri(clade.uri), qUri('rdf:type'), qUri('cdao:Node')),
                           ]
