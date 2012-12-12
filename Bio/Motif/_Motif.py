@@ -166,8 +166,9 @@ under the background distribution.
             ex2 = 0.0
             for letter in self.alphabet.letters:
                 p = self[i][letter]
+                b = background[letter]
                 if p!=0:
-                    term = p*(math.log(p,2)-math.log(background[a],2))
+                    term = p*(math.log(p,2)-math.log(b,2))
                     ex1 += term
                     ex2 += term**2
             exs += ex1
@@ -220,12 +221,44 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def calculate(self, sequence):
         """
-        returns the PWM score for a given sequence
+        returns the PWM score for a given sequence for all positions.
+
+        - the sequence can only be a DNA sequence
+        - the search is performed only on one strand
+        - if the sequence and the motif have the same length, a single
+          number is returned
+        - otherwise, the result is a one-dimensional list or numpy array
         """
-        score = 0.0
-        for position, letter in enumerate(sequence):
-            score += self[letter][position]
-        return score
+        if self.alphabet!=IUPAC.unambiguous_dna:
+            raise ValueError("Wrong alphabet! Use only with DNA motifs")
+        if sequence.alphabet!=IUPAC.unambiguous_dna:
+            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+
+        sequence = str(sequence)
+        m = self.length
+        n = len(sequence)
+
+        scores = []
+        # check if the fast C code can be used
+        try:
+            import _pwm
+        except ImportError:
+            # use the slower Python code otherwise
+            for i in xrange(n-m+1):
+                score = 0.0
+                for position in xrange(m):
+                    letter = sequence[i+position]
+                    score += self[letter][position]
+                scores.append(score)
+        else:
+            # get the log-odds matrix into a proper shape
+            # (each row contains sorted (ACGT) log-odds values)
+            logodds = [[self[letter][i] for letter in "ACGT"] for i in range(m)]
+            scores = _pwm.calculate(sequence, logodds)
+        if len(scores)==1:
+            return scores[0]
+        else:
+            return scores
 
     def search(self, sequence, threshold=0.0, both=True):
         """
@@ -352,6 +385,10 @@ class Motif(object):
         return self.counts is not None
 
     def _check_length(self, len):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.
+""", PendingDeprecationWarning)
         if self.length is None:
             self.length = len
         elif self.length != len:
@@ -359,6 +396,10 @@ class Motif(object):
             raise ValueError("You can't change the length of the motif")
 
     def _check_alphabet(self,alphabet):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.
+""", PendingDeprecationWarning)
         if self.alphabet is None:
             self.alphabet=alphabet
         elif self.alphabet != alphabet:
@@ -368,6 +409,11 @@ class Motif(object):
         """
         adds new instance to the motif
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. Instead of adding instances to an existing
+Motif object, please create a new Motif object.
+""", PendingDeprecationWarning)
         self._check_alphabet(instance.alphabet)
         self._check_length(len(instance))
         if self.counts is not None:
