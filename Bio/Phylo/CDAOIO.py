@@ -7,6 +7,9 @@ from cStringIO import StringIO
 
 from Bio.Phylo import Newick
 import os
+import RDF
+#RDF.debug(1)
+
 
 # Definitions retrieved from Bio.Nexus.Trees
 NODECOMMENT_START = '[&'
@@ -48,101 +51,42 @@ class Parser(object):
 
     def __init__(self, handle):
         self.handle = handle
+        self.model = None
 
-'''    @classmethod
+    @classmethod
     def from_string(cls, treetext):
         handle = StringIO(treetext)
         return cls(handle)
 
-    def parse(self, values_are_confidence=False, rooted=False):
+    def parse(self, values_are_confidence=False, rooted=False,
+              storage=None, mime_type='text/turtle'):
         """Parse the text stream this object was initialized with."""
+        if storage is None:
+            # store RDF model in memory for now
+            storage = RDF.Storage(storage_name="hashes",
+                                  name="serializer",
+                                  options_string="new='yes',hash-type='memory',dir='.'")
+            if storage is None:
+                raise CDAOError("new RDF.Storage failed")
+
+        if self.model is None:
+            self.model = RDF.Model(storage)
+            if self.model is None:
+                raise CDAOError("new RDF.model failed")
+        model = self.model
+        
         self.values_are_confidence = values_are_confidence
-        self.rooted = rooted    # XXX this attribue is useless
-        buf = ''
-        for line in self.handle:
-            buf += line.rstrip()
-            if buf.endswith(';'):
-                yield self._parse_tree(buf, rooted)
-                buf = ''
-        if buf:
-            # Last tree is missing a terminal ';' character -- that's OK
-            yield self._parse_tree(buf, rooted)
-
-    def _parse_tree(self, text, rooted):
-        """Parses the text representation into an Tree object."""
-        # XXX Pass **kwargs along from Parser.parse?
-        return Newick.Tree(root=self._parse_subtree(text), rooted=self.rooted)
-
-    def _parse_subtree(self, text):
-        """Parse ``(a,b,c...)[[[xx]:]yy]`` into subcomponents, recursively."""
-        text = text.strip().rstrip(';')
-        if text.count('(')!=text.count(')'):
-            raise NewickError("Parentheses do not match in (sub)tree: " + text)
-        # Text is now "(...)..." (balanced parens) or "..." (leaf node)
-        if text.count('(') == 0:
-            # Leaf/terminal node -- recursion stops here
-            return self._parse_tag(text)
-        # Handle one layer of the nested subtree
-        # XXX what if there's a paren in a comment or other string?
-        close_posn = text.rfind(')')
-        subtrees = []
-        # Locate subtrees by counting nesting levels of parens
-        plevel = 0
-        prev = 1
-        for posn in range(1, close_posn):
-            if text[posn] == '(':
-                plevel += 1
-            elif text[posn] == ')':
-                plevel -= 1
-            elif text[posn] == ',' and plevel == 0:
-                subtrees.append(text[prev:posn])
-                prev = posn + 1
-        subtrees.append(text[prev:close_posn])
-        # Construct a new clade from trailing text, then attach subclades
-        clade = self._parse_tag(text[close_posn+1:])
-        clade.clades = [self._parse_subtree(st) for st in subtrees]
-        return clade
-
-    def _parse_tag(self, text):
-        """Extract the data for a node from text.
-
-        :returns: Clade instance containing any available data
-        """
-        # Extract the comment
-        comment_start = text.find(NODECOMMENT_START)
-        if comment_start != -1:
-            comment_end = text.find(NODECOMMENT_END)
-            if comment_end == -1:
-                raise NewickError('Error in tree description: '
-                                  'Found %s without matching %s'
-                                  % (NODECOMMENT_START, NODECOMMENT_END))
-            comment = text[comment_start+len(NODECOMMENT_START):comment_end]
-            text = text[:comment_start] + text[comment_end+len(NODECOMMENT_END):]
-        else:
-            comment = None
-        clade = Newick.Clade(comment=comment)
-        # Extract name (taxon), and optionally support, branch length
-        # Float values are support and branch length, the string is name/taxon
-        values = []
-        for part in (t.strip() for t in text.split(':')):
-            if part:
-                try:
-                    values.append(float(part))
-                except ValueError:
-                    assert clade.name is None, "Two string taxonomies?"
-                    clade.name = part
-        if len(values) == 1:
-            # Real branch length, or support as branch length
-            if self.values_are_confidence:
-                clade.confidence = values[0]
-            else:
-                clade.branch_length = values[0]
-        elif len(values) == 2:
-            # Two non-taxon values: support comes first. (Is that always so?)
-            clade.confidence, clade.branch_length = values
-        elif len(values) > 2:
-            raise NewickError("Too many colons in tag: " + text)
-        return clade'''
+        self.rooted = rooted
+        
+        parser = RDF.Parser(mime_type=mime_type)
+        if parser is None:
+            raise Exception('Failed to create RDF.Parser raptor')
+        
+        uri = RDF.Uri(string="file:"+self.handle.name)
+        for s in parser.parse_string_as_stream(self.handle.read(), uri):
+            model.append(s)
+        
+        # TODO: create a Tree object from RDF model
 
 
 # ---------------------------------------------------------
@@ -176,7 +120,6 @@ class Writer(object):
         
     def add_trees_to_model(self, trees=None, storage=None):
         """Add triples describing a set of trees to an RDF model."""
-        import RDF
         Uri = RDF.Uri
         urls = self.urls
         
@@ -248,9 +191,7 @@ class Writer(object):
         model.sync()
             
     def serialize_model(self, handle, mime_type='text/turtle'):
-        """Serialize RDF model to file handle"""
-        import RDF
-        
+        """Serialize RDF model to file handle"""        
         # serialize RDF model to output file
         serializer = RDF.Serializer(mime_type=mime_type)
         for prefix, url in self.urls.items():
@@ -259,7 +200,7 @@ class Writer(object):
         # TODO: this is going to be too memory intensive for large trees;
         # come up with something better
         print "Writing..."
-        handle.write(serializer.serialize_model_to_string(self.model))
+        serializer.serialize_model_to_file(handle.name, self.model)
         print "Done."
         
         return self.count
