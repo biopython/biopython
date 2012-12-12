@@ -80,7 +80,7 @@ class Parser(object):
         
         parser = RDF.Parser(mime_type=mime_type)
         if parser is None:
-            raise Exception('Failed to create RDF.Parser raptor')
+            raise Exception('Failed to create RDF.Parser for MIME type %s' % mime_type)
         
         uri = RDF.Uri(string="file:"+self.handle.name)
         for s in parser.parse_string_as_stream(self.handle.read(), uri):
