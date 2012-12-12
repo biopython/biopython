@@ -159,6 +159,7 @@ class Writer(object):
     def __init__(self, trees):
         self.trees = trees
         self.model = None
+        self.count = 0
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle.
@@ -173,7 +174,8 @@ class Writer(object):
         self.add_trees_to_model()
         self.serialize_model(handle, mime_type=mime_type)
         
-    def add_trees_to_model(self, storage=None):
+    def add_trees_to_model(self, trees=None, storage=None):
+        """Add triples describing a set of trees to an RDF model."""
         import RDF
         Uri = RDF.Uri
         urls = self.urls
@@ -183,6 +185,9 @@ class Writer(object):
                 s = s.split(':')
                 s = urls[s[0]] + ':'.join(s[1:])
             return Uri(s)
+            
+        if trees is None:
+            trees = self.trees
         
         if storage is None:
             # store RDF model in memory for now
@@ -234,14 +239,16 @@ class Writer(object):
                         (Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology')),
                         ])
 
-        self.count = 0
-        for tree in self.trees:
+        for tree in trees:
             first_clade = tree.clade
             process_clade(first_clade)
             
             self.count += 1
             
+        model.sync()
+            
     def serialize_model(self, handle, mime_type='text_turtle'):
+        """Serialize RDF model to file handle"""
         import RDF
         
         # serialize RDF model to output file
