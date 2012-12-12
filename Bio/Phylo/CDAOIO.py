@@ -126,9 +126,8 @@ class Writer(object):
         urls = self.urls
         
         def qUri(s):
-            if ':' in s:
-                s = s.split(':')
-                s = urls[s[0]] + ':'.join(s[1:])
+            for url in urls: 
+                s = s.replace(url+':', urls[url])
             return Uri(s)
             
         if trees is None:
