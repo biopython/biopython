@@ -150,6 +150,11 @@ class Parser(object):
 
 class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
+    urls = {
+            'owl': 'http://www.w3.org/2002/07/owl#',
+            'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
+            'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            }
 
     def __init__(self, trees):
         self.trees = trees
@@ -161,29 +166,30 @@ class Writer(object):
             mime_type: used to determine the serialization format.
                 default is 'text/turtle'
         """
+        try: mime_type = kwargs['mime_type']
+        except KeyError: mime_type = 'text/turtle'
+        
+        model = self.add_trees_to_model()
+        return self.serialize_model(model, mime_type=mime_type)
+        
+    def add_trees_to_model(self, storage=None):
         import RDF
         Uri = RDF.Uri
+        urls = self.urls
         
-        urls = {
-                'owl': 'http://www.w3.org/2002/07/owl#',
-                'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
-                'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-                }
         def qUri(s):
             if ':' in s:
                 s = s.split(':')
                 s = urls[s[0]] + ':'.join(s[1:])
             return Uri(s)
-
-        try: mime_type = kwargs['mime_type']
-        except KeyError: mime_type = 'text/turtle'
         
-        # store RDF model in memory for now
-        storage = RDF.Storage(storage_name="hashes",
-                              name="serializer",
-                              options_string="new='yes',hash-type='memory',dir='.'")
         if storage is None:
-            raise CDAOError("new RDF.Storage failed")
+            # store RDF model in memory for now
+            storage = RDF.Storage(storage_name="hashes",
+                                  name="serializer",
+                                  options_string="new='yes',hash-type='memory',dir='.'")
+            if storage is None:
+                raise CDAOError("new RDF.Storage failed")
 
         model = RDF.Model(storage)
         if model is None:
@@ -225,13 +231,16 @@ class Writer(object):
                         (Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology')),
                         ])
 
-        count = 0
+        self.count = 0
         for tree in self.trees:
             first_clade = tree.clade
             process_clade(first_clade)
             
-            count += 1
+            self.count += 1
             
+    def serialize_model(self, model, mime_type='text_turtle'):
+        import RDF
+        
         # serialize RDF model to output file
         serializer = RDF.Serializer(mime_type=mime_type)
         for prefix, url in urls.items():
@@ -243,81 +252,4 @@ class Writer(object):
         handle.write(serializer.serialize_model_to_string(model))
         print "Done."
         
-        return count
-
-'''    def to_strings(self, confidence_as_branch_length=False,
-            branch_length_only=False, plain=False,
-            plain_newick=True, ladderize=None, max_confidence=1.0,
-            format_confidence='%1.2f', format_branch_length='%1.5f'):
-        """Return an iterable of PAUP-compatible tree lines."""
-        # If there's a conflict in the arguments, we override plain=True
-        if confidence_as_branch_length or branch_length_only:
-            plain = False
-        make_info_string = self._info_factory(plain,
-                confidence_as_branch_length, branch_length_only, max_confidence,
-                format_confidence, format_branch_length)
-
-        def newickize(clade):
-            """Convert a node tree to a Newick tree string, recursively."""
-            if clade.is_terminal():    # terminal
-                return ((clade.name or '')
-                        + make_info_string(clade, terminal=True))
-            else:
-                subtrees = (newickize(sub) for sub in clade)
-                return '(%s)%s' % (','.join(subtrees),
-                        (clade.name or '') + make_info_string(clade))
-
-        # Convert each tree to a string
-        for tree in self.trees:
-            if ladderize in ('left', 'LEFT', 'right', 'RIGHT'):
-                # Nexus compatibility shim, kind of
-                tree.ladderize(reverse=(ladderize in ('right', 'RIGHT')))
-            rawtree = newickize(tree.root) + ';'
-            if plain_newick:
-                yield rawtree
-                continue
-            # Nexus-style (?) notation before the raw Newick tree
-            treeline = ['tree', (tree.name or 'a_tree'), '=']
-            if tree.weight != 1:
-                treeline.append('[&W%s]' % round(float(tree.weight), 3))
-            if tree.rooted:
-                treeline.append('[&R]')
-            treeline.append(rawtree)
-            yield ' '.join(treeline)
-
-    def _info_factory(self, plain, confidence_as_branch_length,
-            branch_length_only, max_confidence, format_confidence,
-            format_branch_length):
-        """Return a function that creates a nicely formatted node tag."""
-        if plain:
-            # Plain tree only. That's easy.
-            def make_info_string(clade, terminal=False):
-                return ''
-
-        elif confidence_as_branch_length:
-            # Support as branchlengths (eg. PAUP), ignore actual branchlengths
-            def make_info_string(clade, terminal=False):
-                if terminal:
-                    # terminal branches have 100% support
-                    return ':' + format_confidence % max_confidence
-                else:
-                    return ':' + format_confidence % clade.confidence
-
-        elif branch_length_only:
-            # write only branchlengths, ignore support
-            def make_info_string(clade, terminal=False):
-                return ':' + format_branch_length % clade.branch_length
-
-        else:
-            # write support and branchlengths (e.g. .con tree of mrbayes)
-            def make_info_string(clade, terminal=False):
-                if (terminal or
-                        not hasattr(clade, 'confidence') or
-                        clade.confidence is None):
-                    return (':' + format_branch_length
-                            ) % (clade.branch_length or 0.0)
-                else:
-                    return (format_confidence + ':' + format_branch_length
-                            ) % (clade.confidence, clade.branch_length or 0.0)
-
-        return make_info_string'''
+        return self.count
