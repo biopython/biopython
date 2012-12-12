@@ -243,7 +243,7 @@ class Writer(object):
         
         # serialize RDF model to output file
         serializer = RDF.Serializer(mime_type=mime_type)
-        for prefix, url in urls.items():
+        for prefix, url in self.urls.items():
             serializer.set_namespace(prefix, url)
 
         # TODO: this is going to be too memory intensive for large trees;
