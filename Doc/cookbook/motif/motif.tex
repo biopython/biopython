@@ -293,8 +293,8 @@ We can do the same with the reverse complement (to find instances on the complem
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=5.0):
-...     print pos,score
+>>> for position, score in m.search(test_seq,threshold=5.0):
+...     print position, score
 ... 
 10 8.44065060871
 -12 7.06213898545
@@ -316,7 +316,7 @@ approximation with a given precision to keep computation cost manageable:
 \begin{verbatim}
 >>> sd = Motif.score_distribution(m,precision=10**4)
 \end{verbatim}
-The sd object can be used to determine a number of different thresholds.
+The \verb+sd+ object can be used to determine a number of different thresholds.
 
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
 \begin{verbatim}
@@ -345,8 +345,9 @@ For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=sd.threshold_balanced(1000)):
-...     print pos,score
+>>> threshold=sd.threshold_balanced(1000)
+>>> for position, score in m.search(test_seq, threshold=threshold):
+...     print position, score
 ... 
 10 8.44065060871
 15 8.44065060871

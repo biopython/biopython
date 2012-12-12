@@ -96,6 +96,15 @@ class GenericPositionMatrix(dict):
             sequence += nucleotide
         return Seq(sequence, alphabet = IUPAC.ambiguous_dna)
 
+    def reverse_complement(self):
+        values = {}
+        values["A"] = self["T"][::-1]
+        values["T"] = self["A"][::-1]
+        values["G"] = self["C"][::-1]
+        values["C"] = self["G"][::-1]
+        alphabet = self.alphabet
+        return self.__class__(alphabet, values)
+
 
 class PositionWeightMatrix(GenericPositionMatrix):
 
@@ -146,45 +155,68 @@ under the background distribution.
         probabilities. If the background is None, a uniform background
         distribution is assumed.
         """
-        return PositionSpecificScoringMatrix(self.alphabet, self, background)
-
-
-class PositionSpecificScoringMatrix(GenericPositionMatrix):
-
-    def __init__(self, alphabet, probabilities, background=None):
-        GenericPositionMatrix.__init__(self, alphabet, counts)
-        result = 0.0
+        values = {}
+        alphabet = self.alphabet
         if background is None:
             background = {}
-            for letter in self.alphabet.letters:
+            for letter in alphabet.letters:
                 background[letter] = 1.0
         else:
             background = dict(background)
         total = sum(background.values())
-        for letter in self.alphabet.letters:
+        for letter in alphabet.letters:
             background[letter] /= total
-        for letter in self.alphabet.letters:
-            self[letter] = []
+        for letter in alphabet.letters:
+            values[letter] = []
             b = background[letter]
             if b > 0:
                 for i in range(self.length):
-                    p = probabilities[letter][i]
+                    p = self[letter][i]
                     if p > 0:
                         logodds = math.log(p/b, 2)
-                        self[letter].append(logodds)
                     else:
                         logodds = float("-inf")
-                        self[letter].append(logodds)
+                    values[letter].append(logodds)
             else:
                 for i in range(self.length):
-                    p = probabilities[letter][i]
+                    p = self[letter][i]
                     if p > 0:
                         logodds = float("inf")
-                        self[letter].append(logodds)
                     else:
                         logodds = float("nan")
-                        self[letter].append(logodds)
-            self[letter] = tuple(self[letter])
+                    values[letter].append(logodds)
+        return PositionSpecificScoringMatrix(alphabet, values)
+
+
+class PositionSpecificScoringMatrix(GenericPositionMatrix):
+
+    def calculate(self, sequence):
+        """
+        returns the PWM score for a given sequence
+        """
+        score = 0.0
+        for position, letter in enumerate(sequence):
+            score += self[letter][position]
+        return score
+
+    def search(self, sequence, threshold=0.0, both=True):
+        """
+        a generator function, returning found hits in a given sequence with the pwm score higher than the threshold
+        """
+        sequence = sequence.upper()
+        n = len(sequence)
+        m = self.length
+        if both:
+            rc = self.reverse_complement()
+        for position in xrange(0,n-m+1):
+            s = sequence[position:position+m]
+            score = self.calculate(s)
+            if score > threshold:
+                yield (position, score)
+            if both:
+                score = rc.calculate(s)
+                if score > threshold:
+                    yield (position-n, score)
 
 
 class Motif(object):
@@ -415,7 +447,7 @@ please use
 
     def log_odds(self,laplace=True):
         """
-        returns the logg odds matrix computed for the set of instances
+        returns the log odds matrix computed for the set of instances
         """
         if self._log_odds_is_current:
             return self._log_odds
@@ -734,7 +766,7 @@ a future release of Biopython.""", PendingDeprecationWarning)
             instances = self.instances
         string = ""
         for i, instance in enumerate(instances):
-            string += ">instance%d\n%s\n "% (i, instance)
+            string += ">instance%d\n%s\n" % (i, instance)
         return string
 
     def reverse_complement(self):

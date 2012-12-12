@@ -10766,7 +10766,7 @@ on commercial use.
 Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import 
 the Motif library:
-%doctest
+%doctest ../Tests/Motif
 \begin{verbatim}
 >>> from Bio import Motif
 \end{verbatim}
@@ -10913,7 +10913,7 @@ representation is based on instances or on some version of PWM matrix.
 On of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
  stores motifs in both formats, so
 let's look at how we can import JASPAR motifs from instances:
-%doctest ../Tests/Motif
+%cont-doctest
 \begin{verbatim}
 >>> from Bio import Motif
 >>> arnt = Motif.read(open("Arnt.sites"),"jaspar-sites")
@@ -10972,6 +10972,7 @@ are using the PWM as the representation of the motif, but one should
 be careful with exporting instances from count-based motifs.
 
 Speaking of exporting, let's look at export functions. We can export to fasta:
+%cont-doctest
 \begin{verbatim}
 >>> print m.format("fasta")
 >instance0
@@ -10982,8 +10983,10 @@ TATTA
 TATAA
 >instance3
 TATAA
+<BLANKLINE>
 \end{verbatim}
 or to TRANSFAC-like matrix format (used by some motif processing software)
+%cont-doctest
 \begin{verbatim}
 >>> print m.format("transfac")
 XX
@@ -10997,6 +11000,7 @@ P0 G A T C
 04 0 3 1 0
 05 0 4 0 0
 XX
+<BLANKLINE>
 \end{verbatim}
 
 Finally, if we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
@@ -11011,12 +11015,14 @@ We should get our logo saved as a png in the specified file.
 The most frequent use for a motif is to find its instances in some
 sequence. For the sake of this section, we will use an artificial sequence like this:
 
+%cont-doctest
 \begin{verbatim}
-test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
+>>> test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
 \end{verbatim}
 
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
+%cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.search_instances(test_seq):
 ...     print pos,seq.tostring()
@@ -11026,6 +11032,7 @@ the true instances of the motif:
 21 TATAA
 \end{verbatim}
 We can do the same with the reverse complement (to find instances on the complementary strand):
+%cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.reverse_complement().search_instances(test_seq):
 ...     print pos,seq.tostring()
@@ -11035,9 +11042,11 @@ We can do the same with the reverse complement (to find instances on the complem
 \end{verbatim}
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
+%cont-doctest
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=5.0):
-...     print pos,score
+>>> pssm = pwm.make_pssm()
+>>> for position, score in pssm.search(test_seq, threshold=5.0):
+...     print position, score
 ... 
 10 8.44065060871
 -14 7.06213898545
