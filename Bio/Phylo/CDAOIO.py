@@ -7,13 +7,6 @@ from cStringIO import StringIO
 
 from Bio.Phylo import Newick
 import os
-import RDF
-#RDF.debug(1)
-
-
-# Definitions retrieved from Bio.Nexus.Trees
-NODECOMMENT_START = '[&'
-NODECOMMENT_END = ']'
 
 
 class CDAOError(Exception):
@@ -61,6 +54,9 @@ class Parser(object):
     def parse(self, values_are_confidence=False, rooted=False,
               storage=None, mime_type='text/turtle'):
         """Parse the text stream this object was initialized with."""
+        import RDF
+        #RDF.debug(1)
+
         if storage is None:
             # store RDF model in memory for now
             storage = RDF.Storage(storage_name="hashes",
@@ -112,6 +108,9 @@ class Writer(object):
             mime_type: used to determine the serialization format.
                 default is 'text/turtle'
         """
+        import RDF
+        #RDF.debug(1)
+        
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
@@ -120,6 +119,9 @@ class Writer(object):
         
     def add_trees_to_model(self, trees=None, storage=None):
         """Add triples describing a set of trees to an RDF model."""
+        import RDF
+        #RDF.debug(1)
+        
         Uri = RDF.Uri
         urls = self.urls
         
@@ -192,15 +194,14 @@ class Writer(object):
             
     def serialize_model(self, handle, mime_type='text/turtle'):
         """Serialize RDF model to file handle"""        
+        import RDF
+        #RDF.debug(1)
+        
         # serialize RDF model to output file
         serializer = RDF.Serializer(mime_type=mime_type)
         for prefix, url in self.urls.items():
             serializer.set_namespace(prefix, url)
 
-        # TODO: this is going to be too memory intensive for large trees;
-        # come up with something better
-        print "Writing..."
-        serializer.serialize_model_to_file(handle.name, self.model)
-        print "Done."
+        handle.write(serializer.serialize_model_to_string(self.model))
         
         return self.count
