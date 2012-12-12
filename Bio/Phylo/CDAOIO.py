@@ -6,6 +6,7 @@ __docformat__ = "restructuredtext en"
 from cStringIO import StringIO
 
 from Bio.Phylo import Newick
+import os
 
 # Definitions retrieved from Bio.Nexus.Trees
 NODECOMMENT_START = '[&'
@@ -154,48 +155,93 @@ class Writer(object):
         self.trees = trees
 
     def write(self, handle, **kwargs):
-        """Write this instance's trees to a file handle."""
+        """Write this instance's trees to a file handle.
+        
+        Keywords:
+            mime_type: used to determine the serialization format.
+                default is 'text/turtle'
+        """
         import RDF
+        Uri = RDF.Uri
+        
+        urls = {
+                'owl': 'http://www.w3.org/2002/07/owl#',
+                'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
+                'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                }
+        def qUri(s):
+            if ':' in s:
+                s = s.split(':')
+                s = urls[s[0]] + ':'.join(s[1:])
+            return Uri(s)
 
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
-        serializer = RDF.Serializer(mime_type=mime_type)
-        serializer.set_namespace('owl', 
-                                 'http://www.w3.org/2002/07/owl#')
-        serializer.set_namespace('cdao', 
-                                 'http://purl.obolibrary.org/obo/cdao.owl#')
-        
+        # store RDF model in memory for now
         storage = RDF.Storage(storage_name="hashes",
                               name="serializer",
                               options_string="new='yes',hash-type='memory',dir='.'")
         if storage is None:
-          raise CDAOError("new RDF.Storage failed")
+            raise CDAOError("new RDF.Storage failed")
 
         model = RDF.Model(storage)
         if model is None:
-          raise CDAOError("new RDF.model failed")
+            raise CDAOError("new RDF.model failed")
         
-        def process_clade(clade, model, parent=None):
-            # TODO: add model statements for this clade
-            
+        def add_statements(statements):
+            for stmt in statements:
+                model.append(RDF.Statement(*stmt))
+        
+        def process_clade(clade, parent=None):
+            # TODO: what uri to use for clades?
+            # currently, non-terminal nodes are all just "clade"
+            clade.uri = (str(clade))
+            statements = [
+                          (Uri(clade.uri), qUri('rdf:type'), qUri('cdao:Node')),
+                          ]
+            if clade.name:
+                # TODO: create TU
+                pass
+                          
             if not parent is None:
-                # TODO: link parent to child
+                edge_uri = parent.uri + "_" + clade.uri
+                statements += [
+                               (Uri(edge_uri), qUri('rdf:type'), qUri('cdao:Directed_Edge')),
+                               (Uri(edge_uri), qUri('cdao:has_Parent_Node'), Uri(parent.uri)),
+                               (Uri(edge_uri), qUri('cdao:has_Child_Node'), Uri(clade.uri)),
+                               (Uri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), Uri(edge_uri)),
+                               (Uri(clade.uri), qUri('cdao:has_Parent'), Uri(parent.uri)),
+                               (Uri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), Uri(edge_uri)),
+                               ]
+                          
+            add_statements(statements)
             
             if not clade.is_terminal():
                 for new_clade in clade.clades:
-                    process_clade(new_clade, model, parent=clade)
+                    process_clade(new_clade, parent=clade)
         
+        add_statements([
+                        (Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology')),
+                        ])
+
         count = 0
         for tree in self.trees:
             first_clade = tree.clade
-            process_clade(first_clade, model)    
+            process_clade(first_clade)
             
             count += 1
             
+        # serialize RDF model to output file
+        serializer = RDF.Serializer(mime_type=mime_type)
+        for prefix, url in urls.items():
+            serializer.set_namespace(prefix, url)
+
         # TODO: this is going to be too memory intensive for large trees;
         # come up with something better
+        print "Writing..."
         handle.write(serializer.serialize_model_to_string(model))
+        print "Done."
         
         return count
 
