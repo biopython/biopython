@@ -87,6 +87,8 @@ class TAIRDirect:
             if line[0] == ">":
                 in_fasta_text = True
             if in_fasta_text:
+                if line[0] == "-":
+                    break
                 seq_string += line
                 seq_string += "\n"
         return seq_string

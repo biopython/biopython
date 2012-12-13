@@ -81,11 +81,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "GAAAGCAAAA", 232),
             ("AT5G63980.1", "TTTGTTTTTT", 131)
             ]
-        test_agis = [  # we only test these as AT4G36450.1 has no utrs
-            "AT4G36900.1",
-            "AT5G63980.1"
-            ]
-        returned = TAIR.get(test_agis, "3prime_utr", "rep_gene")
+        returned = TAIR.get(self.test_agis, "3prime_utr", "rep_gene")
         self._perform_test(returned, expected)
  
     def test_5prime_utr(self):
@@ -93,11 +89,7 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 201),
             ("AT5G63980.1", "GACATATATT", 28)
             ]
-        test_agis = [  # we only test these as AT4G36450.1 has no utrs
-            "AT4G36900.1",
-            "AT5G63980.1"
-            ]
-        returned = TAIR.get(test_agis, "5prime_utr", "rep_gene")
+        returned = TAIR.get(self.test_agis, "5prime_utr", "rep_gene")
         self._perform_test(returned, expected)
 
     def test_upstream500(self):
@@ -154,7 +146,12 @@ class TAIRDirect(unittest.TestCase):
         returned = TAIR.get(self.test_agis, "downstream_3000", "rep_gene")
         self._perform_test(returned, expected)
 
-
+    def test_empty_return(self):
+        # This checks to see that no errors are raised when a invalid AGI is
+        # given.
+        returned = TAIR.get(["AT5G66483.1"], "downstream_3000", "rep_gene")
+        with self.assertRaises(StopIteration):
+            returned.next()
 
 
 #class TAIRNCBI(unittest.TestCase):
