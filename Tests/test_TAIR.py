@@ -1,130 +1,164 @@
 import unittest
 from Bio import TAIR
 
-test_agis = [
-    "AT4G36450.1",
-    "AT4G36900.1",
-    "AT5G63980.1"
-    ]
-
 
 class TAIRDirect(unittest.TestCase):
-    """
-    """
-    test_datasets = [
-        "protein",
-        "upstream_500",
-        "downstream_500",
-        "intergenic",
-        "intron",
-        "3prime_utr",
-        "5prime_utr"
+    test_agis = [
+        "AT4G36450.1",
+        "AT4G36900.1",
+        "AT5G63980.1"
         ]
 
+    def _perform_test(self, returned, expected):
+        for seq, expected_seq in zip(returned, expected):
+            self.assertEqual(seq.id, expected_seq[0])
+            self.assertEqual(str(seq.seq[:10]), expected_seq[1])
+            self.assertEqual(len(seq.seq), expected_seq[2])
+
     def test_transcript(self):
-        test_seqs = {
-            "AT4G36450.1": ("ATGGCGATGC", 1086),
-            "AT4G36900.1": ("AGTGTCGGTG", 1024),
-            "AT5G63980.1": ("GACATATATT", 1383)
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1086),
+            ("AT4G36900.1", "AGTGTCGGTG", 1024),
+            ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-
+        returned = TAIR.get(self.test_agis, "transcript", "rep_gene")
+        self._perform_test(returned, expected)
+ 
     def test_cds(self):
-        test_seqs = {
-            "AT4G36450.1": ("ATGGCGATGC", 1086),
-            "AT4G36900.1": ("ATGGAGACGG", 591),
-            "AT5G63980.1": ("ATGATGTCTA", 1224)
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1086),
+            ("AT4G36900.1", "ATGGAGACGG", 591),
+            ("AT5G63980.1", "ATGATGTCTA", 1224)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-
+        returned = TAIR.get(self.test_agis, "cds", "rep_gene")
+        self._perform_test(returned, expected)
+ 
     def test_gene(self):
-        test_seqs = {
-            "AT4G36450.1": ("ATGGCGATGC", 1169),
-            "AT4G36900.1": ("AGTGTCGGTG", 1024),
-            "AT5G63980.1": ("GACATATATT", 2122)
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1169),
+            ("AT4G36900.1", "AGTGTCGGTG", 1024),
+            ("AT5G63980.1", "GACATATATT", 2122)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-
+        returned = TAIR.get(self.test_agis, "gene", "rep_gene")
+        self._perform_test(returned, expected)
+ 
+    def test_protein(self):
+        expected = [
+            ("AT4G36450.1", "MAMLVDPPNG", 361),
+            ("AT4G36900.1", "METATEVATV", 196),
+            ("AT5G63980.1", "MMSINCFRTA", 407)
+            ]
+        returned = TAIR.get(self.test_agis, "protein", "rep_gene")
+        self._perform_test(returned, expected)
+     
     def test_intergenic(self):
-        test_seqs = {
-            "AT4G36450.1": ("MAMLVDPPNG", 361),
-            "AT4G36900.1": ("METATEVATV", 196),
-            "AT5G63980.1": ("MMSINCFRTA", 407)
+        expected = [
+            ("AT4G36440-AT4G36450", "AGAGTCAAAA", 237),
+            ("AT4G36450-AT4G36460", "TCCTCTTCTT", 1248),
+            ("AT4G36890-AT4G36900", "ACCAATCTCT", 7033),
+            ("AT4G36900-AT4G36910", "AATCCCCCTC", 788),
+            ("AT5G63970-AT5G63980", "TTGCGCCGGC", 564),
+            ("AT5G63980-AT5G63990", "GTATAAAGGG", 1324)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-
-    def test_intergenic(self):
-        test_seqs = {
-            "AT4G36450.1": ("MAMLVDPPNG", 361),
-            "AT4G36900.1": ("METATEVATV", 196),
-            "AT5G63980.1": ("MMSINCFRTA", 407)
-            ]
-        for agi, tests in test_agis:
-            seqs = TAIR.get(agi, dataset, "rep_gene")
-            upstream_seq = seqs[0]
-            downstream_seq = seqs[1]
-            self.assertEqual(upstream_seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-    
+        returned = TAIR.get(self.test_agis, "intergenic", "rep_gene")
+        self._perform_test(returned, expected)
+     
     def test_intron(self):
-        test_seqs = {
-            "AT4G36450.1": ("MAMLVDPPNG", 361),
-            "AT4G36900.1": ("METATEVATV", 196),
-            "AT5G63980.1": ("MMSINCFRTA", 407)
+        expected = [
+            ("AT4G36450.1-1", "GTACGTTGGT", 83),
+            ("AT5G63980.1-1", "GTTAGGGTTT", 226),
+            ("AT5G63980.1-2", "GTTAGTTTGT", 106),
+            ("AT5G63980.1-3", "GTGAAACTGC", 97),
+            ("AT5G63980.1-4", "GTACGTTTTA", 119),
+            ("AT5G63980.1-5", "GTAAATTGCT", 91),
+            ("AT5G63980.1-6", "GTAACATTAA", 100)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-
+        returned = TAIR.get(self.test_agis, "intron", "rep_gene")
+        self._perform_test(returned, expected)
+ 
     def test_3prime_utr(self):
-        test_seqs = {
-            "AT4G36450.1": ("MAMLVDPPNG", 361),
-            "AT4G36900.1": ("METATEVATV", 196),
-            "AT5G63980.1": ("MMSINCFRTA", 407)
+        expected = [
+            ("AT4G36900.1", "GAAAGCAAAA", 232),
+            ("AT5G63980.1", "TTTGTTTTTT", 131)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
-
+        test_agis = [  # we only test these as AT4G36450.1 has no utrs
+            "AT4G36900.1",
+            "AT5G63980.1"
+            ]
+        returned = TAIR.get(test_agis, "3prime_utr", "rep_gene")
+        self._perform_test(returned, expected)
+ 
     def test_5prime_utr(self):
-        test_seqs = {
-            "AT4G36450.1": ("MAMLVDPPNG", 361),
-            "AT4G36900.1": ("METATEVATV", 196),
-            "AT5G63980.1": ("MMSINCFRTA", 407)
+        expected = [
+            ("AT4G36900.1", "AGTGTCGGTG", 201),
+            ("AT5G63980.1", "GACATATATT", 28)
             ]
-        for agi, tests in test_agis:
-            seq = TAIR.get(agi, dataset, "rep_gene")
-            self.assertEqual(seq.id, agi)
-            self.assertEqual(seq.seq[:10], test_values[0])
-            self.assertEqual(len(seq.seq), test_values[1])
+        test_agis = [  # we only test these as AT4G36450.1 has no utrs
+            "AT4G36900.1",
+            "AT5G63980.1"
+            ]
+        returned = TAIR.get(test_agis, "5prime_utr", "rep_gene")
+        self._perform_test(returned, expected)
+
+    def test_upstream500(self):
+        expected = [
+            ("AT4G36450", "TCTCAAAATA", 500),
+            ("AT4G36900", "CTTAAATTAA", 500),
+            ("AT5G63980", "TTTTTAGTCT", 500)
+            ]
+        returned = TAIR.get(self.test_agis, "upstream_500", "rep_gene")
+        self._perform_test(returned, expected)
+        
+    def test_upstream1000(self):
+        expected = [
+            ("AT4G36450", "TTTAAATTTA", 1000),
+            ("AT4G36900", "AAATATCCTC", 1000),
+            ("AT5G63980", "CTAAAATCAA", 1000)
+            ]
+        returned = TAIR.get(self.test_agis, "upstream_1000", "rep_gene")
+        self._perform_test(returned, expected)
+  
+    def test_upstream3000(self):
+        expected = [
+            ("AT4G36450", "TAGAAAATTA", 3000),
+            ("AT4G36900", "GGTTTAGTTA", 3000),
+            ("AT5G63980", "TGATTAATAC", 3000)
+            ]
+        returned = TAIR.get(self.test_agis, "upstream_3000", "rep_gene")
+        self._perform_test(returned, expected)
+
+    def test_downstream500(self):
+        expected = [
+            ("AT4G36450", "ATCAATATTT", 500),
+            ("AT4G36900", "AATCCCCCTC", 500),
+            ("AT5G63980", "GTATAAAGGG", 500)
+            ]
+        returned = TAIR.get(self.test_agis, "downstream_500", "rep_gene")
+        self._perform_test(returned, expected)
+        
+    def test_downstream1000(self):
+        expected = [
+            ("AT4G36450", "ATCAATATTT", 1000),
+            ("AT4G36900", "AATCCCCCTC", 1000),
+            ("AT5G63980", "GTATAAAGGG", 1000)
+            ]
+        returned = TAIR.get(self.test_agis, "downstream_1000", "rep_gene")
+        self._perform_test(returned, expected)
+  
+    def test_downstream3000(self):
+        expected = [
+            ("AT4G36450", "ATCAATATTT", 3000),
+            ("AT4G36900", "AATCCCCCTC", 3000),
+            ("AT5G63980", "GTATAAAGGG", 3000)
+            ]
+        returned = TAIR.get(self.test_agis, "downstream_3000", "rep_gene")
+        self._perform_test(returned, expected)
 
 
-class TAIRNCBI(unittest.TestCase):
-    pass
+
+
+#class TAIRNCBI(unittest.TestCase):
+#    pass
 
 
 if __name__ == "__main__":
