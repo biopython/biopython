@@ -5,13 +5,12 @@
 
 from MultipartPostHandler import MultipartPostHandler
 import urllib2
-import Bio.SeqIO
 from StringIO import StringIO
+from Bio import SeqIO
 
 
 class TAIRDirect:
     """
-
     """
     def __init__(self):
         self.datasets = {
@@ -25,7 +24,7 @@ class TAIRDirect:
             "genomic_locus_sequence": "ATH1_seq",
             "upstream_500": "At_upstream_500",
             "upstream_1000": "At_upstream_1000",
-            "upstream_1000": "At_upstream_3000",
+            "upstream_3000": "At_upstream_3000",
             "downstream_500": "At_downstream_500",
             "downstream_1000": "At_downstream_1000",
             "downstream_3000": "At_downstream_3000",
@@ -45,8 +44,6 @@ class TAIRDirect:
             raise ValueError(
                 "Must specify AGIs, specify agis='Demo' for a demo run"
                 )
-        #elif agis == "Demo":
-        #    agis = ["AT5G63980.1"]
 
         # Check dataset
         if dataset in self.datasets.keys():
@@ -92,7 +89,7 @@ class TAIRDirect:
         return seq_string
 
     def get(self, agis, dataset="gene", target="rep_gene"):
-        return Bio.SeqIO.parse(
+        return SeqIO.parse(
             StringIO(self._getSeqFastaText(agis, dataset, target)),
             "fasta"
             )
@@ -101,5 +98,3 @@ class TAIRDirect:
 def get(agis, dataset="gene", target="rep_gene"):
     tair = TAIRDirect()
     return tair.get(agis, dataset, target)
-
-
