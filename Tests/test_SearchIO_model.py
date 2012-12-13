@@ -394,7 +394,7 @@ class QueryResultCases(unittest.TestCase):
         # test hsps in hit11
         self.assertTrue(all([hsp in filtered['hit1'] for hsp in
                 [hsp111, hsp112, hsp114]]))
-        # test hsps in in hit31
+        # test hsps in hit31
         self.assertTrue(all([hsp in filtered['hit3'] for hsp in
                 [hsp311, hsp312]]))
 

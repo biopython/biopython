@@ -451,7 +451,7 @@ def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
      - handle   - handle to the file, or the filename as a string
-                  (note older verions of Biopython only took a handle).
+                  (note older versions of Biopython only took a handle).
      - format   - lower case string describing the file format.
      - alphabet - optional Alphabet object, useful when the sequence type
                   cannot be automatically inferred from the file itself
@@ -561,7 +561,7 @@ def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
      - handle   - handle to the file, or the filename as a string
-                  (note older verions of Biopython only took a handle).
+                  (note older versions of Biopython only took a handle).
      - format   - string describing the file format.
      - alphabet - optional Alphabet object, useful when the sequence type
                   cannot be automatically inferred from the file itself

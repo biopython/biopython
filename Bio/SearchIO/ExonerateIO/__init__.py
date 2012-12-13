@@ -36,7 +36,7 @@ Supported Formats
   - Cigar line           - 'exonerate-cigar'  - parsing, indexing
 
 On Exonerate, these output formats are not exclusive to one another. For
-example, you may have both plain text and vulgar ouput in the same file.
+example, you may have both plain text and vulgar output in the same file.
 ExonerateIO can only handle one of these at a time, however. If you have a file
 containing both plain text and vulgar lines, for example, you have to pick
 either 'exonerate-text' or 'exonerate-vulgar' to parse it.

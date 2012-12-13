@@ -237,7 +237,7 @@ and HTML formats
   You need Biopython 1.53 or later.  Alternatively, use \verb|str(my_seq).upper()| to get an upper case string.
   If you need a Seq object, try \verb|Seq(str(my_seq).upper())| but be careful about blindly re-using the same alphabet.
  
-  \item \emph{Why does't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
+  \item \emph{Why doesn't the} \verb|Seq| \emph{object translation method support the} \verb|cds| \emph{option described in this Tutorial?} \\
   You need Biopython 1.51 or later.
 
   \item \emph{Why doesn't} \verb|Bio.SeqIO| \emph{work? It imports fine but there is no parse function etc.} \\
@@ -1385,7 +1385,7 @@ there are module level functions in \verb|Bio.Seq| will accept plain Python stri
 \chapter{Sequence Record objects}
 \label{chapter:SeqRecord}
 
-Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record or \verb|SeqRecord| class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with the sequence, and is used thoughout the sequence input/output interface \verb|Bio.SeqIO| described fully in Chapter~\ref{chapter:Bio.SeqIO}.
+Chapter~\ref{chapter:Bio.Seq} introduced the sequence classes.  Immediately ``above'' the \verb|Seq| class is the Sequence Record or \verb|SeqRecord| class, defined in the \verb|Bio.SeqRecord| module. This class allows higher level features such as identifiers and features to be associated with the sequence, and is used throughout the sequence input/output interface \verb|Bio.SeqIO| described fully in Chapter~\ref{chapter:Bio.SeqIO}.
 
 If you are only going to be working with simple data like FASTA files, you can probably skip this chapter
 for now. If on the other hand you are going to be using richly annotated sequence data, say from GenBank
@@ -1411,13 +1411,13 @@ The \verb|SeqRecord| class itself is quite simple, and offers the following info
 
   \item[id] -- The primary ID used to identify the sequence -- a string. In most cases this is something like an accession number.
 
-  \item[name] -- A ``common'' name/id for the sequence -- a string. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analagous to the LOCUS id in a GenBank record.
+  \item[name] -- A ``common'' name/id for the sequence -- a string. In some cases this will be the same as the accession number, but it could also be a clone name. I think of this as being analogous to the LOCUS id in a GenBank record.
 
   \item[description] -- A human readable description or expressive name for the sequence -- a string.
   
   \item[letter\_annotations] -- Holds per-letter-annotations using a (restricted) dictionary of additional information about the letters in the sequence. The keys are the name of the information, and the information is contained in the value as a Python sequence (i.e. a list, tuple or string) with the same length as the sequence itself.  This is often used for quality scores (e.g. Section~\ref{sec:FASTQ-filtering-example}) or secondary structure information (e.g. from Stockholm/PFAM alignment files).
 
-  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructed'' information to the sequence.
+  \item[annotations] -- A dictionary of additional information about the sequence. The keys are the name of the information, and the information is contained in the value. This allows the addition of more ``unstructured'' information to the sequence.
   
   \item[features] -- A list of \verb|SeqFeature| objects with more structured information about the features on a sequence (e.g. position of genes on a genome, or domains on a protein sequence). The structure of sequence features is described below in Section~\ref{sec:seq_features}.
   
@@ -1735,12 +1735,12 @@ I just mention this because sometimes I get confused between the two.
 The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
 
 \begin{description}
-  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a a number, and you can get the position by looking at the \verb|position| attribute of the object.
+  \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a number, and you can get the position by looking at the \verb|position| attribute of the object.
 
   \item[BeforePosition] -- This class represents a fuzzy position
   that occurs prior to some specified site. In GenBank/EMBL notation,
   this is represented as something like \verb|`<13'|, signifying that
-  the real position is located somewhere less then 13. To get
+  the real position is located somewhere less than 13. To get
   the specified upper boundary, look at the \verb|position|
   attribute of the object.
 
@@ -1826,7 +1826,7 @@ which are plain integers:
 
 Notice that this just gives you back the position attributes of the fuzzy locations.
 
-Similary, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
+Similarly, to make it easy to create a position without worrying about fuzzy positions, you can just pass in numbers to the \verb|FeaturePosition| constructors, and you'll get back out \verb|ExactPosition| objects:
 
 %cont-doctest
 \begin{verbatim}
@@ -6232,7 +6232,7 @@ Just like \verb|QueryResult| and \verb|Hit|, invoking \verb|print| on an
 \item We've also got the matching range of the query and hit sequences. The
     slice notation we're using here is an indication that the range is displayed
     using Python's indexing style (zero-based, half open). The number inside the
-    parenthesis denotes the strand. In this case, both sequences have the plust
+    parenthesis denotes the strand. In this case, both sequences have the plus
     strand.
 \item Some quick statistics are available: the e-value and bitscore.
 \item There is information about the HSP fragments. Ignore this for now; it will
@@ -6338,7 +6338,7 @@ Quick stats: evalue ?; bitscore ?
   Fragments: 1 (? columns)
 \end{verbatim}
 
-Some of the outputs you may have alredy guessed. We have the query and hit IDs
+Some of the outputs you may have already guessed. We have the query and hit IDs
 and descriptions and the sequence coordinates. Values for evalue and bitscore is
 `?' as BLAT HSPs do not have these attributes. But The biggest difference here
 is that you don't see any sequence alignments displayed. If you look closer, PSL
@@ -6419,7 +6419,7 @@ do affect how we deal with sequence coordinates, so we can't ignore them.
 Take a look at the hit coordinate of the HSP above. In the \verb|Hit range:| field,
 we see that the coordinate is \verb|[54233104:54264463]|. But looking at the
 table rows, we see that not the entire region spanned by this coordinate matches
-our query. Specificallly, the intervening region spans from \verb|54233122| to
+our query. Specifically, the intervening region spans from \verb|54233122| to
 \verb|54264420|.
 
 Why then, is the query coordinates seem to be contiguous, you ask? This is
@@ -6547,7 +6547,7 @@ a pleasant experience as these search tools usually have their own standards.
 For example, one tools might use one-based coordinates, while the other uses
 zero-based coordinates. Or, one program might reverse the start and end
 coordinates if the strand is minus, while others don't. In short, these often
-creates unecessary mess that we must deal with.
+creates unnecessary mess that we must deal with.
 
 We realize this problem ourselves and we intend to address it in
 \verb|Bio.SearchIO|. After all, one of the goals of \verb|Bio.SearchIO| is to
@@ -6700,7 +6700,7 @@ query offsets into an SQLite database file.
 \section{Writing and converting search output files}
 \label{sec:searchio-write}
 
-It is occasionally useful to be able to manipulate search results from an ouput
+It is occasionally useful to be able to manipulate search results from an output
 file and write it again to a new file. \verb|Bio.SearchIO| provides a
 \verb|write| function that lets you do exactly this. It takes as its arguments
 an iterable returning \verb|QueryResult| objects, the output filename to write
@@ -7194,7 +7194,7 @@ The \verb+record+ variable consists of a Python list, one for each database in w
 ['19304878']
 \end{verbatim}
 
-The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database (although sub-diveded into categories):
+The \verb+"LinkSetDb"+ key contains the search results, stored as a list consisting of one item for each target database. In our search results, we only find hits in the PubMed database (although sub-divided into categories):
 
 \begin{verbatim}
 >>> len(record[0]["LinkSetDb"])
@@ -14447,7 +14447,7 @@ could also be used on FASTQ files.
 \label{sec:SeqIO-sff-conversion}
 
 If you work with 454 (Roche) sequence data, you will probably have access
-to the raw data as an Standard Flowgram Format (SFF) file. This contains
+to the raw data as a Standard Flowgram Format (SFF) file. This contains
 the sequence reads (called bases) with quality scores and the original
 flow information.
 

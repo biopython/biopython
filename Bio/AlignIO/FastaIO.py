@@ -117,7 +117,7 @@ def FastaM10Iterator(handle, alphabet = single_letter_alphabet):
             if tool in ["TFASTX"] and len(match_seq) == len(q):
                 m = match_seq
                 #Quick hack until I can work out how -, * and / characters
-                #and the apparent mix of aa and bp coordindates works.
+                #and the apparent mix of aa and bp coordinates works.
             else:
                 m = _extract_alignment_region(match_seq, match_tags)
             assert len(q) == len(m)

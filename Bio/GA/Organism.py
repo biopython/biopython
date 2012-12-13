@@ -20,7 +20,7 @@ def function_population(new_genome, num_organisms, fitness_calculator):
 
     o num_organisms - The number of individuals we want in the population.
 
-    o fitness_calculator -- A funtion that will calculate the fitness
+    o fitness_calculator -- A function that will calculate the fitness
     of the organism when given the organisms genome.
     """
     all_orgs = []
@@ -46,7 +46,7 @@ def random_population(genome_alphabet, genome_size, num_organisms,
 
     o num_organism -- The number of organisms we want in the population.
 
-    o fitness_calculator -- A funtion that will calculate the fitness
+    o fitness_calculator -- A function that will calculate the fitness
     of the organism when given the organisms genome.
     """
     all_orgs = []
@@ -105,7 +105,7 @@ class Organism(object):
         o genome -- A MutableSeq object representing the sequence of the
         genome.
 
-        o fitness_calculator -- A funtion that will calculate the fitness
+        o fitness_calculator -- A function that will calculate the fitness
         of the organism when given the organisms genome.
 
         o start_fitness - the starting fitness corresponding with the

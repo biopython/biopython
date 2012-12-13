@@ -181,7 +181,7 @@ class PDBParser(object):
                     z = float(line[46:54])
                 except:
                     # Should we allow parsing to continue in permissive mode?
-                    # If so, what coordindates should we default to?  Easier to abort!
+                    # If so, what coordinates should we default to?  Easier to abort!
                     raise PDBConstructionException("Invalid or missing coordinate(s) at line %i."
                                                    % global_line_counter)
                 coord = numpy.array((x, y, z), "f")

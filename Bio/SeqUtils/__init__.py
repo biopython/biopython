@@ -86,7 +86,7 @@ def GC123(seq):
 
 
 def GC_skew(seq, window = 100):
-    """Calculates GC skew (G-C)/(G+C) for multuple windows along the sequence.
+    """Calculates GC skew (G-C)/(G+C) for multiple windows along the sequence.
 
     Returns a list of ratios (floats), controlled by the length of the sequence
     and the size of the window.

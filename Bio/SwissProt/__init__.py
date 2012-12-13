@@ -93,9 +93,9 @@ class Reference(object):
 
     Members:
     number      Number of reference in an entry.
-    positions   Describes extent of work.  list of strings.
+    positions   Describes extent of work.  List of strings.
     comments    Comments.  List of (token, text).
-    references  References.  List of (dbname, identifier)
+    references  References.  List of (dbname, identifier).
     authors     The authors of the work.
     title       Title of the work.
     location    A citation for the work.
