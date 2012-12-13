@@ -44,7 +44,7 @@ HmmerIO is aware of this different naming scheme and will adjust them
 accordingly to fit SearchIO's object model. If HmmerIO sees that the output file
 to parse was written by hmmsearch or phmmer, all 'hmm' coordinates will be the
 hit coordinates and 'ali' coordinates will be the query coordinates. Conversely,
-if the the HMMER flavor is hmmscan, 'hmm' will be query and 'ali' will be hit.
+if the HMMER flavor is hmmscan, 'hmm' will be query and 'ali' will be hit.
 
 This is why the 'hmmer3-domtab' format has to be specified with the source HMMER
 flavor. The parsers need to know which is the hit and which is the query.

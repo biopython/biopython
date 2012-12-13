@@ -447,7 +447,7 @@ class DatabaseLoader:
         - ScientificName (string)
         (and that is all at the time of writing)
 
-        This method will record all the lineage given, returning the the taxon id
+        This method will record all the lineage given, returning the taxon id
         (database key, not NCBI taxon id) of the final entry (the species).
         """
         ncbi_taxon_id = taxonomic_lineage[-1]["TaxId"]

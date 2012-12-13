@@ -165,7 +165,7 @@ class QueryResult(_BaseSearchObject):
     Hit(id='gi|301171322|ref|NR_035857.1|', query_id='33211', 2 hsps)
 
     If you need access to all the hits in a QueryResult object, you can get
-    them in a list using the `hits` property. Similary, access to all hit IDs is
+    them in a list using the `hits` property. Similarly, access to all hit IDs is
     available through the `hit_keys` property.
 
     >>> qresult.hits

@@ -192,7 +192,7 @@ class Hmmer3TextParser(object):
                 'bitscore': float(row[1]),
                 'bias': float(row[2]),
                 # row[3:6] is not parsed, since the info is available
-                # at the the HSP level
+                # at the HSP level
                 'domain_exp_num': float(row[6]),
                 'domain_obs_num': int(row[7]),
                 'description': row[9],

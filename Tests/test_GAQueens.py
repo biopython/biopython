@@ -333,7 +333,7 @@ class QueensCrossover:
                 best_fitness = [start_index, start_index + region_size,
                                 region_fitness]
 
-        # get the the two regions and return 'em
+        # get the two regions and return 'em
         best_region = genome[best_fitness[0]:best_fitness[1]]
         rest_region = genome[0:best_fitness[0]] + genome[best_fitness[1]:]
 

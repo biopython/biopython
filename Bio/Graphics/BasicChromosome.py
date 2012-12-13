@@ -591,7 +591,7 @@ class AnnotatedChromosomeSegment(ChromosomeSegment):
 
         Note we require 0 <= start <= end <= bp_length, and within the vertical
         space allocated to this segmenet lines will be places according to the
-        start/end coordindates (starting from the top).
+        start/end coordinates (starting from the top).
 
         Positive stand features are drawn on the right, negative on the left,
         otherwise all the way across.
@@ -731,7 +731,7 @@ class TelomereSegment(ChromosomeSegment):
         cap_wedge.fillColor = self.fill_color
         cur_drawing.add(cap_wedge)
 
-        #Now draw an arc for the the curved edge of the wedge,
+        #Now draw an arc for the curved edge of the wedge,
         #omitting the flat end.
         cap_arc = ArcPath()
         cap_arc.addArc(center_x, center_y, width / 2,

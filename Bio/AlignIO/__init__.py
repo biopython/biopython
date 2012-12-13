@@ -299,7 +299,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
-                   (note older verions of Biopython only took a handle).
+                   (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
      - alphabet  - optional Alphabet object, useful when the sequence type
                    cannot be automatically inferred from the file itself
@@ -376,7 +376,7 @@ def read(handle, format, seq_count=None, alphabet=None):
 
     Arguments:
      - handle    - handle to the file, or the filename as a string
-                   (note older verions of Biopython only took a handle).
+                   (note older versions of Biopython only took a handle).
      - format    - string describing the file format.
      - alphabet  - optional Alphabet object, useful when the sequence type
                    cannot be automatically inferred from the file itself
