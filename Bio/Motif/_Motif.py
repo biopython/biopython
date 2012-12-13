@@ -24,7 +24,92 @@ class GenericPositionMatrix(dict):
                 raise Exception("Inconsistent lengths found in dictionary")
             self[letter] = list(values[letter])
         self.alphabet = alphabet
+        self.__letters = sorted(self.alphabet.letters)
 
+    def __getitem__(self, key):
+        if isinstance(key, tuple):
+            if len(key)==2:
+                key1, key2 = key
+                if isinstance(key1, slice):
+                    start1, stop1, stride1 = key1.indices(self.length)
+                    indices1 = range(start1, stop1, stride1)
+                    letters1 = [self.__letters[i] for i in indices1]
+                    dim1 = 2
+                elif isinstance(key1, int):
+                    letter1 = self.__letters[key1]
+                    dim1 = 1
+                elif isinstance(key1, tuple):
+                    letters1 = [self.__letters[i] for i in key1]
+                    dim1 = 2
+                elif isinstance(key1, str):
+                    if len(key1)==1:
+                        letter1 = key1
+                        dim1 = 1
+                    else:
+                        raise KeyError(key1)
+                else:
+                    raise KeyError("Cannot understand key %s", str(key1))
+                if isinstance(key2, slice):
+                    start2, stop2, stride2 = key2.indices(self.length)
+                    indices2 = range(start2, stop2, stride2)
+                    dim2 = 2
+                elif isinstance(key2, int):
+                    index2 = key2
+                    dim2 = 1
+                else:
+                    raise KeyError("Cannot understand key %s", str(key2))
+                if dim1==1 and dim2==1:
+                    return dict.__getitem__(self, letter1)[index2]
+                elif dim1==1 and dim2==2:
+                    values = dict.__getitem__(self, letter1)
+                    return tuple(values[index2] for index2 in indices2)
+                elif dim1==2 and dim2==1:
+                    d = {}
+                    for letter1 in letters1:
+                        d[letter1] = dict.__getitem__(self, letter1)[index2]
+                    return d
+                else:
+                    d = {}
+                    for letter1 in letters1:
+                        values = dict.__getitem__(self, letter1)
+                        d[letter1] = [values[index2] for index2 in indices2]
+                    if sorted(letters1)==self.__letters:
+                        return self.__class__(self.alphabet, d)
+                    else:
+                        return d
+            elif len(key)==1:
+                key = key[0]
+            else:
+                raise KeyError("keys should be 1- or 2-dimensional")
+        if isinstance(key, slice):
+            start, stop, stride = key.indices(self.length)
+            indices = range(start, stop, stride)
+            letters = [self.__letters[i] for i in indices]
+            dim = 2
+        elif isinstance(key, int):
+            letter = self.__letters[key]
+            dim = 1
+        elif isinstance(key, tuple):
+            letters = [self.__letters[i] for i in key]
+            dim = 2
+        elif isinstance(key, str):
+            if len(key)==1:
+                letter = key
+                dim = 1
+            else:
+                raise KeyError(key)
+        else:
+            raise KeyError("Cannot understand key %s", str(key))
+        if dim==1:
+            return dict.__getitem__(self, letter)
+        elif dim==2:
+            d = {}
+            for letter in letters:
+                d[letter] = dict.__getitem__(self, letter)
+            return d
+        else:
+            raise RuntimeError("Should not get here")
+        
     @property
     def consensus(self):
         """Returns the consensus sequence.
@@ -1166,7 +1251,6 @@ please use
 >>> pwm = motif.make_pwm()
 >>> pwm[:,i]
 """, PendingDeprecationWarning)
-        raise Exception
         if index in range(self.length):
             return self.pwm()[index]
         else:
