@@ -191,6 +191,37 @@ class GenericPositionMatrix(dict):
         return self.__class__(alphabet, values)
 
 
+class FrequencyPositionMatrix(GenericPositionMatrix):
+
+    def normalize(self, pseudocounts=None):
+        """
+        create and return a position-weight matrix by normalizing the counts matrix.
+
+        If pseudocounts is None (default), no pseudocounts are added
+        to the counts.
+        If pseudocounts is a number, it is added to the counts before
+        calculating the position-weight matrix.
+        Alternatively, the pseudocounts can be a dictionary with a key
+        for each letter in the alphabet associated with the motif.
+        """
+
+        counts = {}
+        if pseudocounts is None:
+            for letter in self.alphabet.letters:
+                counts[letter] = [0.0] * self.length
+        elif isinstance(pseudocounts, dict):
+            for letter in self.alphabet.letters:
+                counts[letter] = [float(pseudocounts[letter])] * self.length
+        else:
+            for letter in self.alphabet.letters:
+                counts[letter] = [float(pseudocounts)] * self.length
+        for i in xrange(self.length):
+            for letter in self.alphabet.letters:
+                counts[letter][i] += self[letter][i]
+        # Actual normalization is done in the PositionWeightMatrix initializer
+        return PositionWeightMatrix(self.alphabet, counts)
+
+
 class PositionWeightMatrix(GenericPositionMatrix):
 
     def __init__(self, alphabet, counts):
@@ -458,7 +489,7 @@ class Motif(object):
                 elif self.length!=length:
                     raise Exception("counts matrix has inconsistent lengths")
             self.instances = None
-            self.counts = GenericPositionMatrix(alphabet, counts)
+            self.counts = FrequencyPositionMatrix(alphabet, counts)
         elif instances is not None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
@@ -483,7 +514,7 @@ class Motif(object):
             for instance in self.instances:
                 for position, letter in enumerate(instance):
                     counts[letter][position] += 1
-            self.counts = GenericPositionMatrix(alphabet, counts)
+            self.counts = FrequencyPositionMatrix(alphabet, counts)
         else:
             self.counts = None
             self.instances = None
@@ -620,9 +651,9 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.pwm()
 use
->>> pwm = motif.make_pwm()
-See the documentation of motif.make_pwm and pwm.make_pssm for details
-on treatment of pseudocounts and background probabilities.
+>>> pwm = motif.counts.normalize()
+See the documentation of motif.counts.normalize and pwm.make_pssm for
+details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         if self._pwm_is_current:
             return self._pwm
@@ -652,34 +683,6 @@ on treatment of pseudocounts and background probabilities.
         self._pwm_is_current=1
         return self._pwm
 
-    def make_pwm(self, pseudocounts=None):
-        """
-        return the position-weight matrix (calculated from the counts
-        matrix).
-
-        If pseudocounts is None (default), no pseudocounts are added
-        to the counts.
-        If pseudocounts is a number, it is added to the counts before
-        calculating the position-weight matrix.
-        Alternatively, the pseudocounts can be a dictionary with a key
-        for each letter in the alphabet associated with the motif.
-        """
-
-        counts = {}
-        if pseudocounts is None:
-            for letter in self.alphabet.letters:
-                counts[letter] = [0.0] * self.length
-        elif isinstance(pseudocounts, dict):
-            for letter in self.alphabet.letters:
-                counts[letter] = [float(pseudocounts[letter])] * self.length
-        else:
-            for letter in self.alphabet.letters:
-                counts[letter] = [float(pseudocounts)] * self.length
-        for i in xrange(self.length):
-            for letter in self.alphabet.letters:
-                counts[letter][i] += self.counts[letter][i]
-        return PositionWeightMatrix(self.alphabet, counts)
-
     def log_odds(self,laplace=True):
         """
         returns the log odds matrix computed for the set of instances
@@ -689,10 +692,10 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.log_odds()
 use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
-See the documentation of motif.make_pwm and pwm.make_pssm for details
-on treatment of pseudocounts and background probabilities.
+See the documentation of motif.counts.normalize and pwm.make_pssm for
+details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         if self._log_odds_is_current:
             return self._log_odds
@@ -715,11 +718,11 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.ic()
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pwm.ic()
-Please be aware though that by default, motif.make_pwm() does not
-use psuedocounts, while motif.ic() does. See the documentation of
-motif.make_pwm for more details.
+Please be aware though that by default, motif.counts.normalize()
+does not use psuedocounts, while motif.ic() does. See the documentation
+of motif.counts.normalize for more details.
 """, PendingDeprecationWarning)
         res=0
         pwm=self.pwm()
@@ -739,9 +742,9 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.exp_score()
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pwm.exp_score()
-See the documentation of motif.make_pwm for details on treatment of
+See the documentation of motif.counts.normalize for details on treatment of
 pseudocounts.
 """, PendingDeprecationWarning)
         exs=0.0
@@ -782,12 +785,12 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.score_hit(sequence, position)
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
 >>> s = sequence[position:positon+len(pssm)]
 >>> pssm.calculate(s)
-See the documentation of motif.make_pwm and pwm.make_pssm for details
-on treatment of pseudocounts and background probabilities.
+See the documentation of motif.counts.normalize() and pwm.make_pssm
+for details on the treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         lo=self.log_odds()
         score = 0.0
@@ -814,11 +817,11 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.score_hit(sequence, position)
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
 >>> pssm.search(sequence)
-See the documentation of motif.make_pwm and pwm.make_pssm for details
-on treatment of pseudocounts and background probabilities.
+See the documentation of motif.counts.normalize() and pwm.make_pssm
+for details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         raise Exception
         if both:
@@ -846,11 +849,11 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif1.dist_pearson(motif2)
 please use
->>> pwm1 = motif1.make_pwm()
->>> pwm2 = motif2.make_pwm()
+>>> pwm1 = motif1.counts.normalize()
+>>> pwm2 = motif2.counts.normalize()
 >>> pwm1.dist_pearson(pwm2)
-Please see the documentation of motif.make_pwm and pwm.dist_pearson
-for more details.
+Please see the documentation of motif.counts.normalize and
+pwm.dist_pearson for more details.
 """, PendingDeprecationWarning)
 
         if self.alphabet != motif.alphabet:
@@ -1248,7 +1251,7 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. Instead of
 >>> motif[i]
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pwm[:,i]
 """, PendingDeprecationWarning)
         if index in range(self.length):
@@ -1302,7 +1305,7 @@ The same rules are used by TRANSFAC."""
 This function is now deprecated. Instead of
 >>> motif.max_score()
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
 >>> pssm.max_score()
 """,
@@ -1318,7 +1321,7 @@ please use
 This function is now deprecated. Instead of
 >>> motif.min_score()
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
 >>> pssm.min_score()
 """,
@@ -1693,11 +1696,11 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.scanPWM(sequence)
 use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
 >>> pssm.calculate(sequence)
-See the documentation of motif.make_pwm, pwm.make_pssm, and pssm.calculate
-for details.
+See the documentation of motif.counts.normalize, pwm.make_pssm, and
+pssm.calculate for details.
 """, PendingDeprecationWarning)
         if self.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA motifs")
@@ -1725,11 +1728,11 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif._pwm_calculate(sequence)
 use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pssm = pwm.make_pssm()
 >>> pssm.calculate(sequence)
-See the documentation of motif.make_pwm, pwm.make_pssm, and pssm.calculate
-for details.
+See the documentation of motif.counts.normalize, pwm.make_pssm, and
+pssm.calculate for details.
 """, PendingDeprecationWarning)
         logodds = self.log_odds()
         m = len(logodds)

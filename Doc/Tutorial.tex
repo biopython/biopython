@@ -10813,7 +10813,7 @@ TTATA
 We can also calculate the information content of a motif with a simple call:
 %cont-doctest
 \begin{verbatim}
->>> pwm = m.make_pwm(pseudocounts=0.25)
+>>> pwm = m.counts.normalize(pseudocounts=0.25)
 >>> print "%0.2f" % pwm.ic()
 5.27
 \end{verbatim}

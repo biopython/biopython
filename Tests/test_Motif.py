@@ -1526,7 +1526,8 @@ class MotifTestPWM(unittest.TestCase):
 
     def test_simple(self):
         """Test if Motif PWM scoring works."""
-        pwm = self.m.make_pwm(pseudocounts=0.25)
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
         pssm = pwm.make_pssm()
         result = pssm.calculate(self.s)
         self.assertEqual(6, len(result))
