@@ -243,7 +243,7 @@ class PDBList(object):
         # Uncompress the file
         gz = gzip.open(filename, 'rb')
         out = open(final_file, 'wb')
-        out.writelines(gz.read())
+        out.writelines(gz)
         gz.close()
         out.close()
         os.remove(filename)
