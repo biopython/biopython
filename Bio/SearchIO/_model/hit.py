@@ -8,7 +8,7 @@
 from itertools import chain
 
 from Bio._utils import getattr_str, trim_str
-from Bio.SearchIO._utils import allitems, fullcascade
+from Bio.SearchIO._utils import allitems, optionalcascade
 
 from _base import _BaseSearchObject
 from hsp import HSP
@@ -239,11 +239,11 @@ class Hit(_BaseSearchObject):
                         "found %r instead." % (self.query_id, hsp.query_id))
 
     ## properties ##
-    description = fullcascade('hit_description', """Hit description""")
-    query_description = fullcascade('query_description',
+    description = optionalcascade('hit_description', """Hit description""")
+    query_description = optionalcascade('query_description',
             """Description of the query that produced the hit""")
-    id = fullcascade('hit_id', """Hit ID string.""")
-    query_id = fullcascade('query_id',
+    id = optionalcascade('hit_id', """Hit ID string.""")
+    query_id = optionalcascade('query_id',
             """ID string of the query that produced the hit""")
     # returns all hsps
     hsps = allitems(doc="""HSP objects contained in the Hit""")
