@@ -8,9 +8,20 @@ import urllib2
 from StringIO import StringIO
 from Bio import SeqIO, Entrez
 from Bio.TAIR._ncbi import ncbi_prot, ncbi_rna
+import re
 
 NCBI_RNA = 1
 NCBI_PROTEIN = 2
+
+
+def _sanitise_agis(agis):
+    clean_agis = []
+    agi_re = re.compile(r"AT[12345CM]G\d{5}(\.\d)?")
+    for agi in agis:
+        agi_match = agi_re.match(agi)
+        if agi_match is not None:
+            clean_agis.append(agi)
+    return clean_agis
 
 
 class TAIRDirect:
@@ -42,13 +53,15 @@ class TAIRDirect:
             "all": "both",
             "specified": "genemodel"
             }
-
+ 
     def _get_fasta_text(self, agis, dataset, target):
+        bad_agi_exception = ValueError(
+            "Must specify AGIs as a iterable, list or tuple"
+            )
+        agis = _sanitise_agis(agis)
         if agis is None:
-            raise ValueError(
-                "Must specify AGIs, specify agis='Demo' for a demo run"
-                )
-
+            raise bad_agi_exception
+        
         # Check dataset
         if dataset in self.datasets.keys():
             dataset = self.datasets[dataset]

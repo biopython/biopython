@@ -153,6 +153,12 @@ class TAIRDirect(unittest.TestCase):
         with self.assertRaises(StopIteration):
             returned.next()
 
+    def test_agiregex(self):
+        agis = ["AT5G63980", "AT5G63980.1", "ATCG12345", "ATCG12345.6"]
+        self.assertEqual(agis, TAIR._sanitise_agis(agis))
+        not_agis = ["notanagi", "not_an_agi", "\as23sd1321\ '.XS"]
+        self.assertEqual([], TAIR._sanitise_agis(not_agis))
+        
 
 #class TAIRNCBI(unittest.TestCase):
 #    pass
