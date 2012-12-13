@@ -6,8 +6,11 @@
 from MultipartPostHandler import MultipartPostHandler
 import urllib2
 from StringIO import StringIO
-from Bio import SeqIO
+from Bio import SeqIO, Entrex
+from Bio.TAIR._ncbi import ncbi_prot, ncbi_rna
 
+NCBI_RNA = 1
+NCBI_PROTEIN = 2
 
 class TAIRDirect:
     """
@@ -95,6 +98,39 @@ class TAIRDirect:
             )
 
 
+def _get_rna_from_ncbi(agis):
+    Entrez.email = ""
+    entrez_handle = Entrez.efetch(
+            db="nucleotide",
+            id=",".join(agis),
+            rettype="gb",
+            retmode="text"
+            )
+    return SeqIO.parse(entrez_handle.read(), "gb")
+
+
+def _get_protein_from_ncbi(agis):
+    Entrez.email = ""
+    entrez_handle = Entrez.efetch(
+            db="protein",
+            id=",".join(agis),
+            rettype="gb",
+            retmode="text"
+            )
+    return SeqIO.parse(entrez_handle.read(), "gb")
+
+
 def get(agis, dataset="gene", target="rep_gene"):
     tair = TAIRDirect()
     return tair.get(agis, dataset, target)
+
+
+
+def get_from_ncbi(agis, mode):
+    if mode == NCBI_RNA:
+       return  _get_rna_from_ncbi(agis)
+    elif mode == NCBI_PROTEIN:
+       return _get_protein_from_ncbi(agis)
+
+
+
