@@ -12,6 +12,7 @@ from Bio.TAIR._ncbi import ncbi_prot, ncbi_rna
 NCBI_RNA = 1
 NCBI_PROTEIN = 2
 
+
 class TAIRDirect:
     """
     """
@@ -42,7 +43,7 @@ class TAIRDirect:
             "specified": "genemodel"
             }
 
-    def _getSeqFastaText(self, agis, dataset, target):
+    def _get_fasta_text(self, agis, dataset, target):
         if agis is None:
             raise ValueError(
                 "Must specify AGIs, specify agis='Demo' for a demo run"
@@ -95,7 +96,7 @@ class TAIRDirect:
 
     def get(self, agis, dataset="gene", target="rep_gene"):
         return SeqIO.parse(
-            StringIO(self._getSeqFastaText(agis, dataset, target)),
+            StringIO(self._get_fasta_text(agis, dataset, target)),
             "fasta"
             )
 
@@ -127,12 +128,8 @@ def get(agis, dataset="gene", target="rep_gene"):
     return tair.get(agis, dataset, target)
 
 
-
 def get_from_ncbi(agis, mode):
     if mode == NCBI_RNA:
-       return  _get_rna_from_ncbi(agis)
+        return _get_rna_from_ncbi(agis)
     elif mode == NCBI_PROTEIN:
-       return _get_protein_from_ncbi(agis)
-
-
-
+        return _get_protein_from_ncbi(agis)
