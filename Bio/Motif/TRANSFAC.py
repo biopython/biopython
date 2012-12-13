@@ -63,10 +63,10 @@ dictionaries with the following keys:
 
 For more information, see the TRANSFAC documentation.
 """
-    _multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
+    multiple_value_keys = set(['BF', 'OV', 'HP', 'BS', 'HC', 'DT', 'DR'])
     # These keys can occur multiple times for one motif
 
-    _reference_keys = set(['RX', 'RA', 'RT', 'RL'])
+    reference_keys = set(['RX', 'RA', 'RT', 'RL'])
     # These keys occur for references
 
     def __init__(self):
@@ -78,75 +78,7 @@ For more information, see the TRANSFAC documentation.
         return dict.__getitem__(self, index)
 
     def __str__(self):
-        sections = (('AC', 'AS',), # Accession
-                    ('ID',),       # ID
-                    ('DT', 'CO'),  # Date, copyright
-                    ('NA',),       # Name
-                    ('DE',),       # Short factor description
-                    ('TY',),       # Type
-                    ('OS', 'OC'),  # Organism
-                    ('HP', 'HC'),  # Superfamilies, subfamilies
-                    ('BF',),       # Binding factors
-                    ('P0',),       # Frequency matrix
-                    ('BA',),       # Statistical basis
-                    ('BS',),       # Factor binding sites
-                    ('CC',),       # Comments
-                    ('DR',),       # External databases
-                    ('OV', 'PV',), # Versions
-                   )
-        lines = []
-        for section in sections:
-            blank = False
-            for key in section:
-                if key=='P0':
-                    # Frequency matrix
-                    length = self.length
-                    if length==0:
-                        continue
-                    sequence = self.degenerate_consensus
-                    line = "P0      A      C      G      T"
-                    lines.append(line)
-                    for i in range(length):
-                        line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
-                                             i+1,
-                                             self.counts['A'][i],
-                                             self.counts['C'][i],
-                                             self.counts['G'][i],
-                                             self.counts['T'][i],
-                                             sequence[i],
-                                            )
-                        lines.append(line)
-                    blank = True
-                else:
-                    value = self.get(key)
-                    if value is not None:
-                        if key in Motif._multiple_value_keys:
-                            for v in value:
-                                line = "%s  %s" % (key, v)
-                                lines.append(line)
-                        else:
-                            line = "%s  %s" % (key, value)
-                            lines.append(line)
-                        blank = True
-                if key=='PV':
-                    # References
-                    keys = ("RN", "RX", "RA", "RT", "RL")
-                    for reference in self.references:
-                        for key in keys:
-                            value = reference.get(key)
-                            if value is None:
-                                continue
-                            line = "%s  %s" % (key, value)
-                            lines.append(line)
-                            blank = True
-            if blank:
-                line = 'XX'
-                lines.append(line)
-        # Finished; glue the lines together
-        line = "//"
-        lines.append(line)
-        text = "\n".join(lines) + "\n"
-        return text
+        return format(self, "transfac")
 
 
 class Record(object):
@@ -228,9 +160,9 @@ def read(handle):
                 assert len(motif.references)==index-1
                 reference = {key: value}
                 motif.references.append(reference)
-            elif key in Motif._reference_keys:
+            elif key in Motif.reference_keys:
                 reference[key] = value
-            elif key in Motif._multiple_value_keys:
+            elif key in Motif.multiple_value_keys:
                 if not key in motif:
                     motif[key] = []
                 motif[key].append(value)
