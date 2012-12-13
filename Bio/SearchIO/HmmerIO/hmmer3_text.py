@@ -220,7 +220,8 @@ class Hmmer3TextParser(object):
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
-                    line.startswith(' ---   ------ ----- --------'))
+                    line.startswith(' ---   ------ ----- --------') or \
+                    line.startswith('   [No individual domains'))
             self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit
@@ -229,6 +230,7 @@ class Hmmer3TextParser(object):
                 # break out of hsp parsing if there are no hits, it's the last hsp
                 # or it's the start of a new hit
                 if self.line.startswith('   [No targets detected that satisfy') or \
+                   self.line.startswith('   [No individual domains') or \
                    self.line.startswith('Internal pipeline statistics summary:') or \
                    self.line.startswith('  Alignments for each domain:') or \
                    self.line.startswith('>>'):
