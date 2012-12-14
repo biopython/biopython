@@ -114,26 +114,46 @@ class TAIRDirect:
             )
 
 
+def _agi_to_rna(agis):
+    rna_ids = []
+    for agi in agis:
+        try:
+            rna_ids.append(ncbi_rna[agi])
+        except LookupError:
+            next
+    return rna_ids
+
+
+def _agi_to_protein(agis):
+    protein_ids = []
+    for agi in agis:
+        try:
+            protein_ids.append(ncbi_prot[agi])
+        except LookupError:
+            next
+    return protein_ids
+
+
 def _get_rna_from_ncbi(agis):
     Entrez.email = ""
     entrez_handle = Entrez.efetch(
             db="nucleotide",
-            id=",".join(agis),
+            id=",".join(_agi_to_rna(agis)),
             rettype="gb",
             retmode="text"
             )
-    return SeqIO.parse(entrez_handle.read(), "gb")
+    return SeqIO.parse(entrez_handle, "gb")
 
 
 def _get_protein_from_ncbi(agis):
     Entrez.email = ""
     entrez_handle = Entrez.efetch(
             db="protein",
-            id=",".join(agis),
+            id=",".join(_agi_to_protein(agis)),
             rettype="gb",
             retmode="text"
             )
-    return SeqIO.parse(entrez_handle.read(), "gb")
+    return SeqIO.parse(entrez_handle, "gb")
 
 
 def get(agis, dataset="gene", target="rep_gene"):
