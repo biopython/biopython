@@ -233,9 +233,9 @@ class CircularDrawer(AbstractDrawer):
             trackunits[track] = (heightholder, heightholder+trackheight)
             heightholder += trackheight # move to next height
 
-        trackunit_height = 0.5*min(self.pagewidth, self.pageheight)/trackunit_sum
-        track_core = trackunit_height * self.circle_core
-        trackunit_height = trackunit_height * (1-self.circle_core)
+        max_radius = 0.5*min(self.pagewidth, self.pageheight)
+        trackunit_height = max_radius * (1 - self.circle_core) / trackunit_sum
+        track_core = max_radius * self.circle_core
 
         # Calculate top and bottom radii for each track
         self.track_radii = {} # The inner, outer and center radii for each track
