@@ -1,0 +1,12 @@
+
+Immediate
+- Docstrings
+- tests for ncbi functions
+- sanitise AGIs in ncbi stuff
+
+Long-term
+- cookbook entry
+- make examle script
+- more extensive tests of both module
+- profile code to check for slow spots
+
