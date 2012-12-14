@@ -11043,13 +11043,13 @@ It's just as easy to look for positions, giving rise to high log-odds scores aga
 \begin{verbatim}
 >>> pssm = pwm.make_pssm()
 >>> for position, score in pssm.search(test_seq, threshold=5.0):
-...     print position, score
+...     print "Position %i gives score %0.2f" % (position, score)
 ... 
-10 8.44065
--14 7.06214
-15 8.44065
--6 8.44065
-21 8.44065
+Position 10 gives score 8.44
+Position -14 gives score 7.06
+Position 15 gives score 8.44
+Position -6 gives score 8.44
+Position 21 gives score 8.44
 \end{verbatim}
 The negative positions refer to instances of the motif found on the
 reverse strand of the test sequence, and follow the Python convention
