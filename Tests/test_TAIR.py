@@ -1,6 +1,6 @@
 import unittest
 from Bio import TAIR
-
+import Bio
 
 class TAIRDirect(unittest.TestCase):
     test_agis = [
@@ -160,8 +160,37 @@ class TAIRDirect(unittest.TestCase):
         self.assertEqual([], TAIR._sanitise_agis(not_agis))
         
 
-#class TAIRNCBI(unittest.TestCase):
-#    pass
+class TAIRNCBI(unittest.TestCase):
+    test_agis = [
+        "AT4G36450.1",
+        "AT4G36900.1",
+        "AT5G63980.1"
+        ]
+
+    def _perform_test(self, returned, expected):
+        for seq, expected_seq in zip(returned, expected):
+            self.assertEqual(seq.id, expected_seq[0])
+            self.assertEqual(str(seq.seq[:10]), expected_seq[1])
+            self.assertEqual(len(seq.seq), expected_seq[2])
+
+    def test_ncbi_rna(self):
+        expected = [
+            ("NM_119808.1", "ATGGCGATGC", 1086),
+            ("NM_119854.2", "AGTGTCGGTG", 1024),
+            ("NM_125794.4", "GACATATATT", 1383)
+            ]
+        returned = TAIR.get_from_ncbi(self.test_agis, TAIR.NCBI_RNA)
+        self._perform_test(returned, expected)
+
+    def test_ncbi_protein(self):
+        expected = [
+            ("NP_195363.1", "MAMLVDPPNG", 361),
+            ("NP_195408.1", "METATEVATV", 196),
+            ("NP_201203.2", "MMSINCFRTA", 407)
+            ]
+        returned = TAIR.get_from_ncbi(self.test_agis, TAIR.NCBI_PROTEIN)
+        self._perform_test(returned, expected)
+
 
 
 if __name__ == "__main__":
