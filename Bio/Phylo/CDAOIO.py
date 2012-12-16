@@ -114,6 +114,7 @@ class Writer(object):
         self.node_counter = 0
         self.edge_counter = 0
         self.tree_counter = 0
+        self.tu_counter = 0
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle.
@@ -133,6 +134,7 @@ class Writer(object):
         
     def add_trees_to_model(self, trees=None, storage=None):
         """Add triples describing a set of trees to an RDF model."""
+        # TODO: base uri?
         import RDF
         #RDF.debug(1)
         
@@ -140,6 +142,7 @@ class Writer(object):
         urls = self.urls
         
         def qUri(s):
+            '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
             for url in urls: 
                 s = s.replace(url+':', urls[url])
             return Uri(s)
@@ -158,12 +161,13 @@ class Writer(object):
         model = self.model
         
         def add_statements(statements):
+            '''add RDF statements, represented by triples, to an RDF model'''
             for stmt in statements:
                 model.append(RDF.Statement(*stmt))
         
         def process_clade(clade, parent=None, root=False):
-            # TODO: what uri to use for clades?
-            # currently, non-terminal nodes are all just "clade"
+            '''recursively add statements describing a tree of clades to the
+            RDF model'''
             import uuid
             self.node_counter += 1
             clade.uri = 'node%s' % self.node_counter
@@ -178,13 +182,20 @@ class Writer(object):
                                (Uri(tree_uri), qUri('cdao:has_root'), Uri(clade.uri)),
                                ]
             
-            statements += [
-                           (Uri(clade.uri), qUri('rdf:type'), qUri('cdao:TerminalNode' if clade.is_terminal()
-                                                                   else 'cdao:AncestralNode')),
-                           ]
             if clade.name:
-                # TODO: create TU
-                pass
+                # create TU
+                self.tu_counter += 1
+                tu_uri = 'tu%s' % self.tu_counter
+                statements += [
+                               (Uri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
+                               (Uri(clade.uri), qUri('cdao:represents_TU'), Uri(tu_uri)),
+                               (Uri(tu_uri), qUri('rdf:label'), clade.name),
+                               ]
+                
+            node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
+            statements += [
+                           (Uri(clade.uri), qUri('rdf:type'), qUri(node_type)),
+                           ]
                           
             if not parent is None:
                 self.edge_counter += 1
