@@ -195,12 +195,14 @@ class Writer(object):
                                (Uri(tu_uri), qUri('rdf:label'), clade.name),
                                ]
                 
+            # create this node
             node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
             statements += [
                            (Uri(clade.uri), qUri('rdf:type'), qUri(node_type)),
                            ]
                           
             if not parent is None:
+                # create edge from the parent node to this node
                 self.edge_counter += 1
                 edge_uri = 'edge%s' % self.edge_counter
                 statements += [
@@ -211,6 +213,7 @@ class Writer(object):
                                (Uri(clade.uri), qUri('cdao:has_Parent'), Uri(parent.uri)),
                                (Uri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), Uri(edge_uri)),
                                ]
+                # TODO: add edge annotations (i.e. edge lengths)
                           
             add_statements(statements)
             
