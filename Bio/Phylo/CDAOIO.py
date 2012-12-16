@@ -12,10 +12,17 @@ import os
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
     pass
-    
+
+
+def import_rdf():
+    try: import RDF
+    except ImportError: raise CDAOError('Redland Python bindings are required for CDAO support.')
+    #RDF.debug(1)
+    return RDF
+        
     
 def new_storage():
-    import RDF
+    RDF = import_rdf()
     
     storage = RDF.Storage(storage_name="hashes",
                           name="serializer",
@@ -65,8 +72,7 @@ class Parser(object):
     def parse(self, values_are_confidence=False, rooted=False,
               storage=None, mime_type='text/turtle'):
         """Parse the text stream this object was initialized with."""
-        import RDF
-        #RDF.debug(1)
+        RDF = import_rdf()
 
         if storage is None:
             # store RDF model in memory for now
@@ -123,8 +129,7 @@ class Writer(object):
             mime_type: used to determine the serialization format.
                 default is 'text/turtle'
         """
-        import RDF
-        #RDF.debug(1)
+        RDF = import_rdf()
         
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
@@ -135,8 +140,7 @@ class Writer(object):
     def add_trees_to_model(self, trees=None, storage=None):
         """Add triples describing a set of trees to an RDF model."""
         # TODO: base uri?
-        import RDF
-        #RDF.debug(1)
+        RDF = import_rdf()
         
         Uri = RDF.Uri
         urls = self.urls
@@ -229,8 +233,7 @@ class Writer(object):
             
     def serialize_model(self, handle, mime_type='text/turtle'):
         """Serialize RDF model to file handle"""        
-        import RDF
-        #RDF.debug(1)
+        RDF = import_rdf()
         
         # serialize RDF model to output file
         serializer = RDF.Serializer(mime_type=mime_type)
