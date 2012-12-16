@@ -9,6 +9,12 @@ from Bio.Phylo import Newick
 import os
 
 
+RDF_NAMESPACES = {
+                  'owl': 'http://www.w3.org/2002/07/owl#',
+                  'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
+                  'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                  }
+
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
     pass
@@ -57,6 +63,7 @@ def write(trees, handle, plain=False, **kwargs):
 class Parser(object):
     """Parse a CDAO tree given a file handle.
     """
+    urls = RDF_NAMESPACES
 
     def __init__(self, handle):
         self.handle = handle
@@ -67,13 +74,13 @@ class Parser(object):
         handle = StringIO(treetext)
         return cls(handle)
 
-    def parse(self, values_are_confidence=False, rooted=False,
-              storage=None, mime_type='text/turtle'):
+    def parse(self, **kwargs):
         """Parse the text stream this object was initialized with."""
-        self.parse_handle_to_model()
+        self.parse_handle_to_model(**kwargs)
         return self.parse_model()
         
-    def parse_handle_to_model(self):
+    def parse_handle_to_model(self, rooted=False, storage=None, 
+                              mime_type='text/turtle', **kwargs):
         '''Parse self.handle into RDF model self.model.'''
         RDF = import_rdf()
 
@@ -87,7 +94,6 @@ class Parser(object):
                 raise CDAOError("new RDF.model failed")
         model = self.model
         
-        self.values_are_confidence = values_are_confidence
         self.rooted = rooted
         
         parser = RDF.Parser(mime_type=mime_type)
@@ -95,7 +101,8 @@ class Parser(object):
             raise Exception('Failed to create RDF.Parser for MIME type %s' % mime_type)
         
         uri = RDF.Uri(string="file:"+self.handle.name)
-        for s in parser.parse_string_as_stream(self.handle.read(), uri):
+        statements = parser.parse_string_as_stream(self.handle.read(), uri)
+        for s in statements:
             model.append(s)        
             
     def parse_model(self, model=None):
@@ -109,6 +116,8 @@ class Parser(object):
         # get all cdao:RootedTree instances, then start tree creation at the 
         # node designated by cdao:has_root
         
+        
+        
 
 
 # ---------------------------------------------------------
@@ -116,11 +125,7 @@ class Parser(object):
 
 class Writer(object):
     """Based on the writer in Bio.Nexus.Trees (str, to_string)."""
-    urls = {
-            'owl': 'http://www.w3.org/2002/07/owl#',
-            'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
-            'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-            }
+    urls = RDF_NAMESPACES
 
     def __init__(self, trees):
         self.trees = trees
