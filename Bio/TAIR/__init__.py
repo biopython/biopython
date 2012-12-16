@@ -3,6 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
+"""
+Functions to get sequences by their Arabidopsis Genome Initiative (AGI)
+identifier, which are commonly used by biologists working with Arabidopsis.
+Sequences can be retreived either directly from The Arabidopsis Information
+Resource (TAIR) at arabidopsis.org, or via GenBank/RefSeq, using
+Bio.Entrez.efetch().
+"""
+
 from MultipartPostHandler import MultipartPostHandler
 import urllib2
 from StringIO import StringIO
@@ -26,6 +34,8 @@ def _sanitise_agis(agis):
 
 class TAIRDirect(object):
     """
+    Class of functions to get sequences directly from arabidopsis.org, by their
+    AGI identifier.
     """
     def __init__(self):
         self.datasets = {
@@ -114,46 +124,51 @@ class TAIRDirect(object):
             )
 
 
-def _agi_to_rna(agis):
-    rna_ids = []
-    for agi in agis:
-        try:
-            rna_ids.append(ncbi_rna[agi])
-        except LookupError:
-            next
-    return rna_ids
+class TAIRNCBI(object):
+    """
+    Class of functions to get sequences from NCBI using Efetch, by their AGI
+    identifier.
+    """
+    def _agi_to_rna(self, agis):
+        rna_ids = []
+        for agi in agis:
+            try:
+                rna_ids.append(ncbi_rna[agi])
+            except LookupError:
+                next
+        return rna_ids
 
 
-def _agi_to_protein(agis):
-    protein_ids = []
-    for agi in agis:
-        try:
-            protein_ids.append(ncbi_prot[agi])
-        except LookupError:
-            next
-    return protein_ids
+    def _agi_to_protein(self, agis):
+        protein_ids = []
+        for agi in agis:
+            try:
+                protein_ids.append(ncbi_prot[agi])
+            except LookupError:
+                next
+        return protein_ids
 
 
-def _get_rna_from_ncbi(agis):
-    Entrez.email = ""
-    entrez_handle = Entrez.efetch(
-            db="nucleotide",
-            id=",".join(_agi_to_rna(agis)),
-            rettype="gb",
-            retmode="text"
-            )
-    return SeqIO.parse(entrez_handle, "gb")
+    def get_rna_from_ncbi(self, agis):
+        Entrez.email = ""
+        entrez_handle = Entrez.efetch(
+                db="nucleotide",
+                id=",".join(self._agi_to_rna(agis)),
+                rettype="gb",
+                retmode="text"
+                )
+        return SeqIO.parse(entrez_handle, "gb")
 
 
-def _get_protein_from_ncbi(agis):
-    Entrez.email = ""
-    entrez_handle = Entrez.efetch(
-            db="protein",
-            id=",".join(_agi_to_protein(agis)),
-            rettype="gb",
-            retmode="text"
-            )
-    return SeqIO.parse(entrez_handle, "gb")
+    def get_protein_from_ncbi(self, agis):
+        Entrez.email = ""
+        entrez_handle = Entrez.efetch(
+                db="protein",
+                id=",".join(self._agi_to_protein(agis)),
+                rettype="gb",
+                retmode="text"
+                )
+        return SeqIO.parse(entrez_handle, "gb")
 
 
 def get(agis, dataset="gene", target="rep_gene"):
@@ -162,7 +177,8 @@ def get(agis, dataset="gene", target="rep_gene"):
 
 
 def get_from_ncbi(agis, mode):
+    tair = TAIRNCBI()
     if mode == NCBI_RNA:
-        return _get_rna_from_ncbi(agis)
+        return tair.get_rna_from_ncbi(agis)
     elif mode == NCBI_PROTEIN:
-        return _get_protein_from_ncbi(agis)
+        return tair.get_protein_from_ncbi(agis)
