@@ -100,6 +100,8 @@ class Parser(object):
             
     def parse_model(self, model=None):
         '''Construct a Newick.Tree from an RDF model.'''
+        RDF = import_rdf()
+        
         if model is None:
             model = self.model
         
@@ -141,12 +143,14 @@ class Writer(object):
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
-        self.add_trees_to_model()
+        try: base_uri = kwargs['base_uri']
+        except KeyError: base_uri = ''
+        
+        self.add_trees_to_model(base_uri=base_uri)
         self.serialize_model(handle, mime_type=mime_type)
         
-    def add_trees_to_model(self, trees=None, storage=None):
+    def add_trees_to_model(self, trees=None, storage=None, base_uri=''):
         """Add triples describing a set of trees to an RDF model."""
-        # TODO: base uri?
         RDF = import_rdf()
         
         Uri = RDF.Uri
@@ -157,6 +161,9 @@ class Writer(object):
             for url in urls: 
                 s = s.replace(url+':', urls[url])
             return Uri(s)
+        def nUri(s):
+            '''append a URI to the base URI'''
+            return base_uri + s
             
         if trees is None:
             trees = self.trees
@@ -189,8 +196,8 @@ class Writer(object):
                 self.tree_counter += 1
                 tree_uri = 'tree%s' % self.tree_counter
                 statements += [
-                               (Uri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
-                               (Uri(tree_uri), qUri('cdao:has_root'), Uri(clade.uri)),
+                               (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
+                               (nUri(tree_uri), qUri('cdao:has_root'), nUri(clade.uri)),
                                ]
             
             if clade.name:
@@ -198,9 +205,9 @@ class Writer(object):
                 self.tu_counter += 1
                 tu_uri = 'tu%s' % self.tu_counter
                 statements += [
-                               (Uri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
-                               (Uri(clade.uri), qUri('cdao:represents_TU'), Uri(tu_uri)),
-                               (Uri(tu_uri), qUri('rdf:label'), clade.name),
+                               (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
+                               (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
+                               (nUri(tu_uri), qUri('rdf:label'), clade.name),
                                ]
                                
                 # TODO: should be able to pass in an optional function for 
@@ -209,7 +216,7 @@ class Writer(object):
             # create this node
             node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
             statements += [
-                           (Uri(clade.uri), qUri('rdf:type'), qUri(node_type)),
+                           (nUri(clade.uri), qUri('rdf:type'), qUri(node_type)),
                            ]
                           
             if not parent is None:
@@ -217,20 +224,20 @@ class Writer(object):
                 self.edge_counter += 1
                 edge_uri = 'edge%s' % self.edge_counter
                 statements += [
-                               (Uri(edge_uri), qUri('rdf:type'), qUri('cdao:Directed_Edge')),
-                               (Uri(edge_uri), qUri('cdao:has_Parent_Node'), Uri(parent.uri)),
-                               (Uri(edge_uri), qUri('cdao:has_Child_Node'), Uri(clade.uri)),
-                               (Uri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), Uri(edge_uri)),
-                               (Uri(clade.uri), qUri('cdao:has_Parent'), Uri(parent.uri)),
-                               (Uri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), Uri(edge_uri)),
+                               (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:Directed_Edge')),
+                               (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
+                               (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
+                               (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
+                               (nUri(clade.uri), qUri('cdao:has_Parent'), nUri(parent.uri)),
+                               (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                                ]
                 # add branch length
                 edge_ann_uri = 'edge_annotation%s' % self.edge_counter
                 statements += [
-                               (Uri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
-                               (Uri(edge_uri), qUri('cdao:has_annotation'), Uri(edge_ann_uri)),
+                               (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
+                               (nUri(edge_uri), qUri('cdao:has_annotation'), nUri(edge_ann_uri)),
                                # TODO: does this type of numeric literal actually work?
-                               (Uri(edge_ann_uri), qUri('cdao:has_value'), RDF.Node(clade.branch_length)),
+                               (nUri(edge_ann_uri), qUri('cdao:has_value'), RDF.Node(str(clade.branch_length))),
                                ]
                           
             add_statements(statements)
