@@ -163,7 +163,7 @@ class Writer(object):
             return Uri(s)
         def nUri(s):
             '''append a URI to the base URI'''
-            return base_uri + s
+            return Uri(base_uri + s)
             
         if trees is None:
             trees = self.trees
@@ -181,7 +181,11 @@ class Writer(object):
         def add_statements(statements):
             '''add RDF statements, represented by triples, to an RDF model'''
             for stmt in statements:
-                model.append(RDF.Statement(*stmt))
+                try:
+                    model.append(RDF.Statement(*stmt))
+                except:
+                    print [str(s) for s in stmt]
+                    raise
         
         def process_clade(clade, parent=None, root=False):
             '''recursively add statements describing a tree of clades to the
@@ -237,7 +241,7 @@ class Writer(object):
                                (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
                                (nUri(edge_uri), qUri('cdao:has_annotation'), nUri(edge_ann_uri)),
                                # TODO: does this type of numeric literal actually work?
-                               (nUri(edge_ann_uri), qUri('cdao:has_value'), RDF.Node(str(clade.branch_length))),
+                               (nUri(edge_ann_uri), qUri('cdao:has_value'), str(clade.branch_length)),
                                ]
                           
             add_statements(statements)
