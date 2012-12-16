@@ -158,7 +158,7 @@ def _get_protein_from_ncbi(agis):
 
 def get(agis, dataset="gene", target="rep_gene"):
     tair = TAIRDirect()
-    return tair.get(agis, dataset, target)
+    return tair.get(_sanitise_agis(agis), dataset, target)
 
 
 def get_from_ncbi(agis, mode):
