@@ -90,6 +90,9 @@ class Parser(object):
             model.append(s)
         
         # TODO: create a Tree object from RDF model
+        # get all cdao:RootedTree instances, then start tree creation at the 
+        # node designated by cdao:has_root
+        
 
 
 # ---------------------------------------------------------
@@ -107,6 +110,10 @@ class Writer(object):
         self.trees = trees
         self.model = None
         self.count = 0
+        
+        self.node_counter = 0
+        self.edge_counter = 0
+        self.tree_counter = 0
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle.
@@ -154,20 +161,34 @@ class Writer(object):
             for stmt in statements:
                 model.append(RDF.Statement(*stmt))
         
-        def process_clade(clade, parent=None):
+        def process_clade(clade, parent=None, root=False):
             # TODO: what uri to use for clades?
             # currently, non-terminal nodes are all just "clade"
             import uuid
-            clade.uri = clade.name if clade.name else uuid.uuid4().hex
-            statements = [
-                          (Uri(clade.uri), qUri('rdf:type'), qUri('cdao:Node')),
-                          ]
+            self.node_counter += 1
+            clade.uri = 'node%s' % self.node_counter
+            
+            statements = []
+            if root:
+                # create a cdao:RootedTree with reference to the tree root
+                self.tree_counter += 1
+                tree_uri = 'tree%s' % self.tree_counter
+                statements += [
+                               (Uri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
+                               (Uri(tree_uri), qUri('cdao:has_root'), Uri(clade.uri)),
+                               ]
+            
+            statements += [
+                           (Uri(clade.uri), qUri('rdf:type'), qUri('cdao:TerminalNode' if clade.is_terminal()
+                                                                   else 'cdao:AncestralNode')),
+                           ]
             if clade.name:
                 # TODO: create TU
                 pass
                           
             if not parent is None:
-                edge_uri = parent.uri + "_" + clade.uri
+                self.edge_counter += 1
+                edge_uri = 'edge%s' % self.edge_counter
                 statements += [
                                (Uri(edge_uri), qUri('rdf:type'), qUri('cdao:Directed_Edge')),
                                (Uri(edge_uri), qUri('cdao:has_Parent_Node'), Uri(parent.uri)),
@@ -181,7 +202,7 @@ class Writer(object):
             
             if not clade.is_terminal():
                 for new_clade in clade.clades:
-                    process_clade(new_clade, parent=clade)
+                    process_clade(new_clade, parent=clade, root=False)
         
         add_statements([
                         (Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology')),
@@ -189,7 +210,7 @@ class Writer(object):
 
         for tree in trees:
             first_clade = tree.clade
-            process_clade(first_clade)
+            process_clade(first_clade, root=True)
             
             self.count += 1
             
