@@ -194,6 +194,9 @@ class Writer(object):
                                (Uri(clade.uri), qUri('cdao:represents_TU'), Uri(tu_uri)),
                                (Uri(tu_uri), qUri('rdf:label'), clade.name),
                                ]
+                               
+                # TODO: should be able to pass in an optional function for 
+                # running each TU through TNRS, etc.
                 
             # create this node
             node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
