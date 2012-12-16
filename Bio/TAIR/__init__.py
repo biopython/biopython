@@ -138,7 +138,6 @@ class TAIRNCBI(object):
                 next
         return rna_ids
 
-
     def _agi_to_protein(self, agis):
         protein_ids = []
         for agi in agis:
@@ -147,7 +146,6 @@ class TAIRNCBI(object):
             except LookupError:
                 next
         return protein_ids
-
 
     def get_rna_from_ncbi(self, agis):
         Entrez.email = ""
@@ -158,7 +156,6 @@ class TAIRNCBI(object):
                 retmode="text"
                 )
         return SeqIO.parse(entrez_handle, "gb")
-
 
     def get_protein_from_ncbi(self, agis):
         Entrez.email = ""
