@@ -56,8 +56,6 @@ def write(trees, handle, plain=False, **kwargs):
 
 class Parser(object):
     """Parse a CDAO tree given a file handle.
-
-    Based on the parser in `Bio.Nexus.Trees`.
     """
 
     def __init__(self, handle):
@@ -72,6 +70,11 @@ class Parser(object):
     def parse(self, values_are_confidence=False, rooted=False,
               storage=None, mime_type='text/turtle'):
         """Parse the text stream this object was initialized with."""
+        self.parse_handle_to_model()
+        return self.parse_model()
+        
+    def parse_handle_to_model(self):
+        '''Parse self.handle into RDF model self.model.'''
         RDF = import_rdf()
 
         if storage is None:
@@ -93,7 +96,12 @@ class Parser(object):
         
         uri = RDF.Uri(string="file:"+self.handle.name)
         for s in parser.parse_string_as_stream(self.handle.read(), uri):
-            model.append(s)
+            model.append(s)        
+            
+    def parse_model(self, model=None):
+        '''Construct a Newick.Tree from an RDF model.'''
+        if model is None:
+            model = self.model
         
         # TODO: create a Tree object from RDF model
         # get all cdao:RootedTree instances, then start tree creation at the 
