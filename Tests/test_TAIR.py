@@ -2,6 +2,7 @@ import unittest
 from Bio import TAIR
 import Bio
 
+
 class TAIRDirect(unittest.TestCase):
     test_agis = [
         "AT4G36450.1",
@@ -23,7 +24,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "transcript", "rep_gene")
         self._perform_test(returned, expected)
- 
+
     def test_cds(self):
         expected = [
             ("AT4G36450.1", "ATGGCGATGC", 1086),
@@ -32,7 +33,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "cds", "rep_gene")
         self._perform_test(returned, expected)
- 
+
     def test_gene(self):
         expected = [
             ("AT4G36450.1", "ATGGCGATGC", 1169),
@@ -41,7 +42,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "gene", "rep_gene")
         self._perform_test(returned, expected)
- 
+
     def test_protein(self):
         expected = [
             ("AT4G36450.1", "MAMLVDPPNG", 361),
@@ -50,7 +51,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "protein", "rep_gene")
         self._perform_test(returned, expected)
-     
+
     def test_intergenic(self):
         expected = [
             ("AT4G36440-AT4G36450", "AGAGTCAAAA", 237),
@@ -62,7 +63,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "intergenic", "rep_gene")
         self._perform_test(returned, expected)
-     
+
     def test_intron(self):
         expected = [
             ("AT4G36450.1-1", "GTACGTTGGT", 83),
@@ -75,7 +76,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "intron", "rep_gene")
         self._perform_test(returned, expected)
- 
+
     def test_3prime_utr(self):
         expected = [
             ("AT4G36900.1", "GAAAGCAAAA", 232),
@@ -83,7 +84,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "3prime_utr", "rep_gene")
         self._perform_test(returned, expected)
- 
+
     def test_5prime_utr(self):
         expected = [
             ("AT4G36900.1", "AGTGTCGGTG", 201),
@@ -100,7 +101,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "upstream_500", "rep_gene")
         self._perform_test(returned, expected)
-        
+
     def test_upstream1000(self):
         expected = [
             ("AT4G36450", "TTTAAATTTA", 1000),
@@ -109,7 +110,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "upstream_1000", "rep_gene")
         self._perform_test(returned, expected)
-  
+
     def test_upstream3000(self):
         expected = [
             ("AT4G36450", "TAGAAAATTA", 3000),
@@ -127,7 +128,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "downstream_500", "rep_gene")
         self._perform_test(returned, expected)
-        
+
     def test_downstream1000(self):
         expected = [
             ("AT4G36450", "ATCAATATTT", 1000),
@@ -136,7 +137,7 @@ class TAIRDirect(unittest.TestCase):
             ]
         returned = TAIR.get(self.test_agis, "downstream_1000", "rep_gene")
         self._perform_test(returned, expected)
-  
+
     def test_downstream3000(self):
         expected = [
             ("AT4G36450", "ATCAATATTT", 3000),
@@ -158,7 +159,7 @@ class TAIRDirect(unittest.TestCase):
         self.assertEqual(agis, TAIR._sanitise_agis(agis))
         not_agis = ["notanagi", "not_an_agi", "\as23sd1321\ '.XS"]
         self.assertEqual([], TAIR._sanitise_agis(not_agis))
-        
+
 
 class TAIRNCBI(unittest.TestCase):
     test_agis = [
@@ -192,8 +193,6 @@ class TAIRNCBI(unittest.TestCase):
         self._perform_test(returned, expected)
 
 
-
 if __name__ == "__main__":
-    runner = unittest.TextTestRunner(verbosity = 2)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
-
