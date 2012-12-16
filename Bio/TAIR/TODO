@@ -1,11 +1,7 @@
-
 Immediate
 - Docstrings
 - sanitise AGIs in ncbi stuff
 
 Long-term
-- cookbook entry
-- make examle script
-- more extensive tests of both module
+- more extensive tests of both modules
 - profile code to check for slow spots
-
