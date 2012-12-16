@@ -115,7 +115,6 @@ class Writer(object):
     def __init__(self, trees):
         self.trees = trees
         self.model = None
-        self.count = 0
         
         self.node_counter = 0
         self.edge_counter = 0
@@ -227,8 +226,6 @@ class Writer(object):
             first_clade = tree.clade
             process_clade(first_clade, root=True)
             
-            self.count += 1
-            
         model.sync()
             
     def serialize_model(self, handle, mime_type='text/turtle'):
@@ -242,4 +239,4 @@ class Writer(object):
 
         handle.write(serializer.serialize_model_to_string(self.model))
         
-        return self.count
+        return self.tree_counter
