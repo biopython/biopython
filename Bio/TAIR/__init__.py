@@ -24,7 +24,7 @@ def _sanitise_agis(agis):
     return clean_agis
 
 
-class TAIRDirect:
+class TAIRDirect(object):
     """
     """
     def __init__(self):
