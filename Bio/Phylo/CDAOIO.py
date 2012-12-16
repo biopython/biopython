@@ -216,7 +216,14 @@ class Writer(object):
                                (Uri(clade.uri), qUri('cdao:has_Parent'), Uri(parent.uri)),
                                (Uri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), Uri(edge_uri)),
                                ]
-                # TODO: add edge annotations (i.e. edge lengths)
+                # add branch length
+                edge_ann_uri = 'edge_annotation%s' % self.edge_counter
+                statements += [
+                               (Uri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
+                               (Uri(edge_uri), qUri('cdao:has_annotation'), Uri(edge_ann_uri)),
+                               # TODO: does this type of numeric literal actually work?
+                               (Uri(edge_ann_uri), qUri('cdao:has_value'), RDF.Node(clade.branch_length)),
+                               ]
                           
             add_statements(statements)
             
