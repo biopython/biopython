@@ -31,7 +31,7 @@ class GenericPositionMatrix(dict):
             if len(key)==2:
                 key1, key2 = key
                 if isinstance(key1, slice):
-                    start1, stop1, stride1 = key1.indices(self.length)
+                    start1, stop1, stride1 = key1.indices(len(self.__letters))
                     indices1 = range(start1, stop1, stride1)
                     letters1 = [self.__letters[i] for i in indices1]
                     dim1 = 2
@@ -82,7 +82,7 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError("keys should be 1- or 2-dimensional")
         if isinstance(key, slice):
-            start, stop, stride = key.indices(self.length)
+            start, stop, stride = key.indices(len(self.__letters))
             indices = range(start, stop, stride)
             letters = [self.__letters[i] for i in indices]
             dim = 2
@@ -131,7 +131,7 @@ class GenericPositionMatrix(dict):
         for i in range(self.length):
             minimum = float("+inf")
             for letter in self.alphabet.letters:
-                count = self.counts[letter][i]
+                count = self[letter][i]
                 if count < minimum:
                     minimum = count
                     sequence_letter = letter

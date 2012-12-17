@@ -10786,16 +10786,85 @@ then we can create a Motif object as follows:
 \begin{verbatim}
 >>> m = Motif.Motif(instances=instances)
 \end{verbatim}
-Now we can try to get some basic information about it.
-Let's start with length and consensus sequence:
+All instances should have the same sequence length. The length of the motif
+is then defined as this sequence length:
 %cont-doctest
 \begin{verbatim}
 >>> len(m)
 5
+\end{verbatim}
+The Motif object has an attribute \verb+.counts+ containing the counts of each
+nucleotide at each position. You can access the counts as a dictionary:
+%cont-doctest
+\begin{verbatim}
+>>> m.counts['A']
+[0, 4, 0, 3, 4]
+\end{verbatim}
+but you can also think of it as a 2D array with the nucleotide as the first
+dimension and the position as the second dimension:
+%cont-doctest
+\begin{verbatim}
+>>> m.counts['T',2]
+4
+>>> m.counts['T',3]
+1
+>>> m.counts[:,3]
+{'A': 3, 'C': 0, 'T': 1, 'G': 0}
+\end{verbatim}
+Instead of the nucleotide itself, you can also use the index of the nucleotide
+in the sorted letters in the alphabet of the motif:
+%cont-doctest
+\begin{verbatim}
+>>> m.alphabet
+IUPACUnambiguousDNA()
+>>> m.alphabet.letters
+'GATC'
+>>> sorted(m.alphabet.letters)
+['A', 'C', 'G', 'T']
+>>> m.counts['A',:]
+(0, 4, 0, 3, 4)
+>>> m.counts[0,:]
+(0, 4, 0, 3, 4)
+\end{verbatim}
+The motif has an associated consensus sequence, defined as the sequence of
+letters along the positions of the motif for which the largest value in the 
+corresponding columns of the \verb+.counts+ matrix is obtained:
+%cont-doctest
+\begin{verbatim}
 >>> m.consensus
 Seq('TATAA', IUPACUnambiguousDNA())
 \end{verbatim}
-In case of DNA motifs, we can also get a reverse complement of a motif:
+as well as an anticonsensus sequence, corresponding to the smallest values in
+the columns of the \verb+.counts+ matrix:
+%cont-doctest
+\begin{verbatim}
+>>> m.anticonsensus
+Seq('GGGGG', IUPACUnambiguousDNA())
+\end{verbatim}
+You can also ask for a degenerate consensus sequence, in which ambiguous
+nucleotides are used for positions where there are multiple nucleotides with
+high counts. For example, if
+%cont-doctest
+\begin{verbatim}
+>>> instances = [Seq("TACAA"),
+...              Seq("TACTA"),
+...              Seq("TAGAC"),
+...              Seq("TAGAC"),
+...              Seq("AAATC"),
+...              Seq("AATAA"),
+...              Seq("AATAA"),
+...             ]
+\end{verbatim}
+then the consensus nucleotide at positions 0, 2, and 4 are ambiguous:
+%cont-doctest
+\begin{verbatim}
+>>> mm = Motif.Motif(instances=instances)
+>>> mm.degenerate_consensus
+Seq('WANAM', IUPACAmbiguousDNA())
+\end{verbatim}
+Here, W, N, and M follow the IUPAC nucleotide ambiguity codes: W is either A or T, M is either A or C, and N is any nucleotide \cite{cornish1985}. The degenerate consensus sequence is constructed followed the rules specified by Cavener \cite{cavener1987}.
+
+We can also get a reverse complement of a motif:
 %>>> m.reverse_complement()
 %<Bio.Motif.Motif.Motif object at 0xb39890>
 %cont-doctest
@@ -10810,6 +10879,10 @@ TTATA
 TTATA
 \end{verbatim}
 
+The reverse complement and the degenerate consensus sequence are
+only defined for DNA motifs.
+
+\section{Position-Weight Matrices}
 We can also calculate the information content of a motif with a simple call:
 %cont-doctest
 \begin{verbatim}
@@ -16331,6 +16404,10 @@ Peter J. A. Cock, Christopher J. Fields, Naohisa Goto, Michael L. Heuer, Peter M
 Patrick O. Brown, David Botstein: ``Exploring the new world of the genome with DNA microarrays''. \textit{Nature Genetics} {\bf 21} (Supplement 1), 33--37 (1999). \href{http://dx.doi.org/10.1038/4462}{doi:10.1038/4462}
 \bibitem{talevich2012}
 Eric Talevich, Brandon M. Invergo, Peter J.A. Cock, Brad A. Chapman: ``Bio.Phylo: A unified toolkit for processing, analyzing and visualizing phylogenetic trees in Biopython''.  \textit{BMC Bioinformatics} {\bf 13}: 209 (2012).  \href{http://dx.doi.org/10.1186/1471-2105-13-209}{doi:10.1186/1471-2105-13-209}
+\bibitem{cornish1985}
+Athel Cornish-Bowden: ``Nomenclature for incompletely specified bases in nucleic acid sequences: Recommendations 1984.'' \textit{Nucleic Acids Research} {\bf 13} (9): 3021--3030 (1985). \href{http://dx.doi.org/10.1093/nar/13.9.3021}{doi:10.1093/nar/13.9.3021}
+\bibitem{cavener1987}
+Douglas R. Cavener: ``Comparison of the consensus sequence flanking translational start sites in Drosophila and vertebrates.'' \textit{Nucleic Acids Research} {\bf 15} (4): 1353--1361 (1987). \href{http://dx.doi.org/10.1093/nar/15.4.1353}{doi:10.1093/nar/15.4.1353}
 \bibitem{dehoon2004}
 Michiel J. L. de Hoon, Seiya Imoto, John Nolan, Satoru Miyano: ``Open source clustering software''. \textit{Bioinformatics} {\bf 20} (9): 1453--1454 (2004). \href{http://dx.doi.org/10.1093/bioinformatics/bth078}{doi:10.1093/bioinformatics/bth078}
 \bibitem{eisen1998}
