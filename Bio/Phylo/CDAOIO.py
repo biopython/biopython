@@ -124,13 +124,12 @@ class Parser(object):
         
         query ='''
         PREFIX cdao: <%s>
-        PREFIX rdf: <%s>
         SELECT * WHERE 
         {
-            ?tree rdf:type cdao:RootedTree .
-            ?tree cdao:has_root ?root_node .
+            ?tree a cdao:RootedTree ;
+                  cdao:has_root ?root_node .
         }
-        ''' % (self.urls['cdao'], self.urls['rdf'])
+        ''' % (self.urls['cdao'])
         q = RDF.Query(query, query_language='sparql')
         
         for result in q.execute(model):
@@ -167,13 +166,13 @@ class Parser(object):
         PREFIX rdf: <%s>
         SELECT * WHERE
         {
-            { ?node rdf:type cdao:TerminalNode . } UNION { ?node rdf:type cdao:AncestralNode } .
+            { ?node a cdao:TerminalNode . } UNION { ?node a cdao:AncestralNode } .
         
             OPTIONAL 
             {
                 ?edge cdao:has_Child_Node ?node ;
                       cdao:has_annotation ?annotation .
-                ?annotation rdf:type cdao:EdgeLength ;
+                ?annotation a cdao:EdgeLength ;
                             cdao:has_value ?branch_length .
             } .
             OPTIONAL
@@ -202,19 +201,16 @@ class Parser(object):
         
         query = '''
         PREFIX cdao: <%s>
-        PREFIX rdf: <%s>
         SELECT * WHERE 
         {
             ?child_node cdao:has_Parent <%s> .
         }
-        ''' % (self.urls['cdao'], self.urls['rdf'], node)
-        #print query
+        ''' % (self.urls['cdao'], node)
         q = RDF.Query(query, query_language='sparql')
         
         children = []
         
         for result in q.execute(model):
-            print result
             
             child_node = result['child_node']
             clade = self.new_clade(child_node)
