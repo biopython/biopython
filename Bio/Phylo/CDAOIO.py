@@ -101,8 +101,9 @@ class Parser(object):
         if parser is None:
             raise Exception('Failed to create RDF.Parser for MIME type %s' % mime_type)
         
-        uri = RDF.Uri(string="file:"+self.handle.name)
-        statements = parser.parse_string_as_stream(self.handle.read(), uri)
+        if 'base_uri' in kwargs: base_uri = kwargs['base_uri']
+        else: base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
+        statements = parser.parse_string_as_stream(self.handle.read(), base_uri)
         for s in statements:
             model.append(s)
             
@@ -253,7 +254,7 @@ class Writer(object):
         self.serialize_model(handle, mime_type=mime_type)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, base_uri=''):
+    def add_trees_to_model(self, trees=None, storage=None, base_uri='http://localhost/'):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
@@ -281,13 +282,13 @@ class Writer(object):
         Redland.librdf_model_transaction_start(model._model)
         
         for stmt in [(Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology'))]:
-            model.add_statement(RDF.Statement(*stmt))
+            model.append(RDF.Statement(*stmt))
 
         for tree in trees:
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=True)
             for stmt in statements:
-                model.add_statement(stmt)
+                model.append(stmt)
                 
         Redland.librdf_model_transaction_commit(model._model)
             
