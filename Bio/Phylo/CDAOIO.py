@@ -115,9 +115,49 @@ class Parser(object):
         # TODO: create a Tree object from RDF model
         # get all cdao:RootedTree instances, then start tree creation at the 
         # node designated by cdao:has_root
+
+        query ='''
+        PREFIX cdao: <%s>
+        PREFIX rdf: <%s>
+        SELECT * WHERE 
+        {
+            ?tree rdf:type cdao:RootedTree .
+            ?tree cdao:has_root ?root_node .
+        }
+        ''' % (self.urls['cdao'], self.urls['rdf'])
+        q = RDF.Query(query, query_language='sparql')
         
+        for result in q.execute(model):
+            root_node = result['root_node']
+            clade = Newick.Clade(comment=str(root_node))
+            clade.clades = self.parse_children(root_node, model)
+            
+            yield Newick.Tree(root=clade, rooted=True)
+            
+    def parse_children(self, node, model):
+        RDF = import_rdf()
         
+        query = '''
+        PREFIX cdao: <%s>
+        PREFIX rdf: <%s>
+        SELECT * WHERE 
+        {
+            ?child_node cdao:has_Parent <%s> .
+        }
+        ''' % (self.urls['cdao'], self.urls['rdf'], node)
+        q = RDF.Query(query, query_language='sparql')
         
+        children = []
+        
+        for result in q.execute(model):
+            child_node = result['child_node']
+            #branch_length = result['branch_length']
+            clade = Newick.Clade(comment=str(child_node))
+            #clade.branch_length = branch_length
+            clade.clades = self.parse_children(child_node, model)
+            children.append(clade)
+        
+        return children
 
 
 # ---------------------------------------------------------
