@@ -12,6 +12,10 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Bio.SeqIO.Interfaces
+====================
+Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
+
 Bio.HotRand
 ===========
 Obsolete file Bio/HotRand.py was deprecated in Release 1.61, consider using
@@ -55,7 +59,7 @@ and removed in Release 1.59.
 Bio.Parsers and Bio.Parsers.spark
 =================================
 This module was a copy of John Aycock's SPARK parser included with Biopython
-soley for use in Bio.GenBank.LocationParser. Declared obsolete in Release
+solely for use in Bio.GenBank.LocationParser. Declared obsolete in Release
 1.55, deprecated in Release 1.56, and removed in Release 1.59.
 
 Bio.Restriction.DNAUtils and check_bases
@@ -394,7 +398,7 @@ Function 'reverse' in Bio.SeqUtils was deprecated in Release 1.54, and
 removed in Release 1.58. Instead just use the string's slice method with
 a step of minus one.
 
-Funtions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
+Functions GC_Frame, fasta_uniqids, apply_on_multi_fasta, and
 quicker_apply_on_multi_fasta were deprecated in Release 1.55, and removed
 in Release 1.58.
 
@@ -420,7 +424,7 @@ Use Bio.SeqUtils instead.
 Bio.SVM
 =======
 Deprecated as of Release 1.30, removed in Release 1.42.
-The Support Vector Machine code in Biopython has been superceeded by a 
+The Support Vector Machine code in Biopython has been superseded by a 
 more robust (and maintained) SVM library, which includes a python
 interface. We recommend using LIBSVM:
 

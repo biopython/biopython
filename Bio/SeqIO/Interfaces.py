@@ -66,26 +66,9 @@ class SequenceIterator(object):
 
 
 class InterlacedSequenceIterator(SequenceIterator):
-    """Base class for any iterator of a non-sequential file type.
+    """Base class for any iterator of a non-sequential file type (DEPRECATED).
 
-    This object is not intended for use directly.
-
-    When writing a parser for any interlaced sequence file where the whole
-    file must be read in order to extract any single record, then you should
-    subclass this object.
-
-    All you need to do is to define your own:
-    (1) __init__ method to parse the file and call self.move_start()
-    (2) __len__ method to return the number of records
-    (3) __getitem__ to return any requested record.
-
-    This class will then provide the iterator methods including next(), but relies
-    on knowing the total number of records and tracking the pending record index in
-    as self._n
-
-    It is up to the subclassed object to decide if it wants to generate a cache of
-    SeqRecords when initialised, or simply use its own lists and dicts and create
-    SeqRecords on request.
+    This object was not intended for direct use, and is now deprecated.
     """
 
     def __init__(self):

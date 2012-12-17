@@ -217,7 +217,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
         self.parameters = [
             #Sorted in the same order as the output from blastall --help
             #which should make it easier to keep them up to date in future.
-            #Note that some arguments are defined the the base clases (above).
+            #Note that some arguments are defined in the base classes (above).
            _Option(["-p", "program"],
                    "The blast program to use (e.g. blastp, blastn).",
                    is_required=True,

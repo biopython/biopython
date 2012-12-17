@@ -34,7 +34,7 @@ class HSP(_BaseHSP):
     with one HSPFragments are BLAST, HMMER, and FASTA. Other programs such as
     BLAT or Exonerate may produce HSPs containing more than one HSPFragment.
     However, their native terminologies may differ: in BLAT these fragments
-    are called 'blocks' while in in Exonerate they are called exons or NER.
+    are called 'blocks' while in Exonerate they are called exons or NER.
 
     Here are examples from each type of HSP. The first one comes from a BLAST
     search:

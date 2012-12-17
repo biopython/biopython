@@ -18,7 +18,7 @@ class Residues(object):
     """A collection of residues from a PDB structure.
 
     This class provides code to work with SCOP domain definitions. These
-    are concisely expressed as a one or more chain fragments. For example,
+    are concisely expressed as one or more chain fragments. For example,
     "(1bba A:10-20,B:)" indicates residue 10 through 20 (inclusive) of
     chain A, and every residue of chain B in the pdb structure 1bba. The pdb
     id and brackets are optional. In addition "-" indicates every residue of

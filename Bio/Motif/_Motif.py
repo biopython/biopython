@@ -13,19 +13,454 @@ import warnings
 from Bio import BiopythonExperimentalWarning
 
 
-class ConsensusSeq(Seq):
-    # This is an ugly hack that allows us raise a warning if a user attempts
-    # to call the method motif.consensus() instead of accessing the property
-    # motif.consensus. It can be removed after consensus() as a method has
-    # been removed from Biopython. Same thing for motif.anticonsensus.
-    def __call__(self):
-        warnings.warn("""\
-Motif.consensus and Motif.anticonsensus are now properties instead of methods.
-Please use yourmotif.consensus instead of yourmotif.consensus(), and
-yourmotif.anticonsensus instead of yourmotif.anticonsensus()""",
-            PendingDeprecationWarning)
-        return self
-ConsensusSeq.__name__ = Seq.__name__
+class GenericPositionMatrix(dict):
+
+    def __init__(self, alphabet, values):
+        self.length = None
+        for letter in alphabet.letters:
+            if self.length is None:
+                self.length = len(values[letter])
+            elif self.length!=len(values[letter]):
+                raise Exception("Inconsistent lengths found in dictionary")
+            self[letter] = list(values[letter])
+        self.alphabet = alphabet
+        self.__letters = sorted(self.alphabet.letters)
+
+    def __getitem__(self, key):
+        if isinstance(key, tuple):
+            if len(key)==2:
+                key1, key2 = key
+                if isinstance(key1, slice):
+                    start1, stop1, stride1 = key1.indices(self.length)
+                    indices1 = range(start1, stop1, stride1)
+                    letters1 = [self.__letters[i] for i in indices1]
+                    dim1 = 2
+                elif isinstance(key1, int):
+                    letter1 = self.__letters[key1]
+                    dim1 = 1
+                elif isinstance(key1, tuple):
+                    letters1 = [self.__letters[i] for i in key1]
+                    dim1 = 2
+                elif isinstance(key1, str):
+                    if len(key1)==1:
+                        letter1 = key1
+                        dim1 = 1
+                    else:
+                        raise KeyError(key1)
+                else:
+                    raise KeyError("Cannot understand key %s", str(key1))
+                if isinstance(key2, slice):
+                    start2, stop2, stride2 = key2.indices(self.length)
+                    indices2 = range(start2, stop2, stride2)
+                    dim2 = 2
+                elif isinstance(key2, int):
+                    index2 = key2
+                    dim2 = 1
+                else:
+                    raise KeyError("Cannot understand key %s", str(key2))
+                if dim1==1 and dim2==1:
+                    return dict.__getitem__(self, letter1)[index2]
+                elif dim1==1 and dim2==2:
+                    values = dict.__getitem__(self, letter1)
+                    return tuple(values[index2] for index2 in indices2)
+                elif dim1==2 and dim2==1:
+                    d = {}
+                    for letter1 in letters1:
+                        d[letter1] = dict.__getitem__(self, letter1)[index2]
+                    return d
+                else:
+                    d = {}
+                    for letter1 in letters1:
+                        values = dict.__getitem__(self, letter1)
+                        d[letter1] = [values[index2] for index2 in indices2]
+                    if sorted(letters1)==self.__letters:
+                        return self.__class__(self.alphabet, d)
+                    else:
+                        return d
+            elif len(key)==1:
+                key = key[0]
+            else:
+                raise KeyError("keys should be 1- or 2-dimensional")
+        if isinstance(key, slice):
+            start, stop, stride = key.indices(self.length)
+            indices = range(start, stop, stride)
+            letters = [self.__letters[i] for i in indices]
+            dim = 2
+        elif isinstance(key, int):
+            letter = self.__letters[key]
+            dim = 1
+        elif isinstance(key, tuple):
+            letters = [self.__letters[i] for i in key]
+            dim = 2
+        elif isinstance(key, str):
+            if len(key)==1:
+                letter = key
+                dim = 1
+            else:
+                raise KeyError(key)
+        else:
+            raise KeyError("Cannot understand key %s", str(key))
+        if dim==1:
+            return dict.__getitem__(self, letter)
+        elif dim==2:
+            d = {}
+            for letter in letters:
+                d[letter] = dict.__getitem__(self, letter)
+            return d
+        else:
+            raise RuntimeError("Should not get here")
+        
+    @property
+    def consensus(self):
+        """Returns the consensus sequence.
+        """
+        sequence = ""
+        for i in range(self.length):
+            maximum = float("-inf")
+            for letter in self.alphabet.letters:
+                count = self[letter][i]
+                if count > maximum:
+                    maximum = count
+                    sequence_letter = letter
+            sequence += sequence_letter
+        return Seq(sequence, self.alphabet)
+
+    @property
+    def anticonsensus(self):
+        sequence = ""
+        for i in range(self.length):
+            minimum = float("+inf")
+            for letter in self.alphabet.letters:
+                count = self.counts[letter][i]
+                if count < minimum:
+                    minimum = count
+                    sequence_letter = letter
+            sequence += sequence_letter
+        return Seq(sequence, self.alphabet)
+
+    @property
+    def degenerate_consensus(self):
+        # Following the rules adapted from
+        # D. R. Cavener: "Comparison of the consensus sequence flanking
+        # translational start sites in Drosophila and vertebrates."
+        # Nucleic Acids Research 15(4): 1353-1361. (1987).
+        # The same rules are used by TRANSFAC.
+        degenerate_nucleotide = {
+            'A': 'A',
+            'C': 'C',
+            'G': 'G',
+            'T': 'T',
+            'AC': 'M',
+            'AG': 'R',
+            'AT': 'W',
+            'CG': 'S',
+            'CT': 'Y',
+            'GT': 'K',
+            'ACG': 'V',
+            'ACT': 'H',
+            'AGT': 'D',
+            'CGT': 'B',
+            'ACGT': 'N',
+        }
+        sequence = ""
+        for i in range(self.length):
+            def get(nucleotide):
+                return self[nucleotide][i]
+            nucleotides = sorted(self, key=get, reverse=True)
+            counts = [self[c][i] for c in nucleotides]
+            # Follow the Cavener rules:
+            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
+                key = nucleotides[0]
+            elif 4*sum(counts[:2]) > 3*sum(counts):
+                key = "".join(sorted(nucleotides[:2]))
+            elif counts[3]==0:
+                key = "".join(sorted(nucleotides[:3]))
+            else:
+                key = "ACGT"
+            nucleotide = degenerate_nucleotide[key]
+            sequence += nucleotide
+        return Seq(sequence, alphabet = IUPAC.ambiguous_dna)
+
+    def reverse_complement(self):
+        values = {}
+        values["A"] = self["T"][::-1]
+        values["T"] = self["A"][::-1]
+        values["G"] = self["C"][::-1]
+        values["C"] = self["G"][::-1]
+        alphabet = self.alphabet
+        return self.__class__(alphabet, values)
+
+
+class FrequencyPositionMatrix(GenericPositionMatrix):
+
+    def normalize(self, pseudocounts=None):
+        """
+        create and return a position-weight matrix by normalizing the counts matrix.
+
+        If pseudocounts is None (default), no pseudocounts are added
+        to the counts.
+        If pseudocounts is a number, it is added to the counts before
+        calculating the position-weight matrix.
+        Alternatively, the pseudocounts can be a dictionary with a key
+        for each letter in the alphabet associated with the motif.
+        """
+
+        counts = {}
+        if pseudocounts is None:
+            for letter in self.alphabet.letters:
+                counts[letter] = [0.0] * self.length
+        elif isinstance(pseudocounts, dict):
+            for letter in self.alphabet.letters:
+                counts[letter] = [float(pseudocounts[letter])] * self.length
+        else:
+            for letter in self.alphabet.letters:
+                counts[letter] = [float(pseudocounts)] * self.length
+        for i in xrange(self.length):
+            for letter in self.alphabet.letters:
+                counts[letter][i] += self[letter][i]
+        # Actual normalization is done in the PositionWeightMatrix initializer
+        return PositionWeightMatrix(self.alphabet, counts)
+
+
+class PositionWeightMatrix(GenericPositionMatrix):
+
+    def __init__(self, alphabet, counts):
+        GenericPositionMatrix.__init__(self, alphabet, counts)
+        for i in xrange(self.length):
+            total = sum([float(self[letter][i]) for letter in alphabet.letters])
+            for letter in alphabet.letters:
+                self[letter][i] /= total
+        for letter in alphabet.letters:
+            self[letter] = tuple(self[letter])
+
+    def ic(self, background=None):
+        """\
+Returns the information content of a motif.
+
+By default, a uniform background is used. To specify a non-uniform
+background, use the 'background' argument to pass a dictionary containing
+the probability of each letter in the alphabet associated with the motif
+under the background distribution.
+        """
+        result=0
+        if background is None:
+            background = {}
+            for a in self.alphabet.letters:
+                background[a] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for a in self.alphabet.letters:
+            background[a] /= total
+        for a in self.alphabet.letters:
+            if background[a]!=0:
+                result-=background[a]*math.log(background[a],2)
+        result *= self.length
+        for i in range(self.length):
+            for a in self.alphabet.letters:
+                if self[a][i]!=0:
+                    result+=self[a][i]*math.log(self[a][i],2)
+        return result
+
+    def exp_score(self, background=None):
+        """
+        Computes expected score of motif's instance and its standard deviation
+        """
+        exs = 0.0
+        var = 0.0
+        if background is None:
+            background = {}
+            for letter in self.alphabet.letters:
+                background[letter] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in self.alphabet.letters:
+            background[a] /= total
+        for i in range(self.length):
+            ex1 = 0.0
+            ex2 = 0.0
+            for letter in self.alphabet.letters:
+                p = self[i][letter]
+                b = background[letter]
+                if p!=0:
+                    term = p*(math.log(p,2)-math.log(b,2))
+                    ex1 += term
+                    ex2 += term**2
+            exs += ex1
+            var += ex2-ex1**2
+        return exs, math.sqrt(var)
+
+    def make_pssm(self, background=None):
+        """
+        returns the Position-Specific Scoring Matrix.
+
+        The Position-Specific Scoring Matrix (PSSM) contains the log-odds
+        scores computed from the probability matrix and the background
+        probabilities. If the background is None, a uniform background
+        distribution is assumed.
+        """
+        values = {}
+        alphabet = self.alphabet
+        if background is None:
+            background = {}
+            for letter in alphabet.letters:
+                background[letter] = 1.0
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in alphabet.letters:
+            background[letter] /= total
+        for letter in alphabet.letters:
+            values[letter] = []
+            b = background[letter]
+            if b > 0:
+                for i in range(self.length):
+                    p = self[letter][i]
+                    if p > 0:
+                        logodds = math.log(p/b, 2)
+                    else:
+                        logodds = float("-inf")
+                    values[letter].append(logodds)
+            else:
+                for i in range(self.length):
+                    p = self[letter][i]
+                    if p > 0:
+                        logodds = float("inf")
+                    else:
+                        logodds = float("nan")
+                    values[letter].append(logodds)
+        return PositionSpecificScoringMatrix(alphabet, values)
+
+    def dist_pearson(self, pwm):
+        """
+        return the similarity score based on pearson correlation for the given motif against self.
+
+        We use the Pearson's correlation of the respective probabilities.
+        """
+
+        if self.alphabet != pwm.alphabet:
+            raise ValueError("Cannot compare motifs with different alphabets")
+
+        max_p=-2
+        for offset in range(-self.length+1, pwm.length):
+            if offset<0:
+                p = self.dist_pearson_at(pwm,-offset)
+            else:  # offset>=0
+                p = pwm.dist_pearson_at(self,offset)
+
+            if max_p<p:
+                max_p=p
+                max_o=-offset
+        return 1-max_p,max_o
+
+    def dist_pearson_at(self, pwm, offset):
+        sxx = 0  # \sum x^2
+        sxy = 0  # \sum x \cdot y
+        sx = 0   # \sum x
+        sy = 0   # \sum y
+        syy = 0  # \sum y^2
+        norm=max(self.length,offset+pwm.length)
+
+        for pos in range(max(self.length,offset+pwm.length)):
+            for l in self.alphabet.letters:
+                xi = self[l][pos]
+                yi = pwm[l][pos-offset]
+                sx = sx + xi
+                sy = sy + yi
+                sxx = sxx + xi * xi
+                syy = syy + yi * yi
+                sxy = sxy + xi * yi
+
+        norm *= len(self.alphabet.letters)
+        s1 = (sxy - sx*sy*1.0/norm)
+        s2 = (norm*sxx - sx*sx*1.0)*(norm*syy- sy*sy*1.0)
+        return s1/math.sqrt(s2)
+
+
+class PositionSpecificScoringMatrix(GenericPositionMatrix):
+
+    def calculate(self, sequence):
+        """
+        returns the PWM score for a given sequence for all positions.
+
+        - the sequence can only be a DNA sequence
+        - the search is performed only on one strand
+        - if the sequence and the motif have the same length, a single
+          number is returned
+        - otherwise, the result is a one-dimensional list or numpy array
+        """
+        if self.alphabet!=IUPAC.unambiguous_dna:
+            raise ValueError("Wrong alphabet! Use only with DNA motifs")
+        if sequence.alphabet!=IUPAC.unambiguous_dna:
+            raise ValueError("Wrong alphabet! Use only with DNA sequences")
+
+        sequence = str(sequence)
+        m = self.length
+        n = len(sequence)
+
+        scores = []
+        # check if the fast C code can be used
+        try:
+            import _pwm
+        except ImportError:
+            # use the slower Python code otherwise
+            for i in xrange(n-m+1):
+                score = 0.0
+                for position in xrange(m):
+                    letter = sequence[i+position]
+                    score += self[letter][position]
+                scores.append(score)
+        else:
+            # get the log-odds matrix into a proper shape
+            # (each row contains sorted (ACGT) log-odds values)
+            logodds = [[self[letter][i] for letter in "ACGT"] for i in range(m)]
+            scores = _pwm.calculate(sequence, logodds)
+        if len(scores)==1:
+            return scores[0]
+        else:
+            return scores
+
+    def search(self, sequence, threshold=0.0, both=True):
+        """
+        a generator function, returning found hits in a given sequence with the pwm score higher than the threshold
+        """
+        sequence = sequence.upper()
+        n = len(sequence)
+        m = self.length
+        if both:
+            rc = self.reverse_complement()
+        for position in xrange(0,n-m+1):
+            s = sequence[position:position+m]
+            score = self.calculate(s)
+            if score > threshold:
+                yield (position, score)
+            if both:
+                score = rc.calculate(s)
+                if score > threshold:
+                    yield (position-n, score)
+
+    def max_score(self):
+        """Maximal possible score for this motif.
+
+        returns the score computed for the consensus sequence.
+        """
+        score = 0.0
+        letters = self.alphabet
+        for position in xrange(0,self.length):
+            score += max([self[letter][position] for letter in letters])
+        return score
+
+    def min_score(self):
+        """Minimal possible score for this motif.
+
+        returns the score computed for the anticonsensus sequence.
+        """
+        score = 0.0
+        letters = self.alphabet
+        for position in xrange(0,self.length):
+            score += min([self[letter][position] for letter in letters])
+        return score
 
 
 class Motif(object):
@@ -54,7 +489,7 @@ class Motif(object):
                 elif self.length!=length:
                     raise Exception("counts matrix has inconsistent lengths")
             self.instances = None
-            self.counts = counts
+            self.counts = FrequencyPositionMatrix(alphabet, counts)
         elif instances is not None:
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
@@ -73,12 +508,13 @@ class Motif(object):
                 # If we didn't get a meaningful alphabet from the instances,
                 # assume it is DNA.
                 alphabet = IUPAC.unambiguous_dna
-            self.counts = {}
+            counts = {}
             for letter in alphabet.letters:
-                self.counts[letter] = [0] * self.length
+                counts[letter] = [0] * self.length
             for instance in self.instances:
                 for position, letter in enumerate(instance):
-                    self.counts[letter][position] += 1
+                    counts[letter][position] += 1
+            self.counts = FrequencyPositionMatrix(alphabet, counts)
         else:
             self.counts = None
             self.instances = None
@@ -110,6 +546,10 @@ class Motif(object):
         return self.counts is not None
 
     def _check_length(self, len):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.
+""", PendingDeprecationWarning)
         if self.length is None:
             self.length = len
         elif self.length != len:
@@ -117,6 +557,10 @@ class Motif(object):
             raise ValueError("You can't change the length of the motif")
 
     def _check_alphabet(self,alphabet):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.
+""", PendingDeprecationWarning)
         if self.alphabet is None:
             self.alphabet=alphabet
         elif self.alphabet != alphabet:
@@ -126,6 +570,11 @@ class Motif(object):
         """
         adds new instance to the motif
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. Instead of adding instances to an existing
+Motif object, please create a new Motif object.
+""", PendingDeprecationWarning)
         self._check_alphabet(instance.alphabet)
         self._check_length(len(instance))
         if self.counts is not None:
@@ -197,6 +646,15 @@ please use
         if laplace=True (default), pseudocounts equal to self.background multiplied by self.beta are added to all positions.
         """
 
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.pwm()
+use
+>>> pwm = motif.counts.normalize()
+See the documentation of motif.counts.normalize and pwm.make_pssm for
+details on treatment of pseudocounts and background probabilities.
+""", PendingDeprecationWarning)
         if self._pwm_is_current:
             return self._pwm
         #we need to compute new pwm
@@ -225,38 +683,20 @@ please use
         self._pwm_is_current=1
         return self._pwm
 
-    def make_pwm(self, pseudocounts=None):
-        """
-        return the position-weight matrix (calculated from the counts
-        matrix).
-
-        If pseudocounts is None (default), no pseudocounts are added
-        to the counts.
-        If pseudocounts is a number, it is added to the counts before
-        calculating the position-weight matrix.
-        Alternatively, the pseudocounts can be a dictionary with a key
-        for each letter in the alphabet associated with the motif.
-        """
-
-        counts = {}
-        if pseudocounts==None:
-            for letter in self.alphabet.letters:
-                counts[letter] = [0.0] * self.length
-        elif isinstance(pseudocounts, dict):
-            for letter in self.alphabet.letters:
-                counts[letter] = [float(pseudocounts[letter])] * self.length
-        else:
-            for letter in self.alphabet.letters:
-                counts[letter] = [float(pseudocounts)] * self.length
-        for i in xrange(self.length):
-            for letter in self.alphabet.letters:
-                counts[letter][i] += self.counts[letter][i]
-        return PositionWeightMatrix(self.alphabet, counts)
-
     def log_odds(self,laplace=True):
         """
-        returns the logg odds matrix computed for the set of instances
+        returns the log odds matrix computed for the set of instances
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.log_odds()
+use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+See the documentation of motif.counts.normalize and pwm.make_pssm for
+details on treatment of pseudocounts and background probabilities.
+""", PendingDeprecationWarning)
         if self._log_odds_is_current:
             return self._log_odds
         #we need to compute new pwm
@@ -278,11 +718,11 @@ This function is now obsolete, and will be deprecated and removed
 in a future release of Biopython. As a replacement, instead of
 >>> motif.ic()
 please use
->>> pwm = motif.make_pwm()
+>>> pwm = motif.counts.normalize()
 >>> pwm.ic()
-Please be aware though that by default, motif.make_pwm() does not
-use psuedocounts, while motif.ic() does. See the documentation of
-motif.make_pwm for more details.
+Please be aware though that by default, motif.counts.normalize()
+does not use psuedocounts, while motif.ic() does. See the documentation
+of motif.counts.normalize for more details.
 """, PendingDeprecationWarning)
         res=0
         pwm=self.pwm()
@@ -297,6 +737,16 @@ motif.make_pwm for more details.
         """
         Computes expected score of motif's instance and its standard deviation
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.exp_score()
+please use
+>>> pwm = motif.counts.normalize()
+>>> pwm.exp_score()
+See the documentation of motif.counts.normalize for details on treatment of
+pseudocounts.
+""", PendingDeprecationWarning)
         exs=0.0
         var=0.0
         pwm=self.pwm()
@@ -330,6 +780,18 @@ motif.make_pwm for more details.
         """
         give the pwm score for a given position
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.score_hit(sequence, position)
+please use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+>>> s = sequence[position:positon+len(pssm)]
+>>> pssm.calculate(s)
+See the documentation of motif.counts.normalize() and pwm.make_pssm
+for details on the treatment of pseudocounts and background probabilities.
+""", PendingDeprecationWarning)
         lo=self.log_odds()
         score = 0.0
         for pos in xrange(self.length):
@@ -350,6 +812,18 @@ motif.make_pwm for more details.
         """
         a generator function, returning found hits in a given sequence with the pwm score higher than the threshold
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.score_hit(sequence, position)
+please use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+>>> pssm.search(sequence)
+See the documentation of motif.counts.normalize() and pwm.make_pssm
+for details on treatment of pseudocounts and background probabilities.
+""", PendingDeprecationWarning)
+        raise Exception
         if both:
             rc = self.reverse_complement()
 
@@ -370,6 +844,17 @@ motif.make_pwm for more details.
 
         We use the Pearson's correlation of the respective probabilities.
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif1.dist_pearson(motif2)
+please use
+>>> pwm1 = motif1.counts.normalize()
+>>> pwm2 = motif2.counts.normalize()
+>>> pwm1.dist_pearson(pwm2)
+Please see the documentation of motif.counts.normalize and
+pwm.dist_pearson for more details.
+""", PendingDeprecationWarning)
 
         if self.alphabet != motif.alphabet:
             raise ValueError("Cannot compare motifs with different alphabets")
@@ -387,11 +872,14 @@ motif.make_pwm for more details.
         return 1-max_p,max_o
 
     def dist_pearson_at(self,motif,offset):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.""", PendingDeprecationWarning)
         sxx = 0  # \sum x^2
         sxy = 0  # \sum x \cdot y
         sx = 0   # \sum x
         sy = 0   # \sum y
-        syy = 0  # \sum x^2
+        syy = 0  # \sum y^2
         norm=max(self.length,offset+motif.length)
 
         for pos in range(max(self.length,offset+motif.length)):
@@ -413,6 +901,9 @@ motif.make_pwm for more details.
         """
         A similarity measure taking into account a product probability of generating overlaping instances of two motifs
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.""", PendingDeprecationWarning)
         max_p=0.0
         for offset in range(-self.length+1,other.length):
             if offset<0:
@@ -425,6 +916,9 @@ motif.make_pwm for more details.
         return 1-max_p/self.dist_product_at(self,0),max_o
 
     def dist_product_at(self,other,offset):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.""", PendingDeprecationWarning)
         s=0
         for i in range(max(self.length,offset+other.length)):
             f1=self[i]
@@ -434,6 +928,9 @@ motif.make_pwm for more details.
         return s/i
 
     def dist_dpq(self,other):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.""", PendingDeprecationWarning)
         r"""Calculates the DPQ distance measure between motifs.
 
         It is calculated as a maximal value of DPQ formula (shown using LaTeX
@@ -475,6 +972,9 @@ motif.make_pwm for more details.
         return min_d,min_o  # ,d_s
 
     def dist_dpq_at(self,other,offset):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.""", PendingDeprecationWarning)
         """
         calculates the dist_dpq measure with a given offset.
 
@@ -540,6 +1040,9 @@ motif.make_pwm for more details.
         """
         writes the motif to the stream
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.""")
 
         stream.write(self.__str__())
 
@@ -547,10 +1050,10 @@ motif.make_pwm for more details.
         """
         FASTA representation of motif
         """
-        warnings.warn("""\
-This function is now obsolete, and will be deprecated and removed in
-a future release of Biopython.""", PendingDeprecationWarning)
         if self.instances is None:
+            warnings.warn("""\
+Creating simulated instances of a motif is now obsolete. This functionality
+will be deprecated and removed in a future release of Biopython.""", PendingDeprecationWarning)
             alpha="".join(self.alphabet.letters)
             #col[i] is a column taken from aligned motif instances
             col=[]
@@ -572,10 +1075,10 @@ a future release of Biopython.""", PendingDeprecationWarning)
                 instances.append(instance)
         else:
             instances = self.instances
-        string = ""
+        text = ""
         for i, instance in enumerate(instances):
-            string += ">instance%d\n%s\n "% (i, instance)
-        return string
+            text += ">instance%d\n%s\n" % (i, instance)
+        return text
 
     def reverse_complement(self):
         """
@@ -591,14 +1094,10 @@ a future release of Biopython.""", PendingDeprecationWarning)
             alphabet = self.alphabet
             res = Motif(alphabet)
             res.counts={}
-            res.counts["A"]=self.counts["T"][:]
-            res.counts["T"]=self.counts["A"][:]
-            res.counts["G"]=self.counts["C"][:]
-            res.counts["C"]=self.counts["G"][:]
-            res.counts["A"].reverse()
-            res.counts["C"].reverse()
-            res.counts["G"].reverse()
-            res.counts["T"].reverse()
+            res.counts["A"]=self.counts["T"][::-1]
+            res.counts["T"]=self.counts["A"][::-1]
+            res.counts["G"]=self.counts["C"][::-1]
+            res.counts["C"]=self.counts["G"][::-1]
             res.length=self.length
         res.__mask = self.__mask[::-1]
         return res
@@ -694,6 +1193,8 @@ a future release of Biopython.""", PendingDeprecationWarning)
         """Creates the count matrix for a motif with instances.
 
         """
+        warnings.warn("This function is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
+        raise Exception(remove)
         #make strings for "columns" of motifs
         #col[i] is a column taken from aligned motif instances
         counts={}
@@ -745,48 +1246,46 @@ a future release of Biopython.""", PendingDeprecationWarning)
 
         If the requested index is out of bounds, the returned distribution comes from background.
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. Instead of
+>>> motif[i]
+please use
+>>> pwm = motif.counts.normalize()
+>>> pwm[:,i]
+""", PendingDeprecationWarning)
         if index in range(self.length):
             return self.pwm()[index]
         else:
             return self.background
 
+    class ConsensusSeq(Seq):
+        # This is an ugly hack that allows us raise a warning if a user attempts
+        # to call the method motif.consensus() instead of accessing the property
+        # motif.consensus. It can be removed after consensus() as a method has
+        # been removed from Biopython. Same thing for motif.anticonsensus.
+        def __call__(self):
+            warnings.warn("""\
+Motif.consensus and Motif.anticonsensus are now properties instead of methods.
+Please use yourmotif.consensus instead of yourmotif.consensus(), and
+yourmotif.anticonsensus instead of yourmotif.anticonsensus()""",
+                PendingDeprecationWarning)
+            return self
+    ConsensusSeq.__name__ = Seq.__name__
+
     @property
     def consensus(self):
-        """Returns the consensus sequence of a motif.
+        """Returns the consensus sequence.
         """
-        res=""
-        for i in range(self.length):
-            max_f=0
-            max_n="X"
-            for n in sorted(self[i]):
-                if self[i][n]>max_f:
-                    max_f=self[i][n]
-                    max_n=n
-            res+=max_n
-        sequence = ConsensusSeq(res,self.alphabet)
-        # This is an ugly hack that allows us raise a warning if a user
-        # attempts to call the method motif.consensus() instead of accessing
-        # the property motif.consensus.
-        return sequence
+        sequence = self.counts.consensus
+        return Motif.ConsensusSeq(str(sequence), sequence.alphabet)
 
     @property
     def anticonsensus(self):
         """returns the least probable pattern to be generated from this motif.
         """
-        res=""
-        for i in range(self.length):
-            min_f=10.0
-            min_n="X"
-            for n in sorted(self[i]):
-                if self[i][n]<min_f:
-                    min_f=self[i][n]
-                    min_n=n
-            res+=min_n
-        sequence = ConsensusSeq(res,self.alphabet)
-        # This is an ugly hack that allows us raise a warning if a user
-        # attempts to call the method motif.anticonsensus() instead of
-        # accessing the property motif.anticonsensus.
-        return sequence
+        sequence = self.counts.anticonsensus
+        return Motif.ConsensusSeq(str(sequence), sequence.alphabet)
 
     @property
     def degenerate_consensus(self):
@@ -795,48 +1294,22 @@ D. R. Cavener: "Comparison of the consensus sequence flanking
 translational start sites in Drosophila and vertebrates."
 Nucleic Acids Research 15(4): 1353-1361. (1987).
 The same rules are used by TRANSFAC."""
-        degenerate_nucleotide = {
-            'A': 'A',
-            'C': 'C',
-            'G': 'G',
-            'T': 'T',
-            'AC': 'M',
-            'AG': 'R',
-            'AT': 'W',
-            'CG': 'S',
-            'CT': 'Y',
-            'GT': 'K',
-            'ACG': 'V',
-            'ACT': 'H',
-            'AGT': 'D',
-            'CGT': 'B',
-            'ACGT': 'N',
-        }
-        res = ""
-        for i in range(self.length):
-            def get(nucleotide):
-                return self.counts[nucleotide][i]
-            nucleotides = sorted(self.counts, key=get, reverse=True)
-            counts = [self.counts[c][i] for c in nucleotides]
-            # Follow the Cavener rules:
-            if counts[0] >= sum(counts[1:]) and counts[0] >= 2*counts[1]:
-                key = nucleotides[0]
-            elif 4*sum(counts[:2]) > 3*sum(counts):
-                key = "".join(sorted(nucleotides[:2]))
-            elif counts[3]==0:
-                key = "".join(sorted(nucleotides[:3]))
-            else:
-                key = "ACGT"
-            nucleotide = degenerate_nucleotide[key]
-            res += nucleotide
-        sequence = Seq(res, alphabet = IUPAC.ambiguous_dna)
-        return sequence
+        return self.counts.degenerate_consensus
 
     def max_score(self):
         """Maximal possible score for this motif.
 
         returns the score computed for the consensus sequence.
         """
+        warnings.warn("""\
+This function is now deprecated. Instead of
+>>> motif.max_score()
+please use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+>>> pssm.max_score()
+""",
+                PendingDeprecationWarning)
         return self.score_hit(self.consensus,0)
 
     def min_score(self):
@@ -844,6 +1317,15 @@ The same rules are used by TRANSFAC."""
 
         returns the score computed for the anticonsensus sequence.
         """
+        warnings.warn("""\
+This function is now deprecated. Instead of
+>>> motif.min_score()
+please use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+>>> pssm.min_score()
+""",
+                PendingDeprecationWarning)
         return self.score_hit(self.anticonsensus,0)
 
     def weblogo(self,fname,format="PNG",version="2.8.2", **kwds):
@@ -1035,31 +1517,93 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
     def _to_transfac(self):
         """Write the representation of a motif in TRANSFAC format
         """
-        res="XX\nTY Motif\n"  # header
-        try:
-            res+="ID %s\n"%self.name
-        except:
-            pass
-        res+="BF undef\nP0"
-        for a in self.alphabet.letters:
-            res+=" %s"%a
-        res+="\n"
-        if self.counts is None:
-            self.make_counts_from_instances()
-        for i in range(self.length):
-            if i<9:
-                res+="0%d"%(i+1)
-            else:
-                res+="%d"%(i+1)
-            for a in self.alphabet.letters:
-                res+=" %d"%self.counts[a][i]
-            res+="\n"
-        res+="XX\n"
-        return res
+        from Bio.Motif import TRANSFAC
+        multiple_value_keys = TRANSFAC.Motif.multiple_value_keys
+        sections = (('AC', 'AS',), # Accession
+                    ('ID',),       # ID
+                    ('DT', 'CO'),  # Date, copyright
+                    ('NA',),       # Name
+                    ('DE',),       # Short factor description
+                    ('TY',),       # Type
+                    ('OS', 'OC'),  # Organism
+                    ('HP', 'HC'),  # Superfamilies, subfamilies
+                    ('BF',),       # Binding factors
+                    ('P0',),       # Frequency matrix
+                    ('BA',),       # Statistical basis
+                    ('BS',),       # Factor binding sites
+                    ('CC',),       # Comments
+                    ('DR',),       # External databases
+                    ('OV', 'PV',), # Versions
+                   )
+        lines = []
+        for section in sections:
+            blank = False
+            for key in section:
+                if key=='P0':
+                    # Frequency matrix
+                    length = self.length
+                    if length==0:
+                        continue
+                    sequence = self.degenerate_consensus
+                    line = "P0      A      C      G      T"
+                    lines.append(line)
+                    for i in range(length):
+                        line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
+                                             i+1,
+                                             self.counts['A'][i],
+                                             self.counts['C'][i],
+                                             self.counts['G'][i],
+                                             self.counts['T'][i],
+                                             sequence[i],
+                                            )
+                        lines.append(line)
+                    blank = True
+                else:
+                    try:
+                        value = self.get(key)
+                    except AttributeError:
+                        value = None
+                    if value is not None:
+                        if key in multiple_value_keys:
+                            for v in value:
+                                line = "%s  %s" % (key, v)
+                                lines.append(line)
+                        else:
+                            line = "%s  %s" % (key, value)
+                            lines.append(line)
+                        blank = True
+                if key=='PV':
+                    # References
+                    try:
+                        references = self.references
+                    except AttributeError:
+                        pass
+                    else:
+                        keys = ("RN", "RX", "RA", "RT", "RL")
+                        for reference in references:
+                            for key in keys:
+                                value = reference.get(key)
+                                if value is None:
+                                    continue
+                                line = "%s  %s" % (key, value)
+                                lines.append(line)
+                                blank = True
+            if blank:
+                line = 'XX'
+                lines.append(line)
+        # Finished; glue the lines together
+        line = "//"
+        lines.append(line)
+        text = "\n".join(lines) + "\n"
+        return text
 
     def _to_vertical_matrix(self,letters=None):
         """Return string representation of the motif as  a matrix.
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.
+""", PendingDeprecationWarning)
         if letters is None:
             letters=self.alphabet.letters
         self._pwm_is_current=False
@@ -1073,6 +1617,10 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
     def _to_horizontal_matrix(self,letters=None,normalized=True):
         """Return string representation of the motif as  a matrix.
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython.
+""", PendingDeprecationWarning)
         if letters is None:
             letters=self.alphabet.letters
         res=""
@@ -1091,30 +1639,47 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
                 res+="\n"
         return res
 
+
     def _to_jaspar_pfm(self):
         """Returns the pfm representation of the motif
         """
-        return self._to_horizontal_matrix(normalized=False,letters="ACGT")
+        letters = "ACGT"
+        counts = self.counts
+        length = self.length
+        lines = []
+        for letter in letters:
+            terms = [str(counts[letter][i]) for i in range(length)]
+            line = "\t".join(terms) + "\n"
+            lines.append(line)
+        # Finished; glue the lines together
+        text = "".join(lines)
+        return text
+
 
     def format(self,format):
         """Returns a string representation of the Motif in a given format
 
         Currently supported fromats:
-         - jaspar-pfm : JASPAR Position Frequency Matrix
+         - pfm : JASPAR Position Frequency Matrix
          - transfac : TRANSFAC like files
          - fasta : FASTA file with instances
         """
 
         formatters={
             "jaspar-pfm":   self._to_jaspar_pfm,
+            "pfm":   self._to_jaspar_pfm,
             "transfac":     self._to_transfac,
             "fasta" :       self._to_fasta,
             }
 
+        if format=="jaspar-pfm":
+            warnings.warn("Please uses 'pfm' instead of 'jaspar-pfm'.",
+PendingDeprecationWarning)
         try:
             return formatters[format]()
         except KeyError:
             raise ValueError("Wrong format type")
+
 
     def scanPWM(self,seq):
         """Matrix of log-odds scores for a nucleotide sequence.
@@ -1126,6 +1691,17 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
         - the sequence can only be a DNA sequence
         - the search is performed only on one strand
         """
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif.scanPWM(sequence)
+use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+>>> pssm.calculate(sequence)
+See the documentation of motif.counts.normalize, pwm.make_pssm, and
+pssm.calculate for details.
+""", PendingDeprecationWarning)
         if self.alphabet!=IUPAC.unambiguous_dna:
             raise ValueError("Wrong alphabet! Use only with DNA motifs")
         if seq.alphabet!=IUPAC.unambiguous_dna:
@@ -1145,7 +1721,19 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
         logodds=[[y[1] for y in sorted(x.items())] for x in self.log_odds()]
         return _pwm.calculate(seq, logodds)
 
+
     def _pwm_calculate(self, sequence):
+        warnings.warn("""\
+This function is now obsolete, and will be deprecated and removed
+in a future release of Biopython. As a replacement, instead of
+>>> motif._pwm_calculate(sequence)
+use
+>>> pwm = motif.counts.normalize()
+>>> pssm = pwm.make_pssm()
+>>> pssm.calculate(sequence)
+See the documentation of motif.counts.normalize, pwm.make_pssm, and
+pssm.calculate for details.
+""", PendingDeprecationWarning)
         logodds = self.log_odds()
         m = len(logodds)
         s = len(sequence)
@@ -1161,52 +1749,4 @@ arguments to WebLogo 2.8.2 and WebLogo 3.""",
                 score += temp
             else:
                 result[i] = score
-        return result
-
-
-class PositionWeightMatrix(dict):
-
-    def __init__(self, alphabet, counts):
-        self.alphabet = alphabet
-        self.length = None
-        for letter in alphabet.letters:
-            if self.length==None:
-                self.length = len(counts[letter])
-            elif len(counts[letter])!=self.length:
-                raise Exception("Inconsistent size found for the counts")
-            self[letter] = list(counts[letter])
-        for i in xrange(self.length):
-            total = sum([float(self[letter][i]) for letter in alphabet.letters])
-            for letter in self.alphabet.letters:
-                self[letter][i] /= total
-        for letter in self.alphabet.letters:
-            self[letter] = tuple(self[letter])
-
-    def ic(self, background=None):
-        """\
-Returns the information content of a motif.
-
-By default, a uniform background is used. To specify a non-uniform
-background, use the 'background' argument to pass a dictionary containing
-the probability of each letter in the alphabet associated with the motif
-under the background distribution.
-        """
-        result=0
-        if background is None:
-            background = {}
-            for a in self.alphabet.letters:
-                background[a] = 1.0
-        else:
-            background = dict(background)
-        total = sum(background.values())
-        for a in self.alphabet.letters:
-            background[a] /= total
-        for a in self.alphabet.letters:
-            if background[a]!=0:
-                result-=background[a]*math.log(background[a],2)
-        result *= self.length
-        for i in range(self.length):
-            for a in self.alphabet.letters:
-                if self[a][i]!=0:
-                    result+=self[a][i]*math.log(self[a][i],2)
         return result

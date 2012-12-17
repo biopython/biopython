@@ -1526,7 +1526,10 @@ class MotifTestPWM(unittest.TestCase):
 
     def test_simple(self):
         """Test if Motif PWM scoring works."""
-        result = self.m.scanPWM(self.s)
+        counts = self.m.counts
+        pwm = counts.normalize(pseudocounts=0.25)
+        pssm = pwm.make_pssm()
+        result = pssm.calculate(self.s)
         self.assertEqual(6, len(result))
         # The fast C-code in Bio/Motif/_pwm.c stores all results as 32-bit
         # floats; the slower Python code in Bio/Motif/_Motif.py uses 64-bit

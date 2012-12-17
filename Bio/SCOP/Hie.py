@@ -4,7 +4,7 @@
 # as part of this package.
 
 
-""" Handle the SCOP HIErarchy files, which describe the SCOP hierarchy in
+"""Handle the SCOP HIErarchy files, which describe the SCOP hierarchy in
 terms of SCOP unique identifiers (sunid).
 
 The file format is described in the scop
@@ -21,7 +21,7 @@ class Record(object):
 
     sunid      -- SCOP unique identifiers of this node
 
-    parent     --  Parents sunid
+    parent     -- Parents sunid
 
     children   -- Sequence of childrens sunids
     """

@@ -73,7 +73,7 @@ class SeqFeature(object):
     o ref_db - A different database for the reference accession number.
     Note this is a shortcut for the reference property of the location
     o qualifiers - A dictionary of qualifiers on the feature. These are
-    analagous to the qualifiers from a GenBank feature table. The keys of
+    analogous to the qualifiers from a GenBank feature table. The keys of
     the dictionary are qualifier names, the values are the qualifier
     values.
     o sub_features - Additional SeqFeatures which fall under this 'parent'
@@ -529,8 +529,8 @@ class FeatureLocation(object):
     Note that for a parent sequence of length n, the FeatureLocation
     start and end must satisfy the inequality 0 <= start <= end <= n.
     This means even for features on the reverse strand of a nucleotide
-    sequence, we expect the 'start' coordindate to be less than the
-    'end' coordindate.
+    sequence, we expect the 'start' coordinate to be less than the
+    'end' coordinate.
 
     >>> from Bio.SeqFeature import FeatureLocation
     >>> r = FeatureLocation(122, 150, strand=-1)
@@ -947,7 +947,7 @@ class WithinPosition(int, AbstractPosition):
 
     This allows dealing with a position like ((1.4)..100). This
     indicates that the start of the sequence is somewhere between 1
-    and 4. Since this is a start coordindate, it should acts like
+    and 4. Since this is a start coordinate, it should acts like
     it is at position 1 (or in Python counting, 0).
 
     >>> p = WithinPosition(10,10,13)

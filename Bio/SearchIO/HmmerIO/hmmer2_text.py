@@ -2,13 +2,22 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
+
 """Bio.SearchIO parser for HMMER 2 text output."""
 
 import re
+
+from Bio._py3k import _as_bytes, _bytes_to_string
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._utils import read_forward
+
+from _base import _BaseHmmerTextIndexer
+
+__all__ = ['Hmmer2TextParser', 'Hmmer2TextIndexer']
 
 _HSP_ALIGN_LINE = re.compile(r'(\S+):\s+domain (\d+) of (\d+)')
+
 
 class _HitPlaceholder(object):
     def createHit(self, hsp_list):
@@ -37,7 +46,7 @@ class Hmmer2TextParser(object):
             qresult.version = self._meta.get('version')
             yield qresult
 
-    def read_next(self):
+    def read_next(self, rstrip=True):
         """Return the next non-empty line, trailing whitespace removed"""
         if len(self.buf) > 0:
             return self.buf.pop()
@@ -45,7 +54,8 @@ class Hmmer2TextParser(object):
         while self.line and not self.line.strip():
             self.line = self.handle.readline()
         if self.line:
-            self.line = self.line.rstrip()
+            if rstrip:
+                self.line = self.line.rstrip()
         return self.line
 
     def push_back(self, line):
@@ -54,7 +64,7 @@ class Hmmer2TextParser(object):
 
     def parse_key_value(self):
         """Parse key-value pair separated by colon (:)"""
-        key, value = self.line.split(':')
+        key, value = self.line.split(':', 1)
         return key.strip(), value.strip()
 
     def parse_preamble(self):
@@ -113,8 +123,11 @@ class Hmmer2TextParser(object):
                 self.parse_hsps(hit_placeholders)
                 self.parse_hsp_alignments()
 
-            while self.read_next() and self.line != '//':
-                pass
+            while not self.line.startswith('Query'):
+                self.read_next()
+                if not self.line:
+                    break
+            self.buf.append(self.line)
 
             if description is not None:
                 self.qresult.description = description
@@ -179,10 +192,10 @@ class Hmmer2TextParser(object):
                 frag.query_start = int(seq_f) - 1
                 frag.query_end = int(seq_t)
             elif self._meta['program'] == 'hmmsearch':
-                frag.query_start = int(seq_f) - 1
-                frag.query_end = int(seq_t)
-                frag.hit_start = int(hmm_f) - 1
-                frag.hit_end = int(hmm_t)
+                frag.query_start = int(hmm_f) - 1
+                frag.query_end = int(hmm_t)
+                frag.hit_start = int(seq_f) - 1
+                frag.hit_end = int(seq_t)
 
             hsp = HSP([frag])
             hsp.evalue = float(evalue)
@@ -236,6 +249,7 @@ class Hmmer2TextParser(object):
             consensus = ''
             otherseq = ''
             structureseq = ''
+            pad = 0
             while self.read_next() and self.line.startswith(' '):
                 # if there's structure information, parse that
                 if self.line[16:18] == 'CS':
@@ -246,13 +260,21 @@ class Hmmer2TextParser(object):
 
                 # skip the *-> start marker if it exists
                 if self.line[19] == '*':
-                    hmmseq += self.line[22:]
+                    seq = self.line[22:]
+                    pad = 3
                 else:
-                    hmmseq += self.line[19:]
+                    seq = self.line[19:]
+                    pad = 0
 
-                if not self.read_next():
+                # get rid of the end marker
+                if seq.endswith('<-*'):
+                    seq = seq[:-3]
+
+                hmmseq += seq
+                line_len = len(seq)
+                if not self.read_next(rstrip=False):
                     break
-                consensus += self.line[19:].strip()
+                consensus += self.line[19+pad:19+pad+line_len]
 
                 if not self.read_next():
                     break
@@ -260,8 +282,8 @@ class Hmmer2TextParser(object):
 
             self.push_back(self.line)
 
-            # get rid of the end marker
-            hmmseq = hmmseq[:-3]
+            # add homology sequence to annotation
+            frag.aln_annotation['homology'] = consensus
 
             # if there's structure information, add it to the fragment
             if structureseq:
@@ -273,3 +295,51 @@ class Hmmer2TextParser(object):
             else:
                 frag.hit = otherseq
                 frag.query = hmmseq
+
+
+class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
+
+    """Indexer for hmmer2-text format."""
+
+    _parser = Hmmer2TextParser
+    qresult_start = _as_bytes('Query')
+    # qresults_ends for hmmpfam and hmmsearch
+    # need to anticipate both since hmmsearch have different query end mark
+    qresult_end = _as_bytes('//')
+
+    def __iter__(self):
+        handle = self._handle
+        handle.seek(0)
+        start_offset = handle.tell()
+        regex_id = re.compile(_as_bytes(r'Query\s*(?:sequence|HMM)?:\s*(.*)'))
+
+        # determine flag for hmmsearch
+        is_hmmsearch = False
+        line = read_forward(handle)
+        if line.startswith(_as_bytes('hmmsearch')):
+            is_hmmsearch = True
+
+        while True:
+            end_offset = handle.tell()
+
+            if line.startswith(self.qresult_start):
+                regx = re.search(regex_id, line)
+                qresult_key = regx.group(1).strip()
+                # qresult start offset is the offset of this line
+                # (starts with the start mark)
+                start_offset = end_offset - len(line)
+            elif line.startswith(self.qresult_end):
+                yield _bytes_to_string(qresult_key), start_offset, 0
+                start_offset = end_offset
+            elif not line:
+                # HACK: since hmmsearch can only have one query result
+                if is_hmmsearch:
+                    yield _bytes_to_string(qresult_key), start_offset, 0
+                break
+
+            line = read_forward(handle)
+
+# if not used as a module, run the doctest
+if __name__ == "__main__":
+    from Bio.SearchIO._utils import run_doctest
+    run_doctest()

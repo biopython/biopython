@@ -403,7 +403,7 @@ class GenBankWriter(_InsdcWriter):
                                       text.replace("\n", " ")))
 
     def _write_multi_line(self, tag, text):
-        """Used in the the 'header' of each GenBank record."""
+        """Used in the 'header' of each GenBank record."""
         #TODO - Do the line spliting while preserving white space?
         max_len = self.MAX_WIDTH - self.HEADER_WIDTH
         lines = self._split_multi_line(text, max_len)

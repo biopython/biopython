@@ -1,10 +1,80 @@
-# Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
+# Copyright 2012 by Wibowo Arindrarto. All rights reserved.
+# Revisions Copyright 2012 by Peter Cock. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from Bio.SearchIO import HSPFragment
+import os
+import unittest
+try:
+    import sqlite3
+except ImportError:
+    sqlite3 = None
+
+from Bio import SearchIO
+from Bio._py3k import _as_bytes
 from Bio.SeqRecord import SeqRecord
+
+
+class CheckRaw(unittest.TestCase):
+
+    """Base class for testing index's get_raw method."""
+
+    def check_raw(self, filename, id, raw, **kwargs):
+        """Index filename using **kwargs, check get_raw(id)==raw."""
+        idx = SearchIO.index(filename, self.fmt, **kwargs)
+        raw = _as_bytes(raw)
+        self.assertEqual(raw, idx.get_raw(id))
+        idx._proxy._handle.close() # To silence a ResourceWarning
+
+        #Now again, but using SQLite backend
+        if sqlite3:
+            idx = SearchIO.index_db(":memory:", filename, self.fmt, **kwargs)
+            self.assertEqual(raw, idx.get_raw(id))
+            idx.close()
+
+        if os.path.isfile(filename + ".bgz"):
+            #Do the tests again with the BGZF compressed file
+            print "[BONUS %s.bgz]" % filename
+            self.check_raw(filename + ".bgz", id, raw, **kwargs)
+
+
+class CheckIndex(unittest.TestCase):
+
+    """Base class for testing indexing."""
+
+    def check_index(self, filename, format, **kwargs):
+        # check if Python3 installation has sqlite3
+        try:
+            import sqlite3
+        except ImportError:
+            sqlite3 = None
+
+        parsed = list(SearchIO.parse(filename, format, **kwargs))
+        # compare values by index
+        indexed = SearchIO.index(filename, format, **kwargs)
+        self.assertEqual(len(parsed), len(indexed.keys()))
+        # compare values by index_db, only if sqlite3 is present
+        if sqlite3 is not None:
+            db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
+            self.assertEqual(len(parsed), len(db_indexed.keys()))
+
+        for qres in parsed:
+            idx_qres = indexed[qres.id]
+            # parsed and indexed qresult are different objects!
+            self.assertNotEqual(id(qres), id(idx_qres))
+            # but they should have the same attribute values
+            self.assertTrue(compare_search_obj(qres, idx_qres))
+            # sqlite3 comparison, only if it's present
+            if sqlite3 is not None:
+                dbidx_qres = db_indexed[qres.id]
+                self.assertNotEqual(id(qres), id(dbidx_qres))
+                self.assertTrue(compare_search_obj(qres, dbidx_qres))
+
+        indexed._proxy._handle.close()  # TODO - Better solution
+        if sqlite3 is not None:
+            db_indexed.close()
+            db_indexed._con.close()
 
 
 def _num_difference(obj_a, obj_b):
@@ -27,7 +97,7 @@ def compare_search_obj(obj_a, obj_b):
     compare_attrs(obj_a, obj_b, obj_a.__dict__.keys())
 
     # compare objects recursively if it's not an HSPFragment
-    if not isinstance(obj_a, HSPFragment):
+    if not isinstance(obj_a, SearchIO.HSPFragment):
         # check the number of hits contained
         assert len(obj_a) == len(obj_b), "length: %r vs %r" % (len(obj_a),
                 len(obj_b), obj_a, obj_b)

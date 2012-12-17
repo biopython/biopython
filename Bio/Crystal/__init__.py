@@ -70,6 +70,8 @@ class Hetero(object):
 
 
 class Chain(object):
+    """This class represents a sequence of Hetero elements."""
+
     def __init__(self, residues = ''):
         self.data = []
         if isinstance(residues, str):
@@ -215,6 +217,9 @@ class Chain(object):
 
 
 class Crystal(object):
+    """This class represents a dictionary of labeled chains from the
+       same structure"""
+
     def __init__(self, data = {}):
         # Enforcestorage
         if not isinstance(data, dict):

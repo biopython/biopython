@@ -50,21 +50,21 @@ def parse(handle,format):
     >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
     ...     print motif.consensus
     TCTACGATTGAG
-    CTGCACCTAGCTACGAGTGAG
-    GTGCCCTAAGCATACTAGGCG
+    CTGCAGCTAGCTACGAGTGAG
+    GTGCTCTAAGCATAGTAGGCG
     GCCACTAGCAGAGCAGGGGGC
     CGACTCAGAGGTT
-    CCACGCTAAGAGAAGTGCCGGAG
-    GCACGTCCCTGAGCA
+    CCACGCTAAGAGAGGTGCCGGAG
+    GCGCGTCGCTGAGCA
     GTCCATCGCAAAGCGTGGGGC
-    GAGATCAGAGGGCCG
-    TGGACGCGGGG
-    GACCAGAGCCTCGCATGGGGG
-    AGCGCGCGTG
-    GCCGGTTGCTGTTCATTAGG
-    ACCGACGGCAGCTAAAAGGG
-    GACGCCGGGGAT
-    CGACTCGCGCTTACAAGG
+    GGGATCAGAGGGCCG
+    TGGAGGCGGGG
+    GACCAGAGCTTCGCATGGGGG
+    GGCGTGCGTG
+    GCTGGTTGCTGTTCATTAGG
+    GCCGGCGGCAGCTAAAAGGG
+    GAGGCCGGGGAT
+    CGACTCGTGCTTAGAAGG
     """
     if format in ('pfm', 'sites'):
         yield Jaspar.read(handle, format)
@@ -92,7 +92,7 @@ def read(handle,format):
     reading a pfm file:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
+    >>> motif = Motif.read(open("Motif/SRF.pfm"), "pfm")
     >>> motif.consensus
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 

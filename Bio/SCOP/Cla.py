@@ -117,7 +117,7 @@ class Index(dict):
             f.close()
 
     def __getitem__(self, key):
-        """ Return an item from the indexed file. """
+        """Return an item from the indexed file."""
         position = dict.__getitem__(self,key)
 
         f = open(self.filename, "rU")

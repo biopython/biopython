@@ -545,8 +545,10 @@ _read_from_handle(void *wasread, const int length, void *handle)
     int segment;
     int bytes_read, bytes_left;
 
-    if(!length)
-	return 1;
+    if(!length) {
+        PyErr_SetString(PyExc_RuntimeError, "data length is zero");
+	goto _read_from_handle_cleanup;
+     }
 
     if(!(py_retval = PyObject_CallMethod(py_handle, "read", "i", length)))
 	goto _read_from_handle_cleanup;
@@ -568,8 +570,10 @@ _read_from_handle(void *wasread, const int length, void *handle)
     segment = 0;
     while(bytes_left > 0) {
 	if((bytes_read = buffer->bf_getreadbuffer(py_retval,
-						  segment, &retval)) == -1)
+						  segment, &retval)) == -1) {
+	    PyErr_SetString(PyExc_ValueError, "failed to read from buffer");
 	    goto _read_from_handle_cleanup;
+        }
 	memcpy(wasread, retval, bytes_read);
 	wasread = (void *)((char *)wasread + bytes_read);
 	bytes_left -= bytes_read;
@@ -579,26 +583,34 @@ _read_from_handle(void *wasread, const int length, void *handle)
     success = 1;
 
  _read_from_handle_cleanup:
-    if(py_retval) {
-	Py_DECREF(py_retval);
-    }
+    Py_XDECREF(py_retval);
     return success;
 }
 
-#define MAX_KEY_LENGTH 2000
 static void *
 _read_value_from_handle(void *handle)
 {
     Py_ssize_t length;
-    char KEY[MAX_KEY_LENGTH];
+    char* KEY;
+    PyObject* VALUE;
 
-    if(!_read_from_handle((void *)&length, sizeof(length), (void *)handle))
+    if(!_read_from_handle(&length, sizeof(length), handle))
 	return NULL;
-    if(length < 0 || length >= MAX_KEY_LENGTH)
-	return NULL;
-    if(!_read_from_handle((void *)KEY, length, (void *)handle))
-	return NULL;
-    return PyMarshal_ReadObjectFromString(KEY, length);
+    if(length < 0)
+    {
+        return NULL;
+    }
+    KEY = malloc(length);
+    if(length < 0)
+    {
+        PyErr_SetString(PyExc_MemoryError, "insufficient memory to read value");
+        return NULL;
+    }
+    VALUE = NULL;
+    if(_read_from_handle(KEY, length, handle))
+        VALUE = PyMarshal_ReadObjectFromString(KEY, length);
+    free(KEY);
+    return VALUE;
 }
 
 

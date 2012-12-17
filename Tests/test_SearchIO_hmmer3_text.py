@@ -1409,9 +1409,9 @@ class HmmerscanCases(unittest.TestCase):
         self.assertEqual(1, counter)
 
 
-    def test_30_hmmscan_bug3399(self):
-        "Test parsing alignment lines that don't align with the query seq"
-        hmmer_file = get_file('text_30_hmmscan_bug3399.out')
+    def test_30_hmmscan_009(self):
+        "Test parsing hmmerscan 3.0 (text_30_hmmscan_009)"
+        hmmer_file = get_file('text_30_hmmscan_009.out')
         qresults = parse(hmmer_file, FMT)
         counter = 0
 
