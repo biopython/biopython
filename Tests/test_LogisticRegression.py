@@ -15,7 +15,6 @@ except ImportError:
         "Install NumPy if you want to use Bio.LogisticRegression.")
 
 import unittest
-import sys
 from Bio import LogisticRegression
 
 

@@ -2,7 +2,6 @@
 """Tests HotRand.
 """
 # standard library
-import sys
 import unittest
 
 # local stuff

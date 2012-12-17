@@ -4,7 +4,6 @@
 # as part of this package.
 
 import string
-import sys
 from Bio import File
 from Bio import ParserSupport
 

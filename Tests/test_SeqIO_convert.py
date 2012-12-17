@@ -4,7 +4,6 @@
 # as part of this package.
 
 """Unit tests for Bio.SeqIO.convert(...) function."""
-import os
 import unittest
 import warnings
 from Bio.Seq import UnknownSeq

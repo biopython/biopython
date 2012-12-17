@@ -4,9 +4,6 @@
 # as part of this package.
 
 import unittest
-import os
-import os.path
-import sys
 from Bio.Phylo.PAML import chi2
 
 

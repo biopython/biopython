@@ -6,7 +6,6 @@
 import os
 import sys
 import unittest
-import subprocess
 
 from Bio import MissingExternalDependencyError
 from Bio import AlignIO

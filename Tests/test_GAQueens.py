@@ -18,9 +18,7 @@ When called as part of the Biopython unit test suite, 5 queens are used.
 """
 # standard library
 import sys
-import math
 import random
-import copy
 import time
 import unittest
 

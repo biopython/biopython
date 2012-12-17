@@ -11,7 +11,6 @@ Reportlab is used for producing the graphical output.
 import math
 
 # reportlab
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib import colors
@@ -20,7 +19,6 @@ from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.graphics.charts.barcharts import BarChartProperties
 from reportlab.graphics.widgetbase import TypedPropertyCollection
-from reportlab.graphics import renderPDF, renderPS
 
 from Bio.Graphics import _write
 

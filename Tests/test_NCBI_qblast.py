@@ -12,7 +12,6 @@ Goals:
     Make sure that all retrieval is working as expected.
     Make sure we can parse the latest XML format being used by the NCBI.
 """
-import sys
 import requires_internet
 requires_internet.check()
 from Bio import MissingExternalDependencyError

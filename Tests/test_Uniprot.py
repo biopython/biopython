@@ -2,7 +2,6 @@
 """Test for the Uniprot parser on Uniprot XML files.
 """
 import os
-import copy
 import unittest
 
 from Bio import SeqIO

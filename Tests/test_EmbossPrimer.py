@@ -2,7 +2,6 @@
 """Tests for Primer-based programs in the Emboss suite.
 """
 # standard library
-import sys
 import os
 import unittest
 
