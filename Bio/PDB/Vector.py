@@ -318,70 +318,70 @@ class Vector(object):
 
 if __name__=="__main__":
 
-        from numpy.random import random
+    from numpy.random import random
 
-        v1=Vector(0,0,1)
-        v2=Vector(0,0,0)
-        v3=Vector(0,1,0)
-        v4=Vector(1,1,0)
+    v1=Vector(0,0,1)
+    v2=Vector(0,0,0)
+    v3=Vector(0,1,0)
+    v4=Vector(1,1,0)
 
-        v4.normalize()
+    v4.normalize()
 
-        print v4
+    print v4
 
-        print calc_angle(v1, v2, v3)
-        dih=calc_dihedral(v1, v2, v3, v4)
-        # Test dihedral sign
-        assert(dih>0)
-        print "DIHEDRAL ", dih
+    print calc_angle(v1, v2, v3)
+    dih=calc_dihedral(v1, v2, v3, v4)
+    # Test dihedral sign
+    assert(dih>0)
+    print "DIHEDRAL ", dih
 
-        ref=refmat(v1, v3)
-        rot=rotmat(v1, v3)
+    ref=refmat(v1, v3)
+    rot=rotmat(v1, v3)
 
-        print v3
-        print v1.left_multiply(ref)
-        print v1.left_multiply(rot)
-        print v1.right_multiply(numpy.transpose(rot))
+    print v3
+    print v1.left_multiply(ref)
+    print v1.left_multiply(rot)
+    print v1.right_multiply(numpy.transpose(rot))
 
-        # -
-        print v1-v2
-        print v1-1
-        print v1+(1,2,3)
-        # +
-        print v1+v2
-        print v1+3
-        print v1-(1,2,3)
-        # *
-        print v1*v2
-        # /
-        print v1/2
-        print v1/(1,2,3)
-        # **
-        print v1**v2
-        print v1**2
-        print v1**(1,2,3)
-        # norm
-        print v1.norm()
-        # norm squared
-        print v1.normsq()
-        # setitem
-        v1[2]=10
-        print v1
-        # getitem
-        print v1[2]
+    # -
+    print v1-v2
+    print v1-1
+    print v1+(1,2,3)
+    # +
+    print v1+v2
+    print v1+3
+    print v1-(1,2,3)
+    # *
+    print v1*v2
+    # /
+    print v1/2
+    print v1/(1,2,3)
+    # **
+    print v1**v2
+    print v1**2
+    print v1**(1,2,3)
+    # norm
+    print v1.norm()
+    # norm squared
+    print v1.normsq()
+    # setitem
+    v1[2]=10
+    print v1
+    # getitem
+    print v1[2]
 
-        print numpy.array(v1)
+    print numpy.array(v1)
 
-        print "ROT"
+    print "ROT"
 
-        angle=random()*numpy.pi
-        axis=Vector(random(3)-random(3))
-        axis.normalize()
+    angle=random()*numpy.pi
+    axis=Vector(random(3)-random(3))
+    axis.normalize()
 
-        m=rotaxis(angle, axis)
+    m=rotaxis(angle, axis)
 
-        cangle, caxis=m2rotaxis(m)
+    cangle, caxis=m2rotaxis(m)
 
-        print angle-cangle
-        print axis-caxis
-        print
+    print angle-cangle
+    print axis-caxis
+    print
