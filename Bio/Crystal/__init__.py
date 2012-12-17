@@ -101,7 +101,6 @@ class Chain(object):
 
     def __str__(self):
         output = ''
-        i = 0
         for element in self.data:
             output = output + '%s ' % element
         output = output.strip()
