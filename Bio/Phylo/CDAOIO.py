@@ -68,6 +68,7 @@ class Parser(object):
     def __init__(self, handle):
         self.handle = handle
         self.model = None
+        self.node_info = None
 
     @classmethod
     def from_string(cls, treetext):
@@ -103,7 +104,10 @@ class Parser(object):
         uri = RDF.Uri(string="file:"+self.handle.name)
         statements = parser.parse_string_as_stream(self.handle.read(), uri)
         for s in statements:
-            model.append(s)        
+            model.append(s)
+            
+        return self.parse_model(model)
+            
             
     def parse_model(self, model=None):
         '''Construct a Newick.Tree from an RDF model.'''
@@ -116,6 +120,8 @@ class Parser(object):
         # get all cdao:RootedTree instances, then start tree creation at the 
         # node designated by cdao:has_root
 
+        self.get_node_info(model)
+        
         query ='''
         PREFIX cdao: <%s>
         PREFIX rdf: <%s>
@@ -129,12 +135,69 @@ class Parser(object):
         
         for result in q.execute(model):
             root_node = result['root_node']
-            clade = Newick.Clade(comment=str(root_node))
+            clade = self.new_clade(root_node)
             clade.clades = self.parse_children(root_node, model)
             
             yield Newick.Tree(root=clade, rooted=True)
             
+            
+    def new_clade(self, node):
+        '''Returns a Newick.Clade object for a given named node.'''
+        RDF = import_rdf()
+        
+        result = self.node_info[str(node)]
+        
+        kwargs = {}
+        if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
+        if 'label' in result: kwargs['comment'] = result['label']
+        
+        clade = Newick.Clade(**kwargs)
+        
+        return clade
+        
+            
+    def get_node_info(self, model):
+        '''Creates a dictionary containing information about all nodes in the tree.'''
+        RDF = import_rdf()
+        
+        self.node_info = {}
+        
+        query = '''
+        PREFIX cdao: <%s>
+        PREFIX rdf: <%s>
+        SELECT * WHERE
+        {
+            { ?node rdf:type cdao:TerminalNode . } UNION { ?node rdf:type cdao:AncestralNode } .
+        
+            OPTIONAL 
+            {
+                ?edge cdao:has_Child_Node ?node ;
+                      cdao:has_annotation ?annotation .
+                ?annotation rdf:type cdao:EdgeLength ;
+                            cdao:has_value ?branch_length .
+            } .
+            OPTIONAL
+            {
+                ?node cdao:represents_TU ?tu .
+                ?tu rdf:label ?label .
+            } .
+        }
+        ''' % (self.urls['cdao'], self.urls['rdf'])
+        q = RDF.Query(query, query_language='sparql')
+        
+        for result in q.execute(model):
+            node = str(result['node'])
+            self.node_info[node] = r = {}
+            
+            # get TU label
+            if result['label']: r['label'] = result['label'].literal_value['string']
+            # get branch length
+            if result['branch_length']: r['branch_length'] = float(result['branch_length'].literal_value['string'])
+        
+
     def parse_children(self, node, model):
+        '''Return a list of clades representing all children nodes of the specified
+        parent node.'''
         RDF = import_rdf()
         
         query = '''
@@ -145,15 +208,17 @@ class Parser(object):
             ?child_node cdao:has_Parent <%s> .
         }
         ''' % (self.urls['cdao'], self.urls['rdf'], node)
+        #print query
         q = RDF.Query(query, query_language='sparql')
         
         children = []
         
         for result in q.execute(model):
+            print result
+            
             child_node = result['child_node']
-            #branch_length = result['branch_length']
-            clade = Newick.Clade(comment=str(child_node))
-            #clade.branch_length = branch_length
+            clade = self.new_clade(child_node)
+
             clade.clades = self.parse_children(child_node, model)
             children.append(clade)
         
