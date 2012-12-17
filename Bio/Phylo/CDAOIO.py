@@ -116,12 +116,10 @@ class Parser(object):
         if model is None:
             model = self.model
         
-        # TODO: create a Tree object from RDF model
-        # get all cdao:RootedTree instances, then start tree creation at the 
-        # node designated by cdao:has_root
-
+        # look up branch lengths/TUs for all nodes
         self.get_node_info(model)
         
+        # get all tree roots
         query ='''
         PREFIX cdao: <%s>
         SELECT * WHERE 
@@ -148,7 +146,7 @@ class Parser(object):
         
         kwargs = {}
         if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
-        if 'label' in result: kwargs['comment'] = result['label']
+        if 'label' in result: kwargs['name'] = result['label']
         
         clade = Newick.Clade(**kwargs)
         
@@ -211,7 +209,6 @@ class Parser(object):
         children = []
         
         for result in q.execute(model):
-            
             child_node = result['child_node']
             clade = self.new_clade(child_node)
 
