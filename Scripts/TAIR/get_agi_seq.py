@@ -40,7 +40,7 @@ if options.filename is None:
     for seq in seqs:
         print seq.format("fasta")
 else:
-    # If we have a filename, write a fasta to the file specfied
+    # If we have a filename, write a fasta to the file specified
     fh = open(options.filename, "wb")
     SeqIO.write(seqs, fh, "fasta")
     fh.close()

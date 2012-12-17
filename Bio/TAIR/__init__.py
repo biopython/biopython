@@ -73,7 +73,7 @@ class TAIRDirect(object):
             raise bad_agi_exception
 
         # Check dataset
-        if dataset in self.datasets.keys():
+        if dataset in self.datasets:
             dataset = self.datasets[dataset]
         elif dataset in self.datasets.values():
             pass  # dataset is already equal to required value
@@ -81,7 +81,7 @@ class TAIRDirect(object):
             raise ValueError("%s is an invalid TAIR dataset" % dataset)
 
         # Check dataset
-        if target in self.targets.keys():
+        if target in self.targets:
             target = self.targets[target]
         elif target in self.targets.values():
             pass  # target is already equal to required value
