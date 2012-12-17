@@ -6,7 +6,6 @@
 # python unittest framework
 import unittest
 import copy
-import sys
 
 # modules to be tested
 from Bio.Crystal import Hetero, Chain, Crystal, CrystalError

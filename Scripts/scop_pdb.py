@@ -8,7 +8,6 @@
 
 import getopt
 import sys
-import types
 import urllib
 
 from Bio.SCOP import *

@@ -12,7 +12,6 @@ from Bio import BiopythonExperimentalWarning
 warnings.warn("Bio.Motif.TRANSFAC is experimental code. While it is usable, \
     the code is subject to change without warning", BiopythonExperimentalWarning)
 
-import string
 from Bio.Motif import Motif as BaseMotif
 
 

@@ -5,9 +5,7 @@
 
 """Testing Bio.TogoWS online code.
 """
-import sys
 import unittest
-import urllib
 from StringIO import StringIO
 
 import requires_internet

@@ -8,9 +8,7 @@ import unittest
 from os.path import join, basename
 
 from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio._py3k import _bytes_to_string, _as_bytes
+from Bio._py3k import _as_bytes
 
 test_data = {
 'data_empty': {

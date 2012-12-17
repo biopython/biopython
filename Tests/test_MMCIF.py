@@ -9,8 +9,6 @@
 
 """Unit tests for the MMCIF portion of the Bio.PDB module."""
 
-import os
-import tempfile
 import unittest
 import warnings
 

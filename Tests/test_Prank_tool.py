@@ -9,7 +9,6 @@ as part of this package.
 import sys
 import os
 import unittest
-import subprocess
 from Bio import AlignIO
 from Bio import SeqIO
 from Bio import MissingExternalDependencyError
