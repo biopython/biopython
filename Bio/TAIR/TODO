@@ -1,7 +1,0 @@
-Immediate
-- Docstrings
-- sanitise AGIs in ncbi stuff
-
-Long-term
-- more extensive tests of both modules
-- profile code to check for slow spots
