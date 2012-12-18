@@ -166,25 +166,26 @@ class Parser(object):
         query = '''
         PREFIX cdao: <%s>
         PREFIX rdf: <%s>
-        SELECT ?node, ?parent_node, ?branch_length, ?label WHERE
+        SELECT * WHERE
         {
-            { ?node a cdao:TerminalNode . } UNION { ?node a cdao:AncestralNode } .
-        
-            OPTIONAL
-            {
-                ?node cdao:has_Parent ?parent_node .
-            } .
+            { ?node a cdao:AncestralNode . } 
+            UNION 
+            { ?node a cdao:TerminalNode . } 
+            .
+            
             OPTIONAL 
             {
-                ?edge cdao:has_Child_Node ?node ;
-                      cdao:has_annotation ?annotation .
-                ?annotation a cdao:EdgeLength ;
-                            cdao:has_value ?branch_length .
+                ?node cdao:has_Parent ?parent_node ;
+                      cdao:belongs_to_Edge_as_Child 
+                      [ cdao:has_annotation
+                        [a cdao:EdgeLength ;
+                            cdao:has_value ?branch_length
+                        ]
+                      ] .
             } .
             OPTIONAL
             {
-                ?node cdao:represents_TU ?tu .
-                ?tu rdf:label ?label .
+                ?node cdao:represents_TU [ rdf:label ?label ] .
             } .
         }
         ''' % (self.urls['cdao'], self.urls['rdf'])
