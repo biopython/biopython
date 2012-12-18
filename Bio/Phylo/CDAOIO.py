@@ -30,9 +30,7 @@ def import_rdf():
 def new_storage():
     RDF = import_rdf()
     
-    storage = RDF.Storage(storage_name="hashes",
-                          name="serializer",
-                          options_string="new='yes',hash-type='memory',dir='.'")
+    storage = RDF.MemoryStorage()
     if storage is None:
         raise CDAOError("new RDF.Storage failed")
     return storage
@@ -168,9 +166,9 @@ class Parser(object):
         PREFIX rdf: <%s>
         SELECT * WHERE
         {
-            { ?node a cdao:AncestralNode . } 
+            { ?node a cdao:AncestralNode . }
             UNION 
-            { ?node a cdao:TerminalNode . } 
+            { ?node a cdao:TerminalNode . }
             .
             
             OPTIONAL 
@@ -183,6 +181,7 @@ class Parser(object):
                         ]
                       ] .
             } .
+            
             OPTIONAL
             {
                 ?node cdao:represents_TU [ rdf:label ?label ] .
