@@ -69,6 +69,7 @@ class Parser(object):
         self.handle = handle
         self.model = None
         self.node_info = None
+        self.parents = {}
 
     @classmethod
     def from_string(cls, treetext):
@@ -103,6 +104,7 @@ class Parser(object):
         
         if 'base_uri' in kwargs: base_uri = kwargs['base_uri']
         else: base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
+        
         statements = parser.parse_string_as_stream(self.handle.read(), base_uri)
         for s in statements:
             model.append(s)
@@ -132,7 +134,7 @@ class Parser(object):
         q = RDF.Query(query, query_language='sparql')
         
         for result in q.execute(model):
-            root_node = result['root_node']
+            root_node = str(result['root_node'].uri)
             clade = self.new_clade(root_node)
             clade.clades = self.parse_children(root_node, model)
             
@@ -143,7 +145,7 @@ class Parser(object):
         '''Returns a Newick.Clade object for a given named node.'''
         RDF = import_rdf()
         
-        result = self.node_info[str(node)]
+        result = self.node_info[node]
         
         kwargs = {}
         if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
@@ -159,14 +161,19 @@ class Parser(object):
         RDF = import_rdf()
         
         self.node_info = {}
+        self.parents = {}
         
         query = '''
         PREFIX cdao: <%s>
         PREFIX rdf: <%s>
-        SELECT * WHERE
+        SELECT ?node, ?parent_node, ?branch_length, ?label WHERE
         {
             { ?node a cdao:TerminalNode . } UNION { ?node a cdao:AncestralNode } .
         
+            OPTIONAL
+            {
+                ?node cdao:has_Parent ?parent_node .
+            } .
             OPTIONAL 
             {
                 ?edge cdao:has_Child_Node ?node ;
@@ -184,39 +191,35 @@ class Parser(object):
         q = RDF.Query(query, query_language='sparql')
         
         for result in q.execute(model):
-            node = str(result['node'])
+            node = str(result['node'].uri)
             self.node_info[node] = r = {}
             
             # get TU label
             if result['label']: r['label'] = result['label'].literal_value['string']
             # get branch length
             if result['branch_length']: r['branch_length'] = float(result['branch_length'].literal_value['string'])
-        
+            # store parent node
+            if result['parent_node']:
+                parent = str(result['parent_node'])
+                if not parent in self.parents:
+                    self.parents[parent] = []
+                self.parents[parent].append(node)
+                
 
     def parse_children(self, node, model):
         '''Return a list of clades representing all children nodes of the specified
         parent node.'''
-        RDF = import_rdf()
         
-        query = '''
-        PREFIX cdao: <%s>
-        SELECT * WHERE 
-        {
-            ?child_node cdao:has_Parent <%s> .
-        }
-        ''' % (self.urls['cdao'], node)
-        q = RDF.Query(query, query_language='sparql')
+        children = self.parents[node] if node in self.parents else []
+        child_clades = []
         
-        children = []
-        
-        for result in q.execute(model):
-            child_node = result['child_node']
+        for child_node in children:
             clade = self.new_clade(child_node)
 
             clade.clades = self.parse_children(child_node, model)
-            children.append(clade)
+            child_clades.append(clade)
         
-        return children
+        return child_clades
 
 
 # ---------------------------------------------------------
@@ -370,6 +373,7 @@ class Writer(object):
                            # TODO: does this type of numeric literal actually work?
                            (nUri(edge_ann_uri), qUri('cdao:has_value'), str(clade.branch_length)),
                            ]
+            # TODO: annotate with confidences?
                       
         for stmt in statements:
             yield RDF.Statement(*stmt)
