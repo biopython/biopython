@@ -354,7 +354,7 @@ class RaxmlCommandline(AbstractCommandline):
                 _Option(['-N', '-#', 'num_replicates'],
                     "Number of alternative runs on distinct starting trees. "
                     "In combination with the '-b' option, this will invoke a "
-                    "multiple boostrap analysis. "
+                    "multiple bootstrap analysis. "
                     "DEFAULT: 1 single analysis."
                     "Note that '-N' has been added as an alternative since "
                     "'-#' sometimes caused problems with certain MPI job "

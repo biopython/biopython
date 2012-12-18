@@ -29,7 +29,7 @@ from Bio.Application import AbstractCommandline, _Option, _Argument
 class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program.
 
-    XXX This could use more checking for valid paramters to the program.
+    XXX This could use more checking for valid parameters to the program.
     """
     def __init__(self, cmd="AlignACE", **kwargs):
         self.parameters = \
@@ -64,7 +64,7 @@ class AlignAceCommandline(AbstractCommandline):
 class CompareAceCommandline(AbstractCommandline):
     """Create a commandline for the CompareAce program.
 
-    XXX This could use more checking for valid paramters to the program.
+    XXX This could use more checking for valid parameters to the program.
     """
     def __init__(self, cmd="CompareACE", **kwargs):
         import os.path

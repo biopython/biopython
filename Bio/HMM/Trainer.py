@@ -2,7 +2,7 @@
 
 These should be used to 'train' a Markov Model prior to actually using
 it to decode state paths. When supplied training sequences and a model
-to work from, these classes will estimate paramters of the model.
+to work from, these classes will estimate parameters of the model.
 
 This aims to estimate two parameters:
 
@@ -53,7 +53,7 @@ class AbstractTrainer(object):
         Arguments:
 
         o probabilities -- A list of the probabilities of each training
-        sequence under the current paramters, calculated using the forward
+        sequence under the current parameters, calculated using the forward
         algorithm.
         """
         total_likelihood = 0

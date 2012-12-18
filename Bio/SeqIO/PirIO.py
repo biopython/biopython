@@ -65,7 +65,7 @@ ASTQKAEKEV TRMVVLMVIG FLVCWVPYAS VAFYIFTHQG SDFGATFMTL PAFFAKSSAL
 YNPVIYILMN KQFRNCMITT LCCGKNPLGD DE-SGASTSKT EVSSVSTSPV SPA*
 
 
-As with the FASTA format, each record starts with a line begining with ">"
+As with the FASTA format, each record starts with a line beginning with ">"
 character.  There is then a two letter sequence type (P1, F1, DL, DC, RL,
 RC, or XX), a semi colon, and the identification code.  The second like is
 free text description.  The remaining lines contain the sequence itself,

@@ -694,7 +694,7 @@ class InDepthLoadTest(unittest.TestCase):
         self.assertEqual(str(test_record.seq[:10]), 'ATTTGGCCTA')
 
     def test_seq_feature(self):
-        """Indepth check that SeqFeatures are transmitted through the db.
+        """In depth check that SeqFeatures are transmitted through the db.
         """
         test_record = self.db.lookup(accession = "AJ237582")
         features = test_record.features

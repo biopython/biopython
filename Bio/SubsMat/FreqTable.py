@@ -8,7 +8,7 @@ FREQ = 2
 # Methods to read a letter frequency or a letter count file:
 # Example files for a DNA alphabet:
 #
-# A count file (whitespace seperated):
+# A count file (whitespace separated):
 #
 # A  50
 # C  37

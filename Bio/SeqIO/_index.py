@@ -68,7 +68,7 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
 
     def get(self, offset):
         """Returns SeqRecord."""
-        #Should be overriden for binary file formats etc:
+        #Should be overridden for binary file formats etc:
         return self._parse(StringIO(_bytes_to_string(self.get_raw(offset))))
 
 

@@ -46,7 +46,7 @@ class ComparativeScatterPlot(object):
         # the information we'll be writing
         self.display_info = []
 
-        # inital colors and shapes used for drawing points
+        # initial colors and shapes used for drawing points
         self.color_choices = [colors.red, colors.green, colors.blue,
                               colors.yellow, colors.orange, colors.black]
         self.shape_choices = [makeFilledCircle, makeEmptySquare,

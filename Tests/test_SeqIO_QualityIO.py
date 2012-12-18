@@ -56,7 +56,7 @@ def write_read(filename, in_format, out_format):
 
 
 def compare_record(old, new, truncate=None):
-    """Quality aware SeqRecord comparision.
+    """Quality aware SeqRecord comparison.
 
     This will check the mapping between Solexa and PHRED scores.
     It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).

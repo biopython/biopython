@@ -65,10 +65,10 @@ class BasicNetwork(object):
             for example in training_examples:
                 # update the predicted values for all of the nodes
                 # based on the current weights and the inputs
-                # This propogates over the entire network from the input.
+                # This propagates over the entire network from the input.
                 self._input.update(example.inputs)
 
-                # calculate the error via back propogation
+                # calculate the error via back propagation
                 self._input.backpropagate(example.outputs,
                                           learning_rate, momentum)
 

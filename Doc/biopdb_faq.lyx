@@ -1355,7 +1355,7 @@ Disordered\SpecialChar \-
 Atom
 \family default 
  object forwards all uncaught method calls to the selected Atom object,
- by default the one that represents the atom with with the highest occupancy.
+ by default the one that represents the atom with the highest occupancy.
  The user can of course change the selected 
 \family typewriter 
 Atom 
@@ -1922,7 +1922,7 @@ Residue
 
 .
  Note that DSSP (the program, and thus by consequence the class) cannot
- handle mutiple models!
+ handle multiple models!
 \layout Standard
 
 
@@ -2249,7 +2249,7 @@ Residue depth is the average distance of a residue's atoms from the solvent
 ResidueDepth
 \family default 
  class.
- This class behaves as a dictionary wich maps 
+ This class behaves as a dictionary which maps 
 \family typewriter 
 Residue
 \family default 
