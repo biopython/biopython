@@ -374,7 +374,6 @@ class _InsdcWriter(SequentialSequenceWriter):
         if isinstance(contig, list) or isinstance(contig, tuple):
             contig = "".join(contig)
         contig = self.clean(contig)
-        i = 0
         answer = []
         while contig:
             if len(contig) > max_len:

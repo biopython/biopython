@@ -370,7 +370,6 @@ class UniprotRandomAccess(SequentialSeqFileRandomAccess):
             #(possibly with leading spaces)
             #but allow it to be later on within the <entry>
             key = None
-            done = False
             while True:
                 line = handle.readline()
                 if key is None and start_acc_marker in line:
@@ -577,7 +576,6 @@ class FastqRandomAccess(SeqFileRandomAccess):
         plus_char = _as_bytes("+")
         if line[0:1] != at_char:
             raise ValueError("Problem with FASTQ @ line:\n%s" % repr(line))
-        identifier = line[1:].rstrip().split(None, 1)[0]
         #Find the seq line(s)
         seq_len = 0
         while line:
@@ -594,7 +592,6 @@ class FastqRandomAccess(SeqFileRandomAccess):
         while line:
             if seq_len == qual_len:
                 #Should be end of record...
-                pos = handle.tell()
                 line = handle.readline()
                 if line and line[0:1] != at_char:
                     ValueError("Problem with line %s" % repr(line))
