@@ -67,7 +67,7 @@ class Parser(object):
         self.handle = handle
         self.model = None
         self.node_info = None
-        self.parents = {}
+        self.children = {}
 
     @classmethod
     def from_string(cls, treetext):
@@ -158,60 +158,66 @@ class Parser(object):
         '''Creates a dictionary containing information about all nodes in the tree.'''
         RDF = import_rdf()
         
+        Uri = RDF.Uri
+        
         self.node_info = {}
-        self.parents = {}
+        self.obj_info = {}
+        self.children = {}
+        self.nodes = set()
         
-        query = '''
-        PREFIX cdao: <%s>
-        PREFIX rdf: <%s>
-        SELECT * WHERE
-        {
-            { ?node a cdao:AncestralNode . }
-            UNION 
-            { ?node a cdao:TerminalNode . }
-            .
+        for statement in model:
+            s, v, o = str(statement.subject), Uri(str(statement.predicate)), str(statement.object)
             
-            OPTIONAL 
-            {
-                ?node cdao:has_Parent ?parent_node ;
-                      cdao:belongs_to_Edge_as_Child 
-                      [ cdao:has_annotation
-                        [ a cdao:EdgeLength ;
-                          cdao:has_value ?branch_length
-                        ]
-                      ] .
-            } .
+            if not s in self.obj_info: self.obj_info[s] = {}
+            this = self.obj_info[s]
             
-            OPTIONAL
-            {
-                ?node cdao:represents_TU [ rdf:label ?label ] .
-            } .
-        }
-        ''' % (self.urls['cdao'], self.urls['rdf'])
-        q = RDF.Query(query, query_language='sparql')
-        
-        for result in q.execute(model):
-            #print result
-            node = str(result['node'].uri)
-            self.node_info[node] = r = {}
+            assignments = {
+                           qUri('rdf:type'): 'type',
+                           qUri('cdao:has_Parent'): 'parent',
+                           qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
+                           qUri('cdao:has_annotation'): 'annotation',
+                           qUri('cdao:has_value'): 'value',
+                           qUri('cdao:represents_TU'): 'tu',
+                           qUri('rdf:label'): 'label',
+                           }
+                    
+            try:
+                this[assignments[v]] = o
+            except KeyError: pass
             
-            # get TU label
-            if result['label']: r['label'] = result['label'].literal_value['string']
-            # get branch length
-            if result['branch_length']: r['branch_length'] = float(result['branch_length'].literal_value['string'])
-            # store parent node
-            if result['parent_node']:
-                parent = str(result['parent_node'])
-                if not parent in self.parents:
-                    self.parents[parent] = []
-                self.parents[parent].append(node)
+            if v == qUri('rdf:type'):
+                if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
+                    self.nodes.add(s)
+                    
+        for node in self.nodes:
+            self.node_info[node] = {}
+            node_info = self.node_info[node]
+            
+            obj = self.obj_info[node]
+            if 'edge' in obj:
+                edge = self.obj_info[obj['edge']]
+                if 'annotation' in edge:
+                    annotation = self.obj_info[edge['annotation']]
+                    if 'value' in annotation:
+                        node_info['branch_length'] = float(annotation['value'])
+            
+            if 'tu' in obj:
+                tu = self.obj_info[obj['tu']]
+                if 'label' in tu:
+                    node_info['label'] = tu['label']
+            
+            if 'parent' in obj:
+                parent = obj['parent']
+                if not parent in self.children:
+                    self.children[parent] = []
+                self.children[parent].append(node)
                 
 
     def parse_children(self, node, model):
         '''Return a list of clades representing all children nodes of the specified
         parent node.'''
         
-        children = self.parents[node] if node in self.parents else []
+        children = self.children[node] if node in self.children else []
         child_clades = []
         
         for child_node in children:
@@ -263,8 +269,7 @@ class Writer(object):
         RDF = import_rdf()
         import Redland
         
-        qUri = self.qUri
-        nUri = self.nUri
+        nUri = lambda s: namedUri(s, self.base_uri)
         Uri = RDF.Uri
         urls = self.urls
         
@@ -320,8 +325,7 @@ class Writer(object):
         self.node_counter += 1
         clade.uri = 'node%s' % self.node_counter
         
-        qUri = self.qUri
-        nUri = self.nUri
+        nUri = lambda s: namedUri(s, self.base_uri)
         Uri = RDF.Uri
         urls = self.urls
         
@@ -385,15 +389,16 @@ class Writer(object):
                     yield stmt
                     
                     
-    def qUri(self, s):
-        '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
-        RDF = import_rdf()
-        
-        for url in self.urls: 
-            s = s.replace(url+':', self.urls[url])
-        return RDF.Uri(s)
-    def nUri(self, s):
-        '''append a URI to the base URI'''
-        RDF = import_rdf()
-        
-        return RDF.Uri(self.base_uri + s)
+def qUri(s):
+    '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
+    RDF = import_rdf()
+    
+    for url in RDF_NAMESPACES: 
+        s = s.replace(url+':', RDF_NAMESPACES[url])
+    return RDF.Uri(s)
+    
+def namedUri(s, base_uri):
+    '''append a URI to the base URI'''
+    RDF = import_rdf()
+    
+    return RDF.Uri(base_uri + s)
