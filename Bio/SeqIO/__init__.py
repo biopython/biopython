@@ -747,7 +747,7 @@ def index(filename, format, alphabet=None, key_function=None):
 
     As with the to_dict() function, by default the id string of each record
     is used as the key. You can specify a callback function to transform
-    this (the record identifier string) into your prefered key. For example:
+    this (the record identifier string) into your preferred key. For example:
 
     >>> from Bio import SeqIO
     >>> def make_tuple(identifier):

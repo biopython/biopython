@@ -17,7 +17,7 @@ This module also provides code to work with the "legacy" standalone version of
 NCBI BLAST, tools blastall, rpsblast and blastpgp via three helper functions of
 the same name. These functions are very limited for dealing with the output as
 files rather than handles, for which the wrappers in Bio.Blast.Applications are
-prefered. Furthermore, the NCBI themselves regard these command line tools as
+preferred. Furthermore, the NCBI themselves regard these command line tools as
 "legacy", and encourage using the new BLAST+ tools instead. Biopython has
 wrappers for these under Bio.Blast.Applications (see the tutorial).
 
@@ -2217,6 +2217,6 @@ class BlastErrorParser(AbstractParser):
             # to indicate a failure to perform the BLAST due to
             # low quality sequence
             if line.startswith('Searchingdone'):
-                raise LowQualityBlastError("Blast failure occured on query: ",
+                raise LowQualityBlastError("Blast failure occurred on query: ",
                                            data_record.query)
             line = handle.readline()

@@ -327,7 +327,7 @@ class MafftCommandline(AbstractCommandline):
                     equate=False),
             #The old solution of also defining extra parameters with
             #["--seed", "seed1"] etc worked, but clashes with the recent
-            #code in the base class to look for duplicate paramters and raise
+            #code in the base class to look for duplicate parameters and raise
             #an error.  Perhaps that check should be ignored here, or maybe
             #we can handle this more elegantly...
             #TODO - Create an _OptionList parameter which allows a list to be

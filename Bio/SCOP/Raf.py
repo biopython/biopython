@@ -16,7 +16,7 @@ CIF files are corrected manually, with the original PDB file serving as the
 final arbiter in case of discrepancies.
 
 Residues are referenced by residue ID. This consists of a the PDB residue
-sequence number (upto 4 digits) and an optional PDB  insertion code (an
+sequence number (up to 4 digits) and an optional PDB insertion code (an
 ascii alphabetic character, a-z, A-Z). e.g. "1", "10A", "1010b", "-1"
 
 See "ASTRAL RAF Sequence Maps":http://astral.stanford.edu/raf.html

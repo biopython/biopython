@@ -80,7 +80,7 @@ class ExampleManagerTest(unittest.TestCase):
         manager = ExampleManager(0, 0)
         manager.add_examples(self.examples)
         assert len(manager.test_examples) == self.num_examples, \
-               "Did not partion correctly to test_examples."
+               "Did not partition correctly to test_examples."
 
         manager = ExampleManager(1.0, 0)
         manager.add_examples(self.examples)

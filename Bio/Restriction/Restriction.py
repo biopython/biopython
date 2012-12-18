@@ -802,7 +802,7 @@ class Meth_Dep(AbstractCut):
 
 
 class Meth_Undep(AbstractCut):
-    """Implement informations about methylation sensitibility.
+    """Implement information about methylation sensitibility.
 
     Enzymes of this class are not sensible to methylation."""
 
@@ -2265,7 +2265,7 @@ class Analysis(RestrictionBatch, PrintFormat):
          Limit the search to the enzymes named in list_of_names."""
         for i, enzyme in enumerate(names):
             if not enzyme in AllEnzymes:
-                print "no datas for the enzyme:", str(name)
+                print "no data for the enzyme:", str(name)
                 del names[i]
         if not dct:
             return RestrictionBatch(names).search(self.sequence)

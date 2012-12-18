@@ -9,7 +9,7 @@
 """
 Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
-This module can be used used directly which will return Record objects
+This module can be used directly which will return Record objects
 which should contain all the original data in the file.
 
 Alternatively, using Bio.SeqIO with the "phd" format will call this module

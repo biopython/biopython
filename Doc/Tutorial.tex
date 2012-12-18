@@ -4443,7 +4443,7 @@ interpreted as a new line and a tab -- which is why we're put a letter
 ``r'' at the start for a raw string that isn't translated in this way.
 This is generally good practice when specifying a Windows style file name.
 
-The last line of the example requires Biopython 1.55 or later to run the
+The last line of the example requires Biopython 1.55 or later to run
 the command line tool via our wrapper object. Internally this uses the
 \verb|subprocess| module which is now the recommended way to run another
 program in Python. This replaces older options like the \verb|os.system()|
@@ -5970,7 +5970,7 @@ not, check them out!). You can use these built in methods to manipulate
 \verb|QueryResult| objects, but you'll end up with regular Python lists and lose
 the ability to do more interesting manipulations.
 
-That's why, \verb|QueryResult| objects provide its own flavor of of
+That's why, \verb|QueryResult| objects provide its own flavor of
 \verb|filter| and \verb|map| methods. Analogous to \verb|filter|, there are
 \verb|hit_filter| and \verb|hsp_filter| methods. As their name implies, these
 methods filter its \verb|QueryResult| object either on its \verb|Hit| objects
@@ -8966,7 +8966,7 @@ Disordered atoms are represented by ordinary Atom objects, but all Atom objects
 that represent the same physical atom are stored in a DisorderedAtom object.
 Each Atom object in a DisorderedAtom object can be uniquely indexed using its
 altloc specifier. The DisorderedAtom object forwards all uncaught method calls
-to the selected Atom object, by default the one that represents the atom with
+to the selected Atom object, by default the one that represents the atom
 with the highest occupancy. The user can of course change the selected Atom
 object, making use of its altloc specifier. In this way atom disorder is represented
 correctly without much additional complexity. In other words, if you are not
@@ -10890,7 +10890,7 @@ motifs. There are no really well established standards for storing
 motifs, but there's a couple of formats which are more used than
 others. The most important distinction is whether the motif
 representation is based on instances or on some version of PWM matrix.
-On of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
+One of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
  stores motifs in both formats, so
 let's look at how we can import JASPAR motifs from instances:
 %cont-doctest
@@ -15194,7 +15194,7 @@ IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
 \begin{itemize}
   \item $IC_{j}$ -- The information content for the $j$-th column in an alignment.
   \item $N_{a}$ -- The number of letters in the alphabet.
-  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occured 3 out of 6 times in an aligment column, this would be 0.5)
+  \item $P_{ij}$ -- The frequency of a particular letter $i$ in the $j$-th column (i.~e.~if G occurred 3 out of 6 times in an aligment column, this would be 0.5)
   \item $Q_{i}$ --  The expected frequency of a letter $i$. This is an
   optional argument, usage of which is left at the user's
   discretion. By default, it is automatically assigned to $0.05 = 1/20$ for a
@@ -15951,7 +15951,7 @@ C 7  22  27
 
 \item Usage
 
-   The following section is layed out in the order by which most people wish to generate a log-odds matrix. Of course, interim matrices can be generated and
+   The following section is laid out in the order by which most people wish to generate a log-odds matrix. Of course, interim matrices can be generated and
    investigated. Most people just want a log-odds matrix, that's all.
   
    \begin{enumerate}

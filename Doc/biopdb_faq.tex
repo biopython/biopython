@@ -730,7 +730,7 @@ atom are stored in a \texttt{Disordered\-Atom} object (see Fig. \ref{cap:SMCRA})
 Each \texttt{Atom} object in a \texttt{Disordered\-Atom} object can
 be uniquely indexed using its altloc specifier. The \texttt{Disordered\-Atom}
 object forwards all uncaught method calls to the selected Atom object,
-by default the one that represents the atom with with the highest
+by default the one that represents the atom with the highest
 occupancy. The user can of course change the selected \texttt{Atom}
 object, making use of its altloc specifier. In this way atom disorder
 is represented correctly without much additional complexity. In other
@@ -988,7 +988,7 @@ for it - free for academic use, see \url{http://www.cmbi.kun.nl/gv/dssp/}).
 Then use the \texttt{DSSP} class, which maps \texttt{Residue} objects
 to their secondary structure (and accessible surface area). The DSSP
 codes are listed in Table \ref{cap:DSSP-codes}. Note that DSSP (the
-program, and thus by consequence the class) cannot handle mutiple
+program, and thus by consequence the class) cannot handle multiple
 models!
 
 %
@@ -1045,7 +1045,7 @@ solvent accessible surface. It's a fairly new and very powerful parameterization
 of solvent accessibility. For this functionality, you need to install
 Michel Sanner's MSMS program (\url{http://www.scripps.edu/pub/olson-web/people/sanner/html/msms_home.html}).
 Then use the \texttt{ResidueDepth} class. This class behaves as a
-dictionary wich maps \texttt{Residue} objects to corresponding (residue
+dictionary which maps \texttt{Residue} objects to corresponding (residue
 depth, C$\alpha$ depth) tuples. The C$\alpha$ depth is the distance
 of a residue's C$\alpha$ atom to the solvent accessible surface. 
 

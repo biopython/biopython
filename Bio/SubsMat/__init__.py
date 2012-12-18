@@ -24,7 +24,7 @@ Pi, Pj: expected frequencies of i and j, respectively.
 
 Usage:
 -----
-The following section is layed out in the order by which most people wish
+The following section is laid out in the order by which most people wish
 to generate a log-odds matrix. Of course, interim matrices can be
 generated and investigated. Most people just want a log-odds matrix,
 that's all.
