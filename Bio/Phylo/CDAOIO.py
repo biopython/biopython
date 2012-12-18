@@ -138,7 +138,7 @@ class Parser(object):
             clade = self.new_clade(root_node)
             clade.clades = self.parse_children(root_node, model)
             
-            yield Newick.Tree(root=clade, rooted=True)
+            yield Newick.Tree(root=clade, rooted=self.rooted)
             
             
     def new_clade(self, node):
@@ -178,8 +178,8 @@ class Parser(object):
                 ?node cdao:has_Parent ?parent_node ;
                       cdao:belongs_to_Edge_as_Child 
                       [ cdao:has_annotation
-                        [a cdao:EdgeLength ;
-                            cdao:has_value ?branch_length
+                        [ a cdao:EdgeLength ;
+                          cdao:has_value ?branch_length
                         ]
                       ] .
             } .
@@ -192,6 +192,7 @@ class Parser(object):
         q = RDF.Query(query, query_language='sparql')
         
         for result in q.execute(model):
+            #print result
             node = str(result['node'].uri)
             self.node_info[node] = r = {}
             
