@@ -10808,6 +10808,10 @@ dimension and the position as the second dimension:
 4
 >>> m.counts['T',3]
 1
+\end{verbatim}
+Column-like access works like this:
+%Don't doctest this as dictionary order is platform dependent:
+\begin{verbatim}
 >>> m.counts[:,3]
 {'A': 3, 'C': 0, 'T': 1, 'G': 0}
 \end{verbatim}
