@@ -181,8 +181,8 @@ class Baseml(Paml):
 
 
 def read(results_file):
-    results = {}
     """Parse a BASEML results file."""
+    results = {}
     if not os.path.exists(results_file):
         raise IOError("Results file does not exist.")
     handle = open(results_file)
