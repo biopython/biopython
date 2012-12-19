@@ -325,7 +325,13 @@ under the background distribution.
                     if p > 0:
                         logodds = math.log(p/b, 2)
                     else:
-                        logodds = float("-inf")
+                        #TODO - Ensure this has unittest coverage!
+                        try:
+                            logodds = float("-inf")
+                        except ValueError:
+                            # On Python 2.5 or older that was handled in C code,
+                            # and failed on Windows XP 32bit
+                            logodds = - 1E400
                     values[letter].append(logodds)
             else:
                 for i in range(self.length):
