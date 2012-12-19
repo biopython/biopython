@@ -179,7 +179,7 @@ class Parser(object):
                 if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
                     self.nodes.add(s)
             if v == qUri('cdao:has_root'):
-                self.tree_roots.add(s)
+                self.tree_roots.add(o)
                     
         for node in self.nodes:
             self.node_info[node] = {}
