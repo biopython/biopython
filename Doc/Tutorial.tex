@@ -10775,10 +10775,13 @@ Suppose we have these instances of a DNA motif:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio.Seq import Seq
->>> instances = [Seq("TATAA"),
-...              Seq("TATTA"),
-...              Seq("TATAA"),
-...              Seq("TATAA"),
+>>> instances = [Seq("TACAA"),
+...              Seq("TACGC"),
+...              Seq("TACAC"),
+...              Seq("TACCC"),
+...              Seq("AACCC"),
+...              Seq("AATGC"),
+...              Seq("AATGC"),
 ...             ]
 \end{verbatim}
 then we can create a Motif object as follows:
@@ -10798,22 +10801,24 @@ nucleotide at each position. You can access the counts as a dictionary:
 %cont-doctest
 \begin{verbatim}
 >>> m.counts['A']
-[0, 4, 0, 3, 4]
+[3, 7, 0, 2, 1]
 \end{verbatim}
 but you can also think of it as a 2D array with the nucleotide as the first
 dimension and the position as the second dimension:
 %cont-doctest
 \begin{verbatim}
->>> m.counts['T',2]
+>>> m.counts['T',0]
 4
+>>> m.counts['T',2]
+2
 >>> m.counts['T',3]
-1
+0
 \end{verbatim}
 Column-like access works like this:
 %Don't doctest this as dictionary order is platform dependent:
 \begin{verbatim}
 >>> m.counts[:,3]
-{'A': 3, 'C': 0, 'T': 1, 'G': 0}
+{'A': 3, 'C': 0, 'G': 4, 'T': 0}
 \end{verbatim}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
 in the sorted letters in the alphabet of the motif:
@@ -10826,9 +10831,9 @@ IUPACUnambiguousDNA()
 >>> sorted(m.alphabet.letters)
 ['A', 'C', 'G', 'T']
 >>> m.counts['A',:]
-(0, 4, 0, 3, 4)
+(3, 7, 0, 2, 1)
 >>> m.counts[0,:]
-(0, 4, 0, 3, 4)
+(3, 7, 0, 2, 1)
 \end{verbatim}
 The motif has an associated consensus sequence, defined as the sequence of
 letters along the positions of the motif for which the largest value in the 
@@ -10836,147 +10841,45 @@ corresponding columns of the \verb+.counts+ matrix is obtained:
 %cont-doctest
 \begin{verbatim}
 >>> m.consensus
-Seq('TATAA', IUPACUnambiguousDNA())
+Seq('TACGC', IUPACUnambiguousDNA())
 \end{verbatim}
 as well as an anticonsensus sequence, corresponding to the smallest values in
 the columns of the \verb+.counts+ matrix:
 %cont-doctest
 \begin{verbatim}
 >>> m.anticonsensus
-Seq('GGGGG', IUPACUnambiguousDNA())
+Seq('GGGTG', IUPACUnambiguousDNA())
 \end{verbatim}
 You can also ask for a degenerate consensus sequence, in which ambiguous
 nucleotides are used for positions where there are multiple nucleotides with
-high counts. For example, if
+high counts:
 %cont-doctest
 \begin{verbatim}
->>> instances = [Seq("TACAA"),
-...              Seq("TACTA"),
-...              Seq("TAGAC"),
-...              Seq("TAGAC"),
-...              Seq("AAATC"),
-...              Seq("AATAA"),
-...              Seq("AATAA"),
-...             ]
+>>> m.degenerate_consensus
+Seq('WACVC', IUPACAmbiguousDNA())
 \end{verbatim}
-then the consensus nucleotide at positions 0, 2, and 4 are ambiguous:
-%cont-doctest
-\begin{verbatim}
->>> mm = Motif.Motif(instances=instances)
->>> mm.degenerate_consensus
-Seq('WANAM', IUPACAmbiguousDNA())
-\end{verbatim}
-Here, W, N, and M follow the IUPAC nucleotide ambiguity codes: W is either A or T, M is either A or C, and N is any nucleotide \cite{cornish1985}. The degenerate consensus sequence is constructed followed the rules specified by Cavener \cite{cavener1987}.
+Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T, and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is constructed followed the rules specified by Cavener \cite{cavener1987}.
 
-We can also get a reverse complement of a motif:
+We can also get the reverse complement of a motif:
 %>>> m.reverse_complement()
 %<Bio.Motif.Motif.Motif object at 0xb39890>
 %cont-doctest
 \begin{verbatim}
 >>> m.reverse_complement().consensus
-Seq('TTATA', IUPACUnambiguousDNA())
+Seq('GCGTA', IUPACUnambiguousDNA())
 >>> for i in m.reverse_complement().instances:
 ...     print i
-TTATA
-TAATA
-TTATA
-TTATA
+TTGTA
+GCGTA
+GTGTA
+GGGTA
+GGGTT
+GCATT
+GCATT
 \end{verbatim}
 
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
-
-\section{Position-Weight Matrices}
-We can also calculate the information content of a motif with a simple call:
-%cont-doctest
-\begin{verbatim}
->>> pwm = m.counts.normalize(pseudocounts=0.25)
->>> print "%0.2f" % pwm.ic()
-5.27
-\end{verbatim}
-This gives us a number of bits of information provided by the motif,
-which tells us how much the motif differs from background.
-
-By default, the information content is calculated with respect to a uniform
-background, in which all letters in the alphabet of the motif are assigend an
-equal probability. To specify a non-uniform background, pass a dictionary with
-the background probabilities when calling this method. For example, the GC
-content for human is approximately 40\%. To calculate the information
-content of a motif with respect to this background, use
-%cont-doctest
-\begin{verbatim}
->>> print "%0.2f" % pwm.ic(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
-5.13
-\end{verbatim}
-
-The most common representation of a motif is a PWM (Position Weight
-Matrix). It summarizes the probabilities of finding any symbol (in
-this case nucleotide) in any position of a motif. It can be computed by calling the \verb|.pwm()| method:
-\begin{verbatim}
->>> m.pwm()
-[{'A': 0.05, 'C': 0.05, 'T': 0.85, 'G': 0.05}, 
- {'A': 0.85, 'C': 0.05, 'T': 0.05, 'G': 0.05}, 
- {'A': 0.05, 'C': 0.05, 'T': 0.85, 'G': 0.05}, 
- {'A': 0.65, 'C': 0.05, 'T': 0.25, 'G': 0.05}, 
- {'A': 0.85, 'C': 0.05, 'T': 0.05, 'G': 0.05}]
-\end{verbatim}
-The probabilities in the motif's PWM are based on the counts in the
-instances, but we can see, that even though there were no Gs and no Cs
-in the instances, we still have non-zero probabilities assigned to
-them. These come from pseudo-counts which are, roughly speaking, a
-commonly used way to acknowledge the incompleteness of our knowledge
-and avoid technical problems with calculating logarithms of $0$.
-
-We can control the way that pseudo-counts are added with two
-properties of Motif objects \verb|.background| is the probability
-distribution over all symbols in the alphabet that we assume represents background, non-motif sequences (usually based on the GC content of the respective
-genome). It is by default set to a uniform distribution upon creation of a motif:
-\begin{verbatim}
->>> m.background  
-{'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
-\end{verbatim}
-The other parameter is \verb|.beta|, which states the amount of
-pseudo-counts we should add to the PWM. By default it is set to $1.0$,
-%cont-doctest
-\begin{verbatim}
->>> m.beta
-1.0
-\end{verbatim}
-so that the total input of pseudo-counts is equal to that of one instance. 
-
-Using the background distribution and PWM with pseudo-counts added,
-it's easy to compute the log-odds ratios, telling us what are the log
-odds of a particular symbol to be coming from a motif against the
-background. We can use the \verb|.log_odds()| method:
-
-\begin{verbatim}
- >>> m.log_odds() 
-[{'A': -2.3219280948873622, 
-  'C': -2.3219280948873622, 
-  'T': 1.7655347463629771, 
-  'G': -2.3219280948873622}, 
- {'A': 1.7655347463629771, 
-  'C': -2.3219280948873622, 
-  'T': -2.3219280948873622, 
-  'G': -2.3219280948873622}, 
- {'A': -2.3219280948873622, 
-  'C': -2.3219280948873622, 
-  'T': 1.7655347463629771, 
-  'G': -2.3219280948873622}, 
- {'A': 1.3785116232537298, 
-  'C': -2.3219280948873622, 
-  'T': 0.0, 
-  'G': -2.3219280948873622}, 
- {'A': 1.7655347463629771, 
-  'C': -2.3219280948873622, 
-  'T': -2.3219280948873622, 
-  'G': -2.3219280948873622}
-]
-\end{verbatim}
-Here we can see positive values for symbols more frequent in the motif
-than in the background and negative for symbols more frequent in the
-background. $0.0$ means that it's equally likely to see a symbol in the
-background and in the motif (e.g. `T' in the second-last position).
 
 \subsection{Reading and writing}
 \label{sec:io}
@@ -11053,13 +10956,19 @@ Speaking of exporting, let's look at export functions. We can export to fasta:
 \begin{verbatim}
 >>> print m.format("fasta")
 >instance0
-TATAA
+TACAA
 >instance1
-TATTA
+TACGC
 >instance2
-TATAA
+TACAC
 >instance3
-TATAA
+TACCC
+>instance4
+AACCC
+>instance5
+AATGC
+>instance6
+AATGC
 <BLANKLINE>
 \end{verbatim}
 or to TRANSFAC-like matrix format (used by some motif processing software)
@@ -11067,11 +10976,11 @@ or to TRANSFAC-like matrix format (used by some motif processing software)
 \begin{verbatim}
 >>> print m.format("transfac")
 P0      A      C      G      T
-01      0      0      0      4      T
-02      4      0      0      0      A
-03      0      0      0      4      T
-04      3      0      0      1      A
-05      4      0      0      0      A
+01      3      0      0      4      W
+02      7      0      0      0      A
+03      0      5      0      2      C
+04      2      2      3      0      V
+05      1      6      0      0      C
 XX
 //
 <BLANKLINE>
@@ -11083,6 +10992,77 @@ Finally, if we have internet access, we can create a \href{http://weblogo.berkel
 \end{verbatim}
 We should get our logo saved as a png in the specified file.
 
+\section{Position-Weight Matrices}
+
+The \verb+.counts+ attribute of a Motif object shows how often each nucleotide appeared at each position along the alignment. We can normalize this matrix by dividing by the number of instances in the alignment, resulting in the probability of each nucleotide at each position along the alignment. We refer to these probabilities as the position-weight matrix. However, beware that in the literature this term may also be used to refer to the position-specific scoring matrix, which we discuss below.
+
+Usually, pseudocounts are added to each position before normalizing. This avoids overfitting of the position-weight matrix to the limited number of motif instances in the alignment, and can also prevent probabilities from becoming zero. To add a fixed pseudocount to all nucleotides at all positions, specify a number for the \verb+pseudocounts+ argument:
+%cont-doctest
+\begin{verbatim}
+>>> pwm = m.counts.normalize(pseudocounts=0.5)
+\end{verbatim}
+Alternatively, \verb+pseudocounts+ can be a dictionary specifying the pseudocounts for each nucleotide. For example, as the GC content of the human genome is about 40\%, you may want to choose the pseudocounts accordingly:
+%cont-doctest
+\begin{verbatim}
+>>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
+\end{verbatim}
+We can also calculate the information content of a motif with a simple call:
+%cont-doctest
+\begin{verbatim}
+>>> print "%0.2f" % pwm.ic()
+3.22
+\end{verbatim}
+This gives us a number of bits of information provided by the motif,
+which tells us how much the motif differs from background.
+
+By default, the information content is calculated with respect to a uniform
+background, in which all letters in the alphabet of the motif are assigend an
+equal probability. To specify a non-uniform background, pass a dictionary with
+the background probabilities when calling this method. To calculate the
+information content of a motif with respect to a background corresponding
+to a GC content of 40\%, use
+%cont-doctest
+\begin{verbatim}
+>>> print "%0.2f" % pwm.ic(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
+3.08
+\end{verbatim}
+
+\section{Position-Specific Scoring Matrices}
+
+Using the background distribution and PWM with pseudo-counts added,
+it's easy to compute the log-odds ratios, telling us what are the log
+odds of a particular symbol to be coming from a motif against the
+background. We can use the \verb|.log_odds()| method:
+
+\begin{verbatim}
+ >>> m.log_odds() 
+[{'A': -2.3219280948873622, 
+  'C': -2.3219280948873622, 
+  'T': 1.7655347463629771, 
+  'G': -2.3219280948873622}, 
+ {'A': 1.7655347463629771, 
+  'C': -2.3219280948873622, 
+  'T': -2.3219280948873622, 
+  'G': -2.3219280948873622}, 
+ {'A': -2.3219280948873622, 
+  'C': -2.3219280948873622, 
+  'T': 1.7655347463629771, 
+  'G': -2.3219280948873622}, 
+ {'A': 1.3785116232537298, 
+  'C': -2.3219280948873622, 
+  'T': 0.0, 
+  'G': -2.3219280948873622}, 
+ {'A': 1.7655347463629771, 
+  'C': -2.3219280948873622, 
+  'T': -2.3219280948873622, 
+  'G': -2.3219280948873622}
+]
+\end{verbatim}
+Here we can see positive values for symbols more frequent in the motif
+than in the background and negative for symbols more frequent in the
+background. $0.0$ means that it's equally likely to see a symbol in the
+background and in the motif (e.g. `T' in the second-last position).
+
 \subsection{Searching for instances}
 \label{sec:search}
 
@@ -11091,7 +11071,7 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 
 %cont-doctest
 \begin{verbatim}
->>> test_seq=Seq("TATGATGTAGTATAATATAATTATAA",m.alphabet)
+>>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA",m.alphabet)
 \end{verbatim}
 
 The simplest way to find instances, is to look for exact matches of
@@ -11101,9 +11081,9 @@ the true instances of the motif:
 >>> for pos,seq in m.search_instances(test_seq):
 ...     print pos,seq.tostring()
 ... 
-10 TATAA
-15 TATAA
-21 TATAA
+0 TACAC
+10 TACAA
+13 AACCC
 \end{verbatim}
 We can do the same with the reverse complement (to find instances on the complementary strand):
 %cont-doctest
@@ -11111,22 +11091,21 @@ We can do the same with the reverse complement (to find instances on the complem
 >>> for pos,seq in m.reverse_complement().search_instances(test_seq):
 ...     print pos,seq.tostring()
 ... 
-12 TAATA
-20 TTATA
+6 GCATT
+20 GCATT
 \end{verbatim}
 
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 %cont-doctest
 \begin{verbatim}
 >>> pssm = pwm.make_pssm()
->>> for position, score in pssm.search(test_seq, threshold=5.0):
+>>> for position, score in pssm.search(test_seq, threshold=4.0):
 ...     print "Position %i gives score %0.2f" % (position, score)
 ... 
-Position 10 gives score 8.44
-Position -14 gives score 7.06
-Position 15 gives score 8.44
-Position -6 gives score 8.44
-Position 21 gives score 8.44
+Position 0 gives score 5.77
+Position -20 gives score 4.75
+Position 13 gives score 5.30
+Position -6 gives score 4.75
 \end{verbatim}
 The negative positions refer to instances of the motif found on the
 reverse strand of the test sequence, and follow the Python convention
@@ -11135,8 +11114,8 @@ is located at \verb|test_seq[pos:pos+len(m)]| both for positive and for
 negative values of \verb|pos|.
 
 You may notice the threshold parameter, here set arbitrarily to
-$5.0$. This is in $log_2$, so we are now looking only for words, which
-are 32 times more likely to occur under the motif model than in the
+$4.0$. This is in $log_2$, so we are now looking only for words, which
+are 16 times more likely to occur under the motif model than in the
 background. The default threshold is $0.0$, which selects everything
 that looks more like the motif than the background.
 
