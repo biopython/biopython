@@ -110,8 +110,7 @@ class Seq(object):
 
         This is a read only property provided for backwards compatility with
         older versions of Biopython (as is the tostring() method). We now
-        encourage you to use str(my_seq) instead of my_seq.data or the method
-        my_seq.tostring().
+        encourage you to use str(my_seq) instead of my_seq.data.
 
         In recent releases of Biopython it was possible to change a Seq object
         by updating its data property, but this triggered a deprecation warning.
@@ -121,7 +120,7 @@ class Seq(object):
         >>> from Bio.Seq import Seq
         >>> from Bio.Alphabet import generic_dna
         >>> my_seq = Seq("ACGT", generic_dna)
-        >>> str(my_seq) == my_seq.tostring() == "ACGT"
+        >>> str(my_seq) == "ACGT"
         True
         >>> my_seq.data = "AAAA"
         Traceback (most recent call last):
@@ -131,8 +130,8 @@ class Seq(object):
         import warnings
         import Bio
         warnings.warn("Accessing the .data attribute is deprecated. Please "
-                      "use str(my_seq) or my_seq.tostring() instead of "
-                      "my_seq.data.", Bio.BiopythonDeprecationWarning)
+                      "use str(my_seq) instead of my_seq.data.",
+                      Bio.BiopythonDeprecationWarning)
         return str(self)
 
     def __repr__(self):
@@ -313,16 +312,14 @@ class Seq(object):
             raise TypeError
 
     def tostring(self):                            # Seq API requirement
-        """Returns the full sequence as a python string (semi-obsolete).
+        """Returns the full sequence as a python string (DEPRECATED).
 
-        Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring()."""
-        #TODO - Fix all places elsewhere in Biopython using this method,
-        #then start deprecation process?
-        #import warnings
-        #warnings.warn("This method is obsolete; please use str(my_seq) "
-        #              "instead of my_seq.tostring().",
-        #              PendingDeprecationWarning)
+        You are now encouraged to use str(my_seq) instead of
+        my_seq.tostring()."""
+        import warnings
+        warnings.warn("This method is obsolete; please use str(my_seq) "
+                      "instead of my_seq.tostring().",
+                      PendingDeprecationWarning)
         return str(self)
 
     def tomutable(self):   # Needed?  Or use a function?
@@ -1743,7 +1740,7 @@ class MutableSeq(object):
         """
         try:
             #TODO - Should we check the alphabet?
-            search = sub.tostring()
+            search = str(sub)
         except AttributeError:
             search = sub
 
@@ -1759,7 +1756,7 @@ class MutableSeq(object):
             return count
         else:
             #TODO - Can we do this more efficiently?
-            return self.tostring().count(search, start, end)
+            return str(self).count(search, start, end)
 
     def index(self, item):
         for i in range(len(self.data)):
@@ -1822,10 +1819,10 @@ class MutableSeq(object):
                 self.data.append(c)
 
     def tostring(self):
-        """Returns the full sequence as a python string (semi-obsolete).
+        """Returns the full sequence as a python string (DEPRECATED).
 
-        Although not formally deprecated, you are now encouraged to use
-        str(my_seq) instead of my_seq.tostring().
+        You are now encouraged to use str(my_seq) instead of my_seq.tostring()
+        as this method is officially deprecated.
 
         Because str(my_seq) will give you the full sequence as a python string,
         there is often no need to make an explicit conversion.  For example,
@@ -1836,6 +1833,10 @@ class MutableSeq(object):
 
         print "ID={%s}, sequence={%s}" % (my_name, my_seq.tostring())
         """
+        import warnings
+        warnings.warn("This method is obsolete; please use str(my_seq) "
+                      "instead of my_seq.tostring().",
+                      PendingDeprecationWarning)
         return "".join(self.data)
 
     def toseq(self):

@@ -263,7 +263,7 @@ and HTML formats
   You need Biopython 1.54 or later, or just wrap the item with \verb|[...]| to create a list of one element.
 
   \item \emph{Why doesn't} \verb|str(...)| \emph{give me the full sequence of a} \verb|Seq| \emph{object?} \\
-  You need Biopython 1.45 or later.  Alternatively, rather than \verb|str(my_seq)|, use \verb|my_seq.tostring()| (which will also work on recent versions of Biopython).
+  You need Biopython 1.45 or later.
   
   \item \emph{Why doesn't} \verb|Bio.Blast| \emph{work with the latest plain text NCBI blast output?} \\
   The NCBI keep tweaking the plain text output from the BLAST tools, and keeping our parser up to date is/was an ongoing struggle.
@@ -717,13 +717,9 @@ Section~\ref{sec:SeqRecord-format} describes a neat way to get a FASTA formatted
 string from a \verb|SeqRecord| object, while the more general topic of reading and
 writing FASTA format sequence files is covered in Chapter~\ref{chapter:Bio.SeqIO}.
 
-\emph{NOTE:} If you are using Biopython 1.44 or older, using \verb|str(my_seq)|
-will give just a truncated representation.  Instead use \verb|my_seq.tostring()|
-(which is still available in the current Biopython releases for backwards compatibility):
-
 %cont-doctest
 \begin{verbatim}
->>> my_seq.tostring()
+>>> str(my_seq)
 'GATCGATGGGCCTATATAGGATCGAAAATCGC'
 \end{verbatim}
 
@@ -11079,7 +11075,7 @@ the true instances of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.search_instances(test_seq):
-...     print pos,seq.tostring()
+...     print pos, str(seq)
 ... 
 0 TACAC
 10 TACAA
@@ -11089,7 +11085,7 @@ We can do the same with the reverse complement (to find instances on the complem
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.reverse_complement().search_instances(test_seq):
-...     print pos,seq.tostring()
+...     print pos, str(seq)
 ... 
 6 GCATT
 20 GCATT

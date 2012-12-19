@@ -12,6 +12,11 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Bio.Seq.Seq.tostring() and Bio.Seq.MutableSeq.tostring()
+========================================================
+Deprecated as of Release 1.61. You should now use str(Bio.Seq.Seq) or
+str(Bio.Seq.MutableSeq) instead of the tostring() methods.
+
 Bio.SeqIO.Interfaces
 ====================
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
