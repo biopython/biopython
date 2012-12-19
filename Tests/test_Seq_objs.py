@@ -345,7 +345,8 @@ class StringMethodTests(unittest.TestCase):
             try :
                 comp = example1.complement()
             except ValueError, e:
-                self.assertEqual(str(e), "Proteins do not have complements!")
+                self.assertEqual(str(e), "'complement' is not applicable for "
+                        "protein sequences")
                 continue
             str1 = str(example1)
             #This only does the unambiguous cases
@@ -373,7 +374,8 @@ class StringMethodTests(unittest.TestCase):
             try :
                 comp = example1.reverse_complement()
             except ValueError, e:
-                self.assertEqual(str(e), "Proteins do not have complements!")
+                self.assertEqual(str(e), "'reverse_complement' is not "
+                        "applicable for protein sequences")
                 continue
             str1 = str(example1)
             #This only does the unambiguous cases
@@ -401,9 +403,7 @@ class StringMethodTests(unittest.TestCase):
                 try :
                     tran = example1.transcribe()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be transcribed!":
-                        continue
-                    if str(e) == "RNA cannot be transcribed!":
+                    if str(e).startswith("'transcribe' is not applicable for "):
                         continue
                     raise e
                 str1 = str(example1)
@@ -419,10 +419,8 @@ class StringMethodTests(unittest.TestCase):
                 try :
                     tran = example1.back_transcribe()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be back transcribed!":
-                        continue
-                    if str(e) == "DNA cannot be back transcribed!":
-                        continue
+                    if str(e).startswith("'back_transcribe' is not applicable "
+                            "for "): continue
                     raise e
                 str1 = str(example1)
                 self.assertEqual(str1.replace("U","T").replace("u","t"), str(tran))
@@ -437,8 +435,8 @@ class StringMethodTests(unittest.TestCase):
                 try :
                     tran = example1.translate()
                 except ValueError, e:
-                    if str(e) == "Proteins cannot be translated!":
-                        continue
+                    if str(e) == "'translate' is not applicable for protein " \
+                            "sequences" : continue
                     raise e
                 #This is based on the limited example not having stop codons:
                 if tran.alphabet not in [extended_protein, protein, generic_protein]:

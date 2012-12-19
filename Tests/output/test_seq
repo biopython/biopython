@@ -175,40 +175,40 @@ Seq('T', IUPACAmbiguousDNA()) -> Seq('U', IUPACAmbiguousRNA())
 Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> Seq('UCAAAAGGAUGCAUCAUGU', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', Alphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 'ATGAAACtg' -> 'AUGAAACug'
-Seq('AUGAAACUG', RNAAlphabet()) -> RNA cannot be transcribed!
+Seq('AUGAAACUG', RNAAlphabet()) -> 'transcribe' is not applicable for RNA sequences
 Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> Seq('AUGAAACUG', IUPACUnambiguousRNA())
 Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> Seq('AUGAAA-CUG', RNAAlphabet())
 Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> Seq('AUGAAACUGWN', IUPACAmbiguousRNA())
-Seq('AUGAAACUG', RNAAlphabet()) -> RNA cannot be transcribed!
-Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> RNA cannot be transcribed!
-Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> RNA cannot be transcribed!
-Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> RNA cannot be transcribed!
+Seq('AUGAAACUG', RNAAlphabet()) -> 'transcribe' is not applicable for RNA sequences
+Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> 'transcribe' is not applicable for RNA sequences
+Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> 'transcribe' is not applicable for RNA sequences
+Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> 'transcribe' is not applicable for RNA sequences
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
 MutableSeq('ATGAAACTG', DNAAlphabet()) -> Seq('AUGAAACUG', RNAAlphabet())
-MutableSeq('AUGaaaCUG', IUPACUnambiguousRNA()) -> RNA cannot be transcribed!
-Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be transcribed!
+MutableSeq('AUGaaaCUG', IUPACUnambiguousRNA()) -> 'transcribe' is not applicable for RNA sequences
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> 'transcribe' is not applicable for protein sequences
 
 Back-transcribe RNA into DNA
 ============================
-Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> DNA cannot be back transcribed!
-Seq('T', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
-Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
+Seq('TCAAAAGGATGCATCATG', IUPACUnambiguousDNA()) -> 'back_transcribe' is not applicable for DNA sequences
+Seq('T', IUPACAmbiguousDNA()) -> 'back_transcribe' is not applicable for DNA sequences
+Seq('TCAAAAGGATGCATCATGT', IUPACAmbiguousDNA()) -> 'back_transcribe' is not applicable for DNA sequences
 Seq('ATGAAACTG', Alphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 'ATGAAACtg' -> 'ATGAAACtg'
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
-Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> DNA cannot be back transcribed!
-Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> DNA cannot be back transcribed!
-Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> DNA cannot be back transcribed!
+Seq('ATGAAACTG', IUPACUnambiguousDNA()) -> 'back_transcribe' is not applicable for DNA sequences
+Seq('ATGAAA-CTG', Gapped(IUPACUnambiguousDNA(), '-')) -> 'back_transcribe' is not applicable for DNA sequences
+Seq('ATGAAACTGWN', IUPACAmbiguousDNA()) -> 'back_transcribe' is not applicable for DNA sequences
 Seq('AUGAAACUG', RNAAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 Seq('AUGAAA==CUG', Gapped(RNAAlphabet(), '=')) -> Seq('ATGAAA==CTG', DNAAlphabet())
 Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> Seq('ATGAAACTG', IUPACUnambiguousDNA())
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> Seq('ATGAAACTGWN', IUPACAmbiguousDNA())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Seq('ATGAAACTG', DNAAlphabet())
-MutableSeq('ATGAAACTG', DNAAlphabet()) -> DNA cannot be back transcribed!
+MutableSeq('ATGAAACTG', DNAAlphabet()) -> 'back_transcribe' is not applicable for DNA sequences
 MutableSeq('AUGaaaCUG', IUPACUnambiguousRNA()) -> Seq('ATGaaaCTG', IUPACUnambiguousDNA())
-Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins cannot be back transcribed!
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> 'back_transcribe' is not applicable for protein sequences
 
 Reverse Complement
 ==================
@@ -247,7 +247,7 @@ MutableSeq('ATGAAACTG', DNAAlphabet())
 MutableSeq('AUGaaaCUG', IUPACUnambiguousRNA())
 -> Seq('CAGuuuCAU', IUPACUnambiguousRNA())
 Seq('ACTGTCGTCT', ProteinAlphabet())
--> Proteins do not have complements!
+-> 'reverse_complement' is not applicable for protein sequences
 
 Translating
 ===========
@@ -286,7 +286,7 @@ MutableSeq('ATGAAACTG', DNAAlphabet())
 MutableSeq('AUGaaaCUG', IUPACUnambiguousRNA())
 -> Seq('MKL', IUPACProtein())
 Seq('ACTGTCGTCT', ProteinAlphabet())
--> Proteins cannot be translated!
+-> 'translate' is not applicable for protein sequences
 
 Seq's .complement() method
 ==========================
@@ -304,7 +304,7 @@ Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> Seq('UACUUUGAC', IUPACUnambiguousRNA(
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> Seq('UACUUUGACWN', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('TACTTTGAC', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Mixed RNA/DNA found
-Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> 'complement' is not applicable for protein sequences
 
 Seq's .reverse_complement() method
 ==================================
@@ -322,4 +322,4 @@ Seq('AUGAAACUG', IUPACUnambiguousRNA()) -> Seq('CAGUUUCAU', IUPACUnambiguousRNA(
 Seq('AUGAAACUGWN', IUPACAmbiguousRNA()) -> Seq('NWCAGUUUCAU', IUPACAmbiguousRNA())
 Seq('ATGAAACTG', NucleotideAlphabet()) -> Seq('CAGTTTCAT', NucleotideAlphabet())
 Seq('AUGAAACTG', NucleotideAlphabet()) -> Mixed RNA/DNA found
-Seq('ACTGTCGTCT', ProteinAlphabet()) -> Proteins do not have complements!
+Seq('ACTGTCGTCT', ProteinAlphabet()) -> 'reverse_complement' is not applicable for protein sequences
