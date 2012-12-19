@@ -178,7 +178,7 @@ class Parser(object):
             if v == qUri('rdf:type'):
                 if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
                     self.nodes.add(s)
-            if v == qUri('rdf:has_root'):
+            if v == qUri('cdao:has_root'):
                 self.tree_roots.add(s)
                     
         for node in self.nodes:
