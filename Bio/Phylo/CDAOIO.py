@@ -30,7 +30,9 @@ def import_rdf():
 def new_storage():
     RDF = import_rdf()
     
-    storage = RDF.MemoryStorage()
+    storage = RDF.Storage(storage_name="hashes",
+                          name="test",
+                          options_string="new='yes',hash-type='memory',dir='.'")
     if storage is None:
         raise CDAOError("new RDF.Storage failed")
     return storage
@@ -120,19 +122,7 @@ class Parser(object):
         # look up branch lengths/TUs for all nodes
         self.get_node_info(model)
         
-        # get all tree roots
-        query ='''
-        PREFIX cdao: <%s>
-        SELECT * WHERE 
-        {
-            ?tree a cdao:RootedTree ;
-                  cdao:has_root ?root_node .
-        }
-        ''' % (self.urls['cdao'])
-        q = RDF.Query(query, query_language='sparql')
-        
-        for result in q.execute(model):
-            root_node = str(result['root_node'].uri)
+        for root_node in self.tree_roots:
             clade = self.new_clade(root_node)
             clade.clades = self.parse_children(root_node, model)
             
@@ -164,6 +154,7 @@ class Parser(object):
         self.obj_info = {}
         self.children = {}
         self.nodes = set()
+        self.tree_roots = set()
         
         for statement in model:
             s, v, o = str(statement.subject), Uri(str(statement.predicate)), str(statement.object)
@@ -172,7 +163,6 @@ class Parser(object):
             this = self.obj_info[s]
             
             assignments = {
-                           qUri('rdf:type'): 'type',
                            qUri('cdao:has_Parent'): 'parent',
                            qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
                            qUri('cdao:has_annotation'): 'annotation',
@@ -180,7 +170,7 @@ class Parser(object):
                            qUri('cdao:represents_TU'): 'tu',
                            qUri('rdf:label'): 'label',
                            }
-                    
+            
             try:
                 this[assignments[v]] = o
             except KeyError: pass
@@ -188,6 +178,8 @@ class Parser(object):
             if v == qUri('rdf:type'):
                 if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
                     self.nodes.add(s)
+            if v == qUri('rdf:has_root'):
+                self.tree_roots.add(s)
                     
         for node in self.nodes:
             self.node_info[node] = {}
