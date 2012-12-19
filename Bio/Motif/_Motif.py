@@ -121,7 +121,7 @@ class GenericPositionMatrix(dict):
             except ValueError:
                 # On Python 2.5 or older that was handled in C code,
                 # and failed on Windows XP 32bit
-                neg_inf = - 1E400
+                maximum = - 1E400
             for letter in self.alphabet.letters:
                 count = self[letter][i]
                 if count > maximum:
