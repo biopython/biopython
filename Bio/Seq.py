@@ -58,22 +58,21 @@ def _invalid_for(*invalids):
     invalids -- String or list of invalid alphabets. Must either be 'protein',
                 'dna', or 'rna'.
     """
-    _alphs = set(['dna', 'rna', 'protein'])
+    alph_map = {
+            Alphabet.DNAAlphabet: 'DNA',
+            Alphabet.NucleotideAlphabet: 'nucleotide',
+            Alphabet.ProteinAlphabet: 'protein',
+            Alphabet.RNAAlphabet: 'RNA',
+    }
     def decorator(func):
-        assert all([x in _alphs for x in invalids])
+        assert all([x in alph_map for x in invalids])
         @wraps(func)
         def wrapped(self, *args, **kwargs):
-            base = Alphabet._get_base_alphabet(self.alphabet)
-            if 'protein' in invalids and isinstance(base,
-                    Alphabet.ProteinAlphabet):
-                raise ValueError("%r is not applicable for protein sequences" %
-                        func.__name__)
-            elif 'dna' in invalids and isinstance(base, Alphabet.DNAAlphabet):
-                raise ValueError("%r is not applicable for DNA sequences" %
-                        func.__name__)
-            elif 'rna' in invalids and isinstance(base, Alphabet.RNAAlphabet):
-                raise ValueError("%r is not applicable for RNA sequences" %
-                        func.__name__)
+            alph = Alphabet._get_base_alphabet(self.alphabet)
+            for invalid in invalids:
+                if isinstance(alph, invalid):
+                    raise ValueError("%r is not applicable for %s sequences" %
+                            (func.__name__, alph_map[invalid]))
             return func(self, *args, **kwargs)
         return wrapped
     return decorator
@@ -748,7 +747,7 @@ class Seq(object):
         """
         return Seq(str(self).lower(), self.alphabet._lower())
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def complement(self):
         """Returns the complement sequence. New Seq object.
 
@@ -798,7 +797,7 @@ class Seq(object):
         #thx to Michael Palmer, University of Waterloo
         return Seq(str(self).translate(ttable), self.alphabet)
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def reverse_complement(self):
         """Returns the reverse complement sequence. New Seq object.
 
@@ -834,7 +833,7 @@ class Seq(object):
         #Use -1 stride/step to reverse the complement
         return self.complement()[::-1]
 
-    @_invalid_for('rna', 'protein')
+    @_invalid_for(Alphabet.RNAAlphabet, Alphabet.ProteinAlphabet)
     def transcribe(self):
         """Returns the RNA sequence from a DNA sequence. New Seq object.
 
@@ -864,7 +863,7 @@ class Seq(object):
 
         return Seq(str(self).replace('T', 'U').replace('t', 'u'), alphabet)
     
-    @_invalid_for('dna', 'protein')
+    @_invalid_for(Alphabet.DNAAlphabet, Alphabet.ProteinAlphabet)
     def back_transcribe(self):
         """Returns the DNA sequence from an RNA sequence. New Seq object.
 
@@ -894,7 +893,7 @@ class Seq(object):
             alphabet = Alphabet.generic_dna
         return Seq(str(self).replace("U", "T").replace("u", "t"), alphabet)
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def translate(self, table="Standard", stop_symbol="*", to_stop=False,
                   cds=False):
         """Turns a nucleotide sequence into a protein sequence. New Seq object.
@@ -1336,7 +1335,7 @@ class UnknownSeq(Seq):
             else:
                 return 0
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def complement(self):
         """The complement of an unknown nucleotide equals itself.
 
@@ -1352,7 +1351,7 @@ class UnknownSeq(Seq):
         """
         return self
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def reverse_complement(self):
         """The reverse complement of an unknown nucleotide equals itself.
 
@@ -1444,7 +1443,7 @@ class UnknownSeq(Seq):
         """
         return UnknownSeq(self._length, self.alphabet._lower(), self._character.lower())
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def translate(self, **kwargs):
         """Translate an unknown nucleotide sequence into an unknown protein.
 
@@ -1798,7 +1797,7 @@ class MutableSeq(object):
         """
         self.data.reverse()
 
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def complement(self):
         """Modify the mutable sequence to take on its complement.
 
@@ -1822,7 +1821,7 @@ class MutableSeq(object):
         self.data = map(lambda c: d[c], self.data)
         self.data = array.array(self.array_indicator, self.data)
         
-    @_invalid_for('protein')
+    @_invalid_for(Alphabet.ProteinAlphabet)
     def reverse_complement(self):
         """Modify the mutable sequence to take on its reverse complement.
 
