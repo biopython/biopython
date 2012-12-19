@@ -513,8 +513,8 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         if isinstance(prefix, tuple):
-            prefix_strs = tuple([self._get_seq_str_and_check_alphabet(p)
-                              for p in prefix])
+            prefix_strs = tuple(self._get_seq_str_and_check_alphabet(p)
+                                for p in prefix)
             return str(self).startswith(prefix_strs, start, end)
         else:
             prefix_str = self._get_seq_str_and_check_alphabet(prefix)
@@ -544,8 +544,8 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         if isinstance(suffix, tuple):
-            suffix_strs = tuple([self._get_seq_str_and_check_alphabet(p)
-                              for p in suffix])
+            suffix_strs = tuple(self._get_seq_str_and_check_alphabet(p)
+                                for p in suffix)
             return str(self).endswith(suffix_strs, start, end)
         else:
             suffix_str = self._get_seq_str_and_check_alphabet(suffix)
