@@ -14,8 +14,9 @@ from Bio.Alphabet import single_letter_alphabet
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
+from Bio._utils import getattr_str, trim_str
 from Bio.SearchIO._utils import singleitem, allitems, fullcascade, \
-        fragcascade, getattr_str, trim_str
+        fragcascade
 
 from _base import _BaseHSP
 
@@ -1043,5 +1044,5 @@ class HSPFragment(_BaseHSP):
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()

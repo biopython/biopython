@@ -9,7 +9,8 @@ from copy import deepcopy
 from itertools import chain
 
 from Bio._py3k import OrderedDict
-from Bio.SearchIO._utils import partialcascade, trim_str
+from Bio._utils import trim_str
+from Bio.SearchIO._utils import partialcascade
 
 from _base import _BaseSearchObject
 from hit import Hit
@@ -698,5 +699,5 @@ class QueryResult(_BaseSearchObject):
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()
