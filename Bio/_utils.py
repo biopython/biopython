@@ -1,4 +1,5 @@
-# Copyright 2012 by Wibowo Arindrarto.  All rights reserved.
+# Copyright 2010 by Eric Talevich. All rights reserved.
+# Copyright 2012 by Wibowo Arindrarto. All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
@@ -40,6 +41,16 @@ def get_processor(format, mapping):
     mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
 
     return getattr(mod, obj_name)
+
+
+def iterlen(items):
+    """Count the number of items in an iterable.
+
+    Exhausts a generator, but doesn't require creating a full list.
+    """
+    for i, x in enumerate(items):
+        count = i
+    return count + 1
 
 
 def read_forward(handle):
