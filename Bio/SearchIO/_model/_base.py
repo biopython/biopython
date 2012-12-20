@@ -6,7 +6,7 @@
 """Abstract base classes for the SearchIO object model."""
 
 
-from Bio.SearchIO._utils import getattr_str, trim_str
+from Bio._utils import getattr_str, trim_str
 
 
 class _BaseSearchObject(object):
