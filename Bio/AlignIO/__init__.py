@@ -139,6 +139,7 @@ __docformat__ = "epytext en"  # not just plaintext
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
+from Bio._utils import get_processor
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
@@ -169,7 +170,7 @@ _FormatToWriter = {#"fasta" is done via Bio.SeqIO
                    }
 
 
-def write(alignments, handle, format):
+def write(alignments, handle, format=None):
     """Write complete set of alignments to a file.
 
     Arguments:
@@ -186,14 +187,6 @@ def write(alignments, handle, format):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
-
     if isinstance(alignments, Alignment):
         #This raised an exception in older versions of Biopython
         alignments = [alignments]
@@ -201,9 +194,7 @@ def write(alignments, handle, format):
     with as_handle(handle, 'w') as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
-            mod_name, writer_name = _FormatToWriter[format]
-            mod = __import__('Bio.AlignIO.%s' % mod_name, fromlist=[1])
-            writer_class = getattr(mod, writer_name)
+            writer_class = get_processor(format, _FormatToWriter, 'Bio.AlignIO')
             count = writer_class(fp).write_file(alignments)
         elif format in SeqIO._FormatToWriter:
             #Exploit the existing SeqIO parser to do the dirty work!
@@ -229,7 +220,7 @@ def write(alignments, handle, format):
 
 
 #This is a generator function!
-def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
+def _SeqIO_to_alignment_iterator(handle, format=None, alphabet=None, seq_count=None):
     """Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
 
     Arguments:
@@ -289,7 +280,7 @@ def _force_alphabet(alignment_iterator, alphabet):
         yield align
 
 
-def parse(handle, format, seq_count=None, alphabet=None):
+def parse(handle, format=None, seq_count=None, alphabet=None):
     """Iterate over an alignment file as MultipleSeqAlignment objects.
 
     Arguments:
@@ -325,13 +316,6 @@ def parse(handle, format, seq_count=None, alphabet=None):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
@@ -341,9 +325,8 @@ def parse(handle, format, seq_count=None, alphabet=None):
     with as_handle(handle, 'rU') as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
-            mod_name, iterator_name = _FormatToIterator[format]
-            mod = __import__('Bio.AlignIO.%s' % mod_name, fromlist=[1])
-            iterator_generator = getattr(mod, iterator_name)
+            iterator_generator = get_processor(format, _FormatToIterator,
+                    'Bio.AlignIO')
             if alphabet is None :
                 i = iterator_generator(fp, seq_count)
             else:
@@ -368,7 +351,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
             yield a
 
 
-def read(handle, format, seq_count=None, alphabet=None):
+def read(handle, format=None, seq_count=None, alphabet=None):
     """Turns an alignment file into a single MultipleSeqAlignment object.
 
     Arguments:
