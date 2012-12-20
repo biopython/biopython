@@ -309,6 +309,7 @@ See also http://biopython.org/wiki/SeqIO_dev
 """
 
 
+from Bio._utils import get_processor
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
@@ -369,10 +370,34 @@ _FormatToWriter = {"fasta" : ('FastaIO', 'FastaWriter'),
                    "seqxml" : ('SeqXmlIO', 'SeqXmlWriter'),
                    }
 
+_FormatToRandomAccess = {"ace": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "embl": ('_index', 'EmblRandomAccess'),
+                         "fasta": ('_index', 'SequentialSeqFileRandomAccess'),
+                         # Class handles all three variants
+                         "fastq": ('_index', 'FastqRandomAccess'),
+                         # alias of the above
+                         "fastq-sanger": ('_index', 'FastqRandomAccess'),
+                         "fastq-solexa": ('_index', 'FastqRandomAccess'),
+                         "fastq-illumina": ('_index', 'FastqRandomAccess'),
+                         "genbank": ('_index', 'GenBankRandomAccess'),
+                         # alias of the above
+                         "gb": ('_index', 'GenBankRandomAccess'),
+                         "ig": ('_index', 'IntelliGeneticsRandomAccess'),
+                         "imgt": ('_index', 'EmblRandomAccess'),
+                         "phd": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "pir": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "sff": ('_index', 'SffRandomAccess'),
+                         "sff-trim": ('_index', 'SffTrimedRandomAccess'),
+                         "swiss": ('_index', 'SwissRandomAccess'),
+                         "tab": ('_index', 'TabRandomAccess'),
+                         "qual": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "uniprot-xml": ('_index', 'UniprotRandomAccess'),
+                         }
+
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 
-def write(sequences, handle, format):
+def write(sequences, handle, format=None):
     """Write complete set of sequences to a file.
 
      - sequences - A list (or iterator) of SeqRecord objects, or (if using
@@ -387,14 +412,6 @@ def write(sequences, handle, format):
     """
     from Bio import AlignIO
 
-    #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
-
     if isinstance(sequences, SeqRecord):
         #This raised an exception in order version of Biopython
         sequences = [sequences]
@@ -407,9 +424,7 @@ def write(sequences, handle, format):
     with as_handle(handle, mode) as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
-            mod_name, writer_name = _FormatToWriter[format]
-            mod = __import__('Bio.SeqIO.%s' % mod_name, fromlist=[1])
-            writer_class = getattr(mod, writer_name)
+            writer_class = get_processor(format, _FormatToWriter, 'Bio.SeqIO')
             count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
             #Try and turn all the records into a single alignment,
@@ -434,7 +449,7 @@ def write(sequences, handle, format):
     return count
 
 
-def parse(handle, format, alphabet=None):
+def parse(handle, format=None, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
      - handle   - handle to the file, or the filename as a string
@@ -496,12 +511,6 @@ def parse(handle, format, alphabet=None):
         mode = 'rU'
 
     #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
@@ -509,9 +518,8 @@ def parse(handle, format, alphabet=None):
     with as_handle(handle, mode) as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
-            mod_name, iterator_name = _FormatToIterator[format]
-            mod = __import__('Bio.SeqIO.%s' % mod_name, fromlist=[1])
-            iterator_generator = getattr(mod, iterator_name)
+            iterator_generator = get_processor(format, _FormatToIterator,
+                    'Bio.SeqIO')
             if alphabet is None:
                 i = iterator_generator(fp)
             else:
@@ -546,7 +554,7 @@ def _force_alphabet(record_iterator, alphabet):
                              % (repr(alphabet), repr(record.seq.alphabet)))
 
 
-def read(handle, format, alphabet=None):
+def read(handle, format=None, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
      - handle   - handle to the file, or the filename as a string
@@ -666,7 +674,7 @@ def to_dict(sequences, key_function=None):
     return d
 
 
-def index(filename, format, alphabet=None, key_function=None):
+def index(filename, format=None, alphabet=None, key_function=None):
     """Indexes a sequence file and returns a dictionary like object.
 
      - filename - string giving name of file to be indexed
@@ -774,23 +782,13 @@ def index(filename, format, alphabet=None, key_function=None):
     #Try and give helpful error messages:
     if not isinstance(filename, basestring):
         raise TypeError("Need a filename (not a handle)")
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess # Lazy import
     from Bio.File import _IndexedSeqFileDict
-    try:
-        proxy_class = _FormatToRandomAccess[format]
-    except KeyError:
-        raise ValueError("Unsupported format %r" % format)
+    proxy_class = get_processor(format, _FormatToRandomAccess, 'Bio.SeqIO')
     repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
         % (filename, format, alphabet, key_function)
     return _IndexedSeqFileDict(proxy_class(filename, format, alphabet),
@@ -856,14 +854,11 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
             "Need a list of filenames (as strings), or one filename")
     if format is not None and not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
-    if format and format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (index_filename, filenames, format, alphabet, key_function)
@@ -871,7 +866,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
         if filename:
-            return _FormatToRandomAccess[format](filename, format, alphabet)
+            proxy_class = get_processor(format, _FormatToRandomAccess, 'Bio.SeqIO')
+            return proxy_class(filename, format, alphabet)
         else:
             return format in _FormatToRandomAccess
 

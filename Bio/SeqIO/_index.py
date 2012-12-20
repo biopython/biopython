@@ -605,27 +605,3 @@ class FastqRandomAccess(SeqFileRandomAccess):
         if seq_len != qual_len:
             raise ValueError("Problem with quality section")
         return data
-
-
-###############################################################################
-
-_FormatToRandomAccess = {"ace": SequentialSeqFileRandomAccess,
-                         "embl": EmblRandomAccess,
-                         "fasta": SequentialSeqFileRandomAccess,
-                         "fastq": FastqRandomAccess,  # Class handles all three variants
-                         "fastq-sanger": FastqRandomAccess,  # alias of the above
-                         "fastq-solexa": FastqRandomAccess,
-                         "fastq-illumina": FastqRandomAccess,
-                         "genbank": GenBankRandomAccess,
-                         "gb": GenBankRandomAccess,  # alias of the above
-                         "ig": IntelliGeneticsRandomAccess,
-                         "imgt": EmblRandomAccess,
-                         "phd": SequentialSeqFileRandomAccess,
-                         "pir": SequentialSeqFileRandomAccess,
-                         "sff": SffRandomAccess,
-                         "sff-trim": SffTrimedRandomAccess,
-                         "swiss": SwissRandomAccess,
-                         "tab": TabRandomAccess,
-                         "qual": SequentialSeqFileRandomAccess,
-                         "uniprot-xml": UniprotRandomAccess,
-                         }
