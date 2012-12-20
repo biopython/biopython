@@ -7,7 +7,8 @@
 
 from itertools import chain
 
-from Bio.SearchIO._utils import allitems, fullcascade, getattr_str, trim_str
+from Bio._utils import getattr_str, trim_str
+from Bio.SearchIO._utils import allitems, fullcascade
 
 from _base import _BaseSearchObject
 from hsp import HSP
@@ -370,5 +371,5 @@ class Hit(_BaseSearchObject):
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()

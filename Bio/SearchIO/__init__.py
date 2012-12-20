@@ -202,9 +202,9 @@ import sys
 import warnings
 
 from Bio import BiopythonExperimentalWarning
+from Bio._utils import get_processor
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from Bio.SearchIO._utils import get_processor
 
 
 warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
@@ -676,5 +676,5 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()

@@ -8,9 +8,9 @@
 import re
 
 from Bio._py3k import _as_bytes, _bytes_to_string
+from Bio._utils import read_forward
 from Bio.Alphabet import generic_protein
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from Bio.SearchIO._utils import read_forward
 
 from _base import _BaseHmmerTextIndexer
 
@@ -341,5 +341,5 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()
