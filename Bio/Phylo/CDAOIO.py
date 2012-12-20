@@ -123,7 +123,7 @@ class Parser(object):
         self.get_node_info(model)
         
         for root_node in self.tree_roots:
-            clade = self.parse_children(root_node, model)
+            clade = self.parse_children(root_node)
             
             yield Newick.Tree(root=clade, rooted=self.rooted)
             
@@ -214,7 +214,7 @@ class Parser(object):
                 self.children[parent].append(node)
                 
 
-    def parse_children(self, node, model):
+    def parse_children(self, node):
         '''Return a list of clades representing all children nodes of the specified
         parent node.
         
