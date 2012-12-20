@@ -123,8 +123,7 @@ class Parser(object):
         self.get_node_info(model)
         
         for root_node in self.tree_roots:
-            clade = self.new_clade(root_node)
-            clade.clades = self.parse_children(root_node, model)
+            clade = self.parse_children(root_node, model)
             
             yield Newick.Tree(root=clade, rooted=self.rooted)
             
@@ -157,6 +156,7 @@ class Parser(object):
         self.tree_roots = set()
         
         for statement in model:
+            # process each RDF triple in the model sequentially
             s, v, o = str(statement.subject), Uri(str(statement.predicate)), str(statement.object)
             
             if not s in self.obj_info: self.obj_info[s] = {}
@@ -172,21 +172,27 @@ class Parser(object):
                            }
             
             try:
+                # if the predicate is one we care about, store information for later
                 this[assignments[v]] = o
             except KeyError: pass
             
             if v == qUri('rdf:type'):
                 if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
+                    # this is a tree node; store it in set of all nodes
                     self.nodes.add(s)
             if v == qUri('cdao:has_root'):
+                # this is a tree; store it in set of all trees
                 self.tree_roots.add(o)
                     
         for node in self.nodes:
+            # for each node, look up all information needed to create a Newick.Clade
             self.node_info[node] = {}
             node_info = self.node_info[node]
             
             obj = self.obj_info[node]
             if 'edge' in obj:
+                # if this object points to an edge, we need a branch length from
+                # the annotation on that edge
                 edge = self.obj_info[obj['edge']]
                 if 'annotation' in edge:
                     annotation = self.obj_info[edge['annotation']]
@@ -194,11 +200,14 @@ class Parser(object):
                         node_info['branch_length'] = float(annotation['value'])
             
             if 'tu' in obj:
+                # if this object points to a TU, we need the label of that TU
                 tu = self.obj_info[obj['tu']]
                 if 'label' in tu:
                     node_info['label'] = tu['label']
             
             if 'parent' in obj:
+                # store this node as a child of its parent, if it has one,
+                # so that the tree can be traversed from parent to children
                 parent = obj['parent']
                 if not parent in self.children:
                     self.children[parent] = []
@@ -207,18 +216,17 @@ class Parser(object):
 
     def parse_children(self, node, model):
         '''Return a list of clades representing all children nodes of the specified
-        parent node.'''
+        parent node.
+        
+        This function calls itself recursively for each child, traversing the 
+        entire tree and creating a nested structure of Newick.Clade objects.'''
+        
+        clade = self.new_clade(node)
         
         children = self.children[node] if node in self.children else []
-        child_clades = []
+        clade.clades = [self.parse_children(child_node) for child_node in children]
         
-        for child_node in children:
-            clade = self.new_clade(child_node)
-
-            clade.clades = self.parse_children(child_node, model)
-            child_clades.append(clade)
-        
-        return child_clades
+        return clade
 
 
 # ---------------------------------------------------------
