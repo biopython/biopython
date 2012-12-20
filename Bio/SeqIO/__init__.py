@@ -397,7 +397,7 @@ _FormatToRandomAccess = {"ace": ('_index', 'SequentialSeqFileRandomAccess'),
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
 
-def write(sequences, handle, format=None):
+def write(sequences, handle, format):
     """Write complete set of sequences to a file.
 
      - sequences - A list (or iterator) of SeqRecord objects, or (if using
@@ -449,7 +449,7 @@ def write(sequences, handle, format=None):
     return count
 
 
-def parse(handle, format=None, alphabet=None):
+def parse(handle, format, alphabet=None):
     r"""Turns a sequence file into an iterator returning SeqRecords.
 
      - handle   - handle to the file, or the filename as a string
@@ -554,7 +554,7 @@ def _force_alphabet(record_iterator, alphabet):
                              % (repr(alphabet), repr(record.seq.alphabet)))
 
 
-def read(handle, format=None, alphabet=None):
+def read(handle, format, alphabet=None):
     """Turns a sequence file into a single SeqRecord.
 
      - handle   - handle to the file, or the filename as a string

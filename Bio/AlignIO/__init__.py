@@ -170,7 +170,7 @@ _FormatToWriter = {#"fasta" is done via Bio.SeqIO
                    }
 
 
-def write(alignments, handle, format=None):
+def write(alignments, handle, format):
     """Write complete set of alignments to a file.
 
     Arguments:
@@ -220,7 +220,7 @@ def write(alignments, handle, format=None):
 
 
 #This is a generator function!
-def _SeqIO_to_alignment_iterator(handle, format=None, alphabet=None, seq_count=None):
+def _SeqIO_to_alignment_iterator(handle, format, alphabet=None, seq_count=None):
     """Uses Bio.SeqIO to create an MultipleSeqAlignment iterator (PRIVATE).
 
     Arguments:
@@ -280,7 +280,7 @@ def _force_alphabet(alignment_iterator, alphabet):
         yield align
 
 
-def parse(handle, format=None, seq_count=None, alphabet=None):
+def parse(handle, format, seq_count=None, alphabet=None):
     """Iterate over an alignment file as MultipleSeqAlignment objects.
 
     Arguments:
@@ -351,7 +351,7 @@ def parse(handle, format=None, seq_count=None, alphabet=None):
             yield a
 
 
-def read(handle, format=None, seq_count=None, alphabet=None):
+def read(handle, format, seq_count=None, alphabet=None):
     """Turns an alignment file into a single MultipleSeqAlignment object.
 
     Arguments:

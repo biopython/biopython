@@ -264,7 +264,7 @@ _WRITER_MAP = {
 }
 
 
-def parse(handle, format=None, **kwargs):
+def parse(handle, format, **kwargs):
     """Turns a search output file into a generator that yields QueryResult
     objects.
 
@@ -317,7 +317,7 @@ def parse(handle, format=None, **kwargs):
             yield qresult
 
 
-def read(handle, format=None, **kwargs):
+def read(handle, format, **kwargs):
     """Turns a search output file containing one query into a single QueryResult.
 
     Arguments:
@@ -567,7 +567,7 @@ def index_db(index_filename, filenames=None, format=None,
                                    key_function, repr)
 
 
-def write(qresults, handle, format=None, **kwargs):
+def write(qresults, handle, format, **kwargs):
     """Writes QueryResult objects to a file in the given format.
 
     Arguments:
