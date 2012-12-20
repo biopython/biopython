@@ -10,11 +10,11 @@
 """Miscellaneous functions for dealing with sequences."""
 
 import re
-from Bio import SeqIO
+from math import pi, sin, cos
+
 from Bio.Seq import Seq
-from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-from Bio.Data import IUPACData, CodonTable
+from Bio.Data import IUPACData
 
 
 ######################################
@@ -102,8 +102,6 @@ def GC_skew(seq, window = 100):
         skew = (g-c)/float(g+c)
         values.append(skew)
     return values
-
-from math import pi, sin, cos, log
 
 
 def xGC_skew(seq, window = 1000, zoom = 100,
