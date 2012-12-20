@@ -302,7 +302,7 @@ def parse(handle, format=None, **kwargs):
 
     """
     # get the iterator object and do error checking
-    iterator = get_processor(format, _ITERATOR_MAP)
+    iterator = get_processor(format, _ITERATOR_MAP, 'Bio.SearchIO')
 
     # HACK: force BLAST XML decoding to use utf-8
     handle_kwargs = {}
@@ -484,7 +484,7 @@ def index(filename, format=None, key_function=None, **kwargs):
         raise TypeError("Need a filename (not a handle)")
 
     from Bio.File import _IndexedSeqFileDict
-    proxy_class = get_processor(format, _INDEXER_MAP)
+    proxy_class = get_processor(format, _INDEXER_MAP, 'Bio.SearchIO')
     repr = "SearchIO.index(%r, %r, key_function=%r)" \
         % (filename, format, key_function)
     return _IndexedSeqFileDict(proxy_class(filename, **kwargs),
@@ -558,7 +558,7 @@ def index_db(index_filename, filenames=None, format=None,
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
         if filename:
-            return get_processor(format, _INDEXER_MAP)(filename, **kwargs)
+            return get_processor(format, _INDEXER_MAP, 'Bio.SearchIO')(filename, **kwargs)
         else:
             return format in _INDEXER_MAP
 
@@ -605,7 +605,7 @@ def write(qresults, handle, format=None, **kwargs):
         qresults = iter(qresults)
 
     # get the writer object and do error checking
-    writer_class = get_processor(format, _WRITER_MAP)
+    writer_class = get_processor(format, _WRITER_MAP, 'Bio.SearchIO')
 
     # write to the handle
     with as_handle(handle, 'w') as target_file:

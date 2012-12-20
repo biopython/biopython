@@ -13,12 +13,14 @@ TEST_DIR = 'Tests'    # Biopython test directory name
 MOD_DIR = 'Bio'       # Biopython main library directory name
 
 
-def get_processor(format, mapping):
+def get_processor(format, mapping, submodule):
     """Returns the object to process the given format according to the mapping.
 
     Arguments:
     format -- Lower case string denoting one of the supported formats.
     mapping -- Dictionary of format and object name mapping.
+    submodule -- String of Bio.* submodule name from which the object will be
+                 loaded, e.g. 'Bio.SeqIO'.
 
     """
     # map file format to iterator name
@@ -38,7 +40,7 @@ def get_processor(format, mapping):
                     "%r" % (format, "', '".join(mapping.keys())))
 
     mod_name, obj_name = obj_info
-    mod = __import__('Bio.SearchIO.%s' % mod_name, fromlist=[''])
+    mod = __import__('%s.%s' % (submodule, mod_name), fromlist=[''])
 
     return getattr(mod, obj_name)
 
