@@ -181,7 +181,7 @@ class Parser(object):
                     # this is a tree node; store it in set of all nodes
                     self.nodes.add(s)
             if v == qUri('cdao:has_root'):
-                # this is a tree; store it in set of all trees
+                # this is a tree; store its root in set of all tree roots
                 self.tree_roots.add(o)
                     
         for node in self.nodes:
