@@ -309,26 +309,11 @@ See also http://biopython.org/wiki/SeqIO_dev
 """
 
 
+from Bio._utils import get_processor
 from Bio.File import as_handle
 from Bio.SeqRecord import SeqRecord
 from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
-
-import AbiIO
-import AceIO
-import FastaIO
-import IgIO  # IntelliGenetics or MASE format
-import InsdcIO  # EMBL and GenBank
-import PdbIO
-import PhdIO
-import PirIO
-import SeqXmlIO
-import SffIO
-import SwissIO
-import TabIO
-import QualityIO  # FastQ and qual files
-import UniprotIO
-
 
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl or EMBOSS where possible.
@@ -339,50 +324,75 @@ import UniprotIO
 #
 #Most alignment file formats will be handled via Bio.AlignIO
 
-_FormatToIterator = {"fasta": FastaIO.FastaIterator,
-                     "gb": InsdcIO.GenBankIterator,
-                     "genbank": InsdcIO.GenBankIterator,
-                     "genbank-cds": InsdcIO.GenBankCdsFeatureIterator,
-                     "embl": InsdcIO.EmblIterator,
-                     "embl-cds": InsdcIO.EmblCdsFeatureIterator,
-                     "imgt": InsdcIO.ImgtIterator,
-                     "ig": IgIO.IgIterator,
-                     "swiss": SwissIO.SwissIterator,
-                     "pdb-atom": PdbIO.PdbAtomIterator,
-                     "pdb-seqres": PdbIO.PdbSeqresIterator,
-                     "phd": PhdIO.PhdIterator,
-                     "ace": AceIO.AceIterator,
-                     "tab": TabIO.TabIterator,
-                     "pir": PirIO.PirIterator,
-                     "fastq": QualityIO.FastqPhredIterator,
-                     "fastq-sanger": QualityIO.FastqPhredIterator,
-                     "fastq-solexa": QualityIO.FastqSolexaIterator,
-                     "fastq-illumina": QualityIO.FastqIlluminaIterator,
-                     "qual": QualityIO.QualPhredIterator,
-                     "sff": SffIO.SffIterator,
+
+_FormatToIterator = {"fasta" : ('FastaIO', 'FastaIterator'),
+                     "gb" : ('InsdcIO', 'GenBankIterator'),
+                     "genbank" : ('InsdcIO', 'GenBankIterator'),
+                     "genbank-cds" : ('InsdcIO', 'GenBankCdsFeatureIterator'),
+                     "embl" : ('InsdcIO', 'EmblIterator'),
+                     "embl-cds" : ('InsdcIO', 'EmblCdsFeatureIterator'),
+                     "imgt" : ('InsdcIO', 'ImgtIterator'),
+                     "ig" : ('IgIO', 'IgIterator'),
+                     "swiss" : ('SwissIO', 'SwissIterator'),
+                     "pdb-atom": ('PdbIO', 'PdbAtomIterator'),
+                     "pdb-seqres": ('PdbIO', 'PdbSeqresIterator'),
+                     "phd" : ('PhdIO', 'PhdIterator'),
+                     "ace" : ('AceIO', 'AceIterator'),
+                     "tab" : ('TabIO', 'TabIterator'),
+                     "pir" : ('PirIO', 'PirIterator'),
+                     "fastq" : ('QualityIO', 'FastqPhredIterator'),
+                     "fastq-sanger" : ('QualityIO', 'FastqPhredIterator'),
+                     "fastq-solexa" : ('QualityIO', 'FastqSolexaIterator'),
+                     "fastq-illumina" : ('QualityIO', 'FastqIlluminaIterator'),
+                     "qual" : ('QualityIO', 'QualPhredIterator'),
+                     "sff": ('SffIO', 'SffIterator'),
                      #Not sure about this in the long run:
-                     "sff-trim": SffIO._SffTrimIterator,
-                     "uniprot-xml": UniprotIO.UniprotIterator,
-                     "seqxml": SeqXmlIO.SeqXmlIterator,
-                     "abi": AbiIO.AbiIterator,
-                     "abi-trim": AbiIO._AbiTrimIterator,
+                     "sff-trim": ('SffIO', '_SffTrimIterator'),
+                     "uniprot-xml": ('UniprotIO', 'UniprotIterator'),
+                     "seqxml" : ('SeqXmlIO', 'SeqXmlIterator'),
+                     "abi": ('AbiIO', 'AbiIterator'),
+                     "abi-trim": ('AbiIO', '_AbiTrimIterator'),
                      }
 
-_FormatToWriter = {"fasta": FastaIO.FastaWriter,
-                   "gb": InsdcIO.GenBankWriter,
-                   "genbank": InsdcIO.GenBankWriter,
-                   "embl": InsdcIO.EmblWriter,
-                   "imgt": InsdcIO.ImgtWriter,
-                   "tab": TabIO.TabWriter,
-                   "fastq": QualityIO.FastqPhredWriter,
-                   "fastq-sanger": QualityIO.FastqPhredWriter,
-                   "fastq-solexa": QualityIO.FastqSolexaWriter,
-                   "fastq-illumina": QualityIO.FastqIlluminaWriter,
-                   "phd": PhdIO.PhdWriter,
-                   "qual": QualityIO.QualPhredWriter,
-                   "sff": SffIO.SffWriter,
-                   "seqxml": SeqXmlIO.SeqXmlWriter,
+_FormatToWriter = {"fasta" : ('FastaIO', 'FastaWriter'),
+                   "gb" : ('InsdcIO', 'GenBankWriter'),
+                   "genbank" : ('InsdcIO', 'GenBankWriter'),
+                   "embl" : ('InsdcIO', 'EmblWriter'),
+                   "imgt" : ('InsdcIO', 'ImgtWriter'),
+                   "tab" : ('TabIO', 'TabWriter'),
+                   "fastq" : ('QualityIO', 'FastqPhredWriter'),
+                   "fastq-sanger" : ('QualityIO', 'FastqPhredWriter'),
+                   "fastq-solexa" : ('QualityIO', 'FastqSolexaWriter'),
+                   "fastq-illumina" : ('QualityIO', 'FastqIlluminaWriter'),
+                   "phd" : ('PhdIO', 'PhdWriter'),
+                   "qual" : ('QualityIO', 'QualPhredWriter'),
+                   "sff" : ('SffIO', 'SffWriter'),
+                   "seqxml" : ('SeqXmlIO', 'SeqXmlWriter'),
                    }
+
+_FormatToRandomAccess = {"ace": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "embl": ('_index', 'EmblRandomAccess'),
+                         "fasta": ('_index', 'SequentialSeqFileRandomAccess'),
+                         # Class handles all three variants
+                         "fastq": ('_index', 'FastqRandomAccess'),
+                         # alias of the above
+                         "fastq-sanger": ('_index', 'FastqRandomAccess'),
+                         "fastq-solexa": ('_index', 'FastqRandomAccess'),
+                         "fastq-illumina": ('_index', 'FastqRandomAccess'),
+                         "genbank": ('_index', 'GenBankRandomAccess'),
+                         # alias of the above
+                         "gb": ('_index', 'GenBankRandomAccess'),
+                         "ig": ('_index', 'IntelliGeneticsRandomAccess'),
+                         "imgt": ('_index', 'EmblRandomAccess'),
+                         "phd": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "pir": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "sff": ('_index', 'SffRandomAccess'),
+                         "sff-trim": ('_index', 'SffTrimedRandomAccess'),
+                         "swiss": ('_index', 'SwissRandomAccess'),
+                         "tab": ('_index', 'TabRandomAccess'),
+                         "qual": ('_index', 'SequentialSeqFileRandomAccess'),
+                         "uniprot-xml": ('_index', 'UniprotRandomAccess'),
+                         }
 
 _BinaryFormats = ["sff", "sff-trim", "abi", "abi-trim"]
 
@@ -402,14 +412,6 @@ def write(sequences, handle, format):
     """
     from Bio import AlignIO
 
-    #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
-
     if isinstance(sequences, SeqRecord):
         #This raised an exception in order version of Biopython
         sequences = [sequences]
@@ -422,7 +424,7 @@ def write(sequences, handle, format):
     with as_handle(handle, mode) as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
-            writer_class = _FormatToWriter[format]
+            writer_class = get_processor(format, _FormatToWriter, 'Bio.SeqIO')
             count = writer_class(fp).write_file(sequences)
         elif format in AlignIO._FormatToWriter:
             #Try and turn all the records into a single alignment,
@@ -509,12 +511,6 @@ def parse(handle, format, alphabet=None):
         mode = 'rU'
 
     #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
@@ -522,7 +518,8 @@ def parse(handle, format, alphabet=None):
     with as_handle(handle, mode) as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
+            iterator_generator = get_processor(format, _FormatToIterator,
+                    'Bio.SeqIO')
             if alphabet is None:
                 i = iterator_generator(fp)
             else:
@@ -677,7 +674,7 @@ def to_dict(sequences, key_function=None):
     return d
 
 
-def index(filename, format, alphabet=None, key_function=None):
+def index(filename, format=None, alphabet=None, key_function=None):
     """Indexes a sequence file and returns a dictionary like object.
 
      - filename - string giving name of file to be indexed
@@ -785,23 +782,13 @@ def index(filename, format, alphabet=None, key_function=None):
     #Try and give helpful error messages:
     if not isinstance(filename, basestring):
         raise TypeError("Need a filename (not a handle)")
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess # Lazy import
     from Bio.File import _IndexedSeqFileDict
-    try:
-        proxy_class = _FormatToRandomAccess[format]
-    except KeyError:
-        raise ValueError("Unsupported format %r" % format)
+    proxy_class = get_processor(format, _FormatToRandomAccess, 'Bio.SeqIO')
     repr = "SeqIO.index(%r, %r, alphabet=%r, key_function=%r)" \
         % (filename, format, alphabet, key_function)
     return _IndexedSeqFileDict(proxy_class(filename, format, alphabet),
@@ -867,14 +854,11 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
             "Need a list of filenames (as strings), or one filename")
     if format is not None and not isinstance(format, basestring):
         raise TypeError("Need a string for the file format (lower case)")
-    if format and format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
 
     #Map the file format to a sequence iterator:
-    from _index import _FormatToRandomAccess  # Lazy import
     from Bio.File import _SQLiteManySeqFilesDict
     repr = "SeqIO.index_db(%r, filenames=%r, format=%r, alphabet=%r, key_function=%r)" \
                % (index_filename, filenames, format, alphabet, key_function)
@@ -882,7 +866,8 @@ def index_db(index_filename, filenames=None, format=None, alphabet=None,
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
         if filename:
-            return _FormatToRandomAccess[format](filename, format, alphabet)
+            proxy_class = get_processor(format, _FormatToRandomAccess, 'Bio.SeqIO')
+            return proxy_class(filename, format, alphabet)
         else:
             return format in _FormatToRandomAccess
 
@@ -943,31 +928,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-def _test():
-    """Run the Bio.SeqIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    #Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

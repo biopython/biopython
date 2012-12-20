@@ -54,5 +54,5 @@ __all__ = ['QueryResult', 'Hit', 'HSP', 'HSPFragment']
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()

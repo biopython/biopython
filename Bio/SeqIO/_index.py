@@ -48,7 +48,9 @@ class SeqFileRandomAccess(_IndexedSeqFileProxy):
         self._format = format
         #Load the parser class/function once an avoid the dict lookup in each
         #__getitem__ call:
-        i = SeqIO._FormatToIterator[format]
+        mod_name, iterator_name = SeqIO._FormatToIterator[format]
+        mod = __import__('Bio.SeqIO.%s' % mod_name, fromlist=[1])
+        i = getattr(mod, iterator_name)
         #The following alphabet code is a bit nasty... duplicates logic in
         #Bio.SeqIO.parse()
         if alphabet is None:
@@ -603,27 +605,3 @@ class FastqRandomAccess(SeqFileRandomAccess):
         if seq_len != qual_len:
             raise ValueError("Problem with quality section")
         return data
-
-
-###############################################################################
-
-_FormatToRandomAccess = {"ace": SequentialSeqFileRandomAccess,
-                         "embl": EmblRandomAccess,
-                         "fasta": SequentialSeqFileRandomAccess,
-                         "fastq": FastqRandomAccess,  # Class handles all three variants
-                         "fastq-sanger": FastqRandomAccess,  # alias of the above
-                         "fastq-solexa": FastqRandomAccess,
-                         "fastq-illumina": FastqRandomAccess,
-                         "genbank": GenBankRandomAccess,
-                         "gb": GenBankRandomAccess,  # alias of the above
-                         "ig": IntelliGeneticsRandomAccess,
-                         "imgt": EmblRandomAccess,
-                         "phd": SequentialSeqFileRandomAccess,
-                         "pir": SequentialSeqFileRandomAccess,
-                         "sff": SffRandomAccess,
-                         "sff-trim": SffTrimedRandomAccess,
-                         "swiss": SwissRandomAccess,
-                         "tab": TabRandomAccess,
-                         "qual": SequentialSeqFileRandomAccess,
-                         "uniprot-xml": UniprotRandomAccess,
-                         }

@@ -139,40 +139,34 @@ __docformat__ = "epytext en"  # not just plaintext
 # - MSF multiple alignment format, aka GCG, aka PileUp format (*.msf)
 #   http://www.bioperl.org/wiki/MSF_multiple_alignment_format
 
+from Bio._utils import get_processor
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align.Generic import Alignment
 from Bio.Alphabet import Alphabet, AlphabetEncoder, _get_base_alphabet
 from Bio.File import as_handle
 
-import StockholmIO
-import ClustalIO
-import NexusIO
-import PhylipIO
-import EmbossIO
-import FastaIO
-
 #Convention for format names is "mainname-subtype" in lower case.
 #Please use the same names as BioPerl and EMBOSS where possible.
 
-_FormatToIterator = {  # "fasta" is done via Bio.SeqIO
-                     "clustal" : ClustalIO.ClustalIterator,
-                     "emboss" : EmbossIO.EmbossIterator,
-                     "fasta-m10" : FastaIO.FastaM10Iterator,
-                     "nexus" : NexusIO.NexusIterator,
-                     "phylip" : PhylipIO.PhylipIterator,
-                     "phylip-sequential" : PhylipIO.SequentialPhylipIterator,
-                     "phylip-relaxed" : PhylipIO.RelaxedPhylipIterator,
-                     "stockholm" : StockholmIO.StockholmIterator,
+_FormatToIterator = {#"fasta" is done via Bio.SeqIO
+                     "clustal" : ('ClustalIO', 'ClustalIterator'),
+                     "emboss" : ('EmbossIO', 'EmbossIterator'),
+                     "fasta-m10" : ('FastaIO', 'FastaM10Iterator'),
+                     "nexus" : ('NexusIO', 'NexusIterator'),
+                     "phylip" : ('PhylipIO', 'PhylipIterator'),
+                     "phylip-sequential" : ('PhylipIO', 'SequentialPhylipIterator'),
+                     "phylip-relaxed" : ('PhylipIO', 'RelaxedPhylipIterator'),
+                     "stockholm" : ('StockholmIO', 'StockholmIterator'),
                      }
 
-_FormatToWriter = {  # "fasta" is done via Bio.SeqIO
-                     # "emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "nexus" : NexusIO.NexusWriter,
-                   "phylip" : PhylipIO.PhylipWriter,
-                   "phylip-sequential" : PhylipIO.SequentialPhylipWriter,
-                   "phylip-relaxed" : PhylipIO.RelaxedPhylipWriter,
-                   "stockholm" : StockholmIO.StockholmWriter,
-                   "clustal" : ClustalIO.ClustalWriter,
+_FormatToWriter = {#"fasta" is done via Bio.SeqIO
+                   #"emboss" : EmbossIO.EmbossWriter, (unfinished)
+                   "nexus" : ('NexusIO', 'NexusWriter'),
+                   "phylip" : ('PhylipIO', 'PhylipWriter'),
+                   "phylip-sequential" : ('PhylipIO', 'SequentialPhylipWriter'),
+                   "phylip-relaxed" : ('PhylipIO', 'RelaxedPhylipWriter'),
+                   "stockholm" : ('StockholmIO', 'StockholmWriter'),
+                   "clustal" : ('ClustalIO', 'ClustalWriter'),
                    }
 
 
@@ -193,14 +187,6 @@ def write(alignments, handle, format):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
-
     if isinstance(alignments, Alignment):
         #This raised an exception in older versions of Biopython
         alignments = [alignments]
@@ -208,7 +194,7 @@ def write(alignments, handle, format):
     with as_handle(handle, 'w') as fp:
         #Map the file format to a writer class
         if format in _FormatToWriter:
-            writer_class = _FormatToWriter[format]
+            writer_class = get_processor(format, _FormatToWriter, 'Bio.AlignIO')
             count = writer_class(fp).write_file(alignments)
         elif format in SeqIO._FormatToWriter:
             #Exploit the existing SeqIO parser to do the dirty work!
@@ -330,13 +316,6 @@ def parse(handle, format, seq_count=None, alphabet=None):
     """
     from Bio import SeqIO
 
-    #Try and give helpful error messages:
-    if not isinstance(format, basestring):
-        raise TypeError("Need a string for the file format (lower case)")
-    if not format:
-        raise ValueError("Format required (lower case string)")
-    if format != format.lower():
-        raise ValueError("Format string '%s' should be lower case" % format)
     if alphabet is not None and not (isinstance(alphabet, Alphabet) or
                                      isinstance(alphabet, AlphabetEncoder)):
         raise ValueError("Invalid alphabet, %s" % repr(alphabet))
@@ -346,7 +325,8 @@ def parse(handle, format, seq_count=None, alphabet=None):
     with as_handle(handle, 'rU') as fp:
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
-            iterator_generator = _FormatToIterator[format]
+            iterator_generator = get_processor(format, _FormatToIterator,
+                    'Bio.AlignIO')
             if alphabet is None :
                 i = iterator_generator(fp, seq_count)
             else:
@@ -463,30 +443,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-def _test():
-    """Run the Bio.AlignIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

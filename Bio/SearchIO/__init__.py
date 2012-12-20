@@ -202,9 +202,9 @@ import sys
 import warnings
 
 from Bio import BiopythonExperimentalWarning
+from Bio._utils import get_processor
 from Bio.File import as_handle
 from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
-from Bio.SearchIO._utils import get_processor
 
 
 warnings.warn('Bio.SearchIO is an experimental submodule which may undergo '
@@ -264,7 +264,7 @@ _WRITER_MAP = {
 }
 
 
-def parse(handle, format=None, **kwargs):
+def parse(handle, format, **kwargs):
     """Turns a search output file into a generator that yields QueryResult
     objects.
 
@@ -302,7 +302,7 @@ def parse(handle, format=None, **kwargs):
 
     """
     # get the iterator object and do error checking
-    iterator = get_processor(format, _ITERATOR_MAP)
+    iterator = get_processor(format, _ITERATOR_MAP, 'Bio.SearchIO')
 
     # HACK: force BLAST XML decoding to use utf-8
     handle_kwargs = {}
@@ -317,7 +317,7 @@ def parse(handle, format=None, **kwargs):
             yield qresult
 
 
-def read(handle, format=None, **kwargs):
+def read(handle, format, **kwargs):
     """Turns a search output file containing one query into a single QueryResult.
 
     Arguments:
@@ -484,7 +484,7 @@ def index(filename, format=None, key_function=None, **kwargs):
         raise TypeError("Need a filename (not a handle)")
 
     from Bio.File import _IndexedSeqFileDict
-    proxy_class = get_processor(format, _INDEXER_MAP)
+    proxy_class = get_processor(format, _INDEXER_MAP, 'Bio.SearchIO')
     repr = "SearchIO.index(%r, %r, key_function=%r)" \
         % (filename, format, key_function)
     return _IndexedSeqFileDict(proxy_class(filename, **kwargs),
@@ -558,7 +558,7 @@ def index_db(index_filename, filenames=None, format=None,
     def proxy_factory(format, filename=None):
         """Given a filename returns proxy object, else boolean if format OK."""
         if filename:
-            return get_processor(format, _INDEXER_MAP)(filename, **kwargs)
+            return get_processor(format, _INDEXER_MAP, 'Bio.SearchIO')(filename, **kwargs)
         else:
             return format in _INDEXER_MAP
 
@@ -567,7 +567,7 @@ def index_db(index_filename, filenames=None, format=None,
                                    key_function, repr)
 
 
-def write(qresults, handle, format=None, **kwargs):
+def write(qresults, handle, format, **kwargs):
     """Writes QueryResult objects to a file in the given format.
 
     Arguments:
@@ -605,7 +605,7 @@ def write(qresults, handle, format=None, **kwargs):
         qresults = iter(qresults)
 
     # get the writer object and do error checking
-    writer_class = get_processor(format, _WRITER_MAP)
+    writer_class = get_processor(format, _WRITER_MAP, 'Bio.SearchIO')
 
     # write to the handle
     with as_handle(handle, 'w') as target_file:
@@ -676,5 +676,5 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":
-    from Bio.SearchIO._utils import run_doctest
+    from Bio._utils import run_doctest
     run_doctest()

@@ -27,7 +27,7 @@ from Bio._py3k import _as_bytes, _bytes_to_string
 
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
-from Bio.SeqIO._index import _FormatToRandomAccess
+from Bio.SeqIO import _FormatToRandomAccess
 from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 
 from seq_tests_common import compare_record
