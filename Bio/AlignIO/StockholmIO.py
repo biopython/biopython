@@ -534,23 +534,6 @@ class StockholmIterator(AlignmentIterator):
                 record.letter_annotations["GR:" + feature] = seq_col_data[feature]
 
 
-def _test():
-    """Run the Bio.SeqIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
-        assert os.path.isfile("Stockholm/simple.sth")
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()
