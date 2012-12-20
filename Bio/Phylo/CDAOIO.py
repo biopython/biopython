@@ -113,7 +113,7 @@ class Parser(object):
             
             
     def parse_model(self, model=None):
-        '''Construct a Newick.Tree from an RDF model.'''
+        '''Generator that yields Newick.Tree instances from an RDF model.'''
         RDF = import_rdf()
         
         if model is None:
