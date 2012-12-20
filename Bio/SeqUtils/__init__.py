@@ -89,7 +89,8 @@ def GC_skew(seq, window = 100):
     """Calculates GC skew (G-C)/(G+C) for multiple windows along the sequence.
 
     Returns a list of ratios (floats), controlled by the length of the sequence
-    and the size of the window.
+    and the size of the window. If a window contains no GC sequences, None is
+    returned for that window.
 
     Does NOT look at any ambiguous nucleotides.
     """
@@ -99,7 +100,10 @@ def GC_skew(seq, window = 100):
         s = seq[i: i + window]
         g = s.count('G') + s.count('g')
         c = s.count('C') + s.count('c')
-        skew = (g-c)/float(g+c)
+        try:
+            skew = (g-c) / float(g+c)
+        except ZeroDivisionError:
+            skew = None
         values.append(skew)
     return values
 
