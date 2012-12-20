@@ -16,7 +16,7 @@ import itertools
 import random
 import re
 
-from Bio.Phylo import _sugar
+from Bio import _utils
 
 
 # General tree-traversal algorithms
@@ -225,7 +225,8 @@ class TreeElement(object):
         """Show this object's constructor with its primitive arguments."""
         def pair_as_kwarg_string(key, val):
             if isinstance(val, basestring):
-                return "%s='%s'" % (key, _sugar.trim_str(unicode(val)))
+                return "%s='%s'" % (key, _utils.trim_str(unicode(val), 60,
+                    u'...'))
             return "%s=%s" % (key, val)
         return u'%s(%s)' % (self.__class__.__name__,
                             ', '.join(pair_as_kwarg_string(key, val)
@@ -425,7 +426,7 @@ class TreeMixin(object):
 
     def count_terminals(self):
         """Counts the number of terminal (leaf) nodes within this tree."""
-        return _sugar.iterlen(self.find_clades(terminal=True))
+        return _utils.iterlen(self.find_clades(terminal=True))
 
     def depths(self, unit_branch_lengths=False):
         """Create a mapping of tree clades to depths (by branch length).
@@ -1023,7 +1024,7 @@ class Clade(TreeElement, TreeMixin):
 
     def __str__(self):
         if self.name:
-            return _sugar.trim_str(self.name, maxlen=40)
+            return _utils.trim_str(self.name, 40, '...')
         return self.__class__.__name__
 
     # Syntax sugar for setting the branch color
