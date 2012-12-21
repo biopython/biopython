@@ -11075,7 +11075,7 @@ the true instances of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.search_instances(test_seq):
-...     print pos, str(seq)
+...     print pos, seq
 ... 
 0 TACAC
 10 TACAA
@@ -11085,7 +11085,7 @@ We can do the same with the reverse complement (to find instances on the complem
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.reverse_complement().search_instances(test_seq):
-...     print pos, str(seq)
+...     print pos, seq
 ... 
 6 GCATT
 20 GCATT

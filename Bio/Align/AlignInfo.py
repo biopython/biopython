@@ -696,7 +696,7 @@ if __name__ == "__main__":
 
     alignment = AlignIO.read(open(filename), format)
     for record in alignment:
-        print str(record.seq)
+        print record.seq
     print "="*alignment.get_alignment_length()
 
     summary = SummaryInfo(alignment)
