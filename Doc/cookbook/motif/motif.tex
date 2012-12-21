@@ -276,7 +276,7 @@ The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
 \begin{verbatim}
 >>> for pos,seq in m.search_instances(test_seq):
-...     print pos,seq.tostring()
+...     print pos, seq
 ... 
 10 TATAA
 15 TATAA
@@ -285,7 +285,7 @@ the true instances of the motif:
 We can do the same with the reverse complement (to find instances on the complementary strand):
 \begin{verbatim}
 >>> for pos,seq in m.reverse_complement().search_instances(test_seq):
-...     print pos,seq.tostring()
+...     print pos, seq
 ... 
 12 TAATA
 20 TTATA
