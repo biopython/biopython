@@ -33,14 +33,16 @@ before_install:
 #Installing mysql-python does not work under Python 3.2
   - "export MSQL=$PG"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export MSQL=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
 
 install:
   - "/usr/bin/yes | $PYTHON_EXE setup.py install 2>&1 | tail -n 2"
 
 before_script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd build/py3.2/Tests; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION != '3.2' ]]; then cd Tests; fi"
+  - cd Tests
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd ../build/py3.2/Tests; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then cd ../build/py3.3/Tests; fi"
 
 script:
   - $PYTHON_EXE run_tests.py --offline
