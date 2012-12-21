@@ -24,11 +24,6 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython | tail -n 2; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi"
   - "sudo apt-get install clustalw clustalo | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
-# We need NumPy, which currently isn't directly available in TravisCI
-# under Python 3.2 due to an installation problem, thus this trick.
-# See https://github.com/travis-ci/travis-cookbooks/issues/48
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then sudo apt-get install python3-numpy python3-numpy-dev 2>&1 | tail -n 2; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then ln -s /usr/lib/python3/dist-packages/numpy ~/virtualenv/python3.2/lib/python3.2/site-packages/; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then export PG=no; fi"
