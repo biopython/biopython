@@ -134,7 +134,12 @@ class GenericPositionMatrix(dict):
     def anticonsensus(self):
         sequence = ""
         for i in range(self.length):
-            minimum = float("inf")
+            try:
+                minimum = float("inf")
+            except ValueError:
+                # On Python 2.5 or older that was handled in C code,
+                # and failed on Windows XP 32bit
+                minimum = 1E400
             for letter in self.alphabet.letters:
                 count = self[letter][i]
                 if count < minimum:
