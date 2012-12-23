@@ -67,13 +67,15 @@ class Parser(object):
             node_dict = {}
             children = {}
             
+            # create dictionary of all nodes in this tree
             nodes = tree.get_node()
             root = None
             for node in nodes:
                 this_node = node_dict[node.id] = {}
                 if hasattr(node, 'otu') and node.otu: this_node['name'] = node.otu
                 if node.root: root = node.id
-
+            
+            # create dictionary linking each node to all of its children
             edges = tree.get_edge()
             srcs = set()
             tars = set()
@@ -87,6 +89,8 @@ class Parser(object):
                 node_dict[tar]['branch_length'] = edge.length
                 
             if root is None:
+                # if no root specified, start the recursive tree creation function
+                # with the first node that's not a child of any other nodes
                 rooted = False
                 possible_roots = (node.id for node in nodes if node.id in srcs and not node.id in tars)
                 root = possible_roots.next()
@@ -97,6 +101,9 @@ class Parser(object):
             
     @classmethod
     def _make_tree(cls, node, node_dict, children):
+        '''Return a Newick.Clade, and calls itself recursively for each child, 
+        traversing the  entire tree and creating a nested structure of Newick.Clade 
+        objects.'''
         this_node = node_dict[node]
         clade = Newick.Clade(**this_node)
         
