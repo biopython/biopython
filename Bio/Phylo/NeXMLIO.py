@@ -71,7 +71,7 @@ class Parser(object):
             root = None
             for node in nodes:
                 this_node = node_dict[node.id] = {}
-                if hasattr(node, 'label') and node.label: this_node['name'] = node.label
+                if hasattr(node, 'otu') and node.otu: this_node['name'] = node.otu
                 if node.root: root = node.id
 
             edges = tree.get_edge()
