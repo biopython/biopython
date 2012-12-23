@@ -13,13 +13,20 @@ from __future__ import with_statement
 __docformat__ = "restructuredtext en"
 
 from Bio import File
-from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO
+from Bio.Phylo import (
+                       BaseTree, 
+                       NewickIO, 
+                       NexusIO, 
+                       PhyloXMLIO,
+                       NeXMLIO,
+                       )
 
 
 supported_formats = {
         'newick':   NewickIO,
         'nexus':    NexusIO,
         'phyloxml': PhyloXMLIO,
+        'nexml':    NeXMLIO,
         }
 
 
