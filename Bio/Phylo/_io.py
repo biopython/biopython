@@ -19,6 +19,7 @@ from Bio.Phylo import (
                        NexusIO, 
                        PhyloXMLIO,
                        NeXMLIO,
+                       CDAOIO,
                        )
 from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, CDAOIO
 
