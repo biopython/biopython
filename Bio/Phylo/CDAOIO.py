@@ -223,11 +223,9 @@ class Parser(object):
                 
 
     def parse_children(self, node):
-        '''Return a list of clades representing all children nodes of the specified
-        parent node.
-        
-        This function calls itself recursively for each child, traversing the 
-        entire tree and creating a nested structure of Newick.Clade objects.'''
+        '''Return a Newick.Clade, and calls itself recursively for each child, 
+        traversing the  entire tree and creating a nested structure of Newick.Clade 
+        objects.'''
         
         clade = self.new_clade(node)
         
