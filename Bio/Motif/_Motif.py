@@ -286,12 +286,12 @@ under the background distribution.
             background = dict(background)
         total = sum(background.values())
         for letter in self.alphabet.letters:
-            background[a] /= total
+            background[letter] /= total
         for i in range(self.length):
             ex1 = 0.0
             ex2 = 0.0
             for letter in self.alphabet.letters:
-                p = self[i][letter]
+                p = self[letter][i]
                 b = background[letter]
                 if p!=0:
                     term = p*(math.log(p,2)-math.log(b,2))
@@ -301,7 +301,7 @@ under the background distribution.
             var += ex2-ex1**2
         return exs, math.sqrt(var)
 
-    def make_pssm(self, background=None):
+    def log_odds(self, background=None):
         """
         returns the Position-Specific Scoring Matrix.
 
@@ -347,51 +347,6 @@ under the background distribution.
                         logodds = float("nan")
                     values[letter].append(logodds)
         return PositionSpecificScoringMatrix(alphabet, values)
-
-    def dist_pearson(self, pwm):
-        """
-        return the similarity score based on pearson correlation for the given motif against self.
-
-        We use the Pearson's correlation of the respective probabilities.
-        """
-
-        if self.alphabet != pwm.alphabet:
-            raise ValueError("Cannot compare motifs with different alphabets")
-
-        max_p=-2
-        for offset in range(-self.length+1, pwm.length):
-            if offset<0:
-                p = self.dist_pearson_at(pwm,-offset)
-            else:  # offset>=0
-                p = pwm.dist_pearson_at(self,offset)
-
-            if max_p<p:
-                max_p=p
-                max_o=-offset
-        return 1-max_p,max_o
-
-    def dist_pearson_at(self, pwm, offset):
-        sxx = 0  # \sum x^2
-        sxy = 0  # \sum x \cdot y
-        sx = 0   # \sum x
-        sy = 0   # \sum y
-        syy = 0  # \sum y^2
-        norm=max(self.length,offset+pwm.length)
-
-        for pos in range(max(self.length,offset+pwm.length)):
-            for l in self.alphabet.letters:
-                xi = self[l][pos]
-                yi = pwm[l][pos-offset]
-                sx = sx + xi
-                sy = sy + yi
-                sxx = sxx + xi * xi
-                syy = syy + yi * yi
-                sxy = sxy + xi * yi
-
-        norm *= len(self.alphabet.letters)
-        s1 = (sxy - sx*sy*1.0/norm)
-        s2 = (norm*sxx - sx*sx*1.0)*(norm*syy- sy*sy*1.0)
-        return s1/math.sqrt(s2)
 
 
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
@@ -456,24 +411,26 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 if score > threshold:
                     yield (position-n, score)
 
+    @property
     def max_score(self):
         """Maximal possible score for this motif.
 
         returns the score computed for the consensus sequence.
         """
         score = 0.0
-        letters = self.alphabet
+        letters = self.alphabet.letters
         for position in xrange(0,self.length):
             score += max([self[letter][position] for letter in letters])
         return score
 
+    @property
     def min_score(self):
         """Minimal possible score for this motif.
 
         returns the score computed for the anticonsensus sequence.
         """
         score = 0.0
-        letters = self.alphabet
+        letters = self.alphabet.letters
         for position in xrange(0,self.length):
             score += min([self[letter][position] for letter in letters])
         return score
@@ -668,7 +625,7 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.pwm()
 use
 >>> pwm = motif.counts.normalize()
-See the documentation of motif.counts.normalize and pwm.make_pssm for
+See the documentation of motif.counts.normalize and pwm.log_odds for
 details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         if self._pwm_is_current:
@@ -709,8 +666,8 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.log_odds()
 use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
-See the documentation of motif.counts.normalize and pwm.make_pssm for
+>>> pssm = pwm.log_odds()
+See the documentation of motif.counts.normalize and pwm.log_odds for
 details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         if self._log_odds_is_current:
@@ -802,10 +759,10 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.score_hit(sequence, position)
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> s = sequence[position:positon+len(pssm)]
 >>> pssm.calculate(s)
-See the documentation of motif.counts.normalize() and pwm.make_pssm
+See the documentation of motif.counts.normalize() and pwm.log_odds
 for details on the treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         lo=self.log_odds()
@@ -834,9 +791,9 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.score_hit(sequence, position)
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.search(sequence)
-See the documentation of motif.counts.normalize() and pwm.make_pssm
+See the documentation of motif.counts.normalize() and pwm.log_odds
 for details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         raise Exception
@@ -1322,7 +1279,7 @@ This function is now deprecated. Instead of
 >>> motif.max_score()
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.max_score()
 """,
                 PendingDeprecationWarning)
@@ -1338,7 +1295,7 @@ This function is now deprecated. Instead of
 >>> motif.min_score()
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.min_score()
 """,
                 PendingDeprecationWarning)
@@ -1713,9 +1670,9 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.scanPWM(sequence)
 use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.calculate(sequence)
-See the documentation of motif.counts.normalize, pwm.make_pssm, and
+See the documentation of motif.counts.normalize, pwm.log_odds, and
 pssm.calculate for details.
 """, PendingDeprecationWarning)
         if self.alphabet!=IUPAC.unambiguous_dna:
@@ -1745,9 +1702,9 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif._pwm_calculate(sequence)
 use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.calculate(sequence)
-See the documentation of motif.counts.normalize, pwm.make_pssm, and
+See the documentation of motif.counts.normalize, pwm.log_odds, and
 pssm.calculate for details.
 """, PendingDeprecationWarning)
         logodds = self.log_odds()

@@ -11006,7 +11006,64 @@ Alternatively, \verb+pseudocounts+ can be a dictionary specifying the pseudocoun
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
 \end{verbatim}
-We can also calculate the information content of a motif with a simple call:
+The position-weight matrix has its own methods to calculate the consensus, anticonsensus, and degenerate consensus sequences:
+%cont-doctest
+\begin{verbatim}
+>>> pwm.consensus
+Seq('TACGC', IUPACUnambiguousDNA())
+>>> pwm.anticonsensus
+Seq('GGGTG', IUPACUnambiguousDNA())
+>>> pwm.degenerate_consensus
+Seq('WACNC', IUPACAmbiguousDNA())
+\end{verbatim}
+Note that due to the pseudocounts, the degenerate consensus sequence calculated from the position-weight matrix is slightly different from the degenerate consensus sequence calculated from the instances in the motif:
+%cont-doctest
+\begin{verbatim}
+>>> m.degenerate_consensus
+Seq('WACVC', IUPACAmbiguousDNA())
+\end{verbatim}
+The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+.
+
+\section{Position-Specific Scoring Matrices}
+
+Using the background distribution and PWM with pseudo-counts added,
+it's easy to compute the log-odds ratios, telling us what are the log
+odds of a particular symbol to be coming from a motif against the
+background. We can use the \verb|.log_odds()| method on the position-weight
+matrix:
+
+\begin{verbatim}
+>>> pwm.log_odds()
+{'A': [0.6780719051126378, 1.7560744171139109, -1.9068905956085187, 0.2085866218114176, -0.4918530963296747], 'C': [-2.4918530963296748, -2.4918530963296748, 1.2630344058337941, 0.09310940439148147, 1.5081469036703254], 'T': [1.031708859727338, -1.9068905956085187, 0.2085866218114176, -1.9068905956085187, -1.9068905956085187], 'G': [-2.4918530963296748, -2.4918530963296748, -2.4918530963296748, 0.5956097449206647, -2.4918530963296748]}
+\end{verbatim}
+Here we can see positive values for symbols more frequent in the motif
+than in the background and negative for symbols more frequent in the
+background. $0.0$ means that it's equally likely to see a symbol in the
+background and in the motif (e.g. `T' in the second-last position).
+
+This assumes that A, C, G, and T are equally likely in the background. To
+calculate the position-specific scoring matrix against a background with
+unequal probabilities for A, C, G, T, use the \verb+background+ argument.
+For example, against a background with a 40\% GC content, use
+\begin{verbatim}
+>>> pwm.log_odds(background={'A':0.3,'C':0.2,'G':0.2,'T':0.3})
+{'A': [0.415037499278844, 1.493040011280117, -2.169925001442312, -0.054447784022376135, -0.7548875021634684], 'C': [-2.1699250014423126, -2.1699250014423126, 1.5849625007211563, 0.4150374992788437, 1.8300749985576878], 'T': [0.7686744538935444, -2.169925001442312, -0.054447784022376135, -2.169925001442312, -2.169925001442312], 'G': [-2.1699250014423126, -2.1699250014423126, -2.1699250014423126, 0.9175378398080271, -2.1699250014423126]}
+\end{verbatim}
+
+The maximum and minimum score that can be obtained from the \verb+max_score+
+and \verb+min_score+ properties:
+%cont-doctest
+\begin{verbatim}
+>>> pssm = pwm.log_odds()
+>>> print "%4.2f" % pssm.max_score
+6.15
+>>> print "%4.2f" % pssm.min_score
+-11.87
+\end{verbatim}
+
+To calculate the information content of this position-specific scoring matrix,
+use the \verb+.ic+ method on the position-weight matrix. For the uniform
+background, we find
 %cont-doctest
 \begin{verbatim}
 >>> print "%0.2f" % pwm.ic()
@@ -11014,56 +11071,24 @@ We can also calculate the information content of a motif with a simple call:
 \end{verbatim}
 This gives us a number of bits of information provided by the motif,
 which tells us how much the motif differs from background.
-
-By default, the information content is calculated with respect to a uniform
-background, in which all letters in the alphabet of the motif are assigend an
-equal probability. To specify a non-uniform background, pass a dictionary with
-the background probabilities when calling this method. To calculate the
-information content of a motif with respect to a background corresponding
-to a GC content of 40\%, use
+The information content of the position-specific scoring matrix against a
+background with a GC content of 40\% can be calculated by using the
+\verb+background+ argument:
 %cont-doctest
 \begin{verbatim}
 >>> print "%0.2f" % pwm.ic(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
 3.08
 \end{verbatim}
 
-\section{Position-Specific Scoring Matrices}
-
-Using the background distribution and PWM with pseudo-counts added,
-it's easy to compute the log-odds ratios, telling us what are the log
-odds of a particular symbol to be coming from a motif against the
-background. We can use the \verb|.log_odds()| method:
-
+The mean and standard deviation of the PSSM scores can be calculated similarly:
+%cont-doctest
 \begin{verbatim}
- >>> m.log_odds() 
-[{'A': -2.3219280948873622, 
-  'C': -2.3219280948873622, 
-  'T': 1.7655347463629771, 
-  'G': -2.3219280948873622}, 
- {'A': 1.7655347463629771, 
-  'C': -2.3219280948873622, 
-  'T': -2.3219280948873622, 
-  'G': -2.3219280948873622}, 
- {'A': -2.3219280948873622, 
-  'C': -2.3219280948873622, 
-  'T': 1.7655347463629771, 
-  'G': -2.3219280948873622}, 
- {'A': 1.3785116232537298, 
-  'C': -2.3219280948873622, 
-  'T': 0.0, 
-  'G': -2.3219280948873622}, 
- {'A': 1.7655347463629771, 
-  'C': -2.3219280948873622, 
-  'T': -2.3219280948873622, 
-  'G': -2.3219280948873622}
-]
+>>> mean, std = pwm.exp_score(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
+>>> print "mean = %0.2f, standard deviation = %0.2f" % (mean, std)
+mean = 3.21, standard deviation = 1.50
 \end{verbatim}
-Here we can see positive values for symbols more frequent in the motif
-than in the background and negative for symbols more frequent in the
-background. $0.0$ means that it's equally likely to see a symbol in the
-background and in the motif (e.g. `T' in the second-last position).
 
-\subsection{Searching for instances}
+\section{Searching for instances}
 \label{sec:search}
 
 The most frequent use for a motif is to find its instances in some
@@ -11098,7 +11123,7 @@ We can do the same with the reverse complement (to find instances on the complem
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 %cont-doctest
 \begin{verbatim}
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> for position, score in pssm.search(test_seq, threshold=4.0):
 ...     print "Position %i gives score %0.2f" % (position, score)
 ... 
@@ -11118,6 +11143,19 @@ $4.0$. This is in $log_2$, so we are now looking only for words, which
 are 16 times more likely to occur under the motif model than in the
 background. The default threshold is $0.0$, which selects everything
 that looks more like the motif than the background.
+
+You can also calculate the scores at all positions along the sequence:
+%cont-doctest
+\begin{verbatim}
+>>> pssm.calculate(test_seq)
+array([  5.76755142,  -5.53445292,  -3.87148786,   0.49856207,
+        -7.2893405 ,  -1.89541376, -10.70437813,  -2.92593575,
+         0.69650143,  -3.18081594,   3.76755118,  -2.0039382 ,
+        -1.04141295,   5.29843712,  -0.94949049,  -4.0039382 ,
+        -9.17386341,  -0.53891265,  -0.45645046,  -2.24905086,
+       -10.70437813,  -2.92593575], dtype=float32)
+\end{verbatim}
+In general, this is the fastest way to calculate PSSM scores.
 
 If you want to use a less arbitrary way of selecting thresholds, you
 can explore the \verb|Motif.score_distribution| class implementing a
