@@ -16,6 +16,7 @@ from cStringIO import StringIO
 
 from Bio.Phylo import Newick
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
 NAMESPACES = {
               'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -181,9 +182,15 @@ class Writer(object):
         
         # write XML document to file handle
         xml_doc = ET.ElementTree(root_node)
-        xml_doc.write(handle,
-                      xml_declaration=True, encoding='utf-8',
-                      method='xml')
+        #xml_doc.write(handle,
+        #              xml_declaration=True, encoding='utf-8',
+        #              method='xml')
+
+        # use xml.dom.minodom for pretty printing
+        rough_string = ET.tostring(root_node, 'utf-8')
+        reparsed = minidom.parseString(rough_string)
+        handle.write(reparsed.toprettyxml(indent="  "))
+        
         return count
     
     def _write_tree(self, clade, tree, parent=None, rooted=False):
