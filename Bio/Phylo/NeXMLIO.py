@@ -1,6 +1,6 @@
 # Copyright (C) 2012 by Ben Morris (ben@bendmorris.com)
 # Based on Bio.Nexus, copyright 2005-2008 by Frank Kauff & Cymon J. Cox
-# and Bio.Newick, copyright 2009 by Eric Talevich.
+# and Bio.Phylo.Newick, copyright 2009 by Eric Talevich.
 # All rights reserved.
 # This code is part of the Biopython distribution and governed by its
 # license. Please see the LICENSE file that should have been included
