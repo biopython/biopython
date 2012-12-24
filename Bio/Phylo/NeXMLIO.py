@@ -64,6 +64,7 @@ class Parser(object):
         nexml_doc = gds.parseString(self.handle.read())
         trees = nexml_doc.get_trees()[0].get_tree()
         for tree in trees:
+            print tree
             node_dict = {}
             children = {}
             
@@ -104,6 +105,7 @@ class Parser(object):
         '''Return a Newick.Clade, and calls itself recursively for each child, 
         traversing the  entire tree and creating a nested structure of Newick.Clade 
         objects.'''
+        
         this_node = node_dict[node]
         clade = Newick.Clade(**this_node)
         
@@ -121,9 +123,57 @@ class Writer(object):
     def __init__(self, trees):
         self.trees = trees
 
+        self.node_counter = 0
+        self.edge_counter = 0
+        self.tree_counter = 0
+        self.tu_counter = 0
+        
+    def new_label(self, obj_type):
+        counter = '%s_counter' % obj_type
+        setattr(self, counter, getattr(self, counter) + 1)
+        return '%s%s' % (obj_type, getattr(self, counter))
+
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle."""
 
-        # TODO: write trees to handle
+        xml_doc = gds.Nexml()
+        trees = gds.Trees()
+        count = 0
+        tus = set()
+        for tree in self.trees:
+            this_tree = gds.FloatTree(id=self.new_label('tree'))
+            
+            first_clade = tree.clade
+            tus.update(self._write_tree(first_clade, this_tree))
+            
+            trees.add_tree(this_tree)
+            count += 1
+            
+        for tu in tus:
+            # TODO: add OTUs to trees object
+            pass
+            
+        xml_doc.set_trees([trees])
+        xml_doc.export(outfile=handle, level=0)
 
         return count
+    
+    def _write_tree(self, clade, tree, parent=None):
+        '''Recursively process tree, adding nodes and edges to Tree object. 
+        Returns a set of all OTUs encountered.'''
+        tus = set()
+        if clade.name:
+            tus.add(clade.name)
+        
+        node_id = self.new_label('node')
+        # TODO: create new node, add to tree with tree.add_node
+        
+        if not parent is None:
+            edge_id = self.new_label('edge')
+            # TODO: create new edge, add to tree with tree.add_edge
+    
+        if not clade.is_terminal():
+            for new_clade in clade.clades:
+                tus.update(self._write_tree(new_clade, tree, parent=clade))
+                
+        return tus
