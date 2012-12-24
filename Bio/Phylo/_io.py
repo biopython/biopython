@@ -79,7 +79,7 @@ def write(trees, file, format, **kwargs):
     return n
 
 
-def convert(in_file, in_format, out_file, out_format, **kwargs):
+def convert(in_file, in_format, out_file, out_format, parse_args={}, **kwargs):
     """Convert between two tree file formats."""
-    trees = parse(in_file, in_format)
+    trees = parse(in_file, in_format, **parse_args)
     return write(trees, out_file, out_format, **kwargs)
