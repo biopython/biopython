@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 5 December 2012 (Biopython 1.60+)}
+\date{Last Update -- 24 December 2012 (Biopython 1.60+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -11145,7 +11145,7 @@ background. The default threshold is $0.0$, which selects everything
 that looks more like the motif than the background.
 
 You can also calculate the scores at all positions along the sequence:
-%cont-doctest
+%Don't use a doc test for this as the spacing can differ
 \begin{verbatim}
 >>> pssm.calculate(test_seq)
 array([  5.76755142,  -5.53445292,  -3.87148786,   0.49856207,
