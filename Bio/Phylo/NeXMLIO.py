@@ -64,7 +64,6 @@ class Parser(object):
         nexml_doc = gds.parseString(self.handle.read())
         trees = nexml_doc.get_trees()[0].get_tree()
         for tree in trees:
-            print tree
             node_dict = {}
             children = {}
             
@@ -126,7 +125,6 @@ class Writer(object):
         self.node_counter = 0
         self.edge_counter = 0
         self.tree_counter = 0
-        self.tu_counter = 0
         
     def new_label(self, obj_type):
         counter = '%s_counter' % obj_type
@@ -144,21 +142,22 @@ class Writer(object):
             this_tree = gds.FloatTree(id=self.new_label('tree'))
             
             first_clade = tree.clade
-            tus.update(self._write_tree(first_clade, this_tree))
+            tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
             
             trees.add_tree(this_tree)
             count += 1
             
+        taxa = gds.Taxa(id='tax1')
         for tu in tus:
-            # TODO: add OTUs to trees object
-            pass
+            taxa.add_otu(gds.Taxon(id=tu))
             
-        xml_doc.set_trees([trees])
+        xml_doc.add_trees(trees)
+        xml_doc.add_otus(taxa)
         xml_doc.export(outfile=handle, level=0)
 
         return count
     
-    def _write_tree(self, clade, tree, parent=None):
+    def _write_tree(self, clade, tree, parent=None, rooted=False):
         '''Recursively process tree, adding nodes and edges to Tree object. 
         Returns a set of all OTUs encountered.'''
         tus = set()
@@ -166,11 +165,14 @@ class Writer(object):
             tus.add(clade.name)
         
         node_id = self.new_label('node')
-        # TODO: create new node, add to tree with tree.add_node
+        clade.node_id = node_id
+        node = gds.TreeNode(id=node_id, root=(rooted and parent is None))
+        tree.add_node(node)
         
         if not parent is None:
             edge_id = self.new_label('edge')
-            # TODO: create new edge, add to tree with tree.add_edge
+            edge = gds.TreeFloatEdge(id=edge_id, source=parent.node_id, target=node_id, length=clade.branch_length)
+            tree.add_edge(edge)
     
         if not clade.is_terminal():
             for new_clade in clade.clades:
