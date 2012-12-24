@@ -14,7 +14,25 @@ __docformat__ = "restructuredtext en"
 
 from cStringIO import StringIO
 
-from Bio.Phylo import Newick, _nexml_gds as gds
+from Bio.Phylo import Newick
+import xml.etree.ElementTree as ET
+
+NAMESPACES = {
+              'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+              #'xmi': 'http://www.w3.org/XML/1998/namespace',
+              'nex': 'http://www.nexml.org/2009',
+              'cdao': 'http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#',
+              'xsd': 'http://www.w3.org/2001/XMLSchema#',
+              }
+DEFAULT_NAMESPACE = NAMESPACES['nex']
+
+for prefix, uri in NAMESPACES.items():
+    ET.register_namespace(prefix, uri)
+    
+def qUri(s):
+    for prefix, uri in NAMESPACES.items():
+        s = s.replace('%s:' % prefix, '{%s}' % uri)
+    return s
 
 
 class NeXMLError(Exception):
@@ -61,32 +79,34 @@ class Parser(object):
     def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
 
-        nexml_doc = gds.parseString(self.handle.read())
-        trees = nexml_doc.get_trees()[0].get_tree()
+        nexml_doc = ET.parse(self.handle)
+        
+        trees = nexml_doc.findall(qUri('nex:trees'))[0].findall(qUri('nex:tree'))
         for tree in trees:
             node_dict = {}
             children = {}
             
             # create dictionary of all nodes in this tree
-            nodes = tree.get_node()
+            nodes = tree.findall(qUri('nex:node'))
             root = None
             for node in nodes:
+                node.id = node.attrib['id']
                 this_node = node_dict[node.id] = {}
-                if hasattr(node, 'otu') and node.otu: this_node['name'] = node.otu
-                if node.root: root = node.id
+                if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
+                if 'root' in node.attrib and node.attrib['root'] == 'true': root = node.id
             
             # create dictionary linking each node to all of its children
-            edges = tree.get_edge()
+            edges = tree.findall(qUri('nex:edge'))
             srcs = set()
             tars = set()
             for edge in edges:
-                src, tar = edge.source, edge.target
+                src, tar = edge.attrib['source'], edge.attrib['target']
                 srcs.add(src)
                 tars.add(tar)
                 if not src in children: children[src] = set()
                 
                 children[src].add(tar)
-                node_dict[tar]['branch_length'] = edge.length
+                if 'length' in edge.attrib: node_dict[tar]['branch_length'] = edge.attrib['length']
                 
             if root is None:
                 # if no root specified, start the recursive tree creation function
@@ -133,46 +153,58 @@ class Writer(object):
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle."""
-
-        xml_doc = gds.Nexml()
-        trees = gds.Trees()
+        
+        # TODO: this is not handling XML namespaces and the root nex:nexml node correctly
+        
+        # set XML namespaces
+        root_node = ET.Element('nex:nexml')
+        for prefix, uri in NAMESPACES.items():
+            root_node.set('xmlns:%s' % prefix, uri)
+        root_node.set('xmlns', DEFAULT_NAMESPACE)
+        
+        # create trees
+        trees = ET.SubElement(root_node, 'trees', attrib={'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
         count = 0
         tus = set()
         for tree in self.trees:
-            this_tree = gds.FloatTree(id=self.new_label('tree'))
+            this_tree = ET.SubElement(trees, 'tree', attrib={'id':self.new_label('tree')})
             
             first_clade = tree.clade
             tus.update(self._write_tree(first_clade, this_tree, rooted=tree.rooted))
-            
-            trees.add_tree(this_tree)
-            count += 1
-            
-        taxa = gds.Taxa(id='tax1')
-        for tu in tus:
-            taxa.add_otu(gds.Taxon(id=tu))
-            
-        xml_doc.add_trees(trees)
-        xml_doc.add_otus(taxa)
-        xml_doc.export(outfile=handle, level=0)
 
+            count += 1
+        
+        # create OTUs
+        otus = ET.SubElement(root_node, 'otus', attrib={'id': 'tax', 'label': 'RootTaxaBlock'})
+        for tu in tus:
+            otu = ET.SubElement(otus, 'otu', attrib={'id':tu})
+        
+        # write XML document to file handle
+        xml_doc = ET.ElementTree(root_node)
+        xml_doc.write(handle,
+                      xml_declaration=True, encoding='utf-8',
+                      method='xml')
         return count
     
     def _write_tree(self, clade, tree, parent=None, rooted=False):
         '''Recursively process tree, adding nodes and edges to Tree object. 
         Returns a set of all OTUs encountered.'''
         tus = set()
-        if clade.name:
-            tus.add(clade.name)
         
         node_id = self.new_label('node')
         clade.node_id = node_id
-        node = gds.TreeNode(id=node_id, root=(rooted and parent is None))
-        tree.add_node(node)
+        attrib={'id':node_id, 'label':node_id}
+        root = rooted and parent is None
+        if root: attrib['root'] = 'true'
+        if clade.name:
+            tus.add(clade.name)
+            attrib['otu'] = clade.name
+        node = ET.SubElement(tree, 'node', attrib=attrib)
         
         if not parent is None:
             edge_id = self.new_label('edge')
-            edge = gds.TreeFloatEdge(id=edge_id, source=parent.node_id, target=node_id, length=clade.branch_length)
-            tree.add_edge(edge)
+            node = ET.SubElement(tree, 'edge', attrib={'id':edge_id, 'source':parent.node_id, 'target':node_id,
+                                                       'length':str(clade.branch_length)})
     
         if not clade.is_terminal():
             for new_clade in clade.clades:
