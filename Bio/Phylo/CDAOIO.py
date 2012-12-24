@@ -8,7 +8,10 @@
 
 """I/O function wrappers for the RDF/CDAO file format.
 
+This is an RDF format that conforms to the Comparative Data Analysis Ontology (CDAO).
+See: http://www.evolutionaryontology.org/cdao
 """
+
 __docformat__ = "restructuredtext en"
 
 from cStringIO import StringIO
