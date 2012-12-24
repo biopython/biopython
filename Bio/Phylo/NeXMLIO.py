@@ -159,10 +159,13 @@ class Writer(object):
         
         # set XML namespaces
         root_node = ET.Element('nex:nexml')
-        for prefix, uri in NAMESPACES.items():
-            root_node.set('xmlns:%s' % prefix, uri)
+        root_node.set('version', '0.9')
         root_node.set('xmlns', DEFAULT_NAMESPACE)
         root_node.set('xsi:schemaLocation', 'http://www.nexml.org/2009 ../xsd/nexml.xsd')
+        for prefix, uri in NAMESPACES.items():
+            root_node.set('xmlns:%s' % prefix, uri)
+
+        otus = ET.SubElement(root_node, 'otus', attrib={'id': 'tax', 'label': 'RootTaxaBlock'})
         
         # create trees
         trees = ET.SubElement(root_node, 'trees', attrib={'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
@@ -177,7 +180,6 @@ class Writer(object):
             count += 1
         
         # create OTUs
-        otus = ET.SubElement(root_node, 'otus', attrib={'id': 'tax', 'label': 'RootTaxaBlock'})
         for tu in tus:
             otu = ET.SubElement(otus, 'otu', attrib={'id':tu})
         
