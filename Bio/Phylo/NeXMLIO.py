@@ -162,6 +162,7 @@ class Writer(object):
         for prefix, uri in NAMESPACES.items():
             root_node.set('xmlns:%s' % prefix, uri)
         root_node.set('xmlns', DEFAULT_NAMESPACE)
+        root_node.set('xsi:schemaLocation', 'http://www.nexml.org/2009 ../xsd/nexml.xsd')
         
         # create trees
         trees = ET.SubElement(root_node, 'trees', attrib={'id':'Trees', 'label':'TreesBlockFromXML', 'otus': 'tax'})
