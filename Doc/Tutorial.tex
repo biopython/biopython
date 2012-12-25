@@ -11050,43 +11050,31 @@ For example, against a background with a 40\% GC content, use
 {'A': [0.415037499278844, 1.493040011280117, -2.169925001442312, -0.054447784022376135, -0.7548875021634684], 'C': [-2.1699250014423126, -2.1699250014423126, 1.5849625007211563, 0.4150374992788437, 1.8300749985576878], 'T': [0.7686744538935444, -2.169925001442312, -0.054447784022376135, -2.169925001442312, -2.169925001442312], 'G': [-2.1699250014423126, -2.1699250014423126, -2.1699250014423126, 0.9175378398080271, -2.1699250014423126]}
 \end{verbatim}
 
-The maximum and minimum score that can be obtained from the \verb+max_score+
-and \verb+min_score+ properties:
+The maximum and minimum score obtainable from the PSSM are stores in the
+\verb+.max+ and \verb+.min+ properties:
 %cont-doctest
 \begin{verbatim}
 >>> pssm = pwm.log_odds()
->>> print "%4.2f" % pssm.max_score
+>>> print "%4.2f" % pssm.max
 6.15
->>> print "%4.2f" % pssm.min_score
+>>> print "%4.2f" % pssm.min
 -11.87
 \end{verbatim}
 
-To calculate the information content of this position-specific scoring matrix,
-use the \verb+.ic+ method on the position-weight matrix. For the uniform
-background, we find
+Similarly, the mean and standard deviation of the PSSM scores are stored in
+the \verb+.mean+ and \verb+.std+ attributes:
 %cont-doctest
 \begin{verbatim}
->>> print "%0.2f" % pwm.ic()
-3.22
-\end{verbatim}
-This gives us a number of bits of information provided by the motif,
-which tells us how much the motif differs from background.
-The information content of the position-specific scoring matrix against a
-background with a GC content of 40\% can be calculated by using the
-\verb+background+ argument:
-%cont-doctest
-\begin{verbatim}
->>> print "%0.2f" % pwm.ic(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
-3.08
-\end{verbatim}
-
-The mean and standard deviation of the PSSM scores can be calculated similarly:
-%cont-doctest
-\begin{verbatim}
->>> mean, std = pwm.exp_score(background={'A': 0.3, 'C': 0.2, 'G': 0.2, 'T': 0.3})
+>>> mean = pssm.mean
+>>> std = pssm.std
 >>> print "mean = %0.2f, standard deviation = %0.2f" % (mean, std)
-mean = 3.21, standard deviation = 1.50
+mean = 3.22, standard deviation = 2.49
 \end{verbatim}
+The mean is particularly important, as its value is equal to the 
+Kullback-Leibler divergence or relative entropy, and is a measure for the
+information content of the motif compared to the background. As in Biopython
+the base-2 logarithm is used in the calculation of the log-odds scores, the
+information content has units of bits.
 
 \section{Searching for instances}
 \label{sec:search}

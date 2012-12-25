@@ -243,64 +243,6 @@ class PositionWeightMatrix(GenericPositionMatrix):
         for letter in alphabet.letters:
             self[letter] = tuple(self[letter])
 
-    def ic(self, background=None):
-        """\
-Returns the information content of a motif.
-
-By default, a uniform background is used. To specify a non-uniform
-background, use the 'background' argument to pass a dictionary containing
-the probability of each letter in the alphabet associated with the motif
-under the background distribution.
-        """
-        result=0
-        if background is None:
-            background = {}
-            for a in self.alphabet.letters:
-                background[a] = 1.0
-        else:
-            background = dict(background)
-        total = sum(background.values())
-        for a in self.alphabet.letters:
-            background[a] /= total
-        for a in self.alphabet.letters:
-            if background[a]!=0:
-                result-=background[a]*math.log(background[a],2)
-        result *= self.length
-        for i in range(self.length):
-            for a in self.alphabet.letters:
-                if self[a][i]!=0:
-                    result+=self[a][i]*math.log(self[a][i],2)
-        return result
-
-    def exp_score(self, background=None):
-        """
-        Computes expected score of motif's instance and its standard deviation
-        """
-        exs = 0.0
-        var = 0.0
-        if background is None:
-            background = {}
-            for letter in self.alphabet.letters:
-                background[letter] = 1.0
-        else:
-            background = dict(background)
-        total = sum(background.values())
-        for letter in self.alphabet.letters:
-            background[letter] /= total
-        for i in range(self.length):
-            ex1 = 0.0
-            ex2 = 0.0
-            for letter in self.alphabet.letters:
-                p = self[letter][i]
-                b = background[letter]
-                if p!=0:
-                    term = p*(math.log(p,2)-math.log(b,2))
-                    ex1 += term
-                    ex2 += term**2
-            exs += ex1
-            var += ex2-ex1**2
-        return exs, math.sqrt(var)
-
     def log_odds(self, background=None):
         """
         returns the Position-Specific Scoring Matrix.
@@ -321,14 +263,20 @@ under the background distribution.
         total = sum(background.values())
         for letter in alphabet.letters:
             background[letter] /= total
-        for letter in alphabet.letters:
             values[letter] = []
-            b = background[letter]
-            if b > 0:
-                for i in range(self.length):
+        mean = 0.0
+        variance = 0.0
+        for i in range(self.length):
+            sx = 0.0
+            sxx = 0.0
+            for letter in alphabet.letters:
+                b = background[letter]
+                if b > 0:
                     p = self[letter][i]
                     if p > 0:
                         logodds = math.log(p/b, 2)
+                        sx += p*logodds
+                        sxx += p*logodds*logodds
                     else:
                         #TODO - Ensure this has unittest coverage!
                         try:
@@ -338,15 +286,23 @@ under the background distribution.
                             # and failed on Windows XP 32bit
                             logodds = - 1E400
                     values[letter].append(logodds)
-            else:
-                for i in range(self.length):
+                else:
                     p = self[letter][i]
                     if p > 0:
                         logodds = float("inf")
+                        mean = float("inf")
+                        variance = float("inf")
                     else:
                         logodds = float("nan")
                     values[letter].append(logodds)
-        return PositionSpecificScoringMatrix(alphabet, values)
+            sxx -= sx*sx
+            mean += sx
+            variance += sxx
+        pssm = PositionSpecificScoringMatrix(alphabet, values)
+        variance = max(variance, 0) # to avoid roundoff problems
+        pssm._mean = mean
+        pssm._std = math.sqrt(variance)
+        return pssm
 
 
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
@@ -412,7 +368,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                     yield (position-n, score)
 
     @property
-    def max_score(self):
+    def max(self):
         """Maximal possible score for this motif.
 
         returns the score computed for the consensus sequence.
@@ -424,7 +380,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         return score
 
     @property
-    def min_score(self):
+    def min(self):
         """Minimal possible score for this motif.
 
         returns the score computed for the anticonsensus sequence.
@@ -434,6 +390,20 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for position in xrange(0,self.length):
             score += min([self[letter][position] for letter in letters])
         return score
+
+    @property
+    def mean(self):
+        """Expected value of the score of a motif.
+
+        returns None if the expected value is undefined"""
+        return self._mean
+
+    @property
+    def std(self):
+        """Standard deviation of the score of a motif.
+
+        returns None if the standard deviation is undefined"""
+        return self._std
 
 
 class Motif(object):
