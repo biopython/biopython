@@ -1383,10 +1383,10 @@ class NcbiblastformatterCommandline(_NcbibaseblastCommandline):
         self.parameters = [
             # Input options
             _Option(["-rid", "rid"],
-                    "BLAST Request ID (RID), not compatiable with archive arg",
+                    "BLAST Request ID (RID), not compatible with archive arg",
                     equate=False),
             _Option(["-archive", "archive"],
-                    "Archive file of results, not compatiable with rid arg.",
+                    "Archive file of results, not compatible with rid arg.",
                     filename=True,
                     equate=False),
             # Restrict search or results

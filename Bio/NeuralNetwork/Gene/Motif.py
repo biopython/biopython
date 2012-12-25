@@ -178,7 +178,7 @@ class MotifCoder(object):
 
         This converts a sequence into a representation based on the motifs.
         The representation is returned as a list of the relative amount of
-        each motif (number of times a motif occured divided by the total
+        each motif (number of times a motif occurred divided by the total
         number of motifs in the sequence). The values in the list correspond
         to the input order of the motifs specified in the initializer.
         """

@@ -47,7 +47,7 @@ class PDBParser(object):
         o structure_builder - an optional user implemented StructureBuilder class.
 
         o QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
-        the SMCRA data will be supressed. If false (DEFAULT), they will be shown.
+        the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
         These warnings might be indicative of problems in the PDB file!
         """
         if structure_builder is not None:

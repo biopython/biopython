@@ -65,7 +65,7 @@ class Atom(object):
         self.siguij_array=None
         self.sigatm_array=None
         self.serial_number=serial_number
-        # Dictionary that keeps addictional properties
+        # Dictionary that keeps additional properties
         self.xtra={}
         assert not element or element == element.upper(), element
         self.element = self._assign_element(element)

@@ -385,7 +385,7 @@ class AbstractCommandline(object):
         by sending it to /dev/null to avoid wasting memory (False). In the
         later case empty string(s) are returned.
 
-        The optional cwd argument is a string giving the working directory to
+        The optional cwd argument is a string giving the working directory
         to run the command from. See Python's subprocess module documentation
         for more details.
 

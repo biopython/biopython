@@ -15,7 +15,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
-#We only import this and subclass it for some limited backward compatibilty.
+#We only import this and subclass it for some limited backward compatibility.
 from Bio.Align.Generic import Alignment as _Alignment
 
 

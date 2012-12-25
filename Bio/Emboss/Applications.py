@@ -640,7 +640,7 @@ class FDNAParsCommandline(_EmbossCommandLine):
         _Option(["-njumble", "njumble"],
                  "number of times to randomise input order (default is 0)"),
         _Option(["-seed", "seed"],
-                 "provde random seed"),
+                 "provide random seed"),
         _Option(["-outgrno", "outgrno"],
                  "Specify outgroup"),
         _Option(["-thresh", "thresh"],
@@ -684,7 +684,7 @@ class FProtParsCommandline(_EmbossCommandLine):
         _Option(["-njumble", "njumble"],
                  "number of times to randomise input order (default is 0)"),
         _Option(["-seed", "seed"],
-                 "provde random seed"),
+                 "provide random seed"),
         _Option(["-outgrno", "outgrno"],
                  "Specify outgroup"),
         _Option(["-thresh", "thresh"],
@@ -735,7 +735,7 @@ class FProtDistCommandline(_EmbossCommandLine):
         _Option(["-ttratio", "ttratio"],
                  "Transition/transversion ratio (0-1)"),
         _Option(["-basefreq", "basefreq"],
-                 "DNA base frequencies (space seperated list)")]
+                 "DNA base frequencies (space separated list)")]
         _EmbossCommandLine.__init__(self, cmd, **kwargs)
 
 

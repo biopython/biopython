@@ -527,7 +527,7 @@ class Tree(Nodes.Chain):
     def display(self):
         """Quick and dirty lists of all nodes."""
         table=[('#','taxon','prev','succ','brlen','blen (sum)','support','comment')]
-        #Sort this to be consistent accross CPython, Jython, etc
+        #Sort this to be consistent across CPython, Jython, etc
         for i in sorted(self.all_ids()):
             n=self.node(i)
             if not n.data:
@@ -754,9 +754,9 @@ class Tree(Nodes.Chain):
         """
 
         if bstrees and constree:
-            raise TreeError('Specify either list of boostrap trees or consensus tree, not both')
+            raise TreeError('Specify either list of bootstrap trees or consensus tree, not both')
         if not (bstrees or constree):
-            raise TreeError('Specify either list of boostrap trees or consensus tree.')
+            raise TreeError('Specify either list of bootstrap trees or consensus tree.')
         # no outgroup specified: use the smallest clade of the root
         if outgroup is None:
             try:

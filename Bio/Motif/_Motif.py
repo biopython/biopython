@@ -842,7 +842,7 @@ in a future release of Biopython.""", PendingDeprecationWarning)
 
     def dist_product(self,other):
         """
-        A similarity measure taking into account a product probability of generating overlaping instances of two motifs
+        A similarity measure taking into account a product probability of generating overlapping instances of two motifs
         """
         warnings.warn("""\
 This function is now obsolete, and will be deprecated and removed
@@ -972,7 +972,7 @@ in a future release of Biopython.""", PendingDeprecationWarning)
     def __len__(self):
         """return the length of a motif
 
-        Please use this method (i.e. invoke len(m)) instead of refering to the m.length directly.
+        Please use this method (i.e. invoke len(m)) instead of referring to m.length directly.
         """
         if self.length is None:
             return 0

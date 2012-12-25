@@ -452,7 +452,7 @@ needed for our NCBI Entrez Utilities XML parser.
 
 The parse, read and write functions in Bio.SeqIO and Bio.AlignIO will now
 accept filenames as well as handles. This follows a general shift from
-from other Python libraries, and does make usage a little simpler. Also
+other Python libraries, and does make usage a little simpler. Also
 the write functions will now accept a single SeqRecord or alignment.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).

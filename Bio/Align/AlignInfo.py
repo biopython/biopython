@@ -322,7 +322,7 @@ class SummaryInfo(object):
         return all_letters
 
     def _get_base_replacements(self, skip_items = []):
-        """Get a zeroed dictonary of all possible letter combinations.
+        """Get a zeroed dictionary of all possible letter combinations.
 
         This looks at the type of alphabet and gets the letters for it.
         It then creates a dictionary with all possible combinations of these

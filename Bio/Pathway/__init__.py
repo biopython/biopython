@@ -16,7 +16,7 @@ interaction between any number of biochemical species.
 Network objects are used to represent the connectivity between species in pathways
 and reaction networks.
 
-For applications where it is not neccessary to explicitly represent network connectivity,
+For applications where it is not necessary to explicitly represent network connectivity,
 the specialized classes Reaction and System should be used in place of Interacton and
 Network.
 

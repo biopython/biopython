@@ -55,7 +55,7 @@ Usage:
     >>> new.print_that(dct)
     ...
 
-    Some of the methods of PrintFormat are meant to be overriden by derived
+    Some of the methods of PrintFormat are meant to be overridden by derived
     class.
 """
 
@@ -100,7 +100,7 @@ class PrintFormat(object):
         dct is a dictionary as returned by a RestrictionBatch.search()
 
         title is the title of the map.
-        It must be a formated string, i.e. you must include the line break.
+        It must be a formatted string, i.e. you must include the line break.
 
         s1 is the title separating the list of enzymes that have sites from
         those without sites.
