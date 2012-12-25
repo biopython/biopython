@@ -80,45 +80,49 @@ class Parser(object):
     def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
 
-        nexml_doc = ET.parse(self.handle)
+        nexml_doc = ET.iterparse(self.handle, events=('end',))
         
-        trees = nexml_doc.findall(qUri('nex:trees'))[0].findall(qUri('nex:tree'))
-        for tree in trees:
-            node_dict = {}
-            children = {}
-            
-            # create dictionary of all nodes in this tree
-            nodes = tree.findall(qUri('nex:node'))
-            root = None
-            for node in nodes:
-                node.id = node.attrib['id']
-                this_node = node_dict[node.id] = {}
-                if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
-                if 'root' in node.attrib and node.attrib['root'] == 'true': root = node.id
-            
-            # create dictionary linking each node to all of its children
-            edges = tree.findall(qUri('nex:edge'))
-            srcs = set()
-            tars = set()
-            for edge in edges:
-                src, tar = edge.attrib['source'], edge.attrib['target']
-                srcs.add(src)
-                tars.add(tar)
-                if not src in children: children[src] = set()
+        for event, node in nexml_doc:
+            if node.tag == qUri('nex:tree'):
+                node_dict = {}
+                node_children = {}
+                root = None
                 
-                children[src].add(tar)
-                if 'length' in edge.attrib: node_dict[tar]['branch_length'] = edge.attrib['length']
+                child_tags = node._children
+                nodes = []                
+                edges = []
+                for child in child_tags:
+                    if child.tag == qUri('nex:node'): nodes.append(child)
+                    if child.tag == qUri('nex:edge'): edges.append(child)
+                    
+                for node in nodes:
+                    node.id = node.attrib['id']
+                    this_node = node_dict[node.id] = {}
+                    if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
+                    if 'root' in node.attrib and node.attrib['root'] == 'true': root = node.id
+                    
+                srcs = set()
+                tars = set()
+                for edge in edges:
+                    src, tar = edge.attrib['source'], edge.attrib['target']
+                    srcs.add(src)
+                    tars.add(tar)
+                    if not src in node_children: node_children[src] = set()
+                    
+                    node_children[src].add(tar)
+                    if 'length' in edge.attrib: node_dict[tar]['branch_length'] = edge.attrib['length']
+                    
+                if root is None:
+                    # if no root specified, start the recursive tree creation function
+                    # with the first node that's not a child of any other nodes
+                    rooted = False
+                    possible_roots = (node.id for node in nodes if node.id in srcs and not node.id in tars)
+                    root = possible_roots.next()
+                else:
+                    rooted = True
+                    
+                yield Newick.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
                 
-            if root is None:
-                # if no root specified, start the recursive tree creation function
-                # with the first node that's not a child of any other nodes
-                rooted = False
-                possible_roots = (node.id for node in nodes if node.id in srcs and not node.id in tars)
-                root = possible_roots.next()
-            else:
-                rooted = True
-                
-            yield Newick.Tree(root=self._make_tree(root, node_dict, children), rooted=rooted)
             
     @classmethod
     def _make_tree(cls, node, node_dict, children):
