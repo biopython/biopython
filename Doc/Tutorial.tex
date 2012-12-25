@@ -11377,10 +11377,10 @@ just let us know on the mailing list or our bug database.
 \chapter{Sequence motif analysis using Bio.motifs}
 
 This chapter gives an overview of the functionality of the
-\verb|Bio.motifs| package included in Biopython distribution. It is intended
-for people who are involved in analysis of sequence motif, so I'll
+\verb|Bio.motifs| package included in Biopython. It is intended
+for people who are involved in the analysis of sequence motifs, so I'll
 assume that you are familiar with basic notions of motif analysis. In
-case something is unclear, please look into Section~\ref{sec:links}
+case something is unclear, please look at Section~\ref{sec:links}
 for some relevant links.
 
 Most of this chapter describes the new \verb|Bio.motifs| package included
@@ -11390,7 +11390,7 @@ Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
 most of their functionality with a unified motif object implementation.
 
 Speaking of other libraries, if you are reading this you might be
-interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another Python library
+interested in \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
 designed to deal with sequence motifs. It supports more \emph{de-novo}
 motif finders, but it is not a part of Biopython and has some restrictions
 on commercial use.
@@ -11524,7 +11524,7 @@ high counts:
 >>> m.degenerate_consensus
 Seq('WACVC', IUPACAmbiguousDNA())
 \end{verbatim}
-Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T, and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is constructed followed the rules specified by Cavener \cite{cavener1987}.
+Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T, and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is constructed following the rules specified by Cavener \cite{cavener1987}.
 
 We can also get the reverse complement of a motif:
 %cont-doctest
@@ -11560,8 +11560,10 @@ representation is based on instances or on some version of PWM matrix.
 
 \subsubsection*{JASPAR}
 One of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
- stores motifs either as a list of instances, or as a frequency matrix.
-As an example, these are the beginning and ending lines of the JASPAR \verb+Arnt.sites+ file showing known binding sites of the mouse helix-loop-helix transcription factor Arnt:
+stores motifs either as a list of instances, or as a frequency matrix.
+As an example, these are the beginning and ending lines of the JASPAR
+\verb+Arnt.sites+ file showing known binding sites of the mouse
+helix-loop-helix transcription factor Arnt:
 \begin{verbatim}
 >MA0004 ARNT    1
 CACGTGatgtcctc
