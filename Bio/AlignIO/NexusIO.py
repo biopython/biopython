@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
     handle = StringIO()
     try:
-        NexusWriter(handle).write_file([a,a])
+        NexusWriter(handle).write_file([a, a])
         assert False, "Should have rejected more than one alignment!"
     except ValueError:
         pass
