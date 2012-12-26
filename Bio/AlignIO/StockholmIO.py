@@ -141,17 +141,17 @@ class StockholmWriter(SequentialAlignmentWriter):
 
     #These dictionaries should be kept in sync with those
     #defined in the StockholmIterator class.
-    pfam_gr_mapping = {"secondary_structure" : "SS",
-                       "surface_accessibility" : "SA",
-                       "transmembrane" : "TM",
-                       "posterior_probability" : "PP",
-                       "ligand_binding" : "LI",
-                       "active_site" : "AS",
-                       "intron" : "IN"}
+    pfam_gr_mapping = {"secondary_structure": "SS",
+                       "surface_accessibility": "SA",
+                       "transmembrane": "TM",
+                       "posterior_probability": "PP",
+                       "ligand_binding": "LI",
+                       "active_site": "AS",
+                       "intron": "IN"}
     #Following dictionary deliberately does not cover AC, DE or DR
-    pfam_gs_mapping = {"organism" : "OS",
-                       "organism_classification" : "OC",
-                       "look" : "LO"}
+    pfam_gs_mapping = {"organism": "OS",
+                       "organism_classification": "OC",
+                       "look": "LO"}
 
     def write_alignment(self, alignment):
         """Use this to write (another) single alignment to an open file.
@@ -192,7 +192,7 @@ class StockholmWriter(SequentialAlignmentWriter):
                     seq_name = record.name
 
         #In the Stockholm file format, spaces are not allowed in the id
-        seq_name = seq_name.replace(" ","_")
+        seq_name = seq_name.replace(" ", "_")
 
         if "start" in record.annotations \
         and "end" in record.annotations:
@@ -253,7 +253,7 @@ class StockholmWriter(SequentialAlignmentWriter):
 
         #GR = per row per column sequence annotation
         for key, value in record.letter_annotations.iteritems():
-            if key in self.pfam_gr_mapping and len(str(value))==len(record.seq):
+            if key in self.pfam_gr_mapping and len(str(value)) == len(record.seq):
                 data = self.clean(str(value))
                 if data:
                     self.handle.write("#=GR %s %s %s\n"
@@ -298,17 +298,17 @@ class StockholmIterator(AlignmentIterator):
 
     #These dictionaries should be kept in sync with those
     #defined in the PfamStockholmWriter class.
-    pfam_gr_mapping = {"SS" : "secondary_structure",
-                       "SA" : "surface_accessibility",
-                       "TM" : "transmembrane",
-                       "PP" : "posterior_probability",
-                       "LI" : "ligand_binding",
-                       "AS" : "active_site",
-                       "IN" : "intron"}
+    pfam_gr_mapping = {"SS": "secondary_structure",
+                       "SA": "surface_accessibility",
+                       "TM": "transmembrane",
+                       "PP": "posterior_probability",
+                       "LI": "ligand_binding",
+                       "AS": "active_site",
+                       "IN": "intron"}
     #Following dictionary deliberately does not cover AC, DE or DR
-    pfam_gs_mapping = {"OS" : "organism",
-                       "OC" : "organism_classification",
-                       "LO" : "look"}
+    pfam_gs_mapping = {"OS": "organism",
+                       "OC": "organism_classification",
+                       "LO": "look"}
 
     def next(self):
         try:
@@ -354,7 +354,7 @@ class StockholmIterator(AlignmentIterator):
                 #Sequence
                 #Format: "<seqname> <sequence>"
                 assert not passed_end_alignment
-                parts = [x.strip() for x in line.split(" ",1)]
+                parts = [x.strip() for x in line.split(" ", 1)]
                 if len(parts) != 2:
                     #This might be someone attempting to store a zero length sequence?
                     raise ValueError("Could not split line into identifier "
@@ -363,13 +363,13 @@ class StockholmIterator(AlignmentIterator):
                 if id not in ids:
                     ids.append(id)
                 seqs.setdefault(id, '')
-                seqs[id] += seq.replace(".","-")
+                seqs[id] += seq.replace(".", "-")
             elif len(line) >= 5:
                 #Comment line or meta-data
                 if line[:5] == "#=GF ":
                     #Generic per-File annotation, free text
                     #Format: #=GF <feature> <free text>
-                    feature, text = line[5:].strip().split(None,1)
+                    feature, text = line[5:].strip().split(None, 1)
                     #Each feature key could be used more than once,
                     #so store the entries as a list of strings.
                     if feature not in gf:
@@ -383,7 +383,7 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == '#=GS ':
                     #Generic per-Sequence annotation, free text
                     #Format: "#=GS <seqname> <feature> <free text>"
-                    id, feature, text = line[5:].strip().split(None,2)
+                    id, feature, text = line[5:].strip().split(None, 2)
                     #if id not in ids:
                     #    ids.append(id)
                     if id not in gs:
@@ -395,14 +395,14 @@ class StockholmIterator(AlignmentIterator):
                 elif line[:5] == "#=GR ":
                     #Generic per-Sequence AND per-Column markup
                     #Format: "#=GR <seqname> <feature> <exactly 1 char per column>"
-                    id, feature, text = line[5:].strip().split(None,2)
+                    id, feature, text = line[5:].strip().split(None, 2)
                     #if id not in ids:
                     #    ids.append(id)
                     if id not in gr:
                         gr[id] = {}
                     if feature not in gr[id]:
                         gr[id][feature] = ""
-                    gr[id][feature] += text.strip() # append to any previous entry
+                    gr[id][feature] += text.strip()  # append to any previous entry
                     #TODO - Should we check the length matches the alignment length?
                     #       For iterlaced sequences the GR data can be split over
                     #       multiple lines
@@ -432,11 +432,11 @@ class StockholmIterator(AlignmentIterator):
                     raise ValueError("Sequences have different lengths, or repeated identifier")
                 name, start, end = self._identifier_split(id)
                 record = SeqRecord(Seq(seq, self.alphabet),
-                                   id = id, name = name, description = id,
-                                   annotations = {"accession":name})
+                                   id=id, name=name, description=id,
+                                   annotations={"accession": name})
                 #Accession will be overridden by _populate_meta_data if an explicit
                 #accession is provided:
-                record.annotations["accession"]=name
+                record.annotations["accession"] = name
 
                 if start is not None:
                     record.annotations["start"] = start
@@ -458,8 +458,8 @@ class StockholmIterator(AlignmentIterator):
     def _identifier_split(self, identifier):
         """Returns (name,start,end) string tuple from an identier."""
         if '/' in identifier:
-            name, start_end = identifier.rsplit("/",1)
-            if start_end.count("-")==1:
+            name, start_end = identifier.rsplit("/", 1)
+            if start_end.count("-") == 1:
                 try:
                     start, end = map(int, start_end.split("-"))
                     return (name, start, end)
@@ -488,7 +488,7 @@ class StockholmIterator(AlignmentIterator):
 
         This function will return an empty dictionary if no data is found."""
         name, start, end = self._identifier_split(identifier)
-        if name==identifier:
+        if name == identifier:
             identifier_keys = [identifier]
         else:
             identifier_keys = [identifier, name]
@@ -509,12 +509,12 @@ class StockholmIterator(AlignmentIterator):
         seq_data = self._get_meta_data(identifier, self.seq_annotation)
         for feature in seq_data:
             #Note this dictionary contains lists!
-            if feature=="AC":  # ACcession number
-                assert len(seq_data[feature])==1
-                record.annotations["accession"]=seq_data[feature][0]
-            elif feature=="DE":  # DEscription
+            if feature == "AC":  # ACcession number
+                assert len(seq_data[feature]) == 1
+                record.annotations["accession"] = seq_data[feature][0]
+            elif feature == "DE":  # DEscription
                 record.description = "\n".join(seq_data[feature])
-            elif feature=="DR":  # Database Reference
+            elif feature == "DR":  # Database Reference
                 #Should we try and parse the strings?
                 record.dbxrefs = seq_data[feature]
             elif feature in self.pfam_gs_mapping:
