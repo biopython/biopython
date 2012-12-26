@@ -191,7 +191,7 @@ def search_iter(db, query, limit=None, batch=100):
         batch = min(batch, remain)
         #print "%r left, asking for %r" % (remain, batch)
         ids = search(db, query, offset, batch).read().strip().split()
-        assert len(ids)==batch, "Got %i, expected %i" % (len(ids), batch)
+        assert len(ids) == batch, "Got %i, expected %i" % (len(ids), batch)
         #print "offset %i, %s ... %s" % (offset, ids[0], ids[-1])
         if ids == prev_ids:
             raise RuntimeError("Same search results for previous offset")
@@ -291,10 +291,10 @@ def convert(data, in_format, out_format):
     #TODO - Should we just accept a string not a handle? What about a filename?
     if hasattr(data, "read"):
         #Handle
-        return _open(url, post={"data":data.read()})
+        return _open(url, post={"data": data.read()})
     else:
         #String
-        return _open(url, post={"data":data})
+        return _open(url, post={"data": data})
 
 
 def _open(url, post=None):
