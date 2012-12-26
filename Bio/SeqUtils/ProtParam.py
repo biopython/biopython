@@ -106,7 +106,7 @@ class ProteinAnalysis(object):
             # remove a molecule of water from the amino acid weight
             aa_weights[i] = iupac_weights[i] - water
 
-        total_weight = water # add just one water molecule for the whole sequence
+        total_weight = water  # add just one water molecule for the whole sequence
         for aa in self.sequence:
             total_weight += aa_weights[aa]
 

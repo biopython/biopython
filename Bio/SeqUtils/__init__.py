@@ -85,7 +85,7 @@ def GC123(seq):
     return gcall, gc[0], gc[1], gc[2]
 
 
-def GC_skew(seq, window = 100):
+def GC_skew(seq, window=100):
     """Calculates GC skew (G-C)/(G+C) for multiple windows along the sequence.
 
     Returns a list of ratios (floats), controlled by the length of the sequence
@@ -104,44 +104,44 @@ def GC_skew(seq, window = 100):
     return values
 
 
-def xGC_skew(seq, window = 1000, zoom = 100,
-                         r = 300, px = 100, py = 100):
+def xGC_skew(seq, window=1000, zoom=100,
+                         r=300, px=100, py=100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
     from Tkinter import Scrollbar, Canvas, BOTTOM, BOTH, ALL, \
                         VERTICAL, HORIZONTAL, RIGHT, LEFT, X, Y
-    yscroll = Scrollbar(orient = VERTICAL)
-    xscroll = Scrollbar(orient = HORIZONTAL)
-    canvas = Canvas(yscrollcommand = yscroll.set,
-                    xscrollcommand = xscroll.set, background = 'white')
+    yscroll = Scrollbar(orient=VERTICAL)
+    xscroll = Scrollbar(orient=HORIZONTAL)
+    canvas = Canvas(yscrollcommand=yscroll.set,
+                    xscrollcommand=xscroll.set, background='white')
     win = canvas.winfo_toplevel()
     win.geometry('700x700')
 
-    yscroll.config(command = canvas.yview)
-    xscroll.config(command = canvas.xview)
-    yscroll.pack(side = RIGHT, fill = Y)
-    xscroll.pack(side = BOTTOM, fill = X)
-    canvas.pack(fill=BOTH, side = LEFT, expand = 1)
+    yscroll.config(command=canvas.yview)
+    xscroll.config(command=canvas.xview)
+    yscroll.pack(side=RIGHT, fill=Y)
+    xscroll.pack(side=BOTTOM, fill=X)
+    canvas.pack(fill=BOTH, side=LEFT, expand=1)
     canvas.update()
 
     X0, Y0 = r + px, r + py
-    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
+    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 - r, Y0 + r
 
     ty = Y0
-    canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
-    ty +=20
-    canvas.create_text(X0, ty, text = 'GC %3.2f%%' % (GC(seq)))
-    ty +=20
-    canvas.create_text(X0, ty, text = 'GC Skew', fill = 'blue')
-    ty +=20
-    canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
-    ty +=20
+    canvas.create_text(X0, ty, text='%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
+    ty += 20
+    canvas.create_text(X0, ty, text='GC %3.2f%%' % (GC(seq)))
+    ty += 20
+    canvas.create_text(X0, ty, text='GC Skew', fill='blue')
+    ty += 20
+    canvas.create_text(X0, ty, text='Accumulated GC Skew', fill='magenta')
+    ty += 20
     canvas.create_oval(x1, y1, x2, y2)
 
     acc = 0
     start = 0
     for gc in GC_skew(seq, window):
         r1 = r
-        acc+=gc
+        acc += gc
         # GC skew
         alpha = pi - (2*pi*start)/len(seq)
         r2 = r1 - gc*zoom
@@ -149,7 +149,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1, y1, x2, y2, fill = 'blue')
+        canvas.create_line(x1, y1, x2, y2, fill='blue')
         # accumulated GC skew
         r1 = r - 50
         r2 = r1 - acc
@@ -157,12 +157,12 @@ def xGC_skew(seq, window = 1000, zoom = 100,
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1, y1, x2, y2, fill = 'magenta')
+        canvas.create_line(x1, y1, x2, y2, fill='magenta')
 
         canvas.update()
         start += window
 
-    canvas.configure(scrollregion = canvas.bbox(ALL))
+    canvas.configure(scrollregion=canvas.bbox(ALL))
 
 
 def molecular_weight(seq):
@@ -191,7 +191,7 @@ def nt_search(seq, subseq):
     result = [pattern]
     l = len(seq)
     while True:
-        pos+=1
+        pos += 1
         s = seq[pos:]
         m = re.search(pattern, s)
         if not m:
@@ -313,7 +313,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 # {{{
 
 
-def six_frame_translations(seq, genetic_code = 1):
+def six_frame_translations(seq, genetic_code=1):
     """Formatted string showing the 6 frame translations and GC content.
 
     nice looking 6 frame translation with GC content - code from xbbtools
