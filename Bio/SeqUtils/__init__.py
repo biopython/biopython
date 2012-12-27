@@ -231,21 +231,25 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     'Xaa'.
 
     e.g.
+
     >>> from Bio.SeqUtils import seq3
     >>> seq3("MAIVMGRWKGAR*")
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
     You can set a custom translation of the codon termination code using the
     "custom_map" argument, e.g.
+
     >>> seq3("MAIVMGRWKGAR*", custom_map={"*": "***"})
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'
 
     You can also set a custom translation for non-amino acid characters, such
     as '-', using the "undef_code" argument, e.g.
+
     >>> seq3("MAIVMGRWKGA--R*", undef_code='---')
     'MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer'
 
     If not given, "undef_code" defaults to "Xaa", e.g.
+
     >>> seq3("MAIVMGRWKGA--R*")
     'MetAlaIleValMetGlyArgTrpLysGlyAlaXaaXaaArgTer'
 
@@ -273,26 +277,31 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     '-'.
 
     e.g.
+
     >>> from Bio.SeqUtils import seq3
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer")
     'MAIVMGRWKGAR*'
 
     The input is case insensitive, e.g.
+
     >>> from Bio.SeqUtils import seq3
     >>> seq1("METalaIlEValMetGLYArgtRplysGlyAlaARGTer")
     'MAIVMGRWKGAR*'
 
     You can set a custom translation of the codon termination code using the
     "custom_map" argument, e.g.
+
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
     'MAIVMGRWKGAR*'
 
     You can also set a custom translation for non-amino acid characters, such
     as '-', using the "undef_code" argument, e.g.
+
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer", undef_code='?')
     'MAIVMGRWKGA??R*'
 
     If not given, "undef_code" defaults to "X", e.g.
+
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer")
     'MAIVMGRWKGAXXR*'
 
