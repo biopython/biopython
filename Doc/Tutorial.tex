@@ -10789,15 +10789,39 @@ then we can create a Motif object as follows:
 \begin{verbatim}
 >>> m = Motif.Motif(instances=instances)
 \end{verbatim}
-All instances should have the same sequence length. The length of the motif
-is then defined as this sequence length:
+Printing out the Motif object shows the instances from which it was constructed:
+%cont-doctest
+\begin{verbatim}
+>>> print m
+TACAA
+TACGC
+TACAC
+TACCC
+AACCC
+AATGC
+AATGC
+<BLANKLINE>
+\end{verbatim}
+The length of the motif defined as the sequence length, which should be the same for all instances:
 %cont-doctest
 \begin{verbatim}
 >>> len(m)
 5
 \end{verbatim}
 The Motif object has an attribute \verb+.counts+ containing the counts of each
-nucleotide at each position. You can access the counts as a dictionary:
+nucleotide at each position. Printing this counts matrix shows it in an easily readable format:
+%cont-doctest
+\begin{verbatim}
+>>> print m.counts
+        0      1      2      3      4
+A:   3.00   7.00   0.00   2.00   1.00
+C:   0.00   0.00   5.00   2.00   6.00
+G:   0.00   0.00   0.00   3.00   0.00
+T:   4.00   0.00   2.00   0.00   0.00
+<BLANKLINE>
+\end{verbatim}
+
+You can access these counts as a dictionary:
 %cont-doctest
 \begin{verbatim}
 >>> m.counts['A']
@@ -10814,11 +10838,11 @@ dimension and the position as the second dimension:
 >>> m.counts['T',3]
 0
 \end{verbatim}
-Column-like access works like this:
+You can also directly access columns of the counts matrix
 %Don't doctest this as dictionary order is platform dependent:
 \begin{verbatim}
 >>> m.counts[:,3]
-{'A': 3, 'C': 0, 'G': 4, 'T': 0}
+{'A': 2, 'C': 2, 'T': 0, 'G': 3}
 \end{verbatim}
 Instead of the nucleotide itself, you can also use the index of the nucleotide
 in the sorted letters in the alphabet of the motif:
@@ -10861,14 +10885,14 @@ Seq('WACVC', IUPACAmbiguousDNA())
 Here, W and R follow the IUPAC nucleotide ambiguity codes: W is either A or T, and V is A, C, or G \cite{cornish1985}. The degenerate consensus sequence is constructed followed the rules specified by Cavener \cite{cavener1987}.
 
 We can also get the reverse complement of a motif:
-%>>> m.reverse_complement()
-%<Bio.Motif.Motif.Motif object at 0xb39890>
 %cont-doctest
 \begin{verbatim}
->>> m.reverse_complement().consensus
+>>> r = m.reverse_complement()
+>>> r.consensus
 Seq('GCGTA', IUPACUnambiguousDNA())
->>> for i in m.reverse_complement().instances:
-...     print i
+>>> r.degenerate_consensus
+Seq('GBGTW', IUPACAmbiguousDNA())
+>>> print r
 TTGTA
 GCGTA
 GTGTA
@@ -10876,6 +10900,7 @@ GGGTA
 GGGTT
 GCATT
 GCATT
+<BLANKLINE>
 \end{verbatim}
 
 The reverse complement and the degenerate consensus sequence are
@@ -11000,11 +11025,25 @@ Usually, pseudocounts are added to each position before normalizing. This avoids
 %cont-doctest
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts=0.5)
+>>> print pwm
+        0      1      2      3      4
+A:   0.39   0.83   0.06   0.28   0.17
+C:   0.06   0.06   0.61   0.28   0.72
+G:   0.06   0.06   0.06   0.39   0.06
+T:   0.50   0.06   0.28   0.06   0.06
+<BLANKLINE>
 \end{verbatim}
 Alternatively, \verb+pseudocounts+ can be a dictionary specifying the pseudocounts for each nucleotide. For example, as the GC content of the human genome is about 40\%, you may want to choose the pseudocounts accordingly:
 %cont-doctest
 \begin{verbatim}
 >>> pwm = m.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
+>>> print pwm
+        0      1      2      3      4
+A:   0.40   0.84   0.07   0.29   0.18
+C:   0.04   0.04   0.60   0.27   0.71
+G:   0.04   0.04   0.04   0.38   0.04
+T:   0.51   0.07   0.29   0.07   0.07
+<BLANKLINE>
 \end{verbatim}
 The position-weight matrix has its own methods to calculate the consensus, anticonsensus, and degenerate consensus sequences:
 %cont-doctest
@@ -11022,7 +11061,18 @@ Note that due to the pseudocounts, the degenerate consensus sequence calculated 
 >>> m.degenerate_consensus
 Seq('WACVC', IUPACAmbiguousDNA())
 \end{verbatim}
-The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+.
+The reverse complement of the position-weight matrix can be calculated directly from the \verb+pwm+:
+%cont-doctest
+\begin{verbatim}
+>>> rpwm = pwm.reverse_complement()
+>>> print rpwm
+        0      1      2      3      4
+A:   0.07   0.07   0.29   0.07   0.51
+C:   0.04   0.38   0.04   0.04   0.04
+G:   0.71   0.27   0.60   0.04   0.04
+T:   0.18   0.29   0.07   0.84   0.40
+<BLANKLINE>
+\end{verbatim}
 
 \section{Position-Specific Scoring Matrices}
 
@@ -11031,34 +11081,46 @@ it's easy to compute the log-odds ratios, telling us what are the log
 odds of a particular symbol to be coming from a motif against the
 background. We can use the \verb|.log_odds()| method on the position-weight
 matrix:
-
+%cont-doctest
 \begin{verbatim}
->>> pwm.log_odds()
-{'A': [0.6780719051126378, 1.7560744171139109, -1.9068905956085187, 0.2085866218114176, -0.4918530963296747], 'C': [-2.4918530963296748, -2.4918530963296748, 1.2630344058337941, 0.09310940439148147, 1.5081469036703254], 'T': [1.031708859727338, -1.9068905956085187, 0.2085866218114176, -1.9068905956085187, -1.9068905956085187], 'G': [-2.4918530963296748, -2.4918530963296748, -2.4918530963296748, 0.5956097449206647, -2.4918530963296748]}
+>>> pssm = pwm.log_odds()
+>>> print pssm
+        0      1      2      3      4
+A:   0.68   1.76  -1.91   0.21  -0.49
+C:  -2.49  -2.49   1.26   0.09   1.51
+G:  -2.49  -2.49  -2.49   0.60  -2.49
+T:   1.03  -1.91   0.21  -1.91  -1.91
+<BLANKLINE>
 \end{verbatim}
 Here we can see positive values for symbols more frequent in the motif
 than in the background and negative for symbols more frequent in the
 background. $0.0$ means that it's equally likely to see a symbol in the
-background and in the motif (e.g. `T' in the second-last position).
+background and in the motif.
 
 This assumes that A, C, G, and T are equally likely in the background. To
 calculate the position-specific scoring matrix against a background with
 unequal probabilities for A, C, G, T, use the \verb+background+ argument.
 For example, against a background with a 40\% GC content, use
+%cont-doctest
 \begin{verbatim}
->>> pwm.log_odds(background={'A':0.3,'C':0.2,'G':0.2,'T':0.3})
-{'A': [0.415037499278844, 1.493040011280117, -2.169925001442312, -0.054447784022376135, -0.7548875021634684], 'C': [-2.1699250014423126, -2.1699250014423126, 1.5849625007211563, 0.4150374992788437, 1.8300749985576878], 'T': [0.7686744538935444, -2.169925001442312, -0.054447784022376135, -2.169925001442312, -2.169925001442312], 'G': [-2.1699250014423126, -2.1699250014423126, -2.1699250014423126, 0.9175378398080271, -2.1699250014423126]}
+>>> pssm = pwm.log_odds(background={'A':0.3,'C':0.2,'G':0.2,'T':0.3})
+>>> print pssm
+        0      1      2      3      4
+A:   0.42   1.49  -2.17  -0.05  -0.75
+C:  -2.17  -2.17   1.58   0.42   1.83
+G:  -2.17  -2.17  -2.17   0.92  -2.17
+T:   0.77  -2.17  -0.05  -2.17  -2.17
+<BLANKLINE>
 \end{verbatim}
 
-The maximum and minimum score obtainable from the PSSM are stores in the
+The maximum and minimum score obtainable from the PSSM are stored in the
 \verb+.max+ and \verb+.min+ properties:
 %cont-doctest
 \begin{verbatim}
->>> pssm = pwm.log_odds()
 >>> print "%4.2f" % pssm.max
-6.15
+6.59
 >>> print "%4.2f" % pssm.min
--11.87
+-10.85
 \end{verbatim}
 
 Similarly, the mean and standard deviation of the PSSM scores are stored in
@@ -11068,13 +11130,16 @@ the \verb+.mean+ and \verb+.std+ attributes:
 >>> mean = pssm.mean
 >>> std = pssm.std
 >>> print "mean = %0.2f, standard deviation = %0.2f" % (mean, std)
-mean = 3.22, standard deviation = 2.49
+mean = 3.21, standard deviation = 2.59
 \end{verbatim}
 The mean is particularly important, as its value is equal to the 
 Kullback-Leibler divergence or relative entropy, and is a measure for the
 information content of the motif compared to the background. As in Biopython
 the base-2 logarithm is used in the calculation of the log-odds scores, the
 information content has units of bits.
+
+The \verb+.reverse_complement+, \verb+.consensus+, \verb+.anticonsensus+, and
+\verb+.degenerate_consensus+ methods can be applied directly to PSSM objects.
 
 \section{Searching for instances}
 \label{sec:search}
@@ -11092,7 +11157,7 @@ the true instances of the motif:
 %cont-doctest
 \begin{verbatim}
 >>> for pos,seq in m.search_instances(test_seq):
-...     print pos,seq.tostring()
+...     print pos, seq
 ... 
 0 TACAC
 10 TACAA
@@ -11101,8 +11166,8 @@ the true instances of the motif:
 We can do the same with the reverse complement (to find instances on the complementary strand):
 %cont-doctest
 \begin{verbatim}
->>> for pos,seq in m.reverse_complement().search_instances(test_seq):
-...     print pos,seq.tostring()
+>>> for pos,seq in r.search_instances(test_seq):
+...     print pos, seq
 ... 
 6 GCATT
 20 GCATT
@@ -11111,14 +11176,13 @@ We can do the same with the reverse complement (to find instances on the complem
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 %cont-doctest
 \begin{verbatim}
->>> pssm = pwm.log_odds()
 >>> for position, score in pssm.search(test_seq, threshold=4.0):
 ...     print "Position %i gives score %0.2f" % (position, score)
 ... 
-Position 0 gives score 5.77
-Position -20 gives score 4.75
-Position 13 gives score 5.30
-Position -6 gives score 4.75
+Position 0 gives score 5.62
+Position -20 gives score 4.60
+Position 13 gives score 5.74
+Position -6 gives score 4.60
 \end{verbatim}
 The negative positions refer to instances of the motif found on the
 reverse strand of the test sequence, and follow the Python convention
@@ -11136,12 +11200,12 @@ You can also calculate the scores at all positions along the sequence:
 %Don't use a doc test for this as the spacing can differ
 \begin{verbatim}
 >>> pssm.calculate(test_seq)
-array([  5.76755142,  -5.53445292,  -3.87148786,   0.49856207,
-        -7.2893405 ,  -1.89541376, -10.70437813,  -2.92593575,
-         0.69650143,  -3.18081594,   3.76755118,  -2.0039382 ,
-        -1.04141295,   5.29843712,  -0.94949049,  -4.0039382 ,
-        -9.17386341,  -0.53891265,  -0.45645046,  -2.24905086,
-       -10.70437813,  -2.92593575], dtype=float32)
+array([  5.62230396,  -5.6796999 ,  -3.43177247,   0.93827754,
+        -6.84962511,  -2.04066086, -10.84962463,  -3.65614533,
+        -0.03370807,  -3.91102552,   3.03734159,  -2.14918518,
+        -0.6016975 ,   5.7381525 ,  -0.50977498,  -3.56422281,
+        -8.73414803,  -0.09919716,  -0.6016975 ,  -2.39429784,
+       -10.84962463,  -3.65614533], dtype=float32)
 \end{verbatim}
 In general, this is the fastest way to calculate PSSM scores.
 

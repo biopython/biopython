@@ -26,6 +26,17 @@ class GenericPositionMatrix(dict):
         self.alphabet = alphabet
         self.__letters = sorted(self.alphabet.letters)
 
+    def __str__(self):
+        words = ["%6d" % i for i in range(self.length)]
+        line = "   " + " ".join(words)
+        lines = [line]
+        for letter in self.__letters:
+            words = ["%6.2f" % value for value in self[letter]]
+            line = "%c: " % letter + " ".join(words)
+            lines.append(line)
+        text = "\n".join(lines) + "\n"
+        return text
+
     def __getitem__(self, key):
         if isinstance(key, tuple):
             if len(key)==2:
