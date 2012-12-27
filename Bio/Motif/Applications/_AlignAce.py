@@ -25,6 +25,10 @@ Roth, FR, Hughes, JD, Estep, PE & GM Church, Nature Biotechnology
 """
 from Bio.Application import AbstractCommandline, _Option, _Argument
 
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.warn("The AlignACE/CompareACE application wrapper is deprecated and is likely to be removed in a future release of Biopython, since an up to date version of the AlignACE software cannot be obtained anymore. If you have a copy of AlignACE 4, please consider contacting the Biopython developers.", BiopythonDeprecationWarning)
+
 
 class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program.
