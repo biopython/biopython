@@ -3,7 +3,7 @@
 # license. Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""Classes corresponding to CDAO trees, also used for Nexus trees.
+"""Classes corresponding to CDAO trees.
 
 See classes in `Bio.Nexus`: Trees.Tree, Trees.NodeData, and Nodes.Chain.
 """
