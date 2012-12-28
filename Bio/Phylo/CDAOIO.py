@@ -16,7 +16,7 @@ __docformat__ = "restructuredtext en"
 
 from cStringIO import StringIO
 
-from Bio.Phylo import Newick
+from Bio.Phylo import CDAO
 import os
 
 
@@ -55,7 +55,7 @@ def new_storage():
 def parse(handle, **kwargs):
     """Iterate over the trees in a CDAO file handle.
 
-    :returns: generator of Bio.Phylo.Newick.Tree objects.
+    :returns: generator of Bio.Phylo.CDAO.Tree objects.
     """
     return Parser(handle).parse(**kwargs)
 
@@ -124,7 +124,7 @@ class Parser(object):
             
             
     def parse_model(self, model=None):
-        '''Generator that yields Newick.Tree instances from an RDF model.'''
+        '''Generator that yields CDAO.Tree instances from an RDF model.'''
         RDF = import_rdf()
         
         if model is None:
@@ -136,11 +136,11 @@ class Parser(object):
         for root_node in self.tree_roots:
             clade = self.parse_children(root_node)
             
-            yield Newick.Tree(root=clade, rooted=self.rooted)
+            yield CDAO.Tree(root=clade, rooted=self.rooted)
             
             
     def new_clade(self, node):
-        '''Returns a Newick.Clade object for a given named node.'''
+        '''Returns a CDAO.Clade object for a given named node.'''
         RDF = import_rdf()
         
         result = self.node_info[node]
@@ -149,7 +149,7 @@ class Parser(object):
         if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
         if 'label' in result: kwargs['name'] = result['label']
         
-        clade = Newick.Clade(**kwargs)
+        clade = CDAO.Clade(**kwargs)
         
         return clade
         
@@ -196,7 +196,7 @@ class Parser(object):
                 self.tree_roots.add(o)
                     
         for node in self.nodes:
-            # for each node, look up all information needed to create a Newick.Clade
+            # for each node, look up all information needed to create a CDAO.Clade
             self.node_info[node] = {}
             node_info = self.node_info[node]
             
@@ -226,8 +226,8 @@ class Parser(object):
                 
 
     def parse_children(self, node):
-        '''Return a Newick.Clade, and calls itself recursively for each child, 
-        traversing the  entire tree and creating a nested structure of Newick.Clade 
+        '''Return a CDAO.Clade, and calls itself recursively for each child, 
+        traversing the  entire tree and creating a nested structure of CDAO.Clade 
         objects.'''
         
         clade = self.new_clade(node)
