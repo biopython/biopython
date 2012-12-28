@@ -118,6 +118,18 @@ class SeqUtilsTests(unittest.TestCase):
                 #Finally check it works with a MutableSeq object
                 self.assertEqual(value, checksum(MutableSeq(seq_str, single_letter_alphabet)))
 
+    def test_GC(self):
+        seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
+        self.assertEqual(GC(seq), 56.25)
+
+    def test_seq1_seq3(self):
+        s3 = "MetAlaTyrtrpcysthrLYSLEUILEGlYPrOGlNaSnaLapRoTyRLySSeRHisTrpLysThr"
+        s1 = "MAYWCTKLIGPQNAPYKSHWKT"
+        self.assertEqual(seq1(s3), s1)
+        self.assertEqual(seq3(s1).upper(), s3.upper())
+        self.assertEqual(seq1(seq3(s1)), s1)
+        self.assertEqual(seq3(seq1(s3)).upper(), s3.upper())
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
