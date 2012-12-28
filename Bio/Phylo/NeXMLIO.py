@@ -14,7 +14,7 @@ __docformat__ = "restructuredtext en"
 
 from cStringIO import StringIO
 
-from Bio.Phylo import Newick
+from Bio.Phylo import NeXML
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
@@ -45,15 +45,15 @@ class NeXMLError(Exception):
 # Public API
 
 def parse(handle, **kwargs):
-    """Iterate over the trees in a Newick file handle.
+    """Iterate over the trees in a NeXML file handle.
 
-    :returns: generator of Bio.Phylo.Newick.Tree objects.
+    :returns: generator of Bio.Phylo.NeXML.Tree objects.
     """
     return Parser(handle).parse(**kwargs)
 
 
 def write(trees, handle, plain=False, **kwargs):
-    """Write a trees in Newick format to the given file handle.
+    """Write a trees in NeXML format to the given file handle.
 
     :returns: number of trees written.
     """
@@ -121,17 +121,17 @@ class Parser(object):
                 else:
                     rooted = True
                     
-                yield Newick.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
+                yield NeXML.Tree(root=self._make_tree(root, node_dict, node_children), rooted=rooted)
                 
             
     @classmethod
     def _make_tree(cls, node, node_dict, children):
-        '''Return a Newick.Clade, and calls itself recursively for each child, 
-        traversing the  entire tree and creating a nested structure of Newick.Clade 
+        '''Return a NeXML.Clade, and calls itself recursively for each child, 
+        traversing the  entire tree and creating a nested structure of NeXML.Clade 
         objects.'''
         
         this_node = node_dict[node]
-        clade = Newick.Clade(**this_node)
+        clade = NeXML.Clade(**this_node)
         
         if node in children:
             clade.clades = [cls._make_tree(child, node_dict, children) for child in children[node]]
