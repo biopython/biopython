@@ -204,9 +204,16 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "invalid_db", "invalid_id")
 
-    def test_nucleotide_genbank(self):
-        """Bio.TogoWS.entry("nucleotide", "X52960")"""
-        handle = TogoWS.entry("nucleotide", "X52960")  # Returns "genbank" format
+    def test_ddbj_genbank_length(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="length")
+        data = handle.read().strip()  #ignore trailing \n
+        handle.close()
+        self.assertEqual(data, "248")
+
+    def test_ddbj_genbank(self):
+        """Bio.TogoWS.entry("ddbj", "X52960")"""
+        handle = TogoWS.entry("ddbj", "X52960")  #Returns "genbank" format
         record = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
@@ -273,12 +280,12 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "nucleotide", "X52960", format="invalid_for_testing")
 
-    #def test_ddbj_gff3(self):
-    #    """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
-    #    handle = TogoWS.entry("ddbj", "X52960", format="gff")
-    #    data = handle.read()
-    #    handle.close()
-    #    self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
+    def test_ddbj_gff3(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
+        handle = TogoWS.entry("ddbj", "X52960", format="gff")
+        data = handle.read()
+        handle.close()
+        self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
 
     def test_genbank_gff3(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
@@ -320,9 +327,9 @@ class TogoEntry(unittest.TestCase):
         self.assertEqual(len(record), 1164)
         self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
-    def test_nucleotide_fasta(self):
-        """Bio.TogoWS.entry("nucleotide", "X52960", "fasta")"""
-        handle = TogoWS.entry("nucleotide", "X52960", "fasta")
+    def test_ddbj_fasta(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
+        handle = TogoWS.entry("ddbj", "X52960", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("X52960" in record.id, record.id)
@@ -409,12 +416,13 @@ class TogoSearch(unittest.TestCase):
 
     def test_pubmed_search_bioruby(self):
         """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
-        self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
+        self.check("pubmed", "BioRuby", ["22994508", "22399473",
+                                         "20739307", "20015970", "14693808"])
 
     def test_pubmed_search_porin(self):
         """Bio.TogoWS.search_iter("pubmed", "human porin") etc
 
-        Count was 339 at time of writing, this was choosen to
+        Count was 357 at time of writing, this was choosen to
         be larger than the default chunk size for iteration,
         but still not too big to download the full list.
         """
@@ -423,26 +431,26 @@ class TogoSearch(unittest.TestCase):
     def test_pdb_search_porin(self):
         """Bio.TogoWS.search_iter("pdb", "porin") etc
 
-        Count was about 130 at time of writing.
+        Count was about 161 at time of writing.
         """
         self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_embl_search_porin(self):
         """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
 
-        Count was about 255 at time of writing.
+        Count was about 297 at time of writing.
         """
         self.check("embl", "human pore", limit=200)
 
     def test_uniprot_search_lung_cancer(self):
-        """Bio.TogoWS.search_iter("uniprot", "lung+cancer", limit=150) etc
+        """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc
 
-        Search count was 1327 at time of writing, a bit large to
+        Search count was 211 at time of writing, a bit large to
         download all the results in a unit test. Want to use a limit
         larger than the batch size (100) to ensure at least two
         batches.
         """
-        self.check("uniprot", "lung+cancer", limit=150)
+        self.check("uniprot", "terminal+lung+cancer", limit=150)
 
     def check(self, database, search_term, expected_matches=[], limit=None):
         if expected_matches and limit:
