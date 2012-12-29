@@ -11255,7 +11255,7 @@ instances with balanced threshold with rate of $1000$.
 21 8.44065060871
 \end{verbatim}
 
-\subsection{Comparing motifs}
+\section{Comparing motifs}
 \label{sec:comp}
 Once we have more than one motif, we might want to compare them. For
 that, we have currently three different methods of \verb|Bio.Motif|
@@ -11272,48 +11272,65 @@ some kind of alignment.  This means we have to take into account two things:
 In \verb|Bio.Motif| we have 3 different functions for motif
 comparison, which are based on the same idea behind motif alignment,
 but use different functions to compare aligned motifs. Briefly
-speaking, we are using ungapped alignment of PWMs and substitute the
-missing columns at the beginning and end of the matrices with
-background distribution. All three comparison functions are written in
-such a way, that they can be interpreted as distance measures, however
+speaking, we are using ungapped alignment of PSSMs and substitute zeros
+for any missing columns at the beginning and end of the matrices. This means
+that effectively we are using the background distribution for columns missing
+from the PSSM. All three comparison functions are written in
+such a way that they can be interpreted as distance measures. However
 only one (\verb|dist_dpq|) satisfies the triangle inequality. All of
 them return the minimal distance and the corresponding offset between
 motifs.
 
 To show how these functions work, let us first load another motif,
 which is similar to our test motif \verb|m|:
+%cont-doctest
 \begin{verbatim}
->>> ubx=Motif.read(open("Ubx.pfm"),"jaspar-pfm")
-<Bio.Motif.Motif.Motif object at 0xc29b90>
->>> ubx.consensus
-Seq('TAAT', IUPACUnambiguousDNA())
+>>> m_reb1 = Motif.read(open("REB1.pfm"), "pfm")
+>>> m_reb1.consensus
+Seq('GTTACCCGG', IUPACUnambiguousDNA())
+>>> print m_reb1.counts
+        0      1      2      3      4      5      6      7      8
+A:  30.00   0.00   0.00 100.00   0.00   0.00   0.00   0.00  15.00
+C:  10.00   0.00   0.00   0.00 100.00 100.00 100.00   0.00  15.00
+G:  50.00   0.00   0.00   0.00   0.00   0.00   0.00  60.00  55.00
+T:  10.00 100.00 100.00   0.00   0.00   0.00   0.00  40.00  15.00
+<BLANKLINE>
 \end{verbatim}
 
+We construct the position-weight matrix and the position-specific scoring matrix
+using the same values for the pseudocounts and the background distribution as our
+motif \verb|m|:
+%cont-doctest
+\begin{verbatim}
+>>> pwm_reb1 = m_reb1.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
+>>> pssm_reb1 = pwm_reb1.log_odds(background={'A':0.3,'C':0.2,'G':0.2,'T':0.3})
+>>> print pssm_reb1
+        0      1      2      3      4      5      6      7      8
+A:   0.00  -5.67  -5.67   1.72  -5.67  -5.67  -5.67  -5.67  -0.97
+C:  -0.97  -5.67  -5.67  -5.67   2.30   2.30   2.30  -5.67  -0.41
+G:   1.30  -5.67  -5.67  -5.67  -5.67  -5.67  -5.67   1.57   1.44
+T:  -1.53   1.72   1.72  -5.67  -5.67  -5.67  -5.67   0.41  -0.97
+<BLANKLINE>
+\end{verbatim}
 The first function we'll use to compare these motifs is based on the
 Pearson correlation. Since we want it to resemble a distance
 measure, we actually take $1-r$, where $r$ is the Pearson correlation
 coefficient (PCC):
+%cont-doctest
 \begin{verbatim}
->>> m.dist_pearson(ubx)
-(0.41740393308237722, 2)
+>>> distance, offset = pssm.dist_pearson(pssm_reb1)
+>>> print "distance = %5.3g" % distance
+distance = 0.239
+>>> print offset
+-2
 \end{verbatim}
-This means, that the best PCC between motif \verb|m| and  \verb|Ubx| is obtained with the following alignment:
+This means that the best PCC between motif \verb|m| and  \verb|m_reb1| is obtained with the following alignment:
 \begin{verbatim}
-bbTAAT
-TATAAb
+m:      bbTACGCbb
+m_reb1: GTTACCCGG
 \end{verbatim}
 where \verb|b| stands for background distribution. The PCC itself is
-roughly $1-0.42=0.58$. If we try the reverse complement of the Ubx motif:
-
-\begin{verbatim}
->>> m.dist_pearson(ubx.reverse_complement())
-(0.25784180151584823, 1)
-\end{verbatim}
-We can see that the PCC is better (almost $0.75$), and the alignment is also different:
-\begin{verbatim}
-bATTA
-TATAA
-\end{verbatim}
+roughly $1-0.239=0.761$.
 
 There are two other functions: \verb|dist_dpq|, which is a true metric (satisfying the triangle inequality) based on the Kullback-Leibler divergence 
 \begin{verbatim}

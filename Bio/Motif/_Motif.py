@@ -24,13 +24,13 @@ class GenericPositionMatrix(dict):
                 raise Exception("Inconsistent lengths found in dictionary")
             self[letter] = list(values[letter])
         self.alphabet = alphabet
-        self.__letters = sorted(self.alphabet.letters)
+        self._letters = sorted(self.alphabet.letters)
 
     def __str__(self):
         words = ["%6d" % i for i in range(self.length)]
         line = "   " + " ".join(words)
         lines = [line]
-        for letter in self.__letters:
+        for letter in self._letters:
             words = ["%6.2f" % value for value in self[letter]]
             line = "%c: " % letter + " ".join(words)
             lines.append(line)
@@ -42,15 +42,15 @@ class GenericPositionMatrix(dict):
             if len(key)==2:
                 key1, key2 = key
                 if isinstance(key1, slice):
-                    start1, stop1, stride1 = key1.indices(len(self.__letters))
+                    start1, stop1, stride1 = key1.indices(len(self._letters))
                     indices1 = range(start1, stop1, stride1)
-                    letters1 = [self.__letters[i] for i in indices1]
+                    letters1 = [self._letters[i] for i in indices1]
                     dim1 = 2
                 elif isinstance(key1, int):
-                    letter1 = self.__letters[key1]
+                    letter1 = self._letters[key1]
                     dim1 = 1
                 elif isinstance(key1, tuple):
-                    letters1 = [self.__letters[i] for i in key1]
+                    letters1 = [self._letters[i] for i in key1]
                     dim1 = 2
                 elif isinstance(key1, str):
                     if len(key1)==1:
@@ -84,7 +84,7 @@ class GenericPositionMatrix(dict):
                     for letter1 in letters1:
                         values = dict.__getitem__(self, letter1)
                         d[letter1] = [values[index2] for index2 in indices2]
-                    if sorted(letters1)==self.__letters:
+                    if sorted(letters1)==self._letters:
                         return self.__class__(self.alphabet, d)
                     else:
                         return d
@@ -93,15 +93,15 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError("keys should be 1- or 2-dimensional")
         if isinstance(key, slice):
-            start, stop, stride = key.indices(len(self.__letters))
+            start, stop, stride = key.indices(len(self._letters))
             indices = range(start, stop, stride)
-            letters = [self.__letters[i] for i in indices]
+            letters = [self._letters[i] for i in indices]
             dim = 2
         elif isinstance(key, int):
-            letter = self.__letters[key]
+            letter = self._letters[key]
             dim = 1
         elif isinstance(key, tuple):
-            letters = [self.__letters[i] for i in key]
+            letters = [self._letters[i] for i in key]
             dim = 2
         elif isinstance(key, str):
             if len(key)==1:
@@ -415,6 +415,51 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
         returns None if the standard deviation is undefined"""
         return self._std
+
+    def dist_pearson(self, other):
+        """
+        return the similarity score based on pearson correlation for the given motif against self.
+
+        We use the Pearson's correlation of the respective probabilities.
+        """
+        if self.alphabet != other.alphabet:
+            raise ValueError("Cannot compare motifs with different alphabets")
+
+        max_p=-2
+        for offset in range(-self.length+1, other.length):
+            if offset<0:
+                p = self.dist_pearson_at(other, -offset)
+            else:  # offset>=0
+                p = other.dist_pearson_at(self, offset)
+            if max_p<p:
+                max_p=p
+                max_o=-offset
+        return 1-max_p,max_o
+
+    def dist_pearson_at(self, other, offset):
+        letters = self._letters
+        sx  = 0.0   # \sum x
+        sy  = 0.0   # \sum y
+        sxx = 0.0  # \sum x^2
+        sxy = 0.0  # \sum x \cdot y
+        syy = 0.0  # \sum y^2
+        norm=max(self.length,offset+other.length)*len(letters)
+        for pos in range(min(self.length-offset, other.length)):
+            xi = [self[letter,pos+offset] for letter in letters]
+            yi = [other[letter,pos] for letter in letters]
+            sx += sum(xi)
+            sy += sum(yi)
+            sxx += sum([x*x for x in xi])
+            sxy += sum([x*y for x,y in zip(xi,yi)])
+            syy += sum([y*y for y in yi])
+        sx /= norm
+        sy /= norm
+        sxx /= norm
+        sxy /= norm
+        syy /= norm
+        numerator = sxy - sx*sy
+        denominator = math.sqrt((sxx-sx*sx)*(syy-sy*sy))
+        return numerator/denominator
 
 
 class Motif(object):
@@ -895,7 +940,7 @@ in a future release of Biopython.""", PendingDeprecationWarning)
            m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
         }
 
-        over possible non-spaced alignemts of two motifs.  See this reference:
+        over possible non-spaced alignments of two motifs.  See this reference:
 
         D. M Endres and J. E Schindelin, "A new metric for probability
         distributions", IEEE transactions on Information Theory 49, no. 7
