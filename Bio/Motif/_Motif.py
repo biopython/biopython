@@ -275,19 +275,13 @@ class PositionWeightMatrix(GenericPositionMatrix):
         for letter in alphabet.letters:
             background[letter] /= total
             values[letter] = []
-        mean = 0.0
-        variance = 0.0
         for i in range(self.length):
-            sx = 0.0
-            sxx = 0.0
             for letter in alphabet.letters:
                 b = background[letter]
                 if b > 0:
                     p = self[letter][i]
                     if p > 0:
                         logodds = math.log(p/b, 2)
-                        sx += p*logodds
-                        sxx += p*logodds*logodds
                     else:
                         #TODO - Ensure this has unittest coverage!
                         try:
@@ -296,23 +290,15 @@ class PositionWeightMatrix(GenericPositionMatrix):
                             # On Python 2.5 or older that was handled in C code,
                             # and failed on Windows XP 32bit
                             logodds = - 1E400
-                    values[letter].append(logodds)
                 else:
                     p = self[letter][i]
                     if p > 0:
                         logodds = float("inf")
-                        mean = float("inf")
-                        variance = float("inf")
                     else:
                         logodds = float("nan")
-                    values[letter].append(logodds)
-            sxx -= sx*sx
-            mean += sx
-            variance += sxx
+                values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
-        variance = max(variance, 0) # to avoid roundoff problems
-        pssm._mean = mean
-        pssm._std = math.sqrt(variance)
+        pssm._background = background
         return pssm
 
 
@@ -385,7 +371,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         returns the score computed for the consensus sequence.
         """
         score = 0.0
-        letters = self.alphabet.letters
+        letters = self._letters
         for position in xrange(0,self.length):
             score += max([self[letter][position] for letter in letters])
         return score
@@ -397,7 +383,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         returns the score computed for the anticonsensus sequence.
         """
         score = 0.0
-        letters = self.alphabet.letters
+        letters = self._letters
         for position in xrange(0,self.length):
             score += min([self[letter][position] for letter in letters])
         return score
@@ -407,14 +393,41 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         """Expected value of the score of a motif.
 
         returns None if the expected value is undefined"""
-        return self._mean
+        if self._background is None:
+            return None
+        background = self._background
+        sx = 0.0
+        for i in range(self.length):
+            for letter in self._letters:
+                logodds = self[letter,i]
+                b = background[letter]
+                p = b * math.pow(2,logodds)
+                sx += p * logodds
+        return sx
+        
 
     @property
     def std(self):
         """Standard deviation of the score of a motif.
 
         returns None if the standard deviation is undefined"""
-        return self._std
+        if self._background is None:
+            return None
+        background = self._background
+        variance = 0.0
+        for i in range(self.length):
+            sx = 0.0
+            sxx = 0.0
+            for letter in self._letters:
+                logodds = self[letter,i]
+                b = background[letter]
+                p = b * math.pow(2,logodds)
+                sx += p*logodds
+                sxx += p*logodds*logodds
+            sxx -= sx*sx
+            variance += sxx
+        variance = max(variance, 0) # to avoid roundoff problems
+        return math.sqrt(variance)
 
     def dist_pearson(self, other):
         """
@@ -720,7 +733,7 @@ please use
 >>> pwm = motif.counts.normalize()
 >>> pwm.ic()
 Please be aware though that by default, motif.counts.normalize()
-does not use psuedocounts, while motif.ic() does. See the documentation
+does not use pseudocounts, while motif.ic() does. See the documentation
 of motif.counts.normalize for more details.
 """, PendingDeprecationWarning)
         res=0
