@@ -416,12 +416,13 @@ class TogoSearch(unittest.TestCase):
 
     def test_pubmed_search_bioruby(self):
         """Bio.TogoWS.search_iter("pubmed", "BioRuby") etc"""
-        self.check("pubmed", "BioRuby", ["20739307", "20015970", "14693808"])
+        self.check("pubmed", "BioRuby", ["22994508", "22399473",
+                                         "20739307", "20015970", "14693808"])
 
     def test_pubmed_search_porin(self):
         """Bio.TogoWS.search_iter("pubmed", "human porin") etc
 
-        Count was 339 at time of writing, this was choosen to
+        Count was 357 at time of writing, this was choosen to
         be larger than the default chunk size for iteration,
         but still not too big to download the full list.
         """
@@ -430,26 +431,26 @@ class TogoSearch(unittest.TestCase):
     def test_pdb_search_porin(self):
         """Bio.TogoWS.search_iter("pdb", "porin") etc
 
-        Count was about 130 at time of writing.
+        Count was about 161 at time of writing.
         """
         self.check("pdb", "porin", ["2j1n", "2vqg", "3m8b", "2k0l"])
 
     def test_embl_search_porin(self):
         """Bio.TogoWS.search_iter("embl", "human pore", limit=200) etc
 
-        Count was about 255 at time of writing.
+        Count was about 297 at time of writing.
         """
         self.check("embl", "human pore", limit=200)
 
     def test_uniprot_search_lung_cancer(self):
-        """Bio.TogoWS.search_iter("uniprot", "lung+cancer", limit=150) etc
+        """Bio.TogoWS.search_iter("uniprot", "terminal+lung+cancer", limit=150) etc
 
-        Search count was 1327 at time of writing, a bit large to
+        Search count was 211 at time of writing, a bit large to
         download all the results in a unit test. Want to use a limit
         larger than the batch size (100) to ensure at least two
         batches.
         """
-        self.check("uniprot", "lung+cancer", limit=150)
+        self.check("uniprot", "terminal+lung+cancer", limit=150)
 
     def check(self, database, search_term, expected_matches=[], limit=None):
         if expected_matches and limit:
