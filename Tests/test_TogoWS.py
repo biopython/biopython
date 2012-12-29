@@ -204,9 +204,16 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "invalid_db", "invalid_id")
 
-    def test_nucleotide_genbank(self):
-        """Bio.TogoWS.entry("nucleotide", "X52960")"""
-        handle = TogoWS.entry("nucleotide", "X52960")  # Returns "genbank" format
+    def test_ddbj_genbank_length(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", field="length")"""
+        handle = TogoWS.entry("ddbj", "X52960", field="length")
+        data = handle.read().strip()  #ignore trailing \n
+        handle.close()
+        self.assertEqual(data, "248")
+
+    def test_ddbj_genbank(self):
+        """Bio.TogoWS.entry("ddbj", "X52960")"""
+        handle = TogoWS.entry("ddbj", "X52960")  #Returns "genbank" format
         record = SeqIO.read(handle, "gb")
         handle.close()
         self.assertEqual(record.id, "X52960.1")
@@ -273,12 +280,12 @@ class TogoEntry(unittest.TestCase):
         self.assertRaises(ValueError, TogoWS.entry,
                           "nucleotide", "X52960", format="invalid_for_testing")
 
-    #def test_ddbj_gff3(self):
-    #    """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
-    #    handle = TogoWS.entry("ddbj", "X52960", format="gff")
-    #    data = handle.read()
-    #    handle.close()
-    #    self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
+    def test_ddbj_gff3(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", format="gff")"""
+        handle = TogoWS.entry("ddbj", "X52960", format="gff")
+        data = handle.read()
+        handle.close()
+        self.assert_(data.startswith("##gff-version 3\nX52960\tDDBJ\t"), data)
 
     def test_genbank_gff3(self):
         """Bio.TogoWS.entry("nucleotide", "X52960", format="gff")"""
@@ -320,9 +327,9 @@ class TogoEntry(unittest.TestCase):
         self.assertEqual(len(record), 1164)
         self.assertEqual(seguid(record.seq), "G0HtLpwF7i4FXUaUjDUPTjok79c")
 
-    def test_nucleotide_fasta(self):
-        """Bio.TogoWS.entry("nucleotide", "X52960", "fasta")"""
-        handle = TogoWS.entry("nucleotide", "X52960", "fasta")
+    def test_ddbj_fasta(self):
+        """Bio.TogoWS.entry("ddbj", "X52960", "fasta")"""
+        handle = TogoWS.entry("ddbj", "X52960", "fasta")
         record = SeqIO.read(handle, "fasta")
         handle.close()
         self.assert_("X52960" in record.id, record.id)
