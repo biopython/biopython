@@ -9,10 +9,6 @@
 import os
 
 
-TEST_DIR = 'Tests'    # Biopython test directory name
-MOD_DIR = 'Bio'       # Biopython main library directory name
-
-
 def iterlen(items):
     """Count the number of items in an iterable.
 
@@ -71,10 +67,10 @@ def find_test_dir(start_dir=None):
 
     target = os.path.abspath(start_dir)
     while True:
-        if os.path.isdir(os.path.join(target, MOD_DIR)) \
-        and os.path.isdir(os.path.join(target, TEST_DIR)):
+        if os.path.isdir(os.path.join(target, "Bio")) \
+        and os.path.isdir(os.path.join(target, "Tests")):
            #Good, we're in the Biopython root now
-           return os.path.abspath(os.path.join(target, TEST_DIR))
+           return os.path.abspath(os.path.join(target, "Tests"))
         #Recurse up the tree
         #TODO - Test this on Windows
         new, tmp = os.path.split(target)
