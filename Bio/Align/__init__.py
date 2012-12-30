@@ -329,8 +329,10 @@ class MultipleSeqAlignment(_Alignment):
         >>> a2 = SeqRecord(Seq("GT", generic_dna), id="Alpha")
         >>> b2 = SeqRecord(Seq("GT", generic_dna), id="Beta")
         >>> c2 = SeqRecord(Seq("GT", generic_dna), id="Gamma")
-        >>> left = MultipleSeqAlignment([a1, b1, c1])
-        >>> right = MultipleSeqAlignment([a2, b2, c2])
+        >>> left = MultipleSeqAlignment([a1, b1, c1],
+        ...                             annotations={"tool": "demo", "name": "start"})
+        >>> right = MultipleSeqAlignment([a2, b2, c2],
+        ...                             annotations={"tool": "demo", "name": "end"})
 
         Now, let's look at these two alignments:
 
@@ -347,7 +349,8 @@ class MultipleSeqAlignment(_Alignment):
 
         And add them:
 
-        >>> print left + right
+        >>> combined = left + right
+        >>> print combined
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
@@ -360,11 +363,21 @@ class MultipleSeqAlignment(_Alignment):
         3
         >>> len(right)
         3
+        >>> len(combined)
+        3
 
         The individual rows are SeqRecord objects, and these can be added together. Refer
         to the SeqRecord documentation for details of how the annotation is handled. This
         example is a special case in that both original alignments shared the same names,
         meaning when the rows are added they also get the same name.
+
+        Any common annotations are preserved, but differing annotation is lost. This is
+        the same behaviour used in the SeqRecord annotations and is designed to prevent
+        accidental propagation of inappropriate values:
+
+        >>> combined.annotations
+        {'tool': 'demo'}
+
         """
         if not isinstance(other, MultipleSeqAlignment):
             raise NotImplementedError
@@ -373,7 +386,12 @@ class MultipleSeqAlignment(_Alignment):
                              " (i.e. same number or rows)")
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
         merged = (left+right for left,right in zip(self, other))
-        return MultipleSeqAlignment(merged, alpha)
+        # Take any common annotation:
+        annotations = dict()
+        for k, v in self.annotations.iteritems():
+            if k in other.annotations and other.annotations[k] == v:
+                annotations[k] = v
+        return MultipleSeqAlignment(merged, alpha, annotations)
 
     def __getitem__(self, index):
         """Access part of the alignment.
