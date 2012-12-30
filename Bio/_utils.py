@@ -91,18 +91,13 @@ def run_doctest(target_dir=None, *args, **kwargs):
     }
     kwargs.update(default_kwargs)
 
-    test_dir = find_test_dir()
-    # set target directory if it's not None
-    if target_dir is not None:
-        target_dir = os.path.join(test_dir, target_dir)
-    else:
-        target_dir = test_dir
     cur_dir = os.path.abspath(os.curdir)
 
     print "Runing doctests..."
-    # change to test directory
-    os.chdir(target_dir)
-    doctest.testmod(*args, **kwargs)
-    # and revert back to initial directory
-    os.chdir(cur_dir)
+    try:
+        os.chdir(find_test_dir(target_dir))
+        doctest.testmod(*args, **kwargs)
+    finally:
+        # and revert back to initial directory
+        os.chdir(cur_dir)
     print "Done"
