@@ -146,13 +146,14 @@ class MultipleSeqAlignment(_Alignment):
                 alphabet = records
                 records = []
                 import warnings
+                from Bio import BiopythonDeprecationWarning
                 warnings.warn("Invalid records argument: While the old "
                               "Bio.Align.Generic.Alignment class only "
                               "accepted a single argument (the alphabet), the "
                               "newer Bio.Align.MultipleSeqAlignment class "
                               "expects a list/iterator of SeqRecord objects "
                               "(which can be an empty list) and an optional "
-                              "alphabet argument")
+                              "alphabet argument", BiopythonDeprecationWarning)
             else :
                 raise ValueError("Invalid records argument")
         if alphabet is not None :
