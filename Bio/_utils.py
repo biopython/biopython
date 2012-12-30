@@ -57,33 +57,32 @@ def find_test_dir(start_dir=None):
     """Finds the absolute path of Biopython's Tests directory.
 
     Arguments:
-    start_dir -- Initial directory to begin lookup.
+    start_dir -- Initial directory to begin lookup (default to current dir)
 
     If the directory is not found up the filesystem's root directory, an
     exception will be raised.
 
     """
-    # no callbacks in function signatures!
-    # defaults to the current _utils directory
-    if start_dir is None:
-        start_dir = os.path.dirname(os.path.abspath(__file__))
+    if not start_dir:
+        # no callbacks in function signatures!
+        # defaults to the current directory
+        # (using __file__ would give the installed Biopython)
+        start_dir = "."
 
-    # raise error if search goes all the way to root without results
-    # to prevent infinite loop
-    # this happens when the Bio directory is not a parent directory of the
-    # running module
-    if start_dir == os.path.dirname(start_dir):
-        raise IOError("Biopython directory not found")
-
-    parent, cur = os.path.split(start_dir)
-    if cur == MOD_DIR:
-        target_dir = os.path.join(parent, TEST_DIR)
-        assert os.path.isdir(target_dir), \
-                "Directory %r not found in Biopython's test directory" % \
-                TEST_DIR
-        return target_dir
-
-    return find_test_dir(start_dir=parent)
+    target = os.path.abspath(start_dir)
+    while True:
+        if os.path.isdir(os.path.join(target, MOD_DIR)) \
+        and os.path.isdir(os.path.join(target, TEST_DIR)):
+           #Good, we're in the Biopython root now
+           return os.path.abspath(os.path.join(target, TEST_DIR))
+        #Recurse up the tree
+        #TODO - Test this on Windows
+        new, tmp = os.path.split(target)
+        if target == new:
+            #Reached root
+            break
+        target = new
+    raise ValueError("Not within Biopython source tree: %r" % os.path.abspath(start_dir))
 
 
 def run_doctest(target_dir=None, *args, **kwargs):
