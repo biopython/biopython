@@ -106,7 +106,8 @@ class MultipleSeqAlignment(_Alignment):
     reference sequence with special status.
     """
 
-    def __init__(self, records, alphabet=None):
+    def __init__(self, records, alphabet=None,
+                 annotations=None):
         """Initialize a new MultipleSeqAlignment object.
 
         Arguments:
@@ -117,6 +118,7 @@ class MultipleSeqAlignment(_Alignment):
                       alphabet, which should be a super-set of the individual
                       record alphabets.  If omitted, a consensus alphabet is
                       used.
+         - annotations - Information about the whole alignment (dictionary).
 
         You would normally load a MSA from a file using Bio.AlignIO, but you
         can do this from a list of SeqRecord objects too:
@@ -127,12 +129,14 @@ class MultipleSeqAlignment(_Alignment):
         >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
         >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
         >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
-        >>> align = MultipleSeqAlignment([a, b, c])
+        >>> align = MultipleSeqAlignment([a, b, c], annotations={"tool": "demo"})
         >>> print align
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
+        >>> align.annotations
+        {'tool': 'demo'}
 
         NOTE - The older Bio.Align.Generic.Alignment class only accepted a
         single argument, an alphabet.  This is still supported via a backwards
@@ -173,6 +177,13 @@ class MultipleSeqAlignment(_Alignment):
                 self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for
                                                               rec in self._records
                                                               if rec.seq is not None)
+
+        # Annotations about the whole alignment
+        if annotations is None: 
+            annotations = {} 
+        elif not isinstance(annotations, dict): 
+            raise TypeError("annotations argument should be a dict") 
+        self.annotations = annotations
 
     def extend(self, records):
         """Add more SeqRecord objects to the alignment as rows.
