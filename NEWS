@@ -34,6 +34,11 @@ The Bio.SeqUtils module how has a seq1 function to turn a sequence using three
 letter amino acid codes into one using the more common one letter codes. This
 acts as the inverse of the existing seq3 function.
 
+The multiple-sequence-alignment object used by Bio.AlignIO etc now supports
+an annotation dictionary. Additional support for per-column annotation is
+planned, with addition and splicing to work like that for the SeqRecord
+per-letter annotation.
+
 A new warning, Bio.BiopythonExperimentalWarning, has been introduced. This
 marks any experimental code included in the otherwise stable release. Such
 'beta' level code is ready for wider testing, but still likely to change and
