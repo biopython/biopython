@@ -26,6 +26,10 @@ system locale settings.
 
 Bio.KEGG can now parse Gene files.
 
+The multiple-sequence-alignment object used by Bio.AlignIO etc now supports
+a per-column annotation dictionary, useful for richly annotated alignments
+in the Stockholm/PFAM format.
+
 The SeqRecord object now has a translate method, following the approach used
 for its existing reverse_complement method etc.
 
