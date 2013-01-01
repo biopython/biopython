@@ -474,6 +474,15 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         denominator = math.sqrt((sxx-sx*sx)*(syy-sy*sy))
         return numerator/denominator
 
+    def distribution(self, precision=10**3):
+        """calculate the distribution of the scores at the given precision
+
+        returns None if the distribution is undefined"""
+        background = self._background
+        if background==None:
+            return None
+        from Thresholds import ScoreDistribution
+        return ScoreDistribution(precision=precision, pssm=self, background=background)
 
 class Motif(object):
     """
@@ -835,7 +844,6 @@ please use
 See the documentation of motif.counts.normalize() and pwm.log_odds
 for details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
-        raise Exception
         if both:
             rc = self.reverse_complement()
 

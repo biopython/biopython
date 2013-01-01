@@ -11150,7 +11150,11 @@ sequence. For the sake of this section, we will use an artificial sequence like 
 %cont-doctest
 \begin{verbatim}
 >>> test_seq=Seq("TACACTGCATTACAACCCAAGCATTA",m.alphabet)
+>>> len(test_seq)
+26
 \end{verbatim}
+
+\subsection{Searching for exact matches}
 
 The simplest way to find instances, is to look for exact matches of
 the true instances of the motif:
@@ -11173,16 +11177,19 @@ We can do the same with the reverse complement (to find instances on the complem
 20 GCATT
 \end{verbatim}
 
+\subsection{Searching for matches using the PSSM score}
+
 It's just as easy to look for positions, giving rise to high log-odds scores against our motif:
 %cont-doctest
 \begin{verbatim}
->>> for position, score in pssm.search(test_seq, threshold=4.0):
-...     print "Position %i gives score %0.2f" % (position, score)
+>>> for position, score in pssm.search(test_seq, threshold=3.0):
+...     print "Position %d: score = %5.3f" % (position, score)
 ... 
-Position 0 gives score 5.62
-Position -20 gives score 4.60
-Position 13 gives score 5.74
-Position -6 gives score 4.60
+Position 0: score = 5.622
+Position -20: score = 4.601
+Position 10: score = 3.037
+Position 13: score = 5.738
+Position -6: score = 4.601
 \end{verbatim}
 The negative positions refer to instances of the motif found on the
 reverse strand of the test sequence, and follow the Python convention
@@ -11191,8 +11198,8 @@ is located at \verb|test_seq[pos:pos+len(m)]| both for positive and for
 negative values of \verb|pos|.
 
 You may notice the threshold parameter, here set arbitrarily to
-$4.0$. This is in $log_2$, so we are now looking only for words, which
-are 16 times more likely to occur under the motif model than in the
+$3.0$. This is in $log_2$, so we are now looking only for words, which
+are eight times more likely to occur under the motif model than in the
 background. The default threshold is $0.0$, which selects everything
 that looks more like the motif than the background.
 
@@ -11208,51 +11215,77 @@ array([  5.62230396,  -5.6796999 ,  -3.43177247,   0.93827754,
        -10.84962463,  -3.65614533], dtype=float32)
 \end{verbatim}
 In general, this is the fastest way to calculate PSSM scores.
+The scores returned by \verb+pssm.calculate+ are for the forward strand
+only. To obtain the scores on the reverse strand, you can take the reverse
+complement of the PSSM:
+\begin{verbatim}
+>>> rpssm = pssm.reverse_complement()
+>>> rpssm.calculate(test_seq)
+array([ -9.43458748,  -3.06172252,  -7.18665981,  -7.76216221,
+        -2.04066086,  -4.26466274,   4.60124254,  -4.2480607 ,
+        -8.73414803,  -2.26503372,  -6.49598789,  -5.64668512,
+        -8.73414803, -10.84962463,  -4.82356262,  -4.82356262,
+        -5.64668512,  -8.73414803,  -4.15613794,  -5.6796999 ,
+         4.60124254,  -4.2480607 ], dtype=float32)
+\end{verbatim}
+
+\subsection{Selecting a score threshold}
 
 If you want to use a less arbitrary way of selecting thresholds, you
-can explore the \verb|Motif.score_distribution| class implementing a
-distribution of scores for a given motif. Since the space for a score
+can explore the distribution of PSSM scores. Since the space for a score
 distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
+%cont-doctest
 \begin{verbatim}
->>> sd = Motif.score_distribution(m,precision=10**4)
+>>> distribution = pssm.distribution(precision=10**4)
 \end{verbatim}
-The sd object can be used to determine a number of different thresholds.
-
+The \verb+distribution+ object can be used to determine a number of different thresholds.
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):
+%cont-doctest
 \begin{verbatim}
->>> sd.threshold_fpr(0.01)
-4.3535838726139886
+>>> threshold = distribution.threshold_fpr(0.01)
+>>> print "%5.3f" % threshold
+4.009
 \end{verbatim}
-
 or the false-negative rate (probability of ``not finding'' an instance generated from the motif):
+%cont-doctest
 \begin{verbatim}
->>> sd.threshold_fnr(0.1)
-0.26651713652234044
+>>> threshold = distribution.threshold_fnr(0.1)
+>>> print "%5.3f" % threshold
+-0.510
 \end{verbatim}
-
-or a threshold (approximately) satisfying some relation between fpr
-and fnr $\frac{fnr}{fpr}\simeq t$:
+or a threshold (approximately) satisfying some relation between the false-positive rate and the false-negative rate ($\frac{\textrm{fnr}}{\textrm{fpr}}\simeq t$):
+%cont-doctest
 \begin{verbatim}
->>> sd.threshold_balanced(1000)
-8.4406506087056368
+>>> threshold = distribution.threshold_balanced(1000)
+>>> print "%5.3f" % threshold
+6.241
 \end{verbatim}
-
 or a threshold satisfying (roughly) the equality between the
 false-positive rate and the $-log$ of the information content (as used
-in patser software by Hertz and Stormo).
+in patser software by Hertz and Stormo):
+%cont-doctest
+\begin{verbatim}
+>>> threshold = distribution.threshold_patser()
+>>> print "%5.3f" % threshold
+0.346
+\end{verbatim}
 
 For example, in case of our motif, you can get the threshold giving
 you exactly the same results (for this sequence) as searching for
 instances with balanced threshold with rate of $1000$.
+%cont-doctest
 \begin{verbatim}
->>> for pos,score in m.search_pwm(test_seq,threshold=sd.threshold_balanced(1000)):
-...     print pos,score
+>>> threshold = distribution.threshold_fpr(0.01)
+>>> print "%5.3f" % threshold
+4.009
+>>> for position, score in pssm.search(test_seq,threshold=threshold):
+...     print "Position %d: score = %5.3f" % (position, score)
 ... 
-10 8.44065060871
-15 8.44065060871
--20 8.44065060871
-21 8.44065060871
+Position 0: score = 5.622
+Position -20: score = 4.601
+Position 13: score = 5.738
+Position -6: score = 4.601
 \end{verbatim}
 
 \section{Comparing motifs}
@@ -11546,7 +11579,7 @@ The Pearson correlation coefficient is a measure for how well a straight line ca
 If all the points in the scatterplot lie on a straight line, the Pearson correlation coefficient is either +1 or -1, depending on whether the slope of line is positive or negative. If the Pearson correlation coefficient is equal to zero, there is no correlation between $x$ and $y$.
 
 The \emph{Pearson distance} is then defined as 
-$$d_{\rm{P}} \equiv 1 - r.$$
+$$d_{\textrm{P}} \equiv 1 - r.$$
 As the Pearson correlation coefficient lies between -1 and 1, the Pearson distance lies between 0 and 2.
 
 \subsection*{Absolute Pearson correlation}
@@ -11554,7 +11587,7 @@ As the Pearson correlation coefficient lies between -1 and 1, the Pearson distan
 By taking the absolute value of the Pearson correlation, we find a number between 0 and 1. If the absolute value is 1, all the points in the scatter plot lie on a straight line with either a positive or a negative slope. If the absolute value is equal to zero, there is no correlation between $x$ and $y$.
 
 The corresponding distance is defined as
-$$d_{\rm{A}} \equiv 1 - \left|r\right|,$$
+$$d_{\textrm A} \equiv 1 - \left|r\right|,$$
 where $r$ is the Pearson correlation coefficient. As the absolute value of the Pearson correlation coefficient lies between 0 and 1, the corresponding distance lies between 0 and 1 as well.
 
 In the context of gene expression experiments, the absolute correlation is equal to 1 if the gene expression profiles of two genes are either exactly the same or exactly opposite. The absolute correlation coefficient should therefore be used with care.
@@ -11562,7 +11595,7 @@ In the context of gene expression experiments, the absolute correlation is equal
 \subsection*{Uncentered correlation (cosine of the angle)}
 
 In some cases, it may be preferable to use the \emph{uncentered correlation} instead of the regular Pearson correlation coefficient. The uncentered correlation is defined as
-$$r_{\rm{U}} = \frac{1}{n} \sum_{i=1}^{n} \left(\frac{x_i}{\sigma_x^{(0)}} \right) \left(\frac{y_i}{\sigma_y^{(0)}} \right),$$
+$$r_{\textrm U} = \frac{1}{n} \sum_{i=1}^{n} \left(\frac{x_i}{\sigma_x^{(0)}} \right) \left(\frac{y_i}{\sigma_y^{(0)}} \right),$$
 where
 \begin{eqnarray}
 \sigma_x^{(0)} & = & \sqrt{{\frac{1}{n}} \sum_{i=1}^{n}x_i^2}; \nonumber \\
