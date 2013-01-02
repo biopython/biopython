@@ -14,6 +14,8 @@ from Bio.Motif.AlignAce import read as _AlignAce_read
 from Bio.Motif.MEME import read as _MEME_read
 from Bio.Motif import Jaspar
 from Bio.Motif.Thresholds import ScoreDistribution
+from Bio.Alphabet import IUPAC
+from Bio.Seq import Seq
 
 
 def _from_pfm(handle):
@@ -22,6 +24,28 @@ def _from_pfm(handle):
 
 def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
+
+
+def create(instances, alphabet=None):
+    for instance in instances:
+        try:
+            a = instance.alphabet
+        except AttributeError:
+            # The instance is a plain string
+            continue
+        if alphabet is None:
+            alphabet = a
+        elif alphabet != a:
+            raise ValueError("Alphabets are inconsistent")
+    if alphabet is None or alphabet.letters is None:
+        # If we didn't get a meaningful alphabet from the instances,
+        # assume it is DNA.
+        alphabet = IUPAC.unambiguous_dna
+    seqs = []
+    for instance in instances:
+        seq = Seq(str(instance), alphabet=alphabet)
+        seqs.append(seq)
+    return Motif(instances=seqs, alphabet=alphabet)
 
 
 def parse(handle,format):

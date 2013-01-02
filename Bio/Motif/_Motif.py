@@ -515,9 +515,7 @@ class Motif(object):
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
             for instance in instances:
-                if alphabet is None:
-                    alphabet=instance.alphabet
-                elif alphabet != instance.alphabet:
+                if alphabet != instance.alphabet:
                     raise ValueError("Alphabets are inconsistent")
                 if self.length is None:
                     self.length = len(instance)
@@ -525,10 +523,6 @@ class Motif(object):
                     message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
                     raise ValueError(message)
                 self.instances.append(instance)
-            if alphabet.letters is None:
-                # If we didn't get a meaningful alphabet from the instances,
-                # assume it is DNA.
-                alphabet = IUPAC.unambiguous_dna
             counts = {}
             for letter in alphabet.letters:
                 counts[letter] = [0] * self.length
@@ -1104,14 +1098,14 @@ will be deprecated and removed in a future release of Biopython.""", PendingDepr
         """
         Gives the reverse complement of the motif
         """
+        alphabet = self.alphabet
         if self.instances is not None:
             instances = []
             for instance in self.instances:
                 instance = instance.reverse_complement()
                 instances.append(instance)
-            res = Motif(instances=instances)
+            res = Motif(instances=instances, alphabet=alphabet)
         else:  # has counts
-            alphabet = self.alphabet
             res = Motif(alphabet)
             res.counts={}
             res.counts["A"]=self.counts["T"][::-1]

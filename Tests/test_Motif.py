@@ -20,7 +20,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.PFMout = "Motif/fa.out"
         instance = Seq("ATATA")
         instances = [instance]
-        self.m=Motif.Motif(instances=instances)
+        self.m = Motif.create(instances)
 
     def tearDown(self):
         self.PFMin.close()

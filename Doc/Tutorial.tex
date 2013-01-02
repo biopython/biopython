@@ -10770,7 +10770,13 @@ the Motif library:
 \begin{verbatim}
 >>> from Bio import Motif
 \end{verbatim}
-and we can start creating our first motif objects.
+and we can start creating our first motif objects. We can either create
+a \verb+Motif+ object from a list of instances of the motif, or we can
+obtain a \verb+Motif+ object by parsing a file from a motif database
+or motif finding software.
+
+\subsection{Creating a motif from instances}
+
 Suppose we have these instances of a DNA motif:
 %cont-doctest
 \begin{verbatim}
@@ -10787,7 +10793,7 @@ Suppose we have these instances of a DNA motif:
 then we can create a Motif object as follows:
 %cont-doctest
 \begin{verbatim}
->>> m = Motif.Motif(instances=instances)
+>>> m = Motif.create(instances)
 \end{verbatim}
 Printing out the Motif object shows the instances from which it was constructed:
 %cont-doctest
@@ -10906,7 +10912,7 @@ GCATT
 The reverse complement and the degenerate consensus sequence are
 only defined for DNA motifs.
 
-\subsection{Reading and writing}
+\subsection{Reading motifs}
 \label{sec:io}
 
 Creating motifs from instances by hand is a bit boring, so it's
@@ -10915,67 +10921,112 @@ motifs. There are no really well established standards for storing
 motifs, but there's a couple of formats which are more used than
 others. The most important distinction is whether the motif
 representation is based on instances or on some version of PWM matrix.
+
+\subsubsection*{JASPAR}
 One of the most popular motif databases \href{http://jaspar.genereg.net}{JASPAR}
- stores motifs in both formats, so
-let's look at how we can import JASPAR motifs from instances:
+ stores motifs either as a list of instances, or as a frequency matrix.
+As an example, these are the beginning and ending lines of the JASPAR \verb+Arnt.sites+ file showing known binding sites of the mouse helix-loop-helix transcription factor Arnt:
+\begin{verbatim}
+>MA0004 ARNT    1
+CACGTGatgtcctc
+>MA0004 ARNT    2
+CACGTGggaggtac
+>MA0004 ARNT    3
+CACGTGccgcgcgc
+...
+>MA0004 ARNT    18
+AACGTGacagccctcc
+>MA0004 ARNT    19
+AACGTGcacatcgtcc
+>MA0004 ARNT    20
+aggaatCGCGTGc
+\end{verbatim}
+The parts of the sequence in capital letters are the motif instances that were found to align to each other.
+
+We can create a \verb+Motif+ object from these instances as follows:
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import Motif
->>> arnt = Motif.read(open("Arnt.sites"),"jaspar-sites")
+>>> arnt = Motif.read(open("Arnt.sites"), "sites")
 \end{verbatim}
-and from a count matrix:
+The instances from which this motif was created is stored in the \verb+.instances+ property:
 %cont-doctest
 \begin{verbatim}
->>> srf = Motif.read(open("SRF.pfm"),"jaspar-pfm")
+>>> print arnt.instances[:3]
+[Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA()), Seq('CACGTG', IUPACUnambiguousDNA())]
+>>> for instance in arnt.instances:
+...     print instance
+... 
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+CACGTG
+AACGTG
+AACGTG
+AACGTG
+AACGTG
+CGCGTG
 \end{verbatim}
-
-The \verb|arnt| and \verb|srf| motifs can both do the same things for
-us, but they use different internal representations of the motif. We
-can tell that by inspecting the \verb|counts| and \verb|instances|
-properties:
+The counts matrix of this motif is automatically calculated from the instances:
 %cont-doctest
 \begin{verbatim}
->>> arnt.counts is None
-True
->>> arnt.instances is None
-False
->>> srf.counts is None
-False
->>> srf.instances is None
-True
+>>> print arnt.counts
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+<BLANKLINE>
 \end{verbatim}
-%TODO - sort order and formatting for doctest?
+
+JASPAR also makes motifs available directly as a count matrix.
+For example, this is the JASPAR file \verb+SRF.pfm+ containing the count
+matrix for the human SRF transcription factor:
 \begin{verbatim}
->>> srf.counts
-{'A': [2, 9, 0, 1, 32, 3, 46, 1, 43, 15, 2, 2],
- 'C': [1, 33, 45, 45, 1, 1, 0, 0, 0, 1, 0, 1],
- 'G': [39, 2, 1, 0, 0, 0, 0, 0, 0, 0, 44, 43],
- 'T': [4, 2, 0, 0, 13, 42, 0, 45, 3, 30, 0, 0]}
+ 2  9  0  1 32  3 46  1 43 15  2  2
+ 1 33 45 45  1  1  0  0  0  1  0  1
+39  2  1  0  0  0  0  0  0  0 44 43
+ 4  2  0  0 13 42  0 45  3 30  0  0
 \end{verbatim}
-
-There are conversion functions, which can help us convert between
-different representations:
+We can create a motif for this count matrix as follows:
+%cont-doctest
 \begin{verbatim}
->>> arnt.make_counts_from_instances()
-{'A': [8, 38, 0, 0, 0, 0],
- 'C': [32, 0, 40, 0, 0, 0],
- 'G': [0, 2, 0, 40, 0, 40],
- 'T': [0, 0, 0, 0, 40, 0]}
-
->>> srf.make_instances_from_counts()
-[Seq('GGGAAAAAAAGG', IUPACUnambiguousDNA()),
- Seq('GGCCAAATAAGG', IUPACUnambiguousDNA()),
- Seq('GACCAAATAAGG', IUPACUnambiguousDNA()),
-....
+>>> srf = Motif.read(open("SRF.pfm"),"pfm")
+>>> print srf.counts
+        0      1      2      3      4      5      6      7      8      9     10     11
+A:   2.00   9.00   0.00   1.00  32.00   3.00  46.00   1.00  43.00  15.00   2.00   2.00
+C:   1.00  33.00  45.00  45.00   1.00   1.00   0.00   0.00   0.00   1.00   0.00   1.00
+G:  39.00   2.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00  44.00  43.00
+T:   4.00   2.00   0.00   0.00  13.00  42.00   0.00  45.00   3.00  30.00   0.00   0.00
+<BLANKLINE>
 \end{verbatim}
-The important thing to remember here is that the method
-\verb|make_instances_from_counts()| creates fake instances, because
-usually there are very many possible sets of instances which give rise
-to the same PWM, and if we have only the count matrix, we cannot
-reconstruct the original one. This does not make any difference if we
-are using the PWM as the representation of the motif, but one should
-be careful with exporting instances from count-based motifs.
+As this motif was created from the counts matrix directly, it has no instances associated with it:
+%cont-doctest
+\begin{verbatim}
+>>> print srf.instances
+None
+\end{verbatim}
+We can now ask for the consensus sequence of these two motifs:
+%cont-doctest
+\begin{verbatim}
+>>> print arnt.counts.consensus
+CACGTG
+>>> print srf.counts.consensus
+GCCCATATATGG
+\end{verbatim}
 
+\subsection{Writing motifs}
 Speaking of exporting, let's look at export functions. We can export to fasta:
 %cont-doctest
 \begin{verbatim}
