@@ -135,7 +135,7 @@ def get_protein_from_ncbi(agis):
     Entrez.email = ""
     entrez_handle = Entrez.efetch(
             db="protein",
-            id=",".join(protein_id),
+            id=",".join(protein_ids),
             rettype="gb",
             retmode="text"
             )
