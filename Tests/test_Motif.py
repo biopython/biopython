@@ -443,9 +443,8 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (first test)
         """
         from Bio.Alphabet import IUPAC
-        from Bio.Motif import MEME
         handle = open("Motif/meme.out")
-        record = MEME.read(handle)
+        record = Motif.parse(handle, 'MEME')
         self.assertEqual(record.version, '3.5.7')
         self.assertEqual(record.datafile, 'test.fa')
         self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
@@ -554,9 +553,8 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (second test)
         """
         from Bio.Alphabet import IUPAC
-        from Bio.Motif import MEME
         handle = open("Motif/meme.dna.oops.txt")
-        record = MEME.read(handle)
+        record = Motif.parse(handle, 'MEME')
         self.assertEqual(record.version, '3.0')
         self.assertEqual(record.datafile, 'INO_up800.s')
         self.assertEqual(record.alphabet, IUPAC.unambiguous_dna)
@@ -569,8 +567,8 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[5], 'INO1')
         self.assertEqual(record.sequences[6], 'OPI3')
         self.assertEqual(record.command, 'meme -mod oops -dna -revcomp -nmotifs 2 -bfile yeast.nc.6.freq INO_up800.s')
-        self.assertEqual(len(record.motifs), 2)
-        motif = record.motifs[0]
+        self.assertEqual(len(record), 2)
+        motif = record[0]
         self.assertEqual(motif.num_occurrences, 7)
         self.assertAlmostEqual(motif.evalue, 0.2)
         self.assertEqual(motif.alphabet, IUPAC.unambiguous_dna)
@@ -618,7 +616,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[4]), "TTCACACGGCAC")
         self.assertEqual(str(motif.instances[5]), "TTCACATGCTAC")
         self.assertEqual(str(motif.instances[6]), "TTCAGATCGCTC")
-        motif = record.motifs[1]
+        motif = record[1]
         self.assertEqual(motif.num_occurrences, 7)
         self.assertAlmostEqual(motif.evalue, 110)
         self.assertEqual(motif.alphabet, IUPAC.unambiguous_dna)
@@ -672,9 +670,8 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (third test)
         """
         from Bio.Alphabet import IUPAC
-        from Bio.Motif import MEME
         handle = open("Motif/meme.protein.oops.txt")
-        record = MEME.read(handle)
+        record = Motif.parse(handle, 'MEME')
         self.assertEqual(record.version, '3.0')
         self.assertEqual(record.datafile, 'adh.s')
         self.assertEqual(record.alphabet, IUPAC.protein)
@@ -713,8 +710,8 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[31], "RFBB_NEIGO")
         self.assertEqual(record.sequences[32], "YURA_MYXXA")
         self.assertEqual(record.command, 'meme adh.s -mod oops -protein -nmotifs 2')
-        self.assertEqual(len(record.motifs), 2)
-        motif = record.motifs[0]
+        self.assertEqual(len(record), 2)
+        motif = record[0]
         self.assertEqual(motif.num_occurrences, 33)
         self.assertAlmostEqual(motif.evalue, 3.6e-165)
         self.assertEqual(motif.alphabet, IUPAC.protein)
@@ -918,7 +915,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[30]), "YGVTKIGVTVLSRIHARKLSEQRKGDKIL")
         self.assertEqual(str(motif.instances[31]), "KDSTLFGVSSLSDSLKGDFTSSALRCKEL")
         self.assertEqual(str(motif.instances[32]), "YINCVAPLRMTELCLPHLYETGSGRIVNI")
-        motif = record.motifs[1]
+        motif = record[1]
         self.assertEqual(motif.num_occurrences, 33)
         self.assertAlmostEqual(motif.evalue, 2.3e-159)
         self.assertEqual(motif.alphabet, IUPAC.protein)
@@ -1062,9 +1059,8 @@ class TestMEME(unittest.TestCase):
         """Test if Motif can parse MEME output files (fourth test)
         """
         from Bio.Alphabet import IUPAC
-        from Bio.Motif import MEME
         handle = open("Motif/meme.protein.tcm.txt")
-        record = MEME.read(handle)
+        record = Motif.parse(handle, 'MEME')
         self.assertEqual(record.version, '3.0')
         self.assertEqual(record.datafile, 'farntrans5.s')
         self.assertEqual(record.alphabet, IUPAC.protein)
@@ -1075,8 +1071,8 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(record.sequences[3], "RATRABGERB")
         self.assertEqual(record.sequences[4], "CAL1_YEAST")
         self.assertEqual(record.command, 'meme farntrans5.s -mod tcm -protein -nmotifs 2')
-        self.assertEqual(len(record.motifs), 2)
-        motif = record.motifs[0]
+        self.assertEqual(len(record), 2)
+        motif = record[0]
         self.assertEqual(motif.num_occurrences, 24)
         self.assertAlmostEqual(motif.evalue, 2.2e-94)
         self.assertEqual(motif.alphabet, IUPAC.protein)
@@ -1226,7 +1222,7 @@ class TestMEME(unittest.TestCase):
         self.assertEqual(str(motif.instances[21]), "PGLRDKPGAHSDFYHTNYCLLGLAVAESSY")
         self.assertEqual(str(motif.instances[22]), "GGFSKNDEEDADLYHSCLGSAALALIEGKF")
         self.assertEqual(str(motif.instances[23]), "HNFEYWLTEHLRLNGIYWGLTALCVLDSPE")
-        motif = record.motifs[1]
+        motif = record[1]
         self.assertEqual(motif.num_occurrences, 21)
         self.assertAlmostEqual(motif.evalue, 3.1e-19)
         self.assertEqual(motif.alphabet, IUPAC.protein)
