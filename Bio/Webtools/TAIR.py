@@ -60,17 +60,17 @@ def get(agis, dataset, target):
         raise bad_agi_exception
 
     # Check dataset
-    if dataset in self.datasets:
-        dataset = self.datasets[dataset]
-    elif dataset in self.datasets.values():
+    if dataset in tair_datasets:
+        dataset = tair_datasets[dataset]
+    elif dataset in tair_datasets.values():
         pass  # dataset is already equal to required value
     else:
         raise ValueError("%s is an invalid TAIR dataset" % dataset)
 
     # Check dataset
-    if target in self.targets:
-        target = self.targets[target]
-    elif target in self.targets.values():
+    if target in tair_targets:
+        target = tair_targets[target]
+    elif target in tair_targets.values():
         pass  # target is already equal to required value
     else:
         raise ValueError("%s is an invalid TAIR target" % target)
