@@ -71,7 +71,7 @@ while line:
         one = line.strip().split()[-1]
         found_one = True
     if line.startswith('_chem_comp.three_letter_code'):
-        three = '%-3s' % (line.strip().split()[-1],) # make it three-letter
+        three = '%-3s' % (line.strip().split()[-1],)  # make it three-letter
         found_three = True
 
     if found_one and found_three:
@@ -96,7 +96,7 @@ while line:
     line = fh.readline()
 
 if len(current_line) < 5:
-    three_to_one_buf[-1] = three_to_one_buf[:-1] # remove the last comma
+    three_to_one_buf[-1] = three_to_one_buf[:-1]  # remove the last comma
     three_to_one_buf.append('}')
 else:
     three_to_one_buf.append('%s }' % (current_line[:-1]))

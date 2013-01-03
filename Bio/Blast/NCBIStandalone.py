@@ -2188,7 +2188,7 @@ class BlastErrorParser(AbstractParser):
 
         try:
             self._scanner.feed(StringIO.StringIO(results), self._consumer)
-        except ValueError, msg:
+        except ValueError:
             # if we have a bad_report_file, save the info to it first
             if self._bad_report_handle:
                 # send the info to the error handle

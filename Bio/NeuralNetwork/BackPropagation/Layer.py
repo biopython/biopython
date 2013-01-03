@@ -146,7 +146,7 @@ class InputLayer(AbstractLayer):
 
 
 class HiddenLayer(AbstractLayer):
-    def __init__(self, num_nodes, next_layer, activation = logistic_function):
+    def __init__(self, num_nodes, next_layer, activation=logistic_function):
         """Initialize a hidden layer.
 
         Arguments:
@@ -258,7 +258,7 @@ class HiddenLayer(AbstractLayer):
 
 
 class OutputLayer(AbstractLayer):
-    def __init__(self, num_nodes, activation = logistic_function):
+    def __init__(self, num_nodes, activation=logistic_function):
         """Initialize the Output Layer.
 
         Arguments:

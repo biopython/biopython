@@ -4,7 +4,6 @@
 # as part of this package.
 
 """Run BioSQL tests using SQLite"""
-import os
 from Bio import MissingExternalDependencyError
 from BioSQL import BioSeqDatabase
 

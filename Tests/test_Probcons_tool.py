@@ -7,7 +7,6 @@
 import sys
 import os
 import unittest
-import subprocess
 from cStringIO import StringIO
 from Bio import AlignIO, SeqIO, MissingExternalDependencyError
 from Bio.Align.Applications import ProbconsCommandline

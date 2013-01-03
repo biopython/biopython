@@ -38,7 +38,7 @@ class DBSeq(Seq):  # This implements the biopython Seq interface
     def __len__(self):
         return self._length
 
-    def __getitem__(self, index) :                 # Seq API requirement
+    def __getitem__(self, index):                 # Seq API requirement
         #Note since Python 2.0, __getslice__ is deprecated
         #and __getitem__ is used instead.
         #See http://docs.python.org/ref/sequence-methods.html
@@ -252,7 +252,7 @@ def _retrieve_features(adaptor, primary_id):
                 import warnings
                 warnings.warn("Inverted location start/end (%i and %i) for "
                               "seqfeature_id %s" % (start, end, seqfeature_id))
-            locations.append( (location_id, start, end, strand) )
+            locations.append((location_id, start, end, strand))
         # Get possible remote reference information
         remote_results = adaptor.execute_and_fetchall(
             "SELECT location_id, dbname, accession, version"
@@ -270,7 +270,7 @@ def _retrieve_features(adaptor, primary_id):
                 dbname = None
             lookup[location_id] = (dbname, v)
 
-        feature = SeqFeature.SeqFeature(type = seqfeature_type)
+        feature = SeqFeature.SeqFeature(type=seqfeature_type)
         feature._seqfeature_id = seqfeature_id  # Store the key as a private property
         feature.qualifiers = qualifiers
         if len(locations) == 0:
@@ -321,7 +321,7 @@ def _retrieve_features(adaptor, primary_id):
             if len(strands) == 1:
                 feature.strand = feature.sub_features[0].strand
             else:
-                feature.strand = None # i.e. mixed strands
+                feature.strand = None  # i.e. mixed strands
 
         seq_feature_list.append(feature)
 
@@ -359,7 +359,7 @@ def _retrieve_annotations(adaptor, primary_id, taxon_id):
 def _make_unicode_into_string(text):
     if isinstance(text, unicode):
         return str(text)
-    else :
+    else:
         return text
 
 

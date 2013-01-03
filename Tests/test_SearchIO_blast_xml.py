@@ -9,7 +9,7 @@
 import os
 import unittest
 
-from Bio.SearchIO import parse, read
+from Bio.SearchIO import parse
 
 # test case files are in the Blast directory
 TEST_DIR = 'Blast'

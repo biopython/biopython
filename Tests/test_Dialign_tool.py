@@ -8,7 +8,6 @@
 import sys
 import os
 import unittest
-import subprocess
 from Bio import MissingExternalDependencyError
 from Bio.Align.Applications import DialignCommandline
 

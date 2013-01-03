@@ -48,7 +48,7 @@ def do_comparison(good_record, test_record):
 
 
 def write_format(file):
-    record_parser = GenBank.RecordParser(debug_level = 2)
+    record_parser = GenBank.RecordParser(debug_level=2)
 
     print "Testing GenBank writing for %s..." % os.path.basename(file)
     # be able to handle gzipped files

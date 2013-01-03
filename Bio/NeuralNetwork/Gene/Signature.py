@@ -21,7 +21,7 @@ class SignatureFinder(object):
     two motifs separated by a gap. We need something a lot smarter than
     this to find more complicated signatures.
     """
-    def __init__(self, alphabet_strict = 1):
+    def __init__(self, alphabet_strict=1):
         """Initialize a finder to get signatures.
 
         Arguments:

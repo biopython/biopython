@@ -2,6 +2,10 @@ import unittest
 import doctest
 import os
 import sys
+import warnings
+from Bio import BiopythonExperimentalWarning
+
+warnings.simplefilter('ignore', BiopythonExperimentalWarning)
 
 if sys.version_info[0] >= 3:
     from lib2to3 import refactor

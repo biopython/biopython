@@ -72,7 +72,7 @@ if sys.version_info[0] >= 3:
                 return self._handle.seek(pos)
 
             def tell(self):
-                return self._handle.tell(pos)
+                return self._handle.tell()
 
         return EvilHandleHack(handle)
 

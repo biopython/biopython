@@ -18,7 +18,7 @@ class xbb_translations:
     def __init__(self):
         ""
 
-    def frame1(self, seq, translation_table = 1):
+    def frame1(self, seq, translation_table=1):
         return translate(seq, table=translation_table)
 
     def complement(self, seq):
@@ -31,7 +31,7 @@ class xbb_translations:
     def antiparallel(self, seq):
         return reverse_complement(seq)
 
-    def frame(self, seq, frame, translation_table = 1):
+    def frame(self, seq, frame, translation_table=1):
         if not ((-3 <= frame <= -1) or (1 <= frame <= 3)):
             frame = 1
         if frame != 1:
@@ -59,7 +59,7 @@ class xbb_translations:
         res += '\n\n'
         return res
 
-    def frame_nice(self, seq, frame, translation_table = 1):
+    def frame_nice(self, seq, frame, translation_table=1):
         length = len(seq)
         protein = self.frame(seq, frame, translation_table)
         res = self.header_nice('Plus one frame translation', seq)
@@ -77,7 +77,7 @@ class xbb_translations:
         """Returns a float between 0 and 100."""
         return GC(seq)
 
-    def gcframe(self, seq, translation_table = 1):
+    def gcframe(self, seq, translation_table=1):
         # always use uppercase nt-sequence !!
         comp = self.complement(seq)
         anti = self.reverse(comp)

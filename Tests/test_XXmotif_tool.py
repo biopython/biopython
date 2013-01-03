@@ -10,7 +10,6 @@ import shutil
 import sys
 import unittest
 from Bio import MissingExternalDependencyError
-from Bio import Motif
 from Bio import SeqIO
 from Bio.Application import ApplicationError
 from Bio.Motif.Applications import XXmotifCommandline

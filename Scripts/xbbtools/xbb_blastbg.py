@@ -18,7 +18,7 @@ from xbb_utils import NotePad
 
 
 class BlastDisplayer:
-    def __init__(self, command, text_id = None):
+    def __init__(self, command, text_id=None):
         self.command = command
         self.tid = text_id
 

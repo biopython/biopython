@@ -26,8 +26,6 @@ class StructureAlignment(object):
                 correspond to the structures
         """
         l=fasta_align.get_alignment_length()
-        s1=fasta_align.get_seq_by_num(si)
-        s2=fasta_align.get_seq_by_num(sj)
         # Get the residues in the models
         rl1=Selection.unfold_entities(m1, 'R')
         rl2=Selection.unfold_entities(m2, 'R')

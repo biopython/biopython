@@ -5,7 +5,6 @@
 
 # python unittest framework
 import unittest
-import sys
 
 # modules to be tested
 from Bio.Pathway import Reaction
