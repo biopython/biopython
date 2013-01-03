@@ -6,6 +6,7 @@
 """Functions to get Arabidopsis sequences by their AGI identifier.
 """
 
+from __future__ import with_statement
 from Bio.Webtools.MultipartPostHandler import MultipartPostHandler
 import urllib2
 from StringIO import StringIO
