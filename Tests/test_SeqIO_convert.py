@@ -39,7 +39,7 @@ def check_convert(in_filename, in_format, out_format, alphabet=None):
     #Now load it back and check it agrees,
     records2 = list(SeqIO.parse(handle, out_format, alphabet))
     compare_records(records, records2, qual_truncate)
-    #Finally, use the convert fuction, and check that agrees:
+    #Finally, use the convert function, and check that agrees:
     handle2 = StringIO()
     if qual_truncate:
         warnings.simplefilter('ignore', UserWarning)
@@ -84,7 +84,7 @@ def check_convert_fails(in_filename, in_format, out_format, alphabet=None):
 
 #TODO - move this to a shared test module...
 def compare_record(old, new, truncate=None):
-    """Quality aware SeqRecord comparision.
+    """Quality aware SeqRecord comparison.
 
     This will check the mapping between Solexa and PHRED scores.
     It knows to ignore UnknownSeq objects for string matching (i.e. QUAL files).

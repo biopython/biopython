@@ -15,6 +15,7 @@ python:
   - "2.6"
   - "2.7"
   - "3.2"
+  - "3.3"
   - "jython2.5"
   - "pypy"
 
@@ -24,11 +25,6 @@ before_install:
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then wget $JYTHON_URL -O jython_installer.jar; java -jar jython_installer.jar -s -d $HOME/jython | tail -n 2; export PATH=$HOME/jython:$PATH; jython -c print; export PYTHON_EXE=jython; fi"
   - "sudo apt-get install clustalw clustalo | tail -n 2"
   - "sudo apt-get install t-coffee muscle mafft probcons wise emboss 2>&1 | tail -n 2"
-# We need NumPy, which currently isn't directly available in TravisCI
-# under Python 3.2 due to an installation problem, thus this trick.
-# See https://github.com/travis-ci/travis-cookbooks/issues/48
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then sudo apt-get install python3-numpy python3-numpy-dev 2>&1 | tail -n 2; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then ln -s /usr/lib/python3/dist-packages/numpy ~/virtualenv/python3.2/lib/python3.2/site-packages/; fi"
 #Installing psycopg2 does not work under PyPy or Jython
   - "export PG=yes"
   - "if [[ $TRAVIS_PYTHON_VERSION == 'jython2.5' ]]; then export PG=no; fi"
@@ -37,14 +33,16 @@ before_install:
 #Installing mysql-python does not work under Python 3.2
   - "export MSQL=$PG"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export MSQL=no; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export MSQL=no; fi"
   - "if [[ $MSQL == 'yes' ]]; then pip install mysql-python --use-mirrors 2>&1 | tail -n 2; fi"
 
 install:
   - "/usr/bin/yes | $PYTHON_EXE setup.py install 2>&1 | tail -n 2"
 
 before_script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd build/py3.2/Tests; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION != '3.2' ]]; then cd Tests; fi"
+  - cd Tests
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then cd ../build/py3.2/Tests; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then cd ../build/py3.3/Tests; fi"
 
 script:
   - $PYTHON_EXE run_tests.py --offline

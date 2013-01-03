@@ -15,7 +15,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import Alphabet
 
-#We only import this and subclass it for some limited backward compatibilty.
+#We only import this and subclass it for some limited backward compatibility.
 from Bio.Align.Generic import Alignment as _Alignment
 
 
@@ -106,7 +106,8 @@ class MultipleSeqAlignment(_Alignment):
     reference sequence with special status.
     """
 
-    def __init__(self, records, alphabet=None):
+    def __init__(self, records, alphabet=None,
+                 annotations=None):
         """Initialize a new MultipleSeqAlignment object.
 
         Arguments:
@@ -117,6 +118,7 @@ class MultipleSeqAlignment(_Alignment):
                       alphabet, which should be a super-set of the individual
                       record alphabets.  If omitted, a consensus alphabet is
                       used.
+         - annotations - Information about the whole alignment (dictionary).
 
         You would normally load a MSA from a file using Bio.AlignIO, but you
         can do this from a list of SeqRecord objects too:
@@ -127,12 +129,14 @@ class MultipleSeqAlignment(_Alignment):
         >>> a = SeqRecord(Seq("AAAACGT", generic_dna), id="Alpha")
         >>> b = SeqRecord(Seq("AAA-CGT", generic_dna), id="Beta")
         >>> c = SeqRecord(Seq("AAAAGGT", generic_dna), id="Gamma")
-        >>> align = MultipleSeqAlignment([a, b, c])
+        >>> align = MultipleSeqAlignment([a, b, c], annotations={"tool": "demo"})
         >>> print align
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
         AAAAGGT Gamma
+        >>> align.annotations
+        {'tool': 'demo'}
 
         NOTE - The older Bio.Align.Generic.Alignment class only accepted a
         single argument, an alphabet.  This is still supported via a backwards
@@ -146,13 +150,14 @@ class MultipleSeqAlignment(_Alignment):
                 alphabet = records
                 records = []
                 import warnings
+                from Bio import BiopythonDeprecationWarning
                 warnings.warn("Invalid records argument: While the old "
                               "Bio.Align.Generic.Alignment class only "
                               "accepted a single argument (the alphabet), the "
                               "newer Bio.Align.MultipleSeqAlignment class "
                               "expects a list/iterator of SeqRecord objects "
                               "(which can be an empty list) and an optional "
-                              "alphabet argument")
+                              "alphabet argument", BiopythonDeprecationWarning)
             else :
                 raise ValueError("Invalid records argument")
         if alphabet is not None :
@@ -172,6 +177,13 @@ class MultipleSeqAlignment(_Alignment):
                 self._alphabet = Alphabet._consensus_alphabet(rec.seq.alphabet for
                                                               rec in self._records
                                                               if rec.seq is not None)
+
+        # Annotations about the whole alignment
+        if annotations is None: 
+            annotations = {} 
+        elif not isinstance(annotations, dict): 
+            raise TypeError("annotations argument should be a dict") 
+        self.annotations = annotations
 
     def extend(self, records):
         """Add more SeqRecord objects to the alignment as rows.
@@ -317,8 +329,10 @@ class MultipleSeqAlignment(_Alignment):
         >>> a2 = SeqRecord(Seq("GT", generic_dna), id="Alpha")
         >>> b2 = SeqRecord(Seq("GT", generic_dna), id="Beta")
         >>> c2 = SeqRecord(Seq("GT", generic_dna), id="Gamma")
-        >>> left = MultipleSeqAlignment([a1, b1, c1])
-        >>> right = MultipleSeqAlignment([a2, b2, c2])
+        >>> left = MultipleSeqAlignment([a1, b1, c1],
+        ...                             annotations={"tool": "demo", "name": "start"})
+        >>> right = MultipleSeqAlignment([a2, b2, c2],
+        ...                             annotations={"tool": "demo", "name": "end"})
 
         Now, let's look at these two alignments:
 
@@ -335,7 +349,8 @@ class MultipleSeqAlignment(_Alignment):
 
         And add them:
 
-        >>> print left + right
+        >>> combined = left + right
+        >>> print combined
         DNAAlphabet() alignment with 3 rows and 7 columns
         AAAACGT Alpha
         AAA-CGT Beta
@@ -348,11 +363,21 @@ class MultipleSeqAlignment(_Alignment):
         3
         >>> len(right)
         3
+        >>> len(combined)
+        3
 
         The individual rows are SeqRecord objects, and these can be added together. Refer
         to the SeqRecord documentation for details of how the annotation is handled. This
         example is a special case in that both original alignments shared the same names,
         meaning when the rows are added they also get the same name.
+
+        Any common annotations are preserved, but differing annotation is lost. This is
+        the same behaviour used in the SeqRecord annotations and is designed to prevent
+        accidental propagation of inappropriate values:
+
+        >>> combined.annotations
+        {'tool': 'demo'}
+
         """
         if not isinstance(other, MultipleSeqAlignment):
             raise NotImplementedError
@@ -361,7 +386,12 @@ class MultipleSeqAlignment(_Alignment):
                              " (i.e. same number or rows)")
         alpha = Alphabet._consensus_alphabet([self._alphabet, other._alphabet])
         merged = (left+right for left,right in zip(self, other))
-        return MultipleSeqAlignment(merged, alpha)
+        # Take any common annotation:
+        annotations = dict()
+        for k, v in self.annotations.iteritems():
+            if k in other.annotations and other.annotations[k] == v:
+                annotations[k] = v
+        return MultipleSeqAlignment(merged, alpha, annotations)
 
     def __getitem__(self, index):
         """Access part of the alignment.
@@ -613,31 +643,6 @@ class MultipleSeqAlignment(_Alignment):
                               id = descriptor, description = descriptor))
 
 
-def _test():
-    """Run the Bio.Align module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests", "Clustalw")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Clustalw")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    #Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

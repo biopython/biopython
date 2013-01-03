@@ -172,6 +172,10 @@ class DataHandler(object):
 
     def read(self, handle):
         """Set up the parser and let it parse the XML results"""
+        # HACK: remove Bio._py3k handle conversion, since the Entrez XML parser
+        # expects binary data
+        if handle.__class__.__name__ == 'EvilHandleHack':
+            handle = handle._handle
         if hasattr(handle, "closed") and handle.closed:
             #Should avoid a possible Segmentation Fault, see:
             #http://bugs.python.org/issue4877

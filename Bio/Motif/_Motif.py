@@ -24,22 +24,33 @@ class GenericPositionMatrix(dict):
                 raise Exception("Inconsistent lengths found in dictionary")
             self[letter] = list(values[letter])
         self.alphabet = alphabet
-        self.__letters = sorted(self.alphabet.letters)
+        self._letters = sorted(self.alphabet.letters)
+
+    def __str__(self):
+        words = ["%6d" % i for i in range(self.length)]
+        line = "   " + " ".join(words)
+        lines = [line]
+        for letter in self._letters:
+            words = ["%6.2f" % value for value in self[letter]]
+            line = "%c: " % letter + " ".join(words)
+            lines.append(line)
+        text = "\n".join(lines) + "\n"
+        return text
 
     def __getitem__(self, key):
         if isinstance(key, tuple):
             if len(key)==2:
                 key1, key2 = key
                 if isinstance(key1, slice):
-                    start1, stop1, stride1 = key1.indices(len(self.__letters))
+                    start1, stop1, stride1 = key1.indices(len(self._letters))
                     indices1 = range(start1, stop1, stride1)
-                    letters1 = [self.__letters[i] for i in indices1]
+                    letters1 = [self._letters[i] for i in indices1]
                     dim1 = 2
                 elif isinstance(key1, int):
-                    letter1 = self.__letters[key1]
+                    letter1 = self._letters[key1]
                     dim1 = 1
                 elif isinstance(key1, tuple):
-                    letters1 = [self.__letters[i] for i in key1]
+                    letters1 = [self._letters[i] for i in key1]
                     dim1 = 2
                 elif isinstance(key1, str):
                     if len(key1)==1:
@@ -73,7 +84,7 @@ class GenericPositionMatrix(dict):
                     for letter1 in letters1:
                         values = dict.__getitem__(self, letter1)
                         d[letter1] = [values[index2] for index2 in indices2]
-                    if sorted(letters1)==self.__letters:
+                    if sorted(letters1)==self._letters:
                         return self.__class__(self.alphabet, d)
                     else:
                         return d
@@ -82,15 +93,15 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError("keys should be 1- or 2-dimensional")
         if isinstance(key, slice):
-            start, stop, stride = key.indices(len(self.__letters))
+            start, stop, stride = key.indices(len(self._letters))
             indices = range(start, stop, stride)
-            letters = [self.__letters[i] for i in indices]
+            letters = [self._letters[i] for i in indices]
             dim = 2
         elif isinstance(key, int):
-            letter = self.__letters[key]
+            letter = self._letters[key]
             dim = 1
         elif isinstance(key, tuple):
-            letters = [self.__letters[i] for i in key]
+            letters = [self._letters[i] for i in key]
             dim = 2
         elif isinstance(key, str):
             if len(key)==1:
@@ -121,7 +132,7 @@ class GenericPositionMatrix(dict):
             except ValueError:
                 # On Python 2.5 or older that was handled in C code,
                 # and failed on Windows XP 32bit
-                neg_inf = - 1E400
+                maximum = - 1E400
             for letter in self.alphabet.letters:
                 count = self[letter][i]
                 if count > maximum:
@@ -134,7 +145,12 @@ class GenericPositionMatrix(dict):
     def anticonsensus(self):
         sequence = ""
         for i in range(self.length):
-            minimum = float("inf")
+            try:
+                minimum = float("inf")
+            except ValueError:
+                # On Python 2.5 or older that was handled in C code,
+                # and failed on Windows XP 32bit
+                minimum = 1E400
             for letter in self.alphabet.letters:
                 count = self[letter][i]
                 if count < minimum:
@@ -238,65 +254,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
         for letter in alphabet.letters:
             self[letter] = tuple(self[letter])
 
-    def ic(self, background=None):
-        """\
-Returns the information content of a motif.
-
-By default, a uniform background is used. To specify a non-uniform
-background, use the 'background' argument to pass a dictionary containing
-the probability of each letter in the alphabet associated with the motif
-under the background distribution.
-        """
-        result=0
-        if background is None:
-            background = {}
-            for a in self.alphabet.letters:
-                background[a] = 1.0
-        else:
-            background = dict(background)
-        total = sum(background.values())
-        for a in self.alphabet.letters:
-            background[a] /= total
-        for a in self.alphabet.letters:
-            if background[a]!=0:
-                result-=background[a]*math.log(background[a],2)
-        result *= self.length
-        for i in range(self.length):
-            for a in self.alphabet.letters:
-                if self[a][i]!=0:
-                    result+=self[a][i]*math.log(self[a][i],2)
-        return result
-
-    def exp_score(self, background=None):
-        """
-        Computes expected score of motif's instance and its standard deviation
-        """
-        exs = 0.0
-        var = 0.0
-        if background is None:
-            background = {}
-            for letter in self.alphabet.letters:
-                background[letter] = 1.0
-        else:
-            background = dict(background)
-        total = sum(background.values())
-        for letter in self.alphabet.letters:
-            background[a] /= total
-        for i in range(self.length):
-            ex1 = 0.0
-            ex2 = 0.0
-            for letter in self.alphabet.letters:
-                p = self[i][letter]
-                b = background[letter]
-                if p!=0:
-                    term = p*(math.log(p,2)-math.log(b,2))
-                    ex1 += term
-                    ex2 += term**2
-            exs += ex1
-            var += ex2-ex1**2
-        return exs, math.sqrt(var)
-
-    def make_pssm(self, background=None):
+    def log_odds(self, background=None):
         """
         returns the Position-Specific Scoring Matrix.
 
@@ -316,71 +274,32 @@ under the background distribution.
         total = sum(background.values())
         for letter in alphabet.letters:
             background[letter] /= total
-        for letter in alphabet.letters:
             values[letter] = []
-            b = background[letter]
-            if b > 0:
-                for i in range(self.length):
+        for i in range(self.length):
+            for letter in alphabet.letters:
+                b = background[letter]
+                if b > 0:
                     p = self[letter][i]
                     if p > 0:
                         logodds = math.log(p/b, 2)
                     else:
-                        logodds = float("-inf")
-                    values[letter].append(logodds)
-            else:
-                for i in range(self.length):
+                        #TODO - Ensure this has unittest coverage!
+                        try:
+                            logodds = float("-inf")
+                        except ValueError:
+                            # On Python 2.5 or older that was handled in C code,
+                            # and failed on Windows XP 32bit
+                            logodds = - 1E400
+                else:
                     p = self[letter][i]
                     if p > 0:
                         logodds = float("inf")
                     else:
                         logodds = float("nan")
-                    values[letter].append(logodds)
-        return PositionSpecificScoringMatrix(alphabet, values)
-
-    def dist_pearson(self, pwm):
-        """
-        return the similarity score based on pearson correlation for the given motif against self.
-
-        We use the Pearson's correlation of the respective probabilities.
-        """
-
-        if self.alphabet != pwm.alphabet:
-            raise ValueError("Cannot compare motifs with different alphabets")
-
-        max_p=-2
-        for offset in range(-self.length+1, pwm.length):
-            if offset<0:
-                p = self.dist_pearson_at(pwm,-offset)
-            else:  # offset>=0
-                p = pwm.dist_pearson_at(self,offset)
-
-            if max_p<p:
-                max_p=p
-                max_o=-offset
-        return 1-max_p,max_o
-
-    def dist_pearson_at(self, pwm, offset):
-        sxx = 0  # \sum x^2
-        sxy = 0  # \sum x \cdot y
-        sx = 0   # \sum x
-        sy = 0   # \sum y
-        syy = 0  # \sum y^2
-        norm=max(self.length,offset+pwm.length)
-
-        for pos in range(max(self.length,offset+pwm.length)):
-            for l in self.alphabet.letters:
-                xi = self[l][pos]
-                yi = pwm[l][pos-offset]
-                sx = sx + xi
-                sy = sy + yi
-                sxx = sxx + xi * xi
-                syy = syy + yi * yi
-                sxy = sxy + xi * yi
-
-        norm *= len(self.alphabet.letters)
-        s1 = (sxy - sx*sy*1.0/norm)
-        s2 = (norm*sxx - sx*sx*1.0)*(norm*syy- sy*sy*1.0)
-        return s1/math.sqrt(s2)
+                values[letter].append(logodds)
+        pssm = PositionSpecificScoringMatrix(alphabet, values)
+        pssm._background = background
+        return pssm
 
 
 class PositionSpecificScoringMatrix(GenericPositionMatrix):
@@ -445,28 +364,125 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 if score > threshold:
                     yield (position-n, score)
 
-    def max_score(self):
+    @property
+    def max(self):
         """Maximal possible score for this motif.
 
         returns the score computed for the consensus sequence.
         """
         score = 0.0
-        letters = self.alphabet
+        letters = self._letters
         for position in xrange(0,self.length):
             score += max([self[letter][position] for letter in letters])
         return score
 
-    def min_score(self):
+    @property
+    def min(self):
         """Minimal possible score for this motif.
 
         returns the score computed for the anticonsensus sequence.
         """
         score = 0.0
-        letters = self.alphabet
+        letters = self._letters
         for position in xrange(0,self.length):
             score += min([self[letter][position] for letter in letters])
         return score
 
+    @property
+    def mean(self):
+        """Expected value of the score of a motif.
+
+        returns None if the expected value is undefined"""
+        if self._background is None:
+            return None
+        background = self._background
+        sx = 0.0
+        for i in range(self.length):
+            for letter in self._letters:
+                logodds = self[letter,i]
+                b = background[letter]
+                p = b * math.pow(2,logodds)
+                sx += p * logodds
+        return sx
+        
+
+    @property
+    def std(self):
+        """Standard deviation of the score of a motif.
+
+        returns None if the standard deviation is undefined"""
+        if self._background is None:
+            return None
+        background = self._background
+        variance = 0.0
+        for i in range(self.length):
+            sx = 0.0
+            sxx = 0.0
+            for letter in self._letters:
+                logodds = self[letter,i]
+                b = background[letter]
+                p = b * math.pow(2,logodds)
+                sx += p*logodds
+                sxx += p*logodds*logodds
+            sxx -= sx*sx
+            variance += sxx
+        variance = max(variance, 0) # to avoid roundoff problems
+        return math.sqrt(variance)
+
+    def dist_pearson(self, other):
+        """
+        return the similarity score based on pearson correlation for the given motif against self.
+
+        We use the Pearson's correlation of the respective probabilities.
+        """
+        if self.alphabet != other.alphabet:
+            raise ValueError("Cannot compare motifs with different alphabets")
+
+        max_p=-2
+        for offset in range(-self.length+1, other.length):
+            if offset<0:
+                p = self.dist_pearson_at(other, -offset)
+            else:  # offset>=0
+                p = other.dist_pearson_at(self, offset)
+            if max_p<p:
+                max_p=p
+                max_o=-offset
+        return 1-max_p,max_o
+
+    def dist_pearson_at(self, other, offset):
+        letters = self._letters
+        sx  = 0.0   # \sum x
+        sy  = 0.0   # \sum y
+        sxx = 0.0  # \sum x^2
+        sxy = 0.0  # \sum x \cdot y
+        syy = 0.0  # \sum y^2
+        norm=max(self.length,offset+other.length)*len(letters)
+        for pos in range(min(self.length-offset, other.length)):
+            xi = [self[letter,pos+offset] for letter in letters]
+            yi = [other[letter,pos] for letter in letters]
+            sx += sum(xi)
+            sy += sum(yi)
+            sxx += sum([x*x for x in xi])
+            sxy += sum([x*y for x,y in zip(xi,yi)])
+            syy += sum([y*y for y in yi])
+        sx /= norm
+        sy /= norm
+        sxx /= norm
+        sxy /= norm
+        syy /= norm
+        numerator = sxy - sx*sy
+        denominator = math.sqrt((sxx-sx*sx)*(syy-sy*sy))
+        return numerator/denominator
+
+    def distribution(self, precision=10**3):
+        """calculate the distribution of the scores at the given precision
+
+        returns None if the distribution is undefined"""
+        background = self._background
+        if background==None:
+            return None
+        from Thresholds import ScoreDistribution
+        return ScoreDistribution(precision=precision, pssm=self, background=background)
 
 class Motif(object):
     """
@@ -499,9 +515,7 @@ class Motif(object):
             warnings.warn("This is experimental code, and may change in future versions", BiopythonExperimentalWarning)
             self.instances = []
             for instance in instances:
-                if alphabet is None:
-                    alphabet=instance.alphabet
-                elif alphabet != instance.alphabet:
+                if alphabet != instance.alphabet:
                     raise ValueError("Alphabets are inconsistent")
                 if self.length is None:
                     self.length = len(instance)
@@ -509,10 +523,6 @@ class Motif(object):
                     message = "All instances should have the same length (%d found, %d expected)" % (len(instance), self.length)
                     raise ValueError(message)
                 self.instances.append(instance)
-            if alphabet.letters is None:
-                # If we didn't get a meaningful alphabet from the instances,
-                # assume it is DNA.
-                alphabet = IUPAC.unambiguous_dna
             counts = {}
             for letter in alphabet.letters:
                 counts[letter] = [0] * self.length
@@ -657,7 +667,7 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.pwm()
 use
 >>> pwm = motif.counts.normalize()
-See the documentation of motif.counts.normalize and pwm.make_pssm for
+See the documentation of motif.counts.normalize and pwm.log_odds for
 details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         if self._pwm_is_current:
@@ -698,8 +708,8 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.log_odds()
 use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
-See the documentation of motif.counts.normalize and pwm.make_pssm for
+>>> pssm = pwm.log_odds()
+See the documentation of motif.counts.normalize and pwm.log_odds for
 details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         if self._log_odds_is_current:
@@ -726,7 +736,7 @@ please use
 >>> pwm = motif.counts.normalize()
 >>> pwm.ic()
 Please be aware though that by default, motif.counts.normalize()
-does not use psuedocounts, while motif.ic() does. See the documentation
+does not use pseudocounts, while motif.ic() does. See the documentation
 of motif.counts.normalize for more details.
 """, PendingDeprecationWarning)
         res=0
@@ -791,10 +801,10 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.score_hit(sequence, position)
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> s = sequence[position:positon+len(pssm)]
 >>> pssm.calculate(s)
-See the documentation of motif.counts.normalize() and pwm.make_pssm
+See the documentation of motif.counts.normalize() and pwm.log_odds
 for details on the treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
         lo=self.log_odds()
@@ -823,12 +833,11 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.score_hit(sequence, position)
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.search(sequence)
-See the documentation of motif.counts.normalize() and pwm.make_pssm
+See the documentation of motif.counts.normalize() and pwm.log_odds
 for details on treatment of pseudocounts and background probabilities.
 """, PendingDeprecationWarning)
-        raise Exception
         if both:
             rc = self.reverse_complement()
 
@@ -904,7 +913,7 @@ in a future release of Biopython.""", PendingDeprecationWarning)
 
     def dist_product(self,other):
         """
-        A similarity measure taking into account a product probability of generating overlaping instances of two motifs
+        A similarity measure taking into account a product probability of generating overlapping instances of two motifs
         """
         warnings.warn("""\
 This function is now obsolete, and will be deprecated and removed
@@ -946,7 +955,7 @@ in a future release of Biopython.""", PendingDeprecationWarning)
            m2[i].freq(alphabet[k])*log_2(m2[i].freq(alphabet[k])/m1[i].freq(alphabet[k]))
         }
 
-        over possible non-spaced alignemts of two motifs.  See this reference:
+        over possible non-spaced alignments of two motifs.  See this reference:
 
         D. M Endres and J. E Schindelin, "A new metric for probability
         distributions", IEEE transactions on Information Theory 49, no. 7
@@ -1034,7 +1043,7 @@ in a future release of Biopython.""", PendingDeprecationWarning)
     def __len__(self):
         """return the length of a motif
 
-        Please use this method (i.e. invoke len(m)) instead of refering to the m.length directly.
+        Please use this method (i.e. invoke len(m)) instead of referring to m.length directly.
         """
         if self.length is None:
             return 0
@@ -1089,14 +1098,14 @@ will be deprecated and removed in a future release of Biopython.""", PendingDepr
         """
         Gives the reverse complement of the motif
         """
+        alphabet = self.alphabet
         if self.instances is not None:
             instances = []
             for instance in self.instances:
                 instance = instance.reverse_complement()
                 instances.append(instance)
-            res = Motif(instances=instances)
+            res = Motif(instances=instances, alphabet=alphabet)
         else:  # has counts
-            alphabet = self.alphabet
             res = Motif(alphabet)
             res.counts={}
             res.counts["A"]=self.counts["T"][::-1]
@@ -1311,7 +1320,7 @@ This function is now deprecated. Instead of
 >>> motif.max_score()
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.max_score()
 """,
                 PendingDeprecationWarning)
@@ -1327,7 +1336,7 @@ This function is now deprecated. Instead of
 >>> motif.min_score()
 please use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.min_score()
 """,
                 PendingDeprecationWarning)
@@ -1702,9 +1711,9 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif.scanPWM(sequence)
 use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.calculate(sequence)
-See the documentation of motif.counts.normalize, pwm.make_pssm, and
+See the documentation of motif.counts.normalize, pwm.log_odds, and
 pssm.calculate for details.
 """, PendingDeprecationWarning)
         if self.alphabet!=IUPAC.unambiguous_dna:
@@ -1734,9 +1743,9 @@ in a future release of Biopython. As a replacement, instead of
 >>> motif._pwm_calculate(sequence)
 use
 >>> pwm = motif.counts.normalize()
->>> pssm = pwm.make_pssm()
+>>> pssm = pwm.log_odds()
 >>> pssm.calculate(sequence)
-See the documentation of motif.counts.normalize, pwm.make_pssm, and
+See the documentation of motif.counts.normalize, pwm.log_odds, and
 pssm.calculate for details.
 """, PendingDeprecationWarning)
         logodds = self.log_odds()

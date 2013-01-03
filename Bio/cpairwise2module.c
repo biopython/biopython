@@ -323,7 +323,7 @@ cleanup_after_py_match_fn:
     first_B_gap = calc_affine_penalty(1, open_B, extend_B,
 				      penalize_extend_when_opening);
 
-    /* Allocate matrices for storing the results and initalize them. */
+    /* Allocate matrices for storing the results and initialize them. */
     lenA = PySequence_Length(py_sequenceA);
     lenB = PySequence_Length(py_sequenceB);
     score_matrix = malloc(lenA*lenB*sizeof(*score_matrix));

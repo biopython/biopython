@@ -437,7 +437,7 @@ class BlastParser(_XMLparser):
             self._descr.bits = float(self._value)
 
     def _end_Hsp_evalue(self):
-        """expect value value of the HSP
+        """expect value of the HSP
         """
         self._hsp.expect = float(self._value)
         if self._descr.e is None:

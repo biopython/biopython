@@ -10,11 +10,11 @@
 """Miscellaneous functions for dealing with sequences."""
 
 import re
-from Bio import SeqIO
+from math import pi, sin, cos
+
 from Bio.Seq import Seq
-from Bio import Alphabet
 from Bio.Alphabet import IUPAC
-from Bio.Data import IUPACData, CodonTable
+from Bio.Data import IUPACData
 
 
 ######################################
@@ -85,7 +85,7 @@ def GC123(seq):
     return gcall, gc[0], gc[1], gc[2]
 
 
-def GC_skew(seq, window = 100):
+def GC_skew(seq, window=100):
     """Calculates GC skew (G-C)/(G+C) for multiple windows along the sequence.
 
     Returns a list of ratios (floats), controlled by the length of the sequence
@@ -103,47 +103,45 @@ def GC_skew(seq, window = 100):
         values.append(skew)
     return values
 
-from math import pi, sin, cos, log
 
-
-def xGC_skew(seq, window = 1000, zoom = 100,
-                         r = 300, px = 100, py = 100):
+def xGC_skew(seq, window=1000, zoom=100,
+                         r=300, px=100, py=100):
     """Calculates and plots normal and accumulated GC skew (GRAPHICS !!!)."""
     from Tkinter import Scrollbar, Canvas, BOTTOM, BOTH, ALL, \
                         VERTICAL, HORIZONTAL, RIGHT, LEFT, X, Y
-    yscroll = Scrollbar(orient = VERTICAL)
-    xscroll = Scrollbar(orient = HORIZONTAL)
-    canvas = Canvas(yscrollcommand = yscroll.set,
-                    xscrollcommand = xscroll.set, background = 'white')
+    yscroll = Scrollbar(orient=VERTICAL)
+    xscroll = Scrollbar(orient=HORIZONTAL)
+    canvas = Canvas(yscrollcommand=yscroll.set,
+                    xscrollcommand=xscroll.set, background='white')
     win = canvas.winfo_toplevel()
     win.geometry('700x700')
 
-    yscroll.config(command = canvas.yview)
-    xscroll.config(command = canvas.xview)
-    yscroll.pack(side = RIGHT, fill = Y)
-    xscroll.pack(side = BOTTOM, fill = X)
-    canvas.pack(fill=BOTH, side = LEFT, expand = 1)
+    yscroll.config(command=canvas.yview)
+    xscroll.config(command=canvas.xview)
+    yscroll.pack(side=RIGHT, fill=Y)
+    xscroll.pack(side=BOTTOM, fill=X)
+    canvas.pack(fill=BOTH, side=LEFT, expand=1)
     canvas.update()
 
     X0, Y0 = r + px, r + py
-    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 -r, Y0 + r
+    x1, x2, y1, y2 = X0 - r, X0 + r, Y0 - r, Y0 + r
 
     ty = Y0
-    canvas.create_text(X0, ty, text = '%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
-    ty +=20
-    canvas.create_text(X0, ty, text = 'GC %3.2f%%' % (GC(seq)))
-    ty +=20
-    canvas.create_text(X0, ty, text = 'GC Skew', fill = 'blue')
-    ty +=20
-    canvas.create_text(X0, ty, text = 'Accumulated GC Skew', fill = 'magenta')
-    ty +=20
+    canvas.create_text(X0, ty, text='%s...%s (%d nt)' % (seq[:7], seq[-7:], len(seq)))
+    ty += 20
+    canvas.create_text(X0, ty, text='GC %3.2f%%' % (GC(seq)))
+    ty += 20
+    canvas.create_text(X0, ty, text='GC Skew', fill='blue')
+    ty += 20
+    canvas.create_text(X0, ty, text='Accumulated GC Skew', fill='magenta')
+    ty += 20
     canvas.create_oval(x1, y1, x2, y2)
 
     acc = 0
     start = 0
     for gc in GC_skew(seq, window):
         r1 = r
-        acc+=gc
+        acc += gc
         # GC skew
         alpha = pi - (2*pi*start)/len(seq)
         r2 = r1 - gc*zoom
@@ -151,7 +149,7 @@ def xGC_skew(seq, window = 1000, zoom = 100,
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1, y1, x2, y2, fill = 'blue')
+        canvas.create_line(x1, y1, x2, y2, fill='blue')
         # accumulated GC skew
         r1 = r - 50
         r2 = r1 - acc
@@ -159,12 +157,12 @@ def xGC_skew(seq, window = 1000, zoom = 100,
         y1 = Y0 + r1 * cos(alpha)
         x2 = X0 + r2 * sin(alpha)
         y2 = Y0 + r2 * cos(alpha)
-        canvas.create_line(x1, y1, x2, y2, fill = 'magenta')
+        canvas.create_line(x1, y1, x2, y2, fill='magenta')
 
         canvas.update()
         start += window
 
-    canvas.configure(scrollregion = canvas.bbox(ALL))
+    canvas.configure(scrollregion=canvas.bbox(ALL))
 
 
 def molecular_weight(seq):
@@ -193,7 +191,7 @@ def nt_search(seq, subseq):
     result = [pattern]
     l = len(seq)
     while True:
-        pos+=1
+        pos += 1
         s = seq[pos:]
         m = re.search(pattern, s)
         if not m:
@@ -233,21 +231,25 @@ def seq3(seq, custom_map={'*': 'Ter'}, undef_code='Xaa'):
     'Xaa'.
 
     e.g.
+
     >>> from Bio.SeqUtils import seq3
     >>> seq3("MAIVMGRWKGAR*")
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer'
 
     You can set a custom translation of the codon termination code using the
     "custom_map" argument, e.g.
+
     >>> seq3("MAIVMGRWKGAR*", custom_map={"*": "***"})
     'MetAlaIleValMetGlyArgTrpLysGlyAlaArg***'
 
     You can also set a custom translation for non-amino acid characters, such
     as '-', using the "undef_code" argument, e.g.
+
     >>> seq3("MAIVMGRWKGA--R*", undef_code='---')
     'MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer'
 
     If not given, "undef_code" defaults to "Xaa", e.g.
+
     >>> seq3("MAIVMGRWKGA--R*")
     'MetAlaIleValMetGlyArgTrpLysGlyAlaXaaXaaArgTer'
 
@@ -275,31 +277,41 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
     '-'.
 
     e.g.
+
     >>> from Bio.SeqUtils import seq3
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArgTer")
     'MAIVMGRWKGAR*'
 
+    The input is case insensitive, e.g.
+
+    >>> from Bio.SeqUtils import seq3
+    >>> seq1("METalaIlEValMetGLYArgtRplysGlyAlaARGTer")
+    'MAIVMGRWKGAR*'
+
     You can set a custom translation of the codon termination code using the
     "custom_map" argument, e.g.
+
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAlaArg***", custom_map={"***": "*"})
     'MAIVMGRWKGAR*'
 
     You can also set a custom translation for non-amino acid characters, such
     as '-', using the "undef_code" argument, e.g.
+
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer", undef_code='?')
     'MAIVMGRWKGA??R*'
 
     If not given, "undef_code" defaults to "X", e.g.
+
     >>> seq1("MetAlaIleValMetGlyArgTrpLysGlyAla------ArgTer")
     'MAIVMGRWKGAXXR*'
 
     """
     # reverse map of threecode
-    onecode = dict([(x[1], x[0]) for x in _THREECODE.items()])
+    onecode = dict([(x[1].upper(), x[0]) for x in _THREECODE.items()])
     # add the given termination codon code and custom maps
-    onecode.update(custom_map)
+    onecode.update((k.upper(), v) for (k, v) in custom_map.iteritems())
     seqlist = [seq[3*i:3*(i+1)] for i in range(len(seq) // 3)]
-    return ''.join([onecode.get(aa, undef_code) for aa in seqlist])
+    return ''.join([onecode.get(aa.upper(), undef_code) for aa in seqlist])
 
 
 # }}}
@@ -310,7 +322,7 @@ def seq1(seq, custom_map={'Ter': '*'}, undef_code='X'):
 # {{{
 
 
-def six_frame_translations(seq, genetic_code = 1):
+def six_frame_translations(seq, genetic_code=1):
     """Formatted string showing the 6 frame translations and GC content.
 
     nice looking 6 frame translation with GC content - code from xbbtools

@@ -47,7 +47,7 @@ class Schema(object):
 
         o ambiguity_info - A dictionary which maps letters in the motifs to
         the ambiguous characters which they might represent. For example,
-        {'R' : 'AG'} specifies that Rs in the motif can match a A or a G.
+        {'R' : 'AG'} specifies that Rs in the motif can match an A or a G.
         All letters in the motif must be represented in the ambiguity_info
         dictionary.
         """

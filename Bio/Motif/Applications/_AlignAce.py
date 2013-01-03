@@ -29,34 +29,60 @@ from Bio.Application import AbstractCommandline, _Option, _Argument
 class AlignAceCommandline(AbstractCommandline):
     """Create a commandline for the AlignAce program.
 
-    XXX This could use more checking for valid paramters to the program.
+    Example:
+
+    >>> from Bio.Motif.Applications import AlignAceCommandline
+    >>> in_file = "sequences.fasta"
+    >>> alignace_cline = AlignAceCommandline(infile=in_file, gcback=0.55)
+    >>> print alignace_cline
+    AlignACE -i sequences.fasta -gcback 0.55
+
+    You would typically run the command line with alignace_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="AlignACE", **kwargs):
         self.parameters = \
           [
-            _Option(["-i","input"],["input"],lambda x : isinstance(x, str),1,
-                    "Input Sequence file in FASTA format."),
+            _Option(["-i", "infile"],
+                    "Input Sequence file in FASTA format.",
+                    checker_function=lambda x: isinstance(x, str),
+                    equate=False,
+                    filename=True),
 
-            _Option(["-numcols","numcols"],["input"],lambda x : isinstance(x, int),0,
-                    "Number of columns to align"),
+            _Option(["-numcols", "numcols"],
+                    "Number of columns to align",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, int)),
 
-            _Option(["-expect","expect"],["input"],lambda x : isinstance(x, int),0,
-                    "number of sites expected in model "),
+            _Option(["-expect", "expect"],
+                    "number of sites expected in model",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, int)),
 
-            _Option(["-gcback","gcback"],["input"],lambda x : isinstance(x, float),0,
-                    "background fractional GC content of input sequence"),
+            _Option(["-gcback", "gcback"],
+                    "background fractional GC content of input sequence",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, float)),
 
-            _Option(["-minpass","minpass"],["input"],lambda x : isinstance(x, int),0,
-                    "minimum number of non-improved passes in phase 1"),
+            _Option(["-minpass", "minpass"],
+                    "minimum number of non-improved passes in phase 1",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, int)),
 
-            _Option(["-seed","seed"],["input"],lambda x : isinstance(x, int),0,
-                    "set seed for random number generator (time)"),
+            _Option(["-seed", "seed"],
+                    "set seed for random number generator (time)",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, int)),
 
-            _Option(["-undersample","undersample"],["input"],lambda x : isinstance(x, int),0,
-                    "possible sites / (expect * numcols * seedings)"),
+            _Option(["-undersample", "undersample"],
+                    "possible sites / (expect * numcols * seedings)",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, int)),
 
-            _Option(["-oversample","oversample"],["input"],lambda x : isinstance(x, int),0,
-                    "1/undersample"),
+            _Option(["-oversample", "oversample"],
+                    "1/undersample",
+                    equate=False,
+                    checker_function=lambda x: isinstance(x, int)),
           ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
@@ -64,13 +90,42 @@ class AlignAceCommandline(AbstractCommandline):
 class CompareAceCommandline(AbstractCommandline):
     """Create a commandline for the CompareAce program.
 
-    XXX This could use more checking for valid paramters to the program.
+    Example:
+
+    >>> from Bio.Motif.Applications import CompareAceCommandline
+    >>> m1_file = "sequences1.fasta"
+    >>> m2_file = "sequences2.fasta"
+    >>> compareace_cline = CompareAceCommandline(motif1=m1_file, motif2=m2_file)
+    >>> print compareace_cline
+    CompareACE sequences1.fasta sequences2.fasta
+
+    You would typically run the command line with compareace_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
     """
     def __init__(self, cmd="CompareACE", **kwargs):
         import os.path
+
         self.parameters = \
           [
-            _Argument(["motif1"],["input","file"], os.path.exists,1,"name of file containing motif 1"),
-            _Argument(["motif2"],["input","file"], os.path.exists,1,"name of file containing motif 2"),
+            _Argument(["motif1"],
+                        "name of file containing motif 1",
+                        checker_function=lambda x: isinstance(x, str),
+                        filename=True),
+            _Argument(["motif2"],
+                        "name of file containing motif 2",
+                        checker_function=lambda x: isinstance(x, str),
+                        filename=True),
           ]
         AbstractCommandline.__init__(self, cmd, **kwargs)
+
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Running AlignAce doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+
+if __name__ == "__main__":
+    _test()

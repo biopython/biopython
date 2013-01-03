@@ -327,7 +327,7 @@ class MafftCommandline(AbstractCommandline):
                     equate=False),
             #The old solution of also defining extra parameters with
             #["--seed", "seed1"] etc worked, but clashes with the recent
-            #code in the base class to look for duplicate paramters and raise
+            #code in the base class to look for duplicate parameters and raise
             #an error.  Perhaps that check should be ignored here, or maybe
             #we can handle this more elegantly...
             #TODO - Create an _OptionList parameter which allows a list to be
@@ -348,30 +348,6 @@ class MafftCommandline(AbstractCommandline):
         AbstractCommandline.__init__(self, cmd, **kwargs)
 
 
-def _test():
-    """Run the module's doctests (PRIVATE).
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    #TODO - Remove os.path checks on input filenames?
-    import doctest
-    if os.path.isdir(os.path.join("..","Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests")) :
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

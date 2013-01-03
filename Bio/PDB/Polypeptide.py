@@ -337,7 +337,7 @@ class _PPBuilder:
         is_connected=self._is_connected
         accept=self._accept
         level=entity.get_level()
-        # Decide wich entity we are dealing with
+        # Decide which entity we are dealing with
         if level=="S":
             model=entity[0]
             chain_list=model.get_list()

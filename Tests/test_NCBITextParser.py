@@ -14762,6 +14762,7 @@ class TestNCBITextParser(unittest.TestCase):
         self.assertEqual(record.database_letters, 4140237112)
         self.assertEqual(len(record.descriptions), 0)
         self.assertEqual(len(record.alignments), 0)
+        handle.close()
 
     def test_text_2226_blastx_002(self):
         """Test parsing BLASTX 2.2.26+ with single hsp results."""

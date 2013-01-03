@@ -1808,27 +1808,6 @@ def PairedFastaQualIterator(fasta_handle, qual_handle, alphabet=single_letter_al
     #Done
 
 
-def _test():
-    """Run the Bio.SeqIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        assert os.path.isfile("Quality/example.fastq")
-        assert os.path.isfile("Quality/example.fasta")
-        assert os.path.isfile("Quality/example.qual")
-        assert os.path.isfile("Quality/tricky.fastq")
-        assert os.path.isfile("Quality/solexa_faked.fastq")
-        doctest.testmod(verbose=0)
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest(verbose=0)

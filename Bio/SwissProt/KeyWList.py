@@ -63,12 +63,12 @@ def parse(handle):
             # We have reached the footer
             break
         key = line[:2]
-        if key=="//":
+        if key == "//":
             record["DE"] = " ".join(record["DE"])
             record["SY"] = " ".join(record["SY"])
             yield record
             record = Record()
-        elif line[2:5]=="   ":
+        elif line[2:5] == "   ":
             value = line[5:].strip()
             if key in ("ID", "IC", "AC", "CA"):
                 record[key] = value

@@ -111,7 +111,7 @@ class InputLayer(AbstractLayer):
         for input_num in range(len(inputs)):
             self.values[input_num + 1] = inputs[input_num]
 
-        # propogate the update to the next layer
+        # propagate the update to the next layer
         self._next_layer.update(self)
 
     def backpropagate(self, outputs, learning_rate, momentum):
@@ -126,7 +126,7 @@ class InputLayer(AbstractLayer):
 
         o outputs - The output info we are using to calculate error.
         """
-        # first backpropogate to the next layers
+        # first backpropagate to the next layers
         next_errors = self._next_layer.backpropagate(outputs, learning_rate,
                                                      momentum)
 
@@ -203,7 +203,7 @@ class HiddenLayer(AbstractLayer):
 
             self.values[update_node] = self._activation(sum)
 
-        # propogate the update to the next layer
+        # propagate the update to the next layer
         self._next_layer.update(self)
 
     def backpropagate(self, outputs, learning_rate, momentum):
@@ -219,7 +219,7 @@ class HiddenLayer(AbstractLayer):
         o outputs - The output values we are using to see how good our
         network is at predicting things.
         """
-        # first backpropogate to the next layers
+        # first backpropagate to the next layers
         next_errors = self._next_layer.backpropagate(outputs, learning_rate,
                                                      momentum)
 
@@ -241,7 +241,7 @@ class HiddenLayer(AbstractLayer):
         # --- calculate error terms
         errors = {}
         for error_node in self.nodes:
-            # get the error info propogated from the next layer
+            # get the error info propagated from the next layer
             previous_error = 0.0
             for next_node in self._next_layer.nodes:
                 previous_error += (next_errors[next_node] *
@@ -282,7 +282,7 @@ class OutputLayer(AbstractLayer):
 
         Arguments:
 
-        o previous_layer -- The hidden layer preceeding this.
+        o previous_layer -- The hidden layer preceding this.
         """
         # update all of the nodes in this layer
         for update_node in self.nodes:

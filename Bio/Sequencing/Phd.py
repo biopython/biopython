@@ -9,7 +9,7 @@
 """
 Parser for PHD files output by PHRED and used by PHRAP and CONSED.
 
-This module can be used used directly which will return Record objects
+This module can be used directly which will return Record objects
 which should contain all the original data in the file.
 
 Alternatively, using Bio.SeqIO with the "phd" format will call this module
@@ -19,9 +19,9 @@ internally.  This will give SeqRecord objects for each contig sequence.
 from Bio import Seq
 from Bio.Alphabet import generic_dna
 
-CKEYWORDS=['CHROMAT_FILE','ABI_THUMBPRINT','PHRED_VERSION','CALL_METHOD',
-        'QUALITY_LEVELS','TIME','TRACE_ARRAY_MIN_INDEX','TRACE_ARRAY_MAX_INDEX',
-        'TRIM','TRACE_PEAK_AREA_RATIO','CHEM','DYE']
+CKEYWORDS = ['CHROMAT_FILE', 'ABI_THUMBPRINT', 'PHRED_VERSION', 'CALL_METHOD',
+        'QUALITY_LEVELS', 'TIME', 'TRACE_ARRAY_MIN_INDEX', 'TRACE_ARRAY_MAX_INDEX',
+        'TRIM', 'TRACE_PEAK_AREA_RATIO', 'CHEM', 'DYE']
 
 
 class Record(object):
@@ -48,7 +48,7 @@ def read(handle):
             record.file_name = line[15:].rstrip()
             break
     else:
-        return # No record found
+        return  # No record found
 
     for line in handle:
         if line.startswith("BEGIN_COMMENT"):
@@ -60,7 +60,7 @@ def read(handle):
         line = line.strip()
         if not line:
             continue
-        if line=="END_COMMENT":
+        if line == "END_COMMENT":
             break
         keyword, value = line.split(":", 1)
         keyword = keyword.lower()
@@ -79,9 +79,9 @@ def read(handle):
                          'trace_array_min_index',
                          'trace_array_max_index'):
             record.comments[keyword] = int(value)
-        elif keyword=='trace_peak_area_ratio':
+        elif keyword == 'trace_peak_area_ratio':
             record.comments[keyword] = float(value)
-        elif keyword=='trim':
+        elif keyword == 'trim':
             first, last, prob = value.split()
             record.comments[keyword] = (int(first), int(last), float(prob))
     else:
@@ -101,7 +101,7 @@ def read(handle):
             # Peak location is optional according to
             # David Gordon (the Consed author)
             parts = line.split()
-            if len(parts) in [2,3]:
+            if len(parts) in [2, 3]:
                 record.sites.append(tuple(parts))
             else:
                 raise ValueError("DNA line must contain a base and quality "

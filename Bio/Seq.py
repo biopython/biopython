@@ -513,15 +513,9 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         if isinstance(prefix, tuple):
-            #TODO - Once we drop support for Python 2.4, instead of this
-            #loop offload to the string method (requires Python 2.5+).
-            #Check all the alphabets first...
-            prefix_strings = [self._get_seq_str_and_check_alphabet(p)
-                              for p in prefix]
-            for prefix_str in prefix_strings:
-                if str(self).startswith(prefix_str, start, end):
-                    return True
-            return False
+            prefix_strs = tuple(self._get_seq_str_and_check_alphabet(p)
+                                for p in prefix)
+            return str(self).startswith(prefix_strs, start, end)
         else:
             prefix_str = self._get_seq_str_and_check_alphabet(prefix)
             return str(self).startswith(prefix_str, start, end)
@@ -550,15 +544,9 @@ class Seq(object):
         """
         #If it has one, check the alphabet:
         if isinstance(suffix, tuple):
-            #TODO - Once we drop support for Python 2.4, instead of this
-            #loop offload to the string method (requires Python 2.5+).
-            #Check all the alphabets first...
-            suffix_strings = [self._get_seq_str_and_check_alphabet(p)
-                              for p in suffix]
-            for suffix_str in suffix_strings:
-                if str(self).endswith(suffix_str, start, end):
-                    return True
-            return False
+            suffix_strs = tuple(self._get_seq_str_and_check_alphabet(p)
+                                for p in suffix)
+            return str(self).endswith(suffix_strs, start, end)
         else:
             suffix_str = self._get_seq_str_and_check_alphabet(suffix)
             return str(self).endswith(suffix_str, start, end)

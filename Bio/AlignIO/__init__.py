@@ -155,24 +155,24 @@ import FastaIO
 #Please use the same names as BioPerl and EMBOSS where possible.
 
 _FormatToIterator = {  # "fasta" is done via Bio.SeqIO
-                     "clustal" : ClustalIO.ClustalIterator,
-                     "emboss" : EmbossIO.EmbossIterator,
-                     "fasta-m10" : FastaIO.FastaM10Iterator,
-                     "nexus" : NexusIO.NexusIterator,
-                     "phylip" : PhylipIO.PhylipIterator,
-                     "phylip-sequential" : PhylipIO.SequentialPhylipIterator,
-                     "phylip-relaxed" : PhylipIO.RelaxedPhylipIterator,
-                     "stockholm" : StockholmIO.StockholmIterator,
+                     "clustal": ClustalIO.ClustalIterator,
+                     "emboss": EmbossIO.EmbossIterator,
+                     "fasta-m10": FastaIO.FastaM10Iterator,
+                     "nexus": NexusIO.NexusIterator,
+                     "phylip": PhylipIO.PhylipIterator,
+                     "phylip-sequential": PhylipIO.SequentialPhylipIterator,
+                     "phylip-relaxed": PhylipIO.RelaxedPhylipIterator,
+                     "stockholm": StockholmIO.StockholmIterator,
                      }
 
 _FormatToWriter = {  # "fasta" is done via Bio.SeqIO
                      # "emboss" : EmbossIO.EmbossWriter, (unfinished)
-                   "nexus" : NexusIO.NexusWriter,
-                   "phylip" : PhylipIO.PhylipWriter,
-                   "phylip-sequential" : PhylipIO.SequentialPhylipWriter,
-                   "phylip-relaxed" : PhylipIO.RelaxedPhylipWriter,
-                   "stockholm" : StockholmIO.StockholmWriter,
-                   "clustal" : ClustalIO.ClustalWriter,
+                   "nexus": NexusIO.NexusWriter,
+                   "phylip": PhylipIO.PhylipWriter,
+                   "phylip-sequential": PhylipIO.SequentialPhylipWriter,
+                   "phylip-relaxed": PhylipIO.RelaxedPhylipWriter,
+                   "stockholm": StockholmIO.StockholmWriter,
+                   "clustal": ClustalIO.ClustalWriter,
                    }
 
 
@@ -347,7 +347,7 @@ def parse(handle, format, seq_count=None, alphabet=None):
         #Map the file format to a sequence iterator:
         if format in _FormatToIterator:
             iterator_generator = _FormatToIterator[format]
-            if alphabet is None :
+            if alphabet is None:
                 i = iterator_generator(fp, seq_count)
             else:
                 try:
@@ -432,7 +432,7 @@ def read(handle, format, seq_count=None, alphabet=None):
     if second is not None:
         raise ValueError("More than one record found in handle")
     if seq_count:
-        assert len(first)==seq_count
+        assert len(first) == seq_count
     return first
 
 
@@ -463,30 +463,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-def _test():
-    """Run the Bio.AlignIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

@@ -747,7 +747,7 @@ def index(filename, format, alphabet=None, key_function=None):
 
     As with the to_dict() function, by default the id string of each record
     is used as the key. You can specify a callback function to transform
-    this (the record identifier string) into your prefered key. For example:
+    this (the record identifier string) into your preferred key. For example:
 
     >>> from Bio import SeqIO
     >>> def make_tuple(identifier):
@@ -943,31 +943,6 @@ def convert(in_file, in_format, out_file, out_format, alphabet=None):
     return count
 
 
-def _test():
-    """Run the Bio.SeqIO module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..", "..", "Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..", "..", "Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-    elif os.path.isdir(os.path.join("Tests", "Fasta")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    #Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()

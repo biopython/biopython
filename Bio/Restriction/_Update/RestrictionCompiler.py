@@ -30,9 +30,9 @@
 
 The Rebase files are in the emboss format:
 
-    emboss_e.###    -> contains informations about the restriction sites.
-    emboss_r.###    -> contains general informations about the enzymes.
-    emboss_s.###    -> contains informations about the suppliers.
+    emboss_e.###    -> contains information about the restriction sites.
+    emboss_r.###    -> contains general information about the enzymes.
+    emboss_s.###    -> contains information about the suppliers.
 
 ### is a 3 digit number. The first digit is the year and the two last the month.
 """
@@ -485,7 +485,7 @@ class DictionaryBuilder(object):
             results.write("rest_dict[%s] = _temp()\n" % repr(name))
             results.write("\n")
         print 'OK.\n'
-        print 'Writing the dictionary containing the suppliers datas.\t\t',
+        print 'Writing the dictionary containing the suppliers data.\t\t',
         results.write('suppliers = {}\n')
         for name in sorted(suppliersdict) :
             results.write("def _temp():\n")

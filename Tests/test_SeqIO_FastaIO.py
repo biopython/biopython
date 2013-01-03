@@ -15,7 +15,7 @@ from Bio.Alphabet import generic_protein, generic_nucleotide, generic_dna
 def title_to_ids(title):
     """Function to convert a title into the id, name, and description.
 
-    This is just a quick-n-dirty implementation, and is definately not meant
+    This is just a quick-n-dirty implementation, and is definetely not meant
     to handle every FASTA title line case.
     """
     # first split the id information from the description

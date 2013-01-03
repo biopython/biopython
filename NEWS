@@ -34,6 +34,11 @@ The Bio.SeqUtils module how has a seq1 function to turn a sequence using three
 letter amino acid codes into one using the more common one letter codes. This
 acts as the inverse of the existing seq3 function.
 
+The multiple-sequence-alignment object used by Bio.AlignIO etc now supports
+an annotation dictionary. Additional support for per-column annotation is
+planned, with addition and splicing to work like that for the SeqRecord
+per-letter annotation.
+
 A new warning, Bio.BiopythonExperimentalWarning, has been introduced. This
 marks any experimental code included in the otherwise stable release. Such
 'beta' level code is ready for wider testing, but still likely to change and
@@ -452,7 +457,7 @@ needed for our NCBI Entrez Utilities XML parser.
 
 The parse, read and write functions in Bio.SeqIO and Bio.AlignIO will now
 accept filenames as well as handles. This follows a general shift from
-from other Python libraries, and does make usage a little simpler. Also
+other Python libraries, and does make usage a little simpler. Also
 the write functions will now accept a single SeqRecord or alignment.
 
 Bio.SeqIO now supports writing EMBL files (DNA and RNA sequences only).

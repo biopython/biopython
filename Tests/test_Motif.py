@@ -20,7 +20,7 @@ class MotifTestsBasic(unittest.TestCase):
         self.PFMout = "Motif/fa.out"
         instance = Seq("ATATA")
         instances = [instance]
-        self.m=Motif.Motif(instances=instances)
+        self.m = Motif.create(instances)
 
     def tearDown(self):
         self.PFMin.close()
@@ -1528,7 +1528,7 @@ class MotifTestPWM(unittest.TestCase):
         """Test if Motif PWM scoring works."""
         counts = self.m.counts
         pwm = counts.normalize(pseudocounts=0.25)
-        pssm = pwm.make_pssm()
+        pssm = pwm.log_odds()
         result = pssm.calculate(self.s)
         self.assertEqual(6, len(result))
         # The fast C-code in Bio/Motif/_pwm.c stores all results as 32-bit

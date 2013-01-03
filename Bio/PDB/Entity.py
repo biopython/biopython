@@ -24,7 +24,7 @@ class Entity(object):
         self.parent=None
         self.child_list=[]
         self.child_dict={}
-        # Dictionary that keeps addictional properties
+        # Dictionary that keeps additional properties
         self.xtra={}
 
     # Special methods

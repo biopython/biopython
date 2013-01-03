@@ -14,18 +14,39 @@ class ScoreDistribution(object):
     scores with a predefined precision. Provides a number of methods for calculating
     thresholds for motif occurences.
     """
-    def __init__(self,motif,precision=10**3):
-        self.min_score=min(0.0,motif.min_score())
-        self.interval=max(0.0,motif.max_score())-self.min_score
-        self.n_points=precision*motif.length
-        self.step=self.interval/(self.n_points-1)
-        self.mo_density=[0.0]*self.n_points
-        self.mo_density[-self._index_diff(self.min_score)]=1.0
-        self.bg_density=[0.0]*self.n_points
-        self.bg_density[-self._index_diff(self.min_score)]=1.0
-        self.ic=motif.ic()
-        for lo,mo in zip(motif.log_odds(),motif.pwm()):
-            self.modify(lo,mo,motif.background)
+    def __init__(self, motif=None, precision=10**3, pssm=None, background=None):
+        if pssm==None:
+            self.min_score = min(0.0, motif.min_score())
+            self.interval = max(0.0, motif.max_score())-self.min_score
+            self.n_points = precision * motif.length
+            self.ic=motif.ic()
+        else:
+            self.min_score = min(0.0, pssm.min)
+            self.interval = max(0.0, pssm.max)-self.min_score
+            self.n_points = precision * pssm.length
+            self.ic = pssm.mean
+        self.step = self.interval/(self.n_points-1)
+        self.mo_density = [0.0]*self.n_points
+        self.mo_density[-self._index_diff(self.min_score)] = 1.0
+        self.bg_density = [0.0]*self.n_points
+        self.bg_density[-self._index_diff(self.min_score)] = 1.0
+        if pssm==None:
+            for lo,mo in zip(motif.log_odds(),motif.pwm()):
+                self.modify(lo,mo,motif.background)
+        else:
+            for position in range(pssm.length):
+                mo_new=[0.0]*self.n_points
+                bg_new=[0.0]*self.n_points
+                lo = pssm[:,position]
+                for letter, score in lo.iteritems():
+                    bg = background[letter]
+                    mo = pow(2,pssm[letter,position]) * bg
+                    d=self._index_diff(score)
+                    for i in range(self.n_points):
+                        mo_new[self._add(i,d)]+=self.mo_density[i]*mo
+                        bg_new[self._add(i,d)]+=self.bg_density[i]*bg
+                self.mo_density=mo_new
+                self.bg_density=bg_new
 
     def _index_diff(self,x,y=0.0):
         return int((x-y+0.5*self.step)//self.step)

@@ -1257,7 +1257,7 @@ class GenBankScanner(InsdcScanner):
                     #species names (as more and more strains and sub strains get
                     #sequenced) the oragnism name can now get wrapped onto multiple
                     #lines.  The NCBI say we have to recognise the lineage line by
-                    #the presense of semi-colon delimited entries.  In the long term,
+                    #the presence of semi-colon delimited entries.  In the long term,
                     #they are considering adding a new keyword (e.g. LINEAGE).
                     #See Bug 2591 for details.
                     organism_data = data

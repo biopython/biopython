@@ -14,10 +14,8 @@ from Bio.Motif.AlignAce import read as _AlignAce_read
 from Bio.Motif.MEME import read as _MEME_read
 from Bio.Motif import Jaspar
 from Bio.Motif.Thresholds import ScoreDistribution
-
-_parsers={"AlignAce" : _AlignAce_read,
-          "MEME" : _MEME_read,
-          }
+from Bio.Alphabet import IUPAC
+from Bio.Seq import Seq
 
 
 def _from_pfm(handle):
@@ -27,9 +25,27 @@ def _from_pfm(handle):
 def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
 
-_readers={"jaspar-pfm": _from_pfm,
-          "jaspar-sites": _from_sites,
-          }
+
+def create(instances, alphabet=None):
+    for instance in instances:
+        try:
+            a = instance.alphabet
+        except AttributeError:
+            # The instance is a plain string
+            continue
+        if alphabet is None:
+            alphabet = a
+        elif alphabet != a:
+            raise ValueError("Alphabets are inconsistent")
+    if alphabet is None or alphabet.letters is None:
+        # If we didn't get a meaningful alphabet from the instances,
+        # assume it is DNA.
+        alphabet = IUPAC.unambiguous_dna
+    seqs = []
+    for instance in instances:
+        seq = Seq(str(instance), alphabet=alphabet)
+        seqs.append(seq)
+    return Motif(instances=seqs, alphabet=alphabet)
 
 
 def parse(handle,format):
@@ -68,20 +84,20 @@ def parse(handle,format):
     """
     if format in ('pfm', 'sites'):
         yield Jaspar.read(handle, format)
+    elif format=="AlignAce":
+        record = _AlignAce_read(handle)
+        for m in record.motifs:
+            yield m
+    elif format=="MEME":
+        record = _MEME_read(handle)
+        for m in record.motifs:
+            yield m
+    elif format=="jaspar-pfm":
+        yield _from_pfm(handle)
+    elif format=="jaspar-sites":
+        yield _from_sites(handle)
     else:
-        try:
-            parser=_parsers[format]
-
-        except KeyError:
-            try:  # not a true parser, try reader formats
-                reader=_readers[format]
-            except:
-                raise ValueError("Wrong parser format")
-            else:  # we have a proper reader
-                yield reader(handle)
-        else:  # we have a proper reader
-            for m in parser(handle).motifs:
-                yield m
+        raise ValueError("Unknown format %s" % format)
 
 
 def read(handle,format):
@@ -140,23 +156,6 @@ def read(handle,format):
     return first
 
 
-def _test():
-    """Run the Bio.Motif module's doctests.
-
-    This will try and locate the unit tests directory, and run the doctests
-    from there in order that the relative paths used in the examples work.
-    """
-    import doctest
-    import os
-    if os.path.isdir(os.path.join("..","..","Tests")):
-        print "Running doctests..."
-        cur_dir = os.path.abspath(os.curdir)
-        os.chdir(os.path.join("..","..","Tests"))
-        doctest.testmod()
-        os.chdir(cur_dir)
-        del cur_dir
-        print "Done"
-
 if __name__ == "__main__":
-    #Run the doctests
-    _test()
+    from Bio._utils import run_doctest
+    run_doctest()
