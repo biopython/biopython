@@ -27,10 +27,10 @@ if options.mode == "direct":
     seqs = TAIR.get(agis, options.dataset)
 elif options.mode == "ncbi_protein":
     # Note this is how you specfiy the NCBI node
-    seqs = TAIR.get_from_ncbi(agis, TAIR.NCBI_PROTEIN)
+    seqs = TAIR.get_from_ncbi(agis, "protein")
 elif options.mode == "ncbi_rna":
     # Note this is how you specfiy the NCBI node
-    seqs = TAIR.get_from_ncbi(agis, TAIR.NCBI_RNA)
+    seqs = TAIR.get_from_ncbi(agis, "rna")
 else:
     sys.stderr.write("Invalid mode: %s\n" % options.mode)
     sys.exit(1)
