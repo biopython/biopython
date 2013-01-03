@@ -1,4 +1,5 @@
-from Bio import TAIR, SeqIO
+from Bio.Webtools import TAIR
+from Bio import SeqIO
 from optparse import OptionParser
 import sys
 
