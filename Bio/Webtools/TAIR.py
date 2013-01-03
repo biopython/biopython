@@ -14,9 +14,6 @@ from StringIO import StringIO
 from Bio import SeqIO, Entrez
 import re
 
-NCBI_RNA = 1
-NCBI_PROTEIN = 2
-
 
 def _sanitise_agis(agis):
     clean_agis = []
@@ -171,10 +168,13 @@ def get(agis, dataset="gene", target="rep_gene"):
 
 def get_from_ncbi(agis, mode):
     tair = TAIRNCBI()
-    if mode == NCBI_RNA:
+    if mode.lower() in ["rna", "mrna", "transcript"]:
         return tair.get_rna_from_ncbi(agis)
-    elif mode == NCBI_PROTEIN:
+    elif mode.lower() in ["protein", "peptide", "amino acid", "aa"]:
         return tair.get_protein_from_ncbi(agis)
+    else:
+        raise ValueError("Invalid mode '%s' for get_from_ncbi()" % mode)
+
 
 ncbi_prot = {
     "AT1G01010.1": "NP_171609.1",
