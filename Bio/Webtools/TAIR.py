@@ -3,9 +3,6 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-from __future__ import with_statement
-
-
 """Functions to get Arabidopsis sequences by their AGI identifier.
 """
 from Bio.Webtools.MultipartPostHandler import MultipartPostHandler
