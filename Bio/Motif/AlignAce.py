@@ -11,10 +11,19 @@ from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
 
-class Record(object):
+class Record(list):
     def __init__(self):
-        self.motifs=[]
         self.parameters = None
+
+    @property
+    def motifs(self):
+        import warnings
+        warnings.warn("""\
+The .motifs attribute is now obsolete, and will be deprecated and removed
+in a future release of Biopython. This class now inherits from list, so
+instead of record.motifs[i], please use record[i].
+""", PendingDeprecationWarning)
+        return self
 
 
 def read(handle):
@@ -50,7 +59,7 @@ def read(handle):
             motif.score = float(line.split()[-1])
             motif.number = number
             motif.mask = mask
-            record.motifs.append(motif)
+            record.append(motif)
         elif len(line.split("\t"))==4:
             seq = Seq(line.split("\t")[0],IUPAC.unambiguous_dna)
             instances.append(seq)

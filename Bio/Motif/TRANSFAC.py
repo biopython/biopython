@@ -81,18 +81,27 @@ For more information, see the TRANSFAC documentation.
         return format(self, "transfac")
 
 
-class Record(object):
+class Record(list):
     """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC
-matrix table.
+matrix table. The record inherits from a list containing the individual
+motifs.
 
 Attributes:
     o version:   The version number, corresponding to the 'VV' field
                  in the TRANSFAC file;
-    o motifs:    The list of motifs.
 """
     def __init__(self):
         self.version = None
-        self.motifs = []
+
+    @property
+    def motifs(self):
+        import warnings
+        warnings.warn("""\
+The .motifs attribute is now obsolete, and will be deprecated and removed
+in a future release of Biopython. This class now inherits from list, so
+instead of record.motifs[i], please use record[i].
+""", PendingDeprecationWarning)
+        return self
 
     def __str__(self):
         blocks = []
@@ -103,7 +112,7 @@ XX
 //
 """ % self.version
             blocks.append(block)
-        for motif in self.motifs:
+        for motif in self:
             block = str(motif)
             blocks.append(block)
         text = "".join(blocks)
@@ -119,7 +128,7 @@ def read(handle):
         line = line.strip()
         if line=='//':
             if motif is not None:
-                record.motifs.append(motif)
+                record.append(motif)
             motif = None
             status = None
         elif line=='XX':

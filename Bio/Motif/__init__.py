@@ -10,23 +10,11 @@ as well as methods for motif comparisons and motif searching in sequences.
 It also includes functionality for parsing AlignACE and MEME programs.
 """
 from Bio.Motif._Motif import Motif
-from Bio.Motif.AlignAce import read as _AlignAce_read
-from Bio.Motif.MEME import read as _MEME_read
-from Bio.Motif import Jaspar
-from Bio.Motif.Thresholds import ScoreDistribution
-from Bio.Alphabet import IUPAC
-from Bio.Seq import Seq
-
-
-def _from_pfm(handle):
-    return Motif()._from_jaspar_pfm(handle)
-
-
-def _from_sites(handle):
-    return Motif()._from_jaspar_sites(handle)
 
 
 def create(instances, alphabet=None):
+    from Bio.Alphabet import IUPAC
+    from Bio.Seq import Seq
     for instance in instances:
         try:
             a = instance.alphabet
@@ -52,13 +40,16 @@ def parse(handle,format):
     """Parses an output file of motif finding programs.
 
     Currently supported formats:
-     - AlignAce
-     - MEME
-
-    You can also use single-motif formats, although the Bio.Motif.read()
-    function is simpler to use in this situation.
-     - jaspar-pfm
-     - jaspar-sites
+     - AlignAce:      AlignAce output file format
+     - MEME:          MEME output file motif
+     - TRANSFAC:      TRANSFAC database file format
+     - pfm:           JASPAR-style position-frequency matrix
+     - sites:         JASPAR-style sites file
+     - jaspar-pfm:    JASPAR-style position-frequency matrix [DEPRECATED]
+     - jaspar-sites:  JASPAR-style sites file [DEPRECATED]
+    As files in the pfm and sites formats contain only a single motif,
+    it is easier to use Bio.Motif.read() instead of Bio.Motif.parse()
+    for those.
 
     For example:
 
@@ -82,30 +73,38 @@ def parse(handle,format):
     GAGGCCGGGGAT
     CGACTCGTGCTTAGAAGG
     """
-    if format in ('pfm', 'sites'):
-        yield Jaspar.read(handle, format)
-    elif format=="AlignAce":
-        record = _AlignAce_read(handle)
-        for m in record.motifs:
-            yield m
+    if format=="AlignAce":
+        from Bio.Motif import AlignAce
+        record = AlignAce.read(handle)
+        return record
     elif format=="MEME":
-        record = _MEME_read(handle)
-        for m in record.motifs:
-            yield m
+        from Bio.Motif import MEME
+        record = MEME.read(handle)
+        return record
+    elif format=="TRANSFAC":
+        from Bio.Motif import TRANSFAC
+        record = TRANSFAC.read(handle)
+        return record
+    elif format in ('pfm', 'sites'):
+        from Bio.Motif import Jaspar
+        motif = Jaspar.read(handle, format)
     elif format=="jaspar-pfm":
-        yield _from_pfm(handle)
+        motif = Motif()._from_jaspar_pfm(handle)
     elif format=="jaspar-sites":
-        yield _from_sites(handle)
+        motif = Motif()._from_jaspar_sites(handle)
     else:
         raise ValueError("Unknown format %s" % format)
+    # Treat the single-motif formats
+    motifs = [motif]
+    return motifs
 
 
 def read(handle,format):
     """Reads a motif from a handle using a specified file-format.
 
     This supports the same formats as Bio.Motif.parse(), but
-    only for files containing exactly one record.  For example,
-    reading a pfm file:
+    only for files containing exactly one motif.  For example,
+    reading a JASPAR-style pfm file:
 
     >>> from Bio import Motif
     >>> motif = Motif.read(open("Motif/SRF.pfm"), "pfm")
@@ -128,32 +127,26 @@ def read(handle,format):
         ...
     ValueError: More than one motif found in handle
 
-    If however you want the first record from a file containing
-    multiple records this function would raise an exception (as
+    If however you want the first motif from a file containing
+    multiple motifs this function would raise an exception (as
     shown in the example above).  Instead use:
 
     >>> from Bio import Motif
-    >>> motif = Motif.parse(open("Motif/alignace.out"),"AlignAce").next()
+    >>> motifs = Motif.parse(open("Motif/alignace.out"),"AlignAce")
+    >>> motif = motifs[0]
     >>> motif.consensus
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
     Use the Bio.Motif.parse(handle, format) function if you want
     to read multiple records from the handle.
     """
-    iterator = parse(handle, format)
-    try:
-        first = iterator.next()
-    except StopIteration:
-        first = None
-    if first is None:
+    motifs = parse(handle, format)
+    if len(motifs)==0:
         raise ValueError("No motifs found in handle")
-    try:
-        second = iterator.next()
-    except StopIteration:
-        second = None
-    if second is not None:
+    if len(motifs) > 1:
         raise ValueError("More than one motif found in handle")
-    return first
+    motif = motifs[0]
+    return motif
 
 
 if __name__ == "__main__":

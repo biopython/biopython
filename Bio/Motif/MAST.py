@@ -5,17 +5,17 @@
 # as part of this package.
 
 from Bio.Alphabet import IUPAC
-from Bio.Motif.MEME import MEMEMotif
+from Bio.Motif import MEME
 
 
 class Record(object):
     """The class for holding the results from a MAST run.
 
     A MAST.Record holds data about matches between motifs and sequences.
-    The motifs held by the Record are objects of the class MEMEMotif.
+    The motifs held by the Record are objects of the class MEME.Motif.
 
     Methods:
-    get_motif_by_name (motif_name): returns a MEMEMotif with the given
+    get_motif_by_name (motif_name): returns a MEME.Motif with the given
     name.
     """
 
@@ -82,7 +82,7 @@ def __read_database_and_motifs(record, handle):
         if not line.strip():
             break
         words = line.strip().split()
-        motif = MEMEMotif(record.alphabet)
+        motif = MEME.Motif(record.alphabet)
         motif.name = words[0]
         motif.length = int(words[1])
         # words[2] contains the best possible match
