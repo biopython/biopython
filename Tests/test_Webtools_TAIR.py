@@ -1,5 +1,5 @@
 import unittest
-from Bio import TAIR
+from Bio.Webtools import TAIR
 import Bio
 
 # Make sure test is skipped if not internet connected
