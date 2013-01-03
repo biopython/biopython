@@ -3,12 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-"""
-Functions to get sequences by their Arabidopsis Genome Initiative (AGI)
-identifier, which are commonly used by biologists working with Arabidopsis.
-Sequences can be retreived either directly from The Arabidopsis Information
-Resource (TAIR) at arabidopsis.org, or via GenBank/RefSeq, using
-Bio.Entrez.efetch().
+"""Functions to get Arabidopsis sequences by their AGI identifier.
 """
 
 from MultipartPostHandler import MultipartPostHandler
