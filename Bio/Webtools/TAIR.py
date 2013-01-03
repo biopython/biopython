@@ -10,7 +10,6 @@ from MultipartPostHandler import MultipartPostHandler
 import urllib2
 from StringIO import StringIO
 from Bio import SeqIO, Entrez
-from Bio.TAIR._ncbi import ncbi_prot, ncbi_rna
 import re
 
 NCBI_RNA = 1
