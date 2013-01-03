@@ -184,7 +184,7 @@ class TAIRNCBI(unittest.TestCase):
             ("NM_119854.2", "AGTGTCGGTG", 1024),
             ("NM_125794.4", "GACATATATT", 1383)
             ]
-        returned = TAIR.get_from_ncbi(self.test_agis, TAIR.NCBI_RNA)
+        returned = TAIR.get_from_ncbi(self.test_agis, "rna")
         self._perform_test(returned, expected)
 
     def test_ncbi_protein(self):
@@ -193,7 +193,7 @@ class TAIRNCBI(unittest.TestCase):
             ("NP_195408.1", "METATEVATV", 196),
             ("NP_201203.2", "MMSINCFRTA", 407)
             ]
-        returned = TAIR.get_from_ncbi(self.test_agis, TAIR.NCBI_PROTEIN)
+        returned = TAIR.get_from_ncbi(self.test_agis, "protein")
         self._perform_test(returned, expected)
 
 
