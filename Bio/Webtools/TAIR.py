@@ -13,6 +13,8 @@ import re
 
 
 def _sanitise_agis(agis):
+    """Takes a list of agis, and returns a list of only those which are valid.
+    """
     clean_agis = []
     agi_re = re.compile(r"AT[12345CM]G\d{5}(\.\d)?")
     for agi in agis:
@@ -23,7 +25,7 @@ def _sanitise_agis(agis):
 
 
 # functions to get sequences directly from arabidopsis.org
-tair_datasets = {
+TAIR_DATASETS = {
     "transcript": "At_transcripts",
     "cds": "ATH1_cds",
     "gene": "ATH1_seq",
@@ -44,7 +46,7 @@ tair_datasets = {
     "5prime_utr": "ATH1_5_UTR"
     }
 
-tair_targets = {
+TAIR_TARGETS = {
     "representative": "rep_gene",
     "all": "both",
     "specified": "genemodel"
@@ -52,6 +54,8 @@ tair_targets = {
 
 
 def get(agis, dataset, target):
+    """Get TAIR sequence(s) from AGI from the arabidopsis.org server directly.
+    """
     bad_agi_exception = ValueError(
         "Must specify AGIs as a iterable, list or tuple"
         )
@@ -60,17 +64,17 @@ def get(agis, dataset, target):
         raise bad_agi_exception
 
     # Check dataset
-    if dataset in tair_datasets:
-        dataset = tair_datasets[dataset]
-    elif dataset in tair_datasets.values():
+    if dataset in TAIR_DATASETS:
+        dataset = TAIR_DATASETS[dataset]
+    elif dataset in TAIR_DATASETS.values():
         pass  # dataset is already equal to required value
     else:
         raise ValueError("%s is an invalid TAIR dataset" % dataset)
 
     # Check dataset
-    if target in tair_targets:
-        target = tair_targets[target]
-    elif target in tair_targets.values():
+    if target in TAIR_TARGETS:
+        target = TAIR_TARGETS[target]
+    elif target in TAIR_TARGETS.values():
         pass  # target is already equal to required value
     else:
         raise ValueError("%s is an invalid TAIR target" % target)
@@ -107,13 +111,15 @@ def get(agis, dataset, target):
 
 # Functions to get sequences from NCBI
 def get_rna_from_ncbi(agis):
+    """Get rna/transcript sequence in GenBank format by AGI from NCBI's RefSeq
+    """
     agis = _sanitise_agis(agis)
     rna_ids = []
     for agi in agis:
         try:
-            rna_ids.append(ncbi_rna[agi])
+            rna_ids.append(NCBI_RNA[agi])
         except LookupError:
-            next
+            pass
     Entrez.email = ""
     entrez_handle = Entrez.efetch(
             db="nucleotide",
@@ -125,13 +131,15 @@ def get_rna_from_ncbi(agis):
 
 
 def get_protein_from_ncbi(agis):
+    """Get protein sequence in GenBank format by AGI from NCBI's RefSeq
+    """
     agis = _sanitise_agis(agis)
     protein_ids = []
     for agi in agis:
         try:
-            protein_ids.append(ncbi_prot[agi])
+            protein_ids.append(NCBI_PROT[agi])
         except LookupError:
-            next
+            pass
     Entrez.email = ""
     entrez_handle = Entrez.efetch(
             db="protein",
@@ -142,7 +150,7 @@ def get_protein_from_ncbi(agis):
     return SeqIO.parse(entrez_handle, "gb")
 
 
-ncbi_prot = {
+NCBI_PROT = {
     "AT1G01010.1": "NP_171609.1",
     "AT1G01020.1": "NP_171610.2",
     "AT1G01020.2": "NP_001030923.1",
@@ -35321,7 +35329,7 @@ ncbi_prot = {
     "AT5G67640.1": "NP_201565.1",
     }
 
-ncbi_rna = {
+NCBI_RNA = {
     "AT1G01010.1": "NM_099983.2",
     "AT1G01020.1": "NM_099984.5",
     "AT1G01020.2": "NM_001035846.1",

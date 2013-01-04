@@ -1,6 +1,5 @@
 import unittest
 import tempfile
-import sys
 import os
 import urllib2
 import re
@@ -11,7 +10,7 @@ import requires_internet
 requires_internet.check()
 
 
-class MultipartPoster(unittest.TestCase):
+class MultipartPost(unittest.TestCase):
     
     validator_url = "http://validator.w3.org/check"
     test_url = ("http://www.w3.org/History/19921103-hypertext/hypertext/WWW/"

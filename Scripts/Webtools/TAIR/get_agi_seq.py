@@ -1,9 +1,14 @@
+"""Demonstration use-case of the Bio.Webtools.TAIR module.
+See comments in source code for pointers on the use of this module.
+"""
+
 from Bio.Webtools import TAIR
 from Bio import SeqIO
 from optparse import OptionParser
-import sys
 
-# Get the commandline options
+
+# Get the commandline options, this section is unrelated to the function of the
+# TAIR module.
 parser = OptionParser()
 parser.add_option('-f', '--file', dest='filename', default=None)
 parser.add_option('-m', '--mode', dest='mode', default='direct',
@@ -18,13 +23,14 @@ parser.add_option('-a', '--agis', dest='agis',
 (options, args) = parser.parse_args()
 
 
-# The TAIR module get functions require a python list of strings, containing
-# AGIs. This gets it from the CSV string given.
+# The TAIR module get functions require a AGIs to be given as a python list
+# of strings, containing AGIs. This gets a list of strings from the CSV
+# string given.
 agis = options.agis.split(",")
 
 # Get the sequences
 if options.mode == "direct":
-    seqs = TAIR.get(agis, options.dataset)
+    seqs = TAIR.get(agis, options.dataset, "representative")
 elif options.mode == "ncbi_protein":
     # Note this is how you specfiy the NCBI node
     seqs = TAIR.get_protein_from_ncbi(agis)
@@ -32,8 +38,7 @@ elif options.mode == "ncbi_rna":
     # Note this is how you specfiy the NCBI node
     seqs = TAIR.get_rna_from_ncbi(agis)
 else:
-    sys.stderr.write("Invalid mode: %s\n" % options.mode)
-    sys.exit(1)
+    raise ValueError("Invalid mode: %s, see --help\n" % options.mode)
 
 
 if options.filename is None:
@@ -42,6 +47,6 @@ if options.filename is None:
         print seq.format("fasta")
 else:
     # If we have a filename, write a fasta to the file specified
-    fh = open(options.filename, "wb")
-    SeqIO.write(seqs, fh, "fasta")
-    fh.close()
+    file_handle = open(options.filename, "wb")
+    SeqIO.write(seqs, file_handle, "fasta")
+    file_handle.close()
