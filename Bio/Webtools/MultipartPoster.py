@@ -15,16 +15,11 @@
 # Lesser General Public License for more details.
 #
 
-import urllib
 import urllib2
 import mimetools
 import mimetypes
 import os
 import stat
-
-class Callable:
-    def __init__(self, anycallable):
-        self.__call__ = anycallable
 
 
 class MultipartPoster(urllib2.BaseHandler):
@@ -45,17 +40,13 @@ class MultipartPoster(urllib2.BaseHandler):
                 raise TypeError(
                     "not a valid non-string sequence or mapping object"
                     )
-            #if len(req_files) == 0:
-            #    # Below, True == do the encoding sequentially
-            #    data = urllib.urlencode(req_vars, True) 
-            #else:
             boundary, data = self.multipart_encode(req_vars, req_files)
             contenttype = 'multipart/form-data; boundary=%s' % boundary
             request.add_unredirected_header('Content-Type', contenttype)
             request.add_data(data)
         return request
 
-    def multipart_encode(vars, files, boundary = None, buffer = None):
+    def multipart_encode(self, vars, files, boundary = None, buffer = None):
         if boundary is None:
             boundary = mimetools.choose_boundary()
         if buffer is None:
@@ -76,36 +67,5 @@ class MultipartPoster(urllib2.BaseHandler):
             buffer += '\r\n' + fd.read() + '\r\n'
         buffer += '--%s--\r\n\r\n' % boundary
         return boundary, buffer
-    multipart_encode = Callable(multipart_encode)
-
     https_request = http_request
 
-
-
-
-
-
-
-def main():
-    import tempfile, sys
-
-    validatorURL = "http://validator.w3.org/check"
-    opener = urllib2.build_opener(MultipartPoster)
-
-    def validateFile(url):
-        temp = tempfile.mkstemp(suffix=".html")
-        os.write(temp[0], opener.open(url).read())
-        params = { "ss" : "0",            # show source
-                   "doctype" : "Inline",
-                   "uploaded_file" : open(temp[1], "rb") }
-        print opener.open(validatorURL, params).read()
-        os.remove(temp[1])
-
-    if len(sys.argv[1:]) > 0:
-        for arg in sys.argv[1:]:
-            validateFile(arg)
-    else:
-        validateFile("http://www.google.com")
-
-if __name__=="__main__":
-    main()
