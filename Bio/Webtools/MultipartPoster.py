@@ -1,28 +1,25 @@
-#!/usr/bin/python
+# Copyright 2012 by Kevin Murray.  All rights reserved.
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
 
 # This borrrows heavily from the MultipartPostHandler module by Will Holcomb
-# <wholcomb@gmail.com>
+# <wholcomb@gmail.com>, available at:
+# http://pypi.python.org/pypi/MultipartPostHandler/
+# MultipartPostHandler was licensed under the LGPL v2.1
 
-
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-#
+"""Module to allow urllib2 to POST to multipart/form-data forms
+"""
 
 import urllib2
 import mimetools
 import mimetypes
-import os
-import stat
 
 
 class MultipartPoster(urllib2.BaseHandler):
+    """
+    Handler class to allow urllib2 to POST to multipart/form-data forms.
+    """
     handler_order = urllib2.HTTPHandler.handler_order - 10 # needs to run first
 
     def http_request(self, request):
