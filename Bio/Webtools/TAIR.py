@@ -5,7 +5,7 @@
 
 """Functions to get Arabidopsis sequences by their AGI identifier.
 """
-from Bio.Webtools.MultipartPoster import MultipartPoster
+from Bio.Webtools.MultipartPostHandler import MultipartPostHandler
 import urllib2
 from StringIO import StringIO
 from Bio import SeqIO, Entrez
@@ -90,7 +90,7 @@ def get(agis, dataset, target):
         }
 
     # Prepare and get request
-    opener = urllib2.build_opener(MultipartPoster)
+    opener = urllib2.build_opener(MultipartPostHandler)
     raw_seq_string = opener.open(url, params).read()
 
     # Trim returned fasta file, responce has leading non-fasta text

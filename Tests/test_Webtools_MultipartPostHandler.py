@@ -3,7 +3,7 @@ import tempfile
 import os
 import urllib2
 import re
-from Bio.Webtools.MultipartPoster import MultipartPoster
+from Bio.Webtools.MultipartPostHandler import MultipartPostHandler
 
 # Make sure test is skipped if not internet connected
 import requires_internet
@@ -17,7 +17,7 @@ class MultipartPost(unittest.TestCase):
         "TheProject.html")
     # Uncomment this, and the tests should fail
     # test_url = "http://www.google.com/"
-    opener = urllib2.build_opener(MultipartPoster)
+    opener = urllib2.build_opener(MultipartPostHandler)
     validator_result_re = "3 Errors, 4 warning\(s\)"  # expected re pattern
 
     def setUp(self):
