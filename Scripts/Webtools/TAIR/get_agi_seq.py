@@ -11,8 +11,6 @@ from optparse import OptionParser
 # TAIR module.
 parser = OptionParser()
 parser.add_option('-f', '--file', dest='filename', default=None)
-parser.add_option('-m', '--mode', dest='mode', default='direct',
-        help="'direct', 'ncbi_rna' or 'ncbi_protein'")
 parser.add_option('-d', '--dataset', dest='dataset', default="transcript",
         help="one of: upstream_500, downstream_3000, intergenic, 5prime_utr, \
         upstream_1000, intron, downstream_500, cds, 3prime_utr, genomic, \
@@ -29,17 +27,7 @@ parser.add_option('-a', '--agis', dest='agis',
 agis = options.agis.split(",")
 
 # Get the sequences
-if options.mode == "direct":
-    seqs = TAIR.get(agis, options.dataset, "representative")
-elif options.mode == "ncbi_protein":
-    # Note this is how you specfiy the NCBI node
-    seqs = TAIR.get_protein_from_ncbi(agis)
-elif options.mode == "ncbi_rna":
-    # Note this is how you specfiy the NCBI node
-    seqs = TAIR.get_rna_from_ncbi(agis)
-else:
-    raise ValueError("Invalid mode: %s, see --help\n" % options.mode)
-
+seqs = TAIR.get(agis, options.dataset, "representative")
 
 if options.filename is None:
     # If a filename is not specified, print a fasta to stdout
