@@ -57,7 +57,14 @@ class SeqUtilsTests(unittest.TestCase):
         for tuple_record, seq_record in zip(tuple_records, seq_records):
             self.assertEqual(tuple_record, (seq_record.description, str(seq_record.seq)))
 
-    def test_codon_usage(self):
+    def test_codon_usage_ecoli(self):
+        """Test Codon Adaptation Index (CAI) using default E. coli data."""
+        CAI = CodonAdaptationIndex()
+        self.assertEqual("%0.5f" % CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG"),
+                         "0.09978")
+
+    def test_codon_usage_custom(self):
+        """Test Codon Adaptation Index (CAI) using FASTA file for background."""
         #We need a FASTA file of CDS sequences to count the codon usage...
         dna_fasta_filename = "fasta.tmp"
         dna_genbank_filename = "GenBank/NC_005816.gb"
@@ -87,10 +94,11 @@ class SeqUtilsTests(unittest.TestCase):
         # Note - this needs a FASTA file which containing non-ambiguous DNA coding
         # sequences - which should each be a whole number of codons.
         CAI.generate_index(dna_fasta_filename)
-        print "Example CAI %0.5f using %s" \
-            % (CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG"),
-                record.annotations["source"])
-
+        # Now check codon usage index (CAI) using this species
+        self.assertEqual(record.annotations["source"],
+                         "Yersinia pestis biovar Microtus str. 91001")
+        self.assertEqual("%0.5f" % CAI.cai_for_gene("ATGCGTATCGATCGCGATACGATTAGGCGGATG"),
+                         "0.67213")
         os.remove(dna_fasta_filename)
 
     def test_crc_checksum_collision(self):
@@ -101,22 +109,44 @@ class SeqUtilsTests(unittest.TestCase):
         self.assertNotEqual(gcg(self.str_light_chain_one), gcg(self.str_light_chain_two))
         self.assertNotEqual(seguid(self.str_light_chain_one), seguid(self.str_light_chain_two))
 
-    def test_checksum(self):
-        #Print some output, which the test harness will check
-        examples = [self.str_light_chain_one, self.str_light_chain_two,
-                    "ATGCGTATCGATCGCGATACGATTAGGCGGAT"]
+    def seq_checksums(self, seq_str, exp_crc32, exp_crc64, exp_gcg, exp_seguid,
+                      exp_simple_LCC, exp_window_LCC):
+        for s in [seq_str,
+                  Seq(seq_str, single_letter_alphabet),
+                  MutableSeq(seq_str, single_letter_alphabet)]:
+            self.assertEqual(exp_crc32, u_crc32(s))
+            self.assertEqual(exp_crc64, crc64(s))
+            self.assertEqual(exp_gcg, gcg(s))
+            self.assertEqual(exp_seguid, seguid(s))
+            self.assertEqual(exp_simple_LCC, simple_LCC(s))
+            self.assertEqual(exp_window_LCC, windowed_LCC(s))
 
-        for i, seq_str in enumerate(examples):
-            print "Example %i, length %i, %s..." % (i+1, len(seq_str), seq_str[:10])
+    def test_checksum1(self):
+        self.seq_checksums(self.str_light_chain_one,
+                           2994980265,
+                           "CRC-44CAAD88706CC153",
+                           9729,
+                           "BpBeDdcNUYNsdk46JoJdw7Pd3BI",
+                           "1.03",
+                           "0.00, 1.00, 0.96, 0.96, 0.96, 0.65, 0.43, 0.35, 0.35, 0.35, 0.35, 0.53, 0.59, 0.26")
 
-            for checksum in [u_crc32, crc64, gcg, seguid, simple_LCC, windowed_LCC]:
-                #First using a string:
-                value = checksum(seq_str)
-                print " %s = %s" % (checksum.__name__, value)
-                #Secondly check it works with a Seq object
-                self.assertEqual(value, checksum(Seq(seq_str, single_letter_alphabet)))
-                #Finally check it works with a MutableSeq object
-                self.assertEqual(value, checksum(MutableSeq(seq_str, single_letter_alphabet)))
+    def test_checksum2(self):
+        self.seq_checksums(self.str_light_chain_two,
+                           802105214,
+                           "CRC-44CAAD88706CC153",
+                           9647,
+                           "X5XEaayob1nZLOc7eVT9qyczarY",
+                           "1.07",
+                           "0.00, 1.00, 0.96, 0.96, 0.96, 0.65, 0.43, 0.35, 0.35, 0.35, 0.35, 0.53, 0.59, 0.26")
+
+    def test_checksum3(self):
+        self.seq_checksums("ATGCGTATCGATCGCGATACGATTAGGCGGAT",
+                           817679856,
+                           "CRC-6234FF451DC6DFC6",
+                           7959,
+                           "8WCUbVjBgiRmM10gfR7XJNjbwnE",
+                           "1.98",
+                           "0.00, 2.00, 1.99, 1.99, 2.00, 1.99, 1.97, 1.99, 1.99, 1.99, 1.96, 1.96, 1.96, 1.96")
 
     def test_GC(self):
         seq = "ACGGGCTACCGTATAGGCAAGAGATGATGCCC"
