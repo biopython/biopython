@@ -58,6 +58,12 @@ are familiar with BioPerl its purpose isn't immediately clear.
 
 Additionally there have been other minor bug fixes and more unit tests.
 
+Finally, we are phasing out support for Python 2.5. We will continue support
+for at least one further release (Biopython 1.62). This could be extended
+given feedback from our users (or if the Jython 2.7 release is delayed, since
+the current stable release Jython 2.5 implemented Python 2.5 only). Focusing
+on Python 2.6 and 2.7 only will make writing Python 3 compatible code easier.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
