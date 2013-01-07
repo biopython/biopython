@@ -12,6 +12,11 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Bio.Motif.Applications.AlignAceCommandline and CompareAceCommandline
+====================================================================
+Deprecated in release 1.61. An up to date version of the software cannot
+be obtained anymore.
+
 Bio.SeqIO.Interfaces
 ====================
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
