@@ -22,7 +22,7 @@ NAMESPACES = {
               'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
               #'xmi': 'http://www.w3.org/XML/1998/namespace',
               'nex': 'http://www.nexml.org/2009',
-              'cdao': 'http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#',
+              'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
               'xsd': 'http://www.w3.org/2001/XMLSchema#',
               }
 DEFAULT_NAMESPACE = NAMESPACES['nex']
