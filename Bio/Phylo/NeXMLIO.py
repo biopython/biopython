@@ -165,7 +165,8 @@ class Writer(object):
         root_node = ET.Element('nex:nexml')
         root_node.set('version', '0.9')
         root_node.set('xmlns', DEFAULT_NAMESPACE)
-        root_node.set('xsi:schemaLocation', 'http://www.nexml.org/2009 ../xsd/nexml.xsd')
+        root_node.set('xsi:schemaLocation', 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd')
+
         for prefix, uri in NAMESPACES.items():
             root_node.set('xmlns:%s' % prefix, uri)
 
