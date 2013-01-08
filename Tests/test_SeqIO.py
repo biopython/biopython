@@ -5,6 +5,7 @@
 
 import os
 
+from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -25,7 +26,7 @@ import warnings
 def send_warnings_to_stdout(message, category, filename, lineno,
                                 file=None, line=None):
     #TODO - Have Biopython DataLossWarning?
-    if category in [UserWarning]:
+    if category in [UserWarning, BiopythonWarning]:
         print "%s - %s" % (category.__name__, message)
 warnings.showwarning = send_warnings_to_stdout
 
