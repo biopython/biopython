@@ -929,7 +929,9 @@ class GenBankScanner(InsdcScanner):
         line = self.line
         while True:
             if not line:
-                raise ValueError("Premature end of file in sequence data")
+                warnings.warn("Premature end of file in sequence data")
+                line = '//'
+                break
             line = line.rstrip()
             if not line:
                 warnings.warn("Blank line in sequence data")
