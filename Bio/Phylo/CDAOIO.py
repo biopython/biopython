@@ -17,12 +17,14 @@ __docformat__ = "restructuredtext en"
 from cStringIO import StringIO
 
 from Bio.Phylo import CDAO
+from cdao_elements import cdao_elements
 import os
 
 
 RDF_NAMESPACES = {
                   'owl': 'http://www.w3.org/2002/07/owl#',
                   'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
+                  'obo': 'http://purl.obolibrary.org/obo/',
                   'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
                   }
 
@@ -176,8 +178,8 @@ class Parser(object):
             assignments = {
                            qUri('cdao:has_Parent'): 'parent',
                            qUri('cdao:belongs_to_Edge_as_Child'): 'edge',
-                           qUri('cdao:has_annotation'): 'annotation',
-                           qUri('cdao:has_value'): 'value',
+                           qUri('cdao:has_Annotation'): 'annotation',
+                           qUri('cdao:has_Value'): 'value',
                            qUri('cdao:represents_TU'): 'tu',
                            qUri('rdf:label'): 'label',
                            }
@@ -191,7 +193,7 @@ class Parser(object):
                 if Uri(o) in (qUri('cdao:AncestralNode'), qUri('cdao:TerminalNode')):
                     # this is a tree node; store it in set of all nodes
                     self.nodes.add(s)
-            if v == qUri('cdao:has_root'):
+            if v == qUri('cdao:has_Root'):
                 # this is a tree; store its root in set of all tree roots
                 self.tree_roots.add(o)
                     
@@ -345,7 +347,7 @@ class Writer(object):
             tree_uri = 'tree%s' % self.tree_counter
             statements += [
                            (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
-                           (nUri(tree_uri), qUri('cdao:has_root'), nUri(clade.uri)),
+                           (nUri(tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
                            ]
         
         if clade.name:
@@ -372,7 +374,7 @@ class Writer(object):
             self.edge_counter += 1
             edge_uri = 'edge%s' % self.edge_counter
             statements += [
-                           (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:Directed_Edge')),
+                           (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
                            (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
                            (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
                            (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
@@ -383,9 +385,9 @@ class Writer(object):
             edge_ann_uri = 'edge_annotation%s' % self.edge_counter
             statements += [
                            (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
-                           (nUri(edge_uri), qUri('cdao:has_annotation'), nUri(edge_ann_uri)),
+                           (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
                            # TODO: does this type of numeric literal actually work?
-                           (nUri(edge_ann_uri), qUri('cdao:has_value'), str(clade.branch_length)),
+                           (nUri(edge_ann_uri), qUri('cdao:has_Value'), str(clade.branch_length)),
                            ]
             # TODO: annotate with confidences?
                       
@@ -402,10 +404,15 @@ def qUri(s):
     '''returns the full URI from a namespaced URI string (i.e. rdf:type)'''
     RDF = import_rdf()
     
+    if s.startswith('cdao:'):
+        return qUri('obo:%s' % cdao_elements[s[5:]])
+
     for url in RDF_NAMESPACES: 
         s = s.replace(url+':', RDF_NAMESPACES[url])
+
     return RDF.Uri(s)
     
+
 def namedUri(s, base_uri):
     '''append a URI to the base URI'''
     RDF = import_rdf()
