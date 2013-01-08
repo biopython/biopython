@@ -8,6 +8,12 @@ import os
 import unittest
 from StringIO import StringIO
 
+# Hide annoying warnings from things like bonds in GenBank features,
+# or PostgreSQL schema rules. TODO - test these warnings are raised!
+import warnings
+from Bio import BiopythonWarning
+warnings.simplefilter('ignore', BiopythonWarning)
+
 # local stuff
 from Bio import MissingExternalDependencyError
 from Bio.Seq import Seq, MutableSeq
