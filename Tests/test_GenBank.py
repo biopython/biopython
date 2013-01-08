@@ -14,7 +14,8 @@ gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 test_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
               'protein_refseq.gb', 'extra_keywords.gb', 'one_of.gb',
               'NT_019265.gb', 'origin_line.gb', 'blank_seq.gb',
-              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb']
+              'dbsource_wrap.gb', 'gbvrl1_start.seq', 'NC_005816.gb',
+              'no_end_marker.gb']
 
 # We only test writing on a subset of the examples:
 write_format_files = ['noref.gb', 'cor6_6.gb', 'iro.gb', 'pri1.gb', 'arab1.gb',
