@@ -4301,10 +4301,6 @@ object into an array of letters -- and you can do this with NumPy:
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
 >>> align_array.shape
 (7, 52)
->>> print align_array[0,0]
-A
->>> print align_array[:,0]
-['A' 'A' 'D' 'A' 'A' 'A' 'F']
 \end{verbatim}
 
 If you will be working heavily with the columns, you can tell NumPy to store
