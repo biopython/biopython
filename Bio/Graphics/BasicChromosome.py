@@ -511,7 +511,8 @@ def _spring_layout(desired, minimum, maximum, gap=0):
 
     if equal_step < gap:
         import warnings
-        warnings.warn("Too many labels to avoid overlap")
+        from Bio import BiopythonWarning
+        warnings.warn("Too many labels to avoid overlap", BiopythonWarning)
         #Crudest solution
         return [minimum+i*equal_step for i in range(count)]
 
