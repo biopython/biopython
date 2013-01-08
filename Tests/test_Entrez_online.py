@@ -22,7 +22,8 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
 
-Entrez.email = 'test@biopython.org'
+#This lets us set the email address to be sent to NCBI Entrez:
+Entrez.email = "biopython-dev@biopython.org"
 
 
 class EntrezOnlineCase(unittest.TestCase):
