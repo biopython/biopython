@@ -942,7 +942,11 @@ class GenBankScanner(InsdcScanner):
             if line.startswith('CONTIG'):
                 break
             if len(line) > 9 and line[9:10] != ' ':
-                raise ValueError("Sequence line mal-formed, '%s'" % line)
+                # Some broken programs indent the sequence by one space too many
+                # so try to get rid of that and test again.
+                line = line[1:]
+                if len(line) > 9 and line[9:10] != ' ':
+                    raise ValueError("Sequence line mal-formed, '%s'" % line)
             seq_lines.append(line[10:])  # remove spaces later
             line = self.handle.readline()
 
