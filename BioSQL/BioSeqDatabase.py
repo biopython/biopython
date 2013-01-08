@@ -91,6 +91,7 @@ def open_database(driver="MySQLdb", **kwargs):
               "rulename='rule_bioentry_i2';"
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
+            from Bio import BiopythonWarning
             warnings.warn("Your BioSQL PostgreSQL schema includes some "
                           "rules currently required for bioperl-db but "
                           "which may cause problems loading data using "
@@ -98,7 +99,7 @@ def open_database(driver="MySQLdb", **kwargs):
                           "use BioPerl, please remove these rules. "
                           "Biopython should cope with the rules present, "
                           "but with a performance penalty when loading "
-                          "new records.")
+                          "new records.", BiopythonWarning)
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
@@ -200,7 +201,9 @@ class DBServer:
         del server[name]
         """
         import warnings
-        warnings.warn("This method is obsolete.  In keeping with the dictionary interface, you can now use 'del server[name]' instead", PendingDeprecationWarning)
+        warnings.warn("This method is obsolete.  In keeping with the "
+                      "dictionary interface, you can now use 'del "
+                      "server[name]' instead", PendingDeprecationWarning)
         db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
         remover = Loader.DatabaseRemover(self.adaptor, db_id)
         remover.remove()
