@@ -4299,28 +4299,12 @@ object into an array of letters -- and you can do this with NumPy:
 >>> from Bio import AlignIO
 >>> alignment = AlignIO.read("PF05371_seed.sth", "stockholm")
 >>> align_array = np.array([list(rec) for rec in alignment], np.character)
->>> print align_array
-[['A' 'E' 'P' 'N' 'A' 'A' 'T' 'N' 'Y' 'A' 'T' 'E' 'A' 'M' 'D' 'S' 'L' 'K'
-  'T' 'Q' 'A' 'I' 'D' 'L' 'I' 'S' 'Q' 'T' 'W' 'P' 'V' 'V' 'T' 'T' 'V' 'V'
-  'V' 'A' 'G' 'L' 'V' 'I' 'R' 'L' 'F' 'K' 'K' 'F' 'S' 'S' 'K' 'A']
- ['A' 'E' 'P' 'N' 'A' 'A' 'T' 'N' 'Y' 'A' 'T' 'E' 'A' 'M' 'D' 'S' 'L' 'K'
-  'T' 'Q' 'A' 'I' 'D' 'L' 'I' 'S' 'Q' 'T' 'W' 'P' 'V' 'V' 'T' 'T' 'V' 'V'
-  'V' 'A' 'G' 'L' 'V' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'V' 'S' 'R' 'A']
- ['D' 'G' 'T' 'S' 'T' 'A' 'T' 'S' 'Y' 'A' 'T' 'E' 'A' 'M' 'N' 'S' 'L' 'K'
-  'T' 'Q' 'A' 'T' 'D' 'L' 'I' 'D' 'Q' 'T' 'W' 'P' 'V' 'V' 'T' 'S' 'V' 'A'
-  'V' 'A' 'G' 'L' 'A' 'I' 'R' 'L' 'F' 'K' 'K' 'F' 'S' 'S' 'K' 'A']
- ['A' 'E' 'G' 'D' 'D' 'P' '-' '-' '-' 'A' 'K' 'A' 'A' 'F' 'N' 'S' 'L' 'Q'
-  'A' 'S' 'A' 'T' 'E' 'Y' 'I' 'G' 'Y' 'A' 'W' 'A' 'M' 'V' 'V' 'V' 'I' 'V'
-  'G' 'A' 'T' 'I' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'T' 'S' 'K' 'A']
- ['A' 'E' 'G' 'D' 'D' 'P' '-' '-' '-' 'A' 'K' 'A' 'A' 'F' 'D' 'S' 'L' 'Q'
-  'A' 'S' 'A' 'T' 'E' 'Y' 'I' 'G' 'Y' 'A' 'W' 'A' 'M' 'V' 'V' 'V' 'I' 'V'
-  'G' 'A' 'T' 'I' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'A' 'S' 'K' 'A']
- ['A' 'E' 'G' 'D' 'D' 'P' '-' '-' '-' 'A' 'K' 'A' 'A' 'F' 'D' 'S' 'L' 'Q'
-  'A' 'S' 'A' 'T' 'E' 'Y' 'I' 'G' 'Y' 'A' 'W' 'A' 'M' 'V' 'V' 'V' 'I' 'V'
-  'G' 'A' 'T' 'I' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'T' 'S' 'K' 'A']
- ['F' 'A' 'A' 'D' 'D' 'A' 'T' 'S' 'Q' 'A' 'K' 'A' 'A' 'F' 'D' 'S' 'L' 'T'
-  'A' 'Q' 'A' 'T' 'E' 'M' 'S' 'G' 'Y' 'A' 'W' 'A' 'L' 'V' 'V' 'L' 'V' 'V'
-  'G' 'A' 'T' 'V' 'G' 'I' 'K' 'L' 'F' 'K' 'K' 'F' 'V' 'S' 'R' 'A']]
+>>> align_array.shape
+(7, 52)
+>>> print align_array[0,0]
+A
+>>> print align_array[:,0]
+['A' 'A' 'D' 'A' 'A' 'A' 'F']
 \end{verbatim}
 
 If you will be working heavily with the columns, you can tell NumPy to store
