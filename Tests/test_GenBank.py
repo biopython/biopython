@@ -4,10 +4,16 @@
 # standard library
 import os
 import cStringIO
+import warnings
+
+from Bio import BiopythonParserWarning
 
 # GenBank stuff to test
 from Bio import GenBank
 from Bio.GenBank import utils
+
+#TODO - Test we get the warnings we expect on the bad input files
+warnings.simplefilter('ignore', BiopythonParserWarning)
 
 gb_file_dir = os.path.join(os.getcwd(), 'GenBank')
 
