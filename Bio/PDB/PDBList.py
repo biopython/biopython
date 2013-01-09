@@ -293,11 +293,9 @@ class PDBList(object):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
-        print "retrieving sequence file. Takes about 15 MB."
+        print "Retrieving sequence file (takes about 15 MB)."
         url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
-        with contextlib.closing(_urlopen(url)) as handle:
-            with open(savefile, 'w') as outfile:
-                outfile.writelines(handle.readlines())
+        urllib.urlretrieve(url, savefile)
 
 
 if __name__ == '__main__':
