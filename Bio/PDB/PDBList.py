@@ -171,8 +171,8 @@ class PDBList(object):
                 obsolete.append(pdb)
         return obsolete
 
-    def retrieve_pdb_file(self,pdb_code, obsolete=0, compression=None,
-            uncompress=None, pdir=None):
+    def retrieve_pdb_file(self, pdb_code, obsolete=0, compression=None,
+                          uncompress=None, pdir=None):
         """ Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
         The PDB structure is returned as a single string.
@@ -190,16 +190,16 @@ class PDBList(object):
         # Alert the user about deprecated parameters
         if compression is not None:
             warnings.warn("PDB file servers now only host .gz archives: "
-                    "the compression parameter will not do anything"
-                    , BiopythonDeprecationWarning)
+                          "the compression parameter will not do anything",
+                          BiopythonDeprecationWarning)
         if uncompress is not None:
             warnings.warn("Decompression is handled with the gzip module: "
-                    "the uncompression parameter will not do anything"
-                    , BiopythonDeprecationWarning)
+                          "the uncompression parameter will not do anything",
+                          BiopythonDeprecationWarning)
 
         # Get the structure
-        code=pdb_code.lower()
-        filename="pdb%s.ent.gz"%code
+        code = pdb_code.lower()
+        archive_fn = "pdb%s.ent.gz" % code
         pdb_dir = "divided" if not obsolete else "obsolete"
         url = (self.pdb_server +
                '/pub/pdb/data/structures/%s/pdb/%s/%s' %
@@ -210,16 +210,15 @@ class PDBList(object):
             path = self.local_pdb if not obsolete else self.obsolete_pdb
             if not self.flat_tree:  # Put in PDB-style directory tree
                 path = os.path.join(path, code[1:3])
-        else:
-            # Put in specified directory
-            path=pdir
+        else:  # Put in specified directory
+            path = pdir
 
-        if not os.access(path,os.F_OK):
+        if not os.access(path, os.F_OK):
             os.makedirs(path)
 
-        filename=os.path.join(path, filename)
+        filename = os.path.join(path, archive_fn)
         # the final uncompressed file
-        final_file=os.path.join(path, "pdb%s.ent" % code)
+        final_file = os.path.join(path, "pdb%s.ent" % code)
 
         # Skip download if the file already exists
         if not self.overwrite:
