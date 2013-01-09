@@ -4,8 +4,6 @@
 #
 # A tool for tracking changes in the PDB Protein Structure Database.
 #
-# Version 2.0
-#
 # (c) 2003 Kristian Rother
 # This work was supported by the German Ministry of Education
 # and Research (BMBF). Project http://www.bcbio.de
@@ -15,12 +13,12 @@
 #    email    : krother@genesilico.pl
 #
 #
-# This Code is released under the conditions of the Biopython license.
+# This code is released under the conditions of the Biopython license.
 # It may be distributed freely with respect to the original author.
-# Any maintainer of the BioPython code may change this notice
+# Any maintainer of the Biopython code may change this notice
 # when appropriate.
 
-"""Access the PDB over the internet (for example to download structures)."""
+""" Access the PDB over the internet (e.g. to download structures). """
 
 import contextlib
 import gzip
@@ -42,13 +40,13 @@ class PDBList(object):
     To use it properly, prepare a directory /pdb or the like,
     where PDB files are stored.
 
-    If You want to use this module from inside a proxy, add
-    the proxy variable to Your environment, e.g. in Unix
+    If you want to use this module from inside a proxy, add
+    the proxy variable to your environment, e.g. in Unix:
     export HTTP_PROXY='http://realproxy.charite.de:888'
     (This can also be added to ~/.bashrc)
     """
 
-    PDB_REF="""
+    PDB_REF = """
     The Protein Data Bank: a computer-based archival file for macromolecular structures.
     F.C.Bernstein, T.F.Koetzle, G.J.B.Williams, E.F.Meyer Jr, M.D.Brice, J.R.Rodgers, O.Kennard, T.Shimanouchi, M.Tasumi
     J. Mol. Biol. 112 pp. 535-542 (1977)
@@ -58,27 +56,25 @@ class PDBList(object):
     alternative_download_url = "http://www.rcsb.org/pdb/files/"
     # just append PDB code to this, and then it works.
 
-    def __init__(self,server='ftp://ftp.wwpdb.org', pdb=os.getcwd(), obsolete_pdb=None):
+    def __init__(self, server='ftp://ftp.wwpdb.org', pdb=os.getcwd(),
+                 obsolete_pdb=None):
         """Initialize the class with the default server or a custom one."""
-        # remote pdb server
-        self.pdb_server = server
-
-        # local pdb file tree
-        self.local_pdb = pdb
+        self.pdb_server = server  # remote pdb server
+        self.local_pdb = pdb  # local pdb file tree
 
         # local file tree for obsolete pdb files
         if obsolete_pdb:
             self.obsolete_pdb = obsolete_pdb
         else:
             self.obsolete_pdb = os.path.join(self.local_pdb, 'obsolete')
-            if not os.access(self.obsolete_pdb,os.F_OK):
+            if not os.access(self.obsolete_pdb, os.F_OK):
                 os.makedirs(self.obsolete_pdb)
 
         # variables for command-line options
         self.overwrite = 0
         self.flat_tree = 0
 
-    def get_status_list(self,url):
+    def get_status_list(self, url):
         """Retrieves a list of pdb codes in the weekly pdb status file
         from the given URL. Used by get_recent_files.
 
@@ -89,7 +85,7 @@ class PDBList(object):
             answer = []
             for line in handle:
                 pdb = line.strip()
-                assert len(pdb)==4
+                assert len(pdb) == 4
                 answer.append(pdb)
         return answer
 
@@ -114,11 +110,12 @@ class PDBList(object):
                             )[-1]
 
         path = self.pdb_server + '/pub/pdb/data/status/%s/' % (recent)
+
         # Retrieve the lists
-        added = self.get_status_list(path+'added.pdb')
-        modified = self.get_status_list(path+'modified.pdb')
-        obsolete = self.get_status_list(path+'obsolete.pdb')
-        return [added,modified,obsolete]
+        added = self.get_status_list(path + 'added.pdb')
+        modified = self.get_status_list(path + 'modified.pdb')
+        obsolete = self.get_status_list(path + 'obsolete.pdb')
+        return [added, modified, obsolete]
 
     def get_all_entries(self):
         """Retrieves a big file containing all the
@@ -164,7 +161,7 @@ class PDBList(object):
                 if not line.startswith("OBSLTE "):
                     continue
                 pdb = line.split()[2]
-                assert len(pdb)==4
+                assert len(pdb) == 4
                 obsolete.append(pdb)
         return obsolete
 
@@ -231,7 +228,7 @@ class PDBList(object):
 
         new, modified, obsolete = self.get_recent_changes()
 
-        for pdb_code in new+modified:
+        for pdb_code in new + modified:
             try:
                 self.retrieve_pdb_file(pdb_code)
             except Exception:
@@ -274,7 +271,7 @@ class PDBList(object):
         # Write the list
         if listfile:
             with open(listfile, 'w') as outfile:
-                outfile.writelines((x+'\n' for x in entries))
+                outfile.writelines((x + '\n' for x in entries))
 
     def download_obsolete_entries(self, listfile=None):
         """Retrieve all obsolete PDB entries not present in the local obsolete
@@ -290,9 +287,9 @@ class PDBList(object):
         # Write the list
         if listfile:
             with open(listfile, 'w') as outfile:
-                outfile.writelines((x+'\n' for x in entries))
+                outfile.writelines((x + '\n' for x in entries))
 
-    def get_seqres_file(self,savefile='pdb_seqres.txt'):
+    def get_seqres_file(self, savefile='pdb_seqres.txt'):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
@@ -325,10 +322,10 @@ if __name__ == '__main__':
     """
     print doc
 
-    if len(sys.argv)>2:
+    if len(sys.argv) > 2:
         pdb_path = sys.argv[2]
         pl = PDBList(pdb=pdb_path)
-        if len(sys.argv)>3:
+        if len(sys.argv) > 3:
             for option in sys.argv[3:]:
                 if option == '-d':
                     pl.flat_tree = 1
@@ -343,7 +340,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == 'update':
             # update PDB
-            print "updating local PDB at "+pdb_path
+            print "updating local PDB at " + pdb_path
             pl.update_pdb()
 
         elif sys.argv[1] == 'all':
@@ -356,4 +353,4 @@ if __name__ == '__main__':
 
         elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
             # get single PDB entry
-            pl.retrieve_pdb_file(sys.argv[1],pdir=pdb_path)
+            pl.retrieve_pdb_file(sys.argv[1], pdir=pdb_path)
