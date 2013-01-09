@@ -25,7 +25,8 @@
 import gzip
 import os
 import shutil
-from urllib2 import urlopen as _urlopen
+import urllib
+from urllib2 import urlopen as _urlopen  # urllib made too many FTP conn's
 import warnings
 
 from Bio import BiopythonDeprecationWarning
@@ -237,8 +238,7 @@ class PDBList(object):
 
         # Retrieve the file
         print "Downloading PDB structure '%s'..." % pdb_code
-        lines = _urlopen(url).read()
-        open(filename,'wb').write(lines)
+        urllib.urlretrieve(url, filename)
 
         # Uncompress the file
         gz = gzip.open(filename, 'rb')
