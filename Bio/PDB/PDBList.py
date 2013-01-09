@@ -22,6 +22,7 @@
 
 """Access the PDB over the internet (for example to download structures)."""
 
+import contextlib
 import gzip
 import os
 import shutil
@@ -87,13 +88,12 @@ class PDBList(object):
         Typical contents of the list files parsed by this method is now
         very simply one PDB name per line.
         """
-        handle = _urlopen(url)
-        answer = []
-        for line in handle:
-            pdb = line.strip()
-            assert len(pdb)==4
-            answer.append(pdb)
-        handle.close()
+        with contextlib.closing(_urlopen(url)) as handle:
+            answer = []
+            for line in handle:
+                pdb = line.strip()
+                assert len(pdb)==4
+                answer.append(pdb)
         return answer
 
     def get_recent_changes(self):
@@ -110,11 +110,13 @@ class PDBList(object):
         drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
         -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
         """
-        url = _urlopen(self.pdb_server + '/pub/pdb/data/status/')
-        recent = filter(str.isdigit,
-                        (x.split()[-1] for x in url.readlines())
-                        )[-1]
-        path = self.pdb_server+'/pub/pdb/data/status/%s/'%(recent)
+        url = self.pdb_server + '/pub/pdb/data/status/'
+        with contextlib.closing(_urlopen(url)) as handle:
+            recent = filter(str.isdigit,
+                            (x.split()[-1] for x in handle.readlines())
+                            )[-1]
+
+        path = self.pdb_server + '/pub/pdb/data/status/%s/' % (recent)
         # Retrieve the lists
         added = self.get_status_list(path+'added.pdb')
         modified = self.get_status_list(path+'modified.pdb')
@@ -127,9 +129,11 @@ class PDBList(object):
         Returns a list of PDB codes in the index file.
         """
         print "retrieving index file. Takes about 5 MB."
-        url = _urlopen(self.pdb_server +
-                       '/pub/pdb/derived_data/index/entries.idx')
-        return [line[:4] for line in url.readlines()[2:] if len(line) > 4]
+        url = self.pdb_server + '/pub/pdb/derived_data/index/entries.idx'
+        with contextlib.closing(_urlopen(url)) as handle:
+            all_entries = [line[:4] for line in handle.readlines()[2:]
+                           if len(line) > 4]
+        return all_entries
 
     def get_all_obsolete(self):
         """Returns a list of all obsolete entries ever in the PDB.
@@ -154,18 +158,17 @@ class PDBList(object):
         ...
 
         """
-        handle = _urlopen(self.pdb_server +
-                          '/pub/pdb/data/status/obsolete.dat')
-        # Extract pdb codes. Could use a list comprehension, but I want
-        # to include an assert to check for mis-reading the data.
-        obsolete = []
-        for line in handle:
-            if not line.startswith("OBSLTE "):
-                continue
-            pdb = line.split()[2]
-            assert len(pdb)==4
-            obsolete.append(pdb)
-        handle.close()
+        url = self.pdb_server + '/pub/pdb/data/status/obsolete.dat'
+        with contextlib.closing(_urlopen(url)) as handle:
+            # Extract pdb codes. Could use a list comprehension, but I want
+            # to include an assert to check for mis-reading the data.
+            obsolete = []
+            for line in handle:
+                if not line.startswith("OBSLTE "):
+                    continue
+                pdb = line.split()[2]
+                assert len(pdb)==4
+                obsolete.append(pdb)
         return obsolete
 
     def retrieve_pdb_file(self,pdb_code, obsolete=0, compression=None,
@@ -241,11 +244,8 @@ class PDBList(object):
         urllib.urlretrieve(url, filename)
 
         # Uncompress the file
-        gz = gzip.open(filename, 'rb')
-        out = open(final_file, 'wb')
-        out.writelines(gz)
-        gz.close()
-        out.close()
+        with gzip.open(filename, 'rb') as gz, open(final_file, 'wb') as out:
+            out.writelines(gz)
         os.remove(filename)
 
         return final_file
@@ -304,9 +304,8 @@ class PDBList(object):
             self.retrieve_pdb_file(pdb_code)
         # Write the list
         if listfile:
-            outfile = open(listfile, 'w')
-            outfile.writelines((x+'\n' for x in entries))
-            outfile.close()
+            with open(listfile, 'w') as outfile:
+                outfile.writelines((x+'\n' for x in entries))
 
     def download_obsolete_entries(self, listfile=None):
         """Retrieve all obsolete PDB entries not present in the local obsolete
@@ -321,22 +320,18 @@ class PDBList(object):
 
         # Write the list
         if listfile:
-            outfile = open(listfile, 'w')
-            outfile.writelines((x+'\n' for x in entries))
-            outfile.close()
+            with open(listfile, 'w') as outfile:
+                outfile.writelines((x+'\n' for x in entries))
 
     def get_seqres_file(self,savefile='pdb_seqres.txt'):
         """Retrieves a (big) file containing all the sequences of PDB entries
         and writes it to a file.
         """
         print "retrieving sequence file. Takes about 15 MB."
-        handle = _urlopen(self.pdb_server +
-                          '/pub/pdb/derived_data/pdb_seqres.txt')
-        lines = handle.readlines()
-        outfile = open(savefile, 'w')
-        outfile.writelines(lines)
-        outfile.close()
-        handle.close()
+        url = self.pdb_server + '/pub/pdb/derived_data/pdb_seqres.txt'
+        with contextlib.closing(_urlopen(url)) as handle:
+            with open(savefile, 'w') as outfile:
+                outfile.writelines(handle.readlines())
 
 
 if __name__ == '__main__':
