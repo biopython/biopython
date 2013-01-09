@@ -181,7 +181,7 @@ class PDBList(object):
         @return: filename
         @rtype: string
         """
-        # Get the structure
+        # Get the compressed PDB structure
         code = pdb_code.lower()
         archive_fn = "pdb%s.ent.gz" % code
         pdb_dir = "divided" if not obsolete else "obsolete"
@@ -189,20 +189,18 @@ class PDBList(object):
                '/pub/pdb/data/structures/%s/pdb/%s/%s' %
                (pdb_dir, code[1:3], archive_fn))
 
-        # In which dir to put the pdb file?
+        # Where does the final PDB file get saved?
         if pdir is None:
             path = self.local_pdb if not obsolete else self.obsolete_pdb
             if not self.flat_tree:  # Put in PDB-style directory tree
                 path = os.path.join(path, code[1:3])
         else:  # Put in specified directory
             path = pdir
-
         if not os.access(path, os.F_OK):
             os.makedirs(path)
 
         filename = os.path.join(path, archive_fn)
-        # the final uncompressed file
-        final_file = os.path.join(path, "pdb%s.ent" % code)
+        final_file = os.path.join(path, "pdb%s.ent" % code)  # (decompressed)
 
         # Skip download if the file already exists
         if not self.overwrite:
@@ -214,7 +212,7 @@ class PDBList(object):
         print "Downloading PDB structure '%s'..." % pdb_code
         urllib.urlretrieve(url, filename)
 
-        # Uncompress the file
+        # Uncompress the archive, delete when done
         with gzip.open(filename, 'rb') as gz, open(final_file, 'wb') as out:
             out.writelines(gz)
         os.remove(filename)
