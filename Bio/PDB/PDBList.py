@@ -200,28 +200,16 @@ class PDBList(object):
         # Get the structure
         code=pdb_code.lower()
         filename="pdb%s.ent.gz"%code
-        if not obsolete:
-            url=(self.pdb_server+
-                 '/pub/pdb/data/structures/divided/pdb/%s/pdb%s.ent.gz'
-                 % (code[1:3],code))
-        else:
-            url=(self.pdb_server+
-                 '/pub/pdb/data/structures/obsolete/pdb/%s/pdb%s.ent.gz'
-                 % (code[1:3],code))
+        pdb_dir = "divided" if not obsolete else "obsolete"
+        url = (self.pdb_server +
+               '/pub/pdb/data/structures/%s/pdb/%s/%s' %
+               (pdb_dir, code[1:3], archive_fn))
 
         # In which dir to put the pdb file?
         if pdir is None:
-            if self.flat_tree:
-                if not obsolete:
-                    path=self.local_pdb
-                else:
-                    path=self.obsolete_pdb
-            else:
-                # Put in PDB-style directory tree
-                if not obsolete:
-                    path=os.path.join(self.local_pdb, code[1:3])
-                else:
-                    path=os.path.join(self.obsolete_pdb,code[1:3])
+            path = self.local_pdb if not obsolete else self.obsolete_pdb
+            if not self.flat_tree:  # Put in PDB-style directory tree
+                path = os.path.join(path, code[1:3])
         else:
             # Put in specified directory
             path=pdir
