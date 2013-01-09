@@ -28,9 +28,6 @@ import os
 import shutil
 import urllib
 from urllib2 import urlopen as _urlopen  # urllib made too many FTP conn's
-import warnings
-
-from Bio import BiopythonDeprecationWarning
 
 
 class PDBList(object):
@@ -171,15 +168,12 @@ class PDBList(object):
                 obsolete.append(pdb)
         return obsolete
 
-    def retrieve_pdb_file(self, pdb_code, obsolete=0, compression=None,
-                          uncompress=None, pdir=None):
+    def retrieve_pdb_file(self, pdb_code, obsolete=False, pdir=None):
         """ Retrieves a PDB structure file from the PDB server and
         stores it in a local file tree.
-        The PDB structure is returned as a single string.
-        If obsolete==1, the file will be saved in a special file tree.
-        If uncompress is specified, a system utility will decompress the .gz
-        archive. Otherwise, Python gzip utility will handle it.
-        compression does nothing, as all archives are already in .gz format
+
+        The PDB structure's file name is returned as a single string.
+        If obsolete == True, the file will be saved in a special file tree.
 
         @param pdir: put the file in this directory (default: create a PDB-style directory tree)
         @type pdir: string
@@ -187,16 +181,6 @@ class PDBList(object):
         @return: filename
         @rtype: string
         """
-        # Alert the user about deprecated parameters
-        if compression is not None:
-            warnings.warn("PDB file servers now only host .gz archives: "
-                          "the compression parameter will not do anything",
-                          BiopythonDeprecationWarning)
-        if uncompress is not None:
-            warnings.warn("Decompression is handled with the gzip module: "
-                          "the uncompression parameter will not do anything",
-                          BiopythonDeprecationWarning)
-
         # Get the structure
         code = pdb_code.lower()
         archive_fn = "pdb%s.ent.gz" % code
