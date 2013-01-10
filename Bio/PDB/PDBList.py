@@ -20,6 +20,9 @@
 
 """ Access the PDB over the internet (e.g. to download structures). """
 
+# For using with statement in Python 2.5 or Jython
+from __future__ import with_statement
+
 import contextlib
 import gzip
 import os
