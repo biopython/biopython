@@ -213,8 +213,9 @@ class PDBList(object):
         urllib.urlretrieve(url, filename)
 
         # Uncompress the archive, delete when done
-        with gzip.open(filename, 'rb') as gz, open(final_file, 'wb') as out:
-            out.writelines(gz)
+        with gzip.open(filename, 'rb') as gz:
+            with open(final_file, 'wb') as out:
+                out.writelines(gz)
         os.remove(filename)
 
         return final_file
