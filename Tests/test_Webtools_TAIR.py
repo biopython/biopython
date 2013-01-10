@@ -154,8 +154,14 @@ class TAIRDirect(unittest.TestCase):
         # This checks to see that no errors are raised when a invalid AGI is
         # given.
         returned = TAIR.get(["AT5G66483.1"], "downstream_3000", "rep_gene")
-        with self.assertRaises(StopIteration):
+        # self.assertTrue(len(returned)) doesn't work with generators, so do:
+        try:
             returned.next()
+        except StopIteration:
+            # This should happen, it means generator is empty
+            self.assertTrue(True)  
+            return
+        self.assertTrue(False)  # This shouldnt happen
 
     def test_agiregex(self):
         agis = ["AT5G63980", "AT5G63980.1", "ATCG12345", "ATCG12345.6"]
