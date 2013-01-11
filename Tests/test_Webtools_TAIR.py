@@ -6,6 +6,7 @@ from Bio.Webtools import TAIR
 import requires_internet
 requires_internet.check()
 
+
 class TAIRDirect(unittest.TestCase):
     test_agis = [
         "AT4G36450.1",
@@ -159,7 +160,7 @@ class TAIRDirect(unittest.TestCase):
             returned.next()
         except StopIteration:
             # This should happen, it means generator is empty
-            self.assertTrue(True)  
+            self.assertTrue(True)
             return
         self.assertTrue(False)  # This shouldnt happen
 

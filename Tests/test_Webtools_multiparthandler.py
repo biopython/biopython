@@ -13,6 +13,7 @@ except ImportError:
 import re
 from Bio.Webtools.multiparthandler import multiparthandler
 
+
 class multiparthandler_t(unittest.TestCase):
     validator_url = "http://validator.w3.org/check"
     test_url = ("http://www.w3.org/History/19921103-hypertext/hypertext/WWW/"
