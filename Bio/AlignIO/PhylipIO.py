@@ -72,6 +72,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         # Check for repeated identifiers...
         # Apply this test *after* cleaning the identifiers
         names = []
+        seqs = []
         for record in alignment:
             """
             Quoting the PHYLIP version 3.6 documentation:
@@ -102,6 +103,12 @@ class PhylipWriter(SequentialAlignmentWriter):
                                  "possibly due to truncation"
                                  % (name, record.id))
             names.append(name)
+            sequence = str(record.seq)
+            if "." in sequence:
+                # Do this check here (once per record, not once per block)
+                raise ValueError("PHYLIP format no longer allows dots in "
+                                 "sequence")
+            seqs.append(sequence)
 
         # From experimentation, the use of tabs is not understood by the
         # EMBOSS suite.  The nature of the expected white space is not
@@ -111,7 +118,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
         block = 0
         while True:
-            for name, record in zip(names, alignment):
+            for name, sequence in zip(names, seqs):
                 if block == 0:
                     #Write name (truncated/padded to id_width characters)
                     #Now truncate and right pad to expected length.
@@ -120,10 +127,6 @@ class PhylipWriter(SequentialAlignmentWriter):
                     #write indent
                     handle.write(" " * id_width)
                 #Write five chunks of ten letters per line...
-                sequence = str(record.seq)
-                if "." in sequence:
-                    raise ValueError("PHYLIP format no longer allows dots in "
-                                     "sequence")
                 for chunk in range(0, 5):
                     i = block*50 + chunk*10
                     seq_segment = sequence[i:i+10]
