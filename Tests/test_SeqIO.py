@@ -24,9 +24,9 @@ import warnings
 
 
 def send_warnings_to_stdout(message, category, filename, lineno,
-                                file=None, line=None):
+                            file=None, line=None):
     #TODO - Have Biopython DataLossWarning?
-    if category in [UserWarning, BiopythonWarning]:
+    if category in [BiopythonWarning]:
         print "%s - %s" % (category.__name__, message)
 warnings.showwarning = send_warnings_to_stdout
 
