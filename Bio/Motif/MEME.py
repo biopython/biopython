@@ -6,7 +6,7 @@
 
 from Bio.Alphabet import IUPAC
 from Bio import Seq
-from Bio.Motif import Motif as BaseMotif
+from Bio.Motif import NewMotif as BaseMotif
 
 
 def read(handle):

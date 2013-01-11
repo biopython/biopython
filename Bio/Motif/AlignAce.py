@@ -6,7 +6,7 @@
 """Parsing AlignACE output files
 """
 
-from Bio.Motif import Motif
+from Bio.Motif import NewMotif as Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 

@@ -11062,7 +11062,7 @@ To parse this file (stored as \verb+meme.dna.oops.txt+), use
 %cont-doctest
 \begin{verbatim}
 >>> handle = open("meme.dna.oops.txt")
->>> record = Motif.parse(handle, "MEME")
+>>> record = Motif.parse(handle, "meme")
 >>> handle.close()
 \end{verbatim}
 The \verb+Motif.parse+ command reads the complete file directly, so you can
@@ -11132,27 +11132,8 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 \subsubsection*{TRANSFAC}
 
 \subsection{Writing motifs}
-Speaking of exporting, let's look at export functions. We can export to fasta:
-%cont-doctest
-\begin{verbatim}
->>> print m.format("fasta")
->instance0
-TACAA
->instance1
-TACGC
->instance2
-TACAC
->instance3
-TACCC
->instance4
-AACCC
->instance5
-AATGC
->instance6
-AATGC
-<BLANKLINE>
-\end{verbatim}
-or to TRANSFAC-like matrix format (used by some motif processing software)
+Speaking of exporting, let's look at export functions. We can export to
+a TRANSFAC-like matrix format (used by some motif processing software)
 %cont-doctest
 \begin{verbatim}
 >>> print m.format("transfac")
