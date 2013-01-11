@@ -85,6 +85,22 @@ def as_handle(handleish, mode='r', **kwargs):
     else:
         yield handleish
 
+def _open_for_random_access(filename):
+    """Open a file in binary mode, spot if it is BGZF format etc (PRIVATE).
+
+    This funcationality is used by the Bio.SeqIO and Bio.SearchIO index
+    and index_db functions.
+    """
+    handle = open(filename, "rb")
+    import bgzf
+    try:
+        return bgzf.BgzfReader(mode="rb", fileobj=handle)
+    except ValueError, e:
+        assert "BGZF" in str(e)
+        #Not a BGZF file after all, rewind to start:
+        handle.seek(0)
+    return handle
+
 
 class UndoHandle(object):
     """A Python handle that adds functionality for saving lines.

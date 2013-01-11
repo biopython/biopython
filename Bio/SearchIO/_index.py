@@ -11,7 +11,7 @@
 from StringIO import StringIO
 from Bio._py3k import _bytes_to_string
 from Bio import bgzf
-from Bio.File import _IndexedSeqFileProxy
+from Bio.File import _IndexedSeqFileProxy, _open_for_random_access
 
 
 class SearchIndexer(_IndexedSeqFileProxy):
@@ -22,14 +22,7 @@ class SearchIndexer(_IndexedSeqFileProxy):
     """
 
     def __init__(self, filename, **kwargs):
-        h = open(filename, 'rb')
-        try:
-            self._handle = bgzf.BgzfReader(mode="rb", fileobj=h)
-        except ValueError, e:
-            assert "BGZF" in str(e)
-            #Not a BGZF file
-            h.seek(0)
-            self._handle = h
+        self._handle = _open_for_random_access(filename)
         self._kwargs = kwargs
 
     def _parse(self, handle):
