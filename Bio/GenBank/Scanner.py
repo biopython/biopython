@@ -457,9 +457,12 @@ class InsdcScanner(object):
             record = self.parse(handle, do_features)
             if record is None:
                 break
-            assert record.id is not None
-            assert record.name != "<unknown name>"
-            assert record.description != "<unknown description>"
+            if record.id is None:
+                raise ValueError("Failed to parse the record's ID. Invalid ID line?")
+            if record.name == "<unknown name>":
+                raise ValueError("Failed to parse the record's name. Invalid ID line?")
+            if record.description == "<unknown description>":
+                raise ValueError("Failed to parse the record's description")
             yield record
 
     def parse_cds_features(self, handle,
