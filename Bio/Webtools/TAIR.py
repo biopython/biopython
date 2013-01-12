@@ -53,7 +53,7 @@ TAIR_TARGETS = {
     }
 
 
-def get(agis, dataset, target):
+def get(agis, dataset, target="representative"):
     """Get TAIR sequence(s) from AGI from the arabidopsis.org server directly.
     """
     bad_agi_exception = ValueError(
