@@ -26,7 +26,63 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 1383)
             ]
-        returned = TAIR.get(self.test_agis, "transcript", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "transcript",
+                "representative"
+                )
+        self._perform_test(returned, expected)
+
+    def test_transcript_all(self):
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1086),
+            ("AT4G36900.1", "AGTGTCGGTG", 1024),
+            ("AT5G63980.1", "GACATATATT", 1383)
+            ]
+        returned = TAIR.get(
+                self.test_agis,
+                "transcript",
+                "all"
+                )
+        self._perform_test(returned, expected)
+
+    def test_transcript_specified(self):
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1086),
+            ("AT4G36900.1", "AGTGTCGGTG", 1024),
+            ("AT5G63980.1", "GACATATATT", 1383)
+            ]
+        returned = TAIR.get(
+                self.test_agis,
+                "transcript",
+                "specified"
+                )
+        self._perform_test(returned, expected)
+
+    def test_full_dataset_name_transcript(self):
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1086),
+            ("AT4G36900.1", "AGTGTCGGTG", 1024),
+            ("AT5G63980.1", "GACATATATT", 1383)
+            ]
+        returned = TAIR.get(
+                self.test_agis,
+                "At_transcripts",
+                "representative"
+                )
+        self._perform_test(returned, expected)
+
+    def test_full_target_name_transcript(self):
+        expected = [
+            ("AT4G36450.1", "ATGGCGATGC", 1086),
+            ("AT4G36900.1", "AGTGTCGGTG", 1024),
+            ("AT5G63980.1", "GACATATATT", 1383)
+            ]
+        returned = TAIR.get(
+                self.test_agis,
+                "transcript",
+                "rep_gene"
+                )
         self._perform_test(returned, expected)
 
     def test_cds(self):
@@ -35,7 +91,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "ATGGAGACGG", 591),
             ("AT5G63980.1", "ATGATGTCTA", 1224)
             ]
-        returned = TAIR.get(self.test_agis, "cds", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "cds",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_gene(self):
@@ -44,7 +104,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 1024),
             ("AT5G63980.1", "GACATATATT", 2122)
             ]
-        returned = TAIR.get(self.test_agis, "gene", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "gene",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_protein(self):
@@ -53,7 +117,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "METATEVATV", 196),
             ("AT5G63980.1", "MMSINCFRTA", 407)
             ]
-        returned = TAIR.get(self.test_agis, "protein", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "protein",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_intergenic(self):
@@ -65,7 +133,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT5G63970-AT5G63980", "TTGCGCCGGC", 564),
             ("AT5G63980-AT5G63990", "GTATAAAGGG", 1324)
             ]
-        returned = TAIR.get(self.test_agis, "intergenic", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "intergenic",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_intron(self):
@@ -78,7 +150,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT5G63980.1-5", "GTAAATTGCT", 91),
             ("AT5G63980.1-6", "GTAACATTAA", 100)
             ]
-        returned = TAIR.get(self.test_agis, "intron", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "intron",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_3prime_utr(self):
@@ -86,7 +162,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "GAAAGCAAAA", 232),
             ("AT5G63980.1", "TTTGTTTTTT", 131)
             ]
-        returned = TAIR.get(self.test_agis, "3prime_utr", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "3prime_utr",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_5prime_utr(self):
@@ -94,7 +174,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900.1", "AGTGTCGGTG", 201),
             ("AT5G63980.1", "GACATATATT", 28)
             ]
-        returned = TAIR.get(self.test_agis, "5prime_utr", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "5prime_utr",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_upstream500(self):
@@ -103,7 +187,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "CTTAAATTAA", 500),
             ("AT5G63980", "TTTTTAGTCT", 500)
             ]
-        returned = TAIR.get(self.test_agis, "upstream_500", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "upstream_500",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_upstream1000(self):
@@ -112,7 +200,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AAATATCCTC", 1000),
             ("AT5G63980", "CTAAAATCAA", 1000)
             ]
-        returned = TAIR.get(self.test_agis, "upstream_1000", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "upstream_1000",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_upstream3000(self):
@@ -121,7 +213,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "GGTTTAGTTA", 3000),
             ("AT5G63980", "TGATTAATAC", 3000)
             ]
-        returned = TAIR.get(self.test_agis, "upstream_3000", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "upstream_3000",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_downstream500(self):
@@ -130,7 +226,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AATCCCCCTC", 500),
             ("AT5G63980", "GTATAAAGGG", 500)
             ]
-        returned = TAIR.get(self.test_agis, "downstream_500", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "downstream_500",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_downstream1000(self):
@@ -139,7 +239,11 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AATCCCCCTC", 1000),
             ("AT5G63980", "GTATAAAGGG", 1000)
             ]
-        returned = TAIR.get(self.test_agis, "downstream_1000", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "downstream_1000",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_downstream3000(self):
@@ -148,13 +252,21 @@ class TAIRDirect(unittest.TestCase):
             ("AT4G36900", "AATCCCCCTC", 3000),
             ("AT5G63980", "GTATAAAGGG", 3000)
             ]
-        returned = TAIR.get(self.test_agis, "downstream_3000", "rep_gene")
+        returned = TAIR.get(
+                self.test_agis,
+                "downstream_3000",
+                "representative"
+                )
         self._perform_test(returned, expected)
 
     def test_empty_return(self):
         # This checks to see that no errors are raised when a invalid AGI is
         # given.
-        returned = TAIR.get(["AT5G66483.1"], "downstream_3000", "rep_gene")
+        returned = TAIR.get(
+                ["AT5G66483.1"],
+                "downstream_3000",
+                "representative"
+                )
         # self.assertTrue(len(returned)) doesn't work with generators, so do:
         try:
             returned.next()
