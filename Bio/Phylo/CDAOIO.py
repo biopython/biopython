@@ -17,7 +17,7 @@ __docformat__ = "restructuredtext en"
 from cStringIO import StringIO
 
 from Bio.Phylo import CDAO
-from cdao_elements import cdao_elements
+from _cdao_owl import cdao_elements
 import os
 
 
