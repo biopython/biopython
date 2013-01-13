@@ -5,6 +5,7 @@
 # as part of this package.
 
 import os
+import gzip
 import unittest
 try:
     import sqlite3
@@ -50,14 +51,23 @@ class CheckIndex(unittest.TestCase):
         except ImportError:
             sqlite3 = None
 
-        parsed = list(SearchIO.parse(filename, format, **kwargs))
+        if filename.endswith(".bgz"):
+            handle = gzip.open(filename)
+            parsed = list(SearchIO.parse(handle, format, **kwargs))
+            handle.close()
+        else:
+            parsed = list(SearchIO.parse(filename, format, **kwargs))
         # compare values by index
         indexed = SearchIO.index(filename, format, **kwargs)
-        self.assertEqual(len(parsed), len(indexed.keys()))
+        self.assertEqual(len(parsed), len(indexed),
+                         "Should be %i records in %s, index says %i" \
+                         % (len(parsed), filename, len(indexed)))
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:
             db_indexed = SearchIO.index_db(':memory:', [filename], format, **kwargs)
-            self.assertEqual(len(parsed), len(db_indexed.keys()))
+            self.assertEqual(len(parsed), len(db_indexed),
+                             "Should be %i records in %s, index_db says %i" \
+                             % (len(parsed), filename, len(db_indexed)))
 
         for qres in parsed:
             idx_qres = indexed[qres.id]
@@ -76,6 +86,10 @@ class CheckIndex(unittest.TestCase):
             db_indexed.close()
             db_indexed._con.close()
 
+        if os.path.isfile(filename + ".bgz"):
+            #Do the tests again with the BGZF compressed file
+            print "[BONUS %s.bgz]" % filename
+            self.check_index(filename + ".bgz", format, **kwargs)
 
 def _num_difference(obj_a, obj_b):
     """Returns the number of instance attributes presence only in one object."""
