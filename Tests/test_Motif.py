@@ -2420,6 +2420,72 @@ class TestMAST(unittest.TestCase):
         handle.close()
 
 
+class TestTransfac(unittest.TestCase):
+
+    def test_transfac_parser(self):
+        """Test if Motif can parse TRANSFAC files
+        """
+        handle = open("Motif/transfac.dat")
+        motifs = Motif.parse(handle, 'TRANSFAC')
+        motif = motifs[0]
+        self.assertEqual(motif['ID'], 'motif1')
+        self.assertEqual(len(motif.counts), 4)
+        self.assertEqual(motif.counts.length, 12)
+        self.assertEqual(motif.counts['A', 0], 1)
+        self.assertEqual(motif.counts['A', 1], 2)
+        self.assertEqual(motif.counts['A', 2], 3)
+        self.assertEqual(motif.counts['A', 3], 0)
+        self.assertEqual(motif.counts['A', 4], 5)
+        self.assertEqual(motif.counts['A', 5], 0)
+        self.assertEqual(motif.counts['A', 6], 0)
+        self.assertEqual(motif.counts['A', 7], 0)
+        self.assertEqual(motif.counts['A', 8], 0)
+        self.assertEqual(motif.counts['A', 9], 0)
+        self.assertEqual(motif.counts['A',10], 0)
+        self.assertEqual(motif.counts['A',11], 1)
+        self.assertEqual(motif.counts['C', 0], 2)
+        self.assertEqual(motif.counts['C', 1], 1)
+        self.assertEqual(motif.counts['C', 2], 0)
+        self.assertEqual(motif.counts['C', 3], 5)
+        self.assertEqual(motif.counts['C', 4], 0)
+        self.assertEqual(motif.counts['C', 5], 0)
+        self.assertEqual(motif.counts['C', 6], 1)
+        self.assertEqual(motif.counts['C', 7], 0)
+        self.assertEqual(motif.counts['C', 8], 0)
+        self.assertEqual(motif.counts['C', 9], 1)
+        self.assertEqual(motif.counts['C',10], 2)
+        self.assertEqual(motif.counts['C',11], 0)
+        self.assertEqual(motif.counts['G', 0], 2)
+        self.assertEqual(motif.counts['G', 1], 2)
+        self.assertEqual(motif.counts['G', 2], 1)
+        self.assertEqual(motif.counts['G', 3], 0)
+        self.assertEqual(motif.counts['G', 4], 0)
+        self.assertEqual(motif.counts['G', 5], 4)
+        self.assertEqual(motif.counts['G', 6], 4)
+        self.assertEqual(motif.counts['G', 7], 0)
+        self.assertEqual(motif.counts['G', 8], 5)
+        self.assertEqual(motif.counts['G', 9], 2)
+        self.assertEqual(motif.counts['G',10], 0)
+        self.assertEqual(motif.counts['G',11], 3)
+        self.assertEqual(motif.counts['T', 0], 0)
+        self.assertEqual(motif.counts['T', 1], 0)
+        self.assertEqual(motif.counts['T', 2], 1)
+        self.assertEqual(motif.counts['T', 3], 0)
+        self.assertEqual(motif.counts['T', 4], 0)
+        self.assertEqual(motif.counts['T', 5], 1)
+        self.assertEqual(motif.counts['T', 6], 0)
+        self.assertEqual(motif.counts['T', 7], 5)
+        self.assertEqual(motif.counts['T', 8], 0)
+        self.assertEqual(motif.counts['T', 9], 2)
+        self.assertEqual(motif.counts['T',10], 3)
+        self.assertEqual(motif.counts['T',11], 1)
+        motif = motifs[1]
+        self.assertEqual(motif['ID'], 'motif2')
+        self.assertEqual(len(motif.counts), 4)
+        self.assertEqual(motif.counts.length, 10)
+        handle.close()
+
+
 class MotifTestPWM(unittest.TestCase):
     def setUp(self):
         import warnings

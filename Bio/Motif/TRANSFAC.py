@@ -12,7 +12,8 @@ from Bio import BiopythonExperimentalWarning
 warnings.warn("Bio.Motif.TRANSFAC is experimental code. While it is usable, \
     the code is subject to change without warning", BiopythonExperimentalWarning)
 
-from Bio.Motif import Motif as BaseMotif
+from Bio.Motif import NewMotif as BaseMotif
+from Bio.Alphabet import IUPAC
 
 
 class Motif(BaseMotif, dict):
@@ -69,17 +70,6 @@ For more information, see the TRANSFAC documentation.
     reference_keys = set(['RX', 'RA', 'RT', 'RL'])
     # These keys occur for references
 
-    def __init__(self):
-        BaseMotif.__init__(self)
-        self.references = []
-
-    def __getitem__(self,index):
-        # This can be removed if we remove the __getitem__ method from BaseMotif
-        return dict.__getitem__(self, index)
-
-    def __str__(self):
-        return format(self, "transfac")
-
 
 class Record(list):
     """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC
@@ -121,60 +111,56 @@ XX
 
 def read(handle):
     """record = read(handle)"""
-    motif = None
-    status = None
+    annotations = {}
+    references = []
+    counts = None
     record = Record()
     for line in handle:
         line = line.strip()
-        if line=='//':
-            if motif is not None:
-                record.append(motif)
-            motif = None
-            status = None
-        elif line=='XX':
-            pass
-        else:
-            key, value = line[:2], line[4:]
-            if key=='VV':
-                record.version = value
-                continue
-            if motif is None:
-                motif = Motif()
-            if status=="freq":
+        key, value = line[:2], line[4:]
+        if key=='VV':
+            record.version = value
+        elif key=='P0':
+            counts = {}
+            assert value.split()[:4]==['A','C','G','T']
+            length = 0
+            for c in "ACGT":
+                counts[c] = []
+            for line in handle:
+                key, value = line[:2], line[4:]
                 try:
                     i = int(key)
                 except ValueError:
-                    status = None
-                else:
-                    motif.length+=1
-                    assert i==motif.length
-                    values = value.split()
-                    for c, v in zip("ACGT", values):
-                        motif.counts[c].append(float(v))
-                    continue
-            if key=='P0':
-                assert status!="freq"
-                assert motif.counts is None
-                motif.counts = {}
-                assert value.split()[:4]==['A','C','G','T']
-                motif.length = 0
-                for c in "ACGT":
-                    motif.counts[c] = []
-                status = "freq"
-            elif key=='RN':
-                index, accession = value.split(";")
-                assert index[0]=='['
-                assert index[-1]==']'
-                index = int(index[1:-1])
-                assert len(motif.references)==index-1
-                reference = {key: value}
-                motif.references.append(reference)
-            elif key in Motif.reference_keys:
-                reference[key] = value
-            elif key in Motif.multiple_value_keys:
-                if not key in motif:
-                    motif[key] = []
-                motif[key].append(value)
-            else:
-                motif[key] = value
+                    break
+                length+=1
+                assert i==length
+                values = value.split()
+                for c, v in zip("ACGT", values):
+                    counts[c].append(float(v))
+        if line=='XX':
+            pass
+        elif key=='RN':
+            index, accession = value.split(";")
+            assert index[0]=='['
+            assert index[-1]==']'
+            index = int(index[1:-1])
+            assert len(references)==index-1
+            reference = {key: value}
+            references.append(reference)
+        elif key=='//':
+            if counts is not None:
+                motif = Motif(alphabet=IUPAC.unambiguous_dna, counts=counts)
+                motif.update(annotations)
+                motif.references = references
+                record.append(motif)
+            annotations = {}
+            references = []
+        elif key in Motif.reference_keys:
+            reference[key] = value
+        elif key in Motif.multiple_value_keys:
+            if not key in annotations:
+                annotations[key] = []
+            annotations[key].append(value)
+        else:
+            annotations[key] = value
     return record
