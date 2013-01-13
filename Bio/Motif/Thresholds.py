@@ -24,7 +24,7 @@ class ScoreDistribution(object):
             self.min_score = min(0.0, pssm.min)
             self.interval = max(0.0, pssm.max)-self.min_score
             self.n_points = precision * pssm.length
-            self.ic = pssm.mean
+            self.ic = pssm.mean(background)
         self.step = self.interval/(self.n_points-1)
         self.mo_density = [0.0]*self.n_points
         self.mo_density[-self._index_diff(self.min_score)] = 1.0

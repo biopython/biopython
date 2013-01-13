@@ -11240,7 +11240,8 @@ unequal probabilities for A, C, G, T, use the \verb+background+ argument.
 For example, against a background with a 40\% GC content, use
 %cont-doctest
 \begin{verbatim}
->>> pssm = pwm.log_odds(background={'A':0.3,'C':0.2,'G':0.2,'T':0.3})
+>>> background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+>>> pssm = pwm.log_odds(background)
 >>> print pssm
         0      1      2      3      4
 A:   0.42   1.49  -2.17  -0.05  -0.75
@@ -11260,15 +11261,16 @@ The maximum and minimum score obtainable from the PSSM are stored in the
 -10.85
 \end{verbatim}
 
-Similarly, the mean and standard deviation of the PSSM scores are stored in
-the \verb+.mean+ and \verb+.std+ attributes:
+The mean and standard deviation of the PSSM scores with respect to a specific
+background are calculated by the \verb+.mean+ and \verb+.std+ methods.
 %cont-doctest
 \begin{verbatim}
->>> mean = pssm.mean
->>> std = pssm.std
+>>> mean = pssm.mean(background)
+>>> std = pssm.std(background)
 >>> print "mean = %0.2f, standard deviation = %0.2f" % (mean, std)
 mean = 3.21, standard deviation = 2.59
 \end{verbatim}
+A uniform background is used if \verb+background+ is not specified.
 The mean is particularly important, as its value is equal to the 
 Kullback-Leibler divergence or relative entropy, and is a measure for the
 information content of the motif compared to the background. As in Biopython
@@ -11374,7 +11376,7 @@ distribution grows exponentially with motif length, we are using an
 approximation with a given precision to keep computation cost manageable:
 %cont-doctest
 \begin{verbatim}
->>> distribution = pssm.distribution(precision=10**4)
+>>> distribution = pssm.distribution(background=background, precision=10**4)
 \end{verbatim}
 The \verb+distribution+ object can be used to determine a number of different thresholds.
 We can specify the requested false-positive rate (probability of ``finding'' a motif instance in background generated sequence):

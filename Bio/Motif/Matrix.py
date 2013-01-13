@@ -264,9 +264,7 @@ class PositionWeightMatrix(GenericPositionMatrix):
         values = {}
         alphabet = self.alphabet
         if background is None:
-            background = {}
-            for letter in alphabet.letters:
-                background[letter] = 1.0
+            background = dict.fromkeys(self._letters, 1.0)
         else:
             background = dict(background)
         total = sum(background.values())
@@ -296,7 +294,6 @@ class PositionWeightMatrix(GenericPositionMatrix):
                         logodds = float("nan")
                 values[letter].append(logodds)
         pssm = PositionSpecificScoringMatrix(alphabet, values)
-        pssm._background = background
         return pssm
 
 
@@ -386,14 +383,15 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             score += min([self[letter][position] for letter in letters])
         return score
 
-    @property
-    def mean(self):
-        """Expected value of the score of a motif.
-
-        returns None if the expected value is undefined"""
-        if self._background is None:
-            return None
-        background = self._background
+    def mean(self, background=None):
+        """Expected value of the score of a motif."""
+        if background is None:
+            background = dict.fromkeys(self._letters, 1.0)
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in self._letters:
+            background[letter] /= total
         sx = 0.0
         for i in range(self.length):
             for letter in self._letters:
@@ -402,16 +400,16 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
                 p = b * math.pow(2,logodds)
                 sx += p * logodds
         return sx
-        
 
-    @property
-    def std(self):
-        """Standard deviation of the score of a motif.
-
-        returns None if the standard deviation is undefined"""
-        if self._background is None:
-            return None
-        background = self._background
+    def std(self, background=None):
+        """Standard deviation of the score of a motif."""
+        if background is None:
+            background = dict.fromkeys(self._letters, 1.0)
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in self._letters:
+            background[letter] /= total
         variance = 0.0
         for i in range(self.length):
             sx = 0.0
@@ -472,12 +470,14 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         denominator = math.sqrt((sxx-sx*sx)*(syy-sy*sy))
         return numerator/denominator
 
-    def distribution(self, precision=10**3):
-        """calculate the distribution of the scores at the given precision
-
-        returns None if the distribution is undefined"""
-        background = self._background
-        if background==None:
-            return None
+    def distribution(self, background=None, precision=10**3):
+        """calculate the distribution of the scores at the given precision."""
         from Thresholds import ScoreDistribution
+        if background is None:
+            background = dict.fromkeys(self._letters, 1.0)
+        else:
+            background = dict(background)
+        total = sum(background.values())
+        for letter in self._letters:
+            background[letter] /= total
         return ScoreDistribution(precision=precision, pssm=self, background=background)
