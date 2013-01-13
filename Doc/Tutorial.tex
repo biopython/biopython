@@ -11131,6 +11131,90 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 
 \subsubsection*{TRANSFAC}
 
+TRANSFAC is a manually curated database of transcription factors, together with their genomic binding sites and DNA binding profiles \cite{matys2003}. While the file format used in the TRANSFAC database is nowadays also used by others, we will refer to it as the TRANSFAC file format.
+
+A minimal file in the TRANSFAC format looks as follows:
+\begin{verbatim}
+ID  motif1
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+04      0      5      0      0      C
+05      5      0      0      0      A
+06      0      0      4      1      G
+07      0      1      4      0      G
+08      0      0      0      5      T
+09      0      0      5      0      G
+10      0      1      2      2      K
+11      0      2      0      3      Y
+12      1      0      3      1      G
+//
+\end{verbatim}
+This file shows the frequency matrix of motif \verb+motif1+ of 12 nucleotides.
+
+TRANSFAC files are typically much more elaborate than this example, containing lots of additional information about the motif. Two-letter keys are used to store this information:
+\begin{table}[h]
+\begin{center}
+\caption{Fields commonly found in TRANSFAC files}
+\begin{tabular}{|l|l||}
+\verb+AC+ & Accession number \\
+\verb+AS+ & Accession numbers, secondary \\
+\verb+BA+ & Statistical basis \\
+\verb+BF+ & Binding factors \\
+\verb+BS+ & Factor binding sites underlying the matrix \\
+\verb+CC+ & Comments \\
+\verb+CO+ & Copyright notice \\
+\verb+DE+ & Short factor description \\
+\verb+DR+ & External databases \\
+\verb+DT+ & Date created/updated \\
+\verb+HC+ & Subfamilies \\
+\verb+HP+ & Superfamilies \\
+\verb+ID+ & Identifier \\
+\verb+NA+ & Name of the binding factor \\
+\verb+OC+ & Taxonomic classification \\
+\verb+OS+ & Species/Taxon \\
+\verb+OV+ & Older version \\
+\verb+PV+ & Preferred version \\
+\verb+TY+ & Type \\
+\verb+XX+ & Empty line; these are not stored in the Record. \\
+\end{tabular}
+\end{center}
+\end{table}
+
+To parse a TRANSFAC file, use
+%cont-doctest
+\begin{verbatim}
+>>> handle = open("transfac.dat")
+>>> record = Motif.parse(handle, "TRANSFAC")
+>>> handle.close()
+\end{verbatim}
+The motifs are stored as the list \verb+record.motifs+. The overall version number, if available, is stored as \verb+record.version+.
+
+Each motif in \verb+record.motifs+ is in instance of the \verb+Bio.Motif.TRANSFAC.Motif+ class, which inherits both from the \verb+Bio.Motif.Motif+ class and from a Python dictionary. The dictionary uses the two-letter keys to store any additional information about the motif:
+%cont-doctest
+\begin{verbatim}
+>>> motif = record.motifs[0]
+>>> motif.degenerate_consensus # Using the Bio.Motif.Motif method
+Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
+>>> motif['ID'] # Using motif as a dictionary
+'motif1'
+\end{verbatim}
+Each motif also has an attribute \verb+.references+ containing the references associated with the motif, using these two-letter keys:
+
+\begin{table}[h]
+\begin{center}
+\caption{Fields used to store references in TRANSFAC files}
+\begin{tabular}{|l|l||}
+\verb+RN+ & Reference number \\
+\verb+RA+ & Reference authors \\
+\verb+RL+ & Reference data \\
+\verb+RT+ & Reference title \\
+\verb+RX+ & PubMed ID \\
+\end{tabular}
+\end{center}
+\end{table}
+
 \subsection{Writing motifs}
 Speaking of exporting, let's look at export functions. We can export to
 a TRANSFAC-like matrix format (used by some motif processing software)
@@ -11535,10 +11619,14 @@ favorite parameters and saved the output in the file
 \verb|meme.out|. You can retrieve the motifs reported by MEME by
 running the following piece of code:
 
+%doctest ../Tests/Motif
 \begin{verbatim}
->>> motifsM = list(Motif.parse(open("meme.out"),"MEME"))
+>>> from Bio import Motif
+>>> motifsM = Motif.parse(open("meme.out"), "meme")
+\end{verbatim}
+\begin{verbatim}
 >>> motifsM
-[<Bio.Motif.MEMEMotif.MEMEMotif object at 0xc356b0>]
+[<Bio.Motif.MEME.Motif object at 0xc356b0>]
 \end{verbatim}
 
 Besides the most wanted list of motifs, the result object contains more useful information, accessible through properties with self-explanatory names:
@@ -11550,22 +11638,24 @@ Besides the most wanted list of motifs, the result object contains more useful i
 \item \verb|.command|
 \end{itemize}
 
-The motifs returned by MEMEParser can be treated exactly like regular
+The motifs returned by the MEME Parser can be treated exactly like regular
 Motif objects (with instances), they also provide some extra
 functionality, by adding additional information about the instances. 
 
+%cont-doctest
 \begin{verbatim}
 >>> motifsM[0].consensus
 Seq('CTCAATCGTA', IUPACUnambiguousDNA())
-
->>> motifsM[0].instances[0].pvalue
-8.71e-07
 >>> motifsM[0].instances[0].sequence_name
 'SEQ10;'
 >>> motifsM[0].instances[0].start
 3
 >>> motifsM[0].instances[0].strand
 '+'
+\end{verbatim}
+\begin{verbatim}
+>>> motifsM[0].instances[0].pvalue
+8.71e-07
 \end{verbatim}
 
 
@@ -11576,11 +11666,14 @@ We can do very similar things with the AlignACE program. Assume, you have
 your output in the file \verb|alignace.out|. You can parse your output
 with the following code:
 
+%cont-doctest
 \begin{verbatim}
->>> motifsA=list(Motif.parse(open("alignace.out"),"AlignAce"))
+>>> from Bio import Motif
+>>> motifsA = Motif.parse(open("alignace.out"),"alignace")
 \end{verbatim}
 
 Again, your motifs behave as they should:
+%cont-doctest
 \begin{verbatim}
 >>> motifsA[0].consensus
 Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
@@ -11589,6 +11682,7 @@ Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 In fact you can even see, that AlignAce found a very similar motif as
 MEME. It is just a longer version of a reverse complement of the MEME
 motif:
+%cont-doctest
 \begin{verbatim}
 >>> motifsM[0].reverse_complement().consensus
 Seq('TACGATTGAG', IUPACUnambiguousDNA())
@@ -11609,7 +11703,7 @@ shown below (other parameters can be specified as keyword parameters):
 Since AlignAce prints all of its output to standard output, you can get
 to your motifs by parsing the first part of the result:
 \begin{verbatim}
-motifs=list(Motif.parse(stdout,"AlignAce"))
+>>> motifs = Motif.parse(stdout,"alignace")
 \end{verbatim}
 
 
@@ -16684,6 +16778,8 @@ Teuvo Kohonen: ``Self-organizing maps'', 2nd Edition. Berlin; New York: Springer
 \bibitem{lecuyer1988}
 Pierre L'Ecuyer: ``Efficient and Portable Combined Random Number Generators.''
 \textit{Communications of the ACM} {\bf 31} (6): 742--749,774 (1988). \href{http://dx.doi.org/10.1145/62959.62969}{doi:10.1145/62959.62969}
+\bibitem{matys2003}
+V. Matys, E. Fricke, R. Geffers, E. G\"ossling, M. Haubrock, R. Hehl, K. Hornischer, D. Karas, A.E. Kel, O.V. Kel-Margoulis, D.U. Kloos, S. Land, B. Lewicki-Potapov, H. Michael, R. M\"unch, I. Reuter, S. Rotert, H. Saxel, M. Scheer, S. Thiele, E. Wingender E: ``TRANSFAC: transcriptional regulation, from patterns to profiles.'' Nucleic Acids Research {\bf 31} (1): 374--378 (2003). \href{http://dx.doi.org/10.1093/nar/gkg108}{doi:10.1093/nar/gkg108}
 \bibitem{sibson1973}
 Robin Sibson: ``SLINK: An optimally efficient algorithm for the single-link cluster method''. \textit{The Computer Journal} {\bf 16} (1): 30--34 (1973). \href{http://dx.doi.org/10.1093/comjnl/16.1.30}{doi:10.1093/comjnl/16.1.30}
 \bibitem{snedecor1989}
