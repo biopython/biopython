@@ -11125,6 +11125,9 @@ Instance('TTCACATGCCGC', IUPACUnambiguousDNA())
 >>> motif.instances[0].length
 12
 >>> pvalue = motif.instances[0].pvalue
+\end{verbatim}
+%Sadly Python 2.5 on Windows gives 1.85e-008 breaking doctest:
+\begin{verbatim}
 >>> print "%5.3g" % pvalue
 1.85e-08
 \end{verbatim}
