@@ -15,22 +15,31 @@ import Bio.Phylo as bp
 from Bio.Phylo import NeXML, NeXMLIO
 
 # Example NeXML files
-example_files = ['NeXML/%s' % f 
-                 for f in (
-                            'characters.xml', 
-                            'edgelabels.xml', 
-                            'meta_taxa.xml', 
-                            'meta_types.xml', 
-                            'nexml.xml', 
-                            'phenoscape.xml', 
-                            'sets.xml', 
-                            'taxa.xml', 
-                            'timetree.xml', 
-                            'tolweb.xml', 
-                            'treebase-record.xml', 
-                            'trees-uris.xml', 
-                            'trees.xml',
-                 )]
+example_files = (
+                 'characters.xml', 
+                 'edgelabels.xml', 
+                 'meta_taxa.xml', 
+                 'meta_types.xml', 
+                 'nexml.xml', 
+                 'phenoscape.xml', 
+                 'sets.xml', 
+                 'taxa.xml', 
+                 'timetree.xml', 
+                 'tolweb.xml', 
+                 'treebase-record.xml', 
+                 'trees-uris.xml', 
+                 'trees.xml',
+                 )
+tree_counts = {
+               'taxa.xml': 0,
+               'timetree.xml': 38,
+               'phenoscape.xml': 0,
+               'nexml.xml': 0,
+               'meta_types.xml': 0,
+               'meta_taxa.xml': 0,
+               'trees.xml': 2,
+               'characters.xml': 0,
+               }
 
 # Temporary file name for Writer tests below
 DUMMY = tempfile.mktemp()
@@ -39,19 +48,21 @@ DUMMY = tempfile.mktemp()
 # ---------------------------------------------------------
 # Parser tests
 
-def _test_parse_factory(source, count=0):
+def _test_parse_factory(source):
     """Generate a test method for parse()ing the given source.
 
     The generated function extracts each phylogenetic tree using the parse()
     function and counts the total number of trees extracted.
     """
-    fname = os.path.basename(source)
+    filename = 'NeXML/%s' % source
+    if source in tree_counts: count = tree_counts[source]
+    else: count = 1
 
     def test_parse(self):
-        trees = bp._io.parse(source, 'nexml')
-        #self.assertEqual(len(list(trees)), count)
+        trees = list(bp._io.parse(filename, 'nexml'))
+        self.assertEqual(len(trees), count)
 
-    test_parse.__doc__ = "Parse the phylogenies in %s." % fname
+    test_parse.__doc__ = "Parse the phylogenies in %s." % source
     return test_parse
 
 
