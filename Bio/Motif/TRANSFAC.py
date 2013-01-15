@@ -83,30 +83,8 @@ Attributes:
     def __init__(self):
         self.version = None
 
-    @property
-    def motifs(self):
-        import warnings
-        warnings.warn("""\
-The .motifs attribute is now obsolete, and will be deprecated and removed
-in a future release of Biopython. This class now inherits from list, so
-instead of record.motifs[i], please use record[i].
-""", PendingDeprecationWarning)
-        return self
-
     def __str__(self):
-        blocks = []
-        if self.version is not None:
-            block = """\
-VV  %s
-XX
-//
-""" % self.version
-            blocks.append(block)
-        for motif in self:
-            block = str(motif)
-            blocks.append(block)
-        text = "".join(blocks)
-        return text
+        return write(self)
 
 
 def read(handle):
@@ -164,3 +142,102 @@ def read(handle):
         else:
             annotations[key] = value
     return record
+
+def write(motifs):
+    """Write the representation of a motif in TRANSFAC format
+    """
+    blocks = []
+    try:
+        version = motifs.version
+    except AttributeError:
+        pass
+    else:
+        if version is not None:
+            block = """\
+VV  %s
+XX
+//
+""" % version
+            blocks.append(block)
+    multiple_value_keys = Motif.multiple_value_keys
+    sections = (('AC', 'AS',), # Accession
+                ('ID',),       # ID
+                ('DT', 'CO'),  # Date, copyright
+                ('NA',),       # Name
+                ('DE',),       # Short factor description
+                ('TY',),       # Type
+                ('OS', 'OC'),  # Organism
+                ('HP', 'HC'),  # Superfamilies, subfamilies
+                ('BF',),       # Binding factors
+                ('P0',),       # Frequency matrix
+                ('BA',),       # Statistical basis
+                ('BS',),       # Factor binding sites
+                ('CC',),       # Comments
+                ('DR',),       # External databases
+                ('OV', 'PV',), # Versions
+               )
+    for motif in motifs:
+        lines = []
+        for section in sections:
+            blank = False
+            for key in section:
+                if key=='P0':
+                    # Frequency matrix
+                    length = motif.length
+                    if length==0:
+                        continue
+                    sequence = motif.degenerate_consensus
+                    line = "P0      A      C      G      T"
+                    lines.append(line)
+                    for i in range(length):
+                        line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
+                                             i+1,
+                                             motif.counts['A'][i],
+                                             motif.counts['C'][i],
+                                             motif.counts['G'][i],
+                                             motif.counts['T'][i],
+                                             sequence[i],
+                                            )
+                        lines.append(line)
+                    blank = True
+                else:
+                    try:
+                        value = motif.get(key)
+                    except AttributeError:
+                        value = None
+                    if value is not None:
+                        if key in multiple_value_keys:
+                            for v in value:
+                                line = "%s  %s" % (key, v)
+                                lines.append(line)
+                        else:
+                            line = "%s  %s" % (key, value)
+                            lines.append(line)
+                        blank = True
+                if key=='PV':
+                    # References
+                    try:
+                        references = motif.references
+                    except AttributeError:
+                        pass
+                    else:
+                        keys = ("RN", "RX", "RA", "RT", "RL")
+                        for reference in references:
+                            for key in keys:
+                                value = reference.get(key)
+                                if value is None:
+                                    continue
+                                line = "%s  %s" % (key, value)
+                                lines.append(line)
+                                blank = True
+            if blank:
+                line = 'XX'
+                lines.append(line)
+        # Finished this motif; glue the lines together
+        line = "//"
+        lines.append(line)
+        block = "\n".join(lines) + "\n"
+        blocks.append(block)
+    # Finished all motifs; glue the blocks together
+    text = "".join(blocks)
+    return text

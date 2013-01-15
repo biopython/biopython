@@ -521,105 +521,6 @@ The same rules are used by TRANSFAC."""
         f.write(im)
         f.close()
 
-    def _to_transfac(self):
-        """Write the representation of a motif in TRANSFAC format
-        """
-        from Bio.Motif import TRANSFAC
-        multiple_value_keys = TRANSFAC.Motif.multiple_value_keys
-        sections = (('AC', 'AS',), # Accession
-                    ('ID',),       # ID
-                    ('DT', 'CO'),  # Date, copyright
-                    ('NA',),       # Name
-                    ('DE',),       # Short factor description
-                    ('TY',),       # Type
-                    ('OS', 'OC'),  # Organism
-                    ('HP', 'HC'),  # Superfamilies, subfamilies
-                    ('BF',),       # Binding factors
-                    ('P0',),       # Frequency matrix
-                    ('BA',),       # Statistical basis
-                    ('BS',),       # Factor binding sites
-                    ('CC',),       # Comments
-                    ('DR',),       # External databases
-                    ('OV', 'PV',), # Versions
-                   )
-        lines = []
-        for section in sections:
-            blank = False
-            for key in section:
-                if key=='P0':
-                    # Frequency matrix
-                    length = self.length
-                    if length==0:
-                        continue
-                    sequence = self.degenerate_consensus
-                    line = "P0      A      C      G      T"
-                    lines.append(line)
-                    for i in range(length):
-                        line = "%02.d %6.20g %6.20g %6.20g %6.20g      %s" % (
-                                             i+1,
-                                             self.counts['A'][i],
-                                             self.counts['C'][i],
-                                             self.counts['G'][i],
-                                             self.counts['T'][i],
-                                             sequence[i],
-                                            )
-                        lines.append(line)
-                    blank = True
-                else:
-                    try:
-                        value = self.get(key)
-                    except AttributeError:
-                        value = None
-                    if value is not None:
-                        if key in multiple_value_keys:
-                            for v in value:
-                                line = "%s  %s" % (key, v)
-                                lines.append(line)
-                        else:
-                            line = "%s  %s" % (key, value)
-                            lines.append(line)
-                        blank = True
-                if key=='PV':
-                    # References
-                    try:
-                        references = self.references
-                    except AttributeError:
-                        pass
-                    else:
-                        keys = ("RN", "RX", "RA", "RT", "RL")
-                        for reference in references:
-                            for key in keys:
-                                value = reference.get(key)
-                                if value is None:
-                                    continue
-                                line = "%s  %s" % (key, value)
-                                lines.append(line)
-                                blank = True
-            if blank:
-                line = 'XX'
-                lines.append(line)
-        # Finished; glue the lines together
-        line = "//"
-        lines.append(line)
-        text = "\n".join(lines) + "\n"
-        return text
-
-    def _to_jaspar_pfm(self):
-        """Returns the pfm representation of the motif
-        """
-        letters = "ACGT"
-        counts = self.counts
-        length = self.length
-        lines = []
-        for letter in letters:
-            terms = [str(counts[letter][i]) for i in range(length)]
-            line = "\t".join(terms) + "\n"
-            lines.append(line)
-        # Finished; glue the lines together
-        text = "".join(lines)
-        return text
-
-
     def format(self,format):
         """Returns a string representation of the Motif in a given format
 
@@ -628,15 +529,38 @@ The same rules are used by TRANSFAC."""
          - transfac : TRANSFAC like files
         """
 
-        formatters={
-            "pfm":   self._to_jaspar_pfm,
-            "transfac":     self._to_transfac,
-            }
+        if format=="pfm":
+            from Bio.Motif import Jaspar
+            return Jaspar.write(self)
+        elif format=="transfac":
+            from Bio.Motif import TRANSFAC
+            motifs = [self]
+            return TRANSFAC.write(motifs)
+        else:
+            raise ValueError("Unknown format type %s" % format)
 
-        try:
-            return formatters[format]()
-        except KeyError:
-            raise ValueError("Wrong format type")
+
+def write(motifs, format):
+    """Returns a string representation of motifs in a given format
+
+    Currently supported fromats:
+     - pfm : JASPAR Position Frequency Matrix
+             [only if len(motifs)==1]
+     - transfac : TRANSFAC like files
+    """
+
+    if format=="pfm":
+        from Bio.Motif import Jaspar
+        if len(motifs)!=1:
+            raise Exception("Only a single motif can be written in the JASPAR Position Frequency Matrix (pfm) format")
+        motif = motifs[0]
+        return Jaspar.write(motif)
+    elif format=="transfac":
+        from Bio.Motif import TRANSFAC
+        return TRANSFAC.write(motifs)
+    else:
+        raise ValueError("Unknown format type %s" % format)
+
 
 NewMotif = Motif
 from Bio.Motif._Motif import Motif

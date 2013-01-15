@@ -80,7 +80,7 @@ Biopython Tutorial and Cookbook}
 
 \author{Jeff Chang, Brad Chapman, Iddo Friedberg, Thomas Hamelryck, \\
 Michiel de Hoon, Peter Cock, Tiago Antao, Eric Talevich, Bartek Wilczy\'{n}ski}
-\date{Last Update -- 3 January 2013 (Biopython 1.60+)}
+\date{Last Update -- 15 January 2013 (Biopython 1.60+)}
 
 %Hack to get the logo at the start of the HTML front page:
 %(hopefully this isn't going to be too wide for most people)
@@ -11155,9 +11155,57 @@ P0      A      C      G      T
 //
 \end{verbatim}
 This file shows the frequency matrix of motif \verb+motif1+ of 12 nucleotides.
+In general, one file in the TRANSFAC format can contain multiple motifs. For
+example, this is the contents of the example TRANSFAC file \verb+transfac.dat+:
+\begin{verbatim}
+VV  EXAMPLE January 15, 2013
+XX
+//
+ID  motif1
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+...
+11      0      2      0      3      Y
+12      1      0      3      1      G
+//
+ID  motif2
+P0      A      C      G      T
+01      2      1      2      0      R
+02      1      2      2      0      S
+...
+09      0      0      0      5      T
+10      0      2      0      3      Y
+//
+\end{verbatim}
+To parse a TRANSFAC file, use
+%cont-doctest
+\begin{verbatim}
+>>> handle = open("transfac.dat")
+>>> motifs = Motif.parse(handle, "TRANSFAC")
+>>> handle.close()
+\end{verbatim}
+The overall version number, if available, is stored as \verb+motifs.version+:
+%cont-doctest
+\begin{verbatim}
+>>> motifs.version
+'EXAMPLE January 15, 2013'
+\end{verbatim}
 
-TRANSFAC files are typically much more elaborate than this example, containing lots of additional information about the motif. Two-letter keys are used to store this information:
+Each motif in \verb+motifs+ is in instance of the \verb+Bio.Motif.TRANSFAC.Motif+ class, which inherits both from the \verb+Bio.Motif.Motif+ class and from a Python dictionary. The dictionary uses the two-letter keys to store any additional information about the motif:
+%cont-doctest
+\begin{verbatim}
+>>> motif = motifs[0]
+>>> motif.degenerate_consensus # Using the Bio.Motif.Motif method
+Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
+>>> motif['ID'] # Using motif as a dictionary
+'motif1'
+\end{verbatim}
+
+TRANSFAC files are typically much more elaborate than this example, containing lots of additional information about the motif. Table \ref{table:transfaccodes} lists the two-letter field codes that are commonly found in TRANSFAC files:
 \begin{table}[h]
+\label{table:transfaccodes}
 \begin{center}
 \caption{Fields commonly found in TRANSFAC files}
 \begin{tabular}{|l|l||}
@@ -11185,24 +11233,6 @@ TRANSFAC files are typically much more elaborate than this example, containing l
 \end{center}
 \end{table}
 
-To parse a TRANSFAC file, use
-%cont-doctest
-\begin{verbatim}
->>> handle = open("transfac.dat")
->>> record = Motif.parse(handle, "TRANSFAC")
->>> handle.close()
-\end{verbatim}
-The motifs are stored as the list \verb+record.motifs+. The overall version number, if available, is stored as \verb+record.version+.
-
-Each motif in \verb+record.motifs+ is in instance of the \verb+Bio.Motif.TRANSFAC.Motif+ class, which inherits both from the \verb+Bio.Motif.Motif+ class and from a Python dictionary. The dictionary uses the two-letter keys to store any additional information about the motif:
-%cont-doctest
-\begin{verbatim}
->>> motif = record.motifs[0]
->>> motif.degenerate_consensus # Using the Bio.Motif.Motif method
-Seq('SRACAGGTGKYG', IUPACAmbiguousDNA())
->>> motif['ID'] # Using motif as a dictionary
-'motif1'
-\end{verbatim}
 Each motif also has an attribute \verb+.references+ containing the references associated with the motif, using these two-letter keys:
 
 \begin{table}[h]
@@ -11218,9 +11248,70 @@ Each motif also has an attribute \verb+.references+ containing the references as
 \end{center}
 \end{table}
 
+Printing the motifs writes them out in their native TRANSFAC format:
+%cont-doctest
+\begin{verbatim}
+>>> print motifs
+VV  EXAMPLE January 15, 2013
+XX
+//
+ID  motif1
+XX
+P0      A      C      G      T
+01      1      2      2      0      S
+02      2      1      2      0      R
+03      3      0      1      1      A
+04      0      5      0      0      C
+05      5      0      0      0      A
+06      0      0      4      1      G
+07      0      1      4      0      G
+08      0      0      0      5      T
+09      0      0      5      0      G
+10      0      1      2      2      K
+11      0      2      0      3      Y
+12      1      0      3      1      G
+XX
+//
+ID  motif2
+XX
+P0      A      C      G      T
+01      2      1      2      0      R
+02      1      2      2      0      S
+03      0      5      0      0      C
+04      3      0      1      1      A
+05      0      0      4      1      G
+06      5      0      0      0      A
+07      0      1      4      0      G
+08      0      0      5      0      G
+09      0      0      0      5      T
+10      0      2      0      3      Y
+XX
+//
+<BLANKLINE>
+\end{verbatim}
+You can export the motifs in the TRANSFAC format by capturing this output
+in a string and saving it in a file:
+\begin{verbatim}
+>>> text = str(motifs)
+>>> handle = open("mytransfacfile.dat", 'w')
+>>> handle.write(text)
+>>> handle.close()
+\end{verbatim}
+
 \subsection{Writing motifs}
-Speaking of exporting, let's look at export functions. We can export to
-a TRANSFAC-like matrix format (used by some motif processing software)
+Speaking of exporting, let's look at export functions in general.
+To export a motif in the JASPAR \verb+.pfm+ format, use
+%the tabs in the output confuse doctest; don't test
+\begin{verbatim}
+>>> print m.format("pfm")
+3       7       0       2       1
+0       0       5       2       6
+0       0       0       3       0
+4       0       2       0       0
+<BLANKLINE>
+\end{verbatim}
+
+To write the motif in a TRANSFAC-like matrix format, use
 %cont-doctest
 \begin{verbatim}
 >>> print m.format("transfac")
@@ -11235,7 +11326,41 @@ XX
 <BLANKLINE>
 \end{verbatim}
 
-Finally, if we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
+To write out multiple motifs, you can use \verb+Motif.write+.
+This function can be used regardless of whether the motifs originated from a TRANSFAC file. For example,
+%cont-doctest
+\begin{verbatim}
+>>> motifs = [arnt, srf]
+>>> print Motif.write(motifs, 'transfac')
+P0      A      C      G      T
+01      4     16      0      0      C
+02     19      0      1      0      A
+03      0     20      0      0      C
+04      0      0     20      0      G
+05      0      0      0     20      T
+06      0      0     20      0      G
+XX
+//
+P0      A      C      G      T
+01      2      1     39      4      G
+02      9     33      2      2      C
+03      0     45      1      0      C
+04      1     45      0      0      C
+05     32      1      0     13      A
+06      3      1      0     42      T
+07     46      0      0      0      A
+08      1      0      0     45      T
+09     43      0      0      3      A
+10     15      1      0     30      T
+11      2      0     44      0      G
+12      2      1     43      0      G
+XX
+//
+<BLANKLINE>
+\end{verbatim}
+
+\subsection{Creating a sequence logo}
+If we have internet access, we can create a \href{http://weblogo.berkeley.edu}{weblogo}:
 \begin{verbatim}
 >>> arnt.weblogo("Arnt.png")
 \end{verbatim}
@@ -11513,6 +11638,10 @@ Position -20: score = 4.601
 Position 13: score = 5.738
 Position -6: score = 4.601
 \end{verbatim}
+
+\section{Each motif object has an associated Position-Specific Scoring Matrix}
+
+To make things easier.
 
 \section{Comparing motifs}
 \label{sec:comp}

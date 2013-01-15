@@ -36,3 +36,17 @@ def read(handle, format):
         raise ValueError("Unknown format %s" % format)
     motif.mask = "*"*motif.length
     return motif
+
+def write(motif):
+    """Returns the pfm representation of the motif
+    """
+    letters = "ACGT"
+    counts = motif.counts
+    lines = []
+    for letter in letters:
+        terms = map(str, counts[letter])
+        line = "\t".join(terms) + "\n"
+        lines.append(line)
+    # Finished; glue the lines together
+    text = "".join(lines)
+    return text
