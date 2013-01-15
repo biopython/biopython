@@ -20,12 +20,14 @@ from xml.dom import minidom
 
 NAMESPACES = {
               'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-              #'xmi': 'http://www.w3.org/XML/1998/namespace',
+              'xml': 'http://www.w3.org/XML/1998/namespace',
               'nex': 'http://www.nexml.org/2009',
               'cdao': 'http://purl.obolibrary.org/obo/cdao.owl#',
               'xsd': 'http://www.w3.org/2001/XMLSchema#',
               }
 DEFAULT_NAMESPACE = NAMESPACES['nex']
+VERSION = '0.9'
+SCHEMA = 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd'
 
 for prefix, uri in NAMESPACES.items():
     ET.register_namespace(prefix, uri)
@@ -163,9 +165,9 @@ class Writer(object):
         
         # set XML namespaces
         root_node = ET.Element('nex:nexml')
-        root_node.set('version', '0.9')
+        root_node.set('version', VERSION)
         root_node.set('xmlns', DEFAULT_NAMESPACE)
-        root_node.set('xsi:schemaLocation', 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd')
+        root_node.set('xsi:schemaLocation', SCHEMA)
 
         for prefix, uri in NAMESPACES.items():
             root_node.set('xmlns:%s' % prefix, uri)
