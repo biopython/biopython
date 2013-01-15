@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nex:nexml 
+    version="0.9"
+    xml:base="http://example.org/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    generator="handmade"
+    xmlns:nex="http://www.nexml.org/2009"
+    xmlns="http://www.nexml.org/2009"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd">
+    <otus 
+        id="taxa1" 
+        label="My taxa block">        
+        <otu id="t1"/>
+        <otu id="t2"/>
+        <otu id="t3"/>
+        <otu id="t4"/>
+        <otu id="t5"/>
+        <set otu="t1 t2" id="set1" about="#set1">
+            <meta id="m1" xsi:type="nex:LiteralMeta" content="1" datatype="xsd:integer" xmlns:foo="http://example.org/foo#" property="foo:hasInt"/>
+        </set>        
+    </otus>
+    <trees otus="taxa1" id="trees1">       
+        <tree xsi:type="nex:IntTree" id="tree1">            
+            <node id="n1"/>
+            <node id="n2"/>
+            <node id="n3"/>
+            <rootedge target="n1" id="root"/>
+            <edge source="n1" target="n2" id="e1"/>
+            <edge source="n1" target="n3" id="e2"/> 
+            <set edge="e1" rootedge="root" node="n1" id="set2"/>            
+        </tree>
+        <set tree="tree1" network="tree1" id="set3"/>        
+    </trees>
+</nex:nexml>
+
