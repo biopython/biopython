@@ -34,6 +34,9 @@ MANIFEST
 #Ignore potential directory created during install:
 biopython.egg-info
  
+#Files are downloaded on install, should not be included
+Bio/Restriction2/emboss_*.txt
+
 #The graphics unit tests produce output files for human inspection
 #(at the time of writing, only PDF and PNG files are created)
 Tests/Graphics/*.pdf
