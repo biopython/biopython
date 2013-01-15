@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+	For an explanation of the structure of the root element 
+	and the taxa element refer to the file taxa.xml.
+-->
+<nex:nexml 
+	version="0.9"
+	xml:base="http://example.org/" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xsi:schemaLocation="http://www.nexml.org/2009 ../xsd/nexml.xsd"
+	xmlns:nex="http://www.nexml.org/2009"
+	xmlns:cdao="http://www.evolutionaryontology.org/cdao/1.0/cdao.owl#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns="http://www.nexml.org/2009">	        
+	<otus id="tax1" label="RootTaxaBlock">
+		<otu id="t1"/>
+		<otu id="t2"/>
+		<otu id="t3"/>
+		<otu id="t4"/>
+		<otu id="t5"/>
+	</otus>
+	<!--
+		The trees block is structured as follows:
+			* the root element takes the same attributes as 
+			  characters elements do: an id, a reference
+			  to a taxa element, and various optional
+			  attributes.
+			* the trees element contains one or more tree/network
+			  elements, which are the same structure as
+			  GraphML documents (http://graphml.graphdrawing.org/),
+			  with the following extentions:
+			  	- there are two subclasses (xsi:type="nex:Tree" and
+			  	  xsi:type="nex:Network"), which only differ in the
+			  	  constrained in-degree of node elements (one for 
+			  	  trees, one or more for networks)
+			  	- node elements can have an additional taxon attribute
+			  	  to refer to a taxon element defined earlier 
+			  	- edge elements can have a 'length' attribute
+			  	  to specify edge length/weight, which is a 
+			  	  IEEE 754-1985 compliant floating point number on 
+			  	  trees of type FloatTree.
+	-->
+	<trees otus="tax1" id="Trees" label="TreesBlockFromXML">
+		<!--
+			A tree with float edges. 
+		-->
+		<tree id="tree1" xsi:type="nex:FloatTree" label="tree1">
+			<node id="n1" label="n1" root="true"/>
+			<node id="n2" label="n2" otu="t1"/>
+			<node id="n3" label="n3"/>
+			<node id="n4" label="n4" about="#n4">
+			    <meta 
+			        id="dict1" 
+			        property="cdao:has_tag" 
+			        content="true" 
+			        xsi:type="nex:LiteralMeta"
+			        datatype="xsd:boolean"/>
+			</node>
+			<node id="n5" label="n5" otu="t3"/>
+			<node id="n6" label="n6" otu="t2"/>
+			<node id="n7" label="n7"/>
+			<node id="n8" label="n8" otu="t5"/>
+			<node id="n9" label="n9" otu="t4"/>
+			<edge source="n1" target="n3" id="e1" length="0.34534"/>			
+			<edge source="n1" target="n2" id="e2" length="0.4353"/>
+			<edge source="n3" target="n4" id="e3" length="0.324"/>
+			<edge source="n3" target="n7" id="e4" length="0.3247"/>
+			<edge source="n4" target="n5" id="e5" length="0.234"/>
+			<edge source="n4" target="n6" id="e6" length="0.3243"/>
+			<edge source="n7" target="n8" id="e7" length="0.32443"/>
+			<edge source="n7" target="n9" id="e8" length="0.2342"/>
+		</tree>
+		<!--  
+			A tree with int edges.
+		-->
+		<tree id="tree2" xsi:type="nex:IntTree" label="tree2">
+			<node id="tree2n1" label="n1"/>
+			<node id="tree2n2" label="n2" otu="t1"/>
+			<node id="tree2n3" label="n3"/>
+			<node id="tree2n4" about="#tree2n4" label="n4">
+			    <meta 
+			    	id="tree2dict1" 
+			        property="cdao:has_tag" 
+			        content="true" 
+			        xsi:type="nex:LiteralMeta"
+			        datatype="xsd:boolean"/>
+			</node>
+			<node id="tree2n5" label="n5" otu="t3"/>
+			<node id="tree2n6" label="n6" otu="t2"/>
+			<node id="tree2n7" label="n7"/>
+			<node id="tree2n8" label="n8" otu="t5"/>
+			<node id="tree2n9" label="n9" otu="t4"/>
+			<edge source="tree2n1" target="tree2n3" id="tree2e1" length="1"/>			
+			<edge source="tree2n1" target="tree2n2" id="tree2e2" length="2"/>
+			<edge source="tree2n3" target="tree2n4" id="tree2e3" length="3"/>
+			<edge source="tree2n3" target="tree2n7" id="tree2e4" length="1"/>
+			<edge source="tree2n4" target="tree2n5" id="tree2e5" length="2"/>
+			<edge source="tree2n4" target="tree2n6" id="tree2e6" length="1"/>
+			<edge source="tree2n7" target="tree2n8" id="tree2e7" length="1"/>
+			<edge source="tree2n7" target="tree2n9" id="tree2e8" length="1"/>
+		</tree>	
+		<!--  
+			A network with int edges.
+		-->
+		<network id="tree3" xsi:type="nex:IntNetwork" label="tree2">
+			<node id="tree3n1" label="tree3n1"/>
+			<node id="tree3n2" label="tree3n2" otu="t1"/>
+			<node id="tree3n3" label="tree3n3"/>
+			<node id="tree3n4" label="tree3n4"/>
+			<node id="tree3n5" label="tree3n5" otu="t3"/>
+			<node id="tree3n6" label="tree3n6" otu="t2"/>
+			<node id="tree3n7" label="tree3n7"/>
+			<node id="tree3n8" label="tree3n8" otu="t5"/>
+			<node id="tree3n9" label="tree3n9" otu="t4"/>
+			<edge source="tree3n1" target="tree3n3" id="tree3e1" length="1"/>			
+			<edge source="tree3n1" target="tree3n2" id="tree3e2" length="2"/>
+			<edge source="tree3n3" target="tree3n4" id="tree3e3" length="3"/>
+			<edge source="tree3n3" target="tree3n7" id="tree3e4" length="1"/>
+			<edge source="tree3n4" target="tree3n5" id="tree3e5" length="2"/>
+			<edge source="tree3n4" target="tree3n6" id="tree3e6" length="1"/>
+			<edge source="tree3n7" target="tree3n6" id="tree3e7" length="1"/> <!-- extra edge -->
+			<edge source="tree3n7" target="tree3n8" id="tree3e9" length="1"/>
+			<edge source="tree3n7" target="tree3n9" id="tree3e8" length="1"/>
+		</network>				
+	</trees>
+</nex:nexml>
