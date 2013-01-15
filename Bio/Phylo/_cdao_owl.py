@@ -1,3 +1,8 @@
+# Copyright (C) 2013 by Ben Morris (ben@bendmorris.com)
+# This code is part of the Biopython distribution and governed by its
+# license. Please see the LICENSE file that should have been included
+# as part of this package.
+
 import xml.etree.ElementTree as ET
 
 cdao_owl = '''<?xml version="1.0"?>
