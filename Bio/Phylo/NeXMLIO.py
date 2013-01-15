@@ -1,4 +1,4 @@
-# Copyright (C) 2012 by Ben Morris (ben@bendmorris.com)
+# Copyright (C) 2013 by Ben Morris (ben@bendmorris.com)
 # Based on Bio.Nexus, copyright 2005-2008 by Frank Kauff & Cymon J. Cox
 # and Bio.Phylo.Newick, copyright 2009 by Eric Talevich.
 # All rights reserved.
