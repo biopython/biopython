@@ -270,9 +270,12 @@ class Writer(object):
         
         try: base_uri = kwargs['base_uri']
         except KeyError: base_uri = ''
+
+        try: storage = kwargs['storage']
+        except KeyError: storage = None
         
-        self.add_trees_to_model(base_uri=base_uri)
-        self.serialize_model(handle, mime_type=mime_type)
+        self.add_trees_to_model(base_uri=base_uri, storage=storage)
+        if storage is None: self.serialize_model(handle, mime_type=mime_type)
         
         
     def add_trees_to_model(self, trees=None, storage=None, base_uri='http://localhost/'):
