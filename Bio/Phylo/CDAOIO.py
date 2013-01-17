@@ -360,7 +360,7 @@ class Writer(object):
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
                            (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), qUri('rdf:label'), clade.name),
+                           (nUri(tu_uri), qUri('rdf:label'), RDF.Node(literal=clade.name)),
                            ]
                            
             # TODO: should be able to pass in an optional function for 
@@ -386,11 +386,12 @@ class Writer(object):
                            ]
             # add branch length
             edge_ann_uri = 'edge_annotation%s' % self.edge_counter
+            branch_length = RDF.Node(literal=str(clade.branch_length), 
+                                     datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
             statements += [
                            (nUri(edge_ann_uri), qUri('rdf:type'), qUri('cdao:EdgeLength')),
                            (nUri(edge_uri), qUri('cdao:has_Annotation'), nUri(edge_ann_uri)),
-                           # TODO: does this type of numeric literal actually work?
-                           (nUri(edge_ann_uri), qUri('cdao:has_Value'), str(clade.branch_length)),
+                           (nUri(edge_ann_uri), qUri('cdao:has_Value'), branch_length),
                            ]
             # TODO: annotate with confidences?
                       
