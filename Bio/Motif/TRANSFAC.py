@@ -98,7 +98,7 @@ def read(handle):
         key, value = line[:2], line[4:]
         if key=='VV':
             record.version = value
-        elif key=='P0':
+        elif key in ('P0', 'PO'): # Old TRANSFAC files use PO instead of P0 
             counts = {}
             assert value.split()[:4]==['A','C','G','T']
             length = 0
@@ -118,7 +118,7 @@ def read(handle):
         if line=='XX':
             pass
         elif key=='RN':
-            index, accession = value.split(";")
+            index, separator, accession = value.partition(";")
             assert index[0]=='['
             assert index[-1]==']'
             index = int(index[1:-1])
