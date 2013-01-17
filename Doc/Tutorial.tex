@@ -11641,7 +11641,141 @@ Position -6: score = 4.601
 
 \section{Each motif object has an associated Position-Specific Scoring Matrix}
 
-To make things easier.
+To facilitate searching for potential TFBSs using PSSMs, both the position-weight matrix and the position-specific scoring matrix are associated with each motif. Using the Arnt motif as an example:
+%cont-doctest
+\begin{verbatim}
+>>> from Bio import Motif
+>>> handle = open("Arnt.sites")
+>>> motif = Motif.read(handle, 'sites')
+>>> print motif.counts
+        0      1      2      3      4      5
+A:   4.00  19.00   0.00   0.00   0.00   0.00
+C:  16.00   0.00  20.00   0.00   0.00   0.00
+G:   0.00   1.00   0.00  20.00   0.00  20.00
+T:   0.00   0.00   0.00   0.00  20.00   0.00
+<BLANKLINE>
+>>> print motif.pwm
+        0      1      2      3      4      5
+A:   0.20   0.95   0.00   0.00   0.00   0.00
+C:   0.80   0.00   1.00   0.00   0.00   0.00
+G:   0.00   0.05   0.00   1.00   0.00   1.00
+T:   0.00   0.00   0.00   0.00   1.00   0.00
+<BLANKLINE>
+>>> print motif.pssm
+        0      1      2      3      4      5
+A:  -0.32   1.93   -inf   -inf   -inf   -inf
+C:   1.68   -inf   2.00   -inf   -inf   -inf
+G:   -inf  -2.32   -inf   2.00   -inf   2.00
+T:   -inf   -inf   -inf   -inf   2.00   -inf
+<BLANKLINE>
+>>>
+\end{verbatim}
+The negative infinities appear here because the corresponding entry in the frequency matrix is 0, and we are using zero pseudocounts by default:
+%cont-doctest
+\begin{verbatim}
+>>> for letter in "ACGT":
+...     print "%s: %4.2f" % (letter, motif.pseudocounts[letter])
+...
+A: 0.00
+C: 0.00
+G: 0.00
+T: 0.00
+\end{verbatim}
+If you change the \verb+.pseudocounts+ attribute, the position-frequency matrix and the position-specific scoring matrix are recalculated automatically:
+%cont-doctest
+\begin{verbatim}
+>>> motif.pseudocounts = 3.0
+>>> for letter in "ACGT":
+...     print "%s: %4.2f" % (letter, motif.pseudocounts[letter])
+...
+A: 3.00
+C: 3.00
+G: 3.00
+T: 3.00
+>>> print motif.pwm
+        0      1      2      3      4      5
+A:   0.22   0.69   0.09   0.09   0.09   0.09
+C:   0.59   0.09   0.72   0.09   0.09   0.09
+G:   0.09   0.12   0.09   0.72   0.09   0.72
+T:   0.09   0.09   0.09   0.09   0.72   0.09
+<BLANKLINE>
+>>> print motif.pssm
+        0      1      2      3      4      5
+A:  -0.19   1.46  -1.42  -1.42  -1.42  -1.42
+C:   1.25  -1.42   1.52  -1.42  -1.42  -1.42
+G:  -1.42  -1.00  -1.42   1.52  -1.42   1.52
+T:  -1.42  -1.42  -1.42  -1.42   1.52  -1.42
+<BLANKLINE>
+\end{verbatim}
+You can also set the \verb+.pseudocounts+ to a dictionary over the four nucleotides if you want to use different pseudocounts for them. Setting \verb+motif.pseudocounts+ to \verb+None+ resets it to its default value of zero.
+
+The position-specific scoring matrix depends on the background distribution, which is uniform by default:
+%cont-doctest
+\begin{verbatim}
+>>> for letter in "ACGT":
+...     print "%s: %4.2f" % (letter, motif.background[letter])
+...
+A: 0.25
+C: 0.25
+G: 0.25
+T: 0.25
+\end{verbatim}
+Again, if you modify the background distribution, the position-specific scoring matrix is recalculated:
+%cont-doctest
+\begin{verbatim}
+>>> motif.background = {'A': 0.2, 'C': 0.3, 'G': 0.3, 'T': 0.2}
+>>> print motif.pssm
+        0      1      2      3      4      5
+A:   0.13   1.78  -1.09  -1.09  -1.09  -1.09
+C:   0.98  -1.68   1.26  -1.68  -1.68  -1.68
+G:  -1.68  -1.26  -1.68   1.26  -1.68   1.26
+T:  -1.09  -1.09  -1.09  -1.09   1.85  -1.09
+<BLANKLINE>
+\end{verbatim}
+Setting \verb+motif.background+ to \verb+None+ resets it to a uniform distribution:
+%cont-doctest
+\begin{verbatim}
+>>> motif.background = None
+>>> for letter in "ACGT":
+...     print "%s: %4.2f" % (letter, motif.background[letter])
+...
+A: 0.25
+C: 0.25
+G: 0.25
+T: 0.25
+\end{verbatim}
+If you set \verb+motif.background+ equal to a single value, it will be interpreted as the GC content:
+%cont-doctest
+\begin{verbatim}
+>>> motif.background = 0.8
+>>> for letter in "ACGT":
+...     print "%s: %4.2f" % (letter, motif.background[letter])
+...
+A: 0.10
+C: 0.40
+G: 0.40
+T: 0.10
+\end{verbatim}
+Note that you can now calculate the mean of the PSSM scores over the background against which it was computed:
+%cont-doctest
+\begin{verbatim}
+>>> print "%f" % motif.pssm.mean(motif.background)
+4.703928
+\end{verbatim}
+as well as its standard deviation:
+%cont-doctest
+\begin{verbatim}
+>>> print "%f" % motif.pssm.std(motif.background)
+3.290900
+\end{verbatim}
+and its distribution:
+%cont-doctest
+\begin{verbatim}
+>>> distribution = motif.pssm.distribution(background=motif.background)
+>>> threshold = distribution.threshold_fpr(0.01)
+>>> print "%f" % threshold
+3.854375
+\end{verbatim}
 
 \section{Comparing motifs}
 \label{sec:comp}

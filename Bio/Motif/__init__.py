@@ -318,10 +318,17 @@ class Motif(object):
         return self._background
 
     def __set_background(self, value):
-        if value is None:
+        if isinstance(value, dict):
+            self._background = dict((letter, value[letter]) for letter in self.alphabet.letters)
+        elif value is None:
             self._background = dict.fromkeys(self.alphabet.letters, 1.0)
         else:
-            self._background = dict((letter, value[letter]) for letter in self.alphabet.letters)
+            if sorted(self.alphabet.letters)!=["A", "C", "G", "T"]:
+                raise Exception("Setting the background to a single value only works for DNA motifs (in which case the value is interpreted as the GC content")
+            self._background['A'] = (1.0-value)/2.0
+            self._background['C'] = value/2.0
+            self._background['G'] = value/2.0
+            self._background['T'] = (1.0-value)/2.0
         total = sum(self._background.values())
         for letter in self.alphabet.letters:
             self._background[letter] /= total
