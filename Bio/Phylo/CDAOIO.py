@@ -117,15 +117,18 @@ class Parser(object):
         
         if 'base_uri' in kwargs: base_uri = kwargs['base_uri']
         else: base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
+
+        if 'context' in kwargs: context = RDF.Node(RDF.Uri(context))
+        else: context = None
         
         statements = parser.parse_string_as_stream(self.handle.read(), base_uri)
         for s in statements:
             model.append(s)
             
-        return self.parse_model(model)
+        return self.parse_model(model, context=context)
             
             
-    def parse_model(self, model=None):
+    def parse_model(self, model=None, context=None):
         '''Generator that yields CDAO.Tree instances from an RDF model.'''
         RDF = import_rdf()
         
@@ -133,7 +136,7 @@ class Parser(object):
             model = self.model
         
         # look up branch lengths/TUs for all nodes
-        self.get_node_info(model)
+        self.get_node_info(model, context=context)
         
         for root_node in self.tree_roots:
             clade = self.parse_children(root_node)
@@ -156,7 +159,7 @@ class Parser(object):
         return clade
         
             
-    def get_node_info(self, model):
+    def get_node_info(self, model, context=None):
         '''Creates a dictionary containing information about all nodes in the tree.'''
         RDF = import_rdf()
         
@@ -168,7 +171,7 @@ class Parser(object):
         self.nodes = set()
         self.tree_roots = set()
         
-        for statement in model:
+        for statement, context in model.as_stream_context(context):
             # process each RDF triple in the model sequentially
             s, v, o = str(statement.subject), Uri(str(statement.predicate)), str(statement.object)
             
@@ -282,7 +285,9 @@ class Writer(object):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
-        
+
+        context = RDF.Node(RDF.Uri(base_uri))
+
         nUri = lambda s: namedUri(s, self.base_uri)
         Uri = RDF.Uri
         urls = self.urls
@@ -305,13 +310,13 @@ class Writer(object):
         Redland.librdf_model_transaction_start(model._model)
         
         for stmt in [(Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology'))]:
-            model.append(RDF.Statement(*stmt))
+            model.append(RDF.Statement(*stmt), context)
 
         for tree in trees:
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=True)
             for stmt in statements:
-                model.append(stmt)
+                model.append(stmt, context)
                 
         Redland.librdf_model_transaction_commit(model._model)
             
