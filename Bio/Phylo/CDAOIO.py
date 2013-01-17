@@ -78,11 +78,12 @@ class Parser(object):
     """
     urls = RDF_NAMESPACES
 
-    def __init__(self, handle):
+    def __init__(self, handle=None):
         self.handle = handle
         self.model = None
         self.node_info = None
         self.children = {}
+        self.rooted = False
 
     @classmethod
     def from_string(cls, treetext):
@@ -117,9 +118,6 @@ class Parser(object):
         
         if 'base_uri' in kwargs: base_uri = kwargs['base_uri']
         else: base_uri = RDF.Uri(string="file://"+os.path.abspath(self.handle.name))
-
-        if 'context' in kwargs: context = RDF.Node(RDF.Uri(context))
-        else: context = None
         
         statements = parser.parse_string_as_stream(self.handle.read(), base_uri)
         for s in statements:
@@ -134,6 +132,8 @@ class Parser(object):
         
         if model is None:
             model = self.model
+
+        if not context is None: context = RDF.Node(RDF.Uri(context))
         
         # look up branch lengths/TUs for all nodes
         self.get_node_info(model, context=context)
