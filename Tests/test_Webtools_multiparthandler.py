@@ -13,6 +13,10 @@ except ImportError:
 import re
 from Bio.Webtools.multiparthandler import multiparthandler
 
+# Make sure test is skipped if not internet connected
+import requires_internet
+requires_internet.check()
+
 
 class multiparthandler_t(unittest.TestCase):
     validator_url = "http://validator.w3.org/check"
