@@ -10743,7 +10743,6 @@ on commercial use.
 \section{Motif objects}
 \label{sec:object}
 
-%TODO - turn these into doctests...
 Since we are interested in motif analysis, we need to take a look at
 \verb|Motif| objects in the first place. For that we need to import 
 the Motif library:
@@ -11642,6 +11641,7 @@ Position -6: score = 4.601
 \section{Each motif object has an associated Position-Specific Scoring Matrix}
 
 To facilitate searching for potential TFBSs using PSSMs, both the position-weight matrix and the position-specific scoring matrix are associated with each motif. Using the Arnt motif as an example:
+%TODO - Start a new doctest here?
 %cont-doctest
 \begin{verbatim}
 >>> from Bio import Motif
@@ -11661,6 +11661,9 @@ C:   0.80   0.00   1.00   0.00   0.00   0.00
 G:   0.00   0.05   0.00   1.00   0.00   1.00
 T:   0.00   0.00   0.00   0.00   1.00   0.00
 <BLANKLINE>
+\end{verbatim}
+%Can't use next bit in doctest, Windows Python 2.5 and 2.6 put -1.$ not -inf
+\begin{verbatim}
 >>> print motif.pssm
         0      1      2      3      4      5
 A:  -0.32   1.93   -inf   -inf   -inf   -inf
@@ -11668,7 +11671,6 @@ C:   1.68   -inf   2.00   -inf   -inf   -inf
 G:   -inf  -2.32   -inf   2.00   -inf   2.00
 T:   -inf   -inf   -inf   -inf   2.00   -inf
 <BLANKLINE>
->>>
 \end{verbatim}
 The negative infinities appear here because the corresponding entry in the frequency matrix is 0, and we are using zero pseudocounts by default:
 %cont-doctest
@@ -11692,6 +11694,10 @@ A: 3.00
 C: 3.00
 G: 3.00
 T: 3.00
+\end{verbatim}
+%Can't use this in doctest, Windows Python 2.5 and 2.6 give G/1 as 0.13 not 0.12
+%TODO - Check why...
+\begin{verbatim}
 >>> print motif.pwm
         0      1      2      3      4      5
 A:   0.22   0.69   0.09   0.09   0.09   0.09
@@ -11699,6 +11705,8 @@ C:   0.59   0.09   0.72   0.09   0.09   0.09
 G:   0.09   0.12   0.09   0.72   0.09   0.72
 T:   0.09   0.09   0.09   0.09   0.72   0.09
 <BLANKLINE>
+%cont-doctest
+\begin{verbatim}
 >>> print motif.pssm
         0      1      2      3      4      5
 A:  -0.19   1.46  -1.42  -1.42  -1.42  -1.42
@@ -11805,6 +11813,7 @@ motifs.
 
 To show how these functions work, let us first load another motif,
 which is similar to our test motif \verb|m|:
+%TODO - Start a new doctest here?
 %cont-doctest
 \begin{verbatim}
 >>> m_reb1 = Motif.read(open("REB1.pfm"), "pfm")
