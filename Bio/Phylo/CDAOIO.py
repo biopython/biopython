@@ -274,24 +274,22 @@ class Writer(object):
         try: base_uri = kwargs['base_uri']
         except KeyError: base_uri = ''
 
+        try: context = kwargs['context']
+        except KeyError: context=None
+
         try: storage = kwargs['storage']
         except KeyError: storage = None
         
-        self.add_trees_to_model(base_uri=base_uri, storage=storage)
+        self.add_trees_to_model(base_uri=base_uri, storage=storage, context=context)
         if storage is None: self.serialize_model(handle, mime_type=mime_type)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, base_uri=None):
+    def add_trees_to_model(self, trees=None, storage=None, base_uri=None, context=None):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
 
-        if base_uri: 
-            context = RDF.Node(RDF.Uri(base_uri))
-            nUri = lambda s: namedUri(s, self.base_uri)
-        else: 
-            context = None
-            nUri = lambda s: namedUri(s, '')
+        if context: context = RDF.Node(RDF.Uri(context))
 
         Uri = RDF.Uri
         urls = self.urls
