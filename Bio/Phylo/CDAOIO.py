@@ -281,14 +281,18 @@ class Writer(object):
         if storage is None: self.serialize_model(handle, mime_type=mime_type)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, base_uri='http://localhost/'):
+    def add_trees_to_model(self, trees=None, storage=None, base_uri=None):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
 
-        context = RDF.Node(RDF.Uri(base_uri))
+        if base_uri: 
+            context = RDF.Node(RDF.Uri(base_uri))
+            nUri = lambda s: namedUri(s, self.base_uri)
+        else: 
+            context = None
+            nUri = lambda s: namedUri(s, '')
 
-        nUri = lambda s: namedUri(s, self.base_uri)
         Uri = RDF.Uri
         urls = self.urls
         
