@@ -430,4 +430,7 @@ def namedUri(s, base_uri):
     '''append a URI to the base URI'''
     RDF = import_rdf()
     
+    if base_uri and not (base_uri.endswith('/') or base_uri.endswith('#')):
+        base_uri += '#'
+
     return RDF.Uri(base_uri + s)
