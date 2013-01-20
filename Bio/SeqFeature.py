@@ -545,6 +545,7 @@ class FeatureLocation(object):
     start and end must satisfy the inequality 0 <= start <= end <= n.
     This means even for features on the reverse strand of a nucleotide
     sequence, we expect the 'start' coordinate to be less than the
+    'end'.
 
     >>> from Bio.SeqFeature import FeatureLocation
     >>> r = FeatureLocation(122, 150, strand=-1)
@@ -560,7 +561,8 @@ class FeatureLocation(object):
     i.e. Rather than thinking of the 'start' and 'end' biologically in a
     strand aware manor, think of them as the 'left most' or 'minimum'
     boundary, and the 'right most' or 'maximum' boundary of the region
-    being described.
+    being described. This is particularly important with compound
+    locations describing non-continuous regions.
 
     In the example above we have used standard exact positions, but there
     are also specialised position objects used to represent fuzzy positions
@@ -950,17 +952,26 @@ class CompoundLocation(object):
         [3, 4, 5, 12, 11, 10]
 
         The example above doing list(f) iterates over the coordinates within the
-        feature. This allows you to use max and min on the location, which should
-        be equivalent to the location's start and end limits.
+        feature. This allows you to use max and min on the location, to find the
+        range covered:
 
         >>> min(f)
         3
         >>> max(f)
         12
+
+        More generally, you can use the compound location's start and end which
+        give the full range covered, 0 <= start <= end <= full sequence length.
+
         >>> f.start == min(f)
         True
         >>> f.end == max(f) + 1
         True
+
+        This is consistent with the behaviour of the simple FeatureLocation for
+        a single region, where again the 'start' and 'end' do not necessarily
+        give the biological start and end, but rather the 'minimal' and 'maximal'
+        coordinate boundaries.
 
         Note that adding locations provides a more intuitive method of
         construction:
@@ -1082,8 +1093,7 @@ class CompoundLocation(object):
             raise NotImplementedError
 
     def __radd__(self, other):
-        """Combine locations.
-        """
+        """Combine locations."""
         if isinstance(other, FeatureLocation):
             return CompoundLocation([other] + self.parts, self.operator)
         elif isinstance(other, int):
