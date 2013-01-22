@@ -11713,6 +11713,7 @@ C:   0.59   0.09   0.72   0.09   0.09   0.09
 G:   0.09   0.12   0.09   0.72   0.09   0.72
 T:   0.09   0.09   0.09   0.09   0.72   0.09
 <BLANKLINE>
+\end{verbatim}
 %cont-doctest
 \begin{verbatim}
 >>> print motif.pssm
@@ -11793,6 +11794,11 @@ and its distribution:
 3.854375
 \end{verbatim}
 
+Note that the position-weight matrix and the position-specific scoring matrix are recalculated each time you call \verb+motif.pwm+ or \verb+motif.pssm+, respectively. If speed is an issue and you want to use the PWM or PSSM repeatedly, you can save them as a variable, as in
+\begin{verbatim}
+>>> pssm = motif.pssm
+\end{verbatim}
+
 \section{Comparing motifs}
 \label{sec:comp}
 Once we have more than one motif, we might want to compare them.
@@ -11805,19 +11811,14 @@ some kind of alignment.  This means we have to take into account two things:
 \item alignment of motifs
 \item some function to compare aligned motifs
 \end{itemize}
-In \verb|Bio.motifs| we have 3 different functions for motif
-comparison, which are based on the same idea behind motif alignment,
-but use different functions to compare aligned motifs. Briefly
-speaking, we are using ungapped alignment of PSSMs and substitute zeros
+To align the motifs, we use ungapped alignment of PSSMs and substitute zeros
 for any missing columns at the beginning and end of the matrices. This means
 that effectively we are using the background distribution for columns missing
-from the PSSM. All three comparison functions are written in
-such a way that they can be interpreted as distance measures. However
-only one (\verb|dist_dpq|) satisfies the triangle inequality. All of
-them return the minimal distance and the corresponding offset between
-motifs.
+from the PSSM.
+The distance function then returns the minimal distance between motifs, as
+well as the corresponding offset in their alignment.
 
-To show how these functions work, let us first load another motif,
+To give an exmaple, let us first load another motif,
 which is similar to our test motif \verb|m|:
 %TODO - Start a new doctest here?
 %cont-doctest
@@ -11834,13 +11835,12 @@ T:  10.00 100.00 100.00   0.00   0.00   0.00   0.00  40.00  15.00
 <BLANKLINE>
 \end{verbatim}
 
-We construct the position-weight matrix and the position-specific scoring matrix
-using the same values for the pseudocounts and the background distribution as our
-motif \verb|m|:
+To make the motifs comparable, we choose the same values for the pseudocounts and the background distribution as our motif \verb|m|:
 %cont-doctest
 \begin{verbatim}
->>> pwm_reb1 = m_reb1.counts.normalize(pseudocounts={'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6})
->>> pssm_reb1 = pwm_reb1.log_odds(background={'A':0.3,'C':0.2,'G':0.2,'T':0.3})
+>>> m_reb1.pseudocounts = {'A':0.6, 'C': 0.4, 'G': 0.4, 'T': 0.6}
+>>> m_reb1.background = {'A':0.3,'C':0.2,'G':0.2,'T':0.3}
+>>> pssm_reb1 = m_reb1.pssm
 >>> print pssm_reb1
         0      1      2      3      4      5      6      7      8
 A:   0.00  -5.67  -5.67   1.72  -5.67  -5.67  -5.67  -5.67  -0.97
@@ -11849,10 +11849,9 @@ G:   1.30  -5.67  -5.67  -5.67  -5.67  -5.67  -5.67   1.57   1.44
 T:  -1.53   1.72   1.72  -5.67  -5.67  -5.67  -5.67   0.41  -0.97
 <BLANKLINE>
 \end{verbatim}
-The first function we'll use to compare these motifs is based on the
-Pearson correlation. Since we want it to resemble a distance
-measure, we actually take $1-r$, where $r$ is the Pearson correlation
-coefficient (PCC):
+We'll compare these motifs using the Pearson correlation.
+Since we want it to resemble a distance measure, we actually take
+$1-r$, where $r$ is the Pearson correlation coefficient (PCC):
 %cont-doctest
 \begin{verbatim}
 >>> distance, offset = pssm.dist_pearson(pssm_reb1)
@@ -11868,21 +11867,6 @@ m_reb1: GTTACCCGG
 \end{verbatim}
 where \verb|b| stands for background distribution. The PCC itself is
 roughly $1-0.239=0.761$.
-
-There are two other functions: \verb|dist_dpq|, which is a true metric (satisfying the triangle inequality) based on the Kullback-Leibler divergence 
-\begin{verbatim}
->>> m.dist_dpq(ubx.reverse_complement())
-(0.49292358382899853, 1)
-\end{verbatim}
-
-and the \verb|dist_product| method, which is based on the product of
-probabilities which can be interpreted as the probability of
-independently generating the same instance by both motifs.
-
-\begin{verbatim}
->>> m.dist_product(ubx.reverse_complement())
-(0.16224587301064275, 1)
-\end{verbatim}
 
 \section{\emph{De novo} motif finding}
 \label{sec:find}
