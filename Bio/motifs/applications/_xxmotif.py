@@ -1,0 +1,174 @@
+# -*- coding: utf-8 -*-
+# Copyright 2012 by Christian Brueffer.  All rights reserved.
+#
+# This code is part of the Biopython distribution and governed by its
+# license.  Please see the LICENSE file that should have been included
+# as part of this package.
+"""Command line wrapper for the motif finding program XXmotif."""
+
+import os
+from Bio.Application import AbstractCommandline, _Option, _Switch, _Argument
+
+
+class XXmotifCommandline(AbstractCommandline):
+    """Command line wrapper for XXmotif.
+
+    http://xxmotif.genzentrum.lmu.de/
+
+    Example:
+
+    >>> from Bio.Motif.Applications import XXmotifCommandline
+    >>> out_dir = "results"
+    >>> in_file = "sequences.fasta"
+    >>> xxmotif_cline = XXmotifCommandline(outdir=out_dir, seqfile=in_file, revcomp=True)
+    >>> print xxmotif_cline
+    XXmotif results sequences.fasta --revcomp
+
+    You would typically run the command line with xxmotif_cline() or via
+    the Python subprocess module, as described in the Biopython tutorial.
+
+    Citations:
+
+    Luehr S, Hartmann H, and Söding J. The XXmotif web server for eXhaustive,
+    weight matriX-based motif discovery in nucleotide sequences,
+    Nucleic Acids Res. 40: W104-W109 (2012).
+
+    Hartmann H, Guthoehrlein EW, Siebert M., Luehr S, and Söding J. P-value
+    based regulatory motif discovery using positional weight matrices
+    (to be published)
+
+    Last checked against version: 1.3
+    """
+
+    def __init__(self, cmd="XXmotif", **kwargs):
+        # order of parameters is the same as in XXmotif --help
+        _valid_alphabet = set("ACGTNX")
+
+        self.parameters = \
+          [
+          _Argument(["outdir", "OUTDIR"],
+                   "output directory for all results",
+                   filename = True,
+                   is_required = True,
+                   # XXmotif currently does not accept spaces in the outdir name
+                   checker_function = lambda x: " " not in x),
+          _Argument(["seqfile", "SEQFILE"],
+                   "file name with sequences from positive set in FASTA format",
+                   filename = True,
+                   is_required = True,
+                   # XXmotif currently only accepts a pure filename
+                   checker_function = lambda x: os.path.split(x)[0] == ""),
+
+          # Options
+          _Option(["--negSet", "negSet", "negset", "NEGSET"],
+                   "sequence set which has to be used as a reference set",
+                   filename = True,
+                   equate = False),
+          _Switch(["--zoops", "zoops", "ZOOPS"],
+                   "use zero-or-one occurrence per sequence model (DEFAULT)"),
+          _Switch(["--mops", "mops", "MOPS"],
+                   "use multiple occurrence per sequence model"),
+          _Switch(["--oops", "oops", "OOPS"],
+                   "use one occurrence per sequence model"),
+          _Switch(["--revcomp", "revcomp", "REVCOMP"],
+                   "search in reverse complement of sequences as well (DEFAULT: NO)"),
+          _Option(["--background-model-order", "background-model-order", "BACKGROUND-MODEL-ORDER"],
+                   "order of background distribution (DEFAULT: 2, 8(--negset) )",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+          _Option(["--pseudo", "pseudo", "PSEUDO"],
+                   "percentage of pseudocounts used (DEFAULT: 10)",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+          _Option(["-g", "--gaps", "gaps", "GAPS"],
+                   "maximum number of gaps used for start seeds [0-3] (DEFAULT: 0)",
+                   checker_function = lambda x: x in [0-3],
+                   equate = False),
+          _Option(["--type", "type", "TYPE"],
+                   "defines what kind of start seeds are used (DEFAULT: ALL)"
+                   "possible types: ALL, FIVEMERS, PALINDROME, TANDEM, NOPALINDROME, NOTANDEM",
+                   checker_function = lambda x: x in ["ALL", "all",
+                                                      "FIVEMERS", "fivemers",
+                                                      "PALINDROME", "palindrome",
+                                                      "TANDEM", "tandem",
+                                                      "NOPALINDROME", "nopalindrome",
+                                                      "NOTANDEM", "notandem"],
+                   equate = False),
+          _Option(["--merge-motif-threshold", "merge-motif-threshold", "MERGE-MOTIF-THRESHOLD"],
+                   "defines the similarity threshold for merging motifs (DEFAULT: HIGH)"
+                   "possible modes: LOW, MEDIUM, HIGH",
+                   checker_function = lambda x: x in ["LOW", "low",
+                                                      "MEDIUM", "medium",
+                                                      "HIGH", "high"],
+                   equate = False),
+          _Switch(["--no-pwm-length-optimization", "no-pwm-length-optimization", "NO-PWM-LENGTH-OPTIMIZATION"],
+                   "do not optimize length during iterations (runtime advantages)"),
+          _Option(["--max-match-positions", "max-match-positions", "MAX-MATCH-POSITIONS"],
+                   "max number of positions per motif (DEFAULT: 17, higher values will lead to very long runtimes)",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+          _Switch(["--batch", "batch", "BATCH"],
+                   "suppress progress bars (reduce output size for batch jobs)"),
+          _Option(["--maxPosSetSize", "maxPosSetSize", "maxpossetsize", "MAXPOSSETSIZE"],
+                   "maximum number of sequences from the positive set used [DEFAULT: all]",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+          # does not make sense in biopython
+          #_Switch(["--help", "help", "HELP"],
+          #         "print this help page"),
+          _Option(["--trackedMotif", "trackedMotif", "trackedmotif", "TRACKEDMOTIF"],
+                   "inspect extensions and refinement of a given seed (DEFAULT: not used)",
+                   checker_function = lambda x: any((c in _valid_alphabet) for c in x),
+                   equate = False),
+
+          # Using conservation information
+          _Option(["--format", "format", "FORMAT"],
+                   "defines what kind of format the input sequences have (DEFAULT: FASTA)",
+                   checker_function = lambda x: x in ["FASTA", "fasta",
+                                                      "MFASTA", "mfasta"],
+                   equate = False),
+          _Option(["--maxMultipleSequences", "maxMultipleSequences", "maxmultiplesequences", "MAXMULTIPLESEQUENCES"],
+                   "maximum number of sequences used in an alignment [DEFAULT: all]",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+
+          # Using localization information
+          _Switch(["--localization", "localization", "LOCALIZATION"],
+                   "use localization information to calculate combined P-values"
+                   "(sequences should have all the same length)"),
+          _Option(["--downstream", "downstream", "DOWNSTREAM"],
+                   "number of residues in positive set downstream of anchor point (DEFAULT: 0)",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+
+          # Start with self defined motif
+          _Option(["-m", "--startMotif", "startMotif", "startmotif", "STARTMOTIF"],
+                   "Start motif (IUPAC characters)",
+                   checker_function = lambda x: any((c in _valid_alphabet) for c in x),
+                   equate = False),
+          _Option(["-p", "--profileFile", "profileFile", "profilefile", "PROFILEFILE"],
+                   "profile file",
+                   filename = True,
+                   equate = False),
+          _Option(["--startRegion", "startRegion", "startregion", "STARTREGION"],
+                   "expected start position for motif occurrences relative to anchor point (--localization)",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+          _Option(["--endRegion", "endRegion", "endregion", "ENDREGION"],
+                   "expected end position for motif occurrences relative to anchor point (--localization)",
+                   checker_function = lambda x: isinstance(x, int),
+                   equate = False),
+          ]
+        AbstractCommandline.__init__(self, cmd, **kwargs)
+
+
+def _test():
+    """Run the module's doctests (PRIVATE)."""
+    print "Running XXmotif doctests..."
+    import doctest
+    doctest.testmod()
+    print "Done"
+
+
+if __name__ == "__main__":
+    _test()
