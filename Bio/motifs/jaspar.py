@@ -1,4 +1,4 @@
-from Bio.Motif import NewMotif as Motif
+from Bio.motifs import Motif, Instances
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
@@ -31,6 +31,7 @@ def read(handle, format):
                     instance += c
             instance = Seq(instance, alphabet)
             instances.append(instance)
+        instances = Instances(instances, alphabet)
         motif = Motif(alphabet, instances=instances)
     else:
         raise ValueError("Unknown format %s" % format)

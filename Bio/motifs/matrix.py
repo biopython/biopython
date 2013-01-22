@@ -19,7 +19,7 @@ class GenericPositionMatrix(dict):
             if self.length is None:
                 self.length = len(values[letter])
             elif self.length!=len(values[letter]):
-                raise Exception("Inconsistent lengths found in dictionary")
+                raise Exception("data has inconsistent lengths")
             self[letter] = list(values[letter])
         self.alphabet = alphabet
         self._letters = sorted(self.alphabet.letters)
@@ -472,7 +472,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
     def distribution(self, background=None, precision=10**3):
         """calculate the distribution of the scores at the given precision."""
-        from Thresholds import ScoreDistribution
+        from thresholds import ScoreDistribution
         if background is None:
             background = dict.fromkeys(self._letters, 1.0)
         else:

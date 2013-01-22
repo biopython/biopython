@@ -4,46 +4,33 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 
-
-import warnings
-warnings.warn("The module Bio.Motif.Parsers.MAST is now obsolete, "
-              "and will be deprecated and removed in a future "
-              "release of Biopython. To parse MAST output files, "
-              "please use the parser in Bio.Motif.MAST instead."
-              "Note that there are some (minor) differences between "
-              "new parser in Bio.Motif.MAST and the old parser "
-              "in Bio.Motif.Parsers.MAST.",
-              PendingDeprecationWarning)
-
-
 from Bio.Alphabet import IUPAC
 from Bio.Motif.Parsers.MEME import MEMEMotif
 
 
 class Record(object):
     """The class for holding the results from a MAST run.
-
+    
     A MAST.Record holds data about matches between motifs and sequences.
     The motifs held by the Record are objects of the class MEMEMotif.
-
+    
     Methods:
     get_motif_by_name (motif_name): returns a MEMEMotif with the given
     name.
     """
 
-    def __init__(self):
+    def __init__ (self):
         self.sequences = []
         self.version = ""
         self.database = ""
         self.diagrams = {}
         self.alphabet = None
         self.motifs = []
-
-    def get_motif_by_name(self, name):
+    
+    def get_motif_by_name (self, name):
         for m in self.motifs:
             if m.name == name:
                 return m
-
 
 def read(handle):
     """read(handle)"""

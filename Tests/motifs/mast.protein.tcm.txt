@@ -1,0 +1,332 @@
+********************************************************************************
+MAST - Motif Alignment and Search Tool
+********************************************************************************
+	MAST version 3.0 (Release date: 2004/08/18 09:07:01)
+
+	For further information on how to interpret these results or to get
+	a copy of the MAST software please access http://meme.sdsc.edu.
+********************************************************************************
+
+
+********************************************************************************
+REFERENCE
+********************************************************************************
+	If you use this program in your research, please cite:
+
+	Timothy L. Bailey and Michael Gribskov,
+	"Combining evidence using p-values: application to sequence homology
+	searches", Bioinformatics, 14(48-54), 1998.
+********************************************************************************
+
+
+********************************************************************************
+DATABASE AND MOTIFS
+********************************************************************************
+	DATABASE farntrans5.s (peptide)
+	Last updated on Mon Aug 16 21:19:59 2004
+	Database contains 5 sequences, 1900 residues
+
+	MOTIFS meme.farntrans5.tcm.txt (peptide)
+	MOTIF WIDTH BEST POSSIBLE MATCH
+	----- ----- -------------------
+	  1    30   GGFQGRPNKEVHTCYTYWALAALAILNKLH
+	  2    14   INKEKLIQWIKSCQ
+
+	PAIRWISE MOTIF CORRELATIONS:
+	MOTIF     1
+	----- -----
+	   2   0.22
+	No overly similar pairs (correlation > 0.60) found.
+
+	Random model letter frequencies (from non-redundant database):
+	A 0.073 C 0.018 D 0.052 E 0.062 F 0.040 G 0.069 H 0.022 I 0.056 K 0.058 
+	L 0.092 M 0.023 N 0.046 P 0.051 Q 0.041 R 0.052 S 0.074 T 0.059 V 0.064 
+	W 0.013 Y 0.033 
+********************************************************************************
+
+
+********************************************************************************
+SECTION I: HIGH-SCORING SEQUENCES
+********************************************************************************
+	- Each of the following 5 sequences has E-value less than 10.
+	- The E-value of a sequence is the expected number of sequences
+	  in a random database of the same size that would match the motifs as
+	  well as the sequence does and is equal to the combined p-value of the
+	  sequence times the number of sequences in the database.
+	- The combined p-value of a sequence measures the strength of the
+	  match of the sequence to all the motifs and is calculated by
+	    o finding the score of the single best match of each motif
+	      to the sequence (best matches may overlap),
+	    o calculating the sequence p-value of each score,
+	    o forming the product of the p-values,
+	    o taking the p-value of the product.
+	- The sequence p-value of a score is defined as the
+	  probability of a random sequence of the same length containing
+	  some match with as good or better a score.
+	- The score for the match of a position in a sequence to a motif
+	  is computed by by summing the appropriate entry from each column of
+	  the position-dependent scoring matrix that represents the motif.
+	- Sequences shorter than one or more of the motifs are skipped.
+	- The table is sorted by increasing E-value.
+********************************************************************************
+
+SEQUENCE NAME                      DESCRIPTION                   E-VALUE  LENGTH
+-------------                      -----------                   -------- ------
+BET2_YEAST                         YPT1/SEC4 PROTEINS GERANY...    2.9e-27    325
+RATRABGERB                         Rat rab geranylgeranyl tr...    1.4e-25    331
+CAL1_YEAST                         RAS PROTEINS GERANYLGERAN...    9.7e-22    376
+PFTB_RAT                           PROTEIN FARNESYLTRANSFERA...    7.6e-21    437
+RAM1_YEAST                         PROTEIN FARNESYLTRANSFERA...    6.2e-20    431
+
+********************************************************************************
+
+
+
+********************************************************************************
+SECTION II: MOTIF DIAGRAMS
+********************************************************************************
+	- The ordering and spacing of all non-overlapping motif occurrences
+	  are shown for each high-scoring sequence listed in Section I.
+	- A motif occurrence is defined as a position in the sequence whose
+	  match to the motif has POSITION p-value less than 0.0001.
+	- The POSITION p-value of a match is the probability of
+	  a single random subsequence of the length of the motif
+	  scoring at least as well as the observed match.
+	- For each sequence, all motif occurrences are shown unless there
+	  are overlaps.  In that case, a motif occurrence is shown only if its
+	  p-value is less than the product of the p-values of the other
+	  (lower-numbered) motif occurrences that it overlaps.
+	- The table also shows the E-value of each sequence.
+	- Spacers and motif occurences are indicated by
+	   o -d-    `d' residues separate the end of the preceding motif 
+		    occurrence and the start of the following motif occurrence
+	   o [n]  occurrence of motif `n' with p-value less than 0.0001.
+********************************************************************************
+
+SEQUENCE NAME                      E-VALUE   MOTIF DIAGRAM
+-------------                      --------  -------------
+BET2_YEAST                          2.9e-27  6_[2]_3_[1]_1_[2]_4_[1]_4_[2]_
+                                             3_[1]_1_[2]_3_[1]_21_[1]_1_[2]_
+                                             4_[1]_24
+RATRABGERB                          1.4e-25  65_[2]_3_[1]_1_[2]_3_[1]_1_[2]_
+                                             3_[1]_18_[1]_1_[2]_4_[1]_26
+CAL1_YEAST                          9.7e-22  125_[2]_50_[2]_1_[1]_4_[2]_22_
+                                             [1]_22_[1]_5_[2]_1
+PFTB_RAT                            7.6e-21  120_[2]_3_[1]_4_[2]_3_[1]_1_[2]_
+                                             3_[1]_1_[2]_4_[1]_14_[2]_4_[1]_60
+RAM1_YEAST                          6.2e-20  144_[1]_5_[2]_4_[1]_1_[2]_4_[1]_
+                                             1_[2]_4_[1]_4_[2]_5_[1]_35_[2]_4
+
+********************************************************************************
+
+
+
+********************************************************************************
+SECTION III: ANNOTATED SEQUENCES
+********************************************************************************
+	- The positions and p-values of the non-overlapping motif occurrences
+	  are shown above the actual sequence for each of the high-scoring
+	  sequences from Section I.
+	- A motif occurrence is defined as a position in the sequence whose
+	  match to the motif has POSITION p-value less than 0.0001 as 
+	  defined in Section II.
+	- For each sequence, the first line specifies the name of the sequence.
+	- The second (and possibly more) lines give a description of the 
+	  sequence.
+	- Following the description line(s) is a line giving the length, 
+	  combined p-value, and E-value of the sequence as defined in Section I.
+	- The next line reproduces the motif diagram from Section II.
+	- The entire sequence is printed on the following lines.
+	- Motif occurrences are indicated directly above their positions in the
+	  sequence on lines showing
+	   o the motif number of the occurrence,
+	   o the position p-value of the occurrence,
+	   o the best possible match to the motif, and
+	   o columns whose match to the motif has a positive score (indicated 
+	     by a plus sign).
+********************************************************************************
+
+
+BET2_YEAST
+  YPT1/SEC4 PROTEINS GERANYLGERANYLTRANSFERASE BETA SUBUNIT (EC 2.
+  LENGTH = 325  COMBINED P-VALUE = 5.77e-28  E-VALUE =  2.9e-27
+  DIAGRAM: 6_[2]_3_[1]_1_[2]_4_[1]_4_[2]_3_[1]_1_[2]_3_[1]_21_[1]_1_[2]_4_[1]_24
+
+           [2]              [1]                            [2]               [1]
+           5.2e-05          2.7e-10                        6.6e-10           5.9
+           INKEKLIQWIKSCQ   GGFQGRPNKEVHTCYTYWALAALAILNKLH INKEKLIQWIKSCQ    GGF
+             +++ +++++++     ++  + +++ +++ +++++ +++++++ + ++++++++++++++    + +
+1    MSGSLTLLKEKHIRYIESLDTNKHNFEYWLTEHLRLNGIYWGLTALCVLDSPETFVKEEVISFVLSCWDDKYGAF
+
+                                    [2]              [1]
+     e-14                           4.8e-07          2.3e-17
+     QGRPNKEVHTCYTYWALAALAILNKLH    INKEKLIQWIKSCQ   GGFQGRPNKEVHTCYTYWALAALAILN
+     +  +++++++  +  ++++++ +++++    +++ +++++++ ++   + ++++  +++++++ +++++++++++
+76   APFPRHDAHLLTTLSAVQILATYDALDVLGKDRKVRLISFIRGNQLEDGSFQGDRFGEVDTRFVYTALSALSILG
+
+         [2]              [1]                                                [1]
+         5.1e-07          1.4e-18                                            4.6
+     KLH INKEKLIQWIKSCQ   GGFQGRPNKEVHTCYTYWALAALAILNKLH                     GGF
+     +++ ++++ ++++++++    ++++  ++++++++++++++++++++++++                     +++
+151  ELTSEVVDPAVDFVLKCYNFDGGFGLCPNAESHAAQAFTCLGALAIANKLDMLSDDQLEEIGWWLCERQLPEGGL
+
+                                 [2]               [1]
+     e-22                        2.0e-13           3.8e-17
+     QGRPNKEVHTCYTYWALAALAILNKLH INKEKLIQWIKSCQ    GGFQGRPNKEVHTCYTYWALAALAILNKL
+     ++++ ++++++++++++++++++++++ ++ +++++++++++    ++++++++++++++++ ++++++++++ +
+226  NGRPSKLPDVCYSWWVLSSLAIIGRLDWINYEKLTEFILKCQDEKKGGISDRPENEVDVFHTVFGVAGLSLMGYD
+
+     
+     
+     H
+     +
+301  NLVPIDPIYCMPKSVTSKFKKYPYK
+
+
+RATRABGERB
+  Rat rab geranylgeranyl transferase beta-subunit
+  LENGTH = 331  COMBINED P-VALUE = 2.83e-26  E-VALUE =  1.4e-25
+  DIAGRAM: 65_[2]_3_[1]_1_[2]_3_[1]_1_[2]_3_[1]_18_[1]_1_[2]_4_[1]_26
+
+                                                                      [2]
+                                                                      1.0e-11
+                                                                      INKEKLIQWI
+                                                                      +++++++ ++
+1    MGTQQKDVTIKSDAPDTLLLEKHADYIASYGSKKDDYEYCMSEYLRMSGVYWGLTVMDLMGQLHRMNKEEILVFI
+
+            [1]                            [2]              [1]
+            1.6e-14                        1.4e-09          5.4e-19
+     KSCQ   GGFQGRPNKEVHTCYTYWALAALAILNKLH INKEKLIQWIKSCQ   GGFQGRPNKEVHTCYTYWAL
+     ++++   ++ +  +++++++ ++  ++++++++++++ +++++++ ++++++   + ++++++++++++++++++
+76   KSCQHECGGVSASIGHDPHLLYTLSAVQILTLYDSIHVINVDKVVAYVQSLQKEDGSFAGDIWGEIDTRFSFCAV
+
+                [2]              [1]
+                3.8e-12          4.8e-19
+     AALAILNKLH INKEKLIQWIKSCQ   GGFQGRPNKEVHTCYTYWALAALAILNKLH
+     ++++++++++ ++++++++++++++   ++++++++ ++++++++++++ ++++++++
+151  ATLALLGKLDAINVEKAIEFVLSCMNFDGGFGCRPGSESHAGQIYCCTGFLAITSQLHQVNSDLLGWWLCERQLP
+
+      [1]                            [2]               [1]
+      3.9e-21                        1.2e-12           9.6e-18
+      GGFQGRPNKEVHTCYTYWALAALAILNKLH INKEKLIQWIKSCQ    GGFQGRPNKEVHTCYTYWALAALAI
+      +++++++++++++++++++++++ ++++++ ++++++++++++++    ++++++++++++ +++ ++++++++
+226  SGGLNGRPEKLPDVCYSWWVLASLKIIGRLHWIDREKLRSFILACQDEETGGFADRPGDMVDPFHTLFGIAGLSL
+
+     
+     
+     LNKLH
+     +++++
+301  LGEEQIKPVSPVFCMPEEVLQRVNVQPELVS
+
+
+CAL1_YEAST
+  RAS PROTEINS GERANYLGERANYLTRANSFERASE (EC 2.5.1.-) (PROTEIN GER
+  LENGTH = 376  COMBINED P-VALUE = 1.94e-22  E-VALUE =  9.7e-22
+  DIAGRAM: 125_[2]_50_[2]_1_[1]_4_[2]_22_[1]_22_[1]_5_[2]_1
+
+
+                                                       [2]
+                                                       1.8e-08
+                                                       INKEKLIQWIKSCQ
+                                                        +++++++++++++
+76   LDDTENTVISGFVGSLVMNIPHATTINLPNTLFALLSMIMLRDYEYFETILDKRSLARFVSKCQRPDRGSFVSCL
+
+                                            [2]            [1]
+                                            4.8e-10        8.7e-14
+                                            INKEKLIQWIKSCQ GGFQGRPNKEVHTCYTYWALA
+                                            +++++++ ++++++  + + + +++++ +++ ++++
+151  DYKTNCGSSVDSDDLRFCYIAVAILYICGCRSKEDFDEYIDTEKLLGYIMSQQCYNGAFGAHNEPHSGYTSCALS
+
+                  [2]                                 [1]
+                  5.9e-08                             5.9e-20
+     ALAILNKLH    INKEKLIQWIKSCQ                      GGFQGRPNKEVHTCYTYWALAALAIL
+     +++++++++      ++++++++++++                      +++++++++ +++++++++++++ ++
+226  TLALLSSLEKLSDKFKEDTITWLLHRQVSSHGCMKFESELNASYDQSDDGGFQGRENKFADTCYAFWCLNSLHLL
+
+                               [1]                                [2]
+                               4.0e-13                            2.1e-07
+     NKLH                      GGFQGRPNKEVHTCYTYWALAALAILNKLH     INKEKLIQWIKSCQ
+     ++++                      ++++ + ++++++++++ + +++++++        + ++ +++++++++
+301  TKDWKMLCQTELVTNYLLDRTQKTLTGGFSKNDEEDADLYHSCLGSAALALIEGKFNGELCIPQEIFNDFSKRCC
+
+
+PFTB_RAT
+  PROTEIN FARNESYLTRANSFERASE BETA SUBUNIT (EC 2.5.1.-) (CAAX FARNES
+  LENGTH = 437  COMBINED P-VALUE = 1.53e-21  E-VALUE =  7.6e-21
+  DIAGRAM: 120_[2]_3_[1]_4_[2]_3_[1]_1_[2]_3_[1]_1_[2]_4_[1]_14_[2]_4_[1]_60
+
+
+                                                  [2]              [1]
+                                                  1.3e-07          2.8e-19
+                                                  INKEKLIQWIKSCQ   GGFQGRPNKEVHT
+                                                  ++ ++++++++ ++   +++++++++ +++
+76   EKHFHYLKRGLRQLTDAYECLDASRPWLCYWILHSLELLDEPIPQIVATDVCQFLELCQSPDGGFGGGPGQYPHL
+
+                          [2]              [1]                            [2]
+                          2.3e-09          2.1e-14                        1.8e-0
+     CYTYWALAALAILNKLH    INKEKLIQWIKSCQ   GGFQGRPNKEVHTCYTYWALAALAILNKLH INKEKL
+     + +++++++++++++++    ++++++++++ +++   + + ++ +++++++ +++++++++++++++ +  +++
+151  APTYAAVNALCIIGTEEAYNVINREKLLQYLYSLKQPDGSFLMHVGGEVDVRSAYCAASVASLTNIITPDLFEGT
+
+                [1]                            [2]               [1]
+     8          7.4e-20                        1.8e-08           2.2e-16
+     IQWIKSCQ   GGFQGRPNKEVHTCYTYWALAALAILNKLH INKEKLIQWIKSCQ    GGFQGRPNKEVHTCY
+     ++++ +++   +++++ +++++++++++++++++ ++++++  + +++++++++++    ++++++ ++++++++
+226  AEWIARCQNWEGGIGGVPGMEAHGGYTFCGLAALVILKKERSLNLKSLLQWVTSRQMRFEGGFQGRCNKLVDGCY
+
+                                  [2]               [1]
+                                  5.0e-08           3.1e-15
+     TYWALAALAILNKLH              INKEKLIQWIKSCQ    GGFQGRPNKEVHTCYTYWALAALAILNK
+     ++++++ + ++++                ++++++++++++++    +++ +++++  +++++++++++++++++
+301  SFWQAGLLPLLHRALHAQGDPALSMSHWMFHQQALQEYILMCCQCPAGGLLDKPGKSRDFYHTCYCLSGLSIAQH
+
+     
+     
+     LH
+     +
+376  FGSGAMLHDVVMGVPENVLQPTHPVYNIGPDKVIQATTHFLQKPVPGFEECEDAVTSDPATD
+
+
+RAM1_YEAST
+  PROTEIN FARNESYLTRANSFERASE BETA SUBUNIT (EC 2.5.1.-) (CAAX FARN
+  LENGTH = 431  COMBINED P-VALUE = 1.24e-20  E-VALUE =  6.2e-20
+  DIAGRAM: 144_[1]_5_[2]_4_[1]_1_[2]_4_[1]_1_[2]_4_[1]_4_[2]_5_[1]_35_[2]_4
+
+
+                                                                          [1]
+                                                                          8.8e-1
+                                                                          GGFQGR
+                                                                          + ++++
+76   PALTKEFHKMYLDVAFEISLPPQMTALDASQPWMLYWIANSLKVMDRDWLSDDTKRKIVVKLFTISPSGGPFGGG
+
+                                  [2]               [1]
+     7                            6.4e-07           1.0e-13
+     PNKEVHTCYTYWALAALAILNKLH     INKEKLIQWIKSCQ    GGFQGRPNKEVHTCYTYWALAALAILNK
+     ++++++++ ++++++++++ ++++     ++++++++++ +++    +  ++ ++++++++ +++++++++++++
+151  PGQLSHLASTYAAINALSLCDNIDGCWDRIDRKGIYQWLISLKEPNGGFKTCLEVGEVDTRGIYCALSIATLLNI
+
+        [2]               [1]                            [2]               [1]
+        2.5e-08           3.1e-17                        4.7e-11           2.4e-
+     LH INKEKLIQWIKSCQ    GGFQGRPNKEVHTCYTYWALAALAILNKLH INKEKLIQWIKSCQ    GGFQG
+     ++ + ++++++++++++    +  ++  +++++++++++++++++++++++ ++++++++++++++     ++ +
+226  LTEELTEGVLNYLKNCQNYEGGFGSCPHVDEAHGGYTFCATASLAILRSMDQINVEKLLEWSSARQLQEERGFCG
+
+                                  [2]                [1]
+     16                           4.9e-09            2.7e-13
+     RPNKEVHTCYTYWALAALAILNKLH    INKEKLIQWIKSCQ     GGFQGRPNKEVHTCYTYWALAALAILN
+     + ++++++++++++ +++++++++     +++++++++++ ++      +++++++++++++++ +++ ++++++
+301  RSNKLVDGCYSFWVGGSAAILEAFGYGQCFNKHALRDYILYCCQEKEQPGLRDKPGAHSDFYHTNYCLLGLAVAE
+
+                                           [2]
+                                           9.8e-05
+     KLH                                   INKEKLIQWIKSCQ
+     +                                     +++++++ + +++
+376  SSYSCTPNDSPHNIKCTPDRLIGSSKLTDVNPVYGLPIENVRKIIHYFKSNLSSPS
+
+********************************************************************************
+
+
+CPU: pmgm2
+Time 0.130000 secs.
+
+mast meme.farntrans5.tcm.txt -text -stdout

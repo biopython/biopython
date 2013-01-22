@@ -6,7 +6,7 @@
 """Parsing AlignACE output files
 """
 
-from Bio.Motif import NewMotif as Motif
+from Bio.motifs import Motif, Instances
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
@@ -14,16 +14,6 @@ from Bio.Seq import Seq
 class Record(list):
     def __init__(self):
         self.parameters = None
-
-    @property
-    def motifs(self):
-        import warnings
-        warnings.warn("""\
-The .motifs attribute is now obsolete, and will be deprecated and removed
-in a future release of Biopython. This class now inherits from list, so
-instead of record.motifs[i], please use record[i].
-""", PendingDeprecationWarning)
-        return self
 
 
 def read(handle):
@@ -55,7 +45,9 @@ def read(handle):
             number = int(words[1])
             instances = []
         elif line[:3]=="MAP":
-            motif = Motif(IUPAC.unambiguous_dna, instances)
+            alphabet = IUPAC.unambiguous_dna
+            instances = Instances(instances, alphabet)
+            motif = Motif(alphabet, instances)
             motif.score = float(line.split()[-1])
             motif.number = number
             motif.mask = mask

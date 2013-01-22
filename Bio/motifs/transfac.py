@@ -6,22 +6,16 @@
 """Parsing TRANSFAC files
 """
 
-import warnings
-from Bio import BiopythonExperimentalWarning
-
-warnings.warn("Bio.Motif.TRANSFAC is experimental code. While it is usable, \
-    the code is subject to change without warning", BiopythonExperimentalWarning)
-
-from Bio.Motif import NewMotif as BaseMotif
+from Bio import motifs
 from Bio.Alphabet import IUPAC
 
 
-class Motif(BaseMotif, dict):
-    """A Bio.Motif.TRANSFAC.Motif stores the information in one TRANSFAC
-motif. This class inherits from the Bio.Motif.Motif base class, as well
+class Motif(motifs.Motif, dict):
+    """A Bio.motifs.transfac.Motif stores the information in one TRANSFAC
+motif. This class inherits from the Bio.motifs.Motif base class, as well
 as from a Python dictionary. All motif information found by the parser
 is stored as attributes of the base class when possible; see the
-Bio.Motif.Motif base class for a description of these attributes. All
+Bio.motifs.Motif base class for a description of these attributes. All
 other information associated with the motif is stored as (key, value)
 pairs in the dictionary, where the key is the two-letter fields as found
 in the TRANSFAC file. References are an exception: These are stored in
@@ -72,7 +66,7 @@ For more information, see the TRANSFAC documentation.
 
 
 class Record(list):
-    """A Bio.Motif.TRANSFAC.Record stores the information in a TRANSFAC
+    """A Bio.motifs.transfac.Record stores the information in a TRANSFAC
 matrix table. The record inherits from a list containing the individual
 motifs.
 

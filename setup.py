@@ -312,6 +312,8 @@ PACKAGES = [
     'Bio.Motif',
     'Bio.Motif.Parsers',
     'Bio.Motif.Applications',
+    'Bio.motifs',
+    'Bio.motifs.applications',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
@@ -417,6 +419,11 @@ if is_Numpy_installed():
     EXTENSIONS.append(
         Extension('Bio.Motif._pwm',
                   ["Bio/Motif/_pwm.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
+    EXTENSIONS.append(
+        Extension('Bio.motifs._pwm',
+                  ["Bio/motifs/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
 
