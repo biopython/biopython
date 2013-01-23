@@ -96,7 +96,7 @@ class Parser(object):
         return self.parse_model()
         
     def parse_handle_to_model(self, rooted=False, storage=None, 
-                              mime_type='text/turtle', **kwargs):
+                              mime_type='text/turtle', context=None, **kwargs):
         '''Parse self.handle into RDF model self.model.'''
         RDF = import_rdf()
 
