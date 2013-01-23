@@ -27,15 +27,14 @@ These fields are commonly found in TRANSFAC files:
     BA:    Statistical basis
     BF:    Binding factors
     BS:    Factor binding sites underlying the matrix
-           [SITE accession number; start position for matrix sequence;
-            length of sequence used; number of gaps inserted; strand
-            orientation]
+           [sequence; SITE accession number; start position for matrix
+            sequence; length of sequence used; number of gaps inserted;
+            strand orientation.]
     CC:    Comments
     CO:    Copyright notice
     DE:    Short factor description
     DR:    External databases
-           [EMBL/GEnBank accession number; EMBL identifier (1st: last
-            position of the TRANSFAC sequence element)]
+           [database name: database accession number]
     DT:    Date created/updated
     HC:    Subfamilies
     HP:    Superfamilies
