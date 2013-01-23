@@ -74,8 +74,8 @@ def parse(handle, format):
     elif format in ('pfm', 'sites'):
         from Bio.motifs import jaspar
         motif = jaspar.read(handle, format)
-	motifs = [motif]
-	return motifs
+        motifs = [motif]
+        return motifs
     else:
         raise ValueError("Unknown format %s" % format)
 
