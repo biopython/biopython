@@ -414,7 +414,7 @@ def _make_score_matrix_generic(
             # character to align from, and thus a different length
             # gap.
             for i in range(0, col-1):
-                score = score_matrix[row-1][i] + gap_A_fn(i, col-1-i)
+                score = score_matrix[row-1][i] + gap_A_fn(row, col-1-i)
                 score_rint = rint(score)
                 if score_rint == best_score_rint:
                     best_score, best_score_rint = score, score_rint
@@ -425,7 +425,7 @@ def _make_score_matrix_generic(
 
             # Try to find a better score by opening gaps in sequenceB.
             for i in range(0, row-1):
-                score = score_matrix[i][col-1] + gap_B_fn(i, row-1-i)
+                score = score_matrix[i][col-1] + gap_B_fn(col, row-1-i)
                 score_rint = rint(score)
                 if score_rint == best_score_rint:
                     best_score, best_score_rint = score, score_rint
