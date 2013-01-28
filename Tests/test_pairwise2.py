@@ -378,6 +378,47 @@ abcde
 """)
 
 
+class TestPersiteGapPenalties(unittest.TestCase):
+    """
+    This tests that the gap penalty callbacks are really being used with the correct gap opening position.
+    The second test forces a bad alignment by having a very expsive gap penalty where one would noremally expect a gap, and a cheap gap pentaly in another place.
+    """
+
+
+    def test_gap_here_only_1(self):
+        seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
+        seq2 = "AABBBAAAACCCCAAAABBBAA"
+        breaks = [0,11,len(seq2)]
+        nogaps = lambda x,y: -2000 -y#Very expensive to open a gap in seq1
+        specificgaps = lambda x,y: (-2 -y) if x in breaks else (-2000 -y)#Very expensive to open a gap in seq2 unless it is in one of the allowed positions
+        alignments = pairwise2.align.globalmc(seq1,seq2,1,-1,nogaps,specificgaps)
+        self.assertEqual(len(alignments),1)
+        formatted = pairwise2.format_alignment(*alignments[0])
+        self.assertEqual(formatted,"""\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+||||||||||||||||||||||||||||||||||||
+--AABBBAAAACC----------CCAAAABBBAA--
+  Score=2
+""")
+
+
+    def test_gap_here_only_2(self):
+        seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
+        seq2 = "AABBBAAAACCCCAAAABBBAA"
+        breaks = [0,3,len(seq2)]
+        nogaps = lambda x,y: -2000 -y#Very expensive to open a gap in seq1
+        specificgaps = lambda x,y: (-2 -y) if x in breaks else (-2000 -y)#Very expensive to open a gap in seq2 unless it is in one of the allowed positions
+        alignments = pairwise2.align.globalmc(seq1,seq2,1,-1,nogaps,specificgaps)
+        self.assertEqual(len(alignments),1)
+        formatted = pairwise2.format_alignment(*alignments[0])
+        self.assertEqual(formatted,"""\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+||||||||||||||||||||||||||||||||||||
+--AAB----------BBAAAACCCCAAAABBBAA--
+  Score=-10
+""")
+
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)
