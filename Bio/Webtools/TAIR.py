@@ -18,7 +18,7 @@ def _sanitise_agis(agis):
     clean_agis = []
     agi_re = re.compile(r"^AT[12345CM]G\d{5}(\.\d){0,1}$")
     for agi in agis:
-        agi_match = agi_re.match(agi)
+        agi_match = agi_re.match(agi.upper())  # Our regex is case senstive
         if agi_match is not None:
             clean_agis.append(agi_match.group())
     return clean_agis
