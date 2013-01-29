@@ -277,9 +277,21 @@ class TAIRDirect(unittest.TestCase):
         self.assertTrue(False)  # This shouldnt happen
 
     def test_agiregex(self):
-        agis = ["AT5G63980", "AT5G63980.1", "ATCG12345", "ATCG12345.6"]
+        agis = [
+                "AT5G63980",
+                "AT5G63980.1",
+                "ATCG12345",
+                "ATCG12345.6",
+                " AT5G63980",
+                "AT5G63980 "
+                ]
         self.assertEqual(agis, TAIR._sanitise_agis(agis))
-        not_agis = ["notanagi", "not_an_agi", "\as23sd1321\ '.XS"]
+        not_agis = [
+                "notanagi",  # random text
+                r"\as23sd1321\ '.XS",  # random text
+                "AT5G63980.12345",  # Contains a valid AGI, but isn't one
+                "AT5G39846054546"  # Contains a valid AGI, but isn't one
+                ]
         self.assertEqual([], TAIR._sanitise_agis(not_agis))
 
 
