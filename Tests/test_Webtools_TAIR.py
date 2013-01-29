@@ -285,7 +285,15 @@ class TAIRDirect(unittest.TestCase):
                 " AT5G63980",
                 "AT5G63980 "
                 ]
-        self.assertEqual(agis, TAIR._sanitise_agis(agis))
+        expected_return = [
+                "AT5G63980",
+                "AT5G63980.1",
+                "ATCG12345",
+                "ATCG12345.6",
+                "AT5G63980",
+                "AT5G63980"
+                ]
+        self.assertEqual(expected_return, TAIR._sanitise_agis(agis))
         not_agis = [
                 "notanagi",  # random text
                 r"\as23sd1321\ '.XS",  # random text
