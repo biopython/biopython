@@ -19,6 +19,7 @@ from cStringIO import StringIO
 from Bio.Phylo import CDAO
 from _cdao_owl import cdao_elements
 import os
+import urlparse
 
 
 RDF_NAMESPACES = {
@@ -27,6 +28,12 @@ RDF_NAMESPACES = {
                   'obo': 'http://purl.obolibrary.org/obo/',
                   'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
                   }
+
+def node_uri(graph, uri):
+    if graph.endswith('/'):
+        return urlparse.urljoin(graph, uri)
+    else:
+        return urlparse.urljoin(graph, '#%s' % uri)
 
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
@@ -256,8 +263,8 @@ class Writer(object):
         
         self.node_counter = 0
         self.edge_counter = 0
-        self.tree_counter = 0
         self.tu_counter = 0
+        self.tree_counter = 0
 
     def write(self, handle, **kwargs):
         """Write this instance's trees to a file handle.
@@ -274,22 +281,26 @@ class Writer(object):
         try: base_uri = kwargs['base_uri']
         except KeyError: base_uri = ''
 
+        try: tree_name = kwargs['tree_name']
+        except KeyError: tree_name = 'tree'
+
         try: context = kwargs['context']
         except KeyError: context=None
 
         try: storage = kwargs['storage']
         except KeyError: storage = None
         
-        self.add_trees_to_model(base_uri=base_uri, storage=storage, context=context)
+        self.add_trees_to_model(base_uri=base_uri, storage=storage, tree_name=tree_name, context=context)
         if storage is None: self.serialize_model(handle, mime_type=mime_type)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, base_uri=None, context=None):
+    def add_trees_to_model(self, trees=None, storage=None, base_uri=None, tree_name='tree', context=None):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
 
         if context: context = RDF.Node(RDF.Uri(context))
+        self.tree_name = tree_name
 
         Uri = RDF.Uri
         urls = self.urls
@@ -302,7 +313,7 @@ class Writer(object):
         if storage is None:
             # store RDF model in memory for now
             storage = new_storage()
-
+        
         if self.model is None:
             self.model = RDF.Model(storage)
             if self.model is None:
@@ -313,10 +324,10 @@ class Writer(object):
         
         for stmt in [(Uri(urls['cdao']), qUri('rdf:type'), qUri('owl:Ontology'))]:
             model.append(RDF.Statement(*stmt), context)
-
+        
         for tree in trees:
             first_clade = tree.clade
-            statements = self.process_clade(first_clade, root=True)
+            statements = self.process_clade(first_clade, root=tree_name)
             for stmt in statements:
                 model.append(stmt, context)
                 
@@ -344,7 +355,7 @@ class Writer(object):
         RDF = import_rdf()
         
         self.node_counter += 1
-        clade.uri = 'node%s' % self.node_counter
+        clade.uri = node_uri(self.tree_name, 'node%s' % self.node_counter)
         
         nUri = lambda s: namedUri(s, self.base_uri)
         Uri = RDF.Uri
@@ -354,7 +365,7 @@ class Writer(object):
         if root:
             # create a cdao:RootedTree with reference to the tree root
             self.tree_counter += 1
-            tree_uri = 'tree%s' % self.tree_counter
+            tree_uri = root + (str(self.tree_counter) if self.tree_counter > 1 else '')
             statements += [
                            (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
                            (nUri(tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
@@ -363,7 +374,8 @@ class Writer(object):
         if clade.name:
             # create TU
             self.tu_counter += 1
-            tu_uri = 'tu%s' % self.tu_counter
+            tu_uri = node_uri(self.tree_name, 'tu%s' % self.tu_counter)
+
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
                            (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
@@ -382,7 +394,8 @@ class Writer(object):
         if not parent is None:
             # create edge from the parent node to this node
             self.edge_counter += 1
-            edge_uri = 'edge%s' % self.edge_counter
+            edge_uri = node_uri(self.tree_name, 'edge%s' % self.edge_counter)
+
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
                            (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
@@ -392,7 +405,8 @@ class Writer(object):
                            (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
             # add branch length
-            edge_ann_uri = 'edge_annotation%s' % self.edge_counter
+            edge_ann_uri = node_uri(self.tree_name, 'edge_annotation%s' % self.edge_counter)
+
             branch_length = RDF.Node(literal=str(clade.branch_length), 
                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
             statements += [
