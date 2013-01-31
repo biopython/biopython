@@ -159,7 +159,7 @@ class Parser(object):
         
         kwargs = {}
         if 'branch_length' in result: kwargs['branch_length'] = result['branch_length']
-        if 'label' in result: kwargs['name'] = result['label']
+        if 'label' in result: kwargs['name'] = result['label'].replace('_', ' ')
         
         clade = CDAO.Clade(**kwargs)
         
@@ -355,7 +355,9 @@ class Writer(object):
         RDF = import_rdf()
         
         self.node_counter += 1
-        clade.uri = node_uri(self.tree_name, 'node%s' % self.node_counter)
+        clade.uri = node_uri(self.tree_name, 'node%s' % str(self.node_counter).zfill(7))
+        if parent: clade.ancestors = parent.ancestors + [parent.uri]
+        else: clade.ancestors = []
         
         nUri = lambda s: namedUri(s, self.base_uri)
         Uri = RDF.Uri
@@ -365,7 +367,7 @@ class Writer(object):
         if root:
             # create a cdao:RootedTree with reference to the tree root
             self.tree_counter += 1
-            tree_uri = root + (str(self.tree_counter) if self.tree_counter > 1 else '')
+            tree_uri = root + (str(self.tree_counter).zfill(7) if self.tree_counter > 1 else '')
             statements += [
                            (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
                            (nUri(tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
@@ -374,7 +376,7 @@ class Writer(object):
         if clade.name:
             # create TU
             self.tu_counter += 1
-            tu_uri = node_uri(self.tree_name, 'tu%s' % self.tu_counter)
+            tu_uri = node_uri(self.tree_name, 'tu%s' % str(self.tu_counter).zfill(7))
 
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
@@ -389,21 +391,31 @@ class Writer(object):
         node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
         statements += [
                        (nUri(clade.uri), qUri('rdf:type'), qUri(node_type)),
+                       (nUri(clade.uri), qUri('cdao:belongs_to_Tree'), nUri(tree_uri)),
                        ]
                       
         if not parent is None:
             # create edge from the parent node to this node
             self.edge_counter += 1
-            edge_uri = node_uri(self.tree_name, 'edge%s' % self.edge_counter)
+            edge_uri = node_uri(self.tree_name, 'edge%s' % str(self.edge_counter).zfill(7))
 
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
+                           (nUri(edge.uri), qUri('cdao:belongs_to_Tree'), nUri(tree_uri)),
                            (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
                            (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
                            (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
                            (nUri(clade.uri), qUri('cdao:has_Parent'), nUri(parent.uri)),
                            (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
+
+            if len(clade.ancestors) > 0: pass
+                #ancestors = RDF.Node(literal=str(len(clade.ancestors)),
+                #                     datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#integer'))
+                #statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), ancestors)]
+                #statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), ancestor)
+                #               for ancestor in clade.ancestors]
+
             # add branch length
             edge_ann_uri = node_uri(self.tree_name, 'edge_annotation%s' % self.edge_counter)
 
