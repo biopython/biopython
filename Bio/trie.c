@@ -236,6 +236,34 @@ void *Trie_get(const Trie* trie, const char *key) {
 }
 
 
+/* DEBUG
+static void
+_print_trie_helper(const Trie* trie, int num_indent) {
+    int i, j;
+    char *message = "no value";
+    Transition *t;
+
+    if(trie->value != NULL)
+        message = "has value";
+    for(j=0; j<num_indent; j++)
+        printf(" ");
+    printf("%d transitions, %s.\n", trie->num_transitions, message);
+    for(i=0; i<trie->num_transitions; i++) {
+        t = &trie->transitions[i];
+        for(j=0; j<num_indent; j++)
+            printf(" ");
+        printf("suffix %s\n", t->suffix);
+        _print_trie_helper(t->next, num_indent+2);
+    }
+}
+
+static void
+_print_trie(const Trie* trie) {
+    _print_trie_helper(trie, 0);
+}
+*/
+
+
 /* Mutually recursive, so need to make a forward declaration. */
 static void
 _get_approximate_trie(const Trie* trie, const char *key, const int k,
@@ -525,16 +553,35 @@ _with_prefix_helper(const Trie* trie, const char *prefix,
 	else if(c > 0)
 	    first = mid+1;
 	else {
+            /* Three cases here.
+             * 1.  Suffix and prefix are the same.
+             *     Add suffix to current_key, advance prefix to the
+             *     end.  Continue recursively.  Since there is no more
+             *     prefix, every sub-trie will be considered as having
+             *     this prefix.
+             * 2.  Suffix shorter than prefix.
+             *     suffix  A
+             *     prefix  AN
+             *     Add suffix (A) to current_key.  Advance prefix by
+             *     1.  Continue recursively to match rest of prefix.
+             * 3.  Suffix longer than prefix.
+             *     suffix  AN
+             *     prefix  A
+             *     Add suffix (AN) to current_key.  Advance prefix to
+             *     the end.  Continue recursively.  Since there is no
+             *     more prefix, every sub-trie will be considered as
+             *     having this prefix.
+             */
 	    int keylen = strlen(current_key);
-	    if(keylen + minlen >= max_key) {
+	    if(keylen + suffixlen >= max_key) {
 		/* BUG: This will fail silently.  It should raise some
 		   sort of error. */
 		break;
 	    }
-	    strncat(current_key, suffix, minlen);
+	    strncat(current_key, suffix, suffixlen);
 	    _with_prefix_helper(transition->next, prefix+minlen,
 				callback, data, current_key, max_key);
-	    current_key[keylen] = 0;
+	    current_key[keylen] = 0;  /* reset current_key */
 	    break;
 	}
     }
@@ -548,6 +595,7 @@ Trie_with_prefix(const Trie* trie, const char *prefix,
 		 void *data
 		 )
 {
+    /*_print_trie(trie);*/
     KEY[0] = 0;
     _with_prefix_helper(trie, prefix, callback, data, KEY, MAX_KEY_LENGTH);
 }
