@@ -364,13 +364,18 @@ class Writer(object):
         urls = self.urls
         
         statements = []
+        self.tree_counter += 1
+        tree_uri = self.tree_name + (str(self.tree_counter).zfill(7) if self.tree_counter > 1 else '')
+        
         if root:
             # create a cdao:RootedTree with reference to the tree root
-            self.tree_counter += 1
-            tree_uri = root + (str(self.tree_counter).zfill(7) if self.tree_counter > 1 else '')
             statements += [
                            (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
                            (nUri(tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
+                           ]
+        else:
+            statements += [
+                           (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:Tree'))
                            ]
         
         if clade.name:
@@ -401,7 +406,7 @@ class Writer(object):
 
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
-                           (nUri(edge.uri), qUri('cdao:belongs_to_Tree'), nUri(tree_uri)),
+                           (nUri(edge_uri), qUri('cdao:belongs_to_Tree'), nUri(tree_uri)),
                            (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
                            (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
                            (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
