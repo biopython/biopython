@@ -365,7 +365,7 @@ class Writer(object):
         
         statements = []
         self.tree_counter += 1
-        tree_uri = self.tree_name + (str(self.tree_counter).zfill(7) if self.tree_counter > 1 else '')
+        tree_uri = node_uri(self.tree_name, 'tree%s' % str(self.tree_counter).zfill(7))
         
         if root:
             # create a cdao:RootedTree with reference to the tree root
