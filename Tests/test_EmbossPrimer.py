@@ -17,6 +17,7 @@ class Primer3ParseTest(unittest.TestCase):
            os.path.join("Emboss", "cds_reverse.primer3"),
            os.path.join("Emboss", "short.primer3"),
            os.path.join("Emboss", "internal_oligo.primer3"),
+           os.path.join("Emboss", "no_oligo.primer3"),
            ]
 
     def test_simple_parse(self):
