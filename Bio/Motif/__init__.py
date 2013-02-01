@@ -9,6 +9,18 @@ it contains the core Motif class containing various I/O methods
 as well as methods for motif comparisons and motif searching in sequences.
 It also inlcudes functionality for parsing AlignACE and MEME programs
 """
+
+import warnings
+warnings.warn("The module Bio.Motif is now obsolete, and will be"
+              "deprecated and removed in a future release of"
+              "release of Biopython. As a replacement for Bio.Motif,"
+              "please use the new module Bio.motifs instead. Please",
+              "be aware that though the functionality of Bio.Motif"
+              "is retained (and extended) in Bio.motifs, usage may"
+              "be different."
+              PendingDeprecationWarning)
+
+
 from Bio.Motif._Motif import Motif
 from Bio.Motif.Parsers.AlignAce import read as _AlignAce_read
 from Bio.Motif.Parsers.MEME import read as _MEME_read

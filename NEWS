@@ -56,6 +56,10 @@ public feedback, but with the big warning that the API is likely to change.
 In fact, even the current name of Bio.SearchIO may change since unless you
 are familiar with BioPerl its purpose isn't immediately clear.
 
+The Bio.Motif module has been updated and reorganized. To allow for a clean
+deprecation of the old code, the new motif code is stored in a new module
+Bio.motifs, and a PendingDeprecationWarning was added to Bio.Motif.
+
 Additionally there have been other minor bug fixes and more unit tests.
 
 Finally, we are phasing out support for Python 2.5. We will continue support
