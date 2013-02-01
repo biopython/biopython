@@ -38,7 +38,7 @@ struct Trie {
 };
 
 
-#define MAX_KEY_LENGTH 1000
+#define MAX_KEY_LENGTH (1024*1024)
 static char KEY[MAX_KEY_LENGTH];
 
 
@@ -723,6 +723,10 @@ int _deserialize_trie(Trie* trie,
 	 malloc(trie->num_transitions*sizeof(Transition))))
 	goto _deserialize_trie_error;
     for(i=0; i<trie->num_transitions; i++) {
+        trie->transitions[i].suffix = NULL;
+        trie->transitions[i].next = NULL;
+    }
+    for(i=0; i<trie->num_transitions; i++) {
 	if(!_deserialize_transition(&trie->transitions[i],
 				    read, read_value, data))
 	    goto _deserialize_trie_error;
@@ -751,8 +755,11 @@ int _deserialize_transition(Transition* transition,
 
     if(!(*read)(&suffixlen, sizeof(suffixlen), data))
 	goto _deserialize_transition_error;
-    if(suffixlen < 0 || suffixlen >= MAX_KEY_LENGTH)
+    if(suffixlen < 0 || suffixlen >= MAX_KEY_LENGTH) {
+        printf("MAX_KEY_LENGTH too short [%d:%d]\n", 
+               MAX_KEY_LENGTH, suffixlen);
 	goto _deserialize_transition_error;
+    }
     if(!(*read)(KEY, suffixlen, data))
 	goto _deserialize_transition_error;
     KEY[suffixlen] = 0;
