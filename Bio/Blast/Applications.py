@@ -261,7 +261,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
                    In older versions of BLAST, -L set the length of region
                    used to judge hits (see -K parameter).""",
                    equate=False),
-           _Option(["-w", "frame_shit_penalty"],
+           _Option(["-w", "frame_shift_penalty"],
                    "Frame shift penalty (OOF algorithm for blastx).",
                    equate=False),
            _Option(["-t", "largest_intron"],
