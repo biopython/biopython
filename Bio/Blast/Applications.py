@@ -976,6 +976,18 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     "Minimum word score such that the word is added to the "
                     "BLAST lookup table (float)",
                     equate=False),
+            _Option(["-comp_based_stats", "comp_based_stats"],
+                    """Use composition-based statistics for blastp, blastx, or tblastn:
+                        D or d: default (equivalent to 2 )
+                        0 or F or f: no composition-based statistics
+                        1: Composition-based statistics as in NAR 29:2994-3005, 2001
+                        2 or T or t : Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, conditioned on sequence properties
+                        3: Composition-based score adjustment as in Bioinformatics 21:902-911, 2005, unconditionally
+
+                        For programs other than tblastn, must either be absent or be D, F or 0
+                        Default = `2'
+                    """,
+                    equate=False),
             #Query filtering options:
             _Option(["-seg", "seg"],
                     """Filter query sequence with SEG (string).
@@ -986,6 +998,8 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
             #Extension options:
             _Switch(["-ungapped", "ungapped"],
                     "Perform ungapped alignment only?"),
+            _Switch(["-use_sw_tback", "use_sw_tback"],
+                    "Compute locally optimal Smith-Waterman alignments?"),
             ]
         _NcbiblastMain2SeqCommandline.__init__(self, cmd, **kwargs)
 
@@ -1229,6 +1243,13 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
 
                     Float. Default is 0.002.""",
                     equate=False),
+            _Switch(["-ignore_msa_master", "ignore_msa_master"],
+                    """Ignore the master sequence when creating PSSM
+
+                    * Requires:  in_msa
+                    * Incompatible with:  msa_master_idx, in_pssm, query,
+                    query_loc, phi_pattern
+                    """),
             #PHI-BLAST options:
             _Option(["-phi_pattern", "phi_pattern"],
                     """File name containing pattern to search
@@ -1242,7 +1263,10 @@ class NcbipsiblastCommandline(_Ncbiblast2SeqCommandline):
     def _validate(self):
         incompatibles = {"num_iterations":["remote"],
                          "in_msa":["in_pssm", "query"],
-                         "in_pssm":["in_msa","query","phi_pattern"]}
+                         "in_pssm":["in_msa","query","phi_pattern"],
+                         "ignore_msa_master":["msa_master_idx", "in_pssm",
+                                 "query", "query_loc", "phi_pattern"],
+                         }
         self._validate_incompatibilities(incompatibles)
         _Ncbiblast2SeqCommandline._validate(self)
 
