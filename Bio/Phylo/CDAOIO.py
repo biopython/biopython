@@ -326,6 +326,9 @@ class Writer(object):
             model.append(RDF.Statement(*stmt), context)
         
         for tree in trees:
+            self.tree_counter += 1
+            self.tree_uri = node_uri(self.tree_name, 'tree%s' % str(self.tree_counter).zfill(7))
+
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree_name)
             for stmt in statements:
@@ -364,18 +367,16 @@ class Writer(object):
         urls = self.urls
         
         statements = []
-        self.tree_counter += 1
-        tree_uri = node_uri(self.tree_name, 'tree%s' % str(self.tree_counter).zfill(7))
         
         if root:
             # create a cdao:RootedTree with reference to the tree root
             statements += [
-                           (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
-                           (nUri(tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
+                           (nUri(self.tree_uri), qUri('rdf:type'), qUri('cdao:RootedTree')),
+                           (nUri(self.tree_uri), qUri('cdao:has_Root'), nUri(clade.uri)),
                            ]
         else:
             statements += [
-                           (nUri(tree_uri), qUri('rdf:type'), qUri('cdao:Tree'))
+                           (nUri(self.tree_uri), qUri('rdf:type'), qUri('cdao:Tree'))
                            ]
         
         if clade.name:
@@ -396,7 +397,7 @@ class Writer(object):
         node_type = 'cdao:TerminalNode' if clade.is_terminal() else 'cdao:AncestralNode'
         statements += [
                        (nUri(clade.uri), qUri('rdf:type'), qUri(node_type)),
-                       (nUri(clade.uri), qUri('cdao:belongs_to_Tree'), nUri(tree_uri)),
+                       (nUri(clade.uri), qUri('cdao:belongs_to_Tree'), nUri(self.tree_uri)),
                        ]
                       
         if not parent is None:
@@ -406,7 +407,7 @@ class Writer(object):
 
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
-                           (nUri(edge_uri), qUri('cdao:belongs_to_Tree'), nUri(tree_uri)),
+                           (nUri(edge_uri), qUri('cdao:belongs_to_Tree'), nUri(self.tree_uri)),
                            (nUri(edge_uri), qUri('cdao:has_Parent_Node'), nUri(parent.uri)),
                            (nUri(edge_uri), qUri('cdao:has_Child_Node'), nUri(clade.uri)),
                            (nUri(clade.uri), qUri('cdao:belongs_to_Edge_as_Child'), nUri(edge_uri)),
