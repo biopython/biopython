@@ -226,7 +226,7 @@ class Parser(object):
                 # if this object points to a TU, we need the label of that TU
                 tu = self.obj_info[obj['tu']]
                 if 'label' in tu:
-                    node_info['label'] = tu['label']
+                    node_info['label'] = tu['label'].replace('_', ' ')
             
             if 'parent' in obj:
                 # store this node as a child of its parent, if it has one,
