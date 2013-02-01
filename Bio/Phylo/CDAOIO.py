@@ -30,10 +30,12 @@ RDF_NAMESPACES = {
                   }
 
 def node_uri(graph, uri):
+    RDF = import_rdf()
+
     if graph.endswith('/'):
-        return urlparse.urljoin(graph, uri)
+        return RDF.Uri(urlparse.urljoin(graph, uri))
     else:
-        return urlparse.urljoin(graph, '#%s' % uri)
+        return RDF.Uri(urlparse.urljoin(graph, '#%s' % uri))
 
 class CDAOError(Exception):
     """Exception raised when CDAO object construction cannot continue."""
@@ -278,9 +280,6 @@ class Writer(object):
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
-        try: base_uri = kwargs['base_uri']
-        except KeyError: base_uri = ''
-
         try: tree_name = kwargs['tree_name']
         except KeyError: tree_name = 'tree'
 
@@ -290,11 +289,11 @@ class Writer(object):
         try: storage = kwargs['storage']
         except KeyError: storage = None
         
-        self.add_trees_to_model(base_uri=base_uri, storage=storage, tree_name=tree_name, context=context)
+        self.add_trees_to_model(storage=storage, tree_name=tree_name, context=context)
         if storage is None: self.serialize_model(handle, mime_type=mime_type)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, base_uri=None, tree_name='tree', context=None):
+    def add_trees_to_model(self, trees=None, storage=None, tree_name='tree', context=None):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
@@ -305,8 +304,6 @@ class Writer(object):
         Uri = RDF.Uri
         urls = self.urls
         
-        self.base_uri = base_uri
-            
         if trees is None:
             trees = self.trees
         
@@ -327,7 +324,7 @@ class Writer(object):
         
         for tree in trees:
             self.tree_counter += 1
-            self.tree_uri = node_uri(self.tree_name, 'tree%s' % str(self.tree_counter).zfill(7))
+            self.tree_uri = 'tree%s' % str(self.tree_counter).zfill(7)
 
             first_clade = tree.clade
             statements = self.process_clade(first_clade, root=tree_name)
@@ -358,11 +355,11 @@ class Writer(object):
         RDF = import_rdf()
         
         self.node_counter += 1
-        clade.uri = node_uri(self.tree_name, 'node%s' % str(self.node_counter).zfill(7))
+        clade.uri = 'node%s' % str(self.node_counter).zfill(7)
         if parent: clade.ancestors = parent.ancestors + [parent.uri]
         else: clade.ancestors = []
         
-        nUri = lambda s: namedUri(s, self.base_uri)
+        nUri = lambda s: node_uri(self.tree_name, s)
         Uri = RDF.Uri
         urls = self.urls
         
@@ -382,7 +379,7 @@ class Writer(object):
         if clade.name:
             # create TU
             self.tu_counter += 1
-            tu_uri = node_uri(self.tree_name, 'tu%s' % str(self.tu_counter).zfill(7))
+            tu_uri = 'tu%s' % str(self.tu_counter).zfill(7)
 
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
@@ -403,7 +400,7 @@ class Writer(object):
         if not parent is None:
             # create edge from the parent node to this node
             self.edge_counter += 1
-            edge_uri = node_uri(self.tree_name, 'edge%s' % str(self.edge_counter).zfill(7))
+            edge_uri = 'edge%s' % str(self.edge_counter).zfill(7)
 
             statements += [
                            (nUri(edge_uri), qUri('rdf:type'), qUri('cdao:DirectedEdge')),
@@ -423,7 +420,7 @@ class Writer(object):
                                for ancestor in clade.ancestors]
             
             # add branch length
-            edge_ann_uri = node_uri(self.tree_name, 'edge_annotation%s' % self.edge_counter)
+            edge_ann_uri = 'edge_annotation%s' % self.edge_counter
 
             branch_length = RDF.Node(literal=str(clade.branch_length), 
                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
@@ -454,13 +451,3 @@ def qUri(s):
         s = s.replace(url+':', RDF_NAMESPACES[url])
 
     return RDF.Uri(s)
-    
-
-def namedUri(s, base_uri):
-    '''append a URI to the base URI'''
-    RDF = import_rdf()
-    
-    if base_uri and not (base_uri.endswith('/') or base_uri.endswith('#')):
-        base_uri += '#'
-
-    return RDF.Uri(base_uri + s)
