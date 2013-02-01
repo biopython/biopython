@@ -226,7 +226,7 @@ class Parser(object):
                 # if this object points to a TU, we need the label of that TU
                 tu = self.obj_info[obj['tu']]
                 if 'label' in tu:
-                    node_info['label'] = tu['label'].replace('_', ' ')
+                    node_info['label'] = tu['label']
             
             if 'parent' in obj:
                 # store this node as a child of its parent, if it has one,
@@ -387,7 +387,7 @@ class Writer(object):
             statements += [
                            (nUri(tu_uri), qUri('rdf:type'), qUri('cdao:TU')),
                            (nUri(clade.uri), qUri('cdao:represents_TU'), nUri(tu_uri)),
-                           (nUri(tu_uri), qUri('rdf:label'), RDF.Node(literal=clade.name)),
+                           (nUri(tu_uri), qUri('rdf:label'), RDF.Node(literal=clade.name.replace('_', ' '))),
                            ]
                            
             # TODO: should be able to pass in an optional function for 
@@ -414,14 +414,14 @@ class Writer(object):
                            (nUri(clade.uri), qUri('cdao:has_Parent'), nUri(parent.uri)),
                            (nUri(parent.uri), qUri('cdao:belongs_to_Edge_as_Parent'), nUri(edge_uri)),
                            ]
-
-            if len(clade.ancestors) > 0: pass
+            
+            if len(clade.ancestors) > 0:
                 #ancestors = RDF.Node(literal=str(len(clade.ancestors)),
                 #                     datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#integer'))
                 #statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), ancestors)]
-                #statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), ancestor)
-                #               for ancestor in clade.ancestors]
-
+                statements += [(nUri(clade.uri), qUri('cdao:has_Ancestor'), nUri(ancestor))
+                               for ancestor in clade.ancestors]
+            
             # add branch length
             edge_ann_uri = node_uri(self.tree_name, 'edge_annotation%s' % self.edge_counter)
 
