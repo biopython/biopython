@@ -232,7 +232,7 @@ class CheckCompleteArgList(unittest.TestCase):
             import warnings
             warnings.warn("NCBI BLAST+ %s and Biopython out sync. Please "
                           "update Biopython, or report this issue if you are "
-                          "already using the latest version. (Exta args: %s; "
+                          "already using the latest version. (Extra args: %s; "
                           "Missing: %s)" % (exe_name,
                           ",".join(sorted(extra)),
                           ",".join(sorted(missing))))
