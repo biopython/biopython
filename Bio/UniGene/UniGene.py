@@ -18,11 +18,13 @@
 # WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import warnings
-warnings.warn("The module Bio.UniGene.UniGene is now obsolete, "
-              "and will be deprecated and removed in a future "
-              "release of Biopython. To parse UniGene flat files, "
-              "please use the parser in Bio.UniGene instead",
-              PendingDeprecationWarning)
+from Bio import BiopythonDeprecationWarning
+
+warnings.warn("The module Bio.UniGene.UniGene is now deprecated, "
+              "and will be removed in a future release of Biopython."
+              "To parse UniGene flat files, please use the parser in "
+              "Bio.UniGene instead",
+              BiopythonDeprecationWarning)
 
 import string
 import sgmllib

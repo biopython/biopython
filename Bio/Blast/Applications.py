@@ -32,6 +32,8 @@ Camacho et al. BLAST+: architecture and applications
 BMC Bioinformatics 2009, 10:421
 doi:10.1186/1471-2105-10-421
 """
+from Bio import BiopythonDeprecationWarning
+
 from Bio.Application import _Option, AbstractCommandline, _Switch
 
 
@@ -213,7 +215,7 @@ class BlastallCommandline(_BlastAllOrPgpCommandLine):
     #TODO - This could use more checking for valid parameters to the program.
     def __init__(self, cmd="blastall",**kwargs):
         import warnings
-        warnings.warn("Like blastall, this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
+        warnings.warn("Like blastall, this wrapper is now deprecated and will be removed in a future release of Biopython.", BiopythonDeprecationWarning)
         self.parameters = [
             #Sorted in the same order as the output from blastall --help
             #which should make it easier to keep them up to date in future.
@@ -316,7 +318,7 @@ class BlastpgpCommandline(_BlastAllOrPgpCommandLine):
     """
     def __init__(self, cmd="blastpgp",**kwargs):
         import warnings
-        warnings.warn("Like blastpgp (and blastall), this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
+        warnings.warn("Like blastpgp (and blastall), this wrapper is now deprecated and will be removed in a future release of Biopython.", BiopythonDeprecationWarning)
         self.parameters = [
            _Option(["-C", "checkpoint_outfile"],
                    "Output file for PSI-BLAST checkpointing.",
@@ -395,7 +397,7 @@ class RpsBlastCommandline(_BlastCommandLine):
     """
     def __init__(self, cmd="rpsblast",**kwargs):
         import warnings
-        warnings.warn("Like the old rpsblast (and blastall), this wrapper is now obsolete, and will be deprecated and removed in a future release of Biopython.", PendingDeprecationWarning)
+        warnings.warn("Like the old rpsblast (and blastall), this wrapper is now deprecated and will be removed in a future release of Biopython.", BiopythonDeprecationWarning)
         self.parameters = [
            #Note -N is also in blastpgp, but not blastall
            _Option(["-N", "nbits_gapping"],

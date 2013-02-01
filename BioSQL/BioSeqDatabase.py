@@ -12,6 +12,8 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
+from Bio import BiopythonDeprecationWarning
+
 import BioSeq
 import Loader
 import DBUtils
@@ -201,9 +203,9 @@ class DBServer:
         del server[name]
         """
         import warnings
-        warnings.warn("This method is obsolete.  In keeping with the "
+        warnings.warn("This method is deprecated.  In keeping with the "
                       "dictionary interface, you can now use 'del "
-                      "server[name]' instead", PendingDeprecationWarning)
+                      "server[name]' instead", BiopythonDeprecationWarning)
         db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
         remover = Loader.DatabaseRemover(self.adaptor, db_id)
         remover.remove()
@@ -517,7 +519,7 @@ class BioSeqDatabase:
         import warnings
         warnings.warn("Use bio_seq_database.keys() instead of "
                       "bio_seq_database.get_all_primary_ids()",
-                      PendingDeprecationWarning)
+                      BiopythonDeprecationWarning)
         return self.keys()
 
     def __getitem__(self, key):
@@ -622,7 +624,7 @@ class BioSeqDatabase:
         import warnings
         warnings.warn("Use bio_seq_database[my_id] instead of "
                       "bio_seq_database.get_Seq_by_primary_id(my_id)",
-                      PendingDeprecationWarning)
+                      BiopythonDeprecationWarning)
         return self[seqid]
 
     def load(self, record_iterator, fetch_NCBI_taxonomy=False):

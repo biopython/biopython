@@ -77,7 +77,8 @@ Bio.Blast.NCBIStandalone
 ========================
 The three functions for calling the "legacy" NCBI BLAST command line tools
 blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
-1.53, please use the BLAST+ wrappers in Bio.Blast.Applications instead.
+1.53, and deprecated in Release 1.61. Please use the BLAST+ wrappers in
+Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
 which was declared obsolete in Release 1.54. For some time now, both the NCBI
@@ -87,8 +88,9 @@ Bio.Blast.Applications
 ======================
 NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
 BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
-1.53, having been replaced with wrappers for the new NCBI BLAST+ tools (e.g.
-NcbiblastpCommandline and NcbipsiblastCommandline).
+1.53 and deprecated in Release 1.61, having been replaced with wrappers for
+the new NCBI BLAST+ tools (e.g.  NcbiblastpCommandline and
+NcbipsiblastCommandline).
 
 Bio.Clustalw
 ============
@@ -503,7 +505,8 @@ UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
 and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
-The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59.
+The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59,
+and deprecated in Release 1.61.
 
 Bio.SubsMat
 ===========

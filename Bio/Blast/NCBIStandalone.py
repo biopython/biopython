@@ -52,6 +52,8 @@ are likely to be deprecated and then removed in future releases.
 import warnings
 warnings.warn("The plain text parser in this module still works at the time of writing, but is considered obsolete and updating it to cope with the latest versions of BLAST is not a priority for us.", PendingDeprecationWarning)
 
+from Bio import BiopythonDeprecationWarning
+
 import os
 import re
 import StringIO
@@ -1786,7 +1788,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", BiopythonDeprecationWarning)
     from Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
     cline.set_parameter(att2param['program'], program)
@@ -1869,7 +1871,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     align_infile        Input alignment file for PSI-BLAST restart.
     """
 
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
@@ -1988,7 +1990,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
                         from the returned handles).
     """
 
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
