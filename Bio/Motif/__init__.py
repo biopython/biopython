@@ -14,10 +14,10 @@ import warnings
 warnings.warn("The module Bio.Motif is now obsolete, and will be"
               "deprecated and removed in a future release of"
               "release of Biopython. As a replacement for Bio.Motif,"
-              "please use the new module Bio.motifs instead. Please",
+              "please use the new module Bio.motifs instead. Please"
               "be aware that though the functionality of Bio.Motif"
               "is retained (and extended) in Bio.motifs, usage may"
-              "be different."
+              "be different.",
               PendingDeprecationWarning)
 
 
