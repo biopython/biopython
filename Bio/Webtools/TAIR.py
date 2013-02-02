@@ -62,7 +62,7 @@ def get(agis, dataset, target="representative"):
         "Must specify AGIs as a iterable, list or tuple"
         )
     agis = _sanitise_agis(agis)
-    if agis is None:
+    if len(agis) < 1:
         raise bad_agi_exception
 
     # Check dataset
