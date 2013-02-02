@@ -7,9 +7,10 @@
 """Bio.SeqIO support for the binary Standard Flowgram Format (SFF) file format.
 
 SFF was designed by 454 Life Sciences (Roche), the Whitehead Institute for
-Biomedical Research and the Wellcome Trust Sanger Institute. You are expected
-to use this module via the Bio.SeqIO functions under the format name "sff" (or
-"sff-trim" as described below).
+Biomedical Research and the Wellcome Trust Sanger Institute. SFF was also used
+as the native output format from early versions of Ion Torrent's PGM platform
+as well. You are expected to use this module via the Bio.SeqIO functions under
+the format name "sff" (or "sff-trim" as described below).
 
 For example, to iterate over the records in an SFF file,
 
