@@ -15,6 +15,9 @@ import re
 def _sanitise_agis(agis):
     """Takes a list of agis, and returns a list of only those which are valid.
     """
+    if isinstance(agis, str):
+        agis = [agis]
+
     clean_agis = []
     agi_re = re.compile(r"^AT[12345CM]G\d{5}(\.\d){0,1}$")
     for agi in agis:
