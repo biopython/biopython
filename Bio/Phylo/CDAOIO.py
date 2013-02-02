@@ -280,8 +280,8 @@ class Writer(object):
         try: mime_type = kwargs['mime_type']
         except KeyError: mime_type = 'text/turtle'
         
-        try: tree_name = kwargs['tree_name']
-        except KeyError: tree_name = 'tree'
+        try: tree_uri = kwargs['tree_uri']
+        except KeyError: tree_uri = 'tree'
 
         try: context = kwargs['context']
         except KeyError: context=None
@@ -289,17 +289,17 @@ class Writer(object):
         try: storage = kwargs['storage']
         except KeyError: storage = None
         
-        self.add_trees_to_model(storage=storage, tree_name=tree_name, context=context)
+        self.add_trees_to_model(storage=storage, tree_uri=tree_uri, context=context)
         if storage is None: self.serialize_model(handle, mime_type=mime_type)
         
         
-    def add_trees_to_model(self, trees=None, storage=None, tree_name='tree', context=None):
+    def add_trees_to_model(self, trees=None, storage=None, tree_uri='tree', context=None):
         """Add triples describing a set of trees to an RDF model."""
         RDF = import_rdf()
         import Redland
 
         if context: context = RDF.Node(RDF.Uri(context))
-        self.tree_name = tree_name
+        self.tree_uri = tree_uri
 
         Uri = RDF.Uri
         urls = self.urls
@@ -327,7 +327,7 @@ class Writer(object):
             self.tree_uri = 'tree%s' % str(self.tree_counter).zfill(7)
 
             first_clade = tree.clade
-            statements = self.process_clade(first_clade, root=tree_name)
+            statements = self.process_clade(first_clade, root=tree_uri)
             for stmt in statements:
                 model.append(stmt, context)
                 
@@ -359,7 +359,7 @@ class Writer(object):
         if parent: clade.ancestors = parent.ancestors + [parent.uri]
         else: clade.ancestors = []
         
-        nUri = lambda s: node_uri(self.tree_name, s)
+        nUri = lambda s: node_uri(self.tree_uri, s)
         Uri = RDF.Uri
         urls = self.urls
         
@@ -420,7 +420,7 @@ class Writer(object):
                                for ancestor in clade.ancestors]
             
             # add branch length
-            edge_ann_uri = 'edge_annotation%s' % self.edge_counter
+            edge_ann_uri = 'edge_annotation%s' % str(self.edge_counter).zfill(7)
 
             branch_length = RDF.Node(literal=str(clade.branch_length), 
                                      datatype=RDF.Uri('http://www.w3.org/2001/XMLSchema#decimal'))
