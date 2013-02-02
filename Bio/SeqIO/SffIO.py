@@ -455,22 +455,6 @@ def _sff_find_roche_index(handle):
                          % (repr(magic_number), repr(data)))
 
 
-def _sff_read_roche_index_xml(handle):
-    """Reads any existing Roche style XML manifest data in the SFF "index" (PRIVATE, DEPRECATED).
-
-    Will use the handle seek/tell functions. Returns a string.
-
-    This has been replaced by ReadRocheXmlManifest. We would normally just
-    delete an old private function without warning, but I believe some people
-    are using this so we'll handle this with a deprecation warning.
-    """
-    import warnings
-    warnings.warn("Private function _sff_read_roche_index_xml is deprecated. "
-                  "Use new public function ReadRocheXmlManifest instead",
-                  DeprecationWarning)
-    return ReadRocheXmlManifest(handle)
-
-
 def ReadRocheXmlManifest(handle):
     """Reads any Roche style XML manifest data in the SFF "index".
 
