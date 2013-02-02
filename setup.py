@@ -308,6 +308,7 @@ PACKAGES = [
     'Bio.KEGG.Compound',
     'Bio.KEGG.Enzyme',
     'Bio.KEGG.Map',
+    'Bio.KGML',
     'Bio.Medline',
     'Bio.Motif',
     'Bio.Motif.Parsers',
