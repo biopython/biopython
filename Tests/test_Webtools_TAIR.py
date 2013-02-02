@@ -302,6 +302,22 @@ class TAIRDirect(unittest.TestCase):
                 ]
         self.assertEqual([], TAIR._sanitise_agis(not_agis))
 
+    def test_string_agi(self):
+        # This checks to see that no errors are raised when an AGI is
+        # given as a string.
+        expected_id = "AT4G36450.1"
+        expected_seq = "ATGGCGATGC"
+        expected_len = 1086
+        returned_seq = TAIR.get(
+                self.test_agis[0],
+                "transcript",
+                "representative"
+                ).next()
+
+        self.assertEqual(expected_id, returned_seq.id)
+        self.assertEqual(expected_seq, str(returned_seq.seq[:10]))
+        self.assertEqual(expected_len, len(returned_seq.seq))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
