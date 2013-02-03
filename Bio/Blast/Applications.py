@@ -959,9 +959,6 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     Integer. Default is one.""",
                     equate=False),
             #General search options:
-            _Option(["-frame_shift_penalty", "frame_shift_penalty"],
-                    "Frame shift penalty (integer, at least 1, default ignored).",
-                    equate=False),
             _Option(["-max_intron_length", "max_intron_length"],
                     """Maximum intron length (integer).
 
@@ -1028,9 +1025,6 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     """Genetic code to use to translate query
 
                     Integer. Default is one.""",
-                    equate=False),
-            _Option(["-frame_shift_penalty", "frame_shift_penalty"],
-                    "Frame shift penalty (integer, at least 1, default ignored).",
                     equate=False),
             _Option(["-max_intron_length", "max_intron_length"],
                     """Maximum intron length (integer).
