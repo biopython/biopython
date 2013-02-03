@@ -227,6 +227,10 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
+        if exe_name=="blastx":
+            #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
+            extra = extra.difference(["-comp_based_stats",
+                                      "-use_sw_tback"])
 
         if extra or missing:
             import warnings
