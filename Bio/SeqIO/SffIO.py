@@ -244,6 +244,7 @@ def _sff_file_header(handle):
 
     >>> handle = open("Roche/greek.sff", "rb")
     >>> values = _sff_file_header(handle)
+    >>> handle.close()
     >>> print values[0]
     840
     >>> print values[1]
