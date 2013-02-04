@@ -12006,7 +12006,6 @@ motif finders, but it is not a part of Biopython and has some restrictions
 on commercial use.
 
 \section{Motif objects}
-\label{sec:object}
 
 %TODO - turn these into doctests...
 Since we are interested in motif analysis, we need to take a look at
@@ -12135,7 +12134,6 @@ background. $0.0$ means that it's equally likely to see a symbol in
 background and in the motif (e.g. `T' in the second-last position).
 
 \subsection{Reading and writing}
-\label{sec:io}
 
 Creating motifs from instances by hand is a bit boring, so it's
 useful to have some I/O functions for reading and writing
@@ -12237,7 +12235,6 @@ Finally, if we have internet access, we can create a \href{http://weblogo.berkel
 We should get our logo saved as a png in the specified file.
 
 \subsection{Searching for instances}
-\label{sec:search}
 
 The most frequent use for a motif is to find its instances in some
 sequence. For the sake of this section, we will use an artificial sequence like this:
@@ -12329,7 +12326,6 @@ instances with balanced threshold with rate of $1000$.
 \end{verbatim}
 
 \subsection{Comparing motifs}
-\label{sec:comp}
 Once we have more than one motif, we might want to compare them. For
 that, we have currently three different methods of \verb|Bio.Motif|
 objects.
@@ -12404,7 +12400,6 @@ independently generating the same instance by both motifs.
 \end{verbatim}
 
 \section{\emph{De novo} motif finding}
-\label{sec:find}
 
 Currently, biopython has only limited support for \emph{de novo} motif
 finding. Namely, we support running and parsing of AlignAce and
@@ -12412,7 +12407,6 @@ MEME. Since the number of motif finding tools is growing rapidly,
 contributions of new parsers are welcome. 
 
 \subsection{MEME}
-\label{sec:meme}
 
 Let's assume, you have run MEME on sequences of your choice with your
 favorite parameters and saved the output in the file
@@ -12454,7 +12448,6 @@ Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
 
 \subsection{AlignAce}
-\label{sec:alignace}
 
 We can do very similar things with AlignACE program. Assume, you have
 your output in the file \verb|alignace.out|. You can parse your output
@@ -12495,20 +12488,6 @@ to your motifs by parsing the first part of the result:
 \begin{verbatim}
 motifs=list(Motif.parse(stdout,"AlignAce"))
 \end{verbatim}
-
-
-
-\section{Useful links }
-\label{sec:links}
-
-
-\begin{itemize}
-\item \href{http://en.wikipedia.org/wiki/Sequence_motif}{Sequence motif} in wikipedia
-\item \href{http://en.wikipedia.org/wiki/Position_weight_matrix}{PWM} in wikipedia
-\item \href{http://en.wikipedia.org/wiki/Consensus_sequence}{Consensus sequence} in wikipedia
-\item \href{http://bio.cs.washington.edu/assessment/}{Comparison of different motif finding programs} 
-\end{itemize}
-
 
 
 \chapter{Cluster analysis}
