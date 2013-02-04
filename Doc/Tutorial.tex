@@ -5562,9 +5562,9 @@ more. In general, these tools usually use your sequence to search a database of
 potential matches. With the growing number of known sequences (hence the
 growing number of potential matches), interpreting the results becomes
 increasingly hard as there could be hundreds or even thousands of potential
-matches. In this scenario, interpreting the results manually is out of the
-question. Moreover, you often need to work with several sequence search tools,
-each with its own statistics, conventions, and output format. Imagine how
+matches. Naturally, manual interpretation of these searches' results is out of
+the question. Moreover, you often need to work with several sequence search
+tools, each with its own statistics, conventions, and output format. Imagine how
 daunting it would be when you need to work with multiple sequences using
 multiple search tools.
 
@@ -5580,26 +5580,26 @@ BLAST and BLAT. They are used merely for illustrative purposes, and you should
 be able to adapt the workflow to any other search tools supported by
 \verb|Bio.SearchIO| in a breeze. You're very welcome to follow along with the
 search output files we'll be using. The BLAST output file can be downloaded
-here, and the BLAT output file here. Both output files were generated using
-this sequence:
-%TODO - Add the missing links above.
+\href{http://biopython.org/SRC/Doc/examples/my_blast.xml}{here},
+and the BLAT output file
+\href{http://biopython.org/SRC/Doc/examples/my_blat.psl}{here}.
+Both output files were generated using this sequence:
 
 \begin{verbatim}
 >mystery_seq
 CCCTCTACAGGGAAGCGCTTTCTGTTGTCTGAAAGAAAAGAAAGTGCTTCCTTTTAGAGGG
 \end{verbatim}
 
-The BLAST result is an XML file generated using blastn against the NCBI
+The BLAST result is an XML file generated using \verb|blastn| against the NCBI
 \verb|refseq_rna| database. For BLAT, the sequence database was the February 2009
 \verb|hg19| human genome draft and the output format is PSL.
 
 We'll start from an introduction to the \verb|Bio.SearchIO| object model. The
 model is the representation of your search results, thus it is core to
-\verb|Bio.SearchIO| itself. After that, we'll see the main methods in
-\verb|Bio.SearchIO|, from the ones that reads in your search output files to
-the ones that can write new files.
+\verb|Bio.SearchIO| itself. After that, we'll check out the main functions in
+\verb|Bio.SearchIO| that you may often use.
 
-Now that we're all set let's go to the first step: introducing the core
+Now that we're all set, let's go to the first step: introducing the core
 object model.
 
 \section{The SearchIO object model}
@@ -5649,8 +5649,8 @@ These four objects are the ones you will interact with when you use
 \verb|Bio.SearchIO|. They are created using one of the main \verb|Bio.SearchIO|
 methods: \verb|read|, \verb|parse|, \verb|index|, or \verb|index_db|. The
 details of these methods are provided in later sections. For this section, we'll
-only be using read and parse so what you need to know is that read and parse
-behave similarly to their \verb|Bio.SeqIO| and \verb|Bio.AlignIO| counterparts:
+only be using read and parse. These functions behave similarly to their
+\verb|Bio.SeqIO| and \verb|Bio.AlignIO| counterparts:
 
 \begin{itemize}
 \item \verb|read| is used for search output files with a single query and
@@ -5758,7 +5758,7 @@ and BLAT searches:
     is BLAT, but in the output file there is no information regarding the
     program version so it defaults to `<unknown version>'.
 \item The query ID, description, and its sequence length. Notice here that these
-    details is slightly different from the ones we see in BLAST. The ID is
+    details are slightly different from the ones we saw in BLAST. The ID is
     `mystery\_seq' instead of 42991, there is no known description, but the query
     length is still 61. This is actually a difference introduced by the file
     formats themselves. BLAST sometimes creates its own query IDs and uses your
@@ -5768,7 +5768,7 @@ and BLAT searches:
 \item And finally, the list of hits we have is completely different. Here, we
     see that our query sequence only hits the `chr19' database entry, but in it
     we see 17 HSP regions. This should not be surprising however, given that we
-    are using a different program on a different target database.
+    are using a different program, each with its own target database.
 \end{itemize}
 
 All the details you saw when invoking the \verb|print| method can be accessed
@@ -5787,13 +5787,16 @@ blat <unknown version>
 \end{verbatim}
 
 For a complete list of accessible attributes, you can check each format-specific
-documentation.
+documentation. Here are the ones
+\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlastIO-module.html}{for BLAST}
+and for
+\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlatIO-module.html}{BLAT}.
 
 Having looked at using \verb|print| on \verb|QueryResult| objects, let's drill
 down deeper. What exactly is a \verb|QueryResult|? In terms of Python objects,
-\verb|QueryResult| is a hybrid between Python's built-in list and dictionary. In
-other words, it is a container object with all the convenient features of lists
-and dictionaries.
+\verb|QueryResult| is a hybrid between a list and a dictionary. In other words,
+it is a container object with all the convenient features of lists and
+dictionaries.
 
 Like Python lists and dictionaries, \verb|QueryResult| objects are iterable.
 Each iteration returns a \verb|Hit| object:
@@ -5895,8 +5898,8 @@ Remember that we're using Python's indexing style here, which is zero-based.
 This means our hit above is ranked at no. 23, not 22.
 
 Also, note that the hit rank you see here is based on the native hit ordering
-present in the original search output file. Different search tools may have
-order these hits based on different criteria.
+present in the original search output file. Different search tools may order
+these hits based on different criteria.
 
 If the native hit ordering doesn't suit your taste, you can use the \verb|sort|
 method of the \verb|QueryResult| object. It is very similar to Python's
@@ -5907,7 +5910,7 @@ Here is an example of using \verb|QueryResult.sort| to sort the hits based on
 each hit's full sequence length. For this particular sort, we'll set the
 \verb|in_place| flag to \verb|False| so that sorting will return a new
 \verb|QueryResult| object and leave our initial object unsorted. We'll also set
-the \verb|reverse| flag to \verb|True| so that we're doing a descending sort.
+the \verb|reverse| flag to \verb|True| so that we sort in descending order.
 
 %cont-doctest
 \begin{verbatim}
@@ -5933,10 +5936,9 @@ gi|356543101|ref|XM_003539954.1| 2936
 \end{verbatim}
 
 The advantage of having the \verb|in_place| flag here is that we're preserving
-the native ordering, so we can come back to it later on in case we need it.
-You should note that this is not the default behavior of
-\verb|QueryResult.sort|, however, which is why we needed to set the flag to
-\verb|True| explicitly.
+the native ordering, so we may use it again later. You should note that this is
+not the default behavior of \verb|QueryResult.sort|, however, which is why we
+needed to set the \verb|in_place| flag to \verb|True| explicitly.
 
 At this point, you've known enough about \verb|QueryResult| objects to make it
 work for you. But before we go on to the next object in the \verb|Bio.SearchIO|
@@ -6164,7 +6166,7 @@ Query: mystery_seq
 You can also sort the \verb|HSP| inside a \verb|Hit|, using the exact same
 arguments like the sort method you saw in the \verb|QueryResult| object.
 
-And finally, there are also the \verb|filter| and \verb|map| methods you can use
+Finally, there are also the \verb|filter| and \verb|map| methods you can use
 on \verb|Hit| objects. Unlike in the \verb|QueryResult| object, \verb|Hit|
 objects only have one variant of \verb|filter| (\verb|Hit.filter|) and one
 variant of \verb|map| (\verb|Hit.map|). Both of \verb|Hit.filter| and
@@ -6236,7 +6238,7 @@ These details can be accessed on their own using the dot notation, just like in
 \end{verbatim}
 
 They're not the only attributes available, though. \verb|HSP| objects come with
-a default set of properties that makes it easy to probe for their various
+a default set of properties that makes it easy to probe their various
 details. Here are some examples:
 
 %cont-doctest
@@ -6249,8 +6251,9 @@ details. Here are some examples:
 61
 \end{verbatim}
 
-Check out the \verb|HSP| documentation for a full list of these predefined
-properties.
+Check out the \verb|HSP|
+\href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for a full list of these predefined properties.
 
 Furthermore, each sequence search tool usually computes its own statistics /
 details for its \verb|HSP| objects. For example, an XML BLAST search also
@@ -6291,8 +6294,8 @@ Section~\ref{chapter:SeqRecord}! This means that you can do all sorts of
 interesting things you can do with \verb|SeqRecord| objects on \verb|HSP.query|
 and/or \verb|HSP.hit|. 
 
-It probably should not surprise you that the \verb|HSP| object has an
-\verb|alignment| property made up by the \verb|MultipleSeqAlignment| object:
+It should not surprise you now that the \verb|HSP| object has an
+\verb|alignment| property which is a \verb|MultipleSeqAlignment| object:
 
 %cont-doctest
 \begin{verbatim}
@@ -6426,8 +6429,8 @@ All these attributes are accessible from the HSP directly, by the way:
 \end{verbatim}
 
 Most of these attributes are not readily available from the PSL file we have,
-but \verb|Bio.SearchIO| calculates them for you on the fly when you ask for
-them. All it needs are the start and end coordinates of each fragment.
+but \verb|Bio.SearchIO| calculates them for you on the fly when you parse the
+PSL file. All it needs are the start and end coordinates of each fragment.
 
 What about the \verb|query|, \verb|hit|, and \verb|aln| attributes? If the
 HSP has multiple fragments, you won't be able to use these attributes as they
@@ -6436,8 +6439,8 @@ However, you can use their \verb|*_all| counterparts: \verb|query_all|,
 \verb|hit_all|, and \verb|aln_all|. These properties will return a list containing
 \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects from each of the HSP
 fragment. There are other attributes that behave similarly, i.e. they only work
-for HSPs with one fragment. Check out the \verb|HSP| documentation for a full
-list.
+for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for a full list.
 
 Finally, to check whether you have multiple fragments or not, you can use the
 \verb|is_fragmented| property like so:
@@ -6466,7 +6469,7 @@ search have results or not.
 In most cases, you don't have to deal with \verb|HSPFragment| objects directly
 since not that many sequence search tools fragment their HSPs. When you do have
 to deal with them, what you should remember is that \verb|HSPFragment| objects
-were written with simplicity in mind. In most cases, they only contain
+were written with to be as compact as possible. In most cases, they only contain
 attributes directly related to sequences: strands, reading frames, alphabets,
 coordinates, the sequences themselves, and their IDs and descriptions.
 
@@ -6528,7 +6531,7 @@ a pleasant experience as these search tools usually have their own standards.
 For example, one tools might use one-based coordinates, while the other uses
 zero-based coordinates. Or, one program might reverse the start and end
 coordinates if the strand is minus, while others don't. In short, these often
-creates unnecessary mess that we must deal with.
+creates unnecessary mess must be dealt with.
 
 We realize this problem ourselves and we intend to address it in
 \verb|Bio.SearchIO|. After all, one of the goals of \verb|Bio.SearchIO| is to
@@ -6631,11 +6634,11 @@ Sometimes, you're handed a search output file containing hundreds or thousands
 of queries that you need to parse. You can of course use
 \verb|Bio.SearchIO.parse| for this file, but that would be grossly inefficient
 if you need to access only a few of the queries. This is because \verb|parse|
-will parse all queries it sees before it reaches the query you want.
+will parse all queries it sees before it fetches your query of interest.
 
 In this case, the ideal choice would be to index the file using
 \verb|Bio.SearchIO.index| or \verb|Bio.SearchIO.index_db|. If the names sound
-familiar it's because you've seen them before in  Section~\ref{sec:SeqIO-index}.
+familiar, it's because you've seen them before in  Section~\ref{sec:SeqIO-index}.
 These functions also behave similarly to their \verb|Bio.SeqIO| counterparts,
 with the addition of format-specific keyword arguments.
 
