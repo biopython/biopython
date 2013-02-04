@@ -174,6 +174,7 @@ Direct use of the Seq object (and MutableSeq object) .data property is
 deprecated.  As of Release 1.49, writing to the Seq object's .data property
 triggered a warning, and this property was made read only in Release 1.53. In
 Release 1.55 final, accessing the .data property gives a DeprecationWarning.
+The Seq object's .data property was removed in Release 1.61.
 
 Bio.Transcribe and Bio.Translate
 ================================

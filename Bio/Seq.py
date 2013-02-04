@@ -102,39 +102,6 @@ class Seq(object):
         self._data = data
         self.alphabet = alphabet  # Seq API requirement
 
-    # A data property is/was a Seq API requirement
-    # Note this is read only since the Seq object is meant to be imutable
-    @property
-    def data(self):
-        """Sequence as a string (DEPRECATED).
-
-        This is a read only property provided for backwards compatility with
-        older versions of Biopython (as is the tostring() method). We now
-        encourage you to use str(my_seq) instead of my_seq.data or the method
-        my_seq.tostring().
-
-        In recent releases of Biopython it was possible to change a Seq object
-        by updating its data property, but this triggered a deprecation warning.
-        Now the data property is read only, since Seq objects are meant to be
-        immutable:
-
-        >>> from Bio.Seq import Seq
-        >>> from Bio.Alphabet import generic_dna
-        >>> my_seq = Seq("ACGT", generic_dna)
-        >>> str(my_seq) == my_seq.tostring() == "ACGT"
-        True
-        >>> my_seq.data = "AAAA"
-        Traceback (most recent call last):
-           ...
-        AttributeError: can't set attribute
-        """
-        import warnings
-        import Bio
-        warnings.warn("Accessing the .data attribute is deprecated. Please "
-                      "use str(my_seq) or my_seq.tostring() instead of "
-                      "my_seq.data.", Bio.BiopythonDeprecationWarning)
-        return str(self)
-
     def __repr__(self):
         """Returns a (truncated) representation of the sequence for debugging."""
         if len(self) > 60:
