@@ -6,7 +6,7 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-from Bio.KGML.KGML_pathway import Pathway
+from Bio.KEGG.KGML.KGML_pathway import Pathway
 
 from reportlab.lib import pagesizes
 from reportlab.lib import colors
