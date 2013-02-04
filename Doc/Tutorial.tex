@@ -5786,7 +5786,10 @@ blat <unknown version>
 \end{verbatim}
 
 For a complete list of accessible attributes, you can check each format-specific
-documentation.
+documentation. Here are the ones
+\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlastIO-module.html}{for BLAST}
+and for
+\href{http://biopython.org/DIST/docs/api/Bio.SearchIO.BlatIO-module.html}{BLAT}.
 
 Having looked at using \verb|print| on \verb|QueryResult| objects, let's drill
 down deeper. What exactly is a \verb|QueryResult|? In terms of Python objects,
@@ -6247,8 +6250,9 @@ details. Here are some examples:
 61
 \end{verbatim}
 
-Check out the \verb|HSP| documentation for a full list of these predefined
-properties.
+Check out the \verb|HSP|
+\href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for a full list of these predefined properties.
 
 Furthermore, each sequence search tool usually computes its own statistics /
 details for its \verb|HSP| objects. For example, an XML BLAST search also
@@ -6434,8 +6438,8 @@ However, you can use their \verb|*_all| counterparts: \verb|query_all|,
 \verb|hit_all|, and \verb|aln_all|. These properties will return a list containing
 \verb|SeqRecord| or \verb|MultipleSeqAlignment| objects from each of the HSP
 fragment. There are other attributes that behave similarly, i.e. they only work
-for HSPs with one fragment. Check out the \verb|HSP| documentation for a full
-list.
+for HSPs with one fragment. Check out the \verb|HSP| \href{http://biopython.org/DIST/docs/api/Bio.SearchIO._model.hsp-module.html}{documentation}
+for a full list.
 
 Finally, to check whether you have multiple fragments or not, you can use the
 \verb|is_fragmented| property like so:
