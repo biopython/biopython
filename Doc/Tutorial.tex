@@ -10729,9 +10729,11 @@ assume that you are familiar with basic notions of motif analysis. In
 case something is unclear, please look into Section~\ref{sec:links}
 for some relevant links.
 
-It should be also noted, that \verb|Bio.motifs| was based on two
-former Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
- most of their functionality with a unified motif object implementation.
+Most of this chapter describes the new \verb|Bio.motifs| package included
+in Biopython 1.61 onwards, which is replacing the older \verb|Bio.Motif| package
+introduced with Biopython 1.50, which was in turn based on two older former
+Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
+most of their functionality with a unified motif object implementation.
 
 Speaking of other libraries, if you are reading this you might be
 interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
@@ -11984,28 +11986,18 @@ to your motifs by parsing the first part of the result:
 \item \href{http://bio.cs.washington.edu/assessment/}{Comparison of different motif finding programs} 
 \end{itemize}
 
+\section{Obsolete Bio.Motif module}
 
-\chapter{Sequence motif analysis using Bio.Motif [OBSOLETE]}
-\label{chap:bio_motif}
+The rest of this chapter above describes the \verb|Bio.motifs| package included
+in Biopython 1.61 onwards, which is replacing the older \verb|Bio.Motif| package
+introduced with Biopython 1.50, which was in turn based on two older former
+Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|.
 
-This chapter gives an overview of the functionality of the
-\verb|Bio.Motif| package included in Biopython distribution. It is intended
-for people who are involved in analysis of sequence motif, so I'll
-assume that you are familiar with basic notions of motif analysis. In
-case something is unclear, please look into Section~\ref{sec:links}
-for some relevant links.
+To allow for a smooth transition, the older \verb|Bio.Motif| package will be
+maintained in parallel with its replacement \verb|Bio.motifs| at least two more
+releases, and at least one year.
 
-It should be also noted, that \verb|Bio.Motif| was based on two
-former Biopython modules, \verb|Bio.AlignAce| and \verb|Bio.MEME|. It provides
- most of their functionality with a unified motif object implementation.
-
-Speaking of other libraries, if you are reading this you might be
-interested in the \href{http://fraenkel.mit.edu/TAMO/}{TAMO}, another python library
-designed to deal with sequence motifs. It supports more \emph{de-novo}
-motif finders, but it is not a part of Biopython and has some restrictions
-on commercial use.
-
-\section{Motif objects}
+\subsection{Motif objects}
 
 %TODO - turn these into doctests...
 Since we are interested in motif analysis, we need to take a look at
@@ -12133,7 +12125,7 @@ than in the background and negative for symbols more frequent in the
 background. $0.0$ means that it's equally likely to see a symbol in
 background and in the motif (e.g. `T' in the second-last position).
 
-\subsection{Reading and writing}
+\subsubsection{Reading and writing}
 
 Creating motifs from instances by hand is a bit boring, so it's
 useful to have some I/O functions for reading and writing
@@ -12399,14 +12391,14 @@ independently generating the same instance by both motifs.
 (0.16224587301064275, 1)
 \end{verbatim}
 
-\section{\emph{De novo} motif finding}
+\subsection{\emph{De novo} motif finding}
 
 Currently, biopython has only limited support for \emph{de novo} motif
 finding. Namely, we support running and parsing of AlignAce and
 MEME. Since the number of motif finding tools is growing rapidly, 
 contributions of new parsers are welcome. 
 
-\subsection{MEME}
+\subsubsection{MEME}
 
 Let's assume, you have run MEME on sequences of your choice with your
 favorite parameters and saved the output in the file
@@ -12447,7 +12439,7 @@ Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 \end{verbatim}
 
 
-\subsection{AlignAce}
+\subsubsection{AlignAce}
 
 We can do very similar things with AlignACE program. Assume, you have
 your output in the file \verb|alignace.out|. You can parse your output
