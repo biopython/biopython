@@ -231,6 +231,9 @@ class CheckCompleteArgList(unittest.TestCase):
             #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
             extra = extra.difference(["-comp_based_stats",
                                       "-use_sw_tback"])
+        if exe_name in ["blastx", "tblastn"]:
+            #Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
+            extra = extra.difference(["-frame_shift_penalty"])
 
         if extra or missing:
             import warnings
