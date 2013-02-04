@@ -20,18 +20,9 @@ a multi-line
 file"""
 
 
-### StringHandle
-
-h = File.StringHandle(data)
-print repr(h.readline())  # 'This'
-print len(h.readlines())  # 3
-print repr(h.readline())  # ''
-h.close()
-
-
 ### UndoHandle
 
-h = File.UndoHandle(File.StringHandle(data))
+h = File.UndoHandle(StringIO(data))
 
 print h.readline()   # 'This'
 print h.peekline()   # 'is'
@@ -57,7 +48,7 @@ print h.readline()             # 'save after empty'
 print repr(h.readline())       # ''
 
 # test read method
-h = File.UndoHandle(File.StringHandle("some text"))
+h = File.UndoHandle(StringIO("some text"))
 h.saveline("more text")
 print h.read()                 # 'more textsome text'
 
