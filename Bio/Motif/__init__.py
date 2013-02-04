@@ -2,12 +2,15 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Module containing different tools for sequence motif analysis.
+"""Tools for sequence motif analysis (OBSOLETE, see Bio.motifs instead).
 
-it contains the core Motif class containing various I/O methods
-as well as methods for motif comparisons and motif searching in sequences.
-It also inlcudes functionality for parsing AlignACE and MEME programs
+This module (Bio.Motif) is now obsolete, and will be deprecated and
+removed in a future release of release of Biopython. Please use the
+new module Bio.motifs instead.
+
+This contains the core Motif class containing various I/O methods as
+well as methods for motif comparisons and motif searching in sequences.
+It also inlcudes functionality for parsing AlignACE and MEME programs.
 """
 
 import warnings
