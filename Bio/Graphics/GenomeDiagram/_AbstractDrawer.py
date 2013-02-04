@@ -433,23 +433,19 @@ class AbstractDrawer(object):
         else:
             self.cross_track_links = cross_track_links
 
-    def _set_xcentre(self, value):
-        import warnings
-        import Bio
-        warnings.warn("The _set_xcentre method and .xcentre attribute are deprecated; please use the .xcenter attribute instead", Bio.BiopythonDeprecationWarning)
-        self.xcenter = value
-    xcentre = property(fget = lambda self : self.xcenter,
-                       fset = _set_xcentre,
-                       doc="Backwards compatible alias for xcenter (DEPRECATED)")
+    @property
+    def xcentre(self):
+        """Backwards compatible alias for xcenter (DEPRECATED)"""
+        warnings.warn("The .xcentre attribute is deprecated, use .xcenter instead",
+                      Bio.BiopythonDeprecationWarning)
+        return self.xcenter
 
-    def _set_ycentre(self, value):
-        import warnings
-        import Bio
-        warnings.warn("The _set_ycentre method and .xcentre attribute are deprecated; please use the .ycenter attribute instead", Bio.BiopythonDeprecationWarning)
-        self.ycenter = value
-    ycentre = property(fget = lambda self : self.ycenter,
-                       fset = _set_ycentre,
-                       doc="Backwards compatible alias for ycenter (DEPRECATED)")
+    @property
+    def ycentre(self):
+        """Backwards compatible alias for ycenter (DEPRECATED)"""
+        warnings.warn("The .ycentre attribute is deprecated, use .ycenter instead",
+                      Bio.BiopythonDeprecationWarning)
+        return self.ycenter
 
     def set_page_size(self, pagesize, orientation):
         """ set_page_size(self, pagesize, orientation)

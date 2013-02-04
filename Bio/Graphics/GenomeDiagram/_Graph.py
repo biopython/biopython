@@ -133,14 +133,12 @@ class GraphData(object):
         self.linewidth = 2          # linewidth to use in line graphs
         self.center = center        # value at which x-axis crosses y-axis
 
-    def _set_centre(self, value):
-        import warnings
-        import Bio
-        warnings.warn("The _set_centre method and .centre attribute are deprecated; please use the .center attribute instead", Bio.BiopythonDeprecationWarning)
-        self.center = value
-    centre = property(fget = lambda self : self.center,
-                       fset = _set_centre,
-                       doc="Backwards compatible alias for center (DEPRECATED)")
+    @property
+    def centre(self):
+        """Backwards compatible alias for center (DEPRECATED)."""
+        warnings.warn("The .centre attribute is deprecated, use .center instead",
+                      Bio.BiopythonDeprecationWarning)
+        return self.center
 
     def set_data(self, data):
         """ set_data(self, data)
