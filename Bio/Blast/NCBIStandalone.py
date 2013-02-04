@@ -1690,10 +1690,11 @@ class Iterator(object):
 
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPALL as handles (OBSOLETE).
+    """Execute and retrieve data from standalone BLASTPALL as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.BlastallCommandline instead.
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastallCommandline instead, or
+    better the BLAST+ command line wrappers in Bio.Blast.Applications.
 
     Execute and retrieve data from blastall.  blastcmd is the command
     used to launch the 'blastall' executable.  program is the blast program
@@ -1801,10 +1802,11 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
 
 
 def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPGP as handles (OBSOLETE).
+    """Execute and retrieve data from standalone BLASTPGP as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead, or
+    better the BLAST+ tool psiblast via the NcbipsiblastCommandline wrapper.
 
     Execute and retrieve data from blastpgp.  blastcmd is the command
     used to launch the 'blastpgp' executable.  database is the path to the
@@ -1930,10 +1932,11 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
 
 def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
-    """Execute and retrieve data from standalone RPS-BLAST as handles (OBSOLETE).
+    """Execute and retrieve data from standalone RPS-BLAST as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead.
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead, or
+    better the BLAST+ rpsblast wrapper NcbirpsblastCommandline.
 
     Execute and retrieve data from standalone RPS-BLAST.  blastcmd is the
     command used to launch the 'rpsblast' executable.  database is the path
