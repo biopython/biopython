@@ -53,7 +53,6 @@ class KGMLCanvas(object):
                  show_compounds=True, show_genes=True,
                  margins=(0.02, 0.02)):
         self.pathway = pathway
-        # Some settings - static for now, but manipulable later perhaps
         self.show_maps = show_maps
         self.show_orthologs = show_orthologs
         self.show_compounds = show_compounds
@@ -120,6 +119,7 @@ class KGMLCanvas(object):
             self.__add_compounds()
         if self.show_genes:
             self.__add_genes()
+        # TODO: complete draw_relations code
         #if self.draw_relations:
         #    self.__add_relations()
         # Write the pathway map to PDF
@@ -339,21 +339,21 @@ class KGMLCanvas(object):
             if centre_to[1] > centre_from[1]: # to above from
                 p.moveTo(centre_from[0], bounds_from[1][1])
                 p.lineTo(centre_from[0], bounds_to[0][1])
-                # Draw arrow point
+                # Draw arrow point - TODO
             else:                             # to below from 
                 p.moveTo(centre_from[0], bounds_from[0][1])
                 p.lineTo(centre_from[0], bounds_to[1][1])
-                # Draw arrow point   
+                # Draw arrow point - TODO
         elif bounds_from[0][0] < centre_to[0] < bounds_from[1][0]:
             print True, g_from.name, g_to.name, bounds_to, bounds_from
             if centre_to[1] > centre_from[1]: # to above from
                 p.moveTo(centre_to[0], bounds_from[1][1])
                 p.lineTo(centre_to[0], bounds_to[0][1])
-                # Draw arrow point
+                # Draw arrow point - TODO
             else:                             # to below from 
                 p.moveTo(centre_to[0], bounds_from[0][1])
                 p.lineTo(centre_to[0], bounds_to[1][1])
-                # Draw arrow point   
+                # Draw arrow point - TODO 
         self.drawing.drawPath(p)    # Draw arrow shaft
         #print g_from
         #print bounds_from
