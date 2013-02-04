@@ -2685,7 +2685,7 @@ Section~\ref{sec:SeqIO-index-bgzf}.
 \label{sec:SeqIO_Online}
 In the previous sections, we looked at parsing sequence data from a file
 (using a filename or handle), and from compressed files (using a handle).
-Here we'll use \verb|Bio.SeqIO| with a another type of handle, a network
+Here we'll use \verb|Bio.SeqIO| with another type of handle, a network
 connection, to download and parse sequences from the internet.
 
 Note that just because you \emph{can} download sequence data and parse it into
@@ -16346,7 +16346,7 @@ IC_{j} = \sum_{i=1}^{N_{a}} P_{ij} \mathrm{log}\left(\frac{P_{ij}}{Q_{i}}\right)
 
 Well, now that we have an idea what information content is being calculated in Biopython, let's look at how to get it for a particular region of the alignment.
 
-First, we need to use our alignment to get a alignment summary object, which we'll assume is called \verb|summary_align| (see section~\ref{sec:summary_info}) for instructions on how to get this. Once we've got this object, calculating the information content for a region is as easy as:
+First, we need to use our alignment to get an alignment summary object, which we'll assume is called \verb|summary_align| (see section~\ref{sec:summary_info}) for instructions on how to get this. Once we've got this object, calculating the information content for a region is as easy as:
 
 \begin{verbatim}
 info_content = summary_align.information_content(5, 30,
