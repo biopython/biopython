@@ -960,7 +960,9 @@ class NcbiblastxCommandline(_NcbiblastMain2SeqCommandline):
                     equate=False),
             #General search options:
             _Option(["-frame_shift_penalty", "frame_shift_penalty"],
-                    "Frame shift penalty (integer, at least 1, default ignored).",
+                    """Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).
+
+                    This was removed in BLAST 2.2.27+""",
                     equate=False),
             _Option(["-max_intron_length", "max_intron_length"],
                     """Maximum intron length (integer).
@@ -1030,7 +1032,9 @@ class NcbitblastnCommandline(_NcbiblastMain2SeqCommandline):
                     Integer. Default is one.""",
                     equate=False),
             _Option(["-frame_shift_penalty", "frame_shift_penalty"],
-                    "Frame shift penalty (integer, at least 1, default ignored).",
+                    """Frame shift penalty (integer, at least 1, default ignored) (OBSOLETE).
+
+                    This was removed in BLAST 2.2.27+""",
                     equate=False),
             _Option(["-max_intron_length", "max_intron_length"],
                     """Maximum intron length (integer).
