@@ -51,13 +51,11 @@ for use on search output files containing only one query. `read` returns one
 QueryResult object and will raise an exception if the source file contains more
 than one queries:
 
-    # reading works for files with one query
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
     >>> print qresult.id, qresult.description
     ...
     gi|11464971:4-101 pleckstrin [Mus musculus]
 
-    # files containing more or less than one queries will raise an error
     >>> SearchIO.read('Blast/mirna.xml', 'blast-xml')
     Traceback (most recent call last):
     ...
@@ -73,7 +71,7 @@ Output
 ======
 SearchIO has writing support for several formats, accessible from the
 Bio.SearchIO.write(...) function. This function returns a tuple of four
-numbers: the number of QueryResult, Hit, HSP, and HSPFragment written:
+numbers: the number of QueryResult, Hit, HSP, and HSPFragment written::
 
     qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
     SearchIO.write(qresults, 'results.tab', 'blast-tab')
@@ -268,10 +266,9 @@ def parse(handle, format=None, **kwargs):
     """Turns a search output file into a generator that yields QueryResult
     objects.
 
-    Arguments:
-    handle -- Handle to the file, or the filename as a string.
-    format -- Lower case string denoting one of the supported formats.
-    kwargs -- Format-specific keyword arguments.
+     - handle - Handle to the file, or the filename as a string.
+     - format - Lower case string denoting one of the supported formats.
+     - kwargs - Format-specific keyword arguments.
 
     This function is used to iterate over each query in a given search output
     file:
@@ -320,10 +317,9 @@ def parse(handle, format=None, **kwargs):
 def read(handle, format=None, **kwargs):
     """Turns a search output file containing one query into a single QueryResult.
 
-    Arguments:
-    handle -- Handle to the file, or the filename as a string.
-    format -- Lower case string denoting one of the supported formats.
-    kwargs -- Format-specific keyword arguments.
+     - handle - Handle to the file, or the filename as a string.
+     - format - Lower case string denoting one of the supported formats.
+     - kwargs - Format-specific keyword arguments.
 
     `read` is used for parsing search output files containing exactly one query:
 
@@ -375,11 +371,10 @@ def read(handle, format=None, **kwargs):
 def to_dict(qresults, key_function=lambda rec: rec.id):
     """Turns a QueryResult iterator or list into a dictionary.
 
-    Arguments:
-    qresults -- Iterable returning QueryResult objects.
-    key_function -- Optional callback function which when given a
-                    QueryResult object should return a unique key for the
-                    dictionary.
+     - qresults     - Iterable returning QueryResult objects.
+     - key_function - Optional callback function which when given a
+                      QueryResult object should return a unique key for the
+                      dictionary.
 
     This function enables access of QueryResult objects from a single search
     output file using its identifier.
@@ -426,12 +421,11 @@ def to_dict(qresults, key_function=lambda rec: rec.id):
 def index(filename, format=None, key_function=None, **kwargs):
     """Indexes a search output file and returns a dictionary-like object.
 
-    Arguments:
-    filename -- string giving name of file to be indexed
-    format -- Lower case string denoting one of the supported formats.
-    key_function -- Optional callback function which when given a
-                    QueryResult should return a unique key for the dictionary.
-    kwargs -- Format-specific keyword arguments.
+     - filename     - string giving name of file to be indexed
+     - format       - Lower case string denoting one of the supported formats.
+     - key_function - Optional callback function which when given a
+                      QueryResult should return a unique key for the dictionary.
+     - kwargs       - Format-specific keyword arguments.
 
     Index returns a pseudo-dictionary object with QueryResult objects as its
     values and a string identifier as its keys. The function is mainly useful
@@ -495,17 +489,16 @@ def index_db(index_filename, filenames=None, format=None,
         key_function=None, **kwargs):
     """Indexes several search output files into an SQLite database.
 
-    Arguments:
-    index_filename -- The SQLite filename.
-    filenames -- List of strings specifying file(s) to be indexed, or when
-                 indexing a single file this can be given as a string.
-                 (optional if reloading an existing index, but must match)
-    format -- Lower case string denoting one of the supported formats.
-              (optional if reloading an existing index, but must match)
-    key_function -- Optional callback function which when given a
-                    QueryResult identifier string should return a unique
-                    key for the dictionary.
-    kwargs -- Format-specific keyword arguments.
+     - index_filename - The SQLite filename.
+     - filenames    - List of strings specifying file(s) to be indexed, or when
+                      indexing a single file this can be given as a string.
+                      (optional if reloading an existing index, but must match)
+     - format       - Lower case string denoting one of the supported formats.
+                      (optional if reloading an existing index, but must match)
+     - key_function - Optional callback function which when given a
+                      QueryResult identifier string should return a unique
+                      key for the dictionary.
+     - kwargs       - Format-specific keyword arguments.
 
     The `index_db` function is similar to `index` in that it indexes the start
     position of all queries from search output files. The main difference is
@@ -570,12 +563,11 @@ def index_db(index_filename, filenames=None, format=None,
 def write(qresults, handle, format=None, **kwargs):
     """Writes QueryResult objects to a file in the given format.
 
-    Arguments:
-    qresults -- An iterator returning QueryResult objects or a single
-                QueryResult object.
-    handle -- Handle to the file, or the filename as a string.
-    format -- Lower case string denoting one of the supported formats.
-    kwargs -- Format-specific keyword arguments.
+     - qresults - An iterator returning QueryResult objects or a single
+                  QueryResult object.
+     - handle   - Handle to the file, or the filename as a string.
+     - format   - Lower case string denoting one of the supported formats.
+     - kwargs   - Format-specific keyword arguments.
 
     The `write` function writes QueryResult object(s) into the given output
     handle / filename. You can supply it with a single QueryResult object or an
@@ -621,13 +613,12 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
         out_kwargs=None):
     """Convert between two search output formats, return number of records.
 
-    Arguments:
-    in_file -- Handle to the input file, or the filename as string.
-    in_format -- Lower case string denoting the format of the input file.
-    out_file -- Handle to the output file, or the filename as string.
-    out_format -- Lower case string denoting the format of the output file.
-    in_kwargs --  Dictionary of keyword arguments for the input function.
-    out_kwargs -- Dictionary of keyword arguments for the output function.
+     - in_file    - Handle to the input file, or the filename as string.
+     - in_format  - Lower case string denoting the format of the input file.
+     - out_file   - Handle to the output file, or the filename as string.
+     - out_format - Lower case string denoting the format of the output file.
+     - in_kwargs  - Dictionary of keyword arguments for the input function.
+     - out_kwargs - Dictionary of keyword arguments for the output function.
 
     The convert function is a shortcut function for `parse` and `write`. It has
     the same return type as `write`. Format-specific arguments may be passed to
