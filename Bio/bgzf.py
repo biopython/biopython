@@ -775,7 +775,7 @@ class BgzfWriter(object):
 
     def tell(self):
         """Returns a BGZF 64-bit virtual offset."""
-        return make_virtual_offset(self.handle.tell(), len(self._buffer))
+        return make_virtual_offset(self._handle.tell(), len(self._buffer))
 
     def seekable(self):
         #Not seekable, but we do support tell...

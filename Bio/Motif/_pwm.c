@@ -60,7 +60,7 @@ calculate(const char sequence[], int s, PyObject* matrix, npy_intp m)
     return result;
 }
 
-static char calculate__doc__[] =
+static char calculate__doc__[] = 
 "    calculate(sequence, pwm) -> array of score values\n"
 "\n"
 "This function calculates the position-weight matrix scores for all\n"
@@ -90,7 +90,7 @@ py_calculate(PyObject* self, PyObject* args, PyObject* keywords)
     }
     else if (PyArray_NDIM(matrix) != 2) /* Checking number of dimensions */
     {
-        result = PyErr_Format(PyExc_ValueError,
+        result = PyErr_Format(PyExc_ValueError, 
             "position-weight matrix has incorrect rank (%d expected 2)",
             PyArray_NDIM(matrix));
     }

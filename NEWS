@@ -56,16 +56,28 @@ public feedback, but with the big warning that the API is likely to change.
 In fact, even the current name of Bio.SearchIO may change since unless you
 are familiar with BioPerl its purpose isn't immediately clear.
 
+The Bio.Motif module has been updated and reorganized. To allow for a clean
+deprecation of the old code, the new motif code is stored in a new module
+Bio.motifs, and a PendingDeprecationWarning was added to Bio.Motif.
+
 Additionally there have been other minor bug fixes and more unit tests.
+
+Finally, we are phasing out support for Python 2.5. We will continue support
+for at least one further release (Biopython 1.62). This could be extended
+given feedback from our users (or if the Jython 2.7 release is delayed, since
+the current stable release Jython 2.5 implemented Python 2.5 only). Focusing
+on Python 2.6 and 2.7 only will make writing Python 3 compatible code easier.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 Brandon Invergo
+Bryan Lunt (first contribution)
 Christian Brueffer (first contribution)
 David Cain
 Eric Talevich
 Grace Yeo (first contribution)
+Jeffrey Chang
 Jingping Li (first contribution)
 Kai Blin (first contribution)
 Leighton Pritchard

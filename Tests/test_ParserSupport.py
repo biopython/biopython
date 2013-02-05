@@ -4,6 +4,7 @@
 # as part of this package.
 
 import string
+from StringIO import StringIO
 from Bio import File
 from Bio import ParserSupport
 
@@ -58,7 +59,7 @@ print "Running tests on safe_readline"
 data = """This
 file"""
 
-h = File.UndoHandle(File.StringHandle(data))
+h = File.UndoHandle(StringIO(data))
 
 safe_readline = ParserSupport.safe_readline
 print safe_readline(h)    # "This"
@@ -79,7 +80,7 @@ safe_peekline = ParserSupport.safe_peekline
 data = """This
 file"""
 
-h = File.UndoHandle(File.StringHandle(data))
+h = File.UndoHandle(StringIO(data))
 
 print safe_peekline(h) # "This"
 h.readline()
@@ -109,7 +110,7 @@ GTAEVI
 
 """
 
-h = File.UndoHandle(File.StringHandle(data))
+h = File.UndoHandle(StringIO(data))
 
 rac = ParserSupport.read_and_call
 lines = []
@@ -171,7 +172,7 @@ MKLHELKPSEGSRKTRNRVGRGIGSGNGKTAGKGHKGQNARSGGGVRPGFEGGQMPLFQRLPKRGFTNIN
 RKEYAVVNLDKLNGFAEGTEVTPELLLETGVISKLNAGVKILGNGKLEKKLTVKANKFSASAKEAVEAAG
 GTAEVI"""
 
-h = File.UndoHandle(File.StringHandle(data))
+h = File.UndoHandle(StringIO(data))
 
 arac = lambda *args, **keywds: \
        pb(ParserSupport.attempt_read_and_call(*args, **keywds))

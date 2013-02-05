@@ -378,6 +378,57 @@ abcde
 """)
 
 
+class TestPersiteGapPenalties(unittest.TestCase):
+    """Check gap penalty callbacks use correct gap opening position.
+
+    This tests that the gap penalty callbacks are really being used
+    with the correct gap opening position.
+    """
+
+    def test_gap_here_only_1(self):
+        seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
+        seq2 = "AABBBAAAACCCCAAAABBBAA"
+        breaks = [0, 11, len(seq2)]
+        # Very expensive to open a gap in seq1:
+        nogaps = lambda x, y: -2000 - y
+        # Very expensive to open a gap in seq2 unless it is in one of the allowed positions
+        specificgaps = lambda x, y: (-2 -y) if x in breaks else (-2000 - y)
+        alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, nogaps, specificgaps)
+        self.assertEqual(len(alignments), 1)
+        formatted = pairwise2.format_alignment(*alignments[0])
+        self.assertEqual(formatted, """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+||||||||||||||||||||||||||||||||||||
+--AABBBAAAACC----------CCAAAABBBAA--
+  Score=2
+""")
+
+
+    def test_gap_here_only_2(self):
+        """Force a bad alignment.
+
+        Forces a bad alignment by having a very expensive gap penalty
+        where one would normally expect a gap, and a cheap gap penalty
+        in another place.
+        """
+        seq1 = "AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA"
+        seq2 = "AABBBAAAACCCCAAAABBBAA"
+        breaks = [0, 3, len(seq2)]
+        #Very expensive to open a gap in seq1:
+        nogaps = lambda x, y: -2000 - y
+        #Very expensive to open a gap in seq2 unless it is in one of the allowed positions:
+        specificgaps = lambda x, y: (-2 - y) if x in breaks else (-2000 - y)
+        alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, nogaps, specificgaps)
+        self.assertEqual(len(alignments), 1)
+        formatted = pairwise2.format_alignment(*alignments[0])
+        self.assertEqual(formatted, """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+||||||||||||||||||||||||||||||||||||
+--AAB----------BBAAAACCCCAAAABBBAA--
+  Score=-10
+""")
+
+
 if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity = 2)
     unittest.main(testRunner=runner)

@@ -11,7 +11,6 @@ Classes:
 AbstractParser         Base class for parsers.
 AbstractConsumer       Base class of all Consumers.
 TaggingConsumer        Consumer that tags output with its event.  For debugging
-SGMLStrippingConsumer  Consumer that strips SGML tags from output.
 EventGenerator         Generate Biopython Events from Martel XML output
                        (note that Martel is now DEPRECATED)
 
@@ -133,39 +132,6 @@ class TaggingConsumer(AbstractConsumer):
             method = lambda x, a=attr, s=self: s._print_name(a, x)
         return method
 
-
-class SGMLStrippingConsumer(object):
-    """A consumer that strips off SGML tags.
-
-    This is meant to be used as a decorator for other consumers.
-
-    """
-    def __init__(self, consumer):
-        import Bio
-        warnings.warn("SGMLStrippingConsumer is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
-        if type(consumer) is not InstanceType:
-            raise ValueError("consumer should be an instance")
-        self._consumer = consumer
-        self._prev_attr = None
-        self._stripper = File.SGMLStripper()
-
-    def _apply_clean_data(self, data):
-        clean = self._stripper.strip(data)
-        self._prev_attr(clean)
-
-    def __getattr__(self, name):
-        if name in ['_prev_attr', '_stripper']:
-            return getattr(self, name)
-        attr = getattr(self._consumer, name)
-        # If this is not a method, then return it as is.
-        if type(attr) is not MethodType:
-            return attr
-        # If it's a section method, then return it.
-        if name[:6] == 'start_' or name[:4] == 'end_':
-            return attr
-        # Otherwise, it's an info event, and return my method.
-        self._prev_attr = attr
-        return self._apply_clean_data
 
 # onle use the Event Generator if XML handling is okay
 if xml_support:

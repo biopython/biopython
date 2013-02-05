@@ -63,11 +63,13 @@ def get_yes_or_no(question, default):
         print ("Please answer y or n.")
     return response[0] == 'y'
 
-# Make sure I have the right Python version.
+# Make sure we have the right Python version.
 if sys.version_info[:2] < (2, 5):
-    print ("Biopython requires Python 2.5 or better (but not Python 3 "
-          + "yet).  Python %d.%d detected" % sys.version_info[:2])
+    print("Biopython requires Python 2.5 or better (but not Python 3 "
+          "yet).  Python %d.%d detected" % sys.version_info[:2])
     sys.exit(-1)
+elif sys.version_info[:2] == (2, 5):
+    print("WARNING - Biopython is phasing out support for Python 2.5")
 elif sys.version_info[0] == 3:
     print("WARNING - Biopython does not yet officially support Python 3")
     import do2to3
@@ -310,6 +312,8 @@ PACKAGES = [
     'Bio.Motif',
     'Bio.Motif.Parsers',
     'Bio.Motif.Applications',
+    'Bio.motifs',
+    'Bio.motifs.applications',
     'Bio.NeuralNetwork',
     'Bio.NeuralNetwork.BackPropagation',
     'Bio.NeuralNetwork.Gene',
@@ -416,6 +420,11 @@ if is_Numpy_installed():
     EXTENSIONS.append(
         Extension('Bio.Motif._pwm',
                   ["Bio/Motif/_pwm.c"],
+                  include_dirs=[numpy_include_dir],
+                  ))
+    EXTENSIONS.append(
+        Extension('Bio.motifs._pwm',
+                  ["Bio/motifs/_pwm.c"],
                   include_dirs=[numpy_include_dir],
                   ))
 

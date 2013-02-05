@@ -7,9 +7,10 @@
 """Bio.SeqIO support for the binary Standard Flowgram Format (SFF) file format.
 
 SFF was designed by 454 Life Sciences (Roche), the Whitehead Institute for
-Biomedical Research and the Wellcome Trust Sanger Institute. You are expected
-to use this module via the Bio.SeqIO functions under the format name "sff" (or
-"sff-trim" as described below).
+Biomedical Research and the Wellcome Trust Sanger Institute. SFF was also used
+as the native output format from early versions of Ion Torrent's PGM platform
+as well. You are expected to use this module via the Bio.SeqIO functions under
+the format name "sff" (or "sff-trim" as described below).
 
 For example, to iterate over the records in an SFF file,
 
@@ -243,6 +244,7 @@ def _sff_file_header(handle):
 
     >>> handle = open("Roche/greek.sff", "rb")
     >>> values = _sff_file_header(handle)
+    >>> handle.close()
     >>> print values[0]
     840
     >>> print values[1]
@@ -453,22 +455,6 @@ def _sff_find_roche_index(handle):
     else:
         raise ValueError("Unknown magic number %s in SFF index header:\n%s"
                          % (repr(magic_number), repr(data)))
-
-
-def _sff_read_roche_index_xml(handle):
-    """Reads any existing Roche style XML manifest data in the SFF "index" (PRIVATE, DEPRECATED).
-
-    Will use the handle seek/tell functions. Returns a string.
-
-    This has been replaced by ReadRocheXmlManifest. We would normally just
-    delete an old private function without warning, but I believe some people
-    are using this so we'll handle this with a deprecation warning.
-    """
-    import warnings
-    warnings.warn("Private function _sff_read_roche_index_xml is deprecated. "
-                  "Use new public function ReadRocheXmlManifest instead",
-                  DeprecationWarning)
-    return ReadRocheXmlManifest(handle)
 
 
 def ReadRocheXmlManifest(handle):

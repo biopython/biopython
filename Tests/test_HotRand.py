@@ -3,6 +3,10 @@
 """
 # standard library
 import unittest
+import warnings
+
+from Bio import BiopythonDeprecationWarning
+warnings.simplefilter('ignore', BiopythonDeprecationWarning)
 
 # local stuff
 import requires_internet

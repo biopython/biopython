@@ -98,12 +98,41 @@ def fullcascade(attr, doc=''):
                         " %s objects: %r" % (self._items[0].__class__.__name__,
                             list(attrset)))
             else:
-                raise AttributeError("%r attribute requires %s objects to be"
+                raise AttributeError("%r attribute requires %s objects to be "
                         "filled" % (attr, self.__class__.__name__))
 
         return getattr(self._items[0], attr)
 
     def setter(self, value):
+        for item in self:
+            setattr(item, attr, value)
+
+    return property(fget=getter, fset=setter, doc=doc)
+
+def optionalcascade(attr, doc=''):
+    """Returns a getter property with a cascading setter.
+
+    This is similar to `fullcascade`, but for SearchIO containers that have
+    at zero or more items. The getter always tries to retrieve the attribute
+    value from the first item, but falls back to the value in the container.
+    If the items have more than one attribute values, an error will be raised.
+    The setter behaves like `partialcascade`.
+
+    """
+    def getter(self):
+        attrset = set([getattr(item, attr) for item in self._items])
+        if len(attrset) != 1:
+            if len(attrset) > 1:
+                raise ValueError("More than one value present in the contained"
+                        " %s objects: %r" % (self._items[0].__class__.__name__,
+                            list(attrset)))
+            else:
+                return getattr(self, "_%s" % attr)
+
+        return getattr(self._items[0], attr)
+
+    def setter(self, value):
+        setattr(self, "_%s" % attr, value)
         for item in self:
             setattr(item, attr, value)
 

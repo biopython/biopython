@@ -12,6 +12,10 @@ Python 2.4
 No longer supported as of Release 1.59, having triggered a warning since
 Release 1.55, with advance notice in the release notes for Release 1.54.
 
+Python 2.5
+==========
+Still supported, but has triggered a warning since Release 1.61.
+
 Bio.SeqIO.Interfaces
 ====================
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
@@ -73,7 +77,8 @@ Bio.Blast.NCBIStandalone
 ========================
 The three functions for calling the "legacy" NCBI BLAST command line tools
 blastall, blastpgp and rpsblast were declared obsolete in Biopython Release
-1.53, please use the BLAST+ wrappers in Bio.Blast.Applications instead.
+1.53, and deprecated in Release 1.61. Please use the BLAST+ wrappers in
+Bio.Blast.Applications instead.
 
 The remainder of this module is a parser for the plain text BLAST output,
 which was declared obsolete in Release 1.54. For some time now, both the NCBI
@@ -83,8 +88,9 @@ Bio.Blast.Applications
 ======================
 NCBI "legacy" BLAST tool wrappers FastacmdCommandline, BlastallCommandline,
 BlastpgpCommandline and RpsBlastCommandline were declared obsolete in Release
-1.53, having been replaced with wrappers for the new NCBI BLAST+ tools (e.g.
-NcbiblastpCommandline and NcbipsiblastCommandline).
+1.53 and deprecated in Release 1.61, having been replaced with wrappers for
+the new NCBI BLAST+ tools (e.g.  NcbiblastpCommandline and
+NcbipsiblastCommandline).
 
 Bio.Clustalw
 ============
@@ -139,7 +145,8 @@ Bio.File
 ========
 Bio.File.SGMLHandle was declared obsolete in Release 1.50, deprecated in
 Release 1.52, and removed in Release 1.56. Bio.File.SGMLStripper was deprecated
-in Release 1.57. Bio.File.StringHandle was deprecated in Release 1.59.
+in Release 1.57, removed in Release 1.61. Bio.File.StringHandle was deprecated
+in Release 1.59, removed in Release 1.61.
 
 Bio.Graphics.GenomeDiagram and colour/color, centre/center
 ==========================================================
@@ -167,6 +174,7 @@ Direct use of the Seq object (and MutableSeq object) .data property is
 deprecated.  As of Release 1.49, writing to the Seq object's .data property
 triggered a warning, and this property was made read only in Release 1.53. In
 Release 1.55 final, accessing the .data property gives a DeprecationWarning.
+The Seq object's .data property was removed in Release 1.61.
 
 Bio.Transcribe and Bio.Translate
 ================================
@@ -499,7 +507,8 @@ UnigeneRecord, _RecordConsumer, _Scanner, RecordParser, and Iterator in
 Bio.UniGene were declared obsolete in Release 1.54, deprecated in Release 1.55,
 and removed in Release 1.59. Their functionality is now available through a
 read() and a parse() function in Bio.UniGene.
-The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59.
+The HTML parser in Bio.UniGene.UniGene was declared obsolete in Release 1.59,
+and deprecated in Release 1.61.
 
 Bio.SubsMat
 ===========
@@ -515,4 +524,6 @@ method get_seq_by_num were deprecated in Release 1.57.
 Bio.ParserSupport
 =================
 Bio.ParserSupport was declared obsolete in Release 1.59.
-Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59.
+
+Bio.ParserSupport.SGMLStrippingConsumer was deprecated in Release 1.59, and
+removed in Release 1.61.

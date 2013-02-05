@@ -109,10 +109,10 @@ class Parser(object):
         def _parse_protein(element):
             """Parse protein names (PRIVATE)."""
             descr_set = False
-            for protein_element in element.getchildren():
+            for protein_element in element:
                 if protein_element.tag in [NS + 'recommendedName', NS + 'alternativeName']:  # recommendedName tag are parsed before
                     #use protein fields for name and description
-                    for rec_name in protein_element.getchildren():
+                    for rec_name in protein_element:
                         ann_key = '%s_%s' % (protein_element.tag.replace(NS, ''),
                                              rec_name.tag.replace(NS, ''))
                         append_to_annotations(ann_key, rec_name.text)
@@ -125,7 +125,7 @@ class Parser(object):
                     pass  # not parsed
 
         def _parse_gene(element):
-            for genename_element in element.getchildren():
+            for genename_element in element:
                 if 'type' in genename_element.attrib:
                     ann_key = 'gene_%s_%s' % (genename_element.tag.replace(NS, ''),
                                               genename_element.attrib['type'])
@@ -139,7 +139,7 @@ class Parser(object):
 
         def _parse_organism(element):
             organism_name = com_name = sci_name = ''
-            for organism_element in element.getchildren():
+            for organism_element in element:
                 if organism_element.tag == NS + 'name':
                     if organism_element.text:
                         if organism_element.attrib['type'] == 'scientific':
@@ -152,7 +152,7 @@ class Parser(object):
                 elif organism_element.tag == NS + 'dbReference':
                     self.ParsedSeqRecord.dbxrefs.append(organism_element.attrib['type'] + ':' + organism_element.attrib['id'])
                 elif organism_element.tag == NS + 'lineage':
-                    for taxon_element in organism_element.getchildren():
+                    for taxon_element in organism_element:
                         if taxon_element.tag == NS + 'taxon':
                             append_to_annotations('taxonomy', taxon_element.text)
             if sci_name and com_name:
@@ -164,7 +164,7 @@ class Parser(object):
             self.ParsedSeqRecord.annotations['organism'] = organism_name
 
         def _parse_organismHost(element):
-            for organism_element in element.getchildren():
+            for organism_element in element:
                 if organism_element.tag == NS + 'name':
                     append_to_annotations("organism_host", organism_element.text)
 
@@ -246,7 +246,7 @@ class Parser(object):
                         append_to_annotations(ann_key, text_element.text)
             elif element.attrib['type'] == 'subcellular location':
                 for subloc_element in element.getiterator(NS + 'subcellularLocation'):
-                    for el in subloc_element.getchildren():
+                    for el in subloc_element:
                         if el.text:
                             ann_key = 'comment_%s_%s' % (element.attrib['type'].replace(' ', ''), el.tag.replace(NS, ''))
                             append_to_annotations(ann_key, el.text)
@@ -307,7 +307,7 @@ class Parser(object):
                 if element.attrib['type'] == 'PDB':
                     method = ""
                     resolution = ""
-                    for ref_element in element.getchildren():
+                    for ref_element in element:
                         if ref_element.tag == NS + 'property':
                             dat_type = ref_element.attrib['type']
                             if dat_type == 'method':
@@ -331,7 +331,7 @@ class Parser(object):
                                         feature.location = SeqFeature.FeatureLocation(start, end)
                                         #self.ParsedSeqRecord.features.append(feature)
 
-            for ref_element in element.getchildren():
+            for ref_element in element:
                 if ref_element.tag == NS + 'property':
                     pass  # this data cannot be fitted in a seqrecord object with a simple list. however at least ensembl and EMBL parsing can be improved to add entries in dbxrefs
 
@@ -343,7 +343,7 @@ class Parser(object):
             journal_name = ''
             pub_type = ''
             pub_date = ''
-            for ref_element in element.getchildren():
+            for ref_element in element:
                 if ref_element.tag == NS + 'citation':
                     pub_type = ref_element.attrib['type']
                     if pub_type == 'submission':
@@ -354,11 +354,11 @@ class Parser(object):
                     j_volume = ref_element.attrib.get('volume', '')
                     j_first = ref_element.attrib.get('first', '')
                     j_last = ref_element.attrib.get('last', '')
-                    for cit_element in ref_element.getchildren():
+                    for cit_element in ref_element:
                         if cit_element.tag == NS + 'title':
                             reference.title = cit_element.text
                         elif cit_element.tag == NS + 'authorList':
-                            for person_element in cit_element.getchildren():
+                            for person_element in cit_element:
                                 authors.append(person_element.attrib['name'])
                         elif cit_element.tag == NS + 'dbReference':
                             self.ParsedSeqRecord.dbxrefs.append(cit_element.attrib['type']
@@ -370,7 +370,7 @@ class Parser(object):
                 elif ref_element.tag == NS + 'scope':
                     scopes.append(ref_element.text)
                 elif ref_element.tag == NS + 'source':
-                    for source_element in ref_element.getchildren():
+                    for source_element in ref_element:
                         if source_element.tag == NS + 'tissue':
                             tissues.append(source_element.text)
             if scopes:
@@ -423,7 +423,7 @@ class Parser(object):
             feature.type = element.attrib.get('type', '')
             if 'id' in element.attrib:
                 feature.id = element.attrib['id']
-            for feature_element in element.getchildren():
+            for feature_element in element:
                 if feature_element.tag == NS + 'location':
                     position_elements = feature_element.findall(NS + 'position')
                     if position_elements:
@@ -480,7 +480,7 @@ class Parser(object):
                 self.ParsedSeqRecord.annotations[k] = v  # to cope with swissProt plain text parser
 
         #Top-to-bottom entry children parsing
-        for element in self.entry.getchildren():
+        for element in self.entry:
             if element.tag == NS + 'name':
                 _parse_name(element)
             elif element.tag == NS + 'accession':

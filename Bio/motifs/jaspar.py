@@ -1,4 +1,4 @@
-from Bio.Motif import Motif
+from Bio.motifs import Motif, Instances
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
 
@@ -31,8 +31,23 @@ def read(handle, format):
                     instance += c
             instance = Seq(instance, alphabet)
             instances.append(instance)
+        instances = Instances(instances, alphabet)
         motif = Motif(alphabet, instances=instances)
     else:
         raise ValueError("Unknown format %s" % format)
     motif.mask = "*"*motif.length
     return motif
+
+def write(motif):
+    """Returns the pfm representation of the motif
+    """
+    letters = "ACGT"
+    counts = motif.counts
+    lines = []
+    for letter in letters:
+        terms = map(str, counts[letter])
+        line = "\t".join(terms) + "\n"
+        lines.append(line)
+    # Finished; glue the lines together
+    text = "".join(lines)
+    return text

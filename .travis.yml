@@ -50,3 +50,9 @@ script:
 #The email defaults are too talkative while we're getting Travis working nicely.
 notifications:
   email: false
+
+#The trick we were using to install Jython seems to have been broken by a
+#TravisCI build change in Jan 2013:
+matrix:
+  allow_failures:
+    - python: "jython2.5"

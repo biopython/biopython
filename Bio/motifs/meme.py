@@ -6,23 +6,23 @@
 
 from Bio.Alphabet import IUPAC
 from Bio import Seq
-from Bio.Motif import Motif
+from Bio import motifs
 
 
 def read(handle):
-    """Parses the text output of the MEME program into MEME.Record object.
+    """Parses the text output of the MEME program into a MEME.Record object.
 
     Example:
 
     >>> f = open("meme.output.txt")
     >>> from Bio.Motif import MEME
-    >>> record = MEME.read(f)
-    >>> for motif in record.motifs:
+    >>> record = MEME.parse(f)
+    >>> for motif in record:
     ...     for instance in motif.instances:
     ...         print instance.motif_name, instance.sequence_name, instance.strand, instance.pvalue
 
     """
-    record = MEMERecord()
+    record = Record()
     __read_version(record, handle)
     __read_datafile(record, handle)
     __read_alphabet(record, handle)
@@ -39,12 +39,12 @@ def read(handle):
         length, num_occurrences, evalue = __read_motif_statistics(line)
         name = __read_motif_name(handle)
         instances = __read_motif_sequences(handle, name, alphabet, length, revcomp)
-        motif = MEMEMotif(alphabet, instances)
+        motif = Motif(alphabet, instances)
         motif.length = length
         motif.num_occurrences = num_occurrences
         motif.evalue = evalue
         motif.name = name
-        record.motifs.append(motif)
+        record.append(motif)
         __skip_unused_lines(handle)
         try:
             line = handle.next()
@@ -57,65 +57,21 @@ def read(handle):
     return record
 
 
-class MEMEMotif(Motif):
+class Motif(motifs.Motif):
     """A subclass of Motif used in parsing MEME (and MAST) output.
 
     This subclass defines functions and data specific to MEME motifs.
-    This includes the evalue for a motif and the PSSM of the motif.
-
-    Methods:
-    add_instance_from_values (name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = +): create a new instance of the motif with the specified values.
-       (DEPRECATION PENDING)
+    This includes the motif name, the evalue for a motif, and its number
+    of occurrences.
     """
     def __init__(self, alphabet=None, instances=None):
-        Motif.__init__(self, alphabet, instances)
+        motifs.Motif.__init__(self, alphabet, instances)
         self.evalue = 0.0
-
-    def _numoccurrences(self, number):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        if type(number) == int:
-            self.num_occurrences = number
-        else:
-            number = int(number)
-            self.num_occurrences = number
-
-    def get_instance_by_name(self,name):
-        for i in self.instances:
-            if i.sequence_name == name:
-                return i
-        return None
-
-    def add_instance_from_values(self, name = 'default', pvalue = 1, sequence = 'ATA', start = 0, strand = '+'):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        inst = MEMEInstance(sequence,self.alphabet)
-        inst._pvalue(pvalue)
-        inst._seqname(name)
-        inst._start(start)
-        inst._strand(strand)
-        if self.length:
-            inst._length(self.length)
-        else:
-            inst._length(len(sequence))
-        if self.name:
-            inst._motifname(self.name)
-        self.add_instance(inst)
-
-    def _evalue(self, evalue):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        if type(evalue) == float:
-            self.evalue = evalue
-        else:
-            evalue = float(evalue)
-            self.evalue = evalue
+        self.num_occurrences = 0
+        self.name = None
 
 
-class MEMEInstance(Seq.Seq):
+class Instance(Seq.Seq):
     """A class describing the instances of a MEME motif, and the data thereof.
     """
     def __init__(self,*args,**kwds):
@@ -127,71 +83,43 @@ class MEMEInstance(Seq.Seq):
         self.length = 0
         self.motif_name = ""
 
-    def _seqname(self, name):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        self.sequence_name = name
 
-    def _motifname(self, name):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        self.motif_name = name
-
-    def _start(self,start):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        start = int(start)
-        self.start = start
-
-    def _pvalue(self,pval):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        pval = float(pval)
-        self.pvalue = pval
-
-    def _score(self, score):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        score = float(score)
-        self.score = score
-
-    def _strand(self, strand):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        self.strand = strand
-
-    def _length(self, length):
-        import warnings
-        warnings.warn("This function is now obsolete, and will be deprecated and removed "
-                      "in a future release of Biopython.", PendingDeprecationWarning)
-        self.length = length
-
-
-class MEMERecord(object):
+class Record(list):
     """A class for holding the results of a MEME run.
 
-    A MEMERecord is an object that holds the results from running
+    A MEME.Record is an object that holds the results from running
     MEME. It implements no methods of its own.
+
+    The MEME.Record class inherits from list, so you can access individual
+    motifs in the record by their index. Alternatively, you can find a motif
+    by its name:
+
+    >>> f = open("meme.output.txt")
+    >>> from Bio import motifs
+    >>> record = motifs.parse(f, 'MEME')
+    >>> motif = record[0]
+    >>> print motif.name
+    Motif 1
+    >>> motif = record['Motif 1']
+    >>> print motif.name
+    Motif 1
     """
+
     def __init__(self):
         """__init__ (self)"""
-        self.motifs = []
         self.version = ""
         self.datafile = ""
         self.command = ""
         self.alphabet = None
         self.sequences = []
 
-    def get_motif_by_name(self, name):
-        for m in self.motifs:
-            if m.name == name:
-                return m
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            for motif in self:
+                if motif.name==key:
+                    return motif
+        else:
+            return list.__getitem__(self, key)
 
 
 # Everything below is private
@@ -299,8 +227,8 @@ def __read_motif_name(handle):
     else:
         raise ValueError('Unexpected end of stream: Failed to find motif name')
     line = line.strip()
-    ls = line.split()
-    name = " ".join(ls[0:2])
+    words = line.split()
+    name = " ".join(words[0:2])
     return name
 
 
@@ -335,7 +263,7 @@ def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
             strand = '+'
         sequence = words[4]
         assert len(sequence)==length
-        instance = MEMEInstance(sequence, alphabet)
+        instance = Instance(sequence, alphabet)
         instance.motif_name = motif_name
         instance.sequence_name = words[0]
         instance.start = int(words[1])
@@ -345,7 +273,7 @@ def __read_motif_sequences(handle, motif_name, alphabet, length, revcomp):
         instances.append(instance)
     else:
         raise ValueError('Unexpected end of stream')
-    return instances
+    return motifs.Instances(instances, alphabet)
 
 
 def __skip_unused_lines(handle):

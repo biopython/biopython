@@ -52,6 +52,8 @@ are likely to be deprecated and then removed in future releases.
 import warnings
 warnings.warn("The plain text parser in this module still works at the time of writing, but is considered obsolete and updating it to cope with the latest versions of BLAST is not a priority for us.", PendingDeprecationWarning)
 
+from Bio import BiopythonDeprecationWarning
+
 import os
 import re
 import StringIO
@@ -1688,10 +1690,11 @@ class Iterator(object):
 
 
 def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPALL as handles (OBSOLETE).
+    """Execute and retrieve data from standalone BLASTPALL as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.BlastallCommandline instead.
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastallCommandline instead, or
+    better the BLAST+ command line wrappers in Bio.Blast.Applications.
 
     Execute and retrieve data from blastall.  blastcmd is the command
     used to launch the 'blastall' executable.  program is the blast program
@@ -1786,7 +1789,7 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
         'seqalign_file' : '-O',
         'outfile' : '-o',
         }
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastallCommandline instead.", BiopythonDeprecationWarning)
     from Applications import BlastallCommandline
     cline = BlastallCommandline(blastcmd)
     cline.set_parameter(att2param['program'], program)
@@ -1799,10 +1802,11 @@ def blastall(blastcmd, program, database, infile, align_view='7', **keywds):
 
 
 def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
-    """Execute and retrieve data from standalone BLASTPGP as handles (OBSOLETE).
+    """Execute and retrieve data from standalone BLASTPGP as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.BlastpgpCommandline instead, or
+    better the BLAST+ tool psiblast via the NcbipsiblastCommandline wrapper.
 
     Execute and retrieve data from blastpgp.  blastcmd is the command
     used to launch the 'blastpgp' executable.  database is the path to the
@@ -1869,7 +1873,7 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
     align_infile        Input alignment file for PSI-BLAST restart.
     """
 
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastpgpCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {
@@ -1928,10 +1932,11 @@ def blastpgp(blastcmd, database, infile, align_view='7', **keywds):
 
 
 def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
-    """Execute and retrieve data from standalone RPS-BLAST as handles (OBSOLETE).
+    """Execute and retrieve data from standalone RPS-BLAST as handles (DEPRECATED).
 
-    NOTE - This function is obsolete, you are encouraged to the command
-    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead.
+    NOTE - This function is deprecated, you are encouraged to the command
+    line wrapper Bio.Blast.Applications.RpsBlastCommandline instead, or
+    better the BLAST+ rpsblast wrapper NcbirpsblastCommandline.
 
     Execute and retrieve data from standalone RPS-BLAST.  blastcmd is the
     command used to launch the 'rpsblast' executable.  database is the path
@@ -1988,7 +1993,7 @@ def rpsblast(blastcmd, database, infile, align_view="7", **keywds):
                         from the returned handles).
     """
 
-    warnings.warn("This function is obsolete, you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", PendingDeprecationWarning)
+    warnings.warn("This function is deprecated; you are encouraged to the command line wrapper Bio.Blast.Applications.BlastrpsCommandline instead.", BiopythonDeprecationWarning)
     _security_check_parameters(keywds)
 
     att2param = {

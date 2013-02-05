@@ -12,6 +12,8 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
+from Bio import BiopythonDeprecationWarning
+
 import BioSeq
 import Loader
 import DBUtils
@@ -91,6 +93,7 @@ def open_database(driver="MySQLdb", **kwargs):
               "rulename='rule_bioentry_i2';"
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
+            from Bio import BiopythonWarning
             warnings.warn("Your BioSQL PostgreSQL schema includes some "
                           "rules currently required for bioperl-db but "
                           "which may cause problems loading data using "
@@ -98,7 +101,7 @@ def open_database(driver="MySQLdb", **kwargs):
                           "use BioPerl, please remove these rules. "
                           "Biopython should cope with the rules present, "
                           "but with a performance penalty when loading "
-                          "new records.")
+                          "new records.", BiopythonWarning)
             global _POSTGRES_RULES_PRESENT
             _POSTGRES_RULES_PRESENT = True
 
@@ -200,7 +203,9 @@ class DBServer:
         del server[name]
         """
         import warnings
-        warnings.warn("This method is obsolete.  In keeping with the dictionary interface, you can now use 'del server[name]' instead", PendingDeprecationWarning)
+        warnings.warn("This method is deprecated.  In keeping with the "
+                      "dictionary interface, you can now use 'del "
+                      "server[name]' instead", BiopythonDeprecationWarning)
         db_id = self.adaptor.fetch_dbid_by_dbname(db_name)
         remover = Loader.DatabaseRemover(self.adaptor, db_id)
         remover.remove()
@@ -514,7 +519,7 @@ class BioSeqDatabase:
         import warnings
         warnings.warn("Use bio_seq_database.keys() instead of "
                       "bio_seq_database.get_all_primary_ids()",
-                      PendingDeprecationWarning)
+                      BiopythonDeprecationWarning)
         return self.keys()
 
     def __getitem__(self, key):
@@ -619,7 +624,7 @@ class BioSeqDatabase:
         import warnings
         warnings.warn("Use bio_seq_database[my_id] instead of "
                       "bio_seq_database.get_Seq_by_primary_id(my_id)",
-                      PendingDeprecationWarning)
+                      BiopythonDeprecationWarning)
         return self[seqid]
 
     def load(self, record_iterator, fetch_NCBI_taxonomy=False):

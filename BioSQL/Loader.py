@@ -795,8 +795,9 @@ class DatabaseLoader:
             # e.g. order locations... we don't record "order" so it
             # will become a "join" on reloading. What does BioPerl do?
             import warnings
+            from Bio import BiopythonWarning
             warnings.warn("%s location operators are not fully supported"
-                          % feature.location_operator)
+                          % feature.location_operator, BiopythonWarning)
 
         # two cases, a simple location or a split location
         if not feature.sub_features:    # simple location

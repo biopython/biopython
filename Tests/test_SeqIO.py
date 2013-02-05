@@ -5,6 +5,7 @@
 
 import os
 
+from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
@@ -21,14 +22,11 @@ except ImportError:
 
 import warnings
 
-
-def send_warnings_to_stdout(message, category, filename, lineno,
-                                file=None, line=None):
-    #TODO - Have Biopython DataLossWarning?
-    if category in [UserWarning]:
-        print "%s - %s" % (category.__name__, message)
-warnings.showwarning = send_warnings_to_stdout
-
+# TODO - Convert this to using unittest, and check desired warnings
+# are issued. Used to do that by capturing warnings to stdout and
+# verifying via the print-and-compare check. However, there was some
+# frustrating cross-platform inconsistency I couldn't resolve.
+warnings.simplefilter('ignore', BiopythonWarning)
 
 protein_alphas = [Alphabet.generic_protein]
 dna_alphas = [Alphabet.generic_dna]

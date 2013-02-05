@@ -115,6 +115,24 @@ class TestTrie(unittest.TestCase):
         self.assertEqual(trieobj.get_approximate('hello me!', 4), [('hello', 1, 4)])
         self.assertEqual(trieobj.get_approximate('hello me!', 5), [('hello', 1, 4)])
 
+    def test_with_prefix(self):
+        trieobj = trie.trie()
+        s = "BANANA"
+        for i in range(len(s)):  # insert all suffixes into trie
+            trieobj[s[i:]] = i
+            self.assertEqual(trieobj[s[i:]], i)
+        self.assertEqual(set(trieobj.values()), set(range(6)))
+        self.assertEqual(set(['A', 'ANA', 'ANANA', 'BANANA', 'NA', 'NANA']),
+                         set(trieobj.keys()))
+        self.assertEqual(set(['NA', 'NANA']),
+                         set(trieobj.with_prefix("N")))
+        self.assertEqual(set(['NA', 'NANA']),
+                         set(trieobj.with_prefix("NA")))
+        self.assertEqual(set(['A', 'ANA', 'ANANA']),
+                         set(trieobj.with_prefix("A")))
+        self.assertEqual(set(['ANA', 'ANANA']),
+                         set(trieobj.with_prefix("AN")))
+
 
 class TestTrieFind(unittest.TestCase):
 

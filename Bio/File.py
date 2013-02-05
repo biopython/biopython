@@ -11,12 +11,6 @@ Classes:
 
 UndoHandle     File object decorator with support for undo-like operations.
 
-StringHandle   Wraps a file object around a string.  This is now DEPRECATED,
-               and is likely to be removed in a future release of Biopython.
-
-SGMLStripper   Object that strips SGML.  This is now DEPRECATED, and is likely
-               to be removed in a future release of Biopython.
-
 Additional private classes used in Bio.SeqIO and Bio.SearchIO for indexing
 files are also defined under Bio.File but these are not intended for direct
 use.
@@ -84,6 +78,22 @@ def as_handle(handleish, mode='r', **kwargs):
                 yield fp
     else:
         yield handleish
+
+def _open_for_random_access(filename):
+    """Open a file in binary mode, spot if it is BGZF format etc (PRIVATE).
+
+    This funcationality is used by the Bio.SeqIO and Bio.SearchIO index
+    and index_db functions.
+    """
+    handle = open(filename, "rb")
+    import bgzf
+    try:
+        return bgzf.BgzfReader(mode="rb", fileobj=handle)
+    except ValueError, e:
+        assert "BGZF" in str(e)
+        #Not a BGZF file after all, rewind to start:
+        handle.seek(0)
+    return handle
 
 
 class UndoHandle(object):
@@ -166,65 +176,6 @@ class UndoHandle(object):
 
     def __exit__(self, type, value, traceback):
         self._handle.close()
-
-
-# I could make this faster by using cStringIO.
-# However, cStringIO (in v1.52) does not implement the
-# readlines method.
-class StringHandle(StringIO.StringIO):
-    def __init__(self, buffer=''):
-        import warnings
-        import Bio
-        warnings.warn("This class is deprecated, and is likely to be removed in a future version of Biopython. Please use the class StringIO in the module StringIO in the Python standard library instead", Bio.BiopythonDeprecationWarning)
-        StringIO.StringIO.__init__(self, buffer)
-
-try:
-    import sgmllib
-except ImportError:
-    #This isn't available on Python 3, but we don't care much as SGMLStripper
-    #is obsolete
-    pass
-else:
-    class SGMLStripper(object):
-        """Object to strip SGML tags (OBSOLETE)."""
-        class MyParser(sgmllib.SGMLParser):
-            def __init__(self):
-                sgmllib.SGMLParser.__init__(self)
-                self.data = ''
-
-            def handle_data(self, data):
-                self.data = self.data + data
-
-        def __init__(self):
-            import warnings
-            import Bio
-            warnings.warn("This class is deprecated, and is likely to be removed in a future version of Biopython", Bio.BiopythonDeprecationWarning)
-            self._parser = SGMLStripper.MyParser()
-
-        def strip(self, str):
-            """S.strip(str) -> string
-
-            Strip the SGML tags from str.
-
-            """
-            if not str:  # empty string, don't do anything.
-                return ''
-            # I need to make sure that I don't return an empty string if
-            # the buffer is not empty.  This can happen if there's a newline
-            # character embedded within a tag.  Thus, I'll first check to
-            # see if the last character is a newline.  If it is, and it's stripped
-            # away, I'll add it back.
-            is_newline = str[-1] in ['\n', '\r']
-
-            self._parser.data = ''    # clear the parser's data (don't reset)
-            self._parser.feed(str)
-            if self._parser.data:
-                str = self._parser.data
-            elif is_newline:
-                str = '\n'
-            else:
-                str = ''
-            return str
 
 
 #The rest of this file defines code used in Bio.SeqIO and Bio.SearchIO

@@ -250,8 +250,10 @@ def _retrieve_features(adaptor, primary_id):
                                  "seqfeature_id %s" % (strand, seqfeature_id))
             if end < start:
                 import warnings
+                from Bio import BiopythonWarning
                 warnings.warn("Inverted location start/end (%i and %i) for "
-                              "seqfeature_id %s" % (start, end, seqfeature_id))
+                              "seqfeature_id %s" % (start, end, seqfeature_id),
+                              BiopythonWarning)
             locations.append((location_id, start, end, strand))
         # Get possible remote reference information
         remote_results = adaptor.execute_and_fetchall(

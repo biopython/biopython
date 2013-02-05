@@ -155,10 +155,10 @@ class Hmmer3TextParser(object):
         is_included = True
 
         # parse the hit table
-        hit_list = []
+        hit_attr_list = []
         while True:
             if not self.line:
-                return hit_list
+                return []
             elif self.line.startswith('  ------ inclusion'):
                 is_included = False
                 self.line = read_forward(self.handle)
@@ -169,10 +169,10 @@ class Hmmer3TextParser(object):
                 while True:
                     self.line = read_forward(self.handle)
                     if self.line.startswith('Internal pipeline'):
-                        assert len(hit_list) == 0
-                        return hit_list
+                        assert len(hit_attr_list) == 0
+                        return []
             elif self.line.startswith('Domain annotation for each '):
-                hit_list = self._create_hits(hit_list, qid)
+                hit_list = self._create_hits(hit_attr_list, qid)
                 return hit_list
             # entering hit results row
             # parse the columns into a list
@@ -198,7 +198,7 @@ class Hmmer3TextParser(object):
                 'description': row[9],
                 'is_included': is_included,
             }
-            hit_list.append(hit_attrs)
+            hit_attr_list.append(hit_attrs)
 
             self.line = read_forward(self.handle)
 
@@ -220,7 +220,8 @@ class Hmmer3TextParser(object):
 
             # read through the hsp table header and move one more line
             self._read_until(lambda line:
-                    line.startswith(' ---   ------ ----- --------'))
+                    line.startswith(' ---   ------ ----- --------') or \
+                    line.startswith('   [No individual domains'))
             self.line = read_forward(self.handle)
 
             # parse the hsp table for the current hit
@@ -229,6 +230,7 @@ class Hmmer3TextParser(object):
                 # break out of hsp parsing if there are no hits, it's the last hsp
                 # or it's the start of a new hit
                 if self.line.startswith('   [No targets detected that satisfy') or \
+                   self.line.startswith('   [No individual domains') or \
                    self.line.startswith('Internal pipeline statistics summary:') or \
                    self.line.startswith('  Alignments for each domain:') or \
                    self.line.startswith('>>'):

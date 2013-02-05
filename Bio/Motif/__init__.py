@@ -2,52 +2,49 @@
 # This code is part of the Biopython distribution and governed by its
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
-"""
-Module containing different tools for sequence motif analysis.
+"""Tools for sequence motif analysis (OBSOLETE, see Bio.motifs instead).
 
-It contains the core Motif class containing various I/O methods
-as well as methods for motif comparisons and motif searching in sequences.
-It also includes functionality for parsing AlignACE and MEME programs.
+This module (Bio.Motif) is now obsolete, and will be deprecated and
+removed in a future release of release of Biopython. Please use the
+new module Bio.motifs instead.
+
+This contains the core Motif class containing various I/O methods as
+well as methods for motif comparisons and motif searching in sequences.
+It also inlcudes functionality for parsing AlignACE and MEME programs.
 """
+
+import warnings
+warnings.warn("The module Bio.Motif is now obsolete, and will be"
+              "deprecated and removed in a future release of"
+              "release of Biopython. As a replacement for Bio.Motif,"
+              "please use the new module Bio.motifs instead. Please"
+              "be aware that though the functionality of Bio.Motif"
+              "is retained (and extended) in Bio.motifs, usage may"
+              "be different.",
+              PendingDeprecationWarning)
+
+
 from Bio.Motif._Motif import Motif
-from Bio.Motif.AlignAce import read as _AlignAce_read
-from Bio.Motif.MEME import read as _MEME_read
-from Bio.Motif import Jaspar
+from Bio.Motif.Parsers.AlignAce import read as _AlignAce_read
+from Bio.Motif.Parsers.MEME import read as _MEME_read
 from Bio.Motif.Thresholds import ScoreDistribution
-from Bio.Alphabet import IUPAC
-from Bio.Seq import Seq
 
+_parsers={"AlignAce" : _AlignAce_read,
+          "MEME" : _MEME_read,
+          }
 
 def _from_pfm(handle):
     return Motif()._from_jaspar_pfm(handle)
 
-
 def _from_sites(handle):
     return Motif()._from_jaspar_sites(handle)
 
-
-def create(instances, alphabet=None):
-    for instance in instances:
-        try:
-            a = instance.alphabet
-        except AttributeError:
-            # The instance is a plain string
-            continue
-        if alphabet is None:
-            alphabet = a
-        elif alphabet != a:
-            raise ValueError("Alphabets are inconsistent")
-    if alphabet is None or alphabet.letters is None:
-        # If we didn't get a meaningful alphabet from the instances,
-        # assume it is DNA.
-        alphabet = IUPAC.unambiguous_dna
-    seqs = []
-    for instance in instances:
-        seq = Seq(str(instance), alphabet=alphabet)
-        seqs.append(seq)
-    return Motif(instances=seqs, alphabet=alphabet)
+_readers={"jaspar-pfm": _from_pfm,
+          "jaspar-sites": _from_sites
+          }
 
 
+          
 def parse(handle,format):
     """Parses an output file of motif finding programs.
 
@@ -64,41 +61,37 @@ def parse(handle,format):
 
     >>> from Bio import Motif
     >>> for motif in Motif.parse(open("Motif/alignace.out"),"AlignAce"):
-    ...     print motif.consensus
+    ...     print motif.consensus()
     TCTACGATTGAG
-    CTGCAGCTAGCTACGAGTGAG
-    GTGCTCTAAGCATAGTAGGCG
+    CTGCACCTAGCTACGAGTGAG
+    GTGCCCTAAGCATACTAGGCG
     GCCACTAGCAGAGCAGGGGGC
     CGACTCAGAGGTT
-    CCACGCTAAGAGAGGTGCCGGAG
-    GCGCGTCGCTGAGCA
+    CCACGCTAAGAGAAGTGCCGGAG
+    GCACGTCCCTGAGCA
     GTCCATCGCAAAGCGTGGGGC
-    GGGATCAGAGGGCCG
-    TGGAGGCGGGG
-    GACCAGAGCTTCGCATGGGGG
-    GGCGTGCGTG
-    GCTGGTTGCTGTTCATTAGG
-    GCCGGCGGCAGCTAAAAGGG
-    GAGGCCGGGGAT
-    CGACTCGTGCTTAGAAGG
+    GAGATCAGAGGGCCG
+    TGGACGCGGGG
+    GACCAGAGCCTCGCATGGGGG
+    AGCGCGCGTG
+    GCCGGTTGCTGTTCATTAGG
+    ACCGACGGCAGCTAAAAGGG
+    GACGCCGGGGAT
+    CGACTCGCGCTTACAAGG
     """
-    if format in ('pfm', 'sites'):
-        yield Jaspar.read(handle, format)
-    elif format=="AlignAce":
-        record = _AlignAce_read(handle)
-        for m in record.motifs:
+    try:
+        parser=_parsers[format]
+        
+    except KeyError:
+        try: #not a true parser, try reader formats
+            reader=_readers[format]
+        except:
+            raise ValueError("Wrong parser format")
+        else: #we have a proper reader 
+            yield reader(handle)
+    else: # we have a proper reader
+        for m in parser(handle).motifs:
             yield m
-    elif format=="MEME":
-        record = _MEME_read(handle)
-        for m in record.motifs:
-            yield m
-    elif format=="jaspar-pfm":
-        yield _from_pfm(handle)
-    elif format=="jaspar-sites":
-        yield _from_sites(handle)
-    else:
-        raise ValueError("Unknown format %s" % format)
-
 
 def read(handle,format):
     """Reads a motif from a handle using a specified file-format.
@@ -108,15 +101,15 @@ def read(handle,format):
     reading a pfm file:
 
     >>> from Bio import Motif
-    >>> motif = Motif.read(open("Motif/SRF.pfm"), "pfm")
-    >>> motif.consensus
+    >>> motif = Motif.read(open("Motif/SRF.pfm"),"jaspar-pfm")
+    >>> motif.consensus()
     Seq('GCCCATATATGG', IUPACUnambiguousDNA())
 
     Or a single-motif MEME file,
 
     >>> from Bio import Motif
     >>> motif =  Motif.read(open("Motif/meme.out"),"MEME")
-    >>> motif.consensus
+    >>> motif.consensus()
     Seq('CTCAATCGTA', IUPACUnambiguousDNA())
 
     If the handle contains no records, or more than one record,
@@ -134,7 +127,7 @@ def read(handle,format):
 
     >>> from Bio import Motif
     >>> motif = Motif.parse(open("Motif/alignace.out"),"AlignAce").next()
-    >>> motif.consensus
+    >>> motif.consensus()
     Seq('TCTACGATTGAG', IUPACUnambiguousDNA())
 
     Use the Bio.Motif.parse(handle, format) function if you want
@@ -156,6 +149,23 @@ def read(handle,format):
     return first
 
 
+def _test():
+    """Run the Bio.Motif module's doctests.
+
+    This will try and locate the unit tests directory, and run the doctests
+    from there in order that the relative paths used in the examples work.
+    """
+    import doctest
+    import os
+    if os.path.isdir(os.path.join("..","..","Tests")):
+        print "Runing doctests..."
+        cur_dir = os.path.abspath(os.curdir)
+        os.chdir(os.path.join("..","..","Tests"))
+        doctest.testmod()
+        os.chdir(cur_dir)
+        del cur_dir
+        print "Done"
+
 if __name__ == "__main__":
-    from Bio._utils import run_doctest
-    run_doctest()
+    #Run the doctests
+    _test()

@@ -6,6 +6,7 @@
 """Class that maps (chain_id, residue_id) to a residue property."""
 
 
+
 class AbstractPropertyMap(object):
     def __init__(self, property_dict, property_keys, property_list):
         self.property_dict=property_dict
@@ -78,7 +79,8 @@ class AbstractPropertyMap(object):
         @type res_id: char
         """
         import warnings
-        warnings.warn("This function is obsolete; use 'id in mapping' instead", PendingDeprecationWarning)
+        from Bio import BiopythonDeprecationWarning
+        warnings.warn("This function is deprecated; use 'id in mapping' instead", BiopythonDeprecationWarning)
         return (id in self)
 
     def keys(self):

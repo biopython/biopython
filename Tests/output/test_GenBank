@@ -3300,6 +3300,72 @@ qualifiers:
     Key: replace, Value: ['tt']
 
 DB cross refs ['Project:58037']
+***Record from no_end_marker.gb with the FeatureParser
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Id: AB070938.1
+Name: AB070938
+Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Annotations***
+Key: accessions
+Value: ['AB070938']
+Key: data_file_division
+Value: BCT
+Key: date
+Value: 11-OCT-2001
+Key: gi
+Value: 15823953
+Key: keywords
+Value: ['']
+Key: organism
+Value: Streptomyces avermitilis
+Key: sequence_version
+Value: 1
+Key: source
+Value: Streptomyces avermitilis
+Key: taxonomy
+Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Feaures
+type: source
+location: [0:6497](+)
+qualifiers: 
+    Key: db_xref, Value: ['taxon:33903']
+    Key: mol_type, Value: ['genomic DNA']
+    Key: organism, Value: ['Streptomyces avermitilis']
+
+DB cross refs []
+***Record from wrong_sequence_indent.gb with the FeatureParser
+Seq: Seq('CTAGCAGCCCGCATCGCCCTCGACGTTGGCGATCATCGTGCGCAGCACCTTGAG...TGA', IUPACAmbiguousDNA())
+Id: AB070938.1
+Name: AB070938
+Description Streptomyces avermitilis melanin biosynthetic gene cluster.
+Annotations***
+Key: accessions
+Value: ['AB070938']
+Key: data_file_division
+Value: BCT
+Key: date
+Value: 11-OCT-2001
+Key: gi
+Value: 15823953
+Key: keywords
+Value: ['']
+Key: organism
+Value: Streptomyces avermitilis
+Key: sequence_version
+Value: 1
+Key: source
+Value: Streptomyces avermitilis
+Key: taxonomy
+Value: ['Bacteria', 'Actinobacteria', 'Actinobacteridae', 'Actinomycetales', 'Streptomycineae', 'Streptomycetaceae', 'Streptomyces']
+Feaures
+type: source
+location: [0:6497](+)
+qualifiers: 
+    Key: db_xref, Value: ['taxon:33903']
+    Key: mol_type, Value: ['genomic DNA']
+    Key: organism, Value: ['Streptomyces avermitilis']
+
+DB cross refs []
 ***Record from noref.gb with the RecordParser
 sequence length: 1622
 locus: NM_006141
@@ -4603,6 +4669,28 @@ location: 8529^8530
 num qualifiers: 2
 key: /note= value: "compared to AL109969"
 key: /replace= value: "tt"
+***Record from no_end_marker.gb with the RecordParser
+sequence length: 6497
+locus: AB070938
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+accession: ['AB070938']
+feature key: source
+location: 1..6497
+num qualifiers: 3
+key: /organism= value: "Streptomyces avermitilis"
+key: /mol_type= value: "genomic DNA"
+key: /db_xref= value: "taxon:33903"
+***Record from wrong_sequence_indent.gb with the RecordParser
+sequence length: 6497
+locus: AB070938
+definition: Streptomyces avermitilis melanin biosynthetic gene cluster.
+accession: ['AB070938']
+feature key: source
+location: 1..6497
+num qualifiers: 3
+key: /organism= value: "Streptomyces avermitilis"
+key: /mol_type= value: "genomic DNA"
+key: /db_xref= value: "taxon:33903"
 Testing writing GenBank format...
 Testing GenBank writing for noref.gb...
 	Testing for NM_006141.1

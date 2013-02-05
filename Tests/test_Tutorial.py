@@ -45,7 +45,10 @@ def _extract(handle):
 
 
 def extract_doctests(latex_filename):
-    """Scans LaTeX file and pulls out marked doctests as strings."""
+    """Scans LaTeX file and pulls out marked doctests as strings.
+
+    This is a generator, yielding one tuple per doctest.
+    """
     handle = open(latex_filename, "rU")
     line_number = 0
     in_test = False
@@ -64,11 +67,13 @@ def extract_doctests(latex_filename):
             if lines:
                 if not lines[0].startswith(">>> "):
                     raise ValueError("Should start '>>> ' not %r" % lines[0])
-                yield name, "".join(lines), folder
+                yield name, "".join(lines), folder, deps
                 lines = []
-            try:
-                folder = line.split(None,1)[1].strip()
-            except:
+            deps = [x.strip() for x in line.split()[1:]]
+            if deps:
+                folder = deps[0]
+                deps = deps[1:]
+            else:
                 folder = ""
             name = "test_from_line_%05i" % line_number
             x = _extract(handle)
@@ -78,7 +83,7 @@ def extract_doctests(latex_filename):
     if lines:
         if not lines[0].startswith(">>> "):
             raise ValueError("Should start '>>> ' not %r" % lines[0])
-        yield name, "".join(lines), folder
+        yield name, "".join(lines), folder, deps
     #yield "dummy", ">>> 2 + 2\n5\n"
 
 
@@ -86,9 +91,26 @@ class TutorialDocTestHolder(object):
     """Python doctests extracted from the Biopython Tutorial."""
     pass
 
+def check_deps(dependencies):
+    missing = []
+    for dep in dependencies:
+        assert dep.startswith("lib:"), dep
+        lib = dep[4:]
+        try:
+            tmp = __import__(lib)
+            del tmp
+        except ImportError:
+            missing.append(lib)
+    return missing
 
 #Create dummy methods on the object purely to hold doctests
-for name, example, folder in extract_doctests(tutorial):
+missing_deps = set()
+for name, example, folder, deps in extract_doctests(tutorial):
+    missing = check_deps(deps)
+    if missing:
+        missing_deps.update(missing)
+        continue
+
     if sys.version_info[0] >= 3:
         example = rt.refactor_docstring(example, name)
 
@@ -136,6 +158,10 @@ class TutorialTestCase(unittest.TestCase):
 
 #This is to run the doctests if the script is called directly:
 if __name__ == "__main__":
+    if missing_deps:
+        print "Skipping tests needing the following:"
+        for dep in sorted(missing_deps):
+            print " - %s" % dep
     print "Running Tutorial doctests..."
     import doctest
     tests = doctest.testmod()

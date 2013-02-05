@@ -6,16 +6,6 @@
 """Parsing AlignACE files: AlignAceParser
 """
 
-import warnings
-warnings.warn("The module Bio.Motif.Parsers.AlignAce is now obsolete, "
-              "and will be deprecated and removed in a future "
-              "release of Biopython. To parse AlignAce files, "
-              "please use the parser in Bio.Motif.AlignAce instead."
-              "Note that there are some (minor) differences between "
-              "new parser in Bio.Motif.AlignAce and the old parser "
-              "in Bio.Motif.Parsers.AlignAce.",
-              PendingDeprecationWarning)
-
 from Bio.Motif import Motif
 from Bio.Alphabet import IUPAC
 from Bio.Seq import Seq
@@ -61,3 +51,5 @@ def read(handle):
         else:
             raise ValueError(line)
     return record
+
+

@@ -397,7 +397,9 @@ class GenBankWriter(_InsdcWriter):
         assert len(tag) < self.HEADER_WIDTH
         if len(text) > self.MAX_WIDTH - self.HEADER_WIDTH:
             import warnings
-            warnings.warn("Annotation %r too long for %s line" % (text, tag))
+            from Bio import BiopythonWarning
+            warnings.warn("Annotation %r too long for %r line" % (text, tag),
+                          BiopythonWarning)
         self.handle.write("%s%s\n" % (tag.ljust(self.HEADER_WIDTH),
                                       text.replace("\n", " ")))
 

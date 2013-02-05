@@ -5,18 +5,28 @@
 # as part of this package.
 
 from Bio.Alphabet import IUPAC
-from Bio.Motif.MEME import MEMEMotif
+from Bio.motifs import meme
 
 
-class Record(object):
+class Record(list):
     """The class for holding the results from a MAST run.
 
-    A MAST.Record holds data about matches between motifs and sequences.
-    The motifs held by the Record are objects of the class MEMEMotif.
+    A mast.Record holds data about matches between motifs and sequences.
+    The motifs held by the Record are objects of the class meme.Motif.
 
-    Methods:
-    get_motif_by_name (motif_name): returns a MEMEMotif with the given
-    name.
+    The mast.Record class inherits from list, so you can access individual
+    motifs in the record by their index. Alternatively, you can find a motif
+    by its name:
+
+    >>> f = open("mast.output.txt")
+    >>> from Bio import motifs
+    >>> record = motifs.parse(f, 'MAST')
+    >>> motif = record[0]
+    >>> print motif.name
+    1
+    >>> motif = record['1']
+    >>> print motif.name
+    1
     """
 
     def __init__(self):
@@ -25,12 +35,14 @@ class Record(object):
         self.database = ""
         self.diagrams = {}
         self.alphabet = None
-        self.motifs = []
 
-    def get_motif_by_name(self, name):
-        for m in self.motifs:
-            if m.name == name:
-                return m
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            for motif in self:
+                if motif.name==key:
+                    return motif
+        else:
+            return list.__getitem__(self, key)
 
 
 def read(handle):
@@ -82,11 +94,11 @@ def __read_database_and_motifs(record, handle):
         if not line.strip():
             break
         words = line.strip().split()
-        motif = MEMEMotif(record.alphabet)
+        motif = meme.Motif(record.alphabet)
         motif.name = words[0]
         motif.length = int(words[1])
         # words[2] contains the best possible match
-        record.motifs.append(motif)
+        record.append(motif)
 
 
 def __read_section_i(record, handle):

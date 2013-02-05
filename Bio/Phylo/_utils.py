@@ -29,11 +29,14 @@ def to_networkx(tree):
         raise MissingPythonDependencyError(
                 "Install NetworkX if you want to use to_networkx.")
 
-    def add_edge(graph, n1, n2):
-        # NB (1/2010): the networkx API congealed recently
-        # Ubuntu Lucid uses v0.99, newest is v1.0.1, let's support both
-        if networkx.__version__ >= '1.0':
-            graph.add_edge(n1, n2, weight=str(n2.branch_length or 1.0))
+    # NB (1/2010): the networkx API stabilized at v.1.0
+    # 1.0+: edges accept arbitrary data as kwargs, weights are floats
+    # 0.99: edges accept weight as a string, nothing else
+    # pre-0.99: edges accept no additional data
+    # Ubuntu Lucid LTS uses v0.99, let's support everything
+    if networkx.__version__ >= '1.0':
+        def add_edge(graph, n1, n2):
+            graph.add_edge(n1, n2, weight=n2.branch_length or 1.0)
             # Copy branch color value as hex, if available
             if hasattr(n2, 'color') and n2.color is not None:
                 graph[n1][n2]['color'] = n2.color.to_hex()
@@ -48,9 +51,11 @@ def to_networkx(tree):
                 # Cascading width attributes
                 graph[n1][n2]['width'] = n1.width
                 n2.width = n1.width
-        elif networkx.__version__ >= '0.99':
+    elif networkx.__version__ >= '0.99':
+        def add_edge(graph, n1, n2):
             graph.add_edge(n1, n2, (n2.branch_length or 1.0))
-        else:
+    else:
+        def add_edge(graph, n1, n2):
             graph.add_edge(n1, n2)
 
     def build_subgraph(graph, top):

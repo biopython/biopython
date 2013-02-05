@@ -319,6 +319,22 @@ class BgzfTests(unittest.TestCase):
         self.rewrite("Blast/wnts.xml.bgz", temp_file)
         self.check_blocks("Blast/wnts.xml.bgz", temp_file)
 
+    def test_write_tell(self):
+        """Check offset works during BGZF writing"""
+        temp_file = self.temp_file
+
+        h = bgzf.open(temp_file, "w") #Text mode!
+        h.write("X" * 100000)
+        offset = h.tell()
+        self.assertNotEqual(offset, 100000) #Should be a virtual offset!
+        h.write("Magic" + "Y" * 100000)
+        h.close()
+
+        h = bgzf.open(temp_file, "r") #Text mode!
+        h.seek(offset)
+        self.assertEqual(h.read(5), "Magic")
+        h.close()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity = 2)

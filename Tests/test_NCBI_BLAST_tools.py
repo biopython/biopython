@@ -227,12 +227,19 @@ class CheckCompleteArgList(unittest.TestCase):
         if "-max_hsps_per_subject" in extra:
             #New in BLAST 2.2.26+ so will look like an extra arg on old BLAST
             extra.remove("-max_hsps_per_subject")
+        if exe_name=="blastx":
+            #New in BLAST 2.2.27+ so will look like an extra arg on old BLAST
+            extra = extra.difference(["-comp_based_stats",
+                                      "-use_sw_tback"])
+        if exe_name in ["blastx", "tblastn"]:
+            #Removed in BLAST 2.2.27+ so will look like extra arg on new BLAST
+            extra = extra.difference(["-frame_shift_penalty"])
 
         if extra or missing:
             import warnings
             warnings.warn("NCBI BLAST+ %s and Biopython out sync. Please "
                           "update Biopython, or report this issue if you are "
-                          "already using the latest version. (Exta args: %s; "
+                          "already using the latest version. (Extra args: %s; "
                           "Missing: %s)" % (exe_name,
                           ",".join(sorted(extra)),
                           ",".join(sorted(missing))))

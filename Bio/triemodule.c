@@ -583,7 +583,9 @@ _read_from_handle(void *wasread, const int length, void *handle)
     success = 1;
 
  _read_from_handle_cleanup:
-    Py_XDECREF(py_retval);
+    if(py_retval) {
+	Py_DECREF(py_retval);
+    }
     return success;
 }
 
