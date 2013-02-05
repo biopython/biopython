@@ -96,10 +96,10 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     a subsequent release of Biopython. Such code should NOT be used for
     production/stable code. It should only be used if:
 
-    * You are running the latest release of Biopython, or ideally the
-      latest code from our repository.
-    * You are subscribed to the biopython-dev mailing list to provide
-      feedback on this code, and to be alterted to changes to it.
+     - You are running the latest release of Biopython, or ideally the
+       latest code from our repository.
+     - You are subscribed to the biopython-dev mailing list to provide
+       feedback on this code, and to be alterted to changes to it.
 
     If all goes well, experimental code would be promoted to stable in
     a subsequence release, and this warning removed from it.
