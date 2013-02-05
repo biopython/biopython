@@ -10,7 +10,7 @@ The latest news is at the top of this file.
 
 ===================================================================
 
-(In progress, not released yet) Biopython 1.61
+5 February 2013: Biopython 1.61
 
 GenomeDiagram has three new sigils (shapes to illustrate features). OCTO shows
 an octagonal shape, like the existing BOX sigil but with the corners cut off.
