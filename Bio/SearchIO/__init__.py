@@ -105,52 +105,55 @@ conventions / standards for SearchIO that extend beyond the common object model.
 These conventions apply to all files parsed by SearchIO, regardless of their
 individual formats.
 
-    * Python-style sequence coordinates.
+Python-style sequence coordinates
+---------------------------------
 
-      When storing sequence coordinates (start and end values), SearchIO uses
-      the Python-style slice convention: zero-based and half-open intervals. For
-      example, if in a BLAST XML output file the start and end coordinates of an
-      HSP are 10 and 28, they would become 9 and 28 in SearchIO. The start
-      coordinate becomes 9 because Python indices start from zero, while the end
-      coordinate remains 28 as Python slices omit the last item in an interval.
+When storing sequence coordinates (start and end values), SearchIO uses
+the Python-style slice convention: zero-based and half-open intervals. For
+example, if in a BLAST XML output file the start and end coordinates of an
+HSP are 10 and 28, they would become 9 and 28 in SearchIO. The start
+coordinate becomes 9 because Python indices start from zero, while the end
+coordinate remains 28 as Python slices omit the last item in an interval.
 
-      Beside giving you the benefits of standardization, this convention also
-      makes the coordinates usable for slicing sequences. For example, given a
-      full query sequence and the start and end coordinates of an HSP, one can
-      use the coordinates to extract part of the query sequence that results in
-      the database hit.
+Beside giving you the benefits of standardization, this convention also
+makes the coordinates usable for slicing sequences. For example, given a
+full query sequence and the start and end coordinates of an HSP, one can
+use the coordinates to extract part of the query sequence that results in
+the database hit.
 
-      When these objects are written to an output file using
-      SearchIO.write(...), the coordinate values are restored to their
-      respective format's convention. Using the example above, if the HSP would
-      be written to an XML file, the start and end coordinates would become 10
-      and 28 again.
+When these objects are written to an output file using
+SearchIO.write(...), the coordinate values are restored to their
+respective format's convention. Using the example above, if the HSP would
+be written to an XML file, the start and end coordinates would become 10
+and 28 again.
 
-    * Sequence coordinates' order.
+Sequence coordinate order
+-------------------------
 
-      Some search output format reverses the start and end coordinate sequences
-      according to the sequence's strand. For example, in BLAST plain text
-      format if the matching strand lies in the minus orientation, then the
-      start coordinate will always be bigger than the end coordinate.
+Some search output format reverses the start and end coordinate sequences
+according to the sequence's strand. For example, in BLAST plain text
+format if the matching strand lies in the minus orientation, then the
+start coordinate will always be bigger than the end coordinate.
 
-      In SearchIO, start coordinates are always smaller than the end
-      coordinates, regardless of their originating strand. This ensures
-      consistency when using the coordinates to slice full sequences.
+In SearchIO, start coordinates are always smaller than the end
+coordinates, regardless of their originating strand. This ensures
+consistency when using the coordinates to slice full sequences.
 
-      Note that this coordinate order convention is only enforced in the
-      HSPFragment level. If an HSP object has several HSPFragment objects, each
-      individual fragment will conform to this convention. But the order of the
-      fragments within the HSP object follows what the search output file uses.
+Note that this coordinate order convention is only enforced in the
+HSPFragment level. If an HSP object has several HSPFragment objects, each
+individual fragment will conform to this convention. But the order of the
+fragments within the HSP object follows what the search output file uses.
 
-      Similar to the coordinate style convention, the start and end coordinates'
-      order are restored to their respective formats when the objects are
-      written using Bio.SearchIO.write(...).
+Similar to the coordinate style convention, the start and end coordinates'
+order are restored to their respective formats when the objects are
+written using Bio.SearchIO.write(...).
 
-    * Frames and strand values.
+Frames and strand values
+------------------------
 
-      SearchIO only allows -1, 0, 1 and None as strand values. For frames, the
-      only allowed values are integers from -3 to 3 (inclusive) and None. Both
-      of these are standard Biopython conventions.
+SearchIO only allows -1, 0, 1 and None as strand values. For frames, the
+only allowed values are integers from -3 to 3 (inclusive) and None. Both
+of these are standard Biopython conventions.
 
 
 Supported Formats
