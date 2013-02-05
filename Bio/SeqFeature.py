@@ -498,8 +498,8 @@ class FeatureLocation(object):
     be described as running from a start position to and end position
     (optionally with a strand and reference information).  More complex
     locations made up from several non-continuous parts (e.g. a coding
-    sequence made up of several exons) are described using multiple
-    FeatureLocation objects combined as a CompoundLocation object.
+    sequence made up of several exons) are currently described using a
+    SeqFeature with sub-features.
 
     Note that the start and end location numbering follow Python's scheme,
     thus a GenBank entry of 123..150 (one based counting) becomes a location
