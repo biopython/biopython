@@ -576,21 +576,21 @@ def write(qresults, handle, format=None, **kwargs):
     handle / filename. You can supply it with a single QueryResult object or an
     iterable returning one or more QueryResult objects. In both cases, the
     function will return a tuple of four values: the number of QueryResult, Hit,
-    HSP, and HSPFragment objects it writes to the output file.
+    HSP, and HSPFragment objects it writes to the output file::
 
-    from Bio import SearchIO
-    qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
-    SearchIO.write(qresults, 'results.tab', 'blast-tab')
-    <stdout> (3, 239, 277, 277)
+        from Bio import SearchIO
+        qresults = SearchIO.parse('Blast/mirna.xml', 'blast-xml')
+        SearchIO.write(qresults, 'results.tab', 'blast-tab')
+        <stdout> (3, 239, 277, 277)
 
     The output of different formats may be adjusted using the format-specific
     keyword arguments. Here is an example that writes BLAT PSL output file with
-    a header:
+    a header::
 
-    from Bio import SearchIO
-    qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')
-    SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)
-    <stdout> (2, 13, 22, 26)
+        from Bio import SearchIO
+        qresults = SearchIO.parse('Blat/psl_34_001.psl', 'blat-psl')
+        SearchIO.write(qresults, 'results.tab', 'blat-psl', header=True)
+        <stdout> (2, 13, 22, 26)
 
     """
     # turn qresults into an iterator if it's a single QueryResult object
@@ -628,17 +628,16 @@ def convert(in_file, in_format, out_file, out_format, in_kwargs=None,
     the convert function, but only as dictionaries.
 
     Here is an example of using `convert` to convert from a BLAST+ XML file
-    into a tabular file with comments:
+    into a tabular file with comments::
 
-    from Bio import SearchIO
-    in_file = 'Blast/mirna.xml'
-    in_fmt = 'blast-xml'
-    out_file = 'results.tab'
-    out_fmt = 'blast-tab'
-    out_kwarg = {'comments': True}
-    SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)
-
-    <stdout> (3, 239, 277, 277)
+        from Bio import SearchIO
+        in_file = 'Blast/mirna.xml'
+        in_fmt = 'blast-xml'
+        out_file = 'results.tab'
+        out_fmt = 'blast-tab'
+        out_kwarg = {'comments': True}
+        SearchIO.convert(in_file, in_fmt, out_file, out_fmt, out_kwargs=out_kwarg)
+        <stdout> (3, 239, 277, 277)
 
     Given that different search output file provide different statistics and
     different level of details, the convert function is limited only to
