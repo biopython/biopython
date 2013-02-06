@@ -29,6 +29,7 @@ DEFAULT_NAMESPACE = NAMESPACES['nex']
 VERSION = '0.9'
 SCHEMA = 'http://www.nexml.org/2009/nexml/xsd/nexml.xsd'
 
+
 for prefix, uri in NAMESPACES.items():
     ET.register_namespace(prefix, uri)
     
@@ -115,7 +116,17 @@ class Parser(object):
                     if 'length' in edge.attrib: node_dict[tar]['branch_length'] = float(edge.attrib['length'])
                     if 'property' in edge.attrib and edge.attrib['property'] == 'cdao:has_Support_Value':
                         node_dict[tar]['confidence'] = float(edge.attrib['content'])
-
+                        
+                    for child in edge._children:
+                        if child.tag == qUri('nex:meta'):
+                            if 'property' in child.attrib: prop = child.attrib['property']
+                            else: prop = 'meta'
+                            
+                            if prop == 'cdao:has_Support_Value':
+                                node_dict[tar]['confidence'] = float(child.text)
+                            else:
+                                node_dict[tar][prop] = child.text
+                    
                 if root is None:
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
