@@ -80,6 +80,15 @@ class Parser(object):
         handle = StringIO(treetext)
         return cls(handle)
 
+    def add_annotation(self, node_dict, meta_node):
+        if 'property' in meta_node.attrib: prop = meta_node.attrib['property']
+        else: prop = 'meta'
+        
+        if prop == 'cdao:has_Support_Value':
+            node_dict['confidence'] = float(meta_node.text)
+        else:
+            node_dict[prop] = meta_node.text
+
     def parse(self, values_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
 
@@ -104,6 +113,10 @@ class Parser(object):
                     if 'otu' in node.attrib and node.attrib['otu']: this_node['name'] = node.attrib['otu']
                     if 'root' in node.attrib and node.attrib['root'] == 'true': root = node.id
                     
+                    for child in node._children:
+                        if child.tag == qUri('nex:meta'):
+                            self.add_annotation(node_dict[node.id], child)
+                    
                 srcs = set()
                 tars = set()
                 for edge in edges:
@@ -119,13 +132,7 @@ class Parser(object):
                         
                     for child in edge._children:
                         if child.tag == qUri('nex:meta'):
-                            if 'property' in child.attrib: prop = child.attrib['property']
-                            else: prop = 'meta'
-                            
-                            if prop == 'cdao:has_Support_Value':
-                                node_dict[tar]['confidence'] = float(child.text)
-                            else:
-                                node_dict[tar][prop] = child.text
+                            self.add_annotation(node_dict[tar], child)
                     
                 if root is None:
                     # if no root specified, start the recursive tree creation function
