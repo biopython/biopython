@@ -112,8 +112,10 @@ class Parser(object):
                     if not src in node_children: node_children[src] = set()
                     
                     node_children[src].add(tar)
-                    if 'length' in edge.attrib: node_dict[tar]['branch_length'] = edge.attrib['length']
-                    
+                    if 'length' in edge.attrib: node_dict[tar]['branch_length'] = float(edge.attrib['length'])
+                    if 'property' in edge.attrib and edge.attrib['property'] == 'cdao:has_Support_Value':
+                        node_dict[tar]['confidence'] = float(edge.attrib['content'])
+
                 if root is None:
                     # if no root specified, start the recursive tree creation function
                     # with the first node that's not a child of any other nodes
@@ -220,8 +222,18 @@ class Writer(object):
         
         if not parent is None:
             edge_id = self.new_label('edge')
-            node = ET.SubElement(tree, 'edge', attrib={'id':edge_id, 'source':parent.node_id, 'target':node_id,
-                                                       'length':str(clade.branch_length)})
+            attrib={
+                    'id':edge_id, 'source':parent.node_id, 'target':node_id,
+                    'length':str(clade.branch_length),
+                    'typeof':'cdao:Edge',
+                    }
+            if hasattr(clade, 'confidence') and not clade.confidence is None:
+                attrib.update({
+                               'property':'cdao:has_Support_Value',
+                               'datatype':'xsd:float',
+                               'content':'%1.2f' % clade.confidence,
+                               })
+            node = ET.SubElement(tree, 'edge', attrib=attrib)
     
         if not clade.is_terminal():
             for new_clade in clade.clades:
