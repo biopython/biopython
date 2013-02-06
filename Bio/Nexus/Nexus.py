@@ -669,6 +669,9 @@ class Nexus(object):
     def _title(self,options):
         pass
 
+    def _link(self, options):
+        pass
+
     def _dimensions(self,options):
         if 'ntax' in options:
             self.ntax=eval(options['ntax'])
