@@ -1,0 +1,944 @@
+<!-- ============================================
+     ::DATATOOL:: Generated from "seqfeat.asn"
+     ::DATATOOL:: by application DATATOOL version 2.3.1
+     ::DATATOOL:: on 12/01/2011 23:05:19
+     ============================================ -->
+
+<!-- ============================================ -->
+<!-- This section is mapped from module "NCBI-Variation"
+================================================= -->
+
+<!--
+*** Variation-ref ***********************************************
+*
+*  Specification of variation features
+*
+-->
+
+<!-- Elements used by other modules:
+          Variation-ref,
+          Variation-inst,
+          VariantProperties,
+          Population-data,
+          Phenotype -->
+
+<!-- Elements referenced from other modules:
+          Int-fuzz,
+          User-object,
+          Object-id,
+          Dbtag FROM NCBI-General,
+          Seq-literal FROM NCBI-Sequence,
+          SubSource FROM NCBI-BioSource,
+          Seq-loc FROM NCBI-Seqloc,
+          Pub FROM NCBI-Pub -->
+<!-- ============================================ -->
+
+<!--
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Historically, the dbSNP definitions document data structures used in the
+ processing and annotation of variations by the dbSNP group.  The intention
+ is to provide information to clients that reflect internal information
+ produced during the mapping of SNPs
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ELEMENT VariantProperties (
+        VariantProperties_version, 
+        VariantProperties_resource-link?, 
+        VariantProperties_gene-location?, 
+        VariantProperties_effect?, 
+        VariantProperties_mapping?, 
+        VariantProperties_map-weight?, 
+        VariantProperties_frequency-based-validation?, 
+        VariantProperties_genotype?, 
+        VariantProperties_project-data?, 
+        VariantProperties_quality-check?, 
+        VariantProperties_confidence?, 
+        VariantProperties_other-validation?, 
+        VariantProperties_allele-origin?, 
+        VariantProperties_allele-state?, 
+        VariantProperties_allele-frequency?, 
+        VariantProperties_is-ancestral-allele?)>
+
+<!ELEMENT VariantProperties_version (%INTEGER;)>
+<!--
+ NOTE:
+ The format for most of these values is as an integer
+ Unless otherwise noted, these integers represent a bitwise OR (= simple
+ sum) of the possible values, and as such, these values represent the
+ specific bit flags that may be set for each of the possible attributes
+ here.
+-->
+<!ELEMENT VariantProperties_resource-link (%INTEGER;)>
+
+<!--
+    preserved	-  Clinical, Pubmed, Cited, (0x01)
+    provisional	-  Provisional Third Party Annotations (0x02)
+    has3D	-  Has 3D strcture SNP3D table (0x04)
+    submitterLinkout	-  SNP->SubSNP->Batch link_out (0x08)
+    clinical	-  Clinical if LSDB, OMIM, TPA, Diagnostic (0x10)
+    genotypeKit	-  Marker exists on high density genotyping kit
+         (0x20)
+-->
+<!ATTLIST VariantProperties_resource-link value (
+        preserved |
+        provisional |
+        has3D |
+        submitterLinkout |
+        clinical |
+        genotypeKit
+        ) #IMPLIED >
+
+
+<!ELEMENT VariantProperties_gene-location (%INTEGER;)>
+
+<!--
+    in-gene	-  Sequence intervals covered by a gene ID but not
+         having an aligned transcript (0x01)
+    near-gene-5	-  Within 2kb of the 5' end of a gene feature
+    near-gene-3	-  Within 0.5kb of the 3' end of a gene feature
+    intron	-  In Intron (0x08)
+    donor	-  In donor splice-site (0x10)
+    acceptor	-  In acceptor splice-site (0x20)
+    utr-5	-  In 5' UTR (0x40)
+    utr-3	-  In 3' UTR (0x80)
+    in-start-codon	-  the variant is observed in a start codon
+         (0x100)
+    in-stop-codon	-  the variant is observed in a stop codon
+         (0x200)
+    intergenic	-  variant located between genes (0x400)
+    conserved-noncoding	-  variant is located in a conserved
+         non-coding region (0x800)
+-->
+<!ATTLIST VariantProperties_gene-location value (
+        in-gene |
+        near-gene-5 |
+        near-gene-3 |
+        intron |
+        donor |
+        acceptor |
+        utr-5 |
+        utr-3 |
+        in-start-codon |
+        in-stop-codon |
+        intergenic |
+        conserved-noncoding
+        ) #IMPLIED >
+
+
+<!ELEMENT VariantProperties_effect (%INTEGER;)>
+
+<!--
+    no-change	-  known to cause no functional changes
+         since 0 does not combine with any other bit
+         value, 'no-change' specifically implies that
+         there are no consequences
+    synonymous	-  one allele in the set does not change the encoded
+         amino acid (0x1)
+    nonsense	-  one allele in the set changes to STOP codon
+         (TER).  (0x2)
+    missense	-  one allele in the set changes protein peptide
+         (0x4)
+    frameshift	-  one allele in the set changes all downstream
+         amino acids (0x8)
+    up-regulator	-  the variant causes increased transcription
+         (0x10)
+    down-regulator	-  the variant causes decreased transcription
+         (0x20)
+    stop-gain	-  reference codon is not stop codon, but the snp
+         variant allele changes the codon to a
+         terminating codon.
+    stop-loss	-  reverse of STOP-GAIN: reference codon is a
+         stop codon, but a snp variant allele changes
+         the codon to a non-terminating codon.
+-->
+<!ATTLIST VariantProperties_effect value (
+        no-change |
+        synonymous |
+        nonsense |
+        missense |
+        frameshift |
+        up-regulator |
+        down-regulator |
+        methylation |
+        stop-gain |
+        stop-loss
+        ) #IMPLIED >
+
+
+<!ELEMENT VariantProperties_mapping (%INTEGER;)>
+
+<!--
+    has-other-snp	-  Another SNP has the same mapped positions
+         on reference assembly (0x01)
+    has-assembly-conflict	-  Weight 1 or 2 SNPs that map to different
+         chromosomes on different assemblies (0x02)
+    is-assembly-specific	-  Only maps to 1 assembly (0x04)
+-->
+<!ATTLIST VariantProperties_mapping value (
+        has-other-snp |
+        has-assembly-conflict |
+        is-assembly-specific
+        ) #IMPLIED >
+
+<!--
+ map-weight captures specificity of placement
+ NOTE: This is *NOT* a bitfield
+-->
+<!ELEMENT VariantProperties_map-weight (%INTEGER;)>
+<!ATTLIST VariantProperties_map-weight value (
+        is-uniquely-placed |
+        placed-twice-on-same-chrom |
+        placed-twice-on-diff-chrom |
+        many-placements
+        ) #IMPLIED >
+
+
+<!ELEMENT VariantProperties_frequency-based-validation (%INTEGER;)>
+
+<!--
+    is-mutation	-  low frequency variation that is cited in
+         journal or other reputable sources (0x01)
+    above-5pct-all	-  >5% minor allele freq in each and all
+         populations (0x02)
+    above-5pct-1plus	-  >5% minor allele freq in 1+ populations (0x04)
+    validated	-  Bit is set if the variant has a minor allele
+         observed in two or more separate chromosomes
+    above-1pct-all	-  >1% minor allele freq in each and all
+         populations (0x10)
+    above-1pct-1plus	-  >1% minor allele freq in 1+ populations (0x20)
+-->
+<!ATTLIST VariantProperties_frequency-based-validation value (
+        is-mutation |
+        above-5pct-all |
+        above-5pct-1plus |
+        validated |
+        above-1pct-all |
+        above-1pct-1plus
+        ) #IMPLIED >
+
+
+<!ELEMENT VariantProperties_genotype (%INTEGER;)>
+
+<!--
+    in-haplotype-set	-  Exists in a haplotype tagging set (0x01)
+    has-genotypes	-  SNP has individual genotype (0x02)
+-->
+<!ATTLIST VariantProperties_genotype value (
+        in-haplotype-set |
+        has-genotypes
+        ) #IMPLIED >
+
+
+<!--
+ project IDs are IDs from BioProjects
+ in order to report information about project relationships, we
+ require projects to be registered
+ This field in many ways duplicates dbxrefs; however, the
+ intention of this field is to more adequately reflect
+ ownership and data source
+
+ 11/9/2010: DO NOT USE
+ This field was changed in the spec in a breaking way; using it will
+ break clients.  We are officially suppressing / abandoning this field.
+ Clients who need to use this should instead place the data in
+ Seq-feat.dbxref, using the db name 'BioProject'
+-->
+<!ELEMENT VariantProperties_project-data (VariantProperties_project-data_E*)>
+
+
+<!ELEMENT VariantProperties_project-data_E (%INTEGER;)>
+
+<!ELEMENT VariantProperties_quality-check (%INTEGER;)>
+
+<!--
+    contig-allele-missing	-  Reference sequence allele at the mapped
+         position is not present in the SNP
+         allele list, adjusted for orientation
+         (0x01)
+    withdrawn-by-submitter	-  One member SS is withdrawn by submitter
+         (0x02)
+    non-overlapping-alleles	-  RS set has 2+ alleles from different
+         submissions and these sets share no
+         alleles in common (0x04)
+    strain-specific	-  Straing specific fixed difference (0x08)
+    genotype-conflict	-  Has Genotype Conflict (0x10)
+-->
+<!ATTLIST VariantProperties_quality-check value (
+        contig-allele-missing |
+        withdrawn-by-submitter |
+        non-overlapping-alleles |
+        strain-specific |
+        genotype-conflict
+        ) #IMPLIED >
+
+
+<!ELEMENT VariantProperties_confidence (%INTEGER;)>
+<!ATTLIST VariantProperties_confidence value (
+        unknown |
+        likely-artifact |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ has this variant been validated?
+ While a boolean flag offers no subtle distinctions of validation
+ methods, occasionally it is only known as a single boolean value
+ NOTE: this flag is redundant and should be omitted if more comprehensive
+ validation information is present
+-->
+<!ELEMENT VariantProperties_other-validation EMPTY>
+<!ATTLIST VariantProperties_other-validation value ( true | false ) #REQUIRED >
+
+<!--
+ origin of this allele, if known
+ note that these are powers-of-two, and represent bits; thus, we can
+ represent more than one state simultaneously through a bitwise OR
+-->
+<!ELEMENT VariantProperties_allele-origin (%INTEGER;)>
+
+<!--
+    other	-  stopper - 2^31
+-->
+<!ATTLIST VariantProperties_allele-origin value (
+        unknown |
+        germline |
+        somatic |
+        inherited |
+        paternal |
+        maternal |
+        de-novo |
+        biparental |
+        uniparental |
+        not-tested |
+        tested-inconclusive |
+        not-reported |
+        other
+        ) #IMPLIED >
+
+<!--
+ observed allele state, if known
+ NOTE: THIS IS NOT A BITFIELD!
+-->
+<!ELEMENT VariantProperties_allele-state (%INTEGER;)>
+<!ATTLIST VariantProperties_allele-state value (
+        unknown |
+        homozygous |
+        heterozygous |
+        hemizygous |
+        nullizygous |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ NOTE:
+ 'allele-frequency' here refers to the minor allele frequency of the
+ default population
+-->
+<!ELEMENT VariantProperties_allele-frequency (%REAL;)>
+
+<!-- is this variant the ancestral allele? -->
+<!ELEMENT VariantProperties_is-ancestral-allele EMPTY>
+<!ATTLIST VariantProperties_is-ancestral-allele value ( true | false ) #REQUIRED >
+
+
+
+<!ELEMENT Phenotype (
+        Phenotype_source?, 
+        Phenotype_term?, 
+        Phenotype_xref?, 
+        Phenotype_clinical-significance?)>
+
+<!ELEMENT Phenotype_source (#PCDATA)>
+
+<!ELEMENT Phenotype_term (#PCDATA)>
+
+<!ELEMENT Phenotype_xref (Dbtag*)>
+<!-- does this variant have known clinical significance? -->
+<!ELEMENT Phenotype_clinical-significance (%INTEGER;)>
+<!ATTLIST Phenotype_clinical-significance value (
+        unknown |
+        untested |
+        non-pathogenic |
+        probable-non-pathogenic |
+        probable-pathogenic |
+        pathogenic |
+        drug-response |
+        histocompatibility |
+        other
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Population-data (
+        Population-data_population, 
+        Population-data_genotype-frequency?, 
+        Population-data_chromosomes-tested?, 
+        Population-data_sample-ids?, 
+        Population-data_allele-frequency?, 
+        Population-data_flags?)>
+
+<!-- assayed population (e.g. HAPMAP-CEU) -->
+<!ELEMENT Population-data_population (#PCDATA)>
+
+<!ELEMENT Population-data_genotype-frequency (%REAL;)>
+
+<!ELEMENT Population-data_chromosomes-tested (%INTEGER;)>
+
+<!ELEMENT Population-data_sample-ids (Object-id*)>
+
+<!ELEMENT Population-data_allele-frequency (%REAL;)>
+<!--
+ This field is an explicit bit-field
+ Valid values should be a bitwise combination (= simple sum)
+ of any of the values below
+-->
+<!ELEMENT Population-data_flags (%INTEGER;)>
+<!ATTLIST Population-data_flags value (
+        is-default-population |
+        is-minor-allele |
+        is-rare-allele
+        ) #IMPLIED >
+
+
+
+<!ELEMENT Ext-loc (
+        Ext-loc_id, 
+        Ext-loc_location)>
+
+<!ELEMENT Ext-loc_id (Object-id)>
+
+<!ELEMENT Ext-loc_location (Seq-loc)>
+
+
+<!ELEMENT Variation-ref (
+        Variation-ref_id?, 
+        Variation-ref_parent-id?, 
+        Variation-ref_sample-id?, 
+        Variation-ref_other-ids?, 
+        Variation-ref_name?, 
+        Variation-ref_synonyms?, 
+        Variation-ref_description?, 
+        Variation-ref_phenotype?, 
+        Variation-ref_method?, 
+        Variation-ref_population-data?, 
+        Variation-ref_variant-prop?, 
+        Variation-ref_validated?, 
+        Variation-ref_clinical-test?, 
+        Variation-ref_allele-origin?, 
+        Variation-ref_allele-state?, 
+        Variation-ref_allele-frequency?, 
+        Variation-ref_is-ancestral-allele?, 
+        Variation-ref_pub?, 
+        Variation-ref_data, 
+        Variation-ref_consequence?, 
+        Variation-ref_location?, 
+        Variation-ref_ext-locs?, 
+        Variation-ref_ext?, 
+        Variation-ref_somatic-origin?)>
+
+<!--
+ ids (i.e., SNP rsid / ssid, dbVar nsv/nssv)
+ expected values include 'dbSNP|rs12334', 'dbSNP|ss12345', 'dbVar|nsv1'
+
+ we relate three kinds of IDs here:
+  - our current object's id
+  - the id of this object's parent, if it exists
+  - the sample ID that this item originates from
+-->
+<!ELEMENT Variation-ref_id (Dbtag)>
+
+<!ELEMENT Variation-ref_parent-id (Dbtag)>
+
+<!ELEMENT Variation-ref_sample-id (Object-id)>
+
+<!ELEMENT Variation-ref_other-ids (Dbtag*)>
+
+<!--
+ names and synonyms
+ some variants have well-known canonical names and possible accepted
+ synonyms
+-->
+<!ELEMENT Variation-ref_name (#PCDATA)>
+
+<!ELEMENT Variation-ref_synonyms (Variation-ref_synonyms_E*)>
+
+
+<!ELEMENT Variation-ref_synonyms_E (#PCDATA)>
+
+<!-- tag for comment and descriptions -->
+<!ELEMENT Variation-ref_description (#PCDATA)>
+
+<!-- phenotype -->
+<!ELEMENT Variation-ref_phenotype (Phenotype*)>
+<!-- sequencing / acuisition method -->
+<!ELEMENT Variation-ref_method (Variation-ref_method_E*)>
+
+
+<!ELEMENT Variation-ref_method_E (%INTEGER;)>
+<!ATTLIST Variation-ref_method_E value (
+        unknown |
+        bac-acgh |
+        computational |
+        curated |
+        digital-array |
+        expression-array |
+        fish |
+        flanking-sequence |
+        maph |
+        mcd-analysis |
+        mlpa |
+        oea-assembly |
+        oligo-acgh |
+        paired-end |
+        pcr |
+        qpcr |
+        read-depth |
+        roma |
+        rt-pcr |
+        sage |
+        sequence-alignment |
+        sequencing |
+        snp-array |
+        snp-genoytyping |
+        southern |
+        western |
+        optical-mapping |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ Note about SNP representation and pretinent fields: allele-frequency,
+ population, quality-codes:
+ The case of multiple alleles for a SNP would be described by
+ parent-feature of type Variation-set.diff-alleles, where the child
+ features of type Variation-inst, all at the same location, would
+ describe individual alleles.
+ population data
+ DEPRECATED - do not use
+-->
+<!ELEMENT Variation-ref_population-data (Population-data*)>
+
+<!-- variant properties bit fields -->
+<!ELEMENT Variation-ref_variant-prop (VariantProperties)>
+
+<!--
+ has this variant been validated?
+ DEPRECATED: new field = VariantProperties.other-validation
+-->
+<!ELEMENT Variation-ref_validated EMPTY>
+<!ATTLIST Variation-ref_validated value ( true | false ) #REQUIRED >
+
+
+<!--
+ link-outs to GeneTests database
+ DEPRECATED - do not use
+-->
+<!ELEMENT Variation-ref_clinical-test (Dbtag*)>
+<!--
+ origin of this allele, if known
+ note that these are powers-of-two, and represent bits; thus, we can
+ represent more than one state simultaneously through a bitwise OR
+ DEPRECATED: new field = VariantProperties.allele-origin
+-->
+<!ELEMENT Variation-ref_allele-origin (%INTEGER;)>
+
+<!--
+    other	-  stopper - 2^31
+-->
+<!ATTLIST Variation-ref_allele-origin value (
+        unknown |
+        germline |
+        somatic |
+        inherited |
+        paternal |
+        maternal |
+        de-novo |
+        biparental |
+        uniparental |
+        not-tested |
+        tested-inconclusive |
+        other
+        ) #IMPLIED >
+
+<!--
+ observed allele state, if known
+ DEPRECATED: new field = VariantProperties.allele-state
+-->
+<!ELEMENT Variation-ref_allele-state (%INTEGER;)>
+<!ATTLIST Variation-ref_allele-state value (
+        unknown |
+        homozygous |
+        heterozygous |
+        hemizygous |
+        nullizygous |
+        other
+        ) #IMPLIED >
+
+
+<!--
+ NOTE:
+ 'allele-frequency' here refers to the minor allele frequency of the
+ default population
+ DEPRECATED: new field = VariantProperties.allele-frequency
+-->
+<!ELEMENT Variation-ref_allele-frequency (%REAL;)>
+
+<!--
+ is this variant the ancestral allele?
+ DEPRECATED: new field = VariantProperties.is-ancestral-allele
+-->
+<!ELEMENT Variation-ref_is-ancestral-allele EMPTY>
+<!ATTLIST Variation-ref_is-ancestral-allele value ( true | false ) #REQUIRED >
+
+
+<!--
+ publication support.
+ Note: made this pub instead of pub-equiv, since
+ Pub can be pub-equiv and pub-equiv is a set of pubs, but it looks like
+ Pub is more often used as top-level container
+ DEPRECATED - do not use; use Seq-feat.dbxref instead
+-->
+<!ELEMENT Variation-ref_pub (Pub)>
+
+<!ELEMENT Variation-ref_data (
+        Variation-ref_data_unknown | 
+        Variation-ref_data_note | 
+        Variation-ref_data_uniparental-disomy | 
+        Variation-ref_data_instance | 
+        Variation-ref_data_set | 
+        Variation-ref_data_complex)>
+
+<!ELEMENT Variation-ref_data_unknown EMPTY>
+
+<!--free-form -->
+<!ELEMENT Variation-ref_data_note (#PCDATA)>
+
+<!ELEMENT Variation-ref_data_uniparental-disomy EMPTY>
+
+<!-- actual sequence-edit at feat.location -->
+<!ELEMENT Variation-ref_data_instance (Variation-inst)>
+<!--
+ Set of related Variations.
+ Location of the set equals to the union of member locations
+-->
+<!ELEMENT Variation-ref_data_set (
+        Variation-ref_data_set_type, 
+        Variation-ref_data_set_variations, 
+        Variation-ref_data_set_name?)>
+
+<!ELEMENT Variation-ref_data_set_type (%INTEGER;)>
+
+<!--
+    compound	-  complex change at the same location on the
+         same molecule
+    products	-  different products arising from the same
+         variation in a precursor, e.g. r.[13g>a,
+         13_88del]
+    haplotype	-  changes on the same allele, e.g
+         r.[13g>a;15u>c]
+    genotype	-  changes on different alleles in the same
+         genotype, e.g. g.[476C>T]+[476C>T]
+    mosaic	-  different genotypes in the same individual
+    individual	-  same organism; allele relationship unknown,
+         e.g. g.[476C>T(+)183G>C]
+    population	-  population
+    alleles	-  set represents a set of observed alleles
+    package	-  set represents a package of observations at
+         a given location, generally containing
+         asserted + reference
+-->
+<!ATTLIST Variation-ref_data_set_type value (
+        unknown |
+        compound |
+        products |
+        haplotype |
+        genotype |
+        mosaic |
+        individual |
+        population |
+        alleles |
+        package |
+        other
+        ) #IMPLIED >
+
+
+<!ELEMENT Variation-ref_data_set_variations (Variation-ref*)>
+
+<!ELEMENT Variation-ref_data_set_name (#PCDATA)>
+
+<!--
+ variant is a complex and undescribed change at the location
+ This type of variant is known to occur in dbVar submissions
+-->
+<!ELEMENT Variation-ref_data_complex EMPTY>
+
+<!ELEMENT Variation-ref_consequence (Variation-ref_consequence_E*)>
+
+
+<!ELEMENT Variation-ref_consequence_E (
+        Variation-ref_consequence_E_unknown | 
+        Variation-ref_consequence_E_splicing | 
+        Variation-ref_consequence_E_note | 
+        Variation-ref_consequence_E_variation | 
+        Variation-ref_consequence_E_frameshift | 
+        Variation-ref_consequence_E_loss-of-heterozygosity)>
+
+<!ELEMENT Variation-ref_consequence_E_unknown EMPTY>
+
+<!--some effect on splicing -->
+<!ELEMENT Variation-ref_consequence_E_splicing EMPTY>
+
+<!--freeform -->
+<!ELEMENT Variation-ref_consequence_E_note (#PCDATA)>
+
+<!--
+ Describe resulting variation in the product, e.g. missense,
+ nonsense, silent, neutral, etc in a protein, that arises from
+ THIS variation.
+-->
+<!ELEMENT Variation-ref_consequence_E_variation (Variation-ref)>
+<!-- see http://www.hgvs.org/mutnomen/recs-prot.html -->
+<!ELEMENT Variation-ref_consequence_E_frameshift (
+        Variation-ref_consequence_E_frameshift_phase?, 
+        Variation-ref_consequence_E_frameshift_x-length?)>
+
+<!ELEMENT Variation-ref_consequence_E_frameshift_phase (%INTEGER;)>
+
+<!ELEMENT Variation-ref_consequence_E_frameshift_x-length (%INTEGER;)>
+
+<!ELEMENT Variation-ref_consequence_E_loss-of-heterozygosity (
+        Variation-ref_consequence_E_loss-of-heterozygosity_reference?, 
+        Variation-ref_consequence_E_loss-of-heterozygosity_test?)>
+
+<!--
+ In germline comparison, it will be reference genome assembly
+ (default) or reference/normal population. In somatic mutation,
+ it will be a name of the normal tissue.
+-->
+<!ELEMENT Variation-ref_consequence_E_loss-of-heterozygosity_reference (#PCDATA)>
+
+<!-- Name of the testing subject type or the testing tissue. -->
+<!ELEMENT Variation-ref_consequence_E_loss-of-heterozygosity_test (#PCDATA)>
+
+<!--
+ Observed location, if different from the parent set or feature.location.
+ DEPRECATED - do not use
+-->
+<!ELEMENT Variation-ref_location (Seq-loc)>
+
+<!--
+ reference other locs, e.g. mapped source
+ DEPRECATED - do not use
+-->
+<!ELEMENT Variation-ref_ext-locs (Ext-loc*)>
+
+<!-- DEPRECATED - do not use; use Seq-feat.exts instead -->
+<!ELEMENT Variation-ref_ext (User-object)>
+
+<!ELEMENT Variation-ref_somatic-origin (Variation-ref_somatic-origin_E*)>
+
+
+<!ELEMENT Variation-ref_somatic-origin_E (
+        Variation-ref_somatic-origin_E_source?, 
+        Variation-ref_somatic-origin_E_condition?)>
+
+<!-- description of the somatic origin itself -->
+<!ELEMENT Variation-ref_somatic-origin_E_source (SubSource)>
+<!-- condition related to this origin's type -->
+<!ELEMENT Variation-ref_somatic-origin_E_condition (
+        Variation-ref_somatic-origin_E_condition_description?, 
+        Variation-ref_somatic-origin_E_condition_object-id?)>
+
+<!ELEMENT Variation-ref_somatic-origin_E_condition_description (#PCDATA)>
+
+<!-- reference to BioTerm / other descriptive database -->
+<!ELEMENT Variation-ref_somatic-origin_E_condition_object-id (Dbtag*)>
+
+
+<!ELEMENT Delta-item (
+        Delta-item_seq?, 
+        Delta-item_multiplier?, 
+        Delta-item_multiplier-fuzz?, 
+        Delta-item_action?)>
+
+<!ELEMENT Delta-item_seq (
+        Delta-item_seq_literal | 
+        Delta-item_seq_loc | 
+        Delta-item_seq_this)>
+
+<!ELEMENT Delta-item_seq_literal (Seq-literal)>
+
+<!ELEMENT Delta-item_seq_loc (Seq-loc)>
+
+<!--same location as variation-ref itself -->
+<!ELEMENT Delta-item_seq_this EMPTY>
+
+<!--
+ Multiplier allows representing a tandem, e.g.  ATATAT as AT*3
+ This allows describing CNV/SSR where delta=self  with a
+ multiplier which specifies the count of the repeat unit.
+assumed 1 if not specified.
+-->
+<!ELEMENT Delta-item_multiplier (%INTEGER;)>
+
+<!ELEMENT Delta-item_multiplier-fuzz (Int-fuzz)>
+
+<!ELEMENT Delta-item_action (%INTEGER;)>
+
+<!--
+    morph	-  replace len(seq) positions starting with location.start with seq
+    offset	-  go downstream by distance specified by multiplier (upstream if < 0),
+         in genomic context.
+    del-at	-  excise sequence at location
+         if multiplier is specified, delete len(location)*multiplier
+         positions downstream
+    ins-before	-  insert seq before the location.start
+-->
+<!ATTLIST Delta-item_action value (
+        morph |
+        offset |
+        del-at |
+        ins-before
+        ) #IMPLIED >
+
+
+<!-- Variation instance -->
+<!ELEMENT Variation-inst (
+        Variation-inst_type, 
+        Variation-inst_delta, 
+        Variation-inst_observation?)>
+
+<!ELEMENT Variation-inst_type (%INTEGER;)>
+
+<!--
+    unknown	-  delta=[]
+    identity	-  delta=[]
+    inv	-  delta=[del, ins.seq=
+         RevComp(variation-location)]
+    snv	-  delta=[morph of length 1]
+         NOTE: this is snV not snP; the latter
+         requires frequency-based validation to be
+         established in VariantProperties
+         the strict definition of SNP is an SNV with
+         an established population frequency of at
+         least 1% in at least 1 popuplation
+    mnp	-  delta=[morph of length >1]
+    delins	-  delta=[del, ins]
+    del	-  delta=[del]
+    ins	-  delta=[ins]
+    microsatellite	-  delta=[del, ins.seq= repeat-unit with fuzzy
+         multiplier]
+         variation-location is the microsat expansion
+         on the sequence
+    transposon	-  delta=[del, ins.seq= known donor or 'this']
+         variation-location is equiv of transposon
+         locs.
+    cnv	-  delta=[del, ins= 'this' with fuzzy
+         multiplier]
+    direct-copy	-  delta=[ins.seq= upstream location on the
+         same strand]
+    rev-direct-copy	-  delta=[ins.seq= downstream location on the
+         same strand]
+    inverted-copy	-  delta=[ins.seq= upstream location on the
+         opposite strand]
+    everted-copy	-  delta=[ins.seq= downstream location on the
+         opposite strand]
+    translocation	-  delta=like delins
+    prot-missense	-  delta=[morph of length 1]
+    prot-nonsense	-  delta=[del]; variation-location is the tail
+         of the protein being truncated
+    prot-neutral	-  delta=[morph of length 1]
+    prot-silent	-  delta=[morph of length 1, same AA as at
+         variation-location]
+    prot-other	-  delta=any
+    other	-  delta=any
+-->
+<!ATTLIST Variation-inst_type value (
+        unknown |
+        identity |
+        inv |
+        snv |
+        mnp |
+        delins |
+        del |
+        ins |
+        microsatellite |
+        transposon |
+        cnv |
+        direct-copy |
+        rev-direct-copy |
+        inverted-copy |
+        everted-copy |
+        translocation |
+        prot-missense |
+        prot-nonsense |
+        prot-neutral |
+        prot-silent |
+        prot-other |
+        other
+        ) #IMPLIED >
+
+
+<!-- Sequence that replaces the location, in biological order. -->
+<!ELEMENT Variation-inst_delta (Delta-item*)>
+<!--
+ 'observation' is used to label items in a Variation-ref package
+ This field is explicitly a bit-field, so the bitwise OR (= sum) of any
+ of the values may be observed.
+-->
+<!ELEMENT Variation-inst_observation (%INTEGER;)>
+
+<!--
+    asserted	-  inst represents the asserted base at a
+         position
+    reference	-  inst represents the reference base at the
+         position
+    variant	-  inst represent the observed variant at a
+         given position
+-->
+<!ATTLIST Variation-inst_observation value (
+        asserted |
+        reference |
+        variant
+        ) #IMPLIED >
+
+
