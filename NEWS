@@ -16,6 +16,14 @@ Nothing to mention so far.
 
 Please note that this could be our last release to support Python 2.5.
 
+Additionally there have been other minor bug fixes and more unit tests.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+Peter Cock
+Petra Kubincová (first contribution)
+
 ===================================================================
 
 5 February 2013: Biopython 1.61
