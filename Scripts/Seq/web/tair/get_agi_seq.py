@@ -1,14 +1,14 @@
-"""Demonstration use-case of the Bio.Webtools.TAIR module.
+"""Demonstration use-case of the Bio.Seq.web.tair module.
 See comments in source code for pointers on the use of this module.
 """
 
-from Bio.Webtools import TAIR
+from Bio.Seq.web import tair
 from Bio import SeqIO
 from optparse import OptionParser
 
 
 # Get the commandline options, this section is unrelated to the function of the
-# TAIR module.
+# tair module.
 parser = OptionParser()
 parser.add_option('-f', '--file', dest='filename', default=None)
 parser.add_option('-d', '--dataset', dest='dataset', default="transcript",
@@ -21,13 +21,13 @@ parser.add_option('-a', '--agis', dest='agis',
 (options, args) = parser.parse_args()
 
 
-# The TAIR module get functions require a AGIs to be given as a python list
+# The tair module get functions require a AGIs to be given as a python list
 # of strings, containing AGIs. This gets a list of strings from the CSV
 # string given.
 agis = options.agis.split(",")
 
 # Get the sequences
-seqs = TAIR.get(agis, options.dataset, "representative")
+seqs = tair.get(agis, options.dataset, "representative")
 
 if options.filename is None:
     # If a filename is not specified, print a fasta to stdout

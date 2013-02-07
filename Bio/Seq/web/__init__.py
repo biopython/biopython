@@ -1,2 +1,3 @@
-"""This module contains submodules which interface with various web interfaces
+"""This module contains submodules which interface with online sequence
+databases, returing SeqRecord objects from their queries.
 """

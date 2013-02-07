@@ -11,7 +11,7 @@ try:  # Py3 hackery, needs to be tested w/ 2to3
 except ImportError:
     import urllib.request as a_urllib
 import re
-from Bio.Webtools.multiparthandler import multiparthandler
+from Bio.Seq.web._multiparthandler import multiparthandler
 
 # Make sure test is skipped if not internet connected
 import requires_internet
