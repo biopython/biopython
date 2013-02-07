@@ -1874,11 +1874,43 @@ ExactPosition(5)
 5
 \end{verbatim}
 
-That is all of the nitty gritty about dealing with fuzzy positions in Biopython. It has been designed so that dealing with fuzziness is not that much more complicated than dealing with exact positions, and hopefully you find that true!
+That is most of the nitty gritty about dealing with fuzzy positions in Biopython.
+It has been designed so that dealing with fuzziness is not that much more
+complicated than dealing with exact positions, and hopefully you find that true!
 
-\subsection{Sequence}
+\subsubsection{Location testing}
 
-A \verb|SeqFeature| object doesn't directly contain a sequence, instead its location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(6..18)}, like this:
+You can use the Python keyword \verb|in| with a \verb|SeqFeature| or location
+object to see if the base/residue for a parent coordinate is within the
+feature/location or not.
+
+For example, suppose you have a SNP of interest and you want to know which
+features this SNP is within, and lets suppose this SNP is at index 4350
+(Python counting!). Here is a simple brute force solution where we just
+check all the features one by one in a loop:
+
+%doctest ../Tests/GenBank
+\begin{verbatim}
+>>> from Bio import SeqIO
+>>> my_snp = 4350
+>>> record = SeqIO.read("NC_005816.gb", "genbank")
+>>> for feature in record.features:
+...     if my_snp in feature:
+...         print feature.type, feature.qualifiers.get('db_xref')
+...
+source ['taxon:229193']
+gene ['GeneID:2767712']
+CDS ['GI:45478716', 'GeneID:2767712']
+\end{verbatim}
+
+Note that gene and CDS features from GenBank or EMBL files defined with joins
+are the union of the exons -- they do not cover any introns.
+
+%TODO - Add join example
+
+\subsection{Sequence described by a feature or location}
+
+A \verb|SeqFeature| or location object doesn't directly contain a sequence, instead the location (see Section~\ref{sec:locations}) describes how to get this from the parent sequence. For example consider a (short) gene sequence with location 5:18 on the reverse strand, which in GenBank/EMBL notation using 1-based counting would be \texttt{complement(6..18)}, like this:
 
 %doctest
 \begin{verbatim}
@@ -1907,7 +1939,8 @@ This is a simple example so this isn't too bad -- however once you have to deal 
 AGCCTTTGCCGTC
 \end{verbatim}
 
-The \verb|extract| method was added in Biopython 1.53, and in Biopython 1.56 the \verb|SeqFeature| was further extended to give its length as that of the region of sequence it describes.
+The length of a \verb|SeqFeature| or location matches
+that of the region of sequence it describes.
 
 %cont-doctest
 \begin{verbatim}
@@ -1917,35 +1950,14 @@ AGCCTTTGCCGTC
 13
 >>> print len(example_feature)
 13
+>>> print len(example_feature.location)
+13
 \end{verbatim}
 
-\subsection{Location testing}
-
-As of Biopython 1.56, you can use the Python keyword \verb|in| with a
-\verb|SeqFeature| to see if the base/residue for a parent coordinate is
-within the feature or not.
-
-For example, suppose you have a SNP of interest and you want to know which
-features this SNP is within, and lets suppose this SNP is at index 4350
-(Python counting!). Here is a simple brute force solution where we just
-check all the features one by one in a loop:
-
-%doctest ../Tests/GenBank
-\begin{verbatim}
->>> from Bio import SeqIO
->>> my_snp = 4350
->>> record = SeqIO.read("NC_005816.gb", "genbank")
->>> for feature in record.features:
-...     if my_snp in feature:
-...         print feature.type, feature.qualifiers.get('db_xref')
-...
-source ['taxon:229193']
-gene ['GeneID:2767712']
-CDS ['GI:45478716', 'GeneID:2767712']
-\end{verbatim}
-
-Note that gene and CDS features from GenBank or EMBL files defined with joins
-are the union of the exons -- they do not cover any introns.
+For simple \verb|FeatureLocation| objects the length is just
+the difference between the start and end positions. However,
+for a \verb|CompoundLocation| the length is the sum of the
+constituent regions.
 
 \section{References}
 
