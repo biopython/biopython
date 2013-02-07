@@ -1673,49 +1673,32 @@ Sequence features are an essential part of describing a sequence. Once you get b
 The first level of dealing with sequence features is the \verb|SeqFeature| class itself. This class has a number of attributes, so first we'll list them and their general features, and then work through an example to show how this applies to a real life example, a GenBank feature table. The attributes of a SeqFeature are:
 
 \begin{description}
-  \item[location] -- The location of the \verb|SeqFeature| on the sequence that you are dealing with. The locations end-points may be fuzzy -- section~\ref{sec:locations} has a lot more description on how to deal with descriptions.
+  \item[.type] -- This is a textual description of the type of feature (for instance, this will be something like `CDS' or `gene').
 
-  \item[type] -- This is a textual description of the type of feature (for instance, this will be something like `CDS' or `gene').
+  \item[.location] -- The location of the \verb|SeqFeature| on the sequence
+  that you are dealing with, see Section~\ref{sec:locations} below. The
+  \verb|SeqFeature| includes a number of shortcut attributes for properties
+  of the location:
 
-  \item[ref] -- A reference to a different sequence. Some times features may be ``on'' a particular sequence, but may need to refer to a different sequence, and this provides the reference (normally an accession number). A good example of this is a genomic sequence that has most of a coding sequence, but one of the exons is on a different accession. In this case, the feature would need to refer to this different accession for this missing exon. You are most likely to see this in contig GenBank files.
+  \begin{description}
+    \item[.ref] -- shorthand for \verb|.location.ref| -- any (different)
+    reference sequence the location is referring to. Usually just None.
 
-  \item[ref\_db] -- This works along with \verb|ref| to provide a cross sequence reference. If there is a reference, \verb|ref_db| will be set as None if the reference is in the same database, and will be set to the name of the database otherwise.
+    \item[.ref\_db] -- shorthand for \verb|.location.ref_db| -- specifies
+    the database any identifier in \verb|.ref| refers to. Usually just None.
 
-  \item[strand] -- The strand on the sequence that the feature is located on. This may either be $1$ for the top strand, $-1$ for the bottom strand, or $0$ or \texttt{None} for both strands (or if it doesn't matter). Keep in mind that this only really makes sense for double stranded DNA, and not for proteins or RNA.
+    \item[.strand] -- shorthand for \verb|.location.strand| -- the strand on
+    the sequence that the feature is located on. For double stranded nucleotide
+    sequence this may either be $1$ for the top strand, $-1$ for the bottom
+    strand, $0$ if the strand is important but is unknown, or \texttt{None}
+    if it doesn't matter. This is None for proteins, or single stranded sequences.
+  \end{description}
 
-  \item[qualifiers] -- This is a Python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed. Note that other the value will be a list of strings (even when there is only one string). This is a reflection of the feature tables in GenBank/EMBL files.
+  \item[.qualifiers] -- This is a Python dictionary of additional information about the feature. The key is some kind of terse one-word description of what the information contained in the value is about, and the value is the actual information. For example, a common key for a qualifier might be ``evidence'' and the value might be ``computational (non-experimental).'' This is just a way to let the person who is looking at the feature know that it has not be experimentally (i.~e.~in a wet lab) confirmed. Note that other the value will be a list of strings (even when there is only one string). This is a reflection of the feature tables in GenBank/EMBL files.
  
-  \item[sub\_features] -- A very important feature of a feature is that it can have additional \verb|sub_features| underneath it. This allows nesting of features, and helps us to deal with things such as the GenBank/EMBL feature lines in a (we hope) intuitive way.
+  \item[.sub\_features] -- This used to be used to represent features with complicated locations like `joins' in GenBank/EMBL files. This has been deprecated with the introduction of the \verb|CompoundLocation| object, and should now be ignored.
   
 \end{description}
-
-To show an example of SeqFeatures in action, let's take a look at the following feature from a GenBank feature table:
-
-\begin{verbatim}
-     mRNA            complement(join(<49223..49300,49780..>50208))
-                     /gene="F28B23.12"
-\end{verbatim}
-
-To look at the easiest attributes of the \verb|SeqFeature| first, if you got a \verb|SeqFeature| object for this it would have it \verb|type| of 'mRNA', a \verb|strand| of -1 (due to the `complement'), and would have None for the \verb|ref| and \verb|ref_db| since there are no references to external databases. The \verb|qualifiers| for this SeqFeature would be a Python dictionary that looked like \verb|{'gene' : ['F28B23.12']}|.
-
-Now let's look at the more tricky part, how the `join' in the location
-line is handled. First, the location for the top level \verb|SeqFeature| (the
-one we are dealing with right now) is set as going from
-\verb|`<49223' to `>50208'| (see section~\ref{sec:locations} for
-the nitty gritty on how fuzzy locations like this are handled).
-So the location of the top level object is the entire span of the
-feature. So, how do you get at the information in the `join'?
-Well, that's where the \verb|sub_features| go in.
-
-The \verb|sub_features| attribute will have a list with two \verb|SeqFeature|
-objects in it, and these contain the information in the join. Let's
-look at \verb|top_level_feature.sub_features[0]| (the first
-\verb|sub_feature|). This object is a \verb|SeqFeature| object with a
-\verb|type| of `\verb|mRNA|,' a \verb|strand| of -1 (inherited
-from the parent \verb|SeqFeature|) and a location going from
-\verb|'<49223' to '49300'|.
-
-So, the \verb|sub_features| allow you to get at the internal information if you want it (i.~e.~if you were trying to get only the exons out of a genomic sequence), or just to deal with the broad picture (i.~e.~you just want to know that the coding sequence for a gene lies in a region). Hopefully this structuring makes it easy and intuitive to get at the sometimes complex information that can be contained in a \verb|SeqFeature|.
 
 \subsection{Locations}
 \label{sec:locations}
