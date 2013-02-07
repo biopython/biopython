@@ -69,7 +69,7 @@ if sys.version_info[:2] < (2, 5):
           "yet).  Python %d.%d detected" % sys.version_info[:2])
     sys.exit(-1)
 elif sys.version_info[:2] == (2, 5):
-    print("WARNING - Biopython is phasing out support for Python 2.5")
+    print("WARNING - Biopython is dropping support for Python 2.5 after this release")
 elif sys.version_info[0] == 3:
     print("WARNING - Biopython does not yet officially support Python 3")
     import do2to3
