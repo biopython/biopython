@@ -16,6 +16,11 @@ Python 2.5
 ==========
 Still supported, but has triggered a warning since Release 1.61.
 
+Bio.SeqFeature
+==============
+With the introduction of the CompoundLocation in Release 1.62, the SeqFeature
+attribute sub_features was deprecated.
+
 Bio.SeqIO.Interfaces
 ====================
 Unused class InterlacedSequenceIterator was deprecated in Release 1.61.
