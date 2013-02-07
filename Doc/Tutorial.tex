@@ -1725,14 +1725,22 @@ In the section on SeqFeatures above, we skipped over one of the more difficult p
 \begin{description}
   \item[position] -- This refers to a single position on a sequence,
   which may be fuzzy or not. For instance, 5, 20, \verb|<100| and
-  \verb|3^5| are all positions.
+  \verb|>200| are all positions.
 
   \item[location] -- A location is two positions that defines a region of a sequence. For instance 5..20 (i.~e.~5 to 20) is a location.
 \end{description}
 
 I just mention this because sometimes I get confused between the two.
 
-The complication in dealing with locations comes in the positions themselves. In biology many times things aren't entirely certain (as much as us wet lab biologists try to make them certain!). For instance, you might do a dinucleotide priming experiment and discover that the start of mRNA transcript starts at one of two sites. This is very useful information, but the complication comes in how to represent this as a position. To help us deal with this, we have the concept of fuzzy positions. Basically there are five types of fuzzy positions, so we have five classes do deal with them:
+The complication in dealing with locations comes in the positions
+themselves. In biology many times things aren't entirely certain
+(as much as us wet lab biologists try to make them certain!). For
+instance, you might do a dinucleotide priming experiment and discover
+that the start of mRNA transcript starts at one of two sites. This
+is very useful information, but the complication comes in how to
+represent this as a position. To help us deal with this, we have
+the concept of fuzzy positions. Basically there are several types
+of fuzzy positions, so we have five classes do deal with them:
 
 \begin{description}
   \item[ExactPosition] -- As its name suggests, this class represents a position which is specified as exact along the sequence. This is represented as just a number, and you can get the position by looking at the \verb|position| attribute of the object.
@@ -1750,18 +1758,28 @@ The complication in dealing with locations comes in the positions themselves. In
   \verb|BeforePosition|, you get the boundary number by looking
   at the \verb|position| attribute of the object.
 
-  \item[WithinPosition] -- This class models a position which occurs somewhere between two specified nucleotides. In GenBank/EMBL notation, this would be represented as `(1.5)', to represent that the position is somewhere within the range 1 to 5. To get the information in this class you have to look at two attributes. The \verb|position| attribute specifies the lower boundary of the range we are looking at, so in our example case this would be one. The \verb|extension| attribute specifies the range to the higher boundary, so in this case it would be 4. So \verb|object.position| is the lower boundary and \verb|object.position + object.extension| is the upper boundary.
+  \item[WithinPosition] -- Occasionally used for GenBank/EMBL locations,
+  this class models a position which occurs somewhere between two
+  specified nucleotides. In GenBank/EMBL notation, this would be
+  represented as `(1.5)', to represent that the position is somewhere
+  within the range 1 to 5. To get the information in this class you
+  have to look at two attributes. The \verb|position| attribute
+  specifies the lower boundary of the range we are looking at, so in
+  our example case this would be one. The \verb|extension| attribute
+  specifies the range to the higher boundary, so in this case it
+  would be 4. So \verb|object.position| is the lower boundary and
+  \verb|object.position + object.extension| is the upper boundary.
 
-  %TODO - Fix this, a between position 2^3 becomes Python style [2:2]
-  \item[BetweenPosition] -- This class deals with a position that
-  occurs between two coordinates. For instance, you might have a
-  protein binding site that occurs between two nucleotides on a
-  sequence. This is represented as \verb|`2^3'|, which indicates that
-  the real position happens between position 2 and 3. Getting
-  this information from the object is very similar to
-  \verb|WithinPosition|, the \verb|position| attribute specifies
-  the lower boundary (2, in this case) and the \verb|extension|
-  indicates the range to the higher boundary (1 in this case).
+  \item[OneOfPosition] -- Occasionally used for GenBank/EMBL locations,
+  this class deals with a position where several possible values exist,
+  for instance you could use this if the start codon was unclear and
+  there where two candidates for the start of the gene. Alternatively,
+  that might be handled explicitly as two related gene features.
+
+  \item[UnknownPosition] -- This class deals with a position of unknown
+  location. This is not used in GenBank/EMBL, but corresponds to the `?'
+  feature coordinate used in UniProt.
+
 \end{description}
 
 Now that we've got all of the types of fuzzy positions we can have taken care of, we are ready to actually specify a location on a sequence. This is handled by the \verb|FeatureLocation| class. An object of this type basically just holds the potentially fuzzy start and end positions of a feature. You can create a \verb|FeatureLocation| object by creating the positions and passing them in:
