@@ -336,6 +336,10 @@ class BgzfTests(unittest.TestCase):
         #(This is because the flush ensures two identical blocks written)
         h.flush()
         offset1 = h.tell()
+        #Note 'offset' and 'offset1' effectively the same, but not equal
+        #due to the flush - 'offet' is at the end of the first BGZF block,
+        #while 'offset1' is at the start of the second BGZF block. In terms
+        #of the decompressed data, they point to the same location!
         self.assertNotEqual(offset, offset1) #New block started
         h.write("Magic" + "Y" * 100000)
         h.flush()
@@ -353,8 +357,21 @@ class BgzfTests(unittest.TestCase):
         h.close()
 
         h = bgzf.open(temp_file, "r") #Text mode!
-        h.seek(offset1)
+
+        h.seek(offset) #i.e. End of first BGZF block
+        self.assertEqual(offset1, h.tell()) #Note *not* seek offset
+        #Now at start of second BGZF block
         self.assertEqual(h.read(5), "Magic")
+
+        h.seek(offset2)
+        self.assertEqual(offset2, h.tell())
+        self.assertEqual(h.read(5), "Magic")
+
+        #Now go back in the file,
+        h.seek(offset1)
+        self.assertEqual(offset1, h.tell())
+        self.assertEqual(h.read(5), "Magic")
+
         h.close()
 
 
