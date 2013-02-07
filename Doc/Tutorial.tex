@@ -1049,12 +1049,6 @@ CDS (you'll get an exception if not).
 The example in Section~\ref{sec:SeqIO-translate} combines the \verb|Seq| object's
 translate method with \verb|Bio.SeqIO| for sequence input/output.
 
-\emph{Note:} The \verb|Seq| object's \verb|translate| method is new in Biopython 1.49.
-For older releases you would have to use the \verb|Bio.Seq| module's \verb|translate|
-function instead, see Section~\ref{sec:seq-module-functions}. The \texttt{cds} option
-was added in Biopython 1.51, and there is no simple way to do this with older versions
-of Biopython.
-
 \section{Translation Tables}
 
 In the previous sections we talked about the \verb|Seq| object translation method (and mentioned the equivalent function in the \verb|Bio.Seq| module -- see
@@ -1293,8 +1287,8 @@ Seq('AGCCCGTGGGAAAGTCGCCGGGTAATGCACCG', IUPACUnambiguousDNA())
 You can also get a string from a \verb|MutableSeq| object just like from a \verb|Seq| object (Section~\ref{sec:seq-to-string}).
 
 \section{UnknownSeq objects}
-Biopython 1.50 introduced another basic sequence object, the \verb|UnknownSeq| object.
-This is a subclass of the basic \verb|Seq| object and its purpose is to represent a
+The \verb|UnknownSeq| object is a subclass of the basic \verb|Seq| object
+and its purpose is to represent a
 sequence where we know the length, but not the actual letters making it up.
 You could of course use a normal \verb|Seq| object in this situation, but it wastes
 rather a lot of memory to hold a string of a million ``N'' characters when you could
@@ -1498,8 +1492,7 @@ The \verb|dbxrefs| and \verb|features| attributes are just Python lists, and
 should be used to store strings and \verb|SeqFeature| objects (discussed later
 in this chapter) respectively.
 
-%TODO - Update this to show passing in the annotations etc to __init__ with a warning that
-%this requires Biopython 1.51 or later?
+%TODO - Update this to show passing in the annotations etc to __init__ ?
 
 \subsection{SeqRecord objects from FASTA files}
 
@@ -1973,8 +1966,8 @@ That's all there is too it. References are meant to be easy to deal with, and ho
 \section{The format method}
 \label{sec:SeqRecord-format}
 
-Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class which
-gives a string containing your record formatted using one of the output file formats
+The \verb|format()| method of the \verb|SeqRecord| class gives a string
+containing your record formatted using one of the output file formats
 supported by \verb|Bio.SeqIO|, such as FASTA:
 
 \begin{verbatim}
@@ -2009,8 +2002,8 @@ work via this \verb|format()| method.  See also Section~\ref{sec:Bio.SeqIO-and-S
 \section{Slicing a SeqRecord}
 \label{sec:SeqRecord-slicing}
 
-One of the new features in Biopython 1.50 was the ability to slice a \verb|SeqRecord|,
-to give you a new \verb|SeqRecord| covering just part of the sequence. What is important
+You can slice a \verb|SeqRecord|, to give you a new \verb|SeqRecord| covering just
+part of the sequence. What is important
 here is that any per-letter annotations are also sliced, and any features which fall
 completely within the new sequence are preserved (with their locations adjusted).
 
@@ -2172,8 +2165,8 @@ per-letter annotations (the read quality scores) are also sliced.
 \section{Adding SeqRecord objects}
 \label{sec:SeqRecord-addition}
 
-One of the new features in Biopython 1.53 was the ability to add \verb|SeqRecord| objects
-together, giving a new \verb|SeqRecord|. What is important here is that any common
+You can add \verb|SeqRecord| objects together, giving a new \verb|SeqRecord|.
+What is important here is that any common
 per-letter annotations are also added, all the features are preserved (with their
 locations adjusted), and any other common annotation is also kept (like the id, name
 and description).
@@ -2392,11 +2385,11 @@ The workhorse function \verb|Bio.SeqIO.parse()| is used to read in sequence data
 \item The second argument is a lower case string specifying sequence format -- we don't try and guess the file format for you!  See \url{http://biopython.org/wiki/SeqIO} for a full listing of supported formats.
 \end{enumerate}
 
-\noindent As of Biopython 1.49 there is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
+\noindent There is an optional argument \verb|alphabet| to specify the alphabet to be used.  This is useful for file formats like FASTA where otherwise \verb|Bio.SeqIO| will default to a generic alphabet.
 
 The \verb|Bio.SeqIO.parse()| function returns an {\it iterator} which gives \verb|SeqRecord| objects.  Iterators are typically used in a for loop as shown below.
 
-Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation Biopython 1.45 introduced the function \verb|Bio.SeqIO.read()| which takes the same arguments.  Provided there is one and only one record in the file, this is returned as a \verb|SeqRecord| object.  Otherwise an exception is raised.
+Sometimes you'll find yourself dealing with files which contain only a single record.  For this situation use the function \verb|Bio.SeqIO.read()| which takes the same arguments.  Provided there is one and only one record in the file, this is returned as a \verb|SeqRecord| object.  Otherwise an exception is raised.
 
 \subsection{Reading Sequence Files}
 
@@ -3033,7 +3026,7 @@ As the previous couple of examples tried to illustrate, using
 everything in memory, the size of file you can work with is limited by your
 computer's RAM. In general, this will only work on small to medium files.
 
-For large files, Biopython 1.52 introduced an alternative,
+For larger files you should consider
 \verb|Bio.SeqIO.index()|, which works a little differently. Although
 it still returns a dictionary like object, this does \emph{not} keep
 \emph{everything} in memory. Instead, it just records where each record
@@ -3122,7 +3115,7 @@ function to use in building the dictionary:
 The dictionary-like object from \verb|Bio.SeqIO.index()| gives you each
 entry as a \verb|SeqRecord| object. However, it is sometimes useful to
 be able to get the original raw data straight from the file. For this
-reason Biopython 1.54 added a \verb|get_raw()| method which takes a
+use the \verb|get_raw()| method which takes a
 single argument (the record identifier) and returns a string (extracted
 from the file without modification).
 
@@ -3384,7 +3377,7 @@ TGEGLEWGVLFGFGPGLTVETVVLHSVAT
 \end{verbatim}
 
 Suppose you wanted to know how many records the \verb|Bio.SeqIO.write()| function wrote to the handle?
-If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.   
+If your records were in a list you could just use \verb|len(my_records)|, however you can't do that when your records come from a generator/iterator.  The \verb|Bio.SeqIO.write()| function returns the number of \verb|SeqRecord| objects written to the file.   
 
 \emph{Note} - If you tell the \verb|Bio.SeqIO.write()| function to write to a file that already exists, the old file will be overwritten without any warning.
 
@@ -3437,8 +3430,7 @@ print "Converted %i records" % count
 \end{verbatim}
 
 Still, that is a little bit complicated. So, because file conversion is such a
-common task, Biopython 1.52 introduced a helper function letting you replace
-that with just:
+common task, there is a helper function letting you replace that with just:
 
 \begin{verbatim}
 from Bio import SeqIO
@@ -3546,7 +3538,7 @@ fasta_data = out_handle.getvalue()
 print fasta_data
 \end{verbatim}
 
-This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, Biopython 1.48 added a new \verb|format()| method to the \verb|SeqRecord| class (see Section~\ref{sec:SeqRecord-format}).
+This isn't entirely straightforward the first time you see it!  On the bright side, for the special case where you would like a string containing a \emph{single} record in a particular file format, use the the \verb|SeqRecord| class' \verb|format()| method (see Section~\ref{sec:SeqRecord-format}).
 
 Note that although we don't encourage it, you \emph{can} use the \verb|format()| method to write to a file, for example something like this:
 \begin{verbatim}
@@ -3602,7 +3594,7 @@ Both functions expect two mandatory arguments:
 
 \noindent There is also an optional \verb|seq_count| argument which is discussed in Section~\ref{sec:AlignIO-count-argument} below for dealing with ambiguous file formats which may contain more than one alignment.
 
-Biopython 1.49 introduced a further optional \verb|alphabet| argument allowing you to specify the expected alphabet. This can be useful as many alignment file formats do not explicitly label the sequences as RNA, DNA or protein -- which means \verb|Bio.AlignIO| will default to using a generic alphabet.
+A further optional \verb|alphabet| argument allowing you to specify the expected alphabet. This can be useful as many alignment file formats do not explicitly label the sequences as RNA, DNA or protein -- which means \verb|Bio.AlignIO| will default to using a generic alphabet.
 
 \subsection{Single Alignments}
 As an example, consider the following annotation rich protein alignment in the PFAM or Stockholm file format:
@@ -3995,7 +3987,7 @@ Iota       -CTACTACAG GTG
 
 Its more common to want to load an existing alignment, and save that, perhaps after some simple manipulation like removing certain rows or columns.
 
-Suppose you wanted to know how many alignments the \verb|Bio.AlignIO.write()| function wrote to the handle? If your alignments were in a list like the example above, you could just use \verb|len(my_alignments)|, however you can't do that when your records come from a generator/iterator.  Therefore as of Biopython 1.49, the \verb|Bio.AlignIO.write()| function returns the number of alignments written to the file.   
+Suppose you wanted to know how many alignments the \verb|Bio.AlignIO.write()| function wrote to the handle? If your alignments were in a list like the example above, you could just use \verb|len(my_alignments)|, however you can't do that when your records come from a generator/iterator.  Therefore the \verb|Bio.AlignIO.write()| function returns the number of alignments written to the file.   
 
 \emph{Note} - If you tell the \verb|Bio.AlignIO.write()| function to write to a file that already exists, the old file will be overwritten without any warning.
 
@@ -4131,7 +4123,8 @@ seq6       FAADDATSQA KAAFDSLTAQ ATEMSGYAWA LVVLVVGATV GIKLFKKFVS
 \subsection{Getting your alignment objects as formatted strings}
 \label{sec:alignment-format-method}
 The \verb|Bio.AlignIO| interface is based on handles, which means if you want to get your alignment(s) into a string in a particular file format you need to do a little bit more work (see below).  
-However, you will probably prefer to take advantage of the new \verb|format()| method added to the alignment object in Biopython 1.48.  This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
+However, you will probably prefer to take advantage of the alignment object's \verb|format()| method.
+This takes a single mandatory argument, a lower case string which is supported by \verb|Bio.AlignIO| as an output format.  For example:
 
 \begin{verbatim}
 from Bio import AlignIO
@@ -4469,8 +4462,7 @@ interpreted as a new line and a tab -- which is why we're put a letter
 ``r'' at the start for a raw string that isn't translated in this way.
 This is generally good practice when specifying a Windows style file name.
 
-The last line of the example requires Biopython 1.55 or later to run
-the command line tool via our wrapper object. Internally this uses the
+Internally this uses the
 \verb|subprocess| module which is now the recommended way to run another
 program in Python. This replaces older options like the \verb|os.system()|
 and the \verb|os.popen*| functions.
@@ -6809,13 +6801,13 @@ To paraphrase:
 \item For any series of more than 100 requests, do this at weekends or outside USA peak times.  This is up to you to obey.
 \item Use the \url{http://eutils.ncbi.nlm.nih.gov} address, not the standard NCBI Web address.  Biopython uses this web address.
 \item Make no more than three requests every seconds (relaxed from at most one request every three seconds in early 2009).  This is automatically enforced by Biopython.
-\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include {\tt email="A.N.Other@example.com"} in the argument list), or as of Biopython 1.48, you can set a global email address:
+\item Use the optional email parameter so the NCBI can contact you if there is a problem.  You can either explicitly set this as a parameter with each call to Entrez (e.g. include {\tt email="A.N.Other@example.com"} in the argument list), or you can set a global email address:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.email = "A.N.Other@example.com"
 \end{verbatim}
 {\tt Bio.Entrez} will then use this email address with each call to Entrez.  The {\tt example.com} address is a reserved domain name specifically for documentation (RFC 2606).  Please DO NOT use a random email -- it's better not to give an email at all. The email parameter will be mandatory from June 1, 2010. In case of excessive usage, NCBI will attempt to contact a user at the e-mail address provided prior to blocking access to the E-utilities.
-\item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include {\tt tool="MyLocalScript"} in the argument list), or as of Biopython 1.54, you can set a global tool name:
+\item If you are using Biopython within some larger software suite, use the tool parameter to specify this.  You can either explicitly set the tool name as a parameter with each call to Entrez (e.g. include {\tt tool="MyLocalScript"} in the argument list), or you can set a global tool name:
 \begin{verbatim}
 >>> from Bio import Entrez
 >>> Entrez.tool = "MyLocalScript"
@@ -9270,7 +9262,7 @@ Model (in this case model 1).
 
 \chapter{Bio.PopGen: Population genetics}
 
-Bio.PopGen is a new Biopython module supporting population genetics,
+Bio.PopGen is a Biopython module supporting population genetics,
 available in Biopython 1.44 onwards.
 
 The medium term objective for the module is to support widely used data
