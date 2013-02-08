@@ -61,9 +61,10 @@ class Parser(object):
         handle = StringIO(treetext)
         return cls(handle)
 
-    def parse(self, values_are_confidence=False, rooted=False):
+    def parse(self, values_are_confidence=False, comments_are_confidence=True, rooted=False):
         """Parse the text stream this object was initialized with."""
         self.values_are_confidence = values_are_confidence
+        self.comments_are_confidence = comments_are_confidence
         self.rooted = rooted
         buf = ''
         for line in self.handle:
@@ -77,26 +78,46 @@ class Parser(object):
 
     def _parse_tree(self, text):
         """Parses the text representation into an Tree object."""
-        text = text.lstrip()
-        
-        def process_clade(clade):
-            if not clade.name:
-                clade.name = None
-            if hasattr(clade, 'branch_length_string'):
-                clade.branch_length = float(clade.branch_length_string)
-                del clade.branch_length_string
-            if hasattr(clade, 'parent'):
-                parent = clade.parent
-                parent.clades.append(clade)
-                del clade.parent
-                return parent
-                
+        text = text.strip()
+
         def make_new_clade(parent=None):
             clade = Newick.Clade(name='')
             if parent: clade.parent = parent
             return clade
             
-        current_clade = make_new_clade()
+        root_clade = make_new_clade()
+        
+        def process_clade(clade):
+            if not clade.name:
+                clade.name = None
+            if hasattr(clade, 'branch_length_string'):
+                if self.values_are_confidence:
+                    clade.confidence = float(clade.branch_length_string)
+                else:
+                    clade.branch_length = float(clade.branch_length_string)
+                del clade.branch_length_string
+            if self.comments_are_confidence and hasattr(clade, 'comment') and clade.comment:
+                try:
+                    clade.confidence = int(clade.comment) / 100.
+                except ValueError, TypeError:
+                    try:
+                        clade.confidence = float(clade.comment)
+                    except ValueError, TypeError:
+                        pass
+                if hasattr(clade, 'confidence'):
+                    try:
+                        assert 0 <= clade.confidence <= 1
+                    except AssertionError:
+                        del clade.confidence
+            if hasattr(clade, 'parent'):
+                parent = clade.parent
+                parent.clades.append(clade)
+                del clade.parent
+                return parent
+            if clade is root_clade:
+                return root_clade
+                
+        current_clade = root_clade
         entering_quoted_string = False
         escaped = False
         entering_comment = False
@@ -126,6 +147,12 @@ class Parser(object):
                     entering_branch_length = False
                     
                 elif char == ',':
+                    # if the current clade is the root, then the external parentheses are missing
+                    # and a new root should be created
+                    if current_clade is root_clade:
+                        root_clade = make_new_clade()
+                        current_clade.parent = root_clade
+
                     # start a new child clade at the same level as the current clade
                     parent = process_clade(current_clade)
                     current_clade = make_new_clade(parent)
@@ -166,8 +193,9 @@ class Parser(object):
             escape = False
             
         process_clade(current_clade)
+        process_clade(root_clade)
         
-        return Newick.Tree(root=current_clade, rooted=self.rooted)
+        return Newick.Tree(root=root_clade, rooted=self.rooted)
 
 
 # ---------------------------------------------------------
