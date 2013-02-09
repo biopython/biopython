@@ -100,7 +100,7 @@ def epost(db, **keywds):
     return _open(cgi, variables, post=True)
 
 
-def efetch(db, **keywds):
+def efetch(db, **keywords):
     """Fetches Entrez results which are returned as a handle.
 
     EFetch retrieves records in the requested format from a list of one or
@@ -127,16 +127,21 @@ def efetch(db, **keywds):
     """
     cgi = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
     variables = {'db': db}
-    keywords = keywds
-    if "id" in keywds and isinstance(keywds["id"], list):
-        #Fix for NCBI change (probably part of EFetch 2,0, Feb 2012) where
-        #a list of ID strings now gives HTTP Error 500: Internal server error
-        #This was turned into ...&id=22307645&id=22303114&... which used to work
-        #while now the NCBI appear to insist on ...&id=22301129,22299544,...
-        keywords = keywds.copy()  # Don't alter input dict!
-        keywords["id"] = ",".join(keywds["id"])
     variables.update(keywords)
-    return _open(cgi, variables)
+    post = False
+    try:
+        ids = variables["id"]
+    except KeyError:
+        pass
+    else:
+        if isinstance(ids, list):
+            ids = ",".join(ids)
+            variables["id"] = ids
+        if ids.count(",") >= 200:
+            # NCBI prefers an HTTP POST instead of an HTTP GET if there are
+            # more than about 200 IDs
+            post = True
+    return _open(cgi, variables, post)
 
 
 def esearch(db, term, **keywds):
