@@ -36,7 +36,8 @@ Long obsolete file Bio/Search.py was deprecated in Release 1.61.
 
 Bio.Pathway.Rep.HashSet
 =======================
-Deprecated in Release 1.59, use Python's built in set module.
+Deprecated in Release 1.59, removed in Release 1.62. Use Python's built in
+set object.
 
 Bio.SeqFeature.WithinPosition and OneOfPosition
 ===============================================
