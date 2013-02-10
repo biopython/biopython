@@ -112,6 +112,12 @@ class Hit(_BaseSearchObject):
         `hit_description` properties.
 
         """
+        # default attribute values
+        self._id = '<unknown id>'
+        self._query_id = '<unknown id>'
+        self._description = '<unknown description>'
+        self._query_description = '<unknown description>'
+
         for attr in ('query_id', 'query_description', 'hit_id',
                 'hit_description'):
             # HACK: setting the if clause to '> 1' allows for empty hit objects.
@@ -239,11 +245,13 @@ class Hit(_BaseSearchObject):
                         "found %r instead." % (self.query_id, hsp.query_id))
 
     ## properties ##
-    description = optionalcascade('hit_description', """Hit description""")
-    query_description = optionalcascade('query_description',
+    description = optionalcascade('_description', 'hit_description',
+            """Hit description""")
+    query_description = optionalcascade('_query_description',
+            'query_description',
             """Description of the query that produced the hit""")
-    id = optionalcascade('hit_id', """Hit ID string.""")
-    query_id = optionalcascade('query_id',
+    id = optionalcascade('_id', 'hit_id', """Hit ID string.""")
+    query_id = optionalcascade('_query_id', 'query_id',
             """ID string of the query that produced the hit""")
     # returns all hsps
     hsps = allitems(doc="""HSP objects contained in the Hit""")

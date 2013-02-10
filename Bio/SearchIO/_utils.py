@@ -109,7 +109,8 @@ def fullcascade(attr, doc=''):
 
     return property(fget=getter, fset=setter, doc=doc)
 
-def optionalcascade(attr, doc=''):
+
+def optionalcascade(cont_attr, item_attr, doc=''):
     """Returns a getter property with a cascading setter.
 
     This is similar to `fullcascade`, but for SearchIO containers that have
@@ -120,21 +121,21 @@ def optionalcascade(attr, doc=''):
 
     """
     def getter(self):
-        attrset = set([getattr(item, attr) for item in self._items])
+        attrset = set([getattr(item, item_attr) for item in self._items])
         if len(attrset) != 1:
             if len(attrset) > 1:
                 raise ValueError("More than one value present in the contained"
                         " %s objects: %r" % (self._items[0].__class__.__name__,
                             list(attrset)))
             else:
-                return getattr(self, "_%s" % attr)
+                return getattr(self, cont_attr)
 
-        return getattr(self._items[0], attr)
+        return getattr(self._items[0], item_attr)
 
     def setter(self, value):
-        setattr(self, "_%s" % attr, value)
+        setattr(self, cont_attr, value)
         for item in self:
-            setattr(item, attr, value)
+            setattr(item, item_attr, value)
 
     return property(fget=getter, fset=setter, doc=doc)
 
