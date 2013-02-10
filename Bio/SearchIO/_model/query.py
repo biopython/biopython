@@ -10,7 +10,7 @@ from itertools import chain
 
 from Bio._py3k import OrderedDict
 from Bio._utils import trim_str
-from Bio.SearchIO._utils import partialcascade
+from Bio.SearchIO._utils import optionalcascade
 
 from _base import _BaseSearchObject
 from hit import Hit
@@ -385,8 +385,8 @@ class QueryResult(_BaseSearchObject):
         return
 
     ## properties ##
-    id = partialcascade('_id', 'query_id', """QueryResult ID string""")
-    description = partialcascade('_description', 'query_description',
+    id = optionalcascade('_id', 'query_id', """QueryResult ID string""")
+    description = optionalcascade('_description', 'query_description',
             """QueryResult description""")
 
     @property
