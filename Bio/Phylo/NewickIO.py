@@ -153,7 +153,7 @@ class Parser(object):
                 entering_branch_length = False
                 rp_count += 1
                 
-            elif token == ';': pass
+            elif token == ';': break
                 
             elif token.startswith(':'):
                 # branch length or confidence
@@ -171,6 +171,13 @@ class Parser(object):
             
         if not lp_count == rp_count:
             raise NewickError('Number of open/close parentheses do not match.')
+
+        # if ; token broke out of for loop, there should be no remaining tokens
+        try:
+            next_token = tokens.next()
+            raise NewickError('Text after semicolon in Newick tree: %s' % next_token.group())
+        except StopIteration:
+            pass
             
         self.process_clade(current_clade)
         self.process_clade(root_clade)
