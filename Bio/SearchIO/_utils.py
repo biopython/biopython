@@ -121,16 +121,16 @@ def optionalcascade(cont_attr, item_attr, doc=''):
 
     """
     def getter(self):
-        attrset = set([getattr(item, item_attr) for item in self._items])
+        attrset = set([getattr(item, item_attr) for item in self])
         if len(attrset) != 1:
             if len(attrset) > 1:
                 raise ValueError("More than one value present in the contained"
-                        " %s objects: %r" % (self._items[0].__class__.__name__,
+                        " %s objects: %r" % (self[0].__class__.__name__,
                             list(attrset)))
             else:
                 return getattr(self, cont_attr)
 
-        return getattr(self._items[0], item_attr)
+        return getattr(self[0], item_attr)
 
     def setter(self, value):
         setattr(self, cont_attr, value)
