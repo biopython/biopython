@@ -11,18 +11,29 @@ See: http://evolution.genetics.washington.edu/phylip/newick_doc.html
 """
 __docformat__ = "restructuredtext en"
 
+import re
 from cStringIO import StringIO
 
 from Bio.Phylo import Newick
-
-# Definitions retrieved from Bio.Nexus.Trees
-NODECOMMENT_START = '[&'
-NODECOMMENT_END = ']'
 
 
 class NewickError(Exception):
     """Exception raised when Newick object construction cannot continue."""
     pass
+    
+    
+tokens = [
+    r"\(",                          # open parens
+    r"\)",                          # close parens
+    r"[^\s\(\)\[\]\'\:\;\,]+",      # unquoted node label
+    r"\:[0-9]*\.?[0-9]+",           # edge length
+    r"\,",                          # comma
+    r"\[(\\.|[^\]])*\]",            # comment
+    r"\'(\\.|[^\'])*\'",            # quoted node label
+    r"\;",                          # semicolon
+    r"\n",                          # newline
+]
+tokenizer = re.compile('(%s)' % '|'.join(tokens))
 
 
 # ---------------------------------------------------------
@@ -78,124 +89,108 @@ class Parser(object):
 
     def _parse_tree(self, text):
         """Parses the text representation into an Tree object."""
-        text = text.strip()
-
-        def make_new_clade(parent=None):
-            clade = Newick.Clade(name='')
-            if parent: clade.parent = parent
-            return clade
             
-        root_clade = make_new_clade()
+        tokens = re.finditer(tokenizer, text.strip())
         
-        def process_clade(clade):
-            if not clade.name:
-                clade.name = None
-            if hasattr(clade, 'branch_length_string'):
-                if self.values_are_confidence:
-                    clade.confidence = float(clade.branch_length_string)
-                else:
-                    clade.branch_length = float(clade.branch_length_string)
-                del clade.branch_length_string
-            if self.comments_are_confidence and hasattr(clade, 'comment') and clade.comment:
-                try:
-                    clade.confidence = int(clade.comment) / 100.
-                except ValueError, TypeError:
-                    try:
-                        clade.confidence = float(clade.comment)
-                    except ValueError, TypeError:
-                        pass
-                if hasattr(clade, 'confidence'):
-                    try:
-                        assert 0 <= clade.confidence <= 1
-                    except AssertionError:
-                        del clade.confidence
-            if hasattr(clade, 'parent'):
-                parent = clade.parent
-                parent.clades.append(clade)
-                del clade.parent
-                return parent
-            if clade is root_clade:
-                return root_clade
-                
+        new_clade = self.new_clade
+        root_clade = new_clade()
+        
         current_clade = root_clade
-        entering_quoted_string = False
-        escaped = False
-        entering_comment = False
         entering_branch_length = False
         
-        for char in text:
-            if entering_quoted_string:
-                # add characters to clade name until closing quote is found
-                if char == "'" and not escaped:
-                    entering_quoted_string = False
-                elif char == '\\':
-                    escaped = True
-                else:
-                    current_clade.name += char
+        lp_count = 0
+        rp_count = 0
+        for match in tokens:
+            token = match.group()
+            
+            if token.startswith("'"):
+                # quoted label; add characters to clade name
+                current_clade.name = token[1:-1]
                     
-            elif entering_comment:
-                # add characters to comment until closing square bracket is found
-                if char == ']':
-                    entering_comment = False
-                else:
-                    current_clade.comment += char
+            elif token.startswith('['):
+                # comment
+                current_clade.comment = token[1:-1]
+                
+                if self.comments_are_confidence:
+                    # check to see if this comment contains a support value
+                    try:
+                        current_clade.confidence = int(current_clade.comment) / 100.
+                    except:
+                        try:
+                            current_clade.confidence = float(current_clade.comment)
+                        except: pass
+                        
+                    if hasattr(current_clade, 'confidence'):
+                        try:
+                            assert 0 <= current_clade.confidence <= 1
+                        except AssertionError:
+                            del current_clade.confidence
                     
-            else:
-                if char == '(':
-                    # start a new clade, which is a child of the current clade
-                    current_clade = make_new_clade(current_clade)
-                    entering_branch_length = False
+            elif token == '(':
+                # start a new clade, which is a child of the current clade
+                current_clade = new_clade(current_clade)
+                entering_branch_length = False
+                lp_count += 1
                     
-                elif char == ',':
-                    # if the current clade is the root, then the external parentheses are missing
-                    # and a new root should be created
-                    if current_clade is root_clade:
-                        root_clade = make_new_clade()
-                        current_clade.parent = root_clade
+            elif token == ',':
+                # if the current clade is the root, then the external parentheses are missing
+                # and a new root should be created
+                if current_clade is root_clade:
+                    root_clade = new_clade()
+                    current_clade.parent = root_clade
 
-                    # start a new child clade at the same level as the current clade
-                    parent = process_clade(current_clade)
-                    current_clade = make_new_clade(parent)
-                    entering_branch_length = False
-                    
-                elif char == ')':
-                    # done adding children for this parent clade
-                    parent = process_clade(current_clade)
-                    if not parent:
-                        raise NewickError('Parenthesis mismatch.')
-                    current_clade = parent
-                    entering_branch_length = False
-                    
-                elif char == '[':
-                    # start entering comment
-                    current_clade.comment = ''
-                    entering_comment = True
-                    
-                elif char == ':':
-                    # start entering branch length
-                    entering_branch_length = True
-                    current_clade.branch_length_string = ''
-                    
-                elif char == "'":
-                    # start entering quoted label
-                    entering_quoted_string = True
-                    
-                elif char == ';': pass
-                    
-                elif entering_branch_length:
-                    # add characters to branch length
-                    current_clade.branch_length_string += char
-                    
+                # start a new child clade at the same level as the current clade
+                parent = self.process_clade(current_clade)
+                current_clade = new_clade(parent)
+                entering_branch_length = False
+                
+            elif token == ')':
+                # done adding children for this parent clade
+                parent = self.process_clade(current_clade)
+                if not parent:
+                    raise NewickError('Parenthesis mismatch.')
+                current_clade = parent
+                entering_branch_length = False
+                rp_count += 1
+                
+            elif token == ';': pass
+                
+            elif token.startswith(':'):
+                # branch length or confidence
+                value = float(token[1:])
+                if self.values_are_confidence:
+                    current_clade.confidence = value
                 else:
-                    # add characters to node label
-                    current_clade.name += char
+                    current_clade.branch_length = value
+                
+            elif token == '\n': pass
+                
+            else:
+                # unquoted node label
+                current_clade.name = token
             
-            escape = False
+        if not lp_count == rp_count:
+            raise NewickError('Number of open/close parentheses do not match.')
             
-        process_clade(current_clade)
-        process_clade(root_clade)
+        self.process_clade(current_clade)
+        self.process_clade(root_clade)
         
         return Newick.Tree(root=root_clade, rooted=self.rooted)
+        
+    def new_clade(self, parent=None):
+        clade = Newick.Clade()
+        if parent: clade.parent = parent
+        return clade
+        
+    def process_clade(self, clade):
+        '''Final processing of a parsed clade. Removes the node's parent and 
+        returns it.'''
+        
+        if hasattr(clade, 'parent'):
+            parent = clade.parent
+            parent.clades.append(clade)
+            del clade.parent
+            return parent
 
 
 # ---------------------------------------------------------
