@@ -15,6 +15,7 @@ from Bio.Phylo import PhyloXML, NewickIO
 
 # Example Newick and Nexus files
 EX_NEWICK = 'Nexus/int_node_labels.nwk'
+EX_NEWICK2 = 'Nexus/test.new'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
 
 # Example PhyloXML files
@@ -30,6 +31,12 @@ class IOTests(unittest.TestCase):
         """Read a Newick file with one tree."""
         tree = Phylo.read(EX_NEWICK, 'newick')
         self.assertEqual(len(tree.get_terminals()), 28)
+        
+        tree = Phylo.read(EX_NEWICK2, 'newick')
+        self.assertEqual(len(tree.get_terminals()), 33)
+        self.assertEqual(tree.find_any('Homo sapiens').comment, 'modern human')
+        self.assertEqual(tree.find_any('Equus caballus').comment, "wild horse; also 'Equus ferus caballus'")
+        self.assertEqual(tree.root.confidence, 1.0)
 
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
