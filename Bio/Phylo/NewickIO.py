@@ -120,7 +120,7 @@ class Parser(object):
                             current_clade.confidence = float(current_clade.comment)
                         except: pass
                         
-                    if hasattr(current_clade, 'confidence'):
+                    if hasattr(current_clade, 'confidence') and current_clade.confidence:
                         try:
                             assert 0 <= current_clade.confidence <= 1
                         except AssertionError:
