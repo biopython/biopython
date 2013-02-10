@@ -17,6 +17,7 @@ from Bio.Phylo import PhyloXML, NewickIO
 EX_NEWICK = 'Nexus/int_node_labels.nwk'
 EX_NEWICK2 = 'Nexus/test.new'
 EX_NEXUS = 'Nexus/test_Nexus_input.nex'
+EX_NEXUS2 = 'Nexus/bats.nex'
 
 # Example PhyloXML files
 EX_APAF = 'PhyloXML/apaf.xml'
@@ -37,6 +38,9 @@ class IOTests(unittest.TestCase):
         self.assertEqual(tree.find_any('Homo sapiens').comment, 'modern human')
         self.assertEqual(tree.find_any('Equus caballus').comment, "wild horse; also 'Equus ferus caballus'")
         self.assertEqual(tree.root.confidence, 1.0)
+        
+        tree = Phylo.read(EX_NEXUS2, 'nexus')
+        self.assertEqual(len(tree.get_terminals()), 658)
 
     def test_newick_read_multiple(self):
         """Parse a Nexus file with multiple trees."""
