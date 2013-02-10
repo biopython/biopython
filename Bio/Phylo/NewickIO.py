@@ -178,6 +178,8 @@ class Parser(object):
         return Newick.Tree(root=root_clade, rooted=self.rooted)
         
     def new_clade(self, parent=None):
+        '''Returns a new Newick.Clade, optionally with a temporary reference
+        to its parent clade.'''
         clade = Newick.Clade()
         if parent: clade.parent = parent
         return clade
