@@ -180,7 +180,7 @@ class QueryResult(_BaseSearchObject):
     # from this one
     _NON_STICKY_ATTRS = ('_items',)
 
-    def __init__(self, id='<unknown id>', hits=[],
+    def __init__(self, id=None, hits=[],
             hit_key_function=lambda hit: hit.id):
         """Initializes a QueryResult object.
 
@@ -191,17 +191,14 @@ class QueryResult(_BaseSearchObject):
                             that return Hit object IDs.
 
         """
-        if id is None:
-            raise ValueError("Query ID string is required for QueryResult "
-                    "creation")
-
+        # default values
         self._id = id
         self._hit_key_function = hit_key_function
         self._items = OrderedDict()
-        self._description = '<unknown description>'
-        self.program = '<unknown program>'
-        self.target = '<unknown target>'
-        self.version = '<unknown version>'
+        self._description = None
+        self.program = None
+        self.target = None
+        self.version = None
 
         # validate Hit objects and fill up self._items
         for hit in hits:
@@ -362,9 +359,22 @@ class QueryResult(_BaseSearchObject):
         if not isinstance(hit, Hit):
             raise TypeError("QueryResult objects can only contain Hit objects.")
         # and it must have the same query ID as this object's ID
-        if hit.query_id != self.id:
-            raise ValueError("Expected Hit with query ID '%s', found '%s' "
-                    "instead." % (self.id, hit.query_id))
+        # unless it's the query ID is None (default for empty objects), in which
+        # case we want to use the hit's query ID as the query ID
+        if self.id is not None:
+            if hit.query_id != self.id:
+                raise ValueError("Expected Hit with query ID %r, found %r "
+                        "instead." % (self.id, hit.query_id))
+        else:
+            self.id = hit.query_id
+        # same thing with descriptions
+        if self.description is not None:
+            if hit.query_description != self.description:
+                raise ValueError("Expected Hit with query description %r, "
+                        "found %r instead." % (self.description,
+                        hit.query_description))
+        else:
+            self.description = hit.query_description
 
         self._items[hit_key] = hit
 
