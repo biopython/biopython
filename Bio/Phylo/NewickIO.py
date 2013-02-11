@@ -89,28 +89,26 @@ class Parser(object):
 
     def _parse_tree(self, text):
         """Parses the text representation into an Tree object."""
-            
         tokens = re.finditer(tokenizer, text.strip())
-        
+
         new_clade = self.new_clade
         root_clade = new_clade()
-        
+
         current_clade = root_clade
         entering_branch_length = False
-        
+
         lp_count = 0
         rp_count = 0
         for match in tokens:
             token = match.group()
-            
+
             if token.startswith("'"):
                 # quoted label; add characters to clade name
                 current_clade.name = token[1:-1]
-                    
+
             elif token.startswith('['):
                 # comment
                 current_clade.comment = token[1:-1]
-                
                 if self.comments_are_confidence:
                     # check to see if this comment contains a support value
                     try:
@@ -118,32 +116,31 @@ class Parser(object):
                     except:
                         try:
                             current_clade.confidence = float(current_clade.comment)
-                        except: pass
-                        
+                        except:
+                            pass
                     if hasattr(current_clade, 'confidence') and current_clade.confidence:
                         try:
                             assert 0 <= current_clade.confidence <= 1
                         except AssertionError:
                             del current_clade.confidence
-                    
+
             elif token == '(':
                 # start a new clade, which is a child of the current clade
                 current_clade = new_clade(current_clade)
                 entering_branch_length = False
                 lp_count += 1
-                    
+
             elif token == ',':
                 # if the current clade is the root, then the external parentheses are missing
                 # and a new root should be created
                 if current_clade is root_clade:
                     root_clade = new_clade()
                     current_clade.parent = root_clade
-
                 # start a new child clade at the same level as the current clade
                 parent = self.process_clade(current_clade)
                 current_clade = new_clade(parent)
                 entering_branch_length = False
-                
+
             elif token == ')':
                 # done adding children for this parent clade
                 parent = self.process_clade(current_clade)
@@ -152,9 +149,10 @@ class Parser(object):
                 current_clade = parent
                 entering_branch_length = False
                 rp_count += 1
-                
-            elif token == ';': break
-                
+
+            elif token == ';':
+                break
+
             elif token.startswith(':'):
                 # branch length or confidence
                 value = float(token[1:])
@@ -162,39 +160,40 @@ class Parser(object):
                     current_clade.confidence = value
                 else:
                     current_clade.branch_length = value
-                
-            elif token == '\n': pass
-                
+
+            elif token == '\n':
+                pass
+
             else:
                 # unquoted node label
                 current_clade.name = token
-            
+
         if not lp_count == rp_count:
             raise NewickError('Number of open/close parentheses do not match.')
 
         # if ; token broke out of for loop, there should be no remaining tokens
         try:
             next_token = tokens.next()
-            raise NewickError('Text after semicolon in Newick tree: %s' % next_token.group())
+            raise NewickError('Text after semicolon in Newick tree: %s'
+                              % next_token.group())
         except StopIteration:
             pass
-            
+
         self.process_clade(current_clade)
         self.process_clade(root_clade)
-        
         return Newick.Tree(root=root_clade, rooted=self.rooted)
-        
+
     def new_clade(self, parent=None):
-        '''Returns a new Newick.Clade, optionally with a temporary reference
-        to its parent clade.'''
+        """Returns a new Newick.Clade, optionally with a temporary reference
+        to its parent clade."""
         clade = Newick.Clade()
-        if parent: clade.parent = parent
+        if parent:
+            clade.parent = parent
         return clade
-        
+
     def process_clade(self, clade):
-        '''Final processing of a parsed clade. Removes the node's parent and 
-        returns it.'''
-        
+        """Final processing of a parsed clade. Removes the node's parent and
+        returns it."""
         if hasattr(clade, 'parent'):
             parent = clade.parent
             parent.clades.append(clade)
