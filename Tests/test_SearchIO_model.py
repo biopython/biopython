@@ -61,6 +61,24 @@ class QueryResultCases(unittest.TestCase):
         self.qresult.seq_len = 1102
         self.qresult.target = 'refseq_rna'
 
+    def test_init_none(self):
+        """Test QueryResult.__init__, no arguments"""
+        qresult = QueryResult()
+        self.assertEqual(None, qresult.id)
+        self.assertEqual(None, qresult.description)
+
+    def test_init_id_only(self):
+        """Test QueryResult.__init__, with ID only"""
+        qresult = QueryResult(id='query1')
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual(None, qresult.description)
+
+    def test_init_hits_only(self):
+        """Test QueryResult.__init__, with hits only"""
+        qresult = QueryResult(hits=[hit11, hit21, hit31])
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
+
     def test_repr(self):
         """Test QueryResult.__repr__"""
         self.assertEqual("QueryResult(id='query1', 3 hits)",
@@ -153,6 +171,21 @@ class QueryResultCases(unittest.TestCase):
         # item assignment should fail if the hit object does not have the same
         # query id
         self.assertRaises(ValueError, self.qresult.__setitem__, 'hit4', hit12)
+
+    def test_setitem_from_empty(self):
+        """Test QueryResult.__setitem__, from empty container"""
+        qresult = QueryResult()
+        # initial desc and id is None
+        self.assertEqual(None, qresult.id)
+        self.assertEqual(None, qresult.description)
+        # but changes to the first item's after append
+        qresult.append(hit11)
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
+        # and remains the same after popping the last item
+        qresult.pop()
+        self.assertEqual('query1', qresult.id)
+        self.assertEqual('<unknown description>', qresult.description)
 
     def test_getitem_default_ok(self):
         """Test QueryResult.__getitem__"""

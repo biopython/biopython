@@ -524,9 +524,9 @@ class BlastnTabCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('<unknown program>', qresult.program)
-        self.assertEqual('<unknown target>', qresult.target)
-        self.assertEqual('<unknown version>', qresult.version)
+        self.assertEqual(None, qresult.program)
+        self.assertEqual(None, qresult.target)
+        self.assertEqual(None, qresult.version)
         self.assertEqual('gi|16080617|ref|NP_391444.1|', qresult.id)
         self.assertEqual(3, len(qresult))
 
@@ -552,9 +552,9 @@ class BlastnTabCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('<unknown program>', qresult.program)
-        self.assertEqual('<unknown target>', qresult.target)
-        self.assertEqual('<unknown version>', qresult.version)
+        self.assertEqual(None, qresult.program)
+        self.assertEqual(None, qresult.target)
+        self.assertEqual(None, qresult.version)
         self.assertEqual('gi|11464971:4-101', qresult.id)
         self.assertEqual(5, len(qresult))
 
@@ -879,9 +879,9 @@ class BlastnTabCases(unittest.TestCase):
         qresult = qresults.next()
         counter += 1
 
-        self.assertEqual('<unknown program>', qresult.program)
-        self.assertEqual('<unknown target>', qresult.target)
-        self.assertEqual('<unknown version>', qresult.version)
+        self.assertEqual(None, qresult.program)
+        self.assertEqual(None, qresult.target)
+        self.assertEqual(None, qresult.version)
         self.assertEqual(3, len(qresult))
 
         hit = qresult[0]
