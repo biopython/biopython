@@ -85,7 +85,7 @@ class Parser(object):
         handle = StringIO(treetext)
         return cls(handle)
 
-    def parse(self, values_are_confidence=False, comments_are_confidence=True, rooted=False):
+    def parse(self, values_are_confidence=False, comments_are_confidence=False, rooted=False):
         """Parse the text stream this object was initialized with."""
         self.values_are_confidence = values_are_confidence
         self.comments_are_confidence = comments_are_confidence
@@ -196,6 +196,12 @@ class Parser(object):
     def process_clade(self, clade):
         """Final processing of a parsed clade. Removes the node's parent and
         returns it."""
+        if (clade.name and not (self.values_are_confidence or self.comments_are_confidence)
+            and clade.confidence is None):
+            clade.confidence = _parse_confidence(clade.name)
+            if not clade.confidence is None:
+                clade.name = None
+            
         if hasattr(clade, 'parent'):
             parent = clade.parent
             parent.clades.append(clade)
