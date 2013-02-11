@@ -58,6 +58,19 @@ def write(trees, handle, plain=False, **kwargs):
 # ---------------------------------------------------------
 # Input
 
+def _parse_confidence(text):
+    if text.isdigit():
+        return int(text)
+        # NB: Could make this more consistent by treating as a percentage
+        # return int(text) / 100.
+    try:
+        return float(text)
+        # NB: This should be in [0.0, 1.0], but who knows what people will do
+        # assert 0 <= current_clade.confidence <= 1
+    except ValueError:
+        return None
+
+
 class Parser(object):
     """Parse a Newick tree given a file handle.
 
@@ -110,19 +123,8 @@ class Parser(object):
                 # comment
                 current_clade.comment = token[1:-1]
                 if self.comments_are_confidence:
-                    # check to see if this comment contains a support value
-                    try:
-                        current_clade.confidence = int(current_clade.comment) / 100.
-                    except:
-                        try:
-                            current_clade.confidence = float(current_clade.comment)
-                        except:
-                            pass
-                    if hasattr(current_clade, 'confidence') and current_clade.confidence:
-                        try:
-                            assert 0 <= current_clade.confidence <= 1
-                        except AssertionError:
-                            del current_clade.confidence
+                    # Try to use this comment as a numeric support value
+                    current_clade.confidence = _parse_confidence(current_clade.comment)
 
             elif token == '(':
                 # start a new clade, which is a child of the current clade

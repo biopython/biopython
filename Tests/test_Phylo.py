@@ -37,7 +37,7 @@ class IOTests(unittest.TestCase):
         self.assertEqual(len(tree.get_terminals()), 33)
         self.assertEqual(tree.find_any('Homo sapiens').comment, 'modern human')
         self.assertEqual(tree.find_any('Equus caballus').comment, "wild horse; also 'Equus ferus caballus'")
-        self.assertEqual(tree.root.confidence, 1.0)
+        self.assertEqual(tree.root.confidence, 100)
         
         tree = Phylo.read(EX_NEXUS2, 'nexus')
         self.assertEqual(len(tree.get_terminals()), 658)
