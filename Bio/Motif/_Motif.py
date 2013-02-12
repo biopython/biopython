@@ -137,8 +137,14 @@ class Motif(object):
         """
         res=0
         pwm=self.pwm()
+        # compute background entropy for one column
+        bg_entropy=0
+        for a in self.alphabet.letters:
+            if background[a]!=0:
+                bg_entropy-=self.background[a]*math.log(self.background[a],2)
+                
         for i in range(self.length):
-            res+=2
+            res+=bg_entropy
             for a in self.alphabet.letters:
                 if pwm[i][a]!=0:
                     res+=pwm[i][a]*math.log(pwm[i][a],2)
